@@ -150,6 +150,7 @@ if (( $wattkombiniert < $abschaltungw )); then
 			exit 0		
 	fi
 	if grep -q 1 "/var/run/ladestatus"; then
+#minimiere Ladeleistung bis kleinste stufe erreicht, dann schalte ab
 		if (( $llalt > $minimalladeleistung )); then
 			llneu=$((llalt - 1 ))
                 	runs/$llneu.sh
