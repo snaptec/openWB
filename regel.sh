@@ -23,7 +23,7 @@
         fi
 
 #Ladeleistung ermitteln
-	modules/$ladeleistung/main.sh
+	modules/$ladeleistungmodul/main.sh
 	lla1=$(cat /var/run/lla1)
 	lla2=$(cat /var/run/lla2)
 	lla3=$(cat /var/run/lla3)	
@@ -99,7 +99,7 @@ if [[ $nachtladen == "1" ]]; then
 fi
 
 #######################
-#Ladeleistung berechnen
+#Ladestromstarke berechnen
 	llalt=`var/run/llsoll`
 	llphasentest=`expr $llalt - "3"`
 
@@ -126,7 +126,7 @@ fi
 
 ########################
 #PV Uberschussregelung
-# wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladeleistung (1320 - 3960 Watt je nach Anzahl Phasen)
+# wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
 
 	if grep -q 0 "/var/run/ladestatus"; then
 		mindestuberschussphasen=`echo "($mindestuberschuss*$anzahlphasen)" | bc`
@@ -140,7 +140,7 @@ fi
 
 
 
-# wenn evse bereits an, vergleiche ladeleistung und uberschuss und regle nach
+# wenn evse bereits an, vergleiche ladestromstaerke und uberschuss und regle nach
 wattkombiniert=`echo "($ladeleistung+$uberschuss)" | bc`
 abschaltungw=`echo "($abschaltuberschuss*$anzahlphasen)" | bc`
 schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
@@ -154,6 +154,7 @@ if (( $wattkombiniert < $abschaltungw )); then
 		if (( $llalt > $minimalladeleistung )); then
 			llneu=$((llalt - 1 ))
                 	runs/$llneu.sh
+			exit 0
 		else
 			runs/ladungaus.sh
 			echo "uberschussladung bei uberschuss $uberschuss und wattkombiniert $wattkombiniert um $date beendet"  >> log/lade.log
@@ -165,12 +166,13 @@ if (( $wattkombiniert < $abschaltungw )); then
 	if (( $uberschuss < 0 )); then
 		llneu=$((llalt - 1 ))
 		runs/$llneu.sh
+		exit 0
 	fi
 	if (( $ubserschuss > $schaltschwelle )); then
 		if (( $llalt == $maximalladeleistung )); then
 			exit 0
 		fi
-		llneu=$(llalt + 1 ))
+		llneu=$(llalt + 1 )
 		runs/$llneu.sh
 	fi
 	exit 0

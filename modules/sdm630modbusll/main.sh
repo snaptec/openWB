@@ -1,8 +1,11 @@
 #!/bin/bash
 
 ###############
-#Pseudocode:
+#SDM630v2 wird mithilfe von https://github.com/gonium/gosdm630 ausgelesen.
 #get modbuswerte
+curl localhost:8080/last/11 |jq ..... !rest to test!
+
+
 llVolt
 llPhase1 x Ampere
 llPhase2 x Ampere
