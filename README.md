@@ -12,12 +12,13 @@ Kommerzielle Anfragen ebenso an info@snaptec.org
 
 # Haftungsausschluss
 Es wird mit Kleinspannung aber auch 220V beim Anschluss der EVSE gearbeitet. 
-Dies darf nur geschultes Personal. Die Anleitung ist ohne Gewähr und jegliches Handeln basiert auf eigener Gefahr.
+Dies darf nur geschultes Personal. Die Anleitung ist ohne Gewähr und jegliches Handeln basiert auf eigene Gefahr.
 Eine Fehlkonfiguration der Software kann höchstens ein nicht geladenes Auto bedeuten.
 Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen Part von einem Elektriker durchführen lassen.
+Keine Gewährleistung für die Software - use at your own RISK!
 
 # Wofür?
-Steuerung eine EVSEwb für sofortiges laden, überwachung, pv überschussladung, Lastmanagement mehrere WB und einiges mehr in Zukunft.
+Steuerung einer EVSEwb für sofortiges laden, überwachung, pv überschussladung, Lastmanagement mehrerer WB und einiges mehr in Zukunft.
 
 
 # Was wird benötigt?
@@ -26,10 +27,17 @@ Hardware:
 
 - SimpleEVSEwb
 - Raspberry pi 3
-- 0-5V konverter (PWM to 0-5V zur Steuerung der Ladeleistung)
-- Stromzähler zur Ladeleistungsmessung (z.B. SDM630Modbus)
-- Stromzähler zur Überschussmessung
-- Auslesen der PV (entsprechendes Modul, oder z.B. SDM630)
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
+- Stromzähler zur Ladeleistungsmessung (z.B. SDM630v2)
+- USB-RS485 Converter
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw..)
+- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630)
+- Relais am RPi zum Ein-/Ausschalten der EVSE
+- RPi Netzteil
+- Schuetz
+- Ladekabel mit Steuerleitung
+- Typ1/2 Stecker
+
 
 # Installation
 
