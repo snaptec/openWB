@@ -42,36 +42,60 @@ Hardware:
 # Installation
 
 Hardware:
+
 MCP4725 an Raspberry verkabeln
+
 Vdd an +5V Pin 2
+
 GND an GnD Pin 6
+
 SCL an GPIO3 SCL Pin 5
+
 SDA an GPIO2 SDA Pin 3
 
+
+
 MCP4725 an SimpleEVSE
+
 A0 an GND EVSE
+
 Vout an AN EVSE
 
 
 
 
 Raspbian installieren
+
 -> https://www.raspberrypi.org/downloads/raspbian/
 
 
+
 Den i2c Bus aktivieren.
+
 In der Konsole
+
         sudo raspi-config
+
 ausführen.
+
 Punk 5 Interfacing Options auswählen
+
 P5 I2C auswählen und aktivieren.
 
+
+
 In der Shell folgendes eingeben:
+
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
 
 
+
+
 In der Shell:
+
 chmod +x modules/sdm630modbusll/main.sh 
+
 chmod +x runs/*
+
 
 
