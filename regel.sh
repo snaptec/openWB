@@ -132,7 +132,7 @@ if (( $llalt > 3 )); then
 	if [ $lla3 -ge $llphasentest ]; then
 	        anzahlphasen=$((anzahlphasen + 1 ))
 	fi
-	if (( $anzahlphasen = 0 )); then
+	if (( $anzahlphasen -eq 0 )); then
 		anzahlphasen=1
 	fi
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
