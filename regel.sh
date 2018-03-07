@@ -66,7 +66,12 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 		exit 0
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		exit 0
+		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
+			exit 0
+		else
+			runs/$sofortll.sh
+			exit 0
+		fi
 	fi		
 fi
 
