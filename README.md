@@ -91,11 +91,13 @@ In der Shell folgendes eingeben:
 
 
 
-In der Shell:
 
-	chmod +x modules/sdm630modbusll/main.sh 
 
-	chmod +x runs/*
+In der Shell (nur nach updates erforderlich):
+
+	chmod +x /var/www/html/openWB/modules/* 
+
+	chmod +x /var/www/html/openWB/runs/*
 
 
 

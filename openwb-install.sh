@@ -110,3 +110,7 @@ else
 fi
 
 
+chmod +x /var/www/html/openWB/modules/*                     
+chmod +x /var/www/html/openWB/runs/*
+
+
