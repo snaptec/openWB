@@ -153,6 +153,7 @@ abschaltungw=`echo "($abschaltuberschuss*$anzahlphasen)" | bc`
 schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
 
 
+echo "bevor 1"
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
@@ -174,7 +175,7 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                         if (( $llalt == $maximalstromstaerke )); then
                                 exit 0
                         fi
-                        llneu=$(llalt + 1 )
+                        llneu=$((llalt + 1 ))
                         runs/$llneu.sh
                 	exit 0
 		fi
