@@ -215,6 +215,9 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		fi
 	else
 		if (( $uberschuss < 0 )); then
+			if (( $llalt = 0 )); then
+				exit 0
+			fi
 			llneu=$((llalt - 1 ))
 			runs/$llneu.sh
 			exit 0
