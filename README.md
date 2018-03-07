@@ -72,7 +72,6 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.s
 
 In der Shell:
 chmod +x modules/sdm630modbusll/main.sh 
-chmod +x runs/atreboot.sh 
-
+chmod +x runs/*
 
 
