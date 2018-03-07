@@ -1,6 +1,6 @@
 #!/bin/bash
 #config file einlesen
-. openWB.conf
+. openwb.conf
 
 
 #######################################

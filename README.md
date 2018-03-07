@@ -67,7 +67,7 @@ Punk 5 Interfacing Options auswählen
 P5 I2C auswählen und aktivieren.
 
 In der Shell folgendes eingeben:
-wget https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
+curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
 
 
 
