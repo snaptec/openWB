@@ -42,7 +42,7 @@ require 'config.php';
 var doInterval;
 function getfile() {
   $.ajax({
-    url: "/openwb/ramdisk/llaktuell",
+    url: "/openWB/ramdisk/llaktuell",
     complete: function(request){
       $("#lldiv").html(request.responseText);
     }
@@ -54,7 +54,7 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
   $.ajax({
-    url: "/openwb/ramdisk/pvwatt",
+    url: "/openWB/ramdisk/pvwatt",
     complete: function(request){
       $("#pvdiv").html(request.responseText);
     }
@@ -66,7 +66,7 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
   $.ajax({
-    url: "/openwb/ramdisk/wattbezug",
+    url: "/openWB/ramdisk/wattbezug",
     complete: function(request){
       $("#bezugdiv").html(request.responseText);
     }
@@ -78,7 +78,7 @@ doInterval = setInterval(getfile, 2000);
 function getfile() {
   $.ajaxSetup({ cache: false});
   $.ajax({
-   url: "/openwb/ramdisk/ladedstatus",
+   url: "/openWB/ramdisk/ladedstatus",
     complete: function(request){
       $("#controlleranaus").html(request.responseText);
 	}
@@ -91,7 +91,7 @@ var doInterval;
 function getfile() {
   $.ajaxSetup({ cache: false});
   $.ajax({
-   url: "/openwb/ramdisk/soc",
+   url: "/openWB/ramdisk/soc",
     complete: function(request){
       $("#soclevel").html(request.responseText);
         }
@@ -103,7 +103,7 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
   $.ajax({
-   url: "/openwb/ramdisk/lademodus",
+   url: "/openWB/ramdisk/lademodus",
     complete: function(request){
       var lademodus=data;
 	console.log(data);
