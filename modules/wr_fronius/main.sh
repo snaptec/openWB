@@ -15,4 +15,4 @@ if ! [[ $pvwatt =~ $re ]] ; then
 fi
 echo $pvwatt
 #zur weiteren verwendung im webinterface
-echo $pvwatt > /var/run/pvwatt
+echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt

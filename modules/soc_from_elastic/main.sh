@@ -19,5 +19,5 @@
 	}' |sed 's/^.*"socDisplay/"socDisplay/' |sed 's/,.*//' |cut -c 14- | cut -f1 -d".")
 
 	#zur weiteren verwendung im webinterface
-	echo $dpsoc > /var/run/soc
+	echo $dpsoc > /var/www/html/openWB/ramdisk/soc
 	echo $dpsoc

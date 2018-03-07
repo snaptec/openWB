@@ -13,4 +13,4 @@ watttmp=$(curl --connect-timeout 15 -s $ip)
 watt=$(echo $watttmp | jq . | sed '13!d' | tr -d ' ' )
 echo $watt
 #zur weiteren verwendung im webinterface
-echo $watt > /var/run/wattbezug
+echo $watt > /var/www/html/openWB/ramdisk/wattbezug
