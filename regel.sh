@@ -153,7 +153,6 @@ abschaltungw=`echo "($abschaltuberschuss*$anzahlphasen)" | bc`
 schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
 
 
-echo "bevor 1"
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
@@ -182,6 +181,7 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 
 fi
 
+echo "nach 1"
 ########################
 #NUR PV Uberschussregelung lademodus 2
 # wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
@@ -233,7 +233,7 @@ fi
 
 
 
-	
+	echo "nach 2ende"
 
 
 
