@@ -117,7 +117,7 @@ fi
 
 #######################
 #Ladestromstarke berechnen
-	llalt=`var/www/html/openWB/ramdisk/llsoll`
+	llalt=`/var/www/html/openWB/ramdisk/llsoll`
 	llphasentest=`expr $llalt - "3"`
 
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
