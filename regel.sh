@@ -208,7 +208,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
                 		runs/$llneu.sh
 				exit 0
 			else
-				runs/ladungaus.sh
+				runs/0.sh
 				echo "uberschussladung bei uberschuss $uberschuss und wattkombiniert $wattkombiniert um $date beendet"  >> log/lade.log
 				exit 0
 			fi
