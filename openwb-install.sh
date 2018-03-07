@@ -32,7 +32,10 @@ echo "check for apache"
 if ! [ -x "$(command -v apachectl)" ]; then
 	apt-get -qq install -y apache2
         sleep 2
+	apt-get -qq install php
+	sleep 2 
 	apt-get -qq install -y libapache2-mod-php5
+	apt-get -qq install -y libapache2-mod-php7.0
 	sleep 2
 	apt-get -qq install -y jq
 	sleep 2
