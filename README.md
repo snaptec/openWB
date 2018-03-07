@@ -101,3 +101,12 @@ In der Shell (nur nach updates erforderlich):
 
 
 
+Für den Produktiv betrieb:
+	crontab -e
+hier einfügen:
+	* * * * * /var/www/html/openWB/regel.sh
+        * * * * * sleep 10 && /var/www/html/openWB/regel.sh
+        * * * * * sleep 20 && /var/www/html/openWB/regel.sh
+        * * * * * sleep 30 && /var/www/html/openWB/regel.sh
+        * * * * * sleep 40 && /var/www/html/openWB/regel.sh
+        * * * * * sleep 50 && /var/www/html/openWB/regel.sh
