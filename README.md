@@ -101,7 +101,7 @@ In der Shell (nur nach updates erforderlich):
 
 
 
-Für den Produktiv betrieb:
+Für den Produktiv betrieb, derzeit in testphase manuell ausführen:
 	crontab -e
 hier einfügen:
 	* * * * * /var/www/html/openWB/regel.sh
