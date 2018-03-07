@@ -178,7 +178,7 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                         runs/$llneu.sh
                 	exit 0
 		fi
-
+	fi
 fi
 
 echo "nach 1"
