@@ -1,4 +1,4 @@
-        <?php
+<?php
 require '../config.php';
                 
 		if ($_GET['jetzt'] == "1") {

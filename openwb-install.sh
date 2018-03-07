@@ -109,6 +109,14 @@ else
 	echo "...ok"
 fi
 
+echo "check for gonium/sdm630"
+if [ ! -d /home/pi/bin ]; then
+	wget https://github.com/gonium/gosdm630/releases/download/v0.5.0/sdm630-linux-arm.zip
+	unzip sdm630-linux-arm.zip 
+	echo "... installed"
+else
+	echo "...ok"
+fi
 
 chmod +x /var/www/html/openWB/modules/*                     
 chmod +x /var/www/html/openWB/runs/*
