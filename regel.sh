@@ -7,7 +7,7 @@
 # Werte für die Berechnung ermitteln
 
 #Wattbezug	
-if [[ $wattbezugmodul != "none"]]; then
+if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=`modules/$wattbezugmodul/main.sh`
 	#uberschuss zur berechnung
 	wattbezugint=`printf "%.0f\n" $wattbezug`
@@ -19,19 +19,19 @@ if [[ $wattbezugmodul != "none"]]; then
 fi
 
 #PV Leistung ermitteln
-if [[ $pvwattmodul != "none"]]; then
+if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=`modules/$pvwattmodul/main.sh`
 	if [[ $debug == "1" ]]; then
                 echo pvwatt $pvwatt
         fi
 fi
 #Ladeleistung ermitteln
-if [[ $ladeleistungmodul != "none"]]; then
+if [[ $ladeleistungmodul != "none" ]]; then
 	modules/$ladeleistungmodul/main.sh
-	lla1=$(cat /var/run/lla1)
-	lla2=$(cat /var/run/lla2)
-	lla3=$(cat /var/run/lla3)	
-	ladeleistung=$(cat /var/run/llaktuell)
+	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
+	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
+	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)	
+	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	if [[ $debug == "1" ]]; then
                 echo ladeleistung $ladeleistung
 		echo lla1 $lla1
@@ -41,7 +41,7 @@ if [[ $ladeleistungmodul != "none"]]; then
 fi	
 
 #Soc ermitteln
-if [[ $socmodul != "none"]]; then
+if [[ $socmodul != "none" ]]; then
 	soc=`modules/$socmodul/main.sh`
         if [[ $debug == "1" ]]; then
                 echo soc $soc
