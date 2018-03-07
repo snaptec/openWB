@@ -1,5 +1,5 @@
 <?php $config = array (
-  'lademodus' => '0',
+  'lademodus' => '1',
   'jetztbtn0' => '<a class="btn btn-primary btn-lg btn-block btn-red" href="?jetzt=true">Sofort</a>',
   'jetztbtn1' => '<a class="btn btn-primary btn-lg btn-block btn-green" href="?jetzt=true">Sofort</a>',
   'minundpvbtn0' => '<a class="btn btn-primary btn-lg btn-block btn-red" href="?minundpv=true">Min + PV</a>',

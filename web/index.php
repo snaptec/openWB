@@ -78,7 +78,7 @@ doInterval = setInterval(getfile, 2000);
 function getfile() {
   $.ajaxSetup({ cache: false});
   $.ajax({
-   url: "/openWB/ramdisk/ladedstatus",
+   url: "/openWB/ramdisk/ladestatus",
     complete: function(request){
       $("#controlleranaus").html(request.responseText);
 	}
