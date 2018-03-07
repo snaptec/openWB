@@ -45,28 +45,28 @@ Hardware:
 
 MCP4725 an Raspberry verkabeln
 
-Vdd an +5V Pin 2
+	Vdd an +5V Pin 2
 
-GND an GnD Pin 6
+	GND an GnD Pin 6
 
-SCL an GPIO3 SCL Pin 5
+	SCL an GPIO3 SCL Pin 5
 
-SDA an GPIO2 SDA Pin 3
+	SDA an GPIO2 SDA Pin 3
 
 
 
 MCP4725 an SimpleEVSE
 
-A0 an GND EVSE
+	A0 an GND EVSE
 
-Vout an AN EVSE
+	Vout an AN EVSE
 
 
 
 
 Raspbian installieren
 
--> https://www.raspberrypi.org/downloads/raspbian/
+	https://www.raspberrypi.org/downloads/raspbian/
 
 
 
@@ -78,24 +78,24 @@ In der Konsole
 
 ausführen.
 
-Punk 5 Interfacing Options auswählen
+	Punk 5 Interfacing Options auswählen
 
-P5 I2C auswählen und aktivieren.
+	P5 I2C auswählen und aktivieren.
 
 
 
 In der Shell folgendes eingeben:
 
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
+	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
 
 
 
 
 In der Shell:
 
-chmod +x modules/sdm630modbusll/main.sh 
+	chmod +x modules/sdm630modbusll/main.sh 
 
-chmod +x runs/*
+	chmod +x runs/*
 
 
 
