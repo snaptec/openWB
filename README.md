@@ -70,6 +70,8 @@ In der Shell folgendes eingeben:
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
 
 
+In der Shell:
+chmod +x modules/sdm630modbusll/main.sh 
 
 
 
