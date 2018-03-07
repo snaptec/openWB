@@ -105,9 +105,9 @@ Für den Produktiv betrieb, derzeit in testphase manuell ausführen:
 	crontab -e
 hier einfügen:
 
-	* * * * /var/www/html/openWB/regel.sh
-	* * * * * sleep 10 && /var/www/html/openWB/regel.sh
-	* * * * * sleep 20 && /var/www/html/openWB/regel.sh
-	* * * * * sleep 30 && /var/www/html/openWB/regel.sh
-	* * * * * sleep 40 && /var/www/html/openWB/regel.sh
-	* * * * * sleep 50 && /var/www/html/openWB/regel.sh
+	* * * * /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
+	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
+	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
+	* * * * * sleep 30 && /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
+	* * * * * sleep 40 && /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
+	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log
