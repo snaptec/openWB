@@ -34,13 +34,10 @@ if ! [ -x "$(command -v apachectl)" ]; then
         sleep 2
 	apt-get -qq install php
 	sleep 2 
-	apt-get -qq install -y libapache2-mod-php5
 	apt-get -qq install -y libapache2-mod-php7.0
 	sleep 2
 	apt-get -qq install -y jq
 	sleep 2
-	apt-get -qq install -y php5-gd
-        sleep 2
 	apt-get -qq install -y raspberrypi-kernel-headers
 	echo "... installed"
 else
@@ -62,6 +59,15 @@ fi
 echo "check for i2c package"
 if ! [ -x "$(command -v i2cdetect)" ]; then
 	apt-get -qq install -y i2c-tools
+	echo "... installed"
+else
+	echo "...ok"
+fi
+
+echo "check for git"
+
+if ! [ -x "$(command -v git)" ]; then
+	apt-get -qq install -y git
 	echo "... installed"
 else
 	echo "...ok"
