@@ -105,7 +105,7 @@ else
 	crontab -l -u root | cat - /tmp/tocrontab | crontab -u root -
 	rm /tmp/tocrontab
 	echo "...added"
-	fi
+fi
 
 echo "check for MCP4725"
 if [ ! -d /home/pi/Adafruit_Python_MCP4725 ]; then
@@ -126,6 +126,14 @@ if [ ! -d /home/pi/bin ]; then
 	echo "... installed"
 else
 	echo "...ok"
+fi
+
+echo "disable cronjob logging"
+if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
+then
+	echo "...ok"
+else
+	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
 
 chmod +x /var/www/html/openWB/modules/*                     

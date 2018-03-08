@@ -11,6 +11,7 @@ ip=10.20.0.51:8080
 
 watttmp=$(curl --connect-timeout 15 -s $ip)
 watt=$(echo $watttmp | jq . | sed '13!d' | tr -d ' ' )
+watt=$(echo "${watt}" | cut -f1 -d".")
 echo $watt
 #zur weiteren verwendung im webinterface
 echo $watt > /var/www/html/openWB/ramdisk/wattbezug

@@ -10,12 +10,12 @@
 #llPhase1 x Ampere
 #llPhase2 x Ampere
 #llPhase3 x Ampere
-lla1=9
+lla1=0
 lla2=0
 lla3=0
 #calc :
 #ladeleistung= (lla1+lla2+lla3)*llVolt
-ladeleistung=2070
+ladeleistung=0
 
 echo $ladeleistung > /var/www/html/openWB/ramdisk/llaktuell
 echo $lla1 > /var/www/html/openWB/ramdisk/lla1

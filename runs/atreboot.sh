@@ -8,10 +8,14 @@ touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/pvwatt
 touch /var/www/html/openWB/ramdisk/soc
+touch /var/www/html/openWB/ramdisk/lla1
+touch /var/www/html/openWB/ramdisk/lla2
+touch /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
+chmod +x modules/sdm630modbusll/main.sh
 chmod 777 /var/www/html/openWB/ramdisk/*

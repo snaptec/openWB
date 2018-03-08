@@ -66,6 +66,18 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
   $.ajax({
+    url: "/openWB/ramdisk/llsoll",
+    complete: function(request){
+      $("#llsolldiv").html(request.responseText);
+    }
+  });
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajax({
     url: "/openWB/ramdisk/wattbezug",
     complete: function(request){
       $("#bezugdiv").html(request.responseText);
@@ -148,16 +160,22 @@ doInterval = setInterval(getfile, 2000);
                                 </div>  
 			</div>	
 			<div class="row">
-				<div class="col-xs-6 text-center">
+				<div class="col-xs-4 text-center">
 					<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestatus
 					<div id="controlleranaus"></div>
 					</button>
 				</div>
-                                <div class="col-xs-6 text-center">
+                                <div class="col-xs-4 text-center">
                                 	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC
 					<div id="soclevel"></div>
 					</button>
-                                </div>
+				</div>
+	                        <div class="col-xs-4 text-center">
+                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">LLSoll
+					<div id="llsolldiv"></div>
+					</button>
+				</div>
+			
                         </div>
                         <div class="row">
                                 <div class="col-xs-4 text-center">
