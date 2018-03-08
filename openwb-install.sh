@@ -84,7 +84,8 @@ else
 fi
 
 echo "check for ramdisk" 
-if [ ! -d /var/www/html/openWB/ramdisk ]; then
+if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab 
+then
 	mkdir -p /var/www/html/openWB/ramdisk
 	echo "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" >> /etc/fstab
 	mount -a
