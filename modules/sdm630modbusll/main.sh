@@ -2,19 +2,12 @@
 
 ###############
 #SDM630v2 wird mithilfe von https://github.com/gonium/gosdm630 ausgelesen.
-#get modbuswerte
-#curl localhost:8080/last/11 |jq ..... !rest to test!
+#auch für SDM230 nutzbar (L2 und L3 bleiben dann immer 0
+#ll = ladeleistung soll Modbus ID 1 sein
 
-
-#llVolt
-#llPhase1 x Ampere
-#llPhase2 x Ampere
-#llPhase3 x Ampere
 lla1=$(curl -s localhost:8080/last/1 |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
 lla2=$(curl -s localhost:8080/last/1 |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
 lla3=$(curl -s localhost:8080/last/1 |jq '.Current.L3' | tr -d '\n' | sed 's/\..*$//')
-#calc :
-#ladeleistung= (lla1+lla2+lla3)*llVolt
 ladeleistung=`curl -s localhost:8080/last/1 |jq '.Power.L1' | tr -d '\n' | sed 's/\..*$//'`
 
 
