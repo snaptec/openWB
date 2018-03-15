@@ -1,15 +1,29 @@
-<?php
-require 'config.php';
-echo $config['sofortladen'];
-echo $config['minundpv'];
-echo $config['pvuberschuss'];
-$config['sofortladen'] = '2';
-$config['minundpv'] = '2';
-$config['pvuberschuss'] = '2';
-echo $config['minundpv'];
-echo "hello";
-file_put_contents('./config.php', '<?php $config = ' . var_export($config, true) . ';');
+<html>
+<body><?php
+
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+    if(substr($line, 0, 9) == 'sofortll=') {
+	    $sofortllold = substr($line, 9, 2);
+	    
+    }
+}
 
 
 
 ?>
+
+
+
+
+
+<form name="sofortll" action="./tools/sofortll.php" method="POST">
+	<label for="sofortll">Sofortmodus Ladeleistung:</label><br>
+	<input type="text" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
+	<br>
+	<button type="submit" class="btn btn-primary">Save</button>	 
+ </form>
+</body></html>
+

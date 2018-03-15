@@ -101,7 +101,6 @@ then
 	echo "...ok"
 else
 	echo "@reboot /var/www/html/openWB/runs/atreboot.sh &" >> /tmp/tocrontab
-	chmod +x /var/www/html/openWB/runs/*
 	crontab -l -u root | cat - /tmp/tocrontab | crontab -u root -
 	rm /tmp/tocrontab
 	echo "...added"

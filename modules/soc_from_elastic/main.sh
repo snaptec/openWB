@@ -3,7 +3,7 @@
 
 
 #SOC in Prozent aus elasticsearch
-	dpsoc=$(curl -s -XGET "http://localhost:9200/pid2105/_search" -H 'Content-Type: application/json' -d'
+	dpsoc=$(curl --connect-timeout 10 -s -XGET "http://localhost:9200/pid2105/_search" -H 'Content-Type: application/json' -d'
 	{
 	    "query": {
 	        "match_all": {}

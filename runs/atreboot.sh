@@ -17,5 +17,5 @@ echo 0 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
-chmod +x modules/sdm630modbusll/main.sh
 chmod 777 /var/www/html/openWB/ramdisk/*
+chmod 777 /var/www/html/openWB/web/lade.log
