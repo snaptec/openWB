@@ -1,9 +1,11 @@
 # openWB
 Control your simpleEVSEwb with a Raspberry for various purposes
 
--- noch unvollständig --
-derzeitige Version ist noch nicht lauffähig
-Wer das fertige stück software nachbauen und nutzen möchte muss sich noch ein paar (wenige) Wochen gedulden
+UPDATE:
+derzeitige Version IST lauffähig und im Betastadium.
+Wer das fertige stück software nachbauen und nutzen möchte muss sich noch ein wenig gedulden.
+"Offizieller Release" nach Testphase.
+Beta Tester sind herzlich willkommen.
 
 
 Die Software steht zur nicht kommerziellen Nutzung frei für jeden zur Verfügung.
@@ -18,26 +20,38 @@ Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen P
 Keine Gewährleistung für die Software - use at your own RISK!
 
 # Wofür?
-Steuerung einer EVSEwb für sofortiges laden, überwachung, pv überschussladung, Lastmanagement mehrerer WB und einiges mehr in Zukunft.
+Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Überschussladung, Lastmanagement mehrerer WB und einiges mehr in Zukunft.
 
 
 # Was wird benötigt?
 
 Hardware:
 
+Für 1-phasiges Laden:
 - SimpleEVSEwb
 - Raspberry pi 3
 - 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
-- Stromzähler zur Ladeleistungsmessung (z.B. SDM630v2)
-- USB-RS485 Converter
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw..)
+- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220 / SDM230)
+- USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- wird beides unterstützt)
 - Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630)
-- Relais am RPi zum Ein-/Ausschalten der EVSE
 - RPi Netzteil
-- Schuetz
+- Schuetz entsprechend der max. Leistung
 - Ladekabel mit Steuerleitung
 - Typ1/2 Stecker
 
+Für 1-phasiges Laden:
+- SimpleEVSEwb
+- Raspberry pi 3
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
+- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM630v2)
+- USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- wird beides unterstützt)
+- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM220/SDM630 je nach Anzahl der Phasen)
+- RPi Netzteil
+- Schuetz entsprechend der max. Leistung
+- Ladekabel mit Steuerleitung
+- Typ1/2 Stecker
 
 # Installation
 
@@ -62,6 +76,7 @@ MCP4725 an SimpleEVSE
 	Vout an AN EVSE
 
 
+Simple EVSE muss Register 2002 auf 0 stehen und Register 2003 auf 1. Dies kann per BT und der Android App gemacht werden.
 
 
 Raspbian installieren
@@ -90,21 +105,11 @@ In der Shell folgendes eingeben:
 
 
 
-
-
-
-In der Shell (nur nach updates erforderlich):
-
-	chmod +x /var/www/html/openWB/modules/* 
-
-	chmod +x /var/www/html/openWB/runs/*
-
-
-
-Für den Produktiv betrieb, derzeit in testphase manuell ausführen:
+Crontab anpassen:
 	crontab -e
 hier einfügen:
 
+	@reboot sleep 10 && /home/pi/bin/sdm630_httpd-linux-arm & 
 	* * * * /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log 2>&1 
 	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
@@ -112,3 +117,7 @@ hier einfügen:
 	* * * * * sleep 40 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 
+
+Zum Updaten:
+
+/var/www/html/openWB/runs/update.sh
