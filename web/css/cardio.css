@@ -211,6 +211,9 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
 .btn.btn-blue {
 	background: #00a8ff;
 }
+.btn.btn-grey {
+	background: #4e4956;
+}
 .btn.btn-red {
         background: #e02828;
 }
@@ -220,18 +223,27 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
 .btn.btn-blue:hover {
 	background: #31b9ff;
 }
-
+.btn.btn-grey:hover {
+	background: #31b9ff;
+}
 .btn.btn-blue-fill {
 	color: #00a8ff;
 	border-color: #00a8ff;
 	background: transparent;
 }
-
+.btn.btn-grey-fill {
+	color: #00a8ff;
+	border-color: #00a8ff;
+	background: transparent;
+}
 .btn.btn-blue-fill:hover {
 	color: white;
 	background: #00a8ff;
 }
-
+.btn.btn-grey-fill:hover {
+	color: white;
+	background: #00a8ff;
+}
 .btn.btn-white-fill {
 	color: #fff;
 	border-color: #fff;

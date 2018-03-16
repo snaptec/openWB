@@ -193,7 +193,31 @@ doInterval = setInterval(getfile, 2000);
 					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
                                         </div>
                                 </div>
-                        </div>
+			</div>
+			<div class="row">
+			<hr>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 text-center">
+					<?php
+						$result = '';
+						$lines = file('/var/www/html/openWB/openwb.conf');
+						foreach($lines as $line) {
+						    if(substr($line, 0, 9) == 'sofortll=') {
+						    $sofortllold = substr($line, 9, 2);
+	    
+						    }
+						}
+					?>
+					<form name="sofortll" action="./tools/sofortll.php" method="POST">
+						<label for="sofortll">Sofortladen A:</label>
+						<input type="number" min="10" max="32" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
+						<br>
+						<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>	 
+					 </form>
+
+				</div>
+			</div>
 		</div>
 	</section>
 	<!-- Holder for mobile navigation -->

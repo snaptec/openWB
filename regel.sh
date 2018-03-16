@@ -79,7 +79,7 @@ fi
 
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
-if [[ $nachtladen == "0" ]]; then
+if [[ $nachtladen == "1" ]]; then
 	if (( $nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H <= $nachtladenbisuhr )); then
 		if [[ $socmodul != "none" ]]; then
 			if (( $soc <= $nachtsoc )); then
@@ -90,14 +90,14 @@ if [[ $nachtladen == "0" ]]; then
 		                		echo "soc $soc"
 		        			echo "ladeleistung" $nachtll
 					fi
-					echo "start Nachtladung mit $nachtll um $date bei $soc" >> log/lade.log
+					echo "start Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/0.sh
-					echo "stop Nachtladung mit $nachtll um $date bei $soc" >> log/lade.log
+					echo "stop Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0

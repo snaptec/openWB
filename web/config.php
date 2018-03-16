@@ -1,4 +1,4 @@
 <?php $config = array (
-  'lademodus' => '2',
+  'lademodus' => '0',
   'sofortll' => '15',
 );
