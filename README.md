@@ -109,7 +109,6 @@ Crontab anpassen:
 	crontab -e
 hier einfügen:
 
-	@reboot sleep 10 && /home/pi/bin/sdm630_httpd-linux-arm & 
 	* * * * /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log 2>&1 
 	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
@@ -120,4 +119,6 @@ hier einfügen:
 
 Zum Updaten:
 
-/var/www/html/openWB/runs/update.sh
+	http://XXipXX/openWB/web/tools/update.php
+
+aufrufen

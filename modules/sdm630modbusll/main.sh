@@ -4,6 +4,7 @@
 #SDM630v2 wird mithilfe von https://github.com/gonium/gosdm630 ausgelesen.
 #auch für SDM230 nutzbar (L2 und L3 bleiben dann immer 0
 #ll = ladeleistung soll Modbus ID 1 sein
+# Gonium Tool fragt standard nur ID1 ab
 
 lla1=$(curl -s localhost:8080/last/1 |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
 lla2=$(curl -s localhost:8080/last/1 |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
