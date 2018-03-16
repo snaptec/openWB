@@ -118,6 +118,9 @@ hier einfügen:
 
 
 Zum Updaten:
+!!BACKUP DER GEÄNDERTEN DATEIEN ERSTELLEN!!
+Beim Update werden alle Dateien überschrieben.
+Config muss neu angepasst werden.
 
 	http://XXipXX/openWB/web/tools/update.php
 
