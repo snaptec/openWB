@@ -6,10 +6,35 @@
 #ll = ladeleistung soll Modbus ID 1 sein
 # Gonium Tool fragt standard nur ID1 ab
 
-lla1=$(curl -s localhost:8080/last/1 |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
-lla2=$(curl -s localhost:8080/last/1 |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
-lla3=$(curl -s localhost:8080/last/1 |jq '.Current.L3' | tr -d '\n' | sed 's/\..*$//')
-ladeleistung=`curl -s localhost:8080/last/1 |jq '.Power.L1' | tr -d '\n' | sed 's/\..*$//'`
+. /var/www/html/openWB/openwb.conf
+
+
+if [[ $sdm630modbusllsource = *virtual* ]]
+then
+	if ps ax |grep -v grep |grep "socat pty,link=$sdm630modbusllsource,raw tcp:$sdm630modbuslllanip:26" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+	sudo socat pty,link=$sdm630modbusllsource,raw tcp:$sdm630modbuslllanip:26
+	fi
+else
+	echo "echo" > /dev/null
+fi
+
+
+#check ob gonium reader lauft
+if ps ax |grep -v grep |grep "sdm630_httpd-linux-arm -s $sdm630modbusllsource -d SDM:$sdm630modbusllid -u $sdm630modbusllport" > /dev/null 
+then
+	echo "test" > /dev/null
+else 
+	sudo /home/pi/bin/sdm630_httpd-linux-arm -s $sdm630modbusllsource -d SDM:$sdm630modbusllid -u $sdm630modbusllport &
+fi
+
+
+lla1=$(curl -s localhost:8080/last/$sdm630modbusllid |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
+lla2=$(curl -s localhost:8080/last/$sdm630modbusllid |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
+lla3=$(curl -s localhost:8080/last/$sdm630modbusllid |jq '.Current.L3' | tr -d '\n' | sed 's/\..*$//')
+ladeleistung=`curl -s localhost:8080/last/$sdm630modbusllid |jq '.Power.L1' | tr -d '\n' | sed 's/\..*$//'`
 
 
 echo $ladeleistung > /var/www/html/openWB/ramdisk/llaktuell

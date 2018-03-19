@@ -127,6 +127,15 @@ else
 	echo "...ok"
 fi
 
+echo "check for socat"
+if ! [ -x "$(command -v socat)" ]; then
+	apt-get -qq install -y socat
+	echo "... installed"
+else
+	echo "...ok"
+fi
+
+
 echo "disable cronjob logging"
 if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
 then
@@ -134,6 +143,7 @@ then
 else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
+
 
 chmod +x /var/www/html/openWB/modules/*                     
 chmod +x /var/www/html/openWB/runs/*

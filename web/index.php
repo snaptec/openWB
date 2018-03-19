@@ -124,6 +124,18 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajax({
+   url: "/openWB/web/error.log",
+    complete: function(request){
+      $("#errorfeed").html(request.responseText);
+	}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
 
 
 
@@ -218,6 +230,9 @@ doInterval = setInterval(getfile, 2000);
 
 				</div>
 			</div>
+			<br>
+			<hr>
+			<div id="errorfeed"></div>
 		</div>
 	</section>
 	<!-- Holder for mobile navigation -->

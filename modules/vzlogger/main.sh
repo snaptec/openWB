@@ -4,12 +4,10 @@
 #Das pipen durch "jq" führt zeilenumbrüche ein.
 #Mithilfe von sed wird die die gewünschte Zeile ausgewählt
 #tr entfernt unnötige leerzeilen
-
-#IP und Port des VZlogger
-ip=10.20.0.51:8080
+. /var/www/html/openWB/openwb.conf
 
 
-watttmp=$(curl --connect-timeout 15 -s $ip)
+watttmp=$(curl --connect-timeout 15 -s $vzloggerip)
 watt=$(echo $watttmp | jq . | sed '13!d' | tr -d ' ' )
 watt=$(echo "${watt}" | cut -f1 -d".")
 echo $watt

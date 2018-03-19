@@ -17,5 +17,4 @@ echo 0 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
-sleep 10 && /home/pi/bin/sdm630_httpd-linux-arm &
 chmod 777 /var/www/html/openWB/ramdisk/*
