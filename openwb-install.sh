@@ -144,7 +144,7 @@ else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
 
-
+chmod 777 /var/www/html/openWB/openwb.conf
 chmod +x /var/www/html/openWB/modules/*                     
 chmod +x /var/www/html/openWB/runs/*
 touch /var/log/openWB.log
