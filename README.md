@@ -125,3 +125,21 @@ Config muss neu angepasst werden.
 	http://XXipXX/openWB/web/tools/update.php
 
 aufrufen
+
+
+
+ Bei Nutzung von einem USR-TCP232-410 Lan to Modbus Converter folgende Konfiguration verwenden:
+
+	Baud Rate: 9600
+	Data Size: 8 Bit
+	Parity: None
+	Stop Bits: 1
+	Flow COntrol and RS485: RS485
+	Local Port Number: 26
+	Remote Port Number: 26
+	Worke Mode: TCP Server None
+	TCP Server detail: default Type
+	Timeout: 0
+	UART packet Time: 10 ms
+	UART packet length: 512 chars
+
