@@ -18,5 +18,12 @@ require '../config.php';
         		 file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 2);
 	                file_put_contents('../config.php', '<?php $config = ' . var_export($config, true) . ';');
                         header("Location: ../index.php");
+		}
+		if ($_GET['stop'] == "1") {
+                        $config['lademodus'] = '3';
+        		 file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 3);
+	                file_put_contents('../config.php', '<?php $config = ' . var_export($config, true) . ';');
+                        header("Location: ../index.php");
                 }
+
         ?>

@@ -190,21 +190,26 @@ doInterval = setInterval(getfile, 2000);
 			
                         </div>
                         <div class="row">
-                                <div class="col-xs-4 text-center">
+                                <div class="col-xs-3 text-center">
 					<div class="actstat">
 						<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block">Sofort Laden</a>
 					</div>
                            	</div>
-                                <div class="col-xs-4 text-center">
+                                <div class="col-xs-3 text-center">
                                         <div class="actstat1">
                                                 <a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block">Min + PV</a>
                                         </div>
                                 </div>
-                                <div class="col-xs-4 text-center">
+                                <div class="col-xs-3 text-center">
                                         <div class="actstat2">
 					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
                                         </div>
-                                </div>
+				</div>
+				<div class="col-xs-3 text-center">
+					<div class="actstat3">
+						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block">Stop</a>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 			<hr>
@@ -261,6 +266,8 @@ function loadText(){
     $('.actstat .btn').addClass("btn-green");
     $('.actstat1 .btn').addClass("btn-red");
     $('.actstat2 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-red");
+    $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
    }
@@ -268,17 +275,30 @@ function loadText(){
     $('.actstat1 .btn').addClass("btn-green");
     $('.actstat .btn').addClass("btn-red");    
     $('.actstat2 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-red");
     $('.actstat .btn').removeClass("btn-green");
+    $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
     }
    if(result.text == 2){
     $('.actstat2 .btn').addClass("btn-green");
     $('.actstat .btn').addClass("btn-red");    
     $('.actstat1 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-red");
+    $('.actstat .btn').removeClass("btn-green");
+    $('.actstat3 .btn').removeClass("btn-green");
+    $('.actstat1 .btn').removeClass("btn-green");    
+	}
+     if(result.text == 3){
+    $('.actstat2 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-green");
+    $('.actstat .btn').addClass("btn-red");    
+    $('.actstat1 .btn').addClass("btn-red");
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
 	}
-}
+
+  }
  });
 }
 </script>

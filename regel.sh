@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
 . openwb.conf
@@ -61,7 +63,10 @@ fi
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$sofortll.sh
-#		runs/$ladungan.sh
+		if [[ $debug == "1" ]]; then
+                	echo starte sofort  von aus $sofortll
+        	fi
+
 		exit 0
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
@@ -69,6 +74,10 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 			exit 0
 		else
 			runs/$sofortll.sh
+		if [[ $debug == "1" ]]; then
+                	echo aendere sofort auf $sofortll
+        	fi
+
 			exit 0
 		fi
 	fi		
@@ -82,6 +91,10 @@ fi
 if [[ $nachtladen == "1" ]]; then
 	if (( $nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H <= $nachtladenbisuhr )); then
 		if [[ $socmodul != "none" ]]; then
+			if [[ $debug == "1" ]]; then
+                		echo nachtladen mit socmodul $socmodul
+        		fi
+
 			if (( $soc <= $nachtsoc )); then
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 				#	runs/ladungan.sh
@@ -90,14 +103,14 @@ if [[ $nachtladen == "1" ]]; then
 		                		echo "soc $soc"
 		        			echo "ladeleistung" $nachtll
 					fi
-					echo "start Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
+					echo "Start Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/0.sh
-					echo "stop Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
+					echo "Stop Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0
@@ -175,13 +188,18 @@ schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$minimalstromstaerke.sh
-#		runs/ladungan.sh
+                if [[ $debug == "1" ]]; then
+                     	echo "starte min + pv ladung mit $minimalstromstaerke"
+                fi
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		if (( $uberschuss < 0 )); then
                 	if (( $llalt > $minimalstromstaerke )); then
                                 llneu=$((llalt - 1 ))
                                 runs/$llneu.sh
+		                if [[ $debug == "1" ]]; then
+        	             		echo "min + pv ladung auf $llneu reduziert"
+               			fi
                                 exit 0
                         else
                                 exit 0
@@ -193,6 +211,9 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                         fi
                         llneu=$((llalt + 1 ))
                         runs/$llneu.sh
+	                if [[ $debug == "1" ]]; then
+       	             		echo "min + pv ladung auf $llneu erhoeht"
+     			fi
                 	exit 0
 		fi
 	fi
@@ -204,8 +225,11 @@ fi
 if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( $mindestuberschussphasen <= $uberschuss )); then
-				runs/ladungan.sh
 				runs/$minimalstromstaerke.sh
+				if [[ $debug == "1" ]]; then
+       	             			echo "pv ladung start mit $minimalstromstaerke"
+     				fi
+
 				exit 0
 			fi	
 	fi
@@ -255,6 +279,17 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 fi
 
 
+
+#Lademodus 3 == Aus
+
+if grep -q 3 "/var/www/html/openWB/ramdisk/lademodus"; then
+	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		runs/0.sh
+		exit 0
+	else
+		exit 0
+	fi
+fi
 
 
 
