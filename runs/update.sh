@@ -8,5 +8,6 @@ sudo chown -R pi:pi openWB
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
 sudo chmod +x /var/www/html/openWB/runs/*
+sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
 
