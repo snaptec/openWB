@@ -17,4 +17,8 @@ echo 0 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
-chmod 777 /var/www/html/openWB/ramdisk/*
+echo 0 > /var/www/html/openWB/ramdisk/lla1
+echo 0 > /var/www/html/openWB/ramdisk/lla2
+echo 0 > /var/www/html/openWB/ramdisk/lla3	
+
+sudo chmod 777 /var/www/html/openWB/ramdisk/*

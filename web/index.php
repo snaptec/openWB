@@ -155,57 +155,65 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-4 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladung 
-                        			<div id="lldiv"></div>
-					</button>
-				</div>
-				<div class="col-xs-4 text-center">                     
+				<div class="col-xs-6 text-center">                     
                             		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">PV
                         			<div id="pvdiv"></div> 
 			                </button>
                			</div>
-				<div class="col-xs-4 text-center">
+				<div class="col-xs-6 text-center">
                                         <button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Bezug
                                                 <div id="bezugdiv"></div> 
                                         </button>
                                 </div>  
 			</div>	
 			<div class="row">
-				<div class="col-xs-4 text-center">
-					<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestatus
-					<div id="controlleranaus"></div>
+				<div class="col-xs-6 text-center">		
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladung 
+                        			<div id="lldiv"></div>
 					</button>
 				</div>
-                                <div class="col-xs-4 text-center">
+				<div class="col-xs-6 text-center">
                                 	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC
 					<div id="soclevel"></div>
 					</button>
 				</div>
-	                        <div class="col-xs-4 text-center">
+			</div>
+			<div class="row">
+				<div class="col-xs-6 text-center">
+					<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestatus
+					<div id="controlleranaus"></div>
+					</button>
+				</div>
+				<div class="col-xs-6 text-center">
                 	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">LLSoll
 					<div id="llsolldiv"></div>
 					</button>
 				</div>
 			
-                        </div>
+			</div>
+			<hr>
+			<div class="col-xs-12 text-center">
+				<h4>Lademodus</h4>
+			</div>	
                         <div class="row">
-                                <div class="col-xs-3 text-center">
+                                <div class="col-xs-6 text-center">
 					<div class="actstat">
 						<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block">Sofort Laden</a>
 					</div>
                            	</div>
-                                <div class="col-xs-3 text-center">
+                                <div class="col-xs-6 text-center">
                                         <div class="actstat1">
                                                 <a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block">Min + PV</a>
                                         </div>
-                                </div>
-                                <div class="col-xs-3 text-center">
+				</div>
+			</div>
+			<div class="row">
+                                <div class="col-xs-6 text-center">
                                         <div class="actstat2">
 					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
                                         </div>
 				</div>
-				<div class="col-xs-3 text-center">
+				<div class="col-xs-6 text-center">
 					<div class="actstat3">
 						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block">Stop</a>
 					</div>
@@ -215,7 +223,7 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			</div>
 			<div class="row">
-				<div class="col-xs-4 text-center">
+				<div class="col-xs-12 text-center">
 					<?php
 						$result = '';
 						$lines = file('/var/www/html/openWB/openwb.conf');
@@ -235,7 +243,6 @@ doInterval = setInterval(getfile, 2000);
 
 				</div>
 			</div>
-			<br>
 			<hr>
 			<div id="errorfeed"></div>
 		</div>
