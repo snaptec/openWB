@@ -244,6 +244,9 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<hr>
+			<div class=text-right>
+				<a href="settings.php">Einstellungen</a>
+			</div>
 			<div id="errorfeed"></div>
 		</div>
 	</section>

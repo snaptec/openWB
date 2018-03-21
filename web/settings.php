@@ -113,18 +113,15 @@ foreach($lines as $line) {
 
 
 
-<form name="debug" action="./tools/sofortll.php" method="POST">
-	<label for="debug">Debug Modus:</label><br>
-	<input type="text" name="debug" id="debug" value="<?php echo $debugold ?>">
-	<br>
-	<button type="submit" class="btn btn-primary">Save</button>	 
- </form>
 <form action="./tools/savesettings.php" method="POST">
-	<label for="sofortll">Sofortmodus Ladeleistung:</label><br>
-	<input type="text" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
+	<label for="sofortll">Minimalstromstaerke:</label><br>
+	<input type="text" name="minimalstromstaerke" id="minimalstromstaerke" value="<?php echo $minimalstromstaerkeold ?>"><br>
+	<label for="debug">Debugmodus:</label><br>
 	<input type="text" name="debug" id="debug" value="<?php echo $debugold ?>">
 	<br>
 	<button type="submit" class="btn btn-primary">Save</button>	 
  </form>
+
+<a href="index.php">Zurück</a>
 </body></html>
 

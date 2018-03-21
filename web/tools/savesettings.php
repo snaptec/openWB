@@ -1,16 +1,12 @@
 
 <?php
-echo hello;
-echo $_POST[sofortll];
-echo $_POST[debug];
-echo danach;
-if(isset($_POST['debug'])) {
+if(isset($_POST['minimalstromstaerke'])) {
 $result = '';
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "sofortll=") !== false) {
-	    $result .= 'sofortll='.$_POST[sofortll]."\n";
+	    if(strpos($line, "minimalstromstaerke=") !== false) {
+	    $result .= 'minimalstromstaerke='.$_POST[minimalstromstaerke]."\n";
 	    } 
 	    else {
 	    $result .= $line;
@@ -35,7 +31,7 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 }
-//header("Location: ../settings.php");
+header("Location: ../settings.php");
 
 ?>
 
