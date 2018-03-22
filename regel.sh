@@ -124,7 +124,7 @@ if [[ $nachtladen == "1" ]]; then
                                 	echo "soc $soc"
                                         echo "ladeleistung" $nachtll
                                 fi
-                                echo "start Nachtladung mit $nachtll um $date" >> log/lade.log
+                                echo "start Nachtladung mit $nachtll um $date" >> web/lade.log
                                 exit 0
 			fi
 		exit 0

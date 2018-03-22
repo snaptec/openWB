@@ -143,3 +143,11 @@ aufrufen
 	UART packet Time: 10 ms
 	UART packet length: 512 chars
 
+
+# Danke geht an:
+
+	Frank für das Bereitstellen von Hardware
+
+
+	Gonium für sein super Tool zum auslesen der SDM: https://github.com/gonium/gosdm630
+
