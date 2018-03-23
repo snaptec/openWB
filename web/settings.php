@@ -162,7 +162,7 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<h2> Regelung der EVSE </h2>
 	<b><label for="evsecon">Anbindung an EVSE:</label></b>
 	<input type="text" name="evsecon" id="evsecon" value="<?php echo $evseconold ?>"><br>
-	Gültige Werte dac, modbusevse. Weitere Konfiguration je nach Anbindung erforderlich! Modbus Anbindung noch in Entwicklung!<br>Derzeit wird nur dac unterstützt.<br><br>
+	Gültige Werte dac, modbusevse. Weitere Konfiguration je nach Anbindung erforderlich! Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 	<b><label for="dacregister">Dacregister:</label></b>
 	<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
 	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
