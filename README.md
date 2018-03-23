@@ -30,23 +30,23 @@ Hardware:
 Für 1-phasiges Laden:
 - SimpleEVSEwb
 - Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE), alternativ EVSE DIN mit Modbus
 - Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220 / SDM230)
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- wird beides unterstützt)
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- weiteres auf Anfrage)
 - Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630)
 - RPi Netzteil
 - Schuetz entsprechend der max. Leistung
 - Ladekabel mit Steuerleitung
 - Typ1/2 Stecker
 
-Für 1-phasiges Laden:
+Für 3-phasiges Laden:
 - SimpleEVSEwb
 - Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE), alternativ EVSE DIN mit Modbus
 - Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM630v2)
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- wird beides unterstützt)
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- weiteres auf Anfrage)
 - Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM220/SDM630 je nach Anzahl der Phasen)
 - RPi Netzteil
 - Schuetz entsprechend der max. Leistung
