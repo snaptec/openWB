@@ -208,15 +208,15 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<div class="row">
-                                <div class="col-xs-6 text-center">
-                                        <div class="actstat2">
-					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
-                                        </div>
-				</div>
 				<div class="col-xs-6 text-center">
 					<div class="actstat3">
 						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block">Stop</a>
 					</div>
+				</div>
+				<div class="col-xs-6 text-center">
+                                        <div class="actstat2">
+					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
+                                        </div>
 				</div>
 			</div>
 			<div class="row">
@@ -246,7 +246,7 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			<div class="row">
 				<div class="col-xs-6">
-					Ver0.13
+					Ver0.14
 				</div>
 				<div class="col-xs-6 text-right">
 					<a href="settings.php">Einstellungen</a> 

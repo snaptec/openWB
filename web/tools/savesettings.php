@@ -131,17 +131,6 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "sdm630modbusbezugport=") !== false) {
-	    $result .= 'sdm630modbusbezugport='.$_POST[sdm630modbusbezugport]."\n";
-	    } 
-	    else {
-	    $result .= $line;
-	    }
-}
-file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-$result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
-foreach($lines as $line) {
 	    if(strpos($line, "pvwattmodul=") !== false) {
 	    $result .= 'pvwattmodul='.$_POST[pvwattmodul]."\n";
 	    } 
@@ -197,8 +186,8 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "sdm630modbusllport=") !== false) {
-	    $result .= 'sdm630modbusllport='.$_POST[sdm630modbusllport]."\n";
+	    if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
+	    $result .= 'sdm630modbusbezuglanip='.$_POST[sdm630modbusbezuglanip]."\n";
 	    } 
 	    else {
 	    $result .= $line;

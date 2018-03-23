@@ -99,6 +99,7 @@ ausführen.
 
 
 
+
 In der Shell folgendes eingeben:
 
 	curl -s https://raw.githubusercontent.com/snaptec/openWB/master/openwb-install.sh | sudo sh
@@ -146,8 +147,7 @@ aufrufen
 
 # Danke geht an:
 
-	Frank für das Bereitstellen von Hardware
+	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
 
 
-	Gonium für sein super Tool zum auslesen der SDM: https://github.com/gonium/gosdm630
 

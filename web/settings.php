@@ -1,5 +1,7 @@
 <html>
-<body><?php
+<body>
+<a href="index.php">Zurück</a>
+<?php
 
 
 $lines = file('/var/www/html/openWB/openwb.conf');
@@ -47,13 +49,13 @@ foreach($lines as $line) {
 		list(, $sdm630modbusbezugidold) = explode("=", $line);
 	}
 
+	if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
+		list(, $sdm630modbusbezuglanipold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm630modbusbezugsource=") !== false) {
 		list(, $sdm630modbusbezugsourceold) = explode("=", $line);
 	}
 
-	if(strpos($line, "sdm630modbusbezugport=") !== false) {
-		list(, $sdm630modbusbezugportold) = explode("=", $line);
-	}
 
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
@@ -70,9 +72,6 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "sdm630modbusllsource=") !== false) {
 		list(, $sdm630modbusllsourceold) = explode("=", $line);
-	}
-	if(strpos($line, "sdm630modbusllport=") !== false) {
-		list(, $sdm630modbusllportold) = explode("=", $line);
 	}
 	if(strpos($line, "sdm630modbuslllanip=") !== false) {
 		list(, $sdm630modbuslllanipold) = explode("=", $line);
@@ -186,9 +185,9 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<b><label for="sdm630modbusbezugsource">SDM Modbus Bezug Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
-	<b><label for="sdm630modbusbezugport">SDM Modbus Bezug Port:</label></b>
-	<input type="text" name="sdm630modbusbezugport" id="sdm630modbusbezugport" value="<?php echo $sdm630modbusbezugportold ?>"><br>
-	Gültige Werte 80xx +, Z.B. 8081. Der Port für das Zwischentool zum Auslesen des SDM.<br><br>
+	<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
+	<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
+	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	<h2> PV Module </h2>
 	<b><label for="pvwattmodul">PV Modul:</label></b>
 	<input type="text" name="pvwattmodul" id="pvwattmodul" value="<?php echo $pvwattmodulold ?>"><br>
@@ -206,9 +205,6 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<b><label for="sdm630modbusllid">SDM Modbus Ladeleistung ID:</label></b>
 	<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
-	<b><label for="sdm630modbusllport">SDM Modbus Ladeleistung Port:</label></b>
-	<input type="text" name="sdm630modbusllport" id="sdm630modbusllport" value="<?php echo $sdm630modbusllportold ?>"><br>
-	Gültige Werte 80xx +, Z.B. 8081. Der Port für das Zwischentool zum Auslesen des SDM. Überschneidungen mit anderen Modulen verhindern<br><br>
 	<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
 	<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>

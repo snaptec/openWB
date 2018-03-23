@@ -1,26 +1,45 @@
 #!/bin/bash
 
-###############
-#SDM630v2 wird mithilfe von https://github.com/gonium/gosdm630 ausgelesen.
-#auch für SDM230 nutzbar (L2 und L3 bleiben dann immer 0
-#bezug = bezug soll Modbus ID 2 sein
 . /var/www/html/openWB/openwb.conf
 
-#check ob gonium reader lauft
-if ps ax |grep -v grep |grep "sdm630_httpd-linux-arm -s $sdm630modbusbezugsource -d SDM:$sdm630modbusbezugid -u $sdm630modbusbezugport" > /dev/null
+if [[ $sdm630modbusbezugsource = *virtual* ]]
 then
-else 
-		sudo /home/pi/bin/sdm630_httpd-linux-arm -s $sdm630modbusbezugsource -d SDM:$sdm630modbusbezugid -u $sdm630modbusbezugport &
+	if ps ax |grep -v grep |grep "socat pty,link=$sdm630modbusbezugsource,raw tcp:$sdm630modbusbezuglanip:26" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		sudo socat pty,link=$sdm630modbusbezugsource,raw tcp:$sdm630modbusbezuglanip:26 &
+	fi
+else
+	echo "echo" > /dev/null
 fi
-	
-bezuga1=$(curl -s localhost:8080/last/$sdm630modbusbezugid |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
-bezuga2=$(curl -s localhost:8080/last/$sdm630modbusbezugid |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
-bezuga3=$(curl -s localhost:8080/last/$sdm630modbusbezugid |jq '.Current.L3' | tr -d '\n' | sed 's/\..*$//')
-wattbezug=`curl -s localhost:8080/last/$sdm630modbusbezugid |jq '.Power.L1' | tr -d '\n' | sed 's/\..*$//'`
+n=0
+output=$(sudo python /var/www/html/openWB/modules/sdm630modbusbezug/readsdm.py $sdm630modbusbezugsource $sdm630modbusbezugid)
+while read -r line; do
+	if (( $n == 0 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga1
+	fi
+	if (( $n == 1 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga2
+	fi
+	if (( $n == 2 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga3
+	fi
+	if (( $n == 3 )); then
+		wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
+	if (( $n == 4 )); then
+		wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
+	if (( $n == 5 )); then
+		wl3=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
 
+	n=$((n + 1))
+done <<< "$output"
 
+wattbezug=`echo "($wl1+wl2+$wl3)" |bc`
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
-echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
-echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
-echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
+
+
 

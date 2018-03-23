@@ -10,7 +10,7 @@ cd /var/www/html/openWB/
 
 #Wattbezug	
 if [[ $wattbezugmodul != "none" ]]; then
-	wattbezug=`modules/$wattbezugmodul/main.sh`
+	wattbezug=`timeout 10 modules/$wattbezugmodul/main.sh`
 	#uberschuss zur berechnung
 	wattbezugint=`printf "%.0f\n" $wattbezug`
 	uberschuss=`expr $wattbezugint \* -1`
@@ -22,14 +22,14 @@ fi
 
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
-	pvwatt=`modules/$pvwattmodul/main.sh`
+	pvwatt=`timeout 10 modules/$pvwattmodul/main.sh`
 	if [[ $debug == "1" ]]; then
                 echo pvwatt $pvwatt
         fi
 fi
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
-	modules/$ladeleistungmodul/main.sh
+	timeout 10 modules/$ladeleistungmodul/main.sh
 	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)	
@@ -202,7 +202,11 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                			fi
                                 exit 0
                         else
-                                exit 0
+				if (( $llalt < $minimalstromstaerke )); then
+					llneu=$((llalt + 1 ))
+					runs/$llneu.sh
+				fi	
+				exit 0
                         fi
                 fi
 		if (( $uberschuss > $schaltschwelle )); then
