@@ -135,6 +135,7 @@ then
 else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
+sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
 
 chmod 777 /var/www/html/openWB/openwb.conf

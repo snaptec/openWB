@@ -28,6 +28,10 @@ fi
 if (( $n == 3 )); then
 echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llaktuell
 fi
+if (( $n == 4 )); then
+echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llkwh
+fi
+
 n=$((n + 1))
     done <<< "$output"
 

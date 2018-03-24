@@ -162,6 +162,7 @@ fi
 
 
 
+
 ########################
 # Berechnung für PV Regelung
 mindestuberschussphasen=`echo "($mindestuberschuss*$anzahlphasen)" | bc`
@@ -188,6 +189,7 @@ schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$minimalstromstaerke.sh
+		exit 0
                 if [[ $debug == "1" ]]; then
                      	echo "starte min + pv ladung mit $minimalstromstaerke"
                 fi
@@ -222,32 +224,33 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 		fi
 	fi
 fi
-
 ########################
 #NUR PV Uberschussregelung lademodus 2
 # wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
 if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( $mindestuberschussphasen <= $uberschuss )); then
+		                if [[ $debug == "1" ]]; then
+        	             		echo "nur  pv ladung auf $minimalstromstaerke starten"
+               			fi
 				runs/$minimalstromstaerke.sh
-				if [[ $debug == "1" ]]; then
-       	             			echo "pv ladung start mit $minimalstromstaerke"
-     				fi
-
 				exit 0
 			fi	
 	fi
 
 
-
 # wenn evse bereits an, vergleiche ladestromstaerke und uberschuss und regle nach
 	if (( $wattkombiniert < $abschaltungw )); then	
+
 		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			exit 0		
 		fi
+
 		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 #minimiere Ladeleistung bis kleinste stufe erreicht, dann schalte ab
+
 			if (( $llalt > $minimalstromstaerke )); then
+
 				llneu=$((llalt - 1 ))
                 		runs/$llneu.sh
 				exit 0
@@ -257,31 +260,38 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 			fi
 		fi
 	else
-		if (( $uberschuss < 0 )); then
-			if (( $llalt == 0 )); then
+		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+			if (( $uberschuss < 0 )); then
+				if (( $llalt == 0 )); then
+					exit 0
+				fi
+				if (( $llalt > $minimalstromstaerke )); then
+	
+				      	llneu=$((llalt - 1 ))
+	                                runs/$llneu.sh
+	                                exit 0
+	                        else
+	                                runs/0.sh
+					exit 0
+	                        fi
+	
+			fi
+			if (( $uberschuss > $schaltschwelle )); then
+				if (( $llalt == $maximalstromstaerke )); then
+					exit 0
+				fi
+	
+				llneu=$((llalt + 1 ))
+				if (( $llalt < $minimalstromstaerke )); then
+					llneu=$minimalstromstaerke
+				fi
+				runs/$llneu.sh
 				exit 0
 			fi
-			if (( $llalt > $minimalstromstaerke )); then
-                                llneu=$((llalt - 1 ))
-                                runs/$llneu.sh
-                                exit 0
-                        else
-                                runs/0.sh
-				exit 0
-                        fi
-
+			exit 0
 		fi
-		if (( $uberschuss > $schaltschwelle )); then
-			if (( $llalt == $maximalstromstaerke )); then
-				exit 0
-			fi
-			llneu=$((llalt + 1 ))
-			runs/$llneu.sh
-		fi
-		exit 0
 	fi		
 fi
-
 
 
 #Lademodus 3 == Aus

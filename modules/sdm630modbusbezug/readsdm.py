@@ -30,4 +30,8 @@ resp = client.read_input_registers(0x0E,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 resp = client.read_input_registers(0x10,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x0156,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+
+
 

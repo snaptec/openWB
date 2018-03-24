@@ -1,7 +1,7 @@
 #!/bin/bash
 . /var/www/html/openWB/openwb.conf
 if [[ $evsecon == "dac" ]]; then
-		sudo python /var/www/html/openWB/runs/dac.py 790 $dacregister
+	sudo python /var/www/html/openWB/runs/dac.py 790 $dacregister
 fi
 if [[ $evsecon == "modbusevse" ]]; then
 		sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid 6
