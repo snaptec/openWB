@@ -42,7 +42,7 @@ require 'config.php';
 var doInterval;
 function getfile() {
   $.ajax({
-    url: "/openWB/ramdisk/llaktuell",
+    url: "/openWB/ramdisk/llkombiniert",
     complete: function(request){
       $("#lldiv").html(request.responseText);
     }
@@ -191,6 +191,41 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			
 			</div>
+			<div class="row">
+					<?php
+						$result = '';
+						$lines = file('/var/www/html/openWB/openwb.conf');
+						foreach($lines as $line) {
+						    if(substr($line, 0, 11) == 'nachtladen=') {
+						    $nachtladenold = substr($line, 11, 2);
+	    
+						    }
+						}
+					?>
+					<?php
+						$result = '';
+						$lines = file('/var/www/html/openWB/openwb.conf');
+						foreach($lines as $line) {
+						    if(substr($line, 0, 15) == 'lastmanagement=') {
+						    $lastmanagementold = substr($line, 15, 2);
+	    
+						    }
+						}
+					?>
+
+					<div class="col-xs-6 text-center">
+                	             		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Nachtladen <?php echo $nachtladenold ?>
+					</button>
+					</div>
+				
+					<div class="col-xs-6 text-center">
+                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Lastmanagement <?php echo $lastmanagementold ?>
+
+					</button>
+					</div>
+
+			</div>
+
 			<hr>
 			<div class="col-xs-12 text-center">
 				<h4>Lademodus</h4>
@@ -246,7 +281,7 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			<div class="row">
 				<div class="col-xs-6">
-					Ver0.14
+					Ver0.15
 				</div>
 				<div class="col-xs-6 text-right">
 					<a href="settings.php">Einstellungen</a> 

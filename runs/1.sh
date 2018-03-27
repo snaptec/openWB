@@ -12,3 +12,4 @@ if [[ $debug == "2" ]]; then
 fi
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
+if [[  == 1 ]]; then

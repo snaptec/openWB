@@ -1,9 +1,10 @@
 # openWB
-Control your simpleEVSEwb with a Raspberry for various purposes
+
+Skizze zum Aufbau sowie Screenshots im Wiki!
+
 
 UPDATE:
 derzeitige Version IST lauffähig und im Betastadium.
-Wer das fertige stück software nachbauen und nutzen möchte muss sich noch ein wenig gedulden.
 "Offizieller Release" nach Testphase.
 Beta Tester sind herzlich willkommen.
 

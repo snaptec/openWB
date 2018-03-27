@@ -11,6 +11,10 @@ cd /var/www/html/openWB/
 #Wattbezug	
 if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=`timeout 10 modules/$wattbezugmodul/main.sh`
+	re='^[0-9]+$'
+	if ! [[ $wattbezug =~ $re ]] ; then
+	 wattbezug="0"
+	fi
 	#uberschuss zur berechnung
 	wattbezugint=`printf "%.0f\n" $wattbezug`
 	uberschuss=`expr $wattbezugint \* -1`
@@ -18,14 +22,24 @@ if [[ $wattbezugmodul != "none" ]]; then
 		echo wattbezug $wattbezug
 		echo uberschuss $uberschuss
 	fi
+else
+	wattbezug=0
+	wattbezugint=0
+	uberschuss=0
 fi
 
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=`timeout 10 modules/$pvwattmodul/main.sh`
+	re='^[0-9]+$'
+	if ! [[ $pvwatt =~ $re ]] ; then
+	 pvwatt="0"
+	fi
 	if [[ $debug == "1" ]]; then
                 echo pvwatt $pvwatt
         fi
+else
+	pvwatt=0
 fi
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
@@ -34,20 +48,57 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)	
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
+	re='^[0-9]+$'
+	if ! [[ $lla1 =~ $re ]] ; then
+		 lla1="0"
+	fi
+	if ! [[ $lla2 =~ $re ]] ; then
+		 lla2="0"
+	fi
+
+	if ! [[ $lla3 =~ $re ]] ; then
+		 lla3="0"
+	fi
+	if ! [[ $lladeleistung =~ $re ]] ; then
+		 ladeleistung="0"
+	fi
+
 	if [[ $debug == "1" ]]; then
                 echo ladeleistung $ladeleistung
 		echo lla1 $lla1
 		echo lla2 $lla2
 		echo lla3 $lla3
         fi
+else
+	lla1=0
+	lla2=0
+	lla3=0
+	ladeleistung=0
 fi	
-
+if [[ $lastmanagement == "1" ]]; then
+	timeout 10 modules/$ladeleistungs1modul/main.sh
+	ladeleistungslave1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
+	re='^[0-9]+$'
+	if ! [[ $ladeleistungslave1 =~ $re ]] ; then
+	 ladeleistungslave1="0"
+	fi
+	ladeleistung=`echo "($ladeleistung+$ladeleistungslave1)" |bc`
+	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
+else
+	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
+fi
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
-	soc=`modules/$socmodul/main.sh`
-        if [[ $debug == "1" ]]; then
+	soc=`timeout 10 modules/$socmodul/main.sh`
+        re='^[0-9]+$'
+	if ! [[ $soc =~ $re ]] ; then
+	 soc="0"
+	fi
+	if [[ $debug == "1" ]]; then
                 echo soc $soc
         fi
+else
+	soc=0
 fi
 #Uhrzeit
 	date=$(date)
@@ -195,6 +246,13 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                 fi
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		if (( $ladeleistung < 500 )); then
+			if (( $llalt > $minimalstromstaerke )); then
+                                llneu=$((llalt - 1 ))
+                                runs/$llneu.sh
+                                exit 0
+			fi	
+		fi	
 		if (( $uberschuss < 0 )); then
                 	if (( $llalt > $minimalstromstaerke )); then
                                 llneu=$((llalt - 1 ))
@@ -237,7 +295,13 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 				exit 0
 			fi	
 	fi
-
+	if (( $ladeleistung < 500 )); then
+		if (( $llalt > $minimalstromstaerke )); then
+                        llneu=$((llalt - 1 ))
+                        runs/$llneu.sh
+                        exit 0
+		fi	
+	fi	
 
 # wenn evse bereits an, vergleiche ladestromstaerke und uberschuss und regle nach
 	if (( $wattkombiniert < $abschaltungw )); then	

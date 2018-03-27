@@ -1,18 +1,48 @@
 #!/bin/bash
 
-###############
-#SDM630v2 wird mithilfe von https://github.com/gonium/gosdm630 ausgelesen.
-#auch für SDM230 nutzbar (L2 und L3 bleiben dann immer 0
-#wrwatt = Wattleistung Wechselrichter soll Modbus ID 3 sein
+. /var/www/html/openWB/openwb.conf
 
-wra1=$(curl -s localhost:8080/last/3 |jq '.Current.L1' | tr -d '\n' | sed 's/\..*$//')
-wra2=$(curl -s localhost:8080/last/3 |jq '.Current.L2' | tr -d '\n' | sed 's/\..*$//')
-wra3=$(curl -s localhost:8080/last/3 |jq '.Current.L3' | tr -d '\n' | sed 's/\..*$//')
-wrwatt=`curl -s localhost:8080/last/3 |jq '.Power.L1' | tr -d '\n' | sed 's/\..*$//'`
+if [[ $sdm630modbuswrsource = *virtual* ]]
+then
+	if ps ax |grep -v grep |grep "socat pty,link=$sdm630modbuswrsource,raw tcp:$sdm630modbuswrlanip:26" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		sudo socat pty,link=$sdm630modbuswrsource,raw tcp:$sdm630modbuswrlanip:26 &
+	fi
+else
+	echo "echo" > /dev/null
+fi
+n=0
+output=$(sudo python /var/www/html/openWB/modules/sdm630modbuswr/readsdm.py $sdm630modbuswrsource $sdm630modbuswrid)
+while read -r line; do
+	if (( $n == 0 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/wra1
+	fi
+	if (( $n == 1 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/wra2
+	fi
+	if (( $n == 2 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/wra3
+	fi
+	if (( $n == 3 )); then
+		wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
+	if (( $n == 4 )); then
+		wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
+	if (( $n == 5 )); then
+		wl3=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
+	if (( $n == 6 )); then
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/wrkwh
+	fi
+
+	n=$((n + 1))
+done <<< "$output"
+
+wattwr=`echo "($wl1+wl2+$wl3)" |bc`
+echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
 
 
-echo $wrwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $wra1 > /var/www/html/openWB/ramdisk/wra1
-echo $wra2 > /var/www/html/openWB/ramdisk/wra2
-echo $wra3 > /var/www/html/openWB/ramdisk/wra3
 
