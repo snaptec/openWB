@@ -4,6 +4,6 @@
 	exec("/var/www/html/openWB/runs/update.sh");
 ?>
 	<script type="text/javascript">
-	    setTimeout(function() { window.location = "../index.php"; }, 25000);
+	    setTimeout(function() { window.location = "../index.php"; }, 10000);
 	</script>
 
