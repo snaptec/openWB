@@ -137,6 +137,7 @@ else
 fi
 sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
+echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
 
 chmod 777 /var/www/html/openWB/openwb.conf
 chmod +x /var/www/html/openWB/modules/*                     

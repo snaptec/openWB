@@ -10,4 +10,5 @@ sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
+sudo /var/www/html/openWB/runs/atreboot.sh
 

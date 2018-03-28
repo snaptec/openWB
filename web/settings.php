@@ -188,6 +188,11 @@ foreach($lines as $line) {
 
 <div class="container">
 
+ 
+<button class="btn btn-primary btn-blue"><a href="index.php" class="btn btn-lg btn-block btn-blue">Zurück</a></button>
+
+
+
 <form action="./tools/savesettings.php" method="POST">
 <div class="row text-center">
 	<h2>Konfiguration individuelle Einstellungen</h2>
