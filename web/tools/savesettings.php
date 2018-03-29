@@ -109,6 +109,40 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	    if(strpos($line, "vzloggerpvip=") !== false) {
+	    $result .= 'vzloggerpvip='.$_POST[vzloggerpvip]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "vzloggerline=") !== false) {
+	    $result .= 'vzloggerline='.$_POST[vzloggerline]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "vzloggerpvline=") !== false) {
+	    $result .= 'vzloggerpvline='.$_POST[vzloggerpvline]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
 	    if(strpos($line, "sdm630modbusbezugid=") !== false) {
 	    $result .= 'sdm630modbusbezugid='.$_POST[sdm630modbusbezugid]."\n";
 	    } 

@@ -41,9 +41,6 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-//    if(substr($line, 0, 9) == 'sofortll=') {
-//	    $sofortllold = substr($line, 9, 2);
-//    }
 
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
@@ -105,7 +102,15 @@ foreach($lines as $line) {
 	if(strpos($line, "vzloggerip=") !== false) {
 		list(, $vzloggeripold) = explode("=", $line);
 	}
-
+	if(strpos($line, "vzloggerline=") !== false) {
+		list(, $vzloggerlineold) = explode("=", $line);
+	}
+	if(strpos($line, "vzloggerpvip=") !== false) {
+		list(, $vzloggerpvipold) = explode("=", $line);
+	}
+	if(strpos($line, "vzloggerpvline=") !== false) {
+		list(, $vzloggerpvlineold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm630modbusbezugid=") !== false) {
 		list(, $sdm630modbusbezugidold) = explode("=", $line);
 	}
@@ -300,32 +305,32 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row">
 	Gültige Werte dac, modbusevse. Weitere Konfiguration je nach Anbindung erforderlich! Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	<b><label for="dacregister">Dacregister:</label></b>
 	<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="modbusevsesource">ModbusEVSE Source:</label></b>
 	<input type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="modbusevseid">ModbusEVSE ID:</label></b>
 	<input type="text" name="modbusevseid" id="modbusevseid" value="<?php echo $modbusevseidold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="modbusevselanip">ModbusEVSE LanIP Konverter:</label></b>
 	<input type="text" name="modbusevselanip" id="modbusevselanip" value="<?php echo $modbusevselanipold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
 <div class="row">
@@ -392,7 +397,7 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 
 </div>
 <div class="row">	<hr>
-	<h3> Strombezug Module </h3>
+	<h3> Strombezug Module (EVU-Übergabepunkt)</h3>
 </div>
 <div class="row">
 	<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
@@ -401,32 +406,39 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row">
 	Gültige Werte vzlogger, sdm630modbusbezug, none. Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
 	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	Gültige Werte IP:Port z.B. 192.168.0.12:8080. GGf muss die /var/www/html/openWB/modules/vzlogger/main.sh angepasst werden.<br> Ggf. bei Github einen Bug eröffnen!<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
+	<b><label for="vzloggerline">Vzlogger Zeile:</label></b>
+	<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
+</div>
+<div class="row bg-success">
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+</div>
+<div class="row bg-info">
 	<b><label for="sdm630modbusbezugid">SDM Modbus Bezug ID:</label></b>
 	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdm630modbusbezugsource">SDM Modbus Bezug Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
 	<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
 <div class="row"><hr>
@@ -437,36 +449,51 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<input type="text" name="pvwattmodul" id="pvwattmodul" value="<?php echo $pvwattmodulold ?>"><br>
 </div>
 <div class="row">
-	Gültige Werte wr_fronius, sdm630modbuswr, none. Weitere Module auf Anfrage.<br><br>
+	Gültige Werte wr_fronius, sdm630modbuswr, vzloggerpv, none. Weitere Module auf Anfrage.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="wrfroniusip">WR Fronius IP:</label></b>
 	<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
 	<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
 	<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
 	<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-success">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
+<div class="row bg-warning">
+	<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
+	<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+</div>
+<div class="row bg-warning">
+	<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
+	<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+</div>
+
 <div class="row"><hr>
 	<h3> Ladeleistungs Module </h3>
 </div>

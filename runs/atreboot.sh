@@ -1,7 +1,7 @@
 #!/bin/bash
 #Ramdisk mit initialen Werten befüllen nach neustart
 sleep 10
-echo 6 > /var/www/html/openWB/ramdisk/llsoll
+echo 0 > /var/www/html/openWB/ramdisk/llsoll
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus

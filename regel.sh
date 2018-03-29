@@ -7,30 +7,9 @@ cd /var/www/html/openWB/
 
 #######################################
 # Werte für die Berechnung ermitteln
-
-#Wattbezug	
-if [[ $wattbezugmodul != "none" ]]; then
-	wattbezug=`timeout 10 modules/$wattbezugmodul/main.sh`
-	re='^[0-9]+$'
-	if ! [[ $wattbezug =~ $re ]] ; then
-	 wattbezug="0"
-	fi
-	#uberschuss zur berechnung
-	wattbezugint=`printf "%.0f\n" $wattbezug`
-	uberschuss=`expr $wattbezugint \* -1`
-	if [[ $debug == "1" ]]; then
-		echo wattbezug $wattbezug
-		echo uberschuss $uberschuss
-	fi
-else
-	wattbezug=0
-	wattbezugint=0
-	uberschuss=0
-fi
-
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
-	pvwatt=`timeout 10 modules/$pvwattmodul/main.sh`
+	pvwatt=`modules/$pvwattmodul/main.sh`
 	re='^[0-9]+$'
 	if ! [[ $pvwatt =~ $re ]] ; then
 	 pvwatt="0"
@@ -40,6 +19,21 @@ if [[ $pvwattmodul != "none" ]]; then
         fi
 else
 	pvwatt=0
+fi
+#Wattbezug	
+if [[ $wattbezugmodul != "none" ]]; then
+	wattbezug=`modules/$wattbezugmodul/main.sh`
+	#uberschuss zur berechnung
+	wattbezugint=`printf "%.0f\n" $wattbezug`
+	uberschuss=$(expr $wattbezugint \* -1)
+	if [[ $debug == "1" ]]; then
+		echo wattbezug $wattbezug
+		echo uberschuss $uberschuss
+	fi
+else
+	wattbezug=0
+	wattbezugint=0
+	uberschuss=0
 fi
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
@@ -74,7 +68,7 @@ else
 	lla2=0
 	lla3=0
 	ladeleistung=0
-fi	
+fi
 if [[ $lastmanagement == "1" ]]; then
 	timeout 10 modules/$ladeleistungs1modul/main.sh
 	ladeleistungslave1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
