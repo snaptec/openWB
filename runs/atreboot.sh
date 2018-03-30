@@ -35,4 +35,5 @@ echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
+sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
