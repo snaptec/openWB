@@ -281,7 +281,7 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			<div class="row">
 				<div class="col-xs-6">
-					Ver0.17
+					Ver0.18
 				</div>
 				<div class="col-xs-6 text-right">
 					<a href="settings.php">Einstellungen</a> 

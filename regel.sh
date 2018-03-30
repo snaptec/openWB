@@ -53,7 +53,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	if ! [[ $lla3 =~ $re ]] ; then
 		 lla3="0"
 	fi
-	if ! [[ $lladeleistung =~ $re ]] ; then
+	if ! [[ $ladeleistung =~ $re ]] ; then
 		 ladeleistung="0"
 	fi
 

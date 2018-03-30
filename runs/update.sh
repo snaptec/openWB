@@ -1,8 +1,8 @@
 #!/bin/bash
 
 cd /var/www/html/openWB
-sudo git reset --hard
-sudo git pull origin master:master
+sudo git fetch origin
+sudo git reset --hard origin/master
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chmod 777 /var/www/html/openWB/openwb.conf
