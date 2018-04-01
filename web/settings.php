@@ -406,20 +406,6 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row">
 	Gültige Werte vzlogger, sdm630modbusbezug, none. Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
-<div class="row bg-success">
-	<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
-	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
-</div>
-<div class="row bg-success">
-	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
-</div>
-<div class="row bg-success">
-	<b><label for="vzloggerline">Vzlogger Zeile:</label></b>
-	<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
-</div>
-<div class="row bg-success">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
-</div>
 <div class="row bg-info">
 	<b><label for="sdm630modbusbezugsource">SDM Modbus Bezug Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
@@ -441,6 +427,21 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row bg-info">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
+<div class="row bg-warning">
+	<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
+	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+</div>
+<div class="row bg-warning">
+	<b><label for="vzloggerline">Vzlogger Zeile:</label></b>
+	<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+</div>
+
 <div class="row"><hr>
 	<h3> PV Module </h3>
 </div>
@@ -501,7 +502,7 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<b><label for="ladeleistungmodul">Ladeleistungmodul:</label></b>
 	<input type="text" name="ladeleistungmodul" id="ladeleistungmodul" value="<?php echo $ladeleistungmodulold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row">
 	Gültige Werte sdm630modbusll, none. Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
 <div class="row bg-info">
