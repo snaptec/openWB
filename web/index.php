@@ -156,24 +156,24 @@ doInterval = setInterval(getfile, 2000);
 			</div>
 			<div class="row">
 				<div class="col-xs-6 text-center">                     
-                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">PV
+                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">PV in Watt
                         			<div id="pvdiv"></div> 
 			                </button>
                			</div>
 				<div class="col-xs-6 text-center">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Bezug
+                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Bezug in Watt
                                                 <div id="bezugdiv"></div> 
                                         </button>
                                 </div>  
 			</div>	
 			<div class="row">
 				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladung 
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung in Watt
                         			<div id="lldiv"></div>
 					</button>
 				</div>
 				<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC
+                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC in %
 					<div id="soclevel"></div>
 					</button>
 				</div>
@@ -185,7 +185,7 @@ doInterval = setInterval(getfile, 2000);
 					</button>
 				</div>
 				<div class="col-xs-6 text-center">
-                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">LLSoll
+                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Soll  in A
 					<div id="llsolldiv"></div>
 					</button>
 				</div>
@@ -281,7 +281,7 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			<div class="row">
 				<div class="col-xs-6">
-					Ver0.18
+					Ver0.19
 				</div>
 				<div class="col-xs-6 text-right">
 					<a href="settings.php">Einstellungen</a> 

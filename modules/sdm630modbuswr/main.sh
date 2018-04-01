@@ -42,6 +42,7 @@ while read -r line; do
 done <<< "$output"
 
 wattwr=`echo "($wl1+wl2+$wl3)" |bc`
+echo $wattwr
 echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
 
 

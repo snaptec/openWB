@@ -4,13 +4,13 @@ set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
 . openwb.conf
+re='^-?[0-9]+$'
 
 #######################################
 # Werte für die Berechnung ermitteln
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
-	pvwatt=`modules/$pvwattmodul/main.sh`
-	re='^[0-9]+$'
+	pvwatt=$(modules/$pvwattmodul/main.sh)
 	if ! [[ $pvwatt =~ $re ]] ; then
 	 pvwatt="0"
 	fi
@@ -22,9 +22,12 @@ else
 fi
 #Wattbezug	
 if [[ $wattbezugmodul != "none" ]]; then
-	wattbezug=`modules/$wattbezugmodul/main.sh`
+	wattbezug=$(modules/$wattbezugmodul/main.sh)
+	if ! [[ $wattbezug =~ $re ]] ; then
+	wattbezug="0"
+	fi
 	#uberschuss zur berechnung
-	wattbezugint=`printf "%.0f\n" $wattbezug`
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$(expr $wattbezugint \* -1)
 	if [[ $debug == "1" ]]; then
 		echo wattbezug $wattbezug
@@ -42,8 +45,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)	
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
-	re='^[0-9]+$'
-	if ! [[ $lla1 =~ $re ]] ; then
+		if ! [[ $lla1 =~ $re ]] ; then
 		 lla1="0"
 	fi
 	if ! [[ $lla2 =~ $re ]] ; then
@@ -72,19 +74,17 @@ fi
 if [[ $lastmanagement == "1" ]]; then
 	timeout 10 modules/$ladeleistungs1modul/main.sh
 	ladeleistungslave1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
-	re='^[0-9]+$'
 	if ! [[ $ladeleistungslave1 =~ $re ]] ; then
 	 ladeleistungslave1="0"
 	fi
-	ladeleistung=`echo "($ladeleistung+$ladeleistungslave1)" |bc`
+	ladeleistung=$(echo "($ladeleistung+$ladeleistungslave1)" |bc)
 	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
 else
 	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
 fi
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
-	soc=`timeout 10 modules/$socmodul/main.sh`
-        re='^[0-9]+$'
+	soc=$(timeout 10 modules/$socmodul/main.sh)
 	if ! [[ $soc =~ $re ]] ; then
 	 soc="0"
 	fi
@@ -130,7 +130,6 @@ fi
 
 
 
-
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 if [[ $nachtladen == "1" ]]; then
@@ -142,7 +141,6 @@ if [[ $nachtladen == "1" ]]; then
 
 			if (( $soc <= $nachtsoc )); then
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-				#	runs/ladungan.sh
 					runs/$nachtll.sh
 					if [[ $debug == "1" ]]; then
 		                		echo "soc $soc"
@@ -176,11 +174,10 @@ if [[ $nachtladen == "1" ]]; then
 		fi	
 	fi
 fi
-
 #######################
 #Ladestromstarke berechnen
 	llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
-	llphasentest=`expr $llalt - "3"`
+	llphasentest=$(expr $llalt - "3")
 
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( $llalt > 3 )); then
@@ -207,13 +204,12 @@ fi
 
 
 
-
 ########################
 # Berechnung für PV Regelung
-mindestuberschussphasen=`echo "($mindestuberschuss*$anzahlphasen)" | bc`
-wattkombiniert=`echo "($ladeleistung+$uberschuss)" | bc`
-abschaltungw=`echo "($abschaltuberschuss*$anzahlphasen)" | bc`
-schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
+mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
+wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
+abschaltungw=$(echo "($abschaltuberschuss*$anzahlphasen)" | bc)
+schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 
 
 	if [[ $debug == "2" ]]; then
@@ -223,7 +219,7 @@ schaltschwelle=`echo "(230*$anzahlphasen)" | bc`
 		echo `cat ramdisk/ladestatus`
 		echo llsoll $llalt
 		echo pvwatt $pvwatt
-                echo mindestuberschussphasen $mindestuberschussphasen
+        echo mindestuberschussphasen $mindestuberschussphasen
 		echo wattkombiniert $wattkombiniert
 		echo abschaltungw $abschaltungw
 		echo schaltschwelle $schaltschwelle

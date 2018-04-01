@@ -353,51 +353,51 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row">
 	<h4>Slave1 WB</h4>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="evsecons1">Anbindung der Slave 1 EVSE:</label></b>
 	<input type="text" name="evsecons1" id="evsecons1" value="<?php echo $evsecons1old ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte modbusevse. Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
 	<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
 	<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="ladeleistungs1modul">Ladeleistung Slave 1 Modul:</label></b>
 	<input type="text" name="ladeleistungs1modul" id="ladeleistungs1modul" value="<?php echo $ladeleistungs1modulold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte sdm630modbuslls1. Modul zur Messung der Ladeleistung in der Slave WB.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdmids1">Slave 1 SDM Zähler ID:</label></b>
 	<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID des Slave 1 SDM Zählers in der WB.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
 	<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der Slave WB.<br><br>
 
 </div>
 <div class="row">	<hr>
-	<h3> Strombezug Module (EVU-Übergabepunkt)</h3>
+	<h3> Strombezugsmessmodule (EVU-Übergabepunkt)</h3>
 </div>
 <div class="row">
 	<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
@@ -411,7 +411,7 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
 </div>
 <div class="row bg-success">
-	Gültige Werte IP:Port z.B. 192.168.0.12:8080. GGf muss die /var/www/html/openWB/modules/vzlogger/main.sh angepasst werden.<br> Ggf. bei Github einen Bug eröffnen!<br><br>
+	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
 </div>
 <div class="row bg-success">
 	<b><label for="vzloggerline">Vzlogger Zeile:</label></b>
@@ -421,18 +421,18 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
 </div>
 <div class="row bg-info">
-	<b><label for="sdm630modbusbezugid">SDM Modbus Bezug ID:</label></b>
-	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
-</div>
-<div class="row bg-info">
 	<b><label for="sdm630modbusbezugsource">SDM Modbus Bezug Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
 <div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="sdm630modbusbezugid">SDM Modbus Bezug ID:</label></b>
+	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
 <div class="row bg-info">
 	<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
@@ -451,32 +451,32 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row">
 	Gültige Werte wr_fronius, sdm630modbuswr, vzloggerpv, none. Weitere Module auf Anfrage.<br><br>
 </div>
-<div class="row bg-info">
+<div class="row">
 	<b><label for="wrfroniusip">WR Fronius IP:</label></b>
 	<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row">
 	Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
 	<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
 	<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
 	<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
 </div>
-<div class="row bg-success">
+<div class="row bg-info">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
 <div class="row bg-warning">
@@ -495,34 +495,34 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 </div>
 
 <div class="row"><hr>
-	<h3> Ladeleistungs Module </h3>
+	<h3> Ladeleistungsmessmodule </h3>
 </div>
 <div class="row">
 	<b><label for="ladeleistungmodul">Ladeleistungmodul:</label></b>
 	<input type="text" name="ladeleistungmodul" id="ladeleistungmodul" value="<?php echo $ladeleistungmodulold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte sdm630modbusll, none. Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdm630modbusllsource">SDM Modbus Ladeleistung Source:</label></b>
 	<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdm630modbusllid">SDM Modbus Ladeleistung ID:</label></b>
 	<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
 	<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
 </div>
-<div class="row">
+<div class="row bg-info">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
 <div class="row"><hr>
