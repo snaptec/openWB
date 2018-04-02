@@ -37,13 +37,17 @@ while read -r line; do
 	if (( $n == 6 )); then
 		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezugkwh
 	fi
-
+	if (( $n == 7 )); then
+		wl=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+	fi
 	n=$((n + 1))
 done <<< "$output"
 
-wattbezug=`echo "($wl1+wl2+$wl3)" |bc`
-echo $wattbezug
-echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
+echo $wl
+echo $wl > /var/www/html/openWB/ramdisk/wattbezug
+#wattbezug=`echo "($wl1+wl2+$wl3)" |bc`
+#echo $wattbezug
+#echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 
 
 
