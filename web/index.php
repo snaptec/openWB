@@ -279,6 +279,10 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<hr>
+			
+		<!--	<div class="row">
+				<iframe height="1000" class="col-xs-12" src="/metern/index.php"></iframe>
+			</div> -->
 			<div class="row">
 				<div class="col-xs-6">
 					Ver0.21

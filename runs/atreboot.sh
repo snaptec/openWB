@@ -17,11 +17,13 @@ touch /var/www/html/openWB/ramdisk/llas11
 touch /var/www/html/openWB/ramdisk/llas12
 touch /var/www/html/openWB/ramdisk/llas13
 touch /var/www/html/openWB/ramdisk/llkwh
+touch /var/www/html/openWB/ramdisk/pvkwh
 touch /var/www/html/openWB/ramdisk/llkwhs1
+touch /var/www/html/openWB/ramdisk/einspeisungkwh
+touch /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
-
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/lademodus
@@ -34,6 +36,9 @@ echo 0 > /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
+echo 0 > /var/www/html/openWB/ramdisk/pvkwh
+echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
+echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*

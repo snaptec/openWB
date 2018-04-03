@@ -34,9 +34,13 @@ while read -r line; do
 	if (( $n == 5 )); then
 		wl3=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
 	fi
+
 	if (( $n == 6 )); then
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezugkwh
+		bezugkwh=$(echo "$line" |  cut -c2- )
+		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/bezugkwh
+		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/einspeisungkwh
 	fi
+
 	n=$((n + 1))
 done <<< "$output"
 

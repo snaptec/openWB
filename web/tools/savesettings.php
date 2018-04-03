@@ -131,6 +131,28 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	    if(strpos($line, "vzloggerkwhline=") !== false) {
+	    $result .= 'vzloggerkwhline='.$_POST[vzloggerkwhline]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "vzloggerekwhline=") !== false) {
+	    $result .= 'vzloggerekwhline='.$_POST[vzloggerekwhline]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
 	    if(strpos($line, "vzloggerpvline=") !== false) {
 	    $result .= 'vzloggerpvline='.$_POST[vzloggerpvline]."\n";
 	    } 

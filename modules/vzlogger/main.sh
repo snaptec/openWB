@@ -13,3 +13,8 @@ watt=$(echo "${watt}" | cut -f1 -d".")
 echo $watt
 #zur weiteren verwendung im webinterface
 echo $watt > /var/www/html/openWB/ramdisk/wattbezug
+
+kwh=$(echo $watttmp | jq . | sed ''$vzloggerkwhline'!d' | tr -d ' ' |tr -d '\n' )
+echo $kwh > /var/www/html/openWB/ramdisk/bezugkwh
+ekwh=$(echo $watttmp | jq . | sed ''$vzloggerekwhline'!d' | tr -d ' ' |tr -d '\n' )
+echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh

@@ -105,6 +105,12 @@ foreach($lines as $line) {
 	if(strpos($line, "vzloggerline=") !== false) {
 		list(, $vzloggerlineold) = explode("=", $line);
 	}
+	if(strpos($line, "vzloggerkwhline=") !== false) {
+		list(, $vzloggerkwhlineold) = explode("=", $line);
+	}
+	if(strpos($line, "vzloggerekwhline=") !== false) {
+		list(, $vzloggerekwhlineold) = explode("=", $line);
+	}
 	if(strpos($line, "vzloggerpvip=") !== false) {
 		list(, $vzloggerpvipold) = explode("=", $line);
 	}
@@ -204,63 +210,174 @@ foreach($lines as $line) {
 </div><hr>
 <div class="row">
 	<b><label for="minimalstromstaerke">Minimalstromstaerke in A:</label></b>
-	<input type="text" name="minimalstromstaerke" id="minimalstromstaerke" value="<?php echo $minimalstromstaerkeold ?>"><br>
+	<select type="text" name="minimalstromstaerke" id="minimalstromstaerke">
+		<option <?php if($minimalstromstaerkeold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minimalstromstaerkeold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minimalstromstaerkeold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minimalstromstaerkeold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minimalstromstaerkeold == 10) echo selected ?> value="10">10</option>
+	</select><br>
 </div>
 <div class="row">
-	Gültige Werte 6-10. Gibt an mit wieviel Ampere Mindestens geladen wird.<br><br>
+	Gibt an mit wieviel Ampere Mindestens geladen wird.<br><br>
 </div>
 <div class="row">
 	<b><label for="maximalstromstaerke">Maximalstromstaerke in A:</label></b>
-	<input type="text" name="maximalstromstaerke" id="maximalstromstaerke" value="<?php echo $maximalstromstaerkeold ?>"><br>
+	<select type="text" name="maximalstromstaerke" id="maximalstromstaerke">
+		<option <?php if($maximalstromstaerkeold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($maximalstromstaerkeold == 12) echo selected ?> value="12">12</option>
+		<option <?php if($maximalstromstaerkeold == 13) echo selected ?> value="13">13</option>
+		<option <?php if($maximalstromstaerkeold == 14) echo selected ?> value="14">14</option>
+		<option <?php if($maximalstromstaerkeold == 15) echo selected ?> value="15">15</option>
+		<option <?php if($maximalstromstaerkeold == 16) echo selected ?> value="16">16</option>
+		<option <?php if($maximalstromstaerkeold == 17) echo selected ?> value="17">17</option>
+		<option <?php if($maximalstromstaerkeold == 18) echo selected ?> value="18">18</option>
+		<option <?php if($maximalstromstaerkeold == 19) echo selected ?> value="19">19</option>
+		<option <?php if($maximalstromstaerkeold == 20) echo selected ?> value="20">20</option>
+		<option <?php if($maximalstromstaerkeold == 21) echo selected ?> value="21">21</option>
+		<option <?php if($maximalstromstaerkeold == 22) echo selected ?> value="22">22</option>
+		<option <?php if($maximalstromstaerkeold == 23) echo selected ?> value="23">23</option>
+		<option <?php if($maximalstromstaerkeold == 24) echo selected ?> value="24">24</option>
+		<option <?php if($maximalstromstaerkeold == 25) echo selected ?> value="25">25</option>
+		<option <?php if($maximalstromstaerkeold == 26) echo selected ?> value="26">26</option>
+		<option <?php if($maximalstromstaerkeold == 27) echo selected ?> value="27">27</option>
+		<option <?php if($maximalstromstaerkeold == 28) echo selected ?> value="28">28</option>
+		<option <?php if($maximalstromstaerkeold == 29) echo selected ?> value="29">29</option>
+		<option <?php if($maximalstromstaerkeold == 30) echo selected ?> value="30">30</option>
+		<option <?php if($maximalstromstaerkeold == 31) echo selected ?> value="31">31</option>
+		<option <?php if($maximalstromstaerkeold == 32) echo selected ?> value="32">32</option>
+	</select><br>
+
 </div>
 <div class="row">
-	Gültige Werte 11-32. Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
+	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
 </div>
 <div class="row">
 	<b><label for="debug">Debugmodus:</label></b>
-	<input type="text" name="debug" id="debug" value="<?php echo $debugold ?>"><br>
+	<select type="text" name="debug" id="debug">
+	<option <?php if($debugold == 0) echo selected ?>value="0">0</option>
+		<option <?php if($debugold == 1) echo selected ?> value="1">1</option>
+		<option <?php if($debugold == 2) echo selected ?>  value="2">2</option>
+	</select>
+<br>
 </div>
 <div class="row">
-	Gültige Werte 0-2. 0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br><br>
+	0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br><br>
 </div>
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
 </div>
 <div class="row">
 	<b><label for="nachtladen">Nachtladen:</label></b>
-	<input type="text" name="nachtladen" id="nachtladen" value="<?php echo $nachtladenold ?>"><br>
+	<select type="text" name="nachtladen" id="nachtladen">
+		<option <?php if($nachtladenold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($nachtladenold == 1) echo selected ?> value="1">An</option>
+	</select>
 </div>
 <div class="row">
-	Gültiger Wert 0 oder 1. Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
+	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
 </div>
-<div class="row">
-	<b><label for="nachtll">Nachtladestromstärke:</label></b>
-	<input type="text" name="nachtll" id="nachtll" value="<?php echo $nachtllold ?>"><br>
+<div id="nachtladenaus">
+	<br>
 </div>
-<div class="row">
-	Gültiger Wert 6-32. Ampere mit der nachts geladen werden soll<br><br>
+<div id="nachtladenan">
+	<div class="row">
+       		<b><label for="nachtll">Nachtladestromstärke in A:</label></b>
+        	<select type="text" name="nachtll" id="nachtll">
+         	        <option <?php if($nachtllold == 6) echo selected ?> value="6">6</option>
+	       	        <option <?php if($nachtllold == 7) echo selected ?> value="7">7</option>
+        	        <option <?php if($nachtllold == 8) echo selected ?> value="8">8</option>
+        	        <option <?php if($nachtllold == 9) echo selected ?> value="9">9</option>
+        	        <option <?php if($nachtllold == 10) echo selected ?> value="10">10</option>
+			<option <?php if($nachtllold == 11) echo selected ?> value="11">11</option>
+        	        <option <?php if($nachtllold == 12) echo selected ?> value="12">12</option>
+        	        <option <?php if($nachtllold == 13) echo selected ?> value="13">13</option>
+        	        <option <?php if($nachtllold == 14) echo selected ?> value="14">14</option>
+        	        <option <?php if($nachtllold == 15) echo selected ?> value="15">15</option>
+        	        <option <?php if($nachtllold == 16) echo selected ?> value="16">16</option>
+        	        <option <?php if($nachtllold == 17) echo selected ?> value="17">17</option>
+        	        <option <?php if($nachtllold == 18) echo selected ?> value="18">18</option>
+        		<option <?php if($nachtllold == 19) echo selected ?> value="19">19</option>
+               		<option <?php if($nachtllold == 20) echo selected ?> value="20">20</option>
+                	<option <?php if($nachtllold == 21) echo selected ?> value="21">21</option>
+                	<option <?php if($nachtllold == 22) echo selected ?> value="22">22</option>
+                	<option <?php if($nachtllold == 23) echo selected ?> value="23">23</option>
+                	<option <?php if($nachtllold == 24) echo selected ?> value="24">24</option>
+                	<option <?php if($nachtllold == 25) echo selected ?> value="25">25</option>
+                	<option <?php if($nachtllold == 26) echo selected ?> value="26">26</option>
+                	<option <?php if($nachtllold == 27) echo selected ?> value="27">27</option>
+                	<option <?php if($nachtllold == 28) echo selected ?> value="28">28</option>
+                	<option <?php if($nachtllold == 29) echo selected ?> value="29">29</option>
+                	<option <?php if($nachtllold == 30) echo selected ?> value="30">30</option>
+                	<option <?php if($nachtllold == 31) echo selected ?> value="31">31</option>
+                	<option <?php if($nachtllold == 32) echo selected ?> value="32">32</option>
+       		</select><br>
+	</div>
+	<div class="row">
+		Ampere mit der nachts geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladenabuhr">Nachtladen Uhrzeit ab:</label></b>
+	       	<select type="text" name="nachtladenabuhr" id="nachtladenabuhr">
+ 			<option <?php if($nachtladenabuhrold == 17) echo selected ?> value="17">17</option>
+ 			<option <?php if($nachtladenabuhrold == 18) echo selected ?> value="18">18</option>
+ 			<option <?php if($nachtladenabuhrold == 19) echo selected ?> value="19">19</option>
+ 			<option <?php if($nachtladenabuhrold == 20) echo selected ?> value="20">20</option>
+ 			<option <?php if($nachtladenabuhrold == 21) echo selected ?> value="21">21</option>
+ 			<option <?php if($nachtladenabuhrold == 22) echo selected ?> value="22">22</option>
+			<option <?php if($nachtladenabuhrold == 23) echo selected ?> value="23">23</option>
+		</select><br>
+	</div>
+	<div class="row">
+		Ab wann Abends geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladenbisuhr">Nachtladen Uhrzeit bis:</label></b>
+	       	<select type="text" name="nachtladenbisuhr" id="nachtladenbisuhr">
+ 			<option <?php if($nachtladenbisuhrold == 1) echo selected ?> value="1">1</option>
+  			<option <?php if($nachtladenbisuhrold == 2) echo selected ?> value="2">2</option>
+	 		<option <?php if($nachtladenbisuhrold == 3) echo selected ?> value="3">3</option>
+ 			<option <?php if($nachtladenbisuhrold == 4) echo selected ?> value="4">4</option>
+ 			<option <?php if($nachtladenbisuhrold == 5) echo selected ?> value="5">5</option>
+ 			<option <?php if($nachtladenbisuhrold == 6) echo selected ?> value="6">6</option>
+ 			<option <?php if($nachtladenbisuhrold == 7) echo selected ?> value="7">7</option>
+ 			<option <?php if($nachtladenbisuhrold == 8) echo selected ?> value="8">8</option>
+			<option <?php if($nachtladenbisuhrold == 9) echo selected ?> value="9">9</option>	
+		</select><br>
+
+	</div>
+	<div class="row">
+		Bis wann morgens geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtsoc">Nacht SOC:</label></b>
+		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
+	</div>
+	<div class="row">
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+	</div>
 </div>
-<div class="row">
-	<b><label for="nachtladenabuhr">Nachtladen Uhrzeit ab:</label></b>
-	<input type="text" name="nachtladenabuhr" id="nachtladenabuhr" value="<?php echo $nachtladenabuhrold ?>"><br>
-</div>
-<div class="row">
-	Gültiger Wert 17-23. Ab wann Abends geladen werden soll<br><br>
-</div>
-<div class="row">
-	<b><label for="nachtladenbisuhr">Nachtladen Uhrzeit bis:</label></b>
-	<input type="text" name="nachtladenbisuhr" id="nachtladenbisuhr" value="<?php echo $nachtladenbisuhrold ?>"><br>
-</div>
-<div class="row">
-	Gültiger Wert 1-9. Bis wann morgens geladen werden soll<br><br>
-</div>
-<div class="row">
-	<b><label for="nachtsoc">Nacht SOC:</label></b>
-	<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
-</div>
-<div class="row">
-	Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
-</div>
+<script>
+$(function() {
+      if($('#nachtladen').val() == '0') {
+		$('#nachtladenaus').show(); 
+		$('#nachtladenan').hide();
+      } else {
+		$('#nachtladenaus').hide();
+	       	$('#nachtladenan').show();	
+      } 
+
+	$('#nachtladen').change(function(){
+	        if($('#nachtladen').val() == '0') {
+			$('#nachtladenaus').show(); 
+			$('#nachtladenan').hide();
+	        } else {
+			$('#nachtladenaus').hide();
+		       	$('#nachtladenan').show();	
+	        } 
+	    });
+});
+</script>
 <div class="row"><hr>
 	<h3>PV Regelung</h3>
 </div>
@@ -300,18 +417,25 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 </div>
 <div class="row">
 	<b><label for="evsecon">Anbindung an EVSE:</label></b>
-	<input type="text" name="evsecon" id="evsecon" value="<?php echo $evseconold ?>"><br>
+        <select type="text" name="evsecon" id="evsecon">
+		<option <?php if($evseconold == "modbusevse\n") echo selected ?> value="modbusevse">Modbusevse</option>
+		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
+	</select>
+
 </div>
 <div class="row">
 	Gültige Werte dac, modbusevse. Weitere Konfiguration je nach Anbindung erforderlich! Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 </div>
-<div class="row bg-success">
-	<b><label for="dacregister">Dacregister:</label></b>
-	<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
-</div>
-<div class="row bg-success">
+<div id="evsecondac">
+	<div class="row bg-success">
+		<b><label for="dacregister">Dacregister:</label></b>
+		<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
+	</div>
+	<div class="row bg-success">
 	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
+	</div>
 </div>
+<div id="evseconmod">
 <div class="row bg-info">
 	<b><label for="modbusevsesource">ModbusEVSE Source:</label></b>
 	<input type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>"><br>
@@ -333,79 +457,142 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row bg-info">
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
+</div>
+<script>
+$(function() {
+      if($('#evsecon').val() == 'dac') {
+		$('#evsecondac').show(); 
+		$('#evseconmod').hide();
+      } else {
+		$('#evsecondac').hide();
+	       	$('#evseconmod').show();	
+      } 
+
+	$('#evsecon').change(function(){
+	        if($('#evsecon').val() == 'dac') {
+			$('#evsecondac').show(); 
+			$('#evseconmod').hide();
+	        } else {
+			$('#evsecondac').hide();
+		       	$('#evseconmod').show();	
+	        } 
+	    });
+});
+</script>
 <div class="row">
 	<h4>Lastmanagement</h4>
 </div>
 <div class="row">
 	<b><label for="lastmanagement">Lastmanagement:</label></b>
-	<input type="text" name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ?>"><br>
+	<select type="text" name="lastmanagement" id="lastmanagement">
+		<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
+	</select>
 </div>
 <div class="row">
-	Gültiger Wert 0 oder 1. Definiert ob es eine zweite WB gibt. Master & Slave werden gleichberechtigt bis Max Stromstaerke geregelt.<br><br>
+	Definiert ob es eine zweite WB gibt. Master & Slave werden gleichberechtigt bis Max Stromstaerke geregelt.<br><br>
 </div>
-<div class="row">
-	<b><label for="lastmmaxw">Lastmanagement Max Watt:</label></b>
-	<input type="text" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>"><br>
+<div id="lastmmaus">
+	<br>
 </div>
-<div class="row">
-	Gültiger Wert 0 bis 44000. Definiert die maximalen Watt die Master & Slave WB gleichzeitig entnehmen dürfen.<br> Wird der Wert überschritten, werden beide WB gleichmäßig runtergeregelt !!noch nicht implementiert, Max Stromstärke gilt pro WB!!<br><br>
+<div id="lastmman">
+	<div class="row">
+		<b><label for="lastmmaxw">Lastmanagement Max Watt:</label></b>
+		<input type="text" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>"><br>
+	</div>
+	<div class="row">
+		Gültiger Wert 0 bis 44000. Definiert die maximalen Watt die Master & Slave WB gleichzeitig entnehmen dürfen.<br> Wird der Wert überschritten, werden beide WB gleichmäßig runtergeregelt !!noch nicht implementiert, Max Stromstärke gilt pro WB!!<br><br>
+	</div>
+	<div class="row">
+		<h4>Slave1 WB</h4>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evsecons1">Anbindung der Slave 1 EVSE:</label></b>
+		<select type="text" name="evsecons1" id="lastmanagement">
+			<option <?php if($evsecons1old == modbusevse) echo selected ?> value="modbusevse">modbusevse</option>
+		</select>
+	</div>
+	<div class="row bg-info">
+		Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
+		<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
+		<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="ladeleistungs1modul">Ladeleistung Slave 1 Modul:</label></b>
+		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
+			<option <?php if($ladeleistungs1modulold == sdm630modbuslls1) echo selected ?> value="sdm630modbuslls1">sdm630modbuslls1</option>
+		</select>
+	</div>
+	<div class="row bg-info">
+		Modul zur Messung der Ladeleistung in der Slave WB.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdmids1">Slave 1 SDM Zähler ID:</label></b>
+		<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des Slave 1 SDM Zählers in der WB.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
+		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der Slave WB.<br><br>
+	</div>
 </div>
-<div class="row">
-	<h4>Slave1 WB</h4>
-</div>
-<div class="row bg-info">
-	<b><label for="evsecons1">Anbindung der Slave 1 EVSE:</label></b>
-	<input type="text" name="evsecons1" id="evsecons1" value="<?php echo $evsecons1old ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte modbusevse. Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
-	<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
-	<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="ladeleistungs1modul">Ladeleistung Slave 1 Modul:</label></b>
-	<input type="text" name="ladeleistungs1modul" id="ladeleistungs1modul" value="<?php echo $ladeleistungs1modulold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte sdm630modbuslls1. Modul zur Messung der Ladeleistung in der Slave WB.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="sdmids1">Slave 1 SDM Zähler ID:</label></b>
-	<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte 1-254. Modbus ID des Slave 1 SDM Zählers in der WB.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
-	<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der Slave WB.<br><br>
+<script>
+$(function() {
+      if($('#lastmanagement').val() == '0') {
+		$('#lastmmaus').show(); 
+		$('#lastmman').hide();
+      } else {
+		$('#lastmmaus').hide();
+	       	$('#lastmman').show();	
+      } 
 
-</div>
+	$('#lastmanagement').change(function(){
+	        if($('#lastmanagement').val() == '0') {
+			$('#lastmmaus').show(); 
+			$('#lastmman').hide();
+	        } else {
+			$('#lastmmaus').hide();
+		       	$('#lastmman').show();	
+	        } 
+	    });
+});
+</script>
 <div class="row">	<hr>
 	<h3> Strombezugsmessmodule (EVU-Übergabepunkt)</h3>
 </div>
 <div class="row">
 	<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
-	<input type="text" name="wattbezugmodul" id="wattbezugmodul" value="<?php echo $wattbezugmodulold ?>"><br>
+	<select type="text" name="wattbezugmodul" id="wattbezugmodul">
+		<option <?php if($wattbezugmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">vzlogger</option>
+		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">sdm630modbusbezug</option>
+
+	</select>
 </div>
 <div class="row">
-	Gültige Werte vzlogger, sdm630modbusbezug, none. Weitere Einstellungen je nach Modul beachten.<br><br>
+	Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
+<div id="wattbezugnone">
+	<br>
+</div>
+<div id="wattbezugsdm">
 <div class="row bg-info">
 	<b><label for="sdm630modbusbezugsource">SDM Modbus Bezug Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
@@ -427,6 +614,8 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 <div class="row bg-info">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
+</div>
+<div id="wattbezugvz">
 <div class="row bg-warning">
 	<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
 	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
@@ -435,115 +624,309 @@ Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus d
 	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
 </div>
 <div class="row bg-warning">
-	<b><label for="vzloggerline">Vzlogger Zeile:</label></b>
+	<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
 	<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
 </div>
 <div class="row bg-warning">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.<br><br>
 </div>
 
+<div class="row bg-warning">
+	<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
+	<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen.<br><br>
+</div>
+<div class="row bg-warning">
+	<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
+	<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>"><br>
+</div>
+<div class="row bg-warning">
+	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.<br><br>
+</div>
+
+</div>
+<script>
+$(function() {
+      if($('#wattbezugmodul').val() == 'vzlogger') {
+		$('#wattbezugvz').show(); 
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+
+      } 
+   if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').show();
+		$('#wattbezugnone').hide();
+
+      } 
+   if($('#wattbezugmodul').val() == 'none')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').show();
+
+      } 
+
+	$('#wattbezugmodul').change(function(){
+	      if($('#wattbezugmodul').val() == 'vzlogger') {
+		$('#wattbezugvz').show(); 
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+
+      } 
+   if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').show();
+		$('#wattbezugnone').hide();
+
+      } 
+   if($('#wattbezugmodul').val() == 'none')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').show();
+
+      } 
+	    });
+});
+</script>
 <div class="row"><hr>
 	<h3> PV Module </h3>
 </div>
 <div class="row">
 	<b><label for="pvwattmodul">PV Modul:</label></b>
-	<input type="text" name="pvwattmodul" id="pvwattmodul" value="<?php echo $pvwattmodulold ?>"><br>
+	<select type="text" name="pvwattmodul" id="pvwattmodul">
+		<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">wr_fronius</option>
+		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">sdm630modbuswr</option>
+		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">vzloggerpv</option>
+	</select>
 </div>
 <div class="row">
-	Gültige Werte wr_fronius, sdm630modbuswr, vzloggerpv, none. Weitere Module auf Anfrage.<br><br>
+	Weitere Module auf Anfrage.<br><br>
 </div>
-<div class="row">
-	<b><label for="wrfroniusip">WR Fronius IP:</label></b>
-	<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
+<div id="pvnone">
+	<br>
 </div>
-<div class="row">
-	Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+<div id="pvwrfronius">
+	<div class="row">
+		<b><label for="wrfroniusip">WR Fronius IP:</label></b>
+		<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+	</div>
 </div>
-<div class="row bg-info">
-	<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
-	<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
+<div id="pvsdmwr">
+	<div class="row bg-info">
+		<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
+		<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
+		<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
+		<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
 </div>
-<div class="row bg-info">
-	Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+<div id="pvvzl">
+	<div class="row bg-warning">
+		<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
+		<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+	</div>
+	<div class="row bg-warning">
+		<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
+		<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+	</div>
 </div>
-<div class="row bg-info">
-	<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
-	<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
-	<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
-</div>
-<div class="row bg-warning">
-	<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
-	<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
-</div>
-<div class="row bg-warning">
-	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
-</div>
-<div class="row bg-warning">
-	<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
-	<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
-</div>
-<div class="row bg-warning">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
-</div>
+
+<script>
+$(function() {
+      if($('#pvwattmodul').val() == 'vzloggerpv') {
+		$('#pvvzl').show(); 
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+      } 
+   if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').show();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+
+      } 
+   if($('#pvwattmodul').val() == 'wr_fronius')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').show();
+		$('#pvnone').hide();
+
+      } 
+   if($('#pvwattmodul').val() == 'none')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').show();
+
+      } 
+
+	$('#pvwattmodul').change(function(){
+             if($('#pvwattmodul').val() == 'vzloggerpv') {
+		$('#pvvzl').show(); 
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+      } 
+   if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').show();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+
+      } 
+   if($('#pvwattmodul').val() == 'wr_fronius')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').show();
+		$('#pvnone').hide();
+
+      } 
+   if($('#pvwattmodul').val() == 'none')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').show();
+
+      } 
+	});
+});
+</script>
 
 <div class="row"><hr>
 	<h3> Ladeleistungsmessmodule </h3>
 </div>
 <div class="row">
 	<b><label for="ladeleistungmodul">Ladeleistungmodul:</label></b>
-	<input type="text" name="ladeleistungmodul" id="ladeleistungmodul" value="<?php echo $ladeleistungmodulold ?>"><br>
+	<select type="text" name="ladeleistungmodul" id="ladeleistungmodul">
+		<option <?php if($ladeleistungmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo selected ?> value="sdm630modbusll">sdm630modbusll</option>
+	</select>
 </div>
 <div class="row">
-	Gültige Werte sdm630modbusll, none. Weitere Einstellungen je nach Modul beachten.<br><br>
+	Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
-<div class="row bg-info">
-	<b><label for="sdm630modbusllsource">SDM Modbus Ladeleistung Source:</label></b>
-	<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
+<div id="llmnone">
+	<br>
 </div>
-<div class="row bg-info">
-	Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+<div id="llmsdm">
+	<div class="row bg-info">
+		<b><label for="sdm630modbusllsource">SDM Modbus Ladeleistung Source:</label></b>
+		<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbusllid">SDM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
+		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
 </div>
-<div class="row bg-info">
-	<b><label for="sdm630modbusllid">SDM Modbus Ladeleistung ID:</label></b>
-	<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
-</div>
-<div class="row bg-info">
-	<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
-	<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
-</div>
-<div class="row bg-info">
-	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
-</div>
+<script>
+$(function() {
+      if($('#ladeleistungmodul').val() == 'none') {
+		$('#llmnone').show(); 
+		$('#llmsdm').hide();
+      } else {
+		$('#llmnone').hide();
+	       	$('#llmnone').show();	
+      } 
+
+	$('#ladeleistungmodul').change(function(){
+	        if($('#ladeleistungmodul').val() == 'none') {
+			$('#llmnone').show(); 
+			$('#llmsdm').hide();
+	        } else {
+			$('#llmnone').hide();
+		       	$('#llmsdm').show();	
+	        } 
+	    });
+});
+</script>
+
+
 <div class="row"><hr>
 	<h3> SOC Module </h3>
 </div>
 <div class="row">
 	<b><label for="socmodul">SOC Modul:</label></b>
-	<input type="text" name="socmodul" id="socmodul" value="<?php echo $socmodulold ?>"><br>
+	<select type="text" name="socmodul" id="socmodul">
+		<option <?php if($socmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">soc_http</option>
+	</select>
 </div>
-<div class="row">
-	Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen! Weitere Einstellungen im Modul selbst nötig. Andere auf Anfrage.<br><br>
+<div id="socmnone">
+	<br>
 </div>
-<div class="row">
-	<b><label for="hsocip">SOC Http Abfrage URL:</label></b>
-	<input type="text" name="hsocip" id="hsocip" value="<?php echo $hsocipold ?>"><br>
+<div id="socmhttp">
+	<div class="row">
+		Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen! Weitere Einstellungen im Modul selbst nötig. Andere auf Anfrage.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="hsocip">SOC Http Abfrage URL:</label></b>
+		<input type="text" name="hsocip" id="hsocip" value="<?php echo $hsocipold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.<br><br>
+	</div>
 </div>
-<div class="row">
-	Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.<br><br>
+<script>
+$(function() {
+      if($('#socmodul').val() == 'none') {
+		$('#socmnone').show(); 
+		$('#socmhttp').hide();
+      } else {
+		$('#socmnone').hide();
+	       	$('#socmhttp').show();	
+      } 
 
-
+	$('#socmodul').change(function(){
+	        if($('#socmodul').val() == 'none') {
+			$('#socmnone').show(); 
+			$('#socmhttp').hide();
+	        } else {
+			$('#socmnone').hide();
+		       	$('#socmhttp').show();	
+	        } 
+	    });
+});
+</script>
 
 
 
