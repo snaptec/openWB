@@ -23,7 +23,6 @@ resp = client.read_input_registers(0x08,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 resp = client.read_input_registers(0x0A,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
-
 resp = client.read_input_registers(0x0C,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 resp = client.read_input_registers(0x0E,2, unit=sdmid)
@@ -32,7 +31,15 @@ resp = client.read_input_registers(0x10,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 resp = client.read_input_registers(0x0156,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
-
-
-
-
+resp = client.read_input_registers(0x015A,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x015C,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x015E,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x0160,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x0162,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
+resp = client.read_input_registers(0x0164,2, unit=sdmid)
+print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))

@@ -281,11 +281,11 @@ doInterval = setInterval(getfile, 2000);
 			<hr>
 			
 		<!--	<div class="row">
-				<iframe height="1000" class="col-xs-12" src="/metern/index.php"></iframe>
+				<iframe frameBorder="0" height="312" class="col-xs-12" src="/metern/index2.php"></iframe>
 			</div> -->
 			<div class="row">
 				<div class="col-xs-6">
-					Ver0.22
+					Ver0.23
 				</div>
 				<div class="col-xs-6 text-right">
 					<a href="settings.php">Einstellungen</a> 
