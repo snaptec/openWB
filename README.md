@@ -31,12 +31,11 @@ Hardware:
 Für 1-phasiges Laden:
 - SimpleEVSEwb
 - Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE), alternativ EVSE DIN mit Modbus
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
 - Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220 / SDM230)
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- weiteres auf Anfrage)
-- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630)
-- RPi Netzteil
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf oder VZLogger <- weiteres auf Anfrage)
+- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630/SDM220)
 - Schuetz entsprechend der max. Leistung
 - Ladekabel mit Steuerleitung
 - Typ1/2 Stecker
@@ -44,12 +43,11 @@ Für 1-phasiges Laden:
 Für 3-phasiges Laden:
 - SimpleEVSEwb
 - Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE), alternativ EVSE DIN mit Modbus
+- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
 - Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM630v2)
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf und VZLogger usw <- weiteres auf Anfrage)
+- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf oder VZLogger <- weiteres auf Anfrage)
 - Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM220/SDM630 je nach Anzahl der Phasen)
-- RPi Netzteil
 - Schuetz entsprechend der max. Leistung
 - Ladekabel mit Steuerleitung
 - Typ1/2 Stecker
@@ -75,9 +73,9 @@ MCP4725 an SimpleEVSE
 	A0 an GND EVSE
 
 	Vout an AN EVSE
+![alt text](http://openwb.de/img/single_openWB_dac.jpg)
 
-
-Simple EVSE muss Register 2002 auf 0 stehen und Register 2003 auf 1. Dies kann per BT und der Android App gemacht werden.
+Simple EVSE muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
 
 
 Raspbian installieren
@@ -88,7 +86,7 @@ Raspbian installieren
 
 Den i2c Bus aktivieren.
 
-In der Konsole
+Hierfür in der Konsole
 
         sudo raspi-config
 
@@ -120,13 +118,10 @@ hier einfügen:
 
 
 Zum Updaten:
-!!BACKUP DER GEÄNDERTEN DATEIEN ERSTELLEN!!
-Beim Update werden alle Dateien überschrieben.
-Config muss neu angepasst werden.
 
 	http://XXipXX/openWB/web/tools/update.php
 
-aufrufen
+aufrufen.
 
 
 
