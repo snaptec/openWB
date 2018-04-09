@@ -117,6 +117,21 @@ hier einfügen:
 	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 
 
+Für das Logging Feature:
+
+Auf den Raspberry per ssh einloggen
+
+	curl -s https://openwb.de/openwbm.sh | sudo sh
+
+ausführen.
+Zusätzlich crontab -e ausführen und
+
+	@reboot sleep 10 && /usr/bin/curl http://localhost/metern/scripts/bootmn.php
+
+mit eintragen. Hierdurch wird der Logging Daemon nach dem Reboot gestartet.
+
+Das Logging ist erreichbar unter http://IPdesRPI/metern/
+
 Zum Updaten:
 
 	http://XXipXX/openWB/web/tools/update.php
@@ -144,6 +159,7 @@ aufrufen.
 # Danke geht an:
 
 	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
+	Das Metern.org Projekt für die Loggingfunktionalität
 
 # API für Remotesteuerung, Einbindung in Hausautomation,  etc..
 
