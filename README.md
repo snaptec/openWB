@@ -73,7 +73,12 @@ MCP4725 an SimpleEVSE
 	A0 an GND EVSE
 
 	Vout an AN EVSE
+Schaltbild EVSE mit SDM für die Ladeleistung und EVU / PV per Http Modulen (vzlogger, etc...)
 ![alt text](http://openwb.de/img/single_openWB_dac.jpg)
+
+Alternativ wenn EVU und PV per SDM Zähler abgefragt werden soll:
+![alt text](http://openwb.de/img/single_openWB_lanmb.jpg)
+
 
 Simple EVSE muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
 
@@ -151,7 +156,8 @@ Die openWB lässt sich per GET Requests fernsteuern. Derzeit implementiert:
 - Lademodus
 - Sofort Laden Stromstärke
 
-Beispiel
+Beispiel:
+
 	curl -X GET 'http://ipdesraspi/openWB/web/api.php?jetztll=16'
 stellt die Ladeleistung auf 16A
 
