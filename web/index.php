@@ -284,10 +284,13 @@ doInterval = setInterval(getfile, 2000);
 				<iframe frameBorder="0" height="312" class="col-xs-12" src="/metern/index2.php"></iframe>
 			</div> -->
 			<div class="row">
-				<div class="col-xs-6">
+				<div class="col-xs-4">
 					Ver0.24
 				</div>
-				<div class="col-xs-6 text-right">
+				<div class="col-xs-4 text-center">
+					<a href="http://openwb.de">www.openwb.de</a>
+				</div>
+				<div class="col-xs-4 text-right">
 					<a href="settings.php">Einstellungen</a> 
 				</div>
 			</div>
