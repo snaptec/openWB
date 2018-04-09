@@ -178,9 +178,11 @@ stellt den Lademodus auf Sofort Laden.
 Gültige Werte:
 
 jetztll
+
 	10-32
 
 lademodus
+
 	jetzt
 	minundpv
 	pvuberschuss
