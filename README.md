@@ -1,17 +1,12 @@
 # openWB
 
-Skizze zum Aufbau sowie Screenshots im Wiki!
 
-
-UPDATE:
-derzeitige Version IST lauffähig und im Betastadium.
-"Offizieller Release" nach Testphase.
-Beta Tester sind herzlich willkommen.
 
 
 Die Software steht zur nicht kommerziellen Nutzung frei für jeden zur Verfügung.
 Spenden gerne an info@snaptec.org
 Kommerzielle Anfragen ebenso an info@snaptec.org
+Weitere Infos unter http://openwb.de
 
 # Haftungsausschluss
 Es wird mit Kleinspannung aber auch 220V beim Anschluss der EVSE gearbeitet. 
