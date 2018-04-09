@@ -29,7 +29,8 @@ if (( $n == 3 )); then
 echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llaktuells1
 fi
 if (( $n == 4 )); then
-echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llkwhs1
+	llkwhs1=$(echo "$line" |  cut -c2- )
+	       echo ${llkwhs1%??} > /var/www/html/openWB/ramdisk/llkwhs1
 fi
 
 n=$((n + 1))

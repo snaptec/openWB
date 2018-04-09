@@ -150,5 +150,27 @@ aufrufen
 
 	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
 
+# API für Remotesteuerung, Einbindung in Hausautomation,  etc..
 
+Die openWB lässt sich per GET Requests fernsteuern. Derzeit implementiert:
+- Lademodus
+- Sofort Laden Stromstärke
+
+Beispiel
+	curl -X GET 'http://ipdesraspi/openWB/web/api.php?jetztll=16'
+stellt die Ladeleistung auf 16A
+
+	curl -X GET 'http://ipdesraspi/openWB/web/api.php?lademodus=jetzt'
+stellt den Lademodus auf Sofort Laden.
+
+Gültige Werte:
+
+jetztll
+	10-32
+
+lademodus
+	jetzt
+	minundpv
+	pvuberschuss
+	stop
 

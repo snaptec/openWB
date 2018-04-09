@@ -214,6 +214,10 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
 .btn.btn-grey {
 	background: #4e4956;
 }
+.btn.btn-orange {
+	background: #FFA500;
+}
+
 .btn.btn-red {
         background: #e02828;
 }
