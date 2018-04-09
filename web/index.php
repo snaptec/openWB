@@ -156,12 +156,12 @@ doInterval = setInterval(getfile, 2000);
 			</div>
 			<div class="row">
 				<div class="col-xs-6 text-center">                     
-                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">PV in Watt
+                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">PV in Watt
                         			<div id="pvdiv"></div> 
 			                </button>
                			</div>
 				<div class="col-xs-6 text-center">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-orange">EVU Bezug in Watt
+                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Bezug in Watt
                                                 <div id="bezugdiv"></div> 
                                         </button>
                                 </div>  
