@@ -23,28 +23,17 @@ Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Übers
 
 Hardware:
 
-Für 1-phasiges Laden:
-- SimpleEVSEwb
-- Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
-- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220 / SDM230)
-- USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf oder VZLogger <- weiteres auf Anfrage)
-- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM630/SDM220)
-- Schuetz entsprechend der max. Leistung
-- Ladekabel mit Steuerleitung
-- Typ1/2 Stecker
 
-Für 3-phasiges Laden:
-- SimpleEVSEwb
-- Raspberry pi 3
-- 0-5V konverter MCP4725 (0-5V zur Steuerung der Ladestromstaerke an der EVSE)
-- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM630v2)
+- "EVSE WB" (! wichtig: Es wird die WB (WallBox)-Variante benötigt - nicht die "simple EVSE" !)
+- Raspberry Pi 3 + Gehäuse (ev. gleich Hutschienengehäuse zur Installation in der WB)
+- 0-5V DA-Konverter MCP4725 (0-5V zur Steuerung der Ladestromstärke an der EVSE) https://www.ebay.de/itm/Digital-Analog-Wandler-MCP4725-D-A-Wandler-12-Bit-Arduino-Raspberry-Pi/152972920605?hash=item239de5871d:g:DwkAAOSwW3VaxqNE
+- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220/230 für 1-phasig, SDM630 für 3-phasig) https://www.ebay.de/itm/B-G-e-tech-LCD-Multifunktions-Dreh-Stromzahler-S0-RS485-10-100A-SDM630-Modbus/122226084121?hash=item1c753e0919:g:zToAAOSwcUBYKci1
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Stromzähler zur Überschussmessung (z.b. SDM630v2, Zaehler mit IR Lesekopf oder VZLogger <- weiteres auf Anfrage)
-- Auslesen der PV (entsprechendes Modul fuer den Wechselrichter (Fronius derzeit unterstuetzt), oder z.B. SDM220/SDM630 je nach Anzahl der Phasen)
+- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater SDM630v2,  -> weitere auf Anfrage)
+- Auslesen der PV-Leistung (entsprechendes Softwaremodul fuer den Wechselrichter (Fronius derzeit unterstuetzt) oder separater SDM220/230 f. 1p bzw. SDM630 f. 3p)
 - Schuetz entsprechend der max. Leistung
-- Ladekabel mit Steuerleitung
+- Ladekabel mit CP-Steuerleitung (CP => Control Pilot)
+- 2x PP- Abschlusswiderstände je Ladekabelende für max. Ladestromstärke des Ladekabels/Stecker/Buchse
 - Typ1/2 Stecker
 
 # Installation
@@ -75,7 +64,7 @@ Alternativ wenn EVU und PV per SDM Zähler abgefragt werden soll:
 ![alt text](http://openwb.de/img/single_openWB_lanmb.jpg)
 
 
-Simple EVSE muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
+In der "EVSE WB" muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
 
 
 Raspbian installieren
