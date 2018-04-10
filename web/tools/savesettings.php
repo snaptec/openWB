@@ -493,6 +493,61 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "wr_http_w_url=") !== false) {
+	    $result .= 'wr_http_w_url='.$_POST[lwr_http_w_url]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "wr_http_kwh_url=") !== false) {
+	    $result .= 'wr_http_kwh_url='.$_POST[wr_http_kwh_url]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "bezug_http_w_url=") !== false) {
+	    $result .= 'bezug_http_w_url='.$_POST[bezug_http_w_url]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "bezug_http_ekwh_url=") !== false) {
+	    $result .= 'bezug_http_ekwh_url='.$_POST[bezug_http_ekwh_url]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "bezug_http_ikwh_url=") !== false) {
+	    $result .= 'bezug_http_ikwh_url='.$_POST[bezug_http_ikwh_url]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 }

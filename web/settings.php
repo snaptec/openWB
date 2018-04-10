@@ -169,6 +169,21 @@ foreach($lines as $line) {
 	if(strpos($line, "nachtll=") !== false) {
 		list(, $nachtllold) = explode("=", $line);
 	}
+	if(strpos($line, "wr_http_w_url=") !== false) {
+		list(, $wr_http_w_urlold) = explode("=", $line);
+	}
+	if(strpos($line, "wr_http_kwh_url=") !== false) {
+		list(, $wr_http_kwh_urlold) = explode("=", $line);
+	}
+	if(strpos($line, "bezug_http_w_url=") !== false) {
+		list(, $bezug_http_w_urlold) = explode("=", $line);
+	}
+	if(strpos($line, "bezug_http_ikwh_url=") !== false) {
+		list(, $bezug_http_ikwh_urlold) = explode("=", $line);
+	}
+	if(strpos($line, "bezug_http_ekwh_url=") !== false) {
+		list(, $bezug_http_ekwh_urlold) = explode("=", $line);
+	}
 	if(strpos($line, "nachtladenabuhr=") !== false) {
 		list(, $nachtladenabuhrold) = explode("=", $line);
 	}
@@ -583,7 +598,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">vzlogger</option>
 		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">sdm630modbusbezug</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">bezug_http</option>
 	</select>
 </div>
 <div class="row">
@@ -616,77 +631,117 @@ $(function() {
 </div>
 </div>
 <div id="wattbezugvz">
-<div class="row bg-warning">
-	<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
-	<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
+	<div class="row bg-warning">
+		<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
+		<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+	</div>
+	<div class="row bg-warning">
+		<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
+		<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br><br>
+	</div>
+	<div class="row bg-warning">
+		<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
+		<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br><br>
+	</div>
+	<div class="row bg-warning">
+		<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
+		<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>"><br>
+	</div>
+	<div class="row bg-warning">
+		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.<br><br>
+	</div>
 </div>
-<div class="row bg-warning">
-	Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
-</div>
-<div class="row bg-warning">
-	<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
-	<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
-</div>
-<div class="row bg-warning">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.<br><br>
+<div id="wattbezughttp">
+	<div class="row">
+		<b><label for="bezug_http_w_url">Vollständige URL für den Watt Bezug</label></b>
+		<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo $bezug_http_w_urlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
+	</div>
+	<div class="row">
+		<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
+		<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo $bezug_http_ikwh_urlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+	</div>
+	<div class="row">
+		<b><label for="bezug_http_ekwh_url">Vollständige URL für die kWh Einspeisung</label></b>
+		<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo $bezug_http_ekwh_urlold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+	</div>
 </div>
 
-<div class="row bg-warning">
-	<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
-	<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>"><br>
-</div>
-<div class="row bg-warning">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen.<br><br>
-</div>
-<div class="row bg-warning">
-	<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
-	<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>"><br>
-</div>
-<div class="row bg-warning">
-	Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.<br><br>
-</div>
-
-</div>
 <script>
 $(function() {
       if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').show();
 		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').show();
+		$('#wattbezughttp').hide();
 
       } 
+   if($('#wattbezugmodul').val() == 'bezug_http')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').show();
+      } 
 
-	$('#wattbezugmodul').change(function(){
+   $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').show();
 		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').show();
-
+		$('#wattbezughttp').hide();
       } 
+   if($('#wattbezugmodul').val() == 'bezug_http')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').show();
+      } 
+
 	    });
 });
 </script>
@@ -700,6 +755,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">wr_fronius</option>
 		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">sdm630modbuswr</option>
 		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">vzloggerpv</option>
+		<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">wr_http</option>
 	</select>
 </div>
 <div class="row">
@@ -756,6 +812,24 @@ $(function() {
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
 	</div>
 </div>
+<div id="pvhttp">
+	<div class="row">
+		<b><label for="wr_http_w_url">Vollständige URL für die Wechselrichter Watt</label></b>
+		<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo $wr_http_w_urlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
+	</div>
+	<div class="row">
+		<b><label for="wr_http_kwh_url">Vollständige URL für die Wechselrichter absolut kWh</label></b>
+		<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo $wr_http_kwh_urlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+	</div>
+
+
+</div>
 
 <script>
 $(function() {
@@ -764,12 +838,15 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
+		$('#pvhttp').hide();
+
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').show();
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
+		$('#pvhttp').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -777,6 +854,7 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').show();
 		$('#pvnone').hide();
+		$('#pvhttp').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -784,7 +862,15 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
 		$('#pvnone').show();
+		$('#pvhttp').hide();
 
+   } 
+   if($('#pvwattmodul').val() == 'none')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').show();
       } 
 
 	$('#pvwattmodul').change(function(){
@@ -793,12 +879,15 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
-      } 
+ 		$('#pvhttp').hide();
+      
+	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').show();
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
+		$('#pvhttp').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -806,6 +895,7 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').show();
 		$('#pvnone').hide();
+		$('#pvhttp').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -813,6 +903,15 @@ $(function() {
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
 		$('#pvnone').show();
+		$('#pvhttp').hide();
+
+   }
+   if($('#pvwattmodul').val() == 'wr_http')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').show();
 
       } 
 	});

@@ -34,9 +34,11 @@ if [[ $wattbezugmodul != "none" ]]; then
 		echo uberschuss $uberschuss
 	fi
 else
-	wattbezug=0
-	wattbezugint=0
-	uberschuss=0
+	wattbezug=$pvwatt
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
+	wattbezugint=$(echo "($wattbezugint-300)" |bc)
+	uberschuss=$wattbezugint
+	
 fi
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then

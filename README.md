@@ -156,6 +156,9 @@ aufrufen.
 	UART packet length: 512 chars
 
 
+Der Raspberry funktioniert zuverlässig mit -gutes vorrausgesetzt- WLAN. Sprich er kann direkt mit EVSE WB und DAC in die Wallbox in der Garage.
+
+
 # Danke geht an:
 
 	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
@@ -187,4 +190,78 @@ lademodus
 	minundpv
 	pvuberschuss
 	stop
+
+
+# Module erstellen
+
+Ist ein Modul für den gewünscht Einsatszweck noch nicht verfügbar kann man dies selbst erstellen.
+Wenn es läuft bitte reporten und ich füge es (einstellbar) dem Projekt hinzu.
+
+Ein Modul ist immer ein Ordner mit dem Modulnamen im Ordner openWB/modules. Es besteht aus einem Shell script mit dem Namen main.sh. Sollten weitere Dateien benötigt werden liegen diese mit im Ordner. Bitte immer einen Timeout mit definieren um im Fehlerfall nicht hängen zu bleiben.
+
+Exemplarisch der Aufbau erklärt am bezug_http Modul:
+
+
+	#!/bin/bash
+	#Laden der openwb.conf Einstellung
+	. /var/www/html/openWB/openwb.conf
+	#Die eigentliche (in dem Fall http) Abfrage. Die Variable sollte den Modulnamen und im Anschluss den Wert enthalten um sie eindeutig zu identifizieren
+	wattbezug=$(curl --connect-timeout 10 -s $bezug_http_w_url)
+	#Prüfung auf Richtigkeit der Variable. Sie darf bei bezug modulen ein - enthalten sowie die Zahlen 0-9
+	re='^-?[0-9]+$'
+	# Entspricht der abgefragte Wert nicht der Anforderung wird sie auf 0 gesetzt um ein Fehlverhalten der Regelung zu verhindern
+	if ! [[ $wattbezug =~ $re ]] ; then
+		wattbezug="0"
+	fi
+	#Der Hauptwert (Watt) wird als echo an die Regellogik zurückgegeben
+	echo $wattbezug
+	#Zusätzlich wird der Wert in die Ramdisk geschrieben, dies ist für das Webinterface sowie das Logging und ggf. externe Abfragen
+	echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
+	#Wird Logging von metern genutzt wird der absolute Zählerstand in Wh benötigt. Ist dieser nicht vorhanden sollte die Variable auf none gesetzt werden
+	if [[ $bezug_http_ikwh_url != "none" ]]; then
+		ikwh=$(curl --connect-timeout 5 -s $bezug_http_ikwh_url)
+		echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
+	fi
+	#Analog zum bezug dasselbe Verfahren für die Einspeisung
+	if [[ $bezug_http_ekwh_url != "none" ]]; then
+		ekwh=$(curl --connect-timeout 5 -s $bezug_http_ekwh_url)
+		echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+	fi
+
+
+Bei PV Modulen muss geschrieben werden:
+
+	#Rückgabewert in Watt
+	echo $pvwatt
+	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+	#ggf wenn verfügbar für logging den Zählerstand in Wh
+	echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
+
+Beispielhaft das wr_fronius modul für deren Wechselrichter mit Webinterface:
+Fronius bietet eine Json API an. Diese wird hier auf die Werte die gebraucht werden reduziert.
+
+
+	#!/bin/bash
+	#Auslesen eine Fronius Symo WR über die integrierte API des WR. Rückgabewert ist die aktuelle Wattleistung
+	. /var/www/html/openWB/openwb.conf
+	#Abfrage der kompletten Json Rückgabe
+	pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
+	# Das Tool jq verarbeitet die Rückgabe und reduziert sie auf die gewünschte Zeile. sed & tr entfernen ungewollte Klammern, Punkte und \n newline Zeichen um die reine Zahl zu erhalten
+	pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
+	#wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
+	#Fronius Wechselrichter gehen nachts in den Standby und antworten dann nicht. Um einen Fehler abzufangen bei leerer Rückgabe wird eine 0 gesetzt
+	re='^[0-9]+$'
+	if ! [[ $pvwatt =~ $re ]] ; then
+	   pvwatt="0"
+	fi
+	#Rückgabe des Watt Wertes an die Regellogik
+	echo $pvwatt
+	#zur weiteren verwendung im webinterface, zum Logging & zur externen Abfrage
+	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+	#Aus dem selben String erhält man ebenso den totalen Zählerstand für das Logging
+	#Hier sieht man das statt .Body.Data.PAC der Wert .Body.Data:TOTAL_Energy "ausgeschnitten" wird
+	pvkwh=$(echo $pvwatttmp | jq '.Body.Data.TOTAL_ENERGY.Values' | sed '2!d' |sed 's/.*: //' )
+	#Dieser Wert wird nun in die ramdisk gespeichert
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+
 
