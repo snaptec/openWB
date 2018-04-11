@@ -70,12 +70,12 @@ echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 ikwh11=${ikwh1%??}
 ikwh22=${ikwh2%??}
 ikwh33=${ikwh3%??}
-ikwh=$(echo "($ikwh11+$ikwh22+$ikwh33)" |bc)
+ikwh=$(echo "(($ikwh11+$ikwh22+$ikwh33)*1000)" |bc)
 echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}
 ekwh33=${ekwh3%??}
-ekwh=$(echo "($ekwh11+$ekwh22+$ekwh33)" |bc)
+ekwh=$(echo "(($ekwh11+$ekwh22+$ekwh33)*1000)" |bc)
 echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 
 
