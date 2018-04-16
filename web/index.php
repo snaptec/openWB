@@ -39,6 +39,30 @@
 require 'config.php';
 ?>
 <script type='text/javascript'>
+setInterval(loadText, 2000);
+function loadText(){
+ $.ajax({
+  url:"./tools/debugmode.php",  
+  type: "post", //request type,
+  dataType: 'json',
+  data: {call: "loadfile"},
+  success:function(result){
+   if(result.text == 0){
+    $('#errorfeed').hide();
+   }
+   if(result.text == 1){
+	 $('#errorfeed').show();
+    }
+   if(result.text == 2){
+ 	 $('#errorfeed').show(); 
+	}
+
+  }
+ });
+}
+</script> 
+
+<script type='text/javascript'>
 var doInterval;
 function getfile() {
   $.ajax({
@@ -123,21 +147,34 @@ function getfile() {
 	});
 }
 doInterval = setInterval(getfile, 2000);
-</script>
+</script> <!--
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
   $.ajax({
-   url: "/openWB/web/error.log",
-    complete: function(request){
-      $("#errorfeed").html(request.responseText);
+   url: "/openWB/ramdisk/openWB.log",
+	   complete: function(request){
+//	$("#errorfeed").html(request.replace(/\\n/g,"<br>").responseText);
+	$("#errorfeed").html(request.responseText);
+	}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script> -->
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajax({
+   url: "/openWB/ramdisk/openWB.log",
+   dataType: "text",
+   success : function (data) {
+	  //  $("#errorfeed").html(data.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,"<br>"));
+	   	 $("#errorfeedcontent").html(data.replace(/\n/g, "<br />"));
 	}
 	});
 }
 doInterval = setInterval(getfile, 2000);
 </script>
-
-
 
 
 <body>
@@ -156,12 +193,12 @@ doInterval = setInterval(getfile, 2000);
 			</div>
 			<div class="row">
 				<div class="col-xs-6 text-center">                     
-                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">PV in Watt
+                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">PV in Watt
                         			<div id="pvdiv"></div> 
 			                </button>
                			</div>
 				<div class="col-xs-6 text-center">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Bezug in Watt
+                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-orange">EVU Bezug in Watt
                                                 <div id="bezugdiv"></div> 
                                         </button>
                                 </div>  
@@ -285,7 +322,7 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.24
+					Ver0.25
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -294,7 +331,10 @@ doInterval = setInterval(getfile, 2000);
 					<a href="settings.php">Einstellungen</a> 
 				</div>
 			</div>
-			<div id="errorfeed"></div>
+			<div id="errorfeed">
+			<div id="errorfeedcontent"></div>
+
+			</div>
 		</div>
 	</section>
 	<!-- Holder for mobile navigation -->

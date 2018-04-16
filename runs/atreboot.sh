@@ -42,3 +42,4 @@ echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
+ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log

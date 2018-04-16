@@ -215,7 +215,7 @@ foreach($lines as $line) {
 <div class="container">
 
  
-<button class="btn btn-primary btn-blue"><a href="index.php" class="btn btn-lg btn-block btn-blue">Zurück</a></button>
+<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 
 
 
@@ -1034,8 +1034,10 @@ $(function() {
 
 <button type="submit" class="btn btn-primary btn-green">Save</button>	 
  </form><br><br />
- 
-<button class="btn btn-primary btn-blue"><a href="index.php" class="btn btn-lg btn-block btn-blue">Zurück</a></button>
+ <button onclick="window.location.href='./tools/backup.php'" class="btn btn-primary btn-red">Backup erstellen</button>
+<br><br>
+<br><br>
+ <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 
 </div>
 </body></html>

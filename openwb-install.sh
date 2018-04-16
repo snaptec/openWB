@@ -91,6 +91,9 @@ else
 	mkdir -p /var/www/html/openWB/ramdisk
 	echo "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" >> /etc/fstab
 	mount -a
+	echo "0" > /var/www/html/openWB/ramdisk/ladestatus
+	echo "0" > /var/www/html/openWB/ramdisk/llsoll
+	echo "0" > /var/www/html/openWB/ramdisk/soc
 	echo "...created"
 fi
 

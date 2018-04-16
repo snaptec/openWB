@@ -6,6 +6,11 @@ cd /var/www/html/openWB/
 . openwb.conf
 re='^-?[0-9]+$'
 
+
+#logfile aufräumen
+if [[ $debug == "1" ]]; then
+	echo "$(tail -100 /var/log/openWB.log)" > /var/log/openWB.log
+fi
 #######################################
 # Werte für die Berechnung ermitteln
 #PV Leistung ermitteln
@@ -15,7 +20,8 @@ if [[ $pvwattmodul != "none" ]]; then
 	 pvwatt="0"
 	fi
 	if [[ $debug == "1" ]]; then
-                echo pvwatt $pvwatt
+                date
+		echo pvwatt $pvwatt
         fi
 else
 	pvwatt=0
@@ -111,7 +117,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$sofortll.sh
 		if [[ $debug == "1" ]]; then
-                	echo starte sofort  von aus $sofortll
+                	echo starte sofort Ladeleistung von $sofortll aus
         	fi
 
 		exit 0
@@ -122,7 +128,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 		else
 			runs/$sofortll.sh
 		if [[ $debug == "1" ]]; then
-                	echo aendere sofort auf $sofortll
+                	echo aendere sofort Ladeleistung auf $sofortll
         	fi
 
 			exit 0
@@ -146,16 +152,14 @@ if [[ $nachtladen == "1" ]]; then
 					runs/$nachtll.sh
 					if [[ $debug == "1" ]]; then
 		                		echo "soc $soc"
-		        			echo "ladeleistung" $nachtll
+		        			echo "ladeleistung nachtladen bei $nachtll"
 					fi
-					echo "Start Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/0.sh
-					echo "Stop Nachtladung mit $nachtll um $date bei $soc" >> web/lade.log
 					exit 0
 				fi
 				exit 0
@@ -167,7 +171,7 @@ if [[ $nachtladen == "1" ]]; then
                                 runs/$nachtll.sh
                                 if [[ $debug == "1" ]]; then
                                 	echo "soc $soc"
-                                        echo "ladeleistung" $nachtll
+                                        echo "ladeleistung nachtladen $nachtll A"
                                 fi
                                 echo "start Nachtladung mit $nachtll um $date" >> web/lade.log
                                 exit 0
