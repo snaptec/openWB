@@ -6,6 +6,7 @@ sudo git fetch origin
 sudo git reset --hard origin/master
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
+sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
