@@ -58,10 +58,10 @@ MCP4725 an SimpleEVSE
 
 	Vout an AN EVSE
 Schaltbild EVSE mit SDM für die Ladeleistung und EVU / PV per Http Modulen (vzlogger, etc...)
-![alt text](http://openwb.de/img/single_openWB_dac.jpg)
+![alt text](http://openwb.de/img/single_openWB_dac_wlan.jpg)
 
 Alternativ wenn EVU und PV per SDM Zähler abgefragt werden soll:
-![alt text](http://openwb.de/img/single_openWB_lanmb.jpg)
+![alt text](http://openwb.de/img/single_openWB_lanmb_wlan.jpg)
 
 
 In der "EVSE WB" muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
