@@ -1036,7 +1036,7 @@ $(function() {
  </form><br><br />
 <div class="row">
  <button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-primary btn-red">Backup erstellen</button>
-<button onclick="window.location.href='./tools/upload.html'" class="btn btn-primary btn-orange">Backup widerherstellen</button>
+<button onclick="window.location.href='./tools/upload.html'" class="btn btn-primary btn-orange">Backup wiederherstellen</button>
 </div>
 <br><br>
 <br><br>
