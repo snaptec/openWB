@@ -7,6 +7,7 @@ sudo git reset --hard origin/master
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
+sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
@@ -34,7 +35,9 @@ if ! grep -Fq "bezug_http_ekwh_url=" /var/www/html/openwb.conf
 then
 	  echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> /var/www/html/openWB/openwb.conf
 fi
-
+if [ ! -f /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini ]; then
+sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+fi
 
 sudo /var/www/html/openWB/runs/atreboot.sh
 

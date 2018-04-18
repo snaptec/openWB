@@ -138,6 +138,7 @@ then
 else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
+sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd

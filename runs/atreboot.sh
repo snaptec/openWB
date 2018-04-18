@@ -40,6 +40,8 @@ echo 0 > /var/www/html/openWB/ramdisk/pvkwh
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
+sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
+sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log

@@ -1034,7 +1034,10 @@ $(function() {
 
 <button type="submit" class="btn btn-primary btn-green">Save</button>	 
  </form><br><br />
- <button onclick="window.location.href='./tools/backup.php'" class="btn btn-primary btn-red">Backup erstellen</button>
+<div class="row">
+ <button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-primary btn-red">Backup erstellen</button>
+<button onclick="window.location.href='./tools/upload.html'" class="btn btn-primary btn-orange">Backup widerherstellen</button>
+</div>
 <br><br>
 <br><br>
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
