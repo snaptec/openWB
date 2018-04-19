@@ -106,7 +106,7 @@ fi
 	date=$(date)
 	H=$(date +%H)
 
-
+	llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #########################################
 #Regelautomatiken
 
@@ -114,12 +114,14 @@ fi
 ########################
 # Sofort Laden
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
+
+if [[ $lastmanagement == "1" ]]; then
+
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$sofortll.sh
 		if [[ $debug == "1" ]]; then
-                	echo starte sofort Ladeleistung von $sofortll aus
+	               	echo starte sofort Ladeleistung von $sofortll aus
         	fi
-
 		exit 0
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
@@ -127,27 +129,77 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 			exit 0
 		else
 			runs/$sofortll.sh
-		if [[ $debug == "1" ]]; then
-                	echo aendere sofort Ladeleistung auf $sofortll
-        	fi
+			if [[ $debug == "1" ]]; then
+	                	echo aendere sofort Ladeleistung auf $sofortll
+	        	fi
+			exit 0
+		fi
+	fi		
+#	begrenzungap1=$(($lastmaxap1 - 6 ))
+#	begrenzungap2=$(($lastmaxap2 - 6 ))
+#	begrenzungap3=$(($lastmaxap3 - 6 ))
+#
+#	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#		runs/$minimalstromstaerke.sh
+#		if [[ $debug == "1" ]]; then
+#			echo Starte sofort Ladeleistung mit Lastmanagement von $minimalstromstaerke aus
+#		fi
+#	exit 0
+#	fi
+#	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#	if [[ $lla1 > "2" ]] || [[ $lla2 > "2" ]] || [[ $lla3 > "2" ]]; then
+#		if (( $llalt < $sofortll )); then
+#			if ( $llalt >
+#			llneu=$((llalt + 1 ))
+#			runs/$llneu.sh
+#		fi
+#	
+#
+#
+#	fi
 
+
+else
+	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		runs/$sofortll.sh
+		if [[ $debug == "1" ]]; then
+	               	echo starte sofort Ladeleistung von $sofortll aus
+        	fi
+		exit 0
+	fi
+	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
+			exit 0
+		else
+			runs/$sofortll.sh
+			if [[ $debug == "1" ]]; then
+	                	echo aendere sofort Ladeleistung auf $sofortll
+	        	fi
 			exit 0
 		fi
 	fi		
 fi
-
-
+fi
 
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 if [[ $nachtladen == "1" ]]; then
 	if (( $nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H <= $nachtladenbisuhr )); then
+		dayoftheweek=$(date +%w)
+		if [ $dayoftheweek -ge 0 -a $dayoftheweek -le 4 ]; then
+		
+			diesersoc=$nachtsoc
+		else
+			diesersoc=$nachtsoc1
+		fi
+
+
 		if [[ $socmodul != "none" ]]; then
 			if [[ $debug == "1" ]]; then
                 		echo nachtladen mit socmodul $socmodul
         		fi
 
-			if (( $soc <= $nachtsoc )); then
+			if (( $soc <= $diesersoc )); then
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/$nachtll.sh
 					if [[ $debug == "1" ]]; then
@@ -182,7 +234,6 @@ if [[ $nachtladen == "1" ]]; then
 fi
 #######################
 #Ladestromstarke berechnen
-	llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 	llphasentest=$(expr $llalt - "3")
 
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert

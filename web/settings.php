@@ -163,6 +163,12 @@ foreach($lines as $line) {
 	if(strpos($line, "hsocip=") !== false) {
 		list(, $hsocipold) = explode("=", $line);
 	}
+	if(strpos($line, "socmodul1=") !== false) {
+		list(, $socmodul1old) = explode("=", $line);
+	}
+	if(strpos($line, "hsocip1=") !== false) {
+		list(, $hsocip1old) = explode("=", $line);
+	}
 	if(strpos($line, "nachtladen=") !== false) {
 		list(, $nachtladenold) = explode("=", $line);
 	}
@@ -193,6 +199,9 @@ foreach($lines as $line) {
 	if(strpos($line, "nachtsoc=") !== false) {
 		list(, $nachtsocold) = explode("=", $line);
 	}
+	if(strpos($line, "nachtsoc1=") !== false) {
+		list(, $nachtsoc1old) = explode("=", $line);
+	}
 	if(strpos($line, "mindestuberschuss=") !== false) {
 		list(, $mindestuberschussold) = explode("=", $line);
 	}
@@ -202,6 +211,16 @@ foreach($lines as $line) {
 	if(strpos($line, "ladeleistungs1modul=") !== false) {
 		list(, $ladeleistungs1modulold) = explode("=", $line);
 	}
+	if(strpos($line, "lastmaxap1=") !== false) {
+		list(, $lastmaxap1old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmaxap2=") !== false) {
+		list(, $lastmaxap2old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmaxap3=") !== false) {
+		list(, $lastmaxap3old) = explode("=", $line);
+	}
+
 }
 
 
@@ -365,8 +384,15 @@ foreach($lines as $line) {
 		Bis wann morgens geladen werden soll<br><br>
 	</div>
 	<div class="row">
-		<b><label for="nachtsoc">Nacht SOC:</label></b>
+		<b><label for="nachtsoc">Nacht SOC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
+	</div>
+	<div class="row">
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
+		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
@@ -494,7 +520,7 @@ $(function() {
 	    });
 });
 </script>
-<div class="row">
+<div class="row"><hr>
 	<h4>Lastmanagement</h4>
 </div>
 <div class="row">
@@ -518,6 +544,24 @@ $(function() {
 	<div class="row">
 		Gültiger Wert 0 bis 44000. Definiert die maximalen Watt die Master & Slave WB gleichzeitig entnehmen dürfen.<br> Wird der Wert überschritten, werden beide WB gleichmäßig runtergeregelt !!noch nicht implementiert, Max Stromstärke gilt pro WB!!<br><br>
 	</div>
+		<div class="row">
+		<b><label for="lastmaxap1">Lastmanagement Max Ampere Phase 1:</label></b>
+		<input type="text" name="lastmaxap1" id="lastmaxap1" value="<?php echo $lastmaxap1old ?>"><br>
+	</div>
+	<div class="row">
+		<b><label for="lastmaxap2">Lastmanagement Max Ampere Phase 2:</label></b>
+		<input type="text" name="lastmaxap2" id="lastmaxap2" value="<?php echo $lastmaxap2old ?>"><br>
+	</div>
+		<div class="row">
+		<b><label for="lastmaxap3">Lastmanagement Max Ampere Phase 3:</label></b>
+		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte 12-64. Definiert die erlaubte Stromstärke beider Wallboxen im Sofort Laden Modus, noch nicht implementiert!<br>
+	</div>
+
+	
+
 	<div class="row">
 		<h4>Slave1 WB</h4>
 	</div>
@@ -567,6 +611,53 @@ $(function() {
 	<div class="row bg-info">
 		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der Slave WB.<br><br>
 	</div>
+	<div class="row">
+		<h5> SOC Module </h5>
+	</div>
+	<div class="row">
+		<b><label for="socmodul1">SOC Modul für zweite WB:</label></b>
+	<select type="text" name="socmodul1" id="socmodul1">
+		<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">soc_http</option>
+	</select>
+	</div>
+	<div id="socmnone1">
+	<br>
+	</div>
+	<div id="socmhttp1">
+	<div class="row">
+		Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
+	</div>
+	<div class="row">
+		<b><label for="hsocip1">SOC zweite WB Http Abfrage URL:</label></b>
+		<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.<br><br>
+	</div>
+</div>
+<script>
+$(function() {
+      if($('#socmodul1').val() == 'none') {
+		$('#socmnone1').show(); 
+		$('#socmhttp1').hide();
+      } else {
+		$('#socmnone1').hide();
+	       	$('#socmhttp1').show();	
+      } 
+
+	$('#socmodul1').change(function(){
+	        if($('#socmodul1').val() == 'none') {
+			$('#socmnone1').show(); 
+			$('#socmhttp1').hide();
+	        } else {
+			$('#socmnone1').hide();
+		       	$('#socmhttp1').show();	
+	        } 
+	    });
+});
+</script>
+
 </div>
 <script>
 $(function() {

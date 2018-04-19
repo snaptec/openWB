@@ -19,6 +19,15 @@ if ! grep -Fq "wr_http_w_url=" /var/www/html/openwb.conf
 then
 	  echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hsocip1=" /var/www/html/openwb.conf
+then
+	  echo "hsocip1=http://10.0.0.110/soc.txt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "socmodul1=" /var/www/html/openwb.conf
+then
+	  echo "socmodul1=soc_http1" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "wr_http_kwh_url=" /var/www/html/openwb.conf
 then
 	  echo "wr_http_kwh_url=http://192.168.0.17/pvwh.txt" >> /var/www/html/openWB/openwb.conf

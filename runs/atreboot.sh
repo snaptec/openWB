@@ -9,6 +9,7 @@ touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
 touch /var/www/html/openWB/ramdisk/pvwatt
 touch /var/www/html/openWB/ramdisk/soc
+touch /var/www/html/openWB/ramdisk/soc1
 touch /var/www/html/openWB/ramdisk/lla1
 touch /var/www/html/openWB/ramdisk/lla2
 touch /var/www/html/openWB/ramdisk/lla3
