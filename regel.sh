@@ -67,12 +67,6 @@ if [[ $ladeleistungmodul != "none" ]]; then
 		 ladeleistung="0"
 	fi
 
-	if [[ $debug == "1" ]]; then
-                echo ladeleistung $ladeleistung
-		echo lla1 $lla1
-		echo lla2 $lla2
-		echo lla3 $lla3
-        fi
 else
 	lla1=0
 	lla2=0
@@ -82,6 +76,9 @@ fi
 if [[ $lastmanagement == "1" ]]; then
 	timeout 10 modules/$ladeleistungs1modul/main.sh
 	ladeleistungslave1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
+	llas1=$(cat /var/www/html/openWB/ramdisk/llas11)
+	llas2=$(cat /var/www/html/openWB/ramdisk/llas12)
+	llas3=$(cat /var/www/html/openWB/ramdisk/llas13)
 	if ! [[ $ladeleistungslave1 =~ $re ]] ; then
 	 ladeleistungslave1="0"
 	fi
@@ -90,6 +87,14 @@ if [[ $lastmanagement == "1" ]]; then
 else
 	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
 fi
+	if [[ $debug == "1" ]]; then
+                echo ladeleistung $ladeleistung
+		echo lla1 $lla1 llas1 $llas1
+		echo lla2 $lla2 llas2 $llas2
+		echo lla3 $lla3 llas3 $llas3
+        fi
+
+
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
 	soc=$(timeout 10 modules/$socmodul/main.sh)
@@ -208,6 +213,16 @@ if [[ $nachtladen == "1" ]]; then
 					fi
 					exit 0
 				fi
+				if grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
+					exit 0
+				else
+					runs/$nachtll.sh
+					if [[ $debug == "1" ]]; then
+	                		echo aendere nacht Ladeleistung auf $nachtll
+	        			fi
+				exit 0
+				fi
+
 				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
@@ -364,6 +379,10 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 
 				llneu=$((llalt - 1 ))
                 		runs/$llneu.sh
+				if [[ $debug == "1" ]]; then
+        	             		echo "pv ladung auf $llneu reduziert"
+               			fi
+
 				exit 0
 			else
 				runs/0.sh
@@ -397,6 +416,9 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 					llneu=$minimalstromstaerke
 				fi
 				runs/$llneu.sh
+		                if [[ $debug == "1" ]]; then
+	       	             		echo "pv ladung auf $llneu erhoeht"
+	     			fi
 				exit 0
 			fi
 			exit 0
