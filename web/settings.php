@@ -220,6 +220,15 @@ foreach($lines as $line) {
 	if(strpos($line, "lastmaxap3=") !== false) {
 		list(, $lastmaxap3old) = explode("=", $line);
 	}
+	if(strpos($line, "smaemdbezugid=") !== false) {
+		list(, $smaemdbezugidold) = explode("=", $line);
+	}
+	if(strpos($line, "smaemdllid=") !== false) {
+		list(, $smaemdllidold) = explode("=", $line);
+	}
+	if(strpos($line, "smaemdpvid=") !== false) {
+		list(, $smaemdpvidold) = explode("=", $line);
+	}
 
 }
 
@@ -690,6 +699,8 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">vzlogger</option>
 		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">sdm630modbusbezug</option>
 		<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">bezug_http</option>
+		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">smaemd_bezug</option>
+
 	</select>
 </div>
 <div class="row">
@@ -757,7 +768,7 @@ $(function() {
 		<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo $bezug_http_w_urlold ?>"><br>
 	</div>
 	<div class="row">
-		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.<br>
 	</div>
 	<div class="row">
 		<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
@@ -774,6 +785,15 @@ $(function() {
 	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 </div>
+<div id="wattbezugsma">
+	<div class="row">
+		<b><label for="smaemdbezugid">Seriennummer des SMA Energy Meter</label></b>
+		<input type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br> Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+	</div>
+</div>
 
 <script>
 $(function() {
@@ -782,6 +802,7 @@ $(function() {
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
+		$('#wattbezugsma').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -789,6 +810,7 @@ $(function() {
 		$('#wattbezugsdm').show();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
+		$('#wattbezugsma').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -796,6 +818,7 @@ $(function() {
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').show();
 		$('#wattbezughttp').hide();
+		$('#wattbezugsma').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -803,14 +826,22 @@ $(function() {
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
-      } 
-
+ 		$('#wattbezugsma').hide();
+     } 
+   if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').show();
+     } 
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -818,6 +849,7 @@ $(function() {
 		$('#wattbezugsdm').show();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -825,14 +857,22 @@ $(function() {
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').show();
 		$('#wattbezughttp').hide();
-      } 
+  		$('#wattbezugsma').hide();
+     } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
-      } 
-
+  		$('#wattbezugsma').hide();
+     } 
+   if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+  		$('#wattbezugsma').show();
+     } 
 	    });
 });
 </script>
@@ -847,7 +887,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">sdm630modbuswr</option>
 		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">vzloggerpv</option>
 		<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">wr_http</option>
-	</select>
+		<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">smaemd_pv</option>
+</select>
 </div>
 <div class="row">
 	Weitere Module auf Anfrage.<br><br>
@@ -921,6 +962,16 @@ $(function() {
 
 
 </div>
+<div id="pvsma">
+	<div class="row">
+		<b><label for="smaemdpvid">Seriennummer des SMA Energy Meter</label></b>
+		<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+
+	</div>
+</div>
 
 <script>
 $(function() {
@@ -930,6 +981,7 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
@@ -938,6 +990,7 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -946,6 +999,7 @@ $(function() {
 		$('#pvwrfronius').show();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -954,16 +1008,25 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').show();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
    } 
-   if($('#pvwattmodul').val() == 'none')   {
+   if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').show();
-      } 
-
+ 		$('#pvsma').hide();
+     } 
+   if($('#pvwattmodul').val() == 'smaemd_pv')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+ 		$('#pvsma').show();
+     } 
 	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
@@ -971,7 +1034,8 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
  		$('#pvhttp').hide();
-      
+   		$('#pvsma').hide();
+   
 	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -979,6 +1043,7 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -987,6 +1052,7 @@ $(function() {
 		$('#pvwrfronius').show();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -995,6 +1061,7 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').show();
 		$('#pvhttp').hide();
+		$('#pvsma').hide();
 
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
@@ -1003,8 +1070,19 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').show();
+		$('#pvsma').hide();
+
+   } 
+   if($('#pvwattmodul').val() == 'smaemd_pv')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+		$('#pvsma').show();
 
       } 
+
 	});
 });
 </script>
@@ -1017,6 +1095,8 @@ $(function() {
 	<select type="text" name="ladeleistungmodul" id="ladeleistungmodul">
 		<option <?php if($ladeleistungmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo selected ?> value="sdm630modbusll">sdm630modbusll</option>
+		<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo selected ?> value="smaemd_ll">smaemd_ll</option>
+
 	</select>
 </div>
 <div class="row">
@@ -1048,26 +1128,67 @@ $(function() {
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	</div>
 </div>
+<div id="llsma">
+	<div class="row">
+		<b><label for="smaemdllid">Seriennummer des SMA Energy Meter</label></b>
+		<input type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+
+	</div>
+</div>
+
+
 <script>
 $(function() {
       if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show(); 
 		$('#llmsdm').hide();
-      } else {
-		$('#llmnone').hide();
-	       	$('#llmnone').show();	
+		$('#llsma').hide();
+
       } 
+      if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
+		$('#llmnone').hide(); 
+		$('#llmsdm').show();
+		$('#llsma').hide();
+
+      } 
+      if($('#ladeleistungmodul').val() == 'smaemd_ll') {
+		$('#llmnone').hide(); 
+		$('#llmsdm').hide();
+		$('#llsma').show();
+
+      } 
+
+
+
+ 
 
 	$('#ladeleistungmodul').change(function(){
 	        if($('#ladeleistungmodul').val() == 'none') {
 			$('#llmnone').show(); 
 			$('#llmsdm').hide();
-	        } else {
-			$('#llmnone').hide();
-		       	$('#llmsdm').show();	
+			$('#llsma').hide();
+
 	        } 
-	    });
+      if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
+		$('#llmnone').hide(); 
+		$('#llmsdm').show();
+		$('#llsma').hide();
+
+      } 
+      if($('#ladeleistungmodul').val() == 'smaemd_ll') {
+		$('#llmnone').hide(); 
+		$('#llmsdm').hide();
+		$('#llsma').show();
+
+      } 
+
+	});
 });
+
+
 </script>
 
 

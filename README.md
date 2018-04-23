@@ -127,7 +127,7 @@ Zum Updaten:
 
 aufrufen.
 
-
+# Extras
 
  Bei Nutzung von einem USR-TCP232-410 Lan to Modbus Converter folgende Konfiguration verwenden:
 
@@ -147,6 +147,22 @@ aufrufen.
 
 Der Raspberry funktioniert zuverlässig mit -gutes vorrausgesetzt- WLAN. Sprich er kann direkt mit EVSE WB und DAC in die Wallbox in der Garage.
 
+
+ Nutzung von SMA Energy Metern:
+
+Zunächst mit dem Raspberry per SSH verbinden.
+
+Die Datei /var/www/html/openWB/web/files/smaemdconfig bearbeiten.
+	
+	vim /var/www/html/openWB/web/files/smaemdconfig
+
+In Zeile 4 und Zeile 25 die Seriennummer(n) der Meter angeben. Bei mehreren Metern mit Leerzeichen trennen.
+
+Nun das installscript ausführen:
+	
+	/var/www/html/openWB/web/tools/smaemd-install.sh
+
+Anschließen im Webinterface in den Einstellungen die SMA Module auswählen und die Seriennummer entsprechend eintragen.
 
 # Danke geht an:
 

@@ -32,6 +32,20 @@ if ! grep -Fq "wr_http_kwh_url=" /var/www/html/openwb.conf
 then
 	  echo "wr_http_kwh_url=http://192.168.0.17/pvwh.txt" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "smaemdbezugid=" /var/www/html/openwb.conf
+then
+	  echo "smaemdbezugid=1900123456" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "smaemdpvid=" /var/www/html/openwb.conf
+then
+	  echo "smaemdpvid=1900123456" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "smaemdllid=" /var/www/html/openwb.conf
+then
+	  echo "smaemdllid=1900123456" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "bezug_http_w_url=" /var/www/html/openwb.conf
 then
 	  echo "bezug_http_w_url=http://192.168.0.17/bezugwatt.txt" >> /var/www/html/openWB/openwb.conf

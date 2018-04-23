@@ -322,7 +322,7 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.27
+					Ver0.28
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

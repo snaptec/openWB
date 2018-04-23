@@ -148,4 +148,4 @@ chmod +x /var/www/html/openWB/modules/*
 chmod +x /var/www/html/openWB/runs/*
 touch /var/log/openWB.log
 chmod 777 /var/log/openWB.log
-
+/var/www/html/openWB/runs/atreboot.sh

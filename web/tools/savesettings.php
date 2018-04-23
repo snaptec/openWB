@@ -553,6 +553,39 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	    if(strpos($line, "smaemdbezugid=") !== false) {
+	    $result .= 'smaemdbezugid='.$_POST[smaemdbezugid]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "smaemdllid=") !== false) {
+	    $result .= 'smaemdllid='.$_POST[smaemdllid]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "smaemdpvid=") !== false) {
+	    $result .= 'smaemdpvid='.$_POST[smaemdpvid]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
 	    if(strpos($line, "ladeleistungs1modul=") !== false) {
 	    $result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
 	    } 
