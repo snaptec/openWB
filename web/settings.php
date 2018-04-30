@@ -64,7 +64,9 @@ foreach($lines as $line) {
 	if(strpos($line, "dacregister=") !== false) {
 		list(, $dacregisterold) = explode("=", $line);
 	}
-
+	if(strpos($line, "dacregisters1=") !== false) {
+		list(, $dacregisters1old) = explode("=", $line);
+	}
 	if(strpos($line, "modbusevsesource=") !== false) {
 		list(, $modbusevsesourceold) = explode("=", $line);
 	}
@@ -176,19 +178,19 @@ foreach($lines as $line) {
 		list(, $nachtllold) = explode("=", $line);
 	}
 	if(strpos($line, "wr_http_w_url=") !== false) {
-		list(, $wr_http_w_urlold) = explode("=", $line);
+		list(, $wr_http_w_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "wr_http_kwh_url=") !== false) {
-		list(, $wr_http_kwh_urlold) = explode("=", $line);
+		list(, $wr_http_kwh_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "bezug_http_w_url=") !== false) {
-		list(, $bezug_http_w_urlold) = explode("=", $line);
+		list(, $bezug_http_w_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "bezug_http_ikwh_url=") !== false) {
-		list(, $bezug_http_ikwh_urlold) = explode("=", $line);
+		list(, $bezug_http_ikwh_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "bezug_http_ekwh_url=") !== false) {
-		list(, $bezug_http_ekwh_urlold) = explode("=", $line);
+		list(, $bezug_http_ekwh_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "nachtladenabuhr=") !== false) {
 		list(, $nachtladenabuhrold) = explode("=", $line);
@@ -232,6 +234,11 @@ foreach($lines as $line) {
 
 }
 
+$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
+$bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
+$bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
+$wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
+$wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 
 
 
@@ -576,27 +583,63 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="evsecons1">Anbindung der Slave 1 EVSE:</label></b>
-		<select type="text" name="evsecons1" id="lastmanagement">
-			<option <?php if($evsecons1old == modbusevse) echo selected ?> value="modbusevse">modbusevse</option>
+		<select type="text" name="evsecons1" id="evsecons1">
+			<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">modbus</option>
+			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
+
 		</select>
 	</div>
-	<div class="row bg-info">
-		Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+	<div id="evseconmbs1">
+		<div class="row bg-info">
+			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
+			<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
+			<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
+		</div>
 	</div>
-	<div class="row bg-info">
-		<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
-		<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
+	<div id="evsecondacs1">
+		<div class="row bg-success">
+			<b><label for="dacregisters1">Dacregister Slave 1:</label></b>
+			<input type="text" name="dacregisters1" id="dacregisters1" value="<?php echo $dacregisters1old ?>"><br>
+		</div>
+		<div class="row bg-success">
+		Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
+		</div>
 	</div>
-	<div class="row bg-info">
-		Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
-	</div>
-	<div class="row bg-info">
-		<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
-		<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
-	</div>
-	<div class="row bg-info">
-		Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
-	</div>
+<script>
+$(function() {
+      if($('#evsecons1').val() == 'dac') {
+		$('#evsecondacs1').show(); 
+		$('#evseconmbs1').hide();
+      } else {
+		$('#evsecondacs1').hide();
+	       	$('#evseconmbs1').show();	
+      } 
+
+	$('#evsecons1').change(function(){
+	        if($('#evsecons1').val() == 'dac') {
+			$('#evsecondacs1').show(); 
+			$('#evseconmbs1').hide();
+	        } else {
+			$('#evsecondacs1').hide();
+		       	$('#evseconmbs1').show();	
+	        } 
+	    });
+});
+</script>
+
+
 	<div class="row bg-info">
 		<b><label for="ladeleistungs1modul">Ladeleistung Slave 1 Modul:</label></b>
 		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
@@ -765,21 +808,21 @@ $(function() {
 <div id="wattbezughttp">
 	<div class="row">
 		<b><label for="bezug_http_w_url">Vollständige URL für den Watt Bezug</label></b>
-		<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo $bezug_http_w_urlold ?>"><br>
+		<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>"><br>
 	</div>
 	<div class="row">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.<br>
 	</div>
 	<div class="row">
 		<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
-		<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo $bezug_http_ikwh_urlold ?>"><br>
+		<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>"><br>
 	</div>
 	<div class="row">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 	<div class="row">
 		<b><label for="bezug_http_ekwh_url">Vollständige URL für die kWh Einspeisung</label></b>
-		<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo $bezug_http_ekwh_urlold ?>"><br>
+		<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>"><br>
 	</div>
 	<div class="row">
 	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
@@ -947,14 +990,14 @@ $(function() {
 <div id="pvhttp">
 	<div class="row">
 		<b><label for="wr_http_w_url">Vollständige URL für die Wechselrichter Watt</label></b>
-		<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo $wr_http_w_urlold ?>"><br>
+		<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>"><br>
 	</div>
 	<div class="row">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 	</div>
 	<div class="row">
 		<b><label for="wr_http_kwh_url">Vollständige URL für die Wechselrichter absolut kWh</label></b>
-		<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo $wr_http_kwh_urlold ?>"><br>
+		<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>"><br>
 	</div>
 	<div class="row">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
@@ -1253,6 +1296,9 @@ $(function() {
 <br><br>
 <br><br>
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
+<br><br>
+<br><br>
+<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-red">UPDATE openWB</button>
 
 </div>
 </body></html>

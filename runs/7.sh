@@ -10,6 +10,10 @@ if [[ $debug == "2" ]]; then
 		echo "setz ladung auf 7A" >> /var/www/html/openWB/web/lade.log
 fi
 if [[ $lastmanagement == "1" ]]; then
+	if [[ $evsecons1 == "dac" ]]; then
+		sudo python /var/www/html/openWB/runs/dac.py 908 $dacregisters1
+	fi
+					
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		if [[ $evsesources1 = *virtual* ]]
 		then

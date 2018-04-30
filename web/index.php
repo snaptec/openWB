@@ -307,10 +307,24 @@ doInterval = setInterval(getfile, 2000);
 						}
 					?>
 					<form name="sofortll" action="./tools/sofortll.php" method="POST">
-						<label for="sofortll">Sofortladen A:</label>
-						<input type="number" min="10" max="32" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
-						<br>
+						<div class="col-xs-4 text-center">
+						<input type="range" min="10" max="32" step="1" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
+						</div>
+						<div class="col-xs-4 text-center">
+						<label for="sofortll">Sofortladen: <span id="sofortlll"></span>A</label>
+						</div>
+						<script>
+						var slider = document.getElementById("sofortll");
+						var output = document.getElementById("sofortlll");
+						output.innerHTML = slider.value;
+
+						slider.oninput = function() {
+						  output.innerHTML = this.value;
+						}
+						</script>
+						<div class="col-xs-4 text-center">
 						<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>	 
+						</div>
 					 </form>
 
 				</div>
@@ -322,13 +336,18 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.28
+					Ver0.29
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 				</div>
 				<div class="col-xs-4 text-right">
 					<a href="settings.php">Einstellungen</a> 
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<a href="/metern/index.php">Logging</a>
 				</div>
 			</div>
 			<div id="errorfeed">

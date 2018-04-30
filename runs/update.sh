@@ -27,6 +27,10 @@ if ! grep -Fq "socmodul1=" /var/www/html/openwb.conf
 then
 	  echo "socmodul1=soc_http1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "dacregisters1=" /var/www/html/openwb.conf
+then
+	  echo "dacregisters1=12" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "wr_http_kwh_url=" /var/www/html/openwb.conf
 then
