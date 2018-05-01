@@ -45,4 +45,5 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod -R +x /var/www/html/openWB/modules/*
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
