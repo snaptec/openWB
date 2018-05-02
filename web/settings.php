@@ -163,7 +163,7 @@ foreach($lines as $line) {
 		list(, $socmodulold) = explode("=", $line);
 	}
 	if(strpos($line, "hsocip=") !== false) {
-		list(, $hsocipold) = explode("=", $line);
+		list(, $hsocipold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "socmodul1=") !== false) {
 		list(, $socmodul1old) = explode("=", $line);
@@ -239,6 +239,8 @@ $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
+$hsocipold = str_replace( "'", "", $hsocipold);
+
 
 
 
@@ -1254,7 +1256,7 @@ $(function() {
 	</div>
 	<div class="row">
 		<b><label for="hsocip">SOC Http Abfrage URL:</label></b>
-		<input type="text" name="hsocip" id="hsocip" value="<?php echo $hsocipold ?>"><br>
+		<input type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>"><br>
 	</div>
 	<div class="row">
 		Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.<br><br>

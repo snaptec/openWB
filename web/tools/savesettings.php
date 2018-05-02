@@ -332,7 +332,7 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "hsocip=") !== false) {
-	    $result .= 'hsocip='.$_POST[hsocip]."\n";
+	    $result .= 'hsocip=\''.$_POST[hsocip]."'\n";
 	    } 
 	    else {
 	    $result .= $line;
