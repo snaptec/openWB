@@ -305,10 +305,21 @@ doInterval = setInterval(getfile, 2000);
 	    
 						    }
 						}
+
+						$lines = file('/var/www/html/openWB/openwb.conf');
+						foreach($lines as $line) {
+							if(strpos($line, "minimalstromstaerke=") !== false) {
+										list(, $minimalstromstaerkeold) = explode("=", $line);
+											}
+							if(strpos($line, "maximalstromstaerke=") !== false) {
+										list(, $maximalstromstaerkeold) = explode("=", $line);
+							}
+						}
+
 					?>
 					<form name="sofortll" action="./tools/sofortll.php" method="POST">
 						<div class="col-xs-4 text-center">
-						<input type="range" min="10" max="32" step="1" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
+						<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value="<?php echo $sofortllold ?>">
 						</div>
 						<div class="col-xs-4 text-center">
 						<label for="sofortll">Sofortladen: <span id="sofortlll"></span>A</label>
@@ -336,7 +347,7 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.29
+					Ver0.30
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
