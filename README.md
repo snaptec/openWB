@@ -64,7 +64,24 @@ Alternativ wenn EVU und PV per SDM Zähler abgefragt werden soll:
 ![alt text](http://openwb.de/img/single_openWB_lanmb_wlan.jpg)
 
 
-In der "EVSE WB" muss das Register 2002 auf 0 gesetzt werden und das Register 2003 auf 1. Dies kann per BT-modul (HC-06) und der Android App gemacht werden.
+Für die Zusammenarbeit mit openWB müssen in der "EVSE WB" bestimmte Register gesetzt werden. Dies kann mit dem BT-Modul (HC-06) und der Android App (*.apk vorab installieren) realisiert werden:
+APP-install: http://evracing.cz/evse/evse-wallbox/
+Hinweise zur BT-Modulnutzung:
+Um das BT-Modul nutzen zu können, muss sich die "EVSE WB" im "Modbus"-mode befinden. Dies ist häufig im Auslieferungszustand noch nicht der Fall.
+Zur Aktivierung ist am besten ein Taster an AN + GND anzuschließen. Sofort wenn die "EVSE WB" mit 230V verbunden wird, ist innerhalb von 3s mind. 5x der Taster zu betätigen. Danach befindet sich die EVSE WB in einem temporären "Modbus"-mode.
+Nun BT am Smartphone aktivieren und in den BT-Einstellungen das gefundene BT-Modul mit PW "1234" verbinden.
+Danach die App starten und unter configure => launch settings die MAC-Adresse des BT-Moduls auswählen sowie die "Modbus slave address" = 1 setzen.
+Nun in der App zurück gehen und mit "Connect" zum BT-Modul verbinden. Die LED des BT-Moduls muss von schnellem Dauerblinken auf sporadisches Blinken oder AUS umschalten (=> erfolgreicher Connect). Die APP-Anzeige springt auf "Disconnect".
+
+notwendige Registereinstellungen für EVSE WB mit DAC-Modul (0-5V analog), um mit openWB zu arbeiten
+("EVSE WB" mit Firmware 8, Bootloader 3, Stand 04.05.2018) 
+Register 2001 = 1 (Modbus slave-ID) -> durch 5x Taster/3s bereits eingestellt
+Register 2002 = 0 (erlaubt Ladestrom bis auf 0 = Ladungsstop), default=5 -> write value=0 -> "WRITE"
+Register 2003 = 0 (Aktivierung AN-Eingang für 0-5V Analogsignalsteuerung) default=1 -> write value=0 -> "WRITE"
+Register 2005 = 0 (Taster für Stromeinstellung sperren ) default=1 -> write value=0 -> "WRITE"
+Der Rest kann bleiben.
+Bereits mit 1x "WRITE" auf ein Register >=2000 wird Modbus dauerhaft aktiviert. Dies wäre hier schon mit Reg. 2002 geschehen.
+
 
 
 Raspbian installieren

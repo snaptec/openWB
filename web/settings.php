@@ -459,11 +459,12 @@ $(function() {
 <div class="row">
 	Gültige Werte 0-2000. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
 Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf 6A reduziert. Danach greift die Abschaltung.<br>
-Sprich bis wieviel Watt soll bei 1320w Ladeleistung Netzbezug erlaubt sein<br>
-Beispiel, bei 900 (watt) wird bei 1320w Ladeleistung 420Watt aus dem Netz bezogen. Werden mehr als 420 Watt bezogen, wird die Ladung gestoppt<br>
-Der Wert ist für 1phasiges laden. Bei 3phasigem laden verdreifacht sich der Wert(automatisch). z.B. bei 900 Watt ergibt das bei 3960Watt Ladeleistung ein (erlaubter) Netzbezug bis 1260W(420W * 3)<br>
-Bei einem abschaltuberschuss von 0 wird erst abgeschaltet wenn Bezug über 1320w bzw 3960w (3phasig) geht<br>
-Bei einem abschaltuberschuss von 1320 wird abgeschaltet sobald mehr als 1W aus dem Netz bezogen wird<br>
+Der Wert gibt an wieviel Watt pro Phase bezogen werden bevor abgeschaltet wird.<br>
+Beispiel: Wert 400Watt<br>
+1-phasiges Fahrzeug schaltet bei Bezug von 401 Watt ab<br>
+2-phasiges Fahrzeug schaltet bei Bezug von 801 Watt ab<br>
+3-phasiges Fahrzeug schaltet bei Bezug von 1201 Watt ab <br>
+Der Wert ist für 1phasiges laden. Bei 3phasigem laden verdreifacht sich der Wert(automatisch)<br>
 
 
 </div>
