@@ -457,14 +457,9 @@ $(function() {
 	<input type="text" name="abschaltuberschuss" id="abschaltuberschuss" value="<?php echo $abschaltuberschussold ?>"><br>
 </div>
 <div class="row">
-	Gültige Werte 0-2000. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
-Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf 6A reduziert. Danach greift die Abschaltung.<br>
-Der Wert gibt an wieviel Watt pro Phase bezogen werden bevor abgeschaltet wird.<br>
-Beispiel: Wert 400Watt<br>
-1-phasiges Fahrzeug schaltet bei Bezug von 401 Watt ab<br>
-2-phasiges Fahrzeug schaltet bei Bezug von 801 Watt ab<br>
-3-phasiges Fahrzeug schaltet bei Bezug von 1201 Watt ab <br>
-Der Wert ist für 1phasiges laden. Bei 3phasigem laden verdreifacht sich der Wert(automatisch)<br>
+	Gültige Werte 0-9999. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
+Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf Minimalstromstaerke reduziert. Danach greift die Abschaltung.<br>
+Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br>
 
 
 </div>
@@ -746,7 +741,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">sdm630modbusbezug</option>
 		<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">bezug_http</option>
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">smaemd_bezug</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">bezug_fronius_sm</option>
 	</select>
 </div>
 <div class="row">
@@ -840,6 +835,12 @@ $(function() {
 		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br> Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
 	</div>
 </div>
+<div id="wattbezugfronius">
+	<div class="row">
+		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
+	</div>
+</div>
+	
 
 <script>
 $(function() {
@@ -849,6 +850,8 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -857,6 +860,7 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -865,6 +869,7 @@ $(function() {
 		$('#wattbezugnone').show();
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -873,14 +878,24 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
  		$('#wattbezugsma').hide();
-     } 
+ 		$('#wattbezugfronius').hide();
+    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').show();
-     } 
+ 		$('#wattbezugfronius').hide();
+   }
+   if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+ 		$('#wattbezugfronius').show();
+    } 
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -888,6 +903,7 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').hide();
+ 		$('#wattbezugfronius').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -896,6 +912,7 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').hide();
+ 		$('#wattbezugfronius').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -904,21 +921,32 @@ $(function() {
 		$('#wattbezugnone').show();
 		$('#wattbezughttp').hide();
   		$('#wattbezugsma').hide();
-     } 
+  		$('#wattbezugfronius').hide();
+    } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
   		$('#wattbezugsma').hide();
-     } 
+  		$('#wattbezugfronius').hide();
+    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
   		$('#wattbezugsma').show();
-     } 
+  		$('#wattbezugfronius').hide();
+   } 
+   if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+  		$('#wattbezugsma').hide();
+  		$('#wattbezugfronius').show();
+    } 
 	    });
 });
 </script>

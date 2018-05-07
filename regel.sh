@@ -313,7 +313,11 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
                                 llneu=$((llalt - 1 ))
                                 runs/$llneu.sh
                                 exit 0
-			fi	
+			fi
+			if (( $llalt = $minimalstromstaerke )); then
+                                exit 0
+			fi
+	
 		fi	
 		if (( $uberschuss < 0 )); then
                 	if (( $llalt > $minimalstromstaerke )); then
@@ -355,6 +359,8 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
                			fi
 				runs/$minimalstromstaerke.sh
 				exit 0
+			else
+				exit 0
 			fi	
 	fi
 	if (( $ladeleistung < 500 )); then
@@ -362,55 +368,69 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
                         llneu=$((llalt - 1 ))
                         runs/$llneu.sh
                         exit 0
-		fi	
+		fi
+		if (( $llalt == $minimalstromstaerke )); then
+                        exit 0
+		fi
 	fi	
 
 # wenn evse bereits an, vergleiche ladestromstaerke und uberschuss und regle nach
-	if (( $wattkombiniert < $abschaltungw )); then	
-
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			exit 0		
-		fi
-
-		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#	if (( $wattkombiniert < $abschaltungw )); then	
+#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#			exit 0		
+#		fi
+#		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 #minimiere Ladeleistung bis kleinste stufe erreicht, dann schalte ab
+#			if (( $llalt > $minimalstromstaerke )); then
+#				llneu=$((llalt - 1 ))
+#               		runs/$llneu.sh
+#				if [[ $debug == "1" ]]; then
+#       	             		echo "pv ladung auf $llneu reduziert"
+#             			fi
+#				exit 0
+#			else
+#				runs/0.sh
+#				exit 0
+#			fi
+#		fi
+#	else
+#		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#			if (( $uberschuss < 0 )); then
+#				if (( $llalt == 0 )); then
+#					exit 0
+#				fi
+#				if (( $llalt > $minimalstromstaerke )); then
+#				      	llneu=$((llalt - 1 ))
+#	                                runs/$llneu.sh
+#	                                exit 0
+#	                        else
+#	                                runs/0.sh
+#					exit 0
+#	                        fi
+#			fi
+#			if (( $uberschuss > $schaltschwelle )); then
+#				if (( $llalt == $maximalstromstaerke )); then
+#					exit 0
+#				fi
+#				llneu=$((llalt + 1 ))
+#				if (( $llalt < $minimalstromstaerke )); then
+#					llneu=$minimalstromstaerke
+#				fi
+#				runs/$llneu.sh
+#		                if [[ $debug == "1" ]]; then
+#	       	             		echo "pv ladung auf $llneu erhoeht"
+#	     			fi
+#				exit 0
+#			fi
+#			exit 0
+#		fi
+#	fi		
 
-			if (( $llalt > $minimalstromstaerke )); then
-
-				llneu=$((llalt - 1 ))
-                		runs/$llneu.sh
-				if [[ $debug == "1" ]]; then
-        	             		echo "pv ladung auf $llneu reduziert"
-               			fi
-
-				exit 0
-			else
-				runs/0.sh
-				exit 0
-			fi
-		fi
-	else
-		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			if (( $uberschuss < 0 )); then
-				if (( $llalt == 0 )); then
-					exit 0
-				fi
-				if (( $llalt > $minimalstromstaerke )); then
-	
-				      	llneu=$((llalt - 1 ))
-	                                runs/$llneu.sh
-	                                exit 0
-	                        else
-	                                runs/0.sh
-					exit 0
-	                        fi
-	
-			fi
+	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( $uberschuss > $schaltschwelle )); then
 				if (( $llalt == $maximalstromstaerke )); then
 					exit 0
 				fi
-	
 				llneu=$((llalt + 1 ))
 				if (( $llalt < $minimalstromstaerke )); then
 					llneu=$minimalstromstaerke
@@ -421,11 +441,30 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 	     			fi
 				exit 0
 			fi
-			exit 0
-		fi
-	fi		
-fi
+			if (( $uberschuss < 0 )); then
+				if (( $llalt > $minimalstromstaerke )); then
+				      	llneu=$((llalt - 1 ))
+	                                runs/$llneu.sh
+			                if [[ $debug == "1" ]]; then
+						echo "pv ladung auf $llneu reduziert"
+					fi
+	                                exit 0
+	                        else
+					if (( $wattbezugint > $abschaltuberschuss )); then 
+					runs/0.sh
+			                if [[ $debug == "1" ]]; then
+						echo "pv ladung beendet"
+					fi
+					exit 0
+					fi
+				exit 0
+	                        fi
+			fi
 
+
+	
+	fi
+fi
 
 #Lademodus 3 == Aus
 
