@@ -26,14 +26,24 @@ if (( $n == 2 )); then
 echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
 fi
 if (( $n == 3 )); then
-echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llaktuell
+	wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
 fi
 if (( $n == 4 )); then
 	llkwh=$(echo "$line" |  cut -c2- )
        echo ${llkwh%??} > /var/www/html/openWB/ramdisk/llkwh
 fi
+if (( $n == 5 )); then
+	wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+fi
+if (( $n == 6 )); then
+	wl3=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
+fi
 
-n=$((n + 1))
+	
+	n=$((n + 1))
     done <<< "$output"
 
+
+llaktuell=`echo "($wl1+$wl2+$wl3)" |bc`
+echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuell
 											

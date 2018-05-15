@@ -98,6 +98,18 @@ Der Rest kann bleiben.
 Bereits mit 1x "WRITE" auf ein Register >=2000 wird Modbus dauerhaft aktiviert. Dies wäre hier schon mit Reg. 2002 geschehen.
 
 
+SDM Einstellung:
+	
+	Baud 9600
+	Stopbit 1
+	Parität keine
+
+
+Modbus Adapter anschließen:
+
+A an A und B an B verkabeln. Es kann je nach Adapter erforderlich sein einen Abschlusswiderstand zu montieren.
+
+150 Ohm haben sich als brauchbar erwiesen
 
 
 Raspbian installieren

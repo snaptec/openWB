@@ -22,6 +22,7 @@ touch /var/www/html/openWB/ramdisk/pvkwh
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
+echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
@@ -47,3 +48,8 @@ sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
+
+if ! grep -Fq "abschaltverzoegerungpv=" /var/www/html/openwb.conf
+then
+  echo "abschaltverzoegerungpv=10" >> /var/www/html/openWB/openwb.conf
+fi

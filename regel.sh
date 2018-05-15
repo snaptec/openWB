@@ -358,6 +358,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
         	             		echo "nur  pv ladung auf $minimalstromstaerke starten"
                			fi
 				runs/$minimalstromstaerke.sh
+				echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
 				exit 0
 			else
 				exit 0
@@ -367,10 +368,28 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		if (( $llalt > $minimalstromstaerke )); then
                         llneu=$((llalt - 1 ))
                         runs/$llneu.sh
+			echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
                         exit 0
 		fi
 		if (( $llalt == $minimalstromstaerke )); then
-                        exit 0
+                        if (( $wattbezugint > $abschaltuberschuss )); then 
+				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
+				if (( $pvcounter < $abschaltverzoegerung )); then
+					$pvcounter=$((pvcounter + 10))
+					echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
+					if [[ $debug == "1" ]]; then
+        	             			echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
+               				fi
+				else
+					runs/0.sh
+					if [[ $debug == "1" ]]; then
+						echo "pv ladung beendet"
+					fi
+					echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
+				fi
+				exit 0
+			fi
+			exit 0
 		fi
 	fi	
 
@@ -439,25 +458,36 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		                if [[ $debug == "1" ]]; then
 	       	             		echo "pv ladung auf $llneu erhoeht"
 	     			fi
+				echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
 				exit 0
 			fi
 			if (( $uberschuss < 0 )); then
 				if (( $llalt > $minimalstromstaerke )); then
 				      	llneu=$((llalt - 1 ))
 	                                runs/$llneu.sh
+					echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
 			                if [[ $debug == "1" ]]; then
 						echo "pv ladung auf $llneu reduziert"
 					fi
 	                                exit 0
 	                        else
 					if (( $wattbezugint > $abschaltuberschuss )); then 
-					runs/0.sh
-			                if [[ $debug == "1" ]]; then
-						echo "pv ladung beendet"
-					fi
+						pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
+						if (( $pvcounter < $abschaltverzoegerung )); then
+							$pvcounter=$((pvcounter + 10))
+							echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
+							if [[ $debug == "1" ]]; then
+        		             				echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
+               						fi
+						else
+							runs/0.sh
+							if [[ $debug == "1" ]]; then
+								echo "pv ladung beendet"
+							fi
+							echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
+						fi
 					exit 0
 					fi
-				exit 0
 	                        fi
 			fi
 

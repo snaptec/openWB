@@ -231,7 +231,9 @@ foreach($lines as $line) {
 	if(strpos($line, "smaemdpvid=") !== false) {
 		list(, $smaemdpvidold) = explode("=", $line);
 	}
-
+	if(strpos($line, "abschaltverzoegerung=") !== false) {
+		list(, $abschaltverzoegerungold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -459,9 +461,18 @@ $(function() {
 <div class="row">
 	Gültige Werte 0-9999. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
 Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf Minimalstromstaerke reduziert. Danach greift die Abschaltung.<br>
-Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br>
+Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br><br>
 
 
+</div>
+<div class="row">
+	<b><label for="abschaltverzoegerung">Abschaltverzögerung:</label></b>
+	<input type="text" name="abschaltverzoegerung" id="abschaltverzoegerung" value="<?php echo $abschaltverzoegerungold ?>"><br>
+</div>
+
+<div class="row">
+Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
+<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
 </div>
 <div class="text-center row"><hr>
 	
