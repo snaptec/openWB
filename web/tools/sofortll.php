@@ -1,14 +1,12 @@
 
 <?php
 if(isset($_POST['sofortll'])) {
-$data = $_POST['sofortll'];
-$config['sofortll'] = $_POST['sofortll'];
 
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	    if(substr($line, 0, 9) == 'sofortll=') {
-	    $result .= 'sofortll='.$config['sofortll']."\n";
+       if(strpos($line, "sofortll=") !== false) {
+	       $result .= 'sofortll='.$_POST[sofortll]."\n";
 	    } else {
 	    $result .= $line;
 	    }
