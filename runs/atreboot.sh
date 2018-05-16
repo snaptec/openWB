@@ -53,4 +53,4 @@ if ! grep -Fq "abschaltverzoegerungpv=" /var/www/html/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
-sudo python /var/www/html/openWB/ramdisk/ladetaster.py &
+sudo python /var/www/html/openWB/runs/ladetaster.py &
