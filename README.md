@@ -209,6 +209,18 @@ Nun das installscript ausführen:
 
 Anschließen im Webinterface in den Einstellungen die SMA Module auswählen und die Seriennummer entsprechend eintragen.
 
+
+
+Taster am Raspberry zur Einstellung des Lademodi
+
+Der Lademodi kann nicht nur über die Weboberfläche sondern auch an der Wallbox direkt eingestellt werden.
+Hierzu müssen schließer Taster von GND (Pin 34) nach Gpio X  angeschlossen werden.
+	SofortLaden GPIO 12, PIN 32
+	Min+PV GPIO 16, PIN 36
+	NurPV GPIO 6, Pin 31
+	Aus Gpio 13, Pin 33
+	
+
 # Danke geht an:
 
 	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
