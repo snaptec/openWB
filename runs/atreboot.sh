@@ -49,7 +49,7 @@ sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 
-if ! grep -Fq "abschaltverzoegerungpv=" /var/www/html/openwb.conf
+if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
