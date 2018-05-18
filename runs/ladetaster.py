@@ -13,6 +13,7 @@ try:
          button2_state = GPIO.input(16)
          button3_state = GPIO.input(6)
          button4_state = GPIO.input(13)
+         time.sleep(1)
     if button1_state == False:
          file = open("/var/www/html/openWB/ramdisk/lademodus","w") 
          file.write("0")
