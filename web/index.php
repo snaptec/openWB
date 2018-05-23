@@ -342,7 +342,7 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.34
+					Ver0.35
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -352,9 +352,16 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 text-center">
+				<div class="col-xs-4 text-center">
+				</div>
+
+				<div class="col-xs-4 text-center">
 					<a href="/metern/index.php">Logging</a>
 				</div>
+				<div class="col-xs-4 text-right">
+					<a href="status.php">Status</a> 
+				</div>
+
 			</div>
 			<div id="errorfeed">
 			<div id="errorfeedcontent"></div>

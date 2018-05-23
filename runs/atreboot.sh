@@ -24,6 +24,29 @@ touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 echo 0 > /var/www/html/openWB/ramdisk/llas11
+echo 0 > /var/www/html/openWB/ramdisk/bezuga1
+echo 0 > /var/www/html/openWB/ramdisk/bezuga2
+echo 0 > /var/www/html/openWB/ramdisk/bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/llv1
+echo 0 > /var/www/html/openWB/ramdisk/llv2
+echo 0 > /var/www/html/openWB/ramdisk/llv3
+echo 0 > /var/www/html/openWB/ramdisk/llaltnv
+echo 0 > /var/www/html/openWB/ramdisk/llhz
+echo 0 > /var/www/html/openWB/ramdisk/llpf1
+echo 0 > /var/www/html/openWB/ramdisk/llpf2
+echo 0 > /var/www/html/openWB/ramdisk/llpf3
+echo 0 > /var/www/html/openWB/ramdisk/evuv1
+echo 0 > /var/www/html/openWB/ramdisk/evuv2
+echo 0 > /var/www/html/openWB/ramdisk/evuv3
+echo 0 > /var/www/html/openWB/ramdisk/evuhz
+echo 0 > /var/www/html/openWB/ramdisk/evupf1
+echo 0 > /var/www/html/openWB/ramdisk/evupf2
+echo 0 > /var/www/html/openWB/ramdisk/evupf3
+echo 0 > /var/www/html/openWB/ramdisk/evuhz
+
+
+
+
 echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug

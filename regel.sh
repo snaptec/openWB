@@ -375,7 +375,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
                         if (( $wattbezugint > $abschaltuberschuss )); then 
 				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 				if (( $pvcounter < $abschaltverzoegerung )); then
-					$pvcounter=$((pvcounter + 10))
+					pvcounter=$((pvcounter + 10))
 					echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
 					if [[ $debug == "1" ]]; then
         	             			echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
