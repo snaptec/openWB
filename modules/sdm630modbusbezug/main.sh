@@ -122,7 +122,8 @@ echo $ikwh22 > /var/www/html/openWB/ramdisk/bezugkwh2
 echo $ikwh33 > /var/www/html/openWB/ramdisk/bezugkwh3
 bezugkwh=${bezugkwh%??}
 einspeisungkwh=${einspeisungkwh%??}
-
+einspeisungkwh=$(echo "(($einspeisungkwh)*1000)" | bc)
+bezugkwh=$(echo "(($bezugkwh)*1000)" | bc)
 echo $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}
