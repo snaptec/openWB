@@ -15,6 +15,11 @@ ikwh=$(echo "($ikwh*1000)" |bc)
 ekwh=$(echo "($ekwh*1000)" |bc)
 echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
+echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
+echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
+
+
 if (( $watteinspeisung > 5 ));then
 		wattbezug=$(echo -$watteinspeisung)
 	fi

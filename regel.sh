@@ -39,6 +39,10 @@ if [[ $wattbezugmodul != "none" ]]; then
 		echo wattbezug $wattbezug
 		echo uberschuss $uberschuss
 	fi
+	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
+	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
+	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
+
 else
 	wattbezug=$pvwatt
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
@@ -119,16 +123,16 @@ fi
 ########################
 # Sofort Laden
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
+#zum test 1 durch 0 ersetzt
+if [[ $lastmanagement == "0" ]]; then
 
-if [[ $lastmanagement == "1" ]]; then
-
-	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		runs/$sofortll.sh
-		if [[ $debug == "1" ]]; then
-	               	echo starte sofort Ladeleistung von $sofortll aus
-        	fi
-		exit 0
-	fi
+#	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#		runs/$sofortll.sh
+#		if [[ $debug == "1" ]]; then
+#	               	echo starte sofort Ladeleistung von $sofortll aus
+#       	fi
+#		exit 0
+#	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
 			exit 0
@@ -139,18 +143,20 @@ if [[ $lastmanagement == "1" ]]; then
 	        	fi
 			exit 0
 		fi
-	fi		
+	fi
+
+
 #	begrenzungap1=$(($lastmaxap1 - 6 ))
 #	begrenzungap2=$(($lastmaxap2 - 6 ))
 #	begrenzungap3=$(($lastmaxap3 - 6 ))
 #
-#	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#		runs/$minimalstromstaerke.sh
-#		if [[ $debug == "1" ]]; then
-#			echo Starte sofort Ladeleistung mit Lastmanagement von $minimalstromstaerke aus
-#		fi
-#	exit 0
-#	fi
+	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		runs/$minimalstromstaerke.sh
+		if [[ $debug == "1" ]]; then
+			echo Starte sofort Ladeleistung mit Lastmanagement von $minimalstromstaerke aus
+		fi
+	exit 0
+	fi
 #	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 #	if [[ $lla1 > "2" ]] || [[ $lla2 > "2" ]] || [[ $lla3 > "2" ]]; then
 #		if (( $llalt < $sofortll )); then
@@ -166,13 +172,60 @@ if [[ $lastmanagement == "1" ]]; then
 
 else
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		runs/$sofortll.sh
+		runs/$minimalstromstaerke.sh
 		if [[ $debug == "1" ]]; then
 	               	echo starte sofort Ladeleistung von $sofortll aus
         	fi
 		exit 0
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		if (( $evua1 < $lastmaxap1 )) || (( $evua2 < $lastmaxap2 )) ||  (( $evua3 < $lastmaxap3 )); then
+			if (( $ladeleistung < 500 )); then
+				if (( $llalt > $minimalstromstaerke )); then
+                                	llneu=$((llalt - 1 ))
+                                	runs/"$llneu"m.sh
+                                	exit 0
+				fi
+				if (( $llalt = $minimalstromstaerke )); then
+                                	exit 0
+				fi
+				if (( $llalt < $minimalstromstaerke )); then
+					llneu=$((llalt + 1 ))
+					runs/"$llneu"m.sh
+					exit 0
+				fi
+
+			else
+				if (( $llalt == $sofortll )); then
+					exit 0
+				fi
+				llneu=$((llalt + 1 ))
+				runs/"$llneu"m.sh
+		                if [[ $debug == "1" ]]; then
+	       	             		echo "Sofort ladung auf $llneu erhoeht"
+	     			fi
+				exit 0
+			fi
+		else
+			evudiff1=$((evua1 - $lastmaxap1 ))
+			evudiff2=$((evua2 - $lastmaxap2 ))
+			evudiff3=$((evua3 - $lastmaxap3 ))
+			evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+			maxdiff=0
+			for v in ${evudiffmax[@]}; do
+					if (( $v > $maxdiff )); then maxdiff=$v; fi;
+			done
+			llneu=$((llalt - maxdiff))
+			runs/"$llneu"m.sh
+	                if [[ $debug == "1" ]]; then
+       	             		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
+     			fi
+			exit 0
+
+ 		fi
+
+
+
 		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
 			exit 0
 		else

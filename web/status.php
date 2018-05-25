@@ -550,12 +550,12 @@ doInterval = setInterval(getfile, 2000);
 			</div>
 	<div class="row">
 				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue"> EVU in Watt
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange"> EVU in Watt
                         			<div id="wattbezugdiv"></div>
 					</button>
 				</div>
 	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Bezug Wh
+                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Bezug Wh
 					<div id="bezugkwhdiv"></div>
 					</button>
 				</div>
@@ -563,12 +563,12 @@ doInterval = setInterval(getfile, 2000);
 
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">EVU Frequenz in Hz
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">EVU Frequenz in Hz
                      			<div id="evuhzdiv"></div>
 			</button>
 		</div>
 	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Einspeisung Wh
+                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Einspeisung Wh
 					<div id="einspeisungkwhdiv"></div>
 					</button>
 				</div>
@@ -576,12 +576,12 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Volt je Phase EVU
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Volt je Phase EVU
              			<div id="evuv1div"></div><div id="evuv2div"></div><div id="evuv3div"></div>
 			</button>
 		</div>
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Power Faktor je Phase EVU
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Power Faktor je Phase EVU
              			<div id="evupf1div"></div><div id="evupf2div"></div><div id="evupf3div"></div>
 			</button>
 		</div>
@@ -590,19 +590,19 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ampere je Phase Bezug
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Ampere je Phase Bezug
              			<div id="bezuga1div"></div><div id="bezuga2div"></div><div id="bezuga3div"></div>
 			</button>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Volt je Phase Ladepunkt 1
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Volt je Phase Ladepunkt 1
              			<div id="llv1div"></div><div id="llv2div"></div><div id="llv3div"></div>
 			</button>
 		</div>
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Power Faktor je Phase Ladepunkt 1
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Power Faktor je Phase Ladepunkt 1
              			<div id="llpf1div"></div><div id="llpf2div"></div><div id="llpf3div"></div>
 			</button>
 		</div>
@@ -612,12 +612,12 @@ doInterval = setInterval(getfile, 2000);
 
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Durchschnittliche Phase zu Neutral Volt
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Durchschnittliche Phase zu Neutral Volt
                      			<div id="llaltnvdiv"></div>
 			</button>
 		</div>
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ladepunkt 1 Frequenz in Hz
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladepunkt 1 Frequenz in Hz
                      			<div id="llhzdiv"></div>
 			</button>
 		</div>
@@ -627,12 +627,12 @@ doInterval = setInterval(getfile, 2000);
 
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ampere je Phase Ladepunkt 1
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ampere je Phase Ladepunkt 1
              			<div id="lla1div"></div><div id="lla2div"></div><div id="lla3div"></div>
 			</button>
 		</div>
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ampere je Phase Ladepunkt 2
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ampere je Phase Ladepunkt 2
              			<div id="llas11div"></div><div id="llas12div"></div><div id="llas13div"></div>
 			</button>
 		</div>
@@ -642,12 +642,12 @@ doInterval = setInterval(getfile, 2000);
 
 	<div class="row">
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ladeleistung Punkt 1 in Watt
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Punkt 1 in Watt
                      			<div id="llaktuelldiv"></div>
 			</button>
 		</div>
 		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ladeleistung Punkt 2 in Watt
+	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Punkt 2 in Watt
                      			<div id="llaktuells1div"></div>
 			</button>
 		</div>
@@ -655,7 +655,7 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="row">
 				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">Ladeleistung in Watt
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung in Watt
                         			<div id="lldiv"></div>
 					</button>
 				</div>
@@ -667,12 +667,12 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="row">
 				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">PVleistung in Watt
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">PVleistung in Watt
                         			<div id="pvwattdiv"></div>
 					</button>
 				</div>
 	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">PV Wh
+                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">PV Wh
 					<div id="pvkwhdiv"></div>
 					</button>
 				</div>

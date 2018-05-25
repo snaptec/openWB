@@ -17,13 +17,19 @@ n=0
 output=$(sudo python /var/www/html/openWB/modules/sdm630modbusbezug/readsdm.py $sdm630modbusbezugsource $sdm630modbusbezugid)
 while read -r line; do
 	if (( $n == 0 )); then
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga1
+		evua1=$(echo "$line" |  cut -c2- )
+		evua1=${evua1%??}
+		printf "%.2f\n" $evua1 > /var/www/html/openWB/ramdisk/bezuga1
 	fi
 	if (( $n == 1 )); then
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga2
+		evua2=$(echo "$line" |  cut -c2- )
+		evua2=${evua2%??}
+		printf "%.2f\n" $evua2 > /var/www/html/openWB/ramdisk/bezuga2
 	fi
 	if (( $n == 2 )); then
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga3
+		evua3=$(echo "$line" |  cut -c2- )
+		evua3=${evua3%??}
+		printf "%.2f\n" $evua3 > /var/www/html/openWB/ramdisk/bezuga3
 	fi
 	if (( $n == 3 )); then
 		wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
@@ -72,22 +78,34 @@ while read -r line; do
 	fi
 	if (( $n == 16 )); then
 		evuv1=$(echo "$line" |  cut -c2- )
-		echo ${evuv1%??} > /var/www/html/openWB/ramdisk/evuv1
+		evuv1=${evuv1%??}
+		printf "%.2f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
 	fi
 	if (( $n == 17 )); then
-		evuv2=$(echo "$line" |  cut -c2- )
-		echo ${evuv2%??} > /var/www/html/openWB/ramdisk/evuv2
+		evzv2=$(echo "$line" |  cut -c2- )
+		evuv2=${evuv2%??}
+		printf "%.2f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
 	fi
 	if (( $n == 18 )); then
 		evuv3=$(echo "$line" |  cut -c2- )
-		echo ${evuv3%??} > /var/www/html/openWB/ramdisk/evuv3
+		evuv3=${evuv3%??}
+		printf "%.2f\n" $evuv3 > /var/www/html/openWB/ramdisk/evuv3
 	fi
 	if (( $n == 19 )); then
-		llhz=$(echo "$line" |  cut -c2- )
-		echo ${llhz%??} > /var/www/html/openWB/ramdisk/llhz
+		evuhz=$(echo "$line" |  cut -c2- )
+		evuhz=${evuhz%??}
+        	printf "%.2f\n" $evuhz > /var/www/html/openWB/ramdisk/evuhz
 	fi
-
-
+	if (( $n == 20 )); then
+		bezugkwh=$(echo "$line" |  cut -c2- )
+#		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/bezugkwh
+#		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/einspeisungkwh
+	fi
+	if (( $n == 21 )); then
+		einspeisungkwh=$(echo "$line" |  cut -c2- )
+#		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/bezugkwh
+#		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/einspeisungkwh
+	fi
 	n=$((n + 1))
 done <<< "$output"
 
@@ -102,9 +120,10 @@ ikwh33=${ikwh3%??}
 echo $ikwh11 > /var/www/html/openWB/ramdisk/bezugkwh1
 echo $ikwh22 > /var/www/html/openWB/ramdisk/bezugkwh2
 echo $ikwh33 > /var/www/html/openWB/ramdisk/bezugkwh3
+bezugkwh=${bezugkwh%??}
+einspeisungkwh=${einspeisungkwh%??}
 
-ikwh=$(echo "(($ikwh11+$ikwh22+$ikwh33)*1000)" |bc)
-echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
+echo $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}
 ekwh33=${ekwh3%??}
@@ -112,8 +131,8 @@ echo $ekwh11 > /var/www/html/openWB/ramdisk/einspeisungkwh1
 echo $ekwh22 > /var/www/html/openWB/ramdisk/einspeisungkwh2
 echo $ekwh33 > /var/www/html/openWB/ramdisk/einspeisungkwh3
 
-ekwh=$(echo "(($ekwh11+$ekwh22+$ekwh33)*1000)" |bc)
-echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+#ekwh=$(echo "(($ekwh11+$ekwh22+$ekwh33)*1000)" |bc)
+echo $einspeisungkwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 
 
 #echo ${ikwh2%??}
