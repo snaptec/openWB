@@ -82,7 +82,7 @@ while read -r line; do
 		printf "%.2f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
 	fi
 	if (( $n == 17 )); then
-		evzv2=$(echo "$line" |  cut -c2- )
+		evuv2=$(echo "$line" |  cut -c2- )
 		evuv2=${evuv2%??}
 		printf "%.2f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
 	fi
