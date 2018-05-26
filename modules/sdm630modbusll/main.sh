@@ -66,7 +66,7 @@ printf "%.2f\n" $llaltnv > /var/www/html/openWB/ramdisk/llaltnv
 fi
 if (( $n == 11 )); then
 	llhz=$(echo "$line" |  cut -c2- )
-	llhz=${llhz%???}
+	llhz=${llhz%???} 
         printf "%.2f\n" $llhz > /var/www/html/openWB/ramdisk/llhz
 fi
 if (( $n == 12 )); then
