@@ -186,7 +186,7 @@ else
                                 	runs/"$llneu"m.sh
                                 	exit 0
 				fi
-				if (( $llalt = $minimalstromstaerke )); then
+				if (( $llalt == $minimalstromstaerke )); then
                                 	exit 0
 				fi
 				if (( $llalt < $minimalstromstaerke )); then
