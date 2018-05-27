@@ -17,19 +17,23 @@ n=0
 output=$(sudo python /var/www/html/openWB/modules/sdm630modbusbezug/readsdm.py $sdm630modbusbezugsource $sdm630modbusbezugid)
 while read -r line; do
 	if (( $n == 0 )); then
-		evua1=$(echo "$line" |  cut -c2- )
-		evua1=${evua1%??}
-		printf "%.1f\n" $evua1 > /var/www/html/openWB/ramdisk/bezuga1
+#		evua1=$(echo "$line" |  cut -c2- )
+#		evua1=${evua1%??}
+#		printf "%.1f\n" $evua1 > /var/www/html/openWB/ramdisk/bezuga1
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga1
 	fi
 	if (( $n == 1 )); then
-		evua2=$(echo "$line" |  cut -c2- )
-		evua2=${evua2%??}
-		printf "%.1f\n" $evua2 > /var/www/html/openWB/ramdisk/bezuga2
+#		evua2=$(echo "$line" |  cut -c2- )
+#		evua2=${evua2%??}
+#		printf "%.1f\n" $evua2 > /var/www/html/openWB/ramdisk/bezuga2
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga2
 	fi
 	if (( $n == 2 )); then
-		evua3=$(echo "$line" |  cut -c2- )
-		evua3=${evua3%??}
-		printf "%.1f\n" $evua3 > /var/www/html/openWB/ramdisk/bezuga3
+#		evua3=$(echo "$line" |  cut -c2- )
+#		evua3=${evua3%??}
+#		printf "%.1f\n" $evua3 > /var/www/html/openWB/ramdisk/bezuga3
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga3
+
 	fi
 	if (( $n == 3 )); then
 		wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
@@ -65,36 +69,50 @@ while read -r line; do
 	ekwh3=$(echo "$line" |  cut -c2- )
 	fi
 	if (( $n == 13 )); then
-		evupf1=$(echo "$line" |  cut -c2- )
-		echo ${evupf1%??} > /var/www/html/openWB/ramdisk/evupf1
+#		evupf1=$(echo "$line" |  cut -c2- )
+#		echo ${evupf1%??} > /var/www/html/openWB/ramdisk/evupf1
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf1
+
 	fi
 	if (( $n == 14 )); then
-		evupf2=$(echo "$line" |  cut -c2- )
-		echo ${evupf2%??} > /var/www/html/openWB/ramdisk/evupf2
+#		evupf2=$(echo "$line" |  cut -c2- )
+#		echo ${evupf2%??} > /var/www/html/openWB/ramdisk/evupf2
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf2
+
 	fi
 	if (( $n == 15 )); then
-		evupf3=$(echo "$line" |  cut -c2- )
-		echo ${evupf3%??} > /var/www/html/openWB/ramdisk/evupf3
+#		evupf3=$(echo "$line" |  cut -c2- )
+#		echo ${evupf3%??} > /var/www/html/openWB/ramdisk/evupf3
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf3
+
 	fi
 	if (( $n == 16 )); then
-		evuv1=$(echo "$line" |  cut -c2- )
-		evuv1=${evuv1%??}
-		printf "%.1f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
+#		evuv1=$(echo "$line" |  cut -c2- )
+#		evuv1=${evuv1%??}
+#		printf "%.1f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv1
+
 	fi
 	if (( $n == 17 )); then
-		evuv2=$(echo "$line" |  cut -c2- )
-		evuv2=${evuv2%??}
-		printf "%.1f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
+#		evuv2=$(echo "$line" |  cut -c2- )
+#		evuv2=${evuv2%??}
+#		printf "%.1f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv2
+
 	fi
 	if (( $n == 18 )); then
-		evuv3=$(echo "$line" |  cut -c2- )
-		evuv3=${evuv3%??}
-		printf "%.1f\n" $evuv3 > /var/www/html/openWB/ramdisk/evuv3
+#		evuv3=$(echo "$line" |  cut -c2- )
+#		evuv3=${evuv3%??}
+#		printf "%.1f\n" $evuv3 > /var/www/html/openWB/ramdisk/evuv3
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv3
+
 	fi
 	if (( $n == 19 )); then
-		evuhz=$(echo "$line" |  cut -c2- )
-		evuhz=${evuhz%??}
-        	printf "%.1f\n" $evuhz > /var/www/html/openWB/ramdisk/evuhz
+#		evuhz=$(echo "$line" |  cut -c2- )
+#		evuhz=${evuhz%??}
+#       	printf "%.1f\n" $evuhz > /var/www/html/openWB/ramdisk/evuhz
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuhz
+
 	fi
 	if (( $n == 20 )); then
 		bezugkwh=$(echo "$line" |  cut -c2- )
