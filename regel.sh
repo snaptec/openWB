@@ -13,6 +13,7 @@ if [[ $debug == "1" ]]; then
 fi
 #######################################
 # Werte für die Berechnung ermitteln
+llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=$(modules/$pvwattmodul/main.sh)
@@ -92,10 +93,11 @@ else
 	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
 fi
 	if [[ $debug == "1" ]]; then
-                echo ladeleistung $ladeleistung
+                echo ladeleistung $ladeleistung llalt $llalt
 		echo lla1 $lla1 llas1 $llas1
 		echo lla2 $lla2 llas2 $llas2
 		echo lla3 $lla3 llas3 $llas3
+		echo evua 1,2,3 $evua1 $evua2 $evua3
         fi
 
 
@@ -115,7 +117,6 @@ fi
 	date=$(date)
 	H=$(date +%H)
 
-	llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #########################################
 #Regelautomatiken
 
@@ -184,27 +185,60 @@ else
 				if (( $llalt > $minimalstromstaerke )); then
                                 	llneu=$((llalt - 1 ))
                                 	runs/"$llneu"m.sh
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+	     				fi
                                 	exit 0
 				fi
 				if (( $llalt == $minimalstromstaerke )); then
-                                	exit 0
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+	     				fi
+					exit 0
 				fi
 				if (( $llalt < $minimalstromstaerke )); then
 					llneu=$((llalt + 1 ))
 					runs/"$llneu"m.sh
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+	     				fi
 					exit 0
 				fi
 
 			else
 				if (( $llalt == $sofortll )); then
 					exit 0
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung erreicht bei $sofortll A"
+	     				fi
+
 				fi
-				llneu=$((llalt + 1 ))
-				runs/"$llneu"m.sh
-		                if [[ $debug == "1" ]]; then
-	       	             		echo "Sofort ladung auf $llneu erhoeht"
-	     			fi
-				exit 0
+				if (( $llalt > $maximalstromstaerke )); then
+					llneu=$((llalt - 1 ))
+					runs/"$llneu"m.sh
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
+	     				fi
+					exit 0
+				fi
+				if (( $llalt < $sofortll)); then
+					llneu=$((llalt + 1 ))
+					runs/"$llneu"m.sh
+		                	if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung auf $llneu erhoeht, kleiner als sofortll $sofortll"
+	     				fi
+					exit 0
+				fi
+				if (( $llalt > $sofortll)); then
+					llneu=$((llalt - 1 ))
+					runs/"$llneu"m.sh
+		                	if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung auf $llneu reduziert, größer als sofortll $sofortll"
+	     				fi
+					exit 0
+				fi
+
+				 
 			fi
 		else
 			evudiff1=$((evua1 - $lastmaxap1 ))
