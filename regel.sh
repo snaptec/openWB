@@ -93,9 +93,9 @@ else
 	echo $ladeleistung > /var/www/html/openWB/ramdisk/llkombiniert
 fi
 	if [[ $debug == "1" ]]; then
-                echo ladeleistung $ladeleistung llalt $llalt
-		echo lla1 $lla1 llas1 $llas1
-		echo lla2 $lla2 llas2 $llas2
+                echo ladeleistung $ladeleistung llalt $llalt nachtladen $nachtladen minimalA $minimalstromstaerke maximalA $maximalstromstaerke
+		echo lla1 $lla1 llas1 $llas1 mindestuberschuss $mindestuberschuss abschaltuberschuss $abschaltuberschuss
+		echo lla2 $lla2 llas2 $llas2 sofortll $sofortll
 		echo lla3 $lla3 llas3 $llas3
 		echo evua 1,2,3 $evua1 $evua2 $evua3
         fi
@@ -180,7 +180,7 @@ else
 		exit 0
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		if (( $evua1 < $lastmaxap1 )) || (( $evua2 < $lastmaxap2 )) ||  (( $evua3 < $lastmaxap3 )); then
+		if (( $evua1 < $lastmaxap1 )) && (( $evua2 < $lastmaxap2 )) &&  (( $evua3 < $lastmaxap3 )); then
 			if (( $ladeleistung < 500 )); then
 				if (( $llalt > $minimalstromstaerke )); then
                                 	llneu=$((llalt - 1 ))
@@ -207,10 +207,10 @@ else
 
 			else
 				if (( $llalt == $sofortll )); then
-					exit 0
 					if [[ $debug == "1" ]]; then
 	       	             			echo "Sofort ladung erreicht bei $sofortll A"
 	     				fi
+					exit 0
 
 				fi
 				if (( $llalt > $maximalstromstaerke )); then
@@ -249,6 +249,7 @@ else
 			for v in ${evudiffmax[@]}; do
 					if (( $v > $maxdiff )); then maxdiff=$v; fi;
 			done
+			maxdiff=$((maxdiff + 1 ))
 			llneu=$((llalt - maxdiff))
 			runs/"$llneu"m.sh
 	                if [[ $debug == "1" ]]; then
