@@ -251,6 +251,12 @@ else
 			done
 			maxdiff=$((maxdiff + 1 ))
 			llneu=$((llalt - maxdiff))
+			if (( $llneu < $minimalstromstaerke )); then
+				llneu=$minimalstromstaerke
+				if [[ $debug == "1" ]]; then
+					echo Differenz groesser als minimalstromstaerke, setze auf minimal A $minimalstromstaerke
+				fi
+			fi
 			runs/"$llneu"m.sh
 	                if [[ $debug == "1" ]]; then
        	             		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
