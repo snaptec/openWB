@@ -15,7 +15,7 @@ sudo chmod +x /var/www/html/openWB/runs/*
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
 sleep 2
-if ! grep -Fq "wr_http_w_url=" /var/www/html/openwb.conf
+if ! grep -Fq "wr_http_w_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> /var/www/html/openWB/openwb.conf
 fi
@@ -62,6 +62,7 @@ if ! grep -Fq "bezug_http_ekwh_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_http_ekwh_url=http://192.168.0.17/einspeisungwh.txt" >> /var/www/html/openWB/openwb.conf
 fi
+
 if [ ! -f /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini ]; then
 sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 fi

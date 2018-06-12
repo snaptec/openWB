@@ -27,7 +27,7 @@ if [[ $pvwattmodul != "none" ]]; then
 else
 	pvwatt=0
 fi
-#Wattbezug	
+#Wattbezug	i
 if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=$(modules/$wattbezugmodul/main.sh)
 	if ! [[ $wattbezug =~ $re ]] ; then
@@ -126,56 +126,10 @@ fi
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 #zum test 1 durch 0 ersetzt
 if [[ $lastmanagement == "0" ]]; then
-
-#	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#		runs/$sofortll.sh
-#		if [[ $debug == "1" ]]; then
-#	               	echo starte sofort Ladeleistung von $sofortll aus
-#       	fi
-#		exit 0
-#	fi
-	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
-			exit 0
-		else
-			runs/$sofortll.sh
-			if [[ $debug == "1" ]]; then
-	                	echo aendere sofort Ladeleistung auf $sofortll
-	        	fi
-			exit 0
-		fi
-	fi
-
-
-#	begrenzungap1=$(($lastmaxap1 - 6 ))
-#	begrenzungap2=$(($lastmaxap2 - 6 ))
-#	begrenzungap3=$(($lastmaxap3 - 6 ))
-#
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/$minimalstromstaerke.sh
 		if [[ $debug == "1" ]]; then
-			echo Starte sofort Ladeleistung mit Lastmanagement von $minimalstromstaerke aus
-		fi
-	exit 0
-	fi
-#	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#	if [[ $lla1 > "2" ]] || [[ $lla2 > "2" ]] || [[ $lla3 > "2" ]]; then
-#		if (( $llalt < $sofortll )); then
-#			if ( $llalt >
-#			llneu=$((llalt + 1 ))
-#			runs/$llneu.sh
-#		fi
-#	
-#
-#
-#	fi
-
-
-else
-	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		runs/$minimalstromstaerke.sh
-		if [[ $debug == "1" ]]; then
-	               	echo starte sofort Ladeleistung von $sofortll aus
+	               	echo starte sofort Ladeleistung von $minimalstromstaerke aus
         	fi
 		exit 0
 	fi
@@ -264,9 +218,9 @@ else
 			exit 0
 
  		fi
-
-
-
+	fi		
+else
+	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		if grep -q $sofortll "/var/www/html/openWB/ramdisk/llsoll"; then
 			exit 0
 		else
@@ -276,7 +230,16 @@ else
 	        	fi
 			exit 0
 		fi
-	fi		
+	fi
+	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		runs/$minimalstromstaerke.sh
+		if [[ $debug == "1" ]]; then
+			echo Starte sofort Ladeleistung mit Lastmanagement von $minimalstromstaerke aus
+		fi
+	exit 0
+	fi
+
+
 fi
 fi
 
@@ -368,15 +331,12 @@ if (( $llalt > 3 )); then
 	anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
 fi
 
-
-
 ########################
 # Berechnung für PV Regelung
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-
 
 	if [[ $debug == "2" ]]; then
 		echo $date
@@ -390,7 +350,16 @@ schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 		echo abschaltungw $abschaltungw
 		echo schaltschwelle $schaltschwelle
         fi
+#PV Regelmodus
+if [[ $pvbezugeinspeisung == "0" ]]; then
+	pvregelungm="0"
+fi
 
+
+if [[ $pvbezugeinspeisung == "1" ]]; then
+	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
+	schaltschwelle="0"
+fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
@@ -413,7 +382,7 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 			fi
 	
 		fi	
-		if (( $uberschuss < 0 )); then
+		if (( $uberschuss < $pvregelungm )); then
                 	if (( $llalt > $minimalstromstaerke )); then
                                 llneu=$((llalt - 1 ))
                                 runs/$llneu.sh
@@ -486,59 +455,6 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 			exit 0
 		fi
 	fi	
-
-# wenn evse bereits an, vergleiche ladestromstaerke und uberschuss und regle nach
-#	if (( $wattkombiniert < $abschaltungw )); then	
-#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#			exit 0		
-#		fi
-#		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#minimiere Ladeleistung bis kleinste stufe erreicht, dann schalte ab
-#			if (( $llalt > $minimalstromstaerke )); then
-#				llneu=$((llalt - 1 ))
-#               		runs/$llneu.sh
-#				if [[ $debug == "1" ]]; then
-#       	             		echo "pv ladung auf $llneu reduziert"
-#             			fi
-#				exit 0
-#			else
-#				runs/0.sh
-#				exit 0
-#			fi
-#		fi
-#	else
-#		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#			if (( $uberschuss < 0 )); then
-#				if (( $llalt == 0 )); then
-#					exit 0
-#				fi
-#				if (( $llalt > $minimalstromstaerke )); then
-#				      	llneu=$((llalt - 1 ))
-#	                                runs/$llneu.sh
-#	                                exit 0
-#	                        else
-#	                                runs/0.sh
-#					exit 0
-#	                        fi
-#			fi
-#			if (( $uberschuss > $schaltschwelle )); then
-#				if (( $llalt == $maximalstromstaerke )); then
-#					exit 0
-#				fi
-#				llneu=$((llalt + 1 ))
-#				if (( $llalt < $minimalstromstaerke )); then
-#					llneu=$minimalstromstaerke
-#				fi
-#				runs/$llneu.sh
-#		                if [[ $debug == "1" ]]; then
-#	       	             		echo "pv ladung auf $llneu erhoeht"
-#	     			fi
-#				exit 0
-#			fi
-#			exit 0
-#		fi
-#	fi		
-
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( $uberschuss > $schaltschwelle )); then
 				if (( $llalt == $maximalstromstaerke )); then
@@ -555,7 +471,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 				echo 0 > /var/www/html/openWB/ramdisk/pvcounter 
 				exit 0
 			fi
-			if (( $uberschuss < 0 )); then
+			if (( $uberschuss < $pvregelungm )); then
 				if (( $llalt > $minimalstromstaerke )); then
 				      	llneu=$((llalt - 1 ))
 	                                runs/$llneu.sh

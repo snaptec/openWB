@@ -45,6 +45,9 @@ foreach($lines as $line) {
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
+	if(strpos($line, "pvbezugeinspeisung=") !== false) {
+		list(, $pvbezugeinspeisungold) = explode("=", $line);
+	}
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}
@@ -474,6 +477,39 @@ Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<
 Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
 <br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
 </div>
+<br><br>
+	<div class="row">
+		<b><label for="pvbezugeinspeisung">PV Lademodus:</label></b>
+	       	<select type="text" name="pvbezugeinspeisung" id="pvbezugeinspeisung">
+ 			<option <?php if($pvbezugeinspeisungold == 0) echo selected ?> value="0">Einspeisung</option>
+  			<option <?php if($pvbezugeinspeisungold == 1) echo selected ?> value="1">Bezug</option>
+		</select><br>
+
+	</div>
+	<div class="row">
+		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
+	</div>
+<div class="row"><hr>
+	<h4>EVU basiertes Lastmanagement</h4>
+</div>
+
+	<div class="row">
+		<b><label for="lastmaxap1">Lastmanagement Max Ampere Phase 1:</label></b>
+		<input type="text" name="lastmaxap1" id="lastmaxap1" value="<?php echo $lastmaxap1old ?>"><br>
+	</div>
+	<div class="row">
+		<b><label for="lastmaxap2">Lastmanagement Max Ampere Phase 2:</label></b>
+		<input type="text" name="lastmaxap2" id="lastmaxap2" value="<?php echo $lastmaxap2old ?>"><br>
+	</div>
+		<div class="row">
+		<b><label for="lastmaxap3">Lastmanagement Max Ampere Phase 3:</label></b>
+		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte 7-64. Definiert die erlaubte Stromstärke der Wallbox bzw. aller Ladepunkte im Sofort Laden Modus sofern das EVU Modul die Ampere Werte je Phase zur Verfuegung stellt.<br>Ist derzeit im Sofort Laden Modus bei einem Ladepunkt aktiv. Implementierung fuer mehrere Ladepunkte folgt! Bei Nutzung mehrere Ladepunkte ist noch die alte Regelung (Sofortstromstaerke wird genutzt) aktiv.<br>
+	</div><br><br>
+
+
 <div class="text-center row"><hr>
 	
 	<h2>Konfiguration Module</h2>
@@ -545,45 +581,22 @@ $(function() {
 	    });
 });
 </script>
-<div class="row"><hr>
-	<h4>Lastmanagement</h4>
-</div>
+<hr>
 <div class="row">
-	<b><label for="lastmanagement">Lastmanagement:</label></b>
+	<b><label for="lastmanagement">Mehrere Ladepunkte:</label></b>
 	<select type="text" name="lastmanagement" id="lastmanagement">
 		<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
 	</select>
 </div>
 <div class="row">
-	Definiert ob es eine zweite WB gibt. Master & Slave werden gleichberechtigt bis Max Stromstaerke geregelt.<br><br>
+	Definiert ob es weitere Ladepunkte gibt.<br><br>
 </div>
 <div id="lastmmaus">
 	<br>
 </div>
 <div id="lastmman">
-	<div class="row">
-		<b><label for="lastmmaxw">Lastmanagement Max Watt:</label></b>
-		<input type="text" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>"><br>
-	</div>
-	<div class="row">
-		Gültiger Wert 0 bis 44000. Definiert die maximalen Watt die Master & Slave WB gleichzeitig entnehmen dürfen.<br> Wird der Wert überschritten, werden beide WB gleichmäßig runtergeregelt !!noch nicht implementiert, Max Stromstärke gilt pro WB!!<br><br>
-	</div>
-		<div class="row">
-		<b><label for="lastmaxap1">Lastmanagement Max Ampere Phase 1:</label></b>
-		<input type="text" name="lastmaxap1" id="lastmaxap1" value="<?php echo $lastmaxap1old ?>"><br>
-	</div>
-	<div class="row">
-		<b><label for="lastmaxap2">Lastmanagement Max Ampere Phase 2:</label></b>
-		<input type="text" name="lastmaxap2" id="lastmaxap2" value="<?php echo $lastmaxap2old ?>"><br>
-	</div>
-		<div class="row">
-		<b><label for="lastmaxap3">Lastmanagement Max Ampere Phase 3:</label></b>
-		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
-	</div>
-	<div class="row">
-		Gültige Werte 12-64. Definiert die erlaubte Stromstärke beider Wallboxen im Sofort Laden Modus, noch nicht implementiert!<br>
-	</div>
+
 
 	
 
@@ -591,7 +604,7 @@ $(function() {
 		<h4>Slave1 WB</h4>
 	</div>
 	<div class="row bg-info">
-		<b><label for="evsecons1">Anbindung der Slave 1 EVSE:</label></b>
+		<b><label for="evsecons1">Anbindung der Ladepunkt 2 EVSE:</label></b>
 		<select type="text" name="evsecons1" id="evsecons1">
 			<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">modbus</option>
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
@@ -603,14 +616,14 @@ $(function() {
 			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 		</div>
 		<div class="row bg-info">
-			<b><label for="evsesources1">Slave 1 EVSE Source:</label></b>
+			<b><label for="evsesources1">Ladepunkt 2 EVSE Source:</label></b>
 			<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
 		</div>
 		<div class="row bg-info">
 			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
 		</div>
 		<div class="row bg-info">
-			<b><label for="evseids1">Slave 1 EVSE ID:</label></b>
+			<b><label for="evseids1">Ladepunkt 2 EVSE ID:</label></b>
 			<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
 		</div>
 		<div class="row bg-info">
@@ -619,7 +632,7 @@ $(function() {
 	</div>
 	<div id="evsecondacs1">
 		<div class="row bg-success">
-			<b><label for="dacregisters1">Dacregister Slave 1:</label></b>
+			<b><label for="dacregisters1">Dacregister Ladepunkt 2:</label></b>
 			<input type="text" name="dacregisters1" id="dacregisters1" value="<?php echo $dacregisters1old ?>"><br>
 		</div>
 		<div class="row bg-success">
@@ -650,33 +663,33 @@ $(function() {
 
 
 	<div class="row bg-info">
-		<b><label for="ladeleistungs1modul">Ladeleistung Slave 1 Modul:</label></b>
+		<b><label for="ladeleistungs1modul">Ladeleistung Ladepunkt 2 Modul:</label></b>
 		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
 			<option <?php if($ladeleistungs1modulold == sdm630modbuslls1) echo selected ?> value="sdm630modbuslls1">sdm630modbuslls1</option>
 		</select>
 	</div>
 	<div class="row bg-info">
-		Modul zur Messung der Ladeleistung in der Slave WB.<br><br>
+		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="sdmids1">Slave 1 SDM Zähler ID:</label></b>
+		<b><label for="sdmids1">Ladepunkt 2 SDM Zähler ID:</label></b>
 		<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte 1-254. Modbus ID des Slave 1 SDM Zählers in der WB.<br><br>
+		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
 		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der Slave WB.<br><br>
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers des zweiten Ladepunktes.<br><br>
 	</div>
 	<div class="row">
 		<h5> SOC Module </h5>
 	</div>
 	<div class="row">
-		<b><label for="socmodul1">SOC Modul für zweite WB:</label></b>
+		<b><label for="socmodul1">SOC Modul für zweiten Ladepunkt:</label></b>
 	<select type="text" name="socmodul1" id="socmodul1">
 		<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">soc_http</option>
@@ -690,7 +703,7 @@ $(function() {
 		Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
 	</div>
 	<div class="row">
-		<b><label for="hsocip1">SOC zweite WB Http Abfrage URL:</label></b>
+		<b><label for="hsocip1">SOC zweiter Ladepunkt Http Abfrage URL:</label></b>
 		<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
 	</div>
 	<div class="row">

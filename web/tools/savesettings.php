@@ -2,6 +2,18 @@
 <?php
 if(isset($_POST['minimalstromstaerke'])) {
 $result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "pvbezugeinspeisung=") !== false) {
+	    $result .= 'pvbezugeinspeisung='.$_POST[pvbezugeinspeisung]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$
+$result = '';
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {

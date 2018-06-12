@@ -83,5 +83,8 @@ else
 	sudo python /var/www/html/openWB/runs/ladetaster.py &
 fi
 
-
+if ! grep -Fq "pvbezugeinspeisung=" /var/www/html/openWB/openwb.conf
+then
+	  echo "pvbezugeinspeisung=0" >> /var/www/html/openWB/openwb.conf
+fi
 

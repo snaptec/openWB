@@ -222,7 +222,7 @@ doInterval = setInterval(getfile, 2000);
 					</button>
 				</div>
 				<div class="col-xs-6 text-center">
-                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Soll  in A
+                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestromstaerke Soll  in A
 					<div id="llsolldiv"></div>
 					</button>
 				</div>
@@ -342,7 +342,7 @@ doInterval = setInterval(getfile, 2000);
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.39
+					Ver0.40
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
