@@ -83,6 +83,16 @@ else
 	sudo python /var/www/html/openWB/runs/ladetaster.py &
 fi
 
+if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "minimalampv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minimalampv=10" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "pvbezugeinspeisung=" /var/www/html/openWB/openwb.conf
 then
 	  echo "pvbezugeinspeisung=0" >> /var/www/html/openWB/openwb.conf

@@ -54,7 +54,12 @@ foreach($lines as $line) {
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
-
+	if(strpos($line, "minimalampv=") !== false) {
+		list(, $minimalampvold) = explode("=", $line);
+	}
+	if(strpos($line, "minimalapv=") !== false) {
+		list(, $minimalapvold) = explode("=", $line);
+	}
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);
 	}
@@ -276,7 +281,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	</select><br>
 </div>
 <div class="row">
-	Gibt an mit wieviel Ampere Mindestens geladen wird.<br><br>
+	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird.<br><br>
 </div>
 <div class="row">
 	<b><label for="maximalstromstaerke">Maximalstromstaerke in A:</label></b>
@@ -476,6 +481,49 @@ Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<
 <div class="row">
 Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
 <br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
+</div><br>
+<div class="row">
+	<b><label for="minimalampv">Minimalstromstaerke fuer den Min + PV Laden Modus:</label></b>
+	<select type="text" name="minimalampv" id="minimalampv">
+		<option <?php if($minimalampvold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minimalampvold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minimalampvold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minimalampvold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minimalampvold == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minimalampvold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($minimalampvold == 12) echo selected ?> value="12">12</option>
+		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalampvold == 14) echo selected ?> value="14">14</option>
+		<option <?php if($minimalampvold == 15) echo selected ?> value="15">15</option>
+		<option <?php if($minimalampvold == 16) echo selected ?> value="16">16</option>
+	</select><br>
+
+</div>
+
+<div class="row">
+Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
+</div>
+<div class="row">
+	<b><label for="minimalapv">Minimalstromstaerke fuer den Nur PV Laden Modus:</label></b>
+	<select type="text" name="minimalapv" id="minimalapv">
+		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minimalapvold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minimalapvold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minimalapvold == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minimalapvold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($minimalapvold == 12) echo selected ?> value="12">12</option>
+		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalapvold == 14) echo selected ?> value="14">14</option>
+		<option <?php if($minimalapvold == 15) echo selected ?> value="15">15</option>
+		<option <?php if($minimalapvold == 16) echo selected ?> value="16">16</option>
+	</select><br>
+
+
+</div>
+
+<div class="row">
+Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
 </div>
 <br><br>
 	<div class="row">
