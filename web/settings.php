@@ -554,7 +554,8 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
 	</div>
 	<div class="row">
-		Gültige Werte 7-64. Definiert die erlaubte Stromstärke der Wallbox bzw. aller Ladepunkte im Sofort Laden Modus sofern das EVU Modul die Ampere Werte je Phase zur Verfuegung stellt.<br>Ist derzeit im Sofort Laden Modus bei einem Ladepunkt aktiv. Implementierung fuer mehrere Ladepunkte folgt! Bei Nutzung mehrere Ladepunkte ist noch die alte Regelung (Sofortstromstaerke wird genutzt) aktiv.<br>
+Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen das Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
+<br>Ist derzeit im Sofort Laden Modus bei einem Ladepunkt aktiv. Implementierung fuer mehrere Ladepunkte folgt! Bei Nutzung mehrere Ladepunkte ist noch die alte Regelung (Sofortstromstaerke wird genutzt) aktiv.<br>
 	</div><br><br>
 
 
