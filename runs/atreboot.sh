@@ -157,8 +157,8 @@ then
 	  echo "durchslp2=15" >> /var/www/html/openWB/openwb.conf
 fi
 if [ -e /var/www/html/openWB/web/ladelog ]; then
-	touch /var/www/html/openWB/web/ladelog
-	echo Start > /var/www/html/openWB/web/ladelog
+	sudo touch /var/www/html/openWB/web/ladelog
+	sudo echo Start > /var/www/html/openWB/web/ladelog
 
 	sudo chmod 777 /var/www/html/openWB/web/ladelog
 fi
