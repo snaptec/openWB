@@ -39,7 +39,7 @@
 require 'config.php';
 ?>
 <script type='text/javascript'>
-setInterval(loadText, 500);
+setInterval(loadText, 1800);
 function loadText(){
  $.ajax({
   url:"./tools/debugmode.php",  
@@ -72,7 +72,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -84,7 +84,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -96,7 +96,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -108,7 +108,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 function getfile() {
@@ -120,7 +120,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -133,7 +133,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -146,7 +146,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -159,7 +159,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -172,7 +172,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -185,7 +185,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -198,7 +198,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -211,7 +211,7 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -224,7 +224,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script> <!--
 <script type='text/javascript'>
 var doInterval;
@@ -237,7 +237,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script> -->
 <script type='text/javascript'>
 var doInterval;
@@ -251,7 +251,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 500);
+doInterval = setInterval(getfile, 1800);
 </script>
 
 
@@ -610,7 +610,7 @@ doInterval = setInterval(getfile, 500);
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
 	<script type='text/javascript'>
-setInterval(loadText, 500);
+setInterval(loadText, 1800);
 function loadText(){
  $.ajax({
   url:"./tools/lademodus.php",  
