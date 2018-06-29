@@ -49,18 +49,6 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-	$.ajax({
-		url: "/openWB/ramdisk/anzahlphasen",
-	        complete: function(request){
-		        $("#anzahlphasendiv").html(request.responseText);
-		}
-	});
-}
-doInterval = setInterval(getfile, 2000);
-</script>
 
 <script type='text/javascript'>
 var doInterval;
@@ -103,9 +91,33 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/bezugkwh",
+		url: "/openWB/ramdisk/llsoll",
 	        complete: function(request){
-		        $("#bezugkwhdiv").html(request.responseText);
+		        $("#llsolldiv").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llsolls1",
+	        complete: function(request){
+		        $("#llsolls1div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llsolls2",
+	        complete: function(request){
+		        $("#llsolls2div").html(request.responseText);
 		}
 	});
 }
@@ -116,9 +128,21 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/einspeisungkwh",
+		url: "/openWB/ramdisk/llas11",
 	        complete: function(request){
-		        $("#einspeisungkwhdiv").html(request.responseText);
+		        $("#llas11div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llas12",
+	        complete: function(request){
+		        $("#llas12div").html(request.responseText);
 		}
 	});
 }
@@ -129,9 +153,46 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/lademodus",
+		url: "/openWB/ramdisk/llas13",
 	        complete: function(request){
-		        $("#lademodusdiv").html(request.responseText);
+		        $("#llas13div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llas21",
+	        complete: function(request){
+		        $("#llas21div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llas22",
+	        complete: function(request){
+		        $("#llas22div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llas23",
+	        complete: function(request){
+		        $("#llas23div").html(request.responseText);
 		}
 	});
 }
@@ -200,44 +261,19 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
-
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/llas11",
+		url: "/openWB/ramdisk/llaktuells2",
 	        complete: function(request){
-		        $("#llas11div").html(request.responseText);
+		        $("#llaktuells2div").html(request.responseText);
 		}
 	});
 }
 doInterval = setInterval(getfile, 2000);
 </script>
 
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-	$.ajax({
-		url: "/openWB/ramdisk/llas12",
-	        complete: function(request){
-		        $("#llas12div").html(request.responseText);
-		}
-	});
-}
-doInterval = setInterval(getfile, 2000);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-	$.ajax({
-		url: "/openWB/ramdisk/llas13",
-	        complete: function(request){
-		        $("#llas13div").html(request.responseText);
-		}
-	});
-}
-doInterval = setInterval(getfile, 2000);
-</script>
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
@@ -262,14 +298,25 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
-
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/llsoll",
+		url: "/openWB/ramdisk/llkwhs2",
 	        complete: function(request){
-		        $("#llsolldiv").html(request.responseText);
+		        $("#llkwhs2div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llkwhges",
+	        complete: function(request){
+		        $("#llkwhgesdiv").html(request.responseText);
 		}
 	});
 }
@@ -293,7 +340,7 @@ doInterval = setInterval(getfile, 2000);
 var doInterval;
 function getfile() {
 	$.ajax({
-		url: "/openWB/ramdisk/pvkwh",
+		url: "/openWB/ramdisk/pvkwhk",
 	        complete: function(request){
 		        $("#pvkwhdiv").html(request.responseText);
 		}
@@ -381,31 +428,8 @@ function getfile() {
 doInterval = setInterval(getfile, 2000);
 </script>
 
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-	$.ajax({
-		url: "/openWB/ramdisk/llaltnv",
-	        complete: function(request){
-		        $("#llaltnvdiv").html(request.responseText);
-		}
-	});
-}
-doInterval = setInterval(getfile, 2000);
-</script>
 
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-	$.ajax({
-		url: "/openWB/ramdisk/llhz",
-	        complete: function(request){
-		        $("#llhzdiv").html(request.responseText);
-		}
-	});
-}
-doInterval = setInterval(getfile, 2000);
-</script>
+
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
@@ -548,142 +572,273 @@ doInterval = setInterval(getfile, 2000);
 					<h3> OpenWB Status </h3>
 				</div>
 			</div>
-	<div class="row">
-				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange"> EVU in Watt
-                        			<div id="wattbezugdiv"></div>
-					</button>
-				</div>
-	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Bezug Wh
-					<div id="bezugkwhdiv"></div>
-					</button>
-				</div>
+<br><br>	
+<div class="row">
+		<div class="col-xs-4 text-center">
+		</div>
+		<div class="col-xs-2 text-center">
+			L1
+		</div>
+		<div class="col-xs-2 text-center">
+			L2
+		</div>
+		<div class="col-xs-2 text-center">
+			L3
+		</div>
+
+</div>
+<hr>
+<div class="row bg-warning">
+	<div class="col-xs-4 text-center bg-warning">
+		EVU Spannung in V
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evuv1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evuv2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evuv3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-warning">
+	<div class="col-xs-4 text-center bg-warning">
+		EVU Power Faktor
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-warning">
+	<div class="col-xs-4 text-center bg-warning">
+		EVU Stromstaerke in A
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezuga1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezuga2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezuga3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladepunkt 1 Spannung in V
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladepunkt 1 Power Faktor
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llpf1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llpf2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llpf3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladepunkt 1 Stromstaerke in A
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="lla1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="lla2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="lla3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+		Ladepunkt 2 Stromstaerke in A
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas11div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas12div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas13div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+		Ladepunkt 3 Stromstaerke in A
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas21div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas22div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llas23div"></div>
+	</div>
+</div>
+<hr style="height:3px;background-color:#333;" />
+<div class="row">
+		<div class="col-xs-4 text-center">
+		</div>
+		<div class="col-xs-2 text-center">
+			Ladepunkt 1
+		</div>
+		<div class="col-xs-2 text-center">
+			Ladepunkt 2
+		</div>
+		<div class="col-xs-2 text-center">
+			Ladepunkt 3
+		</div>
+		<div class="col-xs-2 text-center">
+			Gesamt
+		</div>
+</div>
+<hr>
+
+<div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladestromvorgabe in A
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llsolldiv"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llsolls1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llsolls2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
 	</div>
 
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">EVU Frequenz in Hz
-                     			<div id="evuhzdiv"></div>
-			</button>
-		</div>
-	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Einspeisung Wh
-					<div id="einspeisungkwhdiv"></div>
-					</button>
-				</div>
 
+</div>
+<hr>
+
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+		Ladeleistung in Watt
 	</div>
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Volt je Phase EVU
-             			<div id="evuv1div"></div><div id="evuv2div"></div><div id="evuv3div"></div>
-			</button>
-		</div>
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Power Faktor je Phase EVU
-             			<div id="evupf1div"></div><div id="evupf2div"></div><div id="evupf3div"></div>
-			</button>
-		</div>
-
-
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llaktuelldiv"></div>
 	</div>
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-orange">Ampere je Phase Bezug
-             			<div id="bezuga1div"></div><div id="bezuga2div"></div><div id="bezuga3div"></div>
-			</button>
-		</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llaktuells1div"></div>
 	</div>
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Volt je Phase Ladepunkt 1
-             			<div id="llv1div"></div><div id="llv2div"></div><div id="llv3div"></div>
-			</button>
-		</div>
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Power Faktor je Phase Ladepunkt 1
-             			<div id="llpf1div"></div><div id="llpf2div"></div><div id="llpf3div"></div>
-			</button>
-		</div>
-
-
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llaktuells2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+	<div id="lldiv"></div>
 	</div>
 
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Durchschnittliche Phase zu Neutral Volt
-                     			<div id="llaltnvdiv"></div>
-			</button>
-		</div>
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladepunkt 1 Frequenz in Hz
-                     			<div id="llhzdiv"></div>
-			</button>
-		</div>
-
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+		Zählerstand in kWh
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llkwhdiv"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llkwhs1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llkwhs2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+		<div id="llkwhgesdiv"></div>
 	</div>
 
+</div>
+<hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ampere je Phase Ladepunkt 1
-             			<div id="lla1div"></div><div id="lla2div"></div><div id="lla3div"></div>
-			</button>
+<div class="row bg-success">
+		<div class="col-xs-2 text-center">
+		PV Counter
 		</div>
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ampere je Phase Ladepunkt 2
-             			<div id="llas11div"></div><div id="llas12div"></div><div id="llas13div"></div>
-			</button>
+		<div class="col-xs-2 text-center">
+			<div id="pvcounterdiv"></div>
 		</div>
-
-
-	</div>
-
-	<div class="row">
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Punkt 1 in Watt
-                     			<div id="llaktuelldiv"></div>
-			</button>
+		<div class="col-xs-2 text-center">
+			PV Leistung in Watt
 		</div>
-		<div class="col-xs-6 text-center">		
-	               	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung Punkt 2 in Watt
-                     			<div id="llaktuells1div"></div>
-			</button>
+		<div class="col-xs-2 text-center">
+			<div id="pvwattdiv"></div>
 		</div>
+		<div class="col-xs-2 text-center">
+			PV Zählerstand in kWh
+		</div>
+		<div class="col-xs-2 text-center">
+			<div id="pvkwhdiv"></div>
 
-	</div>
-	<div class="row">
-				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung in Watt
-                        			<div id="lldiv"></div>
-					</button>
-				</div>
-	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC in %
-					<div id="soclevel"></div>
-					</button>
-				</div>
-	</div>
-	<div class="row">
-				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">PVleistung in Watt
-                        			<div id="pvwattdiv"></div>
-					</button>
-				</div>
-	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-green">PV Wh
-					<div id="pvkwhdiv"></div>
-					</button>
-				</div>
-	</div>
+		</div>
+</div>
+<hr>
+<div class="row">
+		<div class="col-xs-2 text-center bg-info">
+		SoC in %
+		</div>
+		<div class="col-xs-2 text-center bg-info">
+			<div id="soclevel"></div>
+		</div>
+		<div class="col-xs-2 text-center bg-warning">
+			EVU in Watt
+		</div>
+		<div class="col-xs-2 text-center bg-warning">
+			<div id="wattbezugdiv"></div>
+		</div>
+		<div class="col-xs-2 text-center bg-warning">
+			EVU in Hz
+		</div>
+		<div class="col-xs-2 text-center bg-warning">
+			<div id="evuhzdiv"></div>
+
+		</div>
+</div>
+<hr style="height:3px;border:none;color:#333;background-color:#333;" />
+
+
+
+
 
 <?php
 echo "
 </textarea> 
 	</td><td width='50%'></b>
-	<br><hr align=left size=1 width='90%'>
-	Uptime: <span id='uptime'>--</span>
+	<br>	Uptime: <span id='uptime'>--</span>
 	<br>OS: ";
 echo exec('uname -ors');
 echo "<br>System: ";

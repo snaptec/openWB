@@ -1,6 +1,6 @@
 <?php
 define('checkaccess', TRUE);
-include('../config/config_main.php');
+include('./config_main.php');
 include('./raspbian_ARM.php');
 
 $uptime   = exec($UPTIME);

@@ -39,7 +39,7 @@
 require 'config.php';
 ?>
 <script type='text/javascript'>
-setInterval(loadText, 2000);
+setInterval(loadText, 500);
 function loadText(){
  $.ajax({
   url:"./tools/debugmode.php",  
@@ -72,7 +72,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -84,7 +84,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -96,7 +96,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -108,7 +108,7 @@ function getfile() {
     }
   });
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 function getfile() {
@@ -120,7 +120,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -133,7 +133,85 @@ function getfile() {
         }
         });
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/gelrlp1",
+    complete: function(request){
+      $("#gelrlp1div").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/gelrlp2",
+    complete: function(request){
+      $("#gelrlp2div").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/gelrlp3",
+    complete: function(request){
+      $("#gelrlp3div").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/aktgeladen",
+    complete: function(request){
+      $("#aktgeladendiv").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/aktgeladens1",
+    complete: function(request){
+      $("#aktgeladens1div").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+  $.ajaxSetup({ cache: false});
+  $.ajax({
+   url: "/openWB/ramdisk/aktgeladens2",
+    complete: function(request){
+      $("#aktgeladens2div").html(request.responseText);
+        }
+        });
+}
+doInterval = setInterval(getfile, 500);
 </script>
 <script type='text/javascript'>
 var doInterval;
@@ -146,7 +224,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script> <!--
 <script type='text/javascript'>
 var doInterval;
@@ -159,7 +237,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script> -->
 <script type='text/javascript'>
 var doInterval;
@@ -173,7 +251,7 @@ function getfile() {
 	}
 	});
 }
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 500);
 </script>
 
 
@@ -193,42 +271,32 @@ doInterval = setInterval(getfile, 2000);
 			</div>
 			<div class="row">
 				<div class="col-xs-6 text-center">                     
-                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-green">PV in Watt
-                        			<div id="pvdiv"></div> 
+                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-green" style="font-size: 2vw">PV
+                        			<span id="pvdiv"></span>Watt 
 			                </button>
                			</div>
 				<div class="col-xs-6 text-center">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-orange">EVU Bezug in Watt
-                                                <div id="bezugdiv"></div> 
+                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-orange" style="font-size: 2vw">EVU Bezug
+                                                <span id="bezugdiv"></span>Watt
                                         </button>
                                 </div>  
 			</div>	
 			<div class="row">
 				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladeleistung in Watt
-                        			<div id="lldiv"></div>
+		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Ladeleistung
+                        			<span id="lldiv"></span>Watt
 					</button>
 				</div>
-				<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">SOC in %
-					<div id="soclevel"></div>
+	<div class="col-xs-6 text-center">
+                	        	     	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Ladestromstaerke Soll
+					<span id="llsolldiv"></span>A
 					</button>
 				</div>
-			</div>
+
+						</div>
 			<div class="row">
-				<div class="col-xs-6 text-center">
-					<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestatus
-					<div id="controlleranaus"></div>
-					</button>
-				</div>
-				<div class="col-xs-6 text-center">
-                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Ladestromstaerke Soll  in A
-					<div id="llsolldiv"></div>
-					</button>
-				</div>
-			
-			</div>
-			<div class="row">
+
+
 					<?php
 						$result = '';
 						$lines = file('/var/www/html/openWB/openwb.conf');
@@ -251,51 +319,94 @@ doInterval = setInterval(getfile, 2000);
 					?>
 
 					<div class="col-xs-6 text-center">
-                	             		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Nachtladen <?php echo $nachtladenold ?>
+                	             		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Nachtladen <?php echo $nachtladenold ?>
 					</button>
 					</div>
-				
-					<div class="col-xs-6 text-center">
-                	             	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue">Lastmanagement <?php echo $lastmanagementold ?>
-
+	<div class="col-xs-6 text-center">
+                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">SOC
+					<span id="soclevel"></span>%
 					</button>
-					</div>
+				</div>
 
+
+							
 			</div>
 
 			<hr>
 			<div class="col-xs-12 text-center">
-				<h4>Lademodus</h4>
+				<h5>Lademodus</h5>
 			</div>	
                         <div class="row">
                                 <div class="col-xs-6 text-center">
 					<div class="actstat">
-						<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block">Sofort Laden</a>
+						<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
 					</div>
                            	</div>
                                 <div class="col-xs-6 text-center">
                                         <div class="actstat1">
-                                                <a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block">Min + PV</a>
+                                                <a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
                                         </div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" style="font-size: 2vw">
 				<div class="col-xs-6 text-center">
 					<div class="actstat3">
-						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block">Stop</a>
+						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
 					</div>
 				</div>
 				<div class="col-xs-6 text-center">
                                         <div class="actstat2">
-					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block">Nur PV</a>
+					        <a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block" style="font-size: 2vw">Nur PV</a>
                                         </div>
 				</div>
 			</div>
 			<div class="row">
 			<hr>
-			</div>
 			<div class="row">
 				<div class="col-xs-12 text-center">
+					<h5>Aktuelle / Letzte Ladung</h5>
+				</div>
+			</div>
+			<div class="row" style="font-size: 2vw">
+				<div class="col-xs-4 text-center" style="font-size: 2vw">
+					Ladepunkt 1
+				</div>
+				<div  id="ladepunkts11div" class="col-xs-4 text-center">
+					Ladepunkt 2
+				</div>
+				<div id="ladepunkts22div" class="col-xs-4 text-center">
+					Ladepunkt 3
+				</div>
+			</div>
+			<div class="row" style="font-size: 2vw">
+				<div class="col-xs-4 text-center">
+					<span id="gelrlp1div"></span>km
+				</div>
+				<div id="ladepunkts111div" class="col-xs-4 text-center">
+					<span id="gelrlp2div"></span>km
+				</div>
+				<div id="ladepunkts222div" class="col-xs-4 text-center">
+					<span id="gelrlp3div"></span>km
+				</div>
+			</div>
+			<div class="row" style="font-size: 2vw">
+				<div class="col-xs-4 text-center">
+					<span id="aktgeladendiv"></span>kWh
+				</div>
+				<div id="ladepunkts1111div" class="col-xs-4 text-center">
+					<span id="aktgeladens1div"></span>kWh
+				</div>
+				<div id="ladepunkts2222div" class="col-xs-4 text-center">
+					<span id="aktgeladens2div"></span>kWh
+				</div>
+			</div>
+
+
+				
+			<hr>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center"> 
 					<?php
 						$result = '';
 						$lines = file('/var/www/html/openWB/openwb.conf');
@@ -309,40 +420,154 @@ doInterval = setInterval(getfile, 2000);
 							if(strpos($line, "sofortll=") !== false) {
 								list(, $sofortllold) = explode("=", $line);
 							}
+							if(strpos($line, "sofortlls1=") !== false) {
+								list(, $sofortlls1old) = explode("=", $line);
+							}
+
+							if(strpos($line, "sofortlls2=") !== false) {
+								list(, $sofortlls2old) = explode("=", $line);
+							}
+							if(strpos($line, "lastmanagement=") !== false) {
+								list(, $lastmanagementold) = explode("=", $line);
+							}
+							if(strpos($line, "lastmanagements2=") !== false) {
+								list(, $lastmanagements2old) = explode("=", $line);
+							}
+
 						}
 
 					?>
-					<form name="sofortll" action="./tools/sofortll.php" method="POST">
-						<div class="col-xs-4 text-center">
-						<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
-						</div>
-						<div class="col-xs-4 text-center">
-						<label for="sofortll">Sofortladen: <span id="sofortlll"></span>A</label>
-						</div>
-						<script>
-						var slider = document.getElementById("sofortll");
-						var output = document.getElementById("sofortlll");
-						output.innerHTML = slider.value;
 
-						slider.oninput = function() {
-						  output.innerHTML = this.value;
-						}
-						</script>
-						<div class="col-xs-4 text-center">
-						<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>	 
+
+
+
+
+
+
+
+					<form name="sofortll" action="./tools/sofortll.php" method="POST">
+						<div class="col-xs-12 text-center">
+							<div class="col-xs-12 tex-center">
+								<h5>Sofortladen Stromstärke</h5><br><br>
+
+							</div>
+							<div class="col-xs-8 text-center">
+								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
+							</div>
+							<div class="col-xs-4 text-center">
+								<label for="sofortll">Ladepunkt 1: <span id="sofortlll"></span>A</label>
+							</div>
+							<script>
+								var slider = document.getElementById("sofortll");
+								var output = document.getElementById("sofortlll");
+								output.innerHTML = slider.value;
+								slider.oninput = function() {
+								  output.innerHTML = this.value;
+								}
+							</script>
 						</div>
+						<div id="ladepunkts1ndiv">
+						<br>
+						</div>
+						<div id="ladepunkts1div">
+						<br>
+						<div class="col-xs-12 text-center">
+							<div class="col-xs-8 text-center">
+								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
+							</div>
+							<div class="col-xs-4 text-center">
+								<label for="sofortlls1">Ladepunkt 2: <span id="sofortllls1"></span>A</label>
+							</div>
+							<script>
+								var sliders1 = document.getElementById("sofortlls1");
+								var outputs1 = document.getElementById("sofortllls1");
+								outputs1.innerHTML = sliders1.value;
+								sliders1.oninput = function() {
+								  outputs1.innerHTML = this.value;
+								}
+							</script>
+						</div>
+						</div>
+						<div id="ladepunkts2ndiv">
+						<br>
+						</div>
+						<div id="ladepunkts2div">
+						<br>
+						<div class="col-xs-12 text-center">
+							<div class="col-xs-8 text-center">
+								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
+							</div>
+							<div class="col-xs-4 text-center">
+								<label for="sofortlls2">Ladepunkt 3: <span id="sofortllls2"></span>A</label>
+							</div>
+							<script>
+								var sliders2 = document.getElementById("sofortlls2");
+								var outputs2 = document.getElementById("sofortllls2");
+								outputs2.innerHTML = sliders2.value;
+								sliders2.oninput = function() {
+								  outputs2.innerHTML = this.value;
+								}
+							</script>
+							<br>
+						</div>
+						</div>
+						<div class="col-xs-12 text-center"><br><br>
+							<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>	 
+						</div>
+						<br><br><br>
 					 </form>
 
+
+						<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>">
+						<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>">				
+						<script>
+						$(function() {
+   						   if($('#lastmanagement').val() == '0') {
+							$('#ladepunkts1ndiv').show(); 
+							$('#ladepunkts1div').hide();
+							$('#ladepunkts11div').hide();
+							$('#ladepunkts111div').hide();
+							$('#ladepunkts1111div').hide();
+						      } else {
+							$('#ladepunkts1ndiv').hide();
+							$('#ladepunkts1div').show();
+							$('#ladepunkts11div').show();
+							$('#ladepunkts111div').show();	
+							$('#ladepunkts1111div').show();	
+						      } 
+
+						});
+						</script>
+						<script>
+						$(function() {
+   						   if($('#lastmanagements2').val() == '0') {
+							$('#ladepunkts2ndiv').show(); 
+							$('#ladepunkts2div').hide();
+							$('#ladepunkts22div').hide();
+							$('#ladepunkts222div').hide();
+							$('#ladepunkts2222div').hide();
+						      } else {
+							$('#ladepunkts2ndiv').hide();
+							$('#ladepunkts2div').show();
+							$('#ladepunkts22div').show();	
+							$('#ladepunkts222div').show();	
+							$('#ladepunkts2222div').show();	
+						      } 
+
+						});
+						</script>
+
 				</div>
-			</div>
+			</div>  <div class="row">
+
 			<hr>
-			
-		<!--	<div class="row">
+			</div>
+	<!--	<div class="row">
 				<iframe frameBorder="0" height="312" class="col-xs-12" src="/metern/index2.php"></iframe>
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.41
+					Ver0.50
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -352,7 +577,8 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-4 text-center">
+				<div class="col-xs-4">
+					<a href="ladelog.php">Ladelog</a>
 				</div>
 
 				<div class="col-xs-4 text-center">
@@ -363,6 +589,7 @@ doInterval = setInterval(getfile, 2000);
 				</div>
 
 			</div>
+			<br><br><br><br>
 			<div id="errorfeed">
 			<div id="errorfeedcontent"></div>
 
@@ -383,7 +610,7 @@ doInterval = setInterval(getfile, 2000);
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
 	<script type='text/javascript'>
-setInterval(loadText, 2000);
+setInterval(loadText, 500);
 function loadText(){
  $.ajax({
   url:"./tools/lademodus.php",  

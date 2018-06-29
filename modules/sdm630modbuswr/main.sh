@@ -36,7 +36,10 @@ while read -r line; do
 	fi
 	if (( $n == 6 )); then
 		wrkwh=$(echo "$line" |  cut -c2- )
-		echo ${wrkwh%??} > /var/www/html/openWB/ramdisk/pvkwh
+		wrkwh=${wrkwh%??}
+		wrwh=$(echo "$wrkwh * 1000" |bc)
+		echo $wrwh > /var/www/html/openWB/ramdisk/pvkwh
+		printf "%.4f\n" $wrkwh > /var/www/html/openWB/ramdisk/pvkwhk
 	fi
 
 	n=$((n + 1))
@@ -45,6 +48,5 @@ done <<< "$output"
 wattwr=`echo "(($wl1+$wl2+$wl3)* -1)" |bc`
 echo $wattwr
 echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
-
 
 

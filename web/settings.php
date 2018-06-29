@@ -51,6 +51,10 @@ foreach($lines as $line) {
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}
+	if(strpos($line, "dspeed=") !== false) {
+		list(, $dspeedold) = explode("=", $line);
+	}
+
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
@@ -91,11 +95,27 @@ foreach($lines as $line) {
 	if(strpos($line, "evseids1=") !== false) {
 		list(, $evseids1old) = explode("=", $line);
 	}
+	if(strpos($line, "evseids2=") !== false) {
+		list(, $evseids2old) = explode("=", $line);
+	}
+
 	if(strpos($line, "evselanips1=") !== false) {
 		list(, $evselanips1old) = explode("=", $line);
 	}
 	if(strpos($line, "lastmanagement=") !== false) {
 		list(, $lastmanagementold) = explode("=", $line);
+	}
+	if(strpos($line, "durchslp1=") !== false) {
+		list(, $durchslp1old) = explode("=", $line);
+	}
+	if(strpos($line, "durchslp2=") !== false) {
+		list(, $durchslp2old) = explode("=", $line);
+	}
+	if(strpos($line, "durchslp3=") !== false) {
+		list(, $durchslp3old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagements2=") !== false) {
+		list(, $lastmanagements2old) = explode("=", $line);
 	}
 	if(strpos($line, "lastmmaxw=") !== false) {
 		list(, $lastmmaxwold) = explode("=", $line);
@@ -105,6 +125,24 @@ foreach($lines as $line) {
 		list(, $evsecons1old) = explode("=", $line);
 	}
 
+	if(strpos($line, "evsecons2=") !== false) {
+		list(, $evsecons2old) = explode("=", $line);
+	}
+	if(strpos($line, "evsesources2=") !== false) {
+		list(, $evsesources2old) = explode("=", $line);
+	}
+	if(strpos($line, "evseids1=") !== false) {
+		list(, $evseids1old) = explode("=", $line);
+	}
+	if(strpos($line, "evselanips2=") !== false) {
+		list(, $evselanips2old) = explode("=", $line);
+	}
+	if(strpos($line, "sdmids2=") !== false) {
+		list(, $sdmids2old) = explode("=", $line);
+	}
+	if(strpos($line, "ladeleistungs2modul=") !== false) {
+		list(, $ladeleistungs2modulold) = explode("=", $line);
+	}
 	if(strpos($line, "wattbezugmodul=") !== false) {
 		list(, $wattbezugmodulold) = explode("=", $line);
 	}
@@ -326,6 +364,47 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 <div class="row">
 	0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br><br>
 </div>
+<div class="row">
+	<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
+	<select type="text" name="dspeed" id="dspeed">
+	<option <?php if($dspeedold == 0) echo selected ?>value="0">Normal</option>
+		<option <?php if($dspeedold == 1) echo selected ?> value="1">Schnell</option>
+	</select>
+<br>
+</div>
+<div class="row">
+	Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>
+</div>
+
+<div id="durchslp1">
+	<div class="row">
+		<hr>
+		<b><label for="durchslp1">Durchschnittsverbrauch in kWh für EV an Ladepunkt 1:</label></b>
+		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+</div>
+<div id="durchslp2">
+	<div class="row">
+		<b><label for="durchslp2">Durchschnittsverbrauch in kWh für EV an Ladepunkt 2:</label></b>
+		<input type="text" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+</div>
+<div id="durchslp3">
+	<div class="row">
+		<b><label for="durchslp3">Durchschnittsverbrauch in kWh für EV an Ladepunkt 3:</label></b>
+		<input type="text" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+</div>
+
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
 </div>
@@ -632,14 +711,11 @@ $(function() {
 </script>
 <hr>
 <div class="row">
-	<b><label for="lastmanagement">Mehrere Ladepunkte:</label></b>
+	<b><h4><label for="lastmanagement">Zweiter Ladepunkte:</label></b>
 	<select type="text" name="lastmanagement" id="lastmanagement">
 		<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
-	</select>
-</div>
-<div class="row">
-	Definiert ob es weitere Ladepunkte gibt.<br><br>
+	</select></h4>
 </div>
 <div id="lastmmaus">
 	<br>
@@ -650,7 +726,6 @@ $(function() {
 	
 
 	<div class="row">
-		<h4>Slave1 WB</h4>
 	</div>
 	<div class="row bg-info">
 		<b><label for="evsecons1">Anbindung der Ladepunkt 2 EVSE:</label></b>
@@ -787,22 +862,157 @@ $(function() {
       if($('#lastmanagement').val() == '0') {
 		$('#lastmmaus').show(); 
 		$('#lastmman').hide();
+		$('#durchslp2').hide();
       } else {
 		$('#lastmmaus').hide();
-	       	$('#lastmman').show();	
+		$('#lastmman').show();	
+		$('#durchslp2').show();
       } 
 
 	$('#lastmanagement').change(function(){
 	        if($('#lastmanagement').val() == '0') {
 			$('#lastmmaus').show(); 
 			$('#lastmman').hide();
+			$('#durchslp2').hide();
 	        } else {
 			$('#lastmmaus').hide();
-		       	$('#lastmman').show();	
+			$('#lastmman').show();
+			$('#durchslp2').show();
 	        } 
 	    });
 });
 </script>
+
+<div class="row">
+	<b><h4><label for="lastmanagements2">Dritter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagements2" id="lastmanagements2">
+		<option <?php if($lastmanagements2old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagements2old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+<div class="row">
+</div>
+<div id="lasts2mmaus">
+	<br>
+</div>
+<div id="lasts2mman">
+
+
+	
+
+	<div class="row">
+	</div>
+	<div class="row bg-info">
+		<b><label for="evsecons2">Anbindung der Ladepunkt 3 EVSE:</label></b>
+		<select type="text" name="evsecons2" id="evsecons2">
+			<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">modbus</option>
+			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
+
+		</select>
+	</div>
+	<div id="evseconmbs2">
+		<div class="row bg-info">
+			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="evsesources2">Ladepunkt 3 EVSE Source:</label></b>
+			<input type="text" name="evsesources2" id="evsesources2" value="<?php echo $evsesources2old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="evseids2">Ladepunkt 3 EVSE ID:</label></b>
+			<input type="text" name="evseids2" id="evseids2" value="<?php echo $evseids2old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte 1-254. Modbus ID der Slave 2 EVSE.<br><br>
+		</div>
+	</div>
+	<div id="evsecondacs2">
+		<div class="row bg-success">
+			<b><label for="dacregisters2">Dacregister Ladepunkt 3:</label></b>
+			<input type="text" name="dacregisters2" id="dacregisters2" value="<?php echo $dacregisters2old ?>"><br>
+		</div>
+		<div class="row bg-success">
+		Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
+		</div>
+	</div>
+<script>
+$(function() {
+      if($('#evsecons2').val() == 'dac') {
+		$('#evsecondacs2').show(); 
+		$('#evseconmbs2').hide();
+      } else {
+		$('#evsecondacs2').hide();
+	       	$('#evseconmbs2').show();	
+      } 
+
+	$('#evsecons2').change(function(){
+	        if($('#evsecons2').val() == 'dac') {
+			$('#evsecondacs2').show(); 
+			$('#evseconmbs2').hide();
+	        } else {
+			$('#evsecondacs2').hide();
+		       	$('#evseconmbs2').show();	
+	        } 
+	    });
+});
+</script>
+
+
+	<div class="row bg-info">
+		<b><label for="ladeleistungs2modul">Ladeleistung Ladepunkt 3 Modul:</label></b>
+		<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
+			<option <?php if($ladeleistungs2modulold == sdm630modbuslls2) echo selected ?> value="sdm630modbuslls2">sdm630modbuslls2</option>
+		</select>
+	</div>
+	<div class="row bg-info">
+		Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdmids2">Ladepunkt 3 SDM Zähler ID:</label></b>
+		<input type="text" name="sdmids2" id="sdmids2" value="<?php echo $sdmids2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>
+		<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers des dritten Ladepunktes.<br><br>
+	</div>
+
+</div>
+<script>
+$(function() {
+      if($('#lastmanagements2').val() == '0') {
+		$('#lasts2mmaus').show(); 
+		$('#lasts2mman').hide();
+		$('#durchslp3').hide();
+      } else {
+		$('#lasts2mmaus').hide();
+		$('#lasts2mman').show();
+		$('#durchslp3').show();
+      } 
+
+	$('#lastmanagements2').change(function(){
+	        if($('#lastmanagements2').val() == '0') {
+			$('#lasts2mmaus').show(); 
+			$('#lasts2mman').hide();
+			$('#durchslp3').hide();
+	        } else {
+			$('#lasts2mmaus').hide();
+			$('#lasts2mman').show();
+			$('#durchslp3').show();
+	        } 
+	    });
+});
+</script>
+
+
 <div class="row">	<hr>
 	<h3> Strombezugsmessmodule (EVU-Übergabepunkt)</h3>
 </div>
