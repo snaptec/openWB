@@ -156,7 +156,7 @@ if ! grep -Fq "durchslp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "durchslp2=15" >> /var/www/html/openWB/openwb.conf
 fi
-if [ -e /var/www/html/openWB/web/ladelog ]; then
+if [! -e /var/www/html/openWB/web/ladelog ]; then
 	sudo touch /var/www/html/openWB/web/ladelog
 	sudo echo Start > /var/www/html/openWB/web/ladelog
 
