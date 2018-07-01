@@ -309,7 +309,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 		     				fi
 					fi
 					if (( llalt < minimalstromstaerke )); then
-						llneu=$((llalt + 1 ))
+						llneu=$minimalstromstaerke
 						runs/"$llneu"m.sh
 						if [[ $debug == "1" ]]; then
 		       	             			echo "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
@@ -363,7 +363,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 		     				fi
 					fi
 					if (( llalts1 < minimalstromstaerke )); then
-						llneus1=$((llalts1 + 1 ))
+						llneus1=$minimalstromstaerke
 						runs/"$llneus1"s1.sh
 						if [[ $debug == "1" ]]; then
 		       	             			echo "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
@@ -417,7 +417,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 			     				fi
 						fi
 						if (( llalts2 < minimalstromstaerke )); then
-							llneus2=$((llalts2 + 1 ))
+							llneus2=$minimalstromstaerke
 							runs/"$llneus2"s2.sh
 							if [[ $debug == "1" ]]; then
 			       	             			echo "Sofort ladung Ladepunkt 3 erhöht auf $llneus2 bei minimal A $minimalstromstaerke Ladeleistung zu gering"

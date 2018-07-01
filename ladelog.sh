@@ -10,7 +10,7 @@ if (( ladeleistung > 500 )); then
 		bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladen > ramdisk/aktgeladen
 		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
-		printf "%.1f\n" $gelrlp1 > ramdisk/gelrlp1
+		LANG=C printf "%.1f\n" $gelrlp1 > ramdisk/gelrlp1
 	else
 		touch ramdisk/ladeustart
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustart
@@ -29,7 +29,7 @@ else
 		ladedauers=$((jetzts - ladeustarts))
 		ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
 		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
-		gelrlp1=$(printf "%.1f\n" $gelrlp1)
+		gelrlp1=$(LANG=C printf "%.1f\n" $gelrlp1)
 #		if (( ladedauer > 60 )); then
 #			ladedauer=$((ladedauer / 60))
 #			laderest=$((ladedauer % 60))
@@ -50,7 +50,7 @@ if (( ladeleistungs1 > 500 )); then
 		bishergeladens1=$(echo "scale=3;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens1 > ramdisk/aktgeladens1
 		gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
-		printf "%.1f\n" $gelrlp2 > ramdisk/gelrlp2
+		LANG=C printf "%.1f\n" $gelrlp2 > ramdisk/gelrlp2
 	else
 		touch ramdisk/ladeustarts1
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts1
@@ -69,7 +69,7 @@ else
 		ladedauerss1=$((jetztss1 - ladeustartss1))
 		ladegeschws1=$(echo "scale=3;$bishergeladens1 * 60 * 60 / $ladedauerss1" |bc)
 		gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
-		gelrlp2=$(printf "%.1f\n" $gelrlp2)
+		gelrlp2=$(LANG=C printf "%.1f\n" $gelrlp2)
 		if (( ladedauers1 > 60 )); then
 			ladedauers1=$((ladedauers1 / 60))
 			laderests1=$((ladedauers1 % 60))
@@ -91,7 +91,7 @@ if (( ladeleistungs2 > 500 )); then
 		bishergeladens2=$(echo "scale=3;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens2 > ramdisk/aktgeladens2
 		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
-		printf "%.1f\n" $gelrlp3 > ramdisk/gelrlp3
+		LANG=C printf "%.1f\n" $gelrlp3 > ramdisk/gelrlp3
 
 	else
 		touch ramdisk/ladeustarts2
@@ -111,7 +111,7 @@ else
 		ladedauerss2=$((jetztss2 - ladeustartss2))
 		ladegeschws2=$(echo "scale=3;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
 		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
-		gelrlp3=$(printf "%.1f\n" $gelrlp3)
+		gelrlp3=$(LANG=C printf "%.1f\n" $gelrlp3)
 
 		if (( ladedauers2 > 60 )); then
 			ladedauers2=$((ladedauers2 / 60))
