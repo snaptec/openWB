@@ -30,13 +30,13 @@ else
 		ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
 		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
 		gelrlp1=$(printf "%.1f\n" $gelrlp1)
-		if (( ladedauer > 60 )); then
-			ladedauer=$((ladedauer / 60))
-			laderest=$((ladedauer % 60))
-			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' H '$laderest' Min,1' web/ladelog
-		else
+#		if (( ladedauer > 60 )); then
+#			ladedauer=$((ladedauer / 60))
+#			laderest=$((ladedauer % 60))
+#			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' H '$laderest' Min,1' web/ladelog
+#		else
 			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ' web/ladelog
-		fi
+#		fi
 		rm ramdisk/ladeustart
 	fi
 fi
