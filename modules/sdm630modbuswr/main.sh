@@ -39,7 +39,7 @@ while read -r line; do
 		wrkwh=${wrkwh%??}
 		wrwh=$(echo "$wrkwh * 1000" |bc)
 		echo $wrwh > /var/www/html/openWB/ramdisk/pvkwh
-		printf "%.4f\n" $wrkwh > /var/www/html/openWB/ramdisk/pvkwhk
+		LANG=C printf "%.4f\n" $wrkwh > /var/www/html/openWB/ramdisk/pvkwhk
 	fi
 
 	n=$((n + 1))

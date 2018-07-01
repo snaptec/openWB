@@ -18,21 +18,21 @@ while read -r line; do
 	if (( $n == 0 )); then
 		lla1=$(echo "$line" |  cut -c2- )
 		lla1=${lla1%??}
-		printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/lla1
+		LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/lla1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla1
 
 	fi
 	if (( $n == 1 )); then
 		lla2=$(echo "$line" |  cut -c2- )
 		lla2=${lla2%??}
-		printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
+		LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla2
 
 	fi
 	if (( $n == 2 )); then
 		lla3=$(echo "$line" |  cut -c2- )
 		lla3=${lla3%??}
-		printf "%.3f\n" $lla3 > /var/www/html/openWB/ramdisk/lla3
+		LANG=C printf "%.3f\n" $lla3 > /var/www/html/openWB/ramdisk/lla3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
 
 	fi
@@ -41,8 +41,8 @@ if (( $n == 3 )); then
 fi
 if (( $n == 4 )); then
 	llkwh=$(echo "$line" |  cut -c2- )
-	llkwh=${llkwh%??}
-	printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
+	llkwh=${llkwh%???}
+	LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
 fi
 if (( $n == 5 )); then
 	wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
@@ -53,20 +53,20 @@ fi
 if (( $n == 7 )); then
 llv1=$(echo "$line" |  cut -c2- )
 llv1=${llv1%??}
-printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llv1
+LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llv1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv1
 
 fi
 if (( $n == 8 )); then
 llv2=$(echo "$line" |  cut -c2- )
 llv2=${llv2%??}
-printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
+LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv2
 fi
 if (( $n == 9 )); then
 llv3=$(echo "$line" |  cut -c2- )
 llv3=${llv3%??}
-printf "%.1f\n" $llv3 > /var/www/html/openWB/ramdisk/llv3
+LANG=C printf "%.1f\n" $llv3 > /var/www/html/openWB/ramdisk/llv3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv3
 fi
 if (( $n == 10 )); then
@@ -86,18 +86,18 @@ fi
 if (( $n == 12 )); then
 llpf1=$(echo "$line" |  cut -c2- )
 llpf1=${llpf1%??}
-printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpf1
+LANG=C printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpf1
 
 fi
 if (( $n == 13 )); then
 llpf2=$(echo "$line" |  cut -c2- )
 llpf2=${llpf2%??}
-printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpf2
+LANG=C printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpf2
 fi
 if (( $n == 14 )); then
 llpf3=$(echo "$line" |  cut -c2- )
 llpf3=${llpf3%??}
-printf "%.3f\n" $llpf3 > /var/www/html/openWB/ramdisk/llpf3
+LANG=C printf "%.3f\n" $llpf3 > /var/www/html/openWB/ramdisk/llpf3
 fi
 
 

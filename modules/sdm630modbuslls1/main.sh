@@ -18,21 +18,21 @@ while read -r line; do
 	if (( $n == 0 )); then
 		llas11=$(echo "$line" |  cut -c2- )
 		llas11=${llas11%??}
-		printf "%.3f\n" $llas11 > /var/www/html/openWB/ramdisk/llas11
+		LANG=C printf "%.3f\n" $llas11 > /var/www/html/openWB/ramdisk/llas11
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llas11
 
 	fi
 	if (( $n == 1 )); then
 		llas12=$(echo "$line" |  cut -c2- )
 		llas12=${llas12%??}
-		printf "%.3f\n" $llas12 > /var/www/html/openWB/ramdisk/llas12
+		LANG=C printf "%.3f\n" $llas12 > /var/www/html/openWB/ramdisk/llas12
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llas12
 
 	fi
 	if (( $n == 2 )); then
 		llas13=$(echo "$line" |  cut -c2- )
 		llas13=${llas13%??}
-		printf "%.3f\n" $llas13 > /var/www/html/openWB/ramdisk/llas13
+		LANG=C printf "%.3f\n" $llas13 > /var/www/html/openWB/ramdisk/llas13
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llas13
 	fi
 if (( $n == 3 )); then
@@ -41,7 +41,7 @@ fi
 if (( $n == 4 )); then
 	llkwhs1=$(echo "$line" |  cut -c2- )
 	llkwhs1=${llkwhs1%??}
-	printf "%.3f\n" $llkwhs1 > /var/www/html/openWB/ramdisk/llkwhs1
+	LANG=C printf "%.3f\n" $llkwhs1 > /var/www/html/openWB/ramdisk/llkwhs1
 fi
 if (( $n == 5 )); then
 	wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
