@@ -18,26 +18,31 @@ if (( ladeleistung > 500 )); then
 		echo $llkwh > ramdisk/ladelstart
 	fi
 else
-	if [ -e ramdisk/ladeustart ]; then
-		ladelstart=$(<ramdisk/ladelstart)
-		ladeustarts=$(<ramdisk/ladeustarts)
-		bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
-		start=$(<ramdisk/ladeustart)
-		jetzt=$(date +%d.%m.%y-%H:%M)
-		jetzts=$(date +%s)
-		ladedauer=$(((jetzts - ladeustarts) / 60 ))
-		ladedauers=$((jetzts - ladeustarts))
-		ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
-		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
-		gelrlp1=$(LANG=C printf "%.1f\n" $gelrlp1)
-#		if (( ladedauer > 60 )); then
-#			ladedauer=$((ladedauer / 60))
-#			laderest=$((ladedauer % 60))
-#			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' H '$laderest' Min,1' web/ladelog
-#		else
-			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ' web/ladelog
-#		fi
-		rm ramdisk/ladeustart
+	if [ -e ramdisk/llog1 ]; then
+		if [ -e ramdisk/ladeustart ]; then
+			ladelstart=$(<ramdisk/ladelstart)
+			ladeustarts=$(<ramdisk/ladeustarts)
+			bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
+			start=$(<ramdisk/ladeustart)
+			jetzt=$(date +%d.%m.%y-%H:%M)
+			jetzts=$(date +%s)
+			ladedauer=$(((jetzts - ladeustarts) / 60 ))
+			ladedauers=$((jetzts - ladeustarts))
+			ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
+			gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
+			gelrlp1=$(LANG=C printf "%.1f\n" $gelrlp1)
+	#		if (( ladedauer > 60 )); then
+	#			ladedauer=$((ladedauer / 60))
+	#			laderest=$((ladedauer % 60))
+	#			sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' H '$laderest' Min,1' web/ladelog
+	#		else
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ' web/ladelog
+	#		fi
+			rm ramdisk/ladeustart
+		fi
+		rm ramdisk/llog1
+	else
+		touch ramdisk/llog1
 	fi
 fi
 
@@ -58,6 +63,7 @@ if (( ladeleistungs1 > 500 )); then
 		echo $llkwhs1 > ramdisk/ladelstarts1
 	fi
 else
+	if [ -e ramdisk/llogs1 ]; then
 	if [ -e ramdisk/ladeustarts1 ]; then
 		ladelstarts1=$(<ramdisk/ladelstarts1)
 		ladeustartss1=$(<ramdisk/ladeustartss1)
@@ -79,6 +85,11 @@ else
 		fi
 		rm ramdisk/ladeustarts1
 	fi
+	rm ramdisk/llogs1
+	else
+		touch ramdisk/llogs1
+	fi
+
 fi
 fi
 
@@ -100,6 +111,7 @@ if (( ladeleistungs2 > 500 )); then
 		echo $llkwhs2 > ramdisk/ladelstarts2
 	fi
 else
+	if [ -e ramdisk/llogs2 ]; then
 	if [ -e ramdisk/ladeustarts2 ]; then
 		ladelstarts2=$(<ramdisk/ladelstarts2)
 		ladeustartss2=$(<ramdisk/ladeustartss2)
@@ -122,6 +134,11 @@ else
 		fi
 		rm ramdisk/ladeustarts2
 	fi
+	rm ramdisk/llogs2
+	else
+		touch ramdisk/llogss
+	fi
+
 fi
 fi
 

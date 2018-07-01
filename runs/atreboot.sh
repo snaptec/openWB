@@ -49,7 +49,8 @@ echo 0 > /var/www/html/openWB/ramdisk/evupf3
 echo 0 > /var/www/html/openWB/ramdisk/evuhz
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp1
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp2
-
+echo 0 > /var/www/html/openWB/ramdisk/llsolls1
+echo 0 > /var/www/html/openWB/ramdisk/llsolls2
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladen
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladens1
@@ -66,6 +67,10 @@ echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
 echo 0 > /var/www/html/openWB/ramdisk/lla3	
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
+echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
+touch /var/www/html/openWB/ramdisk/llog1
+touch /var/www/html/openWB/ramdisk/llogs1
+touch /var/www/html/openWB/ramdisk/llogs2
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
