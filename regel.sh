@@ -99,6 +99,17 @@ else
 fi
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
+	if [[ $socmodul1 != "none" ]]; then
+		soc1=$(timeout 10 modules/$socmodul1/main.sh)
+		if ! [[ $soc1 =~ $re ]] ; then
+		 soc1="0"
+		fi
+		if [[ $debug == "1" ]]; then
+	                echo soc1 $soc1
+	        fi
+	else
+		soc1=0
+	fi
 	timeout 10 modules/$ladeleistungs1modul/main.sh
 	llkwhs1=$(</var/www/html/openWB/ramdisk/llkwhs1)
 	llkwhges=$(echo "$llkwhges + $llkwhs1" |bc)
@@ -172,129 +183,152 @@ fi
 ########################
 # Sofort Laden
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
+	aktgeladen=$(<ramdisk/aktgeladen)
 	#mit einem Ladepunkt
 	if [[ $lastmanagement == "0" ]]; then
 		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/$minimalstromstaerke.sh
-			if [[ $debug == "1" ]]; then
-		               	echo starte sofort Ladeleistung von $minimalstromstaerke aus
-        		fi
-			exit 0
-		fi
-		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
-				if (( ladeleistung < 500 )); then
-					if (( llalt > minimalstromstaerke )); then
-	                                	llneu=$((llalt - 1 ))
-	                                	runs/"$llneu"m.sh
-						if [[ $debug == "1" ]]; then
-		       	             			echo "Sofort ladung reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-		     				fi
-	                                	exit 0
-					fi
-					if (( llalt == minimalstromstaerke )); then
-						if [[ $debug == "1" ]]; then
-		       	             			echo "Sofort ladung bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-		     				fi
-						exit 0
-					fi
-					if (( llalt < minimalstromstaerke )); then
-						llneu=$((llalt + 1 ))
-						runs/"$llneu"m.sh
-						if [[ $debug == "1" ]]; then
-	       	             				echo "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
-	     					fi
-						exit 0
-					fi
+			if (( lademstat == "1" )); then
+				if (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+					if [[ $debug == "1" ]]; then
+	       	             			echo "Sofort ladung beendet da $lademkwh kWh lademenge erreicht"
+	     				fi
 				else
-					if (( llalt == sofortll )); then
-						if [[ $debug == "1" ]]; then
-	       	        	     			echo "Sofort ladung erreicht bei $sofortll A"
-	     					fi
-						exit 0
-					fi
-					if (( llalt > maximalstromstaerke )); then
-						llneu=$((llalt - 1 ))
-						runs/"$llneu"m.sh
-						if [[ $debug == "1" ]]; then
-	       		             			echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
-	     					fi
-						exit 0
-					fi
-					if (( llalt < sofortll)); then
-						evudiff1=$((lastmaxap1 - evua1 ))
-						evudiff2=$((lastmaxap2 - evua2 ))
-						evudiff3=$((lastmaxap3 - evua3 ))
-						evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-						maxdiff=0
-						for v in "${evudiffmax[@]}"; do
-							if (( v > maxdiff )); then maxdiff=$v; fi;
-						done
-						llneu=$((llalt + maxdiff))
-						if (( llneu > sofortll )); then
-							llneu=$sofortll
-						fi
-						runs/"$llneu"m.sh
-		                		if [[ $debug == "1" ]]; then
-	       	             				echo "Sofort ladung um $maxdiff A Differenz auf $llneu A erhoeht, kleiner als sofortll $sofortll"
-	     					fi
-						exit 0
-					fi
-					if (( llalt > sofortll)); then
-						llneu=$sofortll
-						runs/"$llneu"m.sh
-			                	if [[ $debug == "1" ]]; then
-	       		             			echo "Sofort ladung von $llalt A llalt auf $llneu A reduziert, größer als sofortll $sofortll"
-	     					fi
-						exit 0
-					fi
+					runs/$minimalstromstaerke.sh
+					if [[ $debug == "1" ]]; then
+		        		       	echo starte sofort Ladeleistung von $minimalstromstaerke aus
+        				fi
+					exit 0
 				fi
 			else
-				evudiff1=$((evua1 - lastmaxap1 ))
-				evudiff2=$((evua2 - lastmaxap2 ))
-				evudiff3=$((evua3 - lastmaxap3 ))
-				evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-				maxdiff=0
-				for v in "${evudiffmax[@]}"; do
-					if (( v > maxdiff )); then maxdiff=$v; fi;
-				done
-				maxdiff=$((maxdiff + 1 ))
-				llneu=$((llalt - maxdiff))
-				if (( llneu < minimalstromstaerke )); then
-					llneu=$minimalstromstaerke
-					if [[ $debug == "1" ]]; then
-						echo Differenz groesser als minimalstromstaerke, setze auf minimal A $minimalstromstaerke
-					fi
-				fi
-				runs/"$llneu"m.sh
-	        	        if [[ $debug == "1" ]]; then
-       	        	     		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
-     				fi
+				runs/$minimalstromstaerke.sh
+				if [[ $debug == "1" ]]; then
+		        	       	echo starte sofort Ladeleistung von $minimalstromstaerke aus
+        			fi
 				exit 0
 			fi
 		fi
-	else
-	#mit mehr als einem ladepunkt
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			llneu=$minimalstromstaerke
-			runs/$minimalstromstaerke.sh
-			if [[ $debug == "1" ]]; then
-		               	echo starte sofort Ladeleistung mit mehreren Ladepunkten von $minimalstromstaerke aus
-        		fi
-			exit 0
-		fi
 		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
-				evudiff1=$((lastmaxap1 - evua1 ))
-				evudiff2=$((lastmaxap2 - evua2 ))
-				evudiff3=$((lastmaxap3 - evua3 ))
-				evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-				maxdiff=0
-				for v in "${evudiffmax[@]}"; do
-					if (( v > maxdiff )); then maxdiff=$v; fi;
-				done
-				maxdiff=$((maxdiff - 1 ))
-				#Ladepunkt 1
+			if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+				runs/0m.sh
+				if [[ $debug == "1" ]]; then
+		        	       	echo "Beende Sofort Laden da  $lademkwh kWh erreicht"
+        			fi
+
+			else
+				if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
+					if (( ladeleistung < 500 )); then
+						if (( llalt > minimalstromstaerke )); then
+	        	                        	llneu=$((llalt - 1 ))
+	        	                        	runs/"$llneu"m.sh
+							if [[ $debug == "1" ]]; then
+			       	             			echo "Sofort ladung reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+			     				fi
+	        	                        	exit 0
+						fi
+						if (( llalt == minimalstromstaerke )); then
+							if [[ $debug == "1" ]]; then
+			       	             			echo "Sofort ladung bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+			     				fi
+							exit 0
+						fi
+						if (( llalt < minimalstromstaerke )); then
+							llneu=$((llalt + 1 ))
+							runs/"$llneu"m.sh
+							if [[ $debug == "1" ]]; then
+	       		             				echo "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
+	     						fi
+							exit 0
+						fi
+					else
+						if (( llalt == sofortll )); then
+							if [[ $debug == "1" ]]; then
+	       		        	     			echo "Sofort ladung erreicht bei $sofortll A"
+	     						fi
+							exit 0
+						fi
+						if (( llalt > maximalstromstaerke )); then
+							llneu=$((llalt - 1 ))
+							runs/"$llneu"m.sh
+							if [[ $debug == "1" ]]; then
+	       			             			echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
+	     						fi
+							exit 0
+						fi
+						if (( llalt < sofortll)); then
+							evudiff1=$((lastmaxap1 - evua1 ))
+							evudiff2=$((lastmaxap2 - evua2 ))
+							evudiff3=$((lastmaxap3 - evua3 ))
+							evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+							maxdiff=0
+							for v in "${evudiffmax[@]}"; do
+								if (( v > maxdiff )); then maxdiff=$v; fi;
+							done
+							llneu=$((llalt + maxdiff))
+							if (( llneu > sofortll )); then
+								llneu=$sofortll
+							fi
+							runs/"$llneu"m.sh
+			                		if [[ $debug == "1" ]]; then
+	       		             				echo "Sofort ladung um $maxdiff A Differenz auf $llneu A erhoeht, kleiner als sofortll $sofortll"
+	     						fi
+							exit 0
+						fi
+						if (( llalt > sofortll)); then
+							llneu=$sofortll
+							runs/"$llneu"m.sh
+				                	if [[ $debug == "1" ]]; then
+	       			             			echo "Sofort ladung von $llalt A llalt auf $llneu A reduziert, größer als sofortll $sofortll"
+	     						fi
+							exit 0
+						fi
+					fi
+				else
+					evudiff1=$((evua1 - lastmaxap1 ))
+					evudiff2=$((evua2 - lastmaxap2 ))
+					evudiff3=$((evua3 - lastmaxap3 ))
+					evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+					maxdiff=0
+					for v in "${evudiffmax[@]}"; do
+						if (( v > maxdiff )); then maxdiff=$v; fi;
+					done
+					maxdiff=$((maxdiff + 1 ))
+					llneu=$((llalt - maxdiff))
+					if (( llneu < minimalstromstaerke )); then
+						llneu=$minimalstromstaerke
+						if [[ $debug == "1" ]]; then
+							echo Differenz groesser als minimalstromstaerke, setze auf minimal A $minimalstromstaerke
+						fi
+					fi
+					runs/"$llneu"m.sh
+	        		        if [[ $debug == "1" ]]; then
+       	        		     		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
+     					fi
+					exit 0
+				fi
+			fi
+		fi
+	else
+		#mit mehr als einem ladepunkt
+		aktgeladens1=$(<ramdisk/aktgeladens1)
+		if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
+			evudiff1=$((lastmaxap1 - evua1 ))
+			evudiff2=$((lastmaxap2 - evua2 ))
+			evudiff3=$((lastmaxap3 - evua3 ))
+			evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+			maxdiff=0
+			for v in "${evudiffmax[@]}"; do
+				if (( v > maxdiff )); then maxdiff=$v; fi;
+			done
+			maxdiff=$((maxdiff - 1 ))
+			#Ladepunkt 1
+			if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+					runs/0m.sh
+					if [[ $debug == "1" ]]; then
+	       				       	echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
+       					fi
+				fi
+			else
 				if (( ladeleistung < 500 )); then
 					if (( llalt > minimalstromstaerke )); then
 	                                	llneu=$((llalt - 1 ))
@@ -348,7 +382,17 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
-				#Ladepunkt 2
+				
+			fi
+			#Ladepunkt 2
+			if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+					runs/0s1.sh
+					if [[ $debug == "1" ]]; then
+	       				       	echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
+       					fi
+				fi
+			else
 				if (( ladeleistungs1 < 500 )); then
 					if (( llalts1 > minimalstromstaerke )); then
         	                        	llneus1=$((llalts1 - 1 ))
@@ -401,8 +445,18 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
-				#Ladepunkt 3
-				if [[ $lastmanagements2 == "1" ]]; then
+			fi
+			#Ladepunkt 3
+			if [[ $lastmanagements2 == "1" ]]; then
+				aktgeladens2=$(<ramdisk/aktgeladens2)
+				if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
+						runs/0s2.sh
+						if [[ $debug == "1" ]]; then
+		       				       	echo "Beende Sofort Laden an Ladepunkt 3 da  $lademkwhs2 kWh erreicht"
+       						fi
+					fi
+				else
 					if (( ladeleistungs2 < 500 )); then
 						if (( llalts2 > minimalstromstaerke )); then
 			                                	llneus2=$((llalts2 - 1 ))
@@ -456,7 +510,8 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
-				exit 0
+			fi
+			exit 0
 			else
 				evudiff1=$((evua1 - lastmaxap1 ))
 				evudiff2=$((evua2 - lastmaxap2 ))
@@ -492,10 +547,38 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
-				runs/"$llneu"m.sh
-				runs/"$llneus1"s1.sh
+				if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+						runs/0m.sh
+						if [[ $debug == "1" ]]; then
+		       				       	echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
+       						fi
+					fi
+				else
+					runs/"$llneu"m.sh
+				fi
+				if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						runs/0s1.sh
+						if [[ $debug == "1" ]]; then
+		       				       	echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
+       						fi
+					fi
+				else
+					runs/"$llneus1"s1.sh
+				fi
 				if [[ $lastmanagements2 == "1" ]]; then
-				       runs/"$llneus2"s2.sh
+					aktgeladens2=$(<ramdisk/aktgeladens2)
+					if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
+						if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
+							runs/0s2.sh
+							if [[ $debug == "1" ]]; then
+		       					       	echo "Beende Sofort Laden an Ladepunkt 3 da  $lademkwhs2 kWh erreicht"
+       							fi
+						fi
+					else
+						runs/"$llneus2"s2.sh
+					fi
 				fi
 		                if [[ $debug == "1" ]]; then
        		             		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
@@ -503,7 +586,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 				exit 0
 			fi
 		fi
-	fi
+	
 fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
@@ -521,26 +604,26 @@ if [[ $nachtladen == "1" ]]; then
     			fi
 			if (( soc <= diesersoc )); then
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/$nachtll.sh
+					runs/"$nachtll"m.sh
 					if [[ $debug == "1" ]]; then
 		   				echo "soc $soc"
 		      				echo "ladeleistung nachtladen bei $nachtll"
 					fi
 				exit 0
-			fi
+				fi
 				if grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
 					exit 0
 				else
-					runs/$nachtll.sh
+					runs/"$nachtll"m.sh
 					if [[ $debug == "1" ]]; then
-	      					echo aendere nacht Ladeleistung auf $nachtll
-	        			fi
+		      				echo aendere nacht Ladeleistung auf $nachtll
+		        		fi
 					exit 0
 				fi
 				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/0.sh
+					runs/0m.sh
 					exit 0
 				fi
 				exit 0
@@ -548,13 +631,88 @@ if [[ $nachtladen == "1" ]]; then
 		fi
 		if [[ $socmodul == "none" ]]; then
 			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
- 				runs/$nachtll.sh
+ 				runs/"$nachtll"m.sh
  				if [[ $debug == "1" ]]; then
       					echo "soc $soc"
         				echo "ladeleistung nachtladen $nachtll A"
         			fi
         			echo "start Nachtladung mit $nachtll um $date" >> web/lade.log
+       				exit 0
+			else
+				if grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
+					exit 0
+				else
+					runs/"$nachtll"m.sh
+					if [[ $debug == "1" ]]; then
+      						echo aendere nacht Ladeleistung auf $nachtll
+        				fi
+					exit 0
+				fi
+			fi
+			exit 0
+		fi
+	fi
+fi
+#Nachtladen S1
+if [[ $nachtladens1 == "1" ]]; then
+	if (( nachtladenabuhrs1 <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H <= nachtladenbisuhrs1 )); then
+		dayoftheweek=$(date +%w)
+		if [ "$dayoftheweek" -ge 0 ] && [ "$dayoftheweek" -le 4 ]; then
+			diesersocs1=$nachtsocs1
+		else
+			diesersocs1=$nachtsoc1s1
+		fi
+		if [[ $socmodul1 != "none" ]]; then
+			if [[ $debug == "1" ]]; then
+                		echo nachtladen mit socmodul $socmodul1
+    			fi
+			if (( soc1 <= diesersocs1 )); then
+				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+					runs/"$nachtlls1"s1.sh
+					if [[ $debug == "1" ]]; then
+		   				echo "soc $soc1"
+		      				echo "ladeleistung nachtladen bei $nachtlls1"
+					fi
+				exit 0
+				fi
+				if grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
+					exit 0
+				else
+					runs/"$nachtlls1"s1.sh
+					if [[ $debug == "1" ]]; then
+	      					echo aendere nacht Ladeleistung auf $nachtlls1
+	        			fi
+					exit 0
+				fi
+				exit 0
+			else
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+					runs/0s1.sh
+					exit 0
+				fi
+				exit 0
+			fi
+		fi
+		if [[ $socmodul1 == "none" ]]; then
+			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+ 				runs/"$nachtlls1"s1.sh
+ 				if [[ $debug == "1" ]]; then
+      					echo "soc $soc1"
+        				echo "ladeleistung nachtladen $nachtlls1 A"
+        			fi
+        			echo "start Nachtladung mit $nachtlls1 um $date" >> web/lade.log
         			exit 0
+			else
+				if grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
+					exit 0
+				else
+					runs/"$nachtlls1"s1.sh
+					if [[ $debug == "1" ]]; then
+	      					echo aendere nacht Ladeleistung auf $nachtlls1
+	        			fi
+					exit 0
+				fi
+
 			fi
 			exit 0
 		fi
@@ -667,13 +825,13 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
 		if (( uberschuss < pvregelungm )); then
   			if (( llalt > minimalampv )); then
 				if (( uberschuss < -1380 )); then
-					if (( anzahlphasen < 2 )); then
+					if (( anzahlphasen < 4 )); then
 						llneu=$((llalt - 6 ))
 					else
 						llneu=$((llalt - 2 ))
 					fi
 					if (( uberschuss < -2760 )); then
-						if (( anzahlphasen < 2 )); then
+						if (( anzahlphasen < 4 )); then
 							llneu=$((llalt - 12 ))
 						else
 							llneu=$((llalt - 4 ))
@@ -703,13 +861,13 @@ if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
       				exit 0
       			fi
 			if (( uberschuss > 1380 )); then
-				if (( anzahlphasen < 2 )); then
+				if (( anzahlphasen < 4 )); then
 					llneu=$((llalt + 5 ))
 				else
 					llneu=$((llalt + 2 ))
 				fi
 				if (( uberschuss > 2760 )); then
-					if (( anzahlphasen < 2 )); then
+					if (( anzahlphasen < 4 )); then
 						llneu=$((llalt + 11 ))
 					else
 						llneu=$((llalt + 3 ))
@@ -748,13 +906,13 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 	fi
 	if (( ladeleistung < 500 )); then
 		if (( llalt > minimalapv )); then
-    			llneu=$((llalt - 1 ))
+    			llneu=$minimalapv
 			runs/$llneu.sh
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
       			exit 0
 		fi
 		if (( llalt < minimalapv )); then
-    			llneu=$((llalt + 1 ))
+    			llneu=$minimalapv
     			runs/$llneu.sh
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
@@ -782,13 +940,13 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 				exit 0
 			fi
 			if (( uberschuss > 1380 )); then
-				if (( anzahlphasen < 2 )); then
+				if (( anzahlphasen < 4 )); then
 					llneu=$((llalt + 5 ))
 				else
 					llneu=$((llalt + 2 ))
 				fi
 				if (( uberschuss > 2760 )); then
-					if (( anzahlphasen < 2 )); then
+					if (( anzahlphasen < 4 )); then
 						llneu=$((llalt + 11 ))
 					else
 						llneu=$((llalt + 3 ))
@@ -813,13 +971,13 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		if (( uberschuss < pvregelungm )); then
 			if (( llalt > minimalapv )); then
 				if (( uberschuss < -1380 )); then
-					if (( anzahlphasen < 2 )); then
+					if (( anzahlphasen < 4 )); then
 						llneu=$((llalt - 6 ))
 					else
 						llneu=$((llalt - 2 ))
 					fi
 					if (( uberschuss < -2760 )); then
-						if (( anzahlphasen < 2 )); then
+						if (( anzahlphasen < 4 )); then
 							llneu=$((llalt - 12 ))
 						else
 							llneu=$((llalt - 4 ))

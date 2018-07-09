@@ -1388,6 +1388,13 @@ a.bg-info:hover,
 a.bg-info:focus {
   background-color: #afd9ee;
 }
+.bg-info2 {
+  background-color: #77a6b2;
+}
+a.bg-info2:hover,
+a.bg-info2:focus {
+  background-color: #77a6b2;
+}
 .bg-warning {
   background-color: #fcf8e3;
 }

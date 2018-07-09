@@ -42,7 +42,10 @@ fi
 if (( $n == 4 )); then
 	llkwh=$(echo "$line" |  cut -c2- )
 	llkwh=${llkwh%???}
-	LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
+	rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+	if [[ $llkwh =~ $rekwh ]]; then 
+		LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
+	fi	
 fi
 if (( $n == 5 )); then
 	wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
@@ -112,6 +115,12 @@ fi
     done <<< "$output"
 
 
-llaktuell=`echo "($wl1+$wl2+$wl3)" |bc`
-echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuell
+
+re='^-?[0-9]+$'
+if [[ $wl1 =~ $re ]] && [[ $wl2 =~ $re ]] && [[ $wl3 =~ $re ]]; then
+	llaktuell=`echo "($wl1+$wl2+$wl3)" |bc`
+	echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuell
+fi
+
+
 											

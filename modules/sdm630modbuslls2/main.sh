@@ -41,7 +41,10 @@ while read -r line; do
 	if (( $n == 4 )); then
 		llkwhs2=$(echo "$line" |  cut -c2- )
 		llkwhs2=${llkwhs2%??}
-		LANG=C printf "%.3f\n" $llkwhs2 > /var/www/html/openWB/ramdisk/llkwhs2
+		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+		if [[ $llkwhs2 =~ $rekwh ]]; then 
+			LANG=C printf "%.3f\n" $llkwhs2 > /var/www/html/openWB/ramdisk/llkwhs2
+		fi
 	fi
 	if (( $n == 5 )); then
 		wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
@@ -52,7 +55,14 @@ while read -r line; do
 
 	n=$((n + 1))
     done <<< "$output"
-llaktuells2=`echo "($wl1+$wl2+$wl3)" |bc`
-echo $llaktuells2 > /var/www/html/openWB/ramdisk/llaktuells2
 
-											
+	
+re='^-?[0-9]+$'
+if [[ $wl1 =~ $re ]] && [[ $wl2 =~ $re ]] && [[ $wl3 =~ $re ]]; then
+	llaktuells2=`echo "($wl1+$wl2+$wl3)" |bc`
+	echo $llaktuells2 > /var/www/html/openWB/ramdisk/llaktuells2
+fi
+
+									
+
+

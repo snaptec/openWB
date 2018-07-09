@@ -35,225 +35,54 @@
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
+<script src="live.js"></script>
+
 <?php
-require 'config.php';
-?>
-<script type='text/javascript'>
-setInterval(loadText, 1800);
-function loadText(){
- $.ajax({
-  url:"./tools/debugmode.php",  
-  type: "post", //request type,
-  dataType: 'json',
-  data: {call: "loadfile"},
-  success:function(result){
-   if(result.text == 0){
-    $('#errorfeed').hide();
-   }
-   if(result.text == 1){
-	 $('#errorfeed').show();
-    }
-   if(result.text == 2){
- 	 $('#errorfeed').show(); 
+	$result = '';
+	$lines = file('/var/www/html/openWB/openwb.conf');
+	foreach($lines as $line) {
+		if(strpos($line, "minimalstromstaerke=") !== false) {
+			list(, $minimalstromstaerkeold) = explode("=", $line);
+		}
+		if(strpos($line, "maximalstromstaerke=") !== false) {
+			list(, $maximalstromstaerkeold) = explode("=", $line);
+		}
+		if(strpos($line, "sofortll=") !== false) {
+			list(, $sofortllold) = explode("=", $line);
+		}
+		if(strpos($line, "sofortlls1=") !== false) {
+			list(, $sofortlls1old) = explode("=", $line);
+		}
+		if(strpos($line, "sofortlls2=") !== false) {
+			list(, $sofortlls2old) = explode("=", $line);
+		}
+		if(strpos($line, "lastmanagement=") !== false) {
+			list(, $lastmanagementold) = explode("=", $line);
+		}
+		if(strpos($line, "lastmanagements2=") !== false) {
+			list(, $lastmanagements2old) = explode("=", $line);
+		}
+		if(strpos($line, "lademstat=") !== false) {
+			list(, $lademstatold) = explode("=", $line);
+		}
+		if(strpos($line, "lademstats1=") !== false) {
+			list(, $lademstats1old) = explode("=", $line);
+		}
+		if(strpos($line, "lademkwh=") !== false) {
+			list(, $lademkwhold) = explode("=", $line);
+		}
+		if(strpos($line, "lademkwhs1=") !== false) {
+			list(, $lademkwhs1old) = explode("=", $line);
+		}
+		if(strpos($line, "lademstats2=") !== false) {
+			list(, $lademstats2old) = explode("=", $line);
+		}
+		if(strpos($line, "lademkwhs2=") !== false) {
+			list(, $lademkwhs2old) = explode("=", $line);
+		}
 	}
-
-  }
- });
-}
-</script> 
-
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-    url: "/openWB/ramdisk/llkombiniert",
-    complete: function(request){
-      $("#lldiv").html(request.responseText);
-    }
-  });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-    url: "/openWB/ramdisk/pvwatt",
-    complete: function(request){
-      $("#pvdiv").html(request.responseText);
-    }
-  });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-    url: "/openWB/ramdisk/llsoll",
-    complete: function(request){
-      $("#llsolldiv").html(request.responseText);
-    }
-  });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-    url: "/openWB/ramdisk/wattbezug",
-    complete: function(request){
-      $("#bezugdiv").html(request.responseText);
-    }
-  });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/ladestatus",
-    complete: function(request){
-      $("#controlleranaus").html(request.responseText);
-	}
-	});
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/soc",
-    complete: function(request){
-      $("#soclevel").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/gelrlp1",
-    complete: function(request){
-      $("#gelrlp1div").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/gelrlp2",
-    complete: function(request){
-      $("#gelrlp2div").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/gelrlp3",
-    complete: function(request){
-      $("#gelrlp3div").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/aktgeladen",
-    complete: function(request){
-      $("#aktgeladendiv").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/aktgeladens1",
-    complete: function(request){
-      $("#aktgeladens1div").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajaxSetup({ cache: false});
-  $.ajax({
-   url: "/openWB/ramdisk/aktgeladens2",
-    complete: function(request){
-      $("#aktgeladens2div").html(request.responseText);
-        }
-        });
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-   url: "/openWB/ramdisk/lademodus",
-    complete: function(request){
-      var lademodus=data;
-	console.log(data);
-	}
-	});
-}
-doInterval = setInterval(getfile, 1800);
-</script> <!--
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-   url: "/openWB/ramdisk/openWB.log",
-	   complete: function(request){
-//	$("#errorfeed").html(request.replace(/\\n/g,"<br>").responseText);
-	$("#errorfeed").html(request.responseText);
-	}
-	});
-}
-doInterval = setInterval(getfile, 1800);
-</script> -->
-<script type='text/javascript'>
-var doInterval;
-function getfile() {
-  $.ajax({
-   url: "/openWB/ramdisk/openWB.log",
-   dataType: "text",
-   success : function (data) {
-	  //  $("#errorfeed").html(data.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,"<br>"));
-	   	 $("#errorfeedcontent").html(data.replace(/\n/g, "<br />"));
-	}
-	});
-}
-doInterval = setInterval(getfile, 1800);
-</script>
-
+	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
+?>	
 
 <body>
 
@@ -266,73 +95,63 @@ doInterval = setInterval(getfile, 1800);
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h3> OpenWB Charge Controller </h3>
+				<h3> OpenWB Charge Controller </h3>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-6 text-center">                     
-                            		<button type="button" class="btn btn-primary btn-lg btn-block btn-green" style="font-size: 2vw">PV
-                        			<span id="pvdiv"></span>Watt 
-			                </button>
-               			</div>
-				<div class="col-xs-6 text-center">
-                                        <button type="button" class="btn btn-primary btn-lg btn-block btn-orange" style="font-size: 2vw">EVU Bezug
-                                                <span id="bezugdiv"></span>Watt
-                                        </button>
-                                </div>  
-			</div>	
-			<div class="row">
-				<div class="col-xs-6 text-center">		
-		                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Ladeleistung
-                        			<span id="lldiv"></span>Watt
-					</button>
+			<div class="row"><div class="col-xs-12 text-center">
+				<div class="col-xs-6 text-center bg-success" style="font-size: 2vw">
+					PV <span id="pvdiv"></span>Watt 
 				</div>
-	<div class="col-xs-6 text-center">
-                	        	     	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Ladestromstaerke Soll
-					<span id="llsolldiv"></span>A
-					</button>
+				<div class="col-xs-6 text-center bg-warning" style="font-size: 2vw">
+					EVU <span id="bezugdiv"></span>Watt 
 				</div>
 
-						</div>
-			<div class="row">
+			</div></div><br>
+			<div class="row"><div class="col-xs-12 text-center">
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladeleistung <span id="lldiv"></span>Watt 
+				</div>
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladestromstärke <span id="llsolldiv"></span>A 
+				</div>
 
+			</div></div><br>
+			<div id="lp2lldiv">
+			<div class="row"><div class="col-xs-12 text-center">
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladeleistung LP2 <span id="lllp2div"></span>Watt 
+				</div>
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladestromstärke LP2 <span id="llsolllp2div"></span>A 
+				</div>
 
-					<?php
-						$result = '';
-						$lines = file('/var/www/html/openWB/openwb.conf');
-						foreach($lines as $line) {
-						    if(substr($line, 0, 11) == 'nachtladen=') {
-						    $nachtladenold = substr($line, 11, 2);
-	    
-						    }
-						}
-					?>
-					<?php
-						$result = '';
-						$lines = file('/var/www/html/openWB/openwb.conf');
-						foreach($lines as $line) {
-						    if(substr($line, 0, 15) == 'lastmanagement=') {
-						    $lastmanagementold = substr($line, 15, 2);
-	    
-						    }
-						}
-					?>
+			</div></div><br>
+			</div>
+			<div id="lp3lldiv">
+			<div class="row"><div class="col-xs-12 text-center">
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladeleistung LP3 <span id="lllp3div"></span>Watt 
+				</div>
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Ladestromstärke LP3 <span id="llsolllp3div"></span>A 
+				</div>
 
-					<div class="col-xs-6 text-center">
-                	             		<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">Nachtladen <?php echo $nachtladenold ?>
-					</button>
+			</div></div><br>
+			</div>
+
+			<div class="row"><div class="col-xs-12 text-center">
+				<div id="gesamtlldiv">
+					<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					Gesamtladeleistung <span id="gesamtllwdiv"></span> Watt 
 					</div>
-	<div class="col-xs-6 text-center">
-                                	<button type="button" class="btn btn-primary btn-lg btn-block btn-blue" style="font-size: 2vw">SOC
-					<span id="soclevel"></span>%
-					</button>
 				</div>
+				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
+					SoC <span id="soclevel"></span>% 
+				</div>
+			</div></div><hr>
 
 
-							
-			</div>
-
-			<hr>
+			
 			<div class="col-xs-12 text-center">
 				<h5>Lademodus</h5>
 			</div>	
@@ -400,52 +219,159 @@ doInterval = setInterval(getfile, 1800);
 					<span id="aktgeladens2div"></span>kWh
 				</div>
 			</div>
-
+			<div class="row" id="sofortlmdiv2" style="font-size: 2vw">
+				<div class="col-xs-4 text-center">
+					<div id="lademstatdiv">
+					<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+					</div>
+				</div>
+				<div id="ladepunkts11111div" class="col-xs-4 text-center">
+					<div id="lademstats1div">
+						<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+					</div>	
+				</div>
+				<div id="ladepunkts22222div" class="col-xs-4 text-center">
+					<div id="lademstats2div">
+						<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+					</div>
+				</div>
+			</div>
+			<div class="row" id="sofortlmdiv1" style="font-size: 2vw">
+				<div class="col-xs-4 text-center">
+					<div id="lademstat1div">
+					Restzeit <span id="restzeitlp1div"></span> H
+					</div>
+				</div>
+				<div id="ladepunkts1111111div" class="col-xs-4 text-center">
+					<div id="lademstats1div1">
+					Restzeit <span id="restzeitlp2div"></span> H
+					</div>	
+				</div>
+				<div id="ladepunkts2222222div" class="col-xs-4 text-center">
+					<div id="lademstats2div1">
+					Restzeit <span id="restzeitlp3div"></span> H
+					</div>
+				</div>
+			</div>
 
 				
 			<hr>
 			</div>
+			<div id="sofortlmdiv">
+			<form name="sofortll" action="./tools/sofortll.php" method="POST">
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<div class="form-check">
+						<input type="checkbox" <?php if($lademstatold == 1) echo 'checked="checked"'; ?> value="1" name="lademlp1check" class="form-check-input" id="lademlp1check">
+							<label class="form-check-label" for="lademlp1check">Aktiv</label>
+						</div>
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+
+					<div class="col-xs-6" style="font-size: 2vw">
+					<label for="lademlp1">Lademenge </label>
+					<select type="text" name="lademlp1" id="lademlp1">
+					<option <?php if($lademkwhold == 5) echo 'selected' ?> value="5">5</option>
+					<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
+					<option <?php if($lademkwhold == 15) echo 'selected' ?> value="15">15</option>
+					<option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
+					<option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
+					<option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
+					<option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
+					<option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
+					<option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
+					<option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
+					</select> kWh
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<button><a href="./tools/resetlp1ladem.php">Reset</a></button> 
+					</div>
+				</div>
+			</div>
+			<div class="row" id="ladepunkts111111div">
+				<div class="col-xs-12 text-center">
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<div class="form-check">
+						<input type="checkbox" <?php if($lademstats1old == 1) echo 'checked="checked"'; ?> value="1" name="lademlp2check" class="form-check-input" id="lademlp2check">
+							<label class="form-check-label" for="lademlp2check">Aktiv</label>
+						</div>
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+
+					<div class="col-xs-6" style="font-size: 2vw">
+					<label for="lademlp2">Lademenge </label>
+					<select type="text" name="lademlp2" id="lademlp2">
+					<option <?php if($lademkwhs1old == 5) echo 'selected' ?> value="5">5</option>
+					<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
+					<option <?php if($lademkwhs1old == 15) echo 'selected' ?> value="15">15</option>
+					<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
+					<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>
+					<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
+					<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
+					<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
+					<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
+					<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
+					</select> kWh
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<button><a href="./tools/resetlp2ladem.php">Reset</a></button> 
+					</div>
+				</div>
+			</div>
+			<div class="row" id="ladepunkts222222div">
+				<div class="col-xs-12 text-center">
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<div class="form-check">
+						<input type="checkbox" <?php if($lademstats2old == 1) echo 'checked="checked"'; ?> value="1" name="lademlp3check" class="form-check-input" id="lademlp3check">
+							<label class="form-check-label" for="lademlp3check">Aktiv</label>
+						</div>
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+
+					<div class="col-xs-6" style="font-size: 2vw">
+					<label for="lademlp3">Lademenge </label>
+					<select type="text" name="lademlp3" id="lademlp3">
+					<option <?php if($lademkwhs2old == 5) echo 'selected' ?> value="5">5</option>
+					<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
+					<option <?php if($lademkwhs2old == 15) echo 'selected' ?> value="15">15</option>
+					<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
+					<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
+					<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
+					<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
+					<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
+					<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>
+					<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
+					</select> kWh
+					</div>
+					<div class="col-xs-1 text-center" style="font-size: 2vw">
+					</div>
+
+					<div class="col-xs-2 text-center" style="font-size: 2vw">
+						<button><a href="./tools/resetlp3ladem.php">Reset</a></button> 
+					</div>
+				</div>			
+			</div>
+
+
+			<hr>
+
+
+
 			<div class="row">
 				<div class="col-xs-12 text-center"> 
-					<?php
-						$result = '';
-						$lines = file('/var/www/html/openWB/openwb.conf');
-						foreach($lines as $line) {
-							if(strpos($line, "minimalstromstaerke=") !== false) {
-										list(, $minimalstromstaerkeold) = explode("=", $line);
-											}
-							if(strpos($line, "maximalstromstaerke=") !== false) {
-										list(, $maximalstromstaerkeold) = explode("=", $line);
-							}
-							if(strpos($line, "sofortll=") !== false) {
-								list(, $sofortllold) = explode("=", $line);
-							}
-							if(strpos($line, "sofortlls1=") !== false) {
-								list(, $sofortlls1old) = explode("=", $line);
-							}
-
-							if(strpos($line, "sofortlls2=") !== false) {
-								list(, $sofortlls2old) = explode("=", $line);
-							}
-							if(strpos($line, "lastmanagement=") !== false) {
-								list(, $lastmanagementold) = explode("=", $line);
-							}
-							if(strpos($line, "lastmanagements2=") !== false) {
-								list(, $lastmanagements2old) = explode("=", $line);
-							}
-
-						}
-
-					?>
-
-
-
-
-
-
-
-
-					<form name="sofortll" action="./tools/sofortll.php" method="POST">
 						<div class="col-xs-12 text-center">
 							<div class="col-xs-12 tex-center">
 								<h5>Sofortladen Stromstärke</h5><br><br>
@@ -528,12 +454,16 @@ doInterval = setInterval(getfile, 1800);
 							$('#ladepunkts11div').hide();
 							$('#ladepunkts111div').hide();
 							$('#ladepunkts1111div').hide();
+							$('#ladepunkts11111div').hide();
+							$('#ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').hide();
 						      } else {
 							$('#ladepunkts1ndiv').hide();
 							$('#ladepunkts1div').show();
 							$('#ladepunkts11div').show();
 							$('#ladepunkts111div').show();	
-							$('#ladepunkts1111div').show();	
+							$('#ladepunkts1111div').show();
+							$('#ladepunkts11111div').show();
+							$('#ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').show();
 						      } 
 
 						});
@@ -546,28 +476,69 @@ doInterval = setInterval(getfile, 1800);
 							$('#ladepunkts22div').hide();
 							$('#ladepunkts222div').hide();
 							$('#ladepunkts2222div').hide();
+							$('#ladepunkts22222div').hide();
+							$('#ladepunkts222222div, #ladepunkts2222222divi, #lp3lldiv').hide();
 						      } else {
 							$('#ladepunkts2ndiv').hide();
 							$('#ladepunkts2div').show();
 							$('#ladepunkts22div').show();	
 							$('#ladepunkts222div').show();	
 							$('#ladepunkts2222div').show();	
+							$('#ladepunkts22222div').show();
+							$('#ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').show();	
 						      } 
 
 						});
 						</script>
+						<input hidden name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold ; ?>">
+						<script>
+						$(function() {
+   						   if($('#lademlp1stat').val() == '1') {
+							$('#lademstatdiv').show();
+							$('#lademstat1div').show(); 
+						      } else {
+							$('#lademstatdiv').hide();
+							$('#lademstat1div').hide();
 
+						      } 
+
+						});
+						</script>
+						<input hidden name="lademlp2stat" id="lademlp2stat" value="<?php echo $lademstats1old ; ?>">
+						<script>
+						$(function() {
+   						   if($('#lademlp2stat').val() == '1') {
+							$('#lademstats1div, #lademstats1div1').show(); 
+						      } else {
+							$('#lademstats1div, #lademstats1div1').hide();
+						      } 
+
+						});
+						</script>
+						<input hidden name="lademlp3stat" id="lademlp3stat" value="<?php echo $lademstats2old ; ?>">
+						<script>
+						$(function() {
+   						   if($('#lademlp3stat').val() == '1') {
+							$('#lademstats2div, #lademstats2div1').show(); 
+						      } else {
+							$('#lademstats2div, #lademstats2div1').hide();
+						      } 
+
+						});
+						</script>
 				</div>
-			</div>  <div class="row">
-
-			<hr>
+			</div> 
+			<div class="row">
+				<hr>
 			</div>
+			</div>		
+
 	<!--	<div class="row">
 				<iframe frameBorder="0" height="312" class="col-xs-12" src="/metern/index2.php"></iframe>
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.51
+					Ver0.60
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -609,6 +580,17 @@ doInterval = setInterval(getfile, 1800);
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
+	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>">
+	<script>
+	$(function() {
+   	   if($('#sofortlm').val() == '0') {
+		$('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').show(); 
+	      } else {
+		$('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').hide();
+		      } 
+		});
+	</script>
+
 	<script type='text/javascript'>
 setInterval(loadText, 1800);
 function loadText(){
@@ -644,7 +626,7 @@ function loadText(){
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-	}
+}
      if(result.text == 3){
     $('.actstat2 .btn').addClass("btn-red");
     $('.actstat3 .btn').addClass("btn-green");
@@ -652,7 +634,7 @@ function loadText(){
     $('.actstat1 .btn').addClass("btn-red");
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-	}
+     }
 
   }
  });

@@ -427,6 +427,64 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llvs11",
+	        complete: function(request){
+		        $("#llv1s1div").html(request.responseText);
+		}
+});
+	$.ajax({
+		url: "/openWB/ramdisk/llvs21",
+	        complete: function(request){
+		        $("#llv1s2div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llvs12",
+	        complete: function(request){
+		        $("#llv2s1div").html(request.responseText);
+		}
+});
+	$.ajax({
+		url: "/openWB/ramdisk/llvs22",
+	        complete: function(request){
+		        $("#llv2s2div").html(request.responseText);
+		}
+	});
+
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/llvs13",
+	        complete: function(request){
+		        $("#llv3s1div").html(request.responseText);
+		}
+});
+	$.ajax({
+		url: "/openWB/ramdisk/llvs23",
+	        complete: function(request){
+		        $("#llv3s2div").html(request.responseText);
+		}
+	});
+
+}
+doInterval = setInterval(getfile, 2000);
+</script>
 
 
 
@@ -679,6 +737,21 @@ doInterval = setInterval(getfile, 2000);
 </div>
 <hr>
 <div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladepunkt 2 Spannung in V
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv1s1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv2s1div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv3s1div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
 		Ladepunkt 2 Stromstaerke in A
 	</div>
@@ -690,6 +763,21 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llas13div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center">
+		Ladepunkt 3 Spannung in V
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv1s2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv2s2div"></div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div id="llv3s2div"></div>
 	</div>
 </div>
 <hr>
@@ -707,6 +795,9 @@ doInterval = setInterval(getfile, 2000);
 		<div id="llas23div"></div>
 	</div>
 </div>
+
+
+
 <hr style="height:3px;background-color:#333;" />
 <div class="row">
 		<div class="col-xs-4 text-center">

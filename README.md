@@ -4,7 +4,11 @@
 
 
 Die Software steht zur nicht kommerziellen Nutzung frei für jeden zur Verfügung.
-Spenden gerne an info@snaptec.org
+
+	Unterstüztung ist gerne gesehen!
+	Sei es in Form von Code oder durch Spenden
+	Spenden bitte an info@snaptec.org
+
 Kommerzielle Anfragen ebenso an info@snaptec.org
 Weitere Infos unter http://openwb.de
 

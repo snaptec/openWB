@@ -26,6 +26,9 @@ touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 touch /var/www/html/openWB/ramdisk/llkwhs2
+echo 0 > /var/www/html/openWB/ramdisk/ladestatus
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
 echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/bezuga1
@@ -34,6 +37,12 @@ echo 0 > /var/www/html/openWB/ramdisk/bezuga3
 echo 0 > /var/www/html/openWB/ramdisk/llv1
 echo 0 > /var/www/html/openWB/ramdisk/llv2
 echo 0 > /var/www/html/openWB/ramdisk/llv3
+echo 0 > /var/www/html/openWB/ramdisk/llvs11
+echo 0 > /var/www/html/openWB/ramdisk/llvs12
+echo 0 > /var/www/html/openWB/ramdisk/llvs13
+echo 0 > /var/www/html/openWB/ramdisk/llvs21
+echo 0 > /var/www/html/openWB/ramdisk/llvs22
+echo 0 > /var/www/html/openWB/ramdisk/llvs23
 echo 0 > /var/www/html/openWB/ramdisk/llaltnv
 echo 0 > /var/www/html/openWB/ramdisk/llhz
 echo 0 > /var/www/html/openWB/ramdisk/llpf1
@@ -73,6 +82,9 @@ touch /var/www/html/openWB/ramdisk/llogs1
 touch /var/www/html/openWB/ramdisk/llogs2
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
@@ -160,6 +172,97 @@ fi
 if ! grep -Fq "durchslp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "durchslp2=15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladens1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladens1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtsocs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtsocs1=50" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtsoc1s1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtsoc1s1=35" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtlls1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtlls1=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladenabuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladenabuhrs1=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademkwh=15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademkwhs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademkwhs1=15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademkwhs2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademkwhs2=15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademstat=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademstat=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademstats1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademstats1=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lademstats2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "lademstats2=" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid2=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid3=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid1s1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid1s1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid2s1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid2s1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid3s1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid3s1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid1s2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid1s2=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid2s2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid2s2=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllid3s2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllid3s2=10" >> /var/www/html/openWB/openwb.conf
+fi
+
+
+
+
+
+
+if ! grep -Fq "nachtladenbisuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladenbisuhrs1=6" >> /var/www/html/openWB/openwb.conf
 fi
 if [ ! -e /var/www/html/openWB/web/ladelog ]; then
 	sudo touch /var/www/html/openWB/web/ladelog

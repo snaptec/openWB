@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys
 import os
 import time
@@ -16,7 +16,8 @@ client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
 modbusid = int(sys.argv[2])
 readreg = int(sys.argv[3])
 reganzahl = int(sys.argv[4])
-rq = client.read_input_registers(readreg,reganzahl,unit=modbusid)
+
+rq = client.read_holding_registers(readreg,reganzahl,unit=modbusid)
 print(rq.registers)
 
 

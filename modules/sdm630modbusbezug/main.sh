@@ -144,8 +144,12 @@ echo $ikwh33 > /var/www/html/openWB/ramdisk/bezugkwh3
 bezugkwh=${bezugkwh%??}
 einspeisungkwh=${einspeisungkwh%??}
 einspeisungkwh=$(echo "(($einspeisungkwh)*1000)" | bc)
-bezugkwh=$(echo "(($bezugkwh)*1000)" | bc)
-echo $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
+rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+if [[ $bezugkwh =~ $rekwh ]]; then 
+
+	bezugkwh=$(echo "(($bezugkwh)*1000)" | bc)
+	echo $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
+fi
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}
 ekwh33=${ekwh3%??}
@@ -154,8 +158,10 @@ echo $ekwh22 > /var/www/html/openWB/ramdisk/einspeisungkwh2
 echo $ekwh33 > /var/www/html/openWB/ramdisk/einspeisungkwh3
 
 #ekwh=$(echo "(($ekwh11+$ekwh22+$ekwh33)*1000)" |bc)
-echo $einspeisungkwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 
+if [[ $einspeisungkwh =~ $rekwh ]]; then 
+	echo $einspeisungkwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+fi
 
 #echo ${ikwh2%??}
 #echo ${ikwh3%??}
