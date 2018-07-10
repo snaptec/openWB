@@ -473,25 +473,25 @@ $(function() {
 	</div>
 </div>
 	<div id="sdm120div">
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid1">Ladepunkt 1 SDM Zähler 1 ID:</label></b>
 		<input type="text" name="sdm120modbusllid1" id="sdm120modbusllid1" value="<?php echo $sdm120modbusllid1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers in der WB.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid2">Ladepunkt 1 SDM Zähler 2 ID:</label></b>
 		<input type="text" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo $sdm120modbusllid2old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid3">Ladepunkt 1 SDM Zähler 3 ID:</label></b>
 		<input type="text" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	</div>
@@ -648,18 +648,18 @@ $(function() {
 		<div class="row">
 			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 		</div>
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			<b><label for="evsesources1">Ladepunkt 2 EVSE Source:</label></b>
 			<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
 		</div>
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
 		</div>
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			<b><label for="evseids1">Ladepunkt 2 EVSE ID:</label></b>
 			<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
 		</div>
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
 		</div>
 	</div>
@@ -706,43 +706,43 @@ $(function() {
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
 	<div id="sdm630s1div">
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			<b><label for="sdmids1">Ladepunkt 2 SDM Zähler ID:</label></b>
 			<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
 		</div>
-		<div class="row bg-info2">
+		<div class="row bg-info">
 			Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
 		</div>
 	</div>
 	<div id="sdm120s1div">
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid1s1">Ladepunkt 2 SDM Zähler 1 ID:</label></b>
 		<input type="text" name="sdm120modbusllid1s1" id="sdm120modbusllid1s1" value="<?php echo $sdm120modbusllid1s1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid2s1">Ladepunkt 2 SDM Zähler 2 ID:</label></b>
 		<input type="text" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo $sdm120modbusllid2s1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid3s1">Ladepunkt 2 SDM Zähler 3 ID:</label></b>
 		<input type="text" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo $sdm120modbusllid3s1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	</div>
 
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
 		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
 	</div>
 	<div class="row">
@@ -760,11 +760,11 @@ $(function() {
 	<div class="row">
 		Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="hsocip1">SOC zweiter Ladepunkt Http Abfrage URL:</label></b>
 		<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.<br><br>
 	</div>
 </div>
@@ -945,25 +945,25 @@ $(function() {
 		</div>
 	</div>
 	<div id="sdm120s2div">
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid1s2">Ladepunkt 3 SDM Zähler 1 ID:</label></b>
 		<input type="text" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo $sdm120modbusllid1s2old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid2s2">Ladepunkt 3 SDM Zähler 2 ID:</label></b>
 		<input type="text" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo $sdm120modbusllid2s2old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		<b><label for="sdm120modbusllid3s2">Ladepunkt 3 SDM Zähler 3 ID:</label></b>
 		<input type="text" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>"><br>
 	</div>
-	<div class="row bg-info2">
+	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	</div>

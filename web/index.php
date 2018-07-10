@@ -109,10 +109,10 @@
 			</div></div><br>
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung <span id="lldiv"></span>Watt 
+					Ladeleistung LP1 <span id="lldiv"></span>Watt 
 				</div>
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke <span id="llsolldiv"></span>A 
+					Ladestromstärke LP1 <span id="llsolldiv"></span>A 
 				</div>
 
 			</div></div><br>
@@ -272,7 +272,7 @@
 
 
 					<div class="col-xs-6" style="font-size: 2vw">
-					<label for="lademlp1">Lademenge </label>
+					<label for="lademlp1">Lademenge LP1 </label>
 					<select type="text" name="lademlp1" id="lademlp1">
 					<option <?php if($lademkwhold == 5) echo 'selected' ?> value="5">5</option>
 					<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
@@ -307,7 +307,7 @@
 
 
 					<div class="col-xs-6" style="font-size: 2vw">
-					<label for="lademlp2">Lademenge </label>
+					<label for="lademlp2">Lademenge LP2 </label>
 					<select type="text" name="lademlp2" id="lademlp2">
 					<option <?php if($lademkwhs1old == 5) echo 'selected' ?> value="5">5</option>
 					<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
@@ -342,7 +342,7 @@
 
 
 					<div class="col-xs-6" style="font-size: 2vw">
-					<label for="lademlp3">Lademenge </label>
+					<label for="lademlp3">Lademenge LP3 </label>
 					<select type="text" name="lademlp3" id="lademlp3">
 					<option <?php if($lademkwhs2old == 5) echo 'selected' ?> value="5">5</option>
 					<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
@@ -538,7 +538,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.60
+					Ver0.61
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

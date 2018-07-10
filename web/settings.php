@@ -402,7 +402,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 
 
 <div class="row">
-	<b><label for="nachtladen">Nachtladen:</label></b>
+	<b><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">
 		<option <?php if($nachtladenold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($nachtladenold == 1) echo selected ?> value="1">An</option>
