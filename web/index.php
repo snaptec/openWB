@@ -100,29 +100,29 @@
 			</div>
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center bg-success" style="font-size: 2vw">
-					PV <span id="pvdiv"></span>Watt 
+					PV: <span id="pvdiv"></span>Watt 
 				</div>
 				<div class="col-xs-6 text-center bg-warning" style="font-size: 2vw">
-					EVU <span id="bezugdiv"></span>Watt 
+					EVU: <span id="bezugdiv"></span>Watt 
 				</div>
 
 			</div></div><br>
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP1 <span id="lldiv"></span>Watt 
+					Ladeleistung LP1: <span id="lldiv"></span>Watt 
 				</div>
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP1 <span id="llsolldiv"></span>A 
+					Ladestromstärke LP1: <span id="llsolldiv"></span>A 
 				</div>
 
 			</div></div><br>
 			<div id="lp2lldiv">
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP2 <span id="lllp2div"></span>Watt 
+					Ladeleistung LP2: <span id="lllp2div"></span>Watt 
 				</div>
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP2 <span id="llsolllp2div"></span>A 
+					Ladestromstärke LP2: <span id="llsolllp2div"></span>A 
 				</div>
 
 			</div></div><br>
@@ -130,10 +130,10 @@
 			<div id="lp3lldiv">
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP3 <span id="lllp3div"></span>Watt 
+					Ladeleistung LP3: <span id="lllp3div"></span>Watt 
 				</div>
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP3 <span id="llsolllp3div"></span>A 
+					Ladestromstärke LP3: <span id="llsolllp3div"></span>A 
 				</div>
 
 			</div></div><br>
@@ -142,11 +142,11 @@
 			<div class="row"><div class="col-xs-12 text-center">
 				<div id="gesamtlldiv">
 					<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Gesamtladeleistung <span id="gesamtllwdiv"></span> Watt 
+					Gesamtladeleistung: <span id="gesamtllwdiv"></span> Watt 
 					</div>
 				</div>
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					SoC <span id="soclevel"></span>% 
+					SoC: <span id="soclevel"></span>% 
 				</div>
 			</div></div><hr>
 
@@ -538,7 +538,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.61
+					Ver0.62
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

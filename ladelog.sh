@@ -10,9 +10,15 @@ if (( ladeleistung > 500 )); then
 		echo $bishergeladen > ramdisk/aktgeladen
 		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
 		LANG=C printf "%.1f\n" $gelrlp1 > ramdisk/gelrlp1
-		restzeitlp1=$(echo "scale=5;($lademkwh - $bishergeladen)/ $ladeleistung * 1000" |bc)
-		LANG=C printf "%.2f\n" $restzeitlp1 > ramdisk/restzeitlp1
-
+		restzeitlp1=$(echo "scale=6;($lademkwh - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
+		restzeitlp1=$(printf %.0f $restzeitlp1)
+		if (( restzeitlp1 > 60 )); then
+			restzeitlp1h=$((restzeitlp1 / 60))
+			restzeitlp1r=$((restzeitlp1 % 60))
+			echo "$restzeitlp1h H $restzeitlp1r Min" > ramdisk/restzeitlp1
+		else
+			echo "$restzeitlp1 Min" > ramdisk/restzeitlp1
+		fi
 	else
 		touch ramdisk/ladeustart
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustart
@@ -62,8 +68,16 @@ if (( ladeleistungs1 > 500 )); then
 		echo $bishergeladens1 > ramdisk/aktgeladens1
 		gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
 		LANG=C printf "%.1f\n" $gelrlp2 > ramdisk/gelrlp2
-		restzeitlp2=$(echo "scale=5;($lademkwhs1 - $bishergeladens1)/ $ladeleistungs1 * 1000" |bc)
-		LANG=C printf "%.2f\n" $restzeitlp2 > ramdisk/restzeitlp2
+		restzeitlp2=$(echo "scale=6;($lademkwhs1 - $bishergeladens1)/ $ladeleistungs1 * 1000 * 60" |bc)
+		restzeitlp2=$(printf %.0f $restzeitlp2)
+		if (( restzeitlp2 > 60 )); then
+			restzeitlp2h=$((restzeitlp2 / 60))
+			restzeitlp2r=$((restzeitlp2 % 60))
+			echo "$restzeitlp2h H $restzeitlp2r Min" > ramdisk/restzeitlp2
+		else
+			echo "$restzeitlp2 Min" > ramdisk/restzeitlp2
+		fi
+
 	else
 		touch ramdisk/ladeustarts1
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts1
@@ -116,7 +130,15 @@ if (( ladeleistungs2 > 500 )); then
 		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
 		LANG=C printf "%.1f\n" $gelrlp3 > ramdisk/gelrlp3
 		restzeitlp3=$(echo "scale=5;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000" |bc)
-		LANG=C printf "%.2f\n" $restzeitlp3 > ramdisk/restzeitlp3
+		restzeitlp3=$(printf %.0f $restzeitlp3)
+		if (( restzeitlp3 > 60 )); then
+			restzeitlp3h=$((restzeitlp3 / 60))
+			restzeitlp3r=$((restzeitlp3 % 60))
+			echo "$restzeitlp3h H $restzeitlp3r Min" > ramdisk/restzeitlp3
+		else
+			echo "$restzeitlp3 Min" > ramdisk/restzeitlp3
+		fi
+
 	else
 		touch ramdisk/ladeustarts2
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts2

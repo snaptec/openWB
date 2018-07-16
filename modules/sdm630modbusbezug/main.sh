@@ -148,7 +148,7 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 if [[ $bezugkwh =~ $rekwh ]]; then 
 
 	bezugkwh=$(echo "(($bezugkwh)*1000)" | bc)
-	echo $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
+	LANG=C printf "%.3f\n" $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
 fi
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}

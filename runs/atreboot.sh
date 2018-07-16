@@ -86,6 +86,7 @@ echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
+echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
