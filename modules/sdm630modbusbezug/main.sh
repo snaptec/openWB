@@ -46,7 +46,7 @@ while read -r line; do
 	fi
 
 	if (( $n == 6 )); then
-		bezugkwh=$(echo "$line" |  cut -c2- )
+		bezugkwhold=$(echo "$line" |  cut -c2- )
 #		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/bezugkwh
 #		echo ${bezugkwh%??} > /var/www/html/openWB/ramdisk/einspeisungkwh
 	fi
