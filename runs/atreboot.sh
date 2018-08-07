@@ -90,6 +90,7 @@ echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
+echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -186,6 +187,11 @@ if ! grep -Fq "nachtsoc1s1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nachtsoc1s1=35" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "nachtsoc1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtsoc1=35" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "nachtlls1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nachtlls1=12" >> /var/www/html/openWB/openwb.conf
@@ -255,10 +261,74 @@ if ! grep -Fq "sdm120modbusllid3s2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllid3s2=10" >> /var/www/html/openWB/openwb.conf
 fi
-
-
-
-
+if ! grep -Fq "evsewifiiplp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifiiplp1=192.168.0.25" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evsewifiiplp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifiiplp2=192.168.0.25" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evsewifiiplp3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifiiplp3=192.168.0.25" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evsewifitimeoutlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifitimeoutlp1=2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evsewifitimeoutlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifitimeoutlp2=2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evsewifitimeoutlp3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evsewifitimeoutlp3=2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsoclp1=90" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsoclp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsoclp2=90" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsoclp3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsoclp3=90" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsocstatlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsocstatlp1=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsocstatlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsocstatlp2=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sofortsocstatlp3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sofortsocstatlp3=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvsoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "pvsoclp1=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvsoclp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "pvsoclp2=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvsoclp3=" /var/www/html/openWB/openwb.conf
+then
+	  echo "pvsoclp3=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmllsource=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmllsource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmllid=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmllid=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 if ! grep -Fq "nachtladenbisuhrs1=" /var/www/html/openWB/openwb.conf

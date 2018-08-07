@@ -28,4 +28,7 @@ if($_GET["jetztll"] > "10" && $_GET["jetztll"] < "32") {
 	}
 	file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 }
+if($_GET["speicher"]) {
+	file_put_contents('/var/www/html/openWB/ramdisk/speicher', $_GET['speicher']);
+}
 ?>

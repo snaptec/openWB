@@ -86,6 +86,70 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsoclp1=") !== false) {
+	       $result .= 'sofortsoclp1='.$_POST['sofortsoclp1']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsoclp2=") !== false) {
+	       $result .= 'sofortsoclp2='.$_POST['sofortsoclp2']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsoclp3=") !== false) {
+	       $result .= 'sofortsoclp3='.$_POST['sofortsoclp3']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsocstatlp1=") !== false) {
+	       $result .= 'sofortsocstatlp1='.$_POST['sofortsocstatlp1']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsocstatlp2=") !== false) {
+	       $result .= 'sofortsocstatlp2='.$_POST['sofortsocstatlp2']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "sofortsocstatlp3=") !== false) {
+	       $result .= 'sofortsocstatlp3='.$_POST['sofortsocstatlp3']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
 
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');

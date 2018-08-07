@@ -29,5 +29,17 @@ fi
 #		sudo python /var/www/html/openWB/runs/evsewritemodbus.py $evsesources1 $evseids1 7
 #	fi
 #fi
+	if [[ $evsecon == "simpleevsewifi" ]]; then
+		output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+		state=$(echo $output | jq '.list[] | .evseState')
+		if ((state == false)) ; then
+			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
+		fi
+		current=$(echo $output | jq '.list[] | .actualCurrent')
+		if (( current != 7 )) ; then
+			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=7 > /dev/null
+		fi
+	fi
+
 echo 1 > /var/www/html/openWB/ramdisk/ladestatus
 echo 7 > /var/www/html/openWB/ramdisk/llsoll

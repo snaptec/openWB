@@ -160,7 +160,6 @@ echo $llkwhges > ramdisk/llkwhges
 		echo evua 1,2,3 "$evua1" "$evua2" "$evua3"
         fi
 
-
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
 	soc=$(timeout 10 modules/$socmodul/main.sh)
@@ -179,13 +178,23 @@ fi
 
 #########################################
 #Regelautomatiken
-
 ########################
 # Sofort Laden
 if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 	aktgeladen=$(<ramdisk/aktgeladen)
 	#mit einem Ladepunkt
 	if [[ $lastmanagement == "0" ]]; then
+		if (( soc >= sofortsoclp1 )); then
+			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+
+				runs/0m.sh
+				if [[ $debug == "1" ]]; then
+	        		       	echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
+       				fi
+
+			fi
+		exit 0
+		fi
 		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( lademstat == "1" )); then
 				if (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
@@ -321,6 +330,17 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 			done
 			maxdiff=$((maxdiff - 1 ))
 			#Ladepunkt 1
+			if (( sofortsocstatlp1 == "1" )); then
+				if (( soc >= sofortsoclp1 )); then
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+						runs/0m.sh
+						if [[ $debug == "1" ]]; then
+			        		       	echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
+       						fi
+					fi
+				fi
+			else	
+
 			if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/0m.sh
@@ -384,7 +404,18 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 				fi
 				
 			fi
+			fi
 			#Ladepunkt 2
+			if (( sofortsocstatlp2 == "1" )); then
+				if (( soc1 >= sofortsoclp2 )); then
+					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+						runs/0s1.sh
+						if [[ $debug == "1" ]]; then
+			        		       	echo "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
+       						fi
+					fi
+				fi
+			else	
 			if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/0s1.sh
@@ -445,6 +476,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
+			fi
 			fi
 			#Ladepunkt 3
 			if [[ $lastmanagements2 == "1" ]]; then
@@ -547,25 +579,43 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						fi
 					fi
 				fi
-				if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+				if (( soc >= sofortsoclp1 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 						runs/0m.sh
 						if [[ $debug == "1" ]]; then
-		       				       	echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
-       						fi
+		        			       	echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
+						fi
 					fi
-				else
-					runs/"$llneu"m.sh
+				else	
+					if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+						if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+							runs/0m.sh
+							if [[ $debug == "1" ]]; then
+		       					       	echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
+       							fi
+						fi
+					else
+						runs/"$llneu"m.sh
+					fi
 				fi
-				if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+				if (( soc1 >= sofortsoclp2 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						runs/0s1.sh
 						if [[ $debug == "1" ]]; then
-		       				       	echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
+		        		       	echo "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
        						fi
 					fi
-				else
-					runs/"$llneus1"s1.sh
+				else	
+					if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+						if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+							runs/0s1.sh
+							if [[ $debug == "1" ]]; then
+		       					       	echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
+       							fi
+						fi
+					else
+						runs/"$llneus1"s1.sh
+					fi
 				fi
 				if [[ $lastmanagements2 == "1" ]]; then
 					aktgeladens2=$(<ramdisk/aktgeladens2)
@@ -580,10 +630,11 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 						runs/"$llneus2"s2.sh
 					fi
 				fi
-		                if [[ $debug == "1" ]]; then
-       		             		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
+		        	if [[ $debug == "1" ]]; then
+       		        		echo "Sofort ladung um $maxdiff auf $llneu reduziert"
      				fi
 				exit 0
+				
 			fi
 		fi
 	
@@ -609,24 +660,17 @@ if [[ $nachtladen == "1" ]]; then
 		   				echo "soc $soc"
 		      				echo "ladeleistung nachtladen bei $nachtll"
 					fi
-				exit 0
 				fi
-				if grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					exit 0
-				else
+				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
 					runs/"$nachtll"m.sh
 					if [[ $debug == "1" ]]; then
 		      				echo aendere nacht Ladeleistung auf $nachtll
 		        		fi
-					exit 0
 				fi
-				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/0m.sh
-					exit 0
 				fi
-				exit 0
 			fi
 		fi
 		if [[ $socmodul == "none" ]]; then
@@ -636,19 +680,16 @@ if [[ $nachtladen == "1" ]]; then
       					echo "soc $soc"
         				echo "ladeleistung nachtladen $nachtll A"
         			fi
-        			echo "start Nachtladung mit $nachtll um $date" >> web/lade.log
-       				exit 0
 			else
-				if grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					exit 0
-				else
+				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
 					runs/"$nachtll"m.sh
 					if [[ $debug == "1" ]]; then
       						echo aendere nacht Ladeleistung auf $nachtll
         				fi
-					exit 0
 				fi
 			fi
+		fi
+		if [[ $nachtladens1 == "0" ]]; then
 			exit 0
 		fi
 	fi
@@ -673,24 +714,17 @@ if [[ $nachtladens1 == "1" ]]; then
 		   				echo "soc $soc1"
 		      				echo "ladeleistung nachtladen bei $nachtlls1"
 					fi
-				exit 0
 				fi
-				if grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
-					exit 0
-				else
+				if ! grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
 					runs/"$nachtlls1"s1.sh
 					if [[ $debug == "1" ]]; then
 	      					echo aendere nacht Ladeleistung auf $nachtlls1
 	        			fi
-					exit 0
 				fi
-				exit 0
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/0s1.sh
-					exit 0
 				fi
-				exit 0
 			fi
 		fi
 		if [[ $socmodul1 == "none" ]]; then
@@ -701,21 +735,17 @@ if [[ $nachtladens1 == "1" ]]; then
         				echo "ladeleistung nachtladen $nachtlls1 A"
         			fi
         			echo "start Nachtladung mit $nachtlls1 um $date" >> web/lade.log
-        			exit 0
 			else
-				if grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
-					exit 0
-				else
+				if ! grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
 					runs/"$nachtlls1"s1.sh
 					if [[ $debug == "1" ]]; then
 	      					echo aendere nacht Ladeleistung auf $nachtlls1
 	        			fi
-					exit 0
 				fi
 
 			fi
-			exit 0
 		fi
+	exit 0
 	fi
 fi
 #######################
@@ -732,9 +762,6 @@ if (( llalt > 3 )); then
 	fi
 	if [ $lla3 -ge $llphasentest ]; then
 		anzahlphasen=$((anzahlphasen + 1 ))
-	fi
-	if [ $anzahlphasen -eq 0 ]; then
-		anzahlphasen=1
 	fi
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
 else
@@ -754,6 +781,7 @@ if (( lastmanagement == 1 )); then
 		if [ "$llas13" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))
 		fi
+
 		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
 	fi
 fi
@@ -770,6 +798,9 @@ if (( lastmanagements2 == 1 )); then
 		fi
 		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
 	fi
+fi
+if [ $anzahlphasen -eq 0 ]; then
+	anzahlphasen=1
 fi
 ########################
 # Berechnung für PV Regelung

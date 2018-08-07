@@ -18,5 +18,15 @@
 		fi	
 		sudo python /var/www/html/openWB/runs/evsewritemodbus.py $evsesources2 $evseids2 0
 	fi
+	if [[ $evsecons2 == "simpleevsewifi" ]]; then
+		output=$(curl --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/getParameters)
+		state=$(echo $output | jq '.list[] | .evseState')
+		if ((state == true)) ; then
+			curl --silent --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/setStatus?active=false > /dev/null
+		fi
+	fi
+
+
+
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
 echo 0 > /var/www/html/openWB/ramdisk/llsolls2

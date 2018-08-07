@@ -307,6 +307,28 @@ foreach($lines as $line) {
 	if(strpos($line, "abschaltverzoegerung=") !== false) {
 		list(, $abschaltverzoegerungold) = explode("=", $line);
 	}
+	if(strpos($line, "evsewifiiplp1=") !== false) {
+		list(, $evsewifiiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evsewifiiplp2=") !== false) {
+		list(, $evsewifiiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "evsewifiiplp3=") !== false) {
+		list(, $evsewifiiplp3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp1=") !== false) {
+		list(, $evsewifitimeoutlp1old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp2=") !== false) {
+		list(, $evsewifitimeoutlp2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
+		list(, $evsewifitimeoutlp3old) = explode("=", $line);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -373,6 +395,16 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	<div class="row">
 		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-red">UPDATE openWB</button>
 	</div>
+<div class="row">
+<div class="text-center">
+Open Source made with love!<br>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
+<input type="image" src="./img/btn_donate_SM.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+<img alt="" border="0" src="./img/pixel.gif" width="1" height="1">
+</form>
+</div></div>
 </div>
 </body></html>
 

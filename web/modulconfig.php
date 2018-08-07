@@ -329,6 +329,34 @@ foreach($lines as $line) {
 	if(strpos($line, "abschaltverzoegerung=") !== false) {
 		list(, $abschaltverzoegerungold) = explode("=", $line);
 	}
+	if(strpos($line, "evsewifiiplp1=") !== false) {
+		list(, $evsewifiiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evsewifiiplp2=") !== false) {
+		list(, $evsewifiiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "evsewifiiplp3=") !== false) {
+		list(, $evsewifiiplp3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp1=") !== false) {
+		list(, $evsewifitimeoutlp1old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp2=") !== false) {
+		list(, $evsewifitimeoutlp2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
+		list(, $evsewifitimeoutlp3old) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmllsource=") !== false) {
+		list(, $mpm3pmllsourceold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmllid=") !== false) {
+		list(, $mpm3pmllidold) = explode("=", $line);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -376,6 +404,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
         <select type="text" name="evsecon" id="evsecon">
 		<option <?php if($evseconold == "modbusevse\n") echo selected ?> value="modbusevse">Modbusevse</option>
 		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
+		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">BETA SimpleEVSEWifi</option>
 	</select>
 
 </div>
@@ -390,6 +419,23 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	<div class="row bg-success">
 	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
 	</div>
+</div>
+<div id="evseconswifi">
+<div class="row bg-info">
+	<b><label for="evsewifiiplp1">Simple EVSE Wifi IP Adressee:</label></b>
+	<input type="text" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo $evsewifiiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evsewifitimeoutlp1">Simple EVSE Wifi Timeout:</label></b>
+	<input type="text" name="evsewifitimeoutlp1" id="evsewifitimeoutlp1" value="<?php echo $evsewifitimeoutlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+
 </div>
 <div id="evseconmod">
 <div class="row bg-info">
@@ -419,19 +465,40 @@ $(function() {
       if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show(); 
 		$('#evseconmod').hide();
-      } else {
-		$('#evsecondac').hide();
+		$('#evseconswifi').hide();
+	}
+	if($('#evsecon').val() == 'modbusevse') {
+		$('#evseconswifi').hide();
+      		$('#evsecondac').hide();
 	       	$('#evseconmod').show();	
-      } 
+	} 
+	if($('#evsecon').val() == 'simpleevsewifi') {
+		$('#evseconswifi').show();
+      		$('#evsecondac').hide();
+	       	$('#evseconmod').hide();	
+      	} 
+
+
+
 
 	$('#evsecon').change(function(){
 	        if($('#evsecon').val() == 'dac') {
 			$('#evsecondac').show(); 
 			$('#evseconmod').hide();
-	        } else {
+			$('#evseconswifi').hide();
+
+		}
+		if($('#evsecon').val() == 'modbusevse') {
+			$('#evseconswifi').hide();
 			$('#evsecondac').hide();
 		       	$('#evseconmod').show();	
+		} 
+		if($('#evsecon').val() == 'simpleevsewifi') {
+			$('#evseconswifi').show();
+			$('#evsecondac').hide();
+		       	$('#evseconmod').hide();	
 	        } 
+
 	    });
 });
 </script>
@@ -444,11 +511,39 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo selected ?> value="sdm630modbusll">sdm630modbusll</option>
 		<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo selected ?> value="smaemd_ll">smaemd_ll</option>
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">sdm120modbusll</option>
+		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">BETA MPM3PM</option>
 	</select>
 </div>
 <div id="llmnone">
 	
 </div>
+
+<div id="llmpm3pm">
+		<div class="row bg-info">
+		<b><label for="mpm3pmll">MPM3PM Modbus Ladeleistung Source:</label></b>
+		<input type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo $mpm3pmllsourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpm3pmllid">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpm3pmllid" id="mpm3pmllid" value="<?php echo $mpm3pmllidold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
+		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
+
+</div>
+
 <div id="llmsdm">
 	<div class="row bg-info">
 		<b><label for="sdm630modbusllsource">SDM Modbus Ladeleistung Source:</label></b>
@@ -492,10 +587,14 @@ $(function() {
 		<input type="text" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+		Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	</div>
-
+<div id="llswifi">
+<div class="row">
+Keine Konfiguration erforderlich.<br>
+</div>
+</div>
 <div id="llsma">
 	<div class="row">
 		<b><label for="smaemdllid">Seriennummer des SMA Energy Meter</label></b>
@@ -513,6 +612,8 @@ $(function() {
       if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show(); 
 		$('#llmsdm').hide();
+		$('#llmpm3pm').hide();
+		$('#llswifi').hide();
 		$('#llsma, #sdm120div').hide();
 
       } 
@@ -520,19 +621,37 @@ $(function() {
 		$('#llmnone').hide(); 
 		$('#llmsdm').show();
 		$('#llsma, #sdm120div').hide();
+		$('#llswifi').hide();
+		$('#llmpm3pm').hide();
 
       } 
       if($('#ladeleistungmodul').val() == 'smaemd_ll') {
 		$('#llmnone').hide(); 
 		$('#llmsdm, #sdm120div').hide();
 		$('#llsma').show();
-
+		$('#llmpm3pm').hide();
+		$('#llswifi').hide();
       } 
       if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 		$('#llmnone').hide(); 
 		$('#llmsdm, #llsma').hide();
 		$('#sdm120div').show();
-
+		$('#llmpm3pm').hide();
+		$('#llswifi').hide();
+      } 
+      if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
+		$('#llmnone').hide(); 
+		$('#llmsdm, #llsma').hide();
+		$('#sdm120div').hide();
+		$('#llswifi').show();
+		$('#llmpm3pm').hide();
+      } 
+      if($('#ladeleistungmodul').val() == 'mpm3pmll') {
+		$('#llmnone').hide(); 
+		$('#llmsdm, #llsma').hide();
+		$('#sdm120div').hide();
+		$('#llswifi').hide();
+		$('#llmpm3pm').show();
       } 
 
 
@@ -544,27 +663,49 @@ $(function() {
 			$('#llmnone').show(); 
 			$('#llmsdm').hide();
 			$('#llsma, #sdm120div').hide();
+		$('#llmpm3pm').hide();
+		$('#llswifi').hide();
 
 	        } 
       if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
-		$('#llmnone').hide(); 
+	      $('#llmnone').hide();
+		$('#llmpm3pm').hide();
 		$('#llmsdm').show();
 		$('#llsma, #sdm120div').hide();
+		$('#llswifi').hide();
 
       } 
       if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-		$('#llmnone').hide(); 
+	      $('#llmnone').hide();
+	     $('#llmpm3pm').hide();
 		$('#llmsdm, #sdm120div').hide();
 		$('#llsma').show();
+		$('#llswifi').hide();
 
       } 
       if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
-		$('#llmnone').hide(); 
+ 		$('#llmpm3pm').hide();     
+	      $('#llmnone').hide(); 
 		$('#llmsdm, #llsma').hide();
 		$('#sdm120div').show();
+		$('#llswifi').hide();
 
       } 
+      if($('#ladeleistungmodul').val() == 'mpm3pmll') {
+	      $('#llmnone').hide();
+		$('#llmsdm, #llsma').hide();
+		$('#sdm120div').hide();
+		$('#llswifi').hide();
+		$('#llmpm3pm').show();
+      } 
 
+      if($('#ladeleistungmodul').val() == 'simpleevsewifi') { 
+		$('#llmpm3pm').hide();
+	      $('#llmnone').hide(); 
+		$('#llmsdm, #llsma').hide();
+		$('#sdm120div').hide();
+		$('#llswifi').show();
+      } 
 	});
 });
 
@@ -641,6 +782,7 @@ $(function() {
 		<select type="text" name="evsecons1" id="evsecons1">
 			<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">modbus</option>
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
+			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">BETA SimpleEVSEWifi</option>
 
 		</select>
 	</div>
@@ -672,24 +814,65 @@ $(function() {
 		Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
 		</div>
 	</div>
+
+<div id="evseconswifis1">
+<div class="row bg-info">
+	<b><label for="evsewifiiplp2">Ladepunkt 2 Simple EVSE Wifi IP Adressee:</label></b>
+	<input type="text" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo $evsewifiiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evsewifitimeoutlp2">Ladepunkt 2 Simple EVSE Wifi Timeout:</label></b>
+	<input type="text" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo $evsewifitimeoutlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+
+</div>
+
+
 <script>
+
+
 $(function() {
       if($('#evsecons1').val() == 'dac') {
 		$('#evsecondacs1').show(); 
 		$('#evseconmbs1').hide();
-      } else {
+		$('#evseconswifis1').hide();
+
+      } 
+	if($('#evsecons1').val() == 'modbusevse') {
+		$('#evseconswifis1').hide();
 		$('#evsecondacs1').hide();
 	       	$('#evseconmbs1').show();	
+	} 
+	if($('#evsecons1').val() == 'simpleevsewifi') {
+		$('#evseconswifis1').show();
+		$('#evsecondacs1').hide();
+	       	$('#evseconmbs1').hide();	
       } 
+
 
 	$('#evsecons1').change(function(){
 	        if($('#evsecons1').val() == 'dac') {
 			$('#evsecondacs1').show(); 
 			$('#evseconmbs1').hide();
-	        } else {
+			$('#evseconswifis1').hide();
+		} 
+		if($('#evsecons1').val() == 'modbusevse') {
+			$('#evseconswifis1').hide();
 			$('#evsecondacs1').hide();
 		       	$('#evseconmbs1').show();	
+		} 
+		if($('#evsecons1').val() == 'simpleevsewifi') {
+			$('#evseconswifis1').show();
+			$('#evsecondacs1').hide();
+		       	$('#evseconmbs1').hide();	
 	        } 
+
 	    });
 });
 </script>
@@ -700,6 +883,9 @@ $(function() {
 		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
 			<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">sdm630modbuslls1</option>
 			<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">sdm120modbuslls1</option>
+			<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
+
+
 		</select>
 	</div>
 	<div class="row">
@@ -713,7 +899,21 @@ $(function() {
 		<div class="row bg-info">
 			Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
 		</div>
+		<div class="row bg-info">
+		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
+		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
+	</div>
+
+	</div>
+<div id="swifis1div">
+<div class="row">
+Keine Konfiguration erforderlich.<br>
+</div>
+</div>
+
 	<div id="sdm120s1div">
 	<div class="row bg-info">
 		<b><label for="sdm120modbusllid1s1">Ladepunkt 2 SDM Zähler 1 ID:</label></b>
@@ -736,8 +936,6 @@ $(function() {
 	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
-	</div>
-
 	<div class="row bg-info">
 		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
 		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
@@ -745,7 +943,10 @@ $(function() {
 	<div class="row bg-info">
 		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
 	</div>
-	<div class="row">
+
+	</div>
+<br><br>
+		<div class="row">
 		<b><label for="socmodul1">SOC Modul für zweiten Ladepunkt:</label></b>
 	<select type="text" name="socmodul1" id="socmodul1">
 		<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
@@ -773,19 +974,38 @@ $(function() {
       if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
 		$('#sdm630s1div').show(); 
 		$('#sdm120s1div').hide();
-      } else {
-		$('#sdm630s1div').hide();
-	       	$('#sdm120s1div').show();	
+		$('#swifis1div').hide();	
       } 
+      if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').show();
+		$('#swifis1div').hide();	
+      } 
+      if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').show();	
+      } 
+
 
 	$('#ladeleistungss1modul').change(function(){
 	        if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
 			$('#sdm630s1div').show(); 
 			$('#sdm120s1div').hide();
-	        } else {
-			$('#sdm630s1div').hide();
-		       	$('#sdm120s1div').show();	
-	        } 
+		} 
+      if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').show();
+		$('#swifis1div').hide();	
+      } 
+      if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').show();	
+      } 
+
+
+	        
 	    });
 });
 </script>
@@ -870,7 +1090,7 @@ $(function() {
 		<select type="text" name="evsecons2" id="evsecons2">
 			<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">modbus</option>
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
-
+			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">BETA SimpleEVSEWifi</option>
 		</select>
 	</div>
 	<div id="evseconmbs2">
@@ -901,24 +1121,60 @@ $(function() {
 		Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
 		</div>
 	</div>
+<div id="evseconswifis2">
+<div class="row bg-info">
+	<b><label for="evsewifiiplp3">Ladepunkt 3 Simple EVSE Wifi IP Adressee:</label></b>
+	<input type="text" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo $evsewifiiplp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evsewifitimeoutlp3">Ladepunkt 3 Simple EVSE Wifi Timeout:</label></b>
+	<input type="text" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo $evsewifitimeoutlp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+
+</div>
+
 <script>
 $(function() {
       if($('#evsecons2').val() == 'dac') {
 		$('#evsecondacs2').show(); 
 		$('#evseconmbs2').hide();
-      } else {
+		$('#evseconswifis2').hide();
+
+      } 
+      if($('#evsecons2').val() == 'modbusevse') {
+		$('#evseconswifis2').hide();
 		$('#evsecondacs2').hide();
 	       	$('#evseconmbs2').show();	
       } 
+      if($('#evsecons2').val() == 'simpleevsewifi') {
+		$('#evseconswifis2').show();
+		$('#evsecondacs2').hide();
+	       	$('#evseconmbs2').hide();	
+      } 
 
 	$('#evsecons2').change(function(){
-	        if($('#evsecons2').val() == 'dac') {
-			$('#evsecondacs2').show(); 
-			$('#evseconmbs2').hide();
-	        } else {
-			$('#evsecondacs2').hide();
-		       	$('#evseconmbs2').show();	
-	        } 
+      if($('#evsecons2').val() == 'dac') {
+		$('#evsecondacs2').show(); 
+		$('#evseconmbs2').hide();
+		$('#evseconswifis2').hide();
+
+      } 
+      if($('#evsecons2').val() == 'modbusevse') {
+		$('#evseconswifis2').hide();
+		$('#evsecondacs2').hide();
+	       	$('#evseconmbs2').show();	
+      } 
+      if($('#evsecons2').val() == 'simpleevsewifi') {
+		$('#evseconswifis2').show();
+		$('#evsecondacs2').hide();
+	       	$('#evseconmbs2').hide();	
+      } 
 	    });
 });
 </script>
@@ -927,14 +1183,21 @@ $(function() {
 	<div class="row">
 		<b><label for="ladeleistungs2modul">Ladeleistung Ladepunkt 3 Modul:</label></b>
 		<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
-			<option <?php if($ladeleistungs2modulold == sdm630modbuslls2) echo selected ?> value="sdm630modbuslls2">sdm630modbuslls2</option>
-			<option <?php if($ladeleistungs2modulold == sdm120modbuslls2) echo selected ?> value="sdm120modbuslls2">sdm120modbuslls2</option>
+			<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">sdm630modbuslls2</option>
+			<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">sdm120modbuslls2</option>
+			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
 	</div>
+	<div id="swifis2div">
+		<div class="row">
+			Keine Konfiguration erforderlich.<br>
+		</div>
+	</div>
+
 	<div id="sdm630s2div">
 		<div class="row bg-info">
 			<b><label for="sdmids2">Ladepunkt 3 SDM Zähler ID:</label></b>
@@ -943,6 +1206,14 @@ $(function() {
 		<div class="row bg-info">
 			Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
 		</div>
+		<div class="row bg-info">
+		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>
+		<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
+	</div>
+
 	</div>
 	<div id="sdm120s2div">
 	<div class="row bg-info">
@@ -966,9 +1237,6 @@ $(function() {
 	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
-	</div>
-
-
 	<div class="row bg-info">
 		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>
 		<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
@@ -977,25 +1245,45 @@ $(function() {
 		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
 	</div>
 
+	</div>
+
+
+	
 </div>
 <script>
 $(function() {
       if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
 		$('#sdm630s2div').show(); 
 		$('#sdm120s2div').hide();
-      } else {
-		$('#sdm630s2div').hide();
+		$('#swifis2div').hide();
+      } 	
+      if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
+		$('#swifis2div').hide();
+    		$('#sdm630s2div').hide();
 	       	$('#sdm120s2div').show();	
+      } 
+      if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
+		$('#swifis2div').show();
+    		$('#sdm630s2div').hide();
+	       	$('#sdm120s2div').hide();	
       } 
 
 	$('#ladeleistungss2modul').change(function(){
-	        if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
-			$('#sdm630s2div').show(); 
-			$('#sdm120s2div').hide();
-	        } else {
-			$('#sdm630s2div').hide();
-		       	$('#sdm120s2div').show();	
-	        } 
+      if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
+		$('#sdm630s2div').show(); 
+		$('#sdm120s2div').hide();
+		$('#swifis2div').hide();
+      } 	
+      if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
+		$('#swifis2div').hide();
+    		$('#sdm630s2div').hide();
+	       	$('#sdm120s2div').show();	
+      } 
+      if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
+		$('#swifis2div').show();
+    		$('#sdm630s2div').hide();
+	       	$('#sdm120s2div').hide();	
+      } 
 	    });
 });
 </script>
@@ -1470,6 +1758,16 @@ $(function() {
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 <br><br>
 <br><br>
+<div class="row">
+<div class="text-center">
+Open Source made with love!<br>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
+<input type="image" src="./img/btn_donate_SM.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+<img alt="" border="0" src="./img/pixel.gif" width="1" height="1">
+</form>
+</div></div>
 </div>
 </body></html>
 
