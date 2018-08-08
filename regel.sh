@@ -331,7 +331,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 			maxdiff=$((maxdiff - 1 ))
 			#Ladepunkt 1
 			if (( sofortsocstatlp1 == "1" )); then
-				if (( soc >= sofortsoclp1 )); then
+				if (( soc > sofortsoclp1 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 						runs/0m.sh
 						if [[ $debug == "1" ]]; then
@@ -339,7 +339,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
        						fi
 					fi
 				fi
-			else	
+			fi	
 
 			if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
@@ -404,10 +404,10 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 				fi
 				
 			fi
-			fi
+			
 			#Ladepunkt 2
 			if (( sofortsocstatlp2 == "1" )); then
-				if (( soc1 >= sofortsoclp2 )); then
+				if (( soc1 > sofortsoclp2 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						runs/0s1.sh
 						if [[ $debug == "1" ]]; then
@@ -415,7 +415,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
        						fi
 					fi
 				fi
-			else	
+			fi	
 			if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/0s1.sh
@@ -477,7 +477,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 					fi
 				fi
 			fi
-			fi
+			
 			#Ladepunkt 3
 			if [[ $lastmanagements2 == "1" ]]; then
 				aktgeladens2=$(<ramdisk/aktgeladens2)
