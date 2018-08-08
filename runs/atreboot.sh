@@ -329,7 +329,14 @@ if ! grep -Fq "mpm3pmllid=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmllid=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "msmoduslp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "msmoduslp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "msmoduslp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "msmoduslp2=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "nachtladenbisuhrs1=" /var/www/html/openWB/openwb.conf
 then

@@ -37,9 +37,10 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-       if(strpos($line, "lademkwh=") !== false) {
-	       $result .= 'lademkwh='.$_POST['lademlp1']."\n";
-	    } else {
+	if(strpos($line, "lademkwh=") !== false) {
+		$result .= 'lademkwh='.$_POST['lademlp1']."\n";
+		
+		} else {
 	    $result .= $line;
 	    }
 }
@@ -49,8 +50,18 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
        if(strpos($line, "lademstat=") !== false) {
-	       $result .= 'lademstat='.$_POST['lademlp1check']."\n";
-	    } else {
+	       	if($_POST['msmoduslp1'] == 1 )
+		{
+	       $result .= 'lademstat='."1"."\n";
+		} 
+	       	if($_POST['msmoduslp1'] == 2 )
+		{
+		 $result .= 'lademstat='."0"."\n";
+		} 
+		if($_POST['msmoduslp1'] == 0 )
+		{
+		 $result .= 'lademstat='."0"."\n";
+		} } else {
 	    $result .= $line;
 	    }
 }
@@ -70,10 +81,22 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
        if(strpos($line, "lademstats1=") !== false) {
-	       $result .= 'lademstats1='.$_POST['lademlp2check']."\n";
-	    } else {
+	      	if($_POST['msmoduslp2'] == 1 )
+		{
+	       $result .= 'lademstats1='."0"."\n";
+		} 
+	       	if($_POST['msmoduslp2'] == 2 )
+		{
+		 $result .= 'lademstats1='."1"."\n";
+		} 
+		if($_POST['msmoduslp2'] == 0 )
+		{
+		 $result .= 'lademstats1='."0"."\n";
+		} } else {
 	    $result .= $line;
 	    }
+	      
+	      
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
@@ -119,9 +142,19 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-       if(strpos($line, "sofortsocstatlp1=") !== false) {
-	       $result .= 'sofortsocstatlp1='.$_POST['sofortsocstatlp1']."\n";
-	    } else {
+	if(strpos($line, "sofortsocstatlp1=") !== false) {
+	       	if($_POST['msmoduslp1'] == 1 )
+		{
+	       $result .= 'sofortsocstatlp1='."0"."\n";
+		} 
+	       	if($_POST['msmoduslp1'] == 2 )
+		{
+		 $result .= 'sofortsocstatlp1='."1"."\n";
+		} 
+		if($_POST['msmoduslp1'] == 0 )
+		{
+		 $result .= 'sofortsocstatlp1='."0"."\n";
+		} } else {
 	    $result .= $line;
 	    }
 }
@@ -131,8 +164,18 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
        if(strpos($line, "sofortsocstatlp2=") !== false) {
-	       $result .= 'sofortsocstatlp2='.$_POST['sofortsocstatlp2']."\n";
-	    } else {
+	    	if($_POST['msmoduslp2'] == 1 )
+		{
+	       $result .= 'sofortsocstatlp2='."0"."\n";
+		} 
+	       	if($_POST['msmoduslp2'] == 2 )
+		{
+		 $result .= 'sofortsocstatlp2='."1"."\n";
+		} 
+		if($_POST['msmoduslp2'] == 0 )
+		{
+		 $result .= 'sofortsocstatlp2='."0"."\n";
+		} } else {
 	    $result .= $line;
 	    }
 }
@@ -161,6 +204,27 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "msmoduslp1=") !== false) {
+	       $result .= 'msmoduslp1='.$_POST['msmoduslp1']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+       if(strpos($line, "msmoduslp2=") !== false) {
+	       $result .= 'msmoduslp2='.$_POST['msmoduslp2']."\n";
+	    } else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
 header("Location: ../index.php");
 
 }
