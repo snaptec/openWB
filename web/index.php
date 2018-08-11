@@ -286,7 +286,7 @@
 			<form name="sofortll" action="./tools/sofortll.php" method="POST">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<div class="col-xs-3 text-center" style="font-size: 2vw">
+					<div class="col-xs-4 text-center" style="font-size: 2vw">
 						<label for="msmoduslp1">LP1</label>
 
 						<select type="text" name="msmoduslp1" id="msmoduslp1">
@@ -296,10 +296,9 @@
 						</select> 
 
 
-					</div>
 
-					<div id="msmodusmlp1">
-						<div class="col-xs-6" style="font-size: 2vw">
+					<span id="msmodusmlp1">
+						<br><br>
 						<label for="lademlp1">Lademenge</label>
 						<select type="text" name="lademlp1" id="lademlp1">
 						<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
@@ -323,16 +322,11 @@
 						<option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
 						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
-						</div>
-						<div class="col-xs-1 text-center" style="font-size: 2vw">
-						</div>
-
-						<div class="col-xs-2 text-center" style="font-size: 2vw">
+							<br><br>
 							<button><a href="./tools/resetlp1ladem.php">Reset</a></button> 
-						</div>
-					</div>
-					<div id="msmodusslp1">
-						<div class="col-xs-6" style="font-size: 2vw">
+						
+					</span>
+					<span id="msmodusslp1"><br><br>
 						<label for="sofortsoclp1">SoC</label>
 						<select type="text" name="sofortsoclp1" id="sofortsoclp1">
 						<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
@@ -352,20 +346,15 @@
 						<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
 						<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
 						</select> %
-						</div>
-						<div class="col-xs-1 text-center" style="font-size: 2vw">
-						</div>
-					</div>
-					<div id="msmodusnlp1">
-					
-					</div>
+						
+					</span>
+					<span id="msmodusnlp1">
+					<br><br>
+					</span>
 				</div>
-			</div><br>
-			<hr>
-			<div id="ladepunkts111111div">
-			<div class="row"> 
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-3 text-center" style="font-size: 2vw">
+			
+			<span id="ladepunkts111111div">
+			<div class="col-xs-4 text-center" style="font-size: 2vw">
 						<label for="msmoduslp2">LP2</label>
 
 						<select type="text" name="msmoduslp2" id="msmoduslp2">
@@ -375,14 +364,13 @@
 						</select> 
 
 
-					</div>
-					<div id="msmodusnlp2">
 					
-					</div>
-					<div id="msmodusmlp2">
+					<span id="msmodusnlp2">
+					<br><br>
+					</span>
+					<span id="msmodusmlp2">
 
-
-						<div class="col-xs-6" style="font-size: 2vw">
+						<br><br>
 						<label for="lademlp2">Lademenge</label>
 						<select type="text" name="lademlp2" id="lademlp2">
 						<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
@@ -406,16 +394,12 @@
 						<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
 						<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
-						</div>
-						<div class="col-xs-1 text-center" style="font-size: 2vw">
-						</div>
-
-						<div class="col-xs-2 text-center" style="font-size: 2vw">
+						
+							<br><br>
 							<button><a href="./tools/resetlp2ladem.php">Reset</a></button> 
-						</div>
-					</div>
-					<div id="msmodusslp2">
-						<div class="col-xs-6" style="font-size: 2vw">
+						
+					</span>
+					<span id="msmodusslp2"><br><br>
 						<label for="sofortsoclp1">SoC</label>
 						<select type="text" name="sofortsoclp2" id="sofortsoclp2">
 						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
@@ -435,30 +419,25 @@
 						<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
 						<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
 						</select> %
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 2vw">
-					</div>
+				
+						
 
 
-
-					</div>
+					</span>
 				</div>
-				</div><br>
+			
 		
-			</div>
-			<hr>
-			<div class="row" id="ladepunkts222222div">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-3 text-center" style="font-size: 2vw">
-						<div class="form-check">
+			
+			<span id="ladepunkts222222div">
+					<div class="col-xs-4 text-center" style="font-size: 2vw">
+						<span class="form-check">
 						<input type="checkbox" <?php if($lademstats2old == 1) echo 'checked="checked"'; ?> value="1" name="lademlp3check" class="form-check-input" id="lademlp3check">
 							<label class="form-check-label" for="lademlp3check">Aktiv</label>
-						</div>
-					</div>
+						</span>
+					
 			
 
-
-					<div class="col-xs-6" style="font-size: 2vw">
+					<br><br>
 					<label for="lademlp3">Lademenge LP3 </label>
 					<select type="text" name="lademlp3" id="lademlp3">
 					<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
@@ -482,25 +461,19 @@
 					<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
 					<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 					</select> kWh
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 2vw">
-					</div>
-
-					<div class="col-xs-2 text-center" style="font-size: 2vw">
+					<br><br>
 						<button><a href="./tools/resetlp3ladem.php">Reset</a></button> 
-					</div>
-				</div>			
+					
+				</span>			
 			</div>
 
-
-			<hr>
 
 
 
 			<div class="row">
 				<div class="col-xs-12 text-center"> 
 						<div class="col-xs-12 text-center">
-							<div class="col-xs-12 tex-center">
+							<div class="col-xs-12 tex-center"><hr>
 								<h5>Sofortladen Stromstärke</h5><br><br>
 
 							</div>
@@ -665,7 +638,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.73
+					Ver0.74
 				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

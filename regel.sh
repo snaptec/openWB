@@ -939,6 +939,7 @@ if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
 	schaltschwelle="0"
 fi
+
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if grep -q 1 "/var/www/html/openWB/ramdisk/lademodus"; then
@@ -1044,6 +1045,10 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		else
 			exit 0
 		fi
+	fi
+	speicherregelpunkt=$(</var/www/html/openWB/ramdisk/speicher)
+	if (( speicherregelpunkt > 10 )); then
+		runs/0.sh
 	fi
 	if (( ladeleistung < 500 )); then
 		if (( llalt > minimalapv )); then

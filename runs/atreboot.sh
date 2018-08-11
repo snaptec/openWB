@@ -26,6 +26,8 @@ touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 touch /var/www/html/openWB/ramdisk/llkwhs2
+touch /var/www/html/openWB/ramdisk/speicher
+echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
