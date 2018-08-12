@@ -87,7 +87,7 @@ foreach($lines as $line) {
 		} 
 	       	if($_POST['msmoduslp2'] == 2 )
 		{
-		 $result .= 'lademstats1='."1"."\n";
+		 $result .= 'lademstats1='."0"."\n";
 		} 
 		if($_POST['msmoduslp2'] == 0 )
 		{
