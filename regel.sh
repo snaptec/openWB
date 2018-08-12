@@ -1049,6 +1049,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 	speicherregelpunkt=$(</var/www/html/openWB/ramdisk/speicher)
 	if (( speicherregelpunkt > 10 )); then
 		runs/0.sh
+		exit 0
 	fi
 	if (( ladeleistung < 500 )); then
 		if (( llalt > minimalapv )); then

@@ -680,6 +680,10 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+
+
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
@@ -691,7 +695,74 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifitimeoutlp3=") !== false) {
+	    $result .= 'evsewifitimeoutlp3='.$_POST[evsewifitimeoutlp3]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifiiplp3=") !== false) {
+	    $result .= 'evsewifiiplp3='.$_POST[evsewifiiplp3]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifitimeoutlp2=") !== false) {
+	    $result .= 'evsewifitimeoutlp2='.$_POST[evsewifitimeoutlp2]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifiiplp2=") !== false) {
+	    $result .= 'evsewifiiplp2='.$_POST[evsewifiiplp2]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifitimeoutlp1=") !== false) {
+	    $result .= 'evsewifitimeoutlp1='.$_POST[evsewifitimeoutlp1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evsewifiiplp1=") !== false) {
+	    $result .= 'evsewifiiplp1='.$_POST[evsewifiiplp1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 
