@@ -763,6 +763,129 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "leafusername=") !== false) {
+	    $result .= 'leafusername='.$_POST[leafusername]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "leafpasswort=") !== false) {
+	    $result .= 'leafpasswort='.$_POST[leafpasswort]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "leafusernames1=") !== false) {
+	    $result .= 'leafusernames1='.$_POST[leafusernames1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "leafpassworts1=") !== false) {
+	    $result .= 'leafpassworts1='.$_POST[leafpassworts1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3username=") !== false) {
+	    $result .= 'i3username='.$_POST[i3username]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3passwort=") !== false) {
+	    $result .= 'i3passwort='.$_POST[i3passwort]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3vin=") !== false) {
+	    $result .= 'i3vin='.$_POST[i3vin]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3usernames1=") !== false) {
+	    $result .= 'i3usernames1='.$_POST[i3usernames1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3passworts1=") !== false) {
+	    $result .= 'i3passworts1='.$_POST[i3passworts1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "i3vins1=") !== false) {
+	    $result .= 'i3vins1='.$_POST[i3vins1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$i3soc = "/var/www/html/openWB/modules/soc_i3/auth.json";
+$i3soc = fopen($i3soc, 'w');
+fwrite($i3soc,"{".PHP_EOL.'"username": "'.$_POST[i3username].'",'.PHP_EOL.'"password": "'.$_POST[i3passwort].'",'.PHP_EOL.'"vehicle": "'.$_POST[i3vin].'"'.PHP_EOL."}".PHP_EOL);
+$i3soc1 = "/var/www/html/openWB/modules/soc_i3s1/auth.json";
+$i3soc1 = fopen($i3soc1, 'w');
+fwrite($i3soc1,"{".PHP_EOL.'"username": "'.$_POST[i3usernames1].'",'.PHP_EOL.'"password": "'.$_POST[i3passworts1].'",'.PHP_EOL.'"vehicle": "'.$_POST[i3vins1].'"'.PHP_EOL."}".PHP_EOL);
+
+
+
 
 
 

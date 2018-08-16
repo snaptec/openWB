@@ -385,6 +385,13 @@ function getfile() {
 		        $("#soclevel").html(request.responseText);
 		}
 	});
+	$.ajax({
+		url: "/openWB/ramdisk/soc1",
+	        complete: function(request){
+		        $("#soclevel1").html(request.responseText);
+		}
+	});
+
 }
 doInterval = setInterval(getfile, 2000);
 </script>
@@ -900,7 +907,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row">
 		<div class="col-xs-2 text-center bg-info">
-		SoC in %
+		SoC LP1 in %
 		</div>
 		<div class="col-xs-2 text-center bg-info">
 			<div id="soclevel"></div>
@@ -918,6 +925,15 @@ doInterval = setInterval(getfile, 2000);
 			<div id="evuhzdiv"></div>
 
 		</div>
+</div>
+<div class="row">
+	<div class="col-xs-2 text-center bg-info">
+		SoC LP2 in %
+		</div>
+		<div class="col-xs-2 text-center bg-info">
+			<div id="soclevel1"></div>
+		</div>
+
 </div>
 <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 

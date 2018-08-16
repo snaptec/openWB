@@ -93,11 +93,16 @@ echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
+echo 0 > /var/www/html/openWB/ramdisk/soctimer
+echo 0 > /var/www/html/openWB/ramdisk/soctimer1
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
@@ -350,5 +355,46 @@ if [ ! -e /var/www/html/openWB/web/ladelog ]; then
 
 	sudo chmod 777 /var/www/html/openWB/web/ladelog
 fi
+if ! grep -Fq "leafusername=" /var/www/html/openWB/openwb.conf
+then
+	  echo "leafusername=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "leafpasswort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "leafpasswort=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "leafusernames1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "leafusernames1=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "leafpassworts1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "leafpassworts1=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3username=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3passwort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3passwort=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3usernames1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3usernames1=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3passworts1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3passworts1=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3vins1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3vins1=VIN" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "i3vin=" /var/www/html/openWB/openwb.conf
+then
+	  echo "i3vin=VIN" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 

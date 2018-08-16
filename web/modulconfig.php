@@ -356,6 +356,36 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmllid=") !== false) {
 		list(, $mpm3pmllidold) = explode("=", $line);
 	}
+	if(strpos($line, "leafusername=") !== false) {
+		list(, $leafusernameold) = explode("=", $line);
+	}
+	if(strpos($line, "leafpasswort=") !== false) {
+		list(, $leafpasswortold) = explode("=", $line);
+	}
+	if(strpos($line, "leafusernames1=") !== false) {
+		list(, $leafusernames1old) = explode("=", $line);
+	}
+	if(strpos($line, "leafpassworts1=") !== false) {
+		list(, $leafpassworts1old) = explode("=", $line);
+	}
+	if(strpos($line, "i3passworts1=") !== false) {
+		list(, $i3passworts1old) = explode("=", $line);
+	}
+	if(strpos($line, "i3passwort=") !== false) {
+		list(, $i3passwortold) = explode("=", $line);
+	}
+	if(strpos($line, "i3username=") !== false) {
+		list(, $i3usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "i3usernames1=") !== false) {
+		list(, $i3usernames1old) = explode("=", $line);
+	}
+	if(strpos($line, "i3vin=") !== false) {
+		list(, $i3vinold) = explode("=", $line);
+	}
+	if(strpos($line, "i3vins1=") !== false) {
+		list(, $i3vins1old) = explode("=", $line);
+	}
 
 }
 
@@ -717,7 +747,9 @@ $(function() {
 	<b><label for="socmodul">SOC Modul:</label></b>
 	<select type="text" name="socmodul" id="socmodul">
 		<option <?php if($socmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-		<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">soc_http</option>
+		<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">SoC http</option>
+		<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
+		<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
 	</select>
 </div>
 <div id="socmnone">
@@ -736,24 +768,106 @@ $(function() {
 	</div>
 </div>
 
+<div id="socleaf">
+	<div class="row bg-info">
+		<b><label for="leafusername">Benutzername:</label></b>
+		<input type="text" name="leafusername" id="leafusername" value="<?php echo $leafusernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Nissan Connect Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="leafpasswort">Passwort:</label></b>
+		<input type="text" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Nissan Connect Passwort<br><br>
+	</div>
+</div>
+<div id="soci3">
+	<div class="row bg-info">
+		<b><label for="i3username">Benutzername:</label></b>
+		<input type="text" name="i3username" id="i3username" value="<?php echo $i3usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW Services Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="i3passwort">Passwort:</label></b>
+		<input type="text" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW Services Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="i3vin">VIN:</label></b>
+		<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW i3 VIN<br><br>
+	</div>
+
+</div>
+
+
 <script>
 $(function() {
       if($('#socmodul').val() == 'none') {
 		$('#socmnone').show(); 
 		$('#socmhttp').hide();
-      } else {
+		$('#socleaf').hide();
+		$('#soci3').hide();
+
+      } 
+     
+   if($('#socmodul').val() == 'soc_http')   {
 		$('#socmnone').hide();
-	       	$('#socmhttp').show();	
+		$('#socleaf').hide();
+		$('#socmhttp').show();	
+		$('#soci3').hide();
+
+      } 
+   if($('#socmodul').val() == 'soc_leaf')   {
+		$('#socmnone').hide();
+		$('#socleaf').show();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+   } 
+   if($('#socmodul').val() == 'soc_i3')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').show();
       } 
 
 	$('#socmodul').change(function(){
-	        if($('#socmodul').val() == 'none') {
-			$('#socmnone').show(); 
-			$('#socmhttp').hide();
-	        } else {
-			$('#socmnone').hide();
-		       	$('#socmhttp').show();	
-	        } 
+      if($('#socmodul').val() == 'none') {
+		$('#socmnone').show(); 
+		$('#socmhttp').hide();
+		$('#socleaf').hide();
+		$('#soci3').hide();
+
+      } 
+     
+   if($('#socmodul').val() == 'soc_http')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+		$('#socmhttp').show();	
+		$('#soci3').hide();
+
+      } 
+   if($('#socmodul').val() == 'soc_leaf')   {
+		$('#socmnone').hide();
+		$('#socleaf').show();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+   } 
+   if($('#socmodul').val() == 'soc_i3')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').show();
+      } 
 	    });
 });
 </script>
@@ -950,25 +1064,74 @@ Keine Konfiguration erforderlich.<br>
 		<b><label for="socmodul1">SOC Modul für zweiten Ladepunkt:</label></b>
 	<select type="text" name="socmodul1" id="socmodul1">
 		<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-		<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">soc_http</option>
+		<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">SoC Http</option>
+		<option <?php if($socmodul1old == "soc_leafs1\n") echo selected ?> value="soc_leafs1">SoC Nissan Leaf</option>
+		<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
+
 	</select>
 	</div>
 
 	<div id="socmnone1">
-	<br>
+		<br>
 	</div>
 	<div id="socmhttp1">
-	<div class="row">
-		Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
+		<div class="row">
+			Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="hsocip1">SOC zweiter Ladepunkt Http Abfrage URL:</label></b>
+			<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.<br><br>
+		</div>
+	</div>
+
+	<div id="socleaf1">
+	<br>
+	<div class="row bg-info">
+		<b><label for="leafusernames1">Benutzername:</label></b>
+		<input type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="hsocip1">SOC zweiter Ladepunkt Http Abfrage URL:</label></b>
-		<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
+		Nissan Connect Benutzername<br><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.<br><br>
+		<b><label for="leafpassworts1">Passwort:</label></b>
+		<input type="text" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Nissan Connect Passwort<br><br>
 	</div>
 </div>
+<div id="soci31">
+	<div class="row bg-info">
+		<b><label for="i3usernames1">Benutzername:</label></b>
+		<input type="text" name="i3usernames1" id="i3usernames1" value="<?php echo $i3usernames1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW Services Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="i3passworts1">Passwort:</label></b>
+		<input type="text" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW Services Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="i3vins1">VIN:</label></b>
+		<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		BMW i3 VIN<br><br>
+	</div>
+
+</div>
+
+
+
+
 <script>
 $(function() {
       if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
@@ -1014,19 +1177,63 @@ $(function() {
       if($('#socmodul1').val() == 'none') {
 		$('#socmnone1').show(); 
 		$('#socmhttp1').hide();
-      } else {
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+
+
+      } 
+	if($('#socmodul1').val() == 'soc_http1') {
 		$('#socmnone1').hide();
-	       	$('#socmhttp1').show();	
+		$('#socmhttp1').show();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+
+
+      } 
+	if($('#socmodul1').val() == 'soc_leafs1') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').show();
+		$('#soci31').hide();
+      } 
+	if($('#socmodul1').val() == 'soc_i3s1') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').show();
       } 
 
+
 	$('#socmodul1').change(function(){
-	        if($('#socmodul1').val() == 'none') {
-			$('#socmnone1').show(); 
-			$('#socmhttp1').hide();
-	        } else {
-			$('#socmnone1').hide();
-		       	$('#socmhttp1').show();	
-	        } 
+      if($('#socmodul1').val() == 'none') {
+		$('#socmnone1').show(); 
+		$('#socmhttp1').hide();
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+
+
+      } 
+	if($('#socmodul1').val() == 'soc_http1') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').show();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+
+
+      } 
+	if($('#socmodul1').val() == 'soc_leafs1') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').show();
+		$('#soci31').hide();
+      } 
+	if($('#socmodul1').val() == 'soc_i3s1') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').show();
+      } 
+
 	    });
 });
 </script>
