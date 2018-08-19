@@ -187,7 +187,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 		if (( soc >= sofortsoclp1 )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 
-				runs/0m.sh
+				runs/0.sh
 				if [[ $debug == "1" ]]; then
 	        		       	echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
        				fi
