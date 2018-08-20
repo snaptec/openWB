@@ -16,24 +16,24 @@ n=0
 output=$(sudo python /var/www/html/openWB/modules/sdm630modbusll/readsdm.py $sdm630modbusllsource $sdm630modbusllid)
 while read -r line; do
 	if (( $n == 0 )); then
-		lla1=$(echo "$line" |  cut -c2- )
-		lla1=${lla1%??}
-		LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/lla1
-#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla1
+#		lla1=$(echo "$line" |  cut -c2- )
+#		lla1=${lla1%???}
+#		LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/lla1
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla1
 
 	fi
 	if (( $n == 1 )); then
-		lla2=$(echo "$line" |  cut -c2- )
-		lla2=${lla2%??}
-		LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
-#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla2
+#		lla2=$(echo "$line" |  cut -c2- )
+#		lla2=${lla2%???}
+#		LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla2
 
 	fi
 	if (( $n == 2 )); then
-		lla3=$(echo "$line" |  cut -c2- )
-		lla3=${lla3%??}
-		LANG=C printf "%.3f\n" $lla3 > /var/www/html/openWB/ramdisk/lla3
-#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
+#		lla3=$(echo "$line" |  cut -c2- )
+#		lla3=${lla3%???}
+#		LANG=C printf "%.3f\n" $lla3 > /var/www/html/openWB/ramdisk/lla3
+		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
 
 	fi
 if (( $n == 3 )); then
@@ -55,20 +55,20 @@ if (( $n == 6 )); then
 fi
 if (( $n == 7 )); then
 llv1=$(echo "$line" |  cut -c2- )
-llv1=${llv1%??}
+llv1=${llv1%???}
 LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llv1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv1
 
 fi
 if (( $n == 8 )); then
 llv2=$(echo "$line" |  cut -c2- )
-llv2=${llv2%??}
+llv2=${llv2%???}
 LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv2
 fi
 if (( $n == 9 )); then
 llv3=$(echo "$line" |  cut -c2- )
-llv3=${llv3%??}
+llv3=${llv3%???}
 LANG=C printf "%.1f\n" $llv3 > /var/www/html/openWB/ramdisk/llv3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv3
 fi
