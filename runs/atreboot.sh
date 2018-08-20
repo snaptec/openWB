@@ -395,6 +395,14 @@ if ! grep -Fq "i3vin=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3vin=VIN" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "zoeusername=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoeusername=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoepasswort=passwort" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

@@ -386,6 +386,12 @@ foreach($lines as $line) {
 	if(strpos($line, "i3vins1=") !== false) {
 		list(, $i3vins1old) = explode("=", $line);
 	}
+	if(strpos($line, "zoeusername=") !== false) {
+		list(, $zoeusernameold) = explode("=", $line);
+	}
+	if(strpos($line, "zoepasswort=") !== false) {
+		list(, $zoepasswortold) = explode("=", $line);
+	}
 
 }
 
@@ -750,6 +756,7 @@ $(function() {
 		<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">SoC http</option>
 		<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
 		<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
+		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
 	</select>
 </div>
 <div id="socmnone">
@@ -765,6 +772,22 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.<br><br>
+	</div>
+</div>
+<div id="soczoe">
+	<div class="row bg-info">
+		<b><label for="zoeusername">Benutzername:</label></b>
+		<input type="text" name="zoeusername" id="zoeusername" value="<?php echo $zoeusernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Renault Zoe Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="zoepasswort">Passwort:</label></b>
+		<input type="text" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Renault Zoe Passwort<br><br>
 	</div>
 </div>
 
@@ -817,6 +840,8 @@ $(function() {
 		$('#socmhttp').hide();
 		$('#socleaf').hide();
 		$('#soci3').hide();
+		$('#soczoe').hide();
+
 
       } 
      
@@ -825,6 +850,8 @@ $(function() {
 		$('#socleaf').hide();
 		$('#socmhttp').show();	
 		$('#soci3').hide();
+		$('#soczoe').hide();
+
 
       } 
    if($('#socmodul').val() == 'soc_leaf')   {
@@ -832,20 +859,32 @@ $(function() {
 		$('#socleaf').show();
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
+		$('#soczoe').hide();
+
    } 
    if($('#socmodul').val() == 'soc_i3')   {
 		$('#socmnone').hide();
 		$('#socleaf').hide();
 	       	$('#socmhttp').hide();	
 		$('#soci3').show();
-      } 
+		$('#soczoe').hide();
 
+      } 
+   if($('#socmodul').val() == 'soc_zoe')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').show();
+
+      } 
 	$('#socmodul').change(function(){
       if($('#socmodul').val() == 'none') {
 		$('#socmnone').show(); 
 		$('#socmhttp').hide();
 		$('#socleaf').hide();
 		$('#soci3').hide();
+		$('#soczoe').hide();
 
       } 
      
@@ -854,6 +893,7 @@ $(function() {
 		$('#socleaf').hide();
 		$('#socmhttp').show();	
 		$('#soci3').hide();
+		$('#soczoe').hide();
 
       } 
    if($('#socmodul').val() == 'soc_leaf')   {
@@ -861,13 +901,24 @@ $(function() {
 		$('#socleaf').show();
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
+		$('#soczoe').hide();
    } 
    if($('#socmodul').val() == 'soc_i3')   {
 		$('#socmnone').hide();
 		$('#socleaf').hide();
 	       	$('#socmhttp').hide();	
 		$('#soci3').show();
+		$('#soczoe').hide();
+   } 
+   if($('#socmodul').val() == 'soc_zoe')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').show();
+
       } 
+
 	    });
 });
 </script>
@@ -1088,22 +1139,22 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 
 	<div id="socleaf1">
-	<br>
-	<div class="row bg-info">
-		<b><label for="leafusernames1">Benutzername:</label></b>
-		<input type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>"><br>
+		<br>
+		<div class="row bg-info">
+			<b><label for="leafusernames1">Benutzername:</label></b>
+			<input type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Nissan Connect Benutzername<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="leafpassworts1">Passwort:</label></b>
+			<input type="text" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Nissan Connect Passwort<br><br>
+		</div>
 	</div>
-	<div class="row bg-info">
-		Nissan Connect Benutzername<br><br>
-	</div>
-	<div class="row bg-info">
-		<b><label for="leafpassworts1">Passwort:</label></b>
-		<input type="text" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
-	</div>
-	<div class="row bg-info">
-		Nissan Connect Passwort<br><br>
-	</div>
-</div>
 <div id="soci31">
 	<div class="row bg-info">
 		<b><label for="i3usernames1">Benutzername:</label></b>

@@ -29,7 +29,7 @@ class Leaf(object):
         def call(**kwargs):
             url = BASE_URL + name + '.php'
             data = {
-                "RegionCode": 'NNA',
+                "RegionCode": 'NE',
                 "custom_sessionid": self.custom_sessionid,
                 "VIN": self.VIN
             }
