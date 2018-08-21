@@ -908,6 +908,32 @@ foreach($lines as $line) {
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evnotifypasswort=") !== false) {
+	    $result .= 'evnotifypasswort='.$_POST[evnotifypasswort]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "evnotifyakey=") !== false) {
+	    $result .= 'evnotifyakey='.$_POST[evnotifyakey]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+
 
 
 

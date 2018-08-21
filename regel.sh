@@ -1036,6 +1036,28 @@ fi
 #NUR PV Uberschussregelung lademodus 2
 # wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
 if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
+ if [[ $lastmanagement == "0" ]]; then
+	if (( soc < minnurpvsoclp1 )); then
+		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+			runs/$minnurpvsocll.sh
+			if [[ $debug == "1" ]]; then
+				echo "Starte PV Laden da $sofortsoclp1 % zu gering"
+			fi
+
+		fi
+	exit 0
+	fi
+	if (( soc > maxnurpvsoclp1 )); then
+		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+			runs/0.sh
+			if [[ $debug == "1" ]]; then
+				echo "Beende PV Laden da $sofortsoclp1 % erreicht"
+			fi
+		fi
+	exit 0
+	fi
+
+ fi
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		if (( mindestuberschussphasen <= uberschuss )); then
 	  		if [[ $debug == "1" ]]; then

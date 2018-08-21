@@ -392,6 +392,12 @@ foreach($lines as $line) {
 	if(strpos($line, "zoepasswort=") !== false) {
 		list(, $zoepasswortold) = explode("=", $line);
 	}
+	if(strpos($line, "evnotifypasswort=") !== false) {
+		list(, $evnotifypasswortold) = explode("=", $line);
+	}
+	if(strpos($line, "evnotifyakey=") !== false) {
+		list(, $evnotifyakeyold) = explode("=", $line);
+	}
 
 }
 
@@ -757,6 +763,7 @@ $(function() {
 		<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
 		<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
 		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
+		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 	</select>
 </div>
 <div id="socmnone">
@@ -788,6 +795,22 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		Renault Zoe Passwort<br><br>
+	</div>
+</div>
+<div id="socevnotify">
+	<div class="row bg-info">
+		<b><label for="evnotifyakey">Akey:</label></b>
+		<input type="text" name="evnotifyakey" id="evnotifyakey" value="<?php echo $evnotifyakeyold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Akey des EVNotify Kontos<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evnotifypasswort">Passwort:</label></b>
+		<input type="text" name="evnotifypasswort" id="evnotifypasswort" value="<?php echo $evnotifypasswortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Passwort des Kontos<br><br>
 	</div>
 </div>
 
@@ -841,6 +864,7 @@ $(function() {
 		$('#socleaf').hide();
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
 
 
       } 
@@ -851,6 +875,7 @@ $(function() {
 		$('#socmhttp').show();	
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
 
 
       } 
@@ -860,6 +885,7 @@ $(function() {
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -868,6 +894,7 @@ $(function() {
 	       	$('#socmhttp').hide();	
 		$('#soci3').show();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -876,15 +903,27 @@ $(function() {
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
 		$('#soczoe').show();
+		$('#socevnotify').hide();
+
+   }
+   if($('#socmodul').val() == 'soc_evnotify')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').show();
 
       } 
 	$('#socmodul').change(function(){
-      if($('#socmodul').val() == 'none') {
+        if($('#socmodul').val() == 'none') {
 		$('#socmnone').show(); 
 		$('#socmhttp').hide();
 		$('#socleaf').hide();
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
+
 
       } 
      
@@ -894,6 +933,8 @@ $(function() {
 		$('#socmhttp').show();	
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
+
 
       } 
    if($('#socmodul').val() == 'soc_leaf')   {
@@ -902,6 +943,8 @@ $(function() {
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
 		$('#soczoe').hide();
+		$('#socevnotify').hide();
+
    } 
    if($('#socmodul').val() == 'soc_i3')   {
 		$('#socmnone').hide();
@@ -909,13 +952,25 @@ $(function() {
 	       	$('#socmhttp').hide();	
 		$('#soci3').show();
 		$('#soczoe').hide();
-   } 
+		$('#socevnotify').hide();
+
+      } 
    if($('#socmodul').val() == 'soc_zoe')   {
 		$('#socmnone').hide();
 		$('#socleaf').hide();
 	       	$('#socmhttp').hide();	
 		$('#soci3').hide();
 		$('#soczoe').show();
+		$('#socevnotify').hide();
+
+   }
+   if($('#socmodul').val() == 'soc_evnotify')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').show();
 
       } 
 

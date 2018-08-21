@@ -298,6 +298,40 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "minnurpvsocll=") !== false) {
+	    $result .= 'minnurpvsocll='.$_POST[minnurpvsocll]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "minnurpvsoclp1=") !== false) {
+	    $result .= 'minnurpvsoclp1='.$_POST[minnurpvsoclp1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "maxnurpvsoclp1=") !== false) {
+	    $result .= 'maxnurpvsoclp1='.$_POST[maxnurpvsoclp1]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
 
 
 

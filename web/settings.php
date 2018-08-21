@@ -314,6 +314,15 @@ foreach($lines as $line) {
 	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 		list(, $evsewifitimeoutlp3old) = explode("=", $line);
 	}
+	if(strpos($line, "minnurpvsocll=") !== false) {
+		list(, $minnurpvsocllold) = explode("=", $line);
+	}
+	if(strpos($line, "minnurpvsoclp1=") !== false) {
+		list(, $minnurpvsoclp1old) = explode("=", $line);
+	}
+	if(strpos($line, "maxnurpvsoclp1=") !== false) {
+		list(, $maxnurpvsoclp1old) = explode("=", $line);
+	}
 
 }
 
@@ -739,7 +748,91 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 
 <div class="row">
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
-</div>
+</div><br>
+<div class="row">
+	<b><label for="minnurpvsoclp1">Minimal SoC fuer den Nur PV Laden Modus:</label></b>
+	<select type="text" name="minnurpvsoclp1" id="minnurpvsoclp1">
+		<option <?php if($minnurpvsoclp1old == 0) echo selected ?> value="0">0</option>
+		<option <?php if($minnurpvsoclp1old == 5) echo selected ?> value="5">5</option>
+		<option <?php if($minnurpvsoclp1old == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minnurpvsoclp1old == 15) echo selected ?> value="15">15</option>
+		<option <?php if($minnurpvsoclp1old == 20) echo selected ?> value="20">20</option>
+		<option <?php if($minnurpvsoclp1old == 25) echo selected ?> value="25">25</option>
+		<option <?php if($minnurpvsoclp1old == 30) echo selected ?> value="30">30</option>
+		<option <?php if($minnurpvsoclp1old == 35) echo selected ?> value="35">35</option>
+		<option <?php if($minnurpvsoclp1old == 40) echo selected ?> value="40">40</option>
+		<option <?php if($minnurpvsoclp1old == 45) echo selected ?> value="45">45</option>
+		<option <?php if($minnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
+		<option <?php if($minnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
+		<option <?php if($minnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
+		<option <?php if($minnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
+		<option <?php if($minnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
+		<option <?php if($minnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
+		<option <?php if($minnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
+	</select>
+	</div>
+	<div class="row">
+	Definiert einen Mindest SoC Wert bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	</div><br>
+
+
+<div class="row">
+	<b><label for="maxnnurpvsoclp1">Maximal SoC fuer den Nur PV Laden Modus:</label></b>
+	<select type="text" name="maxnurpvsoclp1" id="maxnurpvsoclp1">
+		<option <?php if($maxnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
+		<option <?php if($maxnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
+		<option <?php if($maxnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
+		<option <?php if($maxnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
+		<option <?php if($maxnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
+		<option <?php if($maxnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
+		<option <?php if($maxnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
+		<option <?php if($maxnurpvsoclp1old == 85) echo selected ?> value="85">85</option>
+		<option <?php if($maxnurpvsoclp1old == 90) echo selected ?> value="90">90</option>
+		<option <?php if($maxnurpvsoclp1old == 95) echo selected ?> value="95">95</option>
+		<option <?php if($maxnurpvsoclp1old == 100) echo selected ?> value="100">100</option>
+	</select>
+	</div>
+	<div class="row">
+	Definiert einen Maximal SoC Wert bis zu welchem im Nur PV Modus geladen wird.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	</div>
+<br>
+<div class="row">
+	<b><label for="minnurpvsocll">Stromstaerke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
+	<select type="text" name="minnurpvsocll" id="minnurpvsocll">
+		<option <?php if($minnurpvsocllold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minnurpvsocllold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minnurpvsocllold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minnurpvsocllold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minnurpvsocllold == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minnurpvsocllold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($minnurpvsocllold == 12) echo selected ?> value="12">12</option>
+		<option <?php if($minnurpvsocllold == 13) echo selected ?> value="13">13</option>
+		<option <?php if($minnurpvsocllold == 14) echo selected ?> value="14">14</option>
+		<option <?php if($minnurpvsocllold == 15) echo selected ?> value="15">15</option>
+		<option <?php if($minnurpvsocllold == 16) echo selected ?> value="16">16</option>
+		<option <?php if($minnurpvsocllold == 17) echo selected ?> value="17">17</option>
+		<option <?php if($minnurpvsocllold == 18) echo selected ?> value="18">18</option>
+		<option <?php if($minnurpvsocllold == 19) echo selected ?> value="19">19</option>
+		<option <?php if($minnurpvsocllold == 20) echo selected ?> value="20">20</option>
+		<option <?php if($minnurpvsocllold == 21) echo selected ?> value="21">21</option>
+		<option <?php if($minnurpvsocllold == 22) echo selected ?> value="22">22</option>
+		<option <?php if($minnurpvsocllold == 23) echo selected ?> value="23">23</option>
+		<option <?php if($minnurpvsocllold == 24) echo selected ?> value="24">24</option>
+		<option <?php if($minnurpvsocllold == 25) echo selected ?> value="25">25</option>
+		<option <?php if($minnurpvsocllold == 26) echo selected ?> value="26">26</option>
+		<option <?php if($minnurpvsocllold == 27) echo selected ?> value="27">27</option>
+		<option <?php if($minnurpvsocllold == 28) echo selected ?> value="28">28</option>
+		<option <?php if($minnurpvsocllold == 29) echo selected ?> value="29">29</option>
+		<option <?php if($minnurpvsocllold == 30) echo selected ?> value="30">30</option>
+		<option <?php if($minnurpvsocllold == 31) echo selected ?> value="31">31</option>
+		<option <?php if($minnurpvsocllold == 32) echo selected ?> value="32">32</option>
+	</select></div>
+	<div class="row">
+	Definiert die Ladeleistung wenn Mindest SoC im Nur PV Laden Modus noch nicht erreicht ist.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	</div>
+
+
+
 <br><br>
 	<div class="row">
 		<b><label for="pvbezugeinspeisung">PV Lademodus:</label></b>

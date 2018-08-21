@@ -1,6 +1,8 @@
 #!/bin/bash
 
 cd /var/www/html/openWB
+cp modules/soc_i3/auth.json /tmp/auth.json
+cp modules/soc_i3s1/auth.json /tmp/auth.json.1
 cp openwb.conf /tmp/openwb.conf
 sudo git fetch origin
 sudo git reset --hard origin/master
@@ -9,6 +11,9 @@ sudo chown -R pi:pi openWB
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
+sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
+sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
+
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
 sudo chmod +x /var/www/html/openWB/runs/*

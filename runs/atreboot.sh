@@ -93,8 +93,8 @@ echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
-echo 0 > /var/www/html/openWB/ramdisk/soctimer
-echo 0 > /var/www/html/openWB/ramdisk/soctimer1
+echo 57 > /var/www/html/openWB/ramdisk/soctimer
+echo 57 > /var/www/html/openWB/ramdisk/soctimer1
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -403,6 +403,24 @@ if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "zoepasswort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-
-
+if ! grep -Fq "minnurpvsocll=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minnurpvsocll=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "minnurpvsoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minnurpvsoclp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "maxnurpvsoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "maxnurpvsoclp1=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evnotifyakey=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifyakey=abcdef" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evnotifypasswort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifypasswort=abcdef" >> /var/www/html/openWB/openwb.conf
+fi
 
