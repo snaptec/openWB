@@ -100,7 +100,8 @@ fi
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then
-		soc1=$(timeout 10 modules/$socmodul1/main.sh)
+		timeout 10 modules/$socmodul1/main.sh
+		soc1=$(</var/www/html/openWB/ramdisk/soc1)
 		if ! [[ $soc1 =~ $re ]] ; then
 		 soc1="0"
 		fi
@@ -162,7 +163,8 @@ echo $llkwhges > ramdisk/llkwhges
 
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
-	soc=$(timeout 10 modules/$socmodul/main.sh)
+	timeout 10 modules/$socmodul/main.sh
+	soc=$(</var/www/html/openWB/ramdisk/soc)
 	if ! [[ $soc =~ $re ]] ; then
 	 soc="0"
 	fi

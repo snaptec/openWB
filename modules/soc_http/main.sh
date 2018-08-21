@@ -10,6 +10,6 @@ re='^[0-9]+$'
 if ! [[ $hsoc =~ $re ]] ; then
    hsoc="0"
 fi
-echo $hsoc
+#echo $hsoc
 #zur weiteren verwendung im webinterface
 echo $hsoc > /var/www/html/openWB/ramdisk/soc
