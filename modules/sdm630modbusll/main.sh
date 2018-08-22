@@ -16,24 +16,28 @@ n=0
 output=$(sudo python /var/www/html/openWB/modules/sdm630modbusll/readsdm.py $sdm630modbusllsource $sdm630modbusllid)
 while read -r line; do
 	if (( $n == 0 )); then
-#		lla1=$(echo "$line" |  cut -c2- )
-#		lla1=${lla1%???}
+		lla1=$(echo "$line" |  cut -c2- )
+		lla1=${lla1%???}
 #		LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/lla1
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla1
+#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla1
+		echo "scale=3; $lla1/1" | bc -l > /var/www/html/openWB/ramdisk/lla1
 
 	fi
 	if (( $n == 1 )); then
-#		lla2=$(echo "$line" |  cut -c2- )
-#		lla2=${lla2%???}
+		lla2=$(echo "$line" |  cut -c2- )
+		lla2=${lla2%???}
 #		LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla2
+#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla2
+		echo "scale=3; $lla2/1" | bc -l > /var/www/html/openWB/ramdisk/lla2
 
 	fi
 	if (( $n == 2 )); then
-#		lla3=$(echo "$line" |  cut -c2- )
-#		lla3=${lla3%???}
+		lla3=$(echo "$line" |  cut -c2- )
+		lla3=${lla3%???}
+		echo "scale=3; $lla3/1" | bc -l > /var/www/html/openWB/ramdisk/lla3
+
 #		LANG=C printf "%.3f\n" $lla3 > /var/www/html/openWB/ramdisk/lla3
-		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
+#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/lla3
 
 	fi
 if (( $n == 3 )); then
@@ -44,7 +48,9 @@ if (( $n == 4 )); then
 	llkwh=${llkwh%???}
 	rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 	if [[ $llkwh =~ $rekwh ]]; then 
-		LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
+		#LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
+		echo "scale=3; $llkwh/1" | bc -l > /var/www/html/openWB/ramdisk/llkwh
+
 	fi	
 fi
 if (( $n == 5 )); then
