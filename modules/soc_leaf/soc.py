@@ -6,7 +6,7 @@ import time
 leaftimer = open('/var/www/html/openWB/ramdisk/soctimer', 'r')
 leaftimer = int(leaftimer.read())
 
-if ( leaftimer < 120 ):
+if ( leaftimer < 181 ):
     leaftimer += 1
     f = open('/var/www/html/openWB/ramdisk/soctimer', 'w')
     f.write(str(leaftimer))
