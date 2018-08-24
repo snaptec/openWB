@@ -9,9 +9,10 @@ if (( ladeleistung > 500 )); then
 		bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladen > ramdisk/aktgeladen
 		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
-		LC_NUMERIC=C printf "%.1f\n" $gelrlp1 > ramdisk/gelrlp1
+		gelrlp1=${gelrlp1%.*}
+		echo $gelrlp1 > ramdisk/gelrlp1
 		restzeitlp1=$(echo "scale=6;($lademkwh - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
-		restzeitlp1=$(printf %.0f $restzeitlp1)
+		restzeitlp1=${restzeitlp1%.*}
 		if (( restzeitlp1 > 60 )); then
 			restzeitlp1h=$((restzeitlp1 / 60))
 			restzeitlp1r=$((restzeitlp1 % 60))
@@ -44,7 +45,7 @@ else
 			ladedauers=$((jetzts - ladeustarts))
 			ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
 			gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
-			gelrlp1=$(LC_NUMERIC=C printf "%.1f\n" $gelrlp1)
+			gelrlp1=${gelrlp1%.*}
 			if (( ladedauer > 60 )); then
 				ladedauerh=$((ladedauer / 60))
 				laderest=$((ladedauer % 60))
@@ -67,9 +68,10 @@ if (( ladeleistungs1 > 500 )); then
 		bishergeladens1=$(echo "scale=3;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens1 > ramdisk/aktgeladens1
 		gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
-		LC_NUMERIC=C printf "%.1f\n" $gelrlp2 > ramdisk/gelrlp2
+		gelrlp2=${gelrlp2%.*}
+		echo $gelrlp2 > ramdisk/gelrlp2
 		restzeitlp2=$(echo "scale=6;($lademkwhs1 - $bishergeladens1)/ $ladeleistungs1 * 1000 * 60" |bc)
-		restzeitlp2=$(printf %.0f $restzeitlp2)
+		restzeitlp2=${restzeitlp2%.*}
 		if (( restzeitlp2 > 60 )); then
 			restzeitlp2h=$((restzeitlp2 / 60))
 			restzeitlp2r=$((restzeitlp2 % 60))
@@ -104,7 +106,7 @@ else
 			ladedauerss1=$((jetztss1 - ladeustartss1))
 			ladegeschws1=$(echo "scale=3;$bishergeladens1 * 60 * 60 / $ladedauerss1" |bc)
 			gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
-			gelrlp2=$(LC_NUMERIC=C printf "%.1f\n" $gelrlp2)
+			gelrlp2=${gelrlp2%.*}
 			if (( ladedauers1 > 60 )); then
 				ladedauerhs1=$((ladedauers1 / 60))
 				laderests1=$((ladedauers1 % 60))
@@ -128,9 +130,10 @@ if (( ladeleistungs2 > 500 )); then
 		bishergeladens2=$(echo "scale=3;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens2 > ramdisk/aktgeladens2
 		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
-		LC_NUMERIC=C printf "%.1f\n" $gelrlp3 > ramdisk/gelrlp3
+		gelrlp3=${gelrlp3%.*}
+		echo $gelrlp3 > ramdisk/gelrlp3
 		restzeitlp3=$(echo "scale=5;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000" |bc)
-		restzeitlp3=$(printf %.0f $restzeitlp3)
+		restzeitlp3=${restzeitlp3%.*}
 		if (( restzeitlp3 > 60 )); then
 			restzeitlp3h=$((restzeitlp3 / 60))
 			restzeitlp3r=$((restzeitlp3 % 60))
@@ -164,7 +167,7 @@ else
 			ladedauerss2=$((jetztss2 - ladeustartss2))
 			ladegeschws2=$(echo "scale=3;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
 			gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
-			gelrlp3=$(LC_NUMERIC=C printf "%.1f\n" $gelrlp3)
+			gelrlp3=${gelrlp3%.*}
 	
 			if (( ladedauers2 > 60 )); then
 				ladedauerhs2=$((ladedauers2 / 60))

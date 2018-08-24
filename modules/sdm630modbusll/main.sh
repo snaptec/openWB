@@ -62,20 +62,23 @@ fi
 if (( $n == 7 )); then
 llv1=$(echo "$line" |  cut -c2- )
 llv1=${llv1%???}
-LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llv1
+echo "scale=1; $llv1/1" | bc -l > /var/www/html/openWB/ramdisk/llv1
+#LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llv1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv1
 
 fi
 if (( $n == 8 )); then
 llv2=$(echo "$line" |  cut -c2- )
 llv2=${llv2%???}
-LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
-#		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv2
+echo "scale=1; $llv2/1" | bc -l > /var/www/html/openWB/ramdisk/llv2
+#LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
+#echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv2
 fi
 if (( $n == 9 )); then
 llv3=$(echo "$line" |  cut -c2- )
 llv3=${llv3%???}
-LANG=C printf "%.1f\n" $llv3 > /var/www/html/openWB/ramdisk/llv3
+echo "scale=1; $llv3/1" | bc -l > /var/www/html/openWB/ramdisk/llv3
+#LANG=C printf "%.1f\n" $llv3 > /var/www/html/openWB/ramdisk/llv3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/llv3
 fi
 if (( $n == 10 )); then
@@ -95,26 +98,22 @@ fi
 if (( $n == 12 )); then
 llpf1=$(echo "$line" |  cut -c2- )
 llpf1=${llpf1%??}
-LANG=C printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpf1
+echo "scale=3; $llpf1/1" | bc -l > /var/www/html/openWB/ramdisk/llpf1
+#LANG=C printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpf1
 
 fi
 if (( $n == 13 )); then
 llpf2=$(echo "$line" |  cut -c2- )
 llpf2=${llpf2%??}
-LANG=C printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpf2
+echo "scale=3; $llpf2/1" | bc -l > /var/www/html/openWB/ramdisk/llpf2
+#LANG=C printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpf2
 fi
 if (( $n == 14 )); then
 llpf3=$(echo "$line" |  cut -c2- )
 llpf3=${llpf3%??}
-LANG=C printf "%.3f\n" $llpf3 > /var/www/html/openWB/ramdisk/llpf3
+echo "scale=3; $llpf3/1" | bc -l > /var/www/html/openWB/ramdisk/llpf3
+#LANG=C printf "%.3f\n" $llpf3 > /var/www/html/openWB/ramdisk/llpf3
 fi
-
-
-
-
-
-
-
 
 	
 	n=$((n + 1))
