@@ -640,7 +640,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.86				</div>
+					Ver0.9				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 

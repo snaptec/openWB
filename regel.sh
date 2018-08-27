@@ -31,6 +31,7 @@ if [[ $pvwattmodul != "none" ]]; then
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
+
 	if [[ $debug == "1" ]]; then
                 date
 		echo pvwatt $pvwatt
@@ -38,33 +39,7 @@ if [[ $pvwattmodul != "none" ]]; then
 else
 	pvwatt=0
 fi
-#Wattbezug
-if [[ $wattbezugmodul != "none" ]]; then
-	wattbezug=$(modules/$wattbezugmodul/main.sh)
-	if ! [[ $wattbezug =~ $re ]] ; then
-	wattbezug="0"
-	fi
-	#uberschuss zur berechnung
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	uberschuss=$((wattbezugint * -1))
-	if [[ $debug == "1" ]]; then
-		echo wattbezug $wattbezug
-		echo uberschuss $uberschuss
-	fi
-	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
-	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
-	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
-	evua1=$(echo $evua1 | sed 's/\..*$//')
-	evua2=$(echo $evua2 | sed 's/\..*$//')
-	evua3=$(echo $evua3 | sed 's/\..*$//')
-else
-	wattbezug=$pvwatt
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	wattbezugint=$(echo "($wattbezugint+300)" |bc)
-	echo "$wattbezugint" > /var/www/html/openWB/ramdisk/wattbezug
-	uberschuss=$((wattbezugint * -1))
 
-fi
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
 	timeout 10 modules/$ladeleistungmodul/main.sh
@@ -160,7 +135,33 @@ echo $llkwhges > ramdisk/llkwhges
 		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23"
 		echo evua 1,2,3 "$evua1" "$evua2" "$evua3"
         fi
+#Wattbezug
+if [[ $wattbezugmodul != "none" ]]; then
+	wattbezug=$(modules/$wattbezugmodul/main.sh)
+	if ! [[ $wattbezug =~ $re ]] ; then
+	wattbezug="0"
+	fi
+	#uberschuss zur berechnung
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
+	uberschuss=$((wattbezugint * -1))
+	if [[ $debug == "1" ]]; then
+		echo wattbezug $wattbezug
+		echo uberschuss $uberschuss
+	fi
+	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
+	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
+	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
+	evua1=$(echo $evua1 | sed 's/\..*$//')
+	evua2=$(echo $evua2 | sed 's/\..*$//')
+	evua3=$(echo $evua3 | sed 's/\..*$//')
+else
+	wattbezug=$pvwatt
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
+	wattbezugint=$(echo "($wattbezugint+$hausbezugnone+$ladeleistung)" |bc)
+	echo "$wattbezugint" > /var/www/html/openWB/ramdisk/wattbezug
+	uberschuss=$((wattbezugint * -1))
 
+fi
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
 	timeout 10 modules/$socmodul/main.sh

@@ -398,7 +398,18 @@ foreach($lines as $line) {
 	if(strpos($line, "evnotifyakey=") !== false) {
 		list(, $evnotifyakeyold) = explode("=", $line);
 	}
-
+	if(strpos($line, "wrjsonurl=") !== false) {
+		list(, $wrjsonurlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wrjsonwatt=") !== false) {
+		list(, $wrjsonwattold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wrjsonkwh=") !== false) {
+		list(, $wrjsonkwhold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hausbezugnone=") !== false) {
+		list(, $hausbezugnoneold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -407,7 +418,9 @@ $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
-
+$wrjsonurlold = str_replace( "'", "", $wrjsonurlold);
+$wrjsonwattold = str_replace( "'", "", $wrjsonwattold);
+$wrjsonkwhold = str_replace( "'", "", $wrjsonkwhold);
 
 
 
@@ -1645,6 +1658,15 @@ $(function() {
 	Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
 <div id="wattbezugnone">
+<div class="row bg-info">
+	<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
+	<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV Modul<br><br>
+</div>
+
+
 	<br>
 </div>
 <div id="wattbezugsdm">
@@ -1854,11 +1876,12 @@ $(function() {
 	<b><label for="pvwattmodul">PV Modul:</label></b>
 	<select type="text" name="pvwattmodul" id="pvwattmodul">
 		<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">wr_fronius</option>
-		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">sdm630modbuswr</option>
-		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">vzloggerpv</option>
-		<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">wr_http</option>
+		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">Fronius WR</option>
+		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">sdm630modbus</option>
+		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">vzlogger</option>
+		<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">WR mit URL abfragen</option>
 		<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">smaemd_pv</option>
+		<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
 </select>
 </div>
 <div class="row">
@@ -1867,6 +1890,30 @@ $(function() {
 <div id="pvnone">
 	<br>
 </div>
+<div id="pvwrjson">
+	<div class="row">
+		<b><label for="wrjsonurl">WR URL:</label></b>
+		<input type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="wrjsonwatt">Json Abfrage für Watt:</label></b>
+		<input type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo $wrjsonwattold ?>"><br>
+	</div>
+	<div class="row">
+		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
+	</div>
+	<div class="row">
+		<b><label for="wrjsonkwh">Json Abfrage für kWh:</label></b>
+		<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>"><br>
+	</div>
+	<div class="row">
+		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
+	</div>
+</div>
+
 <div id="pvwrfronius">
 	<div class="row">
 		<b><label for="wrfroniusip">WR Fronius IP:</label></b>
@@ -1953,6 +2000,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
@@ -1962,6 +2010,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -1971,6 +2020,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -1980,6 +2030,7 @@ $(function() {
 		$('#pvnone').show();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
    } 
    if($('#pvwattmodul').val() == 'wr_http')   {
@@ -1988,7 +2039,9 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').show();
- 		$('#pvsma').hide();
+		$('#pvsma').hide();
+		$('#pvwrjson').hide();
+
      } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -1996,7 +2049,19 @@ $(function() {
 		$('#pvwrfronius').hide();
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
- 		$('#pvsma').show();
+		$('#pvsma').show();
+		$('#pvwrjson').hide();
+
+   }
+   if($('#pvwattmodul').val() == 'wr_json')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+		$('#pvsma').hide();
+		$('#pvwrjson').show();
+
      } 
 	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -2006,7 +2071,8 @@ $(function() {
 		$('#pvnone').hide();
  		$('#pvhttp').hide();
    		$('#pvsma').hide();
-   
+   		$('#pvwrjson').hide();
+
 	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2015,6 +2081,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
@@ -2024,6 +2091,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
       } 
    if($('#pvwattmodul').val() == 'none')   {
@@ -2033,6 +2101,7 @@ $(function() {
 		$('#pvnone').show();
 		$('#pvhttp').hide();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
@@ -2042,6 +2111,7 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').show();
 		$('#pvsma').hide();
+		$('#pvwrjson').hide();
 
    } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
@@ -2051,8 +2121,19 @@ $(function() {
 		$('#pvnone').hide();
 		$('#pvhttp').hide();
 		$('#pvsma').show();
+		$('#pvwrjson').hide();
 
       } 
+   if($('#pvwattmodul').val() == 'wr_json')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+		$('#pvsma').hide();
+		$('#pvwrjson').show();
+
+     } 
 
 	});
 });

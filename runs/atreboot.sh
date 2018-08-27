@@ -423,4 +423,19 @@ if ! grep -Fq "evnotifypasswort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifypasswort=abcdef" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrjsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrjsonkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrjsonkwh=.kwh" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrjsonurl=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
+fi
