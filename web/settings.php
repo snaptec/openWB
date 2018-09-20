@@ -355,7 +355,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 <form action="./tools/savemain.php" method="POST">
 
 <div class="row">
-	<b><label for="minimalstromstaerke">Minimalstromstaerke in A:</label></b>
+	<b><label for="minimalstromstaerke">Minimalstromstärke in A:</label></b>
 	<select type="text" name="minimalstromstaerke" id="minimalstromstaerke">
 		<option <?php if($minimalstromstaerkeold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minimalstromstaerkeold == 7) echo selected ?> value="7">7</option>
@@ -368,7 +368,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird.<br><br>
 </div>
 <div class="row">
-	<b><label for="maximalstromstaerke">Maximalstromstaerke in A:</label></b>
+	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
 	<select type="text" name="maximalstromstaerke" id="maximalstromstaerke">
 		<option <?php if($maximalstromstaerkeold == 11) echo selected ?> value="11">11</option>
 		<option <?php if($maximalstromstaerkeold == 12) echo selected ?> value="12">12</option>
@@ -707,7 +707,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 <br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
 </div><br>
 <div class="row">
-	<b><label for="minimalampv">Minimalstromstaerke fuer den Min + PV Laden Modus:</label></b>
+	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
 	<select type="text" name="minimalampv" id="minimalampv">
 		<option <?php if($minimalampvold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minimalampvold == 7) echo selected ?> value="7">7</option>
@@ -728,7 +728,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
 </div>
 <div class="row">
-	<b><label for="minimalapv">Minimalstromstaerke fuer den Nur PV Laden Modus:</label></b>
+	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus:</label></b>
 	<select type="text" name="minimalapv" id="minimalapv">
 		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
@@ -797,7 +797,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	</div>
 <br>
 <div class="row">
-	<b><label for="minnurpvsocll">Stromstaerke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
+	<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
 	<select type="text" name="minnurpvsocll" id="minnurpvsocll">
 		<option <?php if($minnurpvsocllold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minnurpvsocllold == 7) echo selected ?> value="7">7</option>

@@ -86,7 +86,42 @@ function getfile() {
 }
 doInterval = setInterval(getfile, 2000);
 </script>
-
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/bezugw1",
+	        complete: function(request){
+		        $("#bezugw1div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/bezugw2",
+	        complete: function(request){
+		        $("#bezugw2div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+var doInterval;
+function getfile() {
+	$.ajax({
+		url: "/openWB/ramdisk/bezugw3",
+	        complete: function(request){
+		        $("#bezugw3div").html(request.responseText);
+		}
+	});
+}
+doInterval = setInterval(getfile, 2000);
+</script>
 <script type='text/javascript'>
 var doInterval;
 function getfile() {
@@ -670,21 +705,6 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-warning">
 	<div class="col-xs-4 text-center bg-warning">
-		EVU Power Faktor
-	</div>
-	<div class="col-xs-2 text-center bg-warning">
-		<div id="evupf1div"></div>
-	</div>
-	<div class="col-xs-2 text-center bg-warning">
-		<div id="evupf2div"></div>
-	</div>
-	<div class="col-xs-2 text-center bg-warning">
-		<div id="evupf3div"></div>
-	</div>
-</div>
-<hr>
-<div class="row bg-warning">
-	<div class="col-xs-4 text-center bg-warning">
 		EVU Stromstaerke in A
 	</div>
 	<div class="col-xs-2 text-center bg-warning">
@@ -695,6 +715,36 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 	<div class="col-xs-2 text-center bg-warning">
 		<div id="bezuga3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-warning">
+	<div class="col-xs-4 text-center bg-warning">
+		EVU Leistung in Watt
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezugw1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezugw2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="bezugw3div"></div>
+	</div>
+</div>
+<hr>
+<div class="row bg-warning">
+	<div class="col-xs-4 text-center bg-warning">
+		EVU Power Faktor
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf1div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf2div"></div>
+	</div>
+	<div class="col-xs-2 text-center bg-warning">
+		<div id="evupf3div"></div>
 	</div>
 </div>
 <hr>

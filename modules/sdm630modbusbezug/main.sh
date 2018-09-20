@@ -133,6 +133,12 @@ done <<< "$output"
 
 
 wattbezug=`echo "($wl1+$wl2+$wl3)" |bc`
+echo $wl1 > /var/www/html/openWB/ramdisk/bezugw1
+echo $wl2 > /var/www/html/openWB/ramdisk/bezugw2
+echo $wl3 > /var/www/html/openWB/ramdisk/bezugw3
+
+
+
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 ikwh11=${ikwh1%??}

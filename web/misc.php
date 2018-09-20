@@ -382,7 +382,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<button type="submit" class="btn btn-primary btn-green">Save</button>	 
 	</form><br><br /><hr>
 	<div class="row">
-		Ein Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
+		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-primary btn-red">Backup erstellen</button>

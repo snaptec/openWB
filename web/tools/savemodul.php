@@ -978,7 +978,39 @@ foreach($lines as $line) {
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
-
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmpvsource=") !== false) {
+	    $result .= 'mpm3pmpvsource='.$_POST[mpm3pmpvsource]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmpvid=") !== false) {
+	    $result .= 'mpm3pmpvid='.$_POST[mpm3pmpvid]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmpvlanip=") !== false) {
+	    $result .= 'mpm3pmpvlanip='.$_POST[mpm3pmpvlanip]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 

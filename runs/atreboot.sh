@@ -36,6 +36,9 @@ echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/bezuga1
 echo 0 > /var/www/html/openWB/ramdisk/bezuga2
 echo 0 > /var/www/html/openWB/ramdisk/bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/bezugw1
+echo 0 > /var/www/html/openWB/ramdisk/bezugw2
+echo 0 > /var/www/html/openWB/ramdisk/bezugw3
 echo 0 > /var/www/html/openWB/ramdisk/llv1
 echo 0 > /var/www/html/openWB/ramdisk/llv2
 echo 0 > /var/www/html/openWB/ramdisk/llv3
@@ -439,3 +442,16 @@ if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mpm3pmpvsource=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmpvsource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmpvid=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmpvid=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmpvlanip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmpvlanip=192.168.1.12" >> /var/www/html/openWB/openwb.conf
+fi
+
