@@ -264,17 +264,17 @@
 			<div class="row" id="sofortlmdiv1" style="font-size: 2vw">
 				<div class="col-xs-4 text-center">
 					<div id="lademstat1div">
-					Restzeit <span id="restzeitlp1div"></span> H
+					Restzeit <span id="restzeitlp1div"></span> 
 					</div>
 				</div>
 				<div id="ladepunkts1111111div" class="col-xs-4 text-center">
 					<div id="lademstats1div1">
-					Restzeit <span id="restzeitlp2div"></span> H
+					Restzeit <span id="restzeitlp2div"></span> 
 					</div>	
 				</div>
 				<div id="ladepunkts2222222div" class="col-xs-4 text-center">
 					<div id="lademstats2div1">
-					Restzeit <span id="restzeitlp3div"></span> H
+					Restzeit <span id="restzeitlp3div"></span> 
 					</div>
 				</div>
 			</div>

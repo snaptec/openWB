@@ -24,7 +24,6 @@ Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Übers
 
 
 # Was wird benötigt?
-
 Hardware:
 
 
@@ -114,6 +113,14 @@ Modbus Adapter anschließen:
 A an A und B an B verkabeln. Es kann je nach Adapter erforderlich sein einen Abschlusswiderstand zu montieren.
 
 150 Ohm haben sich als brauchbar erwiesen
+
+
+
+Software:
+
+Installiertes Raspbian auf einem Raspberry pi 3.
+
+Installationsanleitung für Windows: http://openwb.de/img/install_openWB_v1.pdf
 
 
 Raspbian installieren
