@@ -3,14 +3,14 @@
 
 
 
-Die Software steht zur nicht kommerziellen Nutzung frei für jeden zur Verfügung.
+Die Software steht frei für jeden zur Verfügung, siehe GPLv3 Bedingungen.
 
 	Unterstüztung ist gerne gesehen!
 	Sei es in Form von Code oder durch Spenden
 	Spenden bitte an info@snaptec.org
 
-Kommerzielle Anfragen ebenso an info@snaptec.org
-Weitere Infos unter http://openwb.de
+Anfragen für Supportverträge ebenso an info@snaptec.org
+Weitere Infos unter https://openwb.de
 
 # Haftungsausschluss
 Es wird mit Kleinspannung aber auch 220V beim Anschluss der EVSE gearbeitet. 
@@ -38,6 +38,7 @@ Hardware:
 - Ladekabel mit CP-Steuerleitung (CP => Control Pilot)
 - 2x PP- Abschlusswiderstände je Ladekabelende für max. Ladestromstärke des Ladekabels/Stecker/Buchse
 - Typ1/2 Stecker
+- Ggf. ein FI Typ B
 
 # Installation
 
