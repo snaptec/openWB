@@ -5,7 +5,7 @@ BASE_URL = 'https://gdcportalgw.its-mo.com/api_v180117_NE/gdc/'
 
 class Leaf(object):
     """Make requests to the Nissan Connect API to get Leaf Info"""
-    custom_sessionid  = None
+    custom_sessionid = None
     VIN = None
 
     def __init__(self, username=None, password=None, custom_sessionid=None, VIN=None):
@@ -38,6 +38,6 @@ class Leaf(object):
             r = requests.post(url, data=data)
             r.raise_for_status()
             if not r.json()['status'] == 200:
-            	raise Exception('Error making request.  Perhaps the session has expired.')
+                raise Exception('Error making request.  Perhaps the session has expired.')
             return r.json()
         return call

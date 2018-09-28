@@ -6,12 +6,12 @@ import time
 leaftimer = open('/var/www/html/openWB/ramdisk/soctimer', 'r')
 leaftimer = int(leaftimer.read())
 
-if ( leaftimer < 181 ):
+if leaftimer < 181:
     leaftimer += 1
     f = open('/var/www/html/openWB/ramdisk/soctimer', 'w')
     f.write(str(leaftimer))
     f.close()
-    if ( leaftimer == 10 ):
+    if leaftimer == 10:
         from leaf import Leaf
         leaf = Leaf(sys.argv[1], sys.argv[2])
         socit = leaf.BatteryStatusRecordsRequest()
@@ -19,7 +19,7 @@ if ( leaftimer < 181 ):
         f = open('/var/www/html/openWB/ramdisk/soc', 'w')
         f.write(str(justsoc))
         f.close()
-    if ( leaftimer == 60 ):
+    if leaftimer == 60:
         from leaf import Leaf
         leaf = Leaf(sys.argv[1], sys.argv[2])
         socit = leaf.BatteryStatusRecordsRequest()
@@ -42,9 +42,3 @@ else:
     f = open('/var/www/html/openWB/ramdisk/soc', 'w')
     f.write(str(justsoc))
     f.close()
-
-
-    
-    
-
-
