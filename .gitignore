@@ -1,0 +1,7 @@
+# .gitignore file
+#
+
+# pyc - compiled python will be generated automatic if needed
+#  https://stackoverflow.com/questions/5551269/ignore-file-pyc-in-git-repository
+*.pyc
+
