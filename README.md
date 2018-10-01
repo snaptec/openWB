@@ -43,6 +43,22 @@ Hardware:
 - Typ1/2 Stecker
 - Ggf. ein FI Typ B
 
+
+
+# Bausatz
+OpenWB gibt es unter 
+
+	https://openwb.de/shop/?product=openwb-kompletter-bausatz-3-phasig-kopie
+
+auch als Bausatz zu kaufen.
+
+Verdrahtungsplan für den Bausatz für den Elektriker:
+	
+	http://openwb.de/images/OpenWBBausatz_Verdrahtungsplan.pdf
+
+
+
+
 # Installation
 
 Hardware:
@@ -118,15 +134,6 @@ A an A und B an B verkabeln. Es kann je nach Adapter erforderlich sein einen Abs
 
 150 Ohm haben sich als brauchbar erwiesen
 
-
-OpenWB gibt es unter 
-
-	https://openwb.de/shop/?product=openwb-kompletter-bausatz-3-phasig-kopie
-
-auch als Bausatz zu kaufen.
-Verdrahtungsplan für den Bausatz für den Elektriker:
-	
-	http://openwb.de/images/OpenWBBausatz_Verdrahtungsplan.pdf
 
 
 Software:
