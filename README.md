@@ -22,6 +22,9 @@ Keine Gewährleistung für die Software - use at your own RISK!
 # Wofür?
 Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Überschussladung, Lastmanagement mehrerer WB und einiges mehr in Zukunft.
 
+Unterstützt wird jedes EV das den AC Ladestandard unterstützt.
+Getestet bisher: Ion, Ioniq, Soul, eGolf, Zoe, Model S/X, i3.
+
 
 # Was wird benötigt?
 Hardware:
@@ -115,6 +118,15 @@ A an A und B an B verkabeln. Es kann je nach Adapter erforderlich sein einen Abs
 
 150 Ohm haben sich als brauchbar erwiesen
 
+
+OpenWB gibt es unter 
+
+	https://openwb.de/shop/?product=openwb-kompletter-bausatz-3-phasig-kopie
+
+auch als Bausatz zu kaufen.
+Verdrahtungsplan für den Bausatz für den Elektriker:
+	
+	http://openwb.de/images/OpenWBBausatz_Verdrahtungsplan.pdf
 
 
 Software:
