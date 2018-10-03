@@ -112,7 +112,7 @@ if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
+if pgrep -f "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
 then
 	echo "test" > /dev/null
 else

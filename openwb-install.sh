@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 echo "update system"
 apt-get update
@@ -8,8 +8,9 @@ if ! [ -x "$(command -v vim)" ]; then
 	apt-get -qq install -y vim
 	echo "... installed"
 else
-	    echo "...ok"
+	echo "...ok"
 fi
+
 echo "check for timezone"
 if  grep -Fxq "Europe/Berlin" /etc/timezone
 then
@@ -23,6 +24,14 @@ fi
 echo "check for bc"
 if ! [ -x "$(command -v bc)" ];then
 	apt-get -qq install bc
+	echo "...installed"
+else
+	echo "...ok"
+fi
+
+echo "check for procps"
+if ! [ -x "$(command -v pgrep)" ];then
+	apt-get -qq install procps
 	echo "...installed"
 else
 	echo "...ok"
