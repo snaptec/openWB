@@ -454,4 +454,20 @@ if ! grep -Fq "mpm3pmpvlanip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmpvlanip=192.168.1.12" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "bezugjsonwatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezugjsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezugjsonkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezugjsonkwh=.kwh" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "einspeisungjsonkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "einspeisungjsonkwh=.kwh" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezugjsonurl=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezugjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
+fi
+sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

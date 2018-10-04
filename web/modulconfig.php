@@ -420,6 +420,19 @@ foreach($lines as $line) {
 	if(strpos($line, "hausbezugnone=") !== false) {
 		list(, $hausbezugnoneold) = explode("=", $line);
 	}
+	if(strpos($line, "bezugjsonurl=") !== false) {
+		list(, $bezugjsonurlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezugjsonwatt=") !== false) {
+		list(, $bezugjsonwattold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezugjsonkwh=") !== false) {
+		list(, $bezugjsonkwhold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "einspeisungjsonkwh=") !== false) {
+		list(, $einspeisungjsonkwhold) = explode("=", $line, 2);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -482,7 +495,7 @@ $wrjsonkwhold = str_replace( "'", "", $wrjsonkwhold);
 		<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
 	</div>
 	<div class="row bg-success">
-	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
+	Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Der benötigte Wert sollte <a href="../ramdisk/i2csearch">HIER</a> zu finden sein. <br> Alternativ rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
 	</div>
 </div>
 <div id="evseconswifi">
@@ -1659,6 +1672,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">VZLogger</option>
 		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">SDM 630</option>
 		<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
+		<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 	</select>
@@ -1768,7 +1782,38 @@ $(function() {
 		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
 	</div>
 </div>
-	
+<div id="wattbezugjson">
+	<div class="row">
+		<b><label for="bezugjsonurl">Bezug URL:</label></b>
+		<input type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo $bezugjsonurlold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="bezugjsonwatt">Json Abfrage für Watt:</label></b>
+		<input type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo $bezugjsonwattold ?>"><br>
+	</div>
+	<div class="row">
+		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
+	</div>
+	<div class="row">
+		<b><label for="bezugjsonkwh">Json Abfrage für Bezug kWh:</label></b>
+		<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>"><br>
+	</div>
+	<div class="row">
+		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
+	</div>
+	<div class="row">
+		<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung kWh:</label></b>
+		<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>"><br>
+	</div>
+	<div class="row">
+		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerSelfSupplied - ohne die - - eingetragen werden<br><br>
+	</div>
+
+</div>
+
 
 <script>
 $(function() {
@@ -1779,6 +1824,8 @@ $(function() {
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+
 
 
       } 
@@ -1789,6 +1836,8 @@ $(function() {
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -1798,6 +1847,8 @@ $(function() {
 		$('#wattbezughttp').hide();
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+
 
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -1806,7 +1857,9 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
  		$('#wattbezugsma').hide();
- 		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -1814,7 +1867,9 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').show();
- 		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -1822,7 +1877,19 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').hide();
- 		$('#wattbezugfronius').show();
+		$('#wattbezugfronius').show();
+		$('#wattbezugjson').hide();
+
+   }
+   if($('#wattbezugmodul').val() == 'bezug_json')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').show();
+
     } 
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
@@ -1831,7 +1898,8 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').hide();
- 		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -1841,7 +1909,7 @@ $(function() {
 		$('#wattbezughttp').hide();
  		$('#wattbezugsma').hide();
  		$('#wattbezugfronius').hide();
-
+		$('#wattbezugjson').hide();
       } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
@@ -1849,7 +1917,8 @@ $(function() {
 		$('#wattbezugnone').show();
 		$('#wattbezughttp').hide();
   		$('#wattbezugsma').hide();
-  		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
     } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
@@ -1857,7 +1926,8 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').show();
   		$('#wattbezugsma').hide();
-  		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -1865,7 +1935,8 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
   		$('#wattbezugsma').show();
-  		$('#wattbezugfronius').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -1873,8 +1944,21 @@ $(function() {
 		$('#wattbezugnone').hide();
 		$('#wattbezughttp').hide();
   		$('#wattbezugsma').hide();
-  		$('#wattbezugfronius').show();
+		$('#wattbezugfronius').show();
+		$('#wattbezugjson').hide();
+   } 
+   if($('#wattbezugmodul').val() == 'bezug_json')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').show();
+
     } 
+
+
 	    });
 });
 </script>
