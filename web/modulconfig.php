@@ -444,6 +444,11 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 $wrjsonurlold = str_replace( "'", "", $wrjsonurlold);
 $wrjsonwattold = str_replace( "'", "", $wrjsonwattold);
 $wrjsonkwhold = str_replace( "'", "", $wrjsonkwhold);
+$bezugjsonurlold = str_replace( "'", "", $bezugjsonurlold);
+$bezugjsonwattold = str_replace( "'", "", $bezugjsonwattold);
+$bezugjsonkwhold = str_replace( "'", "", $bezugjsonkwhold);
+$einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
+
 
 
 

@@ -9,7 +9,9 @@ else
 	re='^-?[0-9]+$'
 	soclevel=$(sudo php index.php | jq .chargingLevel)
 	if  [[ $soclevel =~ $re ]] ; then
-		echo $soclevel > /var/www/html/openWB/ramdisk/soc1
+		if (( $soclevel != 0 )) ; then
+			echo $soclevel > /var/www/html/openWB/ramdisk/soc1
+		fi
 	fi
 	echo 0 > /var/www/html/openWB/ramdisk/soctimer1
 fi
