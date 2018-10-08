@@ -353,6 +353,10 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmllsource=") !== false) {
 		list(, $mpm3pmllsourceold) = explode("=", $line);
 	}
+	if(strpos($line, "mpm3pmlls1source=") !== false) {
+		list(, $mpm3pmlls1sourceold) = explode("=", $line);
+	}
+
 
 	if(strpos($line, "mpm3pmpvid=") !== false) {
 		list(, $mpm3pmpvidold) = explode("=", $line);
@@ -365,6 +369,16 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "mpm3pmllid=") !== false) {
 		list(, $mpm3pmllidold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmlls1id=") !== false) {
+		list(, $mpm3pmlls1idold) = explode("=", $line);
+	}
+
+	if(strpos($line, "mpm3pmevuid=") !== false) {
+		list(, $mpm3pmevuidold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmevusource=") !== false) {
+		list(, $mpm3pmevusourceold) = explode("=", $line);
 	}
 	if(strpos($line, "leafusername=") !== false) {
 		list(, $leafusernameold) = explode("=", $line);
@@ -595,7 +609,7 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo selected ?> value="smaemd_ll">SMA Energy Meter</option>
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
-		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">BETA MPM3PM</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
 	</select>
 </div>
 <div id="llmnone">
@@ -1138,19 +1152,46 @@ $(function() {
 </script>
 
 
-	<div class="row">
+	<div class="row"><br>
 		<b><label for="ladeleistungs1modul">Ladeleistungsmodul für Ladepunkt 2:</label></b>
 		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
 			<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
-
+			<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
 
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
+
+<div id="mpm3pmlls1div">
+		<div class="row bg-info">
+		<b><label for="mpm3pmlls1">MPM3PM Modbus Ladeleistung Source:</label></b>
+		<input type="text" name="mpm3pmlls1source" id="mpm3pmlls1source" value="<?php echo $mpm3pmlls1sourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpm3pmlls1id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpm3pmlls1id" id="mpm3pmlls1id" value="<?php echo $mpm3pmlls1idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evselanips1">IP des Modbus/Lan Konverter:</label></b>
+		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
+
+</div>
+
+
 	<div id="sdm630s1div">
 		<div class="row bg-info">
 			<b><label for="sdmids1">SDM 630 Zähler ID:</label></b>
@@ -1284,16 +1325,27 @@ $(function() {
 		$('#sdm630s1div').show(); 
 		$('#sdm120s1div').hide();
 		$('#swifis1div').hide();	
+		$('#mpm3pmlls1div').hide();	
       } 
       if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
 		$('#sdm630s1div').hide();
 		$('#sdm120s1div').show();
 		$('#swifis1div').hide();	
+		$('#mpm3pmlls1div').hide();	
       } 
       if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
 		$('#sdm630s1div').hide();
 		$('#sdm120s1div').hide();
 		$('#swifis1div').show();	
+		$('#mpm3pmlls1div').hide();	
+      } 
+
+
+      if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').hide();	
+		$('#mpm3pmlls1div').show();	
       } 
 
 
@@ -1301,20 +1353,30 @@ $(function() {
 	        if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
 			$('#sdm630s1div').show(); 
 			$('#sdm120s1div').hide();
+			$('#swifis1div').hide();	
+			$('#mpm3pmlls1div').hide();	
+
 		} 
       if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
 		$('#sdm630s1div').hide();
 		$('#sdm120s1div').show();
 		$('#swifis1div').hide();	
+		$('#mpm3pmlls1div').hide();	
+
       } 
       if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
 		$('#sdm630s1div').hide();
 		$('#sdm120s1div').hide();
 		$('#swifis1div').show();	
+     		$('#mpm3pmlls1div').hide();	
       } 
-
-
-	        
+	
+      if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').hide();	
+		$('#mpm3pmlls1div').show();	
+      }         
 	    });
 });
 </script>
@@ -1533,7 +1595,7 @@ $(function() {
 </script>
 
 
-	<div class="row">
+	<div class="row"><br>
 		<b><label for="ladeleistungs2modul">Ladeleistungsmodul für Ladepunkt 3:</label></b>
 		<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
 			<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
@@ -1678,6 +1740,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">SDM 630</option>
 		<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
 		<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
+		<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 	</select>
@@ -1685,6 +1748,32 @@ $(function() {
 <div class="row">
 	Weitere Einstellungen je nach Modul beachten.<br><br>
 </div>
+
+<div id="wattbezugmpm3pm">
+		<div class="row bg-info">
+		<b><label for="mpm3pmevu">MPM3PM Modbus EVU Source:</label></b>
+		<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpm3pmevuid">MPM3PM Modbus EVU ID:</label></b>
+		<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
+		<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
+
+</div>
+
 <div id="wattbezugnone">
 <div class="row bg-info">
 	<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
@@ -1830,7 +1919,7 @@ $(function() {
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
-
+		$('#wattbezugmpm3pm').hide();
 
 
       } 
@@ -1842,6 +1931,7 @@ $(function() {
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
 
 
       } 
@@ -1853,6 +1943,7 @@ $(function() {
 		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
 
 
       } 
@@ -1864,6 +1955,7 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
 
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -1874,6 +1966,7 @@ $(function() {
  		$('#wattbezugsma').show();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -1884,6 +1977,7 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').show();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -1894,6 +1988,18 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').show();
+		$('#wattbezugmpm3pm').hide();
+
+   } 
+   if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').show();
 
     } 
    $('#wattbezugmodul').change(function(){
@@ -1905,7 +2011,7 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
-
+		$('#wattbezugmpm3pm').hide();
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -1915,6 +2021,7 @@ $(function() {
  		$('#wattbezugsma').hide();
  		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
       } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
@@ -1924,6 +2031,7 @@ $(function() {
   		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
     } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
@@ -1933,6 +2041,7 @@ $(function() {
   		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -1942,6 +2051,7 @@ $(function() {
   		$('#wattbezugsma').show();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -1951,6 +2061,7 @@ $(function() {
   		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').show();
 		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -1960,6 +2071,17 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').show();
+		$('#wattbezugmpm3pm').hide();
+   }
+   if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').show();
 
     } 
 

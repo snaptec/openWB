@@ -670,6 +670,59 @@ foreach($lines as $line) {
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
+
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmevuid=") !== false) {
+	    $result .= 'mpm3pmevuid='.$_POST[mpm3pmevuid]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmevusource=") !== false) {
+	    $result .= 'mpm3pmevusource='.$_POST[mpm3pmevusource]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+
+
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmlls1id=") !== false) {
+	    $result .= 'mpm3pmlls1id='.$_POST[mpm3pmlls1id]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmlls1source=") !== false) {
+	    $result .= 'mpm3pmlls1source='.$_POST[mpm3pmlls1source]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+
+
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "mpm3pmllid=") !== false) {

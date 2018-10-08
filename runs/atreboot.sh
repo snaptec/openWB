@@ -470,4 +470,22 @@ if ! grep -Fq "bezugjsonurl=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezugjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mpm3pmlls1source=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls1source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmlls1id=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls1id=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmevusource=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmevusource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmevuid=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmevuid=1" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch
