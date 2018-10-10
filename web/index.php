@@ -579,7 +579,7 @@
 							$('#ladepunkts222div').hide();
 							$('#ladepunkts2222div').hide();
 							$('#ladepunkts22222div').hide();
-							$('#ladepunkts222222div, #ladepunkts2222222divi, #lp3lldiv').hide();
+							$('#ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').hide();
 						      } else {
 							$('#ladepunkts2ndiv').hide();
 							$('#ladepunkts2div').show();
@@ -640,7 +640,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.93				</div>
+					Ver0.94				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -661,6 +661,15 @@
 					<a href="status.php">Status</a> 
 				</div>
 
+			</div>
+			<div class="row">
+				<div class="imgwrapper">	
+				<img src="../ramdisk/chart-l.png"
+     				alt="Graph" class="img-responsive"
+     				srcset="../ramdisk/chart-s.png 600w, 
+        			     ../ramdisk/chart-m.png 900w, 
+        			     ../ramdisk/chart-l.png 1500w" />
+				</div>
 			</div>
 			<br><br><br><br>
 			<div id="errorfeed">

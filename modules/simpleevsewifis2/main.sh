@@ -2,7 +2,6 @@
 . /var/www/html/openWB/openwb.conf
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
-
 output=$(curl --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/getParameters)
 watt=$(echo $output | jq '.list[] | .actualPower')
 lla1=$(echo $output | jq '.list[] | .currentP1')

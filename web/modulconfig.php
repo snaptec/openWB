@@ -1062,7 +1062,7 @@ $(function() {
 	</div>
 	<div id="evseconmbs1">
 		<div class="row">
-			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+			Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
 		</div>
 		<div class="row bg-info">
 			<b><label for="evsesources1">EVSE Source:</label></b>
@@ -1205,7 +1205,7 @@ $(function() {
 		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br>IP Adresse des Modbus/Lan Konverter.<br><br>
 	</div>
 
 	</div>
@@ -1650,7 +1650,7 @@ $(function() {
 		<input type="text" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+		Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>

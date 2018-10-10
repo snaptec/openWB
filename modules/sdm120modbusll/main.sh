@@ -3,7 +3,7 @@
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
-if [[ $sdm120modbusllsource = *virtual* ]]
+if [[ $modbusevsesource = *virtual* ]]
 then
 	if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesource,raw tcp:$modbusevselanip:26" > /dev/null
 	then
@@ -99,7 +99,7 @@ if [[ $sdm120modbusllid1 != "none" ]] && [[ $sdm120modbusllid2 != "none" ]] && [
 else
 	if [[ $sdm120modbusll2id != "none" ]] ; then
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbusll/readsdm3.py $modbusevsesource $sdm120modbusllid1 $sdm120modbusllid2)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbusll/readsdm1.py $modbusevsesource $sdm120modbusllid1)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )
@@ -157,7 +157,7 @@ else
 		fi
 	else
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbusll/readsdm3.py $modbusevsesource $sdm120modbusllid1)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbusll/readsdm2.py $modbusevsesource $sdm120modbusllid1 $sdm120modbusllid2)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )

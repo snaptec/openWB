@@ -27,6 +27,7 @@ touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 touch /var/www/html/openWB/ramdisk/llkwhs2
 touch /var/www/html/openWB/ramdisk/speicher
+echo 4 > /var/www/html/openWB/ramdisk/graphtimer
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
@@ -486,6 +487,16 @@ if ! grep -Fq "mpm3pmevuid=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmevuid=1" >> /var/www/html/openWB/openwb.conf
 fi
+if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+	sudo apt-get update
+	sleep 1
+	sudo apt-get -qq install -y php-gd
+	sleep 1
+	sudo apt-get -qq install -y php7.0-xml
+	
+fi
+
 
 
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

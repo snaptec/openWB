@@ -5,7 +5,6 @@ cd /var/www/html/openWB/
 #config file einlesen
 . openwb.conf
 re='^-?[0-9]+$'
-
 #ladelog ausfuehren
 ./ladelog.sh &
 #doppelte Ausfuehrungsgeschwindigkeit
@@ -16,6 +15,17 @@ if [[ $dspeed == "1" ]]; then
 	else
 		touch ramdisk/5sec
 	fi
+fi
+graphtimer=$(<ramdisk/graphtimer)
+if (( graphtimer < 6 )); then
+	graphtimer=$((graphtimer+1))
+	echo $graphtimer > ramdisk/graphtimer
+else
+	graphtimer=0
+	echo $graphtimer > ramdisk/graphtimer
+	php web/graph-l.php &
+	php web/graph-m.php &
+	php web/graph-s.php &
 fi
 
 #logfile aufräumen
@@ -179,6 +189,17 @@ fi
 	date=$(date)
 	H=$(date +%H)
 
+#Graphing
+echo $pvwatt >> /var/www/html/openWB/ramdisk/pv.graph
+echo $wattbezug >> /var/www/html/openWB/ramdisk/evu.graph
+echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
+echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev.graph
+date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
+echo "$(tail -2160 /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
+echo "$(tail -2160 /var/www/html/openWB/ramdisk/evu.graph)" > /var/www/html/openWB/ramdisk/evu.graph
+echo "$(tail -2160 /var/www/html/openWB/ramdisk/soc.graph)" > /var/www/html/openWB/ramdisk/soc.graph
+echo "$(tail -2160 /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
+echo "$(tail -2160 /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
 #########################################
 #Regelautomatiken
 ########################
