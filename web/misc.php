@@ -366,7 +366,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			<br>
 		</div>
 		<div class="row">
-			0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br><br>
+			0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>

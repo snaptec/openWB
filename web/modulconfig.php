@@ -1311,7 +1311,7 @@ Keine Konfiguration erforderlich.<br>
 		<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		BMW i3 VIN<br><br>
+		Hier ist die vollständige i3 VIN nötig<br><br>
 	</div>
 
 </div>

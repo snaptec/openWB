@@ -38,15 +38,16 @@ $myData->addPoints($timef,"Labels");
 $myData->setSerieOnAxis("Labels",0);
 $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
-
 $myData->setAxisName(0,"Watt");
+$myData->setSerieWeight("EVU",1);
+$myData->setSerieWeight("EV",1);
+$myData->setSerieWeight("PV",1);
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>300);
 
 
 
 $myImage = new pImage(1500, 500, $myData);
-
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 8));

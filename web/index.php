@@ -7,8 +7,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>OpenWB</title>
-	<meta name="description" content="Control your charge" />
-	<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
+	<meta name="description" content="OpenWB" />
+	<meta name="keywords" content="OpenWB" />
 	<meta name="author" content="Kevin Wieland" />
 	<!-- Favicons (created with http://realfavicongenerator.net/)-->
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -640,7 +640,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.94				</div>
+					Ver0.95				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -672,11 +672,7 @@
 				</div>
 			</div>
 			<br><br><br><br>
-			<div id="errorfeed">
-			<div id="errorfeedcontent"></div>
-
-			</div>
-		</div>
+					</div>
 	</section>
 	<!-- Holder for mobile navigation -->
 	<div class="mobile-nav">

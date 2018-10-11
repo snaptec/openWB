@@ -1,24 +1,4 @@
-setInterval(loadText, 1800);
-function loadText(){
- $.ajax({
-  url:"./tools/debugmode.php",  
-  type: "post", //request type,
-  dataType: 'json',
-  data: {call: "loadfile"},
-  success:function(result){
-   if(result.text == 0){
-    $('#errorfeed').hide();
-   }
-   if(result.text == 1){
-	 $('#errorfeed').show();
-    }
-   if(result.text == 2){
- 	 $('#errorfeed').show(); 
-	}
 
-  }
- });
-}
 var doInterval;
 function getfile() {
 $.ajaxSetup({ cache: false});
@@ -174,14 +154,6 @@ $.ajax({
     complete: function(request){
       var lademodus=data;
 	console.log(data);
-	}
-	});
- $.ajax({
-   url: "/openWB/ramdisk/openWB.log",
-   dataType: "text",
-   success : function (data) {
-	  //  $("#errorfeed").html(data.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,"<br>"));
-	   	 $("#errorfeedcontent").html(data.replace(/\n/g, "<br />"));
 	}
 	});
 }
