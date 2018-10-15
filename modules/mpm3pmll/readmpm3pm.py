@@ -44,11 +44,30 @@ f.write(str(lla3))
 f.close()
 
 resp = client.read_input_registers(0x26,2, unit=sdmid)
-watt = resp.registers[1]
-watt = float(watt) / 100
+s = str(struct.unpack('<hh',struct.pack('<HH',*resp.registers)))
+ss = s.split(", ")[1].split(")")[0]
+ss = int(ss) / 100
 f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
-f.write(str(llaktuell))
+f.write(str(ss))
 f.close()
 
+resp = client.read_input_registers(0x08,4, unit=sdmid)
+voltage = resp.registers[1]
+voltage = float(voltage) / 10
+f = open('/var/www/html/openWB/ramdisk/llv1', 'w')
+f.write(str(voltage))
+f.close()
 
+resp = client.read_input_registers(0x0A,4, unit=sdmid)
+voltage = resp.registers[1]
+voltage = float(voltage) / 10
+f = open('/var/www/html/openWB/ramdisk/lllv2', 'w')
+f.write(str(voltage))
+f.close()
 
+resp = client.read_input_registers(0x0C,4, unit=sdmid)
+voltage = resp.registers[1]
+voltage = float(voltage) / 10
+f = open('/var/www/html/openWB/ramdisk/llv3', 'w')
+f.write(str(voltage))
+f.close()

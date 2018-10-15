@@ -113,7 +113,8 @@ else
 			fi
 			if (( $n == 2 )); then
 				wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
-				fi
+				echo $wl1 > /var/www/html/openWB/ramdisk/llaktuell	
+			fi
 			if (( $n == 3 )); then
 				llpf1=$(echo "$line" |  cut -c2- )
 				llpf1=${llpf1%??}
@@ -123,37 +124,10 @@ else
 				llkwh=$(echo "$line" |  cut -c2- )
 				llkwh=${llkwh%???}
 			fi
-			if (( $n == 5 )); then
-				llv2=$(echo "$line" |  cut -c2- )
-				llv2=${llv2%??}
-				LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llv2
-			fi
-			if (( $n == 6 )); then
-				lla2=$(echo "$line" |  cut -c2- )
-				lla2=${lla2%??}
-				LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/lla2
-			fi
-			if (( $n == 7 )); then
-				wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
-			fi
-			if (( $n == 8 )); then
-				llpf2=$(echo "$line" |  cut -c2- )
-				llpf2=${llpf2%??}
-				LANG=C printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpf2
-			fi
-			if (( $n == 9 )); then
-				llkwh2=$(echo "$line" |  cut -c2- )
-				llkwh2=${llkwh2%???}
-			fi
 			n=$((n + 1))
 		    done <<< "$output"
-		if [[ $llkwh =~ $rekwh ]] && [[ $llkwh2 =~ $rekwh ]] ; then
-			lltotal=`echo "($llkwh+$llkwh2)" |bc`
-			LANG=C printf "%.3f\n" $lltotal > /var/www/html/openWB/ramdisk/llkwh
-		fi
-		if [[ $wl1 =~ $re ]] && [[ $wl2 =~ $re ]]; then
-		 	llaktuell=`echo "($wl1+$wl2)" |bc`
-			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuell
+		if [[ $llkwh =~ $rekwh ]] ; then
+			LANG=C printf "%.3f\n" $llkwh > /var/www/html/openWB/ramdisk/llkwh
 		fi
 	else
 		n=0

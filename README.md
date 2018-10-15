@@ -52,9 +52,9 @@ OpenWB gibt es unter
 
 auch als Bausatz zu kaufen.
 
-Verdrahtungsplan für den Bausatz für den Elektriker:
+Bausatz Anleitung:
 	
-	http://openwb.de/images/OpenWBBausatz_Verdrahtungsplan.pdf
+	https://openwb.de/images/
 
 
 
