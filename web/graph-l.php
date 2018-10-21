@@ -43,7 +43,7 @@ $myData->setSerieWeight("EVU",1);
 $myData->setSerieWeight("EV",1);
 $myData->setSerieWeight("PV",1);
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>300);
+$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
 
 
 

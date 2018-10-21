@@ -41,7 +41,7 @@ $myData->setAbscissa("Labels");
 
 $myData->setAxisName(0,"Watt");
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>300);
+$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
 
 
 

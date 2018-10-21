@@ -17,7 +17,7 @@ if [[ $dspeed == "1" ]]; then
 	fi
 fi
 graphtimer=$(<ramdisk/graphtimer)
-if (( graphtimer < 6 )); then
+if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
 	echo $graphtimer > ramdisk/graphtimer
 else
@@ -192,16 +192,18 @@ fi
 	H=$(date +%H)
 
 #Graphing
+if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 echo $pvwatt >> /var/www/html/openWB/ramdisk/pv.graph
 echo $wattbezug >> /var/www/html/openWB/ramdisk/evu.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
-echo "$(tail -2160 /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
-echo "$(tail -2160 /var/www/html/openWB/ramdisk/evu.graph)" > /var/www/html/openWB/ramdisk/evu.graph
-echo "$(tail -2160 /var/www/html/openWB/ramdisk/soc.graph)" > /var/www/html/openWB/ramdisk/soc.graph
-echo "$(tail -2160 /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
-echo "$(tail -2160 /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
+echo "$(tail -720 /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
+echo "$(tail -720 /var/www/html/openWB/ramdisk/evu.graph)" > /var/www/html/openWB/ramdisk/evu.graph
+echo "$(tail -720 /var/www/html/openWB/ramdisk/soc.graph)" > /var/www/html/openWB/ramdisk/soc.graph
+echo "$(tail -720 /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
+echo "$(tail -720 /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
+fi
 #########################################
 #Regelautomatiken
 ########################
