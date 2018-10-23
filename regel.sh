@@ -194,7 +194,7 @@ fi
 #Graphing
 #Live Graphing
 echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv-live.graph
-echo $wattbezug >> /var/www/html/openWB/ramdisk/evu-live.graph
+echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu-live.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
@@ -207,7 +207,7 @@ echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/time-live.graph)" > /var/w
 #Long Time Graphing
 if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv.graph
-echo $wattbezug >> /var/www/html/openWB/ramdisk/evu.graph
+echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
