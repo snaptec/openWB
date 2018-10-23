@@ -328,6 +328,9 @@ foreach($lines as $line) {
 	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 		list(, $evsewifitimeoutlp3old) = explode("=", $line);
 	}
+	if(strpos($line, "livegraph=") !== false) {
+		list(, $livegraphold) = explode("=", $line);
+	}
 
 }
 
@@ -379,6 +382,19 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>
 		</div>
+
+<div class="row">
+	<b><label for="livegraph">Zeitintervall für den Live Graphen der Hauptseite:</label></b>
+	<select type="text" name="livegraph" id="livegraph">
+		<option <?php if($livegraphold == 5) echo selected ?> value="5">5 Min</option>
+		<option <?php if($livegraphold == 10) echo selected ?> value="10">10 Min</option>
+		<option <?php if($livegraphold == 15) echo selected ?> value="15">15 Min</option>
+		<option <?php if($livegraphold == 20) echo selected ?> value="20">20 Min</option>
+		<option <?php if($livegraphold == 30) echo selected ?> value="30">30 Min</option>
+	</select><br>
+
+</div>
+<br><br>
 		<button type="submit" class="btn btn-primary btn-green">Save</button>	 
 	</form><br><br /><hr>
 	<div class="row">

@@ -156,7 +156,13 @@ $.ajax({
 	console.log(data);
 	}
 	});
-}
-doInterval = setInterval(getfile, 1800);
+var source = 'graph-live.php',
+		        timestamp = (new Date()).getTime(),
+		        newUrl = source + '?_=' + timestamp;
+	    document.getElementById("livegraph").src = newUrl;
 
+
+}
+doInterval = setInterval(getfile, 5000);
+getfile();
 

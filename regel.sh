@@ -23,9 +23,9 @@ if (( graphtimer < 4 )); then
 else
 	graphtimer=0
 	echo $graphtimer > ramdisk/graphtimer
-	php web/graph-l.php &
-	php web/graph-m.php &
-	php web/graph-s.php &
+	#php web/graph-l.php &
+	#php web/graph-m.php &
+	#php web/graph-s.php &
 fi
 
 #logfile aufräumen
@@ -192,8 +192,21 @@ fi
 	H=$(date +%H)
 
 #Graphing
+#Live Graphing
+echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv-live.graph
+echo $wattbezug >> /var/www/html/openWB/ramdisk/evu-live.graph
+echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
+echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
+date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
+livegraph=$((livegraph * 6 ))
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/www/html/openWB/ramdisk/soc-live.graph
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev-live.graph)" > /var/www/html/openWB/ramdisk/ev-live.graph 
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/time-live.graph)" > /var/www/html/openWB/ramdisk/time-live.graph
+#Long Time Graphing
 if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
-echo $pvwatt >> /var/www/html/openWB/ramdisk/pv.graph
+echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv.graph
 echo $wattbezug >> /var/www/html/openWB/ramdisk/evu.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev.graph

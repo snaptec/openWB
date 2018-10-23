@@ -21,9 +21,10 @@ $myData->addPoints($EVU,"EVU");
 $myData->addPoints($PV,"PV");
 
 
-$highestu = max($EVU);
+$highest1 = max($EVU);
 $highest = max($EV);
-$highest = max($highest,$highestu);
+$highest2 = max($PV);
+$highest = max($highest,$highest1,$highest2);
 $lowestu = min($EVU);
 $lowest = min($PV);
 $lowest = min($lowest,$lowestu);

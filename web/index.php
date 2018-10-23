@@ -132,48 +132,34 @@
 				</div>
 
 			</div></div><br>
-			<div class="row"><div class="col-xs-12 text-center">
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP1: <span id="lldiv"></span>Watt 
+			<div class="row"><div class="col-xs-6 text-center">
+				<div class="imgwrapper">	
+				<img id="livegraph" src="graph-live.php"
+     				alt="Graph" class="img-responsive" />
 				</div>
+				</div>	
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP1: <span id="llsolldiv"></span>A 
+					LP1: <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
+					<div id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A </div>
+<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A</spanc> 
+	<span id="gesamtlldiv"><br>Gesamt: <span id="gesamtllwdiv"></span> Watt </span>
+<br>	SoC: <span id="soclevel"></span>% 
+
+
+
+				
 				</div>
 
-			</div></div><br>
-			<div id="lp2lldiv">
-			<div class="row"><div class="col-xs-12 text-center">
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP2: <span id="lllp2div"></span>Watt 
-				</div>
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP2: <span id="llsolllp2div"></span>A 
-				</div>
+			</div><br>
+			
 
-			</div></div><br>
-			</div>
-			<div id="lp3lldiv">
-			<div class="row"><div class="col-xs-12 text-center">
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladeleistung LP3: <span id="lllp3div"></span>Watt 
-				</div>
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Ladestromstärke LP3: <span id="llsolllp3div"></span>A 
-				</div>
 
-			</div></div><br>
+			<hr>
+
+			<div class="row">
+	
 			</div>
 
-			<div class="row"><div class="col-xs-12 text-center">
-				<div id="gesamtlldiv">
-					<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					Gesamtladeleistung: <span id="gesamtllwdiv"></span> Watt 
-					</div>
-				</div>
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					SoC: <span id="soclevel"></span>% 
-				</div>
-			</div></div><hr>
 
 
 			
@@ -640,7 +626,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.96				</div>
+					Ver0.97				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -663,15 +649,21 @@
 
 			</div>
 			<div class="row">
-				<div class="imgwrapper">	
-				<img src="../ramdisk/chart-l.png"
-     				alt="Graph" class="img-responsive"
-     				srcset="../ramdisk/chart-s.png 600w, 
-        			     ../ramdisk/chart-m.png 900w, 
-        			     ../ramdisk/chart-l.png 1500w" />
+				<div class="col-xs-4">
+					<a href="ladelog.php"></a>
 				</div>
-			</div>
-			<br><br><br><br>
+
+				<div class="col-xs-4 text-center">
+					<a href="hilfe.html">Hilfe</a>
+				</div>
+				<div class="col-xs-4 text-right">
+					<a href="status.php"></a> 
+				</div>
+
+		
+
+			</div>	
+					<br><br><br><br>
 					</div>
 	</section>
 	<!-- Holder for mobile navigation -->
@@ -699,7 +691,7 @@
 	</script>
 
 	<script type='text/javascript'>
-setInterval(loadText, 1800);
+	loadText();
 function loadText(){
  $.ajax({
   url:"./tools/lademodus.php",  
@@ -746,6 +738,7 @@ function loadText(){
   }
  });
 }
+
 </script>
 <script>
 $(function() {

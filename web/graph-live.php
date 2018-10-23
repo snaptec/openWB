@@ -4,10 +4,11 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$evufile = '/var/www/html/openWB/ramdisk/evu.graph';
-$pvfile = '/var/www/html/openWB/ramdisk/pv.graph';
-$evfile = '/var/www/html/openWB/ramdisk/ev.graph';
-$timefile = '/var/www/html/openWB/ramdisk/time.graph';
+
+$evufile = '/var/www/html/openWB/ramdisk/evu-live.graph';
+$pvfile = '/var/www/html/openWB/ramdisk/pv-live.graph';
+$evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
+$timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
 
 $EV = file($evfile, FILE_IGNORE_NEW_LINES);
 $EVU = file($evufile, FILE_IGNORE_NEW_LINES);
@@ -39,22 +40,21 @@ $myData->addPoints($timef,"Labels");
 $myData->setSerieOnAxis("Labels",0);
 $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
+
 $myData->setAxisName(0,"Watt");
-$myData->setSerieWeight("EVU",1);
-$myData->setSerieWeight("EV",1);
-$myData->setSerieWeight("PV",1);
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
+$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>30);
 
 
 
-$myImage = new pImage(1500, 500, $myData);
+$myImage = new pImage(900, 300, $myData);
+
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 8));
 
 
-$myImage->setGraphArea(65,25, 1475,475);
+$myImage->setGraphArea(65,25, 875,275);
 $myImage->drawScale($ScaleSettings);
 
 $myImage->drawLineChart();
@@ -62,4 +62,4 @@ $myImage->drawLineChart();
 
 
 header("Content-Type: image/png");
-$myImage->Render('/var/www/html/openWB/ramdisk/chart-l.png');
+$myImage->Stroke();

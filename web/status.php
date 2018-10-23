@@ -987,6 +987,13 @@ doInterval = setInterval(getfile, 2000);
 </div>
 <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
+<div class="row">
+				<div class="imgwrapper">	
+				<img src="graph-m.php"
+     				alt="Graph" class="img-responsive" />
+				</div>
+			</div>
+
 
 
 
