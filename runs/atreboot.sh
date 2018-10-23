@@ -99,6 +99,18 @@ echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
 echo 57 > /var/www/html/openWB/ramdisk/soctimer
 echo 57 > /var/www/html/openWB/ramdisk/soctimer1
+echo 0 > /var/www/html/openWB/ramdisk/ev.graph
+echo 0 > /var/www/html/openWB/ramdisk/ev-live.graph
+echo 0 > /var/www/html/openWB/ramdisk/evu.graph
+echo 0 > /var/www/html/openWB/ramdisk/evu-live.graph
+echo 0 > /var/www/html/openWB/ramdisk/pv.graph
+echo 0 > /var/www/html/openWB/ramdisk/pv-live.graph
+echo 0 > /var/www/html/openWB/ramdisk/date.graph
+echo 0 > /var/www/html/openWB/ramdisk/date-live.graph
+echo 0 > /var/www/html/openWB/ramdisk/soc.graph
+echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
+
+
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -486,6 +498,10 @@ fi
 if ! grep -Fq "mpm3pmevuid=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmevuid=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "livegraph=" /var/www/html/openWB/openwb.conf
+then
+	  echo "livegraph=20" >> /var/www/html/openWB/openwb.conf
 fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
