@@ -37,7 +37,7 @@ fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
-	pvwatt=$(modules/$pvwattmodul/main.sh)
+	pvwatt=$(modules/$pvwattmodul/main.sh || true)
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
@@ -52,7 +52,7 @@ fi
 
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
-	timeout 10 modules/$ladeleistungmodul/main.sh
+	timeout 10 modules/$ladeleistungmodul/main.sh || true
 	llkwh=$(</var/www/html/openWB/ramdisk/llkwh)
 	llkwhges=$llkwh
 	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
@@ -87,7 +87,7 @@ fi
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then
-		timeout 10 modules/$socmodul1/main.sh
+		timeout 10 modules/$socmodul1/main.sh || true
 		soc1=$(</var/www/html/openWB/ramdisk/soc1)
 		if ! [[ $soc1 =~ $re ]] ; then
 		 soc1="0"
@@ -98,7 +98,7 @@ if [[ $lastmanagement == "1" ]]; then
 	else
 		soc1=0
 	fi
-	timeout 10 modules/$ladeleistungs1modul/main.sh
+	timeout 10 modules/$ladeleistungs1modul/main.sh || true
 	llkwhs1=$(</var/www/html/openWB/ramdisk/llkwhs1)
 	llkwhges=$(echo "$llkwhges + $llkwhs1" |bc)
 	llalts1=$(cat /var/www/html/openWB/ramdisk/llsolls1)
@@ -119,7 +119,7 @@ else
 fi
 #dritter ladepunkt
 if [[ $lastmanagements2 == "1" ]]; then
-	timeout 10 modules/$ladeleistungs2modul/main.sh
+	timeout 10 modules/$ladeleistungs2modul/main.sh || true
 	llkwhs2=$(</var/www/html/openWB/ramdisk/llkwhs2)
 	llkwhges=$(echo "$llkwhges + $llkwhs2" |bc)
 	llalts2=$(cat /var/www/html/openWB/ramdisk/llsolls2)
@@ -149,7 +149,7 @@ echo $llkwhges > ramdisk/llkwhges
         fi
 #Wattbezug
 if [[ $wattbezugmodul != "none" ]]; then
-	wattbezug=$(modules/$wattbezugmodul/main.sh)
+	wattbezug=$(modules/$wattbezugmodul/main.sh || true)
 	if ! [[ $wattbezug =~ $re ]] ; then
 	wattbezug="0"
 	fi
@@ -176,7 +176,7 @@ else
 fi
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
-	timeout 10 modules/$socmodul/main.sh
+	timeout 10 modules/$socmodul/main.sh || true
 	soc=$(</var/www/html/openWB/ramdisk/soc)
 	if ! [[ $soc =~ $re ]] ; then
 	 soc="0"
