@@ -13,6 +13,7 @@ else
 	echo "echo" > /dev/null
 fi
 sudo python /var/www/html/openWB/modules/bezug_mpm3pm/readmpm3pm.py $mpm3pmevusource $mpm3pmevuid
-
+wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
+echo $wattbezug
 
 

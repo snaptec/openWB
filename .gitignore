@@ -1,0 +1,4 @@
+web/ladelog
+*.csv
+*.log
+ramdisk/

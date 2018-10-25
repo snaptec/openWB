@@ -503,6 +503,16 @@ if ! grep -Fq "livegraph=" /var/www/html/openWB/openwb.conf
 then
 	  echo "livegraph=20" >> /var/www/html/openWB/openwb.conf
 fi
+if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
+then
+	(crontab -l ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -
+fi
+
+if ! sudo grep -Fq "cron5min.sh" /var/spool/cron/crontabs/pi
+then
+	(crontab -l ; echo "*/5 * * * * /var/www/html/openWB/runs/cron5min.sh >> /var/log/openWB.log 2>&1")| crontab -
+fi
+
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get update

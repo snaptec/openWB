@@ -141,7 +141,7 @@
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
 					LP1: <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
 					<div id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A </div>
-<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A</spanc> 
+<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A</spanc></span> 
 	<span id="gesamtlldiv"><br>Gesamt: <span id="gesamtllwdiv"></span> Watt </span>
 <br>	SoC: <span id="soclevel"></span>% 
 
@@ -416,13 +416,17 @@
 			
 			<span id="ladepunkts222222div">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
-						<span class="form-check">
-						<input type="checkbox" <?php if($lademstats2old == 1) echo 'checked="checked"'; ?> value="1" name="lademlp3check" class="form-check-input" id="lademlp3check">
-							<label class="form-check-label" for="lademlp3check">Aktiv</label>
-						</span>
-					
 			
+						<label for="lademstats2">LP3</label>
 
+						<select type="text" name="lademlp3check" id="lademlp3check">
+						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
+						<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+						</select> 
+
+
+					<span id="msmodusnlp3"></span>
+					<span id="msmodusmlp3">
 					<br><br>
 					<label for="lademlp3">Lademenge LP3 </label>
 					<select type="text" name="lademlp3" id="lademlp3">
@@ -449,7 +453,7 @@
 					</select> kWh
 					<br><br>
 						<button><a href="./tools/resetlp3ladem.php">Reset</a></button> 
-					
+				</span>	
 				</span>			
 			</div>
 
@@ -626,7 +630,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.97				</div>
+					Ver0.98				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -657,7 +661,7 @@
 					<a href="hilfe.html">Hilfe</a>
 				</div>
 				<div class="col-xs-4 text-right">
-					<a href="status.php"></a> 
+					 <a href="logging/index.html">Logging (Beta)</a>
 				</div>
 
 		
@@ -822,6 +826,34 @@ $(function() {
 	    });
 });
 </script>
+<script>
+$(function() {
+      if($('#lademlp3check').val() == '0') {
+		$('#msmodusnlp3').show(); 
+		$('#msmodusmlp3').hide();
+      } 
+     if($('#lademlp3check').val() == '1') 
+      {
+		$('#msmodusnlp3').hide();
+		$('#msmodusmlp3').show();
+      } 
+	$('#lademlp3check').change(function(){
+      if($('#lademlp3check').val() == '0') {
+		$('#msmodusnlp3').show(); 
+		$('#msmodusmlp3').hide();
+      } 
+     if($('#lademlp3check').val() == '1') 
+      {
+		$('#msmodusnlp3').hide();
+		$('#msmodusmlp3').show();
+      } 
+       
+	    });
+});
+</script>
+
+
+
 </body>
 
 </html>

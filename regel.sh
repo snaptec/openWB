@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
@@ -28,10 +28,6 @@ else
 	#php web/graph-s.php &
 fi
 
-#logfile aufräumen
-if [[ $debug == "1" ]]; then
-	echo "$(tail -100 /var/log/openWB.log)" > /var/log/openWB.log
-fi
 #######################################
 # Werte für die Berechnung ermitteln
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)

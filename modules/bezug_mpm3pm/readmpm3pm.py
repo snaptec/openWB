@@ -71,7 +71,6 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(ss))
 f.close()
 
-
 #export kwh
 resp = client.read_input_registers(0x0004,4, unit=sdmid)
 ekwh = resp.registers[1]
