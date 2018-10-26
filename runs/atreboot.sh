@@ -120,6 +120,10 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
+mkdir -p /var/www/html/openWB/web/logging/data/daily
+mkdir -p /var/www/html/openWB/web/logging/data/monthly
+sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
+
 
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
@@ -515,7 +519,7 @@ fi
 
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
-	sudo apt-get update
+	sudo apt-get -qq update
 	sleep 1
 	sudo apt-get -qq install -y php-gd
 	sleep 1
