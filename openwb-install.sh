@@ -17,6 +17,7 @@ then
 else
 	echo 'Europe/Berlin' > /etc/timezone
 	dpkg-reconfigure -f noninteractive tzdata
+	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 	echo "...changed"
 fi
 
