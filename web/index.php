@@ -140,10 +140,10 @@
 				</div>	
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
 					LP1: <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
-					<div id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A </div>
-<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A</spanc></span> 
-	<span id="gesamtlldiv"><br>Gesamt: <span id="gesamtllwdiv"></span> Watt </span>
-<br>	SoC: <span id="soclevel"></span>% 
+					<span id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
+<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
+	<span id="gesamtlldiv">Gesamt: <span id="gesamtllwdiv"></span> Watt<br> </span>
+	SoC: <span id="soclevel"></span>% 
 
 
 
