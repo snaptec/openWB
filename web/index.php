@@ -428,7 +428,7 @@
 					<span id="msmodusnlp3"></span>
 					<span id="msmodusmlp3">
 					<br><br>
-					<label for="lademlp3">Lademenge LP3 </label>
+					<label for="lademlp3">Lademenge</label>
 					<select type="text" name="lademlp3" id="lademlp3">
 					<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
 					<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>

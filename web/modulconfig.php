@@ -536,21 +536,21 @@ $einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
 </div>
 <div id="evseconmod">
 <div class="row bg-info">
-	<b><label for="modbusevsesource">ModbusEVSE Source:</label></b>
+	<b><label for="modbusevsesource">EVSE Source:</label></b>
 	<input type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>"><br>
 </div>
 <div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
 </div>
 <div class="row bg-info">
-	<b><label for="modbusevseid">ModbusEVSE ID:</label></b>
+	<b><label for="modbusevseid">EVSE ID:</label></b>
 	<input type="text" name="modbusevseid" id="modbusevseid" value="<?php echo $modbusevseidold ?>"><br>
 </div>
 <div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
 </div>
 <div class="row bg-info">
-	<b><label for="modbusevselanip">ModbusEVSE LanIP Konverter:</label></b>
+	<b><label for="modbusevselanip">RS485/Lan-Konverter IP:</label></b>
 	<input type="text" name="modbusevselanip" id="modbusevselanip" value="<?php echo $modbusevselanipold ?>"><br>
 </div>
 <div class="row bg-info">
@@ -632,7 +632,7 @@ $(function() {
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
+		<b><label for="sdm630modbuslllanip">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
 	</div>
 	<div class="row bg-info">
@@ -643,21 +643,21 @@ $(function() {
 
 <div id="llmsdm">
 	<div class="row bg-info">
-		<b><label for="sdm630modbusllsource">SDM 630 Modbus Source:</label></b>
+		<b><label for="sdm630modbusllsource">Zähler Source:</label></b>
 		<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="sdm630modbusllid">SDM 630 Modbus ID:</label></b>
+		<b><label for="sdm630modbusllid">Zähler ID:</label></b>
 		<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
+		Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="sdm630modbuslllanip">IP des Modbus/Lan Konverter:</label></b>
+		<b><label for="sdm630modbuslllanip">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
 	</div>
 	<div class="row bg-info">
@@ -1182,7 +1182,7 @@ $(function() {
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="evselanips1">IP des Modbus/Lan Konverter:</label></b>
+		<b><label for="evselanips1">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
 	</div>
 	<div class="row bg-info">
@@ -1194,11 +1194,11 @@ $(function() {
 
 	<div id="sdm630s1div">
 		<div class="row bg-info">
-			<b><label for="sdmids1">SDM 630 Zähler ID:</label></b>
+			<b><label for="sdmids1">Zähler ID:</label></b>
 			<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
 		</div>
 		<div class="row bg-info">
-			Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
+			Gültige Werte 1-254. Modbus ID des Ladepunkt 2 Zählers in der WB.<br><br>
 		</div>
 		<div class="row bg-info">
 		<b><label for="evselanips1">EVSE LanIP Konverter:</label></b>
@@ -1622,11 +1622,11 @@ $(function() {
 			Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
 		</div>
 		<div class="row bg-info">
-		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>
+		<b><label for="evselanips2">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte IP. IP Adresse des Modbus/Lan Konverter.<br><br>
+		Gültige Werte IP. IP Adresse des Modbus/Lan Konverteri, sofern genutzt.<br><br>
 	</div>
 
 	</div>
@@ -1653,7 +1653,7 @@ $(function() {
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="evselanips2">EVSE LanIP Konverter:</label></b>
+		<b><label for="evselanips2">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
 	</div>
 	<div class="row bg-info">
@@ -1751,21 +1751,21 @@ $(function() {
 
 <div id="wattbezugmpm3pm">
 		<div class="row bg-info">
-		<b><label for="mpm3pmevu">MPM3PM Modbus EVU Source:</label></b>
+		<b><label for="mpm3pmevu">MPM3PM Zähler EVU Source:</label></b>
 		<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="mpm3pmevuid">MPM3PM Modbus EVU ID:</label></b>
+		<b><label for="mpm3pmevuid">MPM3PM Zähler EVU ID:</label></b>
 		<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
+		<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 	</div>
 	<div class="row bg-info">
@@ -1788,21 +1788,21 @@ $(function() {
 </div>
 <div id="wattbezugsdm">
 <div class="row bg-info">
-	<b><label for="sdm630modbusbezugsource">SDM 630 Modbus Source:</label></b>
+	<b><label for="sdm630modbusbezugsource">SDM 630 Zähler Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
 <div class="row bg-info">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
 <div class="row bg-info">
-	<b><label for="sdm630modbusbezugid">SDM 630 Modbus ID:</label></b>
+	<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
 	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
 </div>
 <div class="row bg-info">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
 <div class="row bg-info">
-	<b><label for="sdm630modbusbezuglanip">IP des Modbus/Lan Konverter:</label></b>
+	<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 	<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 </div>
 <div class="row bg-info">

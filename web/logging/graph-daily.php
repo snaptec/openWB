@@ -116,6 +116,8 @@ $myImage->setFontProperties(array(
 $myImage->setGraphArea(75,25, 895,275);
 $myImage->drawScale($ScaleSettings);
 
+$myData->setSerieDrawable("Einspeisung",false);
+$myData->setSerieDrawable("Bezug",false);
 $myData->setSerieDrawable("PV",false);
 $myImage->drawLineChart();
 
@@ -125,8 +127,8 @@ $myData->setSerieDrawable("EV LP1",false);
 $myData->setSerieDrawable("EV LP2",false);
 $myData->setSerieDrawable("EV LP3",false);
 $myData->setSerieDrawable("EV Gesamt",false);
-$myData->setSerieDrawable("Bezug",false);
-$myData->setSerieDrawable("Einspeisung",false);
+$myData->setSerieDrawable("Bezug",true);
+$myData->setSerieDrawable("Einspeisung",true);
 $myImage->drawAreaChart();
 
 

@@ -64,11 +64,17 @@ f.close()
 
 #total watt
 resp = client.read_input_registers(0x26,2, unit=sdmid)
-s = str(struct.unpack('<hh',struct.pack('<HH',*resp.registers)))
-ss = s.split(", ")[1].split(")")[0]
-ss = int(ss) / 100
+if ( resp.registers[0] > 32768 ):
+    firstreg = 65536 - resp.registers[0] - 1
+    firstreg = firstreg * 65536
+    final = firstreg + resp.registers[1]
+    final = final / 100 * -1
+else:
+    firstreg = resp.registers[0] * 65536
+    final = firstreg + resp.registers[1]
+    final = final / 100
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
-f.write(str(ss))
+f.write(str(final))
 f.close()
 
 #export kwh

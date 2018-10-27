@@ -51,14 +51,25 @@ $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries
 
 $myImage = new pImage(950, 400, $myData);
 
+
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 16));
 $myImage->setGraphArea(75,25, 895,375);
 $myImage->drawScale($ScaleSettings);
 
+
+$myData->setSerieDrawable("PV",false);
+$myData->setSerieDrawable("EVU",false);
+
+
 $myImage->drawLineChart();
 
+$myData->setSerieDrawable("SoC",false);
+$myData->setSerieDrawable("PV",true);
+$myData->setSerieDrawable("EV",false);
+$myData->setSerieDrawable("EVU",true);
+$myImage->drawAreaChart();
 
 
 header("Content-Type: image/png");
