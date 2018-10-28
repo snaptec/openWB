@@ -45,11 +45,12 @@ f.close()
 
 #total watt
 resp = client.read_input_registers(0x26,2, unit=sdmid)
-s = str(struct.unpack('<hh',struct.pack('<HH',*resp.registers)))
-ss = s.split(", ")[1].split(")")[0]
-ss = int(ss) / 100
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(ss))
+f.write(str(final))
 f.close()
 
 

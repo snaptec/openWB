@@ -62,17 +62,37 @@ f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
 f.write(str(lla3))
 f.close()
 
+#phasen watt
+resp = client.read_input_registers(0x14,2, unit=sdmid)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
+f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
+f.write(str(final))
+f.close()
+resp = client.read_input_registers(0x16,2, unit=sdmid)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
+f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
+f.write(str(final))
+f.close()
+resp = client.read_input_registers(0x18,2, unit=sdmid)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
+f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
+f.write(str(final))
+f.close()
 #total watt
 resp = client.read_input_registers(0x26,2, unit=sdmid)
-if ( resp.registers[0] > 32768 ):
-    firstreg = 65536 - resp.registers[0] - 1
-    firstreg = firstreg * 65536
-    final = firstreg + resp.registers[1]
-    final = final / 100 * -1
-else:
-    firstreg = resp.registers[0] * 65536
-    final = firstreg + resp.registers[1]
-    final = final / 100
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
