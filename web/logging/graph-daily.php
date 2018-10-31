@@ -66,7 +66,7 @@ $myData->addPoints($pvdiff,"PV");
 $myData->addPoints($ll1diff,"EV LP1");
 $myData->addPoints($ll2diff,"EV LP2");
 $myData->addPoints($ll3diff,"EV LP3");
-$myData->addPoints($llgdiff,"EV Gesamt");
+$myData->addPoints($llgdiff,"EV");
 $myData->addPoints($soc,"SoC");
  
 $highest1 = max($pvdiff);
@@ -80,7 +80,7 @@ $myData->setSerieOnAxis("PV",0);
 $myData->setSerieOnAxis("EV LP1",0);
 $myData->setSerieOnAxis("EV LP2",0);
 $myData->setSerieOnAxis("EV LP3",0);
-$myData->setSerieOnAxis("EV Gesamt",0);
+$myData->setSerieOnAxis("EV",0);
 $myData->setSerieOnAxis("SoC",1);
 
 $myData->setSerieWeight("Bezug",1);
@@ -91,7 +91,7 @@ $myData->setPalette("PV",array("R"=>0,"G"=>254,"B"=>0));
 $myData->setPalette("EV LP1",array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("EV LP2",array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("EV LP3",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV Gesamt",array("R"=>0,"G"=>0,"B"=>254));
+$myData->setPalette("EV",array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("SoC",array("R"=>70,"G"=>70,"B"=>254));
  
 $myData->addPoints($timef,"Labels");
@@ -114,6 +114,7 @@ $myImage->setFontProperties(array(
 
 
 $myImage->setGraphArea(75,25, 895,275);
+
 $myImage->drawScale($ScaleSettings);
 
 $myData->setSerieDrawable("Einspeisung",false);
@@ -126,10 +127,26 @@ $myData->setSerieDrawable("PV",true);
 $myData->setSerieDrawable("EV LP1",false);
 $myData->setSerieDrawable("EV LP2",false);
 $myData->setSerieDrawable("EV LP3",false);
-$myData->setSerieDrawable("EV Gesamt",false);
+$myData->setSerieDrawable("EV",false);
 $myData->setSerieDrawable("Bezug",true);
 $myData->setSerieDrawable("Einspeisung",true);
 $myImage->drawAreaChart();
+$myData->setSerieDrawable("EV",true);
+
+$myImage->drawLegend(280,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+
+
+$myData->setSerieDrawable("SoC",true);
+$myData->setSerieDrawable("PV",false);
+$myData->setSerieDrawable("EV LP1",false);
+$myData->setSerieDrawable("EV LP2",false);
+$myData->setSerieDrawable("EV LP3",false);
+$myData->setSerieDrawable("EV",false);
+$myData->setSerieDrawable("Bezug",false);
+$myData->setSerieDrawable("Einspeisung",false);
+
+
+$myImage->drawLegend(560,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
 
 
 header("Content-Type: image/png");

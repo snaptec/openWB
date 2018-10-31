@@ -1108,6 +1108,19 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "bezug_solarlog_ip=") !== false) {
+	    $result .= 'bezug_solarlog_ip=\''.$_POST[bezug_solarlog_ip]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
 
 
 

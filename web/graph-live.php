@@ -44,20 +44,22 @@ $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 $myData->setAxisName(0,"Watt");
-$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>0,"Max"=>100));
+$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>min($SOC),"Max"=>max($SOC)));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
 
 
-$myImage = new pImage(950, 400, $myData);
+$myImage = new pImage(650, 200, $myData);
 
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 18));
-$myImage->setGraphArea(75,25, 895,375);
+$myImage->setGraphArea(85,25, 610,175);
 $myImage->drawScale($ScaleSettings);
 
 $myImage->drawLineChart();
+
+$myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
 
 

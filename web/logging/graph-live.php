@@ -62,6 +62,9 @@ $myImage->drawScale($ScaleSettings);
 $myData->setSerieDrawable("PV",false);
 $myData->setSerieDrawable("EVU",false);
 
+$myImage->drawLegend(460,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
+
+
 
 $myImage->drawLineChart();
 
@@ -70,6 +73,10 @@ $myData->setSerieDrawable("PV",true);
 $myData->setSerieDrawable("EV",false);
 $myData->setSerieDrawable("EVU",true);
 $myImage->drawAreaChart();
+
+
+$myImage->drawLegend(360,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+
 
 
 header("Content-Type: image/png");

@@ -446,7 +446,9 @@ foreach($lines as $line) {
 	if(strpos($line, "einspeisungjsonkwh=") !== false) {
 		list(, $einspeisungjsonkwhold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "bezug_solarlog_ip=") !== false) {
+		list(, $bezug_solarlog_ipold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -1743,6 +1745,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 	</select>
 </div>
 <div class="row">
@@ -1907,6 +1910,15 @@ $(function() {
 	</div>
 
 </div>
+<div id="wattbezugsolarlog">
+	<div class="row">
+		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
+		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig.<br> 
+	</div>
+</div>
 
 
 <script>
@@ -1920,6 +1932,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
 
       } 
@@ -1932,6 +1946,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
 
       } 
@@ -1944,6 +1960,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
 
       } 
@@ -1956,6 +1974,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -1967,6 +1987,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -1978,6 +2000,8 @@ $(function() {
 		$('#wattbezugfronius').show();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -1989,6 +2013,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').show();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
 
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -2000,6 +2026,19 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').show();
+		$('#wattbezugsolarlog').hide();
+
+   if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').show();
+   }
 
     } 
    $('#wattbezugmodul').change(function(){
@@ -2012,7 +2051,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
-      } 
+		$('#wattbezugsolarlog').hide();
+	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').show();
@@ -2021,6 +2061,8 @@ $(function() {
  		$('#wattbezugsma').hide();
  		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').hide();
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -2031,6 +2073,8 @@ $(function() {
   		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').hide();
     } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -2042,6 +2086,8 @@ $(function() {
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
 		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -2051,6 +2097,8 @@ $(function() {
   		$('#wattbezugsma').show();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -2061,6 +2109,8 @@ $(function() {
   		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').show();
 		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -2071,6 +2121,8 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').show();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -2081,7 +2133,23 @@ $(function() {
  		$('#wattbezugsma').hide();
 		$('#wattbezugfronius').hide();
 		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+
 		$('#wattbezugmpm3pm').show();
+
+    } 
+
+   if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').show();
+
 
     } 
 

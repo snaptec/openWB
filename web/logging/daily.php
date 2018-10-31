@@ -3,6 +3,7 @@
 
 <head>
 	<script src="../js/jquery-1.11.1.min.js"></script>
+	<script src="../js/main.js"></script>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +19,7 @@
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
+	<meta http-equiv="refresh" content="600; URL=daily.php">
 	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
@@ -40,9 +42,9 @@
 		 </ul>
 
 
-<!--	<div class="preloader">
+	<div class="preloader">
 		<img src="../img/loader.gif" alt="Preloader image">
-	</div> -->
+	</div> 
 <section id="services">
 <div class="container">
 
@@ -63,7 +65,7 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 ?>
 <div class="row col-xs-12">
 	<div class="text-center">
-		<br><h3> Daily Graph</h3><br>
+		<br><h4> Daily Graph</h4><br>
 	</div>
 </div>
 <div class="row"> 

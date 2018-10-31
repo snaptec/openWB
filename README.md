@@ -20,10 +20,10 @@ Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen P
 Keine Gewährleistung für die Software - use at your own RISK!
 
 # Wofür?
-Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Überschussladung, Lastmanagement mehrerer WB und einiges mehr in Zukunft.
+Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
 
 Unterstützt wird jedes EV das den AC Ladestandard unterstützt.
-Getestet bisher: Ion, Ioniq, Soul, eGolf, Zoe, Model S/X, i3.
+Getestet bisher: Ion, Ioniq, Soul, eGolf, Zoe, Model S/X, i3, Leaf.
 
 
 # Was wird benötigt?
@@ -35,8 +35,8 @@ Hardware:
 - 0-5V DA-Konverter MCP4725 (0-5V zur Steuerung der Ladestromstärke an der EVSE) https://www.ebay.de/itm/Digital-Analog-Wandler-MCP4725-D-A-Wandler-12-Bit-Arduino-Raspberry-Pi/152972920605?hash=item239de5871d:g:DwkAAOSwW3VaxqNE
 - Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220/230 für 1-phasig, SDM630 für 3-phasig) https://www.ebay.de/itm/B-G-e-tech-LCD-Multifunktions-Dreh-Stromzahler-S0-RS485-10-100A-SDM630-Modbus/122226084121?hash=item1c753e0919:g:zToAAOSwcUBYKci1
 - USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater SDM630v2,  -> weitere auf Anfrage)
-- Auslesen der PV-Leistung (entsprechendes Softwaremodul fuer den Wechselrichter (Fronius derzeit unterstuetzt) oder separater SDM220/230 f. 1p bzw. SDM630 f. 3p)
+- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater Modbuszähler oder bereits vorhandene Lösung mit API)
+- Auslesen der PV-Leistung (entsprechendes Softwaremodul fuer den Wechselrichter (z.B. Fronius) oder separater Zähler)
 - Schuetz entsprechend der max. Leistung
 - Ladekabel mit CP-Steuerleitung (CP => Control Pilot)
 - 2x PP- Abschlusswiderstände je Ladekabelende für max. Ladestromstärke des Ladekabels/Stecker/Buchse
@@ -50,7 +50,7 @@ OpenWB gibt es unter
 
 	https://openwb.de/shop/?product=openwb-kompletter-bausatz-3-phasig-kopie
 
-auch als Bausatz zu kaufen.
+auch als Bausatz fertig vorkonfiguriert inkl Anleitung zu kaufen.
 
 Bausatz Anleitung:
 	
@@ -182,26 +182,12 @@ hier einfügen:
 	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 
 
-Für das Logging Feature:
 
-Auf den Raspberry per ssh einloggen
 
-	curl -s https://openwb.de/openwbm.sh | sudo sh
 
-ausführen.
-Zusätzlich crontab -e ausführen und
+Zum Updaten im Webinterface unter Misc den Update Button drücken.
+ 
 
-	@reboot sleep 10 && /usr/bin/curl http://localhost/metern/scripts/bootmn.php
-
-mit eintragen. Hierdurch wird der Logging Daemon nach dem Reboot gestartet.
-
-Das Logging ist erreichbar unter http://IPdesRPI/metern/
-
-Zum Updaten:
-
-	http://XXipXX/openWB/web/tools/update.php
-
-aufrufen.
 
 # Extras
 
@@ -259,7 +245,6 @@ Hierzu müssen schließer Taster von GND (Pin 34) nach Gpio X  angeschlossen wer
 # Danke geht an:
 
 	Frank für das Bereitstellen von Hardware und sein Modbus Wissen!
-	Das Metern.org Projekt für die Loggingfunktionalität
 
 # API für Remotesteuerung, Einbindung in Hausautomation,  etc..
 

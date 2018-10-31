@@ -3,6 +3,7 @@
 
 <head>
 	<script src="../js/jquery-1.11.1.min.js"></script>
+	<script src="../js/main.js"></script>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,34 +41,37 @@
 		 </ul>
 
 
-<!--	<div class="preloader">
+	<div class="preloader">
 		<img src="../img/loader.gif" alt="Preloader image">
-	</div> -->
+	</div> 
 <section id="services">
 <div class="container">
 
 
 <?php
-$today = date('Ymd');
+$today = date('Ym');
 if (isset($_GET[date])) {
-	$daydate = $_GET[date];
-	$_SESSION = $daydate;
+	$monthdate = $_GET[date];
+	$_SESSION = $monthdate;
 }
 else
 {
-	$daydate = $today;
-	$_SESSION = $daydate;
+	$monthdate = $today;
+	$_SESSION = $monthdate;
 }
-$daybefore = date('Ymd',strtotime($daydate . "-1 days"));
-$nextday = date('Ymd',strtotime($daydate . "+1 days")); 
+$daybefore = date('Ym',strtotime($monthdate . "-30 days"));
+$nextday = date('Ym',strtotime($monthdate . "+30 days")); 
+$monthbefore = $monthdate - 1;
+$nextmonth = $monthdate + 1; 
 ?>
 
 <div class="row col-xs-12">
 	<div class="text-center">
-		<br><h3> ...in Development</h3><br>
+		<br><h4> Monthly Graph</h4><br>
 	</div>
 </div>
-<!--
+
+
 <div class="row"> 
 	<div class="col-xs-1">
 	</div>
@@ -75,7 +79,7 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 
 	<div class="col-xs-10">
 		<div class="imgwrapper">	
-			<img src="graph-monthly.php?thedate=<?php echo $daydate ?>"
+			<img src="graph-monthly.php?thedate=<?php echo $monthdate ?>"
 			alt="" class="img-responsive" />
 		</div>
 	</div>
@@ -89,15 +93,15 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 	<div class="col-xs-4">
 	</div>
 	<div class="col-xs-4 text-center">
-	<a href="daily.php?date=<?php print $daybefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
-		<?php print $daydate ?>
+	<a href="monthly.php?date=<?php print $monthbefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
+		<?php print $monthdate ?>
 		
-		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
+		<a href="monthly.php?date=<?php print $nextmonth ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
 	</div>	
 	<div class="col-xs-4">
 	</div>
 </div>
--->
+
 
 
 
