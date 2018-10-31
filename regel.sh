@@ -43,7 +43,7 @@ if [[ $pvwattmodul != "none" ]]; then
 		echo pvwatt $pvwatt
         fi
 else
-	pvwatt=0
+	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
 
 #Ladeleistung ermitteln
