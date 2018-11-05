@@ -72,14 +72,22 @@ function setChargingCurrentModbus () {
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
-		output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
-		state=$(echo $output | jq '.list[] | .evseState')
-		if ((state == false)) ; then
-			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
-		fi
-		oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
-		if (( oldcurrent != $current )) ; then
-			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+		if [[ $current -eq 0 ]]; then
+			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+			state=$(echo $output | jq '.list[] | .evseState')
+			if ((state == true)) ; then
+				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplpi1/setStatus?active=false > /dev/null
+			fi
+		else
+			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+			state=$(echo $output | jq '.list[] | .evseState')
+			if ((state == false)) ; then
+				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
+			fi
+			oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
+			if (( oldcurrent != $current )) ; then
+				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+			fi
 		fi
 	fi
 }
@@ -123,12 +131,14 @@ if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]
 fi
 
 # value below threshold
-if [[ current -le 7 ]]; then 
+if [[ current -lt 7 ]]; then 
 	if [[ $debug == "2" ]]; then 
 		echo "Ladestrom < 7A, setze auf 0A"
 	fi
-	# TODO: Code for 0A charging current, i.e. turn off charging
-	exit 0
+	current=0
+	lstate=0
+else
+	lstate=1
 fi 
 
 # set desired charging current 
@@ -140,8 +150,8 @@ fi
 # set charging current - first charging point
 if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
 	setChargingCurrent
-	echo 10 > /var/www/html/openWB/ramdisk/llsoll
-	echo 1 > /var/www/html/openWB/ramdisk/ladestatus
+	echo $current > /var/www/html/openWB/ramdisk/llsoll
+	echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
 fi
 
 # set charging current - second charging point
@@ -157,8 +167,8 @@ if [[ $lastmanagement == "1" & ]]; then
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 
-		echo 10 > /var/www/html/openWB/ramdisk/llsolls1
-		echo 1 > /var/www/html/openWB/ramdisk/ladestatuss1
+		echo $current > /var/www/html/openWB/ramdisk/llsolls1
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
 	fi
 fi
 
@@ -175,7 +185,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 
-		echo 1 > /var/www/html/openWB/ramdisk/ladestatuss2
-		echo 10 > /var/www/html/openWB/ramdisk/llsolls2
+		echo $current > /var/www/html/openWB/ramdisk/llsolls2
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss2
 	fi
 fi
