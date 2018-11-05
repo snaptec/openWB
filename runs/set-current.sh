@@ -24,6 +24,13 @@
 #####
 
 # set charging current in EVSE
+#
+# Parameters:
+# 1: current
+# 2: charging points, one of "all","m","s1","s2"
+#
+# Example: ./set-current.sh 9 s1
+# sets charging current on point "s1" to 9A
 
 . /var/www/html/openWB/openwb.conf
 
@@ -100,16 +107,23 @@ function setChargingCurrent () {
 #####
 
 # input validation
-let current = $1
-if [[ current < 0 | current > 32 ]]; then 
+let current=$1
+if [[ current -le 0 ]] | [[ current -ge 32 ]]; then 
 	if [[ $debug == "2" ]]; then 
 		echo "ungültiger Wert für Ladestrom" > /var/www/html/openWB/web/lade.log
 	fi
 	exit 1
 fi
 
+if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]]) ; then
+	if [[ $debug == "2" ]]; then
+		echo "ungültiger Wert für Ziel: $2" > /var/www/html/openWB/web/lade.log
+	fi
+	exit 1
+fi
+
 # value below threshold
-if [[ current < 7 ]]; then 
+if [[ current -le 7 ]]; then 
 	if [[ $debug == "2" ]]; then 
 		echo "Ladestrom < 7A, setze auf 0A"
 	fi
@@ -124,39 +138,44 @@ if [[ $debug == "2" ]]; then
 fi
 
 # set charging current - first charging point
-setChargingCurrent
-echo 10 > /var/www/html/openWB/ramdisk/llsoll
-echo 1 > /var/www/html/openWB/ramdisk/ladestatus
+if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
+	setChargingCurrent
+	echo 10 > /var/www/html/openWB/ramdisk/llsoll
+	echo 1 > /var/www/html/openWB/ramdisk/ladestatus
+fi
 
 # set charging current - second charging point
-if [[ $lastmanagement == "1" ]]; then
-	evsecon=$evsecons1
-	dacregister=$dacregisters1
-	modbusevsesource=$evsesources1
-	modbusevseid=$evseids1
-	evsewifitimeoutlp1=$evsewifitimeoutlp2
-	evsewifiiplp1=$evsewifiiplp2
+if [[ $lastmanagement == "1" & ]]; then
+	if [[ $2 == "all" ]] || [[ $2 == "s1" ]]; then
+		evsecon=$evsecons1
+		dacregister=$dacregisters1
+		modbusevsesource=$evsesources1
+		modbusevseid=$evseids1
+		evsewifitimeoutlp1=$evsewifitimeoutlp2
+		evsewifiiplp1=$evsewifiiplp2
 
-	# dirty call (no parameters, all is set above...)
-	setChargingCurrent
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
 
-	echo 10 > /var/www/html/openWB/ramdisk/llsolls1
-	echo 1 > /var/www/html/openWB/ramdisk/ladestatuss1
+		echo 10 > /var/www/html/openWB/ramdisk/llsolls1
+		echo 1 > /var/www/html/openWB/ramdisk/ladestatuss1
+	fi
 fi
 
 # set charging current - second charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	evsecon=$evsecons2
-	dacregister=$dacregisters2
-	modbusevsesource=$evsesources2
-	modbusevseid=$evseids2
-	evsewifitimeoutlp1=$evsewifitimeoutlp3
-	evsewifiiplp1=$evsewifiiplp3
+	if [[ $2 == "all" ]] || [[ $2 == "s2" ]]; then 
+		evsecon=$evsecons2
+		dacregister=$dacregisters2
+		modbusevsesource=$evsesources2
+		modbusevseid=$evseids2
+		evsewifitimeoutlp1=$evsewifitimeoutlp3
+		evsewifiiplp1=$evsewifiiplp3
 
-	# dirty call (no parameters, all is set above...)
-	setChargingCurrent
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
 
-	echo 1 > /var/www/html/openWB/ramdisk/ladestatuss2
-	echo 10 > /var/www/html/openWB/ramdisk/llsolls2
-
+		echo 1 > /var/www/html/openWB/ramdisk/ladestatuss2
+		echo 10 > /var/www/html/openWB/ramdisk/llsolls2
+	fi
 fi
