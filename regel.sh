@@ -5,7 +5,7 @@
 #
 # File: set-current.sh
 #
-# Copyright 2018 David Meder-Marouelli
+# Copyright 2018 Kevin Wieland, David Meder-Marouelli
 #
 #  This file is part of openWB.
 #
