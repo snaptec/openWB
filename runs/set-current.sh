@@ -48,8 +48,8 @@ function setChargingCurrentDAC () {
 	current=$1
 	dacregister=$2
 	# set desired charging current 
-	# TODO: update dac.py to accept current and use translation table 
-	sudo python /var/www/html/openWB/runs/dac.py 1298 $dacregister
+	# INFO: needs new dac.py to accept current and use translation table 
+	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
 }
 
 # function for setting the current - modbusevse
