@@ -155,7 +155,7 @@ if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
 fi
 
 # set charging current - second charging point
-if [[ $lastmanagement == "1" & ]]; then
+if [[ $lastmanagement == "1" ]]; then
 	if [[ $2 == "all" ]] || [[ $2 == "s1" ]]; then
 		evsecon=$evsecons1
 		dacregister=$dacregisters1
