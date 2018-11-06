@@ -156,6 +156,18 @@ $.ajax({
 	console.log(data);
 	}
 	});
+ $.ajax({
+   url: "/openWB/ramdisk/speichersoc",
+    complete: function(request){
+      $("#speichersocdiv").html(request.responseText);
+        }
+        });
+$.ajax({
+   url: "/openWB/ramdisk/speicherleistung",
+    complete: function(request){
+      $("#speicherleistungdiv").html(request.responseText);
+        }
+        });
 var source = 'graph-live.php',
 		        timestamp = (new Date()).getTime(),
 		        newUrl = source + '?_=' + timestamp;

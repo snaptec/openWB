@@ -449,6 +449,25 @@ foreach($lines as $line) {
 	if(strpos($line, "bezug_solarlog_ip=") !== false) {
 		list(, $bezug_solarlog_ipold) = explode("=", $line);
 	}
+	if(strpos($line, "speichermodul=") !== false) {
+		list(, $speichermodulold) = explode("=", $line);
+	}
+	if(strpos($line, "speicherleistung_http=") !== false) {
+		list(, $speicherleistung_httpold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "speichersoc_http=") !== false) {
+		list(, $speichersoc_httpold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "soc_tesla_username=") !== false) {
+		list(, $socteslausernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_tesla_password=") !== false) {
+		list(, $socteslapwold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_tesla_intervall=") !== false) {
+		list(, $socteslaintervallold) = explode("=", $line);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -464,7 +483,9 @@ $bezugjsonurlold = str_replace( "'", "", $bezugjsonurlold);
 $bezugjsonwattold = str_replace( "'", "", $bezugjsonwattold);
 $bezugjsonkwhold = str_replace( "'", "", $bezugjsonkwhold);
 $einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
-
+$bezug_solarlog_ipold = str_replace( "'", "", $bezug_solarlog_ipold);
+$speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
+$speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
 
 
 
@@ -821,10 +842,39 @@ $(function() {
 		<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
 		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
+		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
+
 	</select>
 </div>
 <div id="socmnone">
 	<br>
+</div>
+<div id="socmtesla">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasocuser">Tesla Benutzername:</label></b>
+		<input type="text" name="teslasocuser" id="teslasocuser" value="<?php echo $socteslausernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasocpw">Tesla Passwort:</label></b>
+		<input type="text" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasocpw">Abfrageintervall:</label></b>
+		<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird. Angabe in Minuten.<br><br>
+	</div>
+
+
 </div>
 <div id="socmhttp">
 	<div class="row bg-info">
@@ -921,6 +971,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
 
       } 
@@ -932,6 +983,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
 
       } 
@@ -951,6 +1003,7 @@ $(function() {
 		$('#soci3').show();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -960,6 +1013,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').show();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -969,6 +1023,17 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').show();
+		$('#socmtesla').hide();
+
+   }
+   if($('#socmodul').val() == 'soc_tesla')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').show();
 
       } 
 	$('#socmodul').change(function(){
@@ -979,6 +1044,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
 
       } 
@@ -990,6 +1056,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
 
       } 
@@ -1000,6 +1067,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -1009,6 +1077,7 @@ $(function() {
 		$('#soci3').show();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -1018,6 +1087,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').show();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -1027,9 +1097,19 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').show();
+		$('#socmtesla').hide();
 
       } 
+   if($('#socmodul').val() == 'soc_tesla')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').show();
 
+      } 
 	    });
 });
 </script>
@@ -2474,6 +2554,62 @@ $(function() {
 </script>
 
 
+<div class="row"><hr>
+	<h3> Speicher Modul </h3>
+</div>
+<div class="row">
+	<b><label for="speicherodul">Speicher Modul:</label></b>
+	<select type="text" name="speichermodul" id="speichermodul">
+		<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
+	</select>
+</div>
+
+<div id="divspeichernone">
+	<br>
+</div>
+<div id="divspeicherhttp">
+	<div class="row">
+		<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
+		<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="speichersoc_http">SpeicherSoC URL:</label></b>
+		<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.<br><br>
+	</div>
+
+</div>
+
+<script>
+$(function() {
+      if($('#speichermodul').val() == 'none') {
+		$('#divspeichernone').show(); 
+		$('#divspeicherhttp').hide();
+	
+      } 
+   if($('#speichermodul').val() == 'speicher_http')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').show();
+   }
+$('#speichermodul').change(function(){
+     if($('#speichermodul').val() == 'none') {
+		$('#divspeichernone').show(); 
+		$('#divspeicherhttp').hide();
+	
+      } 
+    if($('#speichermodul').val() == 'speicher_http')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').show();
+   }
+	});
+});
+</script>
 
 
 

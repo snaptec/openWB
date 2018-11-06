@@ -29,6 +29,13 @@ else
 fi
 
 #######################################
+
+#Speicher werte
+if [[ $speichermodul != "none" ]] ; then
+	timeout 5 modules/$speichermodul/main.sh || true
+fi
+
+
 # Werte für die Berechnung ermitteln
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #PV Leistung ermitteln
@@ -195,6 +202,9 @@ echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
 livegraph=$((livegraph * 6 ))
+	if ! [[ $livegraph =~ $re ]] ; then
+	 livegraph="30"
+	fi
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/www/html/openWB/ramdisk/soc-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph

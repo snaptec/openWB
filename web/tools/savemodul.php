@@ -430,9 +430,12 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "lastmanagements2=") !== false) {
-	    $result .= 'lastmanagements2='.$_POST[lastmanagements2]."\n";
-	    } 
-	    else {
+		    if($_POST[lastmanagement] == 0) {
+			$result .= 'lastmanagements2=0'."\n";
+		    } else {						
+			$result .= 'lastmanagements2='.$_POST[lastmanagements2]."\n";
+	    	    } 
+	    } else {
 	    $result .= $line;
 	    }
 }
@@ -1119,9 +1122,72 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-
-
-
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "speicherleistung_http=") !== false) {
+	    $result .= 'speicherleistung_http=\''.$_POST[speicherleistung_http]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "speichersoc_http=") !== false) {
+	    $result .= 'speichersoc_http=\''.$_POST[speichersoc_http]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "speichermodul=") !== false) {
+	    $result .= 'speichermodul='.$_POST[speichermodul]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "soc_tesla_username=") !== false) {
+	    $result .= 'soc_tesla_username='.$_POST[teslasocuser]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "soc_tesla_password=") !== false) {
+	    $result .= 'soc_tesla_password='.$_POST[teslasocpw]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "soc_tesla_intervall=") !== false) {
+	    $result .= 'soc_tesla_intervall='.$_POST[teslasocintervall]."\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 

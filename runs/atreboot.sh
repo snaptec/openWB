@@ -109,8 +109,8 @@ echo 0 > /var/www/html/openWB/ramdisk/date.graph
 echo 0 > /var/www/html/openWB/ramdisk/date-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
-
-
+echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -510,6 +510,31 @@ fi
 if ! grep -Fq "bezug_solarlog_ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_solarlog_ip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speichermodul=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichermodul=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherleistung_http=192.168.0.10/watt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speichersoc_http=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersoc_http=192.168.0.10/soc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_tesla_username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_tesla_password=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "soc_tesla_intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi

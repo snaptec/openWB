@@ -26,6 +26,24 @@ $ll3 = file($ll3file, FILE_IGNORE_NEW_LINES);
 $llg = file($llgfile, FILE_IGNORE_NEW_LINES);
 $soc = file($socfile, FILE_IGNORE_NEW_LINES);
 
+$firstbezug = reset($bezug);
+$lastbezug = end($bezug);
+$dailybezug = number_format((($lastbezug - $firstbezug) / 1000), 2);
+
+$firstev = reset($llg);
+$lastev = end($llg);
+$dailyev = number_format((($lastev - $firstev) / 1000), 2);
+
+$firstpv = reset($pv);
+$lastpv = end($pv);
+$dailypv = number_format((($lastpv - $firstpv) / 1000), 2);
+
+
+
+$firsteinspeisung = reset($einspeisung);
+$lasteinspeisung = end($einspeisung);
+$dailyeinspeisung = number_format((($lasteinspeisung - $firsteinspeisung) / 1000), 2);
+
 $rll1 = array_reverse($ll1);
 $rll2 = array_reverse($ll2);
 $rll3 = array_reverse($ll3);
@@ -60,13 +78,13 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 
 $myData = new pData();
 
-$myData->addPoints($bezugdiff,"Bezug");
-$myData->addPoints($einspeisungdiff,"Einspeisung");
-$myData->addPoints($pvdiff,"PV");
+$myData->addPoints($bezugdiff,"Bezug ".$dailybezug);
+$myData->addPoints($einspeisungdiff,"Einspeisung ".$dailyeinspeisung);
+$myData->addPoints($pvdiff,"PV ".$dailypv);
 $myData->addPoints($ll1diff,"EV LP1");
 $myData->addPoints($ll2diff,"EV LP2");
 $myData->addPoints($ll3diff,"EV LP3");
-$myData->addPoints($llgdiff,"EV");
+$myData->addPoints($llgdiff,"EV ".$dailyev);
 $myData->addPoints($soc,"SoC");
  
 $highest1 = max($pvdiff);
@@ -74,24 +92,24 @@ $highest = max($bezugdiff);
 $highest2 = max($einspeisungdiff);
 $highest = max($highest,$highest1,$highest2);
 
-$myData->setSerieOnAxis("Bezug",0);
-$myData->setSerieOnAxis("Einspeisung",0);
-$myData->setSerieOnAxis("PV",0);
+$myData->setSerieOnAxis("Bezug ".$dailybezug,0);
+$myData->setSerieOnAxis("Einspeisung ".$dailyeinspeisung,0);
+$myData->setSerieOnAxis("PV ".$dailypv,0);
 $myData->setSerieOnAxis("EV LP1",0);
 $myData->setSerieOnAxis("EV LP2",0);
 $myData->setSerieOnAxis("EV LP3",0);
-$myData->setSerieOnAxis("EV",0);
+$myData->setSerieOnAxis("EV ".$dailyev,0);
 $myData->setSerieOnAxis("SoC",1);
-
-$myData->setSerieWeight("Bezug",1);
-$myData->setSerieWeight("Einspeisung",1);
-$myData->setPalette("Bezug",array("R"=>254,"G"=>0,"B"=>0));
-$myData->setPalette("Einspeisung",array("R"=>0,"G"=>125,"B"=>125));
-$myData->setPalette("PV",array("R"=>0,"G"=>254,"B"=>0));
+ 
+$myData->setSerieWeight("Bezug ".$dailybezug,1);
+$myData->setSerieWeight("Einspeisung ".$dailyeinspeisung,1);
+$myData->setPalette("Bezug ".$dailybezug,array("R"=>254,"G"=>0,"B"=>0));
+$myData->setPalette("Einspeisung ".$dailyeinspeisung,array("R"=>0,"G"=>125,"B"=>125));
+$myData->setPalette("PV ".$dailypv,array("R"=>0,"G"=>254,"B"=>0));
 $myData->setPalette("EV LP1",array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("EV LP2",array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("EV LP3",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV",array("R"=>0,"G"=>0,"B"=>254));
+$myData->setPalette("EV ".$dailyev,array("R"=>0,"G"=>0,"B"=>254));
 $myData->setPalette("SoC",array("R"=>70,"G"=>70,"B"=>254));
  
 $myData->addPoints($timef,"Labels");
@@ -117,36 +135,35 @@ $myImage->setGraphArea(75,25, 895,275);
 
 $myImage->drawScale($ScaleSettings);
 
-$myData->setSerieDrawable("Einspeisung",false);
-$myData->setSerieDrawable("Bezug",false);
-$myData->setSerieDrawable("PV",false);
+$myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
+$myData->setSerieDrawable("Bezug ".$dailybezug,false);
+$myData->setSerieDrawable("PV ".$dailypv,false);
 $myImage->drawLineChart();
 
 $myData->setSerieDrawable("SoC",false);
-$myData->setSerieDrawable("PV",true);
+$myData->setSerieDrawable("PV ".$dailypv,true);
 $myData->setSerieDrawable("EV LP1",false);
 $myData->setSerieDrawable("EV LP2",false);
 $myData->setSerieDrawable("EV LP3",false);
-$myData->setSerieDrawable("EV",false);
-$myData->setSerieDrawable("Bezug",true);
-$myData->setSerieDrawable("Einspeisung",true);
+$myData->setSerieDrawable("EV ".$dailyev,false);
+$myData->setSerieDrawable("Bezug ".$dailybezug,true);
+$myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,true);
 $myImage->drawAreaChart();
-$myData->setSerieDrawable("EV",true);
+$myData->setSerieDrawable("EV ".$dailyev,true);
 
 $myImage->drawLegend(280,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
 
 $myData->setSerieDrawable("SoC",true);
-$myData->setSerieDrawable("PV",false);
+$myData->setSerieDrawable("PV ".$dailypv,false);
 $myData->setSerieDrawable("EV LP1",false);
 $myData->setSerieDrawable("EV LP2",false);
 $myData->setSerieDrawable("EV LP3",false);
-$myData->setSerieDrawable("EV",false);
-$myData->setSerieDrawable("Bezug",false);
-$myData->setSerieDrawable("Einspeisung",false);
+$myData->setSerieDrawable("EV ".$dailyev,false);
+$myData->setSerieDrawable("Bezug ".$dailybezug,false);
+$myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
 
-
-$myImage->drawLegend(560,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
+$myImage->drawLegend(220,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
 
 
 header("Content-Type: image/png");

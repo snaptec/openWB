@@ -104,7 +104,9 @@
 		if(strpos($line, "msmoduslp2=") !== false) {
 			list(, $msmoduslp2old) = explode("=", $line);
 		}
-
+		if(strpos($line, "speichermodul=") !== false) {
+			list(, $speicherstatold) = explode("=", $line);
+		}
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 ?>	
@@ -131,7 +133,22 @@
 					EVU: <span id="bezugdiv"></span>Watt 
 				</div>
 
-			</div></div><br>
+			</div></div>
+			<div id="speicherstatdiv">
+			<div class="row"><div class="col-xs-12 text-center">
+				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+					Speicher: 
+				</div>
+				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+					<span id="speichersocdiv"></span> % SoC 
+				</div>
+				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+					 <span id="speicherleistungdiv"></span>Watt 
+				</div>
+
+			</div></div>
+			</div>
+			<br>
 			<div class="row"><div class="col-xs-6 text-center">
 				<div class="imgwrapper">	
 				<img id="livegraph" src="graph-live.php"
@@ -582,6 +599,18 @@
 
 						});
 						</script>
+						<input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>">
+						<script>
+						$(function() {
+   						   if($('#speicherstat').val() == 'none') {
+							$('#speicherstatdiv').hide();
+						      } else {
+							$('#speicherstatdiv').show();
+
+						      } 
+
+						});
+						</script>
 						<input hidden name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold ; ?>">
 						<script>
 						$(function() {
@@ -630,7 +659,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-					Ver0.98				</div>
+					Ver0.99				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 

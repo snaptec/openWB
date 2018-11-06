@@ -4,11 +4,11 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$evufile = '/var/www/html/openWB/ramdisk/evu.graph';
-$pvfile = '/var/www/html/openWB/ramdisk/pv.graph';
-$evfile = '/var/www/html/openWB/ramdisk/ev.graph';
-$timefile = '/var/www/html/openWB/ramdisk/time.graph';
-$socfile = '/var/www/html/openWB/ramdisk/soc.graph';
+$evufile = '/var/www/html/openWB/ramdisk/evu-live.graph';
+$pvfile = '/var/www/html/openWB/ramdisk/pv-live.graph';
+$evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
+$timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
+$socfile = '/var/www/html/openWB/ramdisk/soc-live.graph';
 
 $EV = file($evfile, FILE_IGNORE_NEW_LINES);
 $EVU = file($evufile, FILE_IGNORE_NEW_LINES);
@@ -29,12 +29,6 @@ $highest = max($highest,$highest1,$highest2);
 $lowestu = min($EVU);
 $lowest = min($PV);
 $lowest = min($lowest,$lowestu);
-$socl = (min($SOC) - 5);
-if ($socl < "0" ){
-	$minsoc = 0;
-} else {
-	$minsoc = $socl;
-}
 $myData->setSerieOnAxis("EV",0);
 $myData->setSerieOnAxis("EVU",0);
 $myData->setSerieOnAxis("PV",0);
@@ -50,38 +44,20 @@ $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 $myData->setAxisName(0,"Watt");
-$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($SOC) + 5)));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
+$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>0,"Max"=>100));
+$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
 
 
-$myImage = new pImage(950, 400, $myData);
-
+$myImage = new pImage(320, 125, $myData);
 
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
-    "FontSize" => 16));
-$myImage->setGraphArea(75,25, 895,375);
+    "FontSize" => 12));
+$myImage->setGraphArea(45,15, 290,100);
 $myImage->drawScale($ScaleSettings);
 
-
-$myData->setSerieDrawable("PV",false);
-$myData->setSerieDrawable("EVU",false);
-
-$myImage->drawLegend(460,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
-
-
-
 $myImage->drawLineChart();
-
-$myData->setSerieDrawable("SoC",false);
-$myData->setSerieDrawable("PV",true);
-$myData->setSerieDrawable("EV",false);
-$myData->setSerieDrawable("EVU",true);
-$myImage->drawAreaChart();
-
-
-$myImage->drawLegend(360,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
 
 

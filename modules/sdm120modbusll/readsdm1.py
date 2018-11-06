@@ -12,8 +12,6 @@ from pymodbus.client.sync import ModbusSerialClient
 client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
                 stopbits=1, bytesize=8, timeout=1)
 
-#rq = client.read_holding_registers(0,8,unit=5)
-#print(rq.registers)
 sdmid = int(sys.argv[2])
 resp = client.read_input_registers(0x00,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
@@ -25,7 +23,6 @@ resp = client.read_input_registers(0x1E,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 resp = client.read_input_registers(0x0156,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
-
 
 
 
