@@ -2497,7 +2497,7 @@ $(function() {
 		$('#pvwrkostalpiko').hide();
 
    }
-   if($('#pvwattmodul').val() == 'pvwrkostalpiko')   {
+   if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
@@ -2606,7 +2606,7 @@ $(function() {
 		$('#pvwrkostalpiko').hide();
 
    }
-   if($('#pvwattmodul').val() == 'pvwrkostalpiko')   {
+   if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').hide();
 		$('#pvwrfronius').hide();
