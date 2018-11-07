@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd /var/www/html/openWB
+. /var/www/html/openWB/openwb.conf
 cp modules/soc_i3/auth.json /tmp/auth.json
 cp modules/soc_i3s1/auth.json /tmp/auth.json.1
 cp openwb.conf /tmp/openwb.conf
@@ -10,7 +11,7 @@ cp web/logging/data/daily/* /tmp/data/daily
 mkdir /tmp/data/monthly
 cp web/logging/data/monthly/* /tmp/data/monthly
 sudo git fetch origin
-sudo git reset --hard origin/master
+sudo git reset --hard origin/$releasetrain
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
