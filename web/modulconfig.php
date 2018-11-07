@@ -215,6 +215,9 @@ foreach($lines as $line) {
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
 	}
+	if(strpos($line, "wrkostalpikoip=") !== false) {
+		list(, $wrkostalpikoipold) = explode("=", $line);
+	}
 	if(strpos($line, "ladeleistungmodul=") !== false) {
 		list(, $ladeleistungmodulold) = explode("=", $line);
 	}
@@ -2251,6 +2254,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">SMA Energy Meter</option>
 		<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
 		<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">Beta MPM3PM </option>
+		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
+
 </select>
 </div>
 <div class="row">
@@ -2280,6 +2285,15 @@ $(function() {
 	</div>
 	<div class="row">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
+	</div>
+</div>
+<div id="pvwrkostalpiko">
+	<div class="row">
+		<b><label for="wrfroniusip">WR Kostal Piko IP:</label></b>
+		<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte IP. IP Adresse Kostal Wechselrichter.<br><br>
 	</div>
 </div>
 
@@ -2397,6 +2411,7 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2407,6 +2422,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
@@ -2417,6 +2434,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -2427,6 +2446,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
    } 
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -2437,6 +2458,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
      } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -2447,6 +2470,8 @@ $(function() {
 		$('#pvsma').show();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
    }
    if($('#pvwattmodul').val() == 'wr_json')   {
 		$('#pvvzl').hide();
@@ -2457,6 +2482,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
    } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -2467,6 +2494,20 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
+		$('#pvwrkostalpiko').hide();
+
+   }
+   if($('#pvwattmodul').val() == 'pvwrkostalpiko')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+		$('#pvsma').hide();
+		$('#pvwrjson').hide();
+		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').show();
+
      } 
 	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -2478,6 +2519,8 @@ $(function() {
    		$('#pvsma').hide();
    		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
 	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2488,7 +2531,9 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
-      } 
+		$('#pvwrkostalpiko').hide();
+
+   } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
 		$('#pvsdmwr').hide();
@@ -2498,6 +2543,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -2508,6 +2555,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -2518,6 +2567,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
    } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -2528,6 +2579,8 @@ $(function() {
 		$('#pvsma').show();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
       } 
    if($('#pvwattmodul').val() == 'wr_json')   {
 		$('#pvvzl').hide();
@@ -2538,6 +2591,8 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').hide();
+
      } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -2548,6 +2603,20 @@ $(function() {
 		$('#pvsma').hide();
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
+		$('#pvwrkostalpiko').hide();
+
+   }
+   if($('#pvwattmodul').val() == 'pvwrkostalpiko')   {
+		$('#pvvzl').hide();
+		$('#pvsdmwr').hide();
+		$('#pvwrfronius').hide();
+		$('#pvnone').hide();
+		$('#pvhttp').hide();
+		$('#pvsma').hide();
+		$('#pvwrjson').hide();
+		$('#pvmpm3pm').hide();
+		$('#pvwrkostalpiko').show();
+
      } 
 	});
 });
