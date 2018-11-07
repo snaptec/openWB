@@ -659,7 +659,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- master -->	Ver0.99				</div>
+				<!-- stable -->	Ver 0.99				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 

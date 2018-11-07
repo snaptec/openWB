@@ -536,7 +536,10 @@ if ! grep -Fq "soc_tesla_intervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "releasetrain=" /var/www/html/openWB/openwb.conf
+then
+	  echo "releasetrain=stable" >> /var/www/html/openWB/openwb.conf
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
@@ -559,4 +562,6 @@ fi
 
 
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+uuid=$(uuid)
+curl -d "update="$uuid"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

@@ -331,7 +331,9 @@ foreach($lines as $line) {
 	if(strpos($line, "livegraph=") !== false) {
 		list(, $livegraphold) = explode("=", $line);
 	}
-
+	if(strpos($line, "releasetrain=") !== false) {
+		list(, $releasetrainold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -392,8 +394,21 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<option <?php if($livegraphold == 20) echo selected ?> value="20">20 Min</option>
 		<option <?php if($livegraphold == 30) echo selected ?> value="30">30 Min</option>
 	</select><br>
-
+<br>
 </div>
+		<div class="row">
+			<b><label for="releasetrain">Releasechannel:</label></b>
+			<select type="text" name="releasetrain" id="releasetrain">
+				<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">Stable</option>
+				<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">Beta</option>
+				<option <?php if($releasetrainold == "master\n") echo selected ?> value="master">Nightly</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Der Stable train ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer  zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, Speichern und ein Update durchführen.<br><br>
+		</div>
+
 <br><br>
 		<button type="submit" class="btn btn-primary btn-green">Save</button>	 
 	</form><br><br /><hr>
