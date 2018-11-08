@@ -4,7 +4,7 @@
 #
 # File: set-current.sh
 #
-# Copyright 2018 David Meder-Marouelli
+# Copyright 2018 David Meder-Marouelli, Kevin Wieland
 #
 #  This file is part of openWB.
 #
@@ -131,9 +131,9 @@ if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]
 fi
 
 # value below threshold
-if [[ current -lt 7 ]]; then 
+if [[ current -lt 6 ]]; then 
 	if [[ $debug == "2" ]]; then 
-		echo "Ladestrom < 7A, setze auf 0A"
+		echo "Ladestrom < 6A, setze auf 0A"
 	fi
 	current=0
 	lstate=0
