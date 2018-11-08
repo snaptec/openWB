@@ -449,7 +449,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/lademodus"; then
 								if (( llneu > sofortll )); then
 									llneu=$sofortll
 								fi
-								runs/set-current.sh $llneu m
+								runs/set-current.sh "$llneu" m
 								if [[ $debug == "1" ]]; then
 									echo "Sofort ladung Ladepunkt 1 um $maxdiff A Differenz auf $llneu A erhoeht, war kleiner als sofortll $sofortll"
 								fi
