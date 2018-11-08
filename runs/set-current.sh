@@ -39,7 +39,6 @@
 # functions
 # 
 #####
-
 # function for setting the current - dac
 # Parameters:
 # 1: current
@@ -116,7 +115,7 @@ function setChargingCurrent () {
 
 # input validation
 let current=$1
-if [[ current -le 0 ]] | [[ current -ge 32 ]]; then 
+if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then 
 	if [[ $debug == "2" ]]; then 
 		echo "ungültiger Wert für Ladestrom" > /var/www/html/openWB/web/lade.log
 	fi
