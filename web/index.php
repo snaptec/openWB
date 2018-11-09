@@ -326,7 +326,8 @@
 						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 							<br><br>
-							<button onclick="window.location.href='./tools/resetlp1ladem.php'">Reset</button> 
+
+						<button onclick="rslp1()">Reset</button>
 						
 					</span>
 					<span id="msmodusslp1"><br><br>
@@ -399,7 +400,8 @@
 						</select> kWh
 						
 							<br><br>
-							<button onclick="window.location.href='./tools/resetlp2ladem.php'">Reset</button> 
+						<button onclick="rslp2()">Reset</button>
+
 						
 					</span>
 					<span id="msmodusslp2"><br><br>
@@ -469,7 +471,7 @@
 					<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 					</select> kWh
 					<br><br>
-						<button onclick="window.location.href='./tools/resetlp3ladem.php'">Reset</button> 
+					<button onclick="rslp3()">Reset</button>
 				</span>	
 				</span>			
 			</div>
@@ -881,7 +883,41 @@ $(function() {
 });
 </script>
 
+<script>
+	function rslp1() {
+      $.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp1'},
+           success:function(html) {
+             
+           }
 
+	});
+	}
+	function rslp2() {
+       $.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp2'},
+           success:function(html) {
+             
+           }
+
+      });
+	}
+	function rslp3() {
+	$.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp3'},
+           success:function(html) {
+             
+           }
+	
+      });
+	}
+ </script>
 
 </body>
 

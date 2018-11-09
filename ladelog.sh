@@ -132,7 +132,7 @@ if (( ladeleistungs2 > 500 )); then
 		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
 		gelrlp3=${gelrlp3%.*}
 		echo $gelrlp3 > ramdisk/gelrlp3
-		restzeitlp3=$(echo "scale=5;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000" |bc)
+		restzeitlp3=$(echo "scale=6;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000" |bc)
 		restzeitlp3=${restzeitlp3%.*}
 		if (( restzeitlp3 > 60 )); then
 			restzeitlp3h=$((restzeitlp3 / 60))
@@ -141,7 +141,6 @@ if (( ladeleistungs2 > 500 )); then
 		else
 			echo "$restzeitlp3 Min" > ramdisk/restzeitlp3
 		fi
-
 	else
 		touch ramdisk/ladeustarts2
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts2
