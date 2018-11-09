@@ -326,7 +326,7 @@
 						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 							<br><br>
-							<button><a href="./tools/resetlp1ladem.php">Reset</a></button> 
+							<button onclick="window.location.href='./tools/resetlp1ladem.php'">Reset</button> 
 						
 					</span>
 					<span id="msmodusslp1"><br><br>
@@ -399,7 +399,7 @@
 						</select> kWh
 						
 							<br><br>
-							<button><a href="./tools/resetlp2ladem.php">Reset</a></button> 
+							<button onclick="window.location.href='./tools/resetlp2ladem.php'">Reset</button> 
 						
 					</span>
 					<span id="msmodusslp2"><br><br>
@@ -469,7 +469,7 @@
 					<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 					</select> kWh
 					<br><br>
-						<button><a href="./tools/resetlp3ladem.php">Reset</a></button> 
+						<button onclick="window.location.href='./tools/resetlp3ladem.php'">Reset</button> 
 				</span>	
 				</span>			
 			</div>
