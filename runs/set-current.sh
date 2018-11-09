@@ -75,7 +75,7 @@ function setChargingCurrentWifi () {
 			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
 			state=$(echo $output | jq '.list[] | .evseState')
 			if ((state == true)) ; then
-				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplpi1/setStatus?active=false > /dev/null
+				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=false > /dev/null
 			fi
 		else
 			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
