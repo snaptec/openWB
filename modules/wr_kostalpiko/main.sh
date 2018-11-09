@@ -5,17 +5,19 @@
 
 pvwatttmp=$(curl --connect-timeout 5 -s $wrkostalpikoip/api/dxs.json?dxsEntries=67109120'&'dxsEntries=251658753)
 
-
-re='^[0-9]+$'
-if ! [[ $pvwatt =~ $re ]] ; then
-	   pvwatt="0"
-   fi
 #aktuelle Ausgangsleistung am WR [W]
-pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | awk '{printf "%.0f", $1}')
+pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
+
+if (( $pvwatt > 5 )); then
+ pvwatt=$(echo "$pvwatt*-1" |bc)
+fi   
+
+echo $pvwatt
+
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 
 #Gesamtzählerstand am WR [kWh]
-pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | awk '{printf "%.0f", $1}')
+pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
 #zur weiteren verwendung im webinterface
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
