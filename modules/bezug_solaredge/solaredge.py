@@ -28,6 +28,8 @@ fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
 resp= client.read_holding_registers(40083,2,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
+if fmultiplint == 0:
+    final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
 if fmultiplint == -1:
     final = int(struct.unpack('>h', all.decode('hex'))[0]) / 10 * -1
 if fmultiplint == -2:
