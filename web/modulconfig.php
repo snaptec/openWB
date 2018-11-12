@@ -671,16 +671,7 @@ $(function() {
 <div id="llmnone">
 	
 </div>
-<div id="rs485lanlp1">
-	<div class="row bg-info">
-		<b><label for="sdm630modbuslllanip">RS485/Lan-Konverter IP:</label></b>
-		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
-	</div>
-	<div class="row bg-info">
-		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
-	</div>
-</div>
+
 
 <div id="llmpm3pm">
 		<div class="row bg-info">
@@ -748,6 +739,16 @@ $(function() {
 		Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
 	</div>
 	</div>
+<div id="rs485lanlp1">
+	<div class="row bg-info">
+		<b><label for="sdm630modbuslllanip">RS485/Lan-Konverter IP:</label></b>
+		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
+		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+	</div>
+</div>
 <div id="llswifi">
 <div class="row">
 Keine Konfiguration erforderlich.<br>
@@ -1325,16 +1326,6 @@ $(function() {
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
 
-<div id="rs485lanlp2">
-	<div class="row bg-info">
-		<b><label for="lllaniplp2">RS485/Lan-Konverter IP:</label></b>
-		<input type="text" name="lllaniplp2" id="lllaniplp2" value="<?php echo $lllaniplp2old ?>"><br>
-	</div>
-	<div class="row bg-info">
-		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
-	</div>
-</div>
 
 
 <div id="mpm3pmlls1div">
@@ -1411,6 +1402,17 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 
 	</div>
+
+<div id="rs485lanlp2">
+	<div class="row bg-info">
+		<b><label for="lllaniplp2">RS485/Lan-Konverter IP:</label></b>
+		<input type="text" name="lllaniplp2" id="lllaniplp2" value="<?php echo $lllaniplp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
+		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+	</div>
+</div>
 </div>
 <br><br>
 		<div class="row">
@@ -1801,16 +1803,6 @@ $(function() {
 	<div class="row">
 		Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
 	</div>
-	<div id="rs485lanlp3">
-	<div class="row bg-info">
-		<b><label for="lllaniplp3">RS485/Lan-Konverter IP:</label></b>
-		<input type="text" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>"><br>
-	</div>
-	<div class="row bg-info">
-		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
-	</div>
-</div>
 	<div id="swifis2div">
 		<div class="row">
 			Keine Konfiguration erforderlich.<br>
@@ -1866,6 +1858,17 @@ $(function() {
 	</div>
 
 	</div>
+	<div id="rs485lanlp3">
+	<div class="row bg-info">
+		<b><label for="lllaniplp3">RS485/Lan-Konverter IP:</label></b>
+		<input type="text" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
+		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+	</div>
+</div>
+
 
 </div>
 	
