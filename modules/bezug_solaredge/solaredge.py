@@ -20,10 +20,19 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
 
+resp= client.read_holding_registers(40084,2,unit=1)
+multipli = resp.registers[0]
+multiplint = format(multipli, '04x')
+fmultiplint = int(struct.unpack('>h', all.decode('hex'))[0])
+
 resp= client.read_holding_registers(40083,2,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) / 10 * -1
+if fmultiplint == -1:
+    final = int(struct.unpack('>h', all.decode('hex'))[0]) / 10 * -1
+if fmultiplint == -2:
+    final = int(struct.unpack('>h', all.decode('hex'))[0]) / 100 * -1
+
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(final))
 f.close()
