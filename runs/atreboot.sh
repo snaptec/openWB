@@ -540,6 +540,38 @@ if ! grep -Fq "releasetrain=" /var/www/html/openWB/openwb.conf
 then
 	  echo "releasetrain=stable" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wrkostalpikoip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "wrkostalpikoip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgeip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
+then
+		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm630lp2source=" /var/www/html/openWB/openwb.conf
+then
+		  echo "sdm630lp2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120lp2source=" /var/www/html/openWB/openwb.conf
+then
+		  echo "sdm120lp2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120lp3source=" /var/www/html/openWB/openwb.conf
+then
+		  echo "sdm120lp3source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm630lp3source=" /var/www/html/openWB/openwb.conf
+then
+		  echo "sdm630lp3source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lllaniplp3=" /var/www/html/openWB/openwb.conf
+then
+		  echo "lllaniplp3=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -

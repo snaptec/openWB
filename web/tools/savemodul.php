@@ -182,13 +182,19 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "ladeleistungmodul=") !== false) {
-	    $result .= 'ladeleistungmodul='.$_POST[ladeleistungmodul]."\n";
+	if(strpos($line, "ladeleistungmodul=") !== false) {
+		if($_POST[evsecon] == "simpleevsewifi") {
+			$result .= 'ladeleistungmodul=simpleevsewifi'."\n";
+		} else {
+			$result .= 'ladeleistungmodul='.$_POST[ladeleistungmodul]."\n";
 	    } 
-	    else {
+	} else {
 	    $result .= $line;
 	    }
 }
+
+
+
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
@@ -499,9 +505,13 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "ladeleistungs1modul=") !== false) {
-	    $result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
+	    	if($_POST[evsecons1] == "simpleevsewifi") {
+			$result .= 'ladeleistungs1modul=simpleevsewifi'."\n";
+		} else {
+			$result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
 	    } 
-	    else {
+
+	    }  else {
 	    $result .= $line;
 	    }
 }
@@ -510,9 +520,13 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "ladeleistungs2modul=") !== false) {
-	    $result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
+	    	if($_POST[evsecons2] == "simpleevsewifi") {
+			$result .= 'ladeleistungs2modul=simpleevsewifi'."\n";
+		} else {
+			$result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
 	    } 
-	    else {
+
+	    }  else {
 	    $result .= $line;
 	    }
 }
@@ -1186,6 +1200,99 @@ foreach($lines as $line) {
 	    else {
 	    $result .= $line;
 	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "wrkostalpikoip=") !== false) {
+    	    $result .= 'wrkostalpikoip='.$_POST[wrkostalpikoip]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "solaredgeip=") !== false) {
+	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "lllaniplp2=") !== false) {
+    	    $result .= 'lllaniplp2='.$_POST[lllaniplp2]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "sdm630lp2source=") !== false) {
+    	    $result .= 'sdm630lp2source='.$_POST[sdm630lp2source]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "sdm120lp2source=") !== false) {
+    	    $result .= 'sdm120lp2source='.$_POST[sdm120lp2source]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "sdm630lp3source=") !== false) {
+    	    $result .= 'sdm630lp3source='.$_POST[sdm630lp3source]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "sdm120lp3source=") !== false) {
+    	    $result .= 'sdm120lp3source='.$_POST[sdm120lp3source]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "lllaniplp3=") !== false) {
+    	    $result .= 'lllaniplp3='.$_POST[lllaniplp3]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 

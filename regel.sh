@@ -57,6 +57,10 @@ fi
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
+	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speichervorhanden="1"
+else
+	speichervorhanden="0"
 fi
 
 
@@ -1175,6 +1179,11 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 			fi
 		fi
 	else
+		if [[ $speichervorhanden == "1" ]]; then
+			if (( speicherleistung < 0 )); then
+				uberschuss=$((uberschuss + speicherleistung))
+			fi
+		fi
 		if (( uberschuss > schaltschwelle )); then
 			if (( llalt == maximalstromstaerke )); then
 				exit 0

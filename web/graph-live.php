@@ -56,10 +56,19 @@ $myImage->setFontProperties(array(
     "FontSize" => 18));
 $myImage->setGraphArea(85,25, 610,175);
 $myImage->drawScale($ScaleSettings);
+$myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+$myData->setSerieDrawable("PV",false);
+$myData->setSerieDrawable("EVU",false);
+
 
 $myImage->drawLineChart();
 
-$myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+
+$myData->setSerieDrawable("PV",true);
+$myData->setSerieDrawable("EVU",true);
+$myData->setSerieDrawable("SoC",false);
+$myData->setSerieDrawable("EV",false);
+$myImage->drawAreaChart();
 
 
 
