@@ -69,16 +69,12 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 	</div>
 </div>
 <div class="row"> 
-	<div class="col-xs-1">
-	</div>
-
-	<div class="col-xs-10">
+	
+	<div class="col-xs-12">
 		<div class="imgwrapper">	
 			<img src="graph-daily.php?thedate=<?php echo $daydate ?>"
-			alt="" class="img-responsive" />
+			alt="" class="center-block img-responsive" />
 		</div>
-	</div>
-	<div class="col-xs-1">
 	</div>
 
 </div>

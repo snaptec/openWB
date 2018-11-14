@@ -105,15 +105,15 @@ $AxisBoundaries = array(0=>array("Min"=>0,"Max"=>$highest),1=>array("Min"=>0,"Ma
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"Factors"=>array(10,20));
 
 
-$myImage = new pImage(950, 300, $myData);
+$myImage = new pImage(1150, 400, $myData);
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
-    "FontSize" => 18));
+    "FontSize" => 12));
 
 
 
 
-$myImage->setGraphArea(105,25, 895,275);
+$myImage->setGraphArea(105,25, 1095,375);
 
 $myImage->drawScale($ScaleSettings);
 $settings = array("DisplayPos"=>LABEL_POS_INSIDE, "DisplayValues"=>TRUE, "DisplayOrientation"=>ORIENTATION_VERTICAL, "Gradient"=>TRUE);

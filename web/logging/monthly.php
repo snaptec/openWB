@@ -73,17 +73,13 @@ $nextmonth = $monthdate + 1;
 
 
 <div class="row"> 
-	<div class="col-xs-1">
-	</div>
+	
 
-
-	<div class="col-xs-10">
+	<div class="col-xs-12">
 		<div class="imgwrapper">	
 			<img src="graph-monthly.php?thedate=<?php echo $monthdate ?>"
-			alt="" class="img-responsive" />
+			alt="" class="center-block img-responsive" />
 		</div>
-	</div>
-	<div class="col-xs-1">
 	</div>
 
 </div>

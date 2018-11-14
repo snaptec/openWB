@@ -506,7 +506,7 @@ $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "ladeleistungs1modul=") !== false) {
 	    	if($_POST[evsecons1] == "simpleevsewifi") {
-			$result .= 'ladeleistungs1modul=simpleevsewifi'."\n";
+			$result .= 'ladeleistungs1modul=simpleevsewifis1'."\n";
 		} else {
 			$result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
 	    } 
@@ -521,7 +521,7 @@ $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	    if(strpos($line, "ladeleistungs2modul=") !== false) {
 	    	if($_POST[evsecons2] == "simpleevsewifi") {
-			$result .= 'ladeleistungs2modul=simpleevsewifi'."\n";
+			$result .= 'ladeleistungs2modul=simpleevsewifis2'."\n";
 		} else {
 			$result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
 	    } 
