@@ -1182,6 +1182,7 @@ if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
 		if [[ $speichervorhanden == "1" ]]; then
 			if (( speicherleistung < 0 )); then
 				uberschuss=$((uberschuss + speicherleistung))
+				wattbezugint=$((wattbezugint - speicherleistung))
 			fi
 		fi
 		if (( uberschuss > schaltschwelle )); then

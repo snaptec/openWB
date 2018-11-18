@@ -402,7 +402,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 <div id="durchslp1">
 	<div class="row">
 		<hr>
-		<b><label for="durchslp1">Durchschnittsverbrauch in kWh für EV an Ladepunkt 1:</label></b>
+		<b><label for="durchslp1">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</label></b>
 		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
 	</div>
 	<div class="row">
@@ -411,7 +411,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 </div>
 <div id="durchslp2">
 	<div class="row">
-		<b><label for="durchslp2">Durchschnittsverbrauch in kWh für EV an Ladepunkt 2:</label></b>
+		<b><label for="durchslp2">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 2:</label></b>
 		<input type="text" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>"><br>
 	</div>
 	<div class="row">
@@ -420,7 +420,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 </div>
 <div id="durchslp3">
 	<div class="row">
-		<b><label for="durchslp3">Durchschnittsverbrauch in kWh für EV an Ladepunkt 3:</label></b>
+		<b><label for="durchslp3">Durchschnittsverbrauch deines Elektroautos  in kWh an Ladepunkt 3:</label></b>
 		<input type="text" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>"><br>
 	</div>
 	<div class="row">
