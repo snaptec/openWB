@@ -1296,6 +1296,46 @@ foreach($lines as $line) {
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "lp1name=") !== false) {
+    	    $result .= 'lp1name='.$_POST[lp1name]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "lp2name=") !== false) {
+    	    $result .= 'lp2name='.$_POST[lp2name]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "lp3name=") !== false) {
+    	    $result .= 'lp3name='.$_POST[lp3name]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+
+
 
 
 

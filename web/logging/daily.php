@@ -27,6 +27,7 @@
 	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
+
 </head>
 
 
@@ -50,18 +51,20 @@
 
 
 <?php
-$today = date('Ymd');
+$today = date('Y-m-d');
 if (isset($_GET[date])) {
 	$daydate = $_GET[date];
 	$_SESSION = $daydate;
+
 }
 else
 {
 	$daydate = $today;
 	$_SESSION = $daydate;
+
 }
-$daybefore = date('Ymd',strtotime($daydate . "-1 days"));
-$nextday = date('Ymd',strtotime($daydate . "+1 days")); 
+$daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
+$nextday = date('Y-m-d',strtotime($daydate . "+1 days")); 
 ?>
 <div class="row col-xs-12">
 	<div class="text-center">
@@ -79,14 +82,28 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 
 </div>
 <br><br>
+<form name="dailydate" id="dailydate" action="daily.php" method="GET">
+<div class="row col-xs-12">
+	<div class="col-xs-2">
+	</div>
+	<div class="col-xs-8 block-center text-center .text-align:center">
+	<a href="daily.php?date=<?php print $daybefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
+	 &emsp;
+<input id="date" name="date" type="date" min="2018-01-01" value="<?php print $daydate ?>" required="required" />
+&emsp;
+	 	
+		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
+	</div>	
+	<div class="col-xs-2">
+	</div>
+</div>
+<div class="row"><br></div><br>
 <div class="row col-xs-12">
 	<div class="col-xs-4">
 	</div>
-	<div class="col-xs-4 text-center">
-	<a href="daily.php?date=<?php print $daybefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
-		<?php print $daydate ?>
-		
-		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
+	<div class="col-xs-4 block-center text-center .text-align:center">
+<button type="submit">Go</button>
+	 	
 	</div>	
 	<div class="col-xs-4">
 	</div>
@@ -94,8 +111,7 @@ $nextday = date('Ymd',strtotime($daydate . "+1 days"));
 
 
 
-
-
+</form>	
 
 
 </div>

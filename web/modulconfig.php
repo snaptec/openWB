@@ -491,6 +491,16 @@ foreach($lines as $line) {
 	if(strpos($line, "lllaniplp3=") !== false) {
 		list(, $lllaniplp3old) = explode("=", $line);
 	}
+	if(strpos($line, "lp1name=") !== false) {
+		list(, $lp1nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp2name=") !== false) {
+		list(, $lp2nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp3name=") !== false) {
+		list(, $lp3nameold) = explode("=", $line);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -538,6 +548,11 @@ $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 
 <div class="row">
 	<h3> Erster Ladepunkt </h3>
+</div>
+<div class="row">
+	<b><label for="lp1name">Name Ladepunkt 1:</label></b>
+			<input type="text" name="lp1name" id="lp1name" value="<?php echo $lp1nameold ?>"><br>
+	
 </div>
 <div class="row">
 	<b><label for="evsecon">Anbindung Ladepunkt 1:</label></b>
@@ -1193,6 +1208,11 @@ $(function() {
 
 	<div class="row">
 	</div>
+<div class="row">
+	<b><label for="lp2name">Name Ladepunkt 2:</label></b>
+			<input type="text" name="lp2name" id="lp2name" value="<?php echo $lp2nameold ?>"><br>
+	
+</div>
 	<div class="row">
 		<b><label for="evsecons1">Anbindung der EVSE an Ladepunkt 2:</label></b>
 		<select type="text" name="evsecons1" id="evsecons1">
@@ -1676,6 +1696,12 @@ $(function() {
 
 	<div class="row">
 	</div>
+<div class="row">
+	<b><label for="lp3name">Name Ladepunkt 3:</label></b>
+			<input type="text" name="lp3name" id="lp3name" value="<?php echo $lp3nameold ?>"><br>
+	
+</div>
+
 	<div class="row">
 		<b><label for="evsecons2">Anbindung der EVSE an Ladepunkt 3:</label></b>
 		<select type="text" name="evsecons2" id="evsecons2">

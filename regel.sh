@@ -218,6 +218,13 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
+#Loadsharing LP1 und LP2
+if [[ $loadsharinglp12 == "1" ]]; then
+	lslpl1=$((lla1 + llas12))
+	lslpl2=$((lla2 + llas13))
+	lslpl3=$((lla3 + llas11))
+fi
+
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)

@@ -354,6 +354,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
      
 <form action="./tools/savemain.php" method="POST">
 
+<div class="col-xs-1">
+</div>
+<div class="col-xs-10">
 <div class="row">
 	<b><label for="minimalstromstaerke">Minimalstromstärke in A:</label></b>
 	<select type="text" name="minimalstromstaerke" id="minimalstromstaerke">
@@ -866,7 +869,9 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</div><br><br>
 
 
-
+</div>
+<div class="col-xs-1">
+</div>
 
 <button type="submit" class="btn btn-primary btn-green">Save</button>	 
  </form><br><br />

@@ -107,10 +107,20 @@
 		if(strpos($line, "speichermodul=") !== false) {
 			list(, $speicherstatold) = explode("=", $line);
 		}
+		if(strpos($line, "lp1name=") !== false) {
+			list(, $lp1nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp2name=") !== false) {
+			list(, $lp2nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp3name=") !== false) {
+			list(, $lp3nameold) = explode("=", $line);
+		}
+
+		
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 ?>	
-
 <body>
 
 
@@ -156,9 +166,9 @@
 				</div>
 				</div>	
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					LP1: <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
-					<span id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
-<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
+<?php echo $lp1nameold ?> <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
+					<span id="lp2lldiv"><?php echo $lp2nameold ?>  <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
+<span id="lp3lldiv"><?php echo $lp3nameold ?>  <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
 	<span id="gesamtlldiv">Gesamt: <span id="gesamtllwdiv"></span> Watt<br> </span>
 	SoC: <span id="soclevel"></span>% 
 
@@ -216,13 +226,13 @@
 			</div>
 			<div class="row" style="font-size: 2vw">
 				<div class="col-xs-4 text-center" style="font-size: 2vw">
-					Ladepunkt 1
+					<?php echo $lp1nameold ?>
 				</div>
 				<div  id="ladepunkts11div" class="col-xs-4 text-center">
-					Ladepunkt 2
+					<?php echo $lp2nameold ?>
 				</div>
 				<div id="ladepunkts22div" class="col-xs-4 text-center">
-					Ladepunkt 3
+					<?php echo $lp3nameold ?> 
 				</div>
 			</div>
 			<div class="row" style="font-size: 2vw">
@@ -661,7 +671,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- beta -->	Ver0.99.4.5beta				</div>
+				<!-- beta -->	Ver0.99.5beta				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -676,7 +686,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center">
-					<a href="/metern/index.php">Logging</a>
+					<a href="hilfe.html">Hilfe</a>
 				</div>
 				<div class="col-xs-4 text-right">
 					<a href="status.php">Status</a> 
@@ -689,10 +699,10 @@
 				</div>
 
 				<div class="col-xs-4 text-center">
-					<a href="hilfe.html">Hilfe</a>
+				
 				</div>
 				<div class="col-xs-4 text-right">
-					 <a href="logging/index.html">Logging (Beta)</a>
+					 <a href="logging/index.html">Logging</a>
 				</div>
 
 		

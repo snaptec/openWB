@@ -25,16 +25,20 @@ multipli = resp.registers[0]
 multiplint = format(multipli, '04x')
 fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
 
-resp= client.read_holding_registers(40083,2,unit=1)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-rawprod = final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+respw= client.read_holding_registers(40083,2,unit=1)
+value1w = respw.registers[0]
+allw = format(value1w, '04x')
+rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == -1:
-    rawprod = rawprod / 10 
+    rawprodw = rawprodw / 10 
 if fmultiplint == -2:
-    rawprod = rawprod / 100
+    rawprodw = rawprodw / 100
+if fmultiplint == -3:
+    rawprodw = rawprodw / 1000
+if fmultiplint == -4:
+    rawprodw = rawprodw / 10000
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(rawprod))
+f.write(str(rawprodw))
 f.close()
 
 resp= client.read_holding_registers(40093,2,unit=1)

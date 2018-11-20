@@ -572,6 +572,22 @@ if ! grep -Fq "lllaniplp3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "lllaniplp3=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "lp1name=" /var/www/html/openWB/openwb.conf
+then
+		  echo "lp1name=LP1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lp2name=" /var/www/html/openWB/openwb.conf
+then
+		  echo "lp2name=LP2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lp3name=" /var/www/html/openWB/openwb.conf
+then
+		  echo "lp3name=LP3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "loadsharinglp12=" /var/www/html/openWB/openwb.conf
+then
+		  echo "loadsharinglp12=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
