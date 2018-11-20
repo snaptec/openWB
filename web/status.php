@@ -658,7 +658,23 @@ doInterval = setInterval(getfile, 2000);
 </script>
 
 
+<?php
+	$result = '';
+	$lines = file('/var/www/html/openWB/openwb.conf');
+	foreach($lines as $line) {
+			if(strpos($line, "lp1name=") !== false) {
+			list(, $lp1nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp2name=") !== false) {
+			list(, $lp2nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp3name=") !== false) {
+			list(, $lp3nameold) = explode("=", $line);
+		}
 
+		
+	}
+?>
 <body>
 
 
@@ -750,7 +766,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladepunkt 1 Spannung in V
+		LP1 <?php echo $lp1nameold ?>  Spannung in V
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1div"></div>
@@ -765,7 +781,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladepunkt 1 Power Faktor
+		LP1 <?php echo $lp1nameold ?>  Power Faktor
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llpf1div"></div>
@@ -780,7 +796,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladepunkt 1 Stromstaerke in A
+		LP1 <?php echo $lp1nameold ?>  Stromstaerke in A
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="lla1div"></div>
@@ -795,7 +811,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladepunkt 2 Spannung in V
+		LP2 <?php echo $lp2nameold ?>  Spannung in V
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1s1div"></div>
@@ -810,7 +826,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		Ladepunkt 2 Stromstaerke in A
+		LP2 <?php echo $lp2nameold ?> Stromstaerke in A
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llas11div"></div>
@@ -825,7 +841,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladepunkt 3 Spannung in V
+		LP3 <?php echo $lp3nameold ?> Spannung in V
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1s2div"></div>
@@ -840,7 +856,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		Ladepunkt 3 Stromstaerke in A
+		LP3 <?php echo $lp3nameold ?> Stromstaerke in A
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llas21div"></div>

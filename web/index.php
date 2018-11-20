@@ -226,13 +226,13 @@
 			</div>
 			<div class="row" style="font-size: 2vw">
 				<div class="col-xs-4 text-center" style="font-size: 2vw">
-					<?php echo $lp1nameold ?>
+					LP1 <?php echo $lp1nameold ?>
 				</div>
 				<div  id="ladepunkts11div" class="col-xs-4 text-center">
-					<?php echo $lp2nameold ?>
+					LP2 <?php echo $lp2nameold ?>
 				</div>
 				<div id="ladepunkts22div" class="col-xs-4 text-center">
-					<?php echo $lp3nameold ?> 
+					LP3 <?php echo $lp3nameold ?> 
 				</div>
 			</div>
 			<div class="row" style="font-size: 2vw">
@@ -300,7 +300,7 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
-						<label for="msmoduslp1">LP1</label>
+						<label for="msmoduslp1"></label>
 
 						<select type="text" name="msmoduslp1" id="msmoduslp1">
 						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -369,7 +369,7 @@
 			
 			<span id="ladepunkts111111div">
 			<div class="col-xs-4 text-center" style="font-size: 2vw">
-						<label for="msmoduslp2">LP2</label>
+						<label for="msmoduslp2"></label>
 
 						<select type="text" name="msmoduslp2" id="msmoduslp2">
 						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -446,7 +446,7 @@
 			<span id="ladepunkts222222div">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
 			
-						<label for="lademstats2">LP3</label>
+						<label for="lademstats2"></label>
 
 						<select type="text" name="lademlp3check" id="lademlp3check">
 						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -502,7 +502,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortll">Ladepunkt 1: <span id="sofortlll"></span>A</label>
+								<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
 							</div>
 							<script>
 								var slider = document.getElementById("sofortll");
@@ -523,7 +523,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortlls1">Ladepunkt 2: <span id="sofortllls1"></span>A</label>
+								<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
 							</div>
 							<script>
 								var sliders1 = document.getElementById("sofortlls1");
@@ -545,7 +545,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortlls2">Ladepunkt 3: <span id="sofortllls2"></span>A</label>
+								<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
 							</div>
 							<script>
 								var sliders2 = document.getElementById("sofortlls2");
@@ -671,7 +671,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- beta -->	Ver0.99.5beta				</div>
+				<!-- beta -->	Ver0.99.51beta				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
