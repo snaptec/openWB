@@ -68,35 +68,38 @@ if [[ $evsecon == "goe" ]]; then
 		fi
 	fi
 fi
-if [[ $evsecons1 == "goe" ]]; then
-	output=$(curl --connect-timeout 1 -s http://$goeiplp2/status)
-	state=$(echo $output | jq -r '.alw')
-	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-		if ((state == "0")) ; then
-			curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=1 > /dev/null
+if [[ lastmanagement == "1" ]];
+	if [[ $evsecons1 == "goe" ]]; then
+		output=$(curl --connect-timeout 1 -s http://$goeiplp2/status)
+		state=$(echo $output | jq -r '.alw')
+		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+			if ((state == "0")) ; then
+				curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=1 > /dev/null
+			fi
+		fi
+		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+			if ((state == "1")) ; then
+				curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=0 > /dev/null
+			fi
 		fi
 	fi
-	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-		if ((state == "1")) ; then
-			curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=0 > /dev/null
+	if [[ $lastmanagements2 == "1" ]]; then
+		if [[ $evsecons2 == "goe" ]]; then
+			output=$(curl --connect-timeout 1 -s http://$goeiplp3/status)
+			state=$(echo $output | jq -r '.alw')
+			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
+				if ((state == "0")) ; then
+					curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=1 > /dev/null
+				fi
+			fi
+			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
+				if ((state == "1")) ; then
+					curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=0 > /dev/null
+				fi
+			fi
 		fi
 	fi
 fi
-if [[ $evsecons2 == "goe" ]]; then
-	output=$(curl --connect-timeout 1 -s http://$goeiplp3/status)
-	state=$(echo $output | jq -r '.alw')
-	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-		if ((state == "0")) ; then
-			curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=1 > /dev/null
-		fi
-	fi
-	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-		if ((state == "1")) ; then
-			curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=0 > /dev/null
-		fi
-	fi
-fi
-
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
