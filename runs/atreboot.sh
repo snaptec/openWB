@@ -531,7 +531,10 @@ if ! grep -Fq "soc_tesla_password=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_password=daspasswort" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "soc_tesla_intervallladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_intervallladen=20" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_tesla_intervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_intervall=20" >> /var/www/html/openWB/openwb.conf
@@ -574,20 +577,46 @@ then
 fi
 if ! grep -Fq "lp1name=" /var/www/html/openWB/openwb.conf
 then
-		  echo "lp1name=LP1" >> /var/www/html/openWB/openwb.conf
+		  echo "lp1name='LP1'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lp2name=" /var/www/html/openWB/openwb.conf
 then
-		  echo "lp2name=LP2" >> /var/www/html/openWB/openwb.conf
+		  echo "lp2name='LP2'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lp3name=" /var/www/html/openWB/openwb.conf
 then
-		  echo "lp3name=LP3" >> /var/www/html/openWB/openwb.conf
+		  echo "lp3name='LP3'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "loadsharinglp12=" /var/www/html/openWB/openwb.conf
 then
 		  echo "loadsharinglp12=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "goeiplp1=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goeiplp1=192.168.0.15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "goetimeoutlp1=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goetimeoutlp1=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "goeiplp2=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goeiplp2=192.168.0.15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "goetimeoutlp2=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goetimeoutlp2=5" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "goeiplp3=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goeiplp3=192.168.0.15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "goetimeoutlp3=" /var/www/html/openWB/openwb.conf
+then
+		  echo "goetimeoutlp3=5" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -

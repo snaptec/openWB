@@ -467,6 +467,10 @@ foreach($lines as $line) {
 	if(strpos($line, "soc_tesla_intervall=") !== false) {
 		list(, $socteslaintervallold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_tesla_intervallladen=") !== false) {
+		list(, $socteslaintervallladenold) = explode("=", $line);
+	}
+
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
 	}
@@ -500,6 +504,24 @@ foreach($lines as $line) {
 	if(strpos($line, "lp3name=") !== false) {
 		list(, $lp3nameold) = explode("=", $line);
 	}
+	if(strpos($line, "goeiplp1=") !== false) {
+		list(, $goeiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "goetimeoutlp1=") !== false) {
+		list(, $goetimeoutlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "goeiplp2=") !== false) {
+		list(, $goeiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "goetimeoutlp2=") !== false) {
+		list(, $goetimeoutlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "goeiplp3=") !== false) {
+		list(, $goeiplp3old) = explode("=", $line);
+	}
+	if(strpos($line, "goetimeoutlp3=") !== false) {
+		list(, $goetimeoutlp3old) = explode("=", $line);
+	}
 
 }
 
@@ -520,7 +542,9 @@ $bezug_solarlog_ipold = str_replace( "'", "", $bezug_solarlog_ipold);
 $speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
 $speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
-
+$lp1nameold = str_replace( "'", "", $lp1nameold);
+$lp2nameold = str_replace( "'", "", $lp2nameold);
+$lp3nameold = str_replace( "'", "", $lp3nameold);
 
 
 
@@ -560,6 +584,7 @@ $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 		<option <?php if($evseconold == "modbusevse\n") echo selected ?> value="modbusevse">Modbusevse</option>
 		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
 		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
 	</select>
 
 </div>
@@ -615,6 +640,23 @@ $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
 </div>
+<div id="evsecongoe">
+<div class="row bg-info">
+	<b><label for="goeiplp1">Go-e IP Adressee:</label></b>
+	<input type="text" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="goetimeoutlp1">Go-e Timeout:</label></b>
+	<input type="text" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+
+</div>
 <script>
 $(function() {
       if($('#evsecon').val() == 'dac') {
@@ -622,6 +664,7 @@ $(function() {
 		$('#evseconmod').hide();
 		$('#evseconswifi').hide();
 		$('#llmodullp1').show();
+		$('#evsecongoe').hide();
 
 	}
 	if($('#evsecon').val() == 'modbusevse') {
@@ -629,6 +672,7 @@ $(function() {
       		$('#evsecondac').hide();
 		$('#evseconmod').show();
 		$('#llmodullp1').show();
+		$('#evsecongoe').hide();
 
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
@@ -636,8 +680,16 @@ $(function() {
       		$('#evsecondac').hide();
 		$('#evseconmod').hide();
 		$('#llmodullp1').hide();
+		$('#evsecongoe').hide();
 
       	} 
+		if($('#evsecon').val() == 'goe') {
+			$('#evsecongoe').show();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        } 
 
 
 
@@ -648,6 +700,7 @@ $(function() {
 			$('#evseconmod').hide();
 			$('#evseconswifi').hide();
 			$('#llmodullp1').show();
+			$('#evsecongoe').hide();
 
 
 		}
@@ -656,6 +709,7 @@ $(function() {
 			$('#evsecondac').hide();
 			$('#evseconmod').show();
 			$('#llmodullp1').show();
+			$('#evsecongoe').hide();
 
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
@@ -663,9 +717,15 @@ $(function() {
 			$('#evsecondac').hide();
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
-
+			$('#evsecongoe').hide();
 	        } 
-
+		if($('#evsecon').val() == 'goe') {
+			$('#evsecongoe').show();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        } 
 	    });
 });
 </script>
@@ -942,11 +1002,18 @@ $(function() {
 		Password des Tesla Logins<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="teslasocpw">Abfrageintervall:</label></b>
+		<b><label for="teslasocintervall">Abfrageintervall Standby:</label></b>
 		<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Wie oft der Tesla abgefragt wird. Angabe in Minuten.<br><br>
+		Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasocintervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="teslasocintervallladen" id="teslasocintervallladen" value="<?php echo $socteslaintervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
 	</div>
 
 
@@ -1219,6 +1286,7 @@ $(function() {
 			<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
 
 		</select>
 	</div>
@@ -1275,7 +1343,23 @@ $(function() {
 </div>
 
 </div>
+<div id="evsecongoes1">
+<div class="row bg-info">
+	<b><label for="goeiplp2">Go-e IP Adressee:</label></b>
+	<input type="text" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="goetimeoutlp2">Go-e Timeout:</label></b>
+	<input type="text" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo $goetimeoutlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
 
+</div>
 
 <script>
 
@@ -1286,6 +1370,7 @@ $(function() {
 		$('#evseconmbs1').hide();
 		$('#evseconswifis1').hide();
 		$('#llmodullp2').show();
+		$('#evsecongoes1').hide();
 
       } 
 	if($('#evsecons1').val() == 'modbusevse') {
@@ -1293,6 +1378,7 @@ $(function() {
 		$('#evsecondacs1').hide();
 		$('#evseconmbs1').show();
 		$('#llmodullp2').show();
+		$('#evsecongoes1').hide();
 
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
@@ -1300,6 +1386,15 @@ $(function() {
 		$('#evsecondacs1').hide();
 		$('#evseconmbs1').hide();
 		$('#llmodullp2').hide();
+		$('#evsecongoes1').hide();
+
+      } 
+	if($('#evsecons1').val() == 'goe') {
+		$('#evsecongoes1').show();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
 
       } 
 
@@ -1310,6 +1405,7 @@ $(function() {
 			$('#evseconmbs1').hide();
 			$('#evseconswifis1').hide();
 			$('#llmodullp2').show();
+			$('#evsecongoes1').hide();
 
 		} 
 		if($('#evsecons1').val() == 'modbusevse') {
@@ -1317,6 +1413,7 @@ $(function() {
 			$('#evsecondacs1').hide();
 			$('#evseconmbs1').show();
 			$('#llmodullp2').show();
+			$('#evsecongoes1').hide();
 
 		} 
 		if($('#evsecons1').val() == 'simpleevsewifi') {
@@ -1324,9 +1421,16 @@ $(function() {
 			$('#evsecondacs1').hide();
 			$('#evseconmbs1').hide();
 			$('#llmodullp2').hide();
-
+			$('#evsecongoes1').hide();
 	        } 
+		if($('#evsecons1').val() == 'goe') {
+			$('#evsecongoes1').show();
+			$('#evsecondacs1').hide();
+			$('#evseconmbs1').hide();
+			$('#llmodullp2').hide();
+			$('#evseconswifis1').hide();
 
+		} 
 	    });
 });
 </script>
@@ -1339,7 +1443,7 @@ $(function() {
 			<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
-
+			<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
 		</select>
 	</div>
 	<div class="row">
@@ -1530,7 +1634,13 @@ $(function() {
 		$('#mpm3pmlls1div').hide();
 		$('#rs485laniplp2').hide();	
       } 
-
+    if($('#ladeleistungss1modul').val() == 'goelp2') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').show();	
+		$('#mpm3pmlls1div').hide();
+		$('#rs485laniplp2').hide();	
+      } 
 
       if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
 		$('#sdm630s1div').hide();
@@ -1565,7 +1675,14 @@ $(function() {
 		$('#mpm3pmlls1div').hide();
 		$('#rs485laniplp2').hide();	
       } 
-	
+	    if($('#ladeleistungss1modul').val() == 'goelp2') {
+		$('#sdm630s1div').hide();
+		$('#sdm120s1div').hide();
+		$('#swifis1div').show();	
+		$('#mpm3pmlls1div').hide();
+		$('#rs485laniplp2').hide();	
+      } 
+
       if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
 		$('#sdm630s1div').hide();
 		$('#sdm120s1div').hide();
@@ -1708,6 +1825,7 @@ $(function() {
 			<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+			<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
 		</select>
 	</div>
 	<div id="evseconmbs2">
@@ -1763,6 +1881,23 @@ $(function() {
 </div>
 
 </div>
+<div id="evsecongoes2">
+<div class="row bg-info">
+	<b><label for="goeiplp3">Go-e IP Adressee:</label></b>
+	<input type="text" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="goetimeoutlp3">Go-e Timeout:</label></b>
+	<input type="text" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo $goetimeoutlp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+
+</div>
 
 <script>
 $(function() {
@@ -1771,6 +1906,7 @@ $(function() {
 		$('#evseconmbs2').hide();
 		$('#evseconswifis2').hide();
 		$('#llmodullp3').show();
+		$('#evsecongoes2').hide();
 
 
       } 
@@ -1779,6 +1915,7 @@ $(function() {
 		$('#evsecondacs2').hide();
 		$('#evseconmbs2').show();
 		$('#llmodullp3').show();
+		$('#evsecongoes2').hide();
 
       } 
       if($('#evsecons2').val() == 'simpleevsewifi') {
@@ -1786,16 +1923,24 @@ $(function() {
 		$('#evsecondacs2').hide();
 		$('#evseconmbs2').hide();
 		$('#llmodullp3').hide();
+		$('#evsecongoes2').hide();
 
       } 
+      if($('#evsecons2').val() == 'goe') {
+		$('#evseconswifis2').hide();
+		$('#evsecondacs2').hide();
+		$('#evseconmbs2').hide();
+		$('#llmodullp3').hide();
+		$('#evsecongoes2').show();
 
+      } 
 	$('#evsecons2').change(function(){
       if($('#evsecons2').val() == 'dac') {
 		$('#evsecondacs2').show(); 
 		$('#evseconmbs2').hide();
 		$('#evseconswifis2').hide();
 		$('#llmodullp3').show();
-
+		$('#evsecongoes2').hide();
 
       } 
       if($('#evsecons2').val() == 'modbusevse') {
@@ -1803,15 +1948,24 @@ $(function() {
 		$('#evsecondacs2').hide();
 		$('#evseconmbs2').show();
 		$('#llmodullp3').show();
-
+		$('#evsecongoes2').hide();
       } 
       if($('#evsecons2').val() == 'simpleevsewifi') {
 		$('#evseconswifis2').show();
 		$('#evsecondacs2').hide();
 	       	$('#evseconmbs2').hide();	
  		$('#llmodullp3').hide();
+		$('#evsecongoes2').hide();
+      } 
+      if($('#evsecons2').val() == 'goe') {
+		$('#evseconswifis2').hide();
+		$('#evsecondacs2').hide();
+		$('#evseconmbs2').hide();
+		$('#llmodullp3').hide();
+		$('#evsecongoes2').show();
 
       } 
+
 	    });
 });
 </script>
@@ -1823,7 +1977,7 @@ $(function() {
 			<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-
+			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
 		</select>
 	</div>
 	<div class="row">
@@ -1922,6 +2076,14 @@ $(function() {
 		$('#rs485lanlp3').hide(); 
 
       } 
+      if($('#ladeleistungss2modul').val() == 'goelp3') {
+		$('#swifis2div').show();
+    		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#rs485lanlp3').hide(); 
+
+      } 
+
 
 	$('#ladeleistungss2modul').change(function(){
       if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
@@ -1945,6 +2107,14 @@ $(function() {
 		$('#rs485lanlp3').hide(); 
 
       } 
+      if($('#ladeleistungss2modul').val() == 'goelp3') {
+		$('#swifis2div').show();
+    		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#rs485lanlp3').hide(); 
+
+      } 
+
 	    });
 });
 </script>

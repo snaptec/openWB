@@ -90,6 +90,34 @@ function setChargingCurrentWifi () {
 		fi
 	fi
 }
+# function for setting the current - go-e charger
+# Parameters:
+# 1: current
+# 2: goetimeoutlp1 
+# 3: goeiplp1
+function setChargingCurrentgoe () {
+	if [[ $evsecon == "goe" ]]; then
+		if [[ $current -eq 0 ]]; then
+			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
+			state=$(echo $output | jq -r '.alw')
+			if ((state == "1")) ; then
+				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=0 > /dev/null
+			fi
+		else
+			output=$(curl --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/status)
+			state=$(echo $output | jq -r '.alw')
+			if ((state == "0")) ; then
+				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
+			fi
+			oldcurrent=$(echo $output | jq -r '.amp')
+			if (( oldcurrent != $current )) ; then
+				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
+			fi
+		fi
+	fi
+}
+
+
 
 # function for setting the charging current
 # no parameters, variables need to be set before...
@@ -104,6 +132,9 @@ function setChargingCurrent () {
 
 	if [[ $evsecon == "simpleevsewifi" ]]; then
 		setChargingCurrentWifi $current $evsewifitimeoutlp1 $evsewifiiplp1
+	fi
+	if [[ $evsecon == "goe" ]]; then
+		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
 }
 
@@ -162,6 +193,8 @@ if [[ $lastmanagement == "1" ]]; then
 		modbusevseid=$evseids1
 		evsewifitimeoutlp1=$evsewifitimeoutlp2
 		evsewifiiplp1=$evsewifiiplp2
+		goeiplp1=$goeiplp2
+		goetimeoutlp1=$goetimeoutlp2
 
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
@@ -180,6 +213,8 @@ if [[ $lastmanagements2 == "1" ]]; then
 		modbusevseid=$evseids2
 		evsewifitimeoutlp1=$evsewifitimeoutlp3
 		evsewifiiplp1=$evsewifiiplp3
+		goeiplp1=$goeiplp3
+		goetimeoutlp1=$goetimeoutlp3
 
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent

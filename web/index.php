@@ -120,6 +120,10 @@
 		
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
+	$lp1nameold = str_replace( "'", "", $lp1nameold);
+	$lp2nameold = str_replace( "'", "", $lp2nameold);
+	$lp3nameold = str_replace( "'", "", $lp3nameold);
+
 ?>	
 <body>
 
@@ -671,7 +675,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- beta -->	Ver0.99.51beta				</div>
+				<!-- beta -->	Ver0.99.6beta				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
