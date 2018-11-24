@@ -38,7 +38,7 @@ if [[ $lla3 =~ $re ]] ; then
 fi
 
 llkwh=$(echo $output | jq -r '.eto')
-llkwh=$(echo "scale=0;$llkwh / 10" |bc)
+llkwh=$(echo "scale=3;$llkwh / 10" |bc)
 if [[ $llkwh =~ $rekwh ]] ; then
 	echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
 fi
