@@ -17,7 +17,7 @@ client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
 sdmid = int(sys.argv[2])
 sdm2id = int(sys.argv[3])
 sdm3id = int(sys.argv[4])
-time.sleep(0.2)
+time.sleep(0.3)
 resp = client.read_input_registers(0x00,2, unit=sdmid)
 print(struct.unpack('>f',struct.pack('>HH',*resp.registers)))
 time.sleep(0.1)

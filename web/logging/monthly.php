@@ -49,7 +49,7 @@
 
 
 <?php
-$today = date('Ym');
+$today = date('Y-m-d');
 if (isset($_GET[date])) {
 	$monthdate = $_GET[date];
 	$_SESSION = $monthdate;
@@ -59,10 +59,6 @@ else
 	$monthdate = $today;
 	$_SESSION = $monthdate;
 }
-$daybefore = date('Ym',strtotime($monthdate . "-30 days"));
-$nextday = date('Ym',strtotime($monthdate . "+30 days")); 
-$monthbefore = $monthdate - 1;
-$nextmonth = $monthdate + 1; 
 ?>
 
 <div class="row col-xs-12">
@@ -73,35 +69,77 @@ $nextmonth = $monthdate + 1;
 
 
 <div class="row"> 
-	<div class="col-xs-1">
-	</div>
+	
 
-
-	<div class="col-xs-10">
+	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-monthly.php?thedate=<?php echo $monthdate ?>"
-			alt="" class="img-responsive" />
+			<img src="graph-monthly-evu.php?thedate=<?php echo $monthdate ?>"
+			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
-	<div class="col-xs-1">
+
+</div>
+<div class="row"> 
+	
+
+	<div class="col-xs-12">
+		<div class="imgwrapper">	
+			<img src="graph-monthly-pv.php?thedate=<?php echo $monthdate ?>"
+			alt="" class="center-block img-responsive" />
+		</div>
+	</div>
+
+</div>
+<div class="row"> 
+	
+
+	<div class="col-xs-12">
+		<div class="imgwrapper">	
+			<img src="graph-monthly-ev.php?thedate=<?php echo $monthdate ?>"
+			alt="" class="center-block img-responsive" />
+		</div>
+	</div>
+
+</div>
+
+
+<div class="row"> 
+	
+
+	<div class="col-xs-12">
+		<div class="imgwrapper">	
+			<img src="graph-monthly.php?thedate=<?php echo $monthdate ?>"
+			alt="" class="center-block img-responsive" />
+		</div>
 	</div>
 
 </div>
 
 <br><br>
+
+<form name="monthlydate" id="monthlydate" action="monthly.php" method="GET">
+<div class="row col-xs-12">
+	<div class="col-xs-2">
+	</div>
+	<div class="col-xs-8 block-center text-center .text-align:center">
+<?php $monthdate = date("Y-m", strtotime($monthdate)); ?>
+<input id="date" name="date" type="month" min="2018-01" value="<?php print $monthdate ?>" required="required" />
+	 	
+	</div>	
+	<div class="col-xs-2">
+	</div>
+</div>
+<div class="row"><br></div><br>
 <div class="row col-xs-12">
 	<div class="col-xs-4">
 	</div>
-	<div class="col-xs-4 text-center">
-	<a href="monthly.php?date=<?php print $monthbefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
-		<?php print $monthdate ?>
-		
-		<a href="monthly.php?date=<?php print $nextmonth ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
+	<div class="col-xs-4 block-center text-center .text-align:center">
+<button type="submit">Go</button>
+	 	
 	</div>	
 	<div class="col-xs-4">
 	</div>
 </div>
-
 
 
 

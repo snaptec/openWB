@@ -48,63 +48,33 @@
 
 
 <?php
-$today = date('Ymd');
+$today = date('Y-m-d');
 if (isset($_GET[date])) {
-	$daydate = $_GET[date];
-	$_SESSION = $daydate;
+	$yeardate = $_GET[date];
+	$_SESSION = $yeardate;
 }
 else
 {
-	$daydate = $today;
-	$_SESSION = $daydate;
+	$yeardate = $today;
+	$_SESSION = $yeardate;
 }
-$daybefore = date('Ymd',strtotime($daydate . "-1 days"));
-$nextday = date('Ymd',strtotime($daydate . "+1 days")); 
 ?>
 
 <div class="row col-xs-12">
 	<div class="text-center">
-		<br><h3> ...in Development</h3><br>
+		<br><h4> Yearly Graph</h4><br>
 	</div>
 </div>
-<!--
-<div class="row"> 
-	<div class="col-xs-1">
-	</div>
-
-
-	<div class="col-xs-10">
-		<div class="imgwrapper">	
-			<img src="graph-monthly.php?thedate=<?php echo $daydate ?>"
-			alt="" class="img-responsive" />
-		</div>
-	</div>
-	<div class="col-xs-1">
-	</div>
-
-</div>
-
-<br><br>
 <div class="row col-xs-12">
-	<div class="col-xs-4">
+	<div class="col-xs-2 text-center">
 	</div>
-	<div class="col-xs-4 text-center">
-	<a href="daily.php?date=<?php print $daybefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
-		<?php print $daydate ?>
-		
-		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
-	</div>	
-	<div class="col-xs-4">
+	<div class="col-xs-8 text-center">
+		...in Development
 	</div>
-</div>
--->
-
-
-
-
-
-
+	<div class="col-xs-2 text-center">
+	</div>
 </div>
 </section>
 </body>
 </html>
+

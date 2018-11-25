@@ -4,7 +4,8 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$daydate = $_GET[thedate];
+$daydate1 = $_GET[thedate];
+$daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
 $ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';
 $ll3file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll3.csv';
@@ -91,8 +92,13 @@ $highest1 = max($pvdiff);
 $highest = max($bezugdiff);
 $highest2 = max($einspeisungdiff);
 $highest = max($highest,$highest1,$highest2);
-
-$myData->setSerieOnAxis("Bezug ".$dailybezug,0);
+$socl = (min($soc) - 5);
+if ($socl < "0" ){
+	$minsoc = 0;
+} else {
+	$minsoc = $socl;
+}
+$myData->setSerieonAxis("Bezug ".$dailybezug,0);
 $myData->setSerieOnAxis("Einspeisung ".$dailyeinspeisung,0);
 $myData->setSerieOnAxis("PV ".$dailypv,0);
 $myData->setSerieOnAxis("EV LP1",0);
@@ -120,12 +126,15 @@ $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 
 $myData->setAxisName(0,"Wh");
-$AxisBoundaries = array(0=>array("Min"=>0,"Max"=>$highest),1=>array("Min"=>0,"Max"=>100));
+$myData->setAxisName(1,"SoC");
+
+
+$AxisBoundaries = array(0=>array("Min"=>0,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($soc) + 5)));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>20);
  
 
 
-$myImage = new pImage(950, 300, $myData);
+$myImage = new pImage(1000, 300, $myData);
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 18));

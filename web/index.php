@@ -107,10 +107,24 @@
 		if(strpos($line, "speichermodul=") !== false) {
 			list(, $speicherstatold) = explode("=", $line);
 		}
+		if(strpos($line, "lp1name=") !== false) {
+			list(, $lp1nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp2name=") !== false) {
+			list(, $lp2nameold) = explode("=", $line);
+		}
+		if(strpos($line, "lp3name=") !== false) {
+			list(, $lp3nameold) = explode("=", $line);
+		}
+
+		
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
-?>	
+	$lp1nameold = str_replace( "'", "", $lp1nameold);
+	$lp2nameold = str_replace( "'", "", $lp2nameold);
+	$lp3nameold = str_replace( "'", "", $lp3nameold);
 
+?>	
 <body>
 
 
@@ -156,9 +170,9 @@
 				</div>
 				</div>	
 				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-					LP1: <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
-					<span id="lp2lldiv">LP2: <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
-<span id="lp3lldiv">LP3: <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
+<?php echo $lp1nameold ?> <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
+					<span id="lp2lldiv"><?php echo $lp2nameold ?>  <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
+<span id="lp3lldiv"><?php echo $lp3nameold ?>  <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
 	<span id="gesamtlldiv">Gesamt: <span id="gesamtllwdiv"></span> Watt<br> </span>
 	SoC: <span id="soclevel"></span>% 
 
@@ -216,13 +230,13 @@
 			</div>
 			<div class="row" style="font-size: 2vw">
 				<div class="col-xs-4 text-center" style="font-size: 2vw">
-					Ladepunkt 1
+					LP1 <?php echo $lp1nameold ?>
 				</div>
 				<div  id="ladepunkts11div" class="col-xs-4 text-center">
-					Ladepunkt 2
+					LP2 <?php echo $lp2nameold ?>
 				</div>
 				<div id="ladepunkts22div" class="col-xs-4 text-center">
-					Ladepunkt 3
+					LP3 <?php echo $lp3nameold ?> 
 				</div>
 			</div>
 			<div class="row" style="font-size: 2vw">
@@ -290,7 +304,7 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
-						<label for="msmoduslp1">LP1</label>
+						<label for="msmoduslp1"></label>
 
 						<select type="text" name="msmoduslp1" id="msmoduslp1">
 						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -326,7 +340,8 @@
 						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 							<br><br>
-							<button><a href="./tools/resetlp1ladem.php">Reset</a></button> 
+
+						<button onclick="rslp1()">Reset</button>
 						
 					</span>
 					<span id="msmodusslp1"><br><br>
@@ -358,7 +373,7 @@
 			
 			<span id="ladepunkts111111div">
 			<div class="col-xs-4 text-center" style="font-size: 2vw">
-						<label for="msmoduslp2">LP2</label>
+						<label for="msmoduslp2"></label>
 
 						<select type="text" name="msmoduslp2" id="msmoduslp2">
 						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -399,7 +414,8 @@
 						</select> kWh
 						
 							<br><br>
-							<button><a href="./tools/resetlp2ladem.php">Reset</a></button> 
+						<button onclick="rslp2()">Reset</button>
+
 						
 					</span>
 					<span id="msmodusslp2"><br><br>
@@ -434,7 +450,7 @@
 			<span id="ladepunkts222222div">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
 			
-						<label for="lademstats2">LP3</label>
+						<label for="lademstats2"></label>
 
 						<select type="text" name="lademlp3check" id="lademlp3check">
 						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
@@ -469,7 +485,7 @@
 					<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 					</select> kWh
 					<br><br>
-						<button><a href="./tools/resetlp3ladem.php">Reset</a></button> 
+					<button onclick="rslp3()">Reset</button>
 				</span>	
 				</span>			
 			</div>
@@ -490,7 +506,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortll">Ladepunkt 1: <span id="sofortlll"></span>A</label>
+								<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
 							</div>
 							<script>
 								var slider = document.getElementById("sofortll");
@@ -511,7 +527,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortlls1">Ladepunkt 2: <span id="sofortllls1"></span>A</label>
+								<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
 							</div>
 							<script>
 								var sliders1 = document.getElementById("sofortlls1");
@@ -533,7 +549,7 @@
 								<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
 							</div>
 							<div class="col-xs-4 text-center">
-								<label for="sofortlls2">Ladepunkt 3: <span id="sofortllls2"></span>A</label>
+								<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
 							</div>
 							<script>
 								var sliders2 = document.getElementById("sofortlls2");
@@ -659,7 +675,8 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- stable -->	Ver 0.99				</div>
+
+				<!-- master -->	Ver 1.0				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
@@ -674,7 +691,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center">
-					<a href="/metern/index.php">Logging</a>
+					<a href="hilfe.html">Hilfe</a>
 				</div>
 				<div class="col-xs-4 text-right">
 					<a href="status.php">Status</a> 
@@ -687,10 +704,10 @@
 				</div>
 
 				<div class="col-xs-4 text-center">
-					<a href="hilfe.html">Hilfe</a>
+				
 				</div>
 				<div class="col-xs-4 text-right">
-					 <a href="logging/index.html">Logging (Beta)</a>
+					 <a href="logging/index.html">Logging</a>
 				</div>
 
 		
@@ -881,7 +898,41 @@ $(function() {
 });
 </script>
 
+<script>
+	function rslp1() {
+      $.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp1'},
+           success:function(html) {
+             
+           }
 
+	});
+	}
+	function rslp2() {
+       $.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp2'},
+           success:function(html) {
+             
+           }
+
+      });
+	}
+	function rslp3() {
+	$.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetlp3'},
+           success:function(html) {
+             
+           }
+	
+      });
+	}
+ </script>
 
 </body>
 
