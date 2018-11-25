@@ -675,7 +675,7 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- beta -->	Ver0.99.61beta				</div>
+				<!-- beta -->	Ver1.0.0beta				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
