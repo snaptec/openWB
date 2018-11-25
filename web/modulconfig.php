@@ -215,6 +215,9 @@ foreach($lines as $line) {
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
 	}
+	if(strpos($line, "wrkostalpikoip=") !== false) {
+		list(, $wrkostalpikoipold) = explode("=", $line);
+	}
 	if(strpos($line, "ladeleistungmodul=") !== false) {
 		list(, $ladeleistungmodulold) = explode("=", $line);
 	}
@@ -2797,7 +2800,6 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2894,7 +2896,7 @@ $(function() {
 			$('#pvmpm3pm').hide();
 			$('#pvwrkostalpiko').show();
    } 
-	$('#pvwattmodul').change(function(){
+  	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
 		$('#pvsdmwr').hide();

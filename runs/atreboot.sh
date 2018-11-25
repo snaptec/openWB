@@ -616,7 +616,6 @@ if ! grep -Fq "goetimeoutlp3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goetimeoutlp3=5" >> /var/www/html/openWB/openwb.conf
 fi
-
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
@@ -637,7 +636,7 @@ then
 	
 fi
 
-
+. /var/www/html/openWB/openwb.conf
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
 curl -d "update="$releasetrain$uuid"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
