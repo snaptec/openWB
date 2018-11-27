@@ -378,12 +378,13 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			<select type="text" name="dspeed" id="dspeed">
 				<option <?php if($dspeedold == 0) echo selected ?>value="0">Normal</option>
 				<option <?php if($dspeedold == 1) echo selected ?> value="1">Schnell</option>
+				<option <?php if($dspeedold == 2) echo selected ?> value="2">Langsam</option>
 			</select>
 			<br>
 		</div>
 		<div class="row">
-			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>
-		</div>
+			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
+	<br>	</div>
 
 <div class="row">
 	<b><label for="livegraph">Zeitintervall für den Live Graphen der Hauptseite:</label></b>

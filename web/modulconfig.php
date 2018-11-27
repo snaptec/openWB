@@ -215,6 +215,9 @@ foreach($lines as $line) {
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
 	}
+	if(strpos($line, "wrkostalpikoip=") !== false) {
+		list(, $wrkostalpikoipold) = explode("=", $line);
+	}
 	if(strpos($line, "ladeleistungmodul=") !== false) {
 		list(, $ladeleistungmodulold) = explode("=", $line);
 	}
@@ -2168,36 +2171,36 @@ $(function() {
 </div>
 
 <div id="wattbezugmpm3pm">
-		<div class="row bg-info">
+		<div class="row" style="background-color:#ffaa00">
 		<b><label for="mpm3pmevu">MPM3PM Zähler EVU Source:</label></b>
 		<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#ffaa00">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#ffaa00">
 		<b><label for="mpm3pmevuid">MPM3PM Zähler EVU ID:</label></b>
 		<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#ffaa00">
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#ffaa00">
 		<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#ffaa00">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	</div>
 
 </div>
 
 <div id="wattbezugnone">
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
 	<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV Modul<br><br>
 </div>
 
@@ -2205,25 +2208,25 @@ $(function() {
 	<br>
 </div>
 <div id="wattbezugsdm">
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	<b><label for="sdm630modbusbezugsource">SDM 630 Zähler Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
 	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 	<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#ffaa00">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
 </div>
@@ -2797,7 +2800,6 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2894,7 +2896,7 @@ $(function() {
 			$('#pvmpm3pm').hide();
 			$('#pvwrkostalpiko').show();
    } 
-	$('#pvwattmodul').change(function(){
+  	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
 		$('#pvsdmwr').hide();

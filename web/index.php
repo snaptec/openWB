@@ -143,7 +143,7 @@
 				<div class="col-xs-6 text-center bg-success" style="font-size: 2vw">
 					PV: <span id="pvdiv"></span>Watt 
 				</div>
-				<div class="col-xs-6 text-center bg-warning" style="font-size: 2vw">
+				<div class="col-xs-6 text-center" style="background-color:#ffaa00;font-size: 2vw" >
 					EVU: <span id="bezugdiv"></span>Watt 
 				</div>
 
@@ -675,7 +675,8 @@
 			</div> -->
 			<div class="row">
 				<div class="col-xs-4">
-				<!-- beta -->	Ver1.0.0beta				</div>
+
+				<!-- master -->	Ver 1.0				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 

@@ -616,6 +616,26 @@ if ! grep -Fq "goetimeoutlp3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goetimeoutlp3=5" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pushbenachrichtigung=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbenachrichtigung=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushovertoken=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushovertoken='demotoken'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushoveruser=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushoveruser='demouser'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstartl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstartl=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstopl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstopl=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
@@ -637,8 +657,10 @@ then
 	
 fi
 
-
+. /var/www/html/openWB/openwb.conf
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
+
 curl -d "update="$releasetrain$uuid"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

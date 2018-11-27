@@ -704,62 +704,62 @@ doInterval = setInterval(getfile, 2000);
 
 </div>
 <hr>
-<div class="row bg-warning">
-	<div class="col-xs-4 text-center bg-warning">
+<div class="row" style="background-color:#ffaa00">
+	<div class="col-xs-4 text-center">
 		EVU Spannung in V
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evuv1div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evuv2div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evuv3div"></div>
 	</div>
 </div>
 <hr>
-<div class="row bg-warning">
-	<div class="col-xs-4 text-center bg-warning">
+<div class="row" style="background-color:#ffaa00">
+	<div class="col-xs-4 text-center">
 		EVU Stromstaerke in A
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezuga1div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezuga2div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezuga3div"></div>
 	</div>
 </div>
 <hr>
-<div class="row bg-warning">
-	<div class="col-xs-4 text-center bg-warning">
+<div class="row" style="background-color:#ffaa00">
+	<div class="col-xs-4 text-center">
 		EVU Leistung in Watt
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezugw1div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezugw2div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="bezugw3div"></div>
 	</div>
 </div>
 <hr>
-<div class="row bg-warning">
-	<div class="col-xs-4 text-center bg-warning">
+<div class="row" style="background-color:#ffaa00">
+	<div class="col-xs-4 text-center">
 		EVU Power Faktor
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evupf1div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evupf2div"></div>
 	</div>
-	<div class="col-xs-2 text-center bg-warning">
+	<div class="col-xs-2 text-center">
 		<div id="evupf3div"></div>
 	</div>
 </div>
@@ -978,16 +978,16 @@ doInterval = setInterval(getfile, 2000);
 		<div class="col-xs-2 text-center bg-info">
 			<div id="soclevel"></div>
 		</div>
-		<div class="col-xs-2 text-center bg-warning">
+		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
 			EVU in Watt
 		</div>
-		<div class="col-xs-2 text-center bg-warning">
+		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
 			<div id="wattbezugdiv"></div>
 		</div>
-		<div class="col-xs-2 text-center bg-warning">
+		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
 			EVU in Hz
 		</div>
-		<div class="col-xs-2 text-center bg-warning">
+		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
 			<div id="evuhzdiv"></div>
 
 		</div>
