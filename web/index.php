@@ -676,7 +676,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.0				</div>
+				<!-- master -->	Ver 1.01beta				</div>
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
 
