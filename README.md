@@ -174,7 +174,7 @@ Crontab anpassen:
 	crontab -e
 hier einfügen:
 
-	* * * * /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log 2>&1 
+	* * * * * /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 30 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 

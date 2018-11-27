@@ -177,6 +177,44 @@ if [[ $debug == "2" ]]; then
 	echo "setze ladung auf $current" >> /var/www/html/openWB/web/lade.log
 fi
 
+# Loadsharing LP 1 / 2
+if [[ $loadsharinglp12 == "1" ]]; then
+	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
+	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
+	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
+	lla1=$(echo $lla1 | sed 's/\..*$//')
+	lla2=$(echo $lla2 | sed 's/\..*$//')
+	lla3=$(echo $lla3 | sed 's/\..*$//')
+	llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
+	llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
+	llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
+	llas11=$(echo $llas11 | sed 's/\..*$//')
+	llas12=$(echo $llas12 | sed 's/\..*$//')
+	llas13=$(echo $llas13 | sed 's/\..*$//')
+	lslpl1=$((lla1 + llas12))
+	lslpl2=$((lla2 + llas13))
+	lslpl3=$((lla3 + llas11))
+	if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
+		diff1=$((lslpl1 - 32 ))
+		diff2=$((lslpl2 - 32 ))
+		diff3=$((lslpl3 - 32 ))
+		lldiffmax=($diff1 $diff2 $diff3)
+		diffmax=0
+		for v in "${lldiffmax[@]}"; do
+					if (( v > diffmax )); then diffmax=$v; fi;
+				done
+		diffmax=$((diffmax + 2))
+		diffll=$((diffmax / 2))
+		current=$((current - diffll))
+		if [[ $debug == "2" ]]; then
+		echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+		fi
+	fi
+fi
+
+
+
+
 # set charging current - first charging point
 if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
 	setChargingCurrent

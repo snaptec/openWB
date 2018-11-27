@@ -40,6 +40,16 @@ if [[ $dspeed == "1" ]]; then
 		touch ramdisk/5sec
 	fi
 fi
+if [[ $dspeed == "2" ]]; then
+
+	if [ -e ramdisk/5sec ]; then
+		rm ramdisk/5sec
+		exit 0
+	else
+		touch ramdisk/5sec
+	fi
+fi
+
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
@@ -282,13 +292,6 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
-#Loadsharing LP1 und LP2
-if [[ $loadsharinglp12 == "1" ]]; then
-	lslpl1=$((lla1 + llas12))
-	lslpl2=$((lla2 + llas13))
-	lslpl3=$((lla3 + llas11))
-fi
-
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)
@@ -1180,20 +1183,20 @@ fi
 #NUR PV Uberschussregelung lademodus 2
 # wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
 if grep -q 2 "/var/www/html/openWB/ramdisk/lademodus"; then
-	if (( ladeleistung > 500 )); then
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/set-current.sh 0 m
-      			exit 0
-		fi
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-			runs/set-current.sh 0 s1
-      			exit 0
-		fi
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-			runs/set-current.sh 0 s2
-      			exit 0
-		fi
-	fi
+#	if (( ladeleistung > 500 )); then
+#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+#			runs/set-current.sh 0 m
+#     			exit 0
+#		fi
+#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
+#			runs/set-current.sh 0 s1
+#     			exit 0
+#		fi
+#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
+#			runs/set-current.sh 0 s2
+#     			exit 0
+#		fi
+#	fi
  if [[ $lastmanagement == "0" ]]; then
 	if (( soc < minnurpvsoclp1 )); then
 		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then

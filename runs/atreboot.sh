@@ -616,6 +616,27 @@ if ! grep -Fq "goetimeoutlp3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goetimeoutlp3=5" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pushbenachrichtigung=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbenachrichtigung=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushovertoken=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushovertoken='demotoken'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushoveruser=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushoveruser='demouser'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstartl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstartl=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstopl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstopl=1" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
