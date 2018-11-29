@@ -1393,14 +1393,14 @@ a.bg-info:focus {
 }
 a.bg-info2:hover,
 a.bg-info2:focus {
-  background-color: #77a6b2;
+  background-color: #befebe;
 }
 .bg-warning {
-  background-color: #fcf8e3;
+  background-color: #befebe;
 }
 a.bg-warning:hover,
 a.bg-warning:focus {
-  background-color: #f7ecb5;
+  background-color: #befebe;
 }
 .bg-danger {
   background-color: #f2dede;
