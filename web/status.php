@@ -704,7 +704,7 @@ doInterval = setInterval(getfile, 2000);
 
 </div>
 <hr>
-<div class="row" style="background-color:#ffaa00">
+<div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
 		EVU Spannung in V
 	</div>
@@ -719,7 +719,7 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 </div>
 <hr>
-<div class="row" style="background-color:#ffaa00">
+<div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
 		EVU Stromstaerke in A
 	</div>
@@ -734,7 +734,7 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 </div>
 <hr>
-<div class="row" style="background-color:#ffaa00">
+<div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
 		EVU Leistung in Watt
 	</div>
@@ -749,7 +749,7 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 </div>
 <hr>
-<div class="row" style="background-color:#ffaa00">
+<div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
 		EVU Power Faktor
 	</div>
@@ -949,7 +949,7 @@ doInterval = setInterval(getfile, 2000);
 </div>
 <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
-<div class="row bg-success">
+<div class="row" style="background-color:#BEFEBE">
 		<div class="col-xs-2 text-center">
 		PV Counter
 		</div>
@@ -978,16 +978,16 @@ doInterval = setInterval(getfile, 2000);
 		<div class="col-xs-2 text-center bg-info">
 			<div id="soclevel"></div>
 		</div>
-		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
+		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			EVU in Watt
 		</div>
-		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
+		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			<div id="wattbezugdiv"></div>
 		</div>
-		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
+		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			EVU in Hz
 		</div>
-		<div class="col-xs-2 text-center" style="background-color:#ffaa00">
+		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			<div id="evuhzdiv"></div>
 
 		</div>

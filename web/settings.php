@@ -338,6 +338,10 @@ foreach($lines as $line) {
 	if(strpos($line, "pushbstopl=") !== false) {
 		list(, $pushbstoplold) = explode("=", $line);
 	}
+	if(strpos($line, "loadsharinglp12=") !== false) {
+		list(, $loadsharinglp12old) = explode("=", $line);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -884,6 +888,32 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	<div class="row">
 Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen das Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
 	</div><br><br>
+
+<div class="row"><hr>
+	<h4>Loadsharing LP1/2</h4>
+</div>
+<div class="row">
+	<b><label for="loadsharinglp12">Loadsharing LP 1 / LP 2:</label></b>
+	<select type="text" name="loadsharinglp12" id="loadsharinglp12">
+		<option <?php if($loadsharinglp12old == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($loadsharinglp12old == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+<div class="row">
+	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
+	Sie stellt in jedem Lademodus sicher das nicht mehr als 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Der richtige Anschluss ist zu gewährleisten.<br>
+	Ladepunkt 1: <br>
+	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
+	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 2 Ladepunkt 1</p>
+	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 3 Ladepunkt 1</p>
+	Ladepunkt 2: <br>
+	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 2 Ladepunkt 2</p>
+	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 3 Ladepunkt 2</p>
+	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 1 Ladepunkt 2</p>
+	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
+
+</div>
 
 <div class="row"><hr>
 	<h4>Benachrichtigungen mit Pushover</h4>

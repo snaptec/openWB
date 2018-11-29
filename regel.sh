@@ -271,6 +271,15 @@ if [[ $wattbezugmodul != "none" ]]; then
 	evua1=$(echo $evua1 | sed 's/\..*$//')
 	evua2=$(echo $evua2 | sed 's/\..*$//')
 	evua3=$(echo $evua3 | sed 's/\..*$//')
+	if ! [[ $evua1 =~ $re ]] ; then
+		evua1="0"
+	fi
+	if ! [[ $evua2 =~ $re ]] ; then
+		evua2="0"
+	fi
+	if ! [[ $evua3 =~ $re ]] ; then
+		evua3="0"
+	fi
 else
 	wattbezug=$pvwatt
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
@@ -303,15 +312,17 @@ echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu-live.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
-livegraph=$((livegraph * 6 ))
+if ! [[ $livegraph == $re ]] ; then      
+	livegraph=$((livegraph * 6 ))
 	if ! [[ $livegraph =~ $re ]] ; then
-	 livegraph="30"
+	livegraph="30"
 	fi
-echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
-echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/www/html/openWB/ramdisk/soc-live.graph
-echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph
-echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev-live.graph)" > /var/www/html/openWB/ramdisk/ev-live.graph 
-echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/time-live.graph)" > /var/www/html/openWB/ramdisk/time-live.graph
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/www/html/openWB/ramdisk/soc-live.graph
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev-live.graph)" > /var/www/html/openWB/ramdisk/ev-live.graph 
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/time-live.graph)" > /var/www/html/openWB/ramdisk/time-live.graph
+fi
 #Long Time Graphing
 if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv.graph
