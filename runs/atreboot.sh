@@ -74,7 +74,7 @@ echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
-echo 0 > /var/www/html/openWB/ramdisk/lademodus
+echo 3 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
@@ -129,13 +129,15 @@ if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
-then
-	echo "test" > /dev/null
-else
-	sudo python /var/www/html/openWB/runs/ladetaster.py &
-fi
 
+if ! [ -x "$(command -v nmcli)" ]; then
+	if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		sudo python /var/www/html/openWB/runs/ladetaster.py &
+	fi
+fi
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
@@ -616,6 +618,32 @@ if ! grep -Fq "goetimeoutlp3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goetimeoutlp3=5" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pushbenachrichtigung=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbenachrichtigung=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushovertoken=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushovertoken='demotoken'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushoveruser=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushoveruser='demouser'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstartl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstartl=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbstopl=" /var/www/html/openWB/openwb.conf
+then
+		  echo "pushbstopl=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "smashmbezugid=" /var/www/html/openWB/openwb.conf
+then
+		  echo "smashmbezugid=1234567789" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
@@ -626,6 +654,10 @@ then
 	(crontab -l -u pi ; echo "*/5 * * * * /var/www/html/openWB/runs/cron5min.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
 fi
 
+if ! sudo grep -Fq "atreboot.sh" /var/spool/cron/crontabs/pi
+then
+	(crontab -l -u pi ; echo "@reboot /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
+fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get -qq update

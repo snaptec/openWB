@@ -174,7 +174,7 @@ Crontab anpassen:
 	crontab -e
 hier einfügen:
 
-	* * * * /var/www/html/openWB/regel.sh >> /var/www/html/openWB/web/lade.log 2>&1 
+	* * * * * /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 10 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 20 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 30 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
@@ -272,6 +272,35 @@ lademodus
 	minundpv
 	pvuberschuss
 	stop
+
+
+Die API kann auch abgefragt werden und antwortet im Json Format
+Nachfolgend die Werte zur Erklärung durch deren Einheit ersetzt
+
+	curl -X GET 'http://ipdesraspi/openWB/web/api.php?get=all'
+	{
+	  "date": "Jahr:Monat:Tag-Stunde-Minute-Sekunde",
+	  "lademodus": "0,1,2,3(0 Sofort, 1 Min+PV, 2 NurPV, 3 Stop",
+	  "llsoll": "A (Ziel Ladestromstärke)",
+	  "restzeitlp1": "Min oder H + Min",
+	  "restzeitlp2": "Min oder H + Min",
+	  "restzeitlp3": "Min oder H + Min",
+	  "gelkwhlp1": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
+	  "gelkwhlp2": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
+	  "gelkwhlp3": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
+	  "gelrlp1": "km (geladene Reichweite, aktueller bzw letzer Ladevorgang)",
+	  "gelrlp2": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
+	  "gelrlp3": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
+	  "llgesamt": "Watt (Ladeleistung aller Ladepunkte summiert)",
+	  "evua1": "Ampere (Hausanschlusspunkt Phase 1)",
+	  "evua2": "Ampere (Hausanschlusspunkt Phase 2)",
+	  "evua3": "Ampere (Hausanschlusspunkt Phase 3)",
+	  "lllp1": "Watt Ladeleistung Ladepunkt 1",
+	  "lllp2": "Watt Ladeleistung Ladepunkt 2",
+	  "lllp3": "Watt Ladeleistung Ladepunkt 3",
+	  "evuw": "Watt am Hausanschlusspunkt (EVU)",
+	  "pvw": "Watt PV Leistung"
+	}
 
 
 # Module erstellen

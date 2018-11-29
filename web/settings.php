@@ -323,6 +323,24 @@ foreach($lines as $line) {
 	if(strpos($line, "maxnurpvsoclp1=") !== false) {
 		list(, $maxnurpvsoclp1old) = explode("=", $line);
 	}
+	if(strpos($line, "pushbenachrichtigung=") !== false) {
+		list(, $pushbenachrichtigungold) = explode("=", $line);
+	}
+	if(strpos($line, "pushoveruser=") !== false) {
+		list(, $pushoveruserold) = explode("=", $line);
+	}
+	if(strpos($line, "pushovertoken=") !== false) {
+		list(, $pushovertokenold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstartl=") !== false) {
+		list(, $pushbstartlold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstopl=") !== false) {
+		list(, $pushbstoplold) = explode("=", $line);
+	}
+	if(strpos($line, "loadsharinglp12=") !== false) {
+		list(, $loadsharinglp12old) = explode("=", $line);
+	}
 
 }
 
@@ -332,6 +350,9 @@ $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
+$pushoveruserold = str_replace( "'", "", $pushoveruserold);
+$pushovertokenold = str_replace( "'", "", $pushovertokenold);
+
 
 
 
@@ -867,6 +888,112 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	<div class="row">
 Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen das Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
 	</div><br><br>
+
+<div class="row"><hr>
+	<h4>Loadsharing LP1/2</h4>
+</div>
+<div class="row">
+	<b><label for="loadsharinglp12">Loadsharing LP 1 / LP 2:</label></b>
+	<select type="text" name="loadsharinglp12" id="loadsharinglp12">
+		<option <?php if($loadsharinglp12old == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($loadsharinglp12old == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+<div class="row">
+	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
+	Sie stellt in jedem Lademodus sicher das nicht mehr als 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Der richtige Anschluss ist zu gewährleisten.<br>
+	Ladepunkt 1: <br>
+	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
+	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 2 Ladepunkt 1</p>
+	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 3 Ladepunkt 1</p>
+	Ladepunkt 2: <br>
+	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 2 Ladepunkt 2</p>
+	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 3 Ladepunkt 2</p>
+	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 1 Ladepunkt 2</p>
+	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
+
+</div>
+
+<div class="row"><hr>
+	<h4>Benachrichtigungen mit Pushover</h4>
+</div>
+<div class="row">
+	<b><label for="pushbenachrichtigung">Pushover Benachrichtigungen:</label></b>
+	<select type="text" name="pushbenachrichtigung" id="pushbenachrichtigung">
+		<option <?php if($pushbenachrichtigungold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($pushbenachrichtigungold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="pushbaus">
+	<br>
+</div>
+<div id="pushban">
+	<div class="row">
+	Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen.<br> Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden.<br>
+Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushoveruser">Pushover User String:</label></b>
+        	<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Hier das User Token von Pushover eintragen<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushovertoken">Pushover App Token:</label></b>
+        	<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>"><br>
+<br>
+	</div>
+	<div class="row">
+		Hier das Application Token von Pushover eintragen<br><br>
+	</div>
+
+	<div class="row"><hr>
+		<b>Benachrichtigungseinstellungen:</b><br><br>
+	</div>
+	<div class="row">
+		<b><label for="pushbstartl">Beim Starten der Ladung:</label></b>
+	       	<select type="text" name="pushbstartl" id="pushbstartl">
+ 			<option <?php if($pushbstartlold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstartlold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+	<div class="row">
+		<b><label for="pushbstopl">Beim Stoppen der Ladung:</label></b>
+	       	<select type="text" name="pushbstopl" id="pushbstopl">
+ 			<option <?php if($pushbstoptlold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstoplold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+
+
+</div><br>
+<script>
+$(function() {
+      if($('#pushbenachrichtigung').val() == '0') {
+		$('#pushbaus').show(); 
+		$('#pushban').hide();
+      } else {
+		$('#pushbaus').hide();
+	       	$('#pushban').show();	
+      } 
+
+	$('#pushbenachrichtigung').change(function(){
+	        if($('#pushbenachrichtigung').val() == '0') {
+			$('#pushbaus').show(); 
+			$('#pushban').hide();
+	        } else {
+			$('#pushbaus').hide();
+		       	$('#pushban').show();	
+	        } 
+	    });
+});
+</script>
 
 
 </div>

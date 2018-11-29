@@ -525,7 +525,9 @@ foreach($lines as $line) {
 	if(strpos($line, "goetimeoutlp3=") !== false) {
 		list(, $goetimeoutlp3old) = explode("=", $line);
 	}
-
+	if(strpos($line, "smashmbezugid=") !== false) {
+		list(, $smashmbezugidold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -999,7 +1001,7 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="teslasocpw">Tesla Passwort:</label></b>
-		<input type="text" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>"><br>
+		<input type="password" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Password des Tesla Logins<br><br>
@@ -1042,7 +1044,7 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="zoepasswort">Passwort:</label></b>
-		<input type="text" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>"><br>
+		<input type="password" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Renault Zoe Passwort<br><br>
@@ -1058,7 +1060,7 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="evnotifypasswort">Passwort:</label></b>
-		<input type="text" name="evnotifypasswort" id="evnotifypasswort" value="<?php echo $evnotifypasswortold ?>"><br>
+		<input type="password" name="evnotifypasswort" id="evnotifypasswort" value="<?php echo $evnotifypasswortold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Passwort des Kontos<br><br>
@@ -1075,7 +1077,7 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="leafpasswort">Passwort:</label></b>
-		<input type="text" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>"><br>
+		<input type="password" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Nissan Connect Passwort<br><br>
@@ -1091,7 +1093,7 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		<b><label for="i3passwort">Passwort:</label></b>
-		<input type="text" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>"><br>
+		<input type="password" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		BMW Services Passwort<br><br>
@@ -1580,7 +1582,7 @@ Keine Konfiguration erforderlich.<br>
 		</div>
 		<div class="row bg-info">
 			<b><label for="leafpassworts1">Passwort:</label></b>
-			<input type="text" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
+			<input type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
 		</div>
 		<div class="row bg-info">
 			Nissan Connect Passwort<br><br>
@@ -1596,7 +1598,7 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="i3passworts1">Passwort:</label></b>
-		<input type="text" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>"><br>
+		<input type="password" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>"><br>
 	</div>
 	<div class="row bg-info">
 		BMW Services Passwort<br><br>
@@ -2161,46 +2163,47 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
 		<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
+		<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 		<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
 	</select>
 </div>
 <div class="row">
-	Weitere Einstellungen je nach Modul beachten.<br><br>
+<br><br>
 </div>
 
 <div id="wattbezugmpm3pm">
-		<div class="row bg-info">
+		<div class="row" style="background-color:#febebe">
 		<b><label for="mpm3pmevu">MPM3PM Zähler EVU Source:</label></b>
 		<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="mpm3pmevuid">MPM3PM Zähler EVU ID:</label></b>
 		<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 		<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	</div>
 
 </div>
 
 <div id="wattbezugnone">
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
 	<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV Modul<br><br>
 </div>
 
@@ -2208,141 +2211,152 @@ $(function() {
 	<br>
 </div>
 <div id="wattbezugsdm">
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	<b><label for="sdm630modbusbezugsource">SDM 630 Zähler Source:</label></b>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
 	<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 	<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
 </div>
-<div class="row bg-info">
+<div class="row" style="background-color:#febebe">
 	Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 </div>
 </div>
 <div id="wattbezugvz">
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
 		<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
 		<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
 		<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
 		<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.<br><br>
 	</div>
 </div>
 <div id="wattbezughttp">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_http_w_url">Vollständige URL für den Watt Bezug</label></b>
 		<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.<br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
 		<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_http_ekwh_url">Vollständige URL für die kWh Einspeisung</label></b>
 		<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 </div>
+
+<div id="wattbezugshm">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="smashmdbezugid">Seriennummer des SMA Home Manager</label></b>
+		<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Home Manager für Bezug/Einspeisung angeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen.<br><br>
+	</div>
+</div>
+
 <div id="wattbezugsma">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="smaemdbezugid">Seriennummer des SMA Energy Meter</label></b>
 		<input type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br> Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
 	</div>
 </div>
 <div id="wattbezugfronius">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
 	</div>
 </div>
 <div id="wattbezugjson">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezugjsonurl">Bezug URL:</label></b>
 		<input type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo $bezugjsonurlold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezugjsonwatt">Json Abfrage für Watt:</label></b>
 		<input type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo $bezugjsonwattold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezugjsonkwh">Json Abfrage für Bezug kWh:</label></b>
 		<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung kWh:</label></b>
 		<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerSelfSupplied - ohne die - - eingetragen werden<br><br>
 	</div>
 
 </div>
 <div id="wattbezugsolarlog">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
 		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig.<br> 
 	</div>
 </div>
 <div id="wattbezugsolaredge">
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		<b><label for="solaredgeip">IP Adresse des SolarEdge</label></b>
 		<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Das Modul liest PV Watt, EVU Watt, PV Produktion, EVU Bezug und EVU Einspeisung aus.<br>
 		Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 		Ebenso muss ModbusTCP am Wechselrichter aktiviert werden<br> 
@@ -2363,7 +2377,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
 
       } 
@@ -2378,7 +2392,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
 
       } 
@@ -2393,7 +2407,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
 
       } 
@@ -2408,7 +2422,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -2422,7 +2436,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -2436,7 +2450,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -2450,7 +2464,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -2464,6 +2478,7 @@ $(function() {
 		$('#wattbezugmpm3pm').show();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
 		$('#wattbezugvz').hide();
@@ -2476,7 +2491,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
 		$('#wattbezugvz').hide();
@@ -2489,9 +2504,21 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
-
+		$('#wattbezugshm').hide();
    }
-
+  if($('#wattbezugmodul').val() == 'bezug_smashm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').show();
+   }
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -2504,7 +2531,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -2516,7 +2543,7 @@ $(function() {
 		$('#wattbezugjson').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -2529,7 +2556,7 @@ $(function() {
 		$('#wattbezugjson').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
     } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -2543,7 +2570,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -2555,7 +2582,7 @@ $(function() {
 		$('#wattbezugjson').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -2568,7 +2595,7 @@ $(function() {
 		$('#wattbezugjson').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -2581,7 +2608,7 @@ $(function() {
 		$('#wattbezugjson').show();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -2594,7 +2621,7 @@ $(function() {
 		$('#wattbezugjson').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').show();
 
     } 
@@ -2610,7 +2637,7 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
-
+		$('#wattbezugshm').hide();
 
     } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -2624,7 +2651,20 @@ $(function() {
 		$('#wattbezugmpm3pm').hide();
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
-
+		$('#wattbezugshm').hide();
+   }
+  if($('#wattbezugmodul').val() == 'bezug_smashm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').show();
    }
 
 	    });
@@ -2643,77 +2683,77 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">WR mit URL abfragen</option>
 		<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">SMA Energy Meter</option>
 		<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
-		<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">Beta MPM3PM </option>
+		<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">MPM3PM </option>
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
 </select>
 </div>
 <div class="row">
-	Weitere Module auf Anfrage.<br><br>
+	<br><br>
 </div>
 <div id="pvnone">
 	<br>
 </div>
 <div id="pvwrjson">
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrjsonurl">WR URL:</label></b>
 		<input type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrjsonwatt">Json Abfrage für Watt:</label></b>
 		<input type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo $wrjsonwattold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrjsonkwh">Json Abfrage für kWh:</label></b>
 		<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
 	</div>
 </div>
 <div id="pvwrkostalpiko">
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrfroniusip">WR Kostal Piko IP:</label></b>
 		<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Kostal Wechselrichter.<br><br>
 	</div>
 </div>
 <div id="pvwrfronius">
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrfroniusip">WR Fronius IP:</label></b>
 		<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
 	</div>
 </div>
 <div id="pvmpm3pm">
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="mpm3pmpvsource">MPM3PM Wechselrichterleistung Source:</label></b>
 		<input type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="mpm3pmpvid">MPM3PM Wechselrichterleistung ID:</label></b>
 		<input type="text" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo $mpm3pmpvidold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="mpm3pmpvlanip">IP des Modbus/Lan Konverter:</label></b>
 		<input type="text" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	</div>
 </div>
@@ -2721,30 +2761,30 @@ $(function() {
 
 
 <div id="pvsdmwr">
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
 		<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
 		<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
 		<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
 	</div>
-	<div class="row bg-info">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
 	</div>
 </div>
 <div id="pvvzl">
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
 		<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
 	</div>
@@ -2760,29 +2800,29 @@ $(function() {
 	</div>
 </div>
 <div id="pvhttp">
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wr_http_w_url">Vollständige URL für die Wechselrichter Watt</label></b>
 		<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wr_http_kwh_url">Vollständige URL für die Wechselrichter absolut kWh</label></b>
 		<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 
 
 </div>
 <div id="pvsma">
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="smaemdpvid">Seriennummer des SMA Energy Meter</label></b>
 		<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
 
 	</div>

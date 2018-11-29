@@ -62,7 +62,7 @@ f.close()
 resp = client.read_input_registers(0x0A,4, unit=sdmid)
 voltage = resp.registers[1]
 voltage = float(voltage) / 10
-f = open('/var/www/html/openWB/ramdisk/lllv2', 'w')
+f = open('/var/www/html/openWB/ramdisk/llv2', 'w')
 f.write(str(voltage))
 f.close()
 
