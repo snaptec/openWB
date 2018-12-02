@@ -1,0 +1,21 @@
+Source: openwb
+Section: unknown
+Priority: optional
+Maintainer: David Meder-Marouelli <meder@dmlaptop.fritz.box>
+Build-Depends: debhelper (>= 9), build-essential, git, dh-python, python3-dev, i2c-tools
+Standards-Version: 3.9.8
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: https://anonscm.debian.org/collab-maint/openwb.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/openwb.git
+
+Package: openwb
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${} bc, apache2, php, php-gd, php7.0-xml, libapache2-mod-php7.0, jq, python3, python3-pymodbus, i2c-tools, socat
+Description: Control software for openWB wallbox
+ This package contains all components to run an openWB wallbox.
+ It is primarily designed to run on a RaspberryPi but should also run on most other linux systems too.
+ In particular it contains:
+ * The web frontend (in PHP)
+ * logic for reading data from wallbox components
+ * logic for reading data from external sources
+ * logic for controlling multiple charging points
