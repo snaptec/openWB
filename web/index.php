@@ -4,20 +4,36 @@
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+         <meta name="apple-mobile-web-app-capable" content="yes">
+         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+         <meta name="apple-mobile-web-app-title" content="OpenWB">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  /> 
+	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
+	<meta name="apple-mobile-web-app-title" content="OpenWB">
 	<title>OpenWB</title>
 	<meta name="description" content="OpenWB" />
 	<meta name="keywords" content="OpenWB" />
 	<meta name="author" content="Kevin Wieland" />
-	<!-- Favicons (created with http://realfavicongenerator.net/)-->
+	<link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/favicons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="img/favicons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="img/favicons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="img/favicons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#00a8ff">
+	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
 	<!-- Normalize -->
@@ -34,6 +50,8 @@
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+	<link rel="stylesheet" type="text/css" href="css/pwa.css">
+
 </head>
 <script src="live.js"></script>
 
@@ -120,6 +138,8 @@
 		
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
+	$nachtladenstate = file_get_contents('/var/www/html/openWB/ramdisk/nachtladenstate');
+	$nachtladenstates1 = file_get_contents('/var/www/html/openWB/ramdisk/nachtladenstates1');
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
@@ -150,38 +170,103 @@
 			</div></div>
 			<div id="speicherstatdiv">
 			<div class="row"><div class="col-xs-12 text-center">
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					Speicher: 
 				</div>
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
-					<span id="speichersocdiv"></span> % SoC 
-				</div>
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					 <span id="speicherleistungdiv"></span>Watt 
 				</div>
-
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+					<span id="speichersocdiv"></span> % SoC 
+				</div>
 			</div></div>
 			</div>
 			<br>
-			<div class="row"><div class="col-xs-6 text-center">
-				<div class="imgwrapper">	
-				<img id="livegraph" src="graph-live.php"
-     				alt="Graph" class="img-responsive" />
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<div class="imgwrapper">	
+					<img id="livegraph" src="graph-live.php"
+     					alt="Graph" class="img-responsive" />
+					<br></div>
 				</div>
-				</div>	
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-<?php echo $lp1nameold ?> <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
-					<span id="lp2lldiv"><?php echo $lp2nameold ?>  <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
-<span id="lp3lldiv"><?php echo $lp3nameold ?>  <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
-	<span id="gesamtlldiv">Gesamt: <span id="gesamtllwdiv"></span> Watt<br> </span>
-	SoC: <span id="soclevel"></span>% 
+			</div>
+			<div class="row">
+			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+				Nachtladen LP 1 aktiv
+			</div>
+			 <div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+				Nachtladen LP 2 aktiv
+			</div>
+	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
+	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
+	<script>
+	$(function() {
+	   if($('#nachtladenstate').val() == '1') {
+		$('#nachtladenstatediv').show(); 
+	      } else {
+		$('#nachtladenstatediv').hide();
+	      } 
+
+	});
+	$(function() {
+	   if($('#nachtladenstates1').val() == '1') {
+		$('#nachtladenstates1div').show(); 
+	      } else {
+		$('#nachtladenstates1div').hide();
+	      } 
+
+	});
+	</script>
 
 
-
-				
+			</div>
+			<div class="row">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+				<?php echo $lp1nameold ?> 	
 				</div>
 
-			</div><br>
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A Soll
+				</div>
+				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+					<span id="soclevel"></span>% SoC	
+				</div>
+			</div>
+			<div class="row" id="lp2lldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<?php echo $lp2nameold ?> 	
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A
+				</div>
+				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+					<span id="soc1level"></span>% SoC
+				</div>
+			</div>
+			<div class="row" id="lp3lldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<?php echo $lp3nameold ?> 	
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
+				</div>
+				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
+				</div>
+			</div>
+			<div class="row" id="gesamtlldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					Gesamt: <span id="gesamtllwdiv"></span> Watt<br> 
+				</div>
+					<div class="col-xs-4 text-center" style="font-size: 2vw">
+				</div>
+			</div>
+			<br>
 			
 
 
@@ -662,7 +747,9 @@
 						      } 
 
 						});
+
 						</script>
+						
 				</div>
 			</div> 
 			<div class="row">
@@ -676,7 +763,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.02 nightly				</div>
+				<!-- master -->	Ver 1.05 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -714,6 +801,8 @@
 		
 
 			</div>	
+
+					
 					<br><br><br><br>
 					</div>
 	</section>

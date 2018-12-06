@@ -179,35 +179,66 @@ fi
 
 # Loadsharing LP 1 / 2
 if [[ $loadsharinglp12 == "1" ]]; then
-	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
-	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
-	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
-	lla1=$(echo $lla1 | sed 's/\..*$//')
-	lla2=$(echo $lla2 | sed 's/\..*$//')
-	lla3=$(echo $lla3 | sed 's/\..*$//')
-	llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
-	llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
-	llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
-	llas11=$(echo $llas11 | sed 's/\..*$//')
-	llas12=$(echo $llas12 | sed 's/\..*$//')
-	llas13=$(echo $llas13 | sed 's/\..*$//')
-	lslpl1=$((lla1 + llas12))
-	lslpl2=$((lla2 + llas13))
-	lslpl3=$((lla3 + llas11))
-	if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
-		diff1=$((lslpl1 - 32 ))
-		diff2=$((lslpl2 - 32 ))
-		diff3=$((lslpl3 - 32 ))
-		lldiffmax=($diff1 $diff2 $diff3)
-		diffmax=0
-		for v in "${lldiffmax[@]}"; do
-					if (( v > diffmax )); then diffmax=$v; fi;
-				done
-		diffmax=$((diffmax + 2))
-		diffll=$((diffmax / 2))
-		current=$((current - diffll))
-		if [[ $debug == "2" ]]; then
-		echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+	if (( current > 16 )); then
+		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
+		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
+		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
+		lla1=$(echo $lla1 | sed 's/\..*$//')
+		lla2=$(echo $lla2 | sed 's/\..*$//')
+		lla3=$(echo $lla3 | sed 's/\..*$//')
+		llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
+		llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
+		llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
+		llas11=$(echo $llas11 | sed 's/\..*$//')
+		llas12=$(echo $llas12 | sed 's/\..*$//')
+		llas13=$(echo $llas13 | sed 's/\..*$//')
+		lslpl1=$((lla1 + llas12))
+		lslpl2=$((lla2 + llas13))
+		lslpl3=$((lla3 + llas11))
+		#detect charging cars
+		if (( lla1 > 5 )); then
+			lp1c=1
+			if (( lla2 > 5 )); then
+				lp1c=2
+			fi
+		else
+			lp1c=0
+		fi
+		if (( llas11 > 5 )); then
+			lp2c=2
+			if (( llas12 > 5 )); then
+				lp2c=2
+			fi
+		else
+			lp2c=0
+		fi
+		chargingphases=$(( lp1c + lp2c ))
+		if (( chargingphases > 2 )); then
+			current=16
+		fi
+		if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
+			current=16
+			setChargingCurrent
+			echo $current > /var/www/html/openWB/ramdisk/llsoll
+			echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
+			evsecon=$evsecons1
+			dacregister=$dacregisters1
+			modbusevsesource=$evsesources1
+			modbusevseid=$evseids1
+			evsewifitimeoutlp1=$evsewifitimeoutlp2
+			evsewifiiplp1=$evsewifiiplp2
+			goeiplp1=$goeiplp2
+			goetimeoutlp1=$goetimeoutlp2
+
+			# dirty call (no parameters, all is set above...)
+			setChargingCurrent
+
+			echo $current > /var/www/html/openWB/ramdisk/llsolls1
+			echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
+
+			if [[ $debug == "2" ]]; then
+			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+			fi
 		fi
 	fi
 fi

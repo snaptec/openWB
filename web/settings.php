@@ -515,6 +515,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
  			<option <?php if($nachtladenabuhrold == 21) echo selected ?> value="21">21</option>
  			<option <?php if($nachtladenabuhrold == 22) echo selected ?> value="22">22</option>
 			<option <?php if($nachtladenabuhrold == 23) echo selected ?> value="23">23</option>
+			<option <?php if($nachtladenabuhrold == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
 	<div class="row">
@@ -523,7 +524,8 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	<div class="row">
 		<b><label for="nachtladenbisuhr">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhr" id="nachtladenbisuhr">
- 			<option <?php if($nachtladenbisuhrold == 1) echo selected ?> value="1">1</option>
+			<option <?php if($nachtladenbisuhrold == 0) echo selected ?> value="0">0</option>
+			<option <?php if($nachtladenbisuhrold == 1) echo selected ?> value="1">1</option>
   			<option <?php if($nachtladenbisuhrold == 2) echo selected ?> value="2">2</option>
 	 		<option <?php if($nachtladenbisuhrold == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladenbisuhrold == 4) echo selected ?> value="4">4</option>
@@ -635,6 +637,7 @@ $(function() {
  			<option <?php if($nachtladenabuhrs1old == 21) echo selected ?> value="21">21</option>
  			<option <?php if($nachtladenabuhrs1old == 22) echo selected ?> value="22">22</option>
 			<option <?php if($nachtladenabuhrs1old == 23) echo selected ?> value="23">23</option>
+			<option <?php if($nachtladenabuhrs1old == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
 	<div class="row">
@@ -643,7 +646,8 @@ $(function() {
 	<div class="row">
 		<b><label for="nachtladenbisuhrs1">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhrs1" id="nachtladenbisuhrs1">
- 			<option <?php if($nachtladenbisuhrs1old == 1) echo selected ?> value="1">1</option>
+ 			<option <?php if($nachtladenbisuhrs1old == 0) echo selected ?> value="0">0</option>
+			<option <?php if($nachtladenbisuhrs1old == 1) echo selected ?> value="1">1</option>
   			<option <?php if($nachtladenbisuhrs1old == 2) echo selected ?> value="2">2</option>
 	 		<option <?php if($nachtladenbisuhrs1old == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladenbisuhrs1old == 4) echo selected ?> value="4">4</option>

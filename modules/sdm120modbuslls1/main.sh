@@ -99,7 +99,7 @@ if [[ $sdm120modbusllid1s1 != "none" ]] && [[ $sdm120modbusllid2s1 != "none" ]] 
 else
 	if [[ $sdm120modbusll2ids1 != "none" ]] ; then
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm3.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm1.py $sdm120lp2source $sdm120modbusllid1s1)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )
@@ -157,7 +157,7 @@ else
 		fi
 	else
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm3.py $sdm120lp2source $sdm120modbusllid1s1)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm2.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )

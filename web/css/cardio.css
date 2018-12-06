@@ -32,8 +32,8 @@ body {
 
 .preloader img {
 	position: absolute;
-	top: calc(50% - 32px);
-	left: calc(50% - 32px);
+	top: calc(40% - 60px);
+	left: calc(50% - 150px);
 }
 
 .preloader div {

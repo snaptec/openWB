@@ -1,1 +1,0 @@
-Favicons generated with http://realfavicongenerator.net/

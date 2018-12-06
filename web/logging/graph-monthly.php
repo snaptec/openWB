@@ -117,7 +117,7 @@ $myImage->setFontProperties(array(
 $myImage->setGraphArea(105,25, 1095,375);
 
 $myImage->drawScale($ScaleSettings);
-$settings = array("DisplayPos"=>LABEL_POS_INSIDE, "DisplayValues"=>TRUE, "DisplayOrientation"=>ORIENTATION_VERTICAL, "Gradient"=>TRUE);
+$settings = array("DisplayPos"=>LABEL_POS_INSIDE, "DisplayValues"=>FALSE, "DisplayOrientation"=>ORIENTATION_VERTICAL, "Gradient"=>TRUE);
 $myImage->drawBarChart($settings);
 $myImage->drawLegend(360,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
