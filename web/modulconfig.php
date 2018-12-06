@@ -528,6 +528,26 @@ foreach($lines as $line) {
 	if(strpos($line, "smashmbezugid=") !== false) {
 		list(, $smashmbezugidold) = explode("=", $line);
 	}
+	if(strpos($line, "mpm3pmspeicherpv=") !== false) {
+		list(, $mpm3pmspeicherpvold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmspeicherid=") !== false) {
+		list(, $mpm3pmspeicheridold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmspeicherlanip=") !== false) {
+		list(, $mpm3pmspeicherlanipold) = explode("=", $line);
+	}
+
+	if(strpos($line, "mpm3pmspeichersource=") !== false) {
+		list(, $mpm3pmspeichersourceold) = explode("=", $line);
+	}
+	if(strpos($line, "speicherekwh_http=") !== false) {
+		list(, $speicherekwh_httpold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "speicherikwh_http=") !== false) {
+		list(, $speicherikwh_httpold) = explode("=", $line, 2);
+	}
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -546,6 +566,11 @@ $einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
 $bezug_solarlog_ipold = str_replace( "'", "", $bezug_solarlog_ipold);
 $speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
 $speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
+$speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
+$speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
+
+
+
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
@@ -3058,6 +3083,8 @@ $(function() {
 	<select type="text" name="speichermodul" id="speichermodul">
 		<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
+		<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
+
 	</select>
 </div>
 
@@ -3079,31 +3106,92 @@ $(function() {
 	<div class="row">
 		Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.<br><br>
 	</div>
+	<div class="row">
+		<b><label for="speicherikwh_http">Speicher Import Wh URL:</label></b>
+		<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Wenn nicht vorhanden, none eintragen. Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
+	<br><br>
+	</div>
+	<div class="row">
+		<b><label for="speicherekwh_http">Speicher Export Wh URL:</label></b>
+		<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>"><br>
+	</div>
+	<div class="row">
+		Gültige Werte URL. Wenn nicht vorhanden, none eintragen.  Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
+	<br><br>
+	</div>
+</div>
+<div id="divspeichermpm3pm">
+	<div class="row"><br>
+		<b><label for="mpm3pmspeichersource">Modbus Source:</label></b>
+		<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus<br><br>
+	</div>
+	<div class="row">
+		<b><label for="mpm3pmspeicherid">Modbus ID:</label></b>
+		<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte Zahl. <br><br>
+	</div>
+	<div class="row">
+		<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
+		<select type="text" name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
+			<option <?php if($mpm3pmspeicherpvold == "0\n") echo selected ?> value="0">Keine extra Berechnung</option>
+			<option <?php if($mpm3pmspeicherpvold == "1\n") echo selected ?> value="1">Subtrahieren der PV Leistung</option>
+		</select>
+	</div><br>
+	<div class="row">
+		<b><label for="mpm3pmspeicherlanip">Lan Modbus Konverter IP:</label></b>
+		<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte eine IP Adresse. <br>
+	</div>
 
 </div>
-
 <script>
 $(function() {
       if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 		$('#divspeicherhttp').hide();
-	
+		$('#divspeichermpm3pm').hide();
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
 		$('#divspeicherhttp').show();
+		$('#divspeichermpm3pm').hide();
+   }
+   if($('#speichermodul').val() == 'mpm3pmspeicher')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').show();
+
    }
 $('#speichermodul').change(function(){
      if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 		$('#divspeicherhttp').hide();
-	
+		$('#divspeichermpm3pm').hide();
+
       } 
     if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
+		$('#divspeichermpm3pm').hide();
 		$('#divspeicherhttp').show();
    }
-	});
+   if($('#speichermodul').val() == 'mpm3pmspeicher')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').show();
+
+   }
+});
+
 });
 </script>
 

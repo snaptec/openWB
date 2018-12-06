@@ -38,7 +38,9 @@ if ! [ -x "$(command -v apachectl)" ]; then
 	apt-get -qq install -y php-gd
 	sleep 1
 	apt-get -qq install -y php7.0-xml
-	sleep 2 
+	sleep 2
+        apt-get -qq install -y php-curl
+	sleep 1	
 	apt-get -qq install -y libapache2-mod-php7.0
 	sleep 2
 	apt-get -qq install -y jq

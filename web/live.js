@@ -101,6 +101,12 @@ $.ajax({
       $("#soclevel").html(request.responseText);
         }
         });
+ $.ajax({
+   url: "/openWB/ramdisk/soc1",
+    complete: function(request){
+      $("#soc1level").html(request.responseText);
+        }
+        });
 $.ajax({
    url: "/openWB/ramdisk/restzeitlp1",
     complete: function(request){

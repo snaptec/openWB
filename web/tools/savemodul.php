@@ -1165,6 +1165,30 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	    if(strpos($line, "speicherikwh_http=") !== false) {
+	    $result .= 'speicherikwh_http=\''.$_POST[speicherikwh_http]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "speicherekwh_http=") !== false) {
+	    $result .= 'speicherekwh_http=\''.$_POST[speicherekwh_http]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
 	    if(strpos($line, "speichersoc_http=") !== false) {
 	    $result .= 'speichersoc_http=\''.$_POST[speichersoc_http]."'\n";
 	    } 
@@ -1448,6 +1472,51 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/web/files/smashm.conf', $result);
+
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmspeicherpv=") !== false) {
+    	    $result .= 'mpm3pmspeicherpv='.$_POST[mpm3pmspeicherpv]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmspeicherid=") !== false) {
+    	    $result .= 'mpm3pmspeicherid='.$_POST[mpm3pmspeicherid]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmspeichersource=") !== false) {
+    	    $result .= 'mpm3pmspeichersource='.$_POST[mpm3pmspeichersource]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "mpm3pmspeicherlanip=") !== false) {
+    	    $result .= 'mpm3pmspeicherlanip='.$_POST[mpm3pmspeicherlanip]."\n";
+    	    } 
+   	    else {
+    	    $result .= $line;
+    	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 

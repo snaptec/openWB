@@ -27,6 +27,10 @@ touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 touch /var/www/html/openWB/ramdisk/llkwhs2
 touch /var/www/html/openWB/ramdisk/speicher
+touch /var/www/html/openWB/ramdisk/nachtladenstate
+touch /var/www/html/openWB/ramdisk/nachtladenstates1
+echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
+echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
@@ -111,6 +115,8 @@ echo 0 > /var/www/html/openWB/ramdisk/soc.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
+echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -642,7 +648,22 @@ if ! grep -Fq "smashmbezugid=" /var/www/html/openWB/openwb.conf
 then
 		  echo "smashmbezugid=1234567789" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "mpm3pmspeichersource=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeichersource=/dev/tty2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherid=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherid=8" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherpv=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherpv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherlanip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherlanip=192.168.5.10" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
