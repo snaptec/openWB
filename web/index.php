@@ -4,7 +4,7 @@
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
          <meta name="apple-mobile-web-app-capable" content="yes">
          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
          <meta name="apple-mobile-web-app-title" content="OpenWB">
@@ -159,15 +159,16 @@
 				<h3> OpenWB Charge Controller </h3>
 				</div>
 			</div>
-			<div class="row"><div class="col-xs-12 text-center">
+			<div class="row">
+				<div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
-					PV: <span id="pvdiv"></span>Watt 
+						PV: <span id="pvdiv"></span>Watt 
+					</div>
+					<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+						EVU: <span id="bezugdiv"></span>Watt 
+					</div>
 				</div>
-				<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-					EVU: <span id="bezugdiv"></span>Watt 
-				</div>
-
-			</div></div>
+			</div>
 			<div id="speicherstatdiv">
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
@@ -221,7 +222,7 @@
 
 
 			</div>
-			<div class="row">
+			<div class="row col-xs-12">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				<?php echo $lp1nameold ?> 	
 				</div>
@@ -233,7 +234,7 @@
 					<span id="soclevel"></span>% SoC	
 				</div>
 			</div>
-			<div class="row" id="lp2lldiv">
+			<div class="row col-xs-12" id="lp2lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp2nameold ?> 	
 				</div>
@@ -245,7 +246,7 @@
 					<span id="soc1level"></span>% SoC
 				</div>
 			</div>
-			<div class="row" id="lp3lldiv">
+			<div class="row col-xs-12" id="lp3lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp3nameold ?> 	
 				</div>
@@ -256,7 +257,7 @@
 				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 				</div>
 			</div>
-			<div class="row" id="gesamtlldiv">
+			<div class="row col-xs-12" id="gesamtlldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				</div>
 
@@ -763,7 +764,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.05 beta				</div>
+				<!-- master -->	Ver 1.06 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
