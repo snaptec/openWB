@@ -32,6 +32,9 @@ $highest = max($EV);
 $highest2 = max($PV);
 $highest = max($highest,$highest1,$highest2);
 $lowestu = min($EVU);
+if ($speichervorhanden == 1) {
+	$lowestu = min($SPEICHER);
+}
 $lowest = min($PV);
 $lowest = min($lowest,$lowestu);
 $socl = (min($SOC) - 5);
