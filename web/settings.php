@@ -42,7 +42,6 @@
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 
-
 	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 		list(, $pvbezugeinspeisungold) = explode("=", $line);
 	}

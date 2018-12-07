@@ -4,7 +4,12 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	if(strpos($line, "logdailywh=") !== false) {
+		list(, $logdailywh) = explode("=", $line);
+	}
+}
 $daydate1 = $_GET[thedate];
 $daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
@@ -68,6 +73,8 @@ $rbezug = array_reverse($bezug);
 $reinspeisung = array_reverse($einspeisung);
 
 $anzahl = count($timef);
+
+if ($logdailywh == 1) {
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $bezugdiff[$x] = $rbezug[$x-1] - $rbezug[$x];
 }
@@ -97,6 +104,38 @@ if ($speichervorhanden == 1) {
 	    $speicherewhdiff[$x] = $rpeicherewh[$x-1] - $rspeicherewh[$x];
 	}
 }
+} else {
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $bezugdiff[$x] = $rbezug[$x-1] * 12 - $rbezug[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $pvdiff[$x] = $rpv[$x-1] * 12 - $rpv[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $llgdiff[$x] = $rllg[$x-1] * 12 - $rllg[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $ll1diff[$x] = $rll1[$x-1] * 12 - $rll1[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $ll2diff[$x] = $rll2[$x-1] * 12 - $rll2[$x] * 12;
+}
+for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $ll3diff[$x] = $rll3[$x-1] * 12 - $rll3[$x] * 12;
+}
+if ($speichervorhanden == 1) {
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $speicheriwhdiff[$x] = $rpeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $speicherewhdiff[$x] = $rpeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12;
+	}
+}
+}
+
 $myData = new pData();
 
 $myData->addPoints($bezugdiff,"Bezug ".$dailybezug);
@@ -155,8 +194,12 @@ $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
-
+if ($logdailywh == 1) {
 $myData->setAxisName(0,"Wh");
+} else {
+$myData->setAxisName(0,"Watt");
+
+}
 $myData->setAxisName(1,"SoC");
 
 
