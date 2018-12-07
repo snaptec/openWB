@@ -664,7 +664,10 @@ if ! grep -Fq "mpm3pmspeicherlanip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "mpm3pmspeicherlanip=192.168.5.10" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "logdailywh=" /var/www/html/openWB/openwb.conf
+then
+		  echo "logdailywh=1" >> /var/www/html/openWB/openwb.conf
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
