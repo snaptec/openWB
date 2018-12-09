@@ -228,10 +228,14 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A Soll
+					<span id="lldiv"></span> Watt, <span id="llsolldiv"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
-					<span id="soclevel"></span>% SoC	
+					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
+					   echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';	
+					   } else {
+						   echo '<span id="soclevel"></span>% SoC';
+					   } ?>
 				</div>
 			</div>
 			<div class="row col-xs-12" id="lp2lldiv">
@@ -240,7 +244,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A
+					<span id="lllp2div"></span> Watt,  <span id="llsolllp2div"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 					<span id="soc1level"></span>% SoC
@@ -252,7 +256,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
+					<span id="lllp3div"></span> Watt, <span id="llsolllp3div"></span>A Soll<br></span> 
 				</div>
 				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 				</div>
@@ -764,7 +768,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.07 beta				</div>
+				<!-- master -->	Ver 1.08 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
