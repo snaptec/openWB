@@ -137,6 +137,14 @@ if [[ $wattbezugmodul != "none" ]]; then
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$((wattbezugint * -1))
+	if [[ $speichervorhanden == "1" ]]; then
+	if [[ $speicherpveinbeziehen == "1" ]]; then
+		if (( speicherleistung > 0 )); then
+			uberschuss=$((uberschuss + speicherleistung))
+			wattbezugint=$((wattbezugint - speicherleistung))
+		fi
+	fi
+fi
 	if [[ $debug == "1" ]]; then
 		echo wattbezug $wattbezug
 		echo uberschuss $uberschuss
@@ -164,6 +172,7 @@ else
 	uberschuss=$((wattbezugint * -1))
 
 fi
+
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
 	timeout 10 modules/$socmodul/main.sh || true

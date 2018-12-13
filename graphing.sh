@@ -9,7 +9,7 @@ echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu-live.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
-if ! [[ $livegraph == $re ]] ; then      
+if [[ $livegraph =~ $re ]] ; then      
 	livegraph=$((livegraph * 6 ))
 	if ! [[ $livegraph =~ $re ]] ; then
 	livegraph="30"

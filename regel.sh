@@ -35,7 +35,7 @@ source sofortlademodus.sh
 source goecheck.sh
 source loadvars.sh
 source graphing.sh
-
+source nachtladen.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -80,124 +80,10 @@ graphing
 
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
-if [[ $nachtladen == "1" ]]; then
-	if (( nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H < nachtladenbisuhr )); then
-		nachtladenstate=1
-		dayoftheweek=$(date +%w)
-		if [ "$dayoftheweek" -ge 0 ] && [ "$dayoftheweek" -le 4 ]; then
-			diesersoc=$nachtsoc
-		else
-			diesersoc=$nachtsoc1
-		fi
-		if [[ $socmodul != "none" ]]; then
-			if [[ $debug == "1" ]]; then
-                		echo nachtladen mit socmodul $socmodul
-    			fi
-			if (( soc <= diesersoc )); then
-				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/set-current.sh "$nachtll" m
-					if [[ $debug == "1" ]]; then
-		   				echo "soc $soc"
-		      				echo "ladeleistung nachtladen bei $nachtll"
-					fi
-				fi
-				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					runs/set-current.sh "$nachtll" m
-					if [[ $debug == "1" ]]; then
-		      				echo aendere nacht Ladeleistung auf $nachtll
-		        		fi
-				fi
-			else
-				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/set-current.sh 0 m
-				fi
-			fi
-		else
-			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
- 				runs/set-current.sh "$nachtll" m
- 				if [[ $debug == "1" ]]; then
-      					echo "soc $soc"
-        				echo "ladeleistung nachtladen $nachtll A"
-        			fi
-			else
-				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					runs/set-current.sh "$nachtll" m
-					if [[ $debug == "1" ]]; then
-      						echo aendere nacht Ladeleistung auf $nachtll
-        				fi
-				fi
-			fi
-		fi
-	else
-		nachtladenstate=0
-	fi
-else
-	nachtladenstate=0
-fi
-#Nachtladen S1
-if [[ $nachtladens1 == "1" ]]; then
-	if (( nachtladenabuhrs1 <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H < nachtladenbisuhrs1 )); then
-		nachtladenstates1=1
-		dayoftheweek=$(date +%w)
-		if [ "$dayoftheweek" -ge 0 ] && [ "$dayoftheweek" -le 4 ]; then
-			diesersocs1=$nachtsocs1
-		else
-			diesersocs1=$nachtsoc1s1
-		fi
-		if [[ $socmodul1 != "none" ]]; then
-			if [[ $debug == "1" ]]; then
-                		echo nachtladen mit socmodul $socmodul1
-    			fi
-			if (( soc1 <= diesersocs1 )); then
-				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-					runs/set-current.sh "$nachtlls1" s1
-					if [[ $debug == "1" ]]; then
-		   				echo "soc $soc1"
-		      				echo "ladeleistung nachtladen bei $nachtlls1"
-					fi
-				fi
-				if ! grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
-					runs/set-current.sh "$nachtlls1" s1
-					if [[ $debug == "1" ]]; then
-	      					echo aendere nacht Ladeleistung auf $nachtlls1
-	        			fi
-				fi
-			else
-				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-					runs/set-current.sh 0 s1
-				fi
-			fi
-		else
-			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
- 				runs/set-current.sh "$nachtlls1" s1
- 				if [[ $debug == "1" ]]; then
-      					echo "soc $soc1"
-        				echo "ladeleistung nachtladen $nachtlls1 A"
-        			fi
-        			echo "start Nachtladung mit $nachtlls1 um $date" >> web/lade.log
-			else
-				if ! grep -q $nachtlls1 "/var/www/html/openWB/ramdisk/llsolls1"; then
-					runs/set-current.sh "$nachtlls1" s1
-					if [[ $debug == "1" ]]; then
-	      					echo aendere nacht Ladeleistung auf $nachtlls1
-	        			fi
-				fi
 
-			fi
-		fi
-	else
-		nachtladenstates1=0
-	fi
-else
-	nachtladenstates1=0
+if (( nachtladen == 1 )); then
+	nachtlademodus
 fi
-echo $nachtladenstate > /var/www/html/openWB/ramdisk/nachtladenstate
-echo $nachtladenstates1 > /var/www/html/openWB/ramdisk/nachtladenstates1
-
-if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )); then
-	exit 0
-fi
-
 ########################
 # Sofort Laden
 if (( lademodus == 0 )); then
@@ -224,7 +110,7 @@ else
 	if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
   	echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
 	fi
-	anzahlphasen=$(cat ramdisk/anzahlphasen)
+	anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
 fi
 if (( lastmanagement == 1 )); then
 	if (( llas11 > 3 )); then

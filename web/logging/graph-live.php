@@ -32,11 +32,11 @@ $highest = max($EV);
 $highest2 = max($PV);
 $highest = max($highest,$highest1,$highest2);
 $lowestu = min($EVU);
-if ($speichervorhanden == 1) {
-	$lowestu = min($SPEICHER);
-}
 $lowest = min($PV);
-$lowest = min($lowest,$lowestu);
+if ($speichervorhanden == 1) {
+	$lowest = min($SPEICHER);
+}
+$lowestg = min($lowest,$lowestu);
 $socl = (min($SOC) - 5);
 if ($socl < "0" ){
 	$minsoc = 0;
@@ -59,9 +59,8 @@ $myData->setSerieOnAxis("Labels",0);
 $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
-
 $myData->setAxisName(0,"Watt");
-$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($SOC) + 5)));
+$AxisBoundaries = array(0=>array("Min"=>$lowestg,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($SOC) + 5)));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
 
 
