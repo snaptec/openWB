@@ -668,6 +668,43 @@ if ! grep -Fq "logdailywh=" /var/www/html/openWB/openwb.conf
 then
 		  echo "logdailywh=1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "logeinspeisungneg=" /var/www/html/openWB/openwb.conf
+then
+		  echo "logeinspeisungneg=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nacht2lls1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtll2s1=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2abuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2abuhrs1=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2bisuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2bisuhrs1=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nacht2ll=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtll2=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2abuhr=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2abuhr=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2bisuhr=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2bisuhr=7" >> /var/www/html/openWB/openwb.conf
+fi
+
+
+
+
+
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -

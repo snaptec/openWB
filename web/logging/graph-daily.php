@@ -9,6 +9,9 @@ foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
 		list(, $logdailywh) = explode("=", $line);
 	}
+	if(strpos($line, "logeinspeisungneg=") !== false) {
+		list(, $logeinspeisungneg) = explode("=", $line);
+	}
 }
 $daydate1 = $_GET[thedate];
 $daydate = date("Ymd", strtotime($daydate1));
@@ -98,10 +101,10 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 }
 if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = $rpeicheriwh[$x-1] - $rspeicheriwh[$x];
+	    $speicheriwhdiff[$x] = $rspeicheriwh[$x-1] - $rspeicheriwh[$x];
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = $rpeicherewh[$x-1] - $rspeicherewh[$x];
+	    $speicherewhdiff[$x] = $rspeicherewh[$x-1] - $rspeicherewh[$x];
 	}
 }
 } else {
@@ -112,7 +115,11 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $pvdiff[$x] = $rpv[$x-1] * 12 - $rpv[$x] * 12;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;
+	if ($logeinspeisungneg == 1) {
+	$einspeisungdiff[$x] = ($reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12) * -1;    
+	} else {
+	$einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;
+	}
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $llgdiff[$x] = $rllg[$x-1] * 12 - $rllg[$x] * 12;
@@ -128,10 +135,10 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 }
 if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = $rpeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12;
+	    $speicheriwhdiff[$x] = $rspeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = $rpeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12;
+	    $speicherewhdiff[$x] = $rspeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12;
 	}
 }
 }
@@ -157,7 +164,10 @@ if ($speichervorhanden == 1) {
 
 
 }
-
+$lowest = min($einspeisungdiff);
+if ($lowest > 0){
+	$lowest = 0;
+}
 $highest1 = max($pvdiff);
 $highest = max($bezugdiff);
 $highest2 = max($einspeisungdiff);
@@ -182,12 +192,11 @@ $myData->setSerieWeight("Einspeisung ".$dailyeinspeisung,1);
 $myData->setPalette("Bezug ".$dailybezug,array("R"=>254,"G"=>0,"B"=>0));
 $myData->setPalette("Einspeisung ".$dailyeinspeisung,array("R"=>0,"G"=>125,"B"=>125));
 $myData->setPalette("PV ".$dailypv,array("R"=>0,"G"=>254,"B"=>0));
-$myData->setPalette("EV LP1",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV LP2",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV LP3",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV ".$dailyev,array("R"=>0,"G"=>0,"B"=>254));
+$myData->setPalette("EV LP1",array("R"=>51,"G"=>122,"B"=>183));
+$myData->setPalette("EV LP2",array("R"=>51,"G"=>122,"B"=>183));
+$myData->setPalette("EV LP3",array("R"=>51,"G"=>122,"B"=>183));
+$myData->setPalette("EV ".$dailyev,array("R"=>51,"G"=>122,"B"=>183));
 $myData->setPalette("SoC",array("R"=>70,"G"=>70,"B"=>254));
- 
 $myData->addPoints($timef,"Labels");
 $myData->setSerieOnAxis("Labels",0);
 $myData->setSerieDescription("Labels","Uhrzeit");
@@ -203,7 +212,7 @@ $myData->setAxisName(0,"Watt");
 $myData->setAxisName(1,"SoC");
 
 
-$AxisBoundaries = array(0=>array("Min"=>0,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($soc) + 5)));
+$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($soc) + 5)));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>20);
  
 

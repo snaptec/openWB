@@ -41,6 +41,9 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "logeinspeisungneg=") !== false) {
+		list(, $logeinspeisungnegold) = explode("=", $line);
+	}
 
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
@@ -396,6 +399,14 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			<select type="text" name="logdailywh" id="logdailywh">
 				<option <?php if($logdailywhold == 0) echo selected ?>value="0">Watt</option>
 				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			<b><label for="logeinspeisungneg">Einspeiung im Daily Graph positiv oder negativ anzeigen:</label></b>
+			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
+				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
+				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
 			</select>
 			<br>
 		</div>
