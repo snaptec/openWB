@@ -503,6 +503,14 @@ if ! grep -Fq "mpm3pmlls1id=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmlls1id=1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mpm3pmlls2source=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmlls2id=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls2id=5" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mpm3pmevusource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmevusource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
@@ -556,6 +564,10 @@ then
 		  echo "wrkostalpikoip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "solaredgeip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvsolaredgeip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
@@ -700,10 +712,38 @@ if ! grep -Fq "nachtladen2bisuhr=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nachtladen2bisuhr=7" >> /var/www/html/openWB/openwb.conf
 fi
-
-
-
-
+if ! grep -Fq "akkuglp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "akkuglp1=35" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "akkuglp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "akkuglp2=35" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenuhrzeitlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenuhrzeitlp1='2018-12-19 06:15'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladensoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladensoclp1=60" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenalp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenalp1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenphasenlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenphasenlp1=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenmaxalp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenmaxalp1=32" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenaktivlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenmaktivlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

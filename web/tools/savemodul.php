@@ -287,6 +287,14 @@ foreach($lines as $line) {
 	    if(strpos($line, "mpm3pmlls1source=") !== false) {
 	    $result .= 'mpm3pmlls1source='.$_POST[mpm3pmlls1source]."\n";
 	$writeit = '1';
+	    }
+	    if(strpos($line, "mpm3pmlls2id=") !== false) {
+	    $result .= 'mpm3pmlls2id='.$_POST[mpm3pmlls2id]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "mpm3pmlls2source=") !== false) {
+	    $result .= 'mpm3pmlls2source='.$_POST[mpm3pmlls2source]."\n";
+	$writeit = '1';
     } 
 	    if(strpos($line, "mpm3pmllid=") !== false) {
 	    $result .= 'mpm3pmllid='.$_POST[mpm3pmllid]."\n";
@@ -467,7 +475,12 @@ foreach($lines as $line) {
 	    if(strpos($line, "solaredgeip=") !== false) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
 	 $writeit = '1';
+	    }
+	    if(strpos($line, "pvsolaredgeip=") !== false) {
+	    $result .= 'pvsolaredgeip=\''.$_POST[pvsolaredgeip]."'\n";
+	 $writeit = '1';
    } 
+
 	    if(strpos($line, "lllaniplp2=") !== false) {
     	    $result .= 'lllaniplp2='.$_POST[lllaniplp2]."\n";
     	 $writeit = '1';
