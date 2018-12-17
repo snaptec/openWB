@@ -359,7 +359,9 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmlls1source=") !== false) {
 		list(, $mpm3pmlls1sourceold) = explode("=", $line);
 	}
-
+	if(strpos($line, "mpm3pmlls2source=") !== false) {
+		list(, $mpm3pmlls2sourceold) = explode("=", $line);
+	}
 
 	if(strpos($line, "mpm3pmpvid=") !== false) {
 		list(, $mpm3pmpvidold) = explode("=", $line);
@@ -375,6 +377,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "mpm3pmlls1id=") !== false) {
 		list(, $mpm3pmlls1idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmlls2id=") !== false) {
+		list(, $mpm3pmlls2idold) = explode("=", $line);
 	}
 
 	if(strpos($line, "mpm3pmevuid=") !== false) {
@@ -480,6 +485,10 @@ foreach($lines as $line) {
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
 	}
+	if(strpos($line, "pvsolaredgeip=") !== false) {
+		list(, $pvsolaredgeipold) = explode("=", $line);
+	}
+
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -2006,6 +2015,7 @@ $(function() {
 		<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
 			<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
 		</select>
@@ -2018,7 +2028,23 @@ $(function() {
 			Keine Konfiguration erforderlich.<br>
 		</div>
 	</div>
+	<div id="mpm3pmlls2div">
+			<div class="row bg-info">
+			<b><label for="mpm3pmlls2">MPM3PM Modbus Ladeleistung Source:</label></b>
+			<input type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="mpm3pmlls2id">MPM3PM Modbus Ladeleistung ID:</label></b>
+			<input type="text" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+		</div>
 
+	</div>
 	<div id="sdm630s2div">
 		<div class="row bg-info">
 			<b><label for="sdm630lp3source">Zähler Source:</label></b>
@@ -2090,6 +2116,7 @@ $(function() {
 		$('#sdm120s2div').hide();
 		$('#swifis2div').hide();
 		$('#rs485lanlp3').show(); 
+		$('#mpm3pmlls2div').hide();
 
       } 	
       if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
@@ -2097,6 +2124,7 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').show();
 		$('#rs485lanlp3').show(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
       if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
@@ -2104,6 +2132,7 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
       if($('#ladeleistungss2modul').val() == 'goelp3') {
@@ -2111,9 +2140,16 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
-
+      if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
+		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#swifis2div').hide();	
+		$('#mpm3pmlls2div').show();
+		$('#rs485lanlp3').show();	
+      } 
 
 	$('#ladeleistungss2modul').change(function(){
       if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
@@ -2121,28 +2157,35 @@ $(function() {
 		$('#sdm120s2div').hide();
 		$('#swifis2div').hide();
 		$('#rs485lanlp3').show(); 
-
+		$('#mpm3pmlls2div').hide();
       } 	
       if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
 		$('#swifis2div').hide();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').show();
 		$('#rs485lanlp3').show(); 
-
+		$('#mpm3pmlls2div').hide();
       } 
       if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
 		$('#swifis2div').show();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
-
+		$('#mpm3pmlls2div').hide();
       } 
       if($('#ladeleistungss2modul').val() == 'goelp3') {
 		$('#swifis2div').show();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
-
+		$('#mpm3pmlls2div').hide();
+      } 
+      if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
+		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#swifis2div').hide();	
+		$('#mpm3pmlls2div').show();
+		$('#rs485lanlp3').show();	
       } 
 
 	    });
@@ -2710,6 +2753,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
 		<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">MPM3PM </option>
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
+		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
+
 </select>
 </div>
 <div class="row">
@@ -2748,6 +2793,15 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Kostal Wechselrichter.<br><br>
+	</div>
+</div>
+<div id="pvwrsolaredge">
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="pvsolaredgeip">WR Solaredge IP:</label></b>
+		<input type="text" name="pvsolaredgeip" id="pvsolaredgeip" value="<?php echo $pvsolaredgeipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
 	</div>
 </div>
 <div id="pvwrfronius">
@@ -2865,6 +2919,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2876,7 +2931,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
@@ -2888,7 +2943,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -2900,7 +2955,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -2912,7 +2967,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
      } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -2924,6 +2979,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
+		$('#pvwrsolaredge').hide();
 
    }
    if($('#pvwattmodul').val() == 'wr_json')   {
@@ -2936,7 +2992,7 @@ $(function() {
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -2948,7 +3004,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
       if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 	      		$('#pvvzl').hide();
@@ -2960,7 +3016,21 @@ $(function() {
 			$('#pvwrjson').hide();
 			$('#pvmpm3pm').hide();
 			$('#pvwrkostalpiko').show();
+			$('#pvwrsolaredge').hide();
+      } 
+      if($('#pvwattmodul').val() == 'wr_solaredge')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').show();
    } 
+
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
@@ -2972,7 +3042,7 @@ $(function() {
    		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
 	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2984,7 +3054,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
@@ -2996,7 +3066,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -3008,7 +3078,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -3020,7 +3090,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -3032,7 +3102,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_json')   {
 		$('#pvvzl').hide();
@@ -3044,7 +3114,7 @@ $(function() {
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
      } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -3056,7 +3126,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
       if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 	      	$('#pvvzl').hide();
@@ -3068,7 +3138,21 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').show();
+		$('#pvwrsolaredge').hide();
    } 
+      if($('#pvwattmodul').val() == 'wr_solaredge')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').show();
+   } 
+
 
 	});
 });

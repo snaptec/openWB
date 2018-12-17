@@ -223,7 +223,7 @@ $myImage->setFontProperties(array(
     "FontSize" => 18));
 
 
-$myImage->setGraphArea(75,25, 895,275);
+$myImage->setGraphArea(95,25, 895,275);
 
 $myImage->drawScale($ScaleSettings);
 

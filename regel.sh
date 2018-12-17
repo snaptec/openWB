@@ -36,6 +36,8 @@ source goecheck.sh
 source loadvars.sh
 source graphing.sh
 source nachtladen.sh
+source zielladen.sh
+
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -78,6 +80,9 @@ graphing
 #########################################
 #Regelautomatiken
 
+if (( zielladenaktivlp1 == 1 )); then
+	ziellademodus
+fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
@@ -151,17 +156,9 @@ wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 if [[ $debug == "2" ]]; then
-	ladestatus=$(cat ramdisk/ladestatus)
+	ladestatus=$(<ramdisk/ladestatus)
 	echo "$date"
-	echo uberschuss "$uberschuss"
-	echo wattbezug "$wattbezug"
-	echo ladestatus "$ladestatus"
-	echo llsoll "$llalt"
-	echo pvwatt "$pvwatt"
-	echo mindestuberschussphasen "$mindestuberschussphasen"
-	echo wattkombiniert "$wattkombiniert"
-	echo abschaltungw "$abschaltungw"
-	echo schaltschwelle "$schaltschwelle"
+	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
 fi
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then

@@ -390,8 +390,41 @@ foreach($lines as $line) {
 	    $result .= 'speicherpveinbeziehen='.$_POST[speicherpveinbeziehen]."\n";
 	    $writeit = '1';
 } 
+	    if(strpos($line, "akkuglp1=") !== false) {
+	    $result .= 'akkuglp1='.$_POST[akkuglp1]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "akkuglp2=") !== false) {
+	    $result .= 'akkuglp2='.$_POST[akkuglp2]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "zielladensoclp1=") !== false) {
+	    $result .= 'zielladensoclp1='.$_POST[zielladensoclp1]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "zielladenalp1=") !== false) {
+	    $result .= 'zielladenalp1='.$_POST[zielladenalp1]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "zielladenmaxalp1=") !== false) {
+	    $result .= 'zielladenmaxalp1='.$_POST[zielladenmaxalp1]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "zielladenphasenlp1=") !== false) {
+	    $result .= 'zielladenphasenlp1='.$_POST[zielladenphasenlp1]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "zielladenaktivlp1=") !== false) {
+	    $result .= 'zielladenaktivlp1='.$_POST[zielladenaktivlp1]."\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
+	    $result .= 'zielladenuhrzeitlp1=\''.$_POST[zielladenuhrzeitlp1].\'"\n";
 
- 
+	    $writeit = '1';
+} 
+
+
 	    if ( $writeit == '0') {
 		$result .= $line;
 	    }

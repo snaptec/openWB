@@ -418,9 +418,16 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<option <?php if($livegraphold == 15) echo selected ?> value="15">15 Min</option>
 		<option <?php if($livegraphold == 20) echo selected ?> value="20">20 Min</option>
 		<option <?php if($livegraphold == 30) echo selected ?> value="30">30 Min</option>
+		<option <?php if($livegraphold == 40) echo selected ?> value="40">40 Min</option>
+		<option <?php if($livegraphold == 50) echo selected ?> value="50">50 Min</option>
+		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
+
 	</select><br>
 <br>
 </div>
+		<div class="row">
+	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
+
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>

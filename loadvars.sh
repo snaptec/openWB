@@ -23,10 +23,7 @@ if [[ $pvwattmodul != "none" ]]; then
 		pvwatt="0"
 	fi
 
-	if [[ $debug == "1" ]]; then
-                date
-		echo pvwatt $pvwatt
-        fi
+
 else
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
@@ -73,9 +70,6 @@ if [[ $lastmanagement == "1" ]]; then
 		if ! [[ $soc1 =~ $re ]] ; then
 		 soc1="0"
 		fi
-		if [[ $debug == "1" ]]; then
-	                echo soc1 $soc1
-	        fi
 	else
 		soc1=0
 	fi
@@ -121,13 +115,7 @@ else
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 fi
 echo $llkwhges > ramdisk/llkwhges
-	if [[ $debug == "1" ]]; then
-                echo ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-		echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss"
-		echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll"
-		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23"
-		echo evua 1,2,3 "$evua1" "$evua2" "$evua3"
-        fi
+
 #Wattbezug
 if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=$(modules/$wattbezugmodul/main.sh || true)
@@ -145,10 +133,6 @@ if [[ $wattbezugmodul != "none" ]]; then
 		fi
 	fi
 fi
-	if [[ $debug == "1" ]]; then
-		echo wattbezug $wattbezug
-		echo uberschuss $uberschuss
-	fi
 	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
 	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
 	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
@@ -180,14 +164,18 @@ if [[ $socmodul != "none" ]]; then
 	if ! [[ $soc =~ $re ]] ; then
 	 soc="0"
 	fi
-	if [[ $debug == "1" ]]; then
-                echo soc $soc
-        fi
 else
 	soc=0
 fi
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)
-
+	if [[ $debug == "1" ]]; then
+                date
+		echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
+		echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss"
+		echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug $wattbezug uberschuss $uberschuss
+		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
+		echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
+       	fi
 }

@@ -4,16 +4,18 @@ sofortlademodus(){
 	aktgeladen=$(<ramdisk/aktgeladen)
 	#mit einem Ladepunkt
 	if [[ $lastmanagement == "0" ]]; then
-		if (( soc >= sofortsoclp1 )); then
-			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+		if (( sofortsocstatlp1 == "1" )); then
+			if (( soc >= sofortsoclp1 )); then
+				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 
-				runs/set-current.sh 0 all
-				if [[ $debug == "1" ]]; then
-	        		       	echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
-       				fi
+					runs/set-current.sh 0 all
+					if [[ $debug == "1" ]]; then
+						echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
+					fi
 
-			fi
-		exit 0
+				fi
+			exit 0
+			fi	
 		fi
 		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if (( lademstat == "1" )); then

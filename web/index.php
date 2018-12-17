@@ -134,7 +134,9 @@
 		if(strpos($line, "lp3name=") !== false) {
 			list(, $lp3nameold) = explode("=", $line);
 		}
-
+		if(strpos($line, "zielladenaktivlp1=") !== false) {
+			list(, $zielladenaktivlp1old) = explode("=", $line);
+		}
 		
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
@@ -143,7 +145,7 @@
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
-
+	
 ?>	
 <body>
 
@@ -201,6 +203,8 @@
 			</div>
 	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
 	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
+	</div>
+
 	<script>
 	$(function() {
 	   if($('#nachtladenstate').val() == '1') {
@@ -219,10 +223,26 @@
 
 	});
 	</script>
-
-
+	<div class="row" id="zielladenaktivlp1div">
+			 <div class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+				Zielladen LP 1 aktiv
 			</div>
-			<div class="row col-xs-12">
+
+	</div>
+	<input hidden name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old ; ?>">
+	
+	<script>
+	$(function() {
+	   if($('#zielladenaktivlp1').val() == '1') {
+		$('#zielladenaktivlp1div').show(); 
+	      } else {
+		$('#zielladenaktivlp1div').hide();
+	      } 
+
+	});
+	</script>
+
+						<div class="row col-xs-12">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				<?php echo $lp1nameold ?> 	
 				</div>
@@ -768,7 +788,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.09 beta				</div>
+				<!-- master -->	Ver 1.091 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -1021,6 +1041,17 @@ $(function() {
            type: "POST",
            url: './tools/resetlpladem.php',
            data:{action:'resetlp3'},
+           success:function(html) {
+             
+           }
+	
+      });
+	}
+	function rsziellp1() {
+	$.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetziellp1'},
            success:function(html) {
              
            }

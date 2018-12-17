@@ -37,6 +37,17 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+$result = '';
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
+	    $result .= 'zielladenuhrzeitlp1=\''.$_POST[zielladenuhrzeitlp1]."'\n";
+	    } 
+	    else {
+	    $result .= $line;
+	    }
+}
+file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 
