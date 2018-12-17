@@ -742,7 +742,7 @@ then
 fi
 if ! grep -Fq "zielladenaktivlp1=" /var/www/html/openWB/openwb.conf
 then
-	  echo "zielladenmaktivlp1=0" >> /var/www/html/openWB/openwb.conf
+	  echo "zielladenaktivlp1=0" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
