@@ -567,9 +567,9 @@ if ! grep -Fq "solaredgeip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "pvsolaredgeip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "solaredgepvip=" /var/www/html/openWB/openwb.conf
 then
-		  echo "pvsolaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+		  echo "solaredgepvip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then

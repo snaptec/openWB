@@ -482,13 +482,13 @@ foreach($lines as $line) {
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
 	}
+
+	if(strpos($line, "solaredgepvip=") !== false) {
+		list(, $solaredgeippvold) = explode("=", $line);
+	}
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
 	}
-	if(strpos($line, "pvsolaredgeip=") !== false) {
-		list(, $pvsolaredgeipold) = explode("=", $line);
-	}
-
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -579,7 +579,7 @@ $speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
 $speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
 
 
-$pvsolaredgeipold = str_replace( "'", "", $pvsolaredgeipold);
+$solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
@@ -2797,8 +2797,8 @@ $(function() {
 </div>
 <div id="pvwrsolaredge">
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="pvsolaredgeip">WR Solaredge IP:</label></b>
-		<input type="text" name="pvsolaredgeip" id="pvsolaredgeip" value="<?php echo $pvsolaredgeipold ?>"><br>
+		<b><label for="solaredgepvip">WR Solaredge IP:</label></b>
+		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgeipvpold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
