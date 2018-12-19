@@ -579,7 +579,7 @@ $speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
 $speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
 
 
-
+$pvsolaredgeipold = str_replace( "'", "", $pvsolaredgeipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
