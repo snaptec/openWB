@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Variable aus openWB uebergeben. Verkuerzte Intervallzeit in Prozent waehrend Ladevogang.
+intervall=10
+
 i3timer=$(</var/www/html/openWB/ramdisk/soctimer)
 cd /var/www/html/openWB/modules/soc_i3
 if (( i3timer < 60 )); then
@@ -13,5 +16,13 @@ else
 			echo $soclevel > /var/www/html/openWB/ramdisk/soc
 		fi
 	fi
-	echo 0 > /var/www/html/openWB/ramdisk/soctimer
+
+#Abfrage Ladung aktiv. Setzen des soctimers. 
+	charging=$(echo $abfrage | jq '.chargingActive')
+	if (( $charging != 0 )) ; then
+		soctimer=$((60 * (100 - $intervall) / 100))
+		echo $soctimer > /var/www/html/openWB/ramdisk/soctimer
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/soctimer
+	fi
 fi
