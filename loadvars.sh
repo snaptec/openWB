@@ -1,6 +1,5 @@
 #!/bin/bash
 loadvars(){
-
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
@@ -11,7 +10,6 @@ else
 	speichervorhanden="0"
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
-
 
 # Werte für die Berechnung ermitteln
 lademodus=$(</var/www/html/openWB/ramdisk/lademodus)
@@ -178,4 +176,5 @@ fi
 		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 		echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
        	fi
+
 }

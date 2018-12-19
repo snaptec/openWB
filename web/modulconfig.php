@@ -3176,64 +3176,64 @@ $(function() {
 	<br>
 </div>
 <div id="divspeicherhttp">
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
 		<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt. Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird. Das Modul dient dazu bei NurPV Ladung eine Entladung des Speichers zu verhindern.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speichersoc_http">SpeicherSoC URL:</label></b>
 		<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherikwh_http">Speicher Import Wh URL:</label></b>
 		<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Wenn nicht vorhanden, none eintragen. Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
 	<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherekwh_http">Speicher Export Wh URL:</label></b>
 		<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Wenn nicht vorhanden, none eintragen.  Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
 	<br><br>
 	</div>
 </div>
 <div id="divspeichermpm3pm">
-	<div class="row"><br>
+	<div class="row" style="background-color:#fcbe1e"><br>
 		<b><label for="mpm3pmspeichersource">Modbus Source:</label></b>
 		<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 	Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="mpm3pmspeicherid">Modbus ID:</label></b>
 		<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 	Gültige Werte Zahl. <br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
 		<select type="text" name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
 			<option <?php if($mpm3pmspeicherpvold == "0\n") echo selected ?> value="0">Keine extra Berechnung</option>
 			<option <?php if($mpm3pmspeicherpvold == "1\n") echo selected ?> value="1">Subtrahieren der PV Leistung</option>
 		</select>
-	</div><br>
-	<div class="row">
+	</div>
+	<div class="row" style="background-color:#fcbe1e"><br>
 		<b><label for="mpm3pmspeicherlanip">Lan Modbus Konverter IP:</label></b>
 		<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 	Gültige Werte eine IP Adresse. <br>
 	</div>
 
