@@ -29,6 +29,8 @@ touch /var/www/html/openWB/ramdisk/llkwhs2
 touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
+touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer

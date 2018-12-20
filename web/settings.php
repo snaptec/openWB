@@ -517,6 +517,41 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($zielladenphasenlp1old == 3) echo selected ?> value="3">3</option>
 		</select>
 	</div>
+	<div class="row">
+		<b><label for="zielladenmaxalp1">Stromstärke in A mit der maximal geladen werden kann:</label></b>
+		<select type="text" name="zielladenmaxalp1" id="zielladenmaxalp1">
+			<option <?php if($zielladenmaxalp1old == 6) echo selected ?> value="6">6</option>
+			<option <?php if($zielladenmaxalp1old == 7) echo selected ?> value="7">7</option>
+			<option <?php if($zielladenmaxalp1old == 8) echo selected ?> value="8">8</option>
+			<option <?php if($zielladenmaxalp1old == 9) echo selected ?> value="9">9</option>
+			<option <?php if($zielladenmaxalp1old == 10) echo selected ?> value="10">10</option>
+			<option <?php if($zielladenmaxalp1old == 11) echo selected ?> value="11">11</option>
+			<option <?php if($zielladenmaxalp1old == 12) echo selected ?> value="12">12</option>
+			<option <?php if($zielladenmaxalp1old == 13) echo selected ?> value="13">13</option>
+			<option <?php if($zielladenmaxalp1old == 14) echo selected ?> value="14">14</option>
+			<option <?php if($zielladenmaxalp1old == 15) echo selected ?> value="15">15</option>
+			<option <?php if($zielladenmaxalp1old == 16) echo selected ?> value="16">16</option>
+			<option <?php if($zielladenmaxalp1old == 17) echo selected ?> value="17">17</option>
+			<option <?php if($zielladenmaxalp1old == 18) echo selected ?> value="18">18</option>
+			<option <?php if($zielladenmaxalp1old == 19) echo selected ?> value="19">19</option>
+			<option <?php if($zielladenmaxalp1old == 20) echo selected ?> value="20">20</option>
+			<option <?php if($zielladenmaxalp1old == 21) echo selected ?> value="21">21</option>
+			<option <?php if($zielladenmaxalp1old == 22) echo selected ?> value="22">22</option>
+			<option <?php if($zielladenmaxalp1old == 23) echo selected ?> value="23">23</option>
+			<option <?php if($zielladenmaxalp1old == 24) echo selected ?> value="24">24</option>
+			<option <?php if($zielladenmaxalp1old == 25) echo selected ?> value="25">25</option>
+			<option <?php if($zielladenmaxalp1old == 26) echo selected ?> value="26">26</option>
+			<option <?php if($zielladenmaxalp1old == 27) echo selected ?> value="27">27</option>
+			<option <?php if($zielladenmaxalp1old == 28) echo selected ?> value="28">28</option>
+			<option <?php if($zielladenmaxalp1old == 29) echo selected ?> value="29">29</option>		
+			<option <?php if($zielladenmaxalp1old == 30) echo selected ?> value="30">30</option>
+			<option <?php if($zielladenmaxalp1old == 31) echo selected ?> value="31">31</option>
+			<option <?php if($zielladenmaxalp1old == 32) echo selected ?> value="32">32</option>
+		</select><br>
+	</div>
+	<div class="row">
+	Ampere mit denen geladen werden kann um den Ziel SoC zu erreichen. Entweder was die Installation kann oder was das Auto kann.<br>
+	</div>
 </div>
 <div id="durchslp2">
 	<div class="row"><hr>
