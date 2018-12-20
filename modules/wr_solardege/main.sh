@@ -3,6 +3,6 @@
 
 
 
-sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge.py $pvsolaredgeip
+sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge.py $solaredgepvip
 wattbezug=$(</var/www/html/openWB/ramdisk/pvwatt)
 echo $pvwatt

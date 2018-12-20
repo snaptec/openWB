@@ -476,8 +476,8 @@ foreach($lines as $line) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
 	 $writeit = '1';
 	    }
-	    if(strpos($line, "pvsolaredgeip=") !== false) {
-	    $result .= 'pvsolaredgeip=\''.$_POST[pvsolaredgeip]."'\n";
+	    if(strpos($line, "solaredgepvip=") !== false) {
+	    $result .= 'solaredgepvip=\''.$_POST[solaredgepvip]."'\n";
 	 $writeit = '1';
    } 
 

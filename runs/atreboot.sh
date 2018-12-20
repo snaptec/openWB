@@ -29,6 +29,8 @@ touch /var/www/html/openWB/ramdisk/llkwhs2
 touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
+touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
@@ -567,9 +569,9 @@ if ! grep -Fq "solaredgeip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "pvsolaredgeip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "solaredgepvip=" /var/www/html/openWB/openwb.conf
 then
-		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+		  echo "solaredgepvip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then

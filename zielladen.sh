@@ -33,6 +33,7 @@ ladungdurchziel=$(<ramdisk/ladungdurchziel)
 if (( zuladendewh <= 0 )); then
 	if (( ladestatus == 1 )); then
 		echo 0 > ramdisk/ladungdurchziel
+		echo 0 > ramdisk/zielladenkorrektura
 		runs/set-current.sh 0 m
 	fi
 else
@@ -43,7 +44,7 @@ else
 			exit 0
 		else
 			if (( diffwh > 1000 )); then
-				if test $(find /var/www/html/openWB/ramdisk/zielladenkorrektura -mmin +1); then
+				if test $(find /var/www/html/openWB/ramdisk/zielladenkorrektura -mmin +10); then
 					zielladenkorrektura=$(( zielladenkorrektura + 1 ))
 					echo $zielladenkorrektura > ramdisk/zielladenkorrektura
 					zielneu=$(( zielladenalp1 + zielladenkorrektura ))
