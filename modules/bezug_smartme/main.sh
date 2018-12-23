@@ -23,6 +23,11 @@ ikwh=$(echo "$ikwh / 1" | bc)
 ekwh=$(echo $json | jq .CounterReadingExport)
 ekwh=$(echo "$ekwh / 1" | bc)
 
+#Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
+evupf1=$(echo $json | jq .PowerFactor)
+evuv1=$(echo $json | jq .Voltage)
+bezuga1=$(echo $json | jq .Current)
+
 #Prüfen ob Werte gültig
 re='^-?[0-9]+$'
 if ! [[ $wattbezug =~ $re ]] ; then
@@ -38,5 +43,9 @@ fi
 #Ausgabe
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
+echo $wattbezug > /var/www/html/openWB/ramdisk/bezugw1
 echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+echo $evupf1 > /var/www/html/openWB/ramdisk/evupf1
+echo $evuv1 > /var/www/html/openWB/ramdisk/evuv1
+echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
