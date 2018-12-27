@@ -119,6 +119,12 @@ echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
 echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
+
+
+
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -405,6 +411,11 @@ if ! grep -Fq "i3username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3username=username" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soci3intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soci3intervall=10" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "i3passwort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3passwort=passwort" >> /var/www/html/openWB/openwb.conf
@@ -746,6 +757,19 @@ if ! grep -Fq "zielladenaktivlp1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "zielladenaktivlp1=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bezug_smartme_user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_smartme_pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_smartme_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

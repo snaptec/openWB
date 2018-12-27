@@ -406,6 +406,9 @@ foreach($lines as $line) {
 	if(strpos($line, "i3passwort=") !== false) {
 		list(, $i3passwortold) = explode("=", $line);
 	}
+	if(strpos($line, "soci3intervall=") !== false) {
+		list(, $soci3intervallold) = explode("=", $line);
+	}
 	if(strpos($line, "i3username=") !== false) {
 		list(, $i3usernameold) = explode("=", $line);
 	}
@@ -556,7 +559,15 @@ foreach($lines as $line) {
 	if(strpos($line, "speicherikwh_http=") !== false) {
 		list(, $speicherikwh_httpold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "bezug_smartme_user=") !== false) {
+		list(, $bezug_smartme_userold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezug_smartme_pass=") !== false) {
+		list(, $bezug_smartme_passold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezug_smartme_url=") !== false) {
+		list(, $bezug_smartme_urlold) = explode("=", $line, 2);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -577,6 +588,11 @@ $speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
 $speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
 $speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
 $speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
+$bezug_smartme_userold = str_replace( "'", "", $bezug_smartme_userold);
+$bezug_smartme_passold = str_replace( "'", "", $bezug_smartme_passold);
+$bezug_smartme_urlold = str_replace( "'", "", $bezug_smartme_urlold);
+
+
 
 
 $solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
@@ -1139,7 +1155,13 @@ $(function() {
 	<div class="row bg-info">
 		BMW i3 VIN<br><br>
 	</div>
-
+	<div class="row bg-info">
+		<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
 </div>
 
 
@@ -2235,6 +2257,8 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 		<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
+		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
+
 	</select>
 </div>
 <div class="row">
@@ -2354,7 +2378,30 @@ $(function() {
 	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 </div>
+<div id="wattbezugsmartme">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_user">Smartme Benutzername</label></b>
+		<input type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Benutzername<br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_pass">Smartme Passwort</label></b>
+		<input type="text" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Passwort<br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_url">Smartme Url</label></b>
+		<input type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo htmlspecialchars($bezug_smartme_urlold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Url<br>
+	</div>
 
+</div>
 <div id="wattbezugshm">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="smashmdbezugid">Seriennummer des SMA Home Manager</label></b>
@@ -2446,6 +2493,7 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
 
 
       } 
@@ -2462,6 +2510,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -2477,6 +2526,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -2492,6 +2542,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -2506,6 +2557,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -2520,6 +2572,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2534,6 +2587,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -2547,6 +2601,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
 		$('#wattbezugvz').hide();
@@ -2560,6 +2616,8 @@ $(function() {
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
 		$('#wattbezugvz').hide();
@@ -2573,6 +2631,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -2586,7 +2646,24 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
-   }
+  
+		$('#wattbezugsmartme').hide();
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartme')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  
+		$('#wattbezugsmartme').show();
+  }
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -2600,6 +2677,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
+
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -2613,7 +2692,9 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
-      } 
+   		$('#wattbezugsmartme').hide();
+
+   } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2626,7 +2707,9 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
-    } 
+   
+   		$('#wattbezugsmartme').hide();
+} 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2639,7 +2722,9 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
-    } 
+ 		$('#wattbezugsmartme').hide();
+
+   } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2652,6 +2737,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+  		$('#wattbezugsmartme').hide();
+
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -2665,6 +2752,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+  		$('#wattbezugsmartme').hide();
+
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2678,6 +2767,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+ 		$('#wattbezugsmartme').hide();
+
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -2691,6 +2782,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').show();
+		$('#wattbezugsmartme').hide();
 
     } 
 
@@ -2706,6 +2798,7 @@ $(function() {
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
 
     } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -2720,6 +2813,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
+  		$('#wattbezugsmartme').hide();
+
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -2733,8 +2828,24 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
-   }
+ 		$('#wattbezugsmartme').hide();
 
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartme')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+ 		$('#wattbezugsmartme').show();
+
+  }
 	    });
 });
 </script>
