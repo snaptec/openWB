@@ -137,11 +137,14 @@
 		if(strpos($line, "zielladenaktivlp1=") !== false) {
 			list(, $zielladenaktivlp1old) = explode("=", $line);
 		}
-		
+			if(strpos($line, "nachtladen=") !== false) {
+			list(, $nachtladenstate) = explode("=", $line);
+		}
+				if(strpos($line, "nachtladens1=") !== false) {
+			list(, $nachtladenstates1) = explode("=", $line);
+		}
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
-	$nachtladenstate = file_get_contents('/var/www/html/openWB/ramdisk/nachtladenstate');
-	$nachtladenstates1 = file_get_contents('/var/www/html/openWB/ramdisk/nachtladenstates1');
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
@@ -194,12 +197,14 @@
 					<br></div>
 				</div>
 			</div>
-			<div class="row">
-			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+			<div class="row col-xs-12 text-center">
+			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 				Nachtladen LP 1 aktiv
 			</div>
-			 <div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+			 <div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 				Nachtladen LP 2 aktiv
+			</div>
+			<div class="col-xs-4 text-center">
 			</div>
 	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
 	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
@@ -223,8 +228,8 @@
 
 	});
 	</script>
-	<div class="row" id="zielladenaktivlp1div">
-			 <div class="col-xs-4 text-center" style="background-color:#ff0000;font-size: 2vw">
+	<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
+			 <div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 				Zielladen LP 1 aktiv
 			</div>
 
@@ -267,7 +272,11 @@
 					<span id="lllp2div"></span> Watt,  <span id="llsolllp2div"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
-					<span id="soc1level"></span>% SoC
+					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
+					   echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';	
+					   } else {
+						   echo '<span id="soc1level"></span>% SoC';
+					   } ?>
 				</div>
 			</div>
 			<div class="row col-xs-12" id="lp3lldiv">
@@ -788,7 +797,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.092 beta				</div>
+				<!-- master -->	Ver 1.093 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

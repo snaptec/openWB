@@ -22,7 +22,11 @@ lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 230 ))
 
 wunschawh=$(( zielladenalp1 * zielladenphasenlp1 * 230 ))
 #ladezeit ermitteln
+if (( llalt > 5 )); then
+	wunschawh=$(( llalt * zielladenphasenlp1 * 230 ))
+fi
 moeglichewh=$(( wunschawh / 60 * minzeitdiff ))
+
 if (( debug == 1 )); then
 	echo "Zielladen aktiv:" $wunschawh "gewünschte Lade Wh," $lademaxwh "maximal mögliche Wh," $zuladendewh "zu ladende Wh," $moeglichewh " mögliche ladbare Wh bis Zieluhrzeit"
 fi
@@ -34,6 +38,7 @@ if (( zuladendewh <= 0 )); then
 	if (( ladestatus == 1 )); then
 		echo 0 > ramdisk/ladungdurchziel
 		echo 0 > ramdisk/zielladenkorrektura
+		sed -e "s/zielladenaktivlp1=.*/zielladenaktivlp1=0/" openwb.conf > ramdisk/openwb.conf	&& mv ramdisk/openwb.conf openwb.conf
 		runs/set-current.sh 0 m
 	fi
 else
@@ -60,8 +65,7 @@ else
 	else
 		if (( ladestatus == 1 )); then
 			if (( diffwh < -1000 )); then
-				if test $(find /var/www/html/openWB/ramdisk/zielladenkorrektura -mmin +20); then
-					echo "ladung - 1 "
+				if test $(find /var/www/html/openWB/ramdisk/zielladenkorrektura -mmin +10); then
 					zielladenkorrektura=$(( zielladenkorrektura - 1 ))
 					echo $zielladenkorrektura > ramdisk/zielladenkorrektura
 					zielneu=$(( zielladenalp1 + zielladenkorrektura ))

@@ -37,7 +37,7 @@ source loadvars.sh
 source graphing.sh
 source nachtladen.sh
 source zielladen.sh
-
+source evsedintest.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -68,6 +68,11 @@ else
 	graphtimer=0
 	echo $graphtimer > ramdisk/graphtimer
 fi
+#######################################
+#EVSE DIN Modbus test
+evsedintest
+
+
 
 #######################################
 #goe mobility check

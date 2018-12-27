@@ -464,6 +464,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	<div class="row">
 		<button onclick="window.location.href='./tools/smashmredirect.html'" class="btn btn-primary btn-red">SMA Support</button>
 	</div>
+	<div class="row">
+		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
+	</div>
 <div class="row">
 <div class="text-center">
 Open Source made with love!<br>

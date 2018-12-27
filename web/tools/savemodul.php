@@ -347,7 +347,12 @@ foreach($lines as $line) {
 	    if(strpos($line, "i3username=") !== false) {
 	    $result .= 'i3username='.$_POST[i3username]."\n";
 	$writeit = '1';
+	    } 
+	    if(strpos($line, "soci3intervall=") !== false) {
+	    $result .= 'soci3intervall='.$_POST[soci3intervall]."\n";
+	$writeit = '1';
     } 
+
 	    if(strpos($line, "i3passwort=") !== false) {
 	    $result .= 'i3passwort='.$_POST[i3passwort]."\n";
 	$writeit = '1';
@@ -566,7 +571,21 @@ foreach($lines as $line) {
     	    $result .= 'mpm3pmspeicherlanip='.$_POST[mpm3pmspeicherlanip]."\n";
     	  $writeit = '1';
   } 
-    
+	if(strpos($line, "bezug_smartme_user=") !== false) {
+	    $result .= 'bezug_smartme_user=\''.$_POST[bezug_smartme_user]."'\n";
+	    $writeit = '1';
+	    } 
+	if(strpos($line, "bezug_smartme_pass=") !== false) {
+	    $result .= 'bezug_smartme_pass=\''.$_POST[bezug_smartme_pass]."'\n";
+	    $writeit = '1';
+	    } 
+	if(strpos($line, "bezug_smartme_url=") !== false) {
+	    $result .= 'bezug_smartme_url=\''.$_POST[bezug_smartme_url]."'\n";
+	    $writeit = '1';
+	    } 
+
+
+
 
 	    if ( $writeit == '0') {
 		$result .= $line;

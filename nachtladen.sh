@@ -161,7 +161,7 @@ echo $nachtladenstate > /var/www/html/openWB/ramdisk/nachtladenstate
 echo $nachtladenstates1 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo $nachtladen2state > /var/www/html/openWB/ramdisk/nachtladen2state
 echo $nachtladen2states1 > /var/www/html/openWB/ramdisk/nachtladen2states1
-if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2state == 1 )); then
+if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2state == 1 )) || (( nachtladen2states1 == 1 )); then
 	exit 0
 fi
 }
