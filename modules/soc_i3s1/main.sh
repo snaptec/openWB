@@ -20,7 +20,7 @@ else
 #Abfrage Ladung aktiv. Setzen des soctimers. 
 	charging=$(echo $abfrage | jq '.chargingActive')
 	if [[ $charging != 0 ]] ; then
-		soctimer1=$((60 * (10 - $soci3intervall) / 10))
+		soctimer1=$((60 * (10 - $soci3intervall1) / 10))
 		echo $soctimer1 > /var/www/html/openWB/ramdisk/soctimer1
 	else
 		echo 1 > /var/www/html/openWB/ramdisk/soctimer1
