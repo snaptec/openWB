@@ -797,7 +797,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.093 beta				</div>
+				<!-- master -->	Ver 1.094 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

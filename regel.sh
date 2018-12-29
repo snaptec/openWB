@@ -91,9 +91,8 @@ fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
-if (( nachtladen == 1 )); then
-	nachtlademodus
-fi
+nachtlademodus
+
 ########################
 # Sofort Laden
 if (( lademodus == 0 )); then

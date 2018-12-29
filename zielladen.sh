@@ -18,12 +18,12 @@ akkuglp1wh=$(( akkuglp1 * 1000 ))
 zuladendewh=$(( akkuglp1wh / 100 * zuladendersoc ))
 
 #ladeleistung ermitteln
-lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 230 ))
+lademaxwh=$(( zielladenmaxalp1 * zielladenphasenlp1 * 220 ))
 
-wunschawh=$(( zielladenalp1 * zielladenphasenlp1 * 230 ))
+wunschawh=$(( zielladenalp1 * zielladenphasenlp1 * 220 ))
 #ladezeit ermitteln
 if (( llalt > 5 )); then
-	wunschawh=$(( llalt * zielladenphasenlp1 * 230 ))
+	wunschawh=$(( llalt * zielladenphasenlp1 * 220 ))
 fi
 moeglichewh=$(( wunschawh / 60 * minzeitdiff ))
 
