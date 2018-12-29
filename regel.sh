@@ -82,6 +82,13 @@ loadvars
 
 #Graphing
 graphing
+
+#Lademodus 3 == Aus
+
+if (( lademodus == 3 )); then
+	auslademodus
+fi
+
 #########################################
 #Regelautomatiken
 
@@ -187,8 +194,8 @@ fi
 
 
 
-#Lademodus 3 == Aus
+#Lademodus 4 == SemiAus
 
-if (( lademodus == 3 )); then
-	auslademodus
+if (( lademodus == 4 )); then
+	semiauslademodus
 fi
