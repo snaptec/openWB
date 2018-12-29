@@ -703,7 +703,7 @@ then
 fi
 if ! grep -Fq "nacht2lls1=" /var/www/html/openWB/openwb.conf
 then
-	  echo "nachtll2s1=12" >> /var/www/html/openWB/openwb.conf
+	  echo "nacht2lls1=12" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "nachtladen2abuhrs1=" /var/www/html/openWB/openwb.conf
 then
@@ -715,7 +715,7 @@ then
 fi
 if ! grep -Fq "nacht2ll=" /var/www/html/openWB/openwb.conf
 then
-	  echo "nachtll2=12" >> /var/www/html/openWB/openwb.conf
+	  echo "nacht2ll=12" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "nachtladen2abuhr=" /var/www/html/openWB/openwb.conf
 then
