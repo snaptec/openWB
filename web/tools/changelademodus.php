@@ -31,4 +31,12 @@ if (isset($_GET['stop'])) {
                         header("Location: ../index.php");
                 }
 }
+if (isset($_GET['semistop'])) {
+
+		if ($_GET['semistop'] == "1") {
+                        $config['lademodus'] = '4';
+        		 file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 4);
+                        header("Location: ../index.php");
+                }
+}
         ?>

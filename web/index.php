@@ -329,7 +329,12 @@
 				</div>
 			</div>
 			<div class="row" style="font-size: 2vw">
-				<div class="col-xs-6 text-center">
+				<div class="col-xs-3 text-center">
+					<div class="actstat4">
+						<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Semistop</a>
+					</div>
+				</div>
+				<div class="col-xs-3 text-center">
 					<div class="actstat3">
 						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
 					</div>
@@ -797,7 +802,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.094 beta				</div>
+				<!-- master -->	Ver 1.095 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -879,6 +884,8 @@ function loadText(){
     $('.actstat2 .btn').addClass("btn-red");
     $('.actstat3 .btn').addClass("btn-red");
     $('.actstat3 .btn').removeClass("btn-green");
+    $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
    }
@@ -890,7 +897,10 @@ function loadText(){
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
-    }
+    $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
+
+   }
    if(result.text == 2){
     $('.actstat2 .btn').addClass("btn-green");
     $('.actstat .btn').addClass("btn-red");    
@@ -899,7 +909,10 @@ function loadText(){
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-}
+       $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
+
+   }
      if(result.text == 3){
     $('.actstat2 .btn').addClass("btn-red");
     $('.actstat3 .btn').addClass("btn-green");
@@ -907,8 +920,23 @@ function loadText(){
     $('.actstat1 .btn').addClass("btn-red");
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-     }
+       $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
 
+     }
+     if(result.text == 4){
+    $('.actstat2 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-red");
+    $('.actstat .btn').addClass("btn-red");    
+    $('.actstat1 .btn').addClass("btn-red");
+    $('.actstat .btn').removeClass("btn-green");
+    $('.actstat2 .btn').removeClass("btn-green");
+    $('.actstat3 .btn').removeClass("btn-green");
+    $('.actstat1 .btn').removeClass("btn-green");    
+       $('.actstat4 .btn').addClass("btn-green");
+    $('.actstat4 .btn').removeClass("btn-red");
+
+     }
   }
  });
 }
