@@ -1197,6 +1197,7 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
