@@ -83,6 +83,17 @@ loadvars
 #Graphing
 graphing
 
+
+#evse modbus check
+evsemodbustimer=$(<ramdisk/evsemodbustimer)
+if (( evsemodbustimer < 30 )); then
+	evsemodbustimer=$((evsemodbustimer+1))
+	echo $evsemodbustimer > ramdisk/evsemodbustimer
+else
+	evsemodbustimer=0
+	echo $evsemodbustimer > ramdisk/evsemodbustimer
+	evsemodbuscheck
+fi
 #Lademodus 3 == Aus
 
 if (( lademodus == 3 )); then

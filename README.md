@@ -54,7 +54,7 @@ auch als Bausatz fertig vorkonfiguriert inkl Anleitung zu kaufen.
 
 Bausatz Anleitung:
 	
-	https://openwb.de/images/
+	https://openwb.de/manuals/
 
 
 

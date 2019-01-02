@@ -331,7 +331,7 @@
 			<div class="row" style="font-size: 2vw">
 				<div class="col-xs-3 text-center">
 					<div class="actstat4">
-						<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Semistop</a>
+						<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
 					</div>
 				</div>
 				<div class="col-xs-3 text-center">
@@ -442,6 +442,7 @@
 						<br><br>
 						<label for="lademlp1">Lademenge</label>
 						<select type="text" name="lademlp1" id="lademlp1">
+						<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
 						<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
 						<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
 						<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
@@ -515,6 +516,7 @@
 						<br><br>
 						<label for="lademlp2">Lademenge</label>
 						<select type="text" name="lademlp2" id="lademlp2">
+						<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
 						<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
 						<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
 						<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
@@ -587,6 +589,7 @@
 					<br><br>
 					<label for="lademlp3">Lademenge</label>
 					<select type="text" name="lademlp3" id="lademlp3">
+					<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
 					<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
 					<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
 					<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
@@ -802,7 +805,7 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- master -->	Ver 1.095 beta				</div>
+				<!-- master -->	Ver 1.096 beta				</div>
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>

@@ -119,6 +119,7 @@ echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
 echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
+echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
@@ -624,6 +625,11 @@ if ! grep -Fq "loadsharinglp12=" /var/www/html/openWB/openwb.conf
 then
 		  echo "loadsharinglp12=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "loadsharingalp12=" /var/www/html/openWB/openwb.conf
+then
+		  echo "loadsharingalp12=32" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "goeiplp1=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goeiplp1=192.168.0.15" >> /var/www/html/openWB/openwb.conf
