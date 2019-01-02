@@ -367,6 +367,10 @@ foreach($lines as $line) {
 	if(strpos($line, "loadsharinglp12=") !== false) {
 		list(, $loadsharinglp12old) = explode("=", $line);
 	}
+	if(strpos($line, "loadsharingalp12=") !== false) {
+		list(, $loadsharingalp12old) = explode("=", $line);
+	}
+
 	if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
 		list(, $zielladenuhrzeitlp1old) = explode("=", $line);
 	}
@@ -1254,8 +1258,15 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</select>
 </div>
 <div class="row">
+	<b><label for="loadsharingalp12">Loadsharing Ampere LP 1 / LP 2:</label></b>
+	<select type="text" name="loadsharingalp12" id="loadsharingalp12">
+		<option <?php if($loadsharingalp12old == 16) echo selected ?> value="16">16 Ampere</option>
+		<option <?php if($loadsharingalp12old == 32) echo selected ?> value="32">32 Ampere</option>
+	</select>
+</div>
+<div class="row">
 	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
-	Sie stellt in jedem Lademodus sicher das nicht mehr als 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Sie stellt in jedem Lademodus sicher das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
 	Der richtige Anschluss ist zu gewährleisten.<br>
 	Ladepunkt 1: <br>
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>

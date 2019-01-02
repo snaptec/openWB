@@ -1,7 +1,7 @@
 from auth import login
 import requests
 
-BASE_URL = 'https://gdcportalgw.its-mo.com/api_v181217_NE/gdc/'
+BASE_URL = 'https://gdcportalgw.its-mo.com/gworchest_160803EC/gdc/'
 
 class Leaf(object):
     """Make requests to the Nissan Connect API to get Leaf Info"""
