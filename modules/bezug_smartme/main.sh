@@ -31,13 +31,13 @@ bezuga1=$(echo $json | jq .Current)
 #Prüfen ob Werte gültig
 re='^-?[0-9]+$'
 if ! [[ $wattbezug =~ $re ]] ; then
-	   wattbezug="0"
+	   wattbezug=$(</var/www/html/openWB/ramdisk/wattbezug)
 fi
 if ! [[ $ikwh =~ $re ]] ; then
-	   ikwh="0"
+	   ikwh=$(</var/www/html/openWB/ramdisk/bezugkwh)
 fi
 if ! [[ $ekwh =~ $re ]] ; then
-	   ekwh="0"
+	   ekwh=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
 fi
 
 #Ausgabe
