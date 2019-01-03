@@ -17,6 +17,7 @@ $timef = file($timefile, FILE_IGNORE_NEW_LINES);
 $SOC = file($socfile, FILE_IGNORE_NEW_LINES);
 if ($speichervorhanden == 1) {
 	$speicherfile = '/var/www/html/openWB/ramdisk/speicher.graph';
+	$speichersocfile = '/var/www/html/openWB/ramdisk/speichersoc.graph';
 }
 $myData = new pData();
 $myData->addPoints($EV,"EV");
@@ -26,6 +27,8 @@ $myData->addPoints($SOC, "SoC");
 if ($speichervorhanden == 1) {
 	$SPEICHER = file($speicherfile, FILE_IGNORE_NEW_LINES);
 	$myData->addPoints($SPEICHER, "Speicher");
+	$SPEICHERSOC = file($speichersocfile, FILE_IGNORE_NEW_LINES);
+	$myData->addPoints($SPEICHERSOC, "Speicher SoC");
 }
 $highest1 = max($EVU);
 $highest = max($EV);
@@ -35,9 +38,13 @@ $lowestu = min($EVU);
 $lowest = min($PV);
 if ($speichervorhanden == 1) {
 	$lowest = min($SPEICHER);
+	$minsoc = min($SOC,$SPEICHERSOC);
+	$soc1 = (min($minsoc) - 5);
+} else {
+	$socl = (min($SOC) - 5);
 }
 $lowestg = min($lowest,$lowestu);
-$socl = (min($SOC) - 5);
+
 if ($socl < "0" ){
 	$minsoc = 0;
 } else {
@@ -53,6 +60,9 @@ $myData->setPalette("PV",array("R"=>0,"G"=>254,"B"=>0));
 if ($speichervorhanden == 1) {
 	$myData->setSerieOnAxis("Speicher",0);
 	$myData->setPalette("Speicher",array("R"=>252,"G"=>190,"B"=>50));
+	$myData->setSerieOnAxis("Speicher SoC",1);
+	$myData->setPalette("Speicher SoC",array("R"=>152,"G"=>190,"B"=>50));
+
 }
 $myData->addPoints($timef,"Labels");
 $myData->setSerieOnAxis("Labels",0);
@@ -87,6 +97,7 @@ $myImage->drawLegend(460,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZO
 $myImage->drawLineChart();
 if ($speichervorhanden == 1) {
 	$myData->setSerieDrawable("Speicher",false);
+	$myData->setSerieDrawable("Speicher SoC",false);
 }
 $myData->setSerieDrawable("SoC",false);
 $myData->setSerieDrawable("PV",true);

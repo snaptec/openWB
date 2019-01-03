@@ -4,6 +4,9 @@ graphing(){
 if (( speichervorhanden == 1 )); then
 	echo $speicherleistung >> /var/www/html/openWB/ramdisk/speicher-live.graph
 fi
+if [[ socmodul1 != "none" ]]; then
+	echo $soc1 >> /var/www/html/openWB/ramdisk/soc1-live.graph
+fi
 echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv-live.graph
 echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu-live.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
@@ -22,6 +25,10 @@ if [[ $livegraph =~ $re ]] ; then
 	if ((speichervorhanden == 1 )); then
 		echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/speicher-live.graph)" > /var/www/html/openWB/ramdisk/speicher-live.graph
 	fi
+	if [[ socmodul1 != "none" ]]; then
+		echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc1-live.graph)" > /var/www/html/openWB/ramdisk/soc1-live.graph
+	fi
+	
 fi
 #Long Time Graphing
 if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
@@ -31,6 +38,7 @@ echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev.graph
 if (( speichervorhanden == 1 )); then
 	echo $speicherleistung >> /var/www/html/openWB/ramdisk/speicher.graph
+	echo $speichersoc >> /var/www/html/openWB/ramdisk/speichersoc.graph
 fi
 date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
 echo "$(tail -720 /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
@@ -40,6 +48,8 @@ echo "$(tail -720 /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB
 echo "$(tail -720 /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
 if ((speichervorhanden == 1 )); then
 	echo "$(tail -720 /var/www/html/openWB/ramdisk/speicher.graph)" > /var/www/html/openWB/ramdisk/speicher.graph
+	echo "$(tail -720 /var/www/html/openWB/ramdisk/speichersoc.graph)" > /var/www/html/openWB/ramdisk/speichersoc.graph
+
 fi
 
 fi

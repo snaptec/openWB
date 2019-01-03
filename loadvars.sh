@@ -4,6 +4,7 @@ loadvars(){
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
 	speichervorhanden="1"
 	echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 else
@@ -68,7 +69,9 @@ if [[ $lastmanagement == "1" ]]; then
 		if ! [[ $soc1 =~ $re ]] ; then
 		 soc1="0"
 		fi
+		echo 1 > /var/www/html/openWB/ramdisk/soc1vorhanden
 	else
+		echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 		soc1=0
 	fi
 	timeout 10 modules/$ladeleistungs1modul/main.sh || true
