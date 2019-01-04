@@ -29,9 +29,9 @@ $myData = new pData();
 
 $myData->addPoints($llgdiff,"EV");
  
-$myData->setSerieOnAxis("EV Gesamt",0);
+$myData->setSerieOnAxis("EV",0);
 
-$myData->setPalette("EV Gesamt",array("R"=>0,"G"=>0,"B"=>254));
+$myData->setPalette("EV",array("R"=>51,"G"=>122,"B"=>183));
  
 $myData->addPoints($timefk,"Labels");
 $myData->setSerieOnAxis("Labels",0);

@@ -11,6 +11,8 @@ ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
 llg=$(</var/www/html/openWB/ramdisk/llkwhges)
 soc=$(</var/www/html/openWB/ramdisk/soc)
 
+speicheri=$(</var/www/html/openWB/ramdisk/speicherikwh)
+speichere=$(</var/www/html/openWB/ramdisk/speicherekwh)
 
 ll1=$(echo "$ll1 * 1000" | bc)
 ll2=$(echo "$ll2 * 1000" | bc)
@@ -27,6 +29,9 @@ echo $ll2 >> $dailyfile-ll2.csv
 echo $ll3 >> $dailyfile-ll3.csv
 echo $llg >> $dailyfile-llg.csv
 echo $soc >> $dailyfile-soc.csv
+echo $speicheri >> $dailyfile-speicheriwh.csv
+echo $speichere >> $dailyfile-speicherewh.csv
+
 
 
 

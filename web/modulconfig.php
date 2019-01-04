@@ -359,7 +359,9 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmlls1source=") !== false) {
 		list(, $mpm3pmlls1sourceold) = explode("=", $line);
 	}
-
+	if(strpos($line, "mpm3pmlls2source=") !== false) {
+		list(, $mpm3pmlls2sourceold) = explode("=", $line);
+	}
 
 	if(strpos($line, "mpm3pmpvid=") !== false) {
 		list(, $mpm3pmpvidold) = explode("=", $line);
@@ -375,6 +377,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "mpm3pmlls1id=") !== false) {
 		list(, $mpm3pmlls1idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmlls2id=") !== false) {
+		list(, $mpm3pmlls2idold) = explode("=", $line);
 	}
 
 	if(strpos($line, "mpm3pmevuid=") !== false) {
@@ -400,6 +405,12 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "i3passwort=") !== false) {
 		list(, $i3passwortold) = explode("=", $line);
+	}
+	if(strpos($line, "soci3intervall=") !== false) {
+		list(, $soci3intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soci3intervall1=") !== false) {
+		list(, $soci3intervall1old) = explode("=", $line);
 	}
 	if(strpos($line, "i3username=") !== false) {
 		list(, $i3usernameold) = explode("=", $line);
@@ -477,6 +488,10 @@ foreach($lines as $line) {
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
 	}
+
+	if(strpos($line, "solaredgepvip=") !== false) {
+		list(, $solaredgeippvold) = explode("=", $line);
+	}
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
 	}
@@ -528,6 +543,43 @@ foreach($lines as $line) {
 	if(strpos($line, "smashmbezugid=") !== false) {
 		list(, $smashmbezugidold) = explode("=", $line);
 	}
+	if(strpos($line, "mpm3pmspeicherpv=") !== false) {
+		list(, $mpm3pmspeicherpvold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmspeicherid=") !== false) {
+		list(, $mpm3pmspeicheridold) = explode("=", $line);
+	}
+	if(strpos($line, "mpm3pmspeicherlanip=") !== false) {
+		list(, $mpm3pmspeicherlanipold) = explode("=", $line);
+	}
+
+	if(strpos($line, "mpm3pmspeichersource=") !== false) {
+		list(, $mpm3pmspeichersourceold) = explode("=", $line);
+	}
+	if(strpos($line, "speicherekwh_http=") !== false) {
+		list(, $speicherekwh_httpold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "speicherikwh_http=") !== false) {
+		list(, $speicherikwh_httpold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezug_smartme_user=") !== false) {
+		list(, $bezug_smartme_userold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezug_smartme_pass=") !== false) {
+		list(, $bezug_smartme_passold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "bezug_smartme_url=") !== false) {
+		list(, $bezug_smartme_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "carnetuser=") !== false) {
+		list(, $carnetuserold) = explode("=", $line);
+	}
+	if(strpos($line, "carnetpass=") !== false) {
+		list(, $carnetpassold) = explode("=", $line);
+	}
+	if(strpos($line, "soccarnetintervall=") !== false) {
+		list(, $soccarnetintervallold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -546,6 +598,20 @@ $einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
 $bezug_solarlog_ipold = str_replace( "'", "", $bezug_solarlog_ipold);
 $speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
 $speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
+$speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
+$speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
+$bezug_smartme_userold = str_replace( "'", "", $bezug_smartme_userold);
+$bezug_smartme_passold = str_replace( "'", "", $bezug_smartme_passold);
+$bezug_smartme_urlold = str_replace( "'", "", $bezug_smartme_urlold);
+$carnetuserold = str_replace( "'", "", $carnetuserold);
+$carnetpassold = str_replace( "'", "", $carnetpassold);
+
+
+
+
+
+
+$solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
@@ -983,6 +1049,8 @@ $(function() {
 		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
+		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
+
 
 	</select>
 </div>
@@ -1105,8 +1173,38 @@ $(function() {
 	<div class="row bg-info">
 		BMW i3 VIN<br><br>
 	</div>
-
+	<div class="row bg-info">
+		<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
 </div>
+<div id="soccarnet">
+	<div class="row bg-info">
+		<b><label for="carnetuser">Benutzername:</label></b>
+		<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="carnetpass">Passwort:</label></b>
+		<input type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soccarnetintervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
+</div>
+
 
 
 <script>
@@ -1119,7 +1217,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
-
+		$('#soccarnet').hide();
 
       } 
      
@@ -1131,6 +1229,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1141,6 +1240,8 @@ $(function() {
 		$('#soci3').hide();
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
+		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -1151,6 +1252,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -1161,6 +1263,7 @@ $(function() {
 		$('#soczoe').show();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -1171,6 +1274,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').show();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_tesla')   {
@@ -1181,8 +1285,22 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').show();
+		$('#soccarnet').hide();
+
+   }
+   if($('#socmodul').val() == 'soc_carnet')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').hide();
+		$('#soccarnet').show();
 
       } 
+
+
 	$('#socmodul').change(function(){
         if($('#socmodul').val() == 'none') {
 		$('#socmnone').show(); 
@@ -1192,6 +1310,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1204,6 +1323,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1215,6 +1335,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -1225,6 +1346,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -1235,6 +1357,7 @@ $(function() {
 		$('#soczoe').show();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -1245,6 +1368,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').show();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_tesla')   {
@@ -1255,9 +1379,22 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').show();
+		$('#soccarnet').hide();
 
       } 
-	    });
+   if($('#socmodul').val() == 'soc_carnet')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').hide();
+		$('#soccarnet').show();
+
+      } 
+
+	});
 });
 </script>
 
@@ -1609,6 +1746,13 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 	<div class="row bg-info">
 		Hier ist die vollständige i3 VIN nötig<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soci3intervall1">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
 	</div>
 
 </div>
@@ -1981,6 +2125,7 @@ $(function() {
 		<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
 			<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
 		</select>
@@ -1993,7 +2138,23 @@ $(function() {
 			Keine Konfiguration erforderlich.<br>
 		</div>
 	</div>
+	<div id="mpm3pmlls2div">
+			<div class="row bg-info">
+			<b><label for="mpm3pmlls2">MPM3PM Modbus Ladeleistung Source:</label></b>
+			<input type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+		</div>
+		<div class="row bg-info">
+			<b><label for="mpm3pmlls2id">MPM3PM Modbus Ladeleistung ID:</label></b>
+			<input type="text" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>"><br>
+		</div>
+		<div class="row bg-info">
+			Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+		</div>
 
+	</div>
 	<div id="sdm630s2div">
 		<div class="row bg-info">
 			<b><label for="sdm630lp3source">Zähler Source:</label></b>
@@ -2065,6 +2226,7 @@ $(function() {
 		$('#sdm120s2div').hide();
 		$('#swifis2div').hide();
 		$('#rs485lanlp3').show(); 
+		$('#mpm3pmlls2div').hide();
 
       } 	
       if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
@@ -2072,6 +2234,7 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').show();
 		$('#rs485lanlp3').show(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
       if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
@@ -2079,6 +2242,7 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
       if($('#ladeleistungss2modul').val() == 'goelp3') {
@@ -2086,9 +2250,16 @@ $(function() {
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
+		$('#mpm3pmlls2div').hide();
 
       } 
-
+      if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
+		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#swifis2div').hide();	
+		$('#mpm3pmlls2div').show();
+		$('#rs485lanlp3').show();	
+      } 
 
 	$('#ladeleistungss2modul').change(function(){
       if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
@@ -2096,28 +2267,35 @@ $(function() {
 		$('#sdm120s2div').hide();
 		$('#swifis2div').hide();
 		$('#rs485lanlp3').show(); 
-
+		$('#mpm3pmlls2div').hide();
       } 	
       if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
 		$('#swifis2div').hide();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').show();
 		$('#rs485lanlp3').show(); 
-
+		$('#mpm3pmlls2div').hide();
       } 
       if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
 		$('#swifis2div').show();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
-
+		$('#mpm3pmlls2div').hide();
       } 
       if($('#ladeleistungss2modul').val() == 'goelp3') {
 		$('#swifis2div').show();
     		$('#sdm630s2div').hide();
 		$('#sdm120s2div').hide();
 		$('#rs485lanlp3').hide(); 
-
+		$('#mpm3pmlls2div').hide();
+      } 
+      if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
+		$('#sdm630s2div').hide();
+		$('#sdm120s2div').hide();
+		$('#swifis2div').hide();	
+		$('#mpm3pmlls2div').show();
+		$('#rs485lanlp3').show();	
       } 
 
 	    });
@@ -2167,6 +2345,8 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 		<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
+		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
+
 	</select>
 </div>
 <div class="row">
@@ -2286,7 +2466,30 @@ $(function() {
 	Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
 	</div>
 </div>
+<div id="wattbezugsmartme">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_user">Smartme Benutzername</label></b>
+		<input type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Benutzername<br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_pass">Smartme Passwort</label></b>
+		<input type="text" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Passwort<br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartme_url">Smartme Url</label></b>
+		<input type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo htmlspecialchars($bezug_smartme_urlold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+	Smartme Url<br>
+	</div>
 
+</div>
 <div id="wattbezugshm">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="smashmdbezugid">Seriennummer des SMA Home Manager</label></b>
@@ -2378,6 +2581,7 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
 
 
       } 
@@ -2394,6 +2598,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -2409,6 +2614,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -2424,6 +2630,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -2438,6 +2645,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -2452,6 +2660,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2466,6 +2675,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
+		$('#wattbezugsmartme').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -2479,6 +2689,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
 		$('#wattbezugvz').hide();
@@ -2492,6 +2704,8 @@ $(function() {
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
 		$('#wattbezugvz').hide();
@@ -2505,6 +2719,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
+   
+		$('#wattbezugsmartme').hide();
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -2518,7 +2734,24 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
-   }
+  
+		$('#wattbezugsmartme').hide();
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartme')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  
+		$('#wattbezugsmartme').show();
+  }
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -2532,6 +2765,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
+
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -2545,7 +2780,9 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
-      } 
+   		$('#wattbezugsmartme').hide();
+
+   } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2558,7 +2795,9 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
-    } 
+   
+   		$('#wattbezugsmartme').hide();
+} 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2571,7 +2810,9 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
-    } 
+ 		$('#wattbezugsmartme').hide();
+
+   } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2584,6 +2825,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+  		$('#wattbezugsmartme').hide();
+
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -2597,6 +2840,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+  		$('#wattbezugsmartme').hide();
+
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2610,6 +2855,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
+ 		$('#wattbezugsmartme').hide();
+
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -2623,6 +2870,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').show();
+		$('#wattbezugsmartme').hide();
 
     } 
 
@@ -2638,6 +2886,7 @@ $(function() {
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezugsmartme').hide();
 
     } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -2652,6 +2901,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
+  		$('#wattbezugsmartme').hide();
+
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -2665,8 +2916,24 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
-   }
+ 		$('#wattbezugsmartme').hide();
 
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartme')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+ 		$('#wattbezugsmartme').show();
+
+  }
 	    });
 });
 </script>
@@ -2685,6 +2952,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
 		<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">MPM3PM </option>
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
+		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
+
 </select>
 </div>
 <div class="row">
@@ -2723,6 +2992,15 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Kostal Wechselrichter.<br><br>
+	</div>
+</div>
+<div id="pvwrsolaredge">
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="solaredgepvip">WR Solaredge IP:</label></b>
+		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgeipvpold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
 	</div>
 </div>
 <div id="pvwrfronius">
@@ -2840,6 +3118,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2851,7 +3130,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
@@ -2863,7 +3142,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -2875,7 +3154,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -2887,7 +3166,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
      } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -2899,6 +3178,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
+		$('#pvwrsolaredge').hide();
 
    }
    if($('#pvwattmodul').val() == 'wr_json')   {
@@ -2911,7 +3191,7 @@ $(function() {
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -2923,7 +3203,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
       if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 	      		$('#pvvzl').hide();
@@ -2935,7 +3215,21 @@ $(function() {
 			$('#pvwrjson').hide();
 			$('#pvmpm3pm').hide();
 			$('#pvwrkostalpiko').show();
+			$('#pvwrsolaredge').hide();
+      } 
+      if($('#pvwattmodul').val() == 'wr_solaredge')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').show();
    } 
+
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
@@ -2947,7 +3241,7 @@ $(function() {
    		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
 	     } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvvzl').hide();
@@ -2959,7 +3253,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvvzl').hide();
@@ -2971,7 +3265,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'none')   {
 		$('#pvvzl').hide();
@@ -2983,7 +3277,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvvzl').hide();
@@ -2995,7 +3289,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
    if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvvzl').hide();
@@ -3007,7 +3301,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
       } 
    if($('#pvwattmodul').val() == 'wr_json')   {
 		$('#pvvzl').hide();
@@ -3019,7 +3313,7 @@ $(function() {
 		$('#pvwrjson').show();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
      } 
    if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvvzl').hide();
@@ -3031,7 +3325,7 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').show();
 		$('#pvwrkostalpiko').hide();
-
+		$('#pvwrsolaredge').hide();
    } 
       if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 	      	$('#pvvzl').hide();
@@ -3043,7 +3337,21 @@ $(function() {
 		$('#pvwrjson').hide();
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').show();
+		$('#pvwrsolaredge').hide();
    } 
+      if($('#pvwattmodul').val() == 'wr_solaredge')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').show();
+   } 
+
 
 	});
 });
@@ -3058,6 +3366,8 @@ $(function() {
 	<select type="text" name="speichermodul" id="speichermodul">
 		<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
+		<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
+
 	</select>
 </div>
 
@@ -3065,45 +3375,106 @@ $(function() {
 	<br>
 </div>
 <div id="divspeicherhttp">
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
 		<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt. Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird. Das Modul dient dazu bei NurPV Ladung eine Entladung des Speichers zu verhindern.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speichersoc_http">SpeicherSoC URL:</label></b>
 		<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="speicherikwh_http">Speicher Import Wh URL:</label></b>
+		<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte URL. Wenn nicht vorhanden, none eintragen. Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
+	<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="speicherekwh_http">Speicher Export Wh URL:</label></b>
+		<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte URL. Wenn nicht vorhanden, none eintragen.  Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
+	<br><br>
+	</div>
+</div>
+<div id="divspeichermpm3pm">
+	<div class="row" style="background-color:#fcbe1e"><br>
+		<b><label for="mpm3pmspeichersource">Modbus Source:</label></b>
+		<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+	Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="mpm3pmspeicherid">Modbus ID:</label></b>
+		<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+	Gültige Werte Zahl. <br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
+		<select type="text" name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
+			<option <?php if($mpm3pmspeicherpvold == "0\n") echo selected ?> value="0">Keine extra Berechnung</option>
+			<option <?php if($mpm3pmspeicherpvold == "1\n") echo selected ?> value="1">Subtrahieren der PV Leistung</option>
+		</select>
+	</div>
+	<div class="row" style="background-color:#fcbe1e"><br>
+		<b><label for="mpm3pmspeicherlanip">Lan Modbus Konverter IP:</label></b>
+		<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+	Gültige Werte eine IP Adresse. <br>
 	</div>
 
 </div>
-
 <script>
 $(function() {
       if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 		$('#divspeicherhttp').hide();
-	
+		$('#divspeichermpm3pm').hide();
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
 		$('#divspeicherhttp').show();
+		$('#divspeichermpm3pm').hide();
+   }
+   if($('#speichermodul').val() == 'mpm3pmspeicher')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').show();
+
    }
 $('#speichermodul').change(function(){
      if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 		$('#divspeicherhttp').hide();
-	
+		$('#divspeichermpm3pm').hide();
+
       } 
     if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
+		$('#divspeichermpm3pm').hide();
 		$('#divspeicherhttp').show();
    }
-	});
+   if($('#speichermodul').val() == 'mpm3pmspeicher')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').show();
+
+   }
+});
+
 });
 </script>
 

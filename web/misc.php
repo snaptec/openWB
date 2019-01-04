@@ -41,6 +41,9 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "logeinspeisungneg=") !== false) {
+		list(, $logeinspeisungnegold) = explode("=", $line);
+	}
 
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
@@ -334,6 +337,9 @@ foreach($lines as $line) {
 	if(strpos($line, "releasetrain=") !== false) {
 		list(, $releasetrainold) = explode("=", $line);
 	}
+	if(strpos($line, "logdailywh=") !== false) {
+		list(, $logdailywhold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -385,7 +391,25 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
 	<br>	</div>
-
+		<div class="row">
+	<h3>	Logging Einstellungen</h3> <br>
+		</div>
+		<div class="row">
+			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
+			<select type="text" name="logdailywh" id="logdailywh">
+				<option <?php if($logdailywhold == 0) echo selected ?>value="0">Watt</option>
+				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			<b><label for="logeinspeisungneg">Einspeiung im Daily Graph positiv oder negativ anzeigen:</label></b>
+			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
+				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
+				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
+			</select>
+			<br>
+		</div>
 <div class="row">
 	<b><label for="livegraph">Zeitintervall für den Live Graphen der Hauptseite:</label></b>
 	<select type="text" name="livegraph" id="livegraph">
@@ -394,9 +418,19 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<option <?php if($livegraphold == 15) echo selected ?> value="15">15 Min</option>
 		<option <?php if($livegraphold == 20) echo selected ?> value="20">20 Min</option>
 		<option <?php if($livegraphold == 30) echo selected ?> value="30">30 Min</option>
+		<option <?php if($livegraphold == 40) echo selected ?> value="40">40 Min</option>
+		<option <?php if($livegraphold == 50) echo selected ?> value="50">50 Min</option>
+		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
+
 	</select><br>
 <br>
 </div>
+		<div class="row">
+	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
+
+		<div class="row">
+	<h3>	Releasechannel</h3> <br>
+		</div>
 		<div class="row">
 			<b><label for="releasetrain">Releasechannel:</label></b>
 			<select type="text" name="releasetrain" id="releasetrain">
@@ -429,6 +463,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/smashmredirect.html'" class="btn btn-primary btn-red">SMA Support</button>
+	</div>
+	<div class="row">
+		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
 <div class="row">
 <div class="text-center">

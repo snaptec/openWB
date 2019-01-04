@@ -46,6 +46,24 @@ function getfile() {
 		        $("#lldiv").html(request.responseText);
 		}
 	});
+	$.ajax({
+		url: "/openWB/ramdisk/evsedintestlp1",
+	        complete: function(request){
+		        $("#evsedintestlp1div").html(request.responseText);
+		}
+	});
+	$.ajax({
+		url: "/openWB/ramdisk/evsedintestlp2",
+	        complete: function(request){
+		        $("#evsedintestlp2div").html(request.responseText);
+		}
+	});
+	$.ajax({
+		url: "/openWB/ramdisk/evsedintestlp3",
+	        complete: function(request){
+		        $("#evsedintestlp3div").html(request.responseText);
+		}
+	});
 }
 doInterval = setInterval(getfile, 2000);
 </script>
@@ -947,6 +965,56 @@ doInterval = setInterval(getfile, 2000);
 	</div>
 
 </div>
+<hr>
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+		EVSE Modbus Test<br>siehe Hilfe -> Misc
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+			<div id="evsedintestlp1div"></div>
+		<?php
+			$filename = '/var/www/html/openWB/ramdisk/evsedintestlp1';
+			if (file_exists($filename)) {
+			    echo "last check " . date ("H:i", filemtime($filename));
+			}
+		?>
+	</div>
+
+	<div class="col-xs-2 text-center bg-info">
+		<div id="evsedintestlp2div"></div>
+		<?php
+			$filename = '/var/www/html/openWB/ramdisk/evsedintestlp2';
+			if (file_exists($filename)) {
+			    echo "last check " . date ("H:i", filemtime($filename));
+			}
+		?>
+	</div>
+
+	<div class="col-xs-2 text-center bg-info">
+		<div id="evsedintestlp3div"></div>
+		<?php
+			$filename = '/var/www/html/openWB/ramdisk/evsedintestlp3';
+			if (file_exists($filename)) {
+			    echo "last check " . date ("H:i", filemtime($filename));
+			}
+		?>
+	</div>
+</div>
+<form action="tools/evsedintest.php" method="post">
+<div class="row bg-info">
+	<div class="col-xs-4 text-center bg-info">
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+	<input type="submit" name="testlp1" value="Testen" ></input>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+	<input type="submit" name="testlp2" value="Testen" ></input>
+	</div>
+	<div class="col-xs-2 text-center bg-info">
+	<input type="submit" name="testlp3" value="Testen" ></input>
+	</div>
+</div>
+</form>
 <hr style="height:3px;border:none;color:#333;background-color:#333;" />
 
 <div class="row" style="background-color:#BEFEBE">
@@ -1069,8 +1137,6 @@ echo "
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
 	<script type='text/javascript'>
-
-
 
 
 

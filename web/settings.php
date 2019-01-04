@@ -41,7 +41,9 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "speicherpveinbeziehen=") !== false) {
+		list(, $speicherpveinbeziehenold) = explode("=", $line);
+	}
 
 	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 		list(, $pvbezugeinspeisungold) = explode("=", $line);
@@ -108,6 +110,12 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "durchslp3=") !== false) {
 		list(, $durchslp3old) = explode("=", $line);
+	}
+	if(strpos($line, "akkuglp1=") !== false) {
+		list(, $akkuglp1old) = explode("=", $line);
+	}
+	if(strpos($line, "akkuglp2=") !== false) {
+		list(, $akkuglp2old) = explode("=", $line);
 	}
 	if(strpos($line, "lastmanagements2=") !== false) {
 		list(, $lastmanagements2old) = explode("=", $line);
@@ -218,6 +226,12 @@ foreach($lines as $line) {
 	if(strpos($line, "nachtll=") !== false) {
 		list(, $nachtllold) = explode("=", $line);
 	}
+	if(strpos($line, "nacht2ll=") !== false) {
+		list(, $nacht2llold) = explode("=", $line);
+	}
+	if(strpos($line, "nacht2lls1=") !== false) {
+		list(, $nacht2lls1old) = explode("=", $line);
+	}
 	if(strpos($line, "nachtladens1=") !== false) {
 		list(, $nachtladens1old) = explode("=", $line);
 	}
@@ -229,6 +243,12 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "nachtsoc1s1=") !== false) {
 		list(, $nachtsoc1s1old) = explode("=", $line);
+	}
+	if(strpos($line, "nachtladen2abuhrs1=") !== false) {
+		list(, $nachtladen2abuhrs1old) = explode("=", $line);
+	}
+	if(strpos($line, "nachtladen2bisuhrs1=") !== false) {
+		list(, $nachtladen2bisuhrs1old) = explode("=", $line);
 	}
 	if(strpos($line, "nachtladenabuhrs1=") !== false) {
 		list(, $nachtladenabuhrs1old) = explode("=", $line);
@@ -256,6 +276,12 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "nachtladenbisuhr=") !== false) {
 		list(, $nachtladenbisuhrold) = explode("=", $line);
+	}
+	if(strpos($line, "nachtladen2abuhr=") !== false) {
+		list(, $nachtladen2abuhrold) = explode("=", $line);
+	}
+	if(strpos($line, "nachtladen2bisuhr=") !== false) {
+		list(, $nachtladen2bisuhrold) = explode("=", $line);
 	}
 	if(strpos($line, "nachtsoc=") !== false) {
 		list(, $nachtsocold) = explode("=", $line);
@@ -341,7 +367,28 @@ foreach($lines as $line) {
 	if(strpos($line, "loadsharinglp12=") !== false) {
 		list(, $loadsharinglp12old) = explode("=", $line);
 	}
+	if(strpos($line, "loadsharingalp12=") !== false) {
+		list(, $loadsharingalp12old) = explode("=", $line);
+	}
 
+	if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
+		list(, $zielladenuhrzeitlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "zielladensoclp1=") !== false) {
+		list(, $zielladensoclp1old) = explode("=", $line);
+	}
+	if(strpos($line, "zielladenalp1=") !== false) {
+		list(, $zielladenalp1old) = explode("=", $line);
+	}
+	if(strpos($line, "zielladenphasenlp1=") !== false) {
+		list(, $zielladenphasenlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "zielladenmaxalp1=") !== false) {
+		list(, $zielladenmaxalp1old) = explode("=", $line);
+	}
+	if(strpos($line, "zielladenaktivlp1=") !== false) {
+		list(, $zielladenaktivlp1old) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -352,7 +399,7 @@ $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
 $pushoveruserold = str_replace( "'", "", $pushoveruserold);
 $pushovertokenold = str_replace( "'", "", $pushovertokenold);
-
+$zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 
 
 
@@ -378,6 +425,171 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 <div class="col-xs-1">
 </div>
 <div class="col-xs-10">
+
+<div class="row">
+	<b><h5><label for="Zielladen">Zielladen Ladepunkt 1:(BETA)</label></b>
+	<select type="text" name="zielladenaktivlp1" id="zielladenaktivlp1">
+		<option <?php if($zielladenaktivlp1old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($zielladenaktivlp1old == 1) echo selected ?> value="1">An</option>
+	</select></h5>
+</div>
+
+<div id="zielladenaktivlp1div">
+	<div class="row">
+		<b>Beta Feature</b><br>
+		Vorgehensweise zum testen: Lademodus auf Stop stellen. Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen.<br>
+		Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.<br>
+	</div>
+	<div class="row">
+		<b><label for="zielladensoclp1">Ziel SoC an Ladepunkt 1:</label></b>
+		<input type="text" name="zielladensoclp1" id="zielladensoclp1" value="<?php echo $zielladensoclp1old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx, z.B. 85 <br> Der SoC Wert auf den geladen werden soll.<br><br>
+	</div>
+	<div class="row">
+		
+		<b><label for="zielladenuhrzeitlp1">Zielladenuhrzeit an Ladepunkt 1:</label></b>
+		<input type="text" name="zielladenuhrzeitlp1" id="zielladenuhrzeitlp1" value="<?php echo $zielladenuhrzeitlp1old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte YYYY-MM-DD HH:MM, z.B. 2018-12-16 06:15 <br> Ende der gewünschten Ladezeit. Das Datum muss exakt in diesem Format mit Leerzeichen zwischen Monat und Stunde eingegeben werden.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="zielladenalp1">Stromstärke in A:</label></b>
+		<select type="text" name="zielladenalp1" id="zielladenalp1">
+			<option <?php if($zielladenalp1old == 6) echo selected ?> value="6">6</option>
+			<option <?php if($zielladenalp1old == 7) echo selected ?> value="7">7</option>
+			<option <?php if($zielladenalp1old == 8) echo selected ?> value="8">8</option>
+			<option <?php if($zielladenalp1old == 9) echo selected ?> value="9">9</option>
+			<option <?php if($zielladenalp1old == 10) echo selected ?> value="10">10</option>
+			<option <?php if($zielladenalp1old == 11) echo selected ?> value="11">11</option>
+			<option <?php if($zielladenalp1old == 12) echo selected ?> value="12">12</option>
+			<option <?php if($zielladenalp1old == 13) echo selected ?> value="13">13</option>
+			<option <?php if($zielladenalp1old == 14) echo selected ?> value="14">14</option>
+			<option <?php if($zielladenalp1old == 15) echo selected ?> value="15">15</option>
+			<option <?php if($zielladenalp1old == 16) echo selected ?> value="16">16</option>
+			<option <?php if($zielladenalp1old == 17) echo selected ?> value="17">17</option>
+			<option <?php if($zielladenalp1old == 18) echo selected ?> value="18">18</option>
+			<option <?php if($zielladenalp1old == 19) echo selected ?> value="19">19</option>
+			<option <?php if($zielladenalp1old == 20) echo selected ?> value="20">20</option>
+			<option <?php if($zielladenalp1old == 21) echo selected ?> value="21">21</option>
+			<option <?php if($zielladenalp1old == 22) echo selected ?> value="22">22</option>
+			<option <?php if($zielladenalp1old == 23) echo selected ?> value="23">23</option>
+			<option <?php if($zielladenalp1old == 24) echo selected ?> value="24">24</option>
+			<option <?php if($zielladenalp1old == 25) echo selected ?> value="25">25</option>
+			<option <?php if($zielladenalp1old == 26) echo selected ?> value="26">26</option>
+			<option <?php if($zielladenalp1old == 27) echo selected ?> value="27">27</option>
+			<option <?php if($zielladenalp1old == 28) echo selected ?> value="28">28</option>
+			<option <?php if($zielladenalp1old == 29) echo selected ?> value="29">29</option>		
+			<option <?php if($zielladenalp1old == 30) echo selected ?> value="30">30</option>
+			<option <?php if($zielladenalp1old == 31) echo selected ?> value="31">31</option>
+			<option <?php if($zielladenalp1old == 32) echo selected ?> value="32">32</option>
+		</select><br>
+	</div>
+	<div class="row">
+	Ampere mit denen geladen werden soll um den Ziel SoC zu erreichen.<br>
+	</div>
+
+</div>
+
+<div class="row"><hr>
+	<h3>EV Daten</h3>
+</div>
+<div id="durchslp1">
+	<div class="row">
+		
+		<b><label for="durchslp1">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</label></b>
+		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+	<div class="row">
+		
+		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1:</label></b>
+		<input type="text" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1:</label></b>
+		<select type="text" name="zielladenphasenlp1" id="zielladenphasenlp1">
+			<option <?php if($zielladenphasenlp1old == 1) echo selected ?> value="1">1</option>
+			<option <?php if($zielladenphasenlp1old == 2) echo selected ?> value="2">2</option>
+			<option <?php if($zielladenphasenlp1old == 3) echo selected ?> value="3">3</option>
+		</select>
+	</div>
+	<div class="row">
+		<b><label for="zielladenmaxalp1">Stromstärke in A mit der maximal geladen werden kann:</label></b>
+		<select type="text" name="zielladenmaxalp1" id="zielladenmaxalp1">
+			<option <?php if($zielladenmaxalp1old == 6) echo selected ?> value="6">6</option>
+			<option <?php if($zielladenmaxalp1old == 7) echo selected ?> value="7">7</option>
+			<option <?php if($zielladenmaxalp1old == 8) echo selected ?> value="8">8</option>
+			<option <?php if($zielladenmaxalp1old == 9) echo selected ?> value="9">9</option>
+			<option <?php if($zielladenmaxalp1old == 10) echo selected ?> value="10">10</option>
+			<option <?php if($zielladenmaxalp1old == 11) echo selected ?> value="11">11</option>
+			<option <?php if($zielladenmaxalp1old == 12) echo selected ?> value="12">12</option>
+			<option <?php if($zielladenmaxalp1old == 13) echo selected ?> value="13">13</option>
+			<option <?php if($zielladenmaxalp1old == 14) echo selected ?> value="14">14</option>
+			<option <?php if($zielladenmaxalp1old == 15) echo selected ?> value="15">15</option>
+			<option <?php if($zielladenmaxalp1old == 16) echo selected ?> value="16">16</option>
+			<option <?php if($zielladenmaxalp1old == 17) echo selected ?> value="17">17</option>
+			<option <?php if($zielladenmaxalp1old == 18) echo selected ?> value="18">18</option>
+			<option <?php if($zielladenmaxalp1old == 19) echo selected ?> value="19">19</option>
+			<option <?php if($zielladenmaxalp1old == 20) echo selected ?> value="20">20</option>
+			<option <?php if($zielladenmaxalp1old == 21) echo selected ?> value="21">21</option>
+			<option <?php if($zielladenmaxalp1old == 22) echo selected ?> value="22">22</option>
+			<option <?php if($zielladenmaxalp1old == 23) echo selected ?> value="23">23</option>
+			<option <?php if($zielladenmaxalp1old == 24) echo selected ?> value="24">24</option>
+			<option <?php if($zielladenmaxalp1old == 25) echo selected ?> value="25">25</option>
+			<option <?php if($zielladenmaxalp1old == 26) echo selected ?> value="26">26</option>
+			<option <?php if($zielladenmaxalp1old == 27) echo selected ?> value="27">27</option>
+			<option <?php if($zielladenmaxalp1old == 28) echo selected ?> value="28">28</option>
+			<option <?php if($zielladenmaxalp1old == 29) echo selected ?> value="29">29</option>		
+			<option <?php if($zielladenmaxalp1old == 30) echo selected ?> value="30">30</option>
+			<option <?php if($zielladenmaxalp1old == 31) echo selected ?> value="31">31</option>
+			<option <?php if($zielladenmaxalp1old == 32) echo selected ?> value="32">32</option>
+		</select><br>
+	</div>
+	<div class="row">
+	Ampere mit denen geladen werden kann um den Ziel SoC zu erreichen. Entweder was die Installation kann oder was das Auto kann.<br>
+	</div>
+</div>
+<div id="durchslp2">
+	<div class="row"><hr>
+		<b><label for="durchslp2">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 2:</label></b>
+		<input type="text" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+	<div class="row">
+		<hr>
+		<b><label for="akkuglp2">Akkugröße deines Elektroautos in kWh an Ladepunkt 2:</label></b>
+		<input type="text" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
+	</div>
+
+</div>
+<div id="durchslp3">
+	<div class="row">
+		<b><label for="durchslp3">Durchschnittsverbrauch deines Elektroautos  in kWh an Ladepunkt 3:</label></b>
+		<input type="text" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
+	</div>
+</div>
+
+
+
+<div class="row"><hr>
+	<h3>Sofort Laden</h3>
+</div>
 <div class="row">
 	<b><label for="minimalstromstaerke">Minimalstromstärke in A:</label></b>
 	<select type="text" name="minimalstromstaerke" id="minimalstromstaerke">
@@ -386,10 +598,15 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<option <?php if($minimalstromstaerkeold == 8) echo selected ?> value="8">8</option>
 		<option <?php if($minimalstromstaerkeold == 9) echo selected ?> value="9">9</option>
 		<option <?php if($minimalstromstaerkeold == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minimalstromstaerkeold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($minimalstromstaerkeold == 12) echo selected ?> value="12">12</option>
+		<option <?php if($minimalstromstaerkeold == 13) echo selected ?> value="13">13</option>
+		<option <?php if($minimalstromstaerkeold == 14) echo selected ?> value="14">14</option>
+	
 	</select><br>
 </div>
 <div class="row">
-	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird.<br><br>
+	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird. <br>Der Wert dient lediglich als Startwert und sollte so niedrig wie möglich gewählt werden.<br> Die meisten Fahrzeuge kommen mit 6A klar. Bei der Zoe werden 8A empfohlen. <br><br>
 </div>
 <div class="row">
 	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
@@ -423,45 +640,18 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
 </div>
 
-<div id="durchslp1">
-	<div class="row">
-		<hr>
-		<b><label for="durchslp1">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</label></b>
-		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
-	</div>
-	<div class="row">
-	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
-	</div>
-</div>
-<div id="durchslp2">
-	<div class="row">
-		<b><label for="durchslp2">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 2:</label></b>
-		<input type="text" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>"><br>
-	</div>
-	<div class="row">
-	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
-	</div>
-</div>
-<div id="durchslp3">
-	<div class="row">
-		<b><label for="durchslp3">Durchschnittsverbrauch deines Elektroautos  in kWh an Ladepunkt 3:</label></b>
-		<input type="text" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>"><br>
-	</div>
-	<div class="row">
-	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
-	</div>
-</div>
+
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
 </div>
 
 
 <div class="row">
-	<b><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
+	<b><h5><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">
 		<option <?php if($nachtladenold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($nachtladenold == 1) echo selected ?> value="1">An</option>
-	</select>
+	</select></h5>
 </div>
 <div class="row">
 	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
@@ -515,6 +705,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
  			<option <?php if($nachtladenabuhrold == 21) echo selected ?> value="21">21</option>
  			<option <?php if($nachtladenabuhrold == 22) echo selected ?> value="22">22</option>
 			<option <?php if($nachtladenabuhrold == 23) echo selected ?> value="23">23</option>
+			<option <?php if($nachtladenabuhrold == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
 	<div class="row">
@@ -523,7 +714,8 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	<div class="row">
 		<b><label for="nachtladenbisuhr">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhr" id="nachtladenbisuhr">
- 			<option <?php if($nachtladenbisuhrold == 1) echo selected ?> value="1">1</option>
+			<option <?php if($nachtladenbisuhrold == 0) echo selected ?> value="0">0</option>
+			<option <?php if($nachtladenbisuhrold == 1) echo selected ?> value="1">1</option>
   			<option <?php if($nachtladenbisuhrold == 2) echo selected ?> value="2">2</option>
 	 		<option <?php if($nachtladenbisuhrold == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladenbisuhrold == 4) echo selected ?> value="4">4</option>
@@ -551,6 +743,73 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	</div>
 	<div class="row">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+	</div><br><br>
+	<div class="row">
+       		<b><label for="nacht2ll">Nachtladeintervall 2 Stromstärke in A:</label></b>
+        	<select type="text" name="nacht2ll" id="nacht2ll">
+         	        <option <?php if($nacht2llold == 6) echo selected ?> value="6">6</option>
+	       	        <option <?php if($nacht2llold == 7) echo selected ?> value="7">7</option>
+        	        <option <?php if($nacht2llold == 8) echo selected ?> value="8">8</option>
+        	        <option <?php if($nacht2llold == 9) echo selected ?> value="9">9</option>
+        	        <option <?php if($nacht2llold == 10) echo selected ?> value="10">10</option>
+			<option <?php if($nacht2llold == 11) echo selected ?> value="11">11</option>
+        	        <option <?php if($nacht2llold == 12) echo selected ?> value="12">12</option>
+        	        <option <?php if($nacht2llold == 13) echo selected ?> value="13">13</option>
+        	        <option <?php if($nacht2llold == 14) echo selected ?> value="14">14</option>
+        	        <option <?php if($nacht2llold == 15) echo selected ?> value="15">15</option>
+        	        <option <?php if($nacht2llold == 16) echo selected ?> value="16">16</option>
+        	        <option <?php if($nacht2llold == 17) echo selected ?> value="17">17</option>
+        	        <option <?php if($nacht2llold == 18) echo selected ?> value="18">18</option>
+        		<option <?php if($nacht2llold == 19) echo selected ?> value="19">19</option>
+               		<option <?php if($nacht2llold == 20) echo selected ?> value="20">20</option>
+                	<option <?php if($nacht2llold == 21) echo selected ?> value="21">21</option>
+                	<option <?php if($nacht2llold == 22) echo selected ?> value="22">22</option>
+                	<option <?php if($nacht2llold == 23) echo selected ?> value="23">23</option>
+                	<option <?php if($nacht2llold == 24) echo selected ?> value="24">24</option>
+                	<option <?php if($nacht2llold == 25) echo selected ?> value="25">25</option>
+                	<option <?php if($nacht2llold == 26) echo selected ?> value="26">26</option>
+                	<option <?php if($nacht2llold == 27) echo selected ?> value="27">27</option>
+                	<option <?php if($nacht2llold == 28) echo selected ?> value="28">28</option>
+                	<option <?php if($nacht2llold == 29) echo selected ?> value="29">29</option>
+                	<option <?php if($nacht2llold == 30) echo selected ?> value="30">30</option>
+                	<option <?php if($nacht2llold == 31) echo selected ?> value="31">31</option>
+                	<option <?php if($nacht2llold == 32) echo selected ?> value="32">32</option>
+       		</select><br>
+	</div>
+	<div class="row">
+		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladen2abuhr">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+	       	<select type="text" name="nachtladen2abuhr" id="nachtladen2abuhr">
+ 			<option <?php if($nachtladen2abuhrold == 3) echo selected ?> value="3">3</option>
+ 			<option <?php if($nachtladen2abuhrold == 4) echo selected ?> value="4">4</option>
+ 			<option <?php if($nachtladen2abuhrold == 5) echo selected ?> value="5">5</option>
+ 			<option <?php if($nachtladen2abuhrold == 6) echo selected ?> value="6">6</option>
+ 			<option <?php if($nachtladen2abuhrold == 7) echo selected ?> value="7">7</option>
+ 			<option <?php if($nachtladen2abuhrold == 8) echo selected ?> value="8">8</option>
+			<option <?php if($nachtladen2abuhrold == 9) echo selected ?> value="9">9</option>
+		</select><br>
+	</div>
+	<div class="row">
+		Ab wann im zweiten Intervall geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladen2bisuhr">Nachtladen Uhrzeit bis:</label></b>
+	       	<select type="text" name="nachtladen2bisuhr" id="nachtladen2bisuhr">
+
+ 			<option <?php if($nachtladen2bisuhrold == 4) echo selected ?> value="4">4</option>
+ 			<option <?php if($nachtladen2bisuhrold == 5) echo selected ?> value="5">5</option>
+ 			<option <?php if($nachtladen2bisuhrold == 6) echo selected ?> value="6">6</option>
+ 			<option <?php if($nachtladen2bisuhrold == 7) echo selected ?> value="7">7</option>
+ 			<option <?php if($nachtladen2bisuhrold == 8) echo selected ?> value="8">8</option>
+			<option <?php if($nachtladen2bisuhrold == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladen2bisuhrold == 10) echo selected ?> value="10">10</option>
+		</select><br>
+
+	</div>
+	<div class="row">
+		Bis wann morgens im zweiten Intervall geladen werden soll<br><br>
 	</div>
 </div>
 <script>
@@ -574,14 +833,31 @@ $(function() {
 	    });
 });
 </script>
+<script>
+$(function() {
+      if($('#zielladenaktivlp1').val() == '0') {
+		$('#zielladenaktivlp1div').hide(); 
+      } else {
+	       	$('#zielladenaktivlp1div').show();	
+      } 
 
+	$('#zielladenaktivlp1').change(function(){
+	        if($('#zielladenaktivlp1').val() == '0') {
+		$('#zielladenaktivlp1div').hide(); 
+      } else {
+	       	$('#zielladenaktivlp1div').show();	
+      } 
+
+		});
+});
+</script>
 <div id="nachtls1div">
 <div class="row">
-	<b><label for="nachtladens1">Nachtladen Ladepunkt 2:</label></b>
+	<b><h5><label for="nachtladens1">Nachtladen Ladepunkt 2:</label></b>
 	<select type="text" name="nachtladens1" id="nachtladens1">
 		<option <?php if($nachtladens1old == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($nachtladens1old == 1) echo selected ?> value="1">An</option>
-	</select>
+	</select></h5>
 </div>
 <div class="row">
 	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
@@ -635,6 +911,7 @@ $(function() {
  			<option <?php if($nachtladenabuhrs1old == 21) echo selected ?> value="21">21</option>
  			<option <?php if($nachtladenabuhrs1old == 22) echo selected ?> value="22">22</option>
 			<option <?php if($nachtladenabuhrs1old == 23) echo selected ?> value="23">23</option>
+			<option <?php if($nachtladenabuhrs1old == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
 	<div class="row">
@@ -643,7 +920,8 @@ $(function() {
 	<div class="row">
 		<b><label for="nachtladenbisuhrs1">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhrs1" id="nachtladenbisuhrs1">
- 			<option <?php if($nachtladenbisuhrs1old == 1) echo selected ?> value="1">1</option>
+ 			<option <?php if($nachtladenbisuhrs1old == 0) echo selected ?> value="0">0</option>
+			<option <?php if($nachtladenbisuhrs1old == 1) echo selected ?> value="1">1</option>
   			<option <?php if($nachtladenbisuhrs1old == 2) echo selected ?> value="2">2</option>
 	 		<option <?php if($nachtladenbisuhrs1old == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladenbisuhrs1old == 4) echo selected ?> value="4">4</option>
@@ -671,6 +949,73 @@ $(function() {
 	</div>
 	<div class="row">
 		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+	</div><br><br>
+	<div class="row">
+       		<b><label for="nacht2lls1">Nachtladeintervall 2 Stromstärke in A:</label></b>
+        	<select type="text" name="nacht2lls1" id="nacht2lls1">
+         	        <option <?php if($nacht2lls1old == 6) echo selected ?> value="6">6</option>
+	       	        <option <?php if($nacht2lls1old == 7) echo selected ?> value="7">7</option>
+        	        <option <?php if($nacht2lls1old == 8) echo selected ?> value="8">8</option>
+        	        <option <?php if($nacht2lls1old == 9) echo selected ?> value="9">9</option>
+        	        <option <?php if($nacht2lls1old == 10) echo selected ?> value="10">10</option>
+			<option <?php if($nacht2lls1old == 11) echo selected ?> value="11">11</option>
+        	        <option <?php if($nacht2lls1old == 12) echo selected ?> value="12">12</option>
+        	        <option <?php if($nacht2lls1old == 13) echo selected ?> value="13">13</option>
+        	        <option <?php if($nacht2lls1old == 14) echo selected ?> value="14">14</option>
+        	        <option <?php if($nacht2lls1old == 15) echo selected ?> value="15">15</option>
+        	        <option <?php if($nacht2lls1old == 16) echo selected ?> value="16">16</option>
+        	        <option <?php if($nacht2lls1old == 17) echo selected ?> value="17">17</option>
+        	        <option <?php if($nacht2lls1old == 18) echo selected ?> value="18">18</option>
+        		<option <?php if($nacht2lls1old == 19) echo selected ?> value="19">19</option>
+               		<option <?php if($nacht2lls1old == 20) echo selected ?> value="20">20</option>
+                	<option <?php if($nacht2lls1old == 21) echo selected ?> value="21">21</option>
+                	<option <?php if($nacht2lls1old == 22) echo selected ?> value="22">22</option>
+                	<option <?php if($nacht2lls1old == 23) echo selected ?> value="23">23</option>
+                	<option <?php if($nacht2lls1old == 24) echo selected ?> value="24">24</option>
+                	<option <?php if($nacht2lls1old == 25) echo selected ?> value="25">25</option>
+                	<option <?php if($nacht2lls1old == 26) echo selected ?> value="26">26</option>
+                	<option <?php if($nacht2lls1old == 27) echo selected ?> value="27">27</option>
+                	<option <?php if($nacht2lls1old == 28) echo selected ?> value="28">28</option>
+                	<option <?php if($nacht2lls1old == 29) echo selected ?> value="29">29</option>
+                	<option <?php if($nacht2lls1old == 30) echo selected ?> value="30">30</option>
+                	<option <?php if($nacht2lls1old == 31) echo selected ?> value="31">31</option>
+                	<option <?php if($nacht2lls1old == 32) echo selected ?> value="32">32</option>
+       		</select><br>
+	</div>
+	<div class="row">
+		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladen2abuhrs1">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+	       	<select type="text" name="nachtladen2abuhrs1" id="nachtladen2abuhrs1">
+ 			<option <?php if($nachtladen2abuhrs1old == 3) echo selected ?> value="3">3</option>
+ 			<option <?php if($nachtladen2abuhrs1old == 4) echo selected ?> value="4">4</option>
+ 			<option <?php if($nachtladen2abuhrs1old == 5) echo selected ?> value="5">5</option>
+ 			<option <?php if($nachtladen2abuhrs1old == 6) echo selected ?> value="6">6</option>
+ 			<option <?php if($nachtladen2abuhrs1old == 7) echo selected ?> value="7">7</option>
+ 			<option <?php if($nachtladen2abuhrs1old == 8) echo selected ?> value="8">8</option>
+			<option <?php if($nachtladen2abuhrs1old == 9) echo selected ?> value="9">9</option>
+		</select><br>
+	</div>
+	<div class="row">
+		Ab wann im zweiten Intervall geladen werden soll<br><br>
+	</div>
+	<div class="row">
+		<b><label for="nachtladen2bisuhrs1">Nachtladen Uhrzeit bis:</label></b>
+	       	<select type="text" name="nachtladen2bisuhrs1" id="nachtladen2bisuhrs1">
+
+ 			<option <?php if($nachtladen2bisuhrs1old == 4) echo selected ?> value="4">4</option>
+ 			<option <?php if($nachtladen2bisuhrs1old == 5) echo selected ?> value="5">5</option>
+ 			<option <?php if($nachtladen2bisuhrs1old == 6) echo selected ?> value="6">6</option>
+ 			<option <?php if($nachtladen2bisuhrs1old == 7) echo selected ?> value="7">7</option>
+ 			<option <?php if($nachtladen2bisuhrs1old == 8) echo selected ?> value="8">8</option>
+			<option <?php if($nachtladen2bisuhrs1old == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladen2bisuhrs1old == 10) echo selected ?> value="10">10</option>
+		</select><br>
+
+	</div>
+	<div class="row">
+		Bis wann morgens im zweiten Intervall geladen werden soll<br><br>
 	</div>
 </div>
 <script>
@@ -869,6 +1214,19 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	<div class="row">
 		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
 	</div>
+	<br><br><div class="row">
+		<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
+	       	<select type="text" name="speicherpveinbeziehen" id="speicherpveinbeziehen">
+ 			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
+  			<option <?php if($speicherpveinbeziehenold == 1) echo selected ?> value="1">EV hat Vorrang</option>
+		</select><br>
+
+	</div>
+	<div class="row">
+		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speiher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet.
+<br><br>
+</div>
+
 <div class="row"><hr>
 	<h4>EVU basiertes Lastmanagement</h4>
 </div>
@@ -900,8 +1258,15 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</select>
 </div>
 <div class="row">
+	<b><label for="loadsharingalp12">Loadsharing Ampere LP 1 / LP 2:</label></b>
+	<select type="text" name="loadsharingalp12" id="loadsharingalp12">
+		<option <?php if($loadsharingalp12old == 16) echo selected ?> value="16">16 Ampere</option>
+		<option <?php if($loadsharingalp12old == 32) echo selected ?> value="32">32 Ampere</option>
+	</select>
+</div>
+<div class="row">
 	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
-	Sie stellt in jedem Lademodus sicher das nicht mehr als 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Sie stellt in jedem Lademodus sicher das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
 	Der richtige Anschluss ist zu gewährleisten.<br>
 	Ladepunkt 1: <br>
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
@@ -965,7 +1330,7 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 	<div class="row">
 		<b><label for="pushbstopl">Beim Stoppen der Ladung:</label></b>
 	       	<select type="text" name="pushbstopl" id="pushbstopl">
- 			<option <?php if($pushbstoptlold == 0) echo selected ?> value="0">Nein</option>
+ 			<option <?php if($pushbstoplold == 0) echo selected ?> value="0">Nein</option>
   			<option <?php if($pushbstoplold == 1) echo selected ?> value="1">Ja</option>
 		</select><br><br>
 

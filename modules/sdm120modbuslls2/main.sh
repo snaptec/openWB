@@ -97,7 +97,7 @@ if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] 
 	fi
 
 else
-	if [[ $sdm120modbusll2ids2 != "none" ]] ; then
+	if [[ $sdm120modbusllid2s2 != "none" ]] ; then
 		n=0
 		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2 $sdm120modbusllid2s2)
 		while read -r line; do
@@ -156,41 +156,7 @@ else
 			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells2
 		fi
 	else
-		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2)
-		while read -r line; do
-			if (( $n == 0 )); then
-				llv1=$(echo "$line" |  cut -c2- )
-				llv1=${llv1%??}
-				LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llvs21
-			fi
-			if (( $n == 1 )); then
-				lla1=$(echo "$line" |  cut -c2- )
-				lla1=${lla1%??}
-				LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/llas21
-			fi
-			if (( $n == 2 )); then
-				wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
-				fi
-			if (( $n == 3 )); then
-				llpf1=$(echo "$line" |  cut -c2- )
-				llpf1=${llpf1%??}
-				LANG=C printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpfs21
-			fi
-			if (( $n == 4 )); then
-				llkwh=$(echo "$line" |  cut -c2- )
-				llkwh=${llkwh%???}
-			fi
-			n=$((n + 1))
-		    done <<< "$output"
-		if [[ $llkwh =~ $rekwh ]] ; then
-			lltotal=`echo "($llkwh)" |bc`
-			LANG=C printf "%.3f\n" $lltotal > /var/www/html/openWB/ramdisk/llkwhs2
-		fi
-		if [[ $wl1 =~ $re ]]; then
-		 	llaktuell=`echo "($wl1)" |bc`
-			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells2
-		fi
+		sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm1.py $sdm120lp3source $sdm120modbusllid1s2
 	fi
 fi
 

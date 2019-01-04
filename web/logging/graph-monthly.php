@@ -83,7 +83,7 @@ $myData->setSerieOnAxis("PV",0);
 //$myData->setSerieOnAxis("EV LP1",0);
 //$myData->setSerieOnAxis("EV LP2",0);
 //$myData->setSerieOnAxis("EV LP3",0);
-$myData->setSerieOnAxis("EV Gesamt",0);
+$myData->setSerieOnAxis("EV",0);
 
 $myData->setSerieWeight("Bezug",1);
 $myData->setSerieWeight("Einspeisung",1);
@@ -93,7 +93,7 @@ $myData->setPalette("PV",array("R"=>0,"G"=>254,"B"=>0));
 //$myData->setPalette("EV LP1",array("R"=>0,"G"=>0,"B"=>254));
 //$myData->setPalette("EV LP2",array("R"=>0,"G"=>0,"B"=>254));
 //$myData->setPalette("EV LP3",array("R"=>0,"G"=>0,"B"=>254));
-$myData->setPalette("EV Gesamt",array("R"=>0,"G"=>0,"B"=>254));
+$myData->setPalette("EV",array("R"=>51,"G"=>122,"B"=>183));;
  
 $myData->addPoints($timefk,"Labels");
 $myData->setSerieOnAxis("Labels",0);
@@ -117,7 +117,7 @@ $myImage->setFontProperties(array(
 $myImage->setGraphArea(105,25, 1095,375);
 
 $myImage->drawScale($ScaleSettings);
-$settings = array("DisplayPos"=>LABEL_POS_INSIDE, "DisplayValues"=>TRUE, "DisplayOrientation"=>ORIENTATION_VERTICAL, "Gradient"=>TRUE);
+$settings = array("DisplayPos"=>LABEL_POS_INSIDE, "DisplayValues"=>FALSE, "DisplayOrientation"=>ORIENTATION_VERTICAL, "Gradient"=>TRUE);
 $myImage->drawBarChart($settings);
 $myImage->drawLegend(360,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 

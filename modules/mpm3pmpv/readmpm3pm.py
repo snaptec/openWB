@@ -17,7 +17,7 @@ sdmid = int(sys.argv[2])
 
 resp = client.read_input_registers(0x0004,2, unit=sdmid)
 ikwh = resp.registers[1]
-ikwh = float(ikwh) /100
+ikwh = float(ikwh) * 10
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(ikwh))
 f.close()

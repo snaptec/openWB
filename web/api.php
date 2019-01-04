@@ -54,7 +54,7 @@ if(isset($_GET["get"])) {
 			"gelrlp2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp2'))[0],
 			"gelrlp3"	=>      explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp3'))[0],
 			"llgesamt"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llkombiniert'))[0],
-			"evia1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga1'))[0],
+			"evua1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga1'))[0],
 			"evua2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga2'))[0],
 			"evua3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga3'))[0],
 			"lllp1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llaktuell'))[0],

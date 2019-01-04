@@ -27,6 +27,12 @@ touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
 touch /var/www/html/openWB/ramdisk/llkwhs2
 touch /var/www/html/openWB/ramdisk/speicher
+touch /var/www/html/openWB/ramdisk/nachtladenstate
+touch /var/www/html/openWB/ramdisk/nachtladenstates1
+touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
+echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
+echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
@@ -78,6 +84,7 @@ echo 3 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
+echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
 echo 0 > /var/www/html/openWB/ramdisk/lla3	
@@ -111,6 +118,15 @@ echo 0 > /var/www/html/openWB/ramdisk/soc.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
+echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
+echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
+echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
+
+
+
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -397,6 +413,16 @@ if ! grep -Fq "i3username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3username=username" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soci3intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soci3intervall=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soci3intervall1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soci3intervall1=10" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 if ! grep -Fq "i3passwort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3passwort=passwort" >> /var/www/html/openWB/openwb.conf
@@ -497,6 +523,14 @@ if ! grep -Fq "mpm3pmlls1id=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmlls1id=1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mpm3pmlls2source=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmlls2id=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmlls2id=5" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mpm3pmevusource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmevusource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
@@ -553,6 +587,10 @@ if ! grep -Fq "solaredgeip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgeip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solaredgepvip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then
 		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
@@ -593,6 +631,11 @@ if ! grep -Fq "loadsharinglp12=" /var/www/html/openWB/openwb.conf
 then
 		  echo "loadsharinglp12=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "loadsharingalp12=" /var/www/html/openWB/openwb.conf
+then
+		  echo "loadsharingalp12=32" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "goeiplp1=" /var/www/html/openWB/openwb.conf
 then
 		  echo "goeiplp1=192.168.0.15" >> /var/www/html/openWB/openwb.conf
@@ -642,7 +685,114 @@ if ! grep -Fq "smashmbezugid=" /var/www/html/openWB/openwb.conf
 then
 		  echo "smashmbezugid=1234567789" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "mpm3pmspeichersource=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeichersource=/dev/tty2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherid=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherid=8" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherpv=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherpv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmspeicherlanip=" /var/www/html/openWB/openwb.conf
+then
+		  echo "mpm3pmspeicherlanip=192.168.5.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "logdailywh=" /var/www/html/openWB/openwb.conf
+then
+		  echo "logdailywh=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "logeinspeisungneg=" /var/www/html/openWB/openwb.conf
+then
+		  echo "logeinspeisungneg=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nacht2lls1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nacht2lls1=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2abuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2abuhrs1=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2bisuhrs1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2bisuhrs1=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nacht2ll=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nacht2ll=12" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2abuhr=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2abuhr=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nachtladen2bisuhr=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nachtladen2bisuhr=7" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "akkuglp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "akkuglp1=35" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "akkuglp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "akkuglp2=35" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenuhrzeitlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenuhrzeitlp1='2018-12-19 06:15'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladensoclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladensoclp1=60" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenalp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenalp1=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenphasenlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenphasenlp1=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenmaxalp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenmaxalp1=32" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zielladenaktivlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zielladenaktivlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_smartme_user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_smartme_pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_smartme_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "carnetuser=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetuser='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "carnetpass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetpass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soccarnetintervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soccarnetintervall=10" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

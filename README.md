@@ -54,7 +54,7 @@ auch als Bausatz fertig vorkonfiguriert inkl Anleitung zu kaufen.
 
 Bausatz Anleitung:
 	
-	https://openwb.de/images/
+	https://openwb.de/manuals/
 
 
 
@@ -140,7 +140,7 @@ Software:
 
 Installiertes Raspbian auf einem Raspberry pi 3.
 
-Installationsanleitung für Windows: http://openwb.de/img/install_openWB_v1.pdf
+Installationsanleitung für Windows: http://openwb.de/img/install_openWB_v2.pdf
 
 
 Raspbian installieren

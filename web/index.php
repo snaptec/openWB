@@ -4,20 +4,36 @@
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
+         <meta name="apple-mobile-web-app-capable" content="yes">
+         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+         <meta name="apple-mobile-web-app-title" content="OpenWB">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  /> 
+	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
+	<meta name="apple-mobile-web-app-title" content="OpenWB">
 	<title>OpenWB</title>
 	<meta name="description" content="OpenWB" />
 	<meta name="keywords" content="OpenWB" />
 	<meta name="author" content="Kevin Wieland" />
-	<!-- Favicons (created with http://realfavicongenerator.net/)-->
+	<link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/favicons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="img/favicons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="img/favicons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="img/favicons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#00a8ff">
+	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
 	<!-- Normalize -->
@@ -34,6 +50,8 @@
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+	<link rel="stylesheet" type="text/css" href="css/pwa.css">
+
 </head>
 <script src="live.js"></script>
 
@@ -116,14 +134,21 @@
 		if(strpos($line, "lp3name=") !== false) {
 			list(, $lp3nameold) = explode("=", $line);
 		}
-
-		
+		if(strpos($line, "zielladenaktivlp1=") !== false) {
+			list(, $zielladenaktivlp1old) = explode("=", $line);
+		}
+			if(strpos($line, "nachtladen=") !== false) {
+			list(, $nachtladenstate) = explode("=", $line);
+		}
+				if(strpos($line, "nachtladens1=") !== false) {
+			list(, $nachtladenstates1) = explode("=", $line);
+		}
 	}
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
-
+	
 ?>	
 <body>
 
@@ -139,49 +164,143 @@
 				<h3> OpenWB Charge Controller </h3>
 				</div>
 			</div>
-			<div class="row"><div class="col-xs-12 text-center">
+			<div class="row">
+				<div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
-					PV: <span id="pvdiv"></span>Watt 
+						PV: <span id="pvdiv"></span>Watt 
+					</div>
+					<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+						EVU: <span id="bezugdiv"></span>Watt 
+					</div>
 				</div>
-				<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-					EVU: <span id="bezugdiv"></span>Watt 
-				</div>
-
-			</div></div>
+			</div>
 			<div id="speicherstatdiv">
 			<div class="row"><div class="col-xs-12 text-center">
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					Speicher: 
 				</div>
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
-					<span id="speichersocdiv"></span> % SoC 
-				</div>
-				<div class="col-xs-4 text-center bg-info" style="font-size: 2vw">
+
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					 <span id="speicherleistungdiv"></span>Watt 
 				</div>
-
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+					<span id="speichersocdiv"></span> % SoC 
+				</div>
 			</div></div>
 			</div>
 			<br>
-			<div class="row"><div class="col-xs-6 text-center">
-				<div class="imgwrapper">	
-				<img id="livegraph" src="graph-live.php"
-     				alt="Graph" class="img-responsive" />
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<div class="imgwrapper">	
+					<img id="livegraph" src="graph-live.php"
+     					alt="Graph" class="img-responsive" />
+					<br></div>
 				</div>
-				</div>	
-				<div class="col-xs-6 text-center bg-primary" style="font-size: 2vw">
-<?php echo $lp1nameold ?> <span id="lldiv"></span>Watt, <span id="llsolldiv"></span>A <br>
-					<span id="lp2lldiv"><?php echo $lp2nameold ?>  <span id="lllp2div"></span>Watt,  <span id="llsolllp2div"></span>A <br></span>
-<span id="lp3lldiv"><?php echo $lp3nameold ?>  <span id="lllp3div"></span>Watt, <span id="llsolllp3div"></span>A<br></span> 
-	<span id="gesamtlldiv">Gesamt: <span id="gesamtllwdiv"></span> Watt<br> </span>
-	SoC: <span id="soclevel"></span>% 
+			</div>
+			<div class="row col-xs-12 text-center">
+			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+				Nachtladen LP 1 aktiv
+			</div>
+			 <div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+				Nachtladen LP 2 aktiv
+			</div>
+			<div class="col-xs-4 text-center">
+			</div>
+	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
+	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
+	</div>
 
+	<script>
+	$(function() {
+	   if($('#nachtladenstate').val() == '1') {
+		$('#nachtladenstatediv').show(); 
+	      } else {
+		$('#nachtladenstatediv').hide();
+	      } 
 
+	});
+	$(function() {
+	   if($('#nachtladenstates1').val() == '1') {
+		$('#nachtladenstates1div').show(); 
+	      } else {
+		$('#nachtladenstates1div').hide();
+	      } 
 
-				
+	});
+	</script>
+	<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
+			 <div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+				Zielladen LP 1 aktiv
+			</div>
+
+	</div>
+	<input hidden name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old ; ?>">
+	
+	<script>
+	$(function() {
+	   if($('#zielladenaktivlp1').val() == '1') {
+		$('#zielladenaktivlp1div').show(); 
+	      } else {
+		$('#zielladenaktivlp1div').hide();
+	      } 
+
+	});
+	</script>
+
+						<div class="row col-xs-12">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+				<?php echo $lp1nameold ?> 	
 				</div>
 
-			</div><br>
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lldiv"></span> Watt, <span id="llsolldiv"></span>A Soll
+				</div>
+				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
+					   echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';	
+					   } else {
+						   echo '<span id="soclevel"></span>% SoC';
+					   } ?>
+				</div>
+			</div>
+			<div class="row col-xs-12" id="lp2lldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<?php echo $lp2nameold ?> 	
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lllp2div"></span> Watt,  <span id="llsolllp2div"></span>A Soll
+				</div>
+				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
+					   echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';	
+					   } else {
+						   echo '<span id="soc1level"></span>% SoC';
+					   } ?>
+				</div>
+			</div>
+			<div class="row col-xs-12" id="lp3lldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<?php echo $lp3nameold ?> 	
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					<span id="lllp3div"></span> Watt, <span id="llsolllp3div"></span>A Soll<br></span> 
+				</div>
+				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
+				</div>
+			</div>
+			<div class="row col-xs-12" id="gesamtlldiv">
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+				</div>
+
+				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+					Gesamt: <span id="gesamtllwdiv"></span> Watt<br> 
+				</div>
+					<div class="col-xs-4 text-center" style="font-size: 2vw">
+				</div>
+			</div>
+			<br>
 			
 
 
@@ -210,7 +329,12 @@
 				</div>
 			</div>
 			<div class="row" style="font-size: 2vw">
-				<div class="col-xs-6 text-center">
+				<div class="col-xs-3 text-center">
+					<div class="actstat4">
+						<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
+					</div>
+				</div>
+				<div class="col-xs-3 text-center">
 					<div class="actstat3">
 						<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
 					</div>
@@ -318,6 +442,7 @@
 						<br><br>
 						<label for="lademlp1">Lademenge</label>
 						<select type="text" name="lademlp1" id="lademlp1">
+						<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
 						<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
 						<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
 						<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
@@ -391,6 +516,7 @@
 						<br><br>
 						<label for="lademlp2">Lademenge</label>
 						<select type="text" name="lademlp2" id="lademlp2">
+						<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
 						<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
 						<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
 						<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
@@ -463,6 +589,7 @@
 					<br><br>
 					<label for="lademlp3">Lademenge</label>
 					<select type="text" name="lademlp3" id="lademlp3">
+					<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
 					<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
 					<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
 					<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
@@ -662,7 +789,9 @@
 						      } 
 
 						});
+
 						</script>
+						
 				</div>
 			</div> 
 			<div class="row">
@@ -676,7 +805,9 @@
 			<div class="row">
 				<div class="col-xs-4">
 
-				<!-- stable -->	Ver 1.01				</div>
+
+				<!-- stable -->	Ver 1.1				</div>
+
 
 				<div class="col-xs-4 text-center">
 					<a href="http://openwb.de">www.openwb.de</a>
@@ -714,6 +845,8 @@
 		
 
 			</div>	
+
+					
 					<br><br><br><br>
 					</div>
 	</section>
@@ -756,6 +889,8 @@ function loadText(){
     $('.actstat2 .btn').addClass("btn-red");
     $('.actstat3 .btn').addClass("btn-red");
     $('.actstat3 .btn').removeClass("btn-green");
+    $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
    }
@@ -767,7 +902,10 @@ function loadText(){
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat2 .btn').removeClass("btn-green");
-    }
+    $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
+
+   }
    if(result.text == 2){
     $('.actstat2 .btn').addClass("btn-green");
     $('.actstat .btn').addClass("btn-red");    
@@ -776,7 +914,10 @@ function loadText(){
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat3 .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-}
+       $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
+
+   }
      if(result.text == 3){
     $('.actstat2 .btn').addClass("btn-red");
     $('.actstat3 .btn').addClass("btn-green");
@@ -784,8 +925,23 @@ function loadText(){
     $('.actstat1 .btn').addClass("btn-red");
     $('.actstat .btn').removeClass("btn-green");
     $('.actstat1 .btn').removeClass("btn-green");    
-     }
+       $('.actstat4 .btn').addClass("btn-red");
+    $('.actstat4 .btn').removeClass("btn-green");
 
+     }
+     if(result.text == 4){
+    $('.actstat2 .btn').addClass("btn-red");
+    $('.actstat3 .btn').addClass("btn-red");
+    $('.actstat .btn').addClass("btn-red");    
+    $('.actstat1 .btn').addClass("btn-red");
+    $('.actstat .btn').removeClass("btn-green");
+    $('.actstat2 .btn').removeClass("btn-green");
+    $('.actstat3 .btn').removeClass("btn-green");
+    $('.actstat1 .btn').removeClass("btn-green");    
+       $('.actstat4 .btn').addClass("btn-green");
+    $('.actstat4 .btn').removeClass("btn-red");
+
+     }
   }
  });
 }
@@ -927,6 +1083,17 @@ $(function() {
            type: "POST",
            url: './tools/resetlpladem.php',
            data:{action:'resetlp3'},
+           success:function(html) {
+             
+           }
+	
+      });
+	}
+	function rsziellp1() {
+	$.ajax({
+           type: "POST",
+           url: './tools/resetlpladem.php',
+           data:{action:'resetziellp1'},
            success:function(html) {
              
            }

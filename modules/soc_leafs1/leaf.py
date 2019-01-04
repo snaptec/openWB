@@ -1,8 +1,7 @@
 from auth import login
 import requests
 
-BASE_URL = 'https://gdcportalgw.its-mo.com/api_v180117_NE/gdc/'
-
+BASE_URL = 'https://gdcportalgw.its-mo.com/api_v181217_NE/gdc/'
 class Leaf(object):
     """Make requests to the Nissan Connect API to get Leaf Info"""
     custom_sessionid  = None
@@ -29,7 +28,7 @@ class Leaf(object):
         def call(**kwargs):
             url = BASE_URL + name + '.php'
             data = {
-                "RegionCode": 'NNA',
+                "RegionCode": 'NE',
                 "custom_sessionid": self.custom_sessionid,
                 "VIN": self.VIN
             }
