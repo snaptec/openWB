@@ -417,6 +417,11 @@ if ! grep -Fq "soci3intervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soci3intervall=10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soci3intervall1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soci3intervall1=10" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! grep -Fq "i3passwort=" /var/www/html/openWB/openwb.conf
 then
@@ -776,7 +781,18 @@ if ! grep -Fq "bezug_smartme_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "carnetuser=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetuser='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "carnetpass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetpass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soccarnetintervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soccarnetintervall=10" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

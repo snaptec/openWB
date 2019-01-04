@@ -409,6 +409,9 @@ foreach($lines as $line) {
 	if(strpos($line, "soci3intervall=") !== false) {
 		list(, $soci3intervallold) = explode("=", $line);
 	}
+	if(strpos($line, "soci3intervall1=") !== false) {
+		list(, $soci3intervall1old) = explode("=", $line);
+	}
 	if(strpos($line, "i3username=") !== false) {
 		list(, $i3usernameold) = explode("=", $line);
 	}
@@ -568,6 +571,15 @@ foreach($lines as $line) {
 	if(strpos($line, "bezug_smartme_url=") !== false) {
 		list(, $bezug_smartme_urlold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "carnetuser=") !== false) {
+		list(, $carnetuserold) = explode("=", $line);
+	}
+	if(strpos($line, "carnetpass=") !== false) {
+		list(, $carnetpassold) = explode("=", $line);
+	}
+	if(strpos($line, "soccarnetintervall=") !== false) {
+		list(, $soccarnetintervallold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -591,6 +603,10 @@ $speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
 $bezug_smartme_userold = str_replace( "'", "", $bezug_smartme_userold);
 $bezug_smartme_passold = str_replace( "'", "", $bezug_smartme_passold);
 $bezug_smartme_urlold = str_replace( "'", "", $bezug_smartme_urlold);
+$carnetuserold = str_replace( "'", "", $carnetuserold);
+$carnetpassold = str_replace( "'", "", $carnetpassold);
+
+
 
 
 
@@ -1033,6 +1049,8 @@ $(function() {
 		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
+		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
+
 
 	</select>
 </div>
@@ -1163,6 +1181,30 @@ $(function() {
 		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
 	</div>
 </div>
+<div id="soccarnet">
+	<div class="row bg-info">
+		<b><label for="carnetuser">Benutzername:</label></b>
+		<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="carnetpass">Passwort:</label></b>
+		<input type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soccarnetintervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
+</div>
+
 
 
 <script>
@@ -1175,7 +1217,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
-
+		$('#soccarnet').hide();
 
       } 
      
@@ -1187,6 +1229,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1198,6 +1241,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -1208,6 +1252,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -1218,6 +1263,7 @@ $(function() {
 		$('#soczoe').show();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -1228,6 +1274,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').show();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_tesla')   {
@@ -1238,8 +1285,22 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').show();
+		$('#soccarnet').hide();
+
+   }
+   if($('#socmodul').val() == 'soc_carnet')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').hide();
+		$('#soccarnet').show();
 
       } 
+
+
 	$('#socmodul').change(function(){
         if($('#socmodul').val() == 'none') {
 		$('#socmnone').show(); 
@@ -1249,6 +1310,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1261,6 +1323,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
 
       } 
@@ -1272,6 +1335,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    } 
    if($('#socmodul').val() == 'soc_i3')   {
@@ -1282,6 +1346,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_zoe')   {
@@ -1292,6 +1357,7 @@ $(function() {
 		$('#soczoe').show();
 		$('#socevnotify').hide();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
    }
    if($('#socmodul').val() == 'soc_evnotify')   {
@@ -1302,6 +1368,7 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').show();
 		$('#socmtesla').hide();
+		$('#soccarnet').hide();
 
       } 
    if($('#socmodul').val() == 'soc_tesla')   {
@@ -1312,9 +1379,22 @@ $(function() {
 		$('#soczoe').hide();
 		$('#socevnotify').hide();
 		$('#socmtesla').show();
+		$('#soccarnet').hide();
 
       } 
-	    });
+   if($('#socmodul').val() == 'soc_carnet')   {
+		$('#socmnone').hide();
+		$('#socleaf').hide();
+	       	$('#socmhttp').hide();	
+		$('#soci3').hide();
+		$('#soczoe').hide();
+		$('#socevnotify').hide();
+		$('#socmtesla').hide();
+		$('#soccarnet').show();
+
+      } 
+
+	});
 });
 </script>
 
@@ -1666,6 +1746,13 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 	<div class="row bg-info">
 		Hier ist die vollständige i3 VIN nötig<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soci3intervall1">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
 	</div>
 
 </div>

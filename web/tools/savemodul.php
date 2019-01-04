@@ -352,6 +352,10 @@ foreach($lines as $line) {
 	    $result .= 'soci3intervall='.$_POST[soci3intervall]."\n";
 	$writeit = '1';
     } 
+  if(strpos($line, "soci3intervall1=") !== false) {
+	    $result .= 'soci3intervall1='.$_POST[soci3intervall]."\n";
+	$writeit = '1';
+    } 
 
 	    if(strpos($line, "i3passwort=") !== false) {
 	    $result .= 'i3passwort='.$_POST[i3passwort]."\n";
@@ -583,6 +587,18 @@ foreach($lines as $line) {
 	    $result .= 'bezug_smartme_url=\''.$_POST[bezug_smartme_url]."'\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "carnetuser=") !== false) {
+	    $result .= 'carnetuser=\''.$_POST[carnetuser]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "carnetpass=") !== false) {
+	    $result .= 'carnetpass=\''.$_POST[carnetpass]."'\n";
+	    $writeit = '1';
+	    }
+            if(strpos($line, "soccarnetintervall=") !== false) {
+		$result .= 'soccarnetintervall='.$_POST[soccarnetintervall]."\n";
+		$writeit = '1';
+	    }
 
 
 
