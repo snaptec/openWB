@@ -745,7 +745,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br><br>
 	<div class="row">
-       		<b><label for="nacht2ll">Nachtladeintervall 2 Stromstärke in A:</label></b>
+       		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2ll" id="nacht2ll">
          	        <option <?php if($nacht2llold == 6) echo selected ?> value="6">6</option>
 	       	        <option <?php if($nacht2llold == 7) echo selected ?> value="7">7</option>
@@ -780,7 +780,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
 	</div>
 	<div class="row">
-		<b><label for="nachtladen2abuhr">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+		<b><label for="nachtladen2abuhr">Morgens Laden Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladen2abuhr" id="nachtladen2abuhr">
  			<option <?php if($nachtladen2abuhrold == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladen2abuhrold == 4) echo selected ?> value="4">4</option>
@@ -795,7 +795,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		Ab wann im zweiten Intervall geladen werden soll<br><br>
 	</div>
 	<div class="row">
-		<b><label for="nachtladen2bisuhr">Nachtladen Uhrzeit bis:</label></b>
+		<b><label for="nachtladen2bisuhr">Morgens Laden Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladen2bisuhr" id="nachtladen2bisuhr">
 
  			<option <?php if($nachtladen2bisuhrold == 4) echo selected ?> value="4">4</option>
@@ -951,7 +951,7 @@ $(function() {
 		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br><br>
 	<div class="row">
-       		<b><label for="nacht2lls1">Nachtladeintervall 2 Stromstärke in A:</label></b>
+       		<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2lls1" id="nacht2lls1">
          	        <option <?php if($nacht2lls1old == 6) echo selected ?> value="6">6</option>
 	       	        <option <?php if($nacht2lls1old == 7) echo selected ?> value="7">7</option>
@@ -986,7 +986,7 @@ $(function() {
 		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
 	</div>
 	<div class="row">
-		<b><label for="nachtladen2abuhrs1">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+		<b><label for="nachtladen2abuhrs1">Morgens Laden Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladen2abuhrs1" id="nachtladen2abuhrs1">
  			<option <?php if($nachtladen2abuhrs1old == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladen2abuhrs1old == 4) echo selected ?> value="4">4</option>
@@ -1001,7 +1001,7 @@ $(function() {
 		Ab wann im zweiten Intervall geladen werden soll<br><br>
 	</div>
 	<div class="row">
-		<b><label for="nachtladen2bisuhrs1">Nachtladen Uhrzeit bis:</label></b>
+		<b><label for="nachtladen2bisuhrs1">Morgens Laden Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladen2bisuhrs1" id="nachtladen2bisuhrs1">
 
  			<option <?php if($nachtladen2bisuhrs1old == 4) echo selected ?> value="4">4</option>

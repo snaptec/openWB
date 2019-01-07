@@ -16,33 +16,38 @@ if [[ $nachtladen == "1" ]]; then
     			fi
 			if (( soc <= diesersoc )); then
 				if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/set-current.sh "$nachtll" m
+					llnachtneu=$nachtll
+					#runs/set-current.sh "$nachtll" m
 					if [[ $debug == "1" ]]; then
 		   				echo "soc $soc"
 		      				echo "ladeleistung nachtladen bei $nachtll"
 					fi
 				fi
 				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					runs/set-current.sh "$nachtll" m
+					llnachtneu=$nachtll
+					#runs/set-current.sh "$nachtll" m
 					if [[ $debug == "1" ]]; then
 		      				echo aendere nacht Ladeleistung auf $nachtll
 		        		fi
 				fi
 			else
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-					runs/set-current.sh 0 m
+					llnachtneu=0
+					#runs/set-current.sh 0 m
 				fi
 			fi
 		else
 			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
- 				runs/set-current.sh "$nachtll" m
+ 				llnachtneu=$nachtll
+				#runs/set-current.sh "$nachtll" m
  				if [[ $debug == "1" ]]; then
       					echo "soc $soc"
         				echo "ladeleistung nachtladen $nachtll A"
         			fi
 			else
 				if ! grep -q $nachtll "/var/www/html/openWB/ramdisk/llsoll"; then
-					runs/set-current.sh "$nachtll" m
+					llnachtneu=$nachtll
+					#runs/set-current.sh "$nachtll" m
 					if [[ $debug == "1" ]]; then
       						echo aendere nacht Ladeleistung auf $nachtll
         				fi
@@ -57,14 +62,16 @@ if [[ $nachtladen == "1" ]]; then
 		dayoftheweek=$(date +%w)
 
 			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
- 				runs/set-current.sh "$nacht2ll" m
+ 				llnachtneu=$nacht2ll
+				#runs/set-current.sh "$nacht2ll" m
  				if [[ $debug == "1" ]]; then
       					echo "soc $soc"
         				echo "ladeleistung nachtladen $nacht2ll A"
         			fi
 			else
 				if ! grep -q $nacht2ll "/var/www/html/openWB/ramdisk/llsoll"; then
-					runs/set-current.sh "$nacht2ll" m
+					llnachtneu=$nacht2ll
+					#runs/set-current.sh "$nacht2ll" m
 					if [[ $debug == "1" ]]; then
       						echo aendere nacht Ladeleistung auf $nacht2ll
         				fi
@@ -162,6 +169,9 @@ echo $nachtladenstates1 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo $nachtladen2state > /var/www/html/openWB/ramdisk/nachtladen2state
 echo $nachtladen2states1 > /var/www/html/openWB/ramdisk/nachtladen2states1
 if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2state == 1 )) || (( nachtladen2states1 == 1 )); then
+	if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
+	runs/set-current.sh $llnachtneu m
+	fi
 	exit 0
 fi
 }
