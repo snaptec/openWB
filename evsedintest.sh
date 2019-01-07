@@ -20,13 +20,13 @@ if [[ $evsedintestlp1 == "ausstehend" ]]; then
 
 
 		sleep 1
-		sudo python runs/evsewritembusdev.py $modbusevsesource $modbusevseid 1000 17
+		sudo python runs/evsewritembusdev.py $modbusevsesource $modbusevseid 1000 9
 
 		sleep 1
 
 		evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1000 1)
 
-		if [[ $evsedinstat == "[17]" ]]; then
+		if [[ $evsedinstat == "[9]" ]]; then
 			echo "EVSE LP1 Prüfung erfolgreich"
 			echo "erfolgreich" > ramdisk/evsedintestlp1
 		else
@@ -59,13 +59,13 @@ if [[ $evsedintestlp2 == "ausstehend" ]]; then
 
 
 		sleep 1
-		sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 17
+		sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 9
 
 		sleep 1
 
 		evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
 
-		if [[ $evsedinstat == "[17]" ]]; then
+		if [[ $evsedinstat == "[9]" ]]; then
 			echo "EVSE LP2 Prüfung erfolgreich"
 			echo "erfolgreich" > ramdisk/evsedintestlp2
 		else
@@ -98,13 +98,13 @@ if [[ $evsedintestlp3 == "ausstehend" ]]; then
 
 
 		sleep 1
-		sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 17
+		sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 9
 
 		sleep 1
 
 		evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
 
-		if [[ $evsedinstat == "[17]" ]]; then
+		if [[ $evsedinstat == "[9]" ]]; then
 			echo "EVSE LP3 Prüfung erfolgreich"
 			echo "erfolgreich" > ramdisk/evsedintestlp3
 		else

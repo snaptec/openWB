@@ -131,6 +131,7 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
@@ -781,6 +782,19 @@ if ! grep -Fq "bezug_smartme_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wr_smartme_user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_smartme_pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_smartme_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "carnetuser=" /var/www/html/openWB/openwb.conf
 then
 	  echo "carnetuser='user'" >> /var/www/html/openWB/openwb.conf
@@ -793,7 +807,18 @@ if ! grep -Fq "soccarnetintervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soccarnetintervall=10" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "bydhvuser=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvuser=benutzer" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bydhvpass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvpass=pass" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bydhvip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -

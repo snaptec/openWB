@@ -555,10 +555,7 @@ foreach($lines as $line) {
 	    $result .= 'smashmbezugid='.$_POST[smashmbezugid]."\n";
 	 $writeit = '1';
    } 
-	    if(strpos($line, "serials=") !== false) {
-	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
-	 $writeit = '1';
-   } 
+
 	    if(strpos($line, "mpm3pmspeicherpv=") !== false) {
     	    $result .= 'mpm3pmspeicherpv='.$_POST[mpm3pmspeicherpv]."\n";
     	 $writeit = '1';
@@ -599,9 +596,30 @@ foreach($lines as $line) {
 		$result .= 'soccarnetintervall='.$_POST[soccarnetintervall]."\n";
 		$writeit = '1';
 	    }
-
-
-
+	   if(strpos($line, "bydhvuser=") !== false) {
+	    $result .= 'bydhvuser='.$_POST[bydhvuser]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "bydhvpass=") !== false) {
+	    $result .= 'bydhvpass='.$_POST[bydhvpass]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "bydhvip=") !== false) {
+	    $result .= 'bydhvip='.$_POST[bydhvip]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_user=") !== false) {
+	    $result .= 'wr_smartme_user=\''.$_POST[wr_smartme_user]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_pass=") !== false) {
+	    $result .= 'wr_smartme_pass=\''.$_POST[wr_smartme_pass]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_url=") !== false) {
+	    $result .= 'wr_smartme_url=\''.$_POST[wr_smartme_url]."'\n";
+	    $writeit = '1';
+	    }
 
 	    if ( $writeit == '0') {
 		$result .= $line;
@@ -613,9 +631,17 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 
-
-
-
+$result = '';
+$lines = file('/var/www/html/openWB/web/files/smashm.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "serials=") !== false) {
+		    	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
+			    	    } 
+	    else {
+		    	    $result .= $line;
+			    	    }
+}
+file_put_contents('/var/www/html/openWB/web/files/smashm.conf', $result);
 
 
 
