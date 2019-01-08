@@ -177,8 +177,8 @@ mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
+
 if [[ $debug == "2" ]]; then
-	ladestatus=$(<ramdisk/ladestatus)
 	echo "$date"
 	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
 fi

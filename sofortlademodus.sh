@@ -146,9 +146,11 @@ sofortlademodus(){
 			evudiff2=$((lastmaxap2 - evua2 ))
 			evudiff3=$((lastmaxap3 - evua3 ))
 			evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-			maxdiff=0
+			maxdiff=${evudiffmax[0]}
 			for v in "${evudiffmax[@]}"; do
-				if (( v > maxdiff )); then maxdiff=$v; fi;
+				if [[ "$v" -lt "$maxdiff" ]]; then
+					maxdiff="$v"
+				fi
 			done
 			maxdiff=$((maxdiff - 1 ))
 			#Ladepunkt 1
@@ -284,7 +286,7 @@ sofortlademodus(){
 			fi
 			
 			#Ladepunkt 2
-			if (( sofortsocstatlp2 == "1" )); then
+			if (( sofortsocstatlp2 == 1 )); then
 				if (( soc1 > sofortsoclp2 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 						runs/set-current.sh 0 s1
@@ -511,6 +513,7 @@ sofortlademodus(){
 						fi
 					fi
 				fi
+				if (( sofortsocstatlp2 == 1)); then
 				if (( soc >= sofortsoclp1 )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 						runs/set-current.sh 0 m
@@ -537,18 +540,20 @@ sofortlademodus(){
 		        		       	echo "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
        						fi
 					fi
-				else	
-					if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+				fi
+				fi
+					
+				if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 						if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 							runs/set-current.sh 0 s1
 							if [[ $debug == "1" ]]; then
 		       					       	echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
        							fi
 						fi
-					else
+				else
 						runs/set-current.sh "$llneus1" s1
-					fi
 				fi
+				
 				if [[ $lastmanagements2 == "1" ]]; then
 					aktgeladens2=$(<ramdisk/aktgeladens2)
 					if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then

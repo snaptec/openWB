@@ -38,18 +38,18 @@ nurpvlademodus(){
 	fi
 
  fi
- if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-	 if (( mindestuberschussphasen <= uberschuss )); then
-			if [[ $debug == "1" ]]; then
-   				echo "nur  pv ladung auf $minimalapv starten"
-  			fi
-			runs/set-current.sh $minimalapv all
-			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
-			exit 0
-		else
-			exit 0
-		fi
+if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+	if (( mindestuberschussphasen <= uberschuss )); then
+		if [[ $debug == "1" ]]; then
+   			echo "nur  pv ladung auf $minimalapv starten"
+  		fi
+		runs/set-current.sh $minimalapv all
+		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
+		exit 0
+	else
+		exit 0
 	fi
+fi
 #	speicherregelpunkt=$(</var/www/html/openWB/ramdisk/speicher)
 #	if (( speicherregelpunkt > 10 )); then
 #		runs/set-current.sh 0 all
