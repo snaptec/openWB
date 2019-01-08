@@ -52,6 +52,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	if ! [[ $ladeleistung =~ $re ]] ; then
 		 ladeleistung="0"
 	fi
+	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 
 else
 	lla1=0
@@ -85,6 +86,7 @@ if [[ $lastmanagement == "1" ]]; then
 	llas11=$(echo $llas11 | sed 's/\..*$//')
 	llas12=$(echo $llas12 | sed 's/\..*$//')
 	llas13=$(echo $llas13 | sed 's/\..*$//')
+	ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 	if ! [[ $ladeleistungs1 =~ $re ]] ; then
 	 ladeleistungs1="0"
 	fi
@@ -106,7 +108,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 	llas21=$(echo $llas21 | sed 's/\..*$//')
 	llas22=$(echo $llas22 | sed 's/\..*$//')
 	llas23=$(echo $llas23 | sed 's/\..*$//')
-
+	ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 	if ! [[ $ladeleistungs2 =~ $re ]] ; then
 	 ladeleistungs2="0"
 	fi
