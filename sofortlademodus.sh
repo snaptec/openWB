@@ -90,9 +90,9 @@ sofortlademodus(){
 							evudiff2=$((lastmaxap2 - evua2 ))
 							evudiff3=$((lastmaxap3 - evua3 ))
 							evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-							maxdiff=0
+							maxdiff=${evudiffmax[0]}
 							for v in "${evudiffmax[@]}"; do
-								if (( v > maxdiff )); then maxdiff=$v; fi;
+								if (( v < maxdiff )); then maxdiff=$v; fi;
 							done
 							llneu=$((llalt + maxdiff))
 							if (( llneu > sofortll )); then
@@ -118,7 +118,7 @@ sofortlademodus(){
 					evudiff2=$((evua2 - lastmaxap2 ))
 					evudiff3=$((evua3 - lastmaxap3 ))
 					evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-					maxdiff=0
+					maxdiff=${evudiffmax[0]}
 					for v in "${evudiffmax[@]}"; do
 						if (( v > maxdiff )); then maxdiff=$v; fi;
 					done
@@ -148,9 +148,7 @@ sofortlademodus(){
 			evudiffmax=($evudiff1 $evudiff2 $evudiff3)
 			maxdiff=${evudiffmax[0]}
 			for v in "${evudiffmax[@]}"; do
-				if [[ "$v" -lt "$maxdiff" ]]; then
-					maxdiff="$v"
-				fi
+				if (( v < maxdiff )); then maxdiff=$v; fi;
 			done
 			maxdiff=$((maxdiff - 1 ))
 			#Ladepunkt 1
