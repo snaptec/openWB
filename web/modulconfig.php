@@ -431,7 +431,7 @@ foreach($lines as $line) {
 		list(, $zoepasswortold) = explode("=", $line);
 	}
 	if(strpos($line, "evnotifytoken=") !== false) {
-		list(, $evnotiftokenold) = explode("=", $line);
+		list(, $evnotifytokenold) = explode("=", $line);
 	}
 	if(strpos($line, "evnotifyakey=") !== false) {
 		list(, $evnotifyakeyold) = explode("=", $line);

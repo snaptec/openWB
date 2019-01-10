@@ -12,7 +12,7 @@ else
 	# parse to int to be able to check in condition - to determine if valid or not
 	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
 	if (( isvalid >= 0 && isvalid != null)); then
-		echo $soc > /var/www/html/openWB/ramdisk/soc
+		echo $isvalid > /var/www/html/openWB/ramdisk/soc
 		echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	fi
 fi
