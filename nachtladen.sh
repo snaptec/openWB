@@ -38,6 +38,7 @@ if [ $# -eq 2 ]; then
 				echo Differenz groesser als minimalstromstaerke, setze Nachtladen auf minimal A $minimalstromstaerke
 			fi
 		fi
+		echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 		if [[ $debug == "1" ]]; then
 			echo "Nachtladen um $maxdiff auf $llnachtreturn reduziert"
 		fi

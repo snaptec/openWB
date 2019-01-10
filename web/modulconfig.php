@@ -430,8 +430,8 @@ foreach($lines as $line) {
 	if(strpos($line, "zoepasswort=") !== false) {
 		list(, $zoepasswortold) = explode("=", $line);
 	}
-	if(strpos($line, "evnotifypasswort=") !== false) {
-		list(, $evnotifypasswortold) = explode("=", $line);
+	if(strpos($line, "evnotifytoken=") !== false) {
+		list(, $evnotiftokenold) = explode("=", $line);
 	}
 	if(strpos($line, "evnotifyakey=") !== false) {
 		list(, $evnotifyakeyold) = explode("=", $line);
@@ -1149,11 +1149,11 @@ $(function() {
 		Akey des EVNotify Kontos<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="evnotifypasswort">Passwort:</label></b>
-		<input type="password" name="evnotifypasswort" id="evnotifypasswort" value="<?php echo $evnotifypasswortold ?>"><br>
+		<b><label for="evnotifytoken">Token:</label></b>
+		<input type="text" name="evnotifytoken" id="evnotifytoken" value="<?php echo $evnotifytokenold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Passwort des Kontos<br><br>
+		Token des Kontos<br><br>
 	</div>
 </div>
 
