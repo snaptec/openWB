@@ -385,8 +385,8 @@ foreach($lines as $line) {
 	    $result .= 'zoepasswort='.$_POST[zoepasswort]."\n";
 	$writeit = '1';
     } 
-	    if(strpos($line, "evnotifypasswort=") !== false) {
-	    $result .= 'evnotifypasswort='.$_POST[evnotifypasswort]."\n";
+	    if(strpos($line, "evnotifytoken=") !== false) {
+	    $result .= 'evnotifytoken='.$_POST[evnotifytoken]."\n";
 	$writeit = '1';
     } 
 	    if(strpos($line, "evnotifyakey=") !== false) {

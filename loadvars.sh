@@ -1,5 +1,11 @@
 #!/bin/bash
 loadvars(){
+
+	
+# Lastmanagement var check age
+if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
+       echo "" > ramdisk/lastregelungaktiv	
+fi
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true

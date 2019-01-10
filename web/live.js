@@ -174,6 +174,14 @@ $.ajax({
       $("#speicherleistungdiv").html(request.responseText);
         }
         });
+$.ajax({
+   url: "/openWB/ramdisk/lastregelungaktiv",
+    complete: function(request){
+      $("#lastregelungaktivdiv").html(request.responseText);
+        }
+        });
+
+
 var source = 'graph-live.php',
 		        timestamp = (new Date()).getTime(),
 		        newUrl = source + '?_=' + timestamp;

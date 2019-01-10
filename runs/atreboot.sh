@@ -34,6 +34,7 @@ echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
+echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
@@ -468,9 +469,9 @@ if ! grep -Fq "evnotifyakey=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifyakey=abcdef" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evnotifypasswort=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "evnotifytoken=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evnotifypasswort=abcdef" >> /var/www/html/openWB/openwb.conf
+	  echo "evnotifytoken=token" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
 then

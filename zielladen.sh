@@ -77,7 +77,6 @@ else
 				fi
 			fi
 		fi
-
 	fi
 fi
 if (( ladungdurchziel == 1 )); then
