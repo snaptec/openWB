@@ -1,8 +1,4 @@
 #!/bin/bash
-#Variablen über die Weboberfläche abfragen und an das Modul übergeben.
-#wr_smartme_user="user"
-#wr_smartme_pass="pass"
-#wr_smartme_url="https://smart-me.com:443/api/Devices/[ID]"
 
 . /var/www/html/openWB/openwb.conf
 
@@ -14,12 +10,14 @@ wattwr=$(echo $json | jq .ActivePower)
 wattwr=$(echo "scale=3 ; $wattwr * 1000" | bc)
 wattwr=$(echo "$wattwr / 1" | bc)
 
-#Zählerstand Export (kWh)
+#Zählerstand Export (kWh --> Wh)
 pvkwh=$(echo $json | jq .CounterReadingExport)
-pvkwh=$(echo "$pvkwh / 1" | bc)
+pvkwh=$(echo "scale=3 ; $pvkwh * 1000" | bc)
+#Zur Reduzierung der Datenmenge kann die folgende Zeile eingefügt werden.
+#pvkwh=$(echo "$pvkwh / 1" | bc)
 
-#Prüfen ob Werte gültig sonst letzten gültigen Wert übernehmen
-re='^-?[0-9]+$'
+#Prüfen ob Werte gültig
+re='^[-+]?[0-9]+\.?[0-9]*$'
 if ! [[ $wattwr =~ $re ]] ; then
 	   wattwr=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
