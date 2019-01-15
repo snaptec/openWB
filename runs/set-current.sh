@@ -182,6 +182,9 @@ if [[ $loadsharinglp12 == "1" ]]; then
 	if (( loadsharingalp12 == 16 )); then
 		agrenze=8
 		aagrenze=16
+		if (( current > 16 )); then
+			current=16
+		fi
 	else
 		agrenze=16
 		aagrenze=32

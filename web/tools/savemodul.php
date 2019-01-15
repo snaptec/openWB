@@ -555,7 +555,10 @@ foreach($lines as $line) {
 	    $result .= 'smashmbezugid='.$_POST[smashmbezugid]."\n";
 	 $writeit = '1';
    } 
-
+	    if(strpos($line, "wrfroniusip=") !== false) {
+    	    $result .= 'wrfroniusip='.$_POST[wrfroniusip]."\n";
+    	 $writeit = '1';
+   } 
 	    if(strpos($line, "mpm3pmspeicherpv=") !== false) {
     	    $result .= 'mpm3pmspeicherpv='.$_POST[mpm3pmspeicherpv]."\n";
     	 $writeit = '1';
