@@ -179,7 +179,14 @@ fi
 
 # Loadsharing LP 1 / 2
 if [[ $loadsharinglp12 == "1" ]]; then
-	if (( current > 16 )); then
+	if (( loadsharingalp12 == 16 )); then
+		agrenze=8
+		aagrenze=16
+	else
+		agrenze=16
+		aagrenze=32
+	fi
+	if (( current > agrenze )); then
 		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
@@ -204,9 +211,9 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		else
 			lp1c=0
 		fi
-		if (( llas11 > 5 )); then
-			lp2c=2
-			if (( llas12 > 5 )); then
+		if (( llas12 > 5 )); then
+			lp2c=1
+			if (( llas13 > 5 )); then
 				lp2c=2
 			fi
 		else
@@ -214,28 +221,10 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		fi
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
-			current=16
+			current=agrenze
 		fi
-		if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
-			current=16
-			setChargingCurrent
-			echo $current > /var/www/html/openWB/ramdisk/llsoll
-			echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
-			evsecon=$evsecons1
-			dacregister=$dacregisters1
-			modbusevsesource=$evsesources1
-			modbusevseid=$evseids1
-			evsewifitimeoutlp1=$evsewifitimeoutlp2
-			evsewifiiplp1=$evsewifiiplp2
-			goeiplp1=$goeiplp2
-			goetimeoutlp1=$goetimeoutlp2
-
-			# dirty call (no parameters, all is set above...)
-			setChargingCurrent
-
-			echo $current > /var/www/html/openWB/ramdisk/llsolls1
-			echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
-
+		if (( lslpl1 > aagrenze )) && (( lslpl2 > aagrenze )) && (( lslpl3 > aagrenze )); then
+			current=$(( agrenze - 2))
 			if [[ $debug == "2" ]]; then
 			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
 			fi

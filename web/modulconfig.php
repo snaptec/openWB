@@ -2365,6 +2365,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
 		<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+		<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo selected ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>	
 		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 		<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
@@ -2685,6 +2686,21 @@ $(function() {
 
 		$('#wattbezugsmartme').hide();
    }
+   if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').show();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+
+		$('#wattbezugsmartme').hide();
+   }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
@@ -2852,6 +2868,21 @@ $(function() {
 
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+  		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').show();
+		$('#wattbezugjson').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+		$('#wattbezugmpm3pm').hide();
+  		$('#wattbezugsmartme').hide();
+
+   }
+   if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
 		$('#wattbezugvz').hide();
 		$('#wattbezugsdm').hide();
 		$('#wattbezugnone').hide();
