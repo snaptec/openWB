@@ -104,6 +104,9 @@ if [[ $nachtladen == "1" ]]; then
 				fi
 			fi
 		fi
+		if [ -z "$llnachtneu" ]; then
+			llnachtneu=$llalt
+		fi
 	else
 		nachtladenstate=0
 	fi
@@ -127,7 +130,9 @@ if [[ $nachtladen == "1" ]]; then
         				fi
 				fi
 			fi
-		
+			if [ -z "$llnachtneu" ]; then
+				llnachtneu=$llalt
+			fi	
 	else
 		nachtladen2state=0
 	fi
@@ -190,6 +195,9 @@ if [[ $nachtladens1 == "1" ]]; then
 
 			fi
 		fi
+		if [ -z "$llnachts1neu" ]; then
+			llnachts1neu=$llalts1
+		fi
 	else
 		nachtladenstates1=0
 	fi
@@ -213,7 +221,9 @@ if [[ $nachtladens1 == "1" ]]; then
         				fi
 				fi
 			fi
-		
+			if [ -z "$llnachts1neu" ]; then
+				llnachts1neu=$llalts1
+			fi	
 	else
 		nachtladen2states1=0
 	fi
@@ -227,6 +237,7 @@ echo $nachtladen2state > /var/www/html/openWB/ramdisk/nachtladen2state
 echo $nachtladen2states1 > /var/www/html/openWB/ramdisk/nachtladen2states1
 if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2state == 1 )) || (( nachtladen2states1 == 1 )); then
 	if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
+
 		lastmnacht $llalt $llnachtneu 
 		if (( llnachtreturn != llalt )); then
 			runs/set-current.sh $llnachtreturn m
