@@ -3515,6 +3515,8 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
 		<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
 		<option <?php if($speichermodulold == "speicher_bydhv\n") echo selected ?> value="speicher_bydhv">ByD HV</option>
+		<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
+
 
 
 	</select>
@@ -3523,6 +3525,12 @@ $(function() {
 <div id="divspeichernone">
 	<br>
 </div>
+<div id="divspeicherfronius">
+	<div class="row" style="background-color:#fcbe1e">
+		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
+	</div>
+</div>
+
 <div id="divspeicherhttp">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
@@ -3617,7 +3625,7 @@ $(function() {
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
-
+		$('#divspeicherfronius').hide();
 
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
@@ -3625,6 +3633,8 @@ $(function() {
 		$('#divspeicherhttp').show();
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+
 
 
    }
@@ -3633,6 +3643,8 @@ $(function() {
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').show();
 		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+
 
 
    }
@@ -3641,7 +3653,17 @@ $(function() {
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').show();
+		$('#divspeicherfronius').hide();
 
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_fronius')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').show();
 
    }
 $('#speichermodul').change(function(){
@@ -3650,6 +3672,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+
 
 
       } 
@@ -3658,6 +3682,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherhttp').show();
  		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+
 
 
     }
@@ -3666,6 +3692,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').show();
 		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+
 
 
    }
@@ -3674,7 +3702,15 @@ $('#speichermodul').change(function(){
 		$('#divspeicherhttp').hide();
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').show();
+		$('#divspeicherfronius').hide();
 
+   }
+   if($('#speichermodul').val() == 'speicher_fronius')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').show();
 
    }
 });
