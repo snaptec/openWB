@@ -100,6 +100,46 @@ if (( lademodus == 3 )); then
 	auslademodus
 fi
 
+#loadsharing check
+if [[ $loadsharinglp12 == "1" ]]; then
+	if (( loadsharingalp12 == 16 )); then
+		agrenze=8
+		aagrenze=16
+		if (( current > 16 )); then
+			current=16
+		fi
+	else
+		agrenze=16
+		aagrenze=32
+	fi
+	tcurrent=$(( llalt + llalts1 ))
+	if (( tcurrent > aagrenze )); then
+		#detect charging cars
+		if (( lla1 > 1 )); then
+			lp1c=1
+			if (( lla2 > 1 )); then
+				lp1c=2
+			fi
+		else
+			lp1c=0
+		fi
+		if (( llas11 > 1 )); then
+			lp2c=1
+			if (( llas12 > 1 )); then
+				lp2c=2
+			fi
+		else
+			lp2c=0
+		fi
+		chargingphases=$(( lp1c + lp2c ))
+		if (( chargingphases > 2 )); then
+			runs/set-current "$agrenze" all
+			exit 0
+		fi
+	fi
+fi
+
+
 #########################################
 #Regelautomatiken
 

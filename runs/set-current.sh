@@ -184,6 +184,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		aagrenze=16
 		if (( current > 16 )); then
 			current=16
+			new2=all
 		fi
 	else
 		agrenze=16
@@ -206,17 +207,17 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		lslpl2=$((lla2 + llas13))
 		lslpl3=$((lla3 + llas11))
 		#detect charging cars
-		if (( lla1 > 5 )); then
+		if (( lla1 > 1 )); then
 			lp1c=1
-			if (( lla2 > 5 )); then
+			if (( lla2 > 1 )); then
 				lp1c=2
 			fi
 		else
 			lp1c=0
 		fi
-		if (( llas12 > 5 )); then
+		if (( llas11 > 1 )); then
 			lp2c=1
-			if (( llas13 > 5 )); then
+			if (( llas12 > 1 )); then
 				lp2c=2
 			fi
 		else
@@ -224,10 +225,11 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		fi
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
-			current=agrenze
+			current=$agrenze
 		fi
 		if (( lslpl1 > aagrenze )) && (( lslpl2 > aagrenze )) && (( lslpl3 > aagrenze )); then
-			current=$(( agrenze - 2))
+			current=$(( agrenze - 1))
+			new2=all
 			if [[ $debug == "2" ]]; then
 			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
 			fi
@@ -236,10 +238,14 @@ if [[ $loadsharinglp12 == "1" ]]; then
 fi
 
 
-
+if ! [ -z $new2 ]; then
+	points=$new2
+else
+	points=$2
+fi
 
 # set charging current - first charging point
-if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
+if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 	setChargingCurrent
 	echo $current > /var/www/html/openWB/ramdisk/llsoll
 	echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
@@ -247,7 +253,7 @@ fi
 
 # set charging current - second charging point
 if [[ $lastmanagement == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "s1" ]]; then
 		evsecon=$evsecons1
 		dacregister=$dacregisters1
 		modbusevsesource=$evsesources1
@@ -267,7 +273,7 @@ fi
 
 # set charging current - second charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s2" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
 		evsecon=$evsecons2
 		dacregister=$dacregisters2
 		modbusevsesource=$evsesources2
