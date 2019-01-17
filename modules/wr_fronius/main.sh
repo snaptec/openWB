@@ -7,7 +7,7 @@
 #pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
 pvwatttmp=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope?System")
 pvwatt=$(echo $pvwatttmp | jq '.Body.Data.Site.P_PV' |sed 's/\..*$//')
-
+pvwatt=$(echo "$pvwatt * -1" | bc)
 
 #wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
 re='^-?[0-9]+$'

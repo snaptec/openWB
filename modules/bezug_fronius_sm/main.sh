@@ -51,14 +51,9 @@ echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 kwhtmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System)
 # jq-Funktion funktioniert hier leider nicht,  wegen "0" als Bezeichnung
 
-ikwh=$(echo ${kwhtmp##*EnergyReal_WAC_Minus_Absolute} | tr -d ' ' |  tr -d '\"' | tr -d ':' | tr -d '}' | tr -d '\n')
+ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Minus_Absolute} | tr -d ' ' |  tr -d '\"' | tr -d ':' | tr -d '}' | tr -d '\n')
 
-#echo $ikwh #Test-Ausgabe
-
-echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
-
-# Eingespeiste Energie total in Wh (für Smartmeter im Einspeisepunkt)
 # bei Smartmeter im Verbrauchsweig immer 0
-ekwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
-#echo $ekwh #Test-Ausgabe
+ikwh=$(echo ${kwhtmp##*EnergyReal_WAC_Plus_Absolute} | sed 's/,.*//' | tr -d ' ' | tr -d ':' | tr -d '\"')
+echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh

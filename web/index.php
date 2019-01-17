@@ -811,7 +811,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.105 beta				</div>
+				<!-- master -->	Ver 1.106 beta				</div>
 
 
 				<div class="col-xs-4 text-center">
