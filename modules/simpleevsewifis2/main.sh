@@ -3,7 +3,7 @@
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 output=$(curl --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/getParameters)
-if ! [ -z "$output" ] then;
+if ! [ -z "$output" ]; then
 	watt=$(echo $output | jq '.list[] | .actualPower')
 	lla1=$(echo $output | jq '.list[] | .currentP1')
 	lla2=$(echo $output | jq '.list[] | .currentP2')

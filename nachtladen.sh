@@ -2,6 +2,14 @@
 lastmnacht(){
 if [ $# -eq 2 ]; then
 	if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) && (( evua3 < lastmaxap3 )); then
+		evudiff1=$((lastmaxap1 - evua1 ))
+		evudiff2=$((lastmaxap2 - evua2 ))
+		evudiff3=$((lastmaxap3 - evua3 ))
+		evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+		maxdiff=${evudiffmax[0]}
+		for v in "${evudiffmax[@]}"; do
+			if (( v < maxdiff )); then maxdiff=$v; fi;
+		done
 		if (( $1 == $2 )); then
 			llnachtreturn=$2
 		else
@@ -11,7 +19,11 @@ if [ $# -eq 2 ]; then
 				if (( $1 > $2 )); then
 					llnachtreturn=$(($1 - 1 ))
 				else
-					llnachtreturn=$(($1 + 1 ))
+					if (( maxdiff > 1 )); then
+						llnachtreturn=$(($1 + 1 ))
+					else
+						llnachtreturn=$1
+					fi
 				fi
 				if (( llnachtreturn > maximalstromstaerke )); then
 					llnachtreturn=$2
