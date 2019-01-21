@@ -271,6 +271,10 @@ if ! grep -Fq "lademstats2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "lademstats2=" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "sdm120modbusllsource=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllsource=/dev/ttyUSB1" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
 then

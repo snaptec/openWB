@@ -227,6 +227,9 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm630modbusllsource=") !== false) {
 		list(, $sdm630modbusllsourceold) = explode("=", $line);
 	}
+	if(strpos($line, "sdm120modbusllsource=") !== false) {
+		list(, $sdm120modbusllsourceold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm630modbuslllanip=") !== false) {
 		list(, $sdm630modbuslllanipold) = explode("=", $line);
 	}
@@ -878,8 +881,8 @@ $(function() {
 </div>
 	<div id="sdm120div">
 	<div class="row bg-info">
-		<b><label for="sdm630modbusllsource">Zähler Source:</label></b>
-		<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
+		<b><label for="sdm120modbusllsource">Zähler Source:</label></b>
+		<input type="text" name="sdm120modbusllsource" id="sdm120modbusllsource" value="<?php echo $sdm120modbusllsourceold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>

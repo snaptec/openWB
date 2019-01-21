@@ -21,6 +21,8 @@ respw= client.read_holding_registers(40083,2,unit=1)
 value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
+if fmultiplint == 0:
+    rawprodw = 0
 if fmultiplint == -1:
     rawprodw = rawprodw / 10 
 if fmultiplint == -2:
