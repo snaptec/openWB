@@ -86,6 +86,10 @@ foreach($lines as $line) {
 	    $result .= 'sdm630modbusllsource='.$_POST[sdm630modbusllsource]."\n";
 	    $writeit = '1';
 	    } 
+	    if(strpos($line, "sdm120modbusllsource=") !== false) {
+	    $result .= 'sdm120modbusllsource='.$_POST[sdm120modbusllsource]."\n";
+	    $writeit = '1';
+	    } 
 	    if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
 	    $result .= 'sdm630modbusbezuglanip='.$_POST[sdm630modbusbezuglanip]."\n";
 	    $writeit = '1';

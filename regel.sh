@@ -133,7 +133,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		fi
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
-			runs/set-current "$agrenze" all
+			runs/set-current.sh "$agrenze" all
 			exit 0
 		fi
 	fi
