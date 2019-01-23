@@ -494,15 +494,15 @@ foreach($lines as $line) {
 	 $writeit = '1';
    } 
 	    if(strpos($line, "solaredgepvslave1=") !== false) {
-	    $result .= 'solaredgepvslave1=\''.$_POST[solaredgepvslave1]."'\n";
+	    $result .= 'solaredgepvslave1='.$_POST[solaredgepvslave1]."\n";
 	 $writeit = '1';
 	    } 
 	    if(strpos($line, "solaredgepvslave2=") !== false) {
-	    $result .= 'solaredgepvslave2=\''.$_POST[solaredgepvslave2]."'\n";
+	    $result .= 'solaredgepvslave2='.$_POST[solaredgepvslave2]."\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "solaredgepvslave3=") !== false) {
-	    $result .= 'solaredgepvslave3=\''.$_POST[solaredgepvslave3]."'\n";
+	    $result .= 'solaredgepvslave3='.$_POST[solaredgepvslave3]."\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "lllaniplp2=") !== false) {
