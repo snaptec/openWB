@@ -493,7 +493,16 @@ foreach($lines as $line) {
 	}
 
 	if(strpos($line, "solaredgepvip=") !== false) {
-		list(, $solaredgeippvold) = explode("=", $line);
+		list(, $solaredgepvipold) = explode("=", $line);
+	}
+	if(strpos($line, "solaredgepvslave1=") !== false) {
+		list(, $solaredgeipslave1old) = explode("=", $line);
+	}
+	if(strpos($line, "solaredgepvslave2=") !== false) {
+		list(, $solaredgeipslave2old) = explode("=", $line);
+	}
+	if(strpos($line, "solaredgepvslave3=") !== false) {
+		list(, $solaredgeipslave3old) = explode("=", $line);
 	}
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
@@ -601,7 +610,9 @@ foreach($lines as $line) {
 	if(strpos($line, "wr_smartme_url=") !== false) {
 		list(, $wr_smartme_urlold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "e3dcip=") !== false) {
+		list(, $e3dcipold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -653,7 +664,7 @@ $lp3nameold = str_replace( "'", "", $lp3nameold);
  
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="./index.php">Zurueck</a></li>
+    <LI><A DATA-TOGGLE="TAB" HREF="./INDEX.PHP">ZURUECK</A></LI>
     <li><a href="./settings.php">Ladeeinstellungen</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
     <li><a href="./misc.php">Misc</a></li>
@@ -2372,6 +2383,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
 		<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
+		<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo selected ?> value="bezug_e3dc">E3DC Speicher</option>
 
 	</select>
 </div>
@@ -2592,7 +2604,11 @@ $(function() {
 		Ebenso muss ModbusTCP am Wechselrichter aktiviert werden<br> 
 	</div>
 </div>
-
+<div id="wattbezuge3dc">
+	<div class="row" style="background-color:#febebe">
+		Die IP des Speichers wird im dazugehörigen E3DC Speicher Modul eingestellt.<br>
+	</div>
+</div>
 
 <script>
 $(function() {
@@ -2609,7 +2625,7 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugsmartme').hide();
-
+		$('#wattbezuge3dc').hide();
 
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -2624,6 +2640,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
 
@@ -2640,6 +2658,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
 
@@ -2656,6 +2676,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
     } 
@@ -2671,6 +2693,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
    }
@@ -2686,6 +2710,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
    }
@@ -2702,7 +2728,9 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 
-		$('#wattbezugsmartme').hide();
+			$('#wattbezuge3dc').hide();
+
+	$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2716,6 +2744,8 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
+		$('#wattbezuge3dc').hide();
+
 
 		$('#wattbezugsmartme').hide();
    } 
@@ -2731,7 +2761,9 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
-   
+   		$('#wattbezuge3dc').hide();
+
+
 		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
@@ -2746,7 +2778,9 @@ $(function() {
 		$('#wattbezugsolarlog').show();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
-   
+   		$('#wattbezuge3dc').hide();
+
+
 		$('#wattbezugsmartme').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -2761,7 +2795,9 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
-   
+   		$('#wattbezuge3dc').hide();
+
+
 		$('#wattbezugsmartme').hide();
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -2776,7 +2812,9 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
-  
+  		$('#wattbezuge3dc').hide();
+
+
 		$('#wattbezugsmartme').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -2791,8 +2829,26 @@ $(function() {
 		$('#wattbezugsolarlog').hide();
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
-  
+  		$('#wattbezuge3dc').hide();
+
+
 		$('#wattbezugsmartme').show();
+  }
+  if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').show();
+		$('#wattbezugsmartme').hide();
+
   }
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
@@ -2808,6 +2864,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -2823,6 +2881,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
    		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -2838,7 +2898,9 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
    
-   		$('#wattbezugsmartme').hide();
+   		$('#wattbezuge3dc').hide();
+
+  		$('#wattbezugsmartme').hide();
 } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
@@ -2853,6 +2915,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
  		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -2868,6 +2932,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
   		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -2883,6 +2949,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
   		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
@@ -2898,6 +2966,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
   		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -2913,6 +2983,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').hide();
  		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -2928,6 +3000,8 @@ $(function() {
 		$('#wattbezugshm').hide();
 		$('#wattbezugmpm3pm').show();
 		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
     } 
 
@@ -2944,6 +3018,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
 		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
     } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -2959,6 +3035,8 @@ $(function() {
 		$('#wattbezugsolaredge').show();
 		$('#wattbezugshm').hide();
   		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -2974,6 +3052,8 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').show();
  		$('#wattbezugsmartme').hide();
+  		$('#wattbezuge3dc').hide();
+
 
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -2989,8 +3069,27 @@ $(function() {
 		$('#wattbezugsolaredge').hide();
 		$('#wattbezugshm').hide();
  		$('#wattbezugsmartme').show();
+  		$('#wattbezuge3dc').hide();
+
 
   }
+  if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').show();
+		$('#wattbezugsmartme').hide();
+
+  }
+
 	    });
 });
 </script>
@@ -3081,10 +3180,31 @@ $(function() {
 <div id="pvwrsolaredge">
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="solaredgepvip">WR Solaredge IP:</label></b>
-		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgeipvpold ?>"><br>
+		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>
+		<input type="text" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgeipslave1old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte Zahl. ID des SolarEdge Wechselrichters. Normalerweise 1.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="solaredgepvslave2">WR 2 Solaredge ID:</label></b>
+		<input type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo $solaredgeipslave2old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="solaredgepvslave3">WR 3 Solaredge ID:</label></b>
+		<input type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgeipslave3old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
 	</div>
 </div>
 <div id="pvwrfronius">
@@ -3519,6 +3639,8 @@ $(function() {
 		<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
 		<option <?php if($speichermodulold == "speicher_bydhv\n") echo selected ?> value="speicher_bydhv">ByD HV</option>
 		<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
+		<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
+
 
 
 
@@ -3528,6 +3650,16 @@ $(function() {
 <div id="divspeichernone">
 	<br>
 </div>
+<div id="divspeichere3dc">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="e3dcip">E3DCIP:</label></b>
+		<input type="text" name="e3dcip" id="e3dcip" value="<?php echo $e3dcipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
+	</div>
+</div>
+
 <div id="divspeicherfronius">
 	<div class="row" style="background-color:#fcbe1e">
 		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
@@ -3629,6 +3761,7 @@ $(function() {
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
 
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
@@ -3637,6 +3770,8 @@ $(function() {
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
 
 
@@ -3647,6 +3782,8 @@ $(function() {
 		$('#divspeichermpm3pm').show();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
 
 
@@ -3657,6 +3794,8 @@ $(function() {
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').show();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
 
 
@@ -3667,6 +3806,17 @@ $(function() {
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').show();
+		$('#divspeichere3dc').hide();
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_e3dc')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').show();
 
    }
 $('#speichermodul').change(function(){
@@ -3676,6 +3826,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
 
 
@@ -3687,6 +3839,8 @@ $('#speichermodul').change(function(){
  		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
 
+		$('#divspeichere3dc').hide();
+
 
 
     }
@@ -3696,6 +3850,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichermpm3pm').show();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
 
 
@@ -3706,6 +3862,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').show();
 		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_fronius')   {
@@ -3714,6 +3872,17 @@ $('#speichermodul').change(function(){
 		$('#divspeichermpm3pm').hide();
 		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').show();
+		$('#divspeichere3dc').hide();
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_e3dc')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').show();
 
    }
 });

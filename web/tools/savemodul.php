@@ -493,7 +493,18 @@ foreach($lines as $line) {
 	    $result .= 'solaredgepvip=\''.$_POST[solaredgepvip]."'\n";
 	 $writeit = '1';
    } 
-
+	    if(strpos($line, "solaredgepvslave1=") !== false) {
+	    $result .= 'solaredgepvslave1=\''.$_POST[solaredgepvslave1]."'\n";
+	 $writeit = '1';
+	    } 
+	    if(strpos($line, "solaredgepvslave2=") !== false) {
+	    $result .= 'solaredgepvslave2=\''.$_POST[solaredgepvslave2]."'\n";
+	 $writeit = '1';
+   } 
+	    if(strpos($line, "solaredgepvslave3=") !== false) {
+	    $result .= 'solaredgepvslave3=\''.$_POST[solaredgepvslave3]."'\n";
+	 $writeit = '1';
+   } 
 	    if(strpos($line, "lllaniplp2=") !== false) {
     	    $result .= 'lllaniplp2='.$_POST[lllaniplp2]."\n";
     	 $writeit = '1';
@@ -627,6 +638,14 @@ foreach($lines as $line) {
 	    $result .= 'wr_smartme_url=\''.$_POST[wr_smartme_url]."'\n";
 	    $writeit = '1';
 	    }
+	   if(strpos($line, "e3dcip=") !== false) {
+	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
+	    $writeit = '1';
+	    }
+
+
+
+
 
 	    if ( $writeit == '0') {
 		$result .= $line;

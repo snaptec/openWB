@@ -34,6 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+
 </head>
 <body>
 <?php
@@ -419,8 +420,6 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
     <li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
-
-     
 <form action="./tools/savemain.php" method="POST">
 
 <div class="col-xs-1">

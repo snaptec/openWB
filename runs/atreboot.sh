@@ -597,6 +597,18 @@ if ! grep -Fq "solaredgepvip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgepvip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solaredgepvslave1=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave1=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgepvslave2=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave2=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgepvslave3=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave3=none" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then
 		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
@@ -824,6 +836,11 @@ if ! grep -Fq "bydhvip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bydhvip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "e3dcip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "e3dcip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
+
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
