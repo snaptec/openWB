@@ -2599,7 +2599,7 @@ $(function() {
 		<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Das Modul liest PV Watt, EVU Watt, PV Produktion, EVU Bezug und EVU Einspeisung aus.<br>
+		Gültige Werte IP.<br>
 		Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 		Ebenso muss ModbusTCP am Wechselrichter aktiviert werden<br> 
 	</div>
