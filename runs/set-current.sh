@@ -64,6 +64,14 @@ function setChargingCurrentModbus () {
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
 
+
+# function for openwb slave kit
+function setChargingCurrentSlaveeth () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
+}
+
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
@@ -136,6 +144,10 @@ function setChargingCurrent () {
 	if [[ $evsecon == "goe" ]]; then
 		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
+	if [[ $evsecon == "slaveeth" ]]; then
+		setChargingCurrentSlaveeth $current 
+	fi
+
 }
 
 #####
