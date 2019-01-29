@@ -129,19 +129,19 @@ echo $llkwhges > ramdisk/llkwhges
 if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=$(modules/$wattbezugmodul/main.sh || true)
 	if ! [[ $wattbezug =~ $re ]] ; then
-	wattbezug="0"
+		wattbezug="0"
 	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$((wattbezugint * -1))
 	if [[ $speichervorhanden == "1" ]]; then
-	if [[ $speicherpveinbeziehen == "1" ]]; then
-		if (( speicherleistung > 0 )); then
-			uberschuss=$((uberschuss + speicherleistung))
-			wattbezugint=$((wattbezugint - speicherleistung))
+		if [[ $speicherpveinbeziehen == "1" ]]; then
+			if (( speicherleistung > 0 )); then
+				uberschuss=$((uberschuss + speicherleistung))
+				wattbezugint=$((wattbezugint - speicherleistung))
+			fi
 		fi
 	fi
-fi
 	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
 	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
 	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)

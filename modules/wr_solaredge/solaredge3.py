@@ -8,8 +8,11 @@ import ConfigParser
 import struct
 import binascii
 ipaddress = str(sys.argv[1])
-slave1id = str(sys.argv[2])
-slave2id = str(sys.argv[3])
+slave1id = int(sys.argv[2])
+slave2id = int(sys.argv[3])
+slave3id = int(sys.argv[4])
+
+
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 
@@ -39,6 +42,32 @@ value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0])
+#wr3
+resp= client.read_holding_registers(40084,2,unit=slave3id)
+multipli = resp.registers[0]
+multiplint = format(multipli, '04x')
+fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
+
+respw= client.read_holding_registers(40083,2,unit=slave3id)
+value1w = respw.registers[0]
+allw = format(value1w, '04x')
+rawprod3w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
+if fmultiplint == 0:
+    rawprod3w = 0
+if fmultiplint == -1:
+    rawprod3w = rawprod3w / 10 
+if fmultiplint == -2:
+    rawprod3w = rawprod3w / 100
+if fmultiplint == -3:
+    rawprod3w = rawprod3w / 1000
+if fmultiplint == -4:
+    rawprod3w = rawprod3w / 10000
+
+resp= client.read_holding_registers(40093,2,unit=slave3id)
+value1 = resp.registers[0]
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+final3 = int(struct.unpack('>i', all.decode('hex'))[0])
 
 #wr2
 resp= client.read_holding_registers(40084,2,unit=slave2id)
@@ -60,7 +89,7 @@ if fmultiplint == -3:
     rawprod2w = rawprod2w / 1000
 if fmultiplint == -4:
     rawprod2w = rawprod2w / 10000
-realrawprodw = rawprodw + rawprod2w
+realrawprodw = rawprodw + rawprod2w + rawprod3w
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(realrawprodw))
 f.close()
@@ -70,7 +99,7 @@ value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final2 = int(struct.unpack('>i', all.decode('hex'))[0])
-rfinal = final + final2
+rfinal = final + final2 + final3
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(rfinal))
 f.close()

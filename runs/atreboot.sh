@@ -840,6 +840,34 @@ if ! grep -Fq "e3dcip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "e3dcip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "bezug_http_l1_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l1_url='http://192.168.0.17/bezuga1'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_http_l2_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l2_url='http://192.168.0.17/bezuga2'" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bezug_http_l3_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l3_url='http://192.168.0.17/bezuga3'" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "sbs25ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sbs25ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi 
+  
+  
+  
+  
+sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+
+
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

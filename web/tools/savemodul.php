@@ -195,9 +195,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
             if(strpos($line, "ladeleistungs1modul=") !== false) {
-	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "goe") {
+	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth") {
 			if($_POST[evsecons1] == "goe") {
 				$result .= 'ladeleistungs1modul=goelp2'."\n";
+			}
+			if($_POST[evsecons1] == "slaveeth") {
+				$result .= 'ladeleistungs1modul=mpm3pmethll'."\n";
 			}
 			if($_POST[evsecons1] == "simpleevsewifi") { 
 				$result .= 'ladeleistungs1modul=simpleevsewifis1'."\n";
@@ -230,6 +233,18 @@ foreach($lines as $line) {
 	    } 
 	    if(strpos($line, "bezug_http_w_url=") !== false) {
 	    $result .= 'bezug_http_w_url=\''.$_POST[bezug_http_w_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l1_url=") !== false) {
+	    $result .= 'bezug_http_l1_url=\''.$_POST[bezug_http_l1_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l2_url=") !== false) {
+	    $result .= 'bezug_http_l2_url=\''.$_POST[bezug_http_l2_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l3_url=") !== false) {
+	    $result .= 'bezug_http_l3_url=\''.$_POST[bezug_http_l3_url]."'\n";
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "bezug_http_ekwh_url=") !== false) {
@@ -396,7 +411,17 @@ foreach($lines as $line) {
 	    if(strpos($line, "evnotifyakey=") !== false) {
 	    $result .= 'evnotifyakey='.$_POST[evnotifyakey]."\n";
 	$writeit = '1';
+	    }
+
+	    if(strpos($line, "evnotifytokenlp2=") !== false) {
+	    $result .= 'evnotifytokenlp2='.$_POST[evnotifytokenlp2]."\n";
+	$writeit = '1';
     } 
+	    if(strpos($line, "evnotifyakeylp2=") !== false) {
+	    $result .= 'evnotifyakeylp2='.$_POST[evnotifyakeylp2]."\n";
+	$writeit = '1';
+    } 
+
 	    if(strpos($line, "wrjsonurl=") !== false) {
 	    $result .= 'wrjsonurl=\''.$_POST[wrjsonurl]."'\n";
 	$writeit = '1';
@@ -494,15 +519,15 @@ foreach($lines as $line) {
 	 $writeit = '1';
    } 
 	    if(strpos($line, "solaredgepvslave1=") !== false) {
-	    $result .= 'solaredgepvslave1=\''.$_POST[solaredgepvslave1]."'\n";
+	    $result .= 'solaredgepvslave1='.$_POST[solaredgepvslave1]."\n";
 	 $writeit = '1';
 	    } 
 	    if(strpos($line, "solaredgepvslave2=") !== false) {
-	    $result .= 'solaredgepvslave2=\''.$_POST[solaredgepvslave2]."'\n";
+	    $result .= 'solaredgepvslave2='.$_POST[solaredgepvslave2]."\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "solaredgepvslave3=") !== false) {
-	    $result .= 'solaredgepvslave3=\''.$_POST[solaredgepvslave3]."'\n";
+	    $result .= 'solaredgepvslave3='.$_POST[solaredgepvslave3]."\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "lllaniplp2=") !== false) {
@@ -642,6 +667,14 @@ foreach($lines as $line) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
 	    $writeit = '1';
 	    }
+	   if(strpos($line, "sbs25ip=") !== false) {
+	    $result .= 'sbs25ip='.$_POST[sbs25ip]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "tri9000ip=") !== false) {
+	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
+	    $writeit = '1';
+	    
 
 
 
