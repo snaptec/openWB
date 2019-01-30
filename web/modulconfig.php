@@ -665,8 +665,7 @@ $carnetpassold = str_replace( "'", "", $carnetpassold);
 $wr_smartme_userold = str_replace( "'", "", $wr_smartme_userold);
 $wr_smartme_passold = str_replace( "'", "", $wr_smartme_passold);
 $wr_smartme_urlold = str_replace( "'", "", $wr_smartme_urlold);
-
-
+$socteslapwold = str_replace( "'", "", $socteslapwold);
 
 
 
