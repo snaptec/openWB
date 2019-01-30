@@ -495,7 +495,7 @@ foreach($lines as $line) {
 	 $writeit = '1';
    } 
 	    if(strpos($line, "soc_tesla_password=") !== false) {
-	    $result .= 'soc_tesla_password='.$_POST[teslasocpw]."\n";
+	    $result .= 'soc_tesla_password=\''.$_POST[teslasocpw]."'\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "soc_tesla_intervall=") !== false) {
@@ -674,7 +674,7 @@ foreach($lines as $line) {
 	   if(strpos($line, "tri9000ip=") !== false) {
 	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
 	    $writeit = '1';
-	    
+	   } 
 
 
 
