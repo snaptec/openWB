@@ -71,7 +71,7 @@ foreach($lines as $line) {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
 			}
 			if($_POST[evsecon] == "masterethframer") {
-				$result .= 'ladeleistungs1modul=mpm3pmethllframer'."\n";
+				$result .= 'ladeleistungmodul=mpm3pmethllframer'."\n";
 			}
 			if($_POST[evsecon] == "simpleevsewifi") { 
 				$result .= 'ladeleistungmodul=simpleevsewifi'."\n";
