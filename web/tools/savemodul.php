@@ -66,9 +66,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	if(strpos($line, "ladeleistungmodul=") !== false) {
-		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe") {
+		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer") {
 			if($_POST[evsecon] == "goe") {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
+			}
+			if($_POST[evsecon] == "masterethframer") {
+				$result .= 'ladeleistungs1modul=mpm3pmethllframer'."\n";
 			}
 			if($_POST[evsecon] == "simpleevsewifi") { 
 				$result .= 'ladeleistungmodul=simpleevsewifi'."\n";

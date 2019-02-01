@@ -71,7 +71,11 @@ function setChargingCurrentSlaveeth () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
 }
-
+function setChargingCurrentMasterethframer () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
+}
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
@@ -147,7 +151,9 @@ function setChargingCurrent () {
 	if [[ $evsecon == "slaveeth" ]]; then
 		setChargingCurrentSlaveeth $current 
 	fi
-
+	if [[ $evsecon == "masterethframer" ]]; then
+		setChargingCurrentMasterethframer $current 
+	fi
 }
 
 #####

@@ -715,12 +715,18 @@ $lp3nameold = str_replace( "'", "", $lp3nameold);
 		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
 		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
+		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
 	</select>
 
 </div>
 <div class="row">
-	Gültige Werte dac, modbusevse. Weitere Konfiguration je nach Anbindung erforderlich! Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+<br><br></div>
+<div id="evseconmastereth">
+	<div class="row bg-success">
+	Keine Konfiguration erforderlich.<br>
+	</div>
 </div>
+
 <div id="evsecondac">
 	<div class="row bg-success">
 		<b><label for="dacregister">Dacregister:</label></b>
@@ -795,7 +801,7 @@ $(function() {
 		$('#evseconswifi').hide();
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
-
+		$('#evseconmastereth').hide();
 	}
 	if($('#evsecon').val() == 'modbusevse') {
 		$('#evseconswifi').hide();
@@ -803,13 +809,15 @@ $(function() {
 		$('#evseconmod').show();
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
-
+		$('#evseconmastereth').hide();
+	
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
 		$('#evseconswifi').show();
       		$('#evsecondac').hide();
 		$('#evseconmod').hide();
 		$('#llmodullp1').hide();
+			$('#evseconmastereth').hide();
 		$('#evsecongoe').hide();
 
       	} 
@@ -819,10 +827,16 @@ $(function() {
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
-	        } 
-
-
-
+	       		$('#evseconmastereth').hide();
+	} 
+		if($('#evsecon').val() == 'masterethframer') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').show();
+	} 
 
 	$('#evsecon').change(function(){
 	        if($('#evsecon').val() == 'dac') {
@@ -831,7 +845,8 @@ $(function() {
 			$('#evseconswifi').hide();
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
-
+		$('#evseconmastereth').hide();
+	
 
 		}
 		if($('#evsecon').val() == 'modbusevse') {
@@ -840,7 +855,8 @@ $(function() {
 			$('#evseconmod').show();
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
-
+		$('#evseconmastereth').hide();
+	
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
 			$('#evseconswifi').show();
@@ -848,6 +864,7 @@ $(function() {
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
 			$('#evsecongoe').hide();
+			$('#evseconmastereth').hide();
 	        } 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
@@ -855,7 +872,16 @@ $(function() {
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
-	        } 
+	        	$('#evseconmastereth').hide();
+		} 
+		if($('#evsecon').val() == 'masterethframer') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').show();
+	} 
 	    });
 });
 </script>
@@ -871,6 +897,7 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
+
 	</select>
 </div>
 <div id="llmnone">

@@ -5,7 +5,10 @@ import time
 import getopt
 import struct
 from pymodbus.client.sync import ModbusTcpClient
-clinet = ModbusTcpClient('192.168.193.15', port=8899)
+client = ModbusTcpClient('192.168.193.15', port=8899)
+#from pymodbus.transaction import ModbusRtuFramer
+#client = ModbusTcpClient('192.168.0.7', port=8899, framer=ModbusRtuFramer)
+
 
 
 
