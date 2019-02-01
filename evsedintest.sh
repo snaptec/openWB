@@ -4,7 +4,8 @@ evsedintest() {
 
 evsedintestlp1=$(<ramdisk/evsedintestlp1)
 if [[ $evsedintestlp1 == "ausstehend" ]]; then
-	if [[ $evsecon == "modbusevse"  || $evsecon == "masterethframer"]]; then
+	if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer"]
+	then
 		if [[ $evsecon == "modbusevse" ]]; then 
 			if [[ $modbusevsesource = *virtual* ]]
 			then
@@ -46,6 +47,7 @@ if [[ $evsedintestlp1 == "ausstehend" ]]; then
 			sleep 1
 			sudo python runs/evsewritembusethframerdev.py 192.168.193.18 1 1000 0
 			sleep 1
+		fi
 	else
 		echo "$evsecon konfiguriert" > ramdisk/evsedintestlp1
 	fi
