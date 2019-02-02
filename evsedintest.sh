@@ -4,7 +4,7 @@ evsedintest() {
 
 evsedintestlp1=$(<ramdisk/evsedintestlp1)
 if [[ $evsedintestlp1 == "ausstehend" ]]; then
-	if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer"]
+	if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer" ]
 	then
 		if [[ $evsecon == "modbusevse" ]]; then 
 			if [[ $modbusevsesource = *virtual* ]]
