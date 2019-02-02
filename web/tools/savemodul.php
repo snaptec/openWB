@@ -66,9 +66,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	if(strpos($line, "ladeleistungmodul=") !== false) {
-		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe") {
+		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer") {
 			if($_POST[evsecon] == "goe") {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
+			}
+			if($_POST[evsecon] == "masterethframer") {
+				$result .= 'ladeleistungmodul=mpm3pmethllframer'."\n";
 			}
 			if($_POST[evsecon] == "simpleevsewifi") { 
 				$result .= 'ladeleistungmodul=simpleevsewifi'."\n";
@@ -84,6 +87,10 @@ foreach($lines as $line) {
 	    } 
 	    if(strpos($line, "sdm630modbusllsource=") !== false) {
 	    $result .= 'sdm630modbusllsource='.$_POST[sdm630modbusllsource]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "sdm120modbusllsource=") !== false) {
+	    $result .= 'sdm120modbusllsource='.$_POST[sdm120modbusllsource]."\n";
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
@@ -191,9 +198,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
             if(strpos($line, "ladeleistungs1modul=") !== false) {
-	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "goe") {
+	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth") {
 			if($_POST[evsecons1] == "goe") {
 				$result .= 'ladeleistungs1modul=goelp2'."\n";
+			}
+			if($_POST[evsecons1] == "slaveeth") {
+				$result .= 'ladeleistungs1modul=mpm3pmethll'."\n";
 			}
 			if($_POST[evsecons1] == "simpleevsewifi") { 
 				$result .= 'ladeleistungs1modul=simpleevsewifis1'."\n";
@@ -226,6 +236,18 @@ foreach($lines as $line) {
 	    } 
 	    if(strpos($line, "bezug_http_w_url=") !== false) {
 	    $result .= 'bezug_http_w_url=\''.$_POST[bezug_http_w_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l1_url=") !== false) {
+	    $result .= 'bezug_http_l1_url=\''.$_POST[bezug_http_l1_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l2_url=") !== false) {
+	    $result .= 'bezug_http_l2_url=\''.$_POST[bezug_http_l2_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "bezug_http_l3_url=") !== false) {
+	    $result .= 'bezug_http_l3_url=\''.$_POST[bezug_http_l3_url]."'\n";
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "bezug_http_ekwh_url=") !== false) {
@@ -385,14 +407,24 @@ foreach($lines as $line) {
 	    $result .= 'zoepasswort='.$_POST[zoepasswort]."\n";
 	$writeit = '1';
     } 
-	    if(strpos($line, "evnotifypasswort=") !== false) {
-	    $result .= 'evnotifypasswort='.$_POST[evnotifypasswort]."\n";
+	    if(strpos($line, "evnotifytoken=") !== false) {
+	    $result .= 'evnotifytoken='.$_POST[evnotifytoken]."\n";
 	$writeit = '1';
     } 
 	    if(strpos($line, "evnotifyakey=") !== false) {
 	    $result .= 'evnotifyakey='.$_POST[evnotifyakey]."\n";
 	$writeit = '1';
+	    }
+
+	    if(strpos($line, "evnotifytokenlp2=") !== false) {
+	    $result .= 'evnotifytokenlp2='.$_POST[evnotifytokenlp2]."\n";
+	$writeit = '1';
     } 
+	    if(strpos($line, "evnotifyakeylp2=") !== false) {
+	    $result .= 'evnotifyakeylp2='.$_POST[evnotifyakeylp2]."\n";
+	$writeit = '1';
+    } 
+
 	    if(strpos($line, "wrjsonurl=") !== false) {
 	    $result .= 'wrjsonurl=\''.$_POST[wrjsonurl]."'\n";
 	$writeit = '1';
@@ -466,7 +498,7 @@ foreach($lines as $line) {
 	 $writeit = '1';
    } 
 	    if(strpos($line, "soc_tesla_password=") !== false) {
-	    $result .= 'soc_tesla_password='.$_POST[teslasocpw]."\n";
+	    $result .= 'soc_tesla_password=\''.$_POST[teslasocpw]."'\n";
 	 $writeit = '1';
    } 
 	    if(strpos($line, "soc_tesla_intervall=") !== false) {
@@ -489,7 +521,18 @@ foreach($lines as $line) {
 	    $result .= 'solaredgepvip=\''.$_POST[solaredgepvip]."'\n";
 	 $writeit = '1';
    } 
-
+	    if(strpos($line, "solaredgepvslave1=") !== false) {
+	    $result .= 'solaredgepvslave1='.$_POST[solaredgepvslave1]."\n";
+	 $writeit = '1';
+	    } 
+	    if(strpos($line, "solaredgepvslave2=") !== false) {
+	    $result .= 'solaredgepvslave2='.$_POST[solaredgepvslave2]."\n";
+	 $writeit = '1';
+   } 
+	    if(strpos($line, "solaredgepvslave3=") !== false) {
+	    $result .= 'solaredgepvslave3='.$_POST[solaredgepvslave3]."\n";
+	 $writeit = '1';
+   } 
 	    if(strpos($line, "lllaniplp2=") !== false) {
     	    $result .= 'lllaniplp2='.$_POST[lllaniplp2]."\n";
     	 $writeit = '1';
@@ -555,9 +598,9 @@ foreach($lines as $line) {
 	    $result .= 'smashmbezugid='.$_POST[smashmbezugid]."\n";
 	 $writeit = '1';
    } 
-	    if(strpos($line, "serials=") !== false) {
-	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
-	 $writeit = '1';
+	    if(strpos($line, "wrfroniusip=") !== false) {
+    	    $result .= 'wrfroniusip='.$_POST[wrfroniusip]."\n";
+    	 $writeit = '1';
    } 
 	    if(strpos($line, "mpm3pmspeicherpv=") !== false) {
     	    $result .= 'mpm3pmspeicherpv='.$_POST[mpm3pmspeicherpv]."\n";
@@ -599,6 +642,43 @@ foreach($lines as $line) {
 		$result .= 'soccarnetintervall='.$_POST[soccarnetintervall]."\n";
 		$writeit = '1';
 	    }
+	   if(strpos($line, "bydhvuser=") !== false) {
+	    $result .= 'bydhvuser='.$_POST[bydhvuser]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "bydhvpass=") !== false) {
+	    $result .= 'bydhvpass='.$_POST[bydhvpass]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "bydhvip=") !== false) {
+	    $result .= 'bydhvip='.$_POST[bydhvip]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_user=") !== false) {
+	    $result .= 'wr_smartme_user=\''.$_POST[wr_smartme_user]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_pass=") !== false) {
+	    $result .= 'wr_smartme_pass=\''.$_POST[wr_smartme_pass]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_smartme_url=") !== false) {
+	    $result .= 'wr_smartme_url=\''.$_POST[wr_smartme_url]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "e3dcip=") !== false) {
+	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "sbs25ip=") !== false) {
+	    $result .= 'sbs25ip='.$_POST[sbs25ip]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "tri9000ip=") !== false) {
+	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
+	    $writeit = '1';
+	   } 
+
 
 
 
@@ -613,9 +693,17 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
 
 
-
-
-
+$result = '';
+$lines = file('/var/www/html/openWB/web/files/smashm.conf');
+foreach($lines as $line) {
+	    if(strpos($line, "serials=") !== false) {
+		    	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
+			    	    } 
+	    else {
+		    	    $result .= $line;
+			    	    }
+}
+file_put_contents('/var/www/html/openWB/web/files/smashm.conf', $result);
 
 
 

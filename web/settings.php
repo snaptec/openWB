@@ -34,6 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+
 </head>
 <body>
 <?php
@@ -389,8 +390,9 @@ foreach($lines as $line) {
 	if(strpos($line, "zielladenaktivlp1=") !== false) {
 		list(, $zielladenaktivlp1old) = explode("=", $line);
 	}
-}
 
+}
+$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
@@ -418,8 +420,6 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
     <li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
-
-     
 <form action="./tools/savemain.php" method="POST">
 
 <div class="col-xs-1">
@@ -497,23 +497,23 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	<h3>EV Daten</h3>
 </div>
 <div id="durchslp1">
-	<div class="row">
+	<div class="row bg-info">
 		
 		<b><label for="durchslp1">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</label></b>
 		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 		
 		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1:</label></b>
 		<input type="text" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1:</label></b>
 		<select type="text" name="zielladenphasenlp1" id="zielladenphasenlp1">
 			<option <?php if($zielladenphasenlp1old == 1) echo selected ?> value="1">1</option>
@@ -521,7 +521,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($zielladenphasenlp1old == 3) echo selected ?> value="3">3</option>
 		</select>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 		<b><label for="zielladenmaxalp1">Stromstärke in A mit der maximal geladen werden kann:</label></b>
 		<select type="text" name="zielladenmaxalp1" id="zielladenmaxalp1">
 			<option <?php if($zielladenmaxalp1old == 6) echo selected ?> value="6">6</option>
@@ -553,34 +553,34 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($zielladenmaxalp1old == 32) echo selected ?> value="32">32</option>
 		</select><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Ampere mit denen geladen werden kann um den Ziel SoC zu erreichen. Entweder was die Installation kann oder was das Auto kann.<br>
 	</div>
 </div>
 <div id="durchslp2">
-	<div class="row"><hr>
+	<div class="row bg-info"><hr>
 		<b><label for="durchslp2">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 2:</label></b>
 		<input type="text" name="durchslp2" id="durchslp2" value="<?php echo $durchslp2old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 		<hr>
 		<b><label for="akkuglp2">Akkugröße deines Elektroautos in kWh an Ladepunkt 2:</label></b>
 		<input type="text" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
 	</div>
 
 </div>
 <div id="durchslp3">
-	<div class="row">
+	<div class="row bg-info">
 		<b><label for="durchslp3">Durchschnittsverbrauch deines Elektroautos  in kWh an Ladepunkt 3:</label></b>
 		<input type="text" name="durchslp3" id="durchslp3" value="<?php echo $durchslp3old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row bg-info">
 	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
 	</div>
 </div>
@@ -590,7 +590,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div class="row"><hr>
 	<h3>Sofort Laden</h3>
 </div>
-<div class="row">
+<div class="row" style="background-color:#febebe">
 	<b><label for="minimalstromstaerke">Minimalstromstärke in A:</label></b>
 	<select type="text" name="minimalstromstaerke" id="minimalstromstaerke">
 		<option <?php if($minimalstromstaerkeold == 6) echo selected ?> value="6">6</option>
@@ -605,10 +605,10 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	
 	</select><br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#febebe">
 	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird. <br>Der Wert dient lediglich als Startwert und sollte so niedrig wie möglich gewählt werden.<br> Die meisten Fahrzeuge kommen mit 6A klar. Bei der Zoe werden 8A empfohlen. <br><br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#febebe">
 	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
 	<select type="text" name="maximalstromstaerke" id="maximalstromstaerke">
 		<option <?php if($maximalstromstaerkeold == 11) echo selected ?> value="11">11</option>
@@ -636,7 +636,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select><br>
 
 </div>
-<div class="row">
+<div class="row" style="background-color:#febebe">
 	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
 </div>
 
@@ -646,21 +646,21 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 </div>
 
 
-<div class="row">
+<div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">
 		<option <?php if($nachtladenold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($nachtladenold == 1) echo selected ?> value="1">An</option>
 	</select></h5>
 </div>
-<div class="row">
+<div class="row" style="background-color:#00ada8">
 	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
 </div>
 <div id="nachtladenaus">
 	<br>
 </div>
 <div id="nachtladenan">
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
        		<b><label for="nachtll">Nachtladestromstärke in A:</label></b>
         	<select type="text" name="nachtll" id="nachtll">
          	        <option <?php if($nachtllold == 6) echo selected ?> value="6">6</option>
@@ -692,10 +692,10 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
                 	<option <?php if($nachtllold == 32) echo selected ?> value="32">32</option>
        		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ampere mit der nachts geladen werden soll<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtladenabuhr">Nachtladen Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladenabuhr" id="nachtladenabuhr">
  			<option <?php if($nachtladenabuhrold == 17) echo selected ?> value="17">17</option>
@@ -708,10 +708,10 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($nachtladenabuhrold == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ab wann Abends geladen werden soll<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtladenbisuhr">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhr" id="nachtladenbisuhr">
 			<option <?php if($nachtladenbisuhrold == 0) echo selected ?> value="0">0</option>
@@ -727,25 +727,25 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Bis wann morgens geladen werden soll<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc">Nacht SOC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br><br>
-	<div class="row">
-       		<b><label for="nacht2ll">Nachtladeintervall 2 Stromstärke in A:</label></b>
+	<div class="row" style="background-color:#00ada8">
+       		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2ll" id="nacht2ll">
          	        <option <?php if($nacht2llold == 6) echo selected ?> value="6">6</option>
 	       	        <option <?php if($nacht2llold == 7) echo selected ?> value="7">7</option>
@@ -776,11 +776,11 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
                 	<option <?php if($nacht2llold == 32) echo selected ?> value="32">32</option>
        		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
 	</div>
-	<div class="row">
-		<b><label for="nachtladen2abuhr">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+	<div class="row" style="background-color:#00ada8">
+		<b><label for="nachtladen2abuhr">Morgens Laden Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladen2abuhr" id="nachtladen2abuhr">
  			<option <?php if($nachtladen2abuhrold == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladen2abuhrold == 4) echo selected ?> value="4">4</option>
@@ -791,11 +791,11 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($nachtladen2abuhrold == 9) echo selected ?> value="9">9</option>
 		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ab wann im zweiten Intervall geladen werden soll<br><br>
 	</div>
-	<div class="row">
-		<b><label for="nachtladen2bisuhr">Nachtladen Uhrzeit bis:</label></b>
+	<div class="row" style="background-color:#00ada8">
+		<b><label for="nachtladen2bisuhr">Morgens Laden Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladen2bisuhr" id="nachtladen2bisuhr">
 
  			<option <?php if($nachtladen2bisuhrold == 4) echo selected ?> value="4">4</option>
@@ -808,7 +808,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Bis wann morgens im zweiten Intervall geladen werden soll<br><br>
 	</div>
 </div>
@@ -852,21 +852,21 @@ $(function() {
 });
 </script>
 <div id="nachtls1div">
-<div class="row">
+<div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladens1">Nachtladen Ladepunkt 2:</label></b>
 	<select type="text" name="nachtladens1" id="nachtladens1">
 		<option <?php if($nachtladens1old == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($nachtladens1old == 1) echo selected ?> value="1">An</option>
 	</select></h5>
 </div>
-<div class="row">
+<div class="row" style="background-color:#00ada8">
 	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
 </div>
 <div id="nachtladenauss1">
 	<br>
 </div>
 <div id="nachtladenans1">
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
        		<b><label for="nachtlls1">Nachtladestromstärke in A:</label></b>
         	<select type="text" name="nachtlls1" id="nachtlls1">
          	        <option <?php if($nachtlls1old == 6) echo selected ?> value="6">6</option>
@@ -898,10 +898,10 @@ $(function() {
                 	<option <?php if($nachtlls1old == 32) echo selected ?> value="32">32</option>
        		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ampere mit der nachts geladen werden soll<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtladenabuhrs1">Nachtladen Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladenabuhrs1" id="nachtladenabuhrs1">
  			<option <?php if($nachtladenabuhrs1old == 17) echo selected ?> value="17">17</option>
@@ -914,10 +914,10 @@ $(function() {
 			<option <?php if($nachtladenabuhrs1old == 24) echo selected ?> value="24">24</option>
 		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ab wann Abends geladen werden soll<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtladenbisuhrs1">Nachtladen Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladenbisuhrs1" id="nachtladenbisuhrs1">
  			<option <?php if($nachtladenbisuhrs1old == 0) echo selected ?> value="0">0</option>
@@ -933,25 +933,25 @@ $(function() {
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Bis wann morgens geladen werden soll an Ladepunkt 2<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsocs1">Nacht SOC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsocs1" id="nachtsocs1" value="<?php echo $nachtsocs1old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc1s1">Nacht SOC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1s1" id="nachtsoc1s1" value="<?php echo $nachtsoc1s1old ?>"><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br><br>
-	<div class="row">
-       		<b><label for="nacht2lls1">Nachtladeintervall 2 Stromstärke in A:</label></b>
+	<div class="row" style="background-color:#00ada8">
+       		<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2lls1" id="nacht2lls1">
          	        <option <?php if($nacht2lls1old == 6) echo selected ?> value="6">6</option>
 	       	        <option <?php if($nacht2lls1old == 7) echo selected ?> value="7">7</option>
@@ -982,11 +982,11 @@ $(function() {
                 	<option <?php if($nacht2lls1old == 32) echo selected ?> value="32">32</option>
        		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ampere mit der im zweiten Intervall geladen werden soll<br><br>
 	</div>
-	<div class="row">
-		<b><label for="nachtladen2abuhrs1">Nachtladenintervall 2 Uhrzeit ab:</label></b>
+	<div class="row" style="background-color:#00ada8">
+		<b><label for="nachtladen2abuhrs1">Morgens Laden Uhrzeit ab:</label></b>
 	       	<select type="text" name="nachtladen2abuhrs1" id="nachtladen2abuhrs1">
  			<option <?php if($nachtladen2abuhrs1old == 3) echo selected ?> value="3">3</option>
  			<option <?php if($nachtladen2abuhrs1old == 4) echo selected ?> value="4">4</option>
@@ -997,11 +997,11 @@ $(function() {
 			<option <?php if($nachtladen2abuhrs1old == 9) echo selected ?> value="9">9</option>
 		</select><br>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Ab wann im zweiten Intervall geladen werden soll<br><br>
 	</div>
-	<div class="row">
-		<b><label for="nachtladen2bisuhrs1">Nachtladen Uhrzeit bis:</label></b>
+	<div class="row" style="background-color:#00ada8">
+		<b><label for="nachtladen2bisuhrs1">Morgens Laden Uhrzeit bis:</label></b>
 	       	<select type="text" name="nachtladen2bisuhrs1" id="nachtladen2bisuhrs1">
 
  			<option <?php if($nachtladen2bisuhrs1old == 4) echo selected ?> value="4">4</option>
@@ -1014,7 +1014,7 @@ $(function() {
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#00ada8">
 		Bis wann morgens im zweiten Intervall geladen werden soll<br><br>
 	</div>
 </div>
@@ -1043,39 +1043,39 @@ $(function() {
 <div class="row"><hr>
 	<h3>PV Regelung</h3>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	Die Kombination aus Mindestüberschuss und Abschaltüberschuss sollte sinnvoll gewählt werden.<br>
 	Ansonsten wird im 10 Sekunden Takt die Ladung gestartet und gestoppt.<br>
 	Es macht z.B. 1320 Watt mindestuberschuss und 900 Watt abschaltuberschuss Sinn<br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="mindestuberschuss">Mindestüberschuss:</label></b>
 	<input type="text" name="mindestuberschuss" id="mindestuberschuss" value="<?php echo $mindestuberschussold ?>"><br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	Gültige Werte 0-9999. Mindestüberschuss in Watt bevor im Lademodus "Nur PV" die Ladung beginnt.<br> Soll wenig bis kein Netzbezug vorhanden sein macht ein Wert um 1300-1600 Sinn.<br><br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="abschaltuberschuss">Abschaltüberschuss:</label></b>
 	<input type="text" name="abschaltuberschuss" id="abschaltuberschuss" value="<?php echo $abschaltuberschussold ?>"><br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	Gültige Werte 0-9999. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
 Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf Minimalstromstaerke reduziert. Danach greift die Abschaltung.<br>
 Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br><br>
 
 
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="abschaltverzoegerung">Abschaltverzögerung:</label></b>
 	<input type="text" name="abschaltverzoegerung" id="abschaltverzoegerung" value="<?php echo $abschaltverzoegerungold ?>"><br>
 </div>
 
-<div class="row">
+<div class="row" style="background-color:#befebe">
 Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
 <br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
 </div><br>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
 	<select type="text" name="minimalampv" id="minimalampv">
 		<option <?php if($minimalampvold == 6) echo selected ?> value="6">6</option>
@@ -1093,10 +1093,10 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 
 </div>
 
-<div class="row">
+<div class="row" style="background-color:#befebe">
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
 </div>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus:</label></b>
 	<select type="text" name="minimalapv" id="minimalapv">
 		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
@@ -1115,10 +1115,10 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 
 </div>
 
-<div class="row">
+<div class="row" style="background-color:#befebe">
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
 </div><br>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="minnurpvsoclp1">Minimal SoC fuer den Nur PV Laden Modus:</label></b>
 	<select type="text" name="minnurpvsoclp1" id="minnurpvsoclp1">
 		<option <?php if($minnurpvsoclp1old == 0) echo selected ?> value="0">0</option>
@@ -1140,12 +1140,12 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<option <?php if($minnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
 	</select>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#befebe">
 	Definiert einen Mindest SoC Wert bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
 	</div><br>
 
 
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="maxnnurpvsoclp1">Maximal SoC fuer den Nur PV Laden Modus:</label></b>
 	<select type="text" name="maxnurpvsoclp1" id="maxnurpvsoclp1">
 		<option <?php if($maxnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
@@ -1161,11 +1161,11 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<option <?php if($maxnurpvsoclp1old == 100) echo selected ?> value="100">100</option>
 	</select>
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#befebe">
 	Definiert einen Maximal SoC Wert bis zu welchem im Nur PV Modus geladen wird.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
 	</div>
 <br>
-<div class="row">
+<div class="row" style="background-color:#befebe">
 	<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
 	<select type="text" name="minnurpvsocll" id="minnurpvsocll">
 		<option <?php if($minnurpvsocllold == 6) echo selected ?> value="6">6</option>
@@ -1196,14 +1196,14 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<option <?php if($minnurpvsocllold == 31) echo selected ?> value="31">31</option>
 		<option <?php if($minnurpvsocllold == 32) echo selected ?> value="32">32</option>
 	</select></div>
-	<div class="row">
+	<div class="row" style="background-color:#befebe">
 	Definiert die Ladeleistung wenn Mindest SoC im Nur PV Laden Modus noch nicht erreicht ist.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
 	</div>
 
 
 
 <br><br>
-	<div class="row">
+	<div class="row" style="background-color:#befebe">
 		<b><label for="pvbezugeinspeisung">PV Lademodus:</label></b>
 	       	<select type="text" name="pvbezugeinspeisung" id="pvbezugeinspeisung">
  			<option <?php if($pvbezugeinspeisungold == 0) echo selected ?> value="0">Einspeisung</option>
@@ -1211,10 +1211,11 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#befebe">
 		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
 	</div>
-	<br><br><div class="row">
+<div id="speicherpvrangdiv">
+	<br><br><div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
 	       	<select type="text" name="speicherpveinbeziehen" id="speicherpveinbeziehen">
  			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
@@ -1222,10 +1223,23 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		</select><br>
 
 	</div>
-	<div class="row">
+	<div class="row" style="background-color:#fcbe1e">
 		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speiher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet.
-<br><br>
+	<br><br>
+	</div>
 </div>
+
+<input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
+<script>
+$(function() {
+   if($('#speicherpvrang').val() == '1') {
+	$('#speicherpvrangdiv').show(); 
+      } else {
+	$('#speicherpvrangdiv').hide();
+      } 
+});
+
+</script>
 
 <div class="row"><hr>
 	<h4>EVU basiertes Lastmanagement</h4>

@@ -34,6 +34,7 @@ echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
+echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
@@ -131,6 +132,7 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
@@ -268,6 +270,10 @@ fi
 if ! grep -Fq "lademstats2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "lademstats2=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sdm120modbusllsource=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sdm120modbusllsource=/dev/ttyUSB1" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
@@ -467,9 +473,9 @@ if ! grep -Fq "evnotifyakey=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifyakey=abcdef" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evnotifypasswort=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "evnotifytoken=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evnotifypasswort=abcdef" >> /var/www/html/openWB/openwb.conf
+	  echo "evnotifytoken=token" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
 then
@@ -590,6 +596,18 @@ fi
 if ! grep -Fq "solaredgepvip=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgepvip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgepvslave1=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave1=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgepvslave2=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave2=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgepvslave3=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave3=none" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then
@@ -781,6 +799,19 @@ if ! grep -Fq "bezug_smartme_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wr_smartme_user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_smartme_pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_smartme_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "carnetuser=" /var/www/html/openWB/openwb.conf
 then
 	  echo "carnetuser='user'" >> /var/www/html/openWB/openwb.conf
@@ -793,6 +824,50 @@ if ! grep -Fq "soccarnetintervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soccarnetintervall=10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bydhvuser=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvuser=benutzer" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bydhvpass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvpass=pass" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bydhvip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bydhvip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "e3dcip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "e3dcip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bezug_http_l1_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l1_url='http://192.168.0.17/bezuga1'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_http_l2_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l2_url='http://192.168.0.17/bezuga2'" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "bezug_http_l3_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_http_l3_url='http://192.168.0.17/bezuga3'" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "sbs25ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sbs25ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
+  fi 
+  
+  
+  
+  
+sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+
+
 
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then

@@ -1,0 +1,6 @@
+#!/bin/bash
+. /var/www/html/openWB/openwb.conf
+
+
+
+sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dc.py $e3dcip

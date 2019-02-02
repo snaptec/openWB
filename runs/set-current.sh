@@ -64,6 +64,18 @@ function setChargingCurrentModbus () {
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
 
+
+# function for openwb slave kit
+function setChargingCurrentSlaveeth () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
+}
+function setChargingCurrentMasterethframer () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
+}
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
@@ -136,6 +148,12 @@ function setChargingCurrent () {
 	if [[ $evsecon == "goe" ]]; then
 		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
+	if [[ $evsecon == "slaveeth" ]]; then
+		setChargingCurrentSlaveeth $current 
+	fi
+	if [[ $evsecon == "masterethframer" ]]; then
+		setChargingCurrentMasterethframer $current 
+	fi
 }
 
 #####
@@ -179,7 +197,18 @@ fi
 
 # Loadsharing LP 1 / 2
 if [[ $loadsharinglp12 == "1" ]]; then
-	if (( current > 16 )); then
+	if (( loadsharingalp12 == 16 )); then
+		agrenze=8
+		aagrenze=16
+		if (( current > 16 )); then
+			current=16
+			new2=all
+		fi
+	else
+		agrenze=16
+		aagrenze=32
+	fi
+	if (( current > agrenze )); then
 		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
 		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
 		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
@@ -196,17 +225,17 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		lslpl2=$((lla2 + llas13))
 		lslpl3=$((lla3 + llas11))
 		#detect charging cars
-		if (( lla1 > 5 )); then
+		if (( lla1 > 1 )); then
 			lp1c=1
-			if (( lla2 > 5 )); then
+			if (( lla2 > 1 )); then
 				lp1c=2
 			fi
 		else
 			lp1c=0
 		fi
-		if (( llas11 > 5 )); then
-			lp2c=2
-			if (( llas12 > 5 )); then
+		if (( llas11 > 1 )); then
+			lp2c=1
+			if (( llas12 > 1 )); then
 				lp2c=2
 			fi
 		else
@@ -214,28 +243,11 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		fi
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
-			current=16
+			current=$agrenze
 		fi
-		if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
-			current=16
-			setChargingCurrent
-			echo $current > /var/www/html/openWB/ramdisk/llsoll
-			echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
-			evsecon=$evsecons1
-			dacregister=$dacregisters1
-			modbusevsesource=$evsesources1
-			modbusevseid=$evseids1
-			evsewifitimeoutlp1=$evsewifitimeoutlp2
-			evsewifiiplp1=$evsewifiiplp2
-			goeiplp1=$goeiplp2
-			goetimeoutlp1=$goetimeoutlp2
-
-			# dirty call (no parameters, all is set above...)
-			setChargingCurrent
-
-			echo $current > /var/www/html/openWB/ramdisk/llsolls1
-			echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
-
+		if (( lslpl1 > aagrenze )) && (( lslpl2 > aagrenze )) && (( lslpl3 > aagrenze )); then
+			current=$(( agrenze - 1))
+			new2=all
 			if [[ $debug == "2" ]]; then
 			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
 			fi
@@ -244,10 +256,14 @@ if [[ $loadsharinglp12 == "1" ]]; then
 fi
 
 
-
+if ! [ -z $new2 ]; then
+	points=$new2
+else
+	points=$2
+fi
 
 # set charging current - first charging point
-if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
+if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 	setChargingCurrent
 	echo $current > /var/www/html/openWB/ramdisk/llsoll
 	echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
@@ -255,7 +271,7 @@ fi
 
 # set charging current - second charging point
 if [[ $lastmanagement == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "s1" ]]; then
 		evsecon=$evsecons1
 		dacregister=$dacregisters1
 		modbusevsesource=$evsesources1
@@ -275,7 +291,7 @@ fi
 
 # set charging current - second charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s2" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
 		evsecon=$evsecons2
 		dacregister=$dacregisters2
 		modbusevsesource=$evsesources2

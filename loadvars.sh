@@ -1,5 +1,11 @@
 #!/bin/bash
 loadvars(){
+
+	
+# Lastmanagement var check age
+if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
+       echo "" > ramdisk/lastregelungaktiv	
+fi
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
@@ -52,6 +58,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	if ! [[ $ladeleistung =~ $re ]] ; then
 		 ladeleistung="0"
 	fi
+	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 
 else
 	lla1=0
@@ -85,6 +92,7 @@ if [[ $lastmanagement == "1" ]]; then
 	llas11=$(echo $llas11 | sed 's/\..*$//')
 	llas12=$(echo $llas12 | sed 's/\..*$//')
 	llas13=$(echo $llas13 | sed 's/\..*$//')
+	ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 	if ! [[ $ladeleistungs1 =~ $re ]] ; then
 	 ladeleistungs1="0"
 	fi
@@ -106,7 +114,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 	llas21=$(echo $llas21 | sed 's/\..*$//')
 	llas22=$(echo $llas22 | sed 's/\..*$//')
 	llas23=$(echo $llas23 | sed 's/\..*$//')
-
+	ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 	if ! [[ $ladeleistungs2 =~ $re ]] ; then
 	 ladeleistungs2="0"
 	fi
@@ -121,19 +129,19 @@ echo $llkwhges > ramdisk/llkwhges
 if [[ $wattbezugmodul != "none" ]]; then
 	wattbezug=$(modules/$wattbezugmodul/main.sh || true)
 	if ! [[ $wattbezug =~ $re ]] ; then
-	wattbezug="0"
+		wattbezug="0"
 	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$((wattbezugint * -1))
 	if [[ $speichervorhanden == "1" ]]; then
-	if [[ $speicherpveinbeziehen == "1" ]]; then
-		if (( speicherleistung > 0 )); then
-			uberschuss=$((uberschuss + speicherleistung))
-			wattbezugint=$((wattbezugint - speicherleistung))
+		if [[ $speicherpveinbeziehen == "1" ]]; then
+			if (( speicherleistung > 0 )); then
+				uberschuss=$((uberschuss + speicherleistung))
+				wattbezugint=$((wattbezugint - speicherleistung))
+			fi
 		fi
 	fi
-fi
 	evua1=$(cat /var/www/html/openWB/ramdisk/bezuga1)
 	evua2=$(cat /var/www/html/openWB/ramdisk/bezuga2)
 	evua3=$(cat /var/www/html/openWB/ramdisk/bezuga3)
@@ -172,7 +180,7 @@ fi
 	date=$(date)
 	H=$(date +%H)
 	if [[ $debug == "1" ]]; then
-		echo "$(tail -500 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
+		echo "$(tail -20000 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
 		date
 		echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
 		echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"

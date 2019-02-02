@@ -144,6 +144,7 @@
 			list(, $nachtladenstates1) = explode("=", $line);
 		}
 	}
+	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
@@ -205,6 +206,10 @@
 				Nachtladen LP 2 aktiv
 			</div>
 			<div class="col-xs-4 text-center">
+			</div>
+			<div class="row">
+				<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
+				</div>
 			</div>
 	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
 	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
@@ -806,7 +811,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- stable -->	Ver 1.1				</div>
+				<!-- master -->	Ver 1.2				</div>
 
 
 				<div class="col-xs-4 text-center">
@@ -873,6 +878,10 @@
 		      } 
 		});
 	</script>
+
+			
+						   
+
 
 	<script type='text/javascript'>
 	loadText();
