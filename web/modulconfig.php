@@ -522,6 +522,10 @@ foreach($lines as $line) {
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
 	}
+	if(strpos($line, "solaredgespeicherip=") !== false) {
+		list(, $solaredgespeicheripold) = explode("=", $line);
+	}
+
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -672,10 +676,11 @@ $socteslapwold = str_replace( "'", "", $socteslapwold);
 
 $solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
+$solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
-
+$zoepasswortold = str_replace( "'", "", $zoepasswortold);
 
 
 ?>
@@ -997,6 +1002,8 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 </div>
 </div>
+
+
 
 
 <script>
@@ -3939,6 +3946,8 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
 		<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
+		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher BETA</option>
+
 
 	</select>
 </div>
@@ -3962,6 +3971,15 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.<br><br>
+	</div>
+</div>
+<div id="divspeichersolaredge">
+	<div class="row" style="background-color:#fcbe1e">
+			<b><label for="solaredgespeicherip">Solaredge Speicher IP:</label></b>
+		<input type="text" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo htmlspecialchars($solaredgespeicheripold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.<br><br>
 	</div>
 </div>
 <div id="divspeicherfronius">
@@ -4067,6 +4085,7 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
+		$('#divspeichersolaredge').hide();
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
@@ -4076,7 +4095,8 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+   		$('#divspeichersolaredge').hide();
+
 
 
 
@@ -4089,7 +4109,8 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+   		$('#divspeichersolaredge').hide();
+
 
 
 
@@ -4102,7 +4123,8 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+   		$('#divspeichersolaredge').hide();
+
 
 
 
@@ -4115,7 +4137,8 @@ $(function() {
 		$('#divspeicherfronius').show();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+   		$('#divspeichersolaredge').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_e3dc')   {
@@ -4126,7 +4149,8 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
-   
+   		$('#divspeichersolaredge').hide();
+
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
 		$('#divspeichernone').hide();
@@ -4136,7 +4160,19 @@ $(function() {
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
-   
+   		$('#divspeichersolaredge').hide();
+
+   }
+   if($('#speichermodul').val() == 'speicher_solaredge')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').show();
+
    }
 $('#speichermodul').change(function(){
      if($('#speichermodul').val() == 'none') {
@@ -4147,7 +4183,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+    		$('#divspeichersolaredge').hide();
+  
 
 
 
@@ -4159,7 +4196,8 @@ $('#speichermodul').change(function(){
  		$('#divspeicherbydhv').hide();
 		$('#divspeicherfronius').hide();
 		$('#divspeichersbs25').hide();
-   
+     		$('#divspeichersolaredge').hide();
+ 
 		$('#divspeichere3dc').hide();
 
 
@@ -4173,7 +4211,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+      		$('#divspeichersolaredge').hide();
+
 
 
 
@@ -4186,7 +4225,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+      		$('#divspeichersolaredge').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_fronius')   {
@@ -4197,7 +4237,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').show();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
-   
+      		$('#divspeichersolaredge').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_e3dc')   {
@@ -4208,7 +4249,8 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
-   
+      		$('#divspeichersolaredge').hide();
+
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
 		$('#divspeichernone').hide();
@@ -4218,7 +4260,19 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
-   
+      		$('#divspeichersolaredge').hide();
+
+   }
+   if($('#speichermodul').val() == 'speicher_solaredge')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').show();
+
    }
 });
 

@@ -404,7 +404,7 @@ foreach($lines as $line) {
 	$writeit = '1';
     } 
 	    if(strpos($line, "zoepasswort=") !== false) {
-	    $result .= 'zoepasswort='.$_POST[zoepasswort]."\n";
+	    $result .= 'zoepasswort=\''.$_POST[zoepasswort]."'\n";
 	$writeit = '1';
     } 
 	    if(strpos($line, "evnotifytoken=") !== false) {
@@ -515,6 +515,10 @@ foreach($lines as $line) {
    } 
 	    if(strpos($line, "solaredgeip=") !== false) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
+	 $writeit = '1';
+	    }
+	    if(strpos($line, "solaredgespeicherip=") !== false) {
+	    $result .= 'solaredgespeicherip=\''.$_POST[solaredgespeicherip]."'\n";
 	 $writeit = '1';
 	    }
 	    if(strpos($line, "solaredgepvip=") !== false) {

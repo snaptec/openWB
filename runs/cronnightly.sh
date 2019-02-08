@@ -42,10 +42,3 @@ echo $llg >> $monthlyfile-llg.csv
 echo $speicheri >> $monthlyfile-speicheriwh.csv
 echo $speichere >> $monthlyfile-speicherewh.csv
 
-
-
-
-
-
-
-
