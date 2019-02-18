@@ -35,7 +35,16 @@
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
-
+<?php
+$limit = 10;
+if (isset($_GET[lines])) {
+	$limit = $_GET[lines];
+	$_SESSION = $limit;
+} else {
+	$limit = 20;
+	$_SESSION = $limit;
+}
+?>
 
 <body>
 	<div class="preloader">
@@ -51,8 +60,11 @@
 			<br><br>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-2">
 				<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
+			</div>
+
+			<div class="col-xs-2">
 			</div>
 		</div>
 		<br><br>
@@ -83,24 +95,49 @@
 </div>
 <hr>	
 <?php
-$file = fopen('ladelog', 'r');
+$ifile = fopen('ladelog', "r");
+$ofile = fopen('../ramdisk/tladelog', "w+");
+
+
+$counter = 1;
+while($counter <= $limit) {
+	        $line = fgetcsv($ifile);
+	        fputcsv($ofile, $line);
+		    $counter++;
+} 
+$start = 0;
+$stop = 0;
+$ladezeit = 0;
+$count = 0;
+$avgladel = 0;
+$sumkwh = 0;
+$sumgelkm = 0;
+$file = fopen('../ramdisk/tladelog', 'r');
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	echo '<div class="row">';
 		echo '<div class="col-xs-12 text-center">';
 			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[0]);
+			print_r($logarray[0]);
+			$start = strtotime($logarray[0]);
 			echo '</div>';
 			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[1]);
+			print_r($logarray[1]);
+			$stop = strtotime($logarray[1]);
+
 			echo '</div>';
 			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[2]);
+			print_r($logarray[2]);
+			$sumgelkm=$sumgelkm + $logarray[2];
+
 			echo '</div>';
 			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
 				print_r($logarray[3]);
+				$sumkwh=$sumkwh + $logarray[3];
 			echo '</div>';
 			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[4]);
+			print_r($logarray[4]);
+				$avgladel=$avgladel + $logarray[4];
+				$count=$count + 1;
 			echo '</div>';
 			echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 				print_r($logarray[5]);
@@ -112,16 +149,83 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 		echo '</div>';
 	echo '</div>';
 	echo '<hr>';
+$ladezeit = $ladezeit + (($stop - $start) / 60 );
 	  }
-	  fclose($file);
-
+fclose($file);
+$avgladel = round($avgladel / $count, 3);
+$ladezeit = round($ladezeit / $count, 2);
 ?>
 
-
+<hr>
 	</div>
+	<div class="row">
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+					Startzeit
+				</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+					Endzeit
+				</div>
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+					Geladene km gesamt
+				</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+					Geladene kWh gesamt
+				</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+					Durchschnittliche Ladeleistung kW
+				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					Dirchschnittliche Ladedauer
+				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					Ladepunkt
+				</div>	
+	</div>
+</div>
+	<div class="row">
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+				
+				</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1vw">
+								</div>
+				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
+						<?php print($sumgelkm); ?>	</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
+					<?php print($sumkwh); ?>
 
+				</div>	
+				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
+						<?php print($avgladel); ?>
+				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
+						<?php print($ladezeit); ?> Minuten
+				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+				</div>	
+	</div>
+</div>
 
+<div class="row">
+	<div class="col-xs-1">
+	</div>
+	<div class="col-xs-7">
+	<form name="limitlines" id="limitlines" action="ladelog.php" method="GET">
+		<label for="lines">Anzahl angezeigter Zeilen</label>
+		<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" />
+		<button type="submit">Go</button>
+	</form>
+	</div>
+	<div class="col-xs-4">
+	</div>
+</div>
+
+<br><br>
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
+<form method="get" action="../ramdisk/tladelog">
+ <button class="btn btn-primary btn-green">Download csv</button>
+</form>
 <br><br>
 
 </div>

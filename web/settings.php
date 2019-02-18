@@ -390,6 +390,10 @@ foreach($lines as $line) {
 	if(strpos($line, "zielladenaktivlp1=") !== false) {
 		list(, $zielladenaktivlp1old) = explode("=", $line);
 	}
+	if(strpos($line, "offsetpv=") !== false) {
+		list(, $offsetpvold) = explode("=", $line);
+	}
+
 
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
@@ -1208,12 +1212,23 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	       	<select type="text" name="pvbezugeinspeisung" id="pvbezugeinspeisung">
  			<option <?php if($pvbezugeinspeisungold == 0) echo selected ?> value="0">Einspeisung</option>
   			<option <?php if($pvbezugeinspeisungold == 1) echo selected ?> value="1">Bezug</option>
+			<option <?php if($pvbezugeinspeisungold == 2) echo selected ?> value="2">Manueller Offset</option>
 		</select><br>
 
 	</div>
 	<div class="row" style="background-color:#befebe">
 		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
 	</div>
+
+	<div class="row" style="background-color:#befebe">
+		<b><label for="offsetpv">Manuelles Offset in Watt:</label></b>
+		<input type="text" name="offsetpv" id="offsetpv" value="<?php echo $offsetpvold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Manuelles Offset in Watt für die PV Regelmodi. Verschiebt den Regelpunkt. Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br><br>
+	</div>
+
+
 <div id="speicherpvrangdiv">
 	<br><br><div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
