@@ -10,7 +10,7 @@ ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
 llg=$(</var/www/html/openWB/ramdisk/llkwhges)
 soc=$(</var/www/html/openWB/ramdisk/soc)
-
+soc1=$(</var/www/html/openWB/ramdisk/soc1)
 speicheri=$(</var/www/html/openWB/ramdisk/speicherikwh)
 speichere=$(</var/www/html/openWB/ramdisk/speicherekwh)
 
@@ -31,7 +31,7 @@ echo $llg >> $dailyfile-llg.csv
 echo $soc >> $dailyfile-soc.csv
 echo $speicheri >> $dailyfile-speicheriwh.csv
 echo $speichere >> $dailyfile-speicherewh.csv
-
+echo $soc1 >> $dailyfile-soc1.csv
 
 
 

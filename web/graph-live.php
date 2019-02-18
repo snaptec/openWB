@@ -42,13 +42,15 @@ $highest1 = max($EVU);
 $highest = max($EV);
 $highest2 = max($PV);
 $highest = max($highest,$highest1,$highest2);
-$lowestevu = min($EVU);
+$lowest = min($EVU);
+$lowest1 = min($PV);
+$lowest2 = min($EV);
 if ($speichervorhanden == 1) {
-$lowestpv = min($SPEICHER);
+$lowest3 = min($SPEICHER);
+$loweste = min($lowest,$lowest1,$lowest2,$lowest3);
 } else {
-$lowestpv = min($EVU);
+$loweste = min($lowest,$lowest1,$lowest2);
 }
-$lowest = min($lowestevu,$lowestpv);
 $myData->setSerieOnAxis("EV",0);
 $myData->setSerieOnAxis("EVU",0);
 $myData->setSerieOnAxis("PV",0);
@@ -59,6 +61,21 @@ if ($speichervorhanden == 1) {
 if ($soc1vorhanden == 1) {
 	$myData->setSerieOnAxis("SoC LP2",1);
 	$myData->setPalette("SoC LP2",array("R"=>0,"G"=>155,"B"=>237));
+	$minsoc = min($SOC,$SOC1);
+	$minsoc = min($minsoc);
+	$maxsoc = max($SOC,$SOC1);
+	$maxsoc = max($maxsoc);
+	if ($maxsoc > 100) {
+		$maxsoc = "100";
+	}
+} else {
+	$minsoc = min($SOC);
+	$minsoc = min($minsoc);
+	$maxsoc = max($SOC);
+	$maxsoc = max($maxsoc);
+	if ($maxsoc > 100) {
+		$maxsoc = "100";
+	}
 }
 $myData->setSerieOnAxis("SoC",1);
 $myData->setPalette("EV",array("R"=>51,"G"=>122,"B"=>183));
@@ -73,12 +90,8 @@ $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 $myData->setAxisName(0,"Watt");
-$minsoc = min($SOC,$SOC1);
-$minsoc = min($minsoc);
-$maxsoc = max($SOC,$SOC1);
-$maxsoc = max($maxsoc);
-$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>($minsoc - "5" ),"Max"=>($maxsoc + "5" )));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
+$AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>($minsoc - "5" ),"Max"=>($maxsoc + "5" )));
+$ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
 
 

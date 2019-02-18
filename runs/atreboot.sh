@@ -1,6 +1,15 @@
 #!/bin/bash
 #Ramdisk mit initialen Werten befüllen nach neustart
 sleep 10
+sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
+sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
+sudo chmod 777 /var/www/html/openWB/openwb.conf
+sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/web/files/*
+sudo chmod -R +x /var/www/html/openWB/modules/*
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -127,15 +136,14 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 
 
-
-sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
-sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
+
+
 
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
@@ -455,7 +463,7 @@ then
 fi
 if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
 then
-	  echo "zoepasswort=passwort" >> /var/www/html/openWB/openwb.conf
+	  echo "zoepasswort='passwort'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "minnurpvsocll=" /var/www/html/openWB/openwb.conf
 then
@@ -861,9 +869,15 @@ then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi 
   
-  
-  
-  
+ if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
+  fi  
+ if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
+  fi 
+    
 sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 

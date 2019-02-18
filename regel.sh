@@ -47,7 +47,7 @@ if [[ $dspeed == "1" ]]; then
 		sleep 5 && ./regel.sh >> /var/log/openWB.log 2>&1 &
 		rm ramdisk/5sec
 	else
-		touch ramdisk/5sec
+		echo 0 > ramdisk/5sec
 	fi
 fi
 if [[ $dspeed == "2" ]]; then
@@ -56,10 +56,25 @@ if [[ $dspeed == "2" ]]; then
 		rm ramdisk/5sec
 		exit 0
 	else
-		touch ramdisk/5sec
+		echo 0 > ramdisk/5sec
 	fi
 fi
+if [[ $dspeed == "3" ]]; then
 
+	if [ -e ramdisk/5sec ]; then
+		regeltimer=$(<ramdisk/5sec)
+		if (( regeltimer < 5 )); then
+			regeltimer=$((regeltimer+1))
+			echo $regeltimer > ramdisk/5sec
+			exit 0
+		else
+			regeltimer=0
+			echo $regeltimer > ramdisk/5sec
+		fi
+	else
+		echo 0 > ramdisk/5sec
+	fi
+fi
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
@@ -230,7 +245,10 @@ if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
 	schaltschwelle="0"
 fi
-
+if [[ $pvbezugeinspeisung == "2" ]]; then
+	pvregelungm=$offsetpv
+	schaltschwelle=$((schaltschwelle + offsetpv))
+fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if (( lademodus == 1 )); then
