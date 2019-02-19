@@ -876,7 +876,14 @@ then
  if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
-  fi 
+  fi
+ if ! grep -Fq "kostalplenticoreip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticoreip=192.168.0.30" >> /var/www/html/openWB/openwb.conf
+  fi
+
+
+
     
 sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up

@@ -638,6 +638,10 @@ foreach($lines as $line) {
 	if(strpos($line, "tri9000ip=") !== false) {
 		list(, $tri9000ipold) = explode("=", $line);
 	}
+	if(strpos($line, "kostalplenticoreip=") !== false) {
+		list(, $kostalplenticoreipold) = explode("=", $line);
+	}
+
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -2502,7 +2506,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
 		<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo selected ?> value="bezug_e3dc">E3DC Speicher</option>
 		<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo selected ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300 SM</option>
 
 	</select>
 </div>
@@ -2515,6 +2519,17 @@ $(function() {
 Keine Konfiguration erforderlich.<br><br>
 </div>
 </div>
+<div id="wattbezugplentihaus">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
+		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Dieses Modul erfordert einen (z.B. einen EM300) Smart Meter im Hausverbrauchszweig.<br>
+	Es muss kein extra PV Modul ausgewählt werden (PV Modul auf None stellen).<br> 
+	</div>
+</div>
+
 <div id="wattbezugmpm3pm">
 		<div class="row" style="background-color:#febebe">
 		<b><label for="mpm3pmevu">MPM3PM Zähler EVU Source:</label></b>
@@ -2778,6 +2793,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugplentihaus').hide();
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -2795,7 +2811,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
-
+		$('#wattbezugplentihaus').hide();
       } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
@@ -2813,7 +2829,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
-
+		$('#wattbezugplentihaus').hide();
       } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
@@ -2831,6 +2847,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
     } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -2848,6 +2865,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+				$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -2865,6 +2883,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
 		$('#wattbezugvz').hide();
@@ -2881,7 +2900,8 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 			$('#wattbezuge3dc').hide();
 		$('#wattbezugsbs25').hide();
-	$('#wattbezugsmartme').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -2899,6 +2919,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -2916,6 +2937,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
 		$('#wattbezugvz').hide();
@@ -2933,6 +2955,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
 		$('#wattbezugvz').hide();
@@ -2950,6 +2973,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -2967,6 +2991,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
 		$('#wattbezugvz').hide();
@@ -2984,6 +3009,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugsmartme').show();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
 		$('#wattbezugvz').hide();
@@ -3001,6 +3027,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -3018,6 +3045,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').show();
 		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
 		$('#wattbezugvz').hide();
@@ -3035,6 +3063,25 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').show();
+		$('#wattbezugplentihaus').hide();
+  }
+  if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').show();
   }
    $('#wattbezugmodul').change(function(){
 	      if($('#wattbezugmodul').val() == 'vzlogger') {
@@ -3053,6 +3100,7 @@ $(function() {
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
  		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -3069,7 +3117,8 @@ $(function() {
    		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    } 
    if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugvz').hide();
@@ -3086,7 +3135,8 @@ $(function() {
    		$('#wattbezugethmpm3pm').hide();
    		$('#wattbezuge3dc').hide();
  		$('#wattbezugsbs25').hide();
-  		$('#wattbezugsmartme').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugplentihaus').hide();
 } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezugvz').hide();
@@ -3103,7 +3153,8 @@ $(function() {
  		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
 		$('#wattbezugvz').hide();
@@ -3121,6 +3172,7 @@ $(function() {
   		$('#wattbezuge3dc').hide();
  		$('#wattbezugsbs25').hide();
 		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugplentihaus').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
 		$('#wattbezugvz').hide();
@@ -3137,7 +3189,8 @@ $(function() {
   		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
 		$('#wattbezugvz').hide();
@@ -3154,7 +3207,8 @@ $(function() {
   		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugvz').hide();
@@ -3171,7 +3225,8 @@ $(function() {
  		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -3188,7 +3243,8 @@ $(function() {
 		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
     } 
 
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
@@ -3206,7 +3262,8 @@ $(function() {
 		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
     } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
 		$('#wattbezugvz').hide();
@@ -3223,7 +3280,8 @@ $(function() {
   		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
 		$('#wattbezugvz').hide();
@@ -3240,7 +3298,8 @@ $(function() {
  		$('#wattbezugsmartme').hide();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
 		$('#wattbezugvz').hide();
@@ -3257,7 +3316,8 @@ $(function() {
  		$('#wattbezugsmartme').show();
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
 		$('#wattbezugvz').hide();
@@ -3274,7 +3334,8 @@ $(function() {
   		$('#wattbezuge3dc').show();
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').hide();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
 		$('#wattbezugvz').hide();
@@ -3291,7 +3352,8 @@ $(function() {
   		$('#wattbezuge3dc').hide();
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').show();
- 		$('#wattbezugsbs25').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
@@ -3310,6 +3372,25 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugsbs25').show();
+		$('#wattbezugplentihaus').hide();
+  }
+  if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').show();
   }
 	    });
 });
@@ -3332,6 +3413,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
 		<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
 		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA Tripower 9000</option>
+		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
+
 
 
 
@@ -3343,26 +3426,37 @@ $(function() {
 <div id="pvnone">
 	<br>
 </div>
+<div id="pvplenti">
+	<div class="row" style="background-color:#befebe">
+		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
+		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		Gültige Werte IP.<br> 
+	</div>
+</div>
+
+
 <div id="pvsmartme">
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 		<b><label for="wr_smartme_user">Smartme Benutzername</label></b>
 		<input type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo htmlspecialchars($wr_smartme_userold) ?>"><br>
 	</div>
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 	Smartme Benutzername<br>
 	</div>
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 		<b><label for="wr_smartme_pass">Smartme Passwort</label></b>
 		<input type="text" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars($wr_smartme_passold) ?>"><br>
 	</div>
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 	Smartme Passwort<br>
 	</div>
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 		<b><label for="wr_smartme_url">Smartme Url</label></b>
 		<input type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo htmlspecialchars($wr_smartme_urlold) ?>"><br>
 	</div>
-	<div class="row" style="background-color:#febebe">
+	<div class="row" style="background-color:#befebe">
 	Smartme Url<br>
 	</div>
 
@@ -3557,6 +3651,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();i
 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
       } 
    if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
@@ -3572,6 +3668,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3588,6 +3686,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3604,6 +3704,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3620,6 +3722,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3636,6 +3740,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    }
@@ -3652,6 +3758,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
  		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3668,6 +3776,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3684,6 +3794,8 @@ $(function() {
 			$('#pvwrsolaredge').hide();
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
       } 
@@ -3700,6 +3812,8 @@ $(function() {
 			$('#pvwrsolaredge').show();
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
       } 
@@ -3716,6 +3830,8 @@ $(function() {
 			$('#pvwrsolaredge').hide();
    			$('#pvsmartme').show();
  		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
       } 
@@ -3732,9 +3848,26 @@ $(function() {
 			$('#pvwrsolaredge').hide();
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
-
+		$('#pvplenti').hide();
 
       } 
+      if($('#pvwattmodul').val() == 'wr_plenticore')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').show();
+
+      } 
+
 
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -3750,6 +3883,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
 	     } 
@@ -3766,6 +3901,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3782,6 +3919,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3799,6 +3938,8 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 
+		$('#pvplenti').hide();
+
 
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
@@ -3814,6 +3955,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3830,6 +3973,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3846,6 +3991,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3862,6 +4009,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
    } 
@@ -3878,6 +4027,8 @@ $(function() {
 		$('#pvwrsolaredge').hide();
          	$('#pvsmartme').hide();
   			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
      } 
       if($('#pvwattmodul').val() == 'wr_solaredge')   {
@@ -3893,6 +4044,8 @@ $(function() {
 			$('#pvwrsolaredge').show();
       			$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
 
       } 
@@ -3910,6 +4063,8 @@ $(function() {
 			$('#pvwrsolaredge').hide();
    			$('#pvsmartme').show();
  			$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+
 
       } 
       if($('#pvwattmodul').val() == 'wr_tripower9000')   {
@@ -3925,9 +4080,29 @@ $(function() {
 			$('#pvwrsolaredge').hide();
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
+		$('#pvplenti').hide();
+
 
 
       } 
+      if($('#pvwattmodul').val() == 'wr_plenticore')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').show();
+
+      } 
+
+
 	});
 });
 </script>
