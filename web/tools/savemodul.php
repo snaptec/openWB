@@ -682,6 +682,11 @@ foreach($lines as $line) {
 	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
 	    $writeit = '1';
 	   } 
+	   if(strpos($line, "kostalplenticoreip=") !== false) {
+	    $result .= 'kostalplenticoreip='.$_POST[kostalplenticoreip]."\n";
+	    $writeit = '1';
+	   } 
+
 
 
 
