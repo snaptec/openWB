@@ -44,6 +44,18 @@ if (isset($_GET[lines])) {
 	$limit = 20;
 	$_SESSION = $limit;
 }
+if (isset($_GET[von])) {
+	$wahlstart = strtotime($_GET[von]);
+} else {
+	$wahlstart = strtotime("-4 weeks");
+}
+if (isset($_GET[bis])) {
+	$wahlstop = strtotime($_GET[bis]);
+} else {
+	$wahlstop = strtotime("tomorrow");
+}
+
+
 ?>
 
 <body>
@@ -102,9 +114,10 @@ $ofile = fopen('../ramdisk/tladelog', "w+");
 $counter = 1;
 while($counter <= $limit) {
 	        $line = fgetcsv($ifile);
-	        fputcsv($ofile, $line);
+		fputcsv($ofile, $line);
 		    $counter++;
 } 
+
 $start = 0;
 $stop = 0;
 $ladezeit = 0;
@@ -113,45 +126,96 @@ $avgladel = 0;
 $sumkwh = 0;
 $sumgelkm = 0;
 $file = fopen('../ramdisk/tladelog', 'r');
+$extractf = fopen('../ramdisk/ladelog.csv', "w+");
 while (($logarray = fgetcsv($file)) !== FALSE) {
-	echo '<div class="row">';
-		echo '<div class="col-xs-12 text-center">';
-			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-			print_r($logarray[0]);
-			$start = strtotime($logarray[0]);
-			echo '</div>';
-			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-			print_r($logarray[1]);
-			$stop = strtotime($logarray[1]);
+	$startime = str_replace('.', '-', $logarray[0]);
+	$startime = strtotime(substr_replace($startime, "20", "6", 0));
+	$endtime = str_replace('.', '-', $logarray[1]);
+	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 
-			echo '</div>';
-			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-			print_r($logarray[2]);
-			$sumgelkm=$sumgelkm + $logarray[2];
+	if (isset($_GET[zeitakt]) && $_GET[zeitakt] == "on" ) {
+			if ( $wahlstart < $startime && $wahlstop > $endtime) {
+				fputcsv($extractf, $logarray);
+				echo '<div class="row">';
+				echo '<div class="col-xs-12 text-center">';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[0]);
+					$start = $startime;
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[1]);
+					$stop = $endtime;
 
-			echo '</div>';
-			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[3]);
-				$sumkwh=$sumkwh + $logarray[3];
-			echo '</div>';
-			echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-			print_r($logarray[4]);
-				$avgladel=$avgladel + $logarray[4];
-				$count=$count + 1;
-			echo '</div>';
-			echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[5]);
-			echo '</div>';
-			echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-				print_r($logarray[6]);
-			echo '</div>';
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[2]);
+					$sumgelkm=$sumgelkm + $logarray[2];
 
-		echo '</div>';
-	echo '</div>';
-	echo '<hr>';
-$ladezeit = $ladezeit + (($stop - $start) / 60 );
-	  }
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[3]);
+						$sumkwh=$sumkwh + $logarray[3];
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[4]);
+						$avgladel=$avgladel + $logarray[4];
+						$count=$count + 1;
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[5]);
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[6]);
+					echo '</div>';
+
+				echo '</div>';
+			echo '</div>';
+			echo '<hr>';
+			$ladezeit = $ladezeit + (($stop - $start) / 60 );
+			}
+	} else {
+		fputcsv($extractf, $logarray);
+		echo '<div class="row">';
+				echo '<div class="col-xs-12 text-center">';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[0]);
+					$start = $startime;
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[1]);
+					$stop = $endtime;
+
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[2]);
+					$sumgelkm=$sumgelkm + $logarray[2];
+
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[3]);
+						$sumkwh=$sumkwh + $logarray[3];
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[4]);
+						$avgladel=$avgladel + $logarray[4];
+						$count=$count + 1;
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[5]);
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[6]);
+					echo '</div>';
+
+				echo '</div>';
+			echo '</div>';
+			echo '<hr>';
+			$ladezeit = $ladezeit + (($stop - $start) / 60 );
+			
+	}
+}
 fclose($file);
+fclose($extractf);
 $avgladel = round($avgladel / $count, 3);
 $ladezeit = round($ladezeit / $count, 2);
 ?>
@@ -212,9 +276,16 @@ $ladezeit = round($ladezeit / $count, 2);
 	</div>
 	<div class="col-xs-7">
 	<form name="limitlines" id="limitlines" action="ladelog.php" method="GET">
-		<label for="lines">Anzahl angezeigter Zeilen</label>
-		<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" />
-		<button type="submit">Go</button>
+		<label for="lines">Anzahl berücksichtiger Ladungen</label>
+		<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" /><br>
+		<label for="zeitakt">Datumswahl aktiv:</label>
+		<input id="zeitakt" name="zeitakt" type="checkbox" <?php if (isset($_GET[zeitakt])){ if ( $_GET[zeitakt] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="von">Startdatum:</label>
+		<input id="von" name="von" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstart) ?>" required="required" />
+		<label for="bis">Enddatum:</label>
+		<input id="bis" name="bis" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstop) ?>" required="required" />
+		<br>
+		<button class="btn btn-primary btn-green" type="submit">Go</button>
 	</form>
 	</div>
 	<div class="col-xs-4">
@@ -223,7 +294,7 @@ $ladezeit = round($ladezeit / $count, 2);
 
 <br><br>
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
-<form method="get" action="../ramdisk/tladelog">
+<form method="get" action="../ramdisk/ladelog.csv">
  <button class="btn btn-primary btn-green">Download csv</button>
 </form>
 <br><br>

@@ -393,6 +393,23 @@ foreach($lines as $line) {
 	if(strpos($line, "offsetpv=") !== false) {
 		list(, $offsetpvold) = explode("=", $line);
 	}
+	if(strpos($line, "hook1ein_url=") !== false) {
+		list(, $hook1ein_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook1aus_url=") !== false) {
+		list(, $hook1aus_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook1ein_watt=") !== false) {
+		list(, $hook1ein_wattold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook1aus_watt=") !== false) {
+		list(, $hook1aus_wattold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook1_aktiv=") !== false) {
+		list(, $hook1_aktivold) = explode("=", $line, 2);
+	}
+
+
 
 
 }
@@ -406,6 +423,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 $pushoveruserold = str_replace( "'", "", $pushoveruserold);
 $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
+$hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
+$hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
+
 
 
 
@@ -1388,6 +1408,83 @@ $(function() {
 	    });
 });
 </script>
+
+
+<div class="row"><hr>
+	<h4>Steuerung externer Geräte</h4>
+</div>
+<div class="row">
+	<b><label for="hook1_aktiv">Externes Gerät 1:</label></b>
+	<select type="text" name="hook1_aktiv" id="hook1_aktiv">
+		<option <?php if($hook1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($hook1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="hook1ausdiv">
+	<br>
+</div>
+<div id="hook1andiv">
+	<div class="row">
+	Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1ein_watt">Gerät 1 Einschaltschwelle:</label></b>
+        	<input type="text" name="hook1ein_watt" id="hook1ein_watt" value="<?php echo $hook1ein_wattold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1ein_url">Gerät 1 Einschalturl:</label></b>
+        	<input type="text" name="hook1ein_url" id="hook1ein_url" value="<?php echo htmlspecialchars($hook1ein_urlold) ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Einschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1aus_watt">Gerät 1 Ausschaltschwelle:</label></b>
+        	<input type="text" name="hook1aus_watt" id="hook1aus_watt" value="<?php echo $hook1aus_wattold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1aus_url">Gerät 1 Ausschalturl:</label></b>
+        	<input type="text" name="hook1aus_url" id="hook1aus_url" value="<?php echo htmlspecialchars($hook1aus_urlold) ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+	</div>
+
+</div><br>
+<script>
+$(function() {
+      if($('#hook1_aktiv').val() == '0') {
+		$('#hook1ausdiv').show(); 
+		$('#hook1andiv').hide();
+      } else {
+		$('#hook1ausdiv').hide();
+	       	$('#hook1andiv').show();	
+      } 
+
+	$('#hook1_aktiv').change(function(){
+	      if($('#hook1_aktiv').val() == '0') {
+			$('#hook1ausdiv').show(); 
+			$('#hook1andiv').hide();
+	      } else {
+			$('#hook1ausdiv').hide();
+		       	$('#hook1andiv').show();	
+	      } 
+	    });
+});
+</script>
+
+
 
 
 </div>

@@ -38,6 +38,7 @@ source graphing.sh
 source nachtladen.sh
 source zielladen.sh
 source evsedintest.sh
+source hook.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -97,7 +98,8 @@ loadvars
 
 #Graphing
 graphing
-
+#hooks - externe geraete
+hook
 
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)

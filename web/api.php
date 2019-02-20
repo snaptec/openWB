@@ -27,6 +27,10 @@ if(isset($_GET["lademodus"])) {
 	if($_GET["lademodus"] == "stop") {
 	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 3);
 	}
+	if($_GET["lademodus"] == "standby") {
+	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 4);
+	}
+
 }
 if(isset($_GET["sofortlllp1"])) {
 	if($_GET["sofortlllp1"] >= $minimalstromstaerkeold && $_GET["sofortlllp1"] <= $maximalstromstaerkeold) {

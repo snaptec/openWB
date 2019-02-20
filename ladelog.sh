@@ -5,6 +5,9 @@ ladeleistung=$(<ramdisk/llaktuell)
 llkwh=$(<ramdisk/llkwh)
 soc=$(<ramdisk/soc)
 soc1=$(<ramdisk/soc1)
+lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
+lademodus=$(</var/www/html/openWB/ramdisk/loglademodus)
+
 if (( soc > 0 )); then 
 	soctext=$(echo ", bei $soc %SoC")
 else
@@ -38,6 +41,7 @@ if (( ladeleistung > 500 )); then
 		touch ramdisk/ladeustart
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustart
 		echo -e $(date +%s) > ramdisk/ladeustarts
+		echo $lmodus > ramdisk/loglademodus
 		echo $llkwh > ramdisk/ladelstart
 		if ((pushbenachrichtigung == "1")) ; then
 			if ((pushbstartl == "1")) ; then
@@ -68,7 +72,7 @@ else
 			if (( ladedauer > 60 )); then
 				ladedauerh=$((ladedauer / 60))
 				laderest=$((ladedauer % 60))
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1' web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -76,7 +80,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ' web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauer Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -120,6 +124,7 @@ if (( ladeleistungs1 > 500 )); then
 			fi
 		fi
 		touch ramdisk/ladeustarts1
+		echo $lmodus > ramdisk/loglademodus
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts1
 		echo -e $(date +%s) > ramdisk/ladeustartss1
 		echo $llkwhs1 > ramdisk/ladelstarts1
@@ -148,14 +153,14 @@ else
 			if (( ladedauers1 > 60 )); then
 				ladedauerhs1=$((ladedauers1 / 60))
 				laderests1=$((ladedauers1 % 60))
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2' web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
 					fi
 				fi
 			else
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2 ' web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauers1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
@@ -198,6 +203,7 @@ if (( ladeleistungs2 > 500 )); then
 			fi
 		fi
 		touch ramdisk/ladeustarts2
+		echo $lmodus > ramdisk/loglademodus
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts2
 		echo -e $(date +%s) > ramdisk/ladeustartss2
 		echo $llkwhs2 > ramdisk/ladelstarts2
@@ -226,7 +232,7 @@ else
 			if (( ladedauers2 > 60 )); then
 				ladedauerhs2=$((ladedauers2 / 60))
 				laderests2=$((ladedauers2 % 60))
-				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauerhs2' H '$laderests2' Min,3' web/ladelog
+				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauerhs2' H '$laderests2' Min,3',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauerhs2 H $laderests2 Min mit durchschnittlich $ladegeschws2 kW geladen."
@@ -234,7 +240,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauers2' Min,3 ' web/ladelog
+				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauers2' Min,3',$lademodus web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauers2 Min mit durchschnittlich $ladegeschws2 kW geladen."
