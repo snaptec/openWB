@@ -881,6 +881,28 @@ then
 then
 	  echo "kostalplenticoreip=192.168.0.30" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "hook1ein_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1aus_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1ein_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1ein_watt=1200" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1aus_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1aus_watt=400" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 
 
 
