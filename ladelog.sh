@@ -6,8 +6,9 @@ llkwh=$(<ramdisk/llkwh)
 soc=$(<ramdisk/soc)
 soc1=$(<ramdisk/soc1)
 lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
+if [ -e ramdisk/loglademodus ]; then
 lademodus=$(</var/www/html/openWB/ramdisk/loglademodus)
-
+fi
 if (( soc > 0 )); then 
 	soctext=$(echo ", bei $soc %SoC")
 else

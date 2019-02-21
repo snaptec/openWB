@@ -99,11 +99,39 @@ else
 			else
 				llneu=$((llalt + 2 ))
 			fi
+			if (( uberschuss > 2070 )); then
+            	if (( anzahlphasen < 4 )); then
+                	llneu=$((llalt + 2 ))
+                else
+            	    llneu=$((llalt + 1 ))
+                fi
+            fi
 			if (( uberschuss > 2760 )); then
 				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 11 ))
+					llneu=$((llalt + 2 ))
 				else
-					llneu=$((llalt + 3 ))
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 3450 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 4140 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 4830 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
 				fi
 			fi
 			if (( llneu > maximalstromstaerke )); then
@@ -130,18 +158,74 @@ else
 				else
 					llneu=$((llalt - 2 ))
 				fi
-				if (( uberschuss < -2760 )); then
+				if (( uberschuss < -2070 )); then
 					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 12 ))
+						llneu=$((llalt - 3 ))
 					else
-						llneu=$((llalt - 4 ))
+						llneu=$((llalt - 1 ))
 					fi
 				fi
-				if (( llneu < minimalapv )); then
-					llneu=$minimalapv
+				if (( uberschuss < -2760 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -3450 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -4140 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -4830 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -5520 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -6210 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -6900 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -7590 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
 				fi
 			else
 				llneu=$((llalt - 1 ))
+			fi
+			if (( llneu < minimalapv )); then
+				llneu=$minimalapv
 			fi
 			runs/set-current.sh $llneu all
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter

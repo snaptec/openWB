@@ -32,25 +32,25 @@
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
-	<!-- Main style -->
+	<!-- Main styles -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 <?php
 $limit = 10;
-if (isset($_GET[lines])) {
-	$limit = $_GET[lines];
+if (isset($_GET['lines'])) {
+	$limit = $_GET['lines'];
 	$_SESSION = $limit;
 } else {
 	$limit = 20;
 	$_SESSION = $limit;
 }
-if (isset($_GET[von])) {
-	$wahlstart = strtotime($_GET[von]);
+if (isset($_GET['von'])) {
+	$wahlstart = strtotime($_GET['von']);
 } else {
 	$wahlstart = strtotime("-4 weeks");
 }
-if (isset($_GET[bis])) {
-	$wahlstop = strtotime($_GET[bis]);
+if (isset($_GET['bis'])) {
+	$wahlstop = strtotime($_GET['bis']);
 } else {
 	$wahlstop = strtotime("tomorrow");
 }
@@ -127,14 +127,41 @@ $sumkwh = 0;
 $sumgelkm = 0;
 $file = fopen('../ramdisk/tladelog', 'r');
 $extractf = fopen('../ramdisk/ladelog.csv', "w+");
+if (isset($_GET['lp1akt'])) {
+	if ($_GET['lp1akt'] == "on"){
+		$lp1akt = "1";
+	} else {
+		$lp1akt = 0;
+	}
+} else {
+	$lp1akt = 0;
+}
+if (isset($_GET['lp2akt'])) {
+	if ($_GET['lp2akt'] == "on"){
+		$lp2akt = "2";
+	} else {
+		$lp2akt = 0;
+	}
+} else {
+	$lp2akt = 0;
+}
+if (isset($_GET['lp3akt'])) {
+	if ($_GET['lp3akt'] == "on"){
+		$lp3akt = "3";
+	} else {
+		$lp3akt = 0;
+	}
+} else {
+	$lp3akt = 0;
+}
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	$startime = str_replace('.', '-', $logarray[0]);
 	$startime = strtotime(substr_replace($startime, "20", "6", 0));
 	$endtime = str_replace('.', '-', $logarray[1]);
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
-
-	if (isset($_GET[zeitakt]) && $_GET[zeitakt] == "on" ) {
+	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
+			if ( $lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6]) ) { 
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -172,7 +199,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 			echo '</div>';
 			echo '<hr>';
 			$ladezeit = $ladezeit + (($stop - $start) / 60 );
-			}
+			}}
 	} else {
 		fputcsv($extractf, $logarray);
 		echo '<div class="row">';
@@ -217,7 +244,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 fclose($file);
 fclose($extractf);
 $avgladel = round($avgladel / $count, 3);
-$ladezeit = round($ladezeit / $count, 2);
+$ladezeit = intval(round($ladezeit / $count, 2));
 ?>
 
 <hr>
@@ -264,7 +291,7 @@ $ladezeit = round($ladezeit / $count, 2);
 						<?php print($avgladel); ?>
 				</div>	
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($ladezeit); ?> Minuten
+						<?php print($ladezeit); ?> Min
 				</div>	
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 				</div>	
@@ -278,13 +305,22 @@ $ladezeit = round($ladezeit / $count, 2);
 	<form name="limitlines" id="limitlines" action="ladelog.php" method="GET">
 		<label for="lines">Anzahl berücksichtiger Ladungen</label>
 		<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" /><br>
-		<label for="zeitakt">Datumswahl aktiv:</label>
-		<input id="zeitakt" name="zeitakt" type="checkbox" <?php if (isset($_GET[zeitakt])){ if ( $_GET[zeitakt] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="zeitakt">Filter aktiv:</label>
+		<input id="zeitakt" name="zeitakt" type="checkbox" <?php if (isset($_GET['zeitakt'])){ if ( $_GET['zeitakt'] == "on"){ echo "checked"; }} ?> ><br>
 		<label for="von">Startdatum:</label>
 		<input id="von" name="von" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstart) ?>" required="required" />
 		<label for="bis">Enddatum:</label>
 		<input id="bis" name="bis" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstop) ?>" required="required" />
 		<br>
+		<label for="lp1akt">LP1:</label>
+		<input id="lp1akt" name="lp1akt" type="checkbox" <?php if (isset($_GET['lp1akt'])){ if ( $_GET['lp1akt'] == "on"){ echo "checked"; }} ?> >
+		<label for="lp2akt">LP2:</label>
+		<input id="lp2akt" name="lp2akt" type="checkbox" <?php if (isset($_GET['lp2akt'])){ if ( $_GET['lp2akt'] == "on"){ echo "checked"; }} ?> >
+		<label for="lp3akt">LP3:</label>
+		<input id="lp3akt" name="lp3akt" type="checkbox" <?php if (isset($_GET['lp3akt'])){ if ( $_GET['lp3akt'] == "on"){ echo "checked"; }} ?> ><br>
+
+
+
 		<button class="btn btn-primary btn-green" type="submit">Go</button>
 	</form>
 	</div>
