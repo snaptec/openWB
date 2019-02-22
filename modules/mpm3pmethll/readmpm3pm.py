@@ -7,7 +7,6 @@ import socket
 import ConfigParser
 import struct
 import binascii
-seradd = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient('192.168.193.16', port=8899)
 
