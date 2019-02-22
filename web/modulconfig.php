@@ -442,6 +442,12 @@ foreach($lines as $line) {
 	if(strpos($line, "zoepasswort=") !== false) {
 		list(, $zoepasswortold) = explode("=", $line);
 	}
+	if(strpos($line, "zoelp2username=") !== false) {
+		list(, $zoelp2usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "zoelp2passwort=") !== false) {
+		list(, $zoelp2passwortold) = explode("=", $line);
+	}
 	if(strpos($line, "evnotifytoken=") !== false) {
 		list(, $evnotifytokenold) = explode("=", $line);
 	}
@@ -685,7 +691,7 @@ $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
 $zoepasswortold = str_replace( "'", "", $zoepasswortold);
-
+$zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 ?>
 
@@ -1810,12 +1816,31 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_leafs1\n") echo selected ?> value="soc_leafs1">SoC Nissan Leaf</option>
 		<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
 		<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
+		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
+	
 	</select>
 	</div>
 
 	<div id="socmnone1">
 		<br>
 	</div>
+<div id="soczoelp2">
+	<div class="row bg-info">
+		<b><label for="zoelp2username">Benutzername:</label></b>
+		<input type="text" name="zoelp2username" id="zoelp2username" value="<?php echo $zoelp2usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Renault Zoe Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="zoelp2passwort">Passwort:</label></b>
+		<input type="password" name="zoelp2passwort" id="zoelp2passwort" value="<?php echo $zoelp2passwortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Renault Zoe Passwort<br><br>
+	</div>
+</div>
+
 <div id="socevnotifylp2">
 	<div class="row bg-info">
 		<b><label for="evnotifyakeylp2">Akey:</label></b>
@@ -1989,6 +2014,7 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
+		$('#soczoelp2').hide();
 
 
       } 
@@ -1998,6 +2024,7 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
+		$('#soczoelp2').hide();
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2005,7 +2032,9 @@ $(function() {
 		$('#socmhttp1').hide();	
 		$('#socleaf1').show();
 		$('#soci31').hide();
- 		$('#socevnotifylp2').hide();     
+		$('#socevnotifylp2').hide();   
+		$('#soczoelp2').hide();
+
 	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
 		$('#socmnone1').hide();
@@ -2013,14 +2042,27 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
-      } 
+ 		$('#soczoelp2').hide();
+      
+	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
 		$('#socmnone1').hide();
 		$('#socmhttp1').hide();	
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
-      } 
+ 		$('#soczoelp2').hide();
+     
+	} 
+	if($('#socmodul1').val() == 'soc_zoelp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').show();
+     
+	} 
 
 	$('#socmodul1').change(function(){
       if($('#socmodul1').val() == 'none') {
@@ -2029,6 +2071,7 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
+		$('#soczoelp2').hide();
 
       } 
 	if($('#socmodul1').val() == 'soc_http1') {
@@ -2037,6 +2080,7 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
+		$('#soczoelp2').hide();
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2045,21 +2089,36 @@ $(function() {
 		$('#socleaf1').show();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
-      } 
+			$('#soczoelp2').hide();
+
+	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
 		$('#socmnone1').hide();
 		$('#socmhttp1').hide();	
 		$('#socleaf1').hide();
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
-      } 
+			$('#soczoelp2').hide();
+
+	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
 		$('#socmnone1').hide();
 		$('#socmhttp1').hide();	
 		$('#socleaf1').hide();
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
-      } 
+ 		$('#soczoelp2').hide();
+     
+	}
+	if($('#socmodul1').val() == 'soc_zoelp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').show();
+     
+	} 
 	    });
 });
 </script>

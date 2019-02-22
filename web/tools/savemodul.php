@@ -406,6 +406,14 @@ foreach($lines as $line) {
 	    if(strpos($line, "zoepasswort=") !== false) {
 	    $result .= 'zoepasswort=\''.$_POST[zoepasswort]."'\n";
 	$writeit = '1';
+	    }
+	    if(strpos($line, "zoelp2username=") !== false) {
+	    $result .= 'zoelp2username='.$_POST[zoelp2username]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "zoelp2passwort=") !== false) {
+	    $result .= 'zoelp2passwort=\''.$_POST[zoelp2passwort]."'\n";
+	$writeit = '1';
     } 
 	    if(strpos($line, "evnotifytoken=") !== false) {
 	    $result .= 'evnotifytoken='.$_POST[evnotifytoken]."\n";
