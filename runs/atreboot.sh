@@ -465,6 +465,14 @@ if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "zoepasswort='passwort'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "zoelp2username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoelp2username=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zoelp2passwort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoelp2passwort='passwort'" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "minnurpvsocll=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minnurpvsocll=12" >> /var/www/html/openWB/openwb.conf
