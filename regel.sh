@@ -166,7 +166,7 @@ fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
-nachtlademodus
+prenachtlademodus
 
 ########################
 # Sofort Laden

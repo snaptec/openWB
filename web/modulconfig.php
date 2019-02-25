@@ -3594,6 +3594,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
 		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA Tripower 9000</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
+		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 
 
 
@@ -3605,6 +3606,15 @@ $(function() {
 </div>
 <div id="pvnone">
 	<br>
+</div>
+<div id="pvsolarlog">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
+		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br> 
+	</div>
 </div>
 <div id="pvplenti">
 	<div class="row" style="background-color:#befebe">
@@ -3832,6 +3842,7 @@ $(function() {
 		$('#pvsmartme').hide();i
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
       } 
@@ -3849,6 +3860,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3867,6 +3879,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3885,6 +3898,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3903,6 +3917,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3921,6 +3936,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3939,6 +3955,7 @@ $(function() {
  		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3957,6 +3974,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3975,6 +3993,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3993,6 +4012,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4011,6 +4031,7 @@ $(function() {
    			$('#pvsmartme').show();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4029,6 +4050,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
       } 
       if($('#pvwattmodul').val() == 'wr_plenticore')   {
@@ -4045,9 +4067,26 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
+		$('#pvsolarlog').hide();
 
       } 
+      if($('#pvwattmodul').val() == 'wr_solarlog')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').show();
 
+      } 
 
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -4064,6 +4103,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4082,6 +4122,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4100,6 +4141,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4119,6 +4161,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
    }
@@ -4136,6 +4179,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4154,6 +4198,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4172,6 +4217,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4190,6 +4236,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4208,6 +4255,7 @@ $(function() {
          	$('#pvsmartme').hide();
   			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
      } 
@@ -4225,6 +4273,7 @@ $(function() {
       			$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4244,6 +4293,7 @@ $(function() {
    			$('#pvsmartme').show();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
       } 
@@ -4261,6 +4311,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4279,8 +4330,26 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
+		$('#pvsolarlog').hide();
+      } 
+      if($('#pvwattmodul').val() == 'wr_solarlog')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').show();
 
       } 
+
 
 
 	});

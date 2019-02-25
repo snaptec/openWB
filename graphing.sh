@@ -44,18 +44,23 @@ if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 	if [[ socmodul1 != "none" ]]; then
 		echo $soc1 >> /var/www/html/openWB/ramdisk/soc1.graph
 	fi
+	if (( dpseed == 3 )); then
+		livegraphtime="240"
+	else
+		livegraphtime="1440"
+	fi
 	date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
-	echo "$(tail -1440 /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
-	echo "$(tail -1440 /var/www/html/openWB/ramdisk/evu.graph)" > /var/www/html/openWB/ramdisk/evu.graph
-	echo "$(tail -1440 /var/www/html/openWB/ramdisk/soc.graph)" > /var/www/html/openWB/ramdisk/soc.graph
-	echo "$(tail -1440 /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
-	echo "$(tail -1440 /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/evu.graph)" > /var/www/html/openWB/ramdisk/evu.graph
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/soc.graph)" > /var/www/html/openWB/ramdisk/soc.graph
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/time.graph)" > /var/www/html/openWB/ramdisk/time.graph
 	if ((speichervorhanden == 1 )); then
-		echo "$(tail -1440 /var/www/html/openWB/ramdisk/speicher.graph)" > /var/www/html/openWB/ramdisk/speicher.graph
-		echo "$(tail -1440 /var/www/html/openWB/ramdisk/speichersoc.graph)" > /var/www/html/openWB/ramdisk/speichersoc.graph
+		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/speicher.graph)" > /var/www/html/openWB/ramdisk/speicher.graph
+		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/speichersoc.graph)" > /var/www/html/openWB/ramdisk/speichersoc.graph
 	fi
 	if [[ socmodul1 != "none" ]]; then
-		echo "$(tail -1440 /var/www/html/openWB/ramdisk/soc1.graph)" > /var/www/html/openWB/ramdisk/soc1.graph
+		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/soc1.graph)" > /var/www/html/openWB/ramdisk/soc1.graph
 	fi
 fi
 }
