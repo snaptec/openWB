@@ -166,7 +166,7 @@ fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
-nachtlademodus
+prenachtlademodus
 
 ########################
 # Sofort Laden
@@ -234,7 +234,9 @@ mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-
+if [[ $debug == "1" ]]; then
+	echo anzahlphasen "$anzahlphasen"
+fi
 if [[ $debug == "2" ]]; then
 	echo "$date"
 	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle

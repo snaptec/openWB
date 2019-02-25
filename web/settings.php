@@ -408,10 +408,18 @@ foreach($lines as $line) {
 	if(strpos($line, "hook1_aktiv=") !== false) {
 		list(, $hook1_aktivold) = explode("=", $line, 2);
 	}
-
-
-
-
+	if(strpos($line, "nlakt_sofort=") !== false) {
+		list(, $nlakt_sofortold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_nurpv=") !== false) {
+		list(, $nlakt_nurpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_minpv=") !== false) {
+		list(, $nlakt_minpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_standby=") !== false) {
+		list(, $nlakt_standbyold) = explode("=", $line, 2);
+	}
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -668,8 +676,20 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
 </div>
-
-
+<div class="row" style="background-color:#00ada8">
+	<input type='hidden' value='0' name='nlakt_sofort'>
+	<input id="nlakt_sofort" name="nlakt_sofort" value="1" type="checkbox" <?php if ( $nlakt_sofortold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_sofort">Aktiv im Sofort Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_minpv'>
+	<input id="nlakt_minpv" name="nlakt_minpv" value="1" type="checkbox" <?php if ( $nlakt_minpvold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_minpv">Aktiv im Min+PV Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_nurpv'>
+	<input id="nlakt_nurpv" name="nlakt_nurpv" value="1" type="checkbox" <?php if ( $nlakt_nurpvold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_nurpv">Aktiv im NurPV Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_standby'>
+        <input id="nlakt_standby" name="nlakt_standby" value="1" type="checkbox" <?php if ( $nlakt_standbyold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_standby">Aktiv im Standby Lademodus</label><br>
+</div>
 <div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">

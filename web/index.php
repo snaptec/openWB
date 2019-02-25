@@ -137,12 +137,25 @@
 		if(strpos($line, "zielladenaktivlp1=") !== false) {
 			list(, $zielladenaktivlp1old) = explode("=", $line);
 		}
-			if(strpos($line, "nachtladen=") !== false) {
+		if(strpos($line, "nachtladen=") !== false) {
 			list(, $nachtladenstate) = explode("=", $line);
 		}
-				if(strpos($line, "nachtladens1=") !== false) {
+		if(strpos($line, "nachtladens1=") !== false) {
 			list(, $nachtladenstates1) = explode("=", $line);
 		}
+		if(strpos($line, "nlakt_sofort=") !== false) {
+			list(, $nlakt_sofortold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_nurpv=") !== false) {
+			list(, $nlakt_nurpvold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_minpv=") !== false) {
+			list(, $nlakt_minpvold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_standby=") !== false) {
+			list(, $nlakt_standbyold) = explode("=", $line, 2);
+		}
+
 	}
 	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
@@ -213,23 +226,32 @@
 			</div>
 	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
 	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
+	<input hidden name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo $nlakt_nurpvold ; ?>">
+	<input hidden name="nlakt_sofort" id="nlakt_sofort" value="<?php echo $nlakt_sofortold ; ?>">
+	<input hidden name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold ; ?>">
+	<input hidden name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold ; ?>">
+	<input hidden name="lademodus" id="lademodus" value="<?php echo $lademodusold ; ?>">
 	</div>
 
 	<script>
 	$(function() {
+	if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
 	   if($('#nachtladenstate').val() == '1') {
 		$('#nachtladenstatediv').show(); 
 	      } else {
 		$('#nachtladenstatediv').hide();
-	      } 
-
-	});
-	$(function() {
+	      }
 	   if($('#nachtladenstates1').val() == '1') {
 		$('#nachtladenstates1div').show(); 
 	      } else {
 		$('#nachtladenstates1div').hide();
 	      } 
+	} else {
+		$('#nachtladenstatediv').hide();
+		$('#nachtladenstates1div').hide();
+
+
+	}
 
 	});
 	</script>
@@ -811,7 +833,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.24 Beta				</div>
+				<!-- master -->	Ver 1.25 Beta				</div>
 
 
 				<div class="col-xs-4 text-center">

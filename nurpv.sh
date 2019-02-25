@@ -17,25 +17,27 @@ nurpvlademodus(){
 #		fi
 #	fi
 if [[ $lastmanagement == "0" ]]; then
-	if (( soc < minnurpvsoclp1 )); then
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/set-current.sh $minnurpvsocll all 
-			if [[ $debug == "1" ]]; then
-				echo "Starte PV Laden da $sofortsoclp1 % zu gering"
-			fi
+	if [[ $socmodul != "none" ]]; then
+		if (( soc < minnurpvsoclp1 )); then
+			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+				runs/set-current.sh $minnurpvsocll all 
+				if [[ $debug == "1" ]]; then
+					echo "Starte PV Laden da $sofortsoclp1 % zu gering"
+				fi
 
-		fi
-	exit 0
-	fi
-	if (( soc > maxnurpvsoclp1 )); then
-		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/set-current.sh 0 all
-			if [[ $debug == "1" ]]; then
-				echo "Beende PV Laden da $sofortsoclp1 % erreicht"
 			fi
+		exit 0
 		fi
-	exit 0
-	fi
+		if (( soc > maxnurpvsoclp1 )); then
+			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+				runs/set-current.sh 0 all
+				if [[ $debug == "1" ]]; then
+					echo "Beende PV Laden da $sofortsoclp1 % erreicht"
+				fi
+			fi
+		exit 0
+		fi
+	fi 
 fi
 if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 	if (( ladestatuss1 == 1 )) || (( ladestatuss2 == 1 )); then
@@ -43,7 +45,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 	fi
 	if (( mindestuberschussphasen <= uberschuss )); then
 		if [[ $debug == "1" ]]; then
-   			echo "nur  pv ladung auf $minimalapv starten"
+   			echo "nur pv ladung auf $minimalapv starten"
   		fi
 		runs/set-current.sh $minimalapv all
 		echo 0 > /var/www/html/openWB/ramdisk/pvcounter

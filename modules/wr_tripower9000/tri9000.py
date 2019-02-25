@@ -19,6 +19,7 @@ all = format(value1, '04x') + format(value2, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0])
 if final < 0:
     final = 0
+final = final * -1
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(final))
 f.close()

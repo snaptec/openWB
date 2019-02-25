@@ -909,6 +909,23 @@ if ! grep -Fq "hook1_aktiv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1_aktiv=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "nlakt_sofort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_sofort=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_minpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_minpv=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_nurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_nurpv=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_standby=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_standby=1" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 
 

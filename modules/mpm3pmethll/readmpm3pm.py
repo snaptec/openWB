@@ -7,7 +7,6 @@ import socket
 import ConfigParser
 import struct
 import binascii
-seradd = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient('192.168.193.16', port=8899)
 
@@ -46,8 +45,6 @@ value1 = resp.registers[0]
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
-if final < 10:
-    final = 0
 f = open('/var/www/html/openWB/ramdisk/llaktuells1', 'w')
 f.write(str(final))
 f.close()
