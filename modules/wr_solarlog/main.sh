@@ -13,6 +13,7 @@ pvkwh=$(echo $answer | jq '."801"."170"."109"' )
 if (( $pvwatt > 5 )); then
 	pvwatt=$(echo "$pvwatt*-1" |bc)
 fi
+echo $pvwatt
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 

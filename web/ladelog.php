@@ -88,7 +88,7 @@ if (isset($_GET['bis'])) {
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
-				<div class="col-xs-2 text-center" style="font-size: 1vw">
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km
 				</div>	
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
@@ -102,6 +102,9 @@ if (isset($_GET['bis'])) {
 				</div>	
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
+				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					Lademodus
 				</div>	
 	</div>
 </div>
@@ -154,6 +157,33 @@ if (isset($_GET['lp3akt'])) {
 } else {
 	$lp3akt = 0;
 }
+if (isset($_GET['sofort'])) {
+	if ($_GET['sofort'] == "on"){
+		$sofort = "0";
+	} else {
+		$sofort = 8;
+	}
+} else {
+	$sofort = 8;
+}
+if (isset($_GET['minpv'])) {
+	if ($_GET['minpv'] == "on"){
+		$minpv = "1";
+	} else {
+		$minpv = 8;
+	}
+} else {
+	$minpv = 8;
+}
+if (isset($_GET['nurpv'])) {
+	if ($_GET['nurpv'] == "on"){
+		$nurpv = "2";
+	} else {
+		$nurpv = 8;
+	}
+} else {
+	$nurpv = 8;
+}
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	$startime = str_replace('.', '-', $logarray[0]);
 	$startime = strtotime(substr_replace($startime, "20", "6", 0));
@@ -161,7 +191,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( $lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6]) ) { 
+			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) { 
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -174,7 +204,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					$stop = $endtime;
 
 					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 					print_r($logarray[2]);
 					$sumgelkm=$sumgelkm + $logarray[2];
 
@@ -194,7 +224,21 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[6]);
 					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+					if (isset($logarray[7])){
+						if ($logarray[7] == '0'){
+							echo 'Sofort';
+						}
+						if ($logarray[7] == '1'){
+							echo 'Min+PV';
+						}
+						if ($logarray[7] == '2'){
+							echo 'NurPV';
+						}
 
+
+					}
+					echo '</div>';
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
@@ -213,7 +257,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					$stop = $endtime;
 
 					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 					print_r($logarray[2]);
 					$sumgelkm=$sumgelkm + $logarray[2];
 
@@ -233,7 +277,21 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[6]);
 					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+					if (isset($logarray[7])){
+						if ($logarray[7] == '0'){
+							echo 'Sofort';
+						}
+						if ($logarray[7] == '1'){
+							echo 'Min+PV';
+						}
+						if ($logarray[7] == '2'){
+							echo 'NurPV';
+						}
 
+
+					}
+					echo '</div>';
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
@@ -257,7 +315,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
-				<div class="col-xs-2 text-center" style="font-size: 1vw">
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km gesamt
 				</div>	
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
@@ -272,6 +330,9 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
 				</div>	
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					Lademodus
+				</div>	
 	</div>
 </div>
 	<div class="row">
@@ -281,7 +342,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				</div>	
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 								</div>
-				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
+				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
 						<?php print($sumgelkm); ?>	</div>	
 				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
 					<?php print($sumkwh); ?>
@@ -318,6 +379,14 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 		<input id="lp2akt" name="lp2akt" type="checkbox" <?php if (isset($_GET['lp2akt'])){ if ( $_GET['lp2akt'] == "on"){ echo "checked"; }} ?> >
 		<label for="lp3akt">LP3:</label>
 		<input id="lp3akt" name="lp3akt" type="checkbox" <?php if (isset($_GET['lp3akt'])){ if ( $_GET['lp3akt'] == "on"){ echo "checked"; }} ?> ><br>
+		<br>
+		<label for="sofort">Sofortlademodus:</label>
+		<input id="sofort" name="sofort" type="checkbox" <?php if (isset($_GET['sofort'])){ if ( $_GET['sofort'] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="minpv">Min+PV Lademodus:</label>
+		<input id="minpv" name="minpv" type="checkbox" <?php if (isset($_GET['minpv'])){ if ( $_GET['minpv'] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="nurpv">NurPV Lademodus:</label>
+		<input id="nurpv" name="nurpv" type="checkbox" <?php if (isset($_GET['nurpv'])){ if ( $_GET['nurpv'] == "on"){ echo "checked"; }} ?> ><br>
+
 
 
 

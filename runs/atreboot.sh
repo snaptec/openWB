@@ -925,7 +925,38 @@ if ! grep -Fq "nlakt_standby=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nlakt_standby=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "mpm3pmevuhaus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmevuhaus=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "carnetlp2user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetlp2user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "carnetlp2pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetlp2pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soccarnetlp2intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soccarnetlp2intervall=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_intervallladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_intervallladen=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_intervall=20" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

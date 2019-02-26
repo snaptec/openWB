@@ -4,6 +4,7 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
@@ -38,6 +39,10 @@ if ($speichervorhanden == 1) {
 	$rspeicheriwh = array_reverse($speicheriwh);
 	$rspeicherewh = array_reverse($speicherewh);
 
+}
+if ($soc1vorhanden == 1) {
+	$soc1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-soc1.csv';
+	$soc1 = file($soc1file, FILE_IGNORE_NEW_LINES);
 }
 
 $bezug = file($bezugfile, FILE_IGNORE_NEW_LINES);
@@ -164,6 +169,23 @@ if ($speichervorhanden == 1) {
 
 
 }
+if ($soc1vorhanden == 1) {
+	$myData->addPoints($soc1,"SoC LP2");
+	$myData->setSerieOnAxis("SoC LP2",1);
+	$myData->setPalette("SoC",array("R"=>120,"G"=>125,"B"=>254));
+	$minsoc = min($soc,$soc1);
+	$minsoc = (min($minsoc) -5);
+	$maxsoc = max($soc,$soc1);
+	$maxsoc = (max($maxsoc) -5);
+} else {
+	$socl = (min($soc) - 5);
+	if ($socl < "0" ){
+		$minsoc = 0;
+	} else {
+		$minsoc = $socl;
+	}
+	$maxsoc = max($soc);
+}	
 $lowest = min($einspeisungdiff);
 if ($lowest > 0){
 	$lowest = 0;
@@ -172,12 +194,7 @@ $highest1 = max($pvdiff);
 $highest = max($bezugdiff);
 $highest2 = max($einspeisungdiff);
 $highest = max($highest,$highest1,$highest2);
-$socl = (min($soc) - 5);
-if ($socl < "0" ){
-	$minsoc = 0;
-} else {
-	$minsoc = $socl;
-}
+
 $myData->setSerieonAxis("Bezug ".$dailybezug,0);
 $myData->setSerieOnAxis("Einspeisung ".$dailyeinspeisung,0);
 $myData->setSerieOnAxis("PV ".$dailypv,0);
@@ -212,7 +229,7 @@ $myData->setAxisName(0,"Watt");
 $myData->setAxisName(1,"SoC");
 
 
-$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>(max($soc) + 5)));
+$AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>10,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>20);
  
 
@@ -236,7 +253,9 @@ $myData->setSerieDrawable("Speicher Ladung ".$dailysiwh,false);
 $myData->setSerieDrawable("Speicher Entladung ".$dailysewh,false);
 
 }
-
+if ($soc1vorhanden == 1) {
+$myData->setSerieDrawable("SoC LP2",false);
+}
 $myData->setSerieDrawable("SoC",false);
 $myData->setSerieDrawable("PV ".$dailypv,true);
 $myData->setSerieDrawable("EV LP1",false);
@@ -248,9 +267,11 @@ $myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,true);
 $myImage->drawAreaChart();
 $myData->setSerieDrawable("EV ".$dailyev,true);
 
-$myImage->drawLegend(280,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+$myImage->drawLegend(325,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
-
+if ($soc1vorhanden == 1) {
+$myData->setSerieDrawable("SoC LP2",true);
+}
 $myData->setSerieDrawable("SoC",true);
 $myData->setSerieDrawable("PV ".$dailypv,false);
 $myData->setSerieDrawable("EV LP1",false);
@@ -263,7 +284,7 @@ $myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
 
 
 
-$myImage->drawLegend(220,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
+$myImage->drawLegend(170,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
 if ($speichervorhanden == 1) {
 	$myData->setSerieDrawable("Speicher Ladung ".$dailysiwh,true);
 	$myData->setSerieDrawable("Speicher Entladung ".$dailysewh,true);

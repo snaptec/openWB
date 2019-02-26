@@ -1265,8 +1265,12 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<input type="text" name="offsetpv" id="offsetpv" value="<?php echo $offsetpvold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Manuelles Offset in Watt für die PV Regelmodi. Verschiebt den Regelpunkt. Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br><br>
-	</div>
+Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
+Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
+Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
+z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
+	
+</div>
 
 
 <div id="speicherpvrangdiv">
