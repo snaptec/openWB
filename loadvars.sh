@@ -45,7 +45,8 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
-		if ! [[ $lla1 =~ $re ]] ; then
+	ladeleistunglp1=$ladeleistung	
+	if ! [[ $lla1 =~ $re ]] ; then
 		 lla1="0"
 	fi
 	if ! [[ $lla2 =~ $re ]] ; then
@@ -86,6 +87,7 @@ if [[ $lastmanagement == "1" ]]; then
 	llkwhges=$(echo "$llkwhges + $llkwhs1" |bc)
 	llalts1=$(cat /var/www/html/openWB/ramdisk/llsolls1)
 	ladeleistungs1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
+	ladeleistunglp2=$ladeleistungs1
 	llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
 	llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
 	llas13=$(cat /var/www/html/openWB/ramdisk/llas13)

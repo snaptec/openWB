@@ -508,6 +508,18 @@ foreach($lines as $line) {
 	if(strpos($line, "soc_tesla_intervallladen=") !== false) {
 		list(, $socteslaintervallladenold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_teslalp2_username=") !== false) {
+		list(, $socteslalp2usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_password=") !== false) {
+		list(, $socteslalp2pwold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_intervall=") !== false) {
+		list(, $socteslalp2intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_intervallladen=") !== false) {
+		list(, $socteslalp2intervallladenold) = explode("=", $line);
+	}
 
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
@@ -617,6 +629,16 @@ foreach($lines as $line) {
 	if(strpos($line, "soccarnetintervall=") !== false) {
 		list(, $soccarnetintervallold) = explode("=", $line);
 	}
+	if(strpos($line, "carnetlp2user=") !== false) {
+		list(, $carnetlp2userold) = explode("=", $line);
+	}
+	if(strpos($line, "carnetlp2pass=") !== false) {
+		list(, $carnetlp2passold) = explode("=", $line);
+	}
+	if(strpos($line, "soccarnetlp2intervall=") !== false) {
+		list(, $soccarnetlp2intervallold) = explode("=", $line);
+	}
+
 	if(strpos($line, "bydhvuser=") !== false) {
 		list(, $bydhvuserold) = explode("=", $line);
 	}
@@ -648,6 +670,9 @@ foreach($lines as $line) {
 		list(, $kostalplenticoreipold) = explode("=", $line);
 	}
 
+	if(strpos($line, "mpm3pmevuhaus=") !== false) {
+		list(, $mpm3pmevuhausold) = explode("=", $line);
+	}
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -680,6 +705,10 @@ $wr_smartme_userold = str_replace( "'", "", $wr_smartme_userold);
 $wr_smartme_passold = str_replace( "'", "", $wr_smartme_passold);
 $wr_smartme_urlold = str_replace( "'", "", $wr_smartme_urlold);
 $socteslapwold = str_replace( "'", "", $socteslapwold);
+$socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
+$carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
+$carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
+
 
 
 
@@ -1817,6 +1846,8 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
 		<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
 		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
+		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
+		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
 	
 	</select>
 	</div>
@@ -1824,6 +1855,67 @@ Keine Konfiguration erforderlich.<br>
 	<div id="socmnone1">
 		<br>
 	</div>
+<div id="socmteslalp2">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2user">Tesla Benutzername:</label></b>
+		<input type="text" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo $socteslalp2usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2pw">Tesla Passwort:</label></b>
+		<input type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo $socteslalp2pwold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo $socteslalp2intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+
+<div id="soccarnetlp2">
+	<div class="row bg-info">
+		<b><label for="carnetlp2user">Benutzername:</label></b>
+		<input type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="carnetlp2pass">Passwort:</label></b>
+		<input type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soccarnetlp2intervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
+</div>
+
+
+
 <div id="soczoelp2">
 	<div class="row bg-info">
 		<b><label for="zoelp2username">Benutzername:</label></b>
@@ -2015,6 +2107,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 
 
       } 
@@ -2025,6 +2121,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2034,6 +2133,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();   
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
@@ -2043,7 +2145,10 @@ $(function() {
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').hide();
-      
+      		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
 		$('#socmnone1').hide();
@@ -2052,7 +2157,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
  		$('#soczoelp2').hide();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
 	if($('#socmodul1').val() == 'soc_zoelp2') {
 		$('#socmnone1').hide();
@@ -2061,8 +2169,34 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').show();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 	} 
+	if($('#socmodul1').val() == 'soc_carnetlp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').show();
+
+	} 
+	if($('#socmodul1').val() == 'soc_teslalp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').show();
+		$('#soccarnetlp2').hide();
+
+	} 
+
+
 
 	$('#socmodul1').change(function(){
       if($('#socmodul1').val() == 'none') {
@@ -2072,6 +2206,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_http1') {
@@ -2081,6 +2218,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2089,7 +2229,10 @@ $(function() {
 		$('#socleaf1').show();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
-			$('#soczoelp2').hide();
+		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
@@ -2098,7 +2241,10 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
-			$('#soczoelp2').hide();
+		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
@@ -2108,7 +2254,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
  		$('#soczoelp2').hide();
-     
+ 		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+    
 	}
 	if($('#socmodul1').val() == 'soc_zoelp2') {
 		$('#socmnone1').hide();
@@ -2117,9 +2266,36 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').show();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
-	    });
+	if($('#socmodul1').val() == 'soc_carnetlp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').show();
+
+	} 
+	if($('#socmodul1').val() == 'soc_teslalp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').show();
+		$('#soccarnetlp2').hide();
+
+	} 
+
+
+	});
 });
 </script>
 
@@ -2622,6 +2798,14 @@ Keine Konfiguration erforderlich.<br><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
+	<input type='hidden' value='0' name='mpm3pmevuhaus'>
+	<input id="mpm3pmevuhaus" name="mpm3pmevuhaus" value="1" type="checkbox" <?php if ( $mpm3pmevuhausold == 1){ echo "checked"; } ?> >
+	<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label><br>
+	<div class="row" style="background-color:#febebe">
+Wenn der MPM3PM EVU Zähler im Hausverbrauchszweig NACH den Ladepunkten angeschlossen ist hier ein Hacken setzen.<br>z.B. auch zu nutzen wenn der Ladepunkt an einem seperaten Rundsteuerempfänger(=extra Zähler) angeschlossen ist.<br>Bei gesetzten Hacken werden die Ladeströme der Ladepunkte zu den Strömen gemessen am EVU Zähler hinzuaddiert.<br> Somit ist ein Lastmanagement / Hausanschlussüberwachung möglich.<br>Auf korrekte Verkabelung ist zu achten!<br>
+EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
+
 	</div>
 
 </div>
