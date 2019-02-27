@@ -49,6 +49,9 @@ echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
 echo 0 > /var/www/html/openWB/ramdisk/pvcounter
+echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+
+
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/bezuga1
 echo 0 > /var/www/html/openWB/ramdisk/bezuga2
@@ -155,6 +158,11 @@ if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
+then
+  echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! [ -x "$(command -v nmcli)" ]; then
 	if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
@@ -747,6 +755,11 @@ if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichermaxwatt=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speichermaxwatt=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "nacht2lls1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nacht2lls1=12" >> /var/www/html/openWB/openwb.conf

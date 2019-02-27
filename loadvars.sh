@@ -139,8 +139,8 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
-				uberschuss=$((uberschuss + speicherleistung))
-				wattbezugint=$((wattbezugint - speicherleistung))
+				speicherww=$((speicherleistung - speichermaxwatt))
+				uberschuss=$((uberschuss + speicherww))
 			fi
 		fi
 	fi

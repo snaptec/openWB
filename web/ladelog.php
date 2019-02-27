@@ -184,6 +184,15 @@ if (isset($_GET['nurpv'])) {
 } else {
 	$nurpv = 8;
 }
+if (isset($_GET['standby'])) {
+	if ($_GET['standby'] == "on"){
+		$standby = "4";
+	} else {
+		$standby = 8;
+	}
+} else {
+	$standby = 8;
+}
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	$startime = str_replace('.', '-', $logarray[0]);
 	$startime = strtotime(substr_replace($startime, "20", "6", 0));
@@ -191,7 +200,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) { 
+			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7]) || $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) { 
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -235,7 +244,9 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						if ($logarray[7] == '2'){
 							echo 'NurPV';
 						}
-
+						if ($logarray[7] == '4'){
+							echo 'Standby';
+						}
 
 					}
 					echo '</div>';
@@ -288,7 +299,9 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						if ($logarray[7] == '2'){
 							echo 'NurPV';
 						}
-
+						if ($logarray[7] == '4'){
+							echo 'Standby';
+						}
 
 					}
 					echo '</div>';
@@ -386,6 +399,9 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 		<input id="minpv" name="minpv" type="checkbox" <?php if (isset($_GET['minpv'])){ if ( $_GET['minpv'] == "on"){ echo "checked"; }} ?> ><br>
 		<label for="nurpv">NurPV Lademodus:</label>
 		<input id="nurpv" name="nurpv" type="checkbox" <?php if (isset($_GET['nurpv'])){ if ( $_GET['nurpv'] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="standby">Standby Lademodus:</label>
+		<input id="standby" name="standby" type="checkbox" <?php if (isset($_GET['standby'])){ if ( $_GET['standby'] == "on"){ echo "checked"; }} ?> ><br>
+
 
 
 
