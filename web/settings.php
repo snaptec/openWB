@@ -45,7 +45,9 @@ foreach($lines as $line) {
 	if(strpos($line, "speicherpveinbeziehen=") !== false) {
 		list(, $speicherpveinbeziehenold) = explode("=", $line);
 	}
-
+	if(strpos($line, "speichermaxwatt=") !== false) {
+		list(, $speichermaxwattold) = explode("=", $line);
+	}
 	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 		list(, $pvbezugeinspeisungold) = explode("=", $line);
 	}
@@ -320,6 +322,10 @@ foreach($lines as $line) {
 	if(strpos($line, "abschaltverzoegerung=") !== false) {
 		list(, $abschaltverzoegerungold) = explode("=", $line);
 	}
+	if(strpos($line, "einschaltverzoegerung=") !== false) {
+		list(, $einschaltverzoegerungold) = explode("=", $line);
+	}
+
 	if(strpos($line, "evsewifiiplp1=") !== false) {
 		list(, $evsewifiiplp1old) = explode("=", $line);
 	}
@@ -1111,6 +1117,15 @@ Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<
 
 </div>
 <div class="row" style="background-color:#befebe">
+	<b><label for="einschaltverzoegerung">Einschaltverzögerung:</label></b>
+	<input type="text" name="einschaltverzoegerung" id="einschaltverzoegerung" value="<?php echo $einschaltverzoegerungold ?>"><br>
+</div>
+<div class="row" style="background-color:#befebe">
+Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus gewartet wird bis die Ladung startet.
+<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Überschuss größer als der Einschaltüberschuss sein.<br>
+</div><br>
+
+<div class="row" style="background-color:#befebe">
 	<b><label for="abschaltverzoegerung">Abschaltverzögerung:</label></b>
 	<input type="text" name="abschaltverzoegerung" id="abschaltverzoegerung" value="<?php echo $abschaltverzoegerungold ?>"><br>
 </div>
@@ -1283,9 +1298,19 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
-		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speiher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet.
+		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
 	<br><br>
 	</div>
+	<div id="speicherevvdiv">
+		<div class="row" style="background-color:#fcbe1e">
+			<b><label for="speichermaxwatt">Mindestwatt Speicher:</label></b>
+			<input type="text" name="speichermaxwatt" id="speichermaxwatt" value="<?php echo $speichermaxwattold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#fcbe1e">
+		Definiert einen Wert in Watt mit dem Speicher maximal laden soll. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
+		</div>
+	</div>
+
 </div>
 
 <input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
@@ -1297,7 +1322,20 @@ $(function() {
 	$('#speicherpvrangdiv').hide();
       } 
 });
-
+$(function() {
+   if($('#speicherpveinbeziehen').val() == '1') {
+	$('#speicherevvdiv').show(); 
+      } else {
+	$('#speicherevvdiv').hide();
+      }
+	$('#speicherpveinbeziehen').change(function(){
+	   if($('#speicherpveinbeziehen').val() == '1') {
+	$('#speicherevvdiv').show(); 
+      } else {
+	$('#speicherevvdiv').hide();
+      }
+	});
+});
 </script>
 
 <div class="row"><hr>

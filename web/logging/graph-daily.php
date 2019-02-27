@@ -173,10 +173,12 @@ if ($soc1vorhanden == 1) {
 	$myData->addPoints($soc1,"SoC LP2");
 	$myData->setSerieOnAxis("SoC LP2",1);
 	$myData->setPalette("SoC",array("R"=>120,"G"=>125,"B"=>254));
-	$minsoc = min($soc,$soc1);
-	$minsoc = (min($minsoc) -5);
-	$maxsoc = max($soc,$soc1);
-	$maxsoc = (max($maxsoc) -5);
+	$minsocc = min($soc);
+	$minsocc1 = min($soc1);
+	$minsoc = min($minsocc,$minsocc1);
+	$socc = max($soc);
+	$socc1 = max($soc1);
+	$maxsoc = max($socc,$socc1);
 } else {
 	$socl = (min($soc) - 5);
 	if ($socl < "0" ){
@@ -286,6 +288,9 @@ $myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
 
 $myImage->drawLegend(170,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
 if ($speichervorhanden == 1) {
+	if ($soc1vorhanden == 1) {
+		$myData->setSerieDrawable("SoC LP2",false);
+	}
 	$myData->setSerieDrawable("Speicher Ladung ".$dailysiwh,true);
 	$myData->setSerieDrawable("Speicher Entladung ".$dailysewh,true);
 	$myData->setSerieDrawable("SoC",false);

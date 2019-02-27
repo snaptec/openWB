@@ -113,7 +113,7 @@ $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 $myData->setAxisName(0,"Watt");
-$AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>($minsoc - "5" ),"Max"=>($maxsoc + "5" )));
+$AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
 
