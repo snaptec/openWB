@@ -59,9 +59,7 @@ if ($speichervorhanden == 1) {
 $lowestg = min($lowest,$lowestu);
 
 if ($socl < "0" ){
-	$minsoc = 0;
-} else {
-	$minsoc = $socl;
+	$soc1 = 0;
 }
 if ($soc1vorhanden == 1) {
 	$soc1max = max($SOC1);
