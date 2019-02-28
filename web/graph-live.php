@@ -86,9 +86,7 @@ if ($soc1vorhanden == 1) {
 	}
 } else {
 	$minsoc = min($SOC);
-	$minsoc = min($minsoc);
 	$maxsoc = max($SOC);
-	$maxsoc = max($maxsoc);
 	if ($maxsoc > 100) {
 		$maxsoc = "100";
 	}
