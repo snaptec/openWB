@@ -1304,7 +1304,7 @@ $(function() {
 		<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		BMW i3 VIN<br><br>
+		BMW i3 VIN. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
@@ -2002,7 +2002,7 @@ Keine Konfiguration erforderlich.<br>
 		<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Hier ist die vollständige i3 VIN nötig<br><br>
+		BMW i3 VIN nötig. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="soci3intervall1">Verkürztes Intervall beim Laden:</label></b>

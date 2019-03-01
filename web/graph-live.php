@@ -79,8 +79,9 @@ if ($soc1vorhanden == 1) {
 	$myData->setPalette("SoC LP2",array("R"=>0,"G"=>155,"B"=>237));
 	$minsoc = min($SOC,$SOC1);
 	$minsoc = min($minsoc);
-	$maxsoc = max($SOC,$SOC1);
-	$maxsoc = max($maxsoc);
+	$maxsoc1 = max($SOC1);
+	$maxsoc = max($SOC);
+	$maxsoc = max($maxsoc,$maxsoc1);
 	if ($maxsoc > 100) {
 		$maxsoc = "100";
 	}
