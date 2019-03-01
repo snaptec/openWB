@@ -60,22 +60,7 @@ if [[ $dspeed == "2" ]]; then
 		echo 0 > ramdisk/5sec
 	fi
 fi
-if [[ $dspeed == "3" ]]; then
 
-	if [ -e ramdisk/5sec ]; then
-		regeltimer=$(<ramdisk/5sec)
-		if (( regeltimer < 5 )); then
-			regeltimer=$((regeltimer+1))
-			echo $regeltimer > ramdisk/5sec
-			exit 0
-		else
-			regeltimer=0
-			echo $regeltimer > ramdisk/5sec
-		fi
-	else
-		echo 0 > ramdisk/5sec
-	fi
-fi
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
@@ -98,6 +83,24 @@ loadvars
 
 #Graphing
 graphing
+
+
+if [[ $dspeed == "3" ]]; then
+
+	if [ -e ramdisk/5sec ]; then
+		regeltimer=$(<ramdisk/5sec)
+		if (( regeltimer < 5 )); then
+			regeltimer=$((regeltimer+1))
+			echo $regeltimer > ramdisk/5sec
+			exit 0
+		else
+			regeltimer=0
+			echo $regeltimer > ramdisk/5sec
+		fi
+	else
+		echo 0 > ramdisk/5sec
+	fi
+fi
 #hooks - externe geraete
 hook
 
