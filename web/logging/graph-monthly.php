@@ -103,7 +103,7 @@ $myData->setAbscissa("Labels");
 
 $myData->setAxisName(0,"kWh");
 $AxisBoundaries = array(0=>array("Min"=>0,"Max"=>$highest),1=>array("Min"=>0,"Max"=>100));
-$ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"Factors"=>array(10,20));
+$ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"Factors"=>array(10,20));
 
 
 $myImage = new pImage(1150, 400, $myData);

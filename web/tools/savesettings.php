@@ -417,7 +417,31 @@ foreach($lines as $line) {
 	    if(strpos($line, "zielladenaktivlp1=") !== false) {
 	    $result .= 'zielladenaktivlp1='.$_POST[zielladenaktivlp1]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "offsetpv=") !== false) {
+	    $result .= 'offsetpv='.$_POST[offsetpv]."\n";
+	    $writeit = '1';
+		} 
+	    if(strpos($line, "hook1ein_url=") !== false) {
+	    $result .= 'hook1ein_url=\''.$_POST[hook1ein_url]."'\n";
+	    $writeit = '1';
 } 
+	    if(strpos($line, "hook1aus_url=") !== false) {
+	    $result .= 'hook1aus_url=\''.$_POST[hook1aus_url]."'\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "hook1_aktiv=") !== false) {
+	    $result .= 'hook1_aktiv='.$_POST[hook1_aktiv]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "hook1ein_watt=") !== false) {
+	    $result .= 'hook1ein_watt='.$_POST[hook1ein_watt]."\n";
+	    $writeit = '1';
+		} 
+	    if(strpos($line, "hook1aus_watt=") !== false) {
+	    $result .= 'hook1aus_watt='.$_POST[hook1aus_watt]."\n";
+	    $writeit = '1';
+		} 
 	    if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
 	    $result .= 'zielladenuhrzeitlp1=\''.$_POST[zielladenuhrzeitlp1].\'"\n";
 

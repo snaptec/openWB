@@ -1,6 +1,15 @@
 #!/bin/bash
 #Ramdisk mit initialen Werten befüllen nach neustart
 sleep 10
+sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
+sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
+sudo chmod 777 /var/www/html/openWB/openwb.conf
+sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/web/files/*
+sudo chmod -R +x /var/www/html/openWB/modules/*
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
+sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -40,6 +49,9 @@ echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
 echo 0 > /var/www/html/openWB/ramdisk/pvcounter
+echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+
+
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/bezuga1
 echo 0 > /var/www/html/openWB/ramdisk/bezuga2
@@ -127,15 +139,14 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 
 
-
-sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
-sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
-sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
+
+
 
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
@@ -147,6 +158,11 @@ if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
+then
+  echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! [ -x "$(command -v nmcli)" ]; then
 	if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
@@ -455,7 +471,15 @@ then
 fi
 if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
 then
-	  echo "zoepasswort=passwort" >> /var/www/html/openWB/openwb.conf
+	  echo "zoepasswort='passwort'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zoelp2username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoelp2username=username" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "zoelp2passwort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "zoelp2passwort='passwort'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "minnurpvsocll=" /var/www/html/openWB/openwb.conf
 then
@@ -731,6 +755,11 @@ if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichermaxwatt=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speichermaxwatt=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "nacht2lls1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nacht2lls1=12" >> /var/www/html/openWB/openwb.conf
@@ -861,9 +890,92 @@ then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi 
   
-  
-  
-  
+ if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
+  fi  
+ if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
+  fi
+ if ! grep -Fq "kostalplenticoreip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticoreip=192.168.0.30" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "hook1ein_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1aus_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1ein_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1ein_watt=1200" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1aus_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1aus_watt=400" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook1_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_sofort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_sofort=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_minpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_minpv=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_nurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_nurpv=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nlakt_standby=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nlakt_standby=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpm3pmevuhaus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "mpm3pmevuhaus=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "carnetlp2user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetlp2user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "carnetlp2pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "carnetlp2pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soccarnetlp2intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soccarnetlp2intervall=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_intervallladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_intervallladen=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_teslalp2_intervall=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_teslalp2_intervall=20" >> /var/www/html/openWB/openwb.conf
+fi
+
+
+
+
+
+    
 sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 

@@ -17,38 +17,52 @@ nurpvlademodus(){
 #		fi
 #	fi
 if [[ $lastmanagement == "0" ]]; then
-	if (( soc < minnurpvsoclp1 )); then
-		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/set-current.sh $minnurpvsocll all 
-			if [[ $debug == "1" ]]; then
-				echo "Starte PV Laden da $sofortsoclp1 % zu gering"
-			fi
+	if [[ $socmodul != "none" ]]; then
+		if (( soc < minnurpvsoclp1 )); then
+			if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
+				runs/set-current.sh $minnurpvsocll all 
+				if [[ $debug == "1" ]]; then
+					echo "Starte PV Laden da $sofortsoclp1 % zu gering"
+				fi
 
-		fi
-	exit 0
-	fi
-	if (( soc > maxnurpvsoclp1 )); then
-		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			runs/set-current.sh 0 all
-			if [[ $debug == "1" ]]; then
-				echo "Beende PV Laden da $sofortsoclp1 % erreicht"
 			fi
+		exit 0
 		fi
-	exit 0
-	fi
+		if (( soc > maxnurpvsoclp1 )); then
+			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
+				runs/set-current.sh 0 all
+				if [[ $debug == "1" ]]; then
+					echo "Beende PV Laden da $sofortsoclp1 % erreicht"
+				fi
+			fi
+		exit 0
+		fi
+	fi 
 fi
 if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 	if (( ladestatuss1 == 1 )) || (( ladestatuss2 == 1 )); then
 		runs/set-current.sh 0 all
 	fi
 	if (( mindestuberschussphasen <= uberschuss )); then
-		if [[ $debug == "1" ]]; then
-   			echo "nur  pv ladung auf $minimalapv starten"
-  		fi
-		runs/set-current.sh $minimalapv all
-		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
-		exit 0
+		pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
+		if (( pvecounter < einschaltverzoegerung )); then
+			pvecounter=$((pvecounter + 10))
+			echo $pvecounter > /var/www/html/openWB/ramdisk/pvecounter
+			if [[ $debug == "1" ]]; then
+				echo "PV Einschaltverzögerung auf $pvecounter erhöht, Ziel $einschaltverzoegerung"
+			fi
+			exit 0
+		else
+			if [[ $debug == "1" ]]; then
+				echo "nur pv ladung auf $minimalapv starten"
+			fi
+			runs/set-current.sh $minimalapv all
+			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
+			echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+			exit 0
+		fi
 	else
+		echo 0 > /var/www/html/openWB/ramdisk/pvecounter
 		exit 0
 	fi
 fi
@@ -99,11 +113,39 @@ else
 			else
 				llneu=$((llalt + 2 ))
 			fi
+			if (( uberschuss > 2070 )); then
+            	if (( anzahlphasen < 4 )); then
+                	llneu=$((llalt + 2 ))
+                else
+            	    llneu=$((llalt + 1 ))
+                fi
+            fi
 			if (( uberschuss > 2760 )); then
 				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 11 ))
+					llneu=$((llalt + 2 ))
 				else
-					llneu=$((llalt + 3 ))
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 3450 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 4140 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
+				fi
+			fi
+			if (( uberschuss > 4830 )); then
+				if (( anzahlphasen < 4 )); then
+					llneu=$((llalt + 2 ))
+				else
+					llneu=$((llalt + 1 ))
 				fi
 			fi
 			if (( llneu > maximalstromstaerke )); then
@@ -130,18 +172,74 @@ else
 				else
 					llneu=$((llalt - 2 ))
 				fi
-				if (( uberschuss < -2760 )); then
+				if (( uberschuss < -2070 )); then
 					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 12 ))
+						llneu=$((llalt - 3 ))
 					else
-						llneu=$((llalt - 4 ))
+						llneu=$((llalt - 1 ))
 					fi
 				fi
-				if (( llneu < minimalapv )); then
-					llneu=$minimalapv
+				if (( uberschuss < -2760 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -3450 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -4140 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -4830 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -5520 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -6210 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -6900 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
+				fi
+				if (( uberschuss < -7590 )); then
+					if (( anzahlphasen < 4 )); then
+						llneu=$((llalt - 3 ))
+					else
+						llneu=$((llalt - 1 ))
+					fi
 				fi
 			else
 				llneu=$((llalt - 1 ))
+			fi
+			if (( llneu < minimalapv )); then
+				llneu=$minimalapv
 			fi
 			runs/set-current.sh $llneu all
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter

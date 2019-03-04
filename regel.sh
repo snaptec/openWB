@@ -38,6 +38,7 @@ source graphing.sh
 source nachtladen.sh
 source zielladen.sh
 source evsedintest.sh
+source hook.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -47,7 +48,7 @@ if [[ $dspeed == "1" ]]; then
 		sleep 5 && ./regel.sh >> /var/log/openWB.log 2>&1 &
 		rm ramdisk/5sec
 	else
-		touch ramdisk/5sec
+		echo 0 > ramdisk/5sec
 	fi
 fi
 if [[ $dspeed == "2" ]]; then
@@ -56,7 +57,7 @@ if [[ $dspeed == "2" ]]; then
 		rm ramdisk/5sec
 		exit 0
 	else
-		touch ramdisk/5sec
+		echo 0 > ramdisk/5sec
 	fi
 fi
 
@@ -83,6 +84,25 @@ loadvars
 #Graphing
 graphing
 
+
+if [[ $dspeed == "3" ]]; then
+
+	if [ -e ramdisk/5sec ]; then
+		regeltimer=$(<ramdisk/5sec)
+		if (( regeltimer < 5 )); then
+			regeltimer=$((regeltimer+1))
+			echo $regeltimer > ramdisk/5sec
+			exit 0
+		else
+			regeltimer=0
+			echo $regeltimer > ramdisk/5sec
+		fi
+	else
+		echo 0 > ramdisk/5sec
+	fi
+fi
+#hooks - externe geraete
+hook
 
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)
@@ -149,7 +169,7 @@ fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
-nachtlademodus
+prenachtlademodus
 
 ########################
 # Sofort Laden
@@ -217,7 +237,9 @@ mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-
+if [[ $debug == "1" ]]; then
+	echo anzahlphasen "$anzahlphasen"
+fi
 if [[ $debug == "2" ]]; then
 	echo "$date"
 	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
@@ -230,7 +252,10 @@ if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
 	schaltschwelle="0"
 fi
-
+if [[ $pvbezugeinspeisung == "2" ]]; then
+	pvregelungm=$offsetpv
+	schaltschwelle=$((schaltschwelle + offsetpv))
+fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 if (( lademodus == 1 )); then

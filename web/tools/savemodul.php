@@ -404,7 +404,15 @@ foreach($lines as $line) {
 	$writeit = '1';
     } 
 	    if(strpos($line, "zoepasswort=") !== false) {
-	    $result .= 'zoepasswort='.$_POST[zoepasswort]."\n";
+	    $result .= 'zoepasswort=\''.$_POST[zoepasswort]."'\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "zoelp2username=") !== false) {
+	    $result .= 'zoelp2username='.$_POST[zoelp2username]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "zoelp2passwort=") !== false) {
+	    $result .= 'zoelp2passwort=\''.$_POST[zoelp2passwort]."'\n";
 	$writeit = '1';
     } 
 	    if(strpos($line, "evnotifytoken=") !== false) {
@@ -508,13 +516,34 @@ foreach($lines as $line) {
 	    if(strpos($line, "soc_tesla_intervallladen=") !== false) {
 	    $result .= 'soc_tesla_intervallladen='.$_POST[teslasocintervallladen]."\n";
 	 $writeit = '1';
+	    }
+	    if(strpos($line, "soc_teslalp2_username=") !== false) {
+	    $result .= 'soc_teslalp2_username='.$_POST[teslasoclp2user]."\n";
+	 $writeit = '1';
    } 
+	    if(strpos($line, "soc_teslalp2_password=") !== false) {
+	    $result .= 'soc_teslalp2_password=\''.$_POST[teslasoclp2pw]."'\n";
+	 $writeit = '1';
+   } 
+	    if(strpos($line, "soc_teslalp2_intervall=") !== false) {
+	    $result .= 'soc_teslalp2_intervall='.$_POST[teslasoclp2intervall]."\n";
+	 $writeit = '1';
+   } 
+	    if(strpos($line, "soc_teslalp2_intervallladen=") !== false) {
+	    $result .= 'soc_teslalp2_intervallladen='.$_POST[teslasoclp2intervallladen]."\n";
+	 $writeit = '1';
+   } 
+
 	    if(strpos($line, "wrkostalpikoip=") !== false) {
     	    $result .= 'wrkostalpikoip='.$_POST[wrkostalpikoip]."\n";
     	 $writeit = '1';
    } 
 	    if(strpos($line, "solaredgeip=") !== false) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
+	 $writeit = '1';
+	    }
+	    if(strpos($line, "solaredgespeicherip=") !== false) {
+	    $result .= 'solaredgespeicherip=\''.$_POST[solaredgespeicherip]."'\n";
 	 $writeit = '1';
 	    }
 	    if(strpos($line, "solaredgepvip=") !== false) {
@@ -642,6 +671,19 @@ foreach($lines as $line) {
 		$result .= 'soccarnetintervall='.$_POST[soccarnetintervall]."\n";
 		$writeit = '1';
 	    }
+	   if(strpos($line, "carnetlp2user=") !== false) {
+	    $result .= 'carnetlp2user=\''.$_POST[carnetlp2user]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "carnetlp2pass=") !== false) {
+	    $result .= 'carnetlp2pass=\''.$_POST[carnetlp2pass]."'\n";
+	    $writeit = '1';
+	    }
+            if(strpos($line, "soccarnetlp2intervall=") !== false) {
+		$result .= 'soccarnetlp2intervall='.$_POST[soccarnetlp2intervall]."\n";
+		$writeit = '1';
+	    }
+
 	   if(strpos($line, "bydhvuser=") !== false) {
 	    $result .= 'bydhvuser='.$_POST[bydhvuser]."\n";
 	    $writeit = '1';
@@ -678,6 +720,14 @@ foreach($lines as $line) {
 	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
 	    $writeit = '1';
 	   } 
+	   if(strpos($line, "kostalplenticoreip=") !== false) {
+	    $result .= 'kostalplenticoreip='.$_POST[kostalplenticoreip]."\n";
+	    $writeit = '1';
+	   } 
+	    if(strpos($line, "mpm3pmevuhaus=") !== false) {
+	    $result .= 'mpm3pmevuhaus='.$_POST[mpm3pmevuhaus]."\n";
+	$writeit = '1';
+    } 
 
 
 
