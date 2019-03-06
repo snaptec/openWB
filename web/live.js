@@ -90,6 +90,12 @@ $.ajax({
     }
   });
  $.ajax({
+    url: "/openWB/ramdisk/glattwattbezug",
+    complete: function(request){
+      $("#bezugglattdiv").html(request.responseText);
+    }
+  });
+ $.ajax({
    url: "/openWB/ramdisk/ladestatus",
     complete: function(request){
       $("#controlleranaus").html(request.responseText);

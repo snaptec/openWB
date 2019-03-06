@@ -44,13 +44,25 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/set-current.sh 0 all
 	fi
 	if (( mindestuberschussphasen <= uberschuss )); then
-		if [[ $debug == "1" ]]; then
-   			echo "nur pv ladung auf $minimalapv starten"
-  		fi
-		runs/set-current.sh $minimalapv all
-		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
-		exit 0
+		pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
+		if (( pvecounter < einschaltverzoegerung )); then
+			pvecounter=$((pvecounter + 10))
+			echo $pvecounter > /var/www/html/openWB/ramdisk/pvecounter
+			if [[ $debug == "1" ]]; then
+				echo "PV Einschaltverzögerung auf $pvecounter erhöht, Ziel $einschaltverzoegerung"
+			fi
+			exit 0
+		else
+			if [[ $debug == "1" ]]; then
+				echo "nur pv ladung auf $minimalapv starten"
+			fi
+			runs/set-current.sh $minimalapv all
+			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
+			echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+			exit 0
+		fi
 	else
+		echo 0 > /var/www/html/openWB/ramdisk/pvecounter
 		exit 0
 	fi
 fi

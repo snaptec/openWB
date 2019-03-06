@@ -39,6 +39,7 @@ source nachtladen.sh
 source zielladen.sh
 source evsedintest.sh
 source hook.sh
+source u1p3p.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -60,22 +61,7 @@ if [[ $dspeed == "2" ]]; then
 		echo 0 > ramdisk/5sec
 	fi
 fi
-if [[ $dspeed == "3" ]]; then
 
-	if [ -e ramdisk/5sec ]; then
-		regeltimer=$(<ramdisk/5sec)
-		if (( regeltimer < 5 )); then
-			regeltimer=$((regeltimer+1))
-			echo $regeltimer > ramdisk/5sec
-			exit 0
-		else
-			regeltimer=0
-			echo $regeltimer > ramdisk/5sec
-		fi
-	else
-		echo 0 > ramdisk/5sec
-	fi
-fi
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
@@ -95,9 +81,28 @@ evsedintest
 goecheck
 #load charging vars
 loadvars
-
+#u1p3p switch
+u1p3pswitch
 #Graphing
 graphing
+
+
+if [[ $dspeed == "3" ]]; then
+
+	if [ -e ramdisk/5sec ]; then
+		regeltimer=$(<ramdisk/5sec)
+		if (( regeltimer < 5 )); then
+			regeltimer=$((regeltimer+1))
+			echo $regeltimer > ramdisk/5sec
+			exit 0
+		else
+			regeltimer=0
+			echo $regeltimer > ramdisk/5sec
+		fi
+	else
+		echo 0 > ramdisk/5sec
+	fi
+fi
 #hooks - externe geraete
 hook
 
@@ -166,7 +171,7 @@ fi
 ####################
 # Nachtladung bzw. Ladung bis SOC x% nachts von x bis x Uhr
 
-nachtlademodus
+prenachtlademodus
 
 ########################
 # Sofort Laden

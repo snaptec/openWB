@@ -344,6 +344,7 @@ foreach($lines as $line) {
 	if(strpos($line, "abschaltverzoegerung=") !== false) {
 		list(, $abschaltverzoegerungold) = explode("=", $line);
 	}
+
 	if(strpos($line, "evsewifiiplp1=") !== false) {
 		list(, $evsewifiiplp1old) = explode("=", $line);
 	}
@@ -508,6 +509,18 @@ foreach($lines as $line) {
 	if(strpos($line, "soc_tesla_intervallladen=") !== false) {
 		list(, $socteslaintervallladenold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_teslalp2_username=") !== false) {
+		list(, $socteslalp2usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_password=") !== false) {
+		list(, $socteslalp2pwold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_intervall=") !== false) {
+		list(, $socteslalp2intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_teslalp2_intervallladen=") !== false) {
+		list(, $socteslalp2intervallladenold) = explode("=", $line);
+	}
 
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
@@ -617,6 +630,16 @@ foreach($lines as $line) {
 	if(strpos($line, "soccarnetintervall=") !== false) {
 		list(, $soccarnetintervallold) = explode("=", $line);
 	}
+	if(strpos($line, "carnetlp2user=") !== false) {
+		list(, $carnetlp2userold) = explode("=", $line);
+	}
+	if(strpos($line, "carnetlp2pass=") !== false) {
+		list(, $carnetlp2passold) = explode("=", $line);
+	}
+	if(strpos($line, "soccarnetlp2intervall=") !== false) {
+		list(, $soccarnetlp2intervallold) = explode("=", $line);
+	}
+
 	if(strpos($line, "bydhvuser=") !== false) {
 		list(, $bydhvuserold) = explode("=", $line);
 	}
@@ -644,9 +667,29 @@ foreach($lines as $line) {
 	if(strpos($line, "tri9000ip=") !== false) {
 		list(, $tri9000ipold) = explode("=", $line);
 	}
+	if(strpos($line, "wrsma2ip=") !== false) {
+		list(, $wrsma2ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma3ip=") !== false) {
+		list(, $wrsma3ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma4ip=") !== false) {
+		list(, $wrsma4ipold) = explode("=", $line);
+	}
 	if(strpos($line, "kostalplenticoreip=") !== false) {
 		list(, $kostalplenticoreipold) = explode("=", $line);
 	}
+
+	if(strpos($line, "mpm3pmevuhaus=") !== false) {
+		list(, $mpm3pmevuhausold) = explode("=", $line);
+	}
+	if(strpos($line, "evuglaettung=") !== false) {
+		list(, $evuglaettungold) = explode("=", $line);
+	}
+	if(strpos($line, "evuglaettungakt=") !== false) {
+		list(, $evuglaettungaktold) = explode("=", $line);
+	}
+
 
 
 }
@@ -680,6 +723,10 @@ $wr_smartme_userold = str_replace( "'", "", $wr_smartme_userold);
 $wr_smartme_passold = str_replace( "'", "", $wr_smartme_passold);
 $wr_smartme_urlold = str_replace( "'", "", $wr_smartme_urlold);
 $socteslapwold = str_replace( "'", "", $socteslapwold);
+$socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
+$carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
+$carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
+
 
 
 
@@ -1274,7 +1321,7 @@ $(function() {
 		<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		BMW i3 VIN<br><br>
+		BMW i3 VIN. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
@@ -1817,6 +1864,8 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
 		<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
 		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
+		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
+		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
 	
 	</select>
 	</div>
@@ -1824,6 +1873,67 @@ Keine Konfiguration erforderlich.<br>
 	<div id="socmnone1">
 		<br>
 	</div>
+<div id="socmteslalp2">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2user">Tesla Benutzername:</label></b>
+		<input type="text" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo $socteslalp2usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2pw">Tesla Passwort:</label></b>
+		<input type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo $socteslalp2pwold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoclp2intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo $socteslalp2intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+
+<div id="soccarnetlp2">
+	<div class="row bg-info">
+		<b><label for="carnetlp2user">Benutzername:</label></b>
+		<input type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="carnetlp2pass">Passwort:</label></b>
+		<input type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		VW Carnet Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soccarnetlp2intervall">Verkürztes Intervall beim Laden:</label></b>
+		<input type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+	</div>
+</div>
+
+
+
 <div id="soczoelp2">
 	<div class="row bg-info">
 		<b><label for="zoelp2username">Benutzername:</label></b>
@@ -1909,7 +2019,7 @@ Keine Konfiguration erforderlich.<br>
 		<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Hier ist die vollständige i3 VIN nötig<br><br>
+		BMW i3 VIN nötig. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="soci3intervall1">Verkürztes Intervall beim Laden:</label></b>
@@ -2015,6 +2125,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 
 
       } 
@@ -2025,6 +2139,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2034,6 +2151,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();   
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
@@ -2043,7 +2163,10 @@ $(function() {
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').hide();
-      
+      		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
 		$('#socmnone1').hide();
@@ -2052,7 +2175,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
  		$('#soczoelp2').hide();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
 	if($('#socmodul1').val() == 'soc_zoelp2') {
 		$('#socmnone1').hide();
@@ -2061,8 +2187,34 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').show();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 	} 
+	if($('#socmodul1').val() == 'soc_carnetlp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').show();
+
+	} 
+	if($('#socmodul1').val() == 'soc_teslalp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').show();
+		$('#soccarnetlp2').hide();
+
+	} 
+
+
 
 	$('#socmodul1').change(function(){
       if($('#socmodul1').val() == 'none') {
@@ -2072,6 +2224,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_http1') {
@@ -2081,6 +2236,9 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
 		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
       } 
 	if($('#socmodul1').val() == 'soc_leafs1') {
@@ -2089,7 +2247,10 @@ $(function() {
 		$('#socleaf1').show();
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
-			$('#soczoelp2').hide();
+		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_i3s1') {
@@ -2098,7 +2259,10 @@ $(function() {
 		$('#socleaf1').hide();
 		$('#soci31').show();
 		$('#socevnotifylp2').hide();
-			$('#soczoelp2').hide();
+		$('#soczoelp2').hide();
+		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
 
 	} 
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
@@ -2108,7 +2272,10 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').show();
  		$('#soczoelp2').hide();
-     
+ 		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+    
 	}
 	if($('#socmodul1').val() == 'soc_zoelp2') {
 		$('#socmnone1').hide();
@@ -2117,9 +2284,36 @@ $(function() {
 		$('#soci31').hide();
 		$('#socevnotifylp2').hide();
  		$('#soczoelp2').show();
-     
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').hide();
+
+
 	} 
-	    });
+	if($('#socmodul1').val() == 'soc_carnetlp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').hide();
+		$('#soccarnetlp2').show();
+
+	} 
+	if($('#socmodul1').val() == 'soc_teslalp2') {
+		$('#socmnone1').hide();
+		$('#socmhttp1').hide();	
+		$('#socleaf1').hide();
+		$('#soci31').hide();
+		$('#socevnotifylp2').hide();
+ 		$('#soczoelp2').hide();
+     		$('#socmteslalp2').show();
+		$('#soccarnetlp2').hide();
+
+	} 
+
+
+	});
 });
 </script>
 
@@ -2571,14 +2765,10 @@ $(function() {
 
 	</select>
 </div>
-<div class="row">
-<br><br>
-</div>
-
 <div id="wattbezugethmpm3pm">
-<div class="row">
-Keine Konfiguration erforderlich.<br><br>
-</div>
+	<div class="row">
+		Keine Konfiguration erforderlich.<br><br>
+	</div>
 </div>
 <div id="wattbezugkostalpiko">
 	<div class="row" style="background-color:#febebe">
@@ -2622,6 +2812,14 @@ Keine Konfiguration erforderlich.<br><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+	</div>
+	<input type='hidden' value='0' name='mpm3pmevuhaus'>
+	<input id="mpm3pmevuhaus" name="mpm3pmevuhaus" value="1" type="checkbox" <?php if ( $mpm3pmevuhausold == 1){ echo "checked"; } ?> >
+	<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label><br>
+	<div class="row" style="background-color:#febebe">
+Wenn der MPM3PM EVU Zähler im Hausverbrauchszweig NACH den Ladepunkten angeschlossen ist hier ein Hacken setzen.<br>z.B. auch zu nutzen wenn der Ladepunkt an einem seperaten Rundsteuerempfänger(=extra Zähler) angeschlossen ist.<br>Bei gesetzten Hacken werden die Ladeströme der Ladepunkte zu den Strömen gemessen am EVU Zähler hinzuaddiert.<br> Somit ist ein Lastmanagement / Hausanschlussüberwachung möglich.<br>Auf korrekte Verkabelung ist zu achten!<br>
+EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
+
 	</div>
 
 </div>
@@ -2845,6 +3043,49 @@ Keine Konfiguration erforderlich.<br><br>
 		Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher Modul eingestellt.<br>
 	</div>
 </div>
+<div class="row">
+	<b><h5><label for="evuglaettungakt">EVU Glättung:</label></b>
+	<select type="text" name="evuglaettungakt" id="evuglaettungakt">
+		<option <?php if($evuglaettungaktold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($evuglaettungaktold == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="evuglaettungdiv">
+		<div class="row" style="background-color:#febebe">
+			<b><label for="evuglaettung">Glättung der EVU Werte:</label></b>
+			<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#febebe">
+			Gültige Werte Zeit in Sekunden, z.B. 30,50,200. <br>
+			Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
+			Sinnvoll wenn öfter kurze Lastspitzen auftreten.<br>
+			Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.<br><br>
+		</div>
+		<br><br>
+</div>
+
+<script>
+$(function() {
+      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 
+
+	$('#evuglaettungakt').change(function(){
+	      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 	    });
+});
+</script>
+
 
 <script>
 $(function() {
@@ -3592,8 +3833,9 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
 		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
 		<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
-		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA Tripower 9000</option>
+		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
+		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 
 
 
@@ -3605,6 +3847,15 @@ $(function() {
 </div>
 <div id="pvnone">
 	<br>
+</div>
+<div id="pvsolarlog">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
+		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br> 
+	</div>
 </div>
 <div id="pvplenti">
 	<div class="row" style="background-color:#befebe">
@@ -3676,11 +3927,32 @@ $(function() {
 </div>
 <div id="pvwrtri9000">
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="tri9000ip">SMA TriPower 9000 IP:</label></b>
+		<b><label for="tri9000ip">SMA WR IP:</label></b>
 		<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SMA TriPower9000, ggf. funktionieren auch andere SMA Wr mit diesem Modul.<br><br>
+		Gültige Werte IP. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (default deaktiviert).<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma2ip">WR 2 IP:</label></b>
+		<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma3ip">WR 3 IP:</label></b>
+		<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des dritten SMA Wechselrichters. Wenn nur 2 WR genutzt werden auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma4ip">WR 4 IP:</label></b>
+		<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des vierten SMA Wechselrichters. Wenn nur 3 WR genutzt werden auf none setzen.<br><br>
 	</div>
 </div>
 <div id="pvwrsolaredge">
@@ -3832,6 +4104,7 @@ $(function() {
 		$('#pvsmartme').hide();i
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
       } 
@@ -3849,6 +4122,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3867,6 +4141,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3885,6 +4160,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3903,6 +4179,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3921,6 +4198,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3939,6 +4217,7 @@ $(function() {
  		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3957,6 +4236,7 @@ $(function() {
 		$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3975,6 +4255,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -3993,6 +4274,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4011,6 +4293,7 @@ $(function() {
    			$('#pvsmartme').show();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4029,6 +4312,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
       } 
       if($('#pvwattmodul').val() == 'wr_plenticore')   {
@@ -4045,9 +4329,26 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
+		$('#pvsolarlog').hide();
 
       } 
+      if($('#pvwattmodul').val() == 'wr_solarlog')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').show();
 
+      } 
 
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -4064,6 +4365,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4082,6 +4384,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4100,6 +4403,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4119,6 +4423,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
    }
@@ -4136,6 +4441,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4154,6 +4460,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4172,6 +4479,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4190,6 +4498,7 @@ $(function() {
          	$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4208,6 +4517,7 @@ $(function() {
          	$('#pvsmartme').hide();
   			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
      } 
@@ -4225,6 +4535,7 @@ $(function() {
       			$('#pvsmartme').hide();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4244,6 +4555,7 @@ $(function() {
    			$('#pvsmartme').show();
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
       } 
@@ -4261,6 +4573,7 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
 
 
 
@@ -4279,8 +4592,26 @@ $(function() {
    			$('#pvsmartme').hide();
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
+		$('#pvsolarlog').hide();
+      } 
+      if($('#pvwattmodul').val() == 'wr_solarlog')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').show();
 
       } 
+
 
 
 	});

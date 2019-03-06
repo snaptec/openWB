@@ -62,6 +62,8 @@ fi
 
 
 }
+
+
 nachtlademodus(){
 if [[ $nachtladen == "1" ]]; then
 	if (( nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H < nachtladenbisuhr )); then
@@ -267,3 +269,19 @@ fi
 
 
 
+prenachtlademodus(){
+	if (( lademodus == 0 )) && (( nlakt_sofort == 1 ));then
+		nachtlademodus
+	fi
+	if (( lademodus == 1 )) && (( nlakt_minpv == 1 ));then
+		nachtlademodus
+	fi
+	if (( lademodus == 2 )) && (( nlakt_nurpv == 1 ));then
+		nachtlademodus
+	fi
+	if (( lademodus == 4 )) && (( nlakt_standby == 1 ));then
+		nachtlademodus
+	fi
+	
+
+}

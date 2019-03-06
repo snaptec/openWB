@@ -45,7 +45,8 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
-		if ! [[ $lla1 =~ $re ]] ; then
+	ladeleistunglp1=$ladeleistung	
+	if ! [[ $lla1 =~ $re ]] ; then
 		 lla1="0"
 	fi
 	if ! [[ $lla2 =~ $re ]] ; then
@@ -86,6 +87,7 @@ if [[ $lastmanagement == "1" ]]; then
 	llkwhges=$(echo "$llkwhges + $llkwhs1" |bc)
 	llalts1=$(cat /var/www/html/openWB/ramdisk/llsolls1)
 	ladeleistungs1=$(cat /var/www/html/openWB/ramdisk/llaktuells1)
+	ladeleistunglp2=$ladeleistungs1
 	llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
 	llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
 	llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
@@ -131,14 +133,30 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $wattbezug =~ $re ]] ; then
 		wattbezug="0"
 	fi
+	#evu glaettung
+	if (( evuglaettungakt == 1 )); then
+		ganzahl=$(( evuglaettung / 10 ))
+		for ((i=ganzahl;i>=1;i--)); do
+			i2=$(( i + 1 ))	
+			cp ramdisk/glaettung$i ramdisk/glaettung$i2
+		done
+		echo $wattbezug > ramdisk/glaettung1
+		for ((i=1;i<=ganzahl;i++)); do
+			glaettung=$(<ramdisk/glaettung$i)
+			glaettungw=$(( glaettung + glaettungw))
+		done
+		glaettungfinal=$((glaettungw / ganzahl))
+		echo $glaettungfinal > ramdisk/glattwattbezug
+		wattbezug=$glaettungfinal
+	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$((wattbezugint * -1))
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
-				uberschuss=$((uberschuss + speicherleistung))
-				wattbezugint=$((wattbezugint - speicherleistung))
+				speicherww=$((speicherleistung - speichermaxwatt))
+				uberschuss=$((uberschuss + speicherww))
 			fi
 		fi
 	fi

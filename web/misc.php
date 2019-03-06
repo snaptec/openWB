@@ -382,7 +382,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
 			<select type="text" name="dspeed" id="dspeed">
-				<option <?php if($dspeedold == 0) echo selected ?>value="0">Normal</option>
+				<option <?php if($dspeedold == 0) echo selected ?> value="0">Normal</option>
 				<option <?php if($dspeedold == 1) echo selected ?> value="1">Schnell</option>
 				<option <?php if($dspeedold == 2) echo selected ?> value="2">Langsam</option>
 				<option <?php if($dspeedold == 3) echo selected ?> value="3">Sehr Langsam</option>

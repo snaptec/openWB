@@ -45,7 +45,9 @@ foreach($lines as $line) {
 	if(strpos($line, "speicherpveinbeziehen=") !== false) {
 		list(, $speicherpveinbeziehenold) = explode("=", $line);
 	}
-
+	if(strpos($line, "speichermaxwatt=") !== false) {
+		list(, $speichermaxwattold) = explode("=", $line);
+	}
 	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 		list(, $pvbezugeinspeisungold) = explode("=", $line);
 	}
@@ -320,6 +322,10 @@ foreach($lines as $line) {
 	if(strpos($line, "abschaltverzoegerung=") !== false) {
 		list(, $abschaltverzoegerungold) = explode("=", $line);
 	}
+	if(strpos($line, "einschaltverzoegerung=") !== false) {
+		list(, $einschaltverzoegerungold) = explode("=", $line);
+	}
+
 	if(strpos($line, "evsewifiiplp1=") !== false) {
 		list(, $evsewifiiplp1old) = explode("=", $line);
 	}
@@ -408,10 +414,18 @@ foreach($lines as $line) {
 	if(strpos($line, "hook1_aktiv=") !== false) {
 		list(, $hook1_aktivold) = explode("=", $line, 2);
 	}
-
-
-
-
+	if(strpos($line, "nlakt_sofort=") !== false) {
+		list(, $nlakt_sofortold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_nurpv=") !== false) {
+		list(, $nlakt_nurpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_minpv=") !== false) {
+		list(, $nlakt_minpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "nlakt_standby=") !== false) {
+		list(, $nlakt_standbyold) = explode("=", $line, 2);
+	}
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -668,8 +682,20 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
 </div>
-
-
+<div class="row" style="background-color:#00ada8">
+	<input type='hidden' value='0' name='nlakt_sofort'>
+	<input id="nlakt_sofort" name="nlakt_sofort" value="1" type="checkbox" <?php if ( $nlakt_sofortold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_sofort">Aktiv im Sofort Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_minpv'>
+	<input id="nlakt_minpv" name="nlakt_minpv" value="1" type="checkbox" <?php if ( $nlakt_minpvold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_minpv">Aktiv im Min+PV Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_nurpv'>
+	<input id="nlakt_nurpv" name="nlakt_nurpv" value="1" type="checkbox" <?php if ( $nlakt_nurpvold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_nurpv">Aktiv im NurPV Lademodus</label><br>
+	<input type='hidden' value='0' name='nlakt_standby'>
+        <input id="nlakt_standby" name="nlakt_standby" value="1" type="checkbox" <?php if ( $nlakt_standbyold == 1){ echo "checked"; } ?> >
+	<label for="nlakt_standby">Aktiv im Standby Lademodus</label><br>
+</div>
 <div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">
@@ -1091,6 +1117,15 @@ Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<
 
 </div>
 <div class="row" style="background-color:#befebe">
+	<b><label for="einschaltverzoegerung">Einschaltverzögerung:</label></b>
+	<input type="text" name="einschaltverzoegerung" id="einschaltverzoegerung" value="<?php echo $einschaltverzoegerungold ?>"><br>
+</div>
+<div class="row" style="background-color:#befebe">
+Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus gewartet wird bis die Ladung startet.
+<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Überschuss größer als der Einschaltüberschuss sein.<br>
+</div><br>
+
+<div class="row" style="background-color:#befebe">
 	<b><label for="abschaltverzoegerung">Abschaltverzögerung:</label></b>
 	<input type="text" name="abschaltverzoegerung" id="abschaltverzoegerung" value="<?php echo $abschaltverzoegerungold ?>"><br>
 </div>
@@ -1245,8 +1280,12 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<input type="text" name="offsetpv" id="offsetpv" value="<?php echo $offsetpvold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Manuelles Offset in Watt für die PV Regelmodi. Verschiebt den Regelpunkt. Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br><br>
-	</div>
+Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
+Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
+Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
+z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
+	
+</div>
 
 
 <div id="speicherpvrangdiv">
@@ -1259,9 +1298,19 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
-		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speiher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet.
+		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
 	<br><br>
 	</div>
+	<div id="speicherevvdiv">
+		<div class="row" style="background-color:#fcbe1e">
+			<b><label for="speichermaxwatt">Mindestwatt Speicher:</label></b>
+			<input type="text" name="speichermaxwatt" id="speichermaxwatt" value="<?php echo $speichermaxwattold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#fcbe1e">
+		Definiert einen Wert in Watt mit dem Speicher maximal laden soll. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
+		</div>
+	</div>
+
 </div>
 
 <input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
@@ -1273,7 +1322,20 @@ $(function() {
 	$('#speicherpvrangdiv').hide();
       } 
 });
-
+$(function() {
+   if($('#speicherpveinbeziehen').val() == '1') {
+	$('#speicherevvdiv').show(); 
+      } else {
+	$('#speicherevvdiv').hide();
+      }
+	$('#speicherpveinbeziehen').change(function(){
+	   if($('#speicherpveinbeziehen').val() == '1') {
+	$('#speicherevvdiv').show(); 
+      } else {
+	$('#speicherevvdiv').hide();
+      }
+	});
+});
 </script>
 
 <div class="row"><hr>
