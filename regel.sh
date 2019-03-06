@@ -39,6 +39,7 @@ source nachtladen.sh
 source zielladen.sh
 source evsedintest.sh
 source hook.sh
+source u1p3p.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -80,7 +81,8 @@ evsedintest
 goecheck
 #load charging vars
 loadvars
-
+#u1p3p switch
+u1p3pswitch
 #Graphing
 graphing
 
