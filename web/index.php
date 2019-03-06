@@ -155,7 +155,9 @@
 		if(strpos($line, "nlakt_standby=") !== false) {
 			list(, $nlakt_standbyold) = explode("=", $line, 2);
 		}
-
+		if(strpos($line, "evuglaettungakt=") !== false) {
+			list(, $evuglaettungaktold) = explode("=", $line, 2);
+		}
 	}
 	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
@@ -184,7 +186,7 @@
 						PV: <span id="pvdiv"></span>Watt 
 					</div>
 					<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-						EVU: <span id="bezugdiv"></span>Watt 
+						EVU: <span id="bezugdiv"></span>Watt<span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
 					</div>
 				</div>
 			</div>
@@ -722,6 +724,19 @@
 						<br><br><br>
 					 </form>
 
+						<input hidden name="evuglaettungakt" id="evuglaettungakt" value="<?php echo $evuglaettungaktold ; ?>">
+
+						<script>
+						$(function() {
+   						   if($('#evuglaettungakt').val() == '0') {
+							$('#evuglaettungdiv').hide();
+						      } else {
+							$('#evuglaettungdiv').show();
+
+						      } 
+
+						});
+						</script>
 
 						<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>">
 						<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>">				
@@ -833,7 +848,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.274 Beta				</div>
+				<!-- master -->	Ver 1.301 Beta				</div>
 
 
 				<div class="col-xs-4 text-center">

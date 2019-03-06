@@ -122,7 +122,7 @@ $myImage = new pImage(1150, 200, $myData);
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 18));
-$myImage->setGraphArea(85,25, 1110,175);
+$myImage->setGraphArea(95,25, 1110,175);
 $myImage->drawScale($ScaleSettings);
 $myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 $myData->setSerieDrawable("PV",false);

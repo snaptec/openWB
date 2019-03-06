@@ -50,8 +50,7 @@ echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss2
 echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 echo 0 > /var/www/html/openWB/ramdisk/pvecounter
-
-
+echo 0 > /var/www/html/openWB/ramdisk/glattwattbezug
 echo 0 > /var/www/html/openWB/ramdisk/llas11
 echo 0 > /var/www/html/openWB/ramdisk/bezuga1
 echo 0 > /var/www/html/openWB/ramdisk/bezuga2
@@ -137,7 +136,7 @@ echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
-
+echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
 
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
@@ -970,12 +969,49 @@ if ! grep -Fq "soc_teslalp2_intervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_teslalp2_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wrsma2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrsma2ip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrsma3ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrsma3ip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrsma4ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrsma4ip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evuglaettung=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evuglaettung=10" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "evuglaettungakt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evuglaettungakt=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3paktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3paktiv=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3psofort=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3psofort=3" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3pstandby=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3pstandby=3" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3pnurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3pnurpv=1" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3pminundpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3pminundpv=1" >> /var/www/html/openWB/openwb.conf
+  fi
 
 
 
-
-
-    
 sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 

@@ -667,6 +667,15 @@ foreach($lines as $line) {
 	if(strpos($line, "tri9000ip=") !== false) {
 		list(, $tri9000ipold) = explode("=", $line);
 	}
+	if(strpos($line, "wrsma2ip=") !== false) {
+		list(, $wrsma2ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma3ip=") !== false) {
+		list(, $wrsma3ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma4ip=") !== false) {
+		list(, $wrsma4ipold) = explode("=", $line);
+	}
 	if(strpos($line, "kostalplenticoreip=") !== false) {
 		list(, $kostalplenticoreipold) = explode("=", $line);
 	}
@@ -674,6 +683,14 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmevuhaus=") !== false) {
 		list(, $mpm3pmevuhausold) = explode("=", $line);
 	}
+	if(strpos($line, "evuglaettung=") !== false) {
+		list(, $evuglaettungold) = explode("=", $line);
+	}
+	if(strpos($line, "evuglaettungakt=") !== false) {
+		list(, $evuglaettungaktold) = explode("=", $line);
+	}
+
+
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -2748,14 +2765,10 @@ $(function() {
 
 	</select>
 </div>
-<div class="row">
-<br><br>
-</div>
-
 <div id="wattbezugethmpm3pm">
-<div class="row">
-Keine Konfiguration erforderlich.<br><br>
-</div>
+	<div class="row">
+		Keine Konfiguration erforderlich.<br><br>
+	</div>
 </div>
 <div id="wattbezugkostalpiko">
 	<div class="row" style="background-color:#febebe">
@@ -3030,6 +3043,49 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher Modul eingestellt.<br>
 	</div>
 </div>
+<div class="row">
+	<b><h5><label for="evuglaettungakt">EVU Glättung:</label></b>
+	<select type="text" name="evuglaettungakt" id="evuglaettungakt">
+		<option <?php if($evuglaettungaktold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($evuglaettungaktold == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="evuglaettungdiv">
+		<div class="row" style="background-color:#febebe">
+			<b><label for="evuglaettung">Glättung der EVU Werte:</label></b>
+			<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#febebe">
+			Gültige Werte Zeit in Sekunden, z.B. 30,50,200. <br>
+			Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
+			Sinnvoll wenn öfter kurze Lastspitzen auftreten.<br>
+			Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.<br><br>
+		</div>
+		<br><br>
+</div>
+
+<script>
+$(function() {
+      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 
+
+	$('#evuglaettungakt').change(function(){
+	      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 	    });
+});
+</script>
+
 
 <script>
 $(function() {
@@ -3777,7 +3833,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
 		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
 		<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
-		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA Tripower 9000</option>
+		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 
@@ -3871,11 +3927,32 @@ $(function() {
 </div>
 <div id="pvwrtri9000">
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="tri9000ip">SMA TriPower 9000 IP:</label></b>
+		<b><label for="tri9000ip">SMA WR IP:</label></b>
 		<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SMA TriPower9000, ggf. funktionieren auch andere SMA Wr mit diesem Modul.<br><br>
+		Gültige Werte IP. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (default deaktiviert).<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma2ip">WR 2 IP:</label></b>
+		<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma3ip">WR 3 IP:</label></b>
+		<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des dritten SMA Wechselrichters. Wenn nur 2 WR genutzt werden auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma4ip">WR 4 IP:</label></b>
+		<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des vierten SMA Wechselrichters. Wenn nur 3 WR genutzt werden auf none setzen.<br><br>
 	</div>
 </div>
 <div id="pvwrsolaredge">

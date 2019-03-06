@@ -720,6 +720,18 @@ foreach($lines as $line) {
 	    $result .= 'tri9000ip='.$_POST[tri9000ip]."\n";
 	    $writeit = '1';
 	   } 
+ 	   if(strpos($line, "wrsma2ip=") !== false) {
+	    $result .= 'wrsma2ip='.$_POST[wrsma2ip]."\n";
+	    $writeit = '1';
+	   } 
+ 	   if(strpos($line, "wrsma3ip=") !== false) {
+	    $result .= 'wrsma3ip='.$_POST[wrsma3ip]."\n";
+	    $writeit = '1';
+	   }
+ 	   if(strpos($line, "wrsma4ip=") !== false) {
+	    $result .= 'wrsma4ip='.$_POST[wrsma4ip]."\n";
+	    $writeit = '1';
+	   } 
 	   if(strpos($line, "kostalplenticoreip=") !== false) {
 	    $result .= 'kostalplenticoreip='.$_POST[kostalplenticoreip]."\n";
 	    $writeit = '1';
@@ -728,8 +740,14 @@ foreach($lines as $line) {
 	    $result .= 'mpm3pmevuhaus='.$_POST[mpm3pmevuhaus]."\n";
 	$writeit = '1';
     } 
-
-
+	    if(strpos($line, "evuglaettung=") !== false) {
+	    $result .= 'evuglaettung='.$_POST[evuglaettung]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "evuglaettungakt=") !== false) {
+	    $result .= 'evuglaettungakt='.$_POST[evuglaettungakt]."\n";
+	$writeit = '1';
+    } 
 
 
 
