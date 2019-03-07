@@ -8,7 +8,7 @@ else
 	if  [[ $wrsma2ip != "none" ]] && [[ $wrsma3ip != "none" ]]; then
 		sudo python /var/www/html/openWB/modules/wr_tripower9000/tri90003.py $tri9000ip $wrsma2ip $wrsma3ip 
 	else
-		if  [[ $wrsma2ip != "none" ]] && [[ $wrsma3ip != "none" ]]; then
+		if  [[ $wrsma2ip != "none" ]]; then
 			sudo python /var/www/html/openWB/modules/wr_tripower9000/tri90002.py $tri9000ip $wrsma2ip 
 		else
 			sudo python /var/www/html/openWB/modules/wr_tripower9000/tri9000.py $tri9000ip
