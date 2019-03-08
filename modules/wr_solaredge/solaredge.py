@@ -36,6 +36,8 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 1000
     if fmultiplint == -4:
         rawprodw = rawprodw / 10000
+    if fmultiplint == -5:
+        rawprodw = rawprodw / 100000
     f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
     f.write(str(rawprodw))
     f.close()

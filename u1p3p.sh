@@ -2,7 +2,7 @@
 
 u1p3pswitch(){
 
-if (( u1p3pakt == 1 )); then
+if (( u1p3paktiv == 1 )); then
 	u1p3pstat=$(<ramdisk/u1p3pstat)
 	if (( debug == 1 )); then
 		echo "automatische Umschaltung aktiv"
@@ -15,10 +15,10 @@ if (( u1p3pakt == 1 )); then
 				fi
 				if (( u1p3psofort == 3 )); then
 					sudo python runs/trigclose.py
-					echo 3 > ramdisk/u1p3stat
+					echo 3 > ramdisk/u1p3pstat
 				else
 					sudo python runs/trigopen.py
-					echo 1 > ramdisk/u1p3stat
+					echo 1 > ramdisk/u1p3pstat
 				fi
 				if (( debug == 1 )); then
 					echo "auf $u1p3psofort Phasen geaendert"
@@ -33,10 +33,10 @@ if (( u1p3pakt == 1 )); then
 				fi
 				if (( u1p3pminundpv == 3 )); then
 					sudo python runs/trigclose.py
-					echo 3 > ramdisk/u1p3stat
+					echo 3 > ramdisk/u1p3pstat
 				else
 					sudo python runs/trigopen.py
-					echo 1 > ramdisk/u1p3stat
+					echo 1 > ramdisk/u1p3pstat
 				fi
 				if (( debug == 1 )); then
 					echo "auf $u1p3pminundpv Phasen geaendert"
@@ -51,10 +51,10 @@ if (( u1p3pakt == 1 )); then
 				fi
 				if (( u1p3pnurpv == 3 )); then
 					sudo python runs/trigclose.py
-					echo 3 > ramdisk/u1p3stat
+					echo 3 > ramdisk/u1p3pstat
 				else
 					sudo python runs/trigopen.py
-					echo 1 > ramdisk/u1p3stat
+					echo 1 > ramdisk/u1p3pstat
 				fi
 				if (( debug == 1 )); then
 					echo "auf $u1p3pnurpv Phasen geaendert"
@@ -69,13 +69,13 @@ if (( u1p3pakt == 1 )); then
 				fi
 				if (( u1p3pstandby == 3 )); then
 					sudo python runs/trigclose.py
-					echo 3 > ramdisk/u1p3stat
+					echo 3 > ramdisk/u1p3pstat
 				else
 					sudo python runs/trigopen.py
-					echo 1 > ramdisk/u1p3stat
+					echo 1 > ramdisk/u1p3pstat
 				fi
 				if (( debug == 1 )); then
-					echo "auf $u1p3standby Phasen geaendert"
+					echo "auf $u1p3pstandby Phasen geaendert"
 				fi
 
 			fi		
