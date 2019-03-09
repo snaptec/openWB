@@ -27,7 +27,7 @@ mult2iplint = format(mult2ipli, '04x')
 fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
 if fmultiplint == fmult2iplint:
     if fmultiplint == 0:
-        rawprodw = 0
+        rawprodw = rawprodw
     if fmultiplint == -1:
         rawprodw = rawprodw / 10 
     if fmultiplint == -2:
