@@ -81,6 +81,17 @@ evsedintest
 goecheck
 #load charging vars
 loadvars
+#testing
+ if [[ $debug == "1" ]]; then
+	 echo "40084"
+	cat ramdisk/40084
+	echo "40083"
+	cat ramdisk/40083
+	echo "40108"
+	cat ramdisk/40108
+fi
+
+
 #u1p3p switch
 u1p3pswitch
 #Graphing
