@@ -85,8 +85,10 @@ loadvars
  if [[ $debug == "1" ]]; then
 	 echo "40084"
 	cat ramdisk/40084
+	echo " "
 	echo "40083"
 	cat ramdisk/40083
+	echo " "
 	echo "40108"
 	cat ramdisk/40108
 fi
