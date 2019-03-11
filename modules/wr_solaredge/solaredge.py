@@ -36,7 +36,7 @@ value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprod1w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 f = open('/var/www/html/openWB/ramdisk/40083', 'w')
-f.write(str(rawprodw))
+f.write(str(rawprod1w))
 f.close()
 resp= client.read_holding_registers(40084,2,unit=slave1id)
 mult2ipli = resp.registers[0]
@@ -55,23 +55,23 @@ if ( rawprod1w < rawprodw ):
 else:
     dist = rawprodw - rawprod1w
 
-#if ( dist < 2000 ):
-if fmultiplint == fmult2iplint:
-    if fmultiplint == 0:
-        rawprodw = rawprodw
-    if fmultiplint == -1:
-        rawprodw = rawprodw / 10 
-    if fmultiplint == -2:
-        rawprodw = rawprodw / 100
-    if fmultiplint == -3:
-        rawprodw = rawprodw / 1000
-    if fmultiplint == -4:
-        rawprodw = rawprodw / 10000
-    if fmultiplint == -5:
-        rawprodw = rawprodw / 100000
-    f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-    f.write(str(rawprodw))
-    f.close()
+if ( dist < 1000 ):
+    if fmultiplint == fmult2iplint:
+        if fmultiplint == 0:
+            rawprodw = rawprodw
+        if fmultiplint == -1:
+            rawprodw = rawprodw / 10 
+        if fmultiplint == -2:
+            rawprodw = rawprodw / 100
+        if fmultiplint == -3:
+            rawprodw = rawprodw / 1000
+        if fmultiplint == -4:
+            rawprodw = rawprodw / 10000
+        if fmultiplint == -5:
+            rawprodw = rawprodw / 100000
+        f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
+        f.write(str(rawprodw))
+        f.close()
 
 resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]
