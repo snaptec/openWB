@@ -340,6 +340,9 @@ foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
 		list(, $logdailywhold) = explode("=", $line);
 	}
+	if(strpos($line, "ladetaster=") !== false) {
+		list(, $ladetasterold) = explode("=", $line);
+	}
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -389,9 +392,22 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			</select>
 			<br>
 		</div>
+
 		<div class="row">
 			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
 	<br>	</div>
+		<div class="row">
+			<b><label for="ladetaster">Ladetaster:</label></b>
+			<select type="text" name="ladetaster" id="ladetaster">
+				<option <?php if($ladetasterold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($ladetasterold == 1) echo selected ?> value="1">An</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
+		</div>
+
 		<div class="row">
 	<h3>	Logging Einstellungen</h3> <br>
 		</div>

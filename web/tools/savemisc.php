@@ -29,7 +29,10 @@ foreach($lines as $line) {
 	    $result .= 'logeinspeisungneg='.$_POST[logeinspeisungneg]."\n";
 	    $writeit = '1';
 	    } 
-	    
+	    if(strpos($line, "ladetaster=") !== false) {
+	    $result .= 'ladetaster='.$_POST[ladetaster]."\n";
+	    $writeit = '1';
+	    } 
 	    if ( $writeit == '0') {
 		$result .= $line;
 	    }

@@ -10,6 +10,7 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 
+echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -41,6 +42,8 @@ touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
+echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
+echo 0 > /var/www/html/openWB/ramdisk/nachtladen2states1
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
@@ -161,14 +164,19 @@ if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
-
-
-if ! [ -x "$(command -v nmcli)" ]; then
-	if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
-	then
-		echo "test" > /dev/null
-	else
-		sudo python /var/www/html/openWB/runs/ladetaster.py &
+if ! grep -Fq "ladetaster=" /var/www/html/openWB/openwb.conf
+then
+	  echo "ladetaster=0" >> /var/www/html/openWB/openwb.conf
+fi
+. /var/www/html/openWB/openwb.conf
+if (( ladetaster == 1 )); then
+	if ! [ -x "$(command -v nmcli)" ]; then
+		if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
+		then
+			echo "test" > /dev/null
+		else
+			sudo python /var/www/html/openWB/runs/ladetaster.py &
+		fi
 	fi
 fi
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
@@ -1008,6 +1016,14 @@ then
 if ! grep -Fq "u1p3pminundpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "u1p3pminundpv=1" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "u1p3pnl=" /var/www/html/openWB/openwb.conf
+then
+	  echo "u1p3pnl=3" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "speicherpwip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherpwip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
 
 

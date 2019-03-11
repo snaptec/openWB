@@ -712,7 +712,12 @@ foreach($lines as $line) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
 	    $writeit = '1';
 	    }
-	   if(strpos($line, "sbs25ip=") !== false) {
+ 	   if(strpos($line, "speicherpwip=") !== false) {
+	    $result .= 'peicherpwip='.$_POST[speicherpwip]."\n";
+	    $writeit = '1';
+	    }
+
+	    if(strpos($line, "sbs25ip=") !== false) {
 	    $result .= 'sbs25ip='.$_POST[sbs25ip]."\n";
 	    $writeit = '1';
 	    }

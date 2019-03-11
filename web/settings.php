@@ -695,7 +695,7 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 	<input type='hidden' value='0' name='nlakt_standby'>
         <input id="nlakt_standby" name="nlakt_standby" value="1" type="checkbox" <?php if ( $nlakt_standbyold == 1){ echo "checked"; } ?> >
 	<label for="nlakt_standby">Aktiv im Standby Lademodus</label><br>
-</div>
+</div><br>
 <div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladen">Nachtladen Ladepunkt 1:</label></b>
 	<select type="text" name="nachtladen" id="nachtladen">
@@ -793,7 +793,7 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 	</div>
 	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
-	</div><br><br>
+	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2ll" id="nacht2ll">
@@ -901,7 +901,7 @@ $(function() {
 		});
 });
 </script>
-<div id="nachtls1div">
+<div id="nachtls1div"><br><br><br>
 <div class="row" style="background-color:#00ada8">
 	<b><h5><label for="nachtladens1">Nachtladen Ladepunkt 2:</label></b>
 	<select type="text" name="nachtladens1" id="nachtladens1">
@@ -999,7 +999,7 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#00ada8">
 		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
-	</div><br><br>
+	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>
         	<select type="text" name="nacht2lls1" id="nacht2lls1">

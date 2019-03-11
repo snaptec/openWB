@@ -71,8 +71,7 @@ else
 	echo $graphtimer > ramdisk/graphtimer
 fi
 #######################################
-#EVSE DIN Modbus test
-evsedintest
+
 
 
 
@@ -81,6 +80,20 @@ evsedintest
 goecheck
 #load charging vars
 loadvars
+
+if (( u1p3paktiv == 1 )); then
+	blockall=$(<ramdisk/blockall)
+	if (( blockall == 1 )); then
+		if [[ $debug == "1" ]]; then
+			echo "Phasen Umschaltung noch aktiv... beende"
+		fi
+		exit 0
+	fi
+fi
+
+#EVSE DIN Modbus test
+evsedintest
+
 #u1p3p switch
 u1p3pswitch
 #Graphing

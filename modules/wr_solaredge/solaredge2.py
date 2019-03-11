@@ -24,7 +24,7 @@ value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == 0:
-    rawprodw = 0
+    rawprodw = rawprodw
 if fmultiplint == -1:
     rawprodw = rawprodw / 10 
 if fmultiplint == -2:
@@ -51,7 +51,7 @@ value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprod2w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == 0:
-    rawprod2w = 0
+    rawprod2w = rawprod2w
 if fmultiplint == -1:
     rawprod2w = rawprod2w / 10 
 if fmultiplint == -2:
