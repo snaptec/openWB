@@ -164,14 +164,19 @@ if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
 fi
-
-
-if ! [ -x "$(command -v nmcli)" ]; then
-	if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
-	then
-		echo "test" > /dev/null
-	else
-		sudo python /var/www/html/openWB/runs/ladetaster.py &
+if ! grep -Fq "ladetaster=" /var/www/html/openWB/openwb.conf
+then
+	  echo "ladetaster=0" >> /var/www/html/openWB/openwb.conf
+fi
+. /var/www/html/openWB/openwb.conf
+if (( ladetaster == 1 )); then
+	if ! [ -x "$(command -v nmcli)" ]; then
+		if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
+		then
+			echo "test" > /dev/null
+		else
+			sudo python /var/www/html/openWB/runs/ladetaster.py &
+		fi
 	fi
 fi
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
