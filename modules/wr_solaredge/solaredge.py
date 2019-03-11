@@ -55,7 +55,7 @@ if ( rawprod1w > rawprodw ):
 else:
     dist = rawprodw - rawprod1w
 
-if ( dist < 300 ):
+if ( dist < 2000 ):
     if fmultiplint == fmult2iplint:
         if fmultiplint == 0:
             rawprodw = rawprodw
