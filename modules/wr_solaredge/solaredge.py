@@ -50,7 +50,7 @@ rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 
 
 
-if ( rawprod1w > rawprodw ):
+if ( rawprod1w < rawprodw ):
     dist = rawprod1w - rawprodw
 else:
     dist = rawprodw - rawprod1w
