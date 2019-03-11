@@ -225,7 +225,9 @@ $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 if ($logdailywh == 1) {
 $myData->setAxisName(0,"Wh");
 } else {
-$myData->setAxisName(0,"Watt");
+$myData->setAxisName(0,"kW");
+$myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
+
 
 }
 $myData->setAxisName(1,"SoC");
@@ -307,3 +309,4 @@ if ($speichervorhanden == 1) {
 
 header("Content-Type: image/png");
 $myImage->autoOutput("testa.png");
+function YAxisFormat($Value) { return(round($Value/1000,2)); } 

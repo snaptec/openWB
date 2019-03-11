@@ -661,6 +661,9 @@ foreach($lines as $line) {
 	if(strpos($line, "e3dcip=") !== false) {
 		list(, $e3dcipold) = explode("=", $line);
 	}
+	if(strpos($line, "speicherpwip=") !== false) {
+		list(, $speicherpwipold) = explode("=", $line);
+	}
 	if(strpos($line, "sbs25ip=") !== false) {
 		list(, $sbs25ipold) = explode("=", $line);
 	}
@@ -4633,6 +4636,8 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
 		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher BETA</option>
+		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
+
 
 
 	</select>
@@ -4640,6 +4645,15 @@ $(function() {
 
 <div id="divspeichernone">
 	<br>
+</div>
+<div id="divspeicherpw">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="speicherpwip">Powerwall IP:</label></b>
+		<input type="text" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse der Tesla Powerwall.<br><br>
+	</div>
 </div>
 <div id="divspeichere3dc">
 	<div class="row" style="background-color:#fcbe1e">
@@ -4772,6 +4786,7 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
 		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
@@ -4782,9 +4797,7 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
-
-
-
+		$('#divspeicherpw').hide();
 
    }
    if($('#speichermodul').val() == 'mpm3pmspeicher')   {
@@ -4796,6 +4809,7 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
 
 
 
@@ -4810,6 +4824,8 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
 
 
@@ -4824,6 +4840,8 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
 
    }
@@ -4836,6 +4854,8 @@ $(function() {
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
@@ -4847,6 +4867,8 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_solaredge')   {
@@ -4858,6 +4880,21 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').show();
+		$('#divspeicherpw').hide();
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_powerwall')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').show();
+
 
    }
 $('#speichermodul').change(function(){
@@ -4870,7 +4907,9 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
     		$('#divspeichersolaredge').hide();
-  
+  		$('#divspeicherpw').hide();
+
+
 
 
 
@@ -4883,7 +4922,9 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichersbs25').hide();
      		$('#divspeichersolaredge').hide();
- 
+ 		$('#divspeicherpw').hide();
+
+
 		$('#divspeichere3dc').hide();
 
 
@@ -4898,6 +4939,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
 
 
@@ -4912,6 +4955,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
 
    }
@@ -4924,6 +4969,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
 
    }
@@ -4936,6 +4983,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
@@ -4947,6 +4996,8 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+
 
    }
    if($('#speichermodul').val() == 'speicher_solaredge')   {
@@ -4958,6 +5009,21 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').show();
+		$('#divspeicherpw').hide();
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_powerwall')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').show();
+
 
    }
 });
