@@ -338,7 +338,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 					Durchschnittliche Ladeleistung kW
 				</div>	
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
-					Dirchschnittliche Ladedauer
+					Durchschnittliche Ladedauer
 				</div>	
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
