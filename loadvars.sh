@@ -194,6 +194,7 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
+
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)

@@ -753,7 +753,8 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div class="row"><br>
  <ul class="nav nav-tabs">
     <LI><a data-toggle="tab" href="./index.php">Zurück</A></LI>
-    <li><a href="./settings.php">Ladeeinstellungen</a></li>
+    <li><a href="./settings.php">Einstellungen</a></li>
+    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
     <li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
@@ -4051,14 +4052,14 @@ $(function() {
 		<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
 		<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
 		<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
 	</div>
 </div>
@@ -4104,7 +4105,7 @@ $(function() {
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
 		$('#pvwrsolaredge').hide();
-		$('#pvsmartme').hide();i
+		$('#pvsmartme').hide();
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();

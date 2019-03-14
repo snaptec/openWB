@@ -33,10 +33,36 @@ foreach($lines as $line) {
 	    $result .= 'ladetaster='.$_POST[ladetaster]."\n";
 	    $writeit = '1';
 	    } 
+	    if(strpos($line, "pushbenachrichtigung=") !== false) {
+	    $result .= 'pushbenachrichtigung='.$_POST[pushbenachrichtigung]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "pushbstartl=") !== false) {
+	    $result .= 'pushbstartl='.$_POST[pushbstartl]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "pushbstopl=") !== false) {
+	    $result .= 'pushbstopl='.$_POST[pushbstopl]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "pushovertoken=") !== false) {
+	    $result .= 'pushovertoken=\''.$_POST[pushovertoken]."'\n";
+		$writeit = '1';
+   	 	} 
+	    if(strpos($line, "pushoveruser=") !== false) {
+	    $result .= 'pushoveruser=\''.$_POST[pushoveruser]."'\n";
+	   	$writeit = '1';
+ 		} 
+   if(strpos($line, "grapham=") !== false) {
+	    $result .= 'grapham='.$_POST[grapham]."\n";
+	    $writeit = '1';
+	    } 
+
+
+
 	    if ( $writeit == '0') {
 		$result .= $line;
 	    }
-
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 

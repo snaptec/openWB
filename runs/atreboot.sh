@@ -1025,6 +1025,19 @@ if ! grep -Fq "speicherpwip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherpwip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "adaptfaktor=" /var/www/html/openWB/openwb.conf
+then
+	  echo "adaptfaktor=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "grapham=" /var/www/html/openWB/openwb.conf
+then
+	  echo "grapham=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 
 
@@ -1032,7 +1045,14 @@ sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 
 
-
+if  grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf
+then
+	echo "...ok"
+else
+	sudo cp /var/www/html/openWB/web/tools/000-default.conf /etc/apache2/sites-available/
+	sudo service apache2 restart
+	echo "...changed"
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -

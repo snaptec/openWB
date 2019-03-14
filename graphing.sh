@@ -23,6 +23,11 @@ if [[ $livegraph =~ $re ]] ; then
 		livegraph="30"
 	fi
 fi
+#beta testing
+echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvwatt,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung >> /var/www/html/openWB/ramdisk/all-live.graph
+echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/all-live.graph)" > /var/www/html/openWB/ramdisk/all-live.graph
+#end beta testing
+
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/www/html/openWB/ramdisk/soc-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph
