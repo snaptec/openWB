@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+	<script src="js/core.js"></script>
+	<script src="js/charts.js"></script>
+	<script src="js/animated.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
@@ -158,6 +161,10 @@
 		if(strpos($line, "evuglaettungakt=") !== false) {
 			list(, $evuglaettungaktold) = explode("=", $line, 2);
 		}
+		if(strpos($line, "grapham=") !== false) {
+			list(, $graphamold) = explode("=", $line, 2);
+		}
+
 	}
 	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
@@ -205,15 +212,23 @@
 			</div></div>
 			</div>
 			<br>
-			<div class="row">
+				<?php if ($graphamold == 1) {
+								echo '
+		<div style="height:400px;" id="chartdiv"></div>
+';	
+					   } else {
+						   echo '
+	<div class="row">
 				<div class="col-xs-12 text-center">
 					<div class="imgwrapper">	
 					<img id="livegraph" src="graph-live.php"
      					alt="Graph" class="img-responsive" />
 					<br></div>
 				</div>
-			</div>
-			<div class="row col-xs-12 text-center">
+			</div>';
+					   } ?>
+
+					<div class="row col-xs-12 text-center">
 			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 				Nachtladen LP 1 aktiv
 			</div>
@@ -848,7 +863,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.31 Beta 				</div>
+				<!-- master -->	Ver 1.32 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">
@@ -1147,6 +1162,94 @@ $(function() {
       });
 	}
  </script>
+
+
+<script>
+//am4core.useTheme(am4themes_animated);
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+// Set up data source
+chart.dataSource.url = "../ramdisk/all-live.graph";
+chart.dataSource.incremental = true;
+chart.dataSource.keepCount = true;
+chart.dataSource.reloadFrequency = 30000;
+chart.dataSource.parser = new am4core.CSVParser();
+chart.dataSource.parser.options.useColumnNames = false;
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "col0";
+
+// Create value axis
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+// Creaite series
+var series1 = chart.series.push(new am4charts.LineSeries());
+series1.dataFields.valueY = "col1";
+series1.dataFields.categoryX = "col0";
+series1.name = "Bezug";
+series1.stroke = am4core.color("#ff0000");
+series1.strokeWidth = 3;
+series1.tensionX = 0.8;
+series1.tensionY = 0.8;
+series1.strokeWidth = 1.5;
+
+
+var series2 = chart.series.push(new am4charts.LineSeries());
+series2.dataFields.valueY = "col2";
+series2.dataFields.categoryX = "col0";
+series2.name = "LL Gesamt";
+series2.tensionX = 10;
+series2.tensionY = 10;
+series2.strokeWidth = 1.5;
+
+
+var series4 = chart.series.push(new am4charts.LineSeries());
+series4.dataFields.valueY = "col3";
+series4.dataFields.categoryX = "col0";
+series4.name = "PV";
+series4.stroke = am4core.color("#00ff00");
+series4.tensionX = 10;
+series4.tensionY = 10;
+series4.strokeWidth = 1.5;
+
+
+var series5 = chart.series.push(new am4charts.LineSeries());
+series5.dataFields.valueY = "col4";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#fcbe32");
+series5.tensionX = 10;
+series5.tensionY = 10;
+series5.strokeWidth = 1.5;
+
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col5";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#befc32");
+series6.tensionX = 10;
+series6.tensionY = 10;
+series6.strokeWidth = 1.5;
+
+var series3 = chart.series.push(new am4charts.LineSeries());
+series3.dataFields.valueY = "col7";
+series3.dataFields.categoryX = "col0";
+series3.name = "Speicherleistung";
+series3.stroke = am4core.color("#000000");
+series3.tensionX = 10;
+series3.tensionY = 10;
+series3.strokeWidth = 1.5;
+
+
+chart.cursor = new am4charts.XYCursor();
+
+// Add legend
+chart.legend = new am4charts.Legend();
+</script>
+
+
 
 </body>
 

@@ -59,7 +59,7 @@ if ($speichervorhanden == 1) {
 }
 $lowestg = min($lowest,$lowestu);
 
-if ($socl < "0" ){
+if ($soc1 < "0" ){
 	$soc1 = "0";
 }
 if ($soc1vorhanden == 1) {
