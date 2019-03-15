@@ -66,9 +66,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	if(strpos($line, "ladeleistungmodul=") !== false) {
-		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer") {
+		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer" or $_POST[evsecon] == "nrgkick") {
 			if($_POST[evsecon] == "goe") {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
+			}
+			if($_POST[evsecon] == "nrgkick") {
+				$result .= 'ladeleistungmodul=nrgkicklp1'."\n";
 			}
 			if($_POST[evsecon] == "masterethframer") {
 				$result .= 'ladeleistungmodul=mpm3pmethllframer'."\n";
@@ -599,6 +602,23 @@ foreach($lines as $line) {
 		$result .= 'lp3name=\''.$_POST[lp3name]."'\n";
     	 $writeit = '1';
    } 
+	    if(strpos($line, "nrgkickiplp1=") !== false) {
+    	    $result .= 'nrgkickiplp1='.$_POST[nrgkickiplp1]."\n";
+    	 $writeit = '1';
+	    } 
+	    if(strpos($line, "nrgkicktimeoutlp1=") !== false) {
+    	    $result .= 'nrgkicktimeoutlp1='.$_POST[nrgkicktimeoutlp1]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickmaclp1=") !== false) {
+    	    $result .= 'nrgkickmaclp1='.$_POST[nrgkickmaclp1]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickpwlp1=") !== false) {
+    	    $result .= 'nrgkickpwlp1='.$_POST[nrgkickpwlp1]."\n";
+    	 $writeit = '1';
+   } 
+
 	    if(strpos($line, "goeiplp1=") !== false) {
     	    $result .= 'goeiplp1='.$_POST[goeiplp1]."\n";
     	 $writeit = '1';

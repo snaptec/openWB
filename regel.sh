@@ -40,6 +40,7 @@ source zielladen.sh
 source evsedintest.sh
 source hook.sh
 source u1p3p.sh
+source nrgkickcheck.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -78,6 +79,8 @@ fi
 #######################################
 #goe mobility check
 goecheck
+# nrgkick mobility check
+nrgkickcheck
 #load charging vars
 loadvars
 

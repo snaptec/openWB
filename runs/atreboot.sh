@@ -1037,8 +1037,22 @@ if ! grep -Fq "grapham=" /var/www/html/openWB/openwb.conf
 then
 	  echo "grapham=0" >> /var/www/html/openWB/openwb.conf
 fi
-
-
+if ! grep -Fq "nrgkickiplp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickiplp1=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkicktimeoutlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkicktimeoutlp1=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickmaclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickmaclp1=11:22:33:aa:bb:cc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickpwlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickpwlp1=1234" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
