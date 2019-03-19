@@ -130,7 +130,6 @@ function setChargingCurrentgoe () {
 }
 
 function setChargingCurrentnrgkick () {
-	echo "hier"
 	if [[ $evsecon == "nrgkick" ]]; then
 		if [[ $current -eq 0 ]]; then
 			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)

@@ -1,6 +1,7 @@
 #!/bin/bash
 graphing(){
 #Live Graphing
+pvgraph=$((pvwatt * -1))
 if (( speichervorhanden == 1 )); then
 	echo $speicherleistung >> /var/www/html/openWB/ramdisk/speicher-live.graph
 	echo $speichersoc >> /var/www/html/openWB/ramdisk/speichersoc-live.graph
@@ -12,7 +13,7 @@ echo $ladeleistunglp1 >> /var/www/html/openWB/ramdisk/ev1-live.graph
 if (( lastmanagement == 1 )); then
 	echo $ladeleistunglp2 >> /var/www/html/openWB/ramdisk/ev2-live.graph
 fi
-echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv-live.graph
+echo $pvgraph >> /var/www/html/openWB/ramdisk/pv-live.graph
 echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu-live.graph
 echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
@@ -24,7 +25,8 @@ if [[ $livegraph =~ $re ]] ; then
 	fi
 fi
 #beta testing
-echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvwatt,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung >> /var/www/html/openWB/ramdisk/all-live.graph
+echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1 >> /var/www/html/openWB/ramdisk/all-live.graph
+echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1 > /var/www/html/openWB/ramdisk/all-live.graph?incremental=y
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/all-live.graph)" > /var/www/html/openWB/ramdisk/all-live.graph
 #end beta testing
 
@@ -85,5 +87,11 @@ if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 	if [[ socmodul1 != "none" ]]; then
 		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/soc1.graph)" > /var/www/html/openWB/ramdisk/soc1.graph
 	fi
+	#beta testing
+	echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1 >> /var/www/html/openWB/ramdisk/all.graph
+	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/all.graph)" > /var/www/html/openWB/ramdisk/all.graph
+	#end beta testing
+
+
 fi
 }

@@ -33,7 +33,7 @@
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.html">Live</a></li>
+			 <li><a href="index.php">Live</a></li>
 			 <li><a href="daily.php">Daily</a></li>
 			 <li><a href="monthly.php">Monthly</a></li>
 			 <li class="active"><a href="yearly.php">Yearly</a></li>

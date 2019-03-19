@@ -717,7 +717,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
+	Definiert ob Nachts geladen werden soll.<br><br>
 </div>
 <div id="nachtladenaus">
 	<br>

@@ -762,6 +762,11 @@ if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherpvui=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speicherpvui=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "speichermaxwatt=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speichermaxwatt=0" >> /var/www/html/openWB/openwb.conf
@@ -1037,6 +1042,11 @@ if ! grep -Fq "grapham=" /var/www/html/openWB/openwb.conf
 then
 	  echo "grapham=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "graphliveam=" /var/www/html/openWB/openwb.conf
+then
+	  echo "graphliveam=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "nrgkickiplp1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nrgkickiplp1=192.168.0.17" >> /var/www/html/openWB/openwb.conf
@@ -1054,8 +1064,10 @@ then
 	  echo "nrgkickpwlp1=1234" >> /var/www/html/openWB/openwb.conf
 fi
 
-
-sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+ethstate=$(</sys/class/net/eth0/carrier)
+if (( ethstate == 1 )); then
+	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+fi
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 
 

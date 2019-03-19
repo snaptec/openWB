@@ -45,6 +45,10 @@ foreach($lines as $line) {
 	if(strpos($line, "speicherpveinbeziehen=") !== false) {
 		list(, $speicherpveinbeziehenold) = explode("=", $line);
 	}
+	if(strpos($line, "speicherpvui=") !== false) {
+		list(, $speicherpvuiold) = explode("=", $line);
+	}
+
 	if(strpos($line, "speichermaxwatt=") !== false) {
 		list(, $speichermaxwattold) = explode("=", $line);
 	}
@@ -417,7 +421,12 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
  			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
   			<option <?php if($speicherpveinbeziehenold == 1) echo selected ?> value="1">EV hat Vorrang</option>
 		</select><br>
-
+		<b><label for="speicherpveinbeziehen">Auf der Hauptseite anzeigen:</label></b>
+		<select type="text" name="speicherpvui" id="speicherpvui">
+ 			<option <?php if($speicherpvuiold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($speicherpvuiold == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+	
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.

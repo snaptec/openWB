@@ -362,6 +362,10 @@ foreach($lines as $line) {
 	if(strpos($line, "grapham=") !== false) {
 		list(, $graphamold) = explode("=", $line);
 	}
+	if(strpos($line, "graphliveam=") !== false) {
+		list(, $graphliveamold) = explode("=", $line);
+	}
+
 
 }
 
@@ -550,14 +554,23 @@ $(function() {
 
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
+	<div class="row"><br><br>
+			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
+			<select type="text" name="graphliveam" id="graphliveam">
+				<option <?php if($graphliveamold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
 	<div class="row">
-			<b><label for="grapham">BETA LiveGraph (bitte um Feedback):</label></b>
+			<b><label for="grapham">Interaktiver im Logging Graph:</label></b>
 			<select type="text" name="grapham" id="grapham">
 				<option <?php if($graphamold == 0) echo selected ?>value="0">Aus</option>
 				<option <?php if($graphamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
 	</div>
+
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>

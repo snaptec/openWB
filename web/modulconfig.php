@@ -2867,12 +2867,7 @@ $(function() {
 
 <div id="wattbezugplentihaus">
 	<div class="row" style="background-color:#febebe">
-		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
-		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
-	</div>
-	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Dieses Modul erfordert einen (z.B. einen EM300) Smart Meter im Hausverbrauchszweig.<br>
-	Es muss kein extra PV Modul ausgewählt werden (PV Modul auf None stellen).<br> 
+		Das zugehörige PV Modul (Kostal Plenticore) muss gewählt werden. Dieses Modul erfordert einen (z.B. EM300) Smart Meter im Hausverbrauchszweig.<br>
 	</div>
 </div>
 
