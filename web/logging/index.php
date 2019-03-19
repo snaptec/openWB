@@ -5,8 +5,12 @@
 	<script src="../js/core.js"></script>
 	<script src="../js/charts.js"></script>
 	<script src="../js/animated.js"></script>
-
 	<script src="../js/jquery-1.11.1.min.js"></script>
+	<script src="../js/owl.carousel.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/wow.min.js"></script>
+	<script src="../js/typewriter.js"></script>
+	<script src="../js/jquery.onepagenav.js"></script>
 	<script src="../js/main.js"></script>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +27,7 @@
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<meta http-equiv="refresh" content="600; URL=daily.php">
+	<meta http-equiv="refresh" content="600; URL=index.html">
 	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
@@ -31,7 +35,6 @@
 	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
-
 </head>
 <?php
 	$result = '';
@@ -43,107 +46,56 @@
 					}
 					?>
 
-
-
 <body>
 
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.php">Live</a></li>
-			 <li class="active"><a href="daily.php">Daily</a></li>
+			 <li class="active"><a href="index.html">Live</a></li>
+			 <li><a href="daily.php">Daily</a></li>
 			 <li><a href="monthly.php">Monthly</a></li>
 			 <li><a href="yearly.php">Yearly</a></li>
 		 </ul>
 
-
 	<div class="preloader">
 		<img src="../img/loader.gif" alt="Preloader image">
-	</div> 
+	</div>
 
 
-<?php
-$today = date('Y-m-d');
-if (isset($_GET[date])) {
-	$daydate = $_GET[date];
-	$_SESSION = $daydate;
-
-}
-else
-{
-	$daydate = $today;
-	$_SESSION = $daydate;
-
-}
-$daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
-$nextday = date('Y-m-d',strtotime($daydate . "+1 days")); 
-?>
 <div class="row">
 	<div class="text-center">
-		<br><h4> Daily Graph</h4><br>
+		<br><h3> OpenWB Logging</h3><br>
 	</div>
 </div>
-		<?php if ($graphamold == 1) {
+
+	<?php if ($graphamold == 1) {
 	echo '
-	<div style="height:600px;" id="chartdiv"></div>
+	<div style="height:800px;" id="chartdiv"></div>
 ';	
 				   } else {
 					   echo '
 
 	<div class="row"> 
-	<div class="col-xs-12">
+<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-daily.php?thedate='; echo $daydate; 
-	echo '"
+			<img src="./graph-live.php"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
+</div>
 	'; } ?> 
 
 
 
-<br><br>
-<form name="dailydate" id="dailydate" action="daily.php" method="GET">
-<div class="row col-xs-12">
-	<div class="col-xs-2">
-	</div>
-	<div class="col-xs-8 block-center text-center .text-align:center">
-	<a href="daily.php?date=<?php print $daybefore ?>"><i class="fa fa-angle-left" style="font-size:48px;"></i></a>
-	 &emsp;
-<input id="date" name="date" type="date" min="2018-01-01" value="<?php print $daydate ?>" required="required" />
-&emsp;
-	 	
-		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
-	</div>	
-	<div class="col-xs-2">
-	</div>
-</div>
-<div class="row"><br></div><br>
-<div class="row col-xs-12">
-	<div class="col-xs-4">
-	</div>
-	<div class="col-xs-4 block-center text-center .text-align:center">
-<button type="submit">Go</button>
-	 	
-	</div>	
-	<div class="col-xs-4">
-	</div>
-</div>
 
-
-
-</form>	
-<br><br><br>
-
-</body>
 
 <script>
-am4core.useTheme(am4themes_animated);
+// am4core.useTheme(am4themes_animated);
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
 
 // Set up data source
-chart.dataSource.url = "/openWB/web/logging/graph-dailye.php?thedate=<?php echo $daydate ?>";
+chart.dataSource.url = "/openWB/ramdisk/all.graph";
 chart.dataSource.parser = new am4core.CSVParser();
 chart.dataSource.parser.options.useColumnNames = false;
 
@@ -167,106 +119,78 @@ series1.name = "Bezug";
 series1.fill = am4core.color("#ff0000");
 series1.stroke = am4core.color("#ff0000");
 series1.strokeWidth = 3;
-series1.tensionX = 0.8;
-series1.tensionY = 0.8;
+//series1.tensionX = 0.8;
+//series1.tensionY = 0.8;
 series1.strokeWidth = 1.5;
 series1.fillOpacity = 0.3;
 
 
 var series2 = chart.series.push(new am4charts.LineSeries());
-series2.dataFields.valueY = "col3";
+series2.dataFields.valueY = "col2";
 series2.dataFields.categoryX = "col0";
 series2.name = "LL Gesamt";
 series2.stroke = am4core.color("#4074c9");
-series2.tensionX = 0.8;
-series2.tensionY = 0.8;
+//series2.tensionX = 10;
+//series2.tensionY = 10;
 series2.strokeWidth = 1.5;
 series2.fill = am4core.color("#4074c9");
 series2.fillOpacity = 0.3;
 
 var series4 = chart.series.push(new am4charts.LineSeries());
-series4.dataFields.valueY = "col4";
+series4.dataFields.valueY = "col3";
 series4.dataFields.categoryX = "col0";
 series4.name = "PV";
 series4.stroke = am4core.color("#00ff00");
-series4.tensionX = 0.8;
-series4.tensionY = 0.8;
+//series4.tensionX = 10;
+//series4.tensionY = 10;
 series4.strokeWidth = 1.5;
 series4.fill = am4core.color("#00ff00");
 series4.fillOpacity = 0.3;
 
-var series9 = chart.series.push(new am4charts.LineSeries());
-series9.dataFields.valueY = "col2";
-series9.dataFields.categoryX = "col0";
-series9.name = "Einspeisung";
-series9.stroke = am4core.color("#5d90e2");
-series9.tensionX = 0.8;
-series9.tensionY = 0.8;
-series9.strokeWidth = 1.5;
-series9.fill = am4core.color("#5d90e2");
-series9.fillOpacity = 0.3;
+var series5 = chart.series.push(new am4charts.LineSeries());
+series5.dataFields.valueY = "col4";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#845EC2");
+//series5.tensionX = 10;
+//series5.tensionY = 10;
+series5.strokeWidth = 1.5;
+
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col5";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#aa5ec2");
+//series6.tensionX = 10;
+//series6.tensionY = 10;
+series6.strokeWidth = 1.5;
 
 var series3 = chart.series.push(new am4charts.LineSeries());
-series3.dataFields.valueY = "col5";
+series3.dataFields.valueY = "col7";
 series3.dataFields.categoryX = "col0";
-series3.name = "Speicherladung";
+series3.name = "Speicherleistung";
 series3.stroke = am4core.color("#fcbe1e");
 series3.fill = am4core.color("#fcbe1e");
 series3.fillOpacity = 0.3;
-series3.tensionX = 0.8;
-series3.tensionY = 0.8;
-series3.strokeWidth = 1.5;
-var series3 = chart.series.push(new am4charts.LineSeries());
-series3.dataFields.valueY = "col6";
-series3.dataFields.categoryX = "col0";
-series3.name = "Speicherentladung";
-series3.stroke = am4core.color("#fc6f1e");
-series3.fill = am4core.color("#fc6f1e");
-series3.fillOpacity = 0.3;
-series3.tensionX = 0.8;
-series3.tensionY = 0.8;
+//series3.tensionX = 10;
+//series3.tensionY = 10;
 series3.strokeWidth = 1.5;
 
-/*
 var series7 = chart.series.push(new am4charts.LineSeries());
 series7.dataFields.valueY = "col8";
 series7.dataFields.categoryX = "col0";
 series7.name = "Speicher SoC";
 series7.stroke = am4core.color("#fcbe1e");
-series7.tensionX = 10;
-series7.tensionY = 10;
+//series7.tensionX = 10;
+//series7.tensionY = 10;
 series7.strokeWidth = 1.5;
 series7.yAxis = valueAxis2;
- */
-
-
-var series5 = chart.series.push(new am4charts.LineSeries());
-series5.dataFields.valueY = "col7";
-series5.dataFields.categoryX = "col0";
-series5.name = "LP 1";
-series5.stroke = am4core.color("#845EC2");
-series5.tensionX = 0.8;
-series5.tensionY = 0.8;
-series5.strokeWidth = 1.5;
-
-var series6 = chart.series.push(new am4charts.LineSeries());
-series6.dataFields.valueY = "col8";
-series6.dataFields.categoryX = "col0";
-series6.name = "LP 2";
-series6.stroke = am4core.color("#aa5ec2");
-series6.tensionX = 0.8;
-series6.tensionY = 0.8;
-series6.strokeWidth = 1.5;
-
-
 
 var series8 = chart.series.push(new am4charts.LineSeries());
 series8.dataFields.valueY = "col9";
 series8.dataFields.categoryX = "col0";
 series8.name = "Lp1 SoC";
 series8.stroke = am4core.color("#845EC2");
-//series8.tensionX = 0.8;
-//series8.tensionY = 0.8;
 series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
 
@@ -275,13 +199,11 @@ series9.dataFields.valueY = "col10";
 series9.dataFields.categoryX = "col0";
 series9.name = "Lp2 SoC";
 series9.stroke = am4core.color("#aa5ec2");
-//series9.tensionX = 0.8;
-//series9.tensionY = 0.8;
 series9.strokeWidth = 1.5;
 series9.yAxis = valueAxis2;
 
-
 chart.cursor = new am4charts.XYCursor();
+
 
 
 // Add scrollbar
@@ -298,4 +220,13 @@ chart.legend = new am4charts.Legend();
 
 
 
+
+
+</body>
 </html>
+
+
+
+
+
+

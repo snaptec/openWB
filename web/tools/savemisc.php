@@ -53,10 +53,15 @@ foreach($lines as $line) {
 	    $result .= 'pushoveruser=\''.$_POST[pushoveruser]."'\n";
 	   	$writeit = '1';
  		} 
-   if(strpos($line, "grapham=") !== false) {
+	   if(strpos($line, "grapham=") !== false) {
 	    $result .= 'grapham='.$_POST[grapham]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "graphliveam=") !== false) {
+	    $result .= 'graphliveam='.$_POST[graphliveam]."\n";
+	    $writeit = '1';
+	    } 
+
 
 
 

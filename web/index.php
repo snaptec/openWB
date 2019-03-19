@@ -161,8 +161,14 @@
 		if(strpos($line, "evuglaettungakt=") !== false) {
 			list(, $evuglaettungaktold) = explode("=", $line, 2);
 		}
-		if(strpos($line, "grapham=") !== false) {
-			list(, $graphamold) = explode("=", $line, 2);
+		if(strpos($line, "graphliveam=") !== false) {
+			list(, $graphliveamold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "speicherpvui=") !== false) {
+			list(, $speicherpvuiold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "speicherpveinbeziehen=") !== false) {
+			list(, $speicherpveinbeziehenold) = explode("=", $line, 2);
 		}
 
 	}
@@ -212,7 +218,7 @@
 			</div></div>
 			</div>
 			<br>
-				<?php if ($graphamold == 1) {
+				<?php if ($graphliveamold == 1) {
 								echo '
 		<div style="height:400px;" id="chartdiv"></div>
 ';	
@@ -291,7 +297,7 @@
 	});
 	</script>
 
-						<div class="row col-xs-12">
+						<div class="row">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				<?php echo $lp1nameold ?> 	
 				</div>
@@ -307,7 +313,7 @@
 					   } ?>
 				</div>
 			</div>
-			<div class="row col-xs-12" id="lp2lldiv">
+			<div class="row" id="lp2lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp2nameold ?> 	
 				</div>
@@ -323,7 +329,7 @@
 					   } ?>
 				</div>
 			</div>
-			<div class="row col-xs-12" id="lp3lldiv">
+			<div class="row" id="lp3lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp3nameold ?> 	
 				</div>
@@ -334,7 +340,7 @@
 				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 				</div>
 			</div>
-			<div class="row col-xs-12" id="gesamtlldiv">
+			<div class="row" id="gesamtlldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				</div>
 
@@ -389,6 +395,32 @@
                                         </div>
 				</div>
 			</div>
+			<div class="row" id="speicherpvuidiv">
+					<div class="col-xs-6"></div>
+					 <div class="col-xs-3 pull-right">
+					      <?php if ($speicherpveinbeziehenold == 0) {
+								echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';	
+					   } else {
+						   echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+					   } ?>
+
+
+					</div>
+
+			</div>
+			<input hidden name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold ; ?>">
+			
+			<script>
+			   $(function() {
+				if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
+				$('#speicherpvuidiv').show(); 
+			      } else {
+				$('#speicherpvuidiv').hide();
+			      } 
+
+			});
+			</script>
+
 			<div class="row">
 			<hr>
 			<div class="row">
@@ -863,7 +895,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.32 Beta 				</div>
+				<!-- master -->	Ver 1.33 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">
@@ -896,7 +928,7 @@
 				
 				</div>
 				<div class="col-xs-4 text-right">
-					 <a href="logging/index.html">Logging</a>
+					 <a href="logging/index.php">Logging</a>
 				</div>
 
 		
@@ -1173,7 +1205,13 @@ var chart = am4core.create("chartdiv", am4charts.XYChart);
 chart.dataSource.url = "../ramdisk/all-live.graph";
 chart.dataSource.incremental = true;
 chart.dataSource.keepCount = true;
-chart.dataSource.reloadFrequency = 30000;
+chart.dataSource.reloadFrequency = 10000;
+//chart.dataSource.incrementalParams = {
+//incremental: "y"
+//}
+chart.validateData();
+//chart.dataSource.url = "../ramdisk/all-liveinc.graph";
+//chart.dataSource.load();
 chart.dataSource.parser = new am4core.CSVParser();
 chart.dataSource.parser.options.useColumnNames = false;
 
@@ -1183,67 +1221,97 @@ categoryAxis.dataFields.category = "col0";
 
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Watt";
 
+var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis2.renderer.opposite = true;
+valueAxis2.title.text = "% SoC";
+valueAxis2.renderer.grid.template.disabled = true;
 // Creaite series
 var series1 = chart.series.push(new am4charts.LineSeries());
 series1.dataFields.valueY = "col1";
 series1.dataFields.categoryX = "col0";
 series1.name = "Bezug";
+series1.fill = am4core.color("#ff0000");
 series1.stroke = am4core.color("#ff0000");
 series1.strokeWidth = 3;
-series1.tensionX = 0.8;
-series1.tensionY = 0.8;
 series1.strokeWidth = 1.5;
+series1.fillOpacity = 0.3;
 
 
 var series2 = chart.series.push(new am4charts.LineSeries());
 series2.dataFields.valueY = "col2";
 series2.dataFields.categoryX = "col0";
 series2.name = "LL Gesamt";
-series2.tensionX = 10;
-series2.tensionY = 10;
+series2.stroke = am4core.color("#4074c9");
 series2.strokeWidth = 1.5;
-
+series2.fill = am4core.color("#4074c9");
+series2.fillOpacity = 0.3;
 
 var series4 = chart.series.push(new am4charts.LineSeries());
 series4.dataFields.valueY = "col3";
 series4.dataFields.categoryX = "col0";
 series4.name = "PV";
 series4.stroke = am4core.color("#00ff00");
-series4.tensionX = 10;
-series4.tensionY = 10;
 series4.strokeWidth = 1.5;
-
+series4.fill = am4core.color("#00ff00");
+series4.fillOpacity = 0.3;
 
 var series5 = chart.series.push(new am4charts.LineSeries());
 series5.dataFields.valueY = "col4";
 series5.dataFields.categoryX = "col0";
 series5.name = "LP 1";
-series5.stroke = am4core.color("#fcbe32");
-series5.tensionX = 10;
-series5.tensionY = 10;
+series5.stroke = am4core.color("#845EC2");
 series5.strokeWidth = 1.5;
 
 var series6 = chart.series.push(new am4charts.LineSeries());
 series6.dataFields.valueY = "col5";
 series6.dataFields.categoryX = "col0";
 series6.name = "LP 2";
-series6.stroke = am4core.color("#befc32");
-series6.tensionX = 10;
-series6.tensionY = 10;
+series6.stroke = am4core.color("#aa5ec2");
 series6.strokeWidth = 1.5;
 
 var series3 = chart.series.push(new am4charts.LineSeries());
 series3.dataFields.valueY = "col7";
 series3.dataFields.categoryX = "col0";
 series3.name = "Speicherleistung";
-series3.stroke = am4core.color("#000000");
-series3.tensionX = 10;
-series3.tensionY = 10;
+series3.stroke = am4core.color("#fcbe1e");
+series3.fill = am4core.color("#fcbe1e");
+series3.fillOpacity = 0.3;
 series3.strokeWidth = 1.5;
 
+var series7 = chart.series.push(new am4charts.LineSeries());
+series7.dataFields.valueY = "col8";
+series7.dataFields.categoryX = "col0";
+series7.name = "Speicher SoC";
+series7.stroke = am4core.color("#fcbe1e");
+series7.strokeWidth = 1.5;
+series7.yAxis = valueAxis2;
 
-chart.cursor = new am4charts.XYCursor();
+var series8 = chart.series.push(new am4charts.LineSeries());
+series8.dataFields.valueY = "col9";
+series8.dataFields.categoryX = "col0";
+series8.name = "Lp1 SoC";
+series8.stroke = am4core.color("#845EC2");
+series8.strokeWidth = 0.5;
+series8.yAxis = valueAxis2;
+
+var series9 = chart.series.push(new am4charts.LineSeries());
+series9.dataFields.valueY = "col10";
+series9.dataFields.categoryX = "col0";
+series9.name = "Lp2 SoC";
+series9.stroke = am4core.color("#aa5ec2");
+series9.strokeWidth = 0.5;
+series9.yAxis = valueAxis2;
+
+//chart.cursor = new am4charts.XYCursor();
+
+
+// Add scrollbar
+// chart.scrollbarX = new am4charts.XYChartScrollbar();
+// chart.scrollbarX.series.push(lineSeries);
+// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.startLocation = 0.5;
+// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.endLocation = 0.5;
 
 // Add legend
 chart.legend = new am4charts.Legend();

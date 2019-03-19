@@ -692,7 +692,18 @@ foreach($lines as $line) {
 	if(strpos($line, "evuglaettungakt=") !== false) {
 		list(, $evuglaettungaktold) = explode("=", $line);
 	}
-
+	if(strpos($line, "nrgkickiplp1=") !== false) {
+		list(, $nrgkickiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkicktimeoutlp1=") !== false) {
+		list(, $nrgkicktimeoutlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickmaclp1=") !== false) {
+		list(, $nrgkickmaclp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickpwlp1=") !== false) {
+		list(, $nrgkickpwlp1old) = explode("=", $line);
+	}
 
 
 }
@@ -781,6 +792,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
 		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
+		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
 	</select>
 
@@ -844,7 +856,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 </div>
 <div id="evsecongoe">
 <div class="row bg-info">
-	<b><label for="goeiplp1">Go-e IP Adressee:</label></b>
+	<b><label for="goeiplp1">Go-e IP Adresse:</label></b>
 	<input type="text" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>"><br>
 </div>
 <div class="row bg-info">
@@ -859,6 +871,40 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 </div>
 
 </div>
+<div id="evseconnrgkick">
+<div class="row bg-info">
+	<b><label for="nrgkickiplp1">NRGKick IP Adresse:</label></b>
+	<input type="text" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo $nrgkickiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkicktimeoutlp1">NRGKick Timeout:</label></b>
+	<input type="text" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+<div class="row bg-info">
+	<b><label for="nrgkickmaclp1">NRGKick MAC Adresse:</label></b>
+	<input type="text" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickpwlp1">NRGKick PW:</label></b>
+	<input type="text" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo $nrgkickpwlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Password welches in der NRGKick App festgelegt wurde. <br><br>
+</div>
+
+
+</div>
+
+</div>
+
 <script>
 $(function() {
       if($('#evsecon').val() == 'dac') {
@@ -867,6 +913,7 @@ $(function() {
 		$('#evseconswifi').hide();
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
+		$('#evseconnrgkick').hide();
 		$('#evseconmastereth').hide();
 	}
 	if($('#evsecon').val() == 'modbusevse') {
@@ -876,6 +923,8 @@ $(function() {
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
+		$('#evseconnrgkick').hide();
+
 	
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
@@ -885,6 +934,7 @@ $(function() {
 		$('#llmodullp1').hide();
 			$('#evseconmastereth').hide();
 		$('#evsecongoe').hide();
+		$('#evseconnrgkick').hide();
 
       	} 
 		if($('#evsecon').val() == 'goe') {
@@ -894,16 +944,29 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	       		$('#evseconmastereth').hide();
-	} 
+			$('#evseconnrgkick').hide();
+
+		} 
 		if($('#evsecon').val() == 'masterethframer') {
 			$('#evsecongoe').hide();
 			$('#evsecondac').hide();
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').show();
-	} 
+			$('#evseconmastereth').show();
+		$('#evseconnrgkick').hide();
 
+	} 
+		if($('#evsecon').val() == 'nrgkick') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').show();
+
+		}   
 	$('#evsecon').change(function(){
 	        if($('#evsecon').val() == 'dac') {
 			$('#evsecondac').show(); 
@@ -912,7 +975,8 @@ $(function() {
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-	
+			$('#evseconnrgkick').hide();
+
 
 		}
 		if($('#evsecon').val() == 'modbusevse') {
@@ -922,7 +986,8 @@ $(function() {
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-	
+			$('#evseconnrgkick').hide();
+
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
 			$('#evseconswifi').show();
@@ -931,7 +996,9 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evsecongoe').hide();
 			$('#evseconmastereth').hide();
-	        } 
+			$('#evseconnrgkick').hide();
+       
+		} 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
 			$('#evsecondac').hide();
@@ -939,6 +1006,8 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
 			$('#evsecongoe').hide();
@@ -947,8 +1016,20 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').show();
-	} 
-	    });
+			$('#evseconnrgkick').hide();
+
+		} 
+ 		if($('#evsecon').val() == 'nrgkick') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').show();
+
+		}       
+	});
 });
 </script>
 
@@ -2786,12 +2867,7 @@ $(function() {
 
 <div id="wattbezugplentihaus">
 	<div class="row" style="background-color:#febebe">
-		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
-		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
-	</div>
-	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Dieses Modul erfordert einen (z.B. einen EM300) Smart Meter im Hausverbrauchszweig.<br>
-	Es muss kein extra PV Modul ausgewählt werden (PV Modul auf None stellen).<br> 
+		Das zugehörige PV Modul (Kostal Plenticore) muss gewählt werden. Dieses Modul erfordert einen (z.B. EM300) Smart Meter im Hausverbrauchszweig.<br>
 	</div>
 </div>
 

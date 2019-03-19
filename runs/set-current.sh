@@ -129,6 +129,32 @@ function setChargingCurrentgoe () {
 	fi
 }
 
+function setChargingCurrentnrgkick () {
+	if [[ $evsecon == "nrgkick" ]]; then
+		if [[ $current -eq 0 ]]; then
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+		else
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+			oldcurrent=$(echo $output | jq -r '.Values.ChargingCurrent.Value')
+			if (( oldcurrent != $current )) ; then
+				curl --silent --connect-timeout $nrgkicktimeoutlp1 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current}, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+ > /dev/null
+			fi
+		fi
+	fi
+}
+
+
+
+
 
 
 # function for setting the charging current
@@ -154,6 +180,10 @@ function setChargingCurrent () {
 	if [[ $evsecon == "masterethframer" ]]; then
 		setChargingCurrentMasterethframer $current 
 	fi
+	if [[ $evsecon == "nrgkick" ]]; then
+		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
+	fi
+
 }
 
 #####
