@@ -1063,6 +1063,11 @@ if ! grep -Fq "nrgkickpwlp1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nrgkickpwlp1=1234" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "kostalplenticorehaus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticorehaus=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then

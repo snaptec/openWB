@@ -761,7 +761,12 @@ foreach($lines as $line) {
 	    $result .= 'kostalplenticoreip='.$_POST[kostalplenticoreip]."\n";
 	    $writeit = '1';
 	   } 
-	    if(strpos($line, "mpm3pmevuhaus=") !== false) {
+	  if(strpos($line, "kostalplenticorehaus=") !== false) {
+	    $result .= 'kostalplenticorehaus='.$_POST[kostalplenticorehaus]."\n";
+	    $writeit = '1';
+	   } 
+
+	   if(strpos($line, "mpm3pmevuhaus=") !== false) {
 	    $result .= 'mpm3pmevuhaus='.$_POST[mpm3pmevuhaus]."\n";
 	$writeit = '1';
     } 

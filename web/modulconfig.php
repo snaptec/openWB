@@ -704,7 +704,9 @@ foreach($lines as $line) {
 	if(strpos($line, "nrgkickpwlp1=") !== false) {
 		list(, $nrgkickpwlp1old) = explode("=", $line);
 	}
-
+	if(strpos($line, "kostalplenticorehaus=") !== false) {
+		list(, $kostalplenticorehausold) = explode("=", $line);
+	}
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -2869,6 +2871,10 @@ $(function() {
 	<div class="row" style="background-color:#febebe">
 		Das zugehörige PV Modul (Kostal Plenticore) muss gewählt werden. Dieses Modul erfordert einen (z.B. EM300) Smart Meter im Hausverbrauchszweig.<br>
 	</div>
+	<input type='hidden' value='0' name='kostalplenticorehaus'>
+	<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
+	<label for="kostalplenticorehaus">EM300 im EVU zweig</label><br>
+
 </div>
 
 <div id="wattbezugmpm3pm">

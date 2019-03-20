@@ -36,7 +36,10 @@ f.close()
 resp= client.read_holding_registers(252,2,unit=71)
 FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 final =int(FRegister.decode_32bit_float())
-final = final - pvwatt
+if ( int(sys.argv[2]) == 0):
+    final = final - pvwatt
+else:
+    final = final
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
