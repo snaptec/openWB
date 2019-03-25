@@ -707,6 +707,14 @@ foreach($lines as $line) {
 	if(strpos($line, "kostalplenticorehaus=") !== false) {
 		list(, $kostalplenticorehausold) = explode("=", $line);
 	}
+	if(strpos($line, "kostalplenticorebatt=") !== false) {
+		list(, $kostalplenticorebattold) = explode("=", $line);
+	}
+	if(strpos($line, "froniusprimo=") !== false) {
+		list(, $froniusprimoold) = explode("=", $line);
+	}
+
+
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -3066,6 +3074,11 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	<div class="row" style="background-color:#febebe">
 		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
 	</div>
+	<input type='hidden' value='0' name='froniusprimo'>
+	<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
+	<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label><br>
+
+
 </div>
 
 <div id="wattbezugjson">
@@ -3951,6 +3964,11 @@ $(function() {
 	<div class="row" style="background-color:#befebe">
 		Gültige Werte IP.<br> 
 	</div>
+	<input type='hidden' value='0' name='kostalplenticorebatt'>
+	<input id="kostalplenticorebatt" name="kostalplenticorebatt" value="1" type="checkbox" <?php if ( $kostalplenticorebattold == 1){ echo "checked"; } ?> >
+	<label for="kostalplenticorebatt">Batterie am Kostal angeschlossen</label><br>
+
+
 </div>
 
 

@@ -141,19 +141,24 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 am4core.useTheme(am4themes_animated);
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
-
+ chart.numberFormatter.numberFormat = "#.## a";
 // Set up data source
 chart.dataSource.url = "/openWB/web/logging/graph-dailye.php?thedate=<?php echo $daydate ?>";
 chart.dataSource.parser = new am4core.CSVParser();
 chart.dataSource.parser.options.useColumnNames = false;
-
+//
 // Create axes
 var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 categoryAxis.dataFields.category = "col0";
 
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Watt";
+valueAxis.title.text = "Wh";
+
+valueAxis.adapter.add("getTooltipText", (text) => {
+return text * 12 + "Watt";
+});
+
 
 var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis2.renderer.opposite = true;
@@ -171,7 +176,6 @@ series1.tensionX = 0.8;
 series1.tensionY = 0.8;
 series1.strokeWidth = 1.5;
 series1.fillOpacity = 0.3;
-
 
 var series2 = chart.series.push(new am4charts.LineSeries());
 series2.dataFields.valueY = "col3";
@@ -206,16 +210,16 @@ series9.strokeWidth = 1.5;
 series9.fill = am4core.color("#5d90e2");
 series9.fillOpacity = 0.3;
 
-var series3 = chart.series.push(new am4charts.LineSeries());
-series3.dataFields.valueY = "col5";
-series3.dataFields.categoryX = "col0";
-series3.name = "Speicherladung";
-series3.stroke = am4core.color("#fcbe1e");
-series3.fill = am4core.color("#fcbe1e");
-series3.fillOpacity = 0.3;
-series3.tensionX = 0.8;
-series3.tensionY = 0.8;
-series3.strokeWidth = 1.5;
+var series11 = chart.series.push(new am4charts.LineSeries());
+series11.dataFields.valueY = "col5";
+series11.dataFields.categoryX = "col0";
+series11.name = "Speicherladung";
+series11.stroke = am4core.color("#fcbe1e");
+series11.fill = am4core.color("#fcbe1e");
+series11.fillOpacity = 0.3;
+series11.tensionX = 0.8;
+series11.tensionY = 0.8;
+series11.strokeWidth = 1.5;
 var series3 = chart.series.push(new am4charts.LineSeries());
 series3.dataFields.valueY = "col6";
 series3.dataFields.categoryX = "col0";
@@ -226,19 +230,6 @@ series3.fillOpacity = 0.3;
 series3.tensionX = 0.8;
 series3.tensionY = 0.8;
 series3.strokeWidth = 1.5;
-
-/*
-var series7 = chart.series.push(new am4charts.LineSeries());
-series7.dataFields.valueY = "col8";
-series7.dataFields.categoryX = "col0";
-series7.name = "Speicher SoC";
-series7.stroke = am4core.color("#fcbe1e");
-series7.tensionX = 10;
-series7.tensionY = 10;
-series7.strokeWidth = 1.5;
-series7.yAxis = valueAxis2;
- */
-
 
 var series5 = chart.series.push(new am4charts.LineSeries());
 series5.dataFields.valueY = "col7";
@@ -270,30 +261,55 @@ series8.stroke = am4core.color("#845EC2");
 series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
 
-var series9 = chart.series.push(new am4charts.LineSeries());
-series9.dataFields.valueY = "col10";
-series9.dataFields.categoryX = "col0";
-series9.name = "Lp2 SoC";
-series9.stroke = am4core.color("#aa5ec2");
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col10";
+series10.dataFields.categoryX = "col0";
+series10.name = "Lp2 SoC";
+series10.stroke = am4core.color("#aa5ec2");
 //series9.tensionX = 0.8;
 //series9.tensionY = 0.8;
-series9.strokeWidth = 1.5;
-series9.yAxis = valueAxis2;
+series10.strokeWidth = 1.5;
+series10.yAxis = valueAxis2;
 
 
 chart.cursor = new am4charts.XYCursor();
-
-
-// Add scrollbar
-// chart.scrollbarX = new am4charts.XYChartScrollbar();
-// chart.scrollbarX.series.push(lineSeries);
-// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.startLocation = 0.5;
-// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.endLocation = 0.5;
-
 // Add legend
-chart.legend = new am4charts.Legend();
 
+series4.customField = 12;
+series1.legendSettings.valueText = "{valueY.sum}Wh";
+series4.legendSettings.valueText = "{valueY.sum}Wh";
+series3.legendSettings.valueText = "{valueY.sum}Wh";
+series2.legendSettings.valueText = "{valueY.sum}Wh";
+series9.legendSettings.valueText = "{valueY.sum}Wh";
+series5.legendSettings.valueText = "{valueY.sum}Wh";
+series6.legendSettings.valueText = "{valueY.sum}Wh";
+series11.legendSettings.valueText = "{valueY.sum}Wh";
+
+
+chart.legend = new am4charts.Legend();
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

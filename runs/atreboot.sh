@@ -1067,6 +1067,14 @@ if ! grep -Fq "kostalplenticorehaus=" /var/www/html/openWB/openwb.conf
 then
 	  echo "kostalplenticorehaus=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "kostalplenticorebatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticorebatt=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
+  fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
