@@ -197,7 +197,7 @@ fi
 
 #######################
 #Ladestromstarke berechnen
-llphasentest=$((llalt - 3))
+llphasentest=3
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( llalt > 3 )); then
 	anzahlphasen=0

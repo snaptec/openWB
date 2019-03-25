@@ -761,7 +761,15 @@ foreach($lines as $line) {
 	    $result .= 'kostalplenticoreip='.$_POST[kostalplenticoreip]."\n";
 	    $writeit = '1';
 	   } 
-	    if(strpos($line, "mpm3pmevuhaus=") !== false) {
+	  if(strpos($line, "kostalplenticorehaus=") !== false) {
+	    $result .= 'kostalplenticorehaus='.$_POST[kostalplenticorehaus]."\n";
+	    $writeit = '1';
+	   } 
+	  if(strpos($line, "kostalplenticorebatt=") !== false) {
+	    $result .= 'kostalplenticorebatt='.$_POST[kostalplenticorebatt]."\n";
+	    $writeit = '1';
+	   } 
+	   if(strpos($line, "mpm3pmevuhaus=") !== false) {
 	    $result .= 'mpm3pmevuhaus='.$_POST[mpm3pmevuhaus]."\n";
 	$writeit = '1';
     } 
@@ -773,6 +781,11 @@ foreach($lines as $line) {
 	    $result .= 'evuglaettungakt='.$_POST[evuglaettungakt]."\n";
 	$writeit = '1';
     } 
+	    if(strpos($line, "froniusprimo=") !== false) {
+	    $result .= 'froniusprimo='.$_POST[froniusprimo]."\n";
+	$writeit = '1';
+    } 
+
 
 
 

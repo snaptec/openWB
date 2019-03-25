@@ -111,35 +111,35 @@ if ($speichervorhanden == 1) {
 }
 } else {
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = ($rbezug[$x-1] * 12 - $rbezug[$x] * 12) * -1;
+	    $bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = ($rpv[$x-1] * 12 - $rpv[$x] * 12) * -1;
+	    $pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	if ($logeinspeisungneg == 1) {
-	$einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;    
+	$einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];    
 	} else {
-	$einspeisungdiff[$x] = ($reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12) * -1;
+	$einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
 	}
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = ($rllg[$x-1] * 12 - $rllg[$x] * 12) * -1;
+	    $llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = ($rll1[$x-1] * 12 - $rll1[$x] * 12) * -1;
+	    $ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = ($rll2[$x-1] * 12 - $rll2[$x] * 12) * -1;
+	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] * 12 - $rll3[$x] * 12;
+	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x];
 }
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12) * -1;
+	    $speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12) * -1;
+	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
 	}
 }
 /*
