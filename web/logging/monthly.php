@@ -203,6 +203,7 @@ series1.tensionX = 0.8;
 series1.tensionY = 0.8;
 series1.strokeWidth = 1.5;
 series1.fillOpacity = 0.3;
+//series1.columns.template.tooltipText = "test";
 
 var series2 = chart.series.push(new am4charts.ColumnSeries());
 series2.dataFields.valueY = "col3";
@@ -236,28 +237,7 @@ series9.tensionY = 0.8;
 series9.strokeWidth = 1.5;
 series9.fill = am4core.color("#5d90e2");
 series9.fillOpacity = 0.3;
-/*
-var series11 = chart.series.push(new am4charts.ColumnSeries());
-series11.dataFields.valueY = "col5";
-series11.dataFields.categoryX = "col0";
-series11.name = "Speicherladung";
-series11.stroke = am4core.color("#fcbe1e");
-series11.fill = am4core.color("#fcbe1e");
-series11.fillOpacity = 0.3;
-series11.tensionX = 0.8;
-series11.tensionY = 0.8;
-series11.strokeWidth = 1.5;
-var series3 = chart.series.push(new am4charts.ColumnSeries());
-series3.dataFields.valueY = "col6";
-series3.dataFields.categoryX = "col0";
-series3.name = "Speicherentladung";
-series3.stroke = am4core.color("#fc6f1e");
-series3.fill = am4core.color("#fc6f1e");
-series3.fillOpacity = 0.3;
-series3.tensionX = 0.8;
-series3.tensionY = 0.8;
-series3.strokeWidth = 1.5;
- */
+
 var series5 = chart.series.push(new am4charts.ColumnSeries());
 series5.dataFields.valueY = "col7";
 series5.dataFields.categoryX = "col0";
@@ -278,6 +258,11 @@ series6.strokeWidth = 1.5;
 
 
 chart.cursor = new am4charts.XYCursor();
+chart.cursor.xAxis = categoryAxis;
+chart.cursor.fullWidthLineX = true;
+chart.cursor.lineX.strokeWidth = 0;
+chart.cursor.lineX.fill = am4core.color("#003985");
+chart.cursor.lineX.fillOpacity = 0.1;
 // Add legend
 
 //series4.customField = 12;

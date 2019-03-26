@@ -40,7 +40,23 @@
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
-					}
+		if(strpos($line, "graphinteractiveam=") !== false) {
+			list(, $graphinteractiveamold) = explode("=", $line);
+		}
+
+		if(strpos($line, "lastmanagement=") !== false) {
+			list(, $lastmanagementold) = explode("=", $line);
+		}
+		if(strpos($line, "lastmanagements2=") !== false) {
+			list(, $lastmanagements2old) = explode("=", $line);
+		}
+
+
+	}
+	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+
+
 					?>
 
 
@@ -58,7 +74,7 @@
 
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="Preloader image">
+		<img src="../img/loader.gif" alt="OpenWB loading...">
 	</div> 
 
 
@@ -138,7 +154,18 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 </body>
 
 <script>
-am4core.useTheme(am4themes_animated);
+	// which graphs needed
+	
+	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
+
+
+if ( graphinteractiveam == 1 ){
+	am4core.useTheme(am4themes_animated);
+}
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
  chart.numberFormatter.numberFormat = "#.## a";
@@ -156,7 +183,16 @@ var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis.title.text = "Wh";
 
 valueAxis.adapter.add("getTooltipText", (text) => {
-return text * 12 + "Watt";
+if (text.includes("k")) {
+	text = text.substring(0, text.length -1);
+	text = text * 12 * 1000;
+	text = Math.round(text);
+	text = text +"W";
+} else {
+	text = text * 12 + "W";
+}
+
+return text;
 });
 
 
@@ -210,6 +246,7 @@ series9.strokeWidth = 1.5;
 series9.fill = am4core.color("#5d90e2");
 series9.fillOpacity = 0.3;
 
+if (speichervorhanden == 1) {
 var series11 = chart.series.push(new am4charts.LineSeries());
 series11.dataFields.valueY = "col5";
 series11.dataFields.categoryX = "col0";
@@ -230,7 +267,16 @@ series3.fillOpacity = 0.3;
 series3.tensionX = 0.8;
 series3.tensionY = 0.8;
 series3.strokeWidth = 1.5;
+var series12 = chart.series.push(new am4charts.LineSeries());
+series12.dataFields.valueY = "col12";
+series12.dataFields.categoryX = "col0";
+series12.name = "Speicher SoC";
+series12.stroke = am4core.color("#fc6f1e");
+series12.strokeWidth = 1.5;
+series12.yAxis = valueAxis2;
 
+
+}
 var series5 = chart.series.push(new am4charts.LineSeries());
 series5.dataFields.valueY = "col7";
 series5.dataFields.categoryX = "col0";
@@ -239,7 +285,7 @@ series5.stroke = am4core.color("#845EC2");
 series5.tensionX = 0.8;
 series5.tensionY = 0.8;
 series5.strokeWidth = 1.5;
-
+if ( lastmanagement == 1) {
 var series6 = chart.series.push(new am4charts.LineSeries());
 series6.dataFields.valueY = "col8";
 series6.dataFields.categoryX = "col0";
@@ -248,7 +294,17 @@ series6.stroke = am4core.color("#aa5ec2");
 series6.tensionX = 0.8;
 series6.tensionY = 0.8;
 series6.strokeWidth = 1.5;
-
+}
+if ( lastmanagements2 == 1) {
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col11";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 3";
+series6.stroke = am4core.color("#aa5ec2");
+series6.tensionX = 0.8;
+series6.tensionY = 0.8;
+series6.strokeWidth = 1.5;
+}
 
 
 var series8 = chart.series.push(new am4charts.LineSeries());
@@ -261,6 +317,8 @@ series8.stroke = am4core.color("#845EC2");
 series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
 
+
+if (soc1vorhanden == 1) { 
 var series10 = chart.series.push(new am4charts.LineSeries());
 series10.dataFields.valueY = "col10";
 series10.dataFields.categoryX = "col0";
@@ -270,7 +328,7 @@ series10.stroke = am4core.color("#aa5ec2");
 //series9.tensionY = 0.8;
 series10.strokeWidth = 1.5;
 series10.yAxis = valueAxis2;
-
+}
 
 chart.cursor = new am4charts.XYCursor();
 // Add legend

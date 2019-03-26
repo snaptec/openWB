@@ -40,6 +40,11 @@
 	$result = '';
 	$lines = file('/var/www/html/openWB/openwb.conf');
 	foreach($lines as $line) {
+		if(strpos($line, "graphinteractiveam=") !== false) {
+			list(, $graphinteractiveamold) = explode("=", $line);
+		}
+
+
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
@@ -58,7 +63,7 @@
 		 </ul>
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="Preloader image">
+		<img src="../img/loader.gif" alt="OpenWB loading...">
 	</div>
 
 
@@ -89,8 +94,15 @@
 
 
 
-<script>
-// am4core.useTheme(am4themes_animated);
+	<script>
+
+
+var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
+
+
+if ( graphinteractiveam == 1 ){
+	am4core.useTheme(am4themes_animated);
+}
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
 

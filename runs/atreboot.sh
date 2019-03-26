@@ -1075,6 +1075,14 @@ if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "kebaiplp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kebaiplp1=192.168.25.25" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "graphinteractiveam=" /var/www/html/openWB/openwb.conf
+then
+	  echo "graphinteractiveam=1" >> /var/www/html/openWB/openwb.conf
+  fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)

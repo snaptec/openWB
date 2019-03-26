@@ -66,9 +66,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	if(strpos($line, "ladeleistungmodul=") !== false) {
-		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer" or $_POST[evsecon] == "nrgkick") {
+		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer" or $_POST[evsecon] == "nrgkick" or $_POST[evsecon] == "keba") {
 			if($_POST[evsecon] == "goe") {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
+			}
+			if($_POST[evsecon] == "keba") {
+				$result .= 'ladeleistungmodul=keballlp1'."\n";
 			}
 			if($_POST[evsecon] == "nrgkick") {
 				$result .= 'ladeleistungmodul=nrgkicklp1'."\n";
@@ -785,6 +788,11 @@ foreach($lines as $line) {
 	    $result .= 'froniusprimo='.$_POST[froniusprimo]."\n";
 	$writeit = '1';
     } 
+	    if(strpos($line, "kebaiplp1=") !== false) {
+	    $result .= 'kebaiplp1='.$_POST[kebaiplp1]."\n";
+	$writeit = '1';
+    } 
+
 
 
 

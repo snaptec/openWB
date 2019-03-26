@@ -362,6 +362,10 @@ foreach($lines as $line) {
 	if(strpos($line, "grapham=") !== false) {
 		list(, $graphamold) = explode("=", $line);
 	}
+	if(strpos($line, "graphinteractiveam=") !== false) {
+		list(, $graphinteractiveamold) = explode("=", $line);
+	}
+
 	if(strpos($line, "graphliveam=") !== false) {
 		list(, $graphliveamold) = explode("=", $line);
 	}
@@ -563,14 +567,21 @@ $(function() {
 			<br>
 	</div>
 	<div class="row">
-			<b><label for="grapham">Interaktiver im Logging Graph:</label></b>
+			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
 			<select type="text" name="grapham" id="grapham">
 				<option <?php if($graphamold == 0) echo selected ?>value="0">Aus</option>
 				<option <?php if($graphamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
 	</div>
-
+	<div class="row">
+			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
+			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
+				<option <?php if($graphinteractiveamold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>

@@ -27,6 +27,9 @@ if ($speichervorhanden == 1) {
 	$speicherefile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-speicherewh.csv';
 	$speicheriwh = file($speicherifile, FILE_IGNORE_NEW_LINES);
 	$speicherewh = file($speicherefile, FILE_IGNORE_NEW_LINES);
+	$speichersocfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-speichersoc.csv';
+	$speichersoc = file($speichersocfile, FILE_IGNORE_NEW_LINES);
+
 	$firstsiwh = reset($speicheriwh);
 	$lastsiwh = end($speicheriwh);
 	$dailysiwh = number_format((($lastsiwh - $firstsiwh) / 1000), 2);
@@ -71,7 +74,7 @@ $dailyeinspeisung = number_format((($lasteinspeisung - $firsteinspeisung) / 1000
 
 $rll1 = $ll1;
 $rll2 = $ll2;
-$rll3 = array_reverse($ll3);
+$rll3 = $ll3;
 $rllg = $llg;
 $rpv = $pv;
 $rbezug = $bezug;
@@ -99,7 +102,7 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x];
+	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x] * -1;
 }
 if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
@@ -133,7 +136,7 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x];
+	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x] * -1;
 }
 	for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
@@ -142,20 +145,12 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
 	}
 }
-/*
-$file = "/var/www/html/openWB/ramdisk/testgraph.csv";
-$fp = fopen('/var/www/html/openWB/ramdisk/testgraph.csv', 'w');
-for ($x = 0; $x < $anzahl; $x++){
-	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . PHP_EOL;
-	file_put_contents('/var/www/html/openWB/ramdisk/testgraph.csv', $line, FILE_APPEND);
-}
-fclose($fp);
- */
+
 
 
 
 for ($x = 0; $x < $anzahl; $x++){
-	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . PHP_EOL;
+	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . "," . $ll3diff[$x]  . "," . $speichersoc[$x] .  PHP_EOL;
 	print($line);
 }
 

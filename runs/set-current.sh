@@ -128,6 +128,22 @@ function setChargingCurrentgoe () {
 		fi
 	fi
 }
+# function for setting the current - keba charger
+# Parameters:
+# 1: current
+# 2: goeiplp1
+function setChargingCurrentkeba () {
+	if [[ $evsecon == "keba" ]]; then
+		kebacurr=$(( current * 1000 ))
+		if [[ $current -eq 0 ]]; then
+			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+		else
+			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090		
+		fi
+	fi
+}
+
 
 function setChargingCurrentnrgkick () {
 	if [[ $evsecon == "nrgkick" ]]; then
@@ -183,7 +199,9 @@ function setChargingCurrent () {
 	if [[ $evsecon == "nrgkick" ]]; then
 		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
 	fi
-
+	if [[ $evsecon == "keba" ]]; then
+		setChargingCurrentkeba $current $kebaiplp1
+	fi
 }
 
 #####
