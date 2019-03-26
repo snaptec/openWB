@@ -1,4 +1,5 @@
 #!/bin/bash
+. /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
 nc -ul 7090 >/var/www/html/openWB/ramdisk/keballlp1 &
