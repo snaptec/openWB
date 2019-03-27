@@ -93,7 +93,7 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = $rllg[$x-1] - $rllg[$x];
+	    $llgdiff[$x] = $rllg[$x-1] - $rllg[$x] * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
