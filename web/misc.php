@@ -561,7 +561,7 @@ $(function() {
 	<div class="row"><br><br>
 			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
-				<option <?php if($graphliveamold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
@@ -569,7 +569,7 @@ $(function() {
 	<div class="row">
 			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
 			<select type="text" name="grapham" id="grapham">
-				<option <?php if($graphamold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($graphamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
@@ -577,7 +577,7 @@ $(function() {
 	<div class="row">
 			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
 			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
-				<option <?php if($graphinteractiveamold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($graphinteractiveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>

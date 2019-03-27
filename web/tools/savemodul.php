@@ -795,7 +795,10 @@ foreach($lines as $line) {
 	    $result .= 'kebaiplp1='.$_POST[kebaiplp1]."\n";
 	$writeit = '1';
     } 
-
+	    if(strpos($line, "kebaiplp2=") !== false) {
+	    $result .= 'kebaiplp2='.$_POST[kebaiplp2]."\n";
+	$writeit = '1';
+    } 
 
 
 

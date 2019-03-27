@@ -84,16 +84,16 @@ $anzahl = count($timef);
 
 if ($logdailywh == 1) {
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = $rbezug[$x-1] - $rbezug[$x];
+	    $bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = $rpv[$x-1] - $rpv[$x];
+	    $pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];
+	    $einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = $rllg[$x-1] - $rllg[$x] * -1;
+	    $llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
@@ -102,7 +102,7 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x] * -1;
+	    $ll3diff[$x] = ($rll3[$x-1] - $rll3[$x]) * -1;
 }
 if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
