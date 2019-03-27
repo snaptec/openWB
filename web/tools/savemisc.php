@@ -61,6 +61,11 @@ foreach($lines as $line) {
 	    $result .= 'graphliveam='.$_POST[graphliveam]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "graphinteractiveam=") !== false) {
+	    $result .= 'graphinteractiveam='.$_POST[graphinteractiveam]."\n";
+	    $writeit = '1';
+	    } 
+
 
 
 

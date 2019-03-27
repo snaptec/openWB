@@ -196,10 +196,10 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
-						PV: <span id="pvdiv"></span>Watt 
+						PV: <span id="pvdiv"></span> 
 					</div>
-					<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-						EVU: <span id="bezugdiv"></span>Watt<span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
+					<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+						EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
 					</div>
 				</div>
 			</div>
@@ -210,7 +210,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-					 <span id="speicherleistungdiv"></span>Watt 
+					 <span id="speicherleistungdiv"></span> 
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					<span id="speichersocdiv"></span> % SoC 
@@ -303,7 +303,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lldiv"></span> Watt, <span id="llsolldiv"></span>A Soll
+					<span id="lldiv"></span>, <span id="llsolldiv"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
@@ -319,7 +319,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp2div"></span> Watt,  <span id="llsolllp2div"></span>A Soll
+					<span id="lllp2div"></span>,  <span id="llsolllp2div"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
@@ -335,7 +335,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp3div"></span> Watt, <span id="llsolllp3div"></span>A Soll<br></span> 
+					<span id="lllp3div"></span>, <span id="llsolllp3div"></span>A Soll<br></span> 
 				</div>
 				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 				</div>
@@ -345,7 +345,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					Gesamt: <span id="gesamtllwdiv"></span> Watt<br> 
+					Gesamt: <span id="gesamtllwdiv"></span><br> 
 				</div>
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
 				</div>
@@ -895,7 +895,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.34 Beta 				</div>
+				<!-- master -->	Ver 1.35 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">

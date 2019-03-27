@@ -575,6 +575,10 @@ foreach($lines as $line) {
 	if(strpos($line, "goeiplp1=") !== false) {
 		list(, $goeiplp1old) = explode("=", $line);
 	}
+	if(strpos($line, "kebaiplp1=") !== false) {
+		list(, $kebaiplp1old) = explode("=", $line);
+	}
+
 	if(strpos($line, "goetimeoutlp1=") !== false) {
 		list(, $goetimeoutlp1old) = explode("=", $line);
 	}
@@ -804,6 +808,8 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
 		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
+		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
+	
 	</select>
 
 </div>
@@ -864,6 +870,16 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
 </div>
+<div id="evseconkeba">
+<div class="row bg-info">
+	<b><label for="kebaiplp1">Keba IP Adresse:</label></b>
+	<input type="text" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss der DIP Switch in der Keba aktiviert sein!<br><br>
+</div>
+</div>
+
 <div id="evsecongoe">
 <div class="row bg-info">
 	<b><label for="goeiplp1">Go-e IP Adresse:</label></b>
@@ -925,7 +941,8 @@ $(function() {
 		$('#evsecongoe').hide();
 		$('#evseconnrgkick').hide();
 		$('#evseconmastereth').hide();
-	}
+		$('#evseconkeba').hide();
+      }
 	if($('#evsecon').val() == 'modbusevse') {
 		$('#evseconswifi').hide();
       		$('#evsecondac').hide();
@@ -934,6 +951,7 @@ $(function() {
 		$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
 		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 	
 	} 
@@ -945,6 +963,7 @@ $(function() {
 			$('#evseconmastereth').hide();
 		$('#evsecongoe').hide();
 		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
       	} 
 		if($('#evsecon').val() == 'goe') {
@@ -955,6 +974,7 @@ $(function() {
 			$('#evseconswifi').hide();
 	       		$('#evseconmastereth').hide();
 			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
@@ -965,6 +985,7 @@ $(function() {
 			$('#evseconswifi').hide();
 			$('#evseconmastereth').show();
 		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 	} 
 		if($('#evsecon').val() == 'nrgkick') {
@@ -975,8 +996,20 @@ $(function() {
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').hide();
 			$('#evseconnrgkick').show();
+		$('#evseconkeba').hide();
 
-		}   
+		}
+		if($('#evsecon').val() == 'keba') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').show();
+
+		}       
 	$('#evsecon').change(function(){
 	        if($('#evsecon').val() == 'dac') {
 			$('#evsecondac').show(); 
@@ -986,6 +1019,7 @@ $(function() {
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
 			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 
 		}
@@ -997,6 +1031,7 @@ $(function() {
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
 			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
@@ -1007,7 +1042,8 @@ $(function() {
 			$('#evsecongoe').hide();
 			$('#evseconmastereth').hide();
 			$('#evseconnrgkick').hide();
-       
+       		$('#evseconkeba').hide();
+
 		} 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
@@ -1017,6 +1053,7 @@ $(function() {
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').hide();
 			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
@@ -1027,6 +1064,7 @@ $(function() {
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').show();
 			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
 		} 
  		if($('#evsecon').val() == 'nrgkick') {
@@ -1037,8 +1075,21 @@ $(function() {
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').hide();
 			$('#evseconnrgkick').show();
+		$('#evseconkeba').hide();
 
 		}       
+		if($('#evsecon').val() == 'keba') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').show();
+
+		}       
+
 	});
 });
 </script>
@@ -1054,6 +1105,8 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
+
 
 	</select>
 </div>
@@ -1675,9 +1728,22 @@ $(function() {
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
+			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
+
 
 		</select>
 	</div>
+	<div id="evseconkebas1">
+	<div class="row bg-info">
+		<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
+		<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss der DIP Switch in der Keba aktiviert sein!<br><br>
+	</div>
+	</div>
+
+
 	<div id="evseconmbs1">
 		<div class="row">
 			Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
@@ -1763,6 +1829,7 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
       } 
 	if($('#evsecons1').val() == 'modbusevse') {
 		$('#evseconswifis1').hide();
@@ -1771,6 +1838,8 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+    
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
@@ -1779,7 +1848,9 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+        
+	} 
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
 		$('#evsecondacs1').hide();
@@ -1787,7 +1858,9 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+        
+	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1795,8 +1868,19 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
-
+ 		$('#evseconkebas1').hide();
+     
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+    
+  	} 
 	$('#evsecons1').change(function(){
 	        if($('#evsecons1').val() == 'dac') {
 			$('#evsecondacs1').show(); 
@@ -1805,7 +1889,8 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'modbusevse') {
 			$('#evseconswifis1').hide();
@@ -1814,7 +1899,8 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'simpleevsewifi') {
 			$('#evseconswifis1').show();
@@ -1823,7 +1909,8 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'goe') {
 			$('#evsecongoes1').show();
@@ -1832,8 +1919,8 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-
-		} 
+		$('#evseconkebas1').hide();
+    	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1841,7 +1928,19 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
+		$('#evseconkebas1').hide();
+    
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+    
+  	} 
 	});
 });
 </script>

@@ -143,7 +143,7 @@ else
 		if (( llalt < minimalapv )); then
 			llneu=$minimalapv
 		fi
-		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )); then
+		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then
 			socdist=$(echo $((soc1 - soc)) | sed 's/-//')
 			anzahl=$((socdist / adaptfaktor))
 			if (( soc1 > soc )); then
@@ -259,7 +259,7 @@ else
 				llneu=$minimalapv
 			fi
 			echo $llneu
-			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )); then
+			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && ((anzahlphasen == 2 )); then
 				socdist=$(echo $((soc1 - soc)) | sed 's/-//')
 				anzahl=$((socdist / adaptfaktor))
 				if (( soc1 > soc )); then
