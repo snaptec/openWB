@@ -328,7 +328,7 @@ if [[ $lastmanagement == "1" ]]; then
 		evsewifiiplp1=$evsewifiiplp2
 		goeiplp1=$goeiplp2
 		goetimeoutlp1=$goetimeoutlp2
-
+		kebaiplp1=$kebaiplp2
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 

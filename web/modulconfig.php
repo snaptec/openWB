@@ -1728,9 +1728,22 @@ $(function() {
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
+			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
+
 
 		</select>
 	</div>
+	<div id="evseconkebas1">
+	<div class="row bg-info">
+		<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
+		<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss der DIP Switch in der Keba aktiviert sein!<br><br>
+	</div>
+	</div>
+
+
 	<div id="evseconmbs1">
 		<div class="row">
 			Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
@@ -1816,6 +1829,7 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
       } 
 	if($('#evsecons1').val() == 'modbusevse') {
 		$('#evseconswifis1').hide();
@@ -1824,6 +1838,8 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+    
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
@@ -1832,7 +1848,9 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+        
+	} 
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
 		$('#evsecondacs1').hide();
@@ -1840,7 +1858,9 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+        
+	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1848,8 +1868,19 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
-
+ 		$('#evseconkebas1').hide();
+     
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+    
+  	} 
 	$('#evsecons1').change(function(){
 	        if($('#evsecons1').val() == 'dac') {
 			$('#evsecondacs1').show(); 
@@ -1858,7 +1889,8 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'modbusevse') {
 			$('#evseconswifis1').hide();
@@ -1867,7 +1899,8 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'simpleevsewifi') {
 			$('#evseconswifis1').show();
@@ -1876,7 +1909,8 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    
 		} 
 		if($('#evsecons1').val() == 'goe') {
 			$('#evsecongoes1').show();
@@ -1885,8 +1919,8 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-
-		} 
+		$('#evseconkebas1').hide();
+    	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1894,7 +1928,19 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
+		$('#evseconkebas1').hide();
+    
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+    
+  	} 
 	});
 });
 </script>

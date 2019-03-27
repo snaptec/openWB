@@ -204,9 +204,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
             if(strpos($line, "ladeleistungs1modul=") !== false) {
-	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth") {
+	    	if($_POST[evsecons1] == "simpleevsewifi" or $_POST[evsecons1] == "keba" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth") {
 			if($_POST[evsecons1] == "goe") {
 				$result .= 'ladeleistungs1modul=goelp2'."\n";
+			}
+			if($_POST[evsecons1] == "keba") {
+				$result .= 'ladeleistungs1modul=keballlp2'."\n";
 			}
 			if($_POST[evsecons1] == "slaveeth") {
 				$result .= 'ladeleistungs1modul=mpm3pmethll'."\n";
