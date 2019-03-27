@@ -9,7 +9,7 @@ disown
 echo -n "report 3" | socat - UDP-DATAGRAM:$kebaiplp2:7090
 output=$(</var/www/html/openWB/ramdisk/keballlp2)
 watt=$(echo $output | jq '.P') 
-watt=$(echo "scale=2;$watt / 1000" |bc)
+watt=$(echo "($watt / 1000)/1" |bc)
 if [[ $watt =~ $re ]] ; then
 	 echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 fi
@@ -20,13 +20,13 @@ lla2=$(echo $output | jq '.I2')
 lla2=$(echo "scale=2;$lla2 / 1000" |bc)
 lla3=$(echo $output | jq '.I3') 
 lla3=$(echo "scale=2;$lla3 / 1000" |bc)
-if [[ $lla1 =~ $re ]] ; then
+if [[ $lla1 =~ $rekwh ]] ; then
 	 echo $lla1 > /var/www/html/openWB/ramdisk/llas11
 fi
-if [[ $lla2 =~ $re ]] ; then
+if [[ $lla2 =~ $rekwh ]] ; then
 	 echo $lla2 > /var/www/html/openWB/ramdisk/llas12
 fi
-if [[ $lla3 =~ $re ]] ; then
+if [[ $lla3 =~ $rekwh ]] ; then
 	 echo $lla3 > /var/www/html/openWB/ramdisk/llas13
 fi
 llv1=$(echo $output | jq '.U1') 
