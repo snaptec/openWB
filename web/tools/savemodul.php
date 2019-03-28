@@ -739,7 +739,7 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    }
  	   if(strpos($line, "speicherpwip=") !== false) {
-	    $result .= 'peicherpwip='.$_POST[speicherpwip]."\n";
+	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
 	    $writeit = '1';
 	    }
 

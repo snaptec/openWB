@@ -578,7 +578,9 @@ foreach($lines as $line) {
 	if(strpos($line, "kebaiplp1=") !== false) {
 		list(, $kebaiplp1old) = explode("=", $line);
 	}
-
+	if(strpos($line, "kebaiplp2=") !== false) {
+		list(, $kebaiplp2old) = explode("=", $line);
+	}
 	if(strpos($line, "goetimeoutlp1=") !== false) {
 		list(, $goetimeoutlp1old) = explode("=", $line);
 	}
