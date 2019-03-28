@@ -36,8 +36,14 @@ f.close()
 resp= client.read_holding_registers(252,2,unit=71)
 FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 final =int(FRegister.decode_32bit_float())
+#PV Leistung
+resp= client.read_holding_registers(100,2,unit=71)
+FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+pvwatt =int(FRegister.decode_32bit_float())
+fpvwatt = pvwatt * -1
+
 if ( int(sys.argv[2]) == 0):
-    final = final - pvwatt
+    final = final - fpvwatt
 else:
     final = final
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
