@@ -84,15 +84,16 @@ if fmultiplint == fmult2iplint:
         finala1 = finala1 / 100000
         finala2 = finala2 / 100000
         finala3 = finala3 / 100000
-    f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-    f.write(str(finala1))
-    f.close()
-    f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-    f.write(str(finala2))
-    f.close()
-    f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-    f.write(str(finala3))
-    f.close()
+        
+f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
+f.write(str(finala1))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
+f.write(str(finala2))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
+f.write(str(finala3))
+f.close()
 
 
 
