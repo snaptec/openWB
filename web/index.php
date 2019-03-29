@@ -220,7 +220,7 @@
 			<br>
 				<?php if ($graphliveamold == 1) {
 								echo '
-		<div style="height:400px;" id="chartdiv"></div>
+		<div style="height:300px;" id="chartdiv"></div>
 ';	
 					   } else {
 						   echo '
@@ -895,7 +895,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.352 Beta 				</div>
+				<!-- master -->	Ver 1.353 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">
