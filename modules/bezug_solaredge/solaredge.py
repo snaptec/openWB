@@ -20,7 +20,7 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
 
-resp= client.read_holding_registers(40193,2,unit=slave1id)
+resp= client.read_holding_registers(40193,2,unit=1)
 multipli = resp.registers[0]
 multiplint = format(multipli, '04x')
 fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
@@ -38,7 +38,7 @@ all = format(value1, '04x')
 finala3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
 
 
-resp= client.read_holding_registers(40193,2,unit=slave1id)
+resp= client.read_holding_registers(40193,2,unit=1)
 mult2ipli = resp.registers[0]
 mult2iplint = format(mult2ipli, '04x')
 fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
