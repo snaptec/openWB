@@ -46,7 +46,7 @@ f.close()
 
 #PV-Leistung ist Total_DC_power - Actual_batt_ch_disch_power
 #für weitere Berechnung/Anzeige mit neg. Vorzeichen
-fpvwatt = (pvwatt - battwatt) * -1
+fpvwatt = (pvwatt + battwatt) * -1
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(fpvwatt))
 f.close()
