@@ -31,6 +31,7 @@ client = ModbusTcpClient(ipaddress, port=1502)
 resp = client.read_holding_registers(582,1,unit=71)
 FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 battwatt = int(FRegister.decode_16bit_int())
+battwatt = battwatt * -1
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
 f.write(str(battwatt))
 f.close()

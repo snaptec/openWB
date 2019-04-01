@@ -37,8 +37,11 @@ pvwatt =int(FRegister.decode_32bit_float())
 #da ggf. Batterie DC-seitig in Total_DC_power enthalten ist,
 #muss deren Lade-/Entladeleistung mitbetrachtet werden
 #dazu Wert aus Ramdisk lesen
+#resp = client.read_holding_registers(582,1,unit=71)
+#FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+#battwatt = int(FRegister.decode_16bit_int())
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'r')
-battwatt = f.read()
+battwatt = int(f.read())
 f.close()
 
 #PV-Leistung ist Total_DC_power - Actual_batt_ch_disch_power
