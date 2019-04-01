@@ -739,7 +739,7 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    }
  	   if(strpos($line, "speicherpwip=") !== false) {
-	    $result .= 'peicherpwip='.$_POST[speicherpwip]."\n";
+	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
 	    $writeit = '1';
 	    }
 
@@ -797,6 +797,10 @@ foreach($lines as $line) {
     } 
 	    if(strpos($line, "kebaiplp2=") !== false) {
 	    $result .= 'kebaiplp2='.$_POST[kebaiplp2]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "bezug_smartfox_ip=") !== false) {
+	    $result .= 'bezug_smartfox_ip='.$_POST[bezug_smartfox_ip]."\n";
 	$writeit = '1';
     } 
 

@@ -2,6 +2,7 @@
 . /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
+sleep 1
 nc -ul 7090 >/var/www/html/openWB/ramdisk/keballlp2 &
 pidnc=$!
 disown
@@ -10,7 +11,7 @@ echo -n "report 3" | socat - UDP-DATAGRAM:$kebaiplp2:7090
 output=$(</var/www/html/openWB/ramdisk/keballlp2)
 watt=$(echo $output | jq '.P') 
 watt=$(echo "($watt / 1000)/1" |bc)
-if [[ $watt =~ $re ]] ; then
+if [[ $watt =~ $rekwh ]] ; then
 	 echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 fi
 
