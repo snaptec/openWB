@@ -1088,6 +1088,11 @@ then
 then
 	  echo "graphinteractiveam=1" >> /var/www/html/openWB/openwb.conf
   fi
+  if ! grep -Fq "bezug_smartfox_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartfox_ip=192.168.0.50" >> /var/www/html/openWB/openwb.conf
+  fi
+
 
 
 ethstate=$(</sys/class/net/eth0/carrier)

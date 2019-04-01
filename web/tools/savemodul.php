@@ -799,6 +799,10 @@ foreach($lines as $line) {
 	    $result .= 'kebaiplp2='.$_POST[kebaiplp2]."\n";
 	$writeit = '1';
     } 
+	    if(strpos($line, "bezug_smartfox_ip=") !== false) {
+	    $result .= 'bezug_smartfox_ip='.$_POST[bezug_smartfox_ip]."\n";
+	$writeit = '1';
+    } 
 
 
 
