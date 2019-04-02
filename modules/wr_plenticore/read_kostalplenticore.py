@@ -42,7 +42,6 @@ reg_582 = client.read_holding_registers(582,1,unit=71)
 #PV Gesamt-Ertrag
 reg_320 = client.read_holding_registers(320,2,unit=71)
 #//TODO: weitere Register später hinzufügen für PV-Statistik
-#
 
 #ausgelesene Register dekodieren
 FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
