@@ -1,3 +1,11 @@
+//
+//
+//trägt alle Werte aus ramdisk in Webseite ein
+//
+//2019 Kevin Wieland, Michael Ortenstein
+//This file is part of openWB
+//
+//
 
 var doInterval;
 function getfile() {
@@ -123,7 +131,7 @@ $.ajax({
 	    var wattbezug = request.responseText;
 	    var intbezug = parseInt(wattbezug, 10);
 	    if (intbezug > 0) {
-		    if (intbezug > 1000) {
+		    if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + "kW Bezug";
 		    } else {
@@ -131,7 +139,7 @@ $.ajax({
 			}
 	    } else {
 	    	    intbezug = intbezug * -1;
-			if (intbezug > 1000) {
+			if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + "kW Einspeisung";
 		    } else {
@@ -140,6 +148,41 @@ $.ajax({
 	    }
 
       $("#bezugdiv").html(wattbezug);
+    }
+  });
+  // aktuellen Hausverbrauch [W] anzeigen
+  $.ajax({
+    // Wert aus ramdisk lesen
+    url: "/openWB/ramdisk/hausverbrauch",
+    complete: function(request) {
+    var hausverbrauch = request.responseText;
+    // String in ganze Zahl umwandeln
+    var inthausverbrauch = parseInt(hausverbrauch, 10);
+    // Annahme, dass Einheit in W und Verbrauch vorliegt
+    var unit = "W";
+    var postfix = " Verbrauch";
+    if (inthausverbrauch = 0) {
+      // kein Verbrauch und kein Ueberschuss im Haus,
+      // dann ohne Postfix anzeigen
+      postfix = "";
+    } else {
+      if (inthausverbrauch < 0) {
+        // kein Verbrauch sondern Ueberschuss im Haus
+        // Postfix anpassen
+        postfix = " Einspeisung";
+        // und Vorzeichen tauschen
+        inthausverbrauch = inthausverbrauch * -1;
+      }
+      if (inthausverbrauch) > 999) {
+        // ggf. Umrechnung und Anzeige in kW
+        inthausverbrauch = (inthausverbrauch / 1000).toFixed(2);
+        unit = "kW";
+      }
+    }
+    // String zusammensetzen
+    hausverbrauch = inthausverbrauch + unit + postfix;
+    // und Wert an Webseite
+    $("#homediv").html(hausverbrauch);
     }
   });
  $.ajax({
@@ -233,7 +276,7 @@ $.ajax({
 	    var speicherwatt = request.responseText;
 	    var intspeicherw = parseInt(speicherwatt, 10);
 	    if (intspeicherw > 0) {
-		   if (intspeicherw > 1000) {
+		   if (intspeicherw > 999) {
 			intspeicherw = (intspeicherw / 1000).toFixed(2);
 		    	    speicherwatt = intspeicherw + "kW Ladung";
 		   } else {
@@ -241,7 +284,7 @@ $.ajax({
 		   }
 	    } else {
 	    	    intspeicherw = intspeicherw * -1;
-	   if (intspeicherw > 1000) {
+	   if (intspeicherw > 999) {
 		intspeicherw = (intspeicherw / 1000).toFixed(2);
 		speicherwatt = intspeicherw + "kW Entladung";
 	} else {
@@ -268,4 +311,3 @@ var source = 'graph-live.php',
 }
 doInterval = setInterval(getfile, 5000);
 getfile();
-

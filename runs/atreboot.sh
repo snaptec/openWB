@@ -40,6 +40,7 @@ touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+touch /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
@@ -102,9 +103,10 @@ echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
-echo 0 > /var/www/html/openWB/ramdisk/lla3	
+echo 0 > /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
+echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 touch /var/www/html/openWB/ramdisk/llog1
 touch /var/www/html/openWB/ramdisk/llogs1
 touch /var/www/html/openWB/ramdisk/llogs2
@@ -900,12 +902,12 @@ then
 if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
-  fi 
-  
+  fi
+
  if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
-  fi  
+  fi
  if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1131,7 +1133,7 @@ then
 	sudo apt-get -qq install -y php-gd
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
-	
+
 fi
 
 . /var/www/html/openWB/openwb.conf
