@@ -75,8 +75,9 @@
 
 	<?php if ($graphamold == 1) {
 	echo '
+<div style="border-left:solid transparent 30px; border-right:solid transparent 30px;">
 	<div style="height:800px;" id="chartdiv"></div>
-';	
+</div>';	
 				   } else {
 					   echo '
 
@@ -213,6 +214,16 @@ series9.name = "Lp2 SoC";
 series9.stroke = am4core.color("#aa5ec2");
 series9.strokeWidth = 1.5;
 series9.yAxis = valueAxis2;
+
+
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col11";
+series10.dataFields.categoryX = "col0";
+series10.name = "Hausverbrauch";
+series10.stroke = am4core.color("#fefedf");
+series10.strokeWidth = 2;
+
+
 
 chart.cursor = new am4charts.XYCursor();
 

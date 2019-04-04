@@ -170,6 +170,10 @@
 		if(strpos($line, "speicherpveinbeziehen=") !== false) {
 			list(, $speicherpveinbeziehenold) = explode("=", $line, 2);
 		}
+		if(strpos($line, "chartlegendmain=") !== false) {
+			list(, $chartlegendmainold) = explode("=", $line, 2);
+		}
+
 
 	}
 	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
@@ -177,7 +181,10 @@
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
-	
+	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+
+
 ?>	
 <body>
 
@@ -196,13 +203,19 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
-						PV: <span id="pvdiv"></span> 
-					</div>
-					<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-						EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
-					</div>
+					PV: <span id="pvdiv"></span> 
+				</div>
+				<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
+				</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center" style="background-color:#fefedf;font-size: 2vw">
+					Hausverbrauch: <span id="hausverbrauchdiv"></span> 
+				</div>
+			</div>
+
 			<div id="speicherstatdiv">
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
@@ -895,7 +908,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.37 Beta 				</div>
+				<!-- master -->	Ver 1.38 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">
@@ -1197,7 +1210,16 @@ $(function() {
 
 
 <script>
-//am4core.useTheme(am4themes_animated);
+
+var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+var lastmanagement = <?php echo $lastmanagementold ?>;
+var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+var speichervorhanden = <?php echo $speichervorhanden ?>;
+var chartlegend = <?php echo $chartlegendmainold ?>;
+
+
+
+am4core.useTheme(am4themes_animated);
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
 
@@ -1206,12 +1228,8 @@ chart.dataSource.url = "../ramdisk/all-live.graph";
 chart.dataSource.incremental = true;
 chart.dataSource.keepCount = true;
 chart.dataSource.reloadFrequency = 10000;
-//chart.dataSource.incrementalParams = {
-//incremental: "y"
 //}
 chart.validateData();
-//chart.dataSource.url = "../ramdisk/all-liveinc.graph";
-//chart.dataSource.load();
 chart.dataSource.parser = new am4core.CSVParser();
 chart.dataSource.parser.options.useColumnNames = false;
 
@@ -1227,7 +1245,6 @@ var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis2.renderer.opposite = true;
 valueAxis2.title.text = "% SoC";
 valueAxis2.renderer.grid.template.disabled = true;
-// Creaite series
 var series1 = chart.series.push(new am4charts.LineSeries());
 series1.dataFields.valueY = "col1";
 series1.dataFields.categoryX = "col0";
@@ -1263,14 +1280,15 @@ series5.dataFields.categoryX = "col0";
 series5.name = "LP 1";
 series5.stroke = am4core.color("#845EC2");
 series5.strokeWidth = 1.5;
-
+if ( lastmanagement == 1) {
 var series6 = chart.series.push(new am4charts.LineSeries());
 series6.dataFields.valueY = "col5";
 series6.dataFields.categoryX = "col0";
 series6.name = "LP 2";
 series6.stroke = am4core.color("#aa5ec2");
 series6.strokeWidth = 1.5;
-
+}
+if ( speichervorhanden == 1) {
 var series3 = chart.series.push(new am4charts.LineSeries());
 series3.dataFields.valueY = "col7";
 series3.dataFields.categoryX = "col0";
@@ -1287,22 +1305,31 @@ series7.name = "Speicher SoC";
 series7.stroke = am4core.color("#fcbe1e");
 series7.strokeWidth = 1.5;
 series7.yAxis = valueAxis2;
+}
 
 var series8 = chart.series.push(new am4charts.LineSeries());
 series8.dataFields.valueY = "col9";
 series8.dataFields.categoryX = "col0";
 series8.name = "Lp1 SoC";
 series8.stroke = am4core.color("#845EC2");
-series8.strokeWidth = 0.5;
+series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
-
+if (soc1vorhanden == 1) {
 var series9 = chart.series.push(new am4charts.LineSeries());
 series9.dataFields.valueY = "col10";
 series9.dataFields.categoryX = "col0";
 series9.name = "Lp2 SoC";
 series9.stroke = am4core.color("#aa5ec2");
-series9.strokeWidth = 0.5;
+series9.strokeWidth = 1.5;
 series9.yAxis = valueAxis2;
+}
+
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col11";
+series10.dataFields.categoryX = "col0";
+series10.name = "Hausverbrauch";
+series10.stroke = am4core.color("#fefedf");
+series10.strokeWidth = 2;
 
 //chart.cursor = new am4charts.XYCursor();
 
@@ -1314,7 +1341,9 @@ series9.yAxis = valueAxis2;
 // chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.endLocation = 0.5;
 
 // Add legend
+if ( chartlegend == 1 ) {
 chart.legend = new am4charts.Legend();
+}
 </script>
 
 

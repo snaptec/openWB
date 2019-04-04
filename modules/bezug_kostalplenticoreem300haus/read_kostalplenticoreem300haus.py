@@ -68,7 +68,7 @@ final =int(FRegister.decode_32bit_float())
 resp= client.read_holding_registers(100,2,unit=71)
 FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 pvwatt =int(FRegister.decode_32bit_float())
-fpvwatt = pvwatt * -1
+fpvwatt = pvwatt
 
 if ( int(sys.argv[2]) == 0):
     final = final - fpvwatt

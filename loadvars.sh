@@ -194,7 +194,8 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
-
+hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)

@@ -369,6 +369,10 @@ foreach($lines as $line) {
 	if(strpos($line, "graphliveam=") !== false) {
 		list(, $graphliveamold) = explode("=", $line);
 	}
+	if(strpos($line, "chartlegendmain=") !== false) {
+		list(, $chartlegendmainold) = explode("=", $line);
+	}
+
 
 
 }
@@ -563,6 +567,14 @@ $(function() {
 			<select type="text" name="graphliveam" id="graphliveam">
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
+	<div class="row"><br><br>
+			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="chartlegendmain" id="chartlegendmain">
+				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
 	</div>
