@@ -85,6 +85,9 @@ $.ajax({
 			pvwatt = pvwatt + "W Erzeugung";
 			}
 	}
+	if ( pvwatt = 0){
+		pvwatt = "0 W";
+	}
       $("#pvdiv").html(pvwatt);
     }
   });
