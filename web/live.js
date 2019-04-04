@@ -11,7 +11,7 @@ $.ajaxSetup({ cache: false});
   $.ajax({
     url: "/openWB/ramdisk/llaktuell",
     complete: function(request){
-		if (request.responseText > 1000) {
+		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + "kW";
 		    } else {
@@ -20,10 +20,23 @@ $.ajaxSetup({ cache: false});
       $("#lldiv").html(request.responseText);
     }
 });
+  $.ajax({
+    url: "/openWB/ramdisk/hausverbrauch",
+    complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
+      $("#hausverbrauchdiv").html(request.responseText);
+    }
+});
+
 $.ajax({
     url: "/openWB/ramdisk/llkombiniert",
     complete: function(request){
-		if (request.responseText > 1000) {
+		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + "kW";
 		    } else {
@@ -63,9 +76,9 @@ $.ajax({
     url: "/openWB/ramdisk/pvwatt",
     complete: function(request){
 	    var pvwatt = parseInt(request.responseText, 10);
-	if ( pvwatt < 0){
+	if ( pvwatt <= 0){
 		pvwatt = pvwatt * -1;
-		if (pvwatt > 1000) {
+		if (pvwatt > 999) {
 			    pvwatt = (pvwatt / 1000).toFixed(2);
 		    	    pvwatt = pvwatt + "kW Erzeugung";
 		    } else {
@@ -78,7 +91,7 @@ $.ajax({
  $.ajax({
     url: "/openWB/ramdisk/llaktuells1",
     complete: function(request){
-		if (request.responseText > 1000) {
+		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + "kW";
 		    } else {
@@ -90,7 +103,7 @@ $.ajax({
   $.ajax({
     url: "/openWB/ramdisk/llaktuells2",
     complete: function(request){
-		if (request.responseText > 1000) {
+		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + "kW";
 		    } else {
@@ -123,7 +136,7 @@ $.ajax({
 	    var wattbezug = request.responseText;
 	    var intbezug = parseInt(wattbezug, 10);
 	    if (intbezug > 0) {
-		    if (intbezug > 1000) {
+		    if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + "kW Bezug";
 		    } else {
@@ -131,7 +144,7 @@ $.ajax({
 			}
 	    } else {
 	    	    intbezug = intbezug * -1;
-			if (intbezug > 1000) {
+			if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + "kW Einspeisung";
 		    } else {
@@ -233,7 +246,7 @@ $.ajax({
 	    var speicherwatt = request.responseText;
 	    var intspeicherw = parseInt(speicherwatt, 10);
 	    if (intspeicherw > 0) {
-		   if (intspeicherw > 1000) {
+		   if (intspeicherw > 999) {
 			intspeicherw = (intspeicherw / 1000).toFixed(2);
 		    	    speicherwatt = intspeicherw + "kW Ladung";
 		   } else {
@@ -241,7 +254,7 @@ $.ajax({
 		   }
 	    } else {
 	    	    intspeicherw = intspeicherw * -1;
-	   if (intspeicherw > 1000) {
+	   if (intspeicherw > 999) {
 		intspeicherw = (intspeicherw / 1000).toFixed(2);
 		speicherwatt = intspeicherw + "kW Entladung";
 	} else {

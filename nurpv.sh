@@ -52,7 +52,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		exit 0
 	fi
 fi
-if (( ladeleistung < 500 )); then
+if (( ladeleistung < 300 )); then
 	if (( llalt > minimalapv )); then
 		llneu=$minimalapv
 		runs/set-current.sh $llneu all
@@ -67,19 +67,19 @@ if (( ladeleistung < 500 )); then
 	fi
 	if (( llalt == minimalapv )); then
 		if (( wattbezugint > abschaltuberschuss )); then
-			pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
-			if (( pvcounter < abschaltverzoegerung )); then
-				pvcounter=$((pvcounter + 10))
-				echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
-				if [[ $debug == "1" ]]; then
-					echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
-				fi
-			else
+			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
+			#if (( pvcounter < abschaltverzoegerung )); then
+			#	pvcounter=$((pvcounter + 10))
+			#	echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
+			#	if [[ $debug == "1" ]]; then
+			#		echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
+			#	fi
+			#else
 				runs/set-current.sh 0 all
 				if [[ $debug == "1" ]]; then
 					echo "pv ladung beendet"
 				fi
-			fi
+			#fi
 		fi
 	fi
 else
@@ -258,7 +258,6 @@ else
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
 			fi
-			echo $llneu
 			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && ((anzahlphasen == 2 )); then
 				socdist=$(echo $((soc1 - soc)) | sed 's/-//')
 				anzahl=$((socdist / adaptfaktor))

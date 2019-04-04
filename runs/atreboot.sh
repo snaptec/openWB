@@ -9,7 +9,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-
+echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
 touch /var/www/html/openWB/ramdisk/wattbezug
@@ -1092,6 +1092,11 @@ then
 then
 	  echo "bezug_smartfox_ip=192.168.0.50" >> /var/www/html/openWB/openwb.conf
   fi
+  if ! grep -Fq "chartlegendmain=" /var/www/html/openWB/openwb.conf
+then
+	  echo "chartlegendmain=1" >> /var/www/html/openWB/openwb.conf
+  fi
+
 
 
 
