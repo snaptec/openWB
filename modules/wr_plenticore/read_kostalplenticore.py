@@ -55,8 +55,11 @@ Total_yield = int(FRegister_320.decode_32bit_float())
 
 #da ggf. Batterie DC-seitig in Total_DC_power enthalten ist,
 #muss deren Lade-/Entladeleistung mitbetrachtet werden
-
+#Erzeugung wird als negativer Wert weiter verarbeitet
 PV_power = (Total_DC_power - Actual_batt_ch_disch_power) * -1
+#PV-Anlage kann nichts verbrauchen, also ggf. Register-/Rundungsfehler korrigieren
+if PV_power > 0:
+    PV_power = 0
 
 #und zur Weiterverarbeitung Werte in die ramdisk
 with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
