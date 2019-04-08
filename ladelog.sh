@@ -39,6 +39,7 @@ if (( ladeleistung > 500 )); then
 			echo "$restzeitlp1 Min" > ramdisk/restzeitlp1
 		fi
 	else
+		echo 1 > ramdisk/ladungaktivlp1
 		touch ramdisk/ladeustart
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustart
 		echo -e $(date +%s) > ramdisk/ladeustarts
@@ -58,6 +59,7 @@ else
 		echo $llog1 > ramdisk/llog1
 	else
 		if [ -e ramdisk/ladeustart ]; then
+			echo 0 > ramdisk/ladungaktivlp1
 			echo "--" > ramdisk/restzeitlp1
 			ladelstart=$(<ramdisk/ladelstart)
 			ladeustarts=$(<ramdisk/ladeustarts)
@@ -124,6 +126,7 @@ if (( ladeleistungs1 > 500 )); then
 				./runs/pushover.sh "$lp2name Ladung gestartet$soctext1"
 			fi
 		fi
+		echo 1 > ramdisk/ladungaktivlp2
 		touch ramdisk/ladeustarts1
 		echo $lmodus > ramdisk/loglademodus
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts1
@@ -139,6 +142,7 @@ else
 		echo $llogs1 > ramdisk/llogs1
 	else
 		if [ -e ramdisk/ladeustarts1 ]; then
+			echo 0 > ramdisk/ladungaktivlp2
 			echo "--" > ramdisk/restzeitlp2
 			ladelstarts1=$(<ramdisk/ladelstarts1)
 			ladeustartss1=$(<ramdisk/ladeustartss1)
@@ -203,6 +207,7 @@ if (( ladeleistungs2 > 500 )); then
 				./runs/pushover.sh "$lp3name Ladung gestartet"
 			fi
 		fi
+		echo 1 > ramdisk/ladungaktivlp3
 		touch ramdisk/ladeustarts2
 		echo $lmodus > ramdisk/loglademodus
 		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustarts2
@@ -217,6 +222,7 @@ else
 		echo $llogs2 > ramdisk/llogs2
 	else
 		if [ -e ramdisk/ladeustarts2 ]; then
+			echo 0 > ramdisk/ladungaktivlp3
 			echo "--" > ramdisk/restzeitlp3
 			ladelstarts2=$(<ramdisk/ladelstarts2)
 			ladeustartss2=$(<ramdisk/ladeustartss2)
