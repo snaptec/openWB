@@ -57,7 +57,6 @@
 
 </head>
 <script src="live.js"></script>
-
 <?php
 	$result = '';
 	$lines = file('/var/www/html/openWB/openwb.conf');
@@ -908,7 +907,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- maste r -->	Ver 1.381 Beta 				</div>
+				<!-- maste r -->	Ver 1.39 Beta 				</div>
 
 
 				<div class="col-xs-4 text-center">

@@ -12,6 +12,9 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
+echo 0 > ramdisk/ladungaktivlp1
+echo 0 > ramdisk/ladungaktivlp2
+echo 0 > ramdisk/ladungaktivlp3
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
