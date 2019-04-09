@@ -372,6 +372,10 @@ foreach($lines as $line) {
 	if(strpos($line, "chartlegendmain=") !== false) {
 		list(, $chartlegendmainold) = explode("=", $line);
 	}
+	if(strpos($line, "hausverbrauchstat=") !== false) {
+		list(, $hausverbrauchstatold) = explode("=", $line);
+	}
+
 
 
 
@@ -525,9 +529,20 @@ $(function() {
 </script>
 
 		<div class="row"><hr>
-	<h3>	Logging Einstellungen</h3> <br>
+			<h3>	Optische Einstellungen</h3> <br>
+		</div>
+		<div class="row">
+			<b><label for="hausverbrauchstat">Hausverbrauch auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="hausverbrauchstat" id="hausverbrauchstat">
+				<option <?php if($hausverbrauchstatold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($hausverbrauchstatold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
 		</div>
 
+		<div class="row">
+			<h4>	Graphen</h4> <br>
+		</div>
 		<div class="row">
 			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
 			<select type="text" name="logdailywh" id="logdailywh">
@@ -557,20 +572,19 @@ $(function() {
 		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
 
 	</select><br>
-<br>
 </div>
 
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
-	<div class="row"><br><br>
+	<div class="row"><br>
 			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
-			<br>
+			
 	</div>
-	<div class="row"><br><br>
+	<div class="row">
 			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
 			<select type="text" name="chartlegendmain" id="chartlegendmain">
 				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
@@ -592,7 +606,7 @@ $(function() {
 				<option <?php if($graphinteractiveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
-			<br>
+			<br><br>
 	</div>
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>

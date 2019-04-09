@@ -1099,6 +1099,22 @@ then
 then
 	  echo "chartlegendmain=1" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "nrgkickiplp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickiplp2=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkicktimeoutlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkicktimeoutlp2=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickmaclp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickmaclp2=11:22:33:aa:bb:cc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickpwlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickpwlp2=1234" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

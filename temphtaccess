@@ -1,8 +1,0 @@
-
-Options -Indexes
-
-<FilesMatch "\.(ini|conf|py|sh|json)$">
-Order allow,deny
-Deny from all
-
-</FilesMatch>

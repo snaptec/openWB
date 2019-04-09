@@ -274,6 +274,9 @@ series12.name = "Speicher SoC";
 series12.stroke = am4core.color("#fc6f1e");
 series12.strokeWidth = 1.5;
 series12.yAxis = valueAxis2;
+series11.legendSettings.valueText = "{valueY.sum}Wh";
+series3.legendSettings.valueText = "{valueY.sum}Wh";
+
 
 
 }
@@ -294,16 +297,19 @@ series6.stroke = am4core.color("#aa5ec2");
 series6.tensionX = 0.8;
 series6.tensionY = 0.8;
 series6.strokeWidth = 1.5;
+series6.legendSettings.valueText = "{valueY.sum}Wh";
+
 }
 if ( lastmanagements2 == 1) {
-var series6 = chart.series.push(new am4charts.LineSeries());
-series6.dataFields.valueY = "col11";
-series6.dataFields.categoryX = "col0";
-series6.name = "LP 3";
-series6.stroke = am4core.color("#aa5ec2");
-series6.tensionX = 0.8;
-series6.tensionY = 0.8;
-series6.strokeWidth = 1.5;
+var series30 = chart.series.push(new am4charts.LineSeries());
+series30.dataFields.valueY = "col11";
+series30.dataFields.categoryX = "col0";
+series30.name = "LP 3";
+series30.stroke = am4core.color("#aa5ec2");
+series30.tensionX = 0.8;
+series30.tensionY = 0.8;
+series30.strokeWidth = 1.5;
+
 }
 
 
@@ -336,13 +342,9 @@ chart.cursor = new am4charts.XYCursor();
 series4.customField = 12;
 series1.legendSettings.valueText = "{valueY.sum}Wh";
 series4.legendSettings.valueText = "{valueY.sum}Wh";
-series3.legendSettings.valueText = "{valueY.sum}Wh";
 series2.legendSettings.valueText = "{valueY.sum}Wh";
 series9.legendSettings.valueText = "{valueY.sum}Wh";
 series5.legendSettings.valueText = "{valueY.sum}Wh";
-series6.legendSettings.valueText = "{valueY.sum}Wh";
-series11.legendSettings.valueText = "{valueY.sum}Wh";
-
 
 chart.legend = new am4charts.Legend();
 </script>
