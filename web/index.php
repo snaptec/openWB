@@ -209,7 +209,7 @@
 					PV: <span id="pvdiv"></span> 
 				</div>
 				<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
+					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span> 
 				</div>
 				</div>
 			</div>
