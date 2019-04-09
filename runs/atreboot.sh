@@ -1115,6 +1115,11 @@ if ! grep -Fq "nrgkickpwlp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nrgkickpwlp2=1234" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hausverbrauchstat=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hausverbrauchstat=1" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 
 
