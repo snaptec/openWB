@@ -20,27 +20,179 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
 
+resp= client.read_holding_registers(40194,2,unit=1)
+multipli = resp.registers[0]
+multiplint = format(multipli, '04x')
+fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
 resp= client.read_holding_registers(40191,1,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(final))
-f.close()
+finala1 = int(struct.unpack('>h', all.decode('hex'))[0]) 
 resp= client.read_holding_registers(40192,1,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(final))
-f.close()
+finala2 = int(struct.unpack('>h', all.decode('hex'))[0]) 
 resp= client.read_holding_registers(40193,1,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(final))
+finala3 = int(struct.unpack('>h', all.decode('hex'))[0]) 
+
+
+resp= client.read_holding_registers(40194,2,unit=1)
+mult2ipli = resp.registers[0]
+mult2iplint = format(mult2ipli, '04x')
+fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
+
+if fmultiplint == fmult2iplint:
+    if fmultiplint == 4:
+        finala1 = finala1 * 10000
+        finala2 = finala2 * 10000
+        finala3 = finala3 * 10000
+    if fmultiplint == 3:
+        finala1 = finala1 * 1000
+        finala2 = finala2 * 1000
+        finala3 = finala3 * 1000
+    if fmultiplint == 2:
+        finala1 = finala1 * 100
+        finala2 = finala2 * 100
+        finala3 = finala3 * 100
+    if fmultiplint == 1:
+        finala1 = finala1 * 10
+        finala2 = finala2 * 10
+        finala3 = finala3 * 10
+    if fmultiplint == 0:
+        finala1 = finala1
+        finala2 = finala2
+        finala3 = finala3
+    if fmultiplint == -1:
+        finala1 = finala1 / 10
+        finala2 = finala2 / 10
+        finala3 = finala3 / 10
+    if fmultiplint == -2:
+        finala1 = finala1 / 100
+        finala2 = finala2 / 100
+        finala3 = finala3 / 100
+    if fmultiplint == -3:
+        finala1 = finala1 / 1000
+        finala2 = finala2 / 1000
+        finala3 = finala3 / 1000
+    if fmultiplint == -4:
+        finala1 = finala1 / 10000
+        finala2 = finala2 / 10000
+        finala3 = finala3 / 10000
+    if fmultiplint == -5:
+        finala1 = finala1 / 100000
+        finala2 = finala2 / 100000
+        finala3 = finala3 / 100000
+        
+f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
+f.write(str(finala1))
 f.close()
+f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
+f.write(str(finala2))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
+f.write(str(finala3))
+f.close()
+
+#voltage
+
+resp= client.read_holding_registers(40196,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale1 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
+resp= client.read_holding_registers(40197,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale2 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
+resp= client.read_holding_registers(40198,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale3 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
+
+f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
+f.write(str(finale1))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
+f.write(str(finale2))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
+f.write(str(finale3))
+f.close()
+
+ #watt pro phase
+resp= client.read_holding_registers(40207,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale1 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
+
+
+resp= client.read_holding_registers(40208,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale2 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+resp= client.read_holding_registers(40209,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finale3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
+
+
+        
+f = open('/var/www/html/openWB/ramdisk/bezugw1', 'w')
+f.write(str(finale1))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/bezugw2', 'w')
+f.write(str(finale2))
+f.close()
+f = open('/var/www/html/openWB/ramdisk/bezugw3', 'w')
+f.write(str(finale3))
+f.close()
+
+
+
+#hz
+        
+
+resp= client.read_holding_registers(40204,1,unit=1)
+value1 = resp.registers[0]
+all = format(value1, '04x')
+finalhz = int(struct.unpack('>h', all.decode('hex'))[0]) 
+
+
+resp= client.read_holding_registers(40205,1,unit=1)
+multipli = resp.registers[0]
+multiplint = format(multipli, '04x')
+fmuliplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
+
+if fmultiplint == 4:
+        finalhz = finalhz * 1000
+if fmultiplint == 3:
+        finalhz = finalhz * 100
+if fmultiplint == 2:
+        finalhz = finalhz * 10
+if fmultiplint == 1:
+        finalhz = finalhz * 1
+if fmultiplint == 0:
+        finalhz = finalhz  / 10
+if fmultiplint == -1:
+        finalhz = finalhz / 100
+if fmultiplint == -2:
+        finalhz = finalhz / 1000
+if fmultiplint == -3:
+        finalhz = finalhz / 10000
+if fmultiplint == -4:
+        finalhz = finalhz / 100000
+if fmultiplint == -5:
+        finalhz = finalhz / 1000000
+        
+f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
+f.write(str(finalhz))
+f.close()
+
+
+
+
+
 #resp= client.read_holding_registers(40084,2,unit=1)
 #multipli = resp.registers[0]
 #multiplint = format(multipli, '04x')

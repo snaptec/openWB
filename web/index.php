@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+	<script src="js/core.js"></script>
+	<script src="js/charts.js"></script>
+	<script src="js/animated.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
@@ -31,7 +34,7 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="manifest.json"> 
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -54,7 +57,6 @@
 
 </head>
 <script src="live.js"></script>
-
 <?php
 	$result = '';
 	$lines = file('/var/www/html/openWB/openwb.conf');
@@ -137,19 +139,55 @@
 		if(strpos($line, "zielladenaktivlp1=") !== false) {
 			list(, $zielladenaktivlp1old) = explode("=", $line);
 		}
-			if(strpos($line, "nachtladen=") !== false) {
+		if(strpos($line, "nachtladen=") !== false) {
 			list(, $nachtladenstate) = explode("=", $line);
 		}
-				if(strpos($line, "nachtladens1=") !== false) {
+		if(strpos($line, "nachtladens1=") !== false) {
 			list(, $nachtladenstates1) = explode("=", $line);
 		}
+		if(strpos($line, "nlakt_sofort=") !== false) {
+			list(, $nlakt_sofortold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_nurpv=") !== false) {
+			list(, $nlakt_nurpvold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_minpv=") !== false) {
+			list(, $nlakt_minpvold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "nlakt_standby=") !== false) {
+			list(, $nlakt_standbyold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "evuglaettungakt=") !== false) {
+			list(, $evuglaettungaktold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "graphliveam=") !== false) {
+			list(, $graphliveamold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "speicherpvui=") !== false) {
+			list(, $speicherpvuiold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "speicherpveinbeziehen=") !== false) {
+			list(, $speicherpveinbeziehenold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "chartlegendmain=") !== false) {
+			list(, $chartlegendmainold) = explode("=", $line, 2);
+		}
+		if(strpos($line, "hausverbrauchstat=") !== false) {
+			list(, $hausverbrauchstatold) = explode("=", $line, 2);
+		}
+
+
+
 	}
 	$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 	$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 	$lp1nameold = str_replace( "'", "", $lp1nameold);
 	$lp2nameold = str_replace( "'", "", $lp2nameold);
 	$lp3nameold = str_replace( "'", "", $lp3nameold);
-	
+	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+
+
 ?>	
 <body>
 
@@ -168,13 +206,21 @@
 			<div class="row">
 				<div class="col-xs-12 text-center">
 				<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
-						PV: <span id="pvdiv"></span>Watt 
-					</div>
-					<div class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-						EVU: <span id="bezugdiv"></span>Watt 
-					</div>
+					PV: <span id="pvdiv"></span> 
+				</div>
+				<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span> 
+				</div>
 				</div>
 			</div>
+			<div id="hausverbrauch">
+			<div class="row">
+				<div class="col-xs-12 text-center" style="background-color:#fefedf;font-size: 2vw">
+					Hausverbrauch: <span id="hausverbrauchdiv"></span> 
+				</div>
+			</div>
+			</div>
+
 			<div id="speicherstatdiv">
 			<div class="row"><div class="col-xs-12 text-center">
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
@@ -182,7 +228,7 @@
 				</div>
 
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-					 <span id="speicherleistungdiv"></span>Watt 
+					 <span id="speicherleistungdiv"></span> 
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
 					<span id="speichersocdiv"></span> % SoC 
@@ -190,15 +236,23 @@
 			</div></div>
 			</div>
 			<br>
-			<div class="row">
+				<?php if ($graphliveamold == 1) {
+								echo '
+		<div style="height:300px;" id="chartdiv"></div>
+';	
+					   } else {
+						   echo '
+	<div class="row">
 				<div class="col-xs-12 text-center">
 					<div class="imgwrapper">	
 					<img id="livegraph" src="graph-live.php"
      					alt="Graph" class="img-responsive" />
 					<br></div>
 				</div>
-			</div>
-			<div class="row col-xs-12 text-center">
+			</div>';
+					   } ?>
+
+					<div class="row col-xs-12 text-center">
 			 <div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 				Nachtladen LP 1 aktiv
 			</div>
@@ -213,23 +267,33 @@
 			</div>
 	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>">
 	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>">
+	<input hidden name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo $nlakt_nurpvold ; ?>">
+	<input hidden name="nlakt_sofort" id="nlakt_sofort" value="<?php echo $nlakt_sofortold ; ?>">
+	<input hidden name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold ; ?>">
+	<input hidden name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold ; ?>">
+	<input hidden name="lademodus" id="lademodus" value="<?php echo $lademodusold ; ?>">
+	<input hidden name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo $hausverbrauchstatold ; ?>">
 	</div>
 
 	<script>
 	$(function() {
+	if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
 	   if($('#nachtladenstate').val() == '1') {
 		$('#nachtladenstatediv').show(); 
 	      } else {
 		$('#nachtladenstatediv').hide();
-	      } 
-
-	});
-	$(function() {
+	      }
 	   if($('#nachtladenstates1').val() == '1') {
 		$('#nachtladenstates1div').show(); 
 	      } else {
 		$('#nachtladenstates1div').hide();
 	      } 
+	} else {
+		$('#nachtladenstatediv').hide();
+		$('#nachtladenstates1div').hide();
+
+
+	}
 
 	});
 	</script>
@@ -251,14 +315,23 @@
 
 	});
 	</script>
+	<script>
+	$(function() {
+	   if($('#hausverbrauchstat').val() == '1') {
+		$('#hausverbrauch').show(); 
+	      } else {
+		$('#hausverbrauch').hide();
+	      } 
 
-						<div class="row col-xs-12">
+	});
+	</script>
+						<div class="row">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				<?php echo $lp1nameold ?> 	
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lldiv"></span> Watt, <span id="llsolldiv"></span>A Soll
+					<span id="lldiv"></span>, <span id="llsolldiv"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
@@ -268,13 +341,13 @@
 					   } ?>
 				</div>
 			</div>
-			<div class="row col-xs-12" id="lp2lldiv">
+			<div class="row" id="lp2lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp2nameold ?> 	
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp2div"></span> Watt,  <span id="llsolllp2div"></span>A Soll
+					<span id="lllp2div"></span>,  <span id="llsolllp2div"></span>A Soll
 				</div>
 				<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 					<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
@@ -284,23 +357,23 @@
 					   } ?>
 				</div>
 			</div>
-			<div class="row col-xs-12" id="lp3lldiv">
+			<div class="row" id="lp3lldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 					<?php echo $lp3nameold ?> 	
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					<span id="lllp3div"></span> Watt, <span id="llsolllp3div"></span>A Soll<br></span> 
+					<span id="lllp3div"></span>, <span id="llsolllp3div"></span>A Soll<br></span> 
 				</div>
 				<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 				</div>
 			</div>
-			<div class="row col-xs-12" id="gesamtlldiv">
+			<div class="row" id="gesamtlldiv">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				</div>
 
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-					Gesamt: <span id="gesamtllwdiv"></span> Watt<br> 
+					Gesamt: <span id="gesamtllwdiv"></span><br> 
 				</div>
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
 				</div>
@@ -350,6 +423,32 @@
                                         </div>
 				</div>
 			</div>
+			<div class="row" id="speicherpvuidiv">
+					<div class="col-xs-6"></div>
+					 <div class="col-xs-3 pull-right">
+					      <?php if ($speicherpveinbeziehenold == 0) {
+								echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';	
+					   } else {
+						   echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+					   } ?>
+
+
+					</div>
+
+			</div>
+			<input hidden name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold ; ?>">
+			
+			<script>
+			   $(function() {
+				if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
+				$('#speicherpvuidiv').show(); 
+			      } else {
+				$('#speicherpvuidiv').hide();
+			      } 
+
+			});
+			</script>
+
 			<div class="row">
 			<hr>
 			<div class="row">
@@ -700,6 +799,19 @@
 						<br><br><br>
 					 </form>
 
+						<input hidden name="evuglaettungakt" id="evuglaettungakt" value="<?php echo $evuglaettungaktold ; ?>">
+
+						<script>
+						$(function() {
+   						   if($('#evuglaettungakt').val() == '0') {
+							$('#evuglaettungdiv').hide();
+						      } else {
+							$('#evuglaettungdiv').show();
+
+						      } 
+
+						});
+						</script>
 
 						<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>">
 						<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>">				
@@ -811,7 +923,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.24 Beta				</div>
+				<!-- master -->	Ver 1.393 				</div>
 
 
 				<div class="col-xs-4 text-center">
@@ -844,7 +956,7 @@
 				
 				</div>
 				<div class="col-xs-4 text-right">
-					 <a href="logging/index.html">Logging</a>
+					 <a href="logging/index.php">Logging</a>
 				</div>
 
 		
@@ -1110,6 +1222,146 @@ $(function() {
       });
 	}
  </script>
+
+
+<script>
+
+var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+var lastmanagement = <?php echo $lastmanagementold ?>;
+var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+var speichervorhanden = <?php echo $speichervorhanden ?>;
+var chartlegend = <?php echo $chartlegendmainold ?>;
+
+
+
+am4core.useTheme(am4themes_animated);
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+// Set up data source
+chart.dataSource.url = "../ramdisk/all-live.graph";
+chart.dataSource.incremental = true;
+chart.dataSource.keepCount = true;
+chart.dataSource.reloadFrequency = 10000;
+//}
+chart.validateData();
+chart.dataSource.parser = new am4core.CSVParser();
+chart.dataSource.parser.options.useColumnNames = false;
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "col0";
+
+// Create value axis
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Watt";
+
+var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis2.renderer.opposite = true;
+valueAxis2.title.text = "% SoC";
+valueAxis2.renderer.grid.template.disabled = true;
+var series1 = chart.series.push(new am4charts.LineSeries());
+series1.dataFields.valueY = "col1";
+series1.dataFields.categoryX = "col0";
+series1.name = "Bezug";
+series1.fill = am4core.color("#ff0000");
+series1.stroke = am4core.color("#ff0000");
+series1.strokeWidth = 3;
+series1.strokeWidth = 1.5;
+series1.fillOpacity = 0.3;
+
+
+var series2 = chart.series.push(new am4charts.LineSeries());
+series2.dataFields.valueY = "col2";
+series2.dataFields.categoryX = "col0";
+series2.name = "LL Gesamt";
+series2.stroke = am4core.color("#4074c9");
+series2.strokeWidth = 1.5;
+series2.fill = am4core.color("#4074c9");
+series2.fillOpacity = 0.3;
+
+var series4 = chart.series.push(new am4charts.LineSeries());
+series4.dataFields.valueY = "col3";
+series4.dataFields.categoryX = "col0";
+series4.name = "PV";
+series4.stroke = am4core.color("#00ff00");
+series4.strokeWidth = 1.5;
+series4.fill = am4core.color("#00ff00");
+series4.fillOpacity = 0.3;
+
+var series5 = chart.series.push(new am4charts.LineSeries());
+series5.dataFields.valueY = "col4";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#845EC2");
+series5.strokeWidth = 1.5;
+if ( lastmanagement == 1) {
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col5";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#aa5ec2");
+series6.strokeWidth = 1.5;
+}
+if ( speichervorhanden == 1) {
+var series3 = chart.series.push(new am4charts.LineSeries());
+series3.dataFields.valueY = "col7";
+series3.dataFields.categoryX = "col0";
+series3.name = "Speicherleistung";
+series3.stroke = am4core.color("#fcbe1e");
+series3.fill = am4core.color("#fcbe1e");
+series3.fillOpacity = 0.3;
+series3.strokeWidth = 1.5;
+
+var series7 = chart.series.push(new am4charts.LineSeries());
+series7.dataFields.valueY = "col8";
+series7.dataFields.categoryX = "col0";
+series7.name = "Speicher SoC";
+series7.stroke = am4core.color("#fcbe1e");
+series7.strokeWidth = 1.5;
+series7.yAxis = valueAxis2;
+}
+
+var series8 = chart.series.push(new am4charts.LineSeries());
+series8.dataFields.valueY = "col9";
+series8.dataFields.categoryX = "col0";
+series8.name = "Lp1 SoC";
+series8.stroke = am4core.color("#845EC2");
+series8.strokeWidth = 1.5;
+series8.yAxis = valueAxis2;
+if (soc1vorhanden == 1) {
+var series9 = chart.series.push(new am4charts.LineSeries());
+series9.dataFields.valueY = "col10";
+series9.dataFields.categoryX = "col0";
+series9.name = "Lp2 SoC";
+series9.stroke = am4core.color("#aa5ec2");
+series9.strokeWidth = 1.5;
+series9.yAxis = valueAxis2;
+}
+
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col11";
+series10.dataFields.categoryX = "col0";
+series10.name = "Hausverbrauch";
+series10.stroke = am4core.color("#fefedf");
+series10.strokeWidth = 2;
+
+//chart.cursor = new am4charts.XYCursor();
+
+
+// Add scrollbar
+// chart.scrollbarX = new am4charts.XYChartScrollbar();
+// chart.scrollbarX.series.push(lineSeries);
+// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.startLocation = 0.5;
+// chart.scrollbarX.scrollbarChart.series.getIndex(0).xAxis.endLocation = 0.5;
+
+// Add legend
+if ( chartlegend == 1 ) {
+chart.legend = new am4charts.Legend();
+}
+</script>
+
+
 
 </body>
 
