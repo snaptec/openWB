@@ -34,7 +34,7 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="manifest.json"> 
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -172,6 +172,10 @@
 		if(strpos($line, "chartlegendmain=") !== false) {
 			list(, $chartlegendmainold) = explode("=", $line, 2);
 		}
+		if(strpos($line, "hausverbrauchstat=") !== false) {
+			list(, $hausverbrauchstatold) = explode("=", $line, 2);
+		}
+
 
 
 	}
@@ -205,14 +209,16 @@
 					PV: <span id="pvdiv"></span> 
 				</div>
 				<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
-					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv">(<span id="bezugglattdiv"></span>)</span> 
+					EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span> 
 				</div>
 				</div>
 			</div>
+			<div id="hausverbrauch">
 			<div class="row">
 				<div class="col-xs-12 text-center" style="background-color:#fefedf;font-size: 2vw">
 					Hausverbrauch: <span id="hausverbrauchdiv"></span> 
 				</div>
+			</div>
 			</div>
 
 			<div id="speicherstatdiv">
@@ -266,6 +272,7 @@
 	<input hidden name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold ; ?>">
 	<input hidden name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold ; ?>">
 	<input hidden name="lademodus" id="lademodus" value="<?php echo $lademodusold ; ?>">
+	<input hidden name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo $hausverbrauchstatold ; ?>">
 	</div>
 
 	<script>
@@ -308,7 +315,16 @@
 
 	});
 	</script>
+	<script>
+	$(function() {
+	   if($('#hausverbrauchstat').val() == '1') {
+		$('#hausverbrauch').show(); 
+	      } else {
+		$('#hausverbrauch').hide();
+	      } 
 
+	});
+	</script>
 						<div class="row">
 				<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 				<?php echo $lp1nameold ?> 	
@@ -907,7 +923,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- maste r -->	Ver 1.39 Beta 				</div>
+				<!-- master -->	Ver 1.393 				</div>
 
 
 				<div class="col-xs-4 text-center">

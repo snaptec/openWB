@@ -134,11 +134,12 @@ else
 					llneu=$((llalt + 1 ))
 				fi
 			fi
-			if (( llneu > maximalstromstaerke )); then
-				llneu=$maximalstromstaerke
-			fi
+
 		else
 			llneu=$((llalt + 1 ))
+		fi
+		if (( llneu > maximalstromstaerke )); then
+			llneu=$maximalstromstaerke
 		fi
 		if (( llalt < minimalapv )); then
 			llneu=$minimalapv

@@ -27,9 +27,6 @@ minundpvlademodus(){
 								llneu=$((llalt - 4 ))
 							fi
 						fi
-						if (( llneu < minimalampv )); then
-							llneu=$minimalampv
-						fi
 					else
 						llneu=$((llalt - 1 ))
 					fi
@@ -53,14 +50,18 @@ minundpvlademodus(){
 							llneu=$((llalt + 3 ))
 						fi
 					fi
-					if (( llneu > maximalstromstaerke )); then
-						llneu=$maximalstromstaerke
-					fi
+
 				else
 					llneu=$((llalt + 1 ))
 				fi
 			fi
 		fi
+	fi
+	if (( llneu < minimalampv )); then
+		llneu=$minimalampv
+	fi
+	if (( llneu > maximalstromstaerke )); then
+		llneu=$maximalstromstaerke
 	fi
 	runs/set-current.sh $llneu all
 }

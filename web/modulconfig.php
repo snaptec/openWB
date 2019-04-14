@@ -723,6 +723,18 @@ foreach($lines as $line) {
 	if(strpos($line, "froniusprimo=") !== false) {
 		list(, $froniusprimoold) = explode("=", $line);
 	}
+	if(strpos($line, "nrgkickiplp2=") !== false) {
+		list(, $nrgkickiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkicktimeoutlp2=") !== false) {
+		list(, $nrgkicktimeoutlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickmaclp2=") !== false) {
+		list(, $nrgkickmaclp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickpwlp2=") !== false) {
+		list(, $nrgkickpwlp2old) = explode("=", $line);
+	}
 
 
 
@@ -882,7 +894,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	<input type="text" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>"><br>
 </div>
 <div class="row bg-info">
-	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss der DIP Switch in der Keba aktiviert sein!<br><br>
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 </div>
 </div>
 
@@ -917,6 +929,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 </div>
 <div class="row bg-info">
 	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
 <div class="row bg-info">
 	<b><label for="nrgkickmaclp1">NRGKick MAC Adresse:</label></b>
 	<input type="text" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>"><br>
@@ -935,7 +948,6 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 </div>
 
-</div>
 
 <script>
 $(function() {
@@ -1733,18 +1745,53 @@ $(function() {
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
+			<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
 
 
 		</select>
 	</div>
+<div id="evseconnrgkicks1">
+<div class="row bg-info">
+	<b><label for="nrgkickiplp2">NRGKick IP Adresse:</label></b>
+	<input type="text" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo $nrgkickiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkicktimeoutlp2">NRGKick Timeout:</label></b>
+	<input type="text" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickmaclp2">NRGKick MAC Adresse:</label></b>
+	<input type="text" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo $nrgkickmaclp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickpwlp2">NRGKick PW:</label></b>
+	<input type="text" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo $nrgkickpwlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Password welches in der NRGKick App festgelegt wurde. <br><br>
+</div>
+
+
+</div>
+
+
 	<div id="evseconkebas1">
 	<div class="row bg-info">
 		<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
 		<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss der DIP Switch in der Keba aktiviert sein!<br><br>
+		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 	</div>
 	</div>
 
@@ -1835,6 +1882,7 @@ $(function() {
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
+		$('#evseconnrgkicks1').hide();
       } 
 	if($('#evsecons1').val() == 'modbusevse') {
 		$('#evseconswifis1').hide();
@@ -1844,7 +1892,8 @@ $(function() {
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
-    
+    		$('#evseconnrgkicks1').hide();
+   
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
@@ -1854,7 +1903,8 @@ $(function() {
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
  		$('#evseconkebas1').hide();
-        
+       		$('#evseconnrgkicks1').hide();
+   
 	} 
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
@@ -1864,7 +1914,8 @@ $(function() {
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
  		$('#evseconkebas1').hide();
-        
+ 		$('#evseconnrgkicks1').hide();
+          
 	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
@@ -1874,7 +1925,8 @@ $(function() {
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
  		$('#evseconkebas1').hide();
-     
+ 		$('#evseconnrgkicks1').hide();
+       
 	} 
 	if($('#evsecons1').val() == 'keba') {
 		$('#evsecongoes1').hide();
@@ -1884,6 +1936,18 @@ $(function() {
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').show();
+   		$('#evseconnrgkicks1').hide();
+    
+	} 
+	if($('#evsecons1').val() == 'nrgkick') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+   		$('#evseconnrgkicks1').show();
     
   	} 
 	$('#evsecons1').change(function(){
@@ -1895,7 +1959,8 @@ $(function() {
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
-    
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'modbusevse') {
 			$('#evseconswifis1').hide();
@@ -1905,7 +1970,8 @@ $(function() {
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
-    
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'simpleevsewifi') {
 			$('#evseconswifis1').show();
@@ -1915,7 +1981,8 @@ $(function() {
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
-    
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'goe') {
 			$('#evsecongoes1').show();
@@ -1925,7 +1992,9 @@ $(function() {
 			$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').hide();
-    	} 
+		$('#evseconnrgkicks1').hide();
+     
+		} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1934,7 +2003,8 @@ $(function() {
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
 		$('#evseconkebas1').hide();
-    
+    		$('#evseconnrgkicks1').hide();
+ 
 	} 
 	if($('#evsecons1').val() == 'keba') {
 		$('#evsecongoes1').hide();
@@ -1944,6 +2014,18 @@ $(function() {
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').show();
+    		$('#evseconnrgkicks1').hide();
+ 
+  	} 
+	if($('#evsecons1').val() == 'nrgkick') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+   		$('#evseconnrgkicks1').show();
     
   	} 
 	});

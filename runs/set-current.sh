@@ -329,6 +329,10 @@ if [[ $lastmanagement == "1" ]]; then
 		goeiplp1=$goeiplp2
 		goetimeoutlp1=$goetimeoutlp2
 		kebaiplp1=$kebaiplp2
+		nrgkickiplp1=$nrgkickiplp2
+		nrgkicktimeoutlp1=$nrgkicktimeoutlp2
+		nrgkickmaclp1=$nrgkickmaclp2
+		nrgkickpwlp1=$nrgkickpwlp2
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 
