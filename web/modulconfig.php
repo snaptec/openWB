@@ -983,11 +983,13 @@ function display_lp1 () {
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}
-	
+}
+
 $(function() {
-	display_lp1()
+	display_lp1();
 	$('#evsecon').change( display_lp1() );
 });
+
 </script>
 
 <br>
@@ -1008,7 +1010,6 @@ $(function() {
 <div id="llmnone">
 	
 </div>
-
 
 <div id="llmpm3pm">
 		<div class="row bg-info">
@@ -1103,131 +1104,43 @@ Keine Konfiguration erforderlich.<br>
 </div>
 </div>
 
-
-
-
 <script>
-$(function() {
-      if($('#ladeleistungmodul').val() == 'none') {
+function display_llmp1() {
+	$('#llmnone').hide(); 
+	$('#llmsdm').hide();
+	$('#llmpm3pm').hide();
+	$('#llswifi').hide();
+	$('#llsma, #sdm120div').hide();
+	$('#rs485lanlp1').hide();
+
+	if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show(); 
-		$('#llmsdm').hide();
-		$('#llmpm3pm').hide();
-		$('#llswifi').hide();
-		$('#llsma, #sdm120div').hide();
-		$('#rs485lanlp1').hide();
-
-      } 
-      if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
-		$('#llmnone').hide(); 
+	} 
+	if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 		$('#llmsdm').show();
-		$('#llsma, #sdm120div').hide();
-		$('#llswifi').hide();
-		$('#llmpm3pm').hide();
 		$('#rs485lanlp1').show();
 
-      } 
-      if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-		$('#llmnone').hide(); 
-		$('#llmsdm, #sdm120div').hide();
+	} 
+	if($('#ladeleistungmodul').val() == 'smaemd_ll') {
 		$('#llsma').show();
-		$('#llmpm3pm').hide();
-		$('#llswifi').hide();
-		$('#rs485lanlp1').hide();
-
-      } 
-      if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
-		$('#llmnone').hide(); 
-		$('#llmsdm, #llsma').hide();
+	} 
+	if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 		$('#sdm120div').show();
-		$('#llmpm3pm').hide();
-		$('#llswifi').hide();
 		$('#rs485lanlp1').show();
-
-      } 
-      if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
-		$('#llmnone').hide(); 
-		$('#llmsdm, #llsma').hide();
-		$('#sdm120div').hide();
+	} 
+	if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
 		$('#llswifi').show();
-		$('#llmpm3pm').hide();
-		$('#rs485lanlp1').hide();
-
-      } 
-      if($('#ladeleistungmodul').val() == 'mpm3pmll') {
-		$('#llmnone').hide(); 
-		$('#llmsdm, #llsma').hide();
-		$('#sdm120div').hide();
-		$('#llswifi').hide();
+	} 
+	if($('#ladeleistungmodul').val() == 'mpm3pmll') {
 		$('#llmpm3pm').show();
 		$('#rs485lanlp1').show();
+	} 
+}
 
-      } 
-
-
-
- 
-
-	$('#ladeleistungmodul').change(function(){
-	        if($('#ladeleistungmodul').val() == 'none') {
-			$('#llmnone').show(); 
-			$('#llmsdm').hide();
-			$('#llsma, #sdm120div').hide();
-		$('#llmpm3pm').hide();
-			$('#llswifi').hide();
-		$('#rs485lanlp1').hide();
-
-
-	        } 
-      if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
-	      $('#llmnone').hide();
-		$('#llmpm3pm').hide();
-		$('#llmsdm').show();
-		$('#llsma, #sdm120div').hide();
-		$('#llswifi').hide();
-		$('#rs485lanlp1').show();
-
-
-      } 
-      if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-	      $('#llmnone').hide();
-	     $('#llmpm3pm').hide();
-		$('#llmsdm, #sdm120div').hide();
-		$('#llsma').show();
-		$('#llswifi').hide();
-		$('#rs485lanlp1').hide();
-
-
-      } 
-      if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
- 		$('#llmpm3pm').hide();     
-	      $('#llmnone').hide(); 
-		$('#llmsdm, #llsma').hide();
-		$('#sdm120div').show();
-		$('#llswifi').hide();
-		$('#rs485lanlp1').show();
-
-
-      } 
-      if($('#ladeleistungmodul').val() == 'mpm3pmll') {
-	      $('#llmnone').hide();
-		$('#llmsdm, #llsma').hide();
-		$('#sdm120div').hide();
-		$('#llswifi').hide();
-		$('#llmpm3pm').show();
-		$('#rs485lanlp1').show();
-      } 
-
-      if($('#ladeleistungmodul').val() == 'simpleevsewifi') { 
-		$('#llmpm3pm').hide();
-	      $('#llmnone').hide(); 
-		$('#llmsdm, #llsma').hide();
-		$('#sdm120div').hide();
-		$('#llswifi').show();
-		$('#rs485lanlp1').hide();
-      } 
-	});
+$(function() {
+	display_llmp1();
+	$('#ladeleistungmodul').change( display_llmp1() );
 });
-
 
 </script>
 <br>
@@ -1398,199 +1311,49 @@ $(function() {
 	</div>
 </div>
 
-
-
 <script>
+function display_socmodul() {
+	$('#socmnone').hide(); 
+	$('#socmhttp').hide();
+	$('#socleaf').hide();
+	$('#soci3').hide();
+	$('#soczoe').hide();
+	$('#socevnotify').hide();
+	$('#socmtesla').hide();
+	$('#soccarnet').hide();
+
+	if($('#socmodul').val() == 'none') {
+		$('#socmnone').show(); 
+	}      
+   	if($('#socmodul').val() == 'soc_http')   {
+		$('#socmhttp').show();	
+	} 
+  	if($('#socmodul').val() == 'soc_leaf')   {
+		$('#socleaf').show();
+	} 
+    if($('#socmodul').val() == 'soc_i3')   {
+		$('#soci3').show();
+	} 
+    if($('#socmodul').val() == 'soc_zoe')   {
+		$('#soczoe').show();
+    }
+    if($('#socmodul').val() == 'soc_evnotify')   {
+		$('#socevnotify').show();
+    }
+    if($('#socmodul').val() == 'soc_tesla')   {
+		$('#socmtesla').show();
+	}
+	if($('#socmodul').val() == 'soc_carnet')   {
+		$('#soccarnet').show();
+	} 
+}
+
 $(function() {
-      if($('#socmodul').val() == 'none') {
-		$('#socmnone').show(); 
-		$('#socmhttp').hide();
-		$('#socleaf').hide();
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-      } 
-     
-   if($('#socmodul').val() == 'soc_http')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-		$('#socmhttp').show();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-
-      } 
-   if($('#socmodul').val() == 'soc_leaf')   {
-		$('#socmnone').hide();
-		$('#socleaf').show();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-   } 
-   if($('#socmodul').val() == 'soc_i3')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').show();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-      } 
-   if($('#socmodul').val() == 'soc_zoe')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').show();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-   }
-   if($('#socmodul').val() == 'soc_evnotify')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').show();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-   }
-   if($('#socmodul').val() == 'soc_tesla')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').show();
-		$('#soccarnet').hide();
-
-   }
-   if($('#socmodul').val() == 'soc_carnet')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').show();
-
-      } 
-
-
-	$('#socmodul').change(function(){
-        if($('#socmodul').val() == 'none') {
-		$('#socmnone').show(); 
-		$('#socmhttp').hide();
-		$('#socleaf').hide();
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-
-      } 
-     
-   if($('#socmodul').val() == 'soc_http')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-		$('#socmhttp').show();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-
-      } 
-   if($('#socmodul').val() == 'soc_leaf')   {
-		$('#socmnone').hide();
-		$('#socleaf').show();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-   } 
-   if($('#socmodul').val() == 'soc_i3')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').show();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-      } 
-   if($('#socmodul').val() == 'soc_zoe')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').show();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-   }
-   if($('#socmodul').val() == 'soc_evnotify')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').show();
-		$('#socmtesla').hide();
-		$('#soccarnet').hide();
-
-      } 
-   if($('#socmodul').val() == 'soc_tesla')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').show();
-		$('#soccarnet').hide();
-
-      } 
-   if($('#socmodul').val() == 'soc_carnet')   {
-		$('#socmnone').hide();
-		$('#socleaf').hide();
-	       	$('#socmhttp').hide();	
-		$('#soci3').hide();
-		$('#soczoe').hide();
-		$('#socevnotify').hide();
-		$('#socmtesla').hide();
-		$('#soccarnet').show();
-
-      } 
-
-	});
+	display_socmodul();
+	$('#socmodul').change( display_socmodul() );
 });
-</script>
 
+</script>
 
 <hr>
 <div class="row">
@@ -1604,10 +1367,6 @@ $(function() {
 	<br>
 </div>
 <div id="lastmman" style="margin:5em;">
-
-
-	
-
 	<div class="row">
 	</div>
 <div class="row">
@@ -1659,10 +1418,7 @@ $(function() {
 	Password welches in der NRGKick App festgelegt wurde. <br><br>
 </div>
 
-
 </div>
-
-
 	<div id="evseconkebas1">
 	<div class="row bg-info">
 		<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
@@ -1672,8 +1428,6 @@ $(function() {
 		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 	</div>
 	</div>
-
-
 	<div id="evseconmbs1">
 		<div class="row">
 			Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
@@ -1749,164 +1503,44 @@ $(function() {
 </div>
 
 <script>
+function display_lp2() {
+	$('#evsecondacs1').hide(); 
+	$('#evseconmbs1').hide();
+	$('#evseconswifis1').hide();
+	$('#llmodullp2').hide();
+	$('#evsecongoes1').hide();
+	$('#evsecoslaveeth').hide();
+	$('#evseconkebas1').hide();
+	$('#evseconnrgkicks1').hide();
 
-
-$(function() {
-      if($('#evsecons1').val() == 'dac') {
+	if($('#evsecons1').val() == 'dac') {
 		$('#evsecondacs1').show(); 
-		$('#evseconmbs1').hide();
-		$('#evseconswifis1').hide();
 		$('#llmodullp2').show();
-		$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-		$('#evseconnrgkicks1').hide();
-      } 
+	} 
 	if($('#evsecons1').val() == 'modbusevse') {
-		$('#evseconswifis1').hide();
-		$('#evsecondacs1').hide();
 		$('#evseconmbs1').show();
 		$('#llmodullp2').show();
-		$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-    		$('#evseconnrgkicks1').hide();
-   
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
- 		$('#evseconkebas1').hide();
-       		$('#evseconnrgkicks1').hide();
-   
 	} 
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
- 		$('#evseconkebas1').hide();
- 		$('#evseconnrgkicks1').hide();
-          
 	} 
 	if($('#evsecons1').val() == 'slaveeth') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
- 		$('#evseconkebas1').hide();
- 		$('#evseconnrgkicks1').hide();
-       
 	} 
 	if($('#evsecons1').val() == 'keba') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
 		$('#evseconkebas1').show();
-   		$('#evseconnrgkicks1').hide();
-    
 	} 
 	if($('#evsecons1').val() == 'nrgkick') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
    		$('#evseconnrgkicks1').show();
-    
-  	} 
-	$('#evsecons1').change(function(){
-	        if($('#evsecons1').val() == 'dac') {
-			$('#evsecondacs1').show(); 
-			$('#evseconmbs1').hide();
-			$('#evseconswifis1').hide();
-			$('#llmodullp2').show();
-			$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-    		$('#evseconnrgkicks1').hide();
- 
-		} 
-		if($('#evsecons1').val() == 'modbusevse') {
-			$('#evseconswifis1').hide();
-			$('#evsecondacs1').hide();
-			$('#evseconmbs1').show();
-			$('#llmodullp2').show();
-			$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-    		$('#evseconnrgkicks1').hide();
- 
-		} 
-		if($('#evsecons1').val() == 'simpleevsewifi') {
-			$('#evseconswifis1').show();
-			$('#evsecondacs1').hide();
-			$('#evseconmbs1').hide();
-			$('#llmodullp2').hide();
-			$('#evsecongoes1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-    		$('#evseconnrgkicks1').hide();
- 
-		} 
-		if($('#evsecons1').val() == 'goe') {
-			$('#evsecongoes1').show();
-			$('#evsecondacs1').hide();
-			$('#evseconmbs1').hide();
-			$('#llmodullp2').hide();
-			$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-		$('#evseconnrgkicks1').hide();
-     
-		} 
-	if($('#evsecons1').val() == 'slaveeth') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').show();
-		$('#evseconkebas1').hide();
-    		$('#evseconnrgkicks1').hide();
- 
-	} 
-	if($('#evsecons1').val() == 'keba') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').show();
-    		$('#evseconnrgkicks1').hide();
- 
-  	} 
-	if($('#evsecons1').val() == 'nrgkick') {
-		$('#evsecongoes1').hide();
-		$('#evsecondacs1').hide();
-		$('#evseconmbs1').hide();
-		$('#llmodullp2').hide();
-		$('#evseconswifis1').hide();
-		$('#evsecoslaveeth').hide();
-		$('#evseconkebas1').hide();
-   		$('#evseconnrgkicks1').show();
-    
-  	} 
-	});
+	}
+}
+
+$(function() {
+	display_lp2();
+	$('#evsecons1').change( display_lp2() );
 });
 </script>
 
@@ -1925,8 +1559,6 @@ $(function() {
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
 
-
-
 <div id="mpm3pmlls1div">
 		<div class="row bg-info">
 		<b><label for="mpm3pmlls1">MPM3PM Modbus Ladeleistung Source:</label></b>
@@ -1944,7 +1576,6 @@ $(function() {
 	</div>
 
 </div>
-
 
 	<div id="sdm630s1div">
 		<div class="row bg-info">
@@ -2091,8 +1722,6 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 </div>
 
-
-
 <div id="soczoelp2">
 	<div class="row bg-info">
 		<b><label for="zoelp2username">Benutzername:</label></b>
@@ -2190,91 +1819,40 @@ Keine Konfiguration erforderlich.<br>
 
 </div>
 
-
-
-
 <script>
-$(function() {
-      if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
+function display_llmp2() {
+	$('#sdm630s1div').hide(); 
+	$('#sdm120s1div').hide();
+	$('#swifis1div').hide();	
+	$('#mpm3pmlls1div').hide();
+	$('#rs485laniplp2').hide();	
+
+	if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
 		$('#sdm630s1div').show(); 
-		$('#sdm120s1div').hide();
-		$('#swifis1div').hide();	
-		$('#mpm3pmlls1div').hide();
 		$('#rs485laniplp2').show();	
-      } 
-      if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
-		$('#sdm630s1div').hide();
+	} 
+	if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
 		$('#sdm120s1div').show();
-		$('#swifis1div').hide();	
-		$('#mpm3pmlls1div').hide();
 		$('#rs485laniplp2').show();	
-      } 
-      if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
+	} 
+	if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
 		$('#swifis1div').show();	
-		$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').hide();	
-      } 
+	} 
     if($('#ladeleistungss1modul').val() == 'goelp2') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
 		$('#swifis1div').show();	
-		$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').hide();	
-      } 
-
-      if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
-		$('#swifis1div').hide();	
+	} 
+	if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
 		$('#mpm3pmlls1div').show();
 		$('#rs485laniplp2').show();	
-      } 
+	} 
+}
 
-
-	$('#ladeleistungss1modul').change(function(){
-	        if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
-			$('#sdm630s1div').show(); 
-			$('#sdm120s1div').hide();
-			$('#swifis1div').hide();	
-			$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').show();	
-
-		} 
-      if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').show();
-		$('#swifis1div').hide();	
-		$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').show();	
-
-      } 
-      if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
-		$('#swifis1div').show();	
-		$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').hide();	
-      } 
-	    if($('#ladeleistungss1modul').val() == 'goelp2') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
-		$('#swifis1div').show();	
-		$('#mpm3pmlls1div').hide();
-		$('#rs485laniplp2').hide();	
-      } 
-
-      if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
-		$('#sdm630s1div').hide();
-		$('#sdm120s1div').hide();
-		$('#swifis1div').hide();	
-		$('#mpm3pmlls1div').show();
-		$('#rs485laniplp2').show();	
-      }         
-	    });
+$(function() {
+	display_llmp2();
+	$('#ladeleistungss1modul').change( display_llmp2() );
 });
 </script>
+
 <script>
 $(function() {
       if($('#socmodul1').val() == 'none') {
