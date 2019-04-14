@@ -803,7 +803,7 @@ $zoepasswortold = str_replace( "'", "", $zoepasswortold);
 
 </div>
 <script>
-$(function() {
+function display_lp1 () {
 	$('#evsecondac').hide(); 
 	$('#evseconmod').hide();
 	$('#evseconswifi').hide();
@@ -828,33 +828,10 @@ $(function() {
 	if($('#evsecon').val() == 'masterethframer') {
 		$('#evseconmastereth').show();
 	} 
-
-	$('#evsecon').change(function(){
-		$('#evsecondac').hide(); 
-		$('#evseconmod').hide();
-		$('#evseconswifi').hide();
-		$('#llmodullp1').hide();
-		$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-
-		if($('#evsecon').val() == 'dac') {
-			$('#evsecondac').show(); 
-			$('#llmodullp1').show();
-		}
-		if($('#evsecon').val() == 'modbusevse') {
-			$('#evseconmod').show();
-			$('#llmodullp1').show();
-		} 
-		if($('#evsecon').val() == 'simpleevsewifi') {
-			$('#evseconswifi').show();
-		} 
-		if($('#evsecon').val() == 'goe') {
-			$('#evsecongoe').show();
-		} 
-		if($('#evsecon').val() == 'masterethframer') {
-			$('#evseconmastereth').show();
-		} 
-	});
+}
+$(function() {
+	display_lp1()
+	$('#evsecon').change( display_lp1() );
 });
 </script>
 
