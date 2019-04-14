@@ -950,7 +950,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 
 <script>
-$(function() {
+function display_lp1 () {
 	$('#evsecondac').hide(); 
 	$('#evseconmod').hide();
 	$('#evseconswifi').hide();
@@ -983,40 +983,10 @@ $(function() {
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}       
-	$('#evsecon').change(function(){
-		$('#evsecondac').hide(); 
-		$('#evseconmod').hide();
-		$('#evseconswifi').hide();
-		$('#llmodullp1').hide();
-		$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-		$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
-		if($('#evsecon').val() == 'dac') {
-			$('#evsecondac').show(); 
-			$('#llmodullp1').show();
-		}
-		if($('#evsecon').val() == 'modbusevse') {
-			$('#evseconmod').show();
-			$('#llmodullp1').show();
-		} 
- 		if($('#evsecon').val() == 'nrgkick') {
-			$('#evseconnrgkick').show();
-		}       
-		if($('#evsecon').val() == 'keba') {
-			$('#evseconkeba').show();
-		}       
-		if($('#evsecon').val() == 'simpleevsewifi') {
-			$('#evseconswifi').show();
-		} 
-		if($('#evsecon').val() == 'goe') {
-			$('#evsecongoe').show();
-		} 
-		if($('#evsecon').val() == 'masterethframer') {
-			$('#evseconmastereth').show();
-		} 
-	});
+}
+$(function() {
+	display_lp1()
+	$('#evsecon').change( display_lp1() );
 });
 </script>
 
