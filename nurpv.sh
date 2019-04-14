@@ -1,21 +1,7 @@
 #!/bin/bash
 #NUR PV Uberschussregelung lademodus 2
 nurpvlademodus(){
-# wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
-#	if (( ladeleistung > 500 )); then
-#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-#			runs/set-current.sh 0 m
-#     			exit 0
-#		fi
-#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-#			runs/set-current.sh 0 s1
-#     			exit 0
-#		fi
-#		if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-#			runs/set-current.sh 0 s2
-#     			exit 0
-#		fi
-#	fi
+. /var/www/html/openWB/openwb.conf
 if [[ $lastmanagement == "0" ]]; then
 	if [[ $socmodul != "none" ]]; then
 		if (( soc < minnurpvsoclp1 )); then
@@ -66,7 +52,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		exit 0
 	fi
 fi
-if (( ladeleistung < 500 )); then
+if (( ladeleistung < 300 )); then
 	if (( llalt > minimalapv )); then
 		llneu=$minimalapv
 		runs/set-current.sh $llneu all
@@ -81,19 +67,19 @@ if (( ladeleistung < 500 )); then
 	fi
 	if (( llalt == minimalapv )); then
 		if (( wattbezugint > abschaltuberschuss )); then
-			pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
-			if (( pvcounter < abschaltverzoegerung )); then
-				pvcounter=$((pvcounter + 10))
-				echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
-				if [[ $debug == "1" ]]; then
-					echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
-				fi
-			else
+			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
+			#if (( pvcounter < abschaltverzoegerung )); then
+			#	pvcounter=$((pvcounter + 10))
+			#	echo $pvcounter > /var/www/html/openWB/ramdisk/pvcounter
+			#	if [[ $debug == "1" ]]; then
+			#		echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
+			#	fi
+			#else
 				runs/set-current.sh 0 all
 				if [[ $debug == "1" ]]; then
 					echo "pv ladung beendet"
 				fi
-			fi
+			#fi
 		fi
 	fi
 else
@@ -148,18 +134,50 @@ else
 					llneu=$((llalt + 1 ))
 				fi
 			fi
-			if (( llneu > maximalstromstaerke )); then
-				llneu=$maximalstromstaerke
-			fi
+
 		else
 			llneu=$((llalt + 1 ))
+		fi
+		if (( llneu > maximalstromstaerke )); then
+			llneu=$maximalstromstaerke
 		fi
 		if (( llalt < minimalapv )); then
 			llneu=$minimalapv
 		fi
-		runs/set-current.sh $llneu all
-		if [[ $debug == "1" ]]; then
-			echo "pv ladung auf $llneu erhoeht"
+		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then
+			socdist=$(echo $((soc1 - soc)) | sed 's/-//')
+			anzahl=$((socdist / adaptfaktor))
+			if (( soc1 > soc )); then
+				higherev=s1
+				lowerev=m
+			else
+				higherev=m
+				lowerev=s1
+			fi
+			llhigher=$llneu
+			lllower=$llneu
+			for ((i=1;i<=anzahl;i++)); do
+				if (( llhigher > minimalapv )) && (( lllower < maximalstromstaerke )); then
+					llhigher=$((llhigher - 1))
+					lllower=$((lllower + 1))
+				fi
+			done
+			runs/set-current.sh $llhigher $higherev
+			runs/set-current.sh $lllower $lowerev
+			sleep 1
+			echo $llneu > ramdisk/llsoll
+			echo $llneu > ramdisk/llsolls1
+			if (( debug == 1 )); then
+				echo $llneu "erhoeht, adaptiert auf"
+				echo auf $llhigher A für LP $higherev
+				echo auf $lllower A für LP $lowerev
+			fi
+			
+		else
+			runs/set-current.sh $llneu all
+			if [[ $debug == "1" ]]; then
+				echo "pv ladung auf $llneu erhoeht"
+			fi
 		fi
 		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 		exit 0
@@ -241,11 +259,43 @@ else
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
 			fi
-			runs/set-current.sh $llneu all
-			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
-			if [[ $debug == "1" ]]; then
-				echo "pv ladung auf $llneu reduziert"
+			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && ((anzahlphasen == 2 )); then
+				socdist=$(echo $((soc1 - soc)) | sed 's/-//')
+				anzahl=$((socdist / adaptfaktor))
+				if (( soc1 > soc )); then
+					higherev=s1
+					lowerev=m
+				else
+					higherev=m
+					lowerev=s1
+				fi
+				llhigher=$llneu
+				lllower=$llneu
+				for ((i=1;i<=anzahl;i++)); do
+					if (( llhigher > minimalapv )) && (( lllower < maximalstromstaerke )); then
+						llhigher=$((llhigher - 1))
+						lllower=$((lllower + 1))
+					fi
+				done
+				runs/set-current.sh $llhigher $higherev
+				runs/set-current.sh $lllower $lowerev
+				sleep 1
+				echo $llneu > ramdisk/llsoll
+				echo $llneu > ramdisk/llsolls1
+
+				if (( debug == 1 )); then
+					echo $llneu "reduziert, adaptiert auf"
+					echo auf $llhigher A für LP $higherev
+					echo auf $lllower A für LP $lowerev
+				fi
+			else
+
+				runs/set-current.sh $llneu all
+				if [[ $debug == "1" ]]; then
+					echo "pv ladung auf $llneu reduziert"
+				fi
 			fi
+			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
 		else
 			if (( wattbezugint > abschaltuberschuss )); then

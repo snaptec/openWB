@@ -98,6 +98,22 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm120modbusllid1s1=") !== false) {
 		list(, $sdm120modbusllid1s1old) = explode("=", $line);
 	}
+	if(strpos($line, "pushbenachrichtigung=") !== false) {
+		list(, $pushbenachrichtigungold) = explode("=", $line);
+	}
+	if(strpos($line, "pushoveruser=") !== false) {
+		list(, $pushoveruserold) = explode("=", $line);
+	}
+	if(strpos($line, "pushovertoken=") !== false) {
+		list(, $pushovertokenold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstartl=") !== false) {
+		list(, $pushbstartlold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstopl=") !== false) {
+		list(, $pushbstoplold) = explode("=", $line);
+	}
+
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -340,6 +356,29 @@ foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
 		list(, $logdailywhold) = explode("=", $line);
 	}
+	if(strpos($line, "ladetaster=") !== false) {
+		list(, $ladetasterold) = explode("=", $line);
+	}
+	if(strpos($line, "grapham=") !== false) {
+		list(, $graphamold) = explode("=", $line);
+	}
+	if(strpos($line, "graphinteractiveam=") !== false) {
+		list(, $graphinteractiveamold) = explode("=", $line);
+	}
+
+	if(strpos($line, "graphliveam=") !== false) {
+		list(, $graphliveamold) = explode("=", $line);
+	}
+	if(strpos($line, "chartlegendmain=") !== false) {
+		list(, $chartlegendmainold) = explode("=", $line);
+	}
+	if(strpos($line, "hausverbrauchstat=") !== false) {
+		list(, $hausverbrauchstatold) = explode("=", $line);
+	}
+
+
+
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -348,6 +387,8 @@ $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
+$pushoveruserold = str_replace( "'", "", $pushoveruserold);
+$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 
 
 
@@ -360,9 +401,11 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 <div class="container">
 	<div class="row"><br>
 		<ul class="nav nav-tabs">
-			<li><a data-toggle="tab" href="./index.php">Zurueck</a></li>
-			<li><a href="./settings.php">Ladeeinstellungen</a></li>
+			<li><a data-toggle="tab" href="./index.php">Zurück</a></li>
+			<li><a href="./settings.php">Einstellungen</a></li>
+  			<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
 			<li><a href="./modulconfig.php">Modulkonfiguration</a></li>
+
 			<li class="active"><a href="./misc.php">Misc</a></li>
 		</ul><br><br>
 	</div>  
@@ -370,9 +413,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			<b><label for="debug">Debugmodus:</label></b>
 			<select type="text" name="debug" id="debug">
-				<option <?php if($debugold == 0) echo selected ?>value="0">0</option>
+				<option <?php if($debugold == 0) echo selected ?> value="0">0</option>
 				<option <?php if($debugold == 1) echo selected ?> value="1">1</option>
-				<option <?php if($debugold == 2) echo selected ?>  value="2">2</option>
+				<option <?php if($debugold == 2) echo selected ?> value="2">2</option>
 			</select>
 			<br>
 		</div>
@@ -389,16 +432,121 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			</select>
 			<br>
 		</div>
+
 		<div class="row">
 			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
 	<br>	</div>
 		<div class="row">
-	<h3>	Logging Einstellungen</h3> <br>
+			<b><label for="ladetaster">Ladetaster:</label></b>
+			<select type="text" name="ladetaster" id="ladetaster">
+				<option <?php if($ladetasterold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($ladetasterold == 1) echo selected ?> value="1">An</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
+		</div>
+
+<div class="row"><hr>
+	<h4>Benachrichtigungen mit Pushover</h4>
+</div>
+<div class="row">
+	<b><label for="pushbenachrichtigung">Pushover Benachrichtigungen:</label></b>
+	<select type="text" name="pushbenachrichtigung" id="pushbenachrichtigung">
+		<option <?php if($pushbenachrichtigungold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($pushbenachrichtigungold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="pushbaus">
+	<br>
+</div>
+<div id="pushban">
+	<div class="row">
+	Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen.<br> Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden.<br>
+Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushoveruser">Pushover User String:</label></b>
+        	<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Hier das User Token von Pushover eintragen<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushovertoken">Pushover App Token:</label></b>
+        	<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>"><br>
+<br>
+	</div>
+	<div class="row">
+		Hier das Application Token von Pushover eintragen<br><br>
+	</div>
+
+	<div class="row"><hr>
+		<b>Benachrichtigungseinstellungen:</b><br><br>
+	</div>
+	<div class="row">
+		<b><label for="pushbstartl">Beim Starten der Ladung:</label></b>
+	       	<select type="text" name="pushbstartl" id="pushbstartl">
+ 			<option <?php if($pushbstartlold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstartlold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+	<div class="row">
+		<b><label for="pushbstopl">Beim Stoppen der Ladung:</label></b>
+	       	<select type="text" name="pushbstopl" id="pushbstopl">
+ 			<option <?php if($pushbstoplold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstoplold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+
+
+</div><br>
+<script>
+$(function() {
+      if($('#pushbenachrichtigung').val() == '0') {
+		$('#pushbaus').show(); 
+		$('#pushban').hide();
+      } else {
+		$('#pushbaus').hide();
+	       	$('#pushban').show();	
+      } 
+
+	$('#pushbenachrichtigung').change(function(){
+	        if($('#pushbenachrichtigung').val() == '0') {
+			$('#pushbaus').show(); 
+			$('#pushban').hide();
+	        } else {
+			$('#pushbaus').hide();
+		       	$('#pushban').show();	
+	        } 
+	    });
+});
+</script>
+
+		<div class="row"><hr>
+			<h3>	Optische Einstellungen</h3> <br>
+		</div>
+		<div class="row">
+			<b><label for="hausverbrauchstat">Hausverbrauch auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="hausverbrauchstat" id="hausverbrauchstat">
+				<option <?php if($hausverbrauchstatold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($hausverbrauchstatold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+		</div>
+
+		<div class="row">
+			<h4>	Graphen</h4> <br>
 		</div>
 		<div class="row">
 			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
 			<select type="text" name="logdailywh" id="logdailywh">
-				<option <?php if($logdailywhold == 0) echo selected ?>value="0">Watt</option>
+				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
 				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
 			</select>
 			<br>
@@ -424,11 +572,42 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
 
 	</select><br>
-<br>
 </div>
+
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
-
+	<div class="row"><br>
+			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
+			<select type="text" name="graphliveam" id="graphliveam">
+				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			
+	</div>
+	<div class="row">
+			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="chartlegendmain" id="chartlegendmain">
+				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
+	<div class="row">
+			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
+			<select type="text" name="grapham" id="grapham">
+				<option <?php if($graphamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
+	<div class="row">
+			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
+			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
+				<option <?php if($graphinteractiveamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br><br>
+	</div>
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>

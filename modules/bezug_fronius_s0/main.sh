@@ -7,7 +7,11 @@
 . /var/www/html/openWB/openwb.conf
 
 wattbezugtmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi)
-wattbezug=$(echo $wattbezugtmp | jq -r '.Body.Data.PowerReal_P_Sum' |sed 's/\..*$//')
+if (( froniusprimo == 1 )); then
+	wattbezug=$(echo $wattbezugtmp | jq -r '.Body.Data.Site.P_Grid' |sed 's/\..*$//')
+else
+	wattbezug=$(echo $wattbezugtmp | jq -r '.Body.Data.PowerReal_P_Sum' |sed 's/\..*$//')
+fi
 #pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 #pvwatt=$(echo $pvwatttmp | jq '.Body.Data.PAC.Values' | sed 's/.*://' | tr -d '\n' | sed 's/^.\{2\}//' | sed 's/.$//' )
 pvwatt=$(<ramdisk/pvwatt)

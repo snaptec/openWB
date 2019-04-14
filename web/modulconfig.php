@@ -575,6 +575,12 @@ foreach($lines as $line) {
 	if(strpos($line, "goeiplp1=") !== false) {
 		list(, $goeiplp1old) = explode("=", $line);
 	}
+	if(strpos($line, "kebaiplp1=") !== false) {
+		list(, $kebaiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "kebaiplp2=") !== false) {
+		list(, $kebaiplp2old) = explode("=", $line);
+	}
 	if(strpos($line, "goetimeoutlp1=") !== false) {
 		list(, $goetimeoutlp1old) = explode("=", $line);
 	}
@@ -661,11 +667,27 @@ foreach($lines as $line) {
 	if(strpos($line, "e3dcip=") !== false) {
 		list(, $e3dcipold) = explode("=", $line);
 	}
+	if(strpos($line, "speicherpwip=") !== false) {
+		list(, $speicherpwipold) = explode("=", $line);
+	}
 	if(strpos($line, "sbs25ip=") !== false) {
 		list(, $sbs25ipold) = explode("=", $line);
 	}
 	if(strpos($line, "tri9000ip=") !== false) {
 		list(, $tri9000ipold) = explode("=", $line);
+	}
+	if(strpos($line, "bezug_smartfox_ip=") !== false) {
+		list(, $bezug_smartfox_ipold) = explode("=", $line);
+	}
+
+	if(strpos($line, "wrsma2ip=") !== false) {
+		list(, $wrsma2ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma3ip=") !== false) {
+		list(, $wrsma3ipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrsma4ip=") !== false) {
+		list(, $wrsma4ipold) = explode("=", $line);
 	}
 	if(strpos($line, "kostalplenticoreip=") !== false) {
 		list(, $kostalplenticoreipold) = explode("=", $line);
@@ -674,6 +696,47 @@ foreach($lines as $line) {
 	if(strpos($line, "mpm3pmevuhaus=") !== false) {
 		list(, $mpm3pmevuhausold) = explode("=", $line);
 	}
+	if(strpos($line, "evuglaettung=") !== false) {
+		list(, $evuglaettungold) = explode("=", $line);
+	}
+	if(strpos($line, "evuglaettungakt=") !== false) {
+		list(, $evuglaettungaktold) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickiplp1=") !== false) {
+		list(, $nrgkickiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkicktimeoutlp1=") !== false) {
+		list(, $nrgkicktimeoutlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickmaclp1=") !== false) {
+		list(, $nrgkickmaclp1old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickpwlp1=") !== false) {
+		list(, $nrgkickpwlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "kostalplenticorehaus=") !== false) {
+		list(, $kostalplenticorehausold) = explode("=", $line);
+	}
+	if(strpos($line, "kostalplenticorebatt=") !== false) {
+		list(, $kostalplenticorebattold) = explode("=", $line);
+	}
+	if(strpos($line, "froniusprimo=") !== false) {
+		list(, $froniusprimoold) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickiplp2=") !== false) {
+		list(, $nrgkickiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkicktimeoutlp2=") !== false) {
+		list(, $nrgkicktimeoutlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickmaclp2=") !== false) {
+		list(, $nrgkickmaclp2old) = explode("=", $line);
+	}
+	if(strpos($line, "nrgkickpwlp2=") !== false) {
+		list(, $nrgkickpwlp2old) = explode("=", $line);
+	}
+
+
 
 }
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
@@ -733,7 +796,8 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div class="row"><br>
  <ul class="nav nav-tabs">
     <LI><a data-toggle="tab" href="./index.php">Zurück</A></LI>
-    <li><a href="./settings.php">Ladeeinstellungen</a></li>
+    <li><a href="./settings.php">Einstellungen</a></li>
+    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
     <li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
@@ -760,7 +824,10 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
 		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
+		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
+		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
+	
 	</select>
 
 </div>
@@ -821,9 +888,19 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
 </div>
+<div id="evseconkeba">
+<div class="row bg-info">
+	<b><label for="kebaiplp1">Keba IP Adresse:</label></b>
+	<input type="text" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
+</div>
+</div>
+
 <div id="evsecongoe">
 <div class="row bg-info">
-	<b><label for="goeiplp1">Go-e IP Adressee:</label></b>
+	<b><label for="goeiplp1">Go-e IP Adresse:</label></b>
 	<input type="text" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>"><br>
 </div>
 <div class="row bg-info">
@@ -838,6 +915,40 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 </div>
 
 </div>
+<div id="evseconnrgkick">
+<div class="row bg-info">
+	<b><label for="nrgkickiplp1">NRGKick IP Adresse:</label></b>
+	<input type="text" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo $nrgkickiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkicktimeoutlp1">NRGKick Timeout:</label></b>
+	<input type="text" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickmaclp1">NRGKick MAC Adresse:</label></b>
+	<input type="text" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickpwlp1">NRGKick PW:</label></b>
+	<input type="text" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo $nrgkickpwlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Password welches in der NRGKick App festgelegt wurde. <br><br>
+</div>
+
+
+</div>
+
+
 <script>
 $(function() {
       if($('#evsecon').val() == 'dac') {
@@ -846,8 +957,10 @@ $(function() {
 		$('#evseconswifi').hide();
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
+		$('#evseconnrgkick').hide();
 		$('#evseconmastereth').hide();
-	}
+		$('#evseconkeba').hide();
+      }
 	if($('#evsecon').val() == 'modbusevse') {
 		$('#evseconswifi').hide();
       		$('#evsecondac').hide();
@@ -855,6 +968,9 @@ $(function() {
 		$('#llmodullp1').show();
 		$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
+		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
 	
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
@@ -864,6 +980,8 @@ $(function() {
 		$('#llmodullp1').hide();
 			$('#evseconmastereth').hide();
 		$('#evsecongoe').hide();
+		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
       	} 
 		if($('#evsecon').val() == 'goe') {
@@ -873,16 +991,43 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	       		$('#evseconmastereth').hide();
-	} 
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
+		} 
 		if($('#evsecon').val() == 'masterethframer') {
 			$('#evsecongoe').hide();
 			$('#evsecondac').hide();
 			$('#evseconmod').hide();
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').show();
-	} 
+			$('#evseconmastereth').show();
+		$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
 
+	} 
+		if($('#evsecon').val() == 'nrgkick') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').show();
+		$('#evseconkeba').hide();
+
+		}
+		if($('#evsecon').val() == 'keba') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').show();
+
+		}       
 	$('#evsecon').change(function(){
 	        if($('#evsecon').val() == 'dac') {
 			$('#evsecondac').show(); 
@@ -891,7 +1036,9 @@ $(function() {
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-	
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
 
 		}
 		if($('#evsecon').val() == 'modbusevse') {
@@ -901,7 +1048,9 @@ $(function() {
 			$('#llmodullp1').show();
 			$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-	
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
 			$('#evseconswifi').show();
@@ -910,7 +1059,10 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evsecongoe').hide();
 			$('#evseconmastereth').hide();
-	        } 
+			$('#evseconnrgkick').hide();
+       		$('#evseconkeba').hide();
+
+		} 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
 			$('#evsecondac').hide();
@@ -918,6 +1070,9 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
 			$('#evsecongoe').hide();
@@ -926,8 +1081,34 @@ $(function() {
 			$('#llmodullp1').hide();
 			$('#evseconswifi').hide();
 	        	$('#evseconmastereth').show();
-	} 
-	    });
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').hide();
+
+		} 
+ 		if($('#evsecon').val() == 'nrgkick') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').show();
+		$('#evseconkeba').hide();
+
+		}       
+		if($('#evsecon').val() == 'keba') {
+			$('#evsecongoe').hide();
+			$('#evsecondac').hide();
+			$('#evseconmod').hide();
+			$('#llmodullp1').hide();
+			$('#evseconswifi').hide();
+	        	$('#evseconmastereth').hide();
+			$('#evseconnrgkick').hide();
+		$('#evseconkeba').show();
+
+		}       
+
+	});
 });
 </script>
 
@@ -942,6 +1123,7 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
+
 
 	</select>
 </div>
@@ -1563,9 +1745,57 @@ $(function() {
 			<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
+			<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
+			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
+
 
 		</select>
 	</div>
+<div id="evseconnrgkicks1">
+<div class="row bg-info">
+	<b><label for="nrgkickiplp2">NRGKick IP Adresse:</label></b>
+	<input type="text" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo $nrgkickiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkicktimeoutlp2">NRGKick Timeout:</label></b>
+	<input type="text" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickmaclp2">NRGKick MAC Adresse:</label></b>
+	<input type="text" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo $nrgkickmaclp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="nrgkickpwlp2">NRGKick PW:</label></b>
+	<input type="text" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo $nrgkickpwlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Password welches in der NRGKick App festgelegt wurde. <br><br>
+</div>
+
+
+</div>
+
+
+	<div id="evseconkebas1">
+	<div class="row bg-info">
+		<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
+		<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
+	</div>
+	</div>
+
+
 	<div id="evseconmbs1">
 		<div class="row">
 			Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
@@ -1651,6 +1881,8 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+		$('#evseconnrgkicks1').hide();
       } 
 	if($('#evsecons1').val() == 'modbusevse') {
 		$('#evseconswifis1').hide();
@@ -1659,6 +1891,9 @@ $(function() {
 		$('#llmodullp2').show();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+    		$('#evseconnrgkicks1').hide();
+   
 	} 
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
@@ -1667,7 +1902,10 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+       		$('#evseconnrgkicks1').hide();
+   
+	} 
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
 		$('#evsecondacs1').hide();
@@ -1675,7 +1913,10 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-      } 
+ 		$('#evseconkebas1').hide();
+ 		$('#evseconnrgkicks1').hide();
+          
+	} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
 		$('#evsecondacs1').hide();
@@ -1683,8 +1924,32 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
-
+ 		$('#evseconkebas1').hide();
+ 		$('#evseconnrgkicks1').hide();
+       
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+   		$('#evseconnrgkicks1').hide();
+    
+	} 
+	if($('#evsecons1').val() == 'nrgkick') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+   		$('#evseconnrgkicks1').show();
+    
+  	} 
 	$('#evsecons1').change(function(){
 	        if($('#evsecons1').val() == 'dac') {
 			$('#evsecondacs1').show(); 
@@ -1693,7 +1958,9 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'modbusevse') {
 			$('#evseconswifis1').hide();
@@ -1702,7 +1969,9 @@ $(function() {
 			$('#llmodullp2').show();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'simpleevsewifi') {
 			$('#evseconswifis1').show();
@@ -1711,7 +1980,9 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evsecongoes1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+    		$('#evseconnrgkicks1').hide();
+ 
 		} 
 		if($('#evsecons1').val() == 'goe') {
 			$('#evsecongoes1').show();
@@ -1720,7 +1991,9 @@ $(function() {
 			$('#llmodullp2').hide();
 			$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').hide();
-
+		$('#evseconkebas1').hide();
+		$('#evseconnrgkicks1').hide();
+     
 		} 
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecongoes1').hide();
@@ -1729,7 +2002,32 @@ $(function() {
 		$('#llmodullp2').hide();
 		$('#evseconswifis1').hide();
 		$('#evsecoslaveeth').show();
-      } 
+		$('#evseconkebas1').hide();
+    		$('#evseconnrgkicks1').hide();
+ 
+	} 
+	if($('#evsecons1').val() == 'keba') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').show();
+    		$('#evseconnrgkicks1').hide();
+ 
+  	} 
+	if($('#evsecons1').val() == 'nrgkick') {
+		$('#evsecongoes1').hide();
+		$('#evsecondacs1').hide();
+		$('#evseconmbs1').hide();
+		$('#llmodullp2').hide();
+		$('#evseconswifis1').hide();
+		$('#evsecoslaveeth').hide();
+		$('#evseconkebas1').hide();
+   		$('#evseconnrgkicks1').show();
+    
+  	} 
 	});
 });
 </script>
@@ -2744,18 +3042,16 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo selected ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
 		<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300 SM</option>
 		<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
+
 
 
 	</select>
 </div>
-<div class="row">
-<br><br>
-</div>
-
 <div id="wattbezugethmpm3pm">
-<div class="row">
-Keine Konfiguration erforderlich.<br><br>
-</div>
+	<div class="row">
+		Keine Konfiguration erforderlich.<br><br>
+	</div>
 </div>
 <div id="wattbezugkostalpiko">
 	<div class="row" style="background-color:#febebe">
@@ -2769,13 +3065,12 @@ Keine Konfiguration erforderlich.<br><br>
 
 <div id="wattbezugplentihaus">
 	<div class="row" style="background-color:#febebe">
-		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
-		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
+		Das zugehörige PV Modul (Kostal Plenticore) muss gewählt werden. Dieses Modul erfordert einen (z.B. EM300) Smart Meter im Hausverbrauchszweig.<br>
 	</div>
-	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig. Dieses Modul erfordert einen (z.B. einen EM300) Smart Meter im Hausverbrauchszweig.<br>
-	Es muss kein extra PV Modul ausgewählt werden (PV Modul auf None stellen).<br> 
-	</div>
+	<input type='hidden' value='0' name='kostalplenticorehaus'>
+	<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
+	<label for="kostalplenticorehaus">EM300 im EVU zweig</label><br>
+
 </div>
 
 <div id="wattbezugmpm3pm">
@@ -2953,6 +3248,15 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Home Manager für Bezug/Einspeisung angeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen. Danach einen Reboot durchführen.<br><br>
 	</div>
 </div>
+<div id="wattbezugsmartfox">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_smartfox_ip">Ip Adresse des SmartFox</label></b>
+		<input type="text" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo $bezug_smartfox_ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP Adresse.<br>
+	</div>
+</div>
 
 <div id="wattbezugsma">
 	<div class="row" style="background-color:#febebe">
@@ -2967,6 +3271,11 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	<div class="row" style="background-color:#febebe">
 		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
 	</div>
+	<input type='hidden' value='0' name='froniusprimo'>
+	<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
+	<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label><br>
+
+
 </div>
 
 <div id="wattbezugjson">
@@ -3030,6 +3339,49 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher Modul eingestellt.<br>
 	</div>
 </div>
+<div class="row">
+	<b><h5><label for="evuglaettungakt">EVU Glättung:</label></b>
+	<select type="text" name="evuglaettungakt" id="evuglaettungakt">
+		<option <?php if($evuglaettungaktold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($evuglaettungaktold == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="evuglaettungdiv">
+		<div class="row" style="background-color:#febebe">
+			<b><label for="evuglaettung">Glättung der EVU Werte:</label></b>
+			<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#febebe">
+			Gültige Werte Zeit in Sekunden, z.B. 30,50,200. <br>
+			Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
+			Sinnvoll wenn öfter kurze Lastspitzen auftreten.<br>
+			Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.<br><br>
+		</div>
+		<br><br>
+</div>
+
+<script>
+$(function() {
+      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 
+
+	$('#evuglaettungakt').change(function(){
+	      if($('#evuglaettungakt').val() == '0') {
+		$('#evuglaettungdiv').hide(); 
+      } else {
+		$('#evuglaettungdiv').show(); 
+
+
+      } 	    });
+});
+</script>
+
 
 <script>
 $(function() {
@@ -3051,7 +3403,9 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+  		$('#wattbezugsmartfox').hide();
   
+
       } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugvz').hide();
@@ -3071,6 +3425,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -3091,6 +3446,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -3111,6 +3467,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -3131,6 +3488,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 				$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -3151,6 +3509,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
@@ -3171,6 +3530,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -3191,6 +3551,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -3211,6 +3572,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
@@ -3231,6 +3593,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -3251,6 +3614,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -3271,6 +3635,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -3291,6 +3656,7 @@ $(function() {
 		$('#wattbezugsmartme').show();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
@@ -3311,6 +3677,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
@@ -3331,6 +3698,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
@@ -3351,6 +3719,7 @@ $(function() {
 		$('#wattbezugsbs25').show();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
@@ -3371,6 +3740,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').show();
      		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
@@ -3391,6 +3761,28 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').show();
+   		$('#wattbezugsmartfox').hide();
+ 
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
+     		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').show();
  
   }
   $('#wattbezugmodul').change(function(){
@@ -3413,6 +3805,7 @@ $(function() {
  		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
 	      } 
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -3433,6 +3826,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'none')   {
@@ -3453,6 +3847,7 @@ $(function() {
 		$('#wattbezugsmartme').hide();
 		$('#wattbezugplentihaus').hide();
        		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -3473,6 +3868,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
        		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -3493,6 +3889,7 @@ $(function() {
 		$('#wattbezugethmpm3pm').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -3513,6 +3910,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
@@ -3533,6 +3931,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -3553,6 +3952,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -3573,6 +3973,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
 
@@ -3594,6 +3995,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    } 
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -3614,6 +4016,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -3634,6 +4037,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -3654,6 +4058,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
@@ -3674,6 +4079,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
@@ -3694,6 +4100,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
@@ -3714,6 +4121,7 @@ $(function() {
 		$('#wattbezugsbs25').show();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
@@ -3734,6 +4142,7 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').show();
      		$('#wattbezugkostalpiko').hide();
+     		$('#wattbezugsmartfox').hide();
  
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
@@ -3754,6 +4163,28 @@ $(function() {
 		$('#wattbezugsbs25').hide();
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').show();
+    		$('#wattbezugsmartfox').hide();
+ 
+  }
+  if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
+     		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').show();
  
   }
 
@@ -3777,7 +4208,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
 		<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
 		<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
-		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA Tripower 9000</option>
+		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 
@@ -3809,6 +4240,11 @@ $(function() {
 	<div class="row" style="background-color:#befebe">
 		Gültige Werte IP.<br> 
 	</div>
+<!--	<input type='hidden' value='0' name='kostalplenticorebatt'>
+	<input id="kostalplenticorebatt" name="kostalplenticorebatt" value="1" type="checkbox" <?php if ( $kostalplenticorebattold == 1){ echo "checked"; } ?> >
+	<label for="kostalplenticorebatt">Batterie am Kostal angeschlossen</label><br>
+-->
+
 </div>
 
 
@@ -3871,11 +4307,32 @@ $(function() {
 </div>
 <div id="pvwrtri9000">
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="tri9000ip">SMA TriPower 9000 IP:</label></b>
+		<b><label for="tri9000ip">SMA WR IP:</label></b>
 		<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SMA TriPower9000, ggf. funktionieren auch andere SMA Wr mit diesem Modul.<br><br>
+		Gültige Werte IP. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (default deaktiviert).<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma2ip">WR 2 IP:</label></b>
+		<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma3ip">WR 3 IP:</label></b>
+		<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des dritten SMA Wechselrichters. Wenn nur 2 WR genutzt werden auf none setzen.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsma4ip">WR 4 IP:</label></b>
+		<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP Adresse oder none. IP des vierten SMA Wechselrichters. Wenn nur 3 WR genutzt werden auf none setzen.<br><br>
 	</div>
 </div>
 <div id="pvwrsolaredge">
@@ -3971,14 +4428,14 @@ $(function() {
 		<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
 		<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
 		<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
 	</div>
-	<div class="row bg-warning">
+	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
 	</div>
 </div>
@@ -4024,7 +4481,7 @@ $(function() {
 		$('#pvmpm3pm').hide();
 		$('#pvwrkostalpiko').hide();
 		$('#pvwrsolaredge').hide();
-		$('#pvsmartme').hide();i
+		$('#pvsmartme').hide();
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
@@ -4556,6 +5013,11 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
 		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher BETA</option>
+		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall BETA</option>
+		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore</option>
+
+
+
 
 
 	</select>
@@ -4563,6 +5025,15 @@ $(function() {
 
 <div id="divspeichernone">
 	<br>
+</div>
+<div id="divspeicherpw">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="speicherpwip">Powerwall IP:</label></b>
+		<input type="text" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse der Tesla Powerwall.<br><br>
+	</div>
 </div>
 <div id="divspeichere3dc">
 	<div class="row" style="background-color:#fcbe1e">
@@ -4589,6 +5060,11 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.<br><br>
+	</div>
+</div>
+<div id="divspeicherplenti">
+	<div class="row" style="background-color:#fcbe1e">
+		IP Konfiguration erfolgt im PV Plenticore Modul<br><br>
 	</div>
 </div>
 <div id="divspeicherfronius">
@@ -4695,6 +5171,9 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
 		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
       } 
    if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeichernone').hide();
@@ -4705,8 +5184,8 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
-
-
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
 
 
    }
@@ -4719,6 +5198,9 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
 
 
 
@@ -4733,6 +5215,10 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
 
 
@@ -4747,6 +5233,10 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
 
    }
@@ -4759,6 +5249,10 @@ $(function() {
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
@@ -4770,6 +5264,10 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
    		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
    if($('#speichermodul').val() == 'speicher_solaredge')   {
@@ -4781,8 +5279,43 @@ $(function() {
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').show();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
+   if($('#speichermodul').val() == 'speicher_powerwall')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').show();
+		$('#divspeicherplenti').hide();
+
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_kostalplenticore')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').show();
+
+
+   }
+
+
 $('#speichermodul').change(function(){
      if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
@@ -4793,7 +5326,11 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
     		$('#divspeichersolaredge').hide();
-  
+  		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
+
 
 
 
@@ -4806,7 +5343,11 @@ $('#speichermodul').change(function(){
 		$('#divspeicherfronius').hide();
 		$('#divspeichersbs25').hide();
      		$('#divspeichersolaredge').hide();
- 
+ 		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
+
 		$('#divspeichere3dc').hide();
 
 
@@ -4821,6 +5362,10 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
 
 
@@ -4835,6 +5380,10 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
 
    }
@@ -4847,6 +5396,10 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
 
    }
@@ -4859,6 +5412,10 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').show();
 		$('#divspeichersbs25').hide();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
    if($('#speichermodul').val() == 'speicher_sbs25')   {
@@ -4870,6 +5427,10 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').show();
       		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
    if($('#speichermodul').val() == 'speicher_solaredge')   {
@@ -4881,8 +5442,41 @@ $('#speichermodul').change(function(){
 		$('#divspeichere3dc').hide();
 		$('#divspeichersbs25').hide();
    		$('#divspeichersolaredge').show();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+
+
 
    }
+   if($('#speichermodul').val() == 'speicher_powerwall')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').show();
+		$('#divspeicherplenti').hide();
+
+
+   }
+   if($('#speichermodul').val() == 'speicher_kostalplenticore')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').show();
+
+
+   }
+
 });
 
 });

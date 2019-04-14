@@ -39,6 +39,8 @@ source nachtladen.sh
 source zielladen.sh
 source evsedintest.sh
 source hook.sh
+source u1p3p.sh
+source nrgkickcheck.sh
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -70,17 +72,33 @@ else
 	echo $graphtimer > ramdisk/graphtimer
 fi
 #######################################
-#EVSE DIN Modbus test
-evsedintest
+
 
 
 
 #######################################
 #goe mobility check
 goecheck
+# nrgkick mobility check
+nrgkickcheck
 #load charging vars
 loadvars
 
+if (( u1p3paktiv == 1 )); then
+	blockall=$(<ramdisk/blockall)
+	if (( blockall == 1 )); then
+		if [[ $debug == "1" ]]; then
+			echo "Phasen Umschaltung noch aktiv... beende"
+		fi
+		exit 0
+	fi
+fi
+
+#EVSE DIN Modbus test
+evsedintest
+
+#u1p3p switch
+u1p3pswitch
 #Graphing
 graphing
 
@@ -179,7 +197,11 @@ fi
 
 #######################
 #Ladestromstarke berechnen
-llphasentest=$((llalt - 3))
+anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
+if (( anzahlphasen > 9 )); then
+	anzahlphasen=1
+fi
+llphasentest=3
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( llalt > 3 )); then
 	anzahlphasen=0

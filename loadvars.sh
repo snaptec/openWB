@@ -133,6 +133,22 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $wattbezug =~ $re ]] ; then
 		wattbezug="0"
 	fi
+	#evu glaettung
+	if (( evuglaettungakt == 1 )); then
+		ganzahl=$(( evuglaettung / 10 ))
+		for ((i=ganzahl;i>=1;i--)); do
+			i2=$(( i + 1 ))	
+			cp ramdisk/glaettung$i ramdisk/glaettung$i2
+		done
+		echo $wattbezug > ramdisk/glaettung1
+		for ((i=1;i<=ganzahl;i++)); do
+			glaettung=$(<ramdisk/glaettung$i)
+			glaettungw=$(( glaettung + glaettungw))
+		done
+		glaettungfinal=$((glaettungw / ganzahl))
+		echo $glaettungfinal > ramdisk/glattwattbezug
+		wattbezug=$glaettungfinal
+	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	uberschuss=$((wattbezugint * -1))
@@ -178,6 +194,8 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
+hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)

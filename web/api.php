@@ -142,7 +142,11 @@ if(isset($_GET["get"])) {
 			"speichersoc"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/speichersoc'))[0],
 			"socLP1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc'))[0],
 			"socLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc1'))[0],
-			"speicherleistung"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/speicherleistung'))[0]
+			"speicherleistung"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/speicherleistung'))[0],
+			"ladungaktivLP1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/ladungaktivlp1'))[0],
+			"ladungaktivLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/ladungaktivlp2'))[0],
+			"ladungaktivLP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/ladungaktivlp3'))[0]
+
 		);
 		echo json_encode($json);
 	}

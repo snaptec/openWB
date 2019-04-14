@@ -128,6 +128,48 @@ function setChargingCurrentgoe () {
 		fi
 	fi
 }
+# function for setting the current - keba charger
+# Parameters:
+# 1: current
+# 2: goeiplp1
+function setChargingCurrentkeba () {
+	if [[ $evsecon == "keba" ]]; then
+		kebacurr=$(( current * 1000 ))
+		if [[ $current -eq 0 ]]; then
+			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+		else
+			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090		
+		fi
+	fi
+}
+
+
+function setChargingCurrentnrgkick () {
+	if [[ $evsecon == "nrgkick" ]]; then
+		if [[ $current -eq 0 ]]; then
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+		else
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+			oldcurrent=$(echo $output | jq -r '.Values.ChargingCurrent.Value')
+			if (( oldcurrent != $current )) ; then
+				curl --silent --connect-timeout $nrgkicktimeoutlp1 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current}, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+ > /dev/null
+			fi
+		fi
+	fi
+}
+
+
+
 
 
 
@@ -153,6 +195,12 @@ function setChargingCurrent () {
 	fi
 	if [[ $evsecon == "masterethframer" ]]; then
 		setChargingCurrentMasterethframer $current 
+	fi
+	if [[ $evsecon == "nrgkick" ]]; then
+		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
+	fi
+	if [[ $evsecon == "keba" ]]; then
+		setChargingCurrentkeba $current $kebaiplp1
 	fi
 }
 
@@ -280,7 +328,11 @@ if [[ $lastmanagement == "1" ]]; then
 		evsewifiiplp1=$evsewifiiplp2
 		goeiplp1=$goeiplp2
 		goetimeoutlp1=$goetimeoutlp2
-
+		kebaiplp1=$kebaiplp2
+		nrgkickiplp1=$nrgkickiplp2
+		nrgkicktimeoutlp1=$nrgkicktimeoutlp2
+		nrgkickmaclp1=$nrgkickmaclp2
+		nrgkickpwlp1=$nrgkickpwlp2
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 

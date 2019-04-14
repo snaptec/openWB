@@ -7,9 +7,10 @@
 . /var/www/html/openWB/openwb.conf
 
 
-pvwatttmp=$(curl --connect-timeout 15 -s $vzloggerpvip)
-pvwatt=$(echo $pvwatttmp | jq . | sed ''$vzloggerpvline'!d' | tr -d ' ' )
-pvwatt=$(echo "${watt}" | cut -f1 -d".")
-echo $pvwatt
+watttmp=$(curl --connect-timeout 15 -s $vzloggerpvip)
+watt=$(echo $watttmp | jq . | sed ''$vzloggerpvline'!d' | tr -d ' ' )
+watt=$(echo "${watt}" | cut -f1 -d".")
+echo $watt
 #zur weiteren verwendung im webinterface
-echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+echo $watt > /var/www/html/openWB/ramdisk/pvwatt
+

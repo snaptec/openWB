@@ -22,12 +22,14 @@ respw= client.read_holding_registers(40083,2,unit=slave1id)
 value1w = respw.registers[0]
 allw = format(value1w, '04x')
 rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
+resp= client.read_holding_registers(40084,2,unit=slave1id)
 mult2ipli = resp.registers[0]
 mult2iplint = format(mult2ipli, '04x')
 fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
+
 if fmultiplint == fmult2iplint:
     if fmultiplint == 0:
-        rawprodw = 0
+        rawprodw = rawprodw
     if fmultiplint == -1:
         rawprodw = rawprodw / 10 
     if fmultiplint == -2:
@@ -36,6 +38,8 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 1000
     if fmultiplint == -4:
         rawprodw = rawprodw / 10000
+    if fmultiplint == -5:
+        rawprodw = rawprodw / 100000
     f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
     f.write(str(rawprodw))
     f.close()
@@ -52,6 +56,7 @@ pvkwhk= final / 1000
 f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
 f.write(str(pvkwhk))
 f.close()
+
 
 
 

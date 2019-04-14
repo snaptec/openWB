@@ -2,6 +2,12 @@
 
 
 <head>
+
+	<script src="../js/core.js"></script>
+	<script src="../js/charts.js"></script>
+	<script src="../js/animated.js"></script>
+
+
 	<script src="../js/jquery-1.11.1.min.js"></script>
 	<script src="../js/main.js"></script>
 	<meta charset="UTF-8">
@@ -27,6 +33,17 @@
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 </head>
+<?php
+	$result = '';
+	$lines = file('/var/www/html/openWB/openwb.conf');
+	foreach($lines as $line) {
+		if(strpos($line, "grapham=") !== false) {
+			list(, $graphamold) = explode("=", $line);
+		}
+					}
+					?>
+
+
 
 
 <body>
@@ -34,7 +51,7 @@
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.html">Live</a></li>
+			 <li><a href="index.php">Live</a></li>
 			 <li><a href="daily.php">Daily</a></li>
 			 <li class="active"><a href="monthly.php">Monthly</a></li>
 			 <li><a href="yearly.php">Yearly</a></li>
@@ -45,7 +62,6 @@
 		<img src="../img/loader.gif" alt="Preloader image">
 	</div> 
 <section id="services">
-<div class="container">
 
 
 <?php
@@ -61,19 +77,22 @@ else
 }
 ?>
 
-<div class="row col-xs-12">
 	<div class="text-center">
 		<br><h4> Monthly Graph</h4><br>
 	</div>
-</div>
 
-
+		<?php if ($graphamold == 1) {
+	echo '
+	<div style="height:600px;" id="chartdiv"></div>
+';	
+				   } else {
+					   echo '
 <div class="row"> 
 	
 
 	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-monthly-evu.php?thedate=<?php echo $monthdate ?>"
+			<img src="graph-monthly-evu.php?thedate='; echo $monthdate; echo '" 
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
@@ -84,7 +103,7 @@ else
 
 	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-monthly-pv.php?thedate=<?php echo $monthdate ?>"
+			<img src="graph-monthly-pv.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
@@ -95,7 +114,7 @@ else
 
 	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-monthly-ev.php?thedate=<?php echo $monthdate ?>"
+			<img src="graph-monthly-ev.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
@@ -108,7 +127,7 @@ else
 
 	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-monthly.php?thedate=<?php echo $monthdate ?>"
+			<img src="graph-monthly.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
@@ -116,6 +135,7 @@ else
 </div>
 
 <br><br>
+'; } ?> 
 
 <form name="monthlydate" id="monthlydate" action="monthly.php" method="GET">
 <div class="row col-xs-12">
@@ -146,7 +166,120 @@ else
 
 
 
-</div>
 </section>
 </body>
+
+<script>
+am4core.useTheme(am4themes_animated);
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+ chart.numberFormatter.numberFormat = "#.## a";
+// Set up data source
+chart.dataSource.url = "/openWB/web/logging/graph-monthlye.php?thedate=<?php echo $monthdate ?>";
+chart.dataSource.parser = new am4core.CSVParser();
+chart.dataSource.parser.options.useColumnNames = false;
+//
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "col0";
+
+// Create value axis
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "kWh";
+/*
+valueAxis.adapter.add("getTooltipText", (text) => {
+return text * 12 + "Watt";
+});
+ */
+// Creaite series
+var series1 = chart.series.push(new am4charts.ColumnSeries());
+series1.dataFields.valueY = "col1";
+series1.dataFields.categoryX = "col0";
+series1.name = "Bezug";
+series1.fill = am4core.color("#ff0000");
+series1.stroke = am4core.color("#ff0000");
+series1.strokeWidth = 3;
+series1.tensionX = 0.8;
+series1.tensionY = 0.8;
+series1.strokeWidth = 1.5;
+series1.fillOpacity = 0.3;
+//series1.columns.template.tooltipText = "test";
+
+var series2 = chart.series.push(new am4charts.ColumnSeries());
+series2.dataFields.valueY = "col3";
+series2.dataFields.categoryX = "col0";
+series2.name = "LL Gesamt";
+series2.stroke = am4core.color("#4074c9");
+series2.tensionX = 0.8;
+series2.tensionY = 0.8;
+series2.strokeWidth = 1.5;
+series2.fill = am4core.color("#4074c9");
+series2.fillOpacity = 0.3;
+
+var series4 = chart.series.push(new am4charts.ColumnSeries());
+series4.dataFields.valueY = "col4";
+series4.dataFields.categoryX = "col0";
+series4.name = "PV";
+series4.stroke = am4core.color("#00ff00");
+series4.tensionX = 0.8;
+series4.tensionY = 0.8;
+series4.strokeWidth = 1.5;
+series4.fill = am4core.color("#00ff00");
+series4.fillOpacity = 0.3;
+
+var series9 = chart.series.push(new am4charts.ColumnSeries());
+series9.dataFields.valueY = "col2";
+series9.dataFields.categoryX = "col0";
+series9.name = "Einspeisung";
+series9.stroke = am4core.color("#5d90e2");
+series9.tensionX = 0.8;
+series9.tensionY = 0.8;
+series9.strokeWidth = 1.5;
+series9.fill = am4core.color("#5d90e2");
+series9.fillOpacity = 0.3;
+
+var series5 = chart.series.push(new am4charts.ColumnSeries());
+series5.dataFields.valueY = "col7";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#845EC2");
+series5.tensionX = 0.8;
+series5.tensionY = 0.8;
+series5.strokeWidth = 1.5;
+
+var series6 = chart.series.push(new am4charts.ColumnSeries());
+series6.dataFields.valueY = "col8";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#aa5ec2");
+series6.tensionX = 0.8;
+series6.tensionY = 0.8;
+series6.strokeWidth = 1.5;
+
+
+chart.cursor = new am4charts.XYCursor();
+chart.cursor.xAxis = categoryAxis;
+chart.cursor.fullWidthLineX = true;
+chart.cursor.lineX.strokeWidth = 0;
+chart.cursor.lineX.fill = am4core.color("#003985");
+chart.cursor.lineX.fillOpacity = 0.1;
+// Add legend
+
+//series4.customField = 12;
+series1.legendSettings.valueText = "{valueY.sum}kWh";
+
+series4.legendSettings.valueText = "{valueY.sum}kWh";
+//series3.legendSettings.valueText = "{valueY.sum}kWh";
+series2.legendSettings.valueText = "{valueY.sum}kWh";
+series9.legendSettings.valueText = "{valueY.sum}kWh";
+series5.legendSettings.valueText = "{valueY.sum}kWh";
+series6.legendSettings.valueText = "{valueY.sum}kWh";
+//series11.legendSettings.valueText = "{valueY.sum}kWh";
+
+
+chart.legend = new am4charts.Legend();
+</script>
+
+
+
 </html>

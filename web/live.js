@@ -11,13 +11,38 @@ $.ajaxSetup({ cache: false});
   $.ajax({
     url: "/openWB/ramdisk/llaktuell",
     complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
       $("#lldiv").html(request.responseText);
     }
 });
+  $.ajax({
+    url: "/openWB/ramdisk/hausverbrauch",
+    complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
+      $("#hausverbrauchdiv").html(request.responseText);
+    }
+});
+
 $.ajax({
     url: "/openWB/ramdisk/llkombiniert",
     complete: function(request){
-      $("#gesamtllwdiv").html(request.responseText);
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
+	    $("#gesamtllwdiv").html(request.responseText);
     }
   });
  $.ajax({
@@ -50,18 +75,41 @@ $.ajax({
   $.ajax({
     url: "/openWB/ramdisk/pvwatt",
     complete: function(request){
-      $("#pvdiv").html(request.responseText);
+	    var pvwatt = parseInt(request.responseText, 10);
+	if ( pvwatt <= 0){
+		pvwatt = pvwatt * -1;
+		if (pvwatt > 999) {
+			    pvwatt = (pvwatt / 1000).toFixed(2);
+		    	    pvwatt = pvwatt + "kW Erzeugung";
+		    } else {
+			pvwatt = pvwatt + "W Erzeugung";
+			}
+	}
+
+      $("#pvdiv").html(pvwatt);
     }
   });
  $.ajax({
     url: "/openWB/ramdisk/llaktuells1",
     complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
       $("#lllp2div").html(request.responseText);
     }
   });
   $.ajax({
     url: "/openWB/ramdisk/llaktuells2",
     complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + "kW";
+		    } else {
+			request.responseText = request.responseText + "W";
+			}
       $("#lllp3div").html(request.responseText);
     }
   });
@@ -86,7 +134,32 @@ $.ajax({
  $.ajax({
     url: "/openWB/ramdisk/wattbezug",
     complete: function(request){
-      $("#bezugdiv").html(request.responseText);
+	    var wattbezug = request.responseText;
+	    var intbezug = parseInt(wattbezug, 10);
+	    if (intbezug > 0) {
+		    if (intbezug > 999) {
+			    intbezug = (intbezug / 1000).toFixed(2);
+		    	    wattbezug = intbezug + "kW Bezug";
+		    } else {
+			wattbezug = intbezug + "W Bezug";
+			}
+	    } else {
+	    	    intbezug = intbezug * -1;
+			if (intbezug > 999) {
+			    intbezug = (intbezug / 1000).toFixed(2);
+		    	    wattbezug = intbezug + "kW Einspeisung";
+		    } else {
+			wattbezug = intbezug + "W Einspeisung";
+			}
+	    }
+
+      $("#bezugdiv").html(wattbezug);
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/glattwattbezug",
+    complete: function(request){
+      $("#bezugglattdiv").html(request.responseText);
     }
   });
  $.ajax({
@@ -171,7 +244,25 @@ $.ajax({
 $.ajax({
    url: "/openWB/ramdisk/speicherleistung",
     complete: function(request){
-      $("#speicherleistungdiv").html(request.responseText);
+	    var speicherwatt = request.responseText;
+	    var intspeicherw = parseInt(speicherwatt, 10);
+	    if (intspeicherw > 0) {
+		   if (intspeicherw > 999) {
+			intspeicherw = (intspeicherw / 1000).toFixed(2);
+		    	    speicherwatt = intspeicherw + "kW Ladung";
+		   } else {
+		    speicherwatt = intspeicherw + "W Ladung";
+		   }
+	    } else {
+	    	    intspeicherw = intspeicherw * -1;
+	   if (intspeicherw > 999) {
+		intspeicherw = (intspeicherw / 1000).toFixed(2);
+		speicherwatt = intspeicherw + "kW Entladung";
+	} else {
+		speicherwatt = intspeicherw + "W Entladung";
+	   }
+	    }
+      $("#speicherleistungdiv").html(speicherwatt);
         }
         });
 $.ajax({

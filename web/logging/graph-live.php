@@ -59,7 +59,7 @@ if ($speichervorhanden == 1) {
 }
 $lowestg = min($lowest,$lowestu);
 
-if ($socl < "0" ){
+if ($soc1 < "0" ){
 	$soc1 = "0";
 }
 if ($soc1vorhanden == 1) {
@@ -89,7 +89,10 @@ $myData->setSerieOnAxis("Labels",0);
 $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
-$myData->setAxisName(0,"Watt");
+$myData->setAxisName(0,"kW");
+$myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
+
+
 $AxisBoundaries = array(0=>array("Min"=>$lowestg,"Max"=>$highest),1=>array("Min"=>$soc1,"Max"=>$hsocmaxxx));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>10,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
 $myImage = new pImage(950, 400, $myData);
@@ -130,3 +133,4 @@ $myImage->drawLegend(160,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZO
 
 header("Content-Type: image/png");
 $myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');
+function YAxisFormat($Value) { return(round($Value/1000,2)); } 

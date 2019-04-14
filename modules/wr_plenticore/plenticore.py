@@ -13,7 +13,7 @@ ipaddress = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=1502)
 #PV Leistung
-resp= client.read_holding_registers(172,2,unit=71)
+resp= client.read_holding_registers(100,2,unit=71)
 FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 pvwatt =int(FRegister.decode_32bit_float())
 fpvwatt = pvwatt * -1

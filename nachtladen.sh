@@ -152,6 +152,7 @@ if [[ $nachtladen == "1" ]]; then
 	fi
 else
 	nachtladenstate=0
+	nachtladen2state=0
 fi
 #Nachtladen S1
 if [[ $nachtladens1 == "1" ]]; then
@@ -244,6 +245,7 @@ if [[ $nachtladens1 == "1" ]]; then
 
 else
 	nachtladenstates1=0
+	nachtladen2states1=0
 fi
 echo $nachtladenstate > /var/www/html/openWB/ramdisk/nachtladenstate
 echo $nachtladenstates1 > /var/www/html/openWB/ramdisk/nachtladenstates1
@@ -270,17 +272,13 @@ fi
 
 
 prenachtlademodus(){
-	if (( lademodus == 0 )) && (( nlakt_sofort == 1 ));then
+	if { (( lademodus == 0 )) && (( nlakt_sofort == 1 )); } || { (( lademodus == 1 )) && (( nlakt_minpv == 1 )); } || { (( lademodus == 2 )) && (( nlakt_nurpv == 1 )); } || { (( lademodus == 4 )) && (( nlakt_standby == 1 )); } then
 		nachtlademodus
-	fi
-	if (( lademodus == 1 )) && (( nlakt_minpv == 1 ));then
-		nachtlademodus
-	fi
-	if (( lademodus == 2 )) && (( nlakt_nurpv == 1 ));then
-		nachtlademodus
-	fi
-	if (( lademodus == 4 )) && (( nlakt_standby == 1 ));then
-		nachtlademodus
+	else
+		echo 0 > ramdisk/nachtladenstate
+		echo 0 > ramdisk/nachtladen2state
+		echo 0 > ramdisk/nachtladenstates1
+		echo 0 > ramdisk/nachtladen2states1
 	fi
 	
 
