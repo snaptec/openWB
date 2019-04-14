@@ -951,163 +951,71 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 <script>
 $(function() {
-      if($('#evsecon').val() == 'dac') {
-		$('#evsecondac').show(); 
-		$('#evseconmod').hide();
-		$('#evseconswifi').hide();
-		$('#llmodullp1').show();
-		$('#evsecongoe').hide();
-		$('#evseconnrgkick').hide();
-		$('#evseconmastereth').hide();
-		$('#evseconkeba').hide();
-      }
-	if($('#evsecon').val() == 'modbusevse') {
-		$('#evseconswifi').hide();
-      		$('#evsecondac').hide();
-		$('#evseconmod').show();
-		$('#llmodullp1').show();
-		$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-		$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
+	$('#evsecondac').hide(); 
+	$('#evseconmod').hide();
+	$('#evseconswifi').hide();
+	$('#llmodullp1').hide();
+	$('#evsecongoe').hide();
+	$('#evseconmastereth').hide();
+	$('#evseconnrgkick').hide();
+	$('#evseconkeba').hide();
 
-	
+	if($('#evsecon').val() == 'dac') {
+		$('#evsecondac').show(); 
+		$('#llmodullp1').show();
+    }
+	if($('#evsecon').val() == 'modbusevse') {
+		$('#evseconmod').show();
+		$('#llmodullp1').show();	
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
 		$('#evseconswifi').show();
-      		$('#evsecondac').hide();
-		$('#evseconmod').hide();
-		$('#llmodullp1').hide();
-			$('#evseconmastereth').hide();
-		$('#evsecongoe').hide();
-		$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
-      	} 
-		if($('#evsecon').val() == 'goe') {
-			$('#evsecongoe').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	       		$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
-		} 
-		if($('#evsecon').val() == 'masterethframer') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-			$('#evseconmastereth').show();
-		$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
 	} 
-		if($('#evsecon').val() == 'nrgkick') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
-			$('#evseconnrgkick').show();
-		$('#evseconkeba').hide();
-
-		}
-		if($('#evsecon').val() == 'keba') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
+	if($('#evsecon').val() == 'goe') {
+		$('#evsecongoe').show();
+	} 
+	if($('#evsecon').val() == 'masterethframer') {
+		$('#evseconmastereth').show();
+	} 
+	if($('#evsecon').val() == 'nrgkick') {
+		('#evseconnrgkick').show();
+	}
+	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
-
-		}       
+	}       
 	$('#evsecon').change(function(){
-	        if($('#evsecon').val() == 'dac') {
-			$('#evsecondac').show(); 
-			$('#evseconmod').hide();
-			$('#evseconswifi').hide();
-			$('#llmodullp1').show();
-			$('#evsecongoe').hide();
+		$('#evsecondac').hide(); 
+		$('#evseconmod').hide();
+		$('#evseconswifi').hide();
+		$('#llmodullp1').hide();
+		$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
+		$('#evseconnrgkick').hide();
 		$('#evseconkeba').hide();
 
-
+		if($('#evsecon').val() == 'dac') {
+			$('#evsecondac').show(); 
+			$('#llmodullp1').show();
 		}
 		if($('#evsecon').val() == 'modbusevse') {
-			$('#evseconswifi').hide();
-			$('#evsecondac').hide();
 			$('#evseconmod').show();
 			$('#llmodullp1').show();
-			$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
 		} 
+ 		if($('#evsecon').val() == 'nrgkick') {
+			$('#evseconnrgkick').show();
+		}       
+		if($('#evsecon').val() == 'keba') {
+			$('#evseconkeba').show();
+		}       
 		if($('#evsecon').val() == 'simpleevsewifi') {
 			$('#evseconswifi').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evsecongoe').hide();
-			$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
-       		$('#evseconkeba').hide();
-
 		} 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').show();
-			$('#evseconnrgkick').hide();
-		$('#evseconkeba').hide();
-
+			$('#evseconmastereth').show();
 		} 
- 		if($('#evsecon').val() == 'nrgkick') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
-			$('#evseconnrgkick').show();
-		$('#evseconkeba').hide();
-
-		}       
-		if($('#evsecon').val() == 'keba') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
-			$('#evseconnrgkick').hide();
-		$('#evseconkeba').show();
-
-		}       
-
 	});
 });
 </script>
