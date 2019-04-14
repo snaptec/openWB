@@ -804,94 +804,57 @@ $zoepasswortold = str_replace( "'", "", $zoepasswortold);
 </div>
 <script>
 $(function() {
-      if($('#evsecon').val() == 'dac') {
+	$('#evsecondac').hide(); 
+	$('#evseconmod').hide();
+	$('#evseconswifi').hide();
+	$('#llmodullp1').hide();
+	$('#evsecongoe').hide();
+	$('#evseconmastereth').hide();
+
+	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show(); 
-		$('#evseconmod').hide();
-		$('#evseconswifi').hide();
 		$('#llmodullp1').show();
-		$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
 	}
 	if($('#evsecon').val() == 'modbusevse') {
-		$('#evseconswifi').hide();
-      		$('#evsecondac').hide();
 		$('#evseconmod').show();
-		$('#llmodullp1').show();
-		$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-	
+		$('#llmodullp1').show();	
 	} 
 	if($('#evsecon').val() == 'simpleevsewifi') {
 		$('#evseconswifi').show();
-      		$('#evsecondac').hide();
-		$('#evseconmod').hide();
-		$('#llmodullp1').hide();
-			$('#evseconmastereth').hide();
-		$('#evsecongoe').hide();
-
-      	} 
-		if($('#evsecon').val() == 'goe') {
-			$('#evsecongoe').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	       		$('#evseconmastereth').hide();
 	} 
-		if($('#evsecon').val() == 'masterethframer') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').show();
+	if($('#evsecon').val() == 'goe') {
+		$('#evsecongoe').show();
+	} 
+	if($('#evsecon').val() == 'masterethframer') {
+		$('#evseconmastereth').show();
 	} 
 
 	$('#evsecon').change(function(){
-	        if($('#evsecon').val() == 'dac') {
-			$('#evsecondac').show(); 
-			$('#evseconmod').hide();
-			$('#evseconswifi').hide();
-			$('#llmodullp1').show();
-			$('#evsecongoe').hide();
+		$('#evsecondac').hide(); 
+		$('#evseconmod').hide();
+		$('#evseconswifi').hide();
+		$('#llmodullp1').hide();
+		$('#evsecongoe').hide();
 		$('#evseconmastereth').hide();
-	
 
+		if($('#evsecon').val() == 'dac') {
+			$('#evsecondac').show(); 
+			$('#llmodullp1').show();
 		}
 		if($('#evsecon').val() == 'modbusevse') {
-			$('#evseconswifi').hide();
-			$('#evsecondac').hide();
 			$('#evseconmod').show();
 			$('#llmodullp1').show();
-			$('#evsecongoe').hide();
-		$('#evseconmastereth').hide();
-	
 		} 
 		if($('#evsecon').val() == 'simpleevsewifi') {
 			$('#evseconswifi').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evsecongoe').hide();
-			$('#evseconmastereth').hide();
-	        } 
+		} 
 		if($('#evsecon').val() == 'goe') {
 			$('#evsecongoe').show();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').hide();
 		} 
 		if($('#evsecon').val() == 'masterethframer') {
-			$('#evsecongoe').hide();
-			$('#evsecondac').hide();
-			$('#evseconmod').hide();
-			$('#llmodullp1').hide();
-			$('#evseconswifi').hide();
-	        	$('#evseconmastereth').show();
-	} 
-	    });
+			$('#evseconmastereth').show();
+		} 
+	});
 });
 </script>
 
