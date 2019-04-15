@@ -923,7 +923,7 @@
 				<div class="col-xs-4">
 
 
-				<!-- master -->	Ver 1.393 				</div>
+				<!-- master -->	Ver 1.401 				</div>
 
 
 				<div class="col-xs-4 text-center">

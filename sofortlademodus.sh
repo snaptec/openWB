@@ -60,7 +60,7 @@ if [[ $lastmanagement == "0" ]]; then
 						exit 0
 					fi
 					if (( llalt < minimalstromstaerke )); then
-						llneu=$((llalt + 1 ))
+						llneu=$minimalstromstaerke
 						runs/set-current.sh $llneu m
 						if [[ $debug == "1" ]]; then
       		             				echo "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
