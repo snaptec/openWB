@@ -627,7 +627,22 @@ foreach($lines as $line) {
     	    $result .= 'nrgkickpwlp1='.$_POST[nrgkickpwlp1]."\n";
     	 $writeit = '1';
    } 
-
+	    if(strpos($line, "nrgkickiplp2=") !== false) {
+    	    $result .= 'nrgkickiplp2='.$_POST[nrgkickiplp2]."\n";
+    	 $writeit = '1';
+	    } 
+	    if(strpos($line, "nrgkicktimeoutlp2=") !== false) {
+    	    $result .= 'nrgkicktimeoutlp2='.$_POST[nrgkicktimeoutlp2]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickmaclp2=") !== false) {
+    	    $result .= 'nrgkickmaclp2='.$_POST[nrgkickmaclp2]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickpwlp2=") !== false) {
+    	    $result .= 'nrgkickpwlp2='.$_POST[nrgkickpwlp2]."\n";
+    	 $writeit = '1';
+   } 
 	    if(strpos($line, "goeiplp1=") !== false) {
     	    $result .= 'goeiplp1='.$_POST[goeiplp1]."\n";
     	 $writeit = '1';

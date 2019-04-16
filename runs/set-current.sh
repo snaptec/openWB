@@ -139,7 +139,8 @@ function setChargingCurrentkeba () {
 			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
 		else
 			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090		
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+			echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
 		fi
 	fi
 }
