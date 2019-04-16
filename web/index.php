@@ -924,7 +924,7 @@
 
 
 
-				<!-- master -->	Ver 1.4 Stable				</div>
+				<!-- master -->	Ver 1.41 Beta 				</div>
 
 
 
