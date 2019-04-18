@@ -98,7 +98,7 @@ f.write(str(final))
 f.close()
 
 #export kwh
-resp = client.read_input_registers(0x0004,4, unit=5)
+resp = client.read_input_registers(0x0004,2, unit=5)
 ekwh = resp.registers[1]
 ekwh = float(ekwh) * 10
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
