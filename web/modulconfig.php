@@ -5012,8 +5012,8 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
 		<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
-		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher BETA</option>
-		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall BETA</option>
+		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher</option>
+		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
 		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore</option>
 
 
