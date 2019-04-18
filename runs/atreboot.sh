@@ -1120,7 +1120,10 @@ if ! grep -Fq "hausverbrauchstat=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausverbrauchstat=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
+then
+	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 
