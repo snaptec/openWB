@@ -326,7 +326,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	</select>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Definiert einen Mindest SoC Wert bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	Definiert einen Mindest SoC Wert (EV) bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
 	</div><br>
 
 
@@ -438,7 +438,7 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 			<input type="text" name="speichermaxwatt" id="speichermaxwatt" value="<?php echo $speichermaxwattold ?>"><br>
 		</div>
 		<div class="row" style="background-color:#fcbe1e">
-		Definiert einen Wert in Watt mit dem Speicher maximal laden soll. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
+		Definiert einen Wert, der trotz Vorrang des EV immer als Ladeleistung für den Speicher vorgehalten wird. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
 		</div>
 	</div>
 

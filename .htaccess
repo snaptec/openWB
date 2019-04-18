@@ -1,5 +1,4 @@
 
-
 RedirectMatch 404 \.conf$
 RedirectMatch 404 \.ini$
 RedirectMatch 404 \.py$
