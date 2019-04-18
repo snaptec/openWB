@@ -93,7 +93,7 @@ function getfile() {
 	console.log(data);
 	}
 	});
-var source = 'graph-screen.php',
+var source = 'graph-index.html',
 		        timestamp = (new Date()).getTime(),
 		        newUrl = source + '?_=' + timestamp;
 	    document.getElementById("livegraph").src = newUrl;

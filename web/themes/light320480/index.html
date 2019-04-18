@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<script src="../../js/jquery-1.11.1.min.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>OpenWB</title>
+	<meta name="description" content="OpenWB" />
+	<meta name="keywords" content="OpenWB" />
+	<meta name="author" content="Kevin Wieland" />
+	<!-- Favicons (created with http://realfavicongenerator.net/)-->
+	<link rel="apple-touch-icon" sizes="57x57" href="../../img/favicons/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="../../img/favicons/apple-touch-icon-60x60.png">
+	<link rel="icon" type="image/png" href="../../img/favicons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="../../img/favicons/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="shortcut icon" href="../../img/favicons/favicon.ico">
+	<meta name="msapplication-TileColor" content="#00a8ff">
+	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
+	<!-- Normalize -->
+	<link rel="stylesheet" type="text/css" href="../../css/normalize.css">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+	<!-- Owl -->
+	<link rel="stylesheet" type="text/css" href="../../css/owl.css">
+	<!-- Animate.css -->
+	<link rel="stylesheet" type="text/css" href="../../css/animate.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" type="text/css" href="../../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Elegant Icons -->
+	<link rel="stylesheet" type="text/css" href="../../fonts/eleganticons/et-icons.css">
+	<!-- Main style -->
+	<link rel="stylesheet" type="text/css" href="../../css/cardio.css">
+</head>
+<script src="../../screen.js"></script>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+	<div class="row"><div class="col-xs-12 text-center">
+		<div class="col-xs-6 text-center bg-success" style="font-size: 3vw">
+			PV: <span id="pvdiv"></span>
+		</div>
+		<div class="col-xs-6 text-center bg-warning" style="font-size: 3vw">
+			EVU: <span id="bezugdiv"></span>
+		</div>
+	</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<div class="imgwrapper">
+				<img id="livegraph" src="../../graph-screen.php"
+					 alt="Graph" class="img-responsive" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-8 text-center bg-primary" style="font-size: 3vw">
+			LP1: <span id="lldiv"></span>, <span id="llsolldiv"></span>A
+		</div>
+		<div class="col-xs-4 text-center bg-primary" style="font-size: 3vw">
+			SoC: <span id="soclevel"></span>%
+		</div>
+		<div class="row">
+		</div>
+		<div class="col-xs-8 text-center bg-primary" style="font-size: 3vw">
+			LP2: <span id="lllp2div"></span>, <span id="llsolllp2div"></span>A
+		</div>
+		<div class="col-xs-4 text-center bg-primary" style="font-size: 3vw">
+			SoC: <span id="soc1level"></span>%
+		</div>
+		<div class="row">
+		</div>
+
+		<div class="row" style="font-size: 2vw">
+			<div class="col-xs-12 text-center" style="font-size: 3vw">
+				LP1 <span id="gelrlp1div"></span>km,<span id="aktgeladendiv"></span>kWh	<br><span id="sofortlmdiv"><div id="lademstatdiv">
+
+					</div></span>
+			</div>
+			<div class="col-xs-12 text-center" style="font-size: 3vw">
+				LP2 <span id="gelrlp2div"></span>km,<span id="aktgeladens1div"></span>kWh	<br><span id="sofortlms1div"><div id="lademstats1div">
+					</div></span>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>
+
+
+
