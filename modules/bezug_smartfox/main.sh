@@ -18,10 +18,12 @@ wattbezug3=$(awk -F'[<>]' '/<value id="u6011-41">/{print $3}' <<< $xml)
 #Zählerstand Import(kWh)
 ikwh=$(awk -F'[<>]' '/<value id="u5827-41">/{print $3}' <<< $xml)
 ikwh="${ikwh::-4}"
+ikwh=$(echo "scale=2; $ikwh * 1000" | bc)
 
 #Zählerstand Export(kWh)
 ekwh=$(awk -F'[<>]' '/<value id="u5824-41">/{print $3}' <<< $xml)
 ekwh="${ekwh::-4}"
+ekwh=$(echo "scale=2; $ekwh * 1000" | bc)
 
 #Weitere Zählerdaten für die Statusseite (PowerFaktor, Spannung und Strom)
 evupf1=$(awk -F'[<>]' '/<value id="u6074-41">/{print $3}' <<< $xml)
@@ -33,7 +35,6 @@ evuv3=$(awk -F'[<>]' '/<value id="u5984-41">/{print $3}' <<< $xml)
 bezuga1=$(awk -F'[<>]' '/<value id="u5999-41">/{print $3}' <<< $xml)
 bezuga2=$(awk -F'[<>]' '/<value id="u5996-41">/{print $3}' <<< $xml)
 bezuga3=$(awk -F'[<>]' '/<value id="u5993-41">/{print $3}' <<< $xml)
-
 #Prüfen ob Werte gültig
 re='^[-+]?[0-9]+\.?[0-9]*$'
 if ! [[ $wattbezug =~ $re ]] ; then
