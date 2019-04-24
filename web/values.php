@@ -120,7 +120,9 @@ foreach($lines as $line) {
     if(strpos($line, "theme=") !== false) {
         list(, $themeold) = explode("=", $line, 2);
     }
-
+    if(strpos($line, "heutegeladen=") !== false) {
+	    list(, $heutegeladenold) = explode("=", $line, 2);
+    }
 
 }
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);

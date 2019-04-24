@@ -16,7 +16,7 @@ web/index.php
 - references the theme you can use index.php?theme=yourtheme
 -->
 
-
+<!-- <meta http-equiv="refresh" content="90"> -->
 <!-- Load Javascript Values and functions for amcharts & show/hiding divs -->
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -24,6 +24,7 @@ web/index.php
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
+	
 </script>
 
 
@@ -253,6 +254,25 @@ echo '
 		<div id="ladepunkts2222div" class="col-xs-4 text-center">
 			<span id="aktgeladens2div"></span>kWh
 		</div>
+	</div>
+	<div id="heutegeladendiv">
+	<hr>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h5>Heute geladen</h5>
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-4 text-center">
+			<span id="dailychargelp1div"></span> kWh
+		</div>
+		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
+			<span id="dailychargelp2div"></span> kWh
+		</div>
+		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
+			<span id="dailychargelp3div"></span> kWh
+		</div>
+	</div>
 	</div>
 	<div class="row" id="sofortlmdiv2" style="font-size: 2vw">
 		<div class="col-xs-4 text-center">

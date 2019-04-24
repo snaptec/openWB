@@ -12,9 +12,9 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
-echo 0 > ramdisk/ladungaktivlp1
-echo 0 > ramdisk/ladungaktivlp2
-echo 0 > ramdisk/ladungaktivlp3
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp1
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -187,6 +187,11 @@ if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "minimalalp2pv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minimalalp2pv=6" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! grep -Fq "minimalampv=" /var/www/html/openWB/openwb.conf
 then
@@ -1123,6 +1128,14 @@ fi
 if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredge2wrip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "solaredge2wrip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "heutegeladen=1" >> /var/www/html/openWB/openwb.conf
 fi
 
 
