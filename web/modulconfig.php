@@ -541,6 +541,10 @@ foreach($lines as $line) {
 	if(strpos($line, "solaredgeip=") !== false) {
 		list(, $solaredgeipold) = explode("=", $line);
 	}
+	if(strpos($line, "solaredgewr2ip=") !== false) {
+		list(, $solaredgewr2ipold) = explode("=", $line);
+	}
+
 	if(strpos($line, "solaredgespeicherip=") !== false) {
 		list(, $solaredgespeicheripold) = explode("=", $line);
 	}
@@ -4362,8 +4366,16 @@ $(function() {
 		<input type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgeipslave3old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
+		Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
 	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="solaredge2wrip">WR 2 Solaredge IP:</label></b>
+		<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP oder none. IP des zweiten SolarEdge Wechselrichters. Ist nur nötig wenn 2 Wechselrichter genutzt werden die nicht per Modbus miteinander verbunden sind.<br><br>
+	</div>
+
 </div>
 <div id="pvwrfronius">
 	<div class="row" style="background-color:#BEFEBE">

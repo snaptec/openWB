@@ -69,6 +69,7 @@ function loadText(){
     });
 }
 
+
 $(function() {
     if($('#msmoduslp1').val() == '0') {
         $('#msmodusnlp1').show();
@@ -271,7 +272,15 @@ $(function() {
 
 });
 $(function() {
-    if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
+    if($('#heutegeladen').val() == '0') {
+	    $('#heutegeladendiv').hide();
+    } else {
+	    $('#heutegeladendiv').show();
+    }
+});
+
+$(function() {
+	if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
         $('#speicherpvuidiv').show();
     } else {
         $('#speicherpvuidiv').hide();
@@ -286,7 +295,7 @@ $(function() {
         $('#ladepunkts111div').hide();
         $('#ladepunkts1111div').hide();
         $('#ladepunkts11111div').hide();
-        $('#ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').hide();
+        $('#ladepunkts1111111div, #ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').hide();
     } else {
         $('#ladepunkts1ndiv').hide();
         $('#ladepunkts1div').show();
@@ -294,7 +303,7 @@ $(function() {
         $('#ladepunkts111div').show();
         $('#ladepunkts1111div').show();
         $('#ladepunkts11111div').show();
-        $('#ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').show();
+        $('#ladepunkts1111111div, #ladepunkts111111div, #ladepunkts1111111div, #lp2lldiv, #gesamtlldiv').show();
     }
 
 });
@@ -306,7 +315,7 @@ $(function() {
         $('#ladepunkts222div').hide();
         $('#ladepunkts2222div').hide();
         $('#ladepunkts22222div').hide();
-        $('#ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').hide();
+        $('#ladepunkts2222222div, #ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').hide();
     } else {
         $('#ladepunkts2ndiv').hide();
         $('#ladepunkts2div').show();
@@ -314,7 +323,7 @@ $(function() {
         $('#ladepunkts222div').show();
         $('#ladepunkts2222div').show();
         $('#ladepunkts22222div').show();
-        $('#ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').show();
+        $('#ladepunkts2222222div, #ladepunkts222222div, #ladepunkts2222222div, #lp3lldiv').show();
     }
 
 });

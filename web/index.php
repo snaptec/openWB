@@ -77,6 +77,9 @@
 <input hidden name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold ; ?>" />
 <input hidden name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old ; ?>" />
 <input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
+<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
+
+
 <body>
 
 

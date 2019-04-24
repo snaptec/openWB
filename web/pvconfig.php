@@ -64,6 +64,10 @@ foreach($lines as $line) {
 	if(strpos($line, "minimalapv=") !== false) {
 		list(, $minimalapvold) = explode("=", $line);
 	}
+	if(strpos($line, "minimalalp2pv=") !== false) {
+		list(, $minimalalp2pvold) = explode("=", $line);
+	}
+
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);
 	}
@@ -247,7 +251,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
 </div>
 <div class="row" style="background-color:#befebe">
-	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus:</label></b>
+	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus LP1:</label></b>
 	<select type="text" name="minimalapv" id="minimalapv">
 		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
@@ -264,6 +268,19 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 
 
 </div>
+<div class="row" style="background-color:#befebe">
+	<b><label for="minimalalp2pv">Minimalstromstärke fuer den Nur PV Laden Modus LP2:</label></b>
+	<select type="text" name="minimalalp2pv" id="minimalalp2pv">
+		<option <?php if($minimalalp2pvold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minimalalp2pvold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minimalalp2pvold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minimalalp2pvold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minimalalp2pvold == 10) echo selected ?> value="10">10</option>
+	</select><br>
+
+
+</div>
+
 
 <div class="row" style="background-color:#befebe">
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>

@@ -1,8 +1,108 @@
-
 var doInterval;
+var do2Interval;
+function loadText(){
+    $.ajax({
+        url:"./tools/lademodus.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {call: "loadfile"},
+        success:function(result){
+            if(result.text == 0){
+                $('.actstat .btn').addClass("btn-green");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+            }
+            if(result.text == 1){
+                $('.actstat1 .btn').addClass("btn-green");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+
+            }
+            if(result.text == 2){
+                $('.actstat2 .btn').addClass("btn-green");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+
+            }
+            if(result.text == 3){
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-green");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+
+            }
+            if(result.text == 4){
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-green");
+                $('.actstat4 .btn').removeClass("btn-red");
+
+            }
+        }
+    });
+}
+loadText();
+
 function getfile() {
 $.ajaxSetup({ cache: false});
- $.ajax({
+    $.ajax({
+        url:"./tools/dailychargelp1.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {dailychargelp1call: "loadfile"},
+        success:function(result){
+            $("#dailychargelp1div").html(result.text);
+	}
+	    }); 
+$.ajaxSetup({ cache: false});
+    $.ajax({
+        url:"./tools/dailychargelp2.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {dailychargelp2call: "loadfile"},
+        success:function(result){
+            $("#dailychargelp2div").html(result.text);
+	}
+	    }); 
+	$.ajaxSetup({ cache: false});
+    $.ajax({
+        url:"./tools/dailychargelp3.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {dailychargelp3call: "loadfile"},
+        success:function(result){
+            $("#dailychargelp3div").html(result.text);
+	}
+	    }); 
+$.ajax({
    url: "/openWB/ramdisk/aktgeladens1",
     complete: function(request){
       $("#aktgeladens1div").html(request.responseText);
@@ -228,13 +328,13 @@ $.ajax({
       $("#aktgeladens2div").html(request.responseText);
         }
         });
-  $.ajax({
-   url: "/openWB/ramdisk/lademodus",
-    complete: function(request){
-      var lademodus=data;
-	console.log(data);
-	}
-	});
+//  $.ajax({
+//   url: "/openWB/ramdisk/lademodus",
+//    complete: function(request){
+//      var lademodus=data;
+//	console.log(data);
+//	}
+//	});
  $.ajax({
    url: "/openWB/ramdisk/speichersoc",
     complete: function(request){
@@ -280,6 +380,9 @@ var source = 'graph-live.php',
 
 
 }
+
 doInterval = setInterval(getfile, 5000);
+do2Interval = setInterval(loadText, 5000);
+
 getfile();
 

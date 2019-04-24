@@ -73,6 +73,11 @@ foreach($lines as $line) {
 	    $result .= 'hausverbrauchstat='.$_POST[hausverbrauchstat]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "heutegeladen=") !== false) {
+	    $result .= 'heutegeladen='.$_POST[heutegeladen]."\n";
+	    $writeit = '1';
+	    } 
+
 
 
 

@@ -798,14 +798,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
 	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>

@@ -554,6 +554,11 @@ foreach($lines as $line) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
 	 $writeit = '1';
 	    }
+	    if(strpos($line, "solaredgewr2ip=") !== false) {
+	    $result .= 'solaredgewr2ip=\''.$_POST[solaredgewr2ip]."'\n";
+	 $writeit = '1';
+	    }
+
 	    if(strpos($line, "solaredgespeicherip=") !== false) {
 	    $result .= 'solaredgespeicherip=\''.$_POST[solaredgespeicherip]."'\n";
 	 $writeit = '1';

@@ -375,7 +375,9 @@ foreach($lines as $line) {
 	if(strpos($line, "hausverbrauchstat=") !== false) {
 		list(, $hausverbrauchstatold) = explode("=", $line);
 	}
-
+	if(strpos($line, "heutegeladen=") !== false) {
+		list(, $heutegeladenold) = explode("=", $line);
+	}
 
 
 
@@ -539,6 +541,15 @@ $(function() {
 			</select>
 			<br>
 		</div>
+		<div class="row">
+			<b><label for="heutegeladen">Heute geladen auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="heutegeladen" id="heutegeladen">
+				<option <?php if($heutegeladenold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($heutegeladenold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+		</div>
+
 
 		<div class="row">
 			<h4>	Graphen</h4> <br>
