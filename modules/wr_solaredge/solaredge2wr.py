@@ -54,8 +54,8 @@ resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0])
-finalwr1
+finalwr1 = int(struct.unpack('>i', all.decode('hex'))[0])
+
 
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ip2address, port=502)
