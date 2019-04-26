@@ -783,6 +783,7 @@ $carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
 
 $solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
+$solaredgewr2ipold = str_replace( "'", "", $solaredgewr2ipold);
 $solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
