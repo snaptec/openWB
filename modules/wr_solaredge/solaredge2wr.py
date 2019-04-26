@@ -47,8 +47,7 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 10000
     if fmultiplint == -5:
         rawprodw = rawprodw / 100000
-    rawprodw = rawprodw - storagepower    
-    rawprodwwr1
+    rawprodwwr1 = rawprodw - storagepower    
 
 
 resp= client.read_holding_registers(40093,2,unit=slave1id)
