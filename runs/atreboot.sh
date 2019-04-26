@@ -1129,9 +1129,9 @@ if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "solaredge2wrip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "solaredgewr2ip=" /var/www/html/openWB/openwb.conf
 then
-	  echo "solaredge2wrip=none" >> /var/www/html/openWB/openwb.conf
+	  echo "solaredgewr2ip=none" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
 then

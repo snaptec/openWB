@@ -4369,7 +4369,7 @@ $(function() {
 		Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="solaredge2wrip">WR 2 Solaredge IP:</label></b>
+		<b><label for="solaredgewr2ip">WR 2 Solaredge IP:</label></b>
 		<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
