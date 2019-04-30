@@ -34,6 +34,9 @@ client = ModbusTcpClient(ipaddress, port=1502)
 #ist die gesamte DC-seitige Leistung, einschl. ggf.
 #angeschlossener Batterie
 reg_100 = client.read_holding_registers(100,2,unit=71)
+#Plenticore Register 172: Total_AC_active_power [W]
+#ist die gesamte AC-seitige Leistung des Wechselrichters
+reg_172 = client.read_holding_registers(172,2,unit=71)
 #Plenticore Register 582: Actual_batt_ch_disch_power [W]
 ##ist Lade-/Entladeleistung des angeschlossenen Speichers
 #{charge=negativ, discharge=positiv}
@@ -45,11 +48,13 @@ reg_320 = client.read_holding_registers(320,2,unit=71)
 
 #ausgelesene Register dekodieren
 FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_172 = BinaryPayloadDecoder.fromRegisters(reg_172.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 
 #dekodierte Register in entsprechende Typen umwandeln
 Total_DC_power = int(FRegister_100.decode_32bit_float())
+Total_AC_active_power = int(FRegister_172.decode_32bit_float())
 Actual_batt_ch_disch_power = int(FRegister_582.decode_16bit_int())
 Total_yield = int(FRegister_320.decode_32bit_float())
 
@@ -60,13 +65,18 @@ PV_power = (Total_DC_power - Actual_batt_ch_disch_power) * -1
 #PV-Anlage kann nichts verbrauchen, also ggf. Register-/Rundungsfehler korrigieren
 if PV_power > 0:
     PV_power = 0
-
+#zur weiteren Berechnung Vorzeichen anpassen
+Total_AC_active_power = Total_AC_active_power * -1
 #und zur Weiterverarbeitung Werte in die ramdisk
+#PV-DC-Leistung
 with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
     f.write(str(PV_power))
-#in Wattstunden
+#WR-AC-Leistung
+with open('/var/www/html/openWB/ramdisk/wracwatt', 'w') as f:
+    f.write(str(Total_AC_active_power))
+#Ertrag in Wattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
     f.write(str(Total_yield))
-#in Kilowattstunden
+#Ertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
     f.write(str(Total_yield / 1000))

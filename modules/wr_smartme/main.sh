@@ -29,6 +29,10 @@ fi
 echo $wattwr
 echo $wattwr > /var/www/html/openWB/ramdisk/pvwatt
 
+#WR-AC-Leistung muss in andere Datei für Berechnung Hausverbrauch
+#zunächst hier den gleichen Wert wie für pvwatt nehmen bis Modul angepasst ist
+echo $wattwr > /var/www/html/openWB/ramdisk/wracwatt
+
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 
 pvkwhk=$(echo "scale=3 ; $pvkwh / 1000" | bc)

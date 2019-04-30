@@ -32,7 +32,7 @@ rawprodw = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == 0:
     rawprodw = rawprodw
 if fmultiplint == -1:
-    rawprodw = rawprodw / 10 
+    rawprodw = rawprodw / 10
 if fmultiplint == -2:
     rawprodw = rawprodw / 100
 if fmultiplint == -3:
@@ -59,7 +59,7 @@ rawprod2w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
 if fmultiplint == 0:
     rawprod2w = rawprod2w
 if fmultiplint == -1:
-    rawprod2w = rawprod2w / 10 
+    rawprod2w = rawprod2w / 10
 if fmultiplint == -2:
     rawprod2w = rawprod2w / 100
 if fmultiplint == -3:
@@ -67,9 +67,13 @@ if fmultiplint == -3:
 if fmultiplint == -4:
     rawprod2w = rawprod2w / 10000
 realrawprodw = rawprodw + rawprod2w - storagepower
-f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
-f.write(str(realrawprodw))
-f.close()
+with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
+    f.write(str(realrawprodw))
+
+#WR-AC-Leistung muss in andere Datei für Berechnung Hausverbrauch
+#zunächst hier den gleichen Wert wie für pvwatt nehmen bis Modul angepasst ist
+with open('/var/www/html/openWB/ramdisk/wracwatt', 'w') as f:
+    f.write(str(realrawprodw))
 
 resp= client.read_holding_registers(40093,2,unit=slave2id)
 value1 = resp.registers[0]
@@ -84,7 +88,3 @@ pvkwhk= rfinal / 1000
 f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
 f.write(str(pvkwhk))
 f.close()
-
-
-
-

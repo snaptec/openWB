@@ -11,11 +11,16 @@ pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
 if [ $pvwatt > 5 ]
 	 then
 	  pvwatt=$(echo "$pvwatt*-1" |bc)
-fi   
+fi
 
 echo $pvwatt
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+
+#WR-AC-Leistung muss in andere Datei für Berechnung Hausverbrauch
+#zunächst hier den gleichen Wert wie für pvwatt nehmen bis Modul angepasst ist
+echo $pvwatt > /var/www/html/openWB/ramdisk/wracwatt
+
 #Gesamtzählerstand am WR [kWh]
 pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
 pvkwh=$(echo "$pvkwh*1000" |bc)

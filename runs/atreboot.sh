@@ -21,6 +21,8 @@ touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
 touch /var/www/html/openWB/ramdisk/pvwatt
+#AC-Leistung des WR
+touch /var/www/html/openWB/ramdisk/wracwatt
 touch /var/www/html/openWB/ramdisk/soc
 touch /var/www/html/openWB/ramdisk/soc1
 touch /var/www/html/openWB/ramdisk/lla1
@@ -101,12 +103,13 @@ echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 3 > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
+echo 0 > /var/www/html/openWB/ramdisk/wracwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
-echo 0 > /var/www/html/openWB/ramdisk/lla3	
+echo 0 > /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
 touch /var/www/html/openWB/ramdisk/llog1
@@ -909,12 +912,12 @@ then
 if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
-  fi 
-  
+  fi
+
  if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
-  fi  
+  fi
  if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1177,7 +1180,7 @@ then
 	sudo apt-get -qq install -y php-gd
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
-	
+
 fi
 
 . /var/www/html/openWB/openwb.conf
