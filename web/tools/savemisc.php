@@ -69,6 +69,14 @@ foreach($lines as $line) {
 	    $result .= 'chartlegendmain='.$_POST[chartlegendmain]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "hausverbrauchstat=") !== false) {
+	    $result .= 'hausverbrauchstat='.$_POST[hausverbrauchstat]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "heutegeladen=") !== false) {
+	    $result .= 'heutegeladen='.$_POST[heutegeladen]."\n";
+	    $writeit = '1';
+	    } 
 
 
 

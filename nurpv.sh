@@ -42,7 +42,12 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if [[ $debug == "1" ]]; then
 				echo "nur pv ladung auf $minimalapv starten"
 			fi
-			runs/set-current.sh $minimalapv all
+			if (( minimalapv == minimalalp2pv )); then
+				runs/set-current.sh $minimalapv all
+			else
+				runs/set-current.sh $minimalapv m
+				runs/set-current.sh $minimalalp2pv s1
+			fi
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			echo 0 > /var/www/html/openWB/ramdisk/pvecounter
 			exit 0
@@ -55,13 +60,23 @@ fi
 if (( ladeleistung < 300 )); then
 	if (( llalt > minimalapv )); then
 		llneu=$minimalapv
-		runs/set-current.sh $llneu all
+		if (( minimalapv == minimalalp2pv )); then
+			runs/set-current.sh $llneu all
+		else
+			runs/set-current.sh $minimalapv m
+			runs/set-current.sh $minimalalp2pv s1
+		fi
 		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 		exit 0
 	fi
 	if (( llalt < minimalapv )); then
 		llneu=$minimalapv
-		runs/set-current.sh $llneu all
+		if (( minimalapv == minimalalp2pv )); then
+			runs/set-current.sh $llneu all
+		else
+			runs/set-current.sh $minimalapv m
+			runs/set-current.sh $minimalalp2pv s1
+		fi
 		echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 		exit 0
 	fi
@@ -134,16 +149,20 @@ else
 					llneu=$((llalt + 1 ))
 				fi
 			fi
-			if (( llneu > maximalstromstaerke )); then
-				llneu=$maximalstromstaerke
-			fi
+
 		else
 			llneu=$((llalt + 1 ))
+		fi
+		if (( llneu > maximalstromstaerke )); then
+			llneu=$maximalstromstaerke
 		fi
 		if (( llalt < minimalapv )); then
 			llneu=$minimalapv
 		fi
 		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then
+			if (( minimalalp2pv > minimalapv )); then
+				minimalapv=$minimalalp2pv
+			fi
 			socdist=$(echo $((soc1 - soc)) | sed 's/-//')
 			anzahl=$((socdist / adaptfaktor))
 			if (( soc1 > soc )); then

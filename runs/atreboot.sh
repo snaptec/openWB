@@ -12,6 +12,9 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp1
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -100,6 +103,7 @@ echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
+echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
 echo 0 > /var/www/html/openWB/ramdisk/lla3	
@@ -183,6 +187,11 @@ if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "minimalalp2pv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minimalalp2pv=6" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! grep -Fq "minimalampv=" /var/www/html/openWB/openwb.conf
 then
@@ -1096,6 +1105,38 @@ then
 then
 	  echo "chartlegendmain=1" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "nrgkickiplp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickiplp2=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkicktimeoutlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkicktimeoutlp2=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickmaclp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickmaclp2=11:22:33:aa:bb:cc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickpwlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickpwlp2=1234" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hausverbrauchstat=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hausverbrauchstat=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
+then
+	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgewr2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "solaredgewr2ip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "heutegeladen=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

@@ -139,7 +139,8 @@ function setChargingCurrentkeba () {
 			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
 		else
 			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090		
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+			echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
 		fi
 	fi
 }
@@ -329,6 +330,10 @@ if [[ $lastmanagement == "1" ]]; then
 		goeiplp1=$goeiplp2
 		goetimeoutlp1=$goetimeoutlp2
 		kebaiplp1=$kebaiplp2
+		nrgkickiplp1=$nrgkickiplp2
+		nrgkicktimeoutlp1=$nrgkicktimeoutlp2
+		nrgkickmaclp1=$nrgkickmaclp2
+		nrgkickpwlp1=$nrgkickpwlp2
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
 

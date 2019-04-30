@@ -22,6 +22,10 @@ wattbezug3=$(echo $json | jq .ActivePowerL3)
 wattbezug3=$(echo "scale=3 ; $wattbezug3 * 1000" | bc)
 wattbezug3=$(echo "$wattbezug3 / 1" | bc)
 
+if [ $wattbezug1 = '0' ] ; then
+		wattbezug1=$wattbezug
+fi
+
 #Zählerstand Import(kWh)
 ikwh=$(echo $json | jq .CounterReadingImport)
 ikwh=$(echo "scale=3 ; $ikwh * 1000" | bc)
@@ -44,6 +48,9 @@ evuv3=$(echo $json | jq .VoltageL3)
 bezuga1=$(echo $json | jq .CurrentL1)
 bezuga2=$(echo $json | jq .CurrentL2)
 bezuga3=$(echo $json | jq .CurrentL3)
+if [ $bezuga1 = 'null' ] ; then
+		bezuga1=$(echo $json | jq .Current)
+fi
 
 #Prüfen ob Werte gültig
 re='^[-+]?[0-9]+\.?[0-9]*$'

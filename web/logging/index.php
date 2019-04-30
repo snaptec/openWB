@@ -27,7 +27,7 @@
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<meta http-equiv="refresh" content="600; URL=index.html">
+	<meta http-equiv="refresh" content="600; URL=index.php">
 	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">

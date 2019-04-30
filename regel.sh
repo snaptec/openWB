@@ -197,6 +197,10 @@ fi
 
 #######################
 #Ladestromstarke berechnen
+anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
+if (( anzahlphasen > 9 )); then
+	anzahlphasen=1
+fi
 llphasentest=3
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( llalt > 3 )); then
