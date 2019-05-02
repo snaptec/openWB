@@ -72,14 +72,10 @@ final = wr1w + wr2w + wr3w + wr4w
 if final < 0:
     final = 0
 final = final * -1
-with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
-    f.write(str(final))
+f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
+f.write(str(final))
+f.close()
 
-#WR-AC-Leistung muss in andere Datei für Berechnung Hausverbrauch
-#zunächst hier den gleichen Wert wie für pvwatt nehmen bis Modul angepasst ist
-with open('/var/www/html/openWB/ramdisk/wracwatt', 'w') as f:
-    f.write(str(final))
-    
 #pv Wh
 resp= client2.read_holding_registers(30529,2,unit=3)
 value1 = resp.registers[0]
@@ -90,3 +86,9 @@ final = wr1wh + wr2wh + wr3wh + wr4wh
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(final))
 f.close()
+
+
+
+
+
+

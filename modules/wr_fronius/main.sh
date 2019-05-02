@@ -18,9 +18,6 @@ echo $pvwatt
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 
-#WR-AC-Leistung muss in andere Datei für Berechnung Hausverbrauch
-#zunächst hier den gleichen Wert wie für pvwatt nehmen bis Modul angepasst ist
-echo $pvwatt > /var/www/html/openWB/ramdisk/wracwatt
 
 pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 
