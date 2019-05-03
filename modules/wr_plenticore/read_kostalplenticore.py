@@ -4,8 +4,8 @@
 #########################################################
 #
 #liest aus Wechselrichter Kostal Plenticore Register
-#zu PV-Statistik und berechnet PV-Leistung unter
-#Beachtung angeschlossener Batterie falls vorhanden
+#zu PV-Statistik und berechnet PV-Leistung, Speicherleistung
+#unter Beachtung angeschlossener Batterie falls vorhanden
 #
 #2019 Kevin Wieland, Michael Ortenstein
 #This file is part of openWB
@@ -35,15 +35,33 @@ client = ModbusTcpClient(ipaddress, port=1502)
 #angeschlossener Batterie
 reg_100 = client.read_holding_registers(100,2,unit=71)
 #Plenticore Register 582: Actual_batt_ch_disch_power [W]
-##ist Lade-/Entladeleistung des angeschlossenen Speichers
+#ist Lade-/Entladeleistung des angeschlossenen Speichers
 #{charge=negativ, discharge=positiv}
 reg_582 = client.read_holding_registers(582,1,unit=71)
 #Plenticore Register 320: Total_yield [Wh]
-#PV Gesamt-Ertrag
+#ist PV Gesamt-Ertrag
 reg_320 = client.read_holding_registers(320,2,unit=71)
 #Plenticore Register 575: Inverter_generation_power_actual [W]
-##ist AC-Leistungsabgabe des Wechselrichters
+#ist AC-Leistungsabgabe des Wechselrichters
 reg_575 = client.read_holding_registers(575,1,unit=71)
+#Plenticore Register 514: Battery_actual_SOC [%]
+#ist Ladestand des Speichers
+reg_514 = client.read_holding_registers(514,1,unit=71)
+#Strom auf Phasen 1-3 EVU aus Kostal Plenticore lesen
+#Wechselrichter bekommt Daten von Energy Manager EM300
+#Phase 1
+#Plenticore Register 222: Current_phase_1_(powermeter) [A]
+reg_222 = client.read_holding_registers(222,2,unit=71)
+#Phase 2
+#Plenticore Register 232: Current_phase_2_(powermeter) [A]
+reg_232 = client.read_holding_registers(232,2,unit=71)
+#Phase 3
+#Plenticore Register 242: Current_phase_3_(powermeter) [A]
+reg_242 = client.read_holding_registers(242,2,unit=71)
+#Leistung EVU
+#Plenticore Register 252: Total_active_power_(powermeter) [W]
+#Sensorposition 1 (Hausanschluss): (+)Hausverbrauch (-)Erzeugung
+reg_252 = client.read_holding_registers(252,2,unit=71)
 #//TODO: weitere Register später hinzufügen für PV-Statistik
 
 #ausgelesene Register dekodieren
@@ -51,12 +69,22 @@ FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=
 FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_575 = BinaryPayloadDecoder.fromRegisters(reg_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_514 = BinaryPayloadDecoder.fromRegisters(reg_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_222 = BinaryPayloadDecoder.fromRegisters(reg_222.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_232 = BinaryPayloadDecoder.fromRegisters(reg_232.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_242 = BinaryPayloadDecoder.fromRegisters(reg_242.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_252 = BinaryPayloadDecoder.fromRegisters(reg_252.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 
 #dekodierte Register in entsprechende Typen umwandeln
 Total_DC_power = int(FRegister_100.decode_32bit_float())
 Actual_batt_ch_disch_power = int(FRegister_582.decode_16bit_int())
 Total_yield = int(FRegister_320.decode_32bit_float())
 Inverter_generation_power_actual = int(FRegister_575.decode_16bit_int())
+Battery_actual_SOC = int(FRegister_514.decode_16bit_int())
+Current_phase_1_powermeter = round(FRegister_222.decode_32bit_float(),2)
+Current_phase_2_powermeter = round(FRegister_232.decode_32bit_float(),2)
+Current_phase_3_powermeter = round(FRegister_242.decode_32bit_float(),2)
+Total_active_power_powermeter = int(FRegister_252.decode_32bit_float())
 
 #Leistung der PV-Module bestimmen
 #da ggf. Batterie DC-seitig in Total_DC_power enthalten ist,
@@ -79,16 +107,43 @@ else:
         #wird die Batterie entladen, werden die Wandlungsverluste anteilig an der
         #DC-Leistung auf PV und Batterie verteilt
         PV_power_ac = int((PV_power_dc / float(Total_DC_power)) * Inverter_generation_power_actual)
+        Actual_batt_ch_disch_power = Inverter_generation_power_actual - PV_power_ac
+
+#Bezug berechnen je nach Position des Energy Managers
+Bezug = Total_active_power_powermeter
+#//TODO: hier muss noch der Wert aus den Settings für die if-Prüfung gelesen werden
+#if int(sys.argv[2]) == 0:
+#    Bezug = Bezug - PV_power_ac
 
 #Erzeugung wird als negativer Wert weiter verarbeitet
 PV_power = PV_power_ac * -1
+Actual_batt_ch_disch_power = Actual_batt_ch_disch_power * -1
 
-#und zur Weiterverarbeitung Werte in die ramdisk
+#und zur Weiterverarbeitung alle Werte in die ramdisk
+#PV-AC-Leistung
 with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
     f.write(str(PV_power))
-#in Wattstunden
+#Gesamtertrag in Wattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
     f.write(str(Total_yield))
-#in Kilowattstunden
+#Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
     f.write(str(Total_yield / 1000))
+#Speicherleistung
+with open('/var/www/html/openWB/ramdisk/speicherleistung', 'w') as f:
+    f.write(str(Actual_batt_ch_disch_power))
+#Speicher Ladestand
+with open('/var/www/html/openWB/ramdisk/speichersoc', 'w') as f:
+    f.write(str(Battery_actual_SOC))
+#Bezug EVU
+with open('/var/www/html/openWB/ramdisk/wattbezug', 'w') as f:
+    f.write(str(Bezug))
+#Bezug Phase 1
+with open('/var/www/html/openWB/ramdisk/bezuga1', 'w') as f:
+    f.write(str(Current_phase_1_powermeter))
+#Bezug Phase 2
+with open('/var/www/html/openWB/ramdisk/bezuga2', 'w') as f:
+    f.write(str(Current_phase_2_powermeter))
+#Bezug Phase 3
+with open('/var/www/html/openWB/ramdisk/bezuga3', 'w') as f:
+    f.write(str(Current_phase_3_powermeter))
