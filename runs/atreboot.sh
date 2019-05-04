@@ -43,6 +43,28 @@ touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+
+# temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
+# bei Anschluss von Speicher und Energiemanager direkt am WR
+# alle Werte im Modul des Wechselrichters aus den Registern
+# gelesen werden, um einen zeitlich zusammenhängenden Datensatz
+# zu bekommen. Im jeweiligen Modul Speicher/Bezug werden
+# die Werte dann in die ramdisk für die weitere globale
+# Verarbeitung geschrieben.
+touch /var/www/html/openWB/ramdisk/temp_wattbezug
+touch /var/www/html/openWB/ramdisk/temp_speicherleistung
+touch /var/www/html/openWB/ramdisk/temp_speichersoc
+touch /var/www/html/openWB/ramdisk/bezuga1
+touch /var/www/html/openWB/ramdisk/bezuga2
+touch /var/www/html/openWB/ramdisk/bezuga3
+# Werte initialisieren
+echo 0 > /var/www/html/openWB/ramdisk/temp_wattbezug
+echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/temp_speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/bezuga1
+echo 0 > /var/www/html/openWB/ramdisk/bezuga2
+echo 0 > /var/www/html/openWB/ramdisk/bezuga3
+
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
@@ -106,7 +128,7 @@ echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
-echo 0 > /var/www/html/openWB/ramdisk/lla3	
+echo 0 > /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
 touch /var/www/html/openWB/ramdisk/llog1
@@ -909,12 +931,12 @@ then
 if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
-  fi 
-  
+  fi
+
  if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
-  fi  
+  fi
  if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1177,7 +1199,7 @@ then
 	sudo apt-get -qq install -y php-gd
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
-	
+
 fi
 
 . /var/www/html/openWB/openwb.conf

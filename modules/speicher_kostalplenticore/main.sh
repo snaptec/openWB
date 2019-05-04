@@ -1,7 +1,21 @@
 #!/bin/bash
 
-#hier gibt es nichts zu tun, da alle Werte aus den Registern des WR im WR-Modul
-#gelesen und berechnet werden
+#########################################################
+#
+# liest aus Wechselrichter Kostal Plenticore
+# mit angeschlossener Batterie die Lade-/Entladeleistung
+# und den Batterie-SOC
+#
+# 2019 Michael Ortenstein
+# This file is part of openWB
+#
+#########################################################
 
-#. /var/www/html/openWB/openwb.conf
-#sudo python /var/www/html/openWB/modules/speicher_kostalplenticore/read_kostalplenticorebatt.py $kostalplenticoreip
+# Daten aus temporärer ramdisk zur globalen Weiterverarbeitung in die
+# entsprechenden ramdisks kopieren. Die temporären Werte stammen aus dem
+# wr_plenticore Modul, werden dort zentral aus den Modbus-Registern gelesen
+
+# Speicherleistung
+"cp" /var/www/html/openWB/ramdisk/temp_speicherleistung /var/www/html/openWB/ramdisk/speicherleistung
+# Speicher Ladestand
+"cp" /var/www/html/openWB/ramdisk/temp_speichersoc /var/www/html/openWB/ramdisk/speichersoc
