@@ -28,56 +28,50 @@ client = ModbusTcpClient(ipaddress, port=1502)
 
 #Strom auf Phasen 1-3 EVU aus Kostal Plenticore lesen
 #Wechselrichter bekommt Daten von Energy Manager EM300
-
 #Phase 1
-#dazu Plenticore Register 222 lesen: Current_phase_1_(powermeter) [A]
-resp= client.read_holding_registers(222,2,unit=71)
-FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-final =round(FRegister.decode_32bit_float(),2)
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(final))
-f.close()
-
+#Plenticore Register 222: Current_phase_1_(powermeter) [A]
+reg_222 = client.read_holding_registers(222,2,unit=71)
 #Phase 2
-#dazu Plenticore Register 232 lesen: Current_phase_2_(powermeter) [A]
-resp= client.read_holding_registers(232,2,unit=71)
-FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-final =round(FRegister.decode_32bit_float(),2)
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(final))
-f.close()
-
+#Plenticore Register 232: Current_phase_2_(powermeter) [A]
+reg_232 = client.read_holding_registers(232,2,unit=71)
 #Phase 3
-#dazu Plenticore Register 242 lesen: Current_phase_3_(powermeter) [A]
-resp= client.read_holding_registers(242,2,unit=71)
-FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-final =round(FRegister.decode_32bit_float(),2)
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(final))
-f.close()
-
-#Leistung EVU aus Kostal Plenticore lesen
-#Wechselrichter bekommt Daten von Energy Manager EM300
-#dazu Plenticore Register 252 lesen: Total_active_power_(powermeter) [W]
+#Plenticore Register 242: Current_phase_3_(powermeter) [A]
+reg_242 = client.read_holding_registers(242,2,unit=71)
+#Leistung EVU
+#Plenticore Register 252: Total_active_power_(powermeter) [W]
 #Sensorposition 1 (Hausanschluss): (+)Hausverbrauch (-)Erzeugung
-resp= client.read_holding_registers(252,2,unit=71)
-FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-final =int(FRegister.decode_32bit_float())
+reg_252 = client.read_holding_registers(252,2,unit=71)
 
-#PV Leistung
-resp= client.read_holding_registers(100,2,unit=71)
-FRegister = BinaryPayloadDecoder.fromRegisters(resp.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-pvwatt =int(FRegister.decode_32bit_float())
-fpvwatt = pvwatt
+#ausgelesene Register dekodieren
+FRegister_222 = BinaryPayloadDecoder.fromRegisters(reg_222.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_232 = BinaryPayloadDecoder.fromRegisters(reg_232.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_242 = BinaryPayloadDecoder.fromRegisters(reg_242.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_252 = BinaryPayloadDecoder.fromRegisters(reg_252.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 
-if ( int(sys.argv[2]) == 0):
-    final = final - fpvwatt
-else:
-    final = final
-f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
-f.write(str(final))
-f.close()
+#dekodierte Register in entsprechende Typen umwandeln
+Current_phase_1_powermeter = round(FRegister_222.decode_32bit_float(),2)
+Current_phase_2_powermeter = round(FRegister_232.decode_32bit_float(),2)
+Current_phase_3_powermeter = round(FRegister_242.decode_32bit_float(),2)
+Total_active_power_powermeter = int(FRegister_252.decode_32bit_float())
 
+#PV Leistung wurde schon im Modul Wechselrichter bestimmt, hier aus ramdisk lesen
+#with open('/var/www/html/openWB/ramdisk/pvwatt', 'r') as f:
+#    f.read(int(PV_power_ac))
+#//TODO: Lesen funktioniert so nicht, da String in ramdisk
 
+#Bezug berechnen je nach Position des Energy Managers
+Bezug = Total_active_power_powermeter
 
+#//TODO: Subtraktion funktioniert nicht wegen fehlendem Wert aus ramdisk oben
+#if int(sys.argv[2]) == 0:
+#    Bezug = Bezug - PV_power_ac
 
+#und zur Weiterverarbeitung alle Werte in die ramdisk
+with open('/var/www/html/openWB/ramdisk/wattbezug', 'w') as f:
+    f.write(str(Bezug))
+with open('/var/www/html/openWB/ramdisk/bezuga1', 'w') as f:
+    f.write(str(Current_phase_1_powermeter))
+with open('/var/www/html/openWB/ramdisk/bezuga2', 'w') as f:
+    f.write(str(Current_phase_2_powermeter))
+with open('/var/www/html/openWB/ramdisk/bezuga3', 'w') as f:
+    f.write(str(Current_phase_3_powermeter))
