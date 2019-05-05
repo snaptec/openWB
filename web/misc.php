@@ -658,6 +658,25 @@ $(function() {
 	<div class="row">
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
+
+<hr>
+<div class="row">
+
+<form action="./tools/savedebug.php" method="POST">
+	<h3>Debug Daten senden</h3>
+</div>
+	<div class="row">
+		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>	
+	</div>
+<div class="row">
+	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
+	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
+
+<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+</form><br><br /><hr>
+</div>
+
 <div class="row">
 <div class="text-center">
 Open Source made with love!<br>

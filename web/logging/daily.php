@@ -239,11 +239,11 @@ var series9 = chart.series.push(new am4charts.LineSeries());
 series9.dataFields.valueY = "col2";
 series9.dataFields.categoryX = "col0";
 series9.name = "Einspeisung";
-series9.stroke = am4core.color("#5d90e2");
+series9.stroke = am4core.color("#fff600");
 series9.tensionX = 0.8;
 series9.tensionY = 0.8;
 series9.strokeWidth = 1.5;
-series9.fill = am4core.color("#5d90e2");
+series9.fill = am4core.color("#fff600");
 series9.fillOpacity = 0.3;
 
 if (speichervorhanden == 1) {

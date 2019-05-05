@@ -5,7 +5,13 @@ ladeleistung=$(<ramdisk/llaktuell)
 llkwh=$(<ramdisk/llkwh)
 soc=$(<ramdisk/soc)
 soc1=$(<ramdisk/soc1)
-lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
+nachtladenstate=$(</var/www/html/openWB/ramdisk/nachtladenstate)
+nachtladen2state=$(</var/www/html/openWB/ramdisk/nachtladen2state)
+if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
+	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
+else
+	lmodus=7
+fi
 if [ -e ramdisk/loglademodus ]; then
 lademodus=$(</var/www/html/openWB/ramdisk/loglademodus)
 fi
