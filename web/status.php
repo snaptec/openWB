@@ -690,7 +690,7 @@ doInterval = setInterval(getfile, 2000);
 			list(, $lp3nameold) = explode("=", $line);
 		}
 
-		
+
 	}
 ?>
 <body>
@@ -706,25 +706,25 @@ doInterval = setInterval(getfile, 2000);
 					<h3> OpenWB Status </h3>
 				</div>
 			</div>
-<br><br>	
+<br><br>
 <div class="row">
 		<div class="col-xs-4 text-center">
 		</div>
 		<div class="col-xs-2 text-center">
-			L1
+			Phase 1
 		</div>
 		<div class="col-xs-2 text-center">
-			L2
+			Phase 2
 		</div>
 		<div class="col-xs-2 text-center">
-			L3
+			Phase 3
 		</div>
 
 </div>
 <hr>
 <div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
-		EVU Spannung in V
+		EVU Spannung [V]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="evuv1div"></div>
@@ -739,7 +739,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
-		EVU Stromstaerke in A
+		EVU Stromstärke [A]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="bezuga1div"></div>
@@ -754,7 +754,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row" style="background-color:#febebe">
 	<div class="col-xs-4 text-center">
-		EVU Leistung in Watt
+		EVU Leistung [W]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="bezugw1div"></div>
@@ -784,7 +784,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		LP1 <?php echo $lp1nameold ?>  Spannung in V
+		LP1 <?php echo $lp1nameold ?>  Spannung [V]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1div"></div>
@@ -814,7 +814,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		LP1 <?php echo $lp1nameold ?>  Stromstaerke in A
+		LP1 <?php echo $lp1nameold ?>  Stromstärke [A]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="lla1div"></div>
@@ -829,7 +829,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		LP2 <?php echo $lp2nameold ?>  Spannung in V
+		LP2 <?php echo $lp2nameold ?>  Spannung [V]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1s1div"></div>
@@ -844,7 +844,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		LP2 <?php echo $lp2nameold ?> Stromstaerke in A
+		LP2 <?php echo $lp2nameold ?> Stromstärke [A]
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llas11div"></div>
@@ -859,7 +859,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		LP3 <?php echo $lp3nameold ?> Spannung in V
+		LP3 <?php echo $lp3nameold ?> Spannung [V]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llv1s2div"></div>
@@ -874,7 +874,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		LP3 <?php echo $lp3nameold ?> Stromstaerke in A
+		LP3 <?php echo $lp3nameold ?> Stromstärke [A]
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llas21div"></div>
@@ -910,7 +910,7 @@ doInterval = setInterval(getfile, 2000);
 
 <div class="row bg-info">
 	<div class="col-xs-4 text-center">
-		Ladestromvorgabe in A
+		Ladestromvorgabe [A]
 	</div>
 	<div class="col-xs-2 text-center">
 		<div id="llsolldiv"></div>
@@ -930,7 +930,7 @@ doInterval = setInterval(getfile, 2000);
 
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		Ladeleistung in Watt
+		Ladeleistung [W]
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llaktuelldiv"></div>
@@ -949,7 +949,7 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row bg-info">
 	<div class="col-xs-4 text-center bg-info">
-		Zählerstand in kWh
+		Zählerstand [kWh]
 	</div>
 	<div class="col-xs-2 text-center bg-info">
 		<div id="llkwhdiv"></div>
@@ -1025,13 +1025,13 @@ doInterval = setInterval(getfile, 2000);
 			<div id="pvcounterdiv"></div>
 		</div>
 		<div class="col-xs-2 text-center">
-			PV Leistung in Watt
+			PV Leistung [W]
 		</div>
 		<div class="col-xs-2 text-center">
 			<div id="pvwattdiv"></div>
 		</div>
 		<div class="col-xs-2 text-center">
-			PV Zählerstand in kWh
+			PV Gesamtertrag [kWh]
 		</div>
 		<div class="col-xs-2 text-center">
 			<div id="pvkwhdiv"></div>
@@ -1041,19 +1041,19 @@ doInterval = setInterval(getfile, 2000);
 <hr>
 <div class="row">
 		<div class="col-xs-2 text-center bg-info">
-		SoC LP1 in %
+		SoC LP1 [%]
 		</div>
 		<div class="col-xs-2 text-center bg-info">
 			<div id="soclevel"></div>
 		</div>
 		<div class="col-xs-2 text-center" style="background-color:#febebe">
-			EVU in Watt
+			EVU [W]
 		</div>
 		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			<div id="wattbezugdiv"></div>
 		</div>
 		<div class="col-xs-2 text-center" style="background-color:#febebe">
-			EVU in Hz
+			EVU [Hz]
 		</div>
 		<div class="col-xs-2 text-center" style="background-color:#febebe">
 			<div id="evuhzdiv"></div>
@@ -1062,7 +1062,7 @@ doInterval = setInterval(getfile, 2000);
 </div>
 <div class="row">
 	<div class="col-xs-2 text-center bg-info">
-		SoC LP2 in %
+		SoC LP2 [%]
 		</div>
 		<div class="col-xs-2 text-center bg-info">
 			<div id="soclevel1"></div>
@@ -1077,7 +1077,7 @@ doInterval = setInterval(getfile, 2000);
 
 <?php
 echo "
-</textarea> 
+</textarea>
 	</td><td width='50%'></b>
 	<br>	Uptime: <span id='uptime'>--</span>
 	<br>OS: ";
@@ -1113,8 +1113,8 @@ echo "
   $(document).ready(function() {
   updateit();
   setInterval(updateit, 1000);
-  })  
-</script> 
+  })
+</script>
 
 <br><br>
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
