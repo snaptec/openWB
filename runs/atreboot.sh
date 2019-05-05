@@ -54,16 +54,30 @@ touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/temp_wattbezug
 touch /var/www/html/openWB/ramdisk/temp_speicherleistung
 touch /var/www/html/openWB/ramdisk/temp_speichersoc
-touch /var/www/html/openWB/ramdisk/bezuga1
-touch /var/www/html/openWB/ramdisk/bezuga2
-touch /var/www/html/openWB/ramdisk/bezuga3
+touch /var/www/html/openWB/ramdisk/temp_bezuga1
+touch /var/www/html/openWB/ramdisk/temp_bezuga2
+touch /var/www/html/openWB/ramdisk/temp_bezuga3
+touch /var/www/html/openWB/ramdisk/temp_evuhz
+touch /var/www/html/openWB/ramdisk/temp_bezugw1
+touch /var/www/html/openWB/ramdisk/temp_bezugw2
+touch /var/www/html/openWB/ramdisk/temp_bezugw3
+touch /var/www/html/openWB/ramdisk/temp_evuv1
+touch /var/www/html/openWB/ramdisk/temp_evuv2
+touch /var/www/html/openWB/ramdisk/temp_evuv3
 # Werte initialisieren
 echo 0 > /var/www/html/openWB/ramdisk/temp_wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/temp_speichersoc
-echo 0 > /var/www/html/openWB/ramdisk/bezuga1
-echo 0 > /var/www/html/openWB/ramdisk/bezuga2
-echo 0 > /var/www/html/openWB/ramdisk/bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuhz
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv1
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv2
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv3
 
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
