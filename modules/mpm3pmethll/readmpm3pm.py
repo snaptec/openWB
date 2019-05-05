@@ -12,8 +12,13 @@ client = ModbusTcpClient('192.168.193.16', port=8899)
 
 
 
-resp = client.read_input_registers(0x0002,2, unit=5)
-ikwh = resp.registers[1]
+#resp = client.read_input_registers(0x0002,2, unit=5)
+#ikwh = resp.registers[1]
+resp = client.read_input_registers(0x0002,4, unit=5)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+ikwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
 ikwh = float(ikwh) /100
 f = open('/var/www/html/openWB/ramdisk/llkwhs1', 'w')
 f.write(str(ikwh))

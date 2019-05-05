@@ -12,8 +12,8 @@ else
 	if (( $solaredgepvslave2 != "none" )); then
 		sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge2.py $solaredgepvip $solaredgepvslave1 $solaredgepvslave2 $Solaredgebatwr
 	else
-		if [[ $solaredge2wrip != "none" ]]; then
-			sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge2wr.py $solaredgepvip $solaredgepvslave1 $Solaredgebatwr $solaredge2wrip	
+		if [[ $solaredgewr2ip != "none" ]]; then
+			sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge2wr.py $solaredgepvip $solaredgepvslave1 $Solaredgebatwr $solaredgewr2ip	
 		else
 			sudo python /var/www/html/openWB/modules/wr_solaredge/solaredge.py $solaredgepvip $solaredgepvslave1 $Solaredgebatwr
 		fi

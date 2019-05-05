@@ -123,6 +123,7 @@ echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
+echo 0 > /var/www/html/openWB/ramdisk/llkwhges
 echo 57 > /var/www/html/openWB/ramdisk/soctimer
 echo 57 > /var/www/html/openWB/ramdisk/soctimer1
 echo 0 > /var/www/html/openWB/ramdisk/ev.graph
@@ -1129,9 +1130,9 @@ if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "solaredge2wrip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "solaredgewr2ip=" /var/www/html/openWB/openwb.conf
 then
-	  echo "solaredge2wrip=none" >> /var/www/html/openWB/openwb.conf
+	  echo "solaredgewr2ip=none" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
 then
@@ -1183,7 +1184,7 @@ fi
 . /var/www/html/openWB/openwb.conf
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
-
-curl -d "update="$releasetrain$uuid"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+owbv=$(</var/www/html/openWB/web/version)
+curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
 
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

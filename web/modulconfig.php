@@ -783,6 +783,7 @@ $carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
 
 $solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
 $solaredgeipold = str_replace( "'", "", $solaredgeipold);
+$solaredgewr2ipold = str_replace( "'", "", $solaredgewr2ipold);
 $solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
@@ -4369,7 +4370,7 @@ $(function() {
 		Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		<b><label for="solaredge2wrip">WR 2 Solaredge IP:</label></b>
+		<b><label for="solaredgewr2ip">WR 2 Solaredge IP:</label></b>
 		<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">

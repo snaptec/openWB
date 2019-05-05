@@ -70,7 +70,7 @@ if [[ $nachtladen == "1" ]]; then
 		nachtladenstate=1
 		dayoftheweek=$(date +%w)
 		currenthour=$(date +%k)
-		if [[ $dayoftheweek -eq 6 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 0 && $dayoftheweek -le 3 ]] || [[ $dayoftheweek -ge 4 && $currenthour -le 11 ]]  ; then
+		if [[ $dayoftheweek -eq 0 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 1 && $dayoftheweek -le 4 ]] || [[ $dayoftheweek -eq 5 && $currenthour -le 11 ]]  ; then
 		diesersoc=$nachtsoc
 		else
 			diesersoc=$nachtsoc1
@@ -161,7 +161,7 @@ if [[ $nachtladens1 == "1" ]]; then
 		nachtladenstates1=1
 		dayoftheweek=$(date +%w)
 		currenthour=$(date +%k)
-		if [[ $dayoftheweek -eq 6 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 0 && $dayoftheweek -le 3 ]] || [[ $dayoftheweek -ge 4 && $currenthour -le 11 ]]  ; then
+		if [[ $dayoftheweek -eq 0 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 1 && $dayoftheweek -le 4 ]] || [[ $dayoftheweek -eq 5 && $currenthour -le 11 ]]  ; then
 			diesersocs1=$nachtsocs1
 		else
 			diesersocs1=$nachtsoc1s1
