@@ -26,15 +26,15 @@ else
   # EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
   # Werte aus (temporärer) ramdisk lesen
   # Hausverbrauch
-  Home_consumption = $(</var/www/html/openWB/ramdisk/temp_wattbezug)
+  Home_consumption=$(</var/www/html/openWB/ramdisk/temp_wattbezug)
   # PV-Leistung
-  PV_power_ac = $(</var/www/html/openWB/ramdisk/pvwatt)
+  PV_power_ac=$(</var/www/html/openWB/ramdisk/pvwatt)
   # Speicherleistung
-  Actual_batt_ch_disch_power = $(</var/www/html/openWB/ramdisk/temp_speicherleistung)
-  # und Bezug berechnen
-  Bezug = $((PV_power_ac + Actual_batt_ch_disch_power - Home_consumption))
-
-  # hier muss noch Bezug nach /var/www/html/openWB/ramdisk/wattbezug geschrieben werden
+  Actual_batt_ch_disch_power=$(</var/www/html/openWB/ramdisk/temp_speicherleistung)
+  # Bezug berechnen
+  Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power - $Home_consumption)" |bc)
+  # und in die ramdisk
+	echo $Bezug > /var/www/html/openWB/ramdisk/wattbezug
 fi
 
 # Daten aus temporärer ramdisk zur globalen Weiterverarbeitung in die
