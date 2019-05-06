@@ -673,7 +673,7 @@ $(function() {
 	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
 	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
 
-<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+<button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>	 
 </form><br><br /><hr>
 </div>
 
