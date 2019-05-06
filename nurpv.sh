@@ -10,8 +10,11 @@ if [[ $lastmanagement == "0" ]]; then
 				if [[ $debug == "1" ]]; then
 					echo "Starte PV Laden da $sofortsoclp1 % zu gering"
 				fi
-
-			fi
+			else
+				if (( llalt != minnurpvsocll )); then
+					runs/set-current.sh $minnurpvsocll all
+				fi
+			fi 
 		exit 0
 		fi
 		if (( soc > maxnurpvsoclp1 )); then
