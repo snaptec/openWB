@@ -61,6 +61,12 @@ fi
 "cp" /var/www/html/openWB/ramdisk/temp_evuv2 /var/www/html/openWB/ramdisk/evuv2
 # Spannung Phase 3
 "cp" /var/www/html/openWB/ramdisk/temp_evuv3 /var/www/html/openWB/ramdisk/evuv3
+# Power Faktor Phase 1
+"cp" /var/www/html/openWB/ramdisk/temp_evupf1 /var/www/html/openWB/ramdisk/evupf1
+# Power Faktor Phase 2
+"cp" /var/www/html/openWB/ramdisk/temp_evupf2 /var/www/html/openWB/ramdisk/evupf2
+# Power Faktor Phase 3
+"cp" /var/www/html/openWB/ramdisk/temp_evupf3 /var/www/html/openWB/ramdisk/evupf3
 
 # Rückgabe des Wertes Bezug EVU
 bezugwatt=$(</var/www/html/openWB/ramdisk/wattbezug)

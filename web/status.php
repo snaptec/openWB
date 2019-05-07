@@ -422,6 +422,45 @@
 	var doInterval;
 	function getfile() {
 		$.ajax({
+			url: "/openWB/ramdisk/daily_pvkwhk",
+	    	complete: function(request){
+		    	$("#daily_pvkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/monthly_pvkwhk",
+	    	complete: function(request){
+		    	$("#monthly_pvkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/yearly_pvkwhk",
+	    	complete: function(request){
+		    	$("#yearly_pvkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
 			url: "/openWB/ramdisk/pvwatt",
 	    	complete: function(request){
 		    	$("#pvwattdiv").html(request.responseText);
@@ -1031,6 +1070,26 @@
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="pvkwhdiv"></div>
+				</div>
+			</div>
+			<div class="row" style="background-color:#BEFEBE">
+				<div class="col-xs-2 text-center">
+					PV Tagesertrag [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="daily_pvkwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					PV Monatsertrag [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="monthly_pvkwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					PV Jahresertrag [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="yearly_pvkwhdiv"></div>
 				</div>
 			</div>
 			<hr>

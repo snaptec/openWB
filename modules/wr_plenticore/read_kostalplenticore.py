@@ -38,9 +38,6 @@ reg_100 = client.read_holding_registers(100,2,unit=71)
 # ist Lade-/Entladeleistung des angeschlossenen Speichers
 # {charge=negativ, discharge=positiv}
 reg_582 = client.read_holding_registers(582,1,unit=71)
-# Plenticore Register 320: Total_yield [Wh]
-# ist PV Gesamt-Ertrag
-reg_320 = client.read_holding_registers(320,2,unit=71)
 # Plenticore Register 575: Inverter_generation_power_actual [W]
 # ist AC-Leistungsabgabe des Wechselrichters
 reg_575 = client.read_holding_registers(575,1,unit=71)
@@ -88,12 +85,30 @@ reg_240 = client.read_holding_registers(240,2,unit=71)
 # Phase 3
 # Plenticore Register 250: Voltage_phase_3_(powermeter) [V]
 reg_250 = client.read_holding_registers(250,2,unit=71)
-#//TODO: weitere Register später hinzufügen für PV-Statistik
+# Plenticore Register 150: Actual_cos_phi []
+# ist Wirkfaktor
+reg_150 = client.read_holding_registers(150,2,unit=71)
+# Plenticore Register 320: Total_yield [Wh]
+# ist PV Gesamtertrag
+reg_320 = client.read_holding_registers(320,2,unit=71)
+# Plenticore Register 322: Daily_yield [Wh]
+# ist PV Tagesertrag
+reg_322 = client.read_holding_registers(322,2,unit=71)
+# Plenticore Register 324: Yearly_yield [Wh]
+# ist PV Jahresertrag
+reg_324 = client.read_holding_registers(324,2,unit=71)
+# Plenticore Register 326: Monthly_yield [Wh]
+# ist PV Monatsertrag
+reg_326 = client.read_holding_registers(326,2,unit=71)
 
 # ausgelesene Register dekodieren
 FRegister_100 = BinaryPayloadDecoder.fromRegisters(reg_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_150 = BinaryPayloadDecoder.fromRegisters(reg_150.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_322 = BinaryPayloadDecoder.fromRegisters(reg_322.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_324 = BinaryPayloadDecoder.fromRegisters(reg_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
+FRegister_326 = BinaryPayloadDecoder.fromRegisters(reg_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_575 = BinaryPayloadDecoder.fromRegisters(reg_575.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_514 = BinaryPayloadDecoder.fromRegisters(reg_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_222 = BinaryPayloadDecoder.fromRegisters(reg_222.registers, byteorder=Endian.Big, wordorder=Endian.Little)
@@ -112,6 +127,9 @@ FRegister_250 = BinaryPayloadDecoder.fromRegisters(reg_250.registers, byteorder=
 Total_DC_power = int(FRegister_100.decode_32bit_float())
 Actual_batt_ch_disch_power = int(FRegister_582.decode_16bit_int())
 Total_yield = int(FRegister_320.decode_32bit_float())
+Daily_yield = round((FRegister_322.decode_32bit_float()/1000),2)
+Yearly_yield = round((FRegister_324.decode_32bit_float()/1000),2)
+Monthly_yield = round((FRegister_326.decode_32bit_float()/1000),2)
 Inverter_generation_power_actual = int(FRegister_575.decode_16bit_int())
 Battery_actual_SOC = int(FRegister_514.decode_16bit_int())
 Current_phase_1_powermeter = round(FRegister_222.decode_32bit_float(),2)
@@ -125,6 +143,7 @@ Active_power_phase_3_powermeter = round(FRegister_244.decode_32bit_float(),2)
 Voltage_phase_1_powermeter = round(FRegister_230.decode_32bit_float(),2)
 Voltage_phase_2_powermeter = round(FRegister_240.decode_32bit_float(),2)
 Voltage_phase_3_powermeter = round(FRegister_250.decode_32bit_float(),2)
+Actual_cos_phi = round(FRegister_150.decode_32bit_float(),3)
 
 # AC-Leistung der PV-Module bestimmen
 # da ggf. Batterie DC-seitig in Total_DC_power enthalten ist,
@@ -139,14 +158,15 @@ if PV_power_dc < 0:
 else:
     # wird PV-DC-Leistung erzeugt, müssen die Wandlungsverluste betrachtet werden
     # Kostal liefert nur DC-seitige Werte
-    if Actual_batt_ch_disch_power < 0:
-        # wird die Batterie geladen, ist die PV-Leistung die Summe aus
-        # verlustbehafteter AC-Leistungsabgabe des WR und der DC-Ladeleistung,
-        # die Wandlungsverluste werden also nur in der PV-Leistung ersichtlich
-        PV_power_ac = Inverter_generation_power_actual - Actual_batt_ch_disch_power
-    else:
+    # zunächst Annahme, die Batterie wird geladen:
+    # die PV-Leistung die Summe aus verlustbehafteter AC-Leistungsabgabe des WR
+    # und der DC-Ladeleistung, die Wandlungsverluste werden also nur in der PV-Leistung
+    # ersichtlich
+    PV_power_ac = Inverter_generation_power_actual - Actual_batt_ch_disch_power
+    if Actual_batt_ch_disch_power > 0 and Total_DC_power != 0:
         # wird die Batterie entladen, werden die Wandlungsverluste anteilig an der
         # DC-Leistung auf PV und Batterie verteilt
+        # dazu muss der Divisor Total_DC_power != 0 sein
         PV_power_ac = int((PV_power_dc / float(Total_DC_power)) * Inverter_generation_power_actual)
         Actual_batt_ch_disch_power = Inverter_generation_power_actual - PV_power_ac
 
@@ -167,6 +187,15 @@ with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
 # Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
     f.write(str(Total_yield / 1000))
+# Tagesertrag in Kilowattstunden
+with open('/var/www/html/openWB/ramdisk/daily_pvkwhk', 'w') as f:
+    f.write(str(Daily_yield))
+# Jahresertrag in Kilowattstunden
+with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk', 'w') as f:
+    f.write(str(Yearly_yield))
+# Monatsertrag in Kilowattstunden
+with open('/var/www/html/openWB/ramdisk/monthly_pvkwhk', 'w') as f:
+    f.write(str(Monthly_yield))
 
 # Nachfolgende Werte nur in temporäre ramdisk, da die Module
 # Speicher und Bezug für die globalen Variablen zuständig sind
@@ -210,3 +239,11 @@ with open('/var/www/html/openWB/ramdisk/temp_evuv2', 'w') as f:
 #Spannung Phase 3
 with open('/var/www/html/openWB/ramdisk/temp_evuv3', 'w') as f:
     f.write(str(Voltage_phase_3_powermeter))
+#Wirkfaktor, wird nur einmal vom Wechselrichter ausgegeben,
+#und ist demnach für alle Phasen identisch
+with open('/var/www/html/openWB/ramdisk/temp_evupf1', 'w') as f:
+    f.write(str(Actual_cos_phi))
+with open('/var/www/html/openWB/ramdisk/temp_evupf2', 'w') as f:
+    f.write(str(Actual_cos_phi))
+with open('/var/www/html/openWB/ramdisk/temp_evupf3', 'w') as f:
+    f.write(str(Actual_cos_phi))
