@@ -35,6 +35,9 @@ touch /var/www/html/openWB/ramdisk/llas22
 touch /var/www/html/openWB/ramdisk/llas23
 touch /var/www/html/openWB/ramdisk/llkwh
 touch /var/www/html/openWB/ramdisk/pvkwh
+touch /var/www/html/openWB/ramdisk/daily_pvkwhk
+touch /var/www/html/openWB/ramdisk/yearly_pvkwhk
+touch /var/www/html/openWB/ramdisk/monthly_pvkwhk
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
@@ -54,16 +57,36 @@ touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/temp_wattbezug
 touch /var/www/html/openWB/ramdisk/temp_speicherleistung
 touch /var/www/html/openWB/ramdisk/temp_speichersoc
-touch /var/www/html/openWB/ramdisk/bezuga1
-touch /var/www/html/openWB/ramdisk/bezuga2
-touch /var/www/html/openWB/ramdisk/bezuga3
+touch /var/www/html/openWB/ramdisk/temp_bezuga1
+touch /var/www/html/openWB/ramdisk/temp_bezuga2
+touch /var/www/html/openWB/ramdisk/temp_bezuga3
+touch /var/www/html/openWB/ramdisk/temp_evuhz
+touch /var/www/html/openWB/ramdisk/temp_bezugw1
+touch /var/www/html/openWB/ramdisk/temp_bezugw2
+touch /var/www/html/openWB/ramdisk/temp_bezugw3
+touch /var/www/html/openWB/ramdisk/temp_evuv1
+touch /var/www/html/openWB/ramdisk/temp_evuv2
+touch /var/www/html/openWB/ramdisk/temp_evuv3
+touch /var/www/html/openWB/ramdisk/temp_evupf1
+touch /var/www/html/openWB/ramdisk/temp_evupf2
+touch /var/www/html/openWB/ramdisk/temp_evupf3
 # Werte initialisieren
 echo 0 > /var/www/html/openWB/ramdisk/temp_wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/temp_speichersoc
-echo 0 > /var/www/html/openWB/ramdisk/bezuga1
-echo 0 > /var/www/html/openWB/ramdisk/bezuga2
-echo 0 > /var/www/html/openWB/ramdisk/bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuhz
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv1
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv2
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf1
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf2
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf3
 
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
@@ -141,6 +164,9 @@ echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
 echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
