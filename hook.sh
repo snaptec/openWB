@@ -5,6 +5,8 @@ if (( hook1_aktiv == "1" )); then
 		if [ ! -e ramdisk/hook1aktiv ]; then
 			touch ramdisk/hook1aktiv
 			curl -s --connect-timeout 5 $hook1ein_url > /dev/null
+			echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
+
 			if [[ $debug == "1" ]]; then
 				echo "Gerät 1 aktiviert"
 			fi
@@ -18,6 +20,8 @@ if (( hook1_aktiv == "1" )); then
 		if [ -e ramdisk/hook1aktiv ]; then
 			rm ramdisk/hook1aktiv
 			curl -s --connect-timeout 5 $hook1aus_url > /dev/null
+			echo "$date WebHook 1 deaktiviert" >> ramdisk/ladestatus.log
+
 			if [[ $debug == "1" ]]; then
 				echo "Gerät 1 deaktiviert"
 			fi

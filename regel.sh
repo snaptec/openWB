@@ -41,6 +41,7 @@ source evsedintest.sh
 source hook.sh
 source u1p3p.sh
 source nrgkickcheck.sh
+date=$(date)
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -172,6 +173,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
 			runs/set-current.sh "$agrenze" all
+			echo "$date Alle Ladepunkte, Loadsharing LP1-LP2 aktiv. Setze Ladestromstärke auf $agrenze" >> ramdisk/ladestatus.log
 			exit 0
 		fi
 	fi
