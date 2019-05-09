@@ -728,6 +728,18 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+	function loadstatuslog() {
+		$.ajax({
+			url: "/openWB/ramdisk/ladestatus.log",
+	    	complete: function(request){
+		    	$("#ladestatuslogdiv").html(request.responseText);
+				}
+		});
+	}
+loadstatuslog();
+</script>
+
 
 <?php
     $result = '';
@@ -1166,6 +1178,11 @@
 			<br><br>
  			<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 			<br><br>
+	<div class="row">
+		Ladestatus Änderungen:
+	</div>
+	<div style="white-space: pre-line;" id="ladestatuslogdiv"></div>
+
 
 		</div>
 	</section>
