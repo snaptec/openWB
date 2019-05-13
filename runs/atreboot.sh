@@ -1205,7 +1205,6 @@ then
 	echo "...ok"
 else
 	sudo cp /var/www/html/openWB/web/tools/000-default.conf /etc/apache2/sites-available/
-	sudo service apache2 restart
 	echo "...changed"
 fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
