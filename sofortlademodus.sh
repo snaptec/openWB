@@ -585,12 +585,12 @@ else
 				fi
 			else
 				runs/set-current.sh "$llneu" m
-				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> 
+				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
 		if (( sofortsoctatlp1 == 0)) && (( lademstat == 0));then
 			runs/set-current.sh "$llneu" m
-			echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> 
+			echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 		fi
 		if (( sofortsocstatlp2 == 1 )); then
 			if (( soc1 >= sofortsoclp2 )); then
