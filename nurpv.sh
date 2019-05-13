@@ -215,7 +215,7 @@ else
 			
 		else
 			runs/set-current.sh $llneu all
-			echo "$date alle Ladepunkter, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >>  ramdisk/ladestatus.log
+			echo "$date alle Ladepunkte, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >>  ramdisk/ladestatus.log
 			if [[ $debug == "1" ]]; then
 				echo "pv ladung auf $llneu erhoeht"
 			fi
@@ -335,7 +335,7 @@ else
 			else
 
 				runs/set-current.sh $llneu all
-				echo "$date alle Ladepunkter, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >>  ramdisk/ladestatus.log
+				echo "$date alle Ladepunkte, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >>  ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "pv ladung auf $llneu reduziert"
 				fi
@@ -353,7 +353,7 @@ else
 					fi
 				else
 					runs/set-current.sh 0 all
-					echo "$date alle Ladepunkter, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung" >>  ramdisk/ladestatus.log
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung" >>  ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung beendet"
 					fi
