@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+	// wenn kein Theme übergeben wird, das Standardtheme aufrufen
+  if (!$_GET["theme"]) {
+    header ('Location: index.php?theme=standard');
+	}
+?>
+
 <head>
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
@@ -12,7 +19,7 @@
          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
          <meta name="apple-mobile-web-app-title" content="OpenWB">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
-	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  /> 
+	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="OpenWB">
 	<title>OpenWB</title>
@@ -34,7 +41,7 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="manifest" href="manifest.json"> 
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -54,8 +61,11 @@
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 	<link rel="stylesheet" type="text/css" href="css/pwa.css">
-    <script src="live.js"></script>
-    <script src="livefunctions.js"></script>
+	<!-- special Theme style -->
+	<link rel="stylesheet" type="text/css" href=<?php echo '"themes/'.htmlspecialchars($_GET["theme"]).'/style.css">'; ?>
+
+  <script src="live.js"></script>
+  <script src="livefunctions.js"></script>
 </head>
 
 <?php include ("values.php"); ?>
@@ -81,16 +91,18 @@
 
 
 <body>
-
-
 	<div class="preloader">
 		<img src="img/loader.gif" alt="Preloader image">
 	</div>
-	
+
 	<section id="services">
 		<div class="container">
-            <?php include 'themes/'.$theme.'/index.html'; ?>
-    </section>
+			<?php
+				// das gewählte Theme einbinden
+				include 'themes/'.$_GET["theme"].'/index.html';
+			?>
+		</div>
+  </section>
 
 	<!-- Holder for mobile navigation -->
 	<div class="mobile-nav">
@@ -105,20 +117,6 @@
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
-
-
-
-
-<script>
-
-
-</script>
-
-
-
 </body>
 
 </html>
-
-
-

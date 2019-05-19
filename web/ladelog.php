@@ -73,7 +73,7 @@ if (isset($_GET['bis'])) {
 		</div>
 		<div class="row">
 			<div class="col-xs-2">
-				<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
+				<button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
 			</div>
 
 			<div class="col-xs-2">
@@ -84,31 +84,31 @@ if (isset($_GET['bis'])) {
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Startzeit
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Geladene kWh
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladeleistung kW
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladedauer
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
-				</div>	
+				</div>
 	</div>
 </div>
-<hr>	
+<hr>
 <?php
 $ifile = fopen('ladelog', "r");
 $ofile = fopen('../ramdisk/tladelog', "w+");
@@ -119,7 +119,7 @@ while($counter <= $limit) {
 	        $line = fgetcsv($ifile);
 		fputcsv($ofile, $line);
 		    $counter++;
-} 
+}
 
 $start = 0;
 $stop = 0;
@@ -209,7 +209,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) { 
+			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -322,7 +322,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 			echo '</div>';
 			echo '<hr>';
 			$ladezeit = $ladezeit + (($stop - $start) / 60 );
-			
+
 	}
 }
 fclose($file);
@@ -337,51 +337,51 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Startzeit
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km gesamt
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Geladene kWh gesamt
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladeleistung kW
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladedauer
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
-				</div>	
+				</div>
 	</div>
 </div>
 	<div class="row">
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
-				
-				</div>	
+
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 								</div>
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($sumgelkm); ?>	</div>	
+						<?php print($sumgelkm); ?>	</div>
 				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
 					<?php print($sumkwh); ?>
 
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
 						<?php print($avgladel); ?>
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
 						<?php print($ladezeit); ?> Min
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
-				</div>	
+				</div>
 	</div>
 </div>
 
@@ -430,7 +430,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 </div>
 
 <br><br>
- <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
+ <button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
 <form method="get" action="../ramdisk/ladelog.csv">
  <button class="btn btn-primary btn-green">Download csv</button>
 </form>

@@ -1,8 +1,4 @@
-<!-- you may use this theme as template.
-Every live value and state is loaded by main site.
-You have just to reference the id here.
-Put special parts for the theme (graph, img, ...) in the theme folder and/or sub folders of it
-What to find where?
+<!-- What to find where?
 - web/live.js
 Live values, refresh every 10 seconds are
 - web/livefunctions.js
@@ -24,65 +20,68 @@ web/index.php
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-
 </script>
-
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<h3> OpenWB Charge Controller </h3>
+		<h3> OpenWB Lade Controller </h3>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<div class="col-xs-6 text-center" style="background-color:#BEFEBE;font-size: 2vw">
+		<div class="col-xs-6 text-center pvInfo" style="background-color:#BEFEBE">
 			PV: <span id="pvdiv"></span>
 		</div>
-		<div id="evudiv" class="col-xs-6 text-center" style="background-color:#febebe;font-size: 2vw" >
+		<div id="evudiv" class="col-xs-6 text-center pvInfo" style="background-color:#FEBEBE" >
 			EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span>
 		</div>
 	</div>
 </div>
+
 <div id="hausverbrauch">
 	<div class="row">
-		<div class="col-xs-12 text-center" style="background-color:#fefedf;font-size: 2vw">
-			Hausverbrauch: <span id="hausverbrauchdiv"></span>
+		<div class="col-xs-12 text-center">
+			<div class="col-xs-12 text-center pvInfo" style="background-color:#FEFEDF">
+				Hausverbrauch: <span id="hausverbrauchdiv"></span>
+			</div>
 		</div>
 	</div>
 </div>
 
 <div id="speicherstatdiv">
-	<div class="row"><div class="col-xs-12 text-center">
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			Speicher:
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
+				Speicher:
+			</div>
+			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
+				<span id="speicherleistungdiv"></span>
+			</div>
+			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
+				<span id="speichersocdiv"></span> % SoC
+			</div>
 		</div>
-
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			<span id="speicherleistungdiv"></span>
-		</div>
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			<span id="speichersocdiv"></span> % SoC
-		</div>
-	</div></div>
-</div>
-<br>
-<!-- check which graphing method is enabled and display it -->
-<?php if ($graphliveamold == 1) {
-	echo '
-		<div style="height:300px;" id="chartdiv"></div>
-';
-} else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="graph-live.php"
-				 alt="Graph" class="img-responsive" />
-			<br></div>
 	</div>
-</div>';
-} ?>
+</div>
+
+<!-- check which graphing method is enabled and display it -->
+<?php
+	if ($graphliveamold == 1) {
+		echo '<div style="height:300px;" id="chartdiv"></div>';
+	}
+	else {
+		echo '
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="imgage-wrapper">
+						<img id="livegraph" src="graph-live.php" alt="Graph" class="img-responsive myGraph"/>
+						<br>
+					</div>
+				</div>
+			</div>';
+	}
+?>
 
 <div class="row col-xs-12 text-center">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
@@ -205,15 +204,14 @@ echo '
 <div class="row" id="speicherpvuidiv">
 	<div class="col-xs-6"></div>
 	<div class="col-xs-3 pull-right">
-	<?php
-		if ($speicherpveinbeziehenold == 0) {
-			echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
-		} else {
-			echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
-		}
-	?>
+		<?php
+			if ($speicherpveinbeziehenold == 0) {
+				echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1&theme='.$_GET["theme"].'" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
+			} else {
+				echo '<a href="./tools/changelademodus.php?pveinbeziehen=0&theme='.$_GET["theme"].'" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+			}
+		?>
 	</div>
-
 </div>
 <div class="row">
 	<hr>
@@ -612,11 +610,8 @@ echo '
 </div>
 <div class="row">
 	<div class="col-xs-4">
-		<a href="ladelog.php?theme=<?php echo $_GET["theme"]?>"></a>
 	</div>
-
-	<div class="col-xs-4 text-center">
-
+	<div class="col-xs-4">
 	</div>
 	<div class="col-xs-4 text-right">
 		<a href="logging/index.php?theme=<?php echo $_GET["theme"]?>">Logging</a>
