@@ -46,6 +46,8 @@ touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+touch /var/www/html/openWB/ramdisk/ladestatus.log
+
 
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 # bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -157,6 +159,7 @@ echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
 touch /var/www/html/openWB/ramdisk/llog1
 touch /var/www/html/openWB/ramdisk/llogs1
 touch /var/www/html/openWB/ramdisk/llogs2
+echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
@@ -1202,7 +1205,6 @@ then
 	echo "...ok"
 else
 	sudo cp /var/www/html/openWB/web/tools/000-default.conf /etc/apache2/sites-available/
-	sudo service apache2 restart
 	echo "...changed"
 fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi

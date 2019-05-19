@@ -259,12 +259,16 @@ if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2s
 		lastmnacht $llalt $llnachtneu 
 		if (( llnachtreturn != llalt )); then
 			runs/set-current.sh $llnachtreturn m
+			echo "$date LP1, Lademodus Nachtladen. Ladung mit $llnachtreturn Ampere, $diesersoc % SoC" >> ramdisk/ladestatus.log
+
 		fi
 	fi
 	if (( nachtladenstates1 == 1 )) || (( nachtladen2states1 == 1 )); then
 		lastmnacht $llalts1 $llnachts1neu
 		if (( llnachtreturn != llalts1 )); then
 			runs/set-current.sh $llnachtreturn s1
+			echo "$date LP2, Lademodus Nachtladen. Ladung mit $llnachtreturn Ampere, $diesersocs1 % SoC" >> ramdisk/ladestatus.log
+
 		fi
 	fi
 	exit 0

@@ -32,7 +32,10 @@ else
   # Speicherleistung
   Actual_batt_ch_disch_power=$(</var/www/html/openWB/ramdisk/temp_speicherleistung)
   # Bezug berechnen
-  Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power - $Home_consumption)" |bc)
+  #Test Em 300 haus position
+  Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power + $Home_consumption)" |bc)
+  #orig version
+  #Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power - $Home_consumption)" |bc)
   # und in die ramdisk
 	echo $Bezug > /var/www/html/openWB/ramdisk/wattbezug
 fi
