@@ -671,6 +671,7 @@ $(function() {
 	</div>
 <div class="row">
 	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
+	<b><label for="debugmail">Email Adresse:</label></b>
 	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
 
 <button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>	 

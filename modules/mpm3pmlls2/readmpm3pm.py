@@ -15,7 +15,7 @@ client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
 
 sdmid = int(sys.argv[2])
 
-resp = client.read_input_registers(0x0002,4, unit=5)
+resp = client.read_input_registers(0x0002,4, unit=sdmid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')

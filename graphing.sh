@@ -1,5 +1,7 @@
 #!/bin/bash
 graphing(){
+#Ladestatuslog keurzen
+echo "$(tail -200 /var/www/html/openWB/ramdisk/ladestatus.log)" > /var/www/html/openWB/ramdisk/ladestatus.log
 #Live Graphing
 pvgraph=$((pvwatt * -1))
 if (( speichervorhanden == 1 )); then

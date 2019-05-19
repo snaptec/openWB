@@ -8,6 +8,7 @@ if [[ $lastmanagement == "0" ]]; then
 		if (( soc >= sofortsoclp1 )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 				runs/set-current.sh 0 all
+				echo "$date LP1, Lademodus Sofort. Ladung gestoppt, $soc % SoC erreicht" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
 				fi
@@ -23,6 +24,7 @@ if [[ $lastmanagement == "0" ]]; then
      				fi
 			else
 				runs/set-current.sh $minimalstromstaerke all
+				echo "$date LP1, Lademodus Sofort. Ladung gestartet mit $minimalstromstaerke Ampere" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 	        		       	echo starte sofort Ladeleistung von $minimalstromstaerke aus
        				fi
@@ -39,6 +41,8 @@ if [[ $lastmanagement == "0" ]]; then
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 			runs/set-current.sh 0 m
+			echo "$date LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht" >> ramdisk/ladestatus.log
+
 			if [[ $debug == "1" ]]; then
 	        	       	echo "Beende Sofort Laden da  $lademkwh kWh erreicht"
        			fi
@@ -48,6 +52,7 @@ if [[ $lastmanagement == "0" ]]; then
 					if (( llalt > minimalstromstaerke )); then
         	                        	llneu=$((llalt - 1 ))
         	                        	runs/set-current.sh $llneu m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 		       	             			echo "Sofort ladung reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 		     				fi
@@ -62,6 +67,7 @@ if [[ $lastmanagement == "0" ]]; then
 					if (( llalt < minimalstromstaerke )); then
 						llneu=$minimalstromstaerke
 						runs/set-current.sh $llneu m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
       		             				echo "Sofort ladung erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
  						fi
@@ -77,6 +83,7 @@ if [[ $lastmanagement == "0" ]]; then
 					if (( llalt > maximalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
 						fi
@@ -99,6 +106,7 @@ if [[ $lastmanagement == "0" ]]; then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere, Lastmanagement aktiv" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung um $maxdiff A Differenz auf $llneu A erhoeht, kleiner als sofortll $sofortll"
 						fi
@@ -107,6 +115,7 @@ if [[ $lastmanagement == "0" ]]; then
 					if (( llalt > sofortll)); then
 						llneu=$sofortll
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung von $llalt A llalt auf $llneu A reduziert, größer als sofortll $sofortll"
 						fi
@@ -132,6 +141,7 @@ if [[ $lastmanagement == "0" ]]; then
 					fi
 				fi
 				runs/set-current.sh "$llneu" m
+				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere, Lastmanagement aktiv" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Sofort ladung um $maxdiff auf $llneu reduziert"
 				fi
@@ -157,6 +167,7 @@ else
 			if (( soc > sofortsoclp1 )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
+					echo "$date LP1, Lademodus Sofort. Ladung gestoppt, $sofortsoclp1 % SoC erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
 					fi
@@ -166,6 +177,7 @@ else
 					if (( llalt > minimalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 1 reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
@@ -178,6 +190,7 @@ else
 					if (( llalt < minimalstromstaerke )); then
 						llneu=$minimalstromstaerke
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 						fi
@@ -191,6 +204,7 @@ else
 					if (( llalt > maximalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 1 auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
 						fi
@@ -212,6 +226,7 @@ else
 						if (( llalt > sofortll)); then
 							llneu=$sofortll
 							runs/set-current.sh "$llneu" m
+							echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 							if [[ $debug == "1" ]]; then
 								echo "Sofort ladung Ladepunkt 1 von $llalt A llalt auf $llneu A reduziert, war größer als sofortll $sofortll"
 							fi
@@ -224,6 +239,7 @@ else
 		if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 				runs/set-current.sh 0 m
+				echo "$date LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
 				fi
@@ -233,6 +249,7 @@ else
 				if (( llalt > minimalstromstaerke )); then
 					llneu=$((llalt - 1 ))
 					runs/set-current.sh "$llneu" m
+					echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 1 reudziert auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -245,6 +262,7 @@ else
 				if (( llalt < minimalstromstaerke )); then
 					llneu=$minimalstromstaerke
 					runs/set-current.sh "$llneu" m
+					echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 1 erhöht auf $llneu bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -258,6 +276,7 @@ else
 				if (( llalt > maximalstromstaerke )); then
 					llneu=$((llalt - 1 ))
 					runs/set-current.sh "$llneu" m
+					echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 1 auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
 					fi
@@ -278,6 +297,7 @@ else
 					if (( llalt > sofortll)); then
 						llneu=$sofortll
 						runs/set-current.sh "$llneu" m
+						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 1 von $llalt A llalt auf $llneu A reduziert, war größer als sofortll $sofortll"
 						fi
@@ -292,6 +312,7 @@ else
 		if (( soc1 > sofortsoclp2 )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 				runs/set-current.sh 0 s1
+				echo "$date LP2, Lademodus Sofort. Ladung gestoppt da $sofortsoclp2 % SoC erreicht" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
 				fi
@@ -301,6 +322,7 @@ else
 				if (( llalts1 > minimalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 reudziert auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -313,6 +335,7 @@ else
 				if (( llalts1 < minimalstromstaerke )); then
 					llneus1=$minimalstromstaerke
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -326,6 +349,7 @@ else
 				if (( llalts1 > maximalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 auf $llneus1 reduziert, über eingestellter max A $maximalstromstaerke"
 					fi
@@ -346,6 +370,7 @@ else
 					if (( llalts1 > sofortlls1)); then
 						llneus1=$sofortlls1
 						runs/set-current.sh "$llneus1" s1
+						echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 von $llalts1 A llalt auf $llneus1 A reduziert, war größer als sofortll $sofortlls1"
 						fi
@@ -357,6 +382,7 @@ else
 		if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 				runs/set-current.sh 0 s1
+				echo "$date LP2, Lademodus Sofort. Ladung gestoppt da $lademkwhs1 kWh erreicht" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
 				fi
@@ -366,6 +392,7 @@ else
 				if (( llalts1 > minimalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 reudziert auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -378,6 +405,7 @@ else
 				if (( llalts1 < minimalstromstaerke )); then
 					llneus1=$minimalstromstaerke
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 erhöht auf $llneus1 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -391,6 +419,7 @@ else
 				if (( llalts1 > maximalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
+					echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 2 auf $llneus1 reduziert, über eingestellter max A $maximalstromstaerke"
 					fi
@@ -411,6 +440,7 @@ else
 					if (( llalts1 > sofortlls1)); then
 						llneus1=$sofortlls1
 						runs/set-current.sh "$llneus1" s1
+						echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 von $llalts1 A llalt auf $llneus1 A reduziert, war größer als sofortll $sofortlls1"
 						fi
@@ -426,6 +456,7 @@ else
 		if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 				runs/set-current.sh 0 s2
+			echo "$date LP3, Lademodus Sofort. Ladung gestoppt da $lademkwhs2 kWh Limit erreicht" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden an Ladepunkt 3 da  $lademkwhs2 kWh erreicht"
 				fi
@@ -435,6 +466,7 @@ else
 				if (( llalts2 > minimalstromstaerke )); then
 					llneus2=$((llalts2 - 1 ))
 					runs/set-current.sh "$llneus2" s2
+					echo "$date LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 3 reudziert auf $llneus2 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -447,6 +479,7 @@ else
 				if (( llalts2 < minimalstromstaerke )); then
 					llneus2=$minimalstromstaerke
 					runs/set-current.sh "$llneus2" s2
+					echo "$date LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 3 erhöht auf $llneus2 bei minimal A $minimalstromstaerke Ladeleistung zu gering"
 					fi
@@ -460,6 +493,7 @@ else
 				if (( llalts2 > maximalstromstaerke )); then
 					llneus2=$((llalts2 - 1 ))
 					runs/set-current.sh "$llneus2" s2
+					echo "$date LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Sofort ladung Ladepunkt 3 auf $llneus2 reduziert, über eingestellter max A $maximalstromstaerke"
 					fi
@@ -480,6 +514,7 @@ else
 					if (( llalts2 > sofortlls2)); then
 						llneus2=$sofortlls2
 						runs/set-current.sh "$llneus2" s2
+						echo "$date LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere, Lastmanagement aktiv" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 3 von $llalts2 A llalt auf $llneus2 A reduziert, war größer als sofortll $sofortlls2"
 						fi
@@ -529,67 +564,80 @@ else
 			if (( soc >= sofortsoclp1)); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
+					echo "$date LP1, Lademodus Sofort. Ladung gstoppt da $socortsoclp1 % SoC erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Beende Sofort Laden da $sofortsoclp1 % erreicht"
 					fi
 				fi
 			else
 				runs/set-current.sh "$llneu" m
+				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
 		if (( lademstat == 1 )); then
 			if (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
+					echo "$date LP1, Lademodus Sofort. Ladung gstoppt da $lademkwh kWh erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Beende Sofort Laden an Ladepunkt 1 da  $lademkwh kWh erreicht"
 					fi
 				fi
 			else
 				runs/set-current.sh "$llneu" m
+				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
 		if (( sofortsoctatlp1 == 0)) && (( lademstat == 0));then
 			runs/set-current.sh "$llneu" m
+			echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 		fi
 		if (( sofortsocstatlp2 == 1 )); then
 			if (( soc1 >= sofortsoclp2 )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/set-current.sh 0 s1
+					echo "$date LP2, Lademodus Sofort. Ladung gstoppt da $sofortsoclp2 % SoC erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 					echo "Beende Sofort Laden an Ladepunkt 2 da  $sofortsoclp2 % erreicht"
 					fi
 				fi
 			else
 				runs/set-current.sh "$llneu" s1
+				echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
 		if (( lademstats1 == 1 )); then	
 			if (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/set-current.sh 0 s1
+					echo "$date LP2, Lademodus Sofort. Ladung gstoppt da $lademkwhs1 kWh erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Beende Sofort Laden an Ladepunkt 2 da  $lademkwhs1 kWh erreicht"
 					fi
 				fi
 			else
 				runs/set-current.sh "$llneus1" s1
+				echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
 		if (( sofortsoctatlp2 == 0)) && (( lademstats1 == 0));then
 			runs/set-current.sh "$llneu" s1
+			echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 		fi
 		if [[ $lastmanagements2 == "1" ]]; then
 			aktgeladens2=$(<ramdisk/aktgeladens2)
 			if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 					runs/set-current.sh 0 s2
+					echo "$date LP3, Lademodus Sofort. Ladung gestoppt da $lademkwhs2 kWh erreicht" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "Beende Sofort Laden an Ladepunkt 3 da  $lademkwhs2 kWh erreicht"
 					fi
 				fi
 			else
 				runs/set-current.sh "$llneus2" s2
+				echo "$date LP3, Lademodus Sofort. Ladung geändert auf $llneus2 Ampere" >> ramdisk/ladestatus.log
+
 			fi
 		fi
 		if [[ $debug == "1" ]]; then
