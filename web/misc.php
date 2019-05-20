@@ -98,6 +98,22 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm120modbusllid1s1=") !== false) {
 		list(, $sdm120modbusllid1s1old) = explode("=", $line);
 	}
+	if(strpos($line, "pushbenachrichtigung=") !== false) {
+		list(, $pushbenachrichtigungold) = explode("=", $line);
+	}
+	if(strpos($line, "pushoveruser=") !== false) {
+		list(, $pushoveruserold) = explode("=", $line);
+	}
+	if(strpos($line, "pushovertoken=") !== false) {
+		list(, $pushovertokenold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstartl=") !== false) {
+		list(, $pushbstartlold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbstopl=") !== false) {
+		list(, $pushbstoplold) = explode("=", $line);
+	}
+
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -343,6 +359,28 @@ foreach($lines as $line) {
 	if(strpos($line, "ladetaster=") !== false) {
 		list(, $ladetasterold) = explode("=", $line);
 	}
+	if(strpos($line, "grapham=") !== false) {
+		list(, $graphamold) = explode("=", $line);
+	}
+	if(strpos($line, "graphinteractiveam=") !== false) {
+		list(, $graphinteractiveamold) = explode("=", $line);
+	}
+
+	if(strpos($line, "graphliveam=") !== false) {
+		list(, $graphliveamold) = explode("=", $line);
+	}
+	if(strpos($line, "chartlegendmain=") !== false) {
+		list(, $chartlegendmainold) = explode("=", $line);
+	}
+	if(strpos($line, "hausverbrauchstat=") !== false) {
+		list(, $hausverbrauchstatold) = explode("=", $line);
+	}
+	if(strpos($line, "heutegeladen=") !== false) {
+		list(, $heutegeladenold) = explode("=", $line);
+	}
+
+
+
 }
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -351,6 +389,8 @@ $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
+$pushoveruserold = str_replace( "'", "", $pushoveruserold);
+$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 
 
 
@@ -363,9 +403,11 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 <div class="container">
 	<div class="row"><br>
 		<ul class="nav nav-tabs">
-			<li><a data-toggle="tab" href="./index.php">Zurueck</a></li>
-			<li><a href="./settings.php">Ladeeinstellungen</a></li>
+			<li><a data-toggle="tab" href="./index.php">Zurück</a></li>
+			<li><a href="./settings.php">Einstellungen</a></li>
+  			<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
 			<li><a href="./modulconfig.php">Modulkonfiguration</a></li>
+
 			<li class="active"><a href="./misc.php">Misc</a></li>
 		</ul><br><br>
 	</div>  
@@ -373,9 +415,9 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			<b><label for="debug">Debugmodus:</label></b>
 			<select type="text" name="debug" id="debug">
-				<option <?php if($debugold == 0) echo selected ?>value="0">0</option>
+				<option <?php if($debugold == 0) echo selected ?> value="0">0</option>
 				<option <?php if($debugold == 1) echo selected ?> value="1">1</option>
-				<option <?php if($debugold == 2) echo selected ?>  value="2">2</option>
+				<option <?php if($debugold == 2) echo selected ?> value="2">2</option>
 			</select>
 			<br>
 		</div>
@@ -399,7 +441,7 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
 			<select type="text" name="ladetaster" id="ladetaster">
-				<option <?php if($ladetasterold == 0) echo selected ?>value="0">Aus</option>
+				<option <?php if($ladetasterold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($ladetasterold == 1) echo selected ?> value="1">An</option>
 			</select>
 			<br>
@@ -408,13 +450,114 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
 		</div>
 
+<div class="row"><hr>
+	<h4>Benachrichtigungen mit Pushover</h4>
+</div>
+<div class="row">
+	<b><label for="pushbenachrichtigung">Pushover Benachrichtigungen:</label></b>
+	<select type="text" name="pushbenachrichtigung" id="pushbenachrichtigung">
+		<option <?php if($pushbenachrichtigungold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($pushbenachrichtigungold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="pushbaus">
+	<br>
+</div>
+<div id="pushban">
+	<div class="row">
+	Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen.<br> Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden.<br>
+Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushoveruser">Pushover User String:</label></b>
+        	<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Hier das User Token von Pushover eintragen<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="pushovertoken">Pushover App Token:</label></b>
+        	<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>"><br>
+<br>
+	</div>
+	<div class="row">
+		Hier das Application Token von Pushover eintragen<br><br>
+	</div>
+
+	<div class="row"><hr>
+		<b>Benachrichtigungseinstellungen:</b><br><br>
+	</div>
+	<div class="row">
+		<b><label for="pushbstartl">Beim Starten der Ladung:</label></b>
+	       	<select type="text" name="pushbstartl" id="pushbstartl">
+ 			<option <?php if($pushbstartlold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstartlold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+	<div class="row">
+		<b><label for="pushbstopl">Beim Stoppen der Ladung:</label></b>
+	       	<select type="text" name="pushbstopl" id="pushbstopl">
+ 			<option <?php if($pushbstoplold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbstoplold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
+
+
+</div><br>
+<script>
+$(function() {
+      if($('#pushbenachrichtigung').val() == '0') {
+		$('#pushbaus').show(); 
+		$('#pushban').hide();
+      } else {
+		$('#pushbaus').hide();
+	       	$('#pushban').show();	
+      } 
+
+	$('#pushbenachrichtigung').change(function(){
+	        if($('#pushbenachrichtigung').val() == '0') {
+			$('#pushbaus').show(); 
+			$('#pushban').hide();
+	        } else {
+			$('#pushbaus').hide();
+		       	$('#pushban').show();	
+	        } 
+	    });
+});
+</script>
+
+		<div class="row"><hr>
+			<h3>	Optische Einstellungen</h3> <br>
+		</div>
 		<div class="row">
-	<h3>	Logging Einstellungen</h3> <br>
+			<b><label for="hausverbrauchstat">Hausverbrauch auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="hausverbrauchstat" id="hausverbrauchstat">
+				<option <?php if($hausverbrauchstatold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($hausverbrauchstatold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			<b><label for="heutegeladen">Heute geladen auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="heutegeladen" id="heutegeladen">
+				<option <?php if($heutegeladenold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($heutegeladenold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+		</div>
+
+
+		<div class="row">
+			<h4>	Graphen</h4> <br>
 		</div>
 		<div class="row">
 			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
 			<select type="text" name="logdailywh" id="logdailywh">
-				<option <?php if($logdailywhold == 0) echo selected ?>value="0">Watt</option>
+				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
 				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
 			</select>
 			<br>
@@ -440,11 +583,42 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
 
 	</select><br>
-<br>
 </div>
+
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
-
+	<div class="row"><br>
+			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
+			<select type="text" name="graphliveam" id="graphliveam">
+				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			
+	</div>
+	<div class="row">
+			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="chartlegendmain" id="chartlegendmain">
+				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
+	<div class="row">
+			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
+			<select type="text" name="grapham" id="grapham">
+				<option <?php if($graphamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+	</div>
+	<div class="row">
+			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
+			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
+				<option <?php if($graphinteractiveamold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br><br>
+	</div>
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>
@@ -484,6 +658,26 @@ $hsocipold = str_replace( "'", "", $hsocipold);
 	<div class="row">
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
+
+<hr>
+<div class="row">
+
+<form action="./tools/savedebug.php" method="POST">
+	<h3>Debug Daten senden</h3>
+</div>
+	<div class="row">
+		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>	
+	</div>
+<div class="row">
+	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
+	<b><label for="debugmail">Email Adresse:</label></b>
+	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
+
+<button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>	 
+</form><br><br /><hr>
+</div>
+
 <div class="row">
 <div class="text-center">
 Open Source made with love!<br>

@@ -1,21 +1,9 @@
 #!/bin/bash
 loadvars(){
 
-	
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
-       echo "" > ramdisk/lastregelungaktiv	
-fi
-#Speicher werte
-if [[ $speichermodul != "none" ]] ; then
-	timeout 5 modules/$speichermodul/main.sh || true
-	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
-	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
-	speichervorhanden="1"
-	echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
-else
-	speichervorhanden="0"
-	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
+       echo "" > ramdisk/lastregelungaktiv
 fi
 
 # Werte für die Berechnung ermitteln
@@ -27,10 +15,20 @@ if [[ $pvwattmodul != "none" ]]; then
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
-
-
 else
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+fi
+
+#Speicher werte
+if [[ $speichermodul != "none" ]] ; then
+	timeout 5 modules/$speichermodul/main.sh || true
+	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
+	speichervorhanden="1"
+	echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
+else
+	speichervorhanden="0"
+	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
 
 #Ladeleistung ermitteln
@@ -45,7 +43,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
-	ladeleistunglp1=$ladeleistung	
+	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
 		 lla1="0"
 	fi
@@ -137,7 +135,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if (( evuglaettungakt == 1 )); then
 		ganzahl=$(( evuglaettung / 10 ))
 		for ((i=ganzahl;i>=1;i--)); do
-			i2=$(( i + 1 ))	
+			i2=$(( i + 1 ))
 			cp ramdisk/glaettung$i ramdisk/glaettung$i2
 		done
 		echo $wattbezug > ramdisk/glaettung1
@@ -194,6 +192,8 @@ if [[ $socmodul != "none" ]]; then
 else
 	soc=0
 fi
+hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 #Uhrzeit
 	date=$(date)
 	H=$(date +%H)
@@ -202,7 +202,7 @@ fi
 		date
 		echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
 		echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-		echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss" 
+		echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
 		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 		echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
        	fi

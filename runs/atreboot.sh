@@ -9,9 +9,12 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-
+echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp1
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
+echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -32,6 +35,9 @@ touch /var/www/html/openWB/ramdisk/llas22
 touch /var/www/html/openWB/ramdisk/llas23
 touch /var/www/html/openWB/ramdisk/llkwh
 touch /var/www/html/openWB/ramdisk/pvkwh
+touch /var/www/html/openWB/ramdisk/daily_pvkwhk
+touch /var/www/html/openWB/ramdisk/yearly_pvkwhk
+touch /var/www/html/openWB/ramdisk/monthly_pvkwhk
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
@@ -40,6 +46,50 @@ touch /var/www/html/openWB/ramdisk/speicher
 touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
+touch /var/www/html/openWB/ramdisk/ladestatus.log
+
+
+# temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
+# bei Anschluss von Speicher und Energiemanager direkt am WR
+# alle Werte im Modul des Wechselrichters aus den Registern
+# gelesen werden, um einen zeitlich zusammenhängenden Datensatz
+# zu bekommen. Im jeweiligen Modul Speicher/Bezug werden
+# die Werte dann in die ramdisk für die weitere globale
+# Verarbeitung geschrieben.
+touch /var/www/html/openWB/ramdisk/temp_wattbezug
+touch /var/www/html/openWB/ramdisk/temp_speicherleistung
+touch /var/www/html/openWB/ramdisk/temp_speichersoc
+touch /var/www/html/openWB/ramdisk/temp_bezuga1
+touch /var/www/html/openWB/ramdisk/temp_bezuga2
+touch /var/www/html/openWB/ramdisk/temp_bezuga3
+touch /var/www/html/openWB/ramdisk/temp_evuhz
+touch /var/www/html/openWB/ramdisk/temp_bezugw1
+touch /var/www/html/openWB/ramdisk/temp_bezugw2
+touch /var/www/html/openWB/ramdisk/temp_bezugw3
+touch /var/www/html/openWB/ramdisk/temp_evuv1
+touch /var/www/html/openWB/ramdisk/temp_evuv2
+touch /var/www/html/openWB/ramdisk/temp_evuv3
+touch /var/www/html/openWB/ramdisk/temp_evupf1
+touch /var/www/html/openWB/ramdisk/temp_evupf2
+touch /var/www/html/openWB/ramdisk/temp_evupf3
+# Werte initialisieren
+echo 0 > /var/www/html/openWB/ramdisk/temp_wattbezug
+echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/temp_speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuhz
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw1
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw2
+echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv1
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv2
+echo 0 > /var/www/html/openWB/ramdisk/temp_evuv3
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf1
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf2
+echo 0 > /var/www/html/openWB/ramdisk/temp_evupf3
+
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstate
 echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
@@ -100,14 +150,16 @@ echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
+echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
-echo 0 > /var/www/html/openWB/ramdisk/lla3	
+echo 0 > /var/www/html/openWB/ramdisk/lla3
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
 echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
 touch /var/www/html/openWB/ramdisk/llog1
 touch /var/www/html/openWB/ramdisk/llogs1
 touch /var/www/html/openWB/ramdisk/llogs2
+echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
 echo 0 > /var/www/html/openWB/ramdisk/llkombiniert
 echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
@@ -115,10 +167,14 @@ echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
 echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
+echo 0 > /var/www/html/openWB/ramdisk/llkwhges
 echo 57 > /var/www/html/openWB/ramdisk/soctimer
 echo 57 > /var/www/html/openWB/ramdisk/soctimer1
 echo 0 > /var/www/html/openWB/ramdisk/ev.graph
@@ -183,6 +239,11 @@ if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "minimalalp2pv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "minimalalp2pv=6" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 if ! grep -Fq "minimalampv=" /var/www/html/openWB/openwb.conf
 then
@@ -762,6 +823,11 @@ if ! grep -Fq "speicherpveinbeziehen=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speicherpveinbeziehen=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherpvui=" /var/www/html/openWB/openwb.conf
+then
+		  echo "speicherpvui=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "speichermaxwatt=" /var/www/html/openWB/openwb.conf
 then
 		  echo "speichermaxwatt=0" >> /var/www/html/openWB/openwb.conf
@@ -895,12 +961,12 @@ then
 if ! grep -Fq "tri9000ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "tri9000ip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
-  fi 
-  
+  fi
+
  if ! grep -Fq "solaredgespeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "solaredgespeicherip='192.168.0.31'" >> /var/www/html/openWB/openwb.conf
-  fi  
+  fi
  if ! grep -Fq "offsetpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1025,14 +1091,122 @@ if ! grep -Fq "speicherpwip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherpwip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "adaptfaktor=" /var/www/html/openWB/openwb.conf
+then
+	  echo "adaptfaktor=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "grapham=" /var/www/html/openWB/openwb.conf
+then
+	  echo "grapham=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "graphliveam=" /var/www/html/openWB/openwb.conf
+then
+	  echo "graphliveam=0" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "nrgkickiplp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickiplp1=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkicktimeoutlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkicktimeoutlp1=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickmaclp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickmaclp1=11:22:33:aa:bb:cc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickpwlp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickpwlp1=1234" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "kostalplenticorehaus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticorehaus=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "kostalplenticorebatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kostalplenticorebatt=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "kebaiplp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kebaiplp1=192.168.25.25" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "kebaiplp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "kebaiplp2=192.168.25.25" >> /var/www/html/openWB/openwb.conf
+  fi
+
+  if ! grep -Fq "graphinteractiveam=" /var/www/html/openWB/openwb.conf
+then
+	  echo "graphinteractiveam=1" >> /var/www/html/openWB/openwb.conf
+  fi
+  if ! grep -Fq "bezug_smartfox_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_smartfox_ip=192.168.0.50" >> /var/www/html/openWB/openwb.conf
+  fi
+  if ! grep -Fq "chartlegendmain=" /var/www/html/openWB/openwb.conf
+then
+	  echo "chartlegendmain=1" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "nrgkickiplp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickiplp2=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkicktimeoutlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkicktimeoutlp2=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickmaclp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickmaclp2=11:22:33:aa:bb:cc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "nrgkickpwlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nrgkickpwlp2=1234" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hausverbrauchstat=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hausverbrauchstat=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "theme=" /var/www/html/openWB/openwb.conf
+then
+	  echo "theme=standard" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solaredgewr2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "solaredgewr2ip=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "heutegeladen=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 
-sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+
+ethstate=$(</sys/class/net/eth0/carrier)
+if (( ethstate == 1 )); then
+	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+fi
 sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 
 
-
+if  grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf
+then
+	echo "...ok"
+else
+	sudo cp /var/www/html/openWB/web/tools/000-default.conf /etc/apache2/sites-available/
+	echo "...changed"
+fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "1 0 * * * /var/www/html/openWB/runs/cronnightly.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
@@ -1054,13 +1228,13 @@ then
 	sudo apt-get -qq install -y php-gd
 	sleep 1
 	sudo apt-get -qq install -y php7.0-xml
-	
+
 fi
 
 . /var/www/html/openWB/openwb.conf
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
-
-curl -d "update="$releasetrain$uuid"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+owbv=$(</var/www/html/openWB/web/version)
+curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
 
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch

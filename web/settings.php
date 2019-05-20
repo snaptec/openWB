@@ -42,15 +42,6 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-	if(strpos($line, "speicherpveinbeziehen=") !== false) {
-		list(, $speicherpveinbeziehenold) = explode("=", $line);
-	}
-	if(strpos($line, "speichermaxwatt=") !== false) {
-		list(, $speichermaxwattold) = explode("=", $line);
-	}
-	if(strpos($line, "pvbezugeinspeisung=") !== false) {
-		list(, $pvbezugeinspeisungold) = explode("=", $line);
-	}
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}
@@ -60,12 +51,6 @@ foreach($lines as $line) {
 
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
-	}
-	if(strpos($line, "minimalampv=") !== false) {
-		list(, $minimalampvold) = explode("=", $line);
-	}
-	if(strpos($line, "minimalapv=") !== false) {
-		list(, $minimalapvold) = explode("=", $line);
 	}
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);
@@ -319,12 +304,6 @@ foreach($lines as $line) {
 	if(strpos($line, "smaemdpvid=") !== false) {
 		list(, $smaemdpvidold) = explode("=", $line);
 	}
-	if(strpos($line, "abschaltverzoegerung=") !== false) {
-		list(, $abschaltverzoegerungold) = explode("=", $line);
-	}
-	if(strpos($line, "einschaltverzoegerung=") !== false) {
-		list(, $einschaltverzoegerungold) = explode("=", $line);
-	}
 
 	if(strpos($line, "evsewifiiplp1=") !== false) {
 		list(, $evsewifiiplp1old) = explode("=", $line);
@@ -346,30 +325,6 @@ foreach($lines as $line) {
 
 	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 		list(, $evsewifitimeoutlp3old) = explode("=", $line);
-	}
-	if(strpos($line, "minnurpvsocll=") !== false) {
-		list(, $minnurpvsocllold) = explode("=", $line);
-	}
-	if(strpos($line, "minnurpvsoclp1=") !== false) {
-		list(, $minnurpvsoclp1old) = explode("=", $line);
-	}
-	if(strpos($line, "maxnurpvsoclp1=") !== false) {
-		list(, $maxnurpvsoclp1old) = explode("=", $line);
-	}
-	if(strpos($line, "pushbenachrichtigung=") !== false) {
-		list(, $pushbenachrichtigungold) = explode("=", $line);
-	}
-	if(strpos($line, "pushoveruser=") !== false) {
-		list(, $pushoveruserold) = explode("=", $line);
-	}
-	if(strpos($line, "pushovertoken=") !== false) {
-		list(, $pushovertokenold) = explode("=", $line);
-	}
-	if(strpos($line, "pushbstartl=") !== false) {
-		list(, $pushbstartlold) = explode("=", $line);
-	}
-	if(strpos($line, "pushbstopl=") !== false) {
-		list(, $pushbstoplold) = explode("=", $line);
 	}
 	if(strpos($line, "loadsharinglp12=") !== false) {
 		list(, $loadsharinglp12old) = explode("=", $line);
@@ -399,21 +354,6 @@ foreach($lines as $line) {
 	if(strpos($line, "offsetpv=") !== false) {
 		list(, $offsetpvold) = explode("=", $line);
 	}
-	if(strpos($line, "hook1ein_url=") !== false) {
-		list(, $hook1ein_urlold) = explode("=", $line, 2);
-	}
-	if(strpos($line, "hook1aus_url=") !== false) {
-		list(, $hook1aus_urlold) = explode("=", $line, 2);
-	}
-	if(strpos($line, "hook1ein_watt=") !== false) {
-		list(, $hook1ein_wattold) = explode("=", $line, 2);
-	}
-	if(strpos($line, "hook1aus_watt=") !== false) {
-		list(, $hook1aus_wattold) = explode("=", $line, 2);
-	}
-	if(strpos($line, "hook1_aktiv=") !== false) {
-		list(, $hook1_aktivold) = explode("=", $line, 2);
-	}
 	if(strpos($line, "nlakt_sofort=") !== false) {
 		list(, $nlakt_sofortold) = explode("=", $line, 2);
 	}
@@ -426,6 +366,25 @@ foreach($lines as $line) {
 	if(strpos($line, "nlakt_standby=") !== false) {
 		list(, $nlakt_standbyold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "u1p3paktiv=") !== false) {
+		list(, $u1p3paktivold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "u1p3psofort=") !== false) {
+		list(, $u1p3psofortold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "u1p3pstandby=") !== false) {
+		list(, $u1p3pstandbyold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "u1p3pnurpv=") !== false) {
+		list(, $u1p3pnurpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "u1p3pminundpv=") !== false) {
+		list(, $u1p3pminundpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "u1p3pnl=") !== false) {
+		list(, $u1p3pnlold) = explode("=", $line, 2);
+	}
+
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -434,12 +393,7 @@ $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
-$pushoveruserold = str_replace( "'", "", $pushoveruserold);
-$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
-$hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
-$hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
-
 
 
 
@@ -452,8 +406,9 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 <div class="container">
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="./index.php">Zurueck</a></li>
-    <li class="active"><a href="./settings.php">Ladeeinstellungen</a></li>
+    <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
+    <li class="active"><a href="./settings.php">Einstellungen</a></li>
+    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
     <li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
@@ -678,6 +633,64 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
 </div>
 
+<div class="row"><hr>
+	<h3>Automatische Phasenumschaltung</h3>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	<b><h5><label for="u1p3paktiv">Phasenumschaltung Aktiv:</label></b>
+	<select type="text" name="u1p3paktiv" id="u1p3paktiv">
+		<option <?php if($u1p3paktivold == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($u1p3paktivold == 1) echo selected ?> value="1">An</option>
+	</select></h5>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
+</div>
+<div id="u1p3paus">
+	<br>
+</div>
+<div id="u1p3pan">
+<div class="row" style="background-color:#33ffa8">
+	<b><label for="u1p3psofort">Sofort Laden:</label></b>
+	<select type="text" name="u1p3psofort" id="u1p3psofort">
+		<option <?php if($u1p3psofortold == 1) echo selected ?> value="1">einphasig</option>
+		<option <?php if($u1p3psofortold == 3) echo selected ?> value="3">dreiphasig</option>
+	</select>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	<b><label for="u1p3pstandby">Standby:</label></b>
+	<select type="text" name="u1p3pstandby" id="u1p3pstandby">
+		<option <?php if($u1p3pstandbyold == 1) echo selected ?> value="1">einphasig</option>
+		<option <?php if($u1p3pstandbyold == 3) echo selected ?> value="3">dreiphasig</option>
+	</select>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	<b><label for="u1p3pminundpv">Min + PV Laden:</label></b>
+	<select type="text" name="u1p3pminundpv" id="u1p3pminundpv">
+		<option <?php if($u1p3pminundpvold == 1) echo selected ?> value="1">einphasig</option>
+		<option <?php if($u1p3pminundpvold == 3) echo selected ?> value="3">dreiphasig</option>
+	</select>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	<b><label for="u1p3pnurpv">Nur PV Laden:</label></b>
+	<select type="text" name="u1p3pnurpv" id="u1p3pnurpv">
+		<option <?php if($u1p3pnurpvold == 1) echo selected ?> value="1">einphasig</option>
+		<option <?php if($u1p3pnurpvold == 3) echo selected ?> value="3">dreiphasig</option>
+	</select>
+</div>
+<div class="row" style="background-color:#33ffa8">
+	<b><label for="u1p3pnl">Nachtladen:</label></b>
+	<select type="text" name="u1p3pnl" id="u1p3pnl">
+		<option <?php if($u1p3pnlold == 1) echo selected ?> value="1">einphasig</option>
+		<option <?php if($u1p3pnlold == 3) echo selected ?> value="3">dreiphasig</option>
+	</select>
+</div>
+
+
+
+</div>
+
+
 
 <div class="row"><hr>
 	<h3>Nachtlademodus</h3>
@@ -704,7 +717,7 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
+	Definiert ob Nachts geladen werden soll.<br><br>
 </div>
 <div id="nachtladenaus">
 	<br>
@@ -785,14 +798,14 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
 	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>
@@ -883,6 +896,28 @@ $(function() {
 	    });
 });
 </script>
+<script>
+$(function() {
+      if($('#u1p3paktiv').val() == '0') {
+		$('#u1p3paus').show(); 
+		$('#u1p3pan').hide();
+      } else {
+		$('#u1p3paus').hide();
+	       	$('#u1p3pan').show();	
+      } 
+
+	$('#u1p3paktiv').change(function(){
+	        if($('#u1p3paktiv').val() == '0') {
+			$('#u1p3paus').show(); 
+			$('#u1p3pan').hide();
+	        } else {
+			$('#u1p3paus').hide();
+		       	$('#u1p3pan').show();	
+	        } 
+	    });
+});
+</script>
+
 <script>
 $(function() {
       if($('#zielladenaktivlp1').val() == '0') {
@@ -1090,253 +1125,6 @@ $(function() {
 });
 </script>
 </div>
-<div class="row"><hr>
-	<h3>PV Regelung</h3>
-</div>
-<div class="row" style="background-color:#befebe">
-	Die Kombination aus Mindestüberschuss und Abschaltüberschuss sollte sinnvoll gewählt werden.<br>
-	Ansonsten wird im 10 Sekunden Takt die Ladung gestartet und gestoppt.<br>
-	Es macht z.B. 1320 Watt mindestuberschuss und 900 Watt abschaltuberschuss Sinn<br>
-</div>
-<div class="row" style="background-color:#befebe">
-	<b><label for="mindestuberschuss">Mindestüberschuss:</label></b>
-	<input type="text" name="mindestuberschuss" id="mindestuberschuss" value="<?php echo $mindestuberschussold ?>"><br>
-</div>
-<div class="row" style="background-color:#befebe">
-	Gültige Werte 0-9999. Mindestüberschuss in Watt bevor im Lademodus "Nur PV" die Ladung beginnt.<br> Soll wenig bis kein Netzbezug vorhanden sein macht ein Wert um 1300-1600 Sinn.<br><br>
-</div>
-<div class="row" style="background-color:#befebe">
-	<b><label for="abschaltuberschuss">Abschaltüberschuss:</label></b>
-	<input type="text" name="abschaltuberschuss" id="abschaltuberschuss" value="<?php echo $abschaltuberschussold ?>"><br>
-</div>
-<div class="row" style="background-color:#befebe">
-	Gültige Werte 0-9999. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
-Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf Minimalstromstaerke reduziert. Danach greift die Abschaltung.<br>
-Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br><br>
-
-
-</div>
-<div class="row" style="background-color:#befebe">
-	<b><label for="einschaltverzoegerung">Einschaltverzögerung:</label></b>
-	<input type="text" name="einschaltverzoegerung" id="einschaltverzoegerung" value="<?php echo $einschaltverzoegerungold ?>"><br>
-</div>
-<div class="row" style="background-color:#befebe">
-Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus gewartet wird bis die Ladung startet.
-<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Überschuss größer als der Einschaltüberschuss sein.<br>
-</div><br>
-
-<div class="row" style="background-color:#befebe">
-	<b><label for="abschaltverzoegerung">Abschaltverzögerung:</label></b>
-	<input type="text" name="abschaltverzoegerung" id="abschaltverzoegerung" value="<?php echo $abschaltverzoegerungold ?>"><br>
-</div>
-
-<div class="row" style="background-color:#befebe">
-Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
-<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
-</div><br>
-<div class="row" style="background-color:#befebe">
-	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
-	<select type="text" name="minimalampv" id="minimalampv">
-		<option <?php if($minimalampvold == 6) echo selected ?> value="6">6</option>
-		<option <?php if($minimalampvold == 7) echo selected ?> value="7">7</option>
-		<option <?php if($minimalampvold == 8) echo selected ?> value="8">8</option>
-		<option <?php if($minimalampvold == 9) echo selected ?> value="9">9</option>
-		<option <?php if($minimalampvold == 10) echo selected ?> value="10">10</option>
-		<option <?php if($minimalampvold == 11) echo selected ?> value="11">11</option>
-		<option <?php if($minimalampvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>	
-		<option <?php if($minimalampvold == 14) echo selected ?> value="14">14</option>
-		<option <?php if($minimalampvold == 15) echo selected ?> value="15">15</option>
-		<option <?php if($minimalampvold == 16) echo selected ?> value="16">16</option>
-	</select><br>
-
-</div>
-
-<div class="row" style="background-color:#befebe">
-Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
-</div>
-<div class="row" style="background-color:#befebe">
-	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus:</label></b>
-	<select type="text" name="minimalapv" id="minimalapv">
-		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
-		<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
-		<option <?php if($minimalapvold == 8) echo selected ?> value="8">8</option>
-		<option <?php if($minimalapvold == 9) echo selected ?> value="9">9</option>
-		<option <?php if($minimalapvold == 10) echo selected ?> value="10">10</option>
-		<option <?php if($minimalapvold == 11) echo selected ?> value="11">11</option>
-		<option <?php if($minimalapvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>	
-		<option <?php if($minimalapvold == 14) echo selected ?> value="14">14</option>
-		<option <?php if($minimalapvold == 15) echo selected ?> value="15">15</option>
-		<option <?php if($minimalapvold == 16) echo selected ?> value="16">16</option>
-	</select><br>
-
-
-</div>
-
-<div class="row" style="background-color:#befebe">
-Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
-</div><br>
-<div class="row" style="background-color:#befebe">
-	<b><label for="minnurpvsoclp1">Minimal SoC fuer den Nur PV Laden Modus:</label></b>
-	<select type="text" name="minnurpvsoclp1" id="minnurpvsoclp1">
-		<option <?php if($minnurpvsoclp1old == 0) echo selected ?> value="0">0</option>
-		<option <?php if($minnurpvsoclp1old == 5) echo selected ?> value="5">5</option>
-		<option <?php if($minnurpvsoclp1old == 10) echo selected ?> value="10">10</option>
-		<option <?php if($minnurpvsoclp1old == 15) echo selected ?> value="15">15</option>
-		<option <?php if($minnurpvsoclp1old == 20) echo selected ?> value="20">20</option>
-		<option <?php if($minnurpvsoclp1old == 25) echo selected ?> value="25">25</option>
-		<option <?php if($minnurpvsoclp1old == 30) echo selected ?> value="30">30</option>
-		<option <?php if($minnurpvsoclp1old == 35) echo selected ?> value="35">35</option>
-		<option <?php if($minnurpvsoclp1old == 40) echo selected ?> value="40">40</option>
-		<option <?php if($minnurpvsoclp1old == 45) echo selected ?> value="45">45</option>
-		<option <?php if($minnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
-		<option <?php if($minnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
-		<option <?php if($minnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
-		<option <?php if($minnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
-		<option <?php if($minnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
-		<option <?php if($minnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
-		<option <?php if($minnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
-	</select>
-	</div>
-	<div class="row" style="background-color:#befebe">
-	Definiert einen Mindest SoC Wert bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
-	</div><br>
-
-
-<div class="row" style="background-color:#befebe">
-	<b><label for="maxnnurpvsoclp1">Maximal SoC fuer den Nur PV Laden Modus:</label></b>
-	<select type="text" name="maxnurpvsoclp1" id="maxnurpvsoclp1">
-		<option <?php if($maxnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
-		<option <?php if($maxnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
-		<option <?php if($maxnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
-		<option <?php if($maxnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
-		<option <?php if($maxnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
-		<option <?php if($maxnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
-		<option <?php if($maxnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
-		<option <?php if($maxnurpvsoclp1old == 85) echo selected ?> value="85">85</option>
-		<option <?php if($maxnurpvsoclp1old == 90) echo selected ?> value="90">90</option>
-		<option <?php if($maxnurpvsoclp1old == 95) echo selected ?> value="95">95</option>
-		<option <?php if($maxnurpvsoclp1old == 100) echo selected ?> value="100">100</option>
-	</select>
-	</div>
-	<div class="row" style="background-color:#befebe">
-	Definiert einen Maximal SoC Wert bis zu welchem im Nur PV Modus geladen wird.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
-	</div>
-<br>
-<div class="row" style="background-color:#befebe">
-	<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
-	<select type="text" name="minnurpvsocll" id="minnurpvsocll">
-		<option <?php if($minnurpvsocllold == 6) echo selected ?> value="6">6</option>
-		<option <?php if($minnurpvsocllold == 7) echo selected ?> value="7">7</option>
-		<option <?php if($minnurpvsocllold == 8) echo selected ?> value="8">8</option>
-		<option <?php if($minnurpvsocllold == 9) echo selected ?> value="9">9</option>
-		<option <?php if($minnurpvsocllold == 10) echo selected ?> value="10">10</option>
-		<option <?php if($minnurpvsocllold == 11) echo selected ?> value="11">11</option>
-		<option <?php if($minnurpvsocllold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minnurpvsocllold == 13) echo selected ?> value="13">13</option>
-		<option <?php if($minnurpvsocllold == 14) echo selected ?> value="14">14</option>
-		<option <?php if($minnurpvsocllold == 15) echo selected ?> value="15">15</option>
-		<option <?php if($minnurpvsocllold == 16) echo selected ?> value="16">16</option>
-		<option <?php if($minnurpvsocllold == 17) echo selected ?> value="17">17</option>
-		<option <?php if($minnurpvsocllold == 18) echo selected ?> value="18">18</option>
-		<option <?php if($minnurpvsocllold == 19) echo selected ?> value="19">19</option>
-		<option <?php if($minnurpvsocllold == 20) echo selected ?> value="20">20</option>
-		<option <?php if($minnurpvsocllold == 21) echo selected ?> value="21">21</option>
-		<option <?php if($minnurpvsocllold == 22) echo selected ?> value="22">22</option>
-		<option <?php if($minnurpvsocllold == 23) echo selected ?> value="23">23</option>
-		<option <?php if($minnurpvsocllold == 24) echo selected ?> value="24">24</option>
-		<option <?php if($minnurpvsocllold == 25) echo selected ?> value="25">25</option>
-		<option <?php if($minnurpvsocllold == 26) echo selected ?> value="26">26</option>
-		<option <?php if($minnurpvsocllold == 27) echo selected ?> value="27">27</option>
-		<option <?php if($minnurpvsocllold == 28) echo selected ?> value="28">28</option>
-		<option <?php if($minnurpvsocllold == 29) echo selected ?> value="29">29</option>
-		<option <?php if($minnurpvsocllold == 30) echo selected ?> value="30">30</option>
-		<option <?php if($minnurpvsocllold == 31) echo selected ?> value="31">31</option>
-		<option <?php if($minnurpvsocllold == 32) echo selected ?> value="32">32</option>
-	</select></div>
-	<div class="row" style="background-color:#befebe">
-	Definiert die Ladeleistung wenn Mindest SoC im Nur PV Laden Modus noch nicht erreicht ist.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
-	</div>
-
-
-
-<br><br>
-	<div class="row" style="background-color:#befebe">
-		<b><label for="pvbezugeinspeisung">PV Lademodus:</label></b>
-	       	<select type="text" name="pvbezugeinspeisung" id="pvbezugeinspeisung">
- 			<option <?php if($pvbezugeinspeisungold == 0) echo selected ?> value="0">Einspeisung</option>
-  			<option <?php if($pvbezugeinspeisungold == 1) echo selected ?> value="1">Bezug</option>
-			<option <?php if($pvbezugeinspeisungold == 2) echo selected ?> value="2">Manueller Offset</option>
-		</select><br>
-
-	</div>
-	<div class="row" style="background-color:#befebe">
-		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
-	</div>
-
-	<div class="row" style="background-color:#befebe">
-		<b><label for="offsetpv">Manuelles Offset in Watt:</label></b>
-		<input type="text" name="offsetpv" id="offsetpv" value="<?php echo $offsetpvold ?>"><br>
-	</div>
-	<div class="row" style="background-color:#befebe">
-Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
-Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
-Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
-z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
-	
-</div>
-
-
-<div id="speicherpvrangdiv">
-	<br><br><div class="row" style="background-color:#fcbe1e">
-		<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
-	       	<select type="text" name="speicherpveinbeziehen" id="speicherpveinbeziehen">
- 			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
-  			<option <?php if($speicherpveinbeziehenold == 1) echo selected ?> value="1">EV hat Vorrang</option>
-		</select><br>
-
-	</div>
-	<div class="row" style="background-color:#fcbe1e">
-		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
-	<br><br>
-	</div>
-	<div id="speicherevvdiv">
-		<div class="row" style="background-color:#fcbe1e">
-			<b><label for="speichermaxwatt">Mindestwatt Speicher:</label></b>
-			<input type="text" name="speichermaxwatt" id="speichermaxwatt" value="<?php echo $speichermaxwattold ?>"><br>
-		</div>
-		<div class="row" style="background-color:#fcbe1e">
-		Definiert einen Wert in Watt mit dem Speicher maximal laden soll. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
-		</div>
-	</div>
-
-</div>
-
-<input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
-<script>
-$(function() {
-   if($('#speicherpvrang').val() == '1') {
-	$('#speicherpvrangdiv').show(); 
-      } else {
-	$('#speicherpvrangdiv').hide();
-      } 
-});
-$(function() {
-   if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
-      } else {
-	$('#speicherevvdiv').hide();
-      }
-	$('#speicherpveinbeziehen').change(function(){
-	   if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
-      } else {
-	$('#speicherevvdiv').hide();
-      }
-	});
-});
-</script>
 
 <div class="row"><hr>
 	<h4>EVU basiertes Lastmanagement</h4>
@@ -1390,161 +1178,6 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
 
 </div>
-
-<div class="row"><hr>
-	<h4>Benachrichtigungen mit Pushover</h4>
-</div>
-<div class="row">
-	<b><label for="pushbenachrichtigung">Pushover Benachrichtigungen:</label></b>
-	<select type="text" name="pushbenachrichtigung" id="pushbenachrichtigung">
-		<option <?php if($pushbenachrichtigungold == 0) echo selected ?> value="0">Deaktiviert</option>
-		<option <?php if($pushbenachrichtigungold == 1) echo selected ?> value="1">Aktiviert</option>
-	</select>
-</div>
-
-<div id="pushbaus">
-	<br>
-</div>
-<div id="pushban">
-	<div class="row">
-	Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen.<br> Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden.<br>
-Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="pushoveruser">Pushover User String:</label></b>
-        	<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo $pushoveruserold ?>"><br>
-	<br>
-	</div>
-	<div class="row">
-		Hier das User Token von Pushover eintragen<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="pushovertoken">Pushover App Token:</label></b>
-        	<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo $pushovertokenold ?>"><br>
-<br>
-	</div>
-	<div class="row">
-		Hier das Application Token von Pushover eintragen<br><br>
-	</div>
-
-	<div class="row"><hr>
-		<b>Benachrichtigungseinstellungen:</b><br><br>
-	</div>
-	<div class="row">
-		<b><label for="pushbstartl">Beim Starten der Ladung:</label></b>
-	       	<select type="text" name="pushbstartl" id="pushbstartl">
- 			<option <?php if($pushbstartlold == 0) echo selected ?> value="0">Nein</option>
-  			<option <?php if($pushbstartlold == 1) echo selected ?> value="1">Ja</option>
-		</select><br><br>
-
-	</div>
-	<div class="row">
-		<b><label for="pushbstopl">Beim Stoppen der Ladung:</label></b>
-	       	<select type="text" name="pushbstopl" id="pushbstopl">
- 			<option <?php if($pushbstoplold == 0) echo selected ?> value="0">Nein</option>
-  			<option <?php if($pushbstoplold == 1) echo selected ?> value="1">Ja</option>
-		</select><br><br>
-
-	</div>
-
-
-</div><br>
-<script>
-$(function() {
-      if($('#pushbenachrichtigung').val() == '0') {
-		$('#pushbaus').show(); 
-		$('#pushban').hide();
-      } else {
-		$('#pushbaus').hide();
-	       	$('#pushban').show();	
-      } 
-
-	$('#pushbenachrichtigung').change(function(){
-	        if($('#pushbenachrichtigung').val() == '0') {
-			$('#pushbaus').show(); 
-			$('#pushban').hide();
-	        } else {
-			$('#pushbaus').hide();
-		       	$('#pushban').show();	
-	        } 
-	    });
-});
-</script>
-
-
-<div class="row"><hr>
-	<h4>Steuerung externer Geräte</h4>
-</div>
-<div class="row">
-	<b><label for="hook1_aktiv">Externes Gerät 1:</label></b>
-	<select type="text" name="hook1_aktiv" id="hook1_aktiv">
-		<option <?php if($hook1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-		<option <?php if($hook1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
-	</select>
-</div>
-
-<div id="hook1ausdiv">
-	<br>
-</div>
-<div id="hook1andiv">
-	<div class="row">
-	Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="hook1ein_watt">Gerät 1 Einschaltschwelle:</label></b>
-        	<input type="text" name="hook1ein_watt" id="hook1ein_watt" value="<?php echo $hook1ein_wattold ?>"><br>
-	<br>
-	</div>
-	<div class="row">
-		Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="hook1ein_url">Gerät 1 Einschalturl:</label></b>
-        	<input type="text" name="hook1ein_url" id="hook1ein_url" value="<?php echo htmlspecialchars($hook1ein_urlold) ?>"><br>
-	<br>
-	</div>
-	<div class="row">
-		Einschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="hook1aus_watt">Gerät 1 Ausschaltschwelle:</label></b>
-        	<input type="text" name="hook1aus_watt" id="hook1aus_watt" value="<?php echo $hook1aus_wattold ?>"><br>
-	<br>
-	</div>
-	<div class="row">
-		Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.<br><br>
-	</div>
-	<div class="row">
-       		<b><label for="hook1aus_url">Gerät 1 Ausschalturl:</label></b>
-        	<input type="text" name="hook1aus_url" id="hook1aus_url" value="<?php echo htmlspecialchars($hook1aus_urlold) ?>"><br>
-	<br>
-	</div>
-	<div class="row">
-		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
-	</div>
-
-</div><br>
-<script>
-$(function() {
-      if($('#hook1_aktiv').val() == '0') {
-		$('#hook1ausdiv').show(); 
-		$('#hook1andiv').hide();
-      } else {
-		$('#hook1ausdiv').hide();
-	       	$('#hook1andiv').show();	
-      } 
-
-	$('#hook1_aktiv').change(function(){
-	      if($('#hook1_aktiv').val() == '0') {
-			$('#hook1ausdiv').show(); 
-			$('#hook1andiv').hide();
-	      } else {
-			$('#hook1ausdiv').hide();
-		       	$('#hook1andiv').show();	
-	      } 
-	    });
-});
-</script>
 
 
 

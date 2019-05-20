@@ -2,6 +2,10 @@
 
 
 <head>
+	<script src="../js/core.js"></script>
+	<script src="../js/charts.js"></script>
+	<script src="../js/animated.js"></script>
+
 	<script src="../js/jquery-1.11.1.min.js"></script>
 	<script src="../js/main.js"></script>
 	<meta charset="UTF-8">
@@ -29,6 +33,32 @@
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 
 </head>
+<?php
+	$result = '';
+	$lines = file('/var/www/html/openWB/openwb.conf');
+	foreach($lines as $line) {
+		if(strpos($line, "grapham=") !== false) {
+			list(, $graphamold) = explode("=", $line);
+		}
+		if(strpos($line, "graphinteractiveam=") !== false) {
+			list(, $graphinteractiveamold) = explode("=", $line);
+		}
+
+		if(strpos($line, "lastmanagement=") !== false) {
+			list(, $lastmanagementold) = explode("=", $line);
+		}
+		if(strpos($line, "lastmanagements2=") !== false) {
+			list(, $lastmanagements2old) = explode("=", $line);
+		}
+
+
+	}
+	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+
+
+					?>
+
 
 
 <body>
@@ -36,7 +66,7 @@
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.html">Live</a></li>
+			 <li><a href="index.php">Live</a></li>
 			 <li class="active"><a href="daily.php">Daily</a></li>
 			 <li><a href="monthly.php">Monthly</a></li>
 			 <li><a href="yearly.php">Yearly</a></li>
@@ -44,10 +74,8 @@
 
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="Preloader image">
+		<img src="../img/loader.gif" alt="OpenWB loading...">
 	</div> 
-<section id="services">
-<div class="container">
 
 
 <?php
@@ -66,21 +94,30 @@ else
 $daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
 $nextday = date('Y-m-d',strtotime($daydate . "+1 days")); 
 ?>
-<div class="row col-xs-12">
+<div class="row">
 	<div class="text-center">
 		<br><h4> Daily Graph</h4><br>
 	</div>
 </div>
-<div class="row"> 
-	
+		<?php if ($graphamold == 1) {
+	echo '
+	<div style="height:600px;" id="chartdiv"></div>
+';	
+				   } else {
+					   echo '
+
+	<div class="row"> 
 	<div class="col-xs-12">
 		<div class="imgwrapper">	
-			<img src="graph-daily.php?thedate=<?php echo $daydate ?>"
+			<img src="graph-daily.php?thedate='; echo $daydate; 
+	echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
+	'; } ?> 
 
-</div>
+
+
 <br><br>
 <form name="dailydate" id="dailydate" action="daily.php" method="GET">
 <div class="row col-xs-12">
@@ -112,9 +149,229 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 
 
 </form>	
+<br><br><br>
 
-
-</div>
-</section>
 </body>
+
+<script>
+	// which graphs needed
+	
+	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
+
+
+if ( graphinteractiveam == 1 ){
+	am4core.useTheme(am4themes_animated);
+}
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+ chart.numberFormatter.numberFormat = "#.## a";
+// Set up data source
+chart.dataSource.url = "/openWB/web/logging/graph-dailye.php?thedate=<?php echo $daydate ?>";
+chart.dataSource.parser = new am4core.CSVParser();
+chart.dataSource.parser.options.useColumnNames = false;
+//
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "col0";
+
+// Create value axis
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Wh";
+
+valueAxis.adapter.add("getTooltipText", (text) => {
+if (text.includes("k")) {
+	text = text.substring(0, text.length -1);
+	text = text * 12 * 1000;
+	text = Math.round(text);
+	text = text +"W";
+} else {
+	text = text * 12 + "W";
+}
+
+return text;
+});
+
+
+var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis2.renderer.opposite = true;
+valueAxis2.title.text = "% SoC";
+valueAxis2.renderer.grid.template.disabled = true;
+// Creaite series
+var series1 = chart.series.push(new am4charts.LineSeries());
+series1.dataFields.valueY = "col1";
+series1.dataFields.categoryX = "col0";
+series1.name = "Bezug";
+series1.fill = am4core.color("#ff0000");
+series1.stroke = am4core.color("#ff0000");
+series1.strokeWidth = 3;
+series1.tensionX = 0.8;
+series1.tensionY = 0.8;
+series1.strokeWidth = 1.5;
+series1.fillOpacity = 0.3;
+
+var series2 = chart.series.push(new am4charts.LineSeries());
+series2.dataFields.valueY = "col3";
+series2.dataFields.categoryX = "col0";
+series2.name = "LL Gesamt";
+series2.stroke = am4core.color("#4074c9");
+series2.tensionX = 0.8;
+series2.tensionY = 0.8;
+series2.strokeWidth = 1.5;
+series2.fill = am4core.color("#4074c9");
+series2.fillOpacity = 0.3;
+
+var series4 = chart.series.push(new am4charts.LineSeries());
+series4.dataFields.valueY = "col4";
+series4.dataFields.categoryX = "col0";
+series4.name = "PV";
+series4.stroke = am4core.color("#00ff00");
+series4.tensionX = 0.8;
+series4.tensionY = 0.8;
+series4.strokeWidth = 1.5;
+series4.fill = am4core.color("#00ff00");
+series4.fillOpacity = 0.3;
+
+var series9 = chart.series.push(new am4charts.LineSeries());
+series9.dataFields.valueY = "col2";
+series9.dataFields.categoryX = "col0";
+series9.name = "Einspeisung";
+series9.stroke = am4core.color("#fff600");
+series9.tensionX = 0.8;
+series9.tensionY = 0.8;
+series9.strokeWidth = 1.5;
+series9.fill = am4core.color("#fff600");
+series9.fillOpacity = 0.3;
+
+if (speichervorhanden == 1) {
+var series11 = chart.series.push(new am4charts.LineSeries());
+series11.dataFields.valueY = "col5";
+series11.dataFields.categoryX = "col0";
+series11.name = "Speicherladung";
+series11.stroke = am4core.color("#fcbe1e");
+series11.fill = am4core.color("#fcbe1e");
+series11.fillOpacity = 0.3;
+series11.tensionX = 0.8;
+series11.tensionY = 0.8;
+series11.strokeWidth = 1.5;
+var series3 = chart.series.push(new am4charts.LineSeries());
+series3.dataFields.valueY = "col6";
+series3.dataFields.categoryX = "col0";
+series3.name = "Speicherentladung";
+series3.stroke = am4core.color("#fc6f1e");
+series3.fill = am4core.color("#fc6f1e");
+series3.fillOpacity = 0.3;
+series3.tensionX = 0.8;
+series3.tensionY = 0.8;
+series3.strokeWidth = 1.5;
+var series12 = chart.series.push(new am4charts.LineSeries());
+series12.dataFields.valueY = "col12";
+series12.dataFields.categoryX = "col0";
+series12.name = "Speicher SoC";
+series12.stroke = am4core.color("#fc6f1e");
+series12.strokeWidth = 1.5;
+series12.yAxis = valueAxis2;
+series11.legendSettings.valueText = "{valueY.sum}Wh";
+series3.legendSettings.valueText = "{valueY.sum}Wh";
+
+
+
+}
+var series5 = chart.series.push(new am4charts.LineSeries());
+series5.dataFields.valueY = "col7";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#845EC2");
+series5.tensionX = 0.8;
+series5.tensionY = 0.8;
+series5.strokeWidth = 1.5;
+if ( lastmanagement == 1) {
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col8";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#aa5ec2");
+series6.tensionX = 0.8;
+series6.tensionY = 0.8;
+series6.strokeWidth = 1.5;
+series6.legendSettings.valueText = "{valueY.sum}Wh";
+
+}
+if ( lastmanagements2 == 1) {
+var series30 = chart.series.push(new am4charts.LineSeries());
+series30.dataFields.valueY = "col11";
+series30.dataFields.categoryX = "col0";
+series30.name = "LP 3";
+series30.stroke = am4core.color("#aa5ec2");
+series30.tensionX = 0.8;
+series30.tensionY = 0.8;
+series30.strokeWidth = 1.5;
+
+}
+
+
+var series8 = chart.series.push(new am4charts.LineSeries());
+series8.dataFields.valueY = "col9";
+series8.dataFields.categoryX = "col0";
+series8.name = "Lp1 SoC";
+series8.stroke = am4core.color("#845EC2");
+//series8.tensionX = 0.8;
+//series8.tensionY = 0.8;
+series8.strokeWidth = 1.5;
+series8.yAxis = valueAxis2;
+
+
+if (soc1vorhanden == 1) { 
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col10";
+series10.dataFields.categoryX = "col0";
+series10.name = "Lp2 SoC";
+series10.stroke = am4core.color("#aa5ec2");
+//series9.tensionX = 0.8;
+//series9.tensionY = 0.8;
+series10.strokeWidth = 1.5;
+series10.yAxis = valueAxis2;
+}
+
+chart.cursor = new am4charts.XYCursor();
+// Add legend
+
+series4.customField = 12;
+series1.legendSettings.valueText = "{valueY.sum}Wh";
+series4.legendSettings.valueText = "{valueY.sum}Wh";
+series2.legendSettings.valueText = "{valueY.sum}Wh";
+series9.legendSettings.valueText = "{valueY.sum}Wh";
+series5.legendSettings.valueText = "{valueY.sum}Wh";
+
+chart.legend = new am4charts.Legend();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </html>

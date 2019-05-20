@@ -40,6 +40,8 @@ source zielladen.sh
 source evsedintest.sh
 source hook.sh
 source u1p3p.sh
+source nrgkickcheck.sh
+date=$(date)
 re='^-?[0-9]+$'
 #ladelog ausfuehren
 ./ladelog.sh &
@@ -78,6 +80,8 @@ fi
 #######################################
 #goe mobility check
 goecheck
+# nrgkick mobility check
+nrgkickcheck
 #load charging vars
 loadvars
 
@@ -169,6 +173,7 @@ if [[ $loadsharinglp12 == "1" ]]; then
 		chargingphases=$(( lp1c + lp2c ))
 		if (( chargingphases > 2 )); then
 			runs/set-current.sh "$agrenze" all
+			echo "$date Alle Ladepunkte, Loadsharing LP1-LP2 aktiv. Setze Ladestromstärke auf $agrenze" >> ramdisk/ladestatus.log
 			exit 0
 		fi
 	fi
@@ -194,7 +199,11 @@ fi
 
 #######################
 #Ladestromstarke berechnen
-llphasentest=$((llalt - 3))
+anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
+if (( anzahlphasen > 9 )); then
+	anzahlphasen=1
+fi
+llphasentest=3
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( llalt > 3 )); then
 	anzahlphasen=0

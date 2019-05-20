@@ -6,32 +6,16 @@ foreach($lines as $line) {
 	$writeit = '0';
 	foreach($_POST as $k => $v) {
 	    if(strpos($line, $k.'=') !== false) {
-		if ( $k != "zielladenuhrzeitlp1" && $k != "pushovertoken" && $k != "pushoveruser" && $k != "hook1ein_url" && $k != "hook1aus_url") {   
+		if ( $k != "zielladenuhrzeitlp1") {   
 		$result .= $k.'='.$v."\n";
 		$writeit = '1';
 		}
 	    } 
 	}
-	    if(strpos($line, "pushovertoken=") !== false) {
-	    $result .= 'pushovertoken=\''.$_POST[pushovertoken]."'\n";
-		$writeit = '1';
-   	 	} 
-	    if(strpos($line, "pushoveruser=") !== false) {
-	    $result .= 'pushoveruser=\''.$_POST[pushoveruser]."'\n";
-	   	$writeit = '1';
- 		} 
-	    if(strpos($line, "zielladenuhrzeitlp1=") !== false) {
+	if (strpos($line, "zielladenuhrzeitlp1=") !== false) {
 	    $result .= 'zielladenuhrzeitlp1=\''.$_POST[zielladenuhrzeitlp1]."'\n";
 	    	$writeit = '1';
 		} 
-	    if(strpos($line, "hook1ein_url=") !== false) {
-	    $result .= 'hook1ein_url=\''.$_POST[hook1ein_url]."'\n";
-	    $writeit = '1';
-} 
-	    if(strpos($line, "hook1aus_url=") !== false) {
-	    $result .= 'hook1aus_url=\''.$_POST[hook1aus_url]."'\n";
-	    $writeit = '1';
-} 
 
 		if ( $writeit == '0' ) {
 		$result .= $line;

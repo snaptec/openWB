@@ -1,0 +1,148 @@
+<!-- you may use this theme as template.
+Every live value and state is loaded by main site.
+You have just to reference the id here.
+Put special parts for the theme (graph, img, ...) in the theme folder and/or sub folders of it
+What to find where?
+- web/live.js
+Live values, refresh every 10 seconds are
+- web/livefunctions.js
+- functions for show/hide divs depending on the selected options / conditions
+web/values.php
+- loads config values from openwb.conf
+web/index.php
+- loads everything
+- loads php vars to js
+- sets pwa settings
+- references the theme you can use index.php?theme=yourtheme
+-->
+
+
+<!-- Load Javascript Values and functions for amcharts & show/hiding divs -->
+<script>
+	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	var chartlegend = <?php echo $chartlegendmainold ?>;
+</script>
+
+
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<h3> OpenWB Charge Controller </h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<div class="col-xs-4 text-center" style="background-color:#BEFEBE;font-size: 2vw">
+			PV: <br><span id="pvdiv"></span>
+		</div>
+		<div class="col-xs-4 text-center">
+		</div>
+		<div id="evudiv" class="col-xs-4 text-center" style="background-color:#febebe;font-size: 2vw" >
+			EVU:<br> <span id="bezugdiv"></span>
+		</div>
+	</div>
+</div><br><br><br>
+<div id="speicherstatdiv">
+	<div class="row">
+		<div class="col-xs-12 text-center">
+				<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+					Speicher:<br><span id="speicherleistungdiv"></span>
+			<br><span id="speichersocdiv"></span> % SoC
+		</div>
+<div class="col-xs-4 text-center">
+		</div>
+	<div class="col-xs-4 text-center" style="background-color:#fefedf;font-size: 2vw">
+			Hausverbrauch: <span id="hausverbrauchdiv"></span>
+		</div>
+
+
+
+	</div></div>
+</div>
+<br>
+<div class="row col-xs-12 text-center">
+	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Nachtladen LP 1 aktiv
+	</div>
+	<div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Nachtladen LP 2 aktiv
+	</div>
+	<div class="col-xs-4 text-center">
+	</div>
+	<div class="row">
+		<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
+		</div>
+	</div>
+
+</div>
+
+<!-- show zielladen if its active in settings -->
+<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
+	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Zielladen LP 1 aktiv
+	</div>
+
+</div>
+<!-- show first charging Point -->
+<div class="col-xs-3"></div>
+	<div class="col-xs-3 text-center bg-primary" style="font-size: 2vw">
+		<?php echo $lp1nameold ?>
+		<br><span id="lldiv"></span>, <span id="llsolldiv"></span>A Soll
+		<br><!-- if soc date of file is to old display it in grey -->
+		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
+		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
+		} else {
+		echo '<span id="soclevel"></span>% SoC';
+		} ?>
+	</div>
+<!-- show values for second charging point -->
+<div id="lp2lldiv">
+	<div class="col-xs-3 text-center bg-primary" style="font-size: 2vw">
+		<?php echo $lp2nameold ?>
+
+		<br><span id="lllp2div"></span>,  <span id="llsolllp2div"></span>A Soll
+		<br><!-- if soc date of file is to old display it in grey -->
+		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
+		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
+		} else {
+		echo '<span id="soc1level"></span>% SoC';
+		} ?>
+	</div>
+<div class="col-xs-3"></div>
+</div>
+<!-- show values for third charging point -->
+<div class="row" id="lp3lldiv">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<?php echo $lp3nameold ?>
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp3div"></span>, <span id="llsolllp3div"></span>A Soll<br></span>
+	</div>
+	<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+<div class="row" id="gesamtlldiv">
+	<div class="col-xs-4 text-center" style="font-size: 2vw">
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		Gesamt: <span id="gesamtllwdiv"></span><br>
+	</div>
+	<div class="col-xs-4 text-center" style="font-size: 2vw">
+	</div>
+</div>
+<br>
+<hr>
+<div class="row">
+
+</div>
+</div>
+<br><br><br><br>
+</div>
+
+<!-- load amcharts js for graph -->
+<script src="/openWB/web/themes/standard/livegraph.js"></script>

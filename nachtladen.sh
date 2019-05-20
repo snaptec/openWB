@@ -69,8 +69,9 @@ if [[ $nachtladen == "1" ]]; then
 	if (( nachtladenabuhr <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H < nachtladenbisuhr )); then
 		nachtladenstate=1
 		dayoftheweek=$(date +%w)
-		if [ "$dayoftheweek" -ge 0 ] && [ "$dayoftheweek" -le 4 ]; then
-			diesersoc=$nachtsoc
+		currenthour=$(date +%k)
+		if [[ $dayoftheweek -eq 0 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 1 && $dayoftheweek -le 4 ]] || [[ $dayoftheweek -eq 5 && $currenthour -le 11 ]]  ; then
+		diesersoc=$nachtsoc
 		else
 			diesersoc=$nachtsoc1
 		fi
@@ -152,13 +153,15 @@ if [[ $nachtladen == "1" ]]; then
 	fi
 else
 	nachtladenstate=0
+	nachtladen2state=0
 fi
 #Nachtladen S1
 if [[ $nachtladens1 == "1" ]]; then
 	if (( nachtladenabuhrs1 <= 10#$H && 10#$H <= 24 )) || (( 0 <= 10#$H && 10#$H < nachtladenbisuhrs1 )); then
 		nachtladenstates1=1
 		dayoftheweek=$(date +%w)
-		if [ "$dayoftheweek" -ge 0 ] && [ "$dayoftheweek" -le 4 ]; then
+		currenthour=$(date +%k)
+		if [[ $dayoftheweek -eq 0 && $currenthour -ge 14 ]] || [[ $dayoftheweek -ge 1 && $dayoftheweek -le 4 ]] || [[ $dayoftheweek -eq 5 && $currenthour -le 11 ]]  ; then
 			diesersocs1=$nachtsocs1
 		else
 			diesersocs1=$nachtsoc1s1
@@ -244,6 +247,7 @@ if [[ $nachtladens1 == "1" ]]; then
 
 else
 	nachtladenstates1=0
+	nachtladen2states1=0
 fi
 echo $nachtladenstate > /var/www/html/openWB/ramdisk/nachtladenstate
 echo $nachtladenstates1 > /var/www/html/openWB/ramdisk/nachtladenstates1
@@ -255,12 +259,16 @@ if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2s
 		lastmnacht $llalt $llnachtneu 
 		if (( llnachtreturn != llalt )); then
 			runs/set-current.sh $llnachtreturn m
+			echo "$date LP1, Lademodus Nachtladen. Ladung mit $llnachtreturn Ampere, $diesersoc % SoC" >> ramdisk/ladestatus.log
+
 		fi
 	fi
 	if (( nachtladenstates1 == 1 )) || (( nachtladen2states1 == 1 )); then
 		lastmnacht $llalts1 $llnachts1neu
 		if (( llnachtreturn != llalts1 )); then
 			runs/set-current.sh $llnachtreturn s1
+			echo "$date LP2, Lademodus Nachtladen. Ladung mit $llnachtreturn Ampere, $diesersocs1 % SoC" >> ramdisk/ladestatus.log
+
 		fi
 	fi
 	exit 0
@@ -270,17 +278,13 @@ fi
 
 
 prenachtlademodus(){
-	if (( lademodus == 0 )) && (( nlakt_sofort == 1 ));then
+	if { (( lademodus == 0 )) && (( nlakt_sofort == 1 )); } || { (( lademodus == 1 )) && (( nlakt_minpv == 1 )); } || { (( lademodus == 2 )) && (( nlakt_nurpv == 1 )); } || { (( lademodus == 4 )) && (( nlakt_standby == 1 )); } then
 		nachtlademodus
-	fi
-	if (( lademodus == 1 )) && (( nlakt_minpv == 1 ));then
-		nachtlademodus
-	fi
-	if (( lademodus == 2 )) && (( nlakt_nurpv == 1 ));then
-		nachtlademodus
-	fi
-	if (( lademodus == 4 )) && (( nlakt_standby == 1 ));then
-		nachtlademodus
+	else
+		echo 0 > ramdisk/nachtladenstate
+		echo 0 > ramdisk/nachtladen2state
+		echo 0 > ramdisk/nachtladenstates1
+		echo 0 > ramdisk/nachtladen2states1
 	fi
 	
 
