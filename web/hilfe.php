@@ -24,8 +24,8 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
+	<!-- Font Awesome, all styles -->
+  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 

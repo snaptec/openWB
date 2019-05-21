@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -169,11 +169,11 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 <div class="container">
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
-    <li><a href="./settings.php">Einstellungen</a></li>
-    <li class="active"><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
-    <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-    <li><a href="./misc.php">Misc</a></li>
+    <li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+    <li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
+    <li class="active"><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
+    <li><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
+    <li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
   </ul><br><br>
  </div>
 <form action="./tools/savepv.php" method="POST">
@@ -239,7 +239,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 		<option <?php if($minimalampvold == 10) echo selected ?> value="10">10</option>
 		<option <?php if($minimalampvold == 11) echo selected ?> value="11">11</option>
 		<option <?php if($minimalampvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>
 		<option <?php if($minimalampvold == 14) echo selected ?> value="14">14</option>
 		<option <?php if($minimalampvold == 15) echo selected ?> value="15">15</option>
 		<option <?php if($minimalampvold == 16) echo selected ?> value="16">16</option>
@@ -260,7 +260,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 		<option <?php if($minimalapvold == 10) echo selected ?> value="10">10</option>
 		<option <?php if($minimalapvold == 11) echo selected ?> value="11">11</option>
 		<option <?php if($minimalapvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>
 		<option <?php if($minimalapvold == 14) echo selected ?> value="14">14</option>
 		<option <?php if($minimalapvold == 15) echo selected ?> value="15">15</option>
 		<option <?php if($minimalapvold == 16) echo selected ?> value="16">16</option>
@@ -427,7 +427,7 @@ Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Re
 Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
 Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
 z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
-	
+
 </div>
 
 
@@ -443,7 +443,7 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
  			<option <?php if($speicherpvuiold == 0) echo selected ?> value="0">Nein</option>
   			<option <?php if($speicherpvuiold == 1) echo selected ?> value="1">Ja</option>
 		</select><br>
-	
+
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
@@ -465,20 +465,20 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 <script>
 $(function() {
    if($('#speicherpvrang').val() == '1') {
-	$('#speicherpvrangdiv').show(); 
+	$('#speicherpvrangdiv').show();
       } else {
 	$('#speicherpvrangdiv').hide();
-      } 
+      }
 });
 $(function() {
    if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
+	$('#speicherevvdiv').show();
       } else {
 	$('#speicherevvdiv').hide();
       }
 	$('#speicherpveinbeziehen').change(function(){
 	   if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
+	$('#speicherevvdiv').show();
       } else {
 	$('#speicherevvdiv').hide();
       }
@@ -512,13 +512,13 @@ Die Differenz beträgt 36 %, geteilt durch Faktor 5 ergibt den Wert 7.<br> Nun w
 
 $(function() {
    if($('#adaptpv').val() == '1') {
-	$('#adaptpvdiv').show(); 
+	$('#adaptpvdiv').show();
       } else {
 	$('#adaptpvdiv').hide();
       }
 	$('#adaptpv').change(function(){
 	   if($('#adaptpv').val() == '1') {
-	$('#adaptpvdiv').show(); 
+	$('#adaptpvdiv').show();
       } else {
 	$('#adaptpvdiv').hide();
       }
@@ -582,21 +582,21 @@ $(function() {
 <script>
 $(function() {
       if($('#hook1_aktiv').val() == '0') {
-		$('#hook1ausdiv').show(); 
+		$('#hook1ausdiv').show();
 		$('#hook1andiv').hide();
       } else {
 		$('#hook1ausdiv').hide();
-	       	$('#hook1andiv').show();	
-      } 
+	       	$('#hook1andiv').show();
+      }
 
 	$('#hook1_aktiv').change(function(){
 	      if($('#hook1_aktiv').val() == '0') {
-			$('#hook1ausdiv').show(); 
+			$('#hook1ausdiv').show();
 			$('#hook1andiv').hide();
 	      } else {
 			$('#hook1ausdiv').hide();
-		       	$('#hook1andiv').show();	
-	      } 
+		       	$('#hook1andiv').show();
+	      }
 	    });
 });
 </script>
@@ -608,7 +608,7 @@ $(function() {
 <div class="col-xs-1">
 </div>
 
-<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+<button type="submit" class="btn btn-primary btn-green">Save</button>
  </form><br><br />
 
 <br><br>
@@ -630,4 +630,3 @@ Open Source made with love!<br>
 
 </div>
 </body></html>
-

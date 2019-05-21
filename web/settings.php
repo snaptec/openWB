@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -408,10 +408,10 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
  <ul class="nav nav-tabs">
 
     <li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
-    <li class="active"><a href="./settings.php">Einstellungen</a></li>
-    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
-    <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-    <li><a href="./misc.php">Misc</a></li>
+    <li class="active"><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
+    <li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
+    <li><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
+    <li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
   </ul><br><br>
  </div>
 <form action="./tools/savemain.php" method="POST">

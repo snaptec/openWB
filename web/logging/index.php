@@ -56,10 +56,10 @@
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
-			 <li class="active"><a href="index.html">Live</a></li>
-			 <li><a href="daily.php">Daily</a></li>
-			 <li><a href="monthly.php">Monthly</a></li>
-			 <li><a href="yearly.php">Yearly</a></li>
+			 <li class="active"><a href="index.php?theme=<?php echo $_GET["theme"]?>">Live</a></li>
+			 <li><a href="daily.php?theme=<?php echo $_GET["theme"]?>">Daily</a></li>
+			 <li><a href="monthly.php?theme=<?php echo $_GET["theme"]?>">Monthly</a></li>
+			 <li><a href="yearly.php?theme=<?php echo $_GET["theme"]?>">Yearly</a></li>
 		 </ul>
 
 	<div class="preloader">
