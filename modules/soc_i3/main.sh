@@ -25,4 +25,13 @@ else
 	else
 		echo 1 > /var/www/html/openWB/ramdisk/soctimer
 	fi
+
+#Benachrichtigung bei Ladeabbruch 
+	charging=$(echo $abfrage | jq '.chargingActive')
+    	if [ "$charging" = "CHARGINGERROR" ] ; then
+        	message="ACHTUNG - Ladung bei "
+        	message+="$soclevel"
+        	message+="% abgebrochen"
+		/var/www/html/openWB/runs/pushover.sh "$message"
+	fi
 fi
