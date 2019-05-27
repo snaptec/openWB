@@ -129,8 +129,8 @@ $myImage->setFontProperties(array(
     "FontSize" => 18));
 $myImage->setGraphArea(70,25,1070,175);
 // set background gradient
-$Settings = array("StartR" => 221, "StartG" => 221, "StartB" => 221, "EndR" => 120, "EndG" => 120, "EndB" => 120, "Alpha" => 50);
-$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
+//$Settings = array("StartR" => 221, "StartG" => 221, "StartB" => 221, "EndR" => 120, "EndG" => 120, "EndB" => 120, "Alpha" => 50);
+//$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
 
 $myImage->drawScale($ScaleSettings);
 $myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));

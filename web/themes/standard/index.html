@@ -18,6 +18,8 @@ web/index.php
 
 <!-- <meta http-equiv="refresh" content="90"> -->
 <!-- Load Javascript Values and functions for amcharts & show/hiding divs -->
+<script src="themes/standard/standard.js"></script>
+
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
@@ -77,7 +79,7 @@ echo '
 <div class="row">
 	<div class="col-xs-12 text-center">
 		<div class="imgwrapper">
-			<img id="livegraph" src="graph-live.php"
+			<img id="livegraph" src="./themes/'; echo $_GET["theme"]; echo '/graph-live.php"
 				 alt="Graph" class="img-responsive" />
 			<br></div>
 	</div>

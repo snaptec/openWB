@@ -21,7 +21,7 @@ web/index.php
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
 </script>
-
+<script src="themes/dark19_01/dark.js"></script>
 <div class="row">
 	<div class="col-xs-12 text-center">
 		<h3> OpenWB Lade Controller </h3>
@@ -75,7 +75,7 @@ web/index.php
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="imgage-wrapper">
-						<img id="livegraph" src="graph-live.php" alt="Graph" class="img-responsive myGraph"/>
+						<img id="livegraph" src="./themes/'; echo $_GET["theme"]; echo '/graph-live.php" alt="Graph" class="img-responsive myGraph"/>
 						<br>
 					</div>
 				</div>

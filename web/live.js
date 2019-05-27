@@ -372,11 +372,6 @@ $.ajax({
         }
         });
 
-var source = 'graph-live.php',
-		        timestamp = (new Date()).getTime(),
-		        newUrl = source + '?_=' + timestamp;
-	    document.getElementById("livegraph").src = newUrl;
-
 
 }
 
