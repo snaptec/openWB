@@ -804,7 +804,8 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
     <li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
     <li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
     <li class="active"><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
-    <li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
+	<li><a href="./settheme.php?theme=<?php echo $_GET["theme"]?>">Theme</a></li>
+	<li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
   </ul><br><br>
  </div>
 
