@@ -81,7 +81,7 @@ $.ajaxSetup({ cache: false});
         success:function(result){
             $("#dailychargelp1div").html(result.text);
 	}
-	    }); 
+	    });
 $.ajaxSetup({ cache: false});
     $.ajax({
         url:"./tools/dailychargelp2.php",
@@ -91,7 +91,7 @@ $.ajaxSetup({ cache: false});
         success:function(result){
             $("#dailychargelp2div").html(result.text);
 	}
-	    }); 
+	    });
 	$.ajaxSetup({ cache: false});
     $.ajax({
         url:"./tools/dailychargelp3.php",
@@ -101,7 +101,7 @@ $.ajaxSetup({ cache: false});
         success:function(result){
             $("#dailychargelp3div").html(result.text);
 	}
-	    }); 
+	    });
 $.ajax({
    url: "/openWB/ramdisk/aktgeladens1",
     complete: function(request){
@@ -372,7 +372,6 @@ $.ajax({
         }
         });
 
-
 var source = 'graph-live.php',
 		        timestamp = (new Date()).getTime(),
 		        newUrl = source + '?_=' + timestamp;
@@ -385,4 +384,3 @@ doInterval = setInterval(getfile, 5000);
 do2Interval = setInterval(loadText, 5000);
 
 getfile();
-

@@ -1,4 +1,6 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
@@ -22,8 +24,8 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
+	<!-- Font Awesome, all styles -->
+  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 
@@ -39,14 +41,14 @@
 
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="./index.php">Zurueck</a></li>
+    <li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
     <li><a id="lnkbedienung" href="#" onclick="return ShowContent('bedienung');" >Bedienung</a></li>
     <li><a id="lnkladeeinstellung" href="#" onclick="return ShowContent('ladeeinstellung');" >Ladeeinstellungen</a></li>
     <li><a id="lnkmisc" href="#" onclick="return ShowContent('misc');" >Misc</a></li>
   </ul><br><br>
  </div>
 
- <div id="bedienung" style="display:block"> 
+ <div id="bedienung" style="display:block">
 	 <h3>Bedienung</h3>
 		 <p> Lademodus</p><br>
 			 Der Unterschied zwischen Standby und Stop ist, dass bei Stop keine Ladung erlaubt ist.<br>
@@ -56,13 +58,13 @@
 	<br>
 	 Etwas unklar in der Bedienung?<br>
 	 Passende Erklärung parat?<br>
-	 <br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de	 
-	
+	 <br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de
+
  </div>
 
  <div id="ladeeinstellung" style="display:none">
-	 	 <h3>Ladeeinstellung</h3>	 
-	 
+	 	 <h3>Ladeeinstellung</h3>
+
 
 		 <p>Meldung "Lastmanagement aktiv, Ladeleistung reduziert"</p>
 		<br> Wurde innerhalb der letzten 2 Minuten das Lastmanagement aktiv wird diese Meldung auf der Hauptseite unterhalb des Graphen angezeigt.<br>
@@ -72,14 +74,14 @@
 
 		 Etwas unklar bei den Ladeeinstellungen?<br>
 	 Passende Erklärung parat?<br>
-	<br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de	 
-	
+	<br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de
+
 </div>
 
 
- <div id="misc" style="display:none"> 
- 
- 	 	 <h3>Misc</h3>	 
+ <div id="misc" style="display:none">
+
+ 	 	 <h3>Misc</h3>
 		 <p> EVSE Modbus Test zu finden unter Status.<br></p>
 		 Der Test dient zur Hilfe bei der Erstkonfiguration.<br>Er prüft die korrekte Kommunikation zur EVSE.<br> Bei Verwendung eines Modbus/LanKonverters baut der Test zunächst die dafür benötigte Verbindung auf.<br>
 		 Nutzung:<br><br>
@@ -93,16 +95,15 @@
 
 	 Sonstige Hilfe die hier stehen sollte?<br>
 	 Passende Erklärung parat?<br>
-	<br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de	 
-	
- 
- 
- 
- 
+	<br> Mithilfe erwünscht. Fragen oder Hilfetexte bitte im <a href="https://openwb.de/forum/">Forum</a> posten oder an info@snaptec.de
+
+
+
+
+
  </div>
 
 
 
 </div>
 </html>
-

@@ -55,11 +55,11 @@
 
 
 		 <ul class="nav nav-tabs">
-			 <li><a href="../index.php">Zurück</a></li>
-			 <li class="active"><a href="index.html">Live</a></li>
-			 <li><a href="daily.php">Daily</a></li>
-			 <li><a href="monthly.php">Monthly</a></li>
-			 <li><a href="yearly.php">Yearly</a></li>
+			 <li><a href="../index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+			 <li class="active"><a href="index.php?theme=<?php echo $_GET["theme"]?>">Live</a></li>
+			 <li><a href="daily.php?theme=<?php echo $_GET["theme"]?>">Daily</a></li>
+			 <li><a href="monthly.php?theme=<?php echo $_GET["theme"]?>">Monthly</a></li>
+			 <li><a href="yearly.php?theme=<?php echo $_GET["theme"]?>">Yearly</a></li>
 		 </ul>
 
 	<div class="preloader">
@@ -77,19 +77,19 @@
 	echo '
 <div style="border-left:solid transparent 30px; border-right:solid transparent 30px;">
 	<div style="height:800px;" id="chartdiv"></div>
-</div>';	
+</div>';
 				   } else {
 					   echo '
 
-	<div class="row"> 
+	<div class="row">
 <div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="./graph-live.php"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 </div>
-	'; } ?> 
+	'; } ?>
 
 
 
@@ -247,9 +247,3 @@ chart.legend = new am4charts.Legend();
 
 </body>
 </html>
-
-
-
-
-
-

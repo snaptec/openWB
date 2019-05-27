@@ -68,9 +68,9 @@ $myData->setSerieOnAxis("EVU",0);
 $myData->setSerieOnAxis("PV",0);
 if ($speichervorhanden == 1) {
 	$myData->setSerieOnAxis("Speicher",0);
-	$myData->setPalette("Speicher",array("R"=>252,"G"=>190,"B"=>50));
+	$myData->setPalette("Speicher",array("R"=>122,"G"=>29,"B"=>29));
 	$myData->setSerieOnAxis("Speicher SoC",1);
-	$myData->setPalette("Speicher SoC",array("R"=>252,"G"=>252,"B"=>100));
+	$myData->setPalette("Speicher SoC",array("R"=>229,"G"=>59,"B"=>59));
 }
 if ($soc1vorhanden == 1) {
 	$myData->setSerieOnAxis("EV1",0);
@@ -111,19 +111,27 @@ $myData->setSerieDescription("Labels","Uhrzeit");
 $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 $myData->setAxisName(0,"kW");
+$myData->setAxisPosition(2,AXIS_POSITION_RIGHT);
+$myData->setAxisName(1,"% SoC");
 $myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
 
 $AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
-$ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
+$ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,
+						"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
 
+$width = 1150;
+$height = 200;
 
-$myImage = new pImage(1150, 200, $myData);
-
+$myImage = new pImage($width, $height, $myData);
 $myImage->setFontProperties(array(
     "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 18));
-$myImage->setGraphArea(95,25, 1110,175);
+$myImage->setGraphArea(70,25,1070,175);
+// set background gradient
+$Settings = array("StartR" => 221, "StartG" => 221, "StartB" => 221, "EndR" => 120, "EndG" => 120, "EndB" => 120, "Alpha" => 50);
+$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
+
 $myImage->drawScale($ScaleSettings);
 $myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 $myData->setSerieDrawable("PV",false);
@@ -153,4 +161,4 @@ $myImage->drawAreaChart();
 
 header("Content-Type: image/png");
 $myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');
-function YAxisFormat($Value) { return(round($Value/1000,2)); } 
+function YAxisFormat($Value) { return(round($Value/1000,2)); }
