@@ -1189,7 +1189,10 @@ if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
 then
 	  echo "heutegeladen=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "sunnyislandip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sunnyislandip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

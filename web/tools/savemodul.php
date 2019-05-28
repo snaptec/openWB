@@ -765,7 +765,10 @@ foreach($lines as $line) {
 	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
 	    $writeit = '1';
 	    }
-
+	    if(strpos($line, "sunnyislandip=") !== false) {
+	    $result .= 'sunnyislandip='.$_POST[sunnyislandip]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "sbs25ip=") !== false) {
 	    $result .= 'sbs25ip='.$_POST[sbs25ip]."\n";
 	    $writeit = '1';

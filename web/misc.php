@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+	  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -403,14 +403,14 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 <div class="container">
 	<div class="row"><br>
 		<ul class="nav nav-tabs">
-			<li><a data-toggle="tab" href="./index.php">Zurück</a></li>
-			<li><a href="./settings.php">Einstellungen</a></li>
-  			<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
-			<li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-
-			<li class="active"><a href="./misc.php">Misc</a></li>
+			<li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+			<li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
+  			<li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
+			<li><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
+			<li><a href="./settheme.php?theme=<?php echo $_GET["theme"]?>">Theme</a></li>
+			<li class="active"><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
 		</ul><br><br>
-	</div>  
+	</div>
 	<form action="./tools/savemisc.php" method="POST">
 		<div class="row">
 			<b><label for="debug">Debugmodus:</label></b>
@@ -511,21 +511,21 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 <script>
 $(function() {
       if($('#pushbenachrichtigung').val() == '0') {
-		$('#pushbaus').show(); 
+		$('#pushbaus').show();
 		$('#pushban').hide();
       } else {
 		$('#pushbaus').hide();
-	       	$('#pushban').show();	
-      } 
+	       	$('#pushban').show();
+      }
 
 	$('#pushbenachrichtigung').change(function(){
 	        if($('#pushbenachrichtigung').val() == '0') {
-			$('#pushbaus').show(); 
+			$('#pushbaus').show();
 			$('#pushban').hide();
 	        } else {
 			$('#pushbaus').hide();
-		       	$('#pushban').show();	
-	        } 
+		       	$('#pushban').show();
+	        }
 	    });
 });
 </script>
@@ -593,7 +593,7 @@ $(function() {
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
-			
+
 	</div>
 	<div class="row">
 			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
@@ -636,7 +636,7 @@ $(function() {
 		</div>
 
 <br><br>
-		<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+		<button type="submit" class="btn btn-primary btn-green">Save</button>
 	</form><br><br /><hr>
 	<div class="row">
 		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
@@ -667,14 +667,14 @@ $(function() {
 </div>
 	<div class="row">
 		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
-		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>	
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>
 	</div>
 <div class="row">
 	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
 	<b><label for="debugmail">Email Adresse:</label></b>
 	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
 
-<button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>	 
+<button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>
 </form><br><br /><hr>
 </div>
 
@@ -690,4 +690,3 @@ Open Source made with love!<br>
 </div></div>
 </div>
 </body></html>
-

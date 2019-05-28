@@ -50,17 +50,17 @@
 
 
 		 <ul class="nav nav-tabs">
-			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.php">Live</a></li>
-			 <li><a href="daily.php">Daily</a></li>
-			 <li class="active"><a href="monthly.php">Monthly</a></li>
-			 <li><a href="yearly.php">Yearly</a></li>
+			 <li><a href="../index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+			 <li><a href="index.php?theme=<?php echo $_GET["theme"]?>">Live</a></li>
+			 <li><a href="daily.php?theme=<?php echo $_GET["theme"]?>">Daily</a></li>
+			 <li class="active"><a href="monthly.php?theme=<?php echo $_GET["theme"]?>">Monthly</a></li>
+			 <li><a href="yearly.php?theme=<?php echo $_GET["theme"]?>">Yearly</a></li>
 		 </ul>
 
 
 	<div class="preloader">
 		<img src="../img/loader.gif" alt="Preloader image">
-	</div> 
+	</div>
 <section id="services">
 
 
@@ -84,36 +84,36 @@ else
 		<?php if ($graphamold == 1) {
 	echo '
 	<div style="height:600px;" id="chartdiv"></div>
-';	
+';
 				   } else {
 					   echo '
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
-			<img src="graph-monthly-evu.php?thedate='; echo $monthdate; echo '" 
+		<div class="imgwrapper">
+			<img src="graph-monthly-evu.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 
 </div>
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly-pv.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 
 </div>
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly-ev.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
@@ -122,11 +122,11 @@ else
 </div>
 
 
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
@@ -135,7 +135,7 @@ else
 </div>
 
 <br><br>
-'; } ?> 
+'; } ?>
 
 <form name="monthlydate" id="monthlydate" action="monthly.php" method="GET">
 <div class="row col-xs-12">
@@ -144,8 +144,8 @@ else
 	<div class="col-xs-8 block-center text-center .text-align:center">
 <?php $monthdate = date("Y-m", strtotime($monthdate)); ?>
 <input id="date" name="date" type="month" min="2018-01" value="<?php print $monthdate ?>" required="required" />
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -155,8 +155,8 @@ else
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>
