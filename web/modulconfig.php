@@ -800,12 +800,12 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <LI><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</A></LI>
-    <li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
-    <li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
-    <li class="active"><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
-	<li><a href="./settheme.php?theme=<?php echo $_GET["theme"]?>">Theme</a></li>
-	<li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
+    <LI><a data-toggle="tab" href="./index.php">Zurück</A></LI>
+    <li><a href="./settings.php">Einstellungen</a></li>
+    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+    <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
+	<li><a href="./settheme.php">Theme</a></li>
+	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
 

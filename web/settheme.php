@@ -30,19 +30,21 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+	<!-- Theme cookie manager -->
+    <script type = "text/javascript" src = "cookiemonster.js" ></script>
 </head>
 
 <body>
-	
+
 	<div class="container">
 		<div class="row"><br>
 			<ul class="nav nav-tabs">
-				<li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
-				<li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
-  				<li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
-				<li><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
-				<li class="active"><a href="./settheme.php?theme=<?php echo $_GET["theme"]?>">Theme</a></li>
-				<li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
+				<li><a data-toggle="tab" href="./index.php">Zurück</a></li>
+				<li><a href="./settings.php">Einstellungen</a></li>
+  				<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+				<li><a href="./modulconfig.php>">Modulkonfiguration</a></li>
+				<li class="active"><a href="./settheme.php">Theme</a></li>
+				<li><a href="./misc.php">Misc</a></li>
 			</ul>
 			<br><br>
 		</div>
@@ -51,9 +53,9 @@
 		<div class="row">
   			<div class="col-sm-4">
     			<div class="thumbnail">
-      				<img src="./themes/<?php echo $_GET["theme"]?>/preview.png" height="120" alt="Theme Vorschau"/>
+      				<img src="./themes/<?php echo $_COOKIE['openWBTheme']?>/preview.png" height="120" alt="Theme Vorschau"/>
       				<div class="caption">
-        				<h4 class="text-center"><?php echo $_GET["theme"]?></h4>
+        				<h4 class="text-center"><?php echo $_COOKIE['openWBTheme']?></h4>
       				</div>
     			</div>
   			</div>
@@ -95,7 +97,7 @@
 		<br><br>
 
 		<button onclick="loadSelectedTheme()" class="btn btn-primary btn-green">Theme übernehmen</button>
-		<button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
+		<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 	</div>
 
 	<script type="text/javascript">
@@ -103,8 +105,8 @@
 			// Hauptseite neu aufbauen mit gewähltem Theme
 			var selector = document.getElementById("themeSelector");
 			var selectedTheme = selector.options[selector.selectedIndex].value;
-			var url = "./index.php?theme="+selectedTheme;
-	        window.location.href = url;
+			themeCookie.write(selectedTheme);
+	        window.location.href = "./index.php";
 		}
 	</script>
 

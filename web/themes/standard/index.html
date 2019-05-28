@@ -1,24 +1,5 @@
-<!-- you may use this theme as template.
-Every live value and state is loaded by main site.
-You have just to reference the id here.
-Put special parts for the theme (graph, img, ...) in the theme folder and/or sub folders of it
-What to find where?
-- web/live.js
-Live values, refresh every 10 seconds are
-- web/livefunctions.js
-- functions for show/hide divs depending on the selected options / conditions
-web/values.php
-- loads config values from openwb.conf
-web/index.php
-- loads everything
-- loads php vars to js
-- sets pwa settings
-- references the theme you can use index.php?theme=yourtheme
--->
-
-<!-- <meta http-equiv="refresh" content="90"> -->
-<!-- Load Javascript Values and functions for amcharts & show/hiding divs -->
-<script src="themes/standard/standard.js"></script>
+<!-- standard theme for openWB -->
+<!-- 2019 Kevin Wieland, Michael Ortenstein -->
 
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -79,8 +60,8 @@ echo '
 <div class="row">
 	<div class="col-xs-12 text-center">
 		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_GET["theme"]; echo '/graph-live.php"
-				 alt="Graph" class="img-responsive" />
+			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
+				 alt="Graph lädt, bitte warten..." class="img-responsive">
 			<br></div>
 	</div>
 </div>';
@@ -178,29 +159,29 @@ echo '
 <div class="row">
 	<div class="col-xs-6 text-center">
 		<div class="actstat">
-			<a href="./tools/changelademodus.php?jetzt=1&theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
+			<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat1">
-			<a href="./tools/changelademodus.php?minundpv=1&theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
+			<a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
 		</div>
 	</div>
 </div>
 <div class="row" style="font-size: 2vw">
 	<div class="col-xs-3 text-center">
 		<div class="actstat4">
-			<a href="./tools/changelademodus.php?semistop=1&theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
+			<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
 		</div>
 	</div>
 	<div class="col-xs-3 text-center">
 		<div class="actstat3">
-			<a href="./tools/changelademodus.php?stop=1&theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
+			<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat2">
-			<a href="./tools/changelademodus.php?pvuberschuss=1&theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-block" style="font-size: 2vw">Nur PV</a>
+			<a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block" style="font-size: 2vw">Nur PV</a>
 		</div>
 	</div>
 </div>
@@ -209,7 +190,7 @@ echo '
 	<div class="col-xs-3 pull-right">
 	<?php
 		if ($speicherpveinbeziehenold == 0) {
-			echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
 		} else {
 			echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
 		}
@@ -589,13 +570,13 @@ echo '
 
 	<div class="row">
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="ladelog.php?theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-blue" >Ladelog</a>
+			<a href="ladelog.php" class="btn btn-lg btn-blue" >Ladelog</a>
 		</div>
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="logging/index.php?theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-blue" >Logging</a>
+			<a href="logging/index.php" class="btn btn-lg btn-blue" >Logging</a>
 		</div>
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="status.php?theme=<?php echo $_GET["theme"]?>" class="btn btn-lg btn-blue" >Status</a>
+			<a href="status.php" class="btn btn-lg btn-blue" >Status</a>
 			</div
 	</div>
 	<div class="row">
@@ -603,15 +584,15 @@ echo '
 		</div>
 		<div class="col-xs-4 text-center">
 			<a href="https://openwb.de">www.openwb.de</a><br>
-			<a href="hilfe.php?theme=<?php echo $_GET["theme"]?>">Hilfe</a>
+			<a href="hilfe.php">Hilfe</a>
 		</div>
 		<div class="col-xs-4 text-right">
-			<a href="settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a><br>
+			<a href="settings.php">Einstellungen</a><br>
 			Ver <?php echo $owbversion ?>
 		</div>
 	</div>
-	
-	
+
+
 	<br><br><br><br>
 </div>
 

@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-	// wenn kein Theme übergeben wird, das Standardtheme aufrufen
-  if (!$_GET["theme"]) {
-    header ('Location: index.php?theme=standard');
-	}
-?>
-
 <head>
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
@@ -61,11 +54,23 @@
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 	<link rel="stylesheet" type="text/css" href="css/pwa.css">
-	<!-- special Theme style -->
-	<link rel="stylesheet" type="text/css" href=<?php echo '"themes/'.htmlspecialchars($_GET["theme"]).'/style.css">'; ?>
 
-  <script src="live.js"></script>
-  <script src="livefunctions.js"></script>
+    <!-- Theme cookie manager -->
+    <script type = "text/javascript" src = "cookiemonster.js" ></script>
+    <!-- include special Theme style and body-->
+    <script>
+        var theme = themeCookie.read();
+        var element = document.createElement("link");
+        element.setAttribute("rel", "stylesheet");
+        element.setAttribute("type", "text/css");
+        element.setAttribute("href", "themes/"+theme+"/style.css");
+        document.getElementsByTagName("head")[0].appendChild(element);
+    </script>
+	<!-- Graph refresher -->
+	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+	<!-- Data refresher -->
+    <script src="live.js"></script>
+    <script src="livefunctions.js"></script>
 </head>
 
 <?php include ("values.php"); ?>
@@ -99,10 +104,10 @@
 		<div class="container">
 			<?php
 				// das gewählte Theme einbinden
-				include 'themes/'.$_GET["theme"].'/index.html';
+				include 'themes/'.$_COOKIE['openWBTheme'].'/index.html';
 			?>
 		</div>
-  </section>
+    </section>
 
 	<!-- Holder for mobile navigation -->
 	<div class="mobile-nav">
