@@ -756,6 +756,18 @@ foreach($lines as $line) {
 	   if(strpos($line, "wr_smartme_url=") !== false) {
 	    $result .= 'wr_smartme_url=\''.$_POST[wr_smartme_url]."'\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "wr_piko2_user=") !== false) {
+	    $result .= 'wr_piko2_user=\''.$_POST[wr_piko2_user]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_piko2_pass=") !== false) {
+	    $result .= 'wr_piko2_pass=\''.$_POST[wr_piko2_pass]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_piko2_url=") !== false) {
+	    $result .= 'wr_piko2_url=\''.$_POST[wr_piko2_url]."'\n";
+	    $writeit = '1';
 	    }
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";

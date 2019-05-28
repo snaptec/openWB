@@ -668,6 +668,15 @@ foreach($lines as $line) {
 	if(strpos($line, "wr_smartme_url=") !== false) {
 		list(, $wr_smartme_urlold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "wr_piko2_user=") !== false) {
+		list(, $wr_piko2_userold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wr_piko2_pass=") !== false) {
+		list(, $wr_piko2_passold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wr_piko2_url=") !== false) {
+		list(, $wr_piko2_urlold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "e3dcip=") !== false) {
 		list(, $e3dcipold) = explode("=", $line);
 	}
@@ -778,6 +787,9 @@ $socteslapwold = str_replace( "'", "", $socteslapwold);
 $socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
 $carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
 $carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
+$wr_piko2_userold = str_replace( "'", "", $wr_piko2_userold);
+$wr_piko2_passold = str_replace( "'", "", $wr_piko2_passold);
+$wr_piko2_urlold = str_replace( "'", "", $wr_piko2_urlold);
 
 
 
@@ -4219,7 +4231,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
-
+		<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alternative Auslesung</option>
 
 
 
@@ -4280,7 +4292,30 @@ $(function() {
 	</div>
 
 </div>
+<div id="pvpiko2">
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_user">Benutzername</label></b>
+		<input type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo htmlspecialchars($wr_piko2_userold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Benutzername<br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_pass">Passwort</label></b>
+		<input type="text" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Passwort<br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_url">Url</label></b>
+		<input type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo htmlspecialchars($wr_piko2_urlold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Url<br>
+	</div>
 
+</div>
 <div id="pvwrjson">
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrjsonurl">WR URL:</label></b>
@@ -4501,6 +4536,7 @@ $(function() {
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
       }
@@ -4519,6 +4555,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4538,6 +4575,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4557,6 +4595,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4576,6 +4615,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4595,6 +4635,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4614,6 +4655,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4633,6 +4675,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4652,6 +4695,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4671,6 +4715,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4690,6 +4735,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4709,6 +4755,7 @@ $(function() {
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
       }
       if($('#pvwattmodul').val() == 'wr_plenticore')   {
@@ -4726,6 +4773,7 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
       }
       if($('#pvwattmodul').val() == 'wr_solarlog')   {
@@ -4743,8 +4791,28 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').show();
+		$('#pvpiko2').hide();
 
       }
+      if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').show();
+
+      }
+
 
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -4762,6 +4830,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4781,6 +4850,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4800,6 +4870,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4820,6 +4891,7 @@ $(function() {
 
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
    }
@@ -4838,6 +4910,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4857,6 +4930,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4876,6 +4950,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4895,6 +4970,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4914,6 +4990,7 @@ $(function() {
   			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
      }
@@ -4932,6 +5009,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4952,6 +5030,7 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
       }
@@ -4970,6 +5049,7 @@ $(function() {
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
 
 
 
@@ -4989,6 +5069,9 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+
+
       }
       if($('#pvwattmodul').val() == 'wr_solarlog')   {
 	      		$('#pvvzl').hide();
@@ -5005,6 +5088,25 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').show();
+		$('#pvpiko2').hide();
+
+      }
+      if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').show();
 
       }
 
