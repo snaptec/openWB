@@ -8,4 +8,3 @@ function getgraph() {
 }
 
 doval = setInterval(getgraph, 5000);
-getfile();
