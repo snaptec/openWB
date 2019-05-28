@@ -739,7 +739,9 @@ foreach($lines as $line) {
 	if(strpos($line, "nrgkickpwlp2=") !== false) {
 		list(, $nrgkickpwlp2old) = explode("=", $line);
 	}
-
+	if(strpos($line, "sunnyislandip=") !== false) {
+		list(, $sunnyislandipold) = explode("=", $line);
+	}
 
 
 }
@@ -5028,7 +5030,10 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
 		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher</option>
 		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
-		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore</option>
+		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore
+		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
+
+</option>
 
 
 
@@ -5067,6 +5072,16 @@ $(function() {
 		Gültige Werte IP. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.<br><br>
 	</div>
 </div>
+<div id="divspeichersunnyisland">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="sunnyislandip">Sunny Island IP:</label></b>
+		<input type="text" name="sunnyislandip" id="sunnyislandip" value="<?php echo $sunnyislandipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse des SMA Sunny Island.<br><br>
+	</div>
+</div>
+
 <div id="divspeichersolaredge">
 	<div class="row" style="background-color:#fcbe1e">
 			<b><label for="solaredgespeicherip">Solaredge Speicher IP:</label></b>
@@ -5187,6 +5202,7 @@ $(function() {
 		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
       }
    if($('#speichermodul').val() == 'speicher_http')   {
@@ -5200,6 +5216,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
    }
@@ -5214,6 +5231,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5231,6 +5249,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5249,6 +5268,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5265,6 +5285,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5280,6 +5301,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5295,6 +5317,7 @@ $(function() {
    		$('#divspeichersolaredge').show();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5310,6 +5333,7 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').show();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5325,10 +5349,25 @@ $(function() {
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').show();
+		$('#divspeichersunnyisland').hide();
 
 
    }
+   if($('#speichermodul').val() == 'speicher_sunnyisland')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').show();
 
+
+   }
 
 $('#speichermodul').change(function(){
      if($('#speichermodul').val() == 'none') {
@@ -5342,6 +5381,7 @@ $('#speichermodul').change(function(){
     		$('#divspeichersolaredge').hide();
   		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5359,6 +5399,7 @@ $('#speichermodul').change(function(){
      		$('#divspeichersolaredge').hide();
  		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5378,6 +5419,7 @@ $('#speichermodul').change(function(){
       		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5396,6 +5438,7 @@ $('#speichermodul').change(function(){
       		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5412,6 +5455,7 @@ $('#speichermodul').change(function(){
       		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5428,6 +5472,7 @@ $('#speichermodul').change(function(){
       		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5443,6 +5488,7 @@ $('#speichermodul').change(function(){
       		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5458,6 +5504,7 @@ $('#speichermodul').change(function(){
    		$('#divspeichersolaredge').show();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
 
@@ -5473,6 +5520,7 @@ $('#speichermodul').change(function(){
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').show();
 		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').hide();
 
 
    }
@@ -5487,9 +5535,26 @@ $('#speichermodul').change(function(){
    		$('#divspeichersolaredge').hide();
 		$('#divspeicherpw').hide();
 		$('#divspeicherplenti').show();
+		$('#divspeichersunnyisland').hide();
 
 
    }
+   if($('#speichermodul').val() == 'speicher_sunnyisland')   {
+		$('#divspeichernone').hide();
+		$('#divspeicherhttp').hide();
+		$('#divspeichermpm3pm').hide();
+		$('#divspeicherbydhv').hide();
+		$('#divspeicherfronius').hide();
+		$('#divspeichere3dc').hide();
+		$('#divspeichersbs25').hide();
+   		$('#divspeichersolaredge').hide();
+		$('#divspeicherpw').hide();
+		$('#divspeicherplenti').hide();
+		$('#divspeichersunnyisland').show();
+
+
+   }
+
 
 });
 
