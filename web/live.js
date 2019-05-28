@@ -113,9 +113,9 @@ $.ajax({
     complete: function(request){
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
-		    	    request.responseText = request.responseText + "kW";
+		    	    request.responseText = request.responseText + " kW";
 		    } else {
-			request.responseText = request.responseText + "W";
+			request.responseText = request.responseText + " W";
 			}
       $("#lldiv").html(request.responseText);
     }
@@ -125,9 +125,9 @@ $.ajax({
     complete: function(request){
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
-		    	    request.responseText = request.responseText + "kW";
+		    	    request.responseText = request.responseText + " kW";
 		    } else {
-			request.responseText = request.responseText + "W";
+			request.responseText = request.responseText + " W";
 			}
       $("#hausverbrauchdiv").html(request.responseText);
     }
@@ -138,9 +138,9 @@ $.ajax({
     complete: function(request){
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
-		    	    request.responseText = request.responseText + "kW";
+		    	    request.responseText = request.responseText + " kW";
 		    } else {
-			request.responseText = request.responseText + "W";
+			request.responseText = request.responseText + " W";
 			}
 	    $("#gesamtllwdiv").html(request.responseText);
     }
@@ -180,9 +180,9 @@ $.ajax({
 		pvwatt = pvwatt * -1;
 		if (pvwatt > 999) {
 			    pvwatt = (pvwatt / 1000).toFixed(2);
-		    	    pvwatt = pvwatt + "kW Erzeugung";
+		    	    pvwatt = pvwatt + " kW Erzeugung";
 		    } else {
-			pvwatt = pvwatt + "W Erzeugung";
+			pvwatt = pvwatt + " W Erzeugung";
 			}
 	}
 
@@ -194,9 +194,9 @@ $.ajax({
     complete: function(request){
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
-		    	    request.responseText = request.responseText + "kW";
+		    	    request.responseText = request.responseText + " kW";
 		    } else {
-			request.responseText = request.responseText + "W";
+			request.responseText = request.responseText + " W";
 			}
       $("#lllp2div").html(request.responseText);
     }
@@ -206,9 +206,9 @@ $.ajax({
     complete: function(request){
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
-		    	    request.responseText = request.responseText + "kW";
+		    	    request.responseText = request.responseText + " kW";
 		    } else {
-			request.responseText = request.responseText + "W";
+			request.responseText = request.responseText + " W";
 			}
       $("#lllp3div").html(request.responseText);
     }
@@ -239,17 +239,17 @@ $.ajax({
 	    if (intbezug > 0) {
 		    if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + "kW Bezug";
+		    	    wattbezug = intbezug + " kW Bezug";
 		    } else {
-			wattbezug = intbezug + "W Bezug";
+			wattbezug = intbezug + " W Bezug";
 			}
 	    } else {
 	    	    intbezug = intbezug * -1;
 			if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + "kW Einspeisung";
+		    	    wattbezug = intbezug + " kW Einspeisung";
 		    } else {
-			wattbezug = intbezug + "W Einspeisung";
+			wattbezug = intbezug + " W Einspeisung";
 			}
 	    }
 
@@ -349,17 +349,17 @@ $.ajax({
 	    if (intspeicherw > 0) {
 		   if (intspeicherw > 999) {
 			intspeicherw = (intspeicherw / 1000).toFixed(2);
-		    	    speicherwatt = intspeicherw + "kW Ladung";
+		    	    speicherwatt = intspeicherw + " kW Ladung";
 		   } else {
-		    speicherwatt = intspeicherw + "W Ladung";
+		    speicherwatt = intspeicherw + " W Ladung";
 		   }
 	    } else {
 	    	    intspeicherw = intspeicherw * -1;
 	   if (intspeicherw > 999) {
 		intspeicherw = (intspeicherw / 1000).toFixed(2);
-		speicherwatt = intspeicherw + "kW Entladung";
+		speicherwatt = intspeicherw + " kW Entladung";
 	} else {
-		speicherwatt = intspeicherw + "W Entladung";
+		speicherwatt = intspeicherw + " W Entladung";
 	   }
 	    }
       $("#speicherleistungdiv").html(speicherwatt);
@@ -371,11 +371,6 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
-
-var source = 'graph-live.php',
-		        timestamp = (new Date()).getTime(),
-		        newUrl = source + '?_=' + timestamp;
-	    document.getElementById("livegraph").src = newUrl;
 
 
 }

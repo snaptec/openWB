@@ -36,6 +36,8 @@ minundpvlademodus(){
 					llneu=$minimalampv
 					#runs/set-current.sh $llneu all
 				fi
+			else
+				llneu=$llalt
 			fi
 			if (( uberschuss > schaltschwelle )); then
 				if (( uberschuss > 1380 )); then
