@@ -7,7 +7,6 @@
 <script src="js/RGraph.vprogress.js"></script>
 <script src="themes/dark_gauges_1/updateGauges.js"></script>
 
-
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
@@ -58,6 +57,7 @@
         max: 1000,
         value: 0,
         options: {
+			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],
@@ -93,6 +93,7 @@
         value: 0,
 		options: {
 			centerx: 110,
+			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
 			labelsSpecific: ['-1', '0', '1'],
@@ -149,6 +150,7 @@
         max: 1000,
         value: 0,
 		options: {
+			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
 			labelsSpecific: ['-1', '0', '1'],
@@ -185,6 +187,7 @@
         max: 1000,
         value: 0,
 		options: {
+			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],
@@ -193,6 +196,7 @@
 			marginTop: 5,
 			shadow: true,
 			shadowColor: '#E9E9E9',
+			shadowBlur: 6,
 			backgroundColor: 'Gradient(white:#B5F1FF)',
 			borderWidth: 1,
 			borderInner: '#6E939B',
@@ -211,7 +215,6 @@
             anglesEnd: RGraph.TWOPI + 0.55
         }
     }).draw();
-</script>
 
 <!-- enable selected graphing method -->
 <?php if ($graphliveamold == 1) {
