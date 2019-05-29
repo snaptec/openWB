@@ -1227,7 +1227,7 @@ loadstatuslog();
 			</script>
 
 			<br><br>
- 			<button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
+ 			<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 			<br><br>
 	<div class="row">
 		Ladestatus Änderungen:

@@ -668,6 +668,15 @@ foreach($lines as $line) {
 	if(strpos($line, "wr_smartme_url=") !== false) {
 		list(, $wr_smartme_urlold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "wr_piko2_user=") !== false) {
+		list(, $wr_piko2_userold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wr_piko2_pass=") !== false) {
+		list(, $wr_piko2_passold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "wr_piko2_url=") !== false) {
+		list(, $wr_piko2_urlold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "e3dcip=") !== false) {
 		list(, $e3dcipold) = explode("=", $line);
 	}
@@ -778,6 +787,9 @@ $socteslapwold = str_replace( "'", "", $socteslapwold);
 $socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
 $carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
 $carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
+$wr_piko2_userold = str_replace( "'", "", $wr_piko2_userold);
+$wr_piko2_passold = str_replace( "'", "", $wr_piko2_passold);
+$wr_piko2_urlold = str_replace( "'", "", $wr_piko2_urlold);
 
 
 
@@ -802,12 +814,12 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <LI><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</A></LI>
-    <li><a href="./settings.php?theme=<?php echo $_GET["theme"]?>">Einstellungen</a></li>
-    <li><a href="./pvconfig.php?theme=<?php echo $_GET["theme"]?>">PV Ladeeinstellungen</a></li>
-    <li class="active"><a href="./modulconfig.php?theme=<?php echo $_GET["theme"]?>">Modulkonfiguration</a></li>
-	<li><a href="./settheme.php?theme=<?php echo $_GET["theme"]?>">Theme</a></li>
-	<li><a href="./misc.php?theme=<?php echo $_GET["theme"]?>">Misc</a></li>
+    <LI><a data-toggle="tab" href="./index.php">Zurück</A></LI>
+    <li><a href="./settings.php">Einstellungen</a></li>
+    <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+    <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
+	<li><a href="./settheme.php">Theme</a></li>
+	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
 
@@ -3051,7 +3063,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300 SM</option>
 		<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
 
 
 	</select>
@@ -3061,6 +3073,12 @@ $(function() {
 		Keine Konfiguration erforderlich.<br><br>
 	</div>
 </div>
+<div id="wattbezugpowerwall">
+	<div class="row">
+		Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
+	</div>
+</div>
+
 <div id="wattbezugkostalpiko">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="wrkostalpikoip">WR Kostal Piko IP:</label></b>
@@ -3412,6 +3430,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
   		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
 
       }
@@ -3434,6 +3453,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'none')   {
@@ -3455,6 +3475,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -3476,6 +3497,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -3497,6 +3519,7 @@ $(function() {
 				$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -3518,6 +3541,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
@@ -3539,6 +3563,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -3560,6 +3585,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -3581,6 +3607,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_solarlog')   {
@@ -3602,6 +3629,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -3623,6 +3651,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -3644,6 +3673,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -3665,6 +3695,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
@@ -3686,6 +3717,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
@@ -3707,6 +3739,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
@@ -3728,6 +3761,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
@@ -3749,6 +3783,7 @@ $(function() {
 		$('#wattbezugplentihaus').show();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
@@ -3770,6 +3805,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').show();
    		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
@@ -3791,8 +3827,32 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').show();
+  		$('#wattbezugpowerwall').hide();
 
   }
+  if($('#wattbezugmodul').val() == 'bezug_powerwall')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
+     		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').show();
+
+  }
+
   $('#wattbezugmodul').change(function(){
 
 	   if($('#wattbezugmodul').val() == 'vzlogger') {
@@ -3814,6 +3874,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
 	      }
    if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
@@ -3835,6 +3896,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'none')   {
@@ -3856,6 +3918,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
        		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_http')   {
@@ -3877,6 +3940,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
        		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
@@ -3898,6 +3962,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_sm')   {
@@ -3919,6 +3984,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_fronius_s0')   {
@@ -3940,6 +4006,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_json')   {
@@ -3961,6 +4028,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
@@ -3982,6 +4050,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
 
@@ -4004,6 +4073,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
    if($('#wattbezugmodul').val() == 'bezug_solaredge')   {
@@ -4025,6 +4095,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
    }
   if($('#wattbezugmodul').val() == 'bezug_smashm')   {
@@ -4046,6 +4117,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_smartme')   {
@@ -4067,6 +4139,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_e3dc')   {
@@ -4088,6 +4161,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_ethmpm3pm')   {
@@ -4109,6 +4183,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_sbs25')   {
@@ -4130,6 +4205,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
@@ -4151,6 +4227,7 @@ $(function() {
 		$('#wattbezugplentihaus').show();
      		$('#wattbezugkostalpiko').hide();
      		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
@@ -4172,6 +4249,7 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').show();
     		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').hide();
 
   }
   if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
@@ -4193,9 +4271,31 @@ $(function() {
 		$('#wattbezugplentihaus').hide();
      		$('#wattbezugkostalpiko').hide();
    		$('#wattbezugsmartfox').show();
+  		$('#wattbezugpowerwall').hide();
 
   }
+  if($('#wattbezugmodul').val() == 'bezug_powerwall')   {
+		$('#wattbezugvz').hide();
+		$('#wattbezugsdm').hide();
+		$('#wattbezugnone').hide();
+		$('#wattbezughttp').hide();
+ 		$('#wattbezugsma').hide();
+		$('#wattbezugfronius').hide();
+		$('#wattbezugjson').hide();
+		$('#wattbezugmpm3pm').hide();
+		$('#wattbezugsolarlog').hide();
+		$('#wattbezugsolaredge').hide();
+		$('#wattbezugshm').hide();
+  		$('#wattbezuge3dc').hide();
+		$('#wattbezugsmartme').hide();
+		$('#wattbezugethmpm3pm').hide();
+		$('#wattbezugsbs25').hide();
+		$('#wattbezugplentihaus').hide();
+     		$('#wattbezugkostalpiko').hide();
+   		$('#wattbezugsmartfox').hide();
+  		$('#wattbezugpowerwall').show();
 
+  }
    });
 });
 </script>
@@ -4219,7 +4319,8 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 		<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
-
+		<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alternative Auslesung</option>
+		<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
 
 
 
@@ -4238,6 +4339,12 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br>
+	</div>
+</div>
+<div id="pvpowerwall">
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert<br>
 	</div>
 </div>
 <div id="pvplenti">
@@ -4280,7 +4387,30 @@ $(function() {
 	</div>
 
 </div>
+<div id="pvpiko2">
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_user">Benutzername</label></b>
+		<input type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo htmlspecialchars($wr_piko2_userold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Benutzername<br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_pass">Passwort</label></b>
+		<input type="text" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Passwort<br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="wr_piko2_url">Url</label></b>
+		<input type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo htmlspecialchars($wr_piko2_urlold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+	Piko Url<br>
+	</div>
 
+</div>
 <div id="pvwrjson">
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrjsonurl">WR URL:</label></b>
@@ -4501,6 +4631,8 @@ $(function() {
 		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4519,6 +4651,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
 
@@ -4538,6 +4672,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
 
@@ -4557,6 +4693,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
 
@@ -4576,7 +4714,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4595,6 +4734,9 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
+
 
 
 
@@ -4614,7 +4756,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4633,7 +4776,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4652,7 +4796,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4671,7 +4816,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4690,7 +4836,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4709,7 +4856,8 @@ $(function() {
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
       }
       if($('#pvwattmodul').val() == 'wr_plenticore')   {
 	      		$('#pvvzl').hide();
@@ -4726,7 +4874,8 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
       }
       if($('#pvwattmodul').val() == 'wr_solarlog')   {
 	      		$('#pvvzl').hide();
@@ -4743,8 +4892,46 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').show();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
       }
+      if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').show();
+		$('#pvpowerwall').hide();
+      }
+      if($('#pvwattmodul').val() == 'wr_powerwall')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').show();
+      }
+
 
   	$('#pvwattmodul').change(function(){
              if($('#pvwattmodul').val() == 'vzloggerpv') {
@@ -4762,7 +4949,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
 	     }
@@ -4781,7 +4969,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4800,7 +4989,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4820,7 +5010,8 @@ $(function() {
 
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
    }
    if($('#pvwattmodul').val() == 'wr_http')   {
@@ -4838,7 +5029,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4857,7 +5049,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4876,7 +5069,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4895,7 +5089,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
    }
@@ -4914,7 +5109,8 @@ $(function() {
   			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
      }
       if($('#pvwattmodul').val() == 'wr_solaredge')   {
@@ -4932,7 +5128,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4952,7 +5149,8 @@ $(function() {
  			$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
       }
       if($('#pvwattmodul').val() == 'wr_tripower9000')   {
@@ -4970,7 +5168,8 @@ $(function() {
  		$('#pvwrtri9000').show();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').hide();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
 
 
       }
@@ -4989,6 +5188,9 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').show();
 		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
+
       }
       if($('#pvwattmodul').val() == 'wr_solarlog')   {
 	      		$('#pvvzl').hide();
@@ -5005,9 +5207,45 @@ $(function() {
  		$('#pvwrtri9000').hide();
 		$('#pvplenti').hide();
 		$('#pvsolarlog').show();
-
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').hide();
       }
-
+      if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').show();
+		$('#pvpowerwall').hide();
+      }
+      if($('#pvwattmodul').val() == 'wr_powerwall')   {
+	      		$('#pvvzl').hide();
+			$('#pvsdmwr').hide();
+			$('#pvwrfronius').hide();
+			$('#pvnone').hide();
+			$('#pvhttp').hide();
+			$('#pvsma').hide();
+			$('#pvwrjson').hide();
+			$('#pvmpm3pm').hide();
+			$('#pvwrkostalpiko').hide();
+			$('#pvwrsolaredge').hide();
+   			$('#pvsmartme').hide();
+ 		$('#pvwrtri9000').hide();
+		$('#pvplenti').hide();
+		$('#pvsolarlog').hide();
+		$('#pvpiko2').hide();
+		$('#pvpowerwall').show();
+      }
 
 
 	});

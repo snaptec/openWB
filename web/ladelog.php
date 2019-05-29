@@ -73,7 +73,7 @@ if (isset($_GET['bis'])) {
 		</div>
 		<div class="row">
 			<div class="col-xs-2">
-				<button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
+				<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 			</div>
 
 			<div class="col-xs-2">
@@ -430,7 +430,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 </div>
 
 <br><br>
- <button onclick="window.location.href='./index.php?theme=<?php echo $_GET["theme"]?>'" class="btn btn-primary btn-blue">Zurück</button>
+ <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 <form method="get" action="../ramdisk/ladelog.csv">
  <button class="btn btn-primary btn-green">Download csv</button>
 </form>

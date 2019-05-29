@@ -41,7 +41,7 @@
 
 <div class="row"><br>
  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="./index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+    <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
     <li><a id="lnkbedienung" href="#" onclick="return ShowContent('bedienung');" >Bedienung</a></li>
     <li><a id="lnkladeeinstellung" href="#" onclick="return ShowContent('ladeeinstellung');" >Ladeeinstellungen</a></li>
     <li><a id="lnkmisc" href="#" onclick="return ShowContent('misc');" >Misc</a></li>
