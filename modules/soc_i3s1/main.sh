@@ -28,19 +28,19 @@ else
 
 #Benachrichtigung bei Ladeabbruch 
 	error=$(echo $abfrage | jq '.chargingError')
-    	if [[ "$error" != 0 ]] ; then
+    	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
-		chargingError=$(</var/www/html/openWB/ramdisk/chargingerror1)
+		chargingError=$(</var/www/html/openWB/ramdisk/chargingerror)
 		#wiederholte Benachrichtigungen verhindern
-		if [[ $chargingError != 1 ]] ; then
+		if [[ $chargingError == 0 ]] ; then
         		message="ACHTUNG - Ladung bei "
         		message+="$soclevel"
         		message+="% abgebrochen"
 			/var/www/html/openWB/runs/pushover.sh "$message"
 			#dokumetieren des Fehlers in der Ramdisk
-			echo 1 > /var/www/html/openWB/ramdisk/chargingerror1
+			echo 1 > /var/www/html/openWB/ramdisk/chargingerror
 		fi
 	else 
-		echo 0 > /var/www/html/openWB/ramdisk/chargingerror1
+		echo 0 > /var/www/html/openWB/ramdisk/chargingerror
 	fi
 fi
