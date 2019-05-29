@@ -13,6 +13,7 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
+	var defaultScaleCounter = 20;  // Standardwert Zähler zur Anpassung Gauge-Skala
 </script>
 
 <div class="row">
@@ -51,6 +52,7 @@
 </div>
 
 <script>
+
     gaugePV = new RGraph.Gauge({
         id: 'pvData',
         min: 0,
@@ -79,12 +81,14 @@
 			labelsValueSize: 17,
             adjustable: true,
             textAccessible: false,
+			colorsRanges: [[0, 1000, 'green', 3]],
 			colorsRedWidth: 0,
             colorsYellowWidth: 0,
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
     }).draw();
+	gaugePV.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
 
 	gaugeBatt = new RGraph.Gauge({
         id: 'battData',
@@ -123,6 +127,7 @@
             anglesEnd: RGraph.TWOPI + 0.55
         }
     }).draw();
+	gaugeBatt.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
 
 	progressBarSoC = new RGraph.VProgress({
         id: 'battData',
@@ -180,6 +185,8 @@
             anglesEnd: RGraph.TWOPI + 0.55
         }
     }).draw();
+	gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+
 
 	gaugeHome = new RGraph.Gauge({
         id: 'homeData',
@@ -209,12 +216,15 @@
 			labelsValueSize: 17,
             adjustable: true,
             textAccessible: false,
+			colorsRanges: [[0, 1000, 'green', 3]],
 			colorsRedWidth: 0,
             colorsYellowWidth: 0,
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
     }).draw();
+	gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+
 </script>
 
 <!-- enable selected graphing method -->
@@ -746,7 +756,11 @@ echo '
 			</div
 	</div>
 	<div class="row">
-		<div class="col-xs-4">
+		<div class="col-xs-4 text-center">
+			<div></div>
+			<div>
+				Theme 2019 by M.Ortenstein
+			</div>
 		</div>
 		<div class="col-xs-4 text-center">
 			<a href="https://openwb.de">www.openwb.de</a><br>
