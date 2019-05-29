@@ -25,6 +25,8 @@ var themeCookie = {
             // kein Cookie gefunden, dann Standard-Theme setzen
             cookie = "standard";
             this.write(cookie);
+            // und Seite neu laden
+            location.reload();
         }
         // prüfen, ob Theme existiert anhand index.html
         var reader = new XMLHttpRequest();
