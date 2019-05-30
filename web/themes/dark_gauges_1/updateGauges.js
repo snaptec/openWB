@@ -5,36 +5,43 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     // value: neuer Wert
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
     // bottomText: Text unter der Leistungsanzeige
-    // setzt neuen Wert und passt Skala an, wenn sich Wert geändert hat
-    if (gauge.value != value) {
-        var needsScaling = false;
-        var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
-        if (gauge.max < newGaugeMax) {
-            // aktuelles Maximum ist größer als Skala
-            gauge.max = newGaugeMax;  // Skala positiv anpassen
+    // setzt neuen Wert und passt Skala an
+    var needsScaling = false;
+    var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
+    if (gauge.max < newGaugeMax) {
+        // aktuelles Maximum ist größer als Skala
+        gauge.max = newGaugeMax;  // Skala positiv anpassen
+        gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+        needsScaling = true;
+    } else if (gauge.max > newGaugeMax) {
+        // Skala ist aktuell eigentlich zu groß
+        gauge.scaleCounter -= 1; // dann Counter reduzieren
+        if (gauge.scaleCounter == 0) {
+            // wenn Zeit rum
             gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+            gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
             needsScaling = true;
-        } else if (gauge.max > newGaugeMax) {
-            // Skala ist aktuell eigentlich zu groß
-            gauge.scaleCounter -= 1; // dann Counter reduzieren
-            if (gauge.scaleCounter == 0) {
-                // wenn Zeit rum
-                gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-                gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
-                needsScaling = true;
-            }
         }
-        if (needsScaling) {
-            // wenn Skala angepasst werden muss
-            if (isSymmetric) {
-                // bei symmetrischer Gauge die negative Skala angleichen
-                gauge.min = gauge.max *-1;
-            }
-            // farbigen Rand anpassen
-            gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
-            // Labels in kW
-            gauge.set('labelsSpecific', [(gauge.min/1000), ((gauge.max-Math.abs(gauge.min))/2000), (gauge.max/1000)]);
+    } else {
+        // Skala soll bleiben
+        if (gauge.scaleCounter < defaultScaleCounter) {
+            // aber Zähler zum Wechsel ist schon angelaufen
+            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
         }
+    }
+    if (needsScaling) {
+        // wenn Skala angepasst werden muss
+        if (isSymmetric) {
+            // bei symmetrischer Gauge die negative Skala angleichen
+            gauge.min = gauge.max *-1;
+        }
+        // farbigen Rand anpassen
+        gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
+        // Labels in kW
+        gauge.set('labelsSpecific', [(gauge.min/1000), ((gauge.max-Math.abs(gauge.min))/2000), (gauge.max/1000)]);
+    }
+    // neu zeichnen nur, wenn sich Wert oder die Skala ändert
+    if (gauge.value != value || needsScaling) {
         // Text unter Leistungsanzeige wie übergeben setzen
         gauge.set('titleBottom', bottomText);
         // Farben der Schrift anpassen
