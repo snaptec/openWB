@@ -36,6 +36,16 @@
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 <body>
+<body onload="checkmodification()">
+<script type="text/javascript">
+function checkmodification(){
+	var r=confirm("Nach einmaliger Einrichtung ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig. Fortfahren?");
+	if (r!=true)
+	  {
+		  window.location.href = './index.php';
+	  }
+	}
+</script>
 <?php
 
 
