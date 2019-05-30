@@ -8,6 +8,8 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     // setzt neuen Wert und passt Skala an
     var needsScaling = false;
     var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
+    if (gauge.value != value) {
+
 
     if (gauge.max < newGaugeMax) {
         // aktuelles Maximum ist größer als Skala
@@ -47,6 +49,7 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     gauge.value = value;
     // und Anzeige erneuern
     gauge.grow();
+    }
 }
 
 function getfile() {
