@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+	<?php
+		// Check ob Theme-Cookie existiert - dann Gültigkeit verlängern, sonst standard setzen
+		if(!(isset($_COOKIE['openWBTheme']) === true)) {
+			setcookie('openWBTheme', 'standard', time()+(60*60*24*365*2));
+			$_COOKIE['openWBTheme'] = 'standard';
+		} else {
+			$themeCookie = $_COOKIE['openWBTheme'];
+			setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
+		}
+	?>
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
 	<script src="js/animated.js"></script>
@@ -55,17 +65,9 @@
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 	<link rel="stylesheet" type="text/css" href="css/pwa.css">
 
-    <!-- Theme cookie manager -->
-    <script type = "text/javascript" src = "cookiemonster.js" ></script>
-    <!-- include special Theme style and body-->
-    <script>
-        var theme = themeCookie.read();
-        var element = document.createElement("link");
-        element.setAttribute("rel", "stylesheet");
-        element.setAttribute("type", "text/css");
-        element.setAttribute("href", "themes/"+theme+"/style.css");
-        document.getElementsByTagName("head")[0].appendChild(element);
-    </script>
+    <!-- include special Theme style -->
+	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
+
 	<!-- Graph refresher -->
 	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
 	<!-- Data refresher -->

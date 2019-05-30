@@ -6,6 +6,10 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
     // bottomText: Text unter der Leistungsanzeige
     // setzt neuen Wert und passt Skala an
+    if(isNaN(value)){
+        // es wurde keine Zahl als Wert übergeben
+	     return;  // gleich wieder zurück
+    }
     var needsScaling = false;
     var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
     if (gauge.max < newGaugeMax) {
