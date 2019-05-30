@@ -4342,7 +4342,7 @@ $(function() {
 	</div>
 </div>
 <div id="pvpowerwall">
-	</div>
+	
 	<div class="row" style="background-color:#febebe">
 		Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert<br>
 	</div>
