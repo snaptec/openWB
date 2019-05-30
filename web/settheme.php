@@ -30,8 +30,6 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
-	<!-- Theme cookie manager -->
-    <script type = "text/javascript" src = "cookiemonster.js" ></script>
 </head>
 
 <body>
@@ -105,7 +103,10 @@
 			// Hauptseite neu aufbauen mit gewähltem Theme
 			var selector = document.getElementById("themeSelector");
 			var selectedTheme = selector.options[selector.selectedIndex].value;
-			themeCookie.write(selectedTheme);
+			var d = new Date();
+	        d.setTime(d.getTime() + (2*365*24*60*60*1000));
+	        var expires = "expires="+d.toUTCString();
+			document.cookie = "openWBTheme=" + selectedTheme + "; " + expires;
 	        window.location.href = "./index.php";
 		}
 	</script>
