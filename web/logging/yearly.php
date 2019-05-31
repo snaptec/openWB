@@ -16,7 +16,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
@@ -25,7 +25,8 @@
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 </head>
@@ -35,11 +36,11 @@
 
 
 		 <ul class="nav nav-tabs">
-			 <li><a href="../index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
-			 <li><a href="index.php?theme=<?php echo $_GET["theme"]?>">Live</a></li>
-			 <li><a href="daily.php?theme=<?php echo $_GET["theme"]?>">Daily</a></li>
-			 <li><a href="monthly.php?theme=<?php echo $_GET["theme"]?>">Monthly</a></li>
-			 <li class="active"><a href="yearly.php?theme=<?php echo $_GET["theme"]?>">Yearly</a></li>
+			 <li><a href="../index.php">Zurück</a></li>
+			 <li><a href="index.php">Live</a></li>
+			 <li><a href="daily.php">Daily</a></li>
+			 <li><a href="monthly.php">Monthly</a></li>
+			 <li class="active"><a href="yearly.php">Yearly</a></li>
 		 </ul>
 
 

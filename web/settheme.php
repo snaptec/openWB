@@ -17,7 +17,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -41,7 +41,7 @@
 				<li><a href="./settings.php">Einstellungen</a></li>
   				<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
 				<li><a href="./modulconfig.php>">Modulkonfiguration</a></li>
-				<li class="active"><a href="./settheme.php">Theme</a></li>
+				<li class="active"><a href="./setTheme.php">Theme</a></li>
 				<li><a href="./misc.php">Misc</a></li>
 			</ul>
 			<br><br>
@@ -94,22 +94,24 @@
 		</div>
 		<br><br>
 
-		<button onclick="loadSelectedTheme()" class="btn btn-primary btn-green">Theme übernehmen</button>
+		<button onclick="setThemeClicked()" class="btn btn-primary btn-green">Theme übernehmen</button>
 		<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 	</div>
 
-	<script type="text/javascript">
-	    function loadSelectedTheme() {
-			// Hauptseite neu aufbauen mit gewähltem Theme
+	<script language="javascript">
+    	function setThemeClicked() {
 			var selector = document.getElementById("themeSelector");
 			var selectedTheme = selector.options[selector.selectedIndex].value;
-			var d = new Date();
-	        d.setTime(d.getTime() + (2*365*24*60*60*1000));
-	        var expires = "expires="+d.toUTCString();
-			document.cookie = "openWBTheme=" + selectedTheme + "; " + expires;
-	        window.location.href = "./index.php";
-		}
-	</script>
+        	$.ajax({
+            	type: "GET",
+            	url: "setThemeCookie.php" ,
+            	data: { theme: selectedTheme },
+            	success : function() {
+            		window.location.href = "./index.php";
+				}
+        	});
+    	}
+    </script>
 
 </body>
 </html>
