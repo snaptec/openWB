@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+	<?php
+		// Check ob Theme-Cookie existiert - dann Gültigkeit verlängern, sonst standard setzen
+		if(!(isset($_COOKIE['openWBTheme']) === true)) {
+			setcookie('openWBTheme', 'standard', time()+(60*60*24*365*2));
+			$_COOKIE['openWBTheme'] = 'standard';
+		} else {
+			$themeCookie = $_COOKIE['openWBTheme'];
+			setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
+		}
+	?>
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
 	<script src="js/animated.js"></script>
@@ -12,7 +22,7 @@
          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
          <meta name="apple-mobile-web-app-title" content="OpenWB">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
-	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  /> 
+	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="OpenWB">
 	<title>OpenWB</title>
@@ -34,7 +44,7 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-	<link rel="manifest" href="manifest.json"> 
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<link rel="apple-touch-startup-image" href="img/loader.gif">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -47,13 +57,20 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 	<link rel="stylesheet" type="text/css" href="css/pwa.css">
+
+    <!-- include special Theme style -->
+	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
+
+	<!-- Graph refresher -->
+	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+	<!-- Data refresher -->
     <script src="live.js"></script>
     <script src="livefunctions.js"></script>
 </head>
@@ -81,15 +98,17 @@
 
 
 <body>
-
-
 	<div class="preloader">
 		<img src="img/loader.gif" alt="Preloader image">
 	</div>
-	
+
 	<section id="services">
 		<div class="container">
-            <?php include 'themes/'.$theme.'/index.html'; ?>
+			<?php
+				// das gewählte Theme einbinden
+				include 'themes/'.$_COOKIE['openWBTheme'].'/index.html';
+			?>
+		</div>
     </section>
 
 	<!-- Holder for mobile navigation -->
@@ -105,20 +124,6 @@
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
-
-
-
-
-<script>
-
-
-</script>
-
-
-
 </body>
 
 </html>
-
-
-

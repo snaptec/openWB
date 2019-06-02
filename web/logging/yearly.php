@@ -35,11 +35,11 @@
 
 
 		 <ul class="nav nav-tabs">
-			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.php">Live</a></li>
-			 <li><a href="daily.php">Daily</a></li>
-			 <li><a href="monthly.php">Monthly</a></li>
-			 <li class="active"><a href="yearly.php">Yearly</a></li>
+			 <li><a href="../index.php?theme=<?php echo $_GET["theme"]?>">Zurück</a></li>
+			 <li><a href="index.php?theme=<?php echo $_GET["theme"]?>">Live</a></li>
+			 <li><a href="daily.php?theme=<?php echo $_GET["theme"]?>">Daily</a></li>
+			 <li><a href="monthly.php?theme=<?php echo $_GET["theme"]?>">Monthly</a></li>
+			 <li class="active"><a href="yearly.php?theme=<?php echo $_GET["theme"]?>">Yearly</a></li>
 		 </ul>
 
 
@@ -66,7 +66,7 @@ else
 		<br><h4> Yearly Graph</h4><br>
 <br>...in development
 	</div>
- <div style="height:600px;" id="chartdiv"> 
+ <div style="height:600px;" id="chartdiv">
 </div><br><br><br><br><br><br>
 <form name="yearlydate" id="yearlydate" action="yearly.php" method="GET">
 <div class="row col-xs-12">
@@ -74,8 +74,8 @@ else
 	</div>
 	<div class="col-xs-8 block-center text-center .text-align:center">
 <input id="date" name="date" type="year" min="2017" value="<?php print $yeardate ?>" required="required" />
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -85,8 +85,8 @@ else
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>
@@ -208,4 +208,3 @@ chart.legend = new am4charts.Legend();
 
 
 </html>
-

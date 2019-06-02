@@ -913,6 +913,18 @@ if ! grep -Fq "wr_smartme_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wr_smartme_url='https://smart-me.com:443/api/Devices/[ID]'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wr_piko2_user=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_piko2_user='user'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_piko2_pass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_piko2_pass='pass'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_piko2_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr_piko2_url='https://url'" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "carnetuser=" /var/www/html/openWB/openwb.conf
 then
@@ -1189,7 +1201,10 @@ if ! grep -Fq "heutegeladen=" /var/www/html/openWB/openwb.conf
 then
 	  echo "heutegeladen=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "sunnyislandip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "sunnyislandip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

@@ -1,30 +1,13 @@
-<!-- you may use this theme as template.
-Every live value and state is loaded by main site.
-You have just to reference the id here.
-Put special parts for the theme (graph, img, ...) in the theme folder and/or sub folders of it
-What to find where?
-- web/live.js
-Live values, refresh every 10 seconds are
-- web/livefunctions.js
-- functions for show/hide divs depending on the selected options / conditions
-web/values.php
-- loads config values from openwb.conf
-web/index.php
-- loads everything
-- loads php vars to js
-- sets pwa settings
-- references the theme you can use index.php?theme=yourtheme
--->
+<!-- standard theme for openWB -->
+<!-- 2019 Kevin Wieland, Michael Ortenstein -->
 
-<!-- <meta http-equiv="refresh" content="90"> -->
-<!-- Load Javascript Values and functions for amcharts & show/hiding divs -->
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	
+
 </script>
 
 
@@ -77,8 +60,8 @@ echo '
 <div class="row">
 	<div class="col-xs-12 text-center">
 		<div class="imgwrapper">
-			<img id="livegraph" src="graph-live.php"
-				 alt="Graph" class="img-responsive" />
+			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
+				 alt="Graph lädt, bitte warten..." class="img-responsive">
 			<br></div>
 	</div>
 </div>';
@@ -205,13 +188,13 @@ echo '
 <div class="row" id="speicherpvuidiv">
 	<div class="col-xs-6"></div>
 	<div class="col-xs-3 pull-right">
-		<?php if ($speicherpveinbeziehenold == 0) {
-								echo ' <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
+	<?php
+		if ($speicherpveinbeziehenold == 0) {
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
 		} else {
-		echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
-		} ?>
-
-
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+		}
+	?>
 	</div>
 
 </div>
@@ -354,7 +337,7 @@ echo '
 							<br><br>
 
 						<button onclick="rslp1()">Reset</button>
-						
+
 					</span>
 					<span id="msmodusslp1"><br><br>
 						<label for="sofortsoclp1">SoC</label>
@@ -376,7 +359,7 @@ echo '
 							<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
 							<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
 						</select> %
-						
+
 					</span>
 					<span id="msmodusnlp1">
 					<br><br>
@@ -391,10 +374,10 @@ echo '
 						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
 							<option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
 							<option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
-						</select> 
+						</select>
 
 
-					
+
 					<span id="msmodusnlp2">
 					<br><br>
 					</span>
@@ -425,11 +408,11 @@ echo '
 							<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
 							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
-						
+
 							<br><br>
 						<button onclick="rslp2()">Reset</button>
 
-						
+
 					</span>
 					<span id="msmodusslp2"><br><br>
 						<label for="sofortsoclp1">SoC</label>
@@ -451,24 +434,24 @@ echo '
 							<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
 							<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
 						</select> %
-				
-						
+
+
 
 
 					</span>
 				</div>
-			
-		
-			
+
+
+
 			<span id="ladepunkts222222div">
 					<div class="col-xs-4 text-center" style="font-size: 2vw">
-			
+
 						<label for="lademstats2"></label>
 
 						<select type="text" name="lademlp3check" id="lademlp3check">
 						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
 							<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
-						</select> 
+						</select>
 
 
 					<span id="msmodusnlp3"></span>
@@ -500,7 +483,7 @@ echo '
 					</select> kWh
 					<br><br>
 					<button onclick="rslp3()">Reset</button>
-				</span>	
+				</span>
 				</span>
 			</div>
 
@@ -584,36 +567,35 @@ echo '
 	<hr>
 </div>
 </div>
-<div class="row">
 
-	<div class="col-xs-4 text-center" style="font-size: 2vw">
-		<a href="ladelog.php" class="btn btn-lg btn-blue" >Ladelog</a>	
+	<div class="row">
+		<div class="col-xs-4 text-center" style="font-size: 2vw">
+			<a href="ladelog.php" class="btn btn-lg btn-blue" >Ladelog</a>
+		</div>
+		<div class="col-xs-4 text-center" style="font-size: 2vw">
+			<a href="logging/index.php" class="btn btn-lg btn-blue" >Logging</a>
+		</div>
+		<div class="col-xs-4 text-center" style="font-size: 2vw">
+			<a href="status.php" class="btn btn-lg btn-blue" >Status</a>
+			</div
+	</div>
+	<div class="row">
+		<div class="col-xs-4">
+		</div>
+		<div class="col-xs-4 text-center">
+			<a href="https://openwb.de">www.openwb.de</a><br>
+			<a href="hilfe.php">Hilfe</a>
+		</div>
+		<div class="col-xs-3 text-right">
+			<a href="settings.php">Einstellungen</a><br>
+			Ver <?php echo $owbversion ?>
+		</div>
+		<div class="col-xs-1">
+		</div>
 	</div>
 
 
-	<div class="col-xs-4 text-center" style="font-size: 2vw">
-		<a href="logging/index.php" class="btn btn-lg btn-blue" >Logging</a>
-	</div>
-	<div class="col-xs-4 text-center" style="font-size: 2vw">
-		<a href="status.php" class="btn btn-lg btn-blue" >Status</a>
-	</div
-</div>
-<div class="row">
-	<div class="col-xs-4">
-
-	</div>
-	<div class="col-xs-4 text-center">
-		<a href="http://openwb.de">www.openwb.de</a><br>
-		<a href="hilfe.html">Hilfe</a>
-
-	</div>
-	<div class="col-xs-4 text-right">
-		<a href="settings.php">Einstellungen</a><br>
-		Ver <?php echo $owbversion ?>
-	</div>
-</div>
-
-<br><br><br><br>
+	<br><br><br><br>
 </div>
 
 <!-- load amcharts js for graph -->

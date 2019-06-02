@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -112,7 +112,19 @@
 		$.ajax({
 			url: "/openWB/ramdisk/bezugw1",
 	    	complete: function(request){
-		    	$("#bezugw1div").html(request.responseText);
+					// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
+					var value = parseInt(request.responseText);
+					var valueStr = "";
+					if(value<0) {
+						value = value * -1;
+						valueStr = valueStr+value+" (Einspeisung)"
+					} else if (value>0) {
+						valueStr = valueStr+value+" (Bezug)"
+					} else  {
+						// Bezug = 0
+						valueStr = valueStr+value
+					}
+		    	$("#bezugw1div").html(valueStr);
 				}
 		});
 	}
@@ -125,7 +137,19 @@
 		$.ajax({
 			url: "/openWB/ramdisk/bezugw2",
 	    	complete: function(request){
-		    	$("#bezugw2div").html(request.responseText);
+					// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
+					var value = parseInt(request.responseText);
+					var valueStr = "";
+					if(value<0) {
+						value = value * -1;
+						valueStr = valueStr+value+" (Einspeisung)"
+					} else if (value>0) {
+						valueStr = valueStr+value+" (Bezug)"
+					} else  {
+						// Bezug = 0
+						valueStr = valueStr+value
+					}
+		    	$("#bezugw2div").html(valueStr);
 				}
 		});
 	}
@@ -138,7 +162,19 @@
 		$.ajax({
 			url: "/openWB/ramdisk/bezugw3",
 	    	complete: function(request){
-		    	$("#bezugw3div").html(request.responseText);
+					// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
+					var value = parseInt(request.responseText);
+					var valueStr = "";
+					if(value<0) {
+						value = value * -1;
+						valueStr = valueStr+value+" (Einspeisung)"
+					} else if (value>0) {
+						valueStr = valueStr+value+" (Bezug)"
+					} else  {
+						// Bezug = 0
+						valueStr = valueStr+value
+					}
+		    	$("#bezugw3div").html(valueStr);
 				}
 		});
 	}
@@ -463,7 +499,10 @@
 		$.ajax({
 			url: "/openWB/ramdisk/pvwatt",
 	    	complete: function(request){
-		    	$("#pvwattdiv").html(request.responseText);
+					// zur Anzeige Wert positiv darstellen
+					// (Erzeugung liegt als Negativwert vor)
+					var value = parseInt(request.responseText) * -1;
+		    	$("#pvwattdiv").html(""+value);
 				}
 		});
 	}
@@ -476,7 +515,19 @@
 		$.ajax({
 			url: "/openWB/ramdisk/wattbezug",
 	    	complete: function(request){
-		    	$("#wattbezugdiv").html(request.responseText);
+					// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
+					var value = parseInt(request.responseText);
+					var valueStr = "";
+					if(value<0) {
+						value = value * -1;
+						valueStr = valueStr+value+" (Einspeisung)"
+					} else if (value>0) {
+						valueStr = valueStr+value+" (Bezug)"
+					} else  {
+						// Bezug = 0
+						valueStr = valueStr+value
+					}
+		    	$("#wattbezugdiv").html(valueStr);
 				}
 		});
 	}
