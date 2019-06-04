@@ -15,7 +15,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -29,7 +29,7 @@
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<!-- Font Awesome, all styles -->
-  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+    <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main styles -->
