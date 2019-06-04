@@ -8,7 +8,7 @@ default_amps_value = 20
 client = ModbusSerialClient(method = "rtu", port="/dev/ttyUSB0", baudrate=9600,
         stopbits=1, bytesize=8, timeout=1)
 
-client.connect()
+#client.connect()
 
 print('First read the registers 2000 to 2009...')
 rr = client.read_holding_registers(2000, 10, unit=1)
@@ -26,4 +26,4 @@ print('Now read the registers 2000 to 2009 a second time for verification...')
 rr = client.read_holding_registers(2000, 10, unit=1)
 print(rr.registers)
 
-client.close()
+#client.close()
