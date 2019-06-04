@@ -237,6 +237,12 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm630modbusllsource=") !== false) {
 		list(, $sdm630modbusllsourceold) = explode("=", $line);
 	}
+	if(strpos($line, "fsm63a3modbusllid=") !== false) {
+		list(, $fsm63a3modbusllidold) = explode("=", $line);
+	}
+	if(strpos($line, "fsm63a3modbusllsource=") !== false) {
+		list(, $fsm63a3modbusllsourceold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm120modbusllsource=") !== false) {
 		list(, $sdm120modbusllsourceold) = explode("=", $line);
 	}
@@ -1153,6 +1159,7 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
+		<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
 
 
 	</select>
@@ -1180,7 +1187,22 @@ $(function() {
 
 
 </div>
-
+<div id="llmfsm">
+	<div class="row bg-info">
+		<b><label for="fsm63a3modbusllsource">Zähler Source:</label></b>
+		<input type="text" name="fsm63a3modbusllsource" id="fsm63a3modbusllsource" value="<?php echo $fsm63a3modbusllsourceold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der fsm63a3 in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="fsm63a3modbusllid">Zähler ID:</label></b>
+		<input type="text" name="fsm63a3modbusllid" id="fsm63a3modbusllid" value="<?php echo $fsm63a3modbusllidold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des fsm63a3.<br><br>
+	</div>
+</div>
 <div id="llmsdm">
 	<div class="row bg-info">
 		<b><label for="sdm630modbusllsource">Zähler Source:</label></b>
@@ -1267,6 +1289,7 @@ $(function() {
 		$('#llswifi').hide();
 		$('#llsma, #sdm120div').hide();
 		$('#rs485lanlp1').hide();
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
@@ -1276,6 +1299,7 @@ $(function() {
 		$('#llswifi').hide();
 		$('#llmpm3pm').hide();
 		$('#rs485lanlp1').show();
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'smaemd_ll') {
@@ -1285,6 +1309,7 @@ $(function() {
 		$('#llmpm3pm').hide();
 		$('#llswifi').hide();
 		$('#rs485lanlp1').hide();
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
@@ -1294,6 +1319,7 @@ $(function() {
 		$('#llmpm3pm').hide();
 		$('#llswifi').hide();
 		$('#rs485lanlp1').show();
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
@@ -1303,6 +1329,7 @@ $(function() {
 		$('#llswifi').show();
 		$('#llmpm3pm').hide();
 		$('#rs485lanlp1').hide();
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'mpm3pmll') {
@@ -1312,9 +1339,20 @@ $(function() {
 		$('#llswifi').hide();
 		$('#llmpm3pm').show();
 		$('#rs485lanlp1').show();
+		$('#llmfsm').hide();
 
       }
 
+      if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
+		$('#llmnone').hide();
+		$('#llmsdm').hide();
+		$('#llsma, #sdm120div').hide();
+		$('#llswifi').hide();
+		$('#llmpm3pm').hide();
+		$('#rs485lanlp1').show();
+		$('#llmfsm').show();
+
+      }
 
 
 
@@ -1327,7 +1365,7 @@ $(function() {
 		$('#llmpm3pm').hide();
 			$('#llswifi').hide();
 		$('#rs485lanlp1').hide();
-
+		$('#llmfsm').hide();
 
 	        }
       if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
@@ -1337,7 +1375,7 @@ $(function() {
 		$('#llsma, #sdm120div').hide();
 		$('#llswifi').hide();
 		$('#rs485lanlp1').show();
-
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'smaemd_ll') {
@@ -1347,7 +1385,7 @@ $(function() {
 		$('#llsma').show();
 		$('#llswifi').hide();
 		$('#rs485lanlp1').hide();
-
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
@@ -1357,7 +1395,7 @@ $(function() {
 		$('#sdm120div').show();
 		$('#llswifi').hide();
 		$('#rs485lanlp1').show();
-
+		$('#llmfsm').hide();
 
       }
       if($('#ladeleistungmodul').val() == 'mpm3pmll') {
@@ -1367,6 +1405,8 @@ $(function() {
 		$('#llswifi').hide();
 		$('#llmpm3pm').show();
 		$('#rs485lanlp1').show();
+		$('#llmfsm').hide();
+
       }
 
       if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
@@ -1376,7 +1416,19 @@ $(function() {
 		$('#sdm120div').hide();
 		$('#llswifi').show();
 		$('#rs485lanlp1').hide();
+		$('#llmfsm').hide();
       }
+      if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
+		$('#llmnone').hide();
+		$('#llmsdm').hide();
+		$('#llsma, #sdm120div').hide();
+		$('#llswifi').hide();
+		$('#llmpm3pm').hide();
+		$('#rs485lanlp1').show();
+		$('#llmfsm').show();
+
+      }
+
 	});
 });
 
