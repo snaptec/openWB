@@ -4,7 +4,7 @@
 ### TODO: The following variables need to be added to "openwb.conf":
 # fsm63a3modbusllsource=... (e.g. "/dev/ttyUSB0")
 # fsm63a3modbusllid=... (e.g. "2")
-### Furthermore the follwoing value in "openwb.conf" has to be set manually:
+### Furthermore the following value in "openwb.conf" has to be set manually:
 # ladeleistungmodul=fsm63a3modbusll
 ### If once all three values can be set up via the GUI (needs to be done by snaptec), these 6 lines can be deleted.
 
