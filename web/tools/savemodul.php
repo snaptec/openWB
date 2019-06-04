@@ -94,6 +94,14 @@ foreach($lines as $line) {
 	    if(strpos($line, "sdm630modbusllsource=") !== false) {
 	    $result .= 'sdm630modbusllsource='.$_POST[sdm630modbusllsource]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "fsm63a3modbusllid=") !== false) {
+	    $result .= 'fsm63a3modbusllid='.$_POST[fsm63a3modbusllid]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "fsm63a3modbusllsource=") !== false) {
+	    $result .= 'fsm63a3modbusllsource='.$_POST[fsm63a3modbusllsource]."\n";
+	    $writeit = '1';
 	    } 
 	    if(strpos($line, "sdm120modbusllsource=") !== false) {
 	    $result .= 'sdm120modbusllsource='.$_POST[sdm120modbusllsource]."\n";

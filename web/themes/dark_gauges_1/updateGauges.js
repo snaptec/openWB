@@ -6,9 +6,12 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
     // bottomText: Text unter der Leistungsanzeige
     // setzt neuen Wert und passt Skala an
+    if(isNaN(value)){
+        // es wurde keine Zahl als Wert übergeben
+	     return;  // gleich wieder zurück
+    }
     var needsScaling = false;
     var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
-
     if (gauge.max < newGaugeMax) {
         // aktuelles Maximum ist größer als Skala
         gauge.max = newGaugeMax;  // Skala positiv anpassen
@@ -23,6 +26,12 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
             gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
             needsScaling = true;
         }
+    } else {
+        // Skala soll bleiben
+        if (gauge.scaleCounter < defaultScaleCounter) {
+            // aber Zähler zum Wechsel ist schon angelaufen
+            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+        }
     }
     if (needsScaling) {
         // wenn Skala angepasst werden muss
@@ -35,18 +44,21 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
         // Labels in kW
         gauge.set('labelsSpecific', [(gauge.min/1000), ((gauge.max-Math.abs(gauge.min))/2000), (gauge.max/1000)]);
     }
-    // Text unter Leistungsanzeige wie übergeben setzen
-    gauge.set('titleBottom', bottomText);
-    // Farben der Schrift anpassen
-    if (value < 0) {
-        gauge.set('titleBottomColor', 'red');
-    } else {
-        gauge.set('titleBottomColor', 'green');
+    // neu zeichnen nur, wenn sich Wert oder die Skala ändert
+    if (gauge.value != value || needsScaling) {
+        // Text unter Leistungsanzeige wie übergeben setzen
+        gauge.set('titleBottom', bottomText);
+        // Farben der Schrift anpassen
+        if (value < 0) {
+            gauge.set('titleBottomColor', 'red');
+        } else {
+            gauge.set('titleBottomColor', 'green');
+        }
+        // neuen Wert für Gauge setzen
+        gauge.value = value;
+        // und Anzeige erneuern
+        gauge.grow();
     }
-    // neuen Wert für Gauge setzen
-    gauge.value = value;
-    // und Anzeige erneuern
-    gauge.grow();
 }
 
 function getfile() {
