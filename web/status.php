@@ -117,9 +117,9 @@
 					var valueStr = "";
 					if(value<0) {
 						value = value * -1;
-						valueStr = valueStr+value+" (Einspeisung)"
+						valueStr = valueStr+value+" (E)"
 					} else if (value>0) {
-						valueStr = valueStr+value+" (Bezug)"
+						valueStr = valueStr+value+" (B)"
 					} else  {
 						// Bezug = 0
 						valueStr = valueStr+value
@@ -142,9 +142,9 @@
 					var valueStr = "";
 					if(value<0) {
 						value = value * -1;
-						valueStr = valueStr+value+" (Einspeisung)"
+						valueStr = valueStr+value+" (E)"
 					} else if (value>0) {
-						valueStr = valueStr+value+" (Bezug)"
+						valueStr = valueStr+value+" (B)"
 					} else  {
 						// Bezug = 0
 						valueStr = valueStr+value
@@ -167,9 +167,9 @@
 					var valueStr = "";
 					if(value<0) {
 						value = value * -1;
-						valueStr = valueStr+value+" (Einspeisung)"
+						valueStr = valueStr+value+" (E)"
 					} else if (value>0) {
-						valueStr = valueStr+value+" (Bezug)"
+						valueStr = valueStr+value+" (B)"
 					} else  {
 						// Bezug = 0
 						valueStr = valueStr+value
@@ -520,9 +520,9 @@
 					var valueStr = "";
 					if(value<0) {
 						value = value * -1;
-						valueStr = valueStr+value+" (Einspeisung)"
+						valueStr = valueStr+value+" (E)"
 					} else if (value>0) {
-						valueStr = valueStr+value+" (Bezug)"
+						valueStr = valueStr+value+" (B)"
 					} else  {
 						// Bezug = 0
 						valueStr = valueStr+value
