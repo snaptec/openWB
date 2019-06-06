@@ -1213,6 +1213,18 @@ if ! grep -Fq "fsm63a3modbusllid=" /var/www/html/openWB/openwb.conf
 then
 	  echo "fsm63a3modbusllid=8" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wakeupzoelp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupzoelp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wakeupzoelp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupzoelp2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
+then
+	echo "plz=36124" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
@@ -1254,6 +1266,7 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
+/var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)

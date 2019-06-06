@@ -48,7 +48,9 @@ foreach($lines as $line) {
 	if(strpos($line, "dspeed=") !== false) {
 		list(, $dspeedold) = explode("=", $line);
 	}
-
+	if(strpos($line, "plz=") !== false) {
+		list(, $plzold) = explode("=", $line);
+	}
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
@@ -420,7 +422,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div class="col-xs-1">
 </div>
 <div class="col-xs-10">
+	<div class="row ">
 
+		<b><label for="plz">Postleitzahl:</label></b>
+		<input type="text" name="plz" id="plz" value="<?php echo $plzold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte z.B. 36124 <br> Dient zur Ermittlung des GSI Index. Weitere Infos unter: <a href="https://www.corrently.de/hintergrund/gruenstromindex">Hier</a><br>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.<br><br>
+	</div><hr>
 <div class="row">
 	<b><h5><label for="Zielladen">Zielladen Ladepunkt 1:(BETA)</label></b>
 	<select type="text" name="zielladenaktivlp1" id="zielladenaktivlp1">
