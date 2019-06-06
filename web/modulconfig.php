@@ -465,6 +465,13 @@ foreach($lines as $line) {
 	if(strpos($line, "zoelp2passwort=") !== false) {
 		list(, $zoelp2passwortold) = explode("=", $line);
 	}
+	if(strpos($line, "wakeupzoelp1=") !== false) {
+		list(, $wakeupzoelp1old) = explode("=", $line);
+	}
+	if(strpos($line, "wakeupzoelp2=") !== false) {
+		list(, $wakeupzoelp2old) = explode("=", $line);
+	}
+
 	if(strpos($line, "evnotifytoken=") !== false) {
 		list(, $evnotifytokenold) = explode("=", $line);
 	}

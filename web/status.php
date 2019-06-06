@@ -3,6 +3,10 @@
 
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/core.js"></script>
+	<script src="js/charts.js"></script>
+	<script src="js/animated.js"></script>
+
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1230,6 +1234,9 @@ loadstatuslog();
  			<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 			<br><br>
 	<div class="row">
+		<div style="height:300px;" id="gsidiv"></div>
+	</div>
+	<div class="row">
 		Ladestatus Änderungen:
 	</div>
 	<div style="white-space: pre-line;" id="ladestatuslogdiv"></div>
@@ -1249,6 +1256,6 @@ loadstatuslog();
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
-	<script type='text/javascript'>
-</body>
+					<script src="gsigraph.js"></script>
+				</body>
 </html>
