@@ -17,6 +17,8 @@ echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+echo 0 > /var/www/html/openWB/ramdisk/chargestat
+echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
