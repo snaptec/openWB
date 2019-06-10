@@ -50,8 +50,8 @@
  <div id="bedienung" style="display:block">
 	 <h3>Bedienung</h3>
 		 <p> Lademodus</p><br>
-			 Der Unterschied zwischen Standby und Stop ist, dass bei Stop keine Ladung erlaubt ist.<br>
-		 Ist Semistop Modus kann die Ladung durch Nachtladen und Zielladen aktiviert werden<br>
+			 Der Unterschied zwischen "Standby" und "Stop" ist, dass bei "Stop" keine Ladung erlaubt ist.<br>
+		 Im Semistop Modus kann die Ladung durch Nachtladen und Zielladen aktiviert werden<br>
 		 <hr>
 
 	<br>
