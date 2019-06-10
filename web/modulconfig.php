@@ -1894,7 +1894,8 @@ $(function() {
 			<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
 		</div>
 		<div class="row bg-info">
-			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+			Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br>
+			Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br><br>
 		</div>
 		<div class="row bg-info">
 			<b><label for="evseids1">EVSE ID:</label></b>
@@ -3406,7 +3407,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 </div>
 <div id="wattbezugsolarlog">
 	<div class="row" style="background-color:#febebe">
-		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
+		<b><label for="bezug_solarlog_ip">IP Adresse des SolarLog</label></b>
 		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
@@ -4595,7 +4596,7 @@ $(function() {
 		<input type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="mpm3pmpvid">MPM3PM Wechselrichterleistung ID:</label></b>
@@ -4609,7 +4610,7 @@ $(function() {
 		<input type="text" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.<br><br>
 	</div>
 </div>
 
