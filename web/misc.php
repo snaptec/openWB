@@ -617,8 +617,8 @@ $(function() {
 		<div class="row">
 			<b><label for="releasetrain">Releasechannel:</label></b>
 			<select type="text" name="releasetrain" id="releasetrain">
-				<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">Stable</option>
-				<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">Beta</option>
+				<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">stable</option>
+				<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">beta</option>
 				<option <?php if($releasetrainold == "master\n") echo selected ?> value="master">Nightly</option>
 			</select>
 			<br>
