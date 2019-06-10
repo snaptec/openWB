@@ -22,17 +22,18 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<meta http-equiv="refresh" content="600; URL=index.html">
+	<meta http-equiv="refresh" content="600; URL=index.php">
 	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 </head>
@@ -56,7 +57,7 @@
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li class="active"><a href="index.html">Live</a></li>
+			 <li class="active"><a href="index.php">Live</a></li>
 			 <li><a href="daily.php">Daily</a></li>
 			 <li><a href="monthly.php">Monthly</a></li>
 			 <li><a href="yearly.php">Yearly</a></li>
@@ -77,19 +78,19 @@
 	echo '
 <div style="border-left:solid transparent 30px; border-right:solid transparent 30px;">
 	<div style="height:800px;" id="chartdiv"></div>
-</div>';	
+</div>';
 				   } else {
 					   echo '
 
-	<div class="row"> 
+	<div class="row">
 <div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="./graph-live.php"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 </div>
-	'; } ?> 
+	'; } ?>
 
 
 
@@ -247,9 +248,3 @@ chart.legend = new am4charts.Legend();
 
 </body>
 </html>
-
-
-
-
-
-

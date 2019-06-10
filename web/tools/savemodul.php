@@ -94,6 +94,14 @@ foreach($lines as $line) {
 	    if(strpos($line, "sdm630modbusllsource=") !== false) {
 	    $result .= 'sdm630modbusllsource='.$_POST[sdm630modbusllsource]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "fsm63a3modbusllid=") !== false) {
+	    $result .= 'fsm63a3modbusllid='.$_POST[fsm63a3modbusllid]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "fsm63a3modbusllsource=") !== false) {
+	    $result .= 'fsm63a3modbusllsource='.$_POST[fsm63a3modbusllsource]."\n";
+	    $writeit = '1';
 	    } 
 	    if(strpos($line, "sdm120modbusllsource=") !== false) {
 	    $result .= 'sdm120modbusllsource='.$_POST[sdm120modbusllsource]."\n";
@@ -554,6 +562,11 @@ foreach($lines as $line) {
 	    $result .= 'solaredgeip=\''.$_POST[solaredgeip]."'\n";
 	 $writeit = '1';
 	    }
+	    if(strpos($line, "solaredgewr2ip=") !== false) {
+	    $result .= 'solaredgewr2ip=\''.$_POST[solaredgewr2ip]."'\n";
+	 $writeit = '1';
+	    }
+
 	    if(strpos($line, "solaredgespeicherip=") !== false) {
 	    $result .= 'solaredgespeicherip=\''.$_POST[solaredgespeicherip]."'\n";
 	 $writeit = '1';
@@ -627,7 +640,22 @@ foreach($lines as $line) {
     	    $result .= 'nrgkickpwlp1='.$_POST[nrgkickpwlp1]."\n";
     	 $writeit = '1';
    } 
-
+	    if(strpos($line, "nrgkickiplp2=") !== false) {
+    	    $result .= 'nrgkickiplp2='.$_POST[nrgkickiplp2]."\n";
+    	 $writeit = '1';
+	    } 
+	    if(strpos($line, "nrgkicktimeoutlp2=") !== false) {
+    	    $result .= 'nrgkicktimeoutlp2='.$_POST[nrgkicktimeoutlp2]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickmaclp2=") !== false) {
+    	    $result .= 'nrgkickmaclp2='.$_POST[nrgkickmaclp2]."\n";
+    	 $writeit = '1';
+   } 
+	    if(strpos($line, "nrgkickpwlp2=") !== false) {
+    	    $result .= 'nrgkickpwlp2='.$_POST[nrgkickpwlp2]."\n";
+    	 $writeit = '1';
+   } 
 	    if(strpos($line, "goeiplp1=") !== false) {
     	    $result .= 'goeiplp1='.$_POST[goeiplp1]."\n";
     	 $writeit = '1';
@@ -736,6 +764,18 @@ foreach($lines as $line) {
 	   if(strpos($line, "wr_smartme_url=") !== false) {
 	    $result .= 'wr_smartme_url=\''.$_POST[wr_smartme_url]."'\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "wr_piko2_user=") !== false) {
+	    $result .= 'wr_piko2_user=\''.$_POST[wr_piko2_user]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_piko2_pass=") !== false) {
+	    $result .= 'wr_piko2_pass=\''.$_POST[wr_piko2_pass]."'\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "wr_piko2_url=") !== false) {
+	    $result .= 'wr_piko2_url=\''.$_POST[wr_piko2_url]."'\n";
+	    $writeit = '1';
 	    }
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
@@ -745,7 +785,10 @@ foreach($lines as $line) {
 	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
 	    $writeit = '1';
 	    }
-
+	    if(strpos($line, "sunnyislandip=") !== false) {
+	    $result .= 'sunnyislandip='.$_POST[sunnyislandip]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "sbs25ip=") !== false) {
 	    $result .= 'sbs25ip='.$_POST[sbs25ip]."\n";
 	    $writeit = '1';

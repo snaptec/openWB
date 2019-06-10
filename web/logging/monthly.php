@@ -20,7 +20,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
@@ -29,7 +29,8 @@
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 </head>
@@ -60,7 +61,7 @@
 
 	<div class="preloader">
 		<img src="../img/loader.gif" alt="Preloader image">
-	</div> 
+	</div>
 <section id="services">
 
 
@@ -84,36 +85,36 @@ else
 		<?php if ($graphamold == 1) {
 	echo '
 	<div style="height:600px;" id="chartdiv"></div>
-';	
+';
 				   } else {
 					   echo '
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
-			<img src="graph-monthly-evu.php?thedate='; echo $monthdate; echo '" 
+		<div class="imgwrapper">
+			<img src="graph-monthly-evu.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 
 </div>
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly-pv.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
 
 </div>
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly-ev.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
@@ -122,11 +123,11 @@ else
 </div>
 
 
-<div class="row"> 
-	
+<div class="row">
+
 
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
+		<div class="imgwrapper">
 			<img src="graph-monthly.php?thedate='; echo $monthdate; echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
@@ -135,7 +136,7 @@ else
 </div>
 
 <br><br>
-'; } ?> 
+'; } ?>
 
 <form name="monthlydate" id="monthlydate" action="monthly.php" method="GET">
 <div class="row col-xs-12">
@@ -144,8 +145,8 @@ else
 	<div class="col-xs-8 block-center text-center .text-align:center">
 <?php $monthdate = date("Y-m", strtotime($monthdate)); ?>
 <input id="date" name="date" type="month" min="2018-01" value="<?php print $monthdate ?>" required="required" />
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -155,8 +156,8 @@ else
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>

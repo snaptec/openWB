@@ -9,9 +9,15 @@ import struct
 import binascii
 ipaddress = str(sys.argv[1])
 slave1id = int(sys.argv[2])
+batwrsame = int(sys.argv[3])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
-
+#batterie auslesen und pv leistung korrigieren
+storagepower = 0
+if batwrsame == 1:
+    rr = client.read_holding_registers(62836, 2, unit=1)
+    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
+    storagepower = int(struct.unpack('>f', raw)[0])
 
 resp= client.read_holding_registers(40084,2,unit=slave1id)
 multipli = resp.registers[0]
@@ -40,9 +46,11 @@ if fmultiplint == fmult2iplint:
         rawprodw = rawprodw / 10000
     if fmultiplint == -5:
         rawprodw = rawprodw / 100000
+    rawprodw = rawprodw - storagepower    
     f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
     f.write(str(rawprodw))
     f.close()
+
 
 resp= client.read_holding_registers(40093,2,unit=slave1id)
 value1 = resp.registers[0]

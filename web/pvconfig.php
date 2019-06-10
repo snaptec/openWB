@@ -15,7 +15,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -64,6 +64,10 @@ foreach($lines as $line) {
 	if(strpos($line, "minimalapv=") !== false) {
 		list(, $minimalapvold) = explode("=", $line);
 	}
+	if(strpos($line, "minimalalp2pv=") !== false) {
+		list(, $minimalalp2pvold) = explode("=", $line);
+	}
+
 	if(strpos($line, "minimalstromstaerke=") !== false) {
 		list(, $minimalstromstaerkeold) = explode("=", $line);
 	}
@@ -152,15 +156,7 @@ $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
 $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
-
-
-
-
-
-
 ?>
-
-
 
 <div class="container">
 <div class="row"><br>
@@ -169,7 +165,8 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
     <li><a href="./settings.php">Einstellungen</a></li>
     <li class="active"><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-    <li><a href="./misc.php">Misc</a></li>
+	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
 <form action="./tools/savepv.php" method="POST">
@@ -177,9 +174,6 @@ $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 <div class="col-xs-1">
 </div>
 <div class="col-xs-10">
-
-
-
 
 <div class="row">
 	<h3>PV Regelung</h3>
@@ -235,7 +229,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 		<option <?php if($minimalampvold == 10) echo selected ?> value="10">10</option>
 		<option <?php if($minimalampvold == 11) echo selected ?> value="11">11</option>
 		<option <?php if($minimalampvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>
 		<option <?php if($minimalampvold == 14) echo selected ?> value="14">14</option>
 		<option <?php if($minimalampvold == 15) echo selected ?> value="15">15</option>
 		<option <?php if($minimalampvold == 16) echo selected ?> value="16">16</option>
@@ -247,7 +241,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
 </div>
 <div class="row" style="background-color:#befebe">
-	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus:</label></b>
+	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus LP1:</label></b>
 	<select type="text" name="minimalapv" id="minimalapv">
 		<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
 		<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
@@ -256,7 +250,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 		<option <?php if($minimalapvold == 10) echo selected ?> value="10">10</option>
 		<option <?php if($minimalapvold == 11) echo selected ?> value="11">11</option>
 		<option <?php if($minimalapvold == 12) echo selected ?> value="12">12</option>
-		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>	
+		<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>
 		<option <?php if($minimalapvold == 14) echo selected ?> value="14">14</option>
 		<option <?php if($minimalapvold == 15) echo selected ?> value="15">15</option>
 		<option <?php if($minimalapvold == 16) echo selected ?> value="16">16</option>
@@ -264,6 +258,19 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 
 
 </div>
+<div class="row" style="background-color:#befebe">
+	<b><label for="minimalalp2pv">Minimalstromstärke fuer den Nur PV Laden Modus LP2:</label></b>
+	<select type="text" name="minimalalp2pv" id="minimalalp2pv">
+		<option <?php if($minimalalp2pvold == 6) echo selected ?> value="6">6</option>
+		<option <?php if($minimalalp2pvold == 7) echo selected ?> value="7">7</option>
+		<option <?php if($minimalalp2pvold == 8) echo selected ?> value="8">8</option>
+		<option <?php if($minimalalp2pvold == 9) echo selected ?> value="9">9</option>
+		<option <?php if($minimalalp2pvold == 10) echo selected ?> value="10">10</option>
+	</select><br>
+
+
+</div>
+
 
 <div class="row" style="background-color:#befebe">
 Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
@@ -326,7 +333,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	</select>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Definiert einen Mindest SoC Wert bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	Definiert einen Mindest SoC Wert (EV) bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
 	</div><br>
 
 
@@ -410,7 +417,7 @@ Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Re
 Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
 Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
 z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
-	
+
 </div>
 
 
@@ -426,7 +433,7 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
  			<option <?php if($speicherpvuiold == 0) echo selected ?> value="0">Nein</option>
   			<option <?php if($speicherpvuiold == 1) echo selected ?> value="1">Ja</option>
 		</select><br>
-	
+
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
@@ -438,7 +445,7 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 			<input type="text" name="speichermaxwatt" id="speichermaxwatt" value="<?php echo $speichermaxwattold ?>"><br>
 		</div>
 		<div class="row" style="background-color:#fcbe1e">
-		Definiert einen Wert in Watt mit dem Speicher maximal laden soll. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
+		Definiert einen Wert, der trotz Vorrang des EV immer als Ladeleistung für den Speicher vorgehalten wird. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
 		</div>
 	</div>
 
@@ -448,20 +455,20 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 <script>
 $(function() {
    if($('#speicherpvrang').val() == '1') {
-	$('#speicherpvrangdiv').show(); 
+	$('#speicherpvrangdiv').show();
       } else {
 	$('#speicherpvrangdiv').hide();
-      } 
+      }
 });
 $(function() {
    if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
+	$('#speicherevvdiv').show();
       } else {
 	$('#speicherevvdiv').hide();
       }
 	$('#speicherpveinbeziehen').change(function(){
 	   if($('#speicherpveinbeziehen').val() == '1') {
-	$('#speicherevvdiv').show(); 
+	$('#speicherevvdiv').show();
       } else {
 	$('#speicherevvdiv').hide();
       }
@@ -495,13 +502,13 @@ Die Differenz beträgt 36 %, geteilt durch Faktor 5 ergibt den Wert 7.<br> Nun w
 
 $(function() {
    if($('#adaptpv').val() == '1') {
-	$('#adaptpvdiv').show(); 
+	$('#adaptpvdiv').show();
       } else {
 	$('#adaptpvdiv').hide();
       }
 	$('#adaptpv').change(function(){
 	   if($('#adaptpv').val() == '1') {
-	$('#adaptpvdiv').show(); 
+	$('#adaptpvdiv').show();
       } else {
 	$('#adaptpvdiv').hide();
       }
@@ -565,21 +572,21 @@ $(function() {
 <script>
 $(function() {
       if($('#hook1_aktiv').val() == '0') {
-		$('#hook1ausdiv').show(); 
+		$('#hook1ausdiv').show();
 		$('#hook1andiv').hide();
       } else {
 		$('#hook1ausdiv').hide();
-	       	$('#hook1andiv').show();	
-      } 
+	       	$('#hook1andiv').show();
+      }
 
 	$('#hook1_aktiv').change(function(){
 	      if($('#hook1_aktiv').val() == '0') {
-			$('#hook1ausdiv').show(); 
+			$('#hook1ausdiv').show();
 			$('#hook1andiv').hide();
 	      } else {
 			$('#hook1ausdiv').hide();
-		       	$('#hook1andiv').show();	
-	      } 
+		       	$('#hook1andiv').show();
+	      }
 	    });
 });
 </script>
@@ -591,7 +598,7 @@ $(function() {
 <div class="col-xs-1">
 </div>
 
-<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+<button type="submit" class="btn btn-primary btn-green">Save</button>
  </form><br><br />
 
 <br><br>
@@ -613,4 +620,3 @@ Open Source made with love!<br>
 
 </div>
 </body></html>
-

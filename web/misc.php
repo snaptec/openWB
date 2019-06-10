@@ -15,7 +15,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -28,17 +28,16 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+	  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 <body>
+
 <?php
-
-
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "logeinspeisungneg=") !== false) {
@@ -375,7 +374,9 @@ foreach($lines as $line) {
 	if(strpos($line, "hausverbrauchstat=") !== false) {
 		list(, $hausverbrauchstatold) = explode("=", $line);
 	}
-
+	if(strpos($line, "heutegeladen=") !== false) {
+		list(, $heutegeladenold) = explode("=", $line);
+	}
 
 
 
@@ -389,14 +390,7 @@ $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
 $pushoveruserold = str_replace( "'", "", $pushoveruserold);
 $pushovertokenold = str_replace( "'", "", $pushovertokenold);
-
-
-
-
-
 ?>
-
-
 
 <div class="container">
 	<div class="row"><br>
@@ -405,10 +399,10 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<li><a href="./settings.php">Einstellungen</a></li>
   			<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
 			<li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-
+			<li><a href="./setTheme.php">Theme</a></li>
 			<li class="active"><a href="./misc.php">Misc</a></li>
 		</ul><br><br>
-	</div>  
+	</div>
 	<form action="./tools/savemisc.php" method="POST">
 		<div class="row">
 			<b><label for="debug">Debugmodus:</label></b>
@@ -509,21 +503,21 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 <script>
 $(function() {
       if($('#pushbenachrichtigung').val() == '0') {
-		$('#pushbaus').show(); 
+		$('#pushbaus').show();
 		$('#pushban').hide();
       } else {
 		$('#pushbaus').hide();
-	       	$('#pushban').show();	
-      } 
+	       	$('#pushban').show();
+      }
 
 	$('#pushbenachrichtigung').change(function(){
 	        if($('#pushbenachrichtigung').val() == '0') {
-			$('#pushbaus').show(); 
+			$('#pushbaus').show();
 			$('#pushban').hide();
 	        } else {
 			$('#pushbaus').hide();
-		       	$('#pushban').show();	
-	        } 
+		       	$('#pushban').show();
+	        }
 	    });
 });
 </script>
@@ -539,6 +533,15 @@ $(function() {
 			</select>
 			<br>
 		</div>
+		<div class="row">
+			<b><label for="heutegeladen">Heute geladen auf der Hauptseite anzeigen:</label></b>
+			<select type="text" name="heutegeladen" id="heutegeladen">
+				<option <?php if($heutegeladenold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($heutegeladenold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+			<br>
+		</div>
+
 
 		<div class="row">
 			<h4>	Graphen</h4> <br>
@@ -582,7 +585,7 @@ $(function() {
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
-			
+
 	</div>
 	<div class="row">
 			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
@@ -625,7 +628,7 @@ $(function() {
 		</div>
 
 <br><br>
-		<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+		<button type="submit" class="btn btn-primary btn-green">Save</button>
 	</form><br><br /><hr>
 	<div class="row">
 		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
@@ -647,6 +650,26 @@ $(function() {
 	<div class="row">
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
+
+<hr>
+<div class="row">
+
+<form action="./tools/savedebug.php" method="POST">
+	<h3>Debug Daten senden</h3>
+</div>
+	<div class="row">
+		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>
+	</div>
+<div class="row">
+	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
+	<b><label for="debugmail">Email Adresse:</label></b>
+	<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
+
+<button type="submit" class="btn btn-primary btn-green">Debug Daten senden</button>
+</form><br><br /><hr>
+</div>
+
 <div class="row">
 <div class="text-center">
 Open Source made with love!<br>
@@ -659,4 +682,3 @@ Open Source made with love!<br>
 </div></div>
 </div>
 </body></html>
-

@@ -16,7 +16,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
@@ -25,7 +25,8 @@
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 </head>
@@ -66,7 +67,7 @@ else
 		<br><h4> Yearly Graph</h4><br>
 <br>...in development
 	</div>
- <div style="height:600px;" id="chartdiv"> 
+ <div style="height:600px;" id="chartdiv">
 </div><br><br><br><br><br><br>
 <form name="yearlydate" id="yearlydate" action="yearly.php" method="GET">
 <div class="row col-xs-12">
@@ -74,8 +75,8 @@ else
 	</div>
 	<div class="col-xs-8 block-center text-center .text-align:center">
 <input id="date" name="date" type="year" min="2017" value="<?php print $yeardate ?>" required="required" />
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -85,8 +86,8 @@ else
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>
@@ -208,4 +209,3 @@ chart.legend = new am4charts.Legend();
 
 
 </html>
-

@@ -4,6 +4,7 @@
 minundpvlademodus(){
 	if (( ladestatus == 0 )); then
 		runs/set-current.sh $minimalampv all
+		echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
 		if [[ $debug == "1" ]]; then
 			echo "starte min + pv ladung mit $minimalampv"
 		fi
@@ -35,6 +36,8 @@ minundpvlademodus(){
 					llneu=$minimalampv
 					#runs/set-current.sh $llneu all
 				fi
+			else
+				llneu=$llalt
 			fi
 			if (( uberschuss > schaltschwelle )); then
 				if (( uberschuss > 1380 )); then
@@ -59,10 +62,13 @@ minundpvlademodus(){
 	fi
 	if (( llneu < minimalampv )); then
 		llneu=$minimalampv
+
 	fi
 	if (( llneu > maximalstromstaerke )); then
 		llneu=$maximalstromstaerke
 	fi
 	runs/set-current.sh $llneu all
+	echo "$date alle Ladepunkte, Lademodus Min und PV. Ändere Ladeleistung auf $llneu Ampere" >> ramdisk/ladestatus.log
+
 }
 

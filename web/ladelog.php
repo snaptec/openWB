@@ -15,7 +15,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main styles -->
@@ -84,31 +84,31 @@ if (isset($_GET['bis'])) {
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Startzeit
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Geladene kWh
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladeleistung kW
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladedauer
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
-				</div>	
+				</div>
 	</div>
 </div>
-<hr>	
+<hr>
 <?php
 $ifile = fopen('ladelog', "r");
 $ofile = fopen('../ramdisk/tladelog', "w+");
@@ -119,7 +119,7 @@ while($counter <= $limit) {
 	        $line = fgetcsv($ifile);
 		fputcsv($ofile, $line);
 		    $counter++;
-} 
+}
 
 $start = 0;
 $stop = 0;
@@ -193,6 +193,15 @@ if (isset($_GET['standby'])) {
 } else {
 	$standby = 8;
 }
+if (isset($_GET['nachtladenlp1'])) {
+	if ($_GET['nachtladenlp1'] == "on"){
+		$nachtladenlp1 = "7";
+	} else {
+		$nachtladenlp1 = 8;
+	}
+} else {
+	$standby = 8;
+}
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	$startime = str_replace('.', '-', $logarray[0]);
 	$startime = strtotime(substr_replace($startime, "20", "6", 0));
@@ -200,7 +209,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7]) || $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) { 
+			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -247,7 +256,9 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						if ($logarray[7] == '4'){
 							echo 'Standby';
 						}
-
+						if ($logarray[7] == '7'){
+							echo 'Nachtladen';
+						}
 					}
 					echo '</div>';
 				echo '</div>';
@@ -302,14 +313,16 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						if ($logarray[7] == '4'){
 							echo 'Standby';
 						}
-
+						if ($logarray[7] == '4'){
+							echo 'Nachtladen';
+						}
 					}
 					echo '</div>';
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
 			$ladezeit = $ladezeit + (($stop - $start) / 60 );
-			
+
 	}
 }
 fclose($file);
@@ -324,51 +337,51 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Startzeit
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Endzeit
 				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km gesamt
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Geladene kWh gesamt
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladeleistung kW
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Durchschnittliche Ladedauer
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
-				</div>	
+				</div>
 	</div>
 </div>
 	<div class="row">
 			<div class="col-xs-12 text-center">
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
-				
-				</div>	
+
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
 								</div>
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($sumgelkm); ?>	</div>	
+						<?php print($sumgelkm); ?>	</div>
 				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
 					<?php print($sumkwh); ?>
 
-				</div>	
+				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
 						<?php print($avgladel); ?>
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
 						<?php print($ladezeit); ?> Min
-				</div>	
+				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
-				</div>	
+				</div>
 	</div>
 </div>
 
@@ -401,6 +414,9 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 		<input id="nurpv" name="nurpv" type="checkbox" <?php if (isset($_GET['nurpv'])){ if ( $_GET['nurpv'] == "on"){ echo "checked"; }} ?> ><br>
 		<label for="standby">Standby Lademodus:</label>
 		<input id="standby" name="standby" type="checkbox" <?php if (isset($_GET['standby'])){ if ( $_GET['standby'] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="nachtladenlp1">Nachtladen LP1:</label>
+		<input id="nachtladenlp1" name="nachtladenlp1" type="checkbox" <?php if (isset($_GET['nachtladenlp1'])){ if ( $_GET['nachtladenlp1'] == "on"){ echo "checked"; }} ?> ><br>
+
 
 
 

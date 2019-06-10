@@ -18,7 +18,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
@@ -28,7 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 
@@ -75,7 +76,7 @@
 
 	<div class="preloader">
 		<img src="../img/loader.gif" alt="OpenWB loading...">
-	</div> 
+	</div>
 
 
 <?php
@@ -92,7 +93,7 @@ else
 
 }
 $daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
-$nextday = date('Y-m-d',strtotime($daydate . "+1 days")); 
+$nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 ?>
 <div class="row">
 	<div class="text-center">
@@ -102,19 +103,19 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 		<?php if ($graphamold == 1) {
 	echo '
 	<div style="height:600px;" id="chartdiv"></div>
-';	
+';
 				   } else {
 					   echo '
 
-	<div class="row"> 
+	<div class="row">
 	<div class="col-xs-12">
-		<div class="imgwrapper">	
-			<img src="graph-daily.php?thedate='; echo $daydate; 
+		<div class="imgwrapper">
+			<img src="graph-daily.php?thedate='; echo $daydate;
 	echo '"
 			alt="" class="center-block img-responsive" />
 		</div>
 	</div>
-	'; } ?> 
+	'; } ?>
 
 
 
@@ -128,9 +129,9 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	 &emsp;
 <input id="date" name="date" type="date" min="2018-01-01" value="<?php print $daydate ?>" required="required" />
 &emsp;
-	 	
+
 		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
-	</div>	
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -140,22 +141,22 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>
 
 
 
-</form>	
+</form>
 <br><br><br>
 
 </body>
 
 <script>
 	// which graphs needed
-	
+
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
@@ -239,11 +240,11 @@ var series9 = chart.series.push(new am4charts.LineSeries());
 series9.dataFields.valueY = "col2";
 series9.dataFields.categoryX = "col0";
 series9.name = "Einspeisung";
-series9.stroke = am4core.color("#5d90e2");
+series9.stroke = am4core.color("#fff600");
 series9.tensionX = 0.8;
 series9.tensionY = 0.8;
 series9.strokeWidth = 1.5;
-series9.fill = am4core.color("#5d90e2");
+series9.fill = am4core.color("#fff600");
 series9.fillOpacity = 0.3;
 
 if (speichervorhanden == 1) {
@@ -324,7 +325,7 @@ series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
 
 
-if (soc1vorhanden == 1) { 
+if (soc1vorhanden == 1) {
 var series10 = chart.series.push(new am4charts.LineSeries());
 series10.dataFields.valueY = "col10";
 series10.dataFields.categoryX = "col0";

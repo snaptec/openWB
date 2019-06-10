@@ -15,7 +15,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
@@ -28,8 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+  <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
@@ -48,7 +48,9 @@ foreach($lines as $line) {
 	if(strpos($line, "dspeed=") !== false) {
 		list(, $dspeedold) = explode("=", $line);
 	}
-
+	if(strpos($line, "plz=") !== false) {
+		list(, $plzold) = explode("=", $line);
+	}
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
@@ -406,11 +408,13 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div class="container">
 <div class="row"><br>
  <ul class="nav nav-tabs">
+
     <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
     <li class="active"><a href="./settings.php">Einstellungen</a></li>
     <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
-    <li><a href="./misc.php">Misc</a></li>
+	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
 <form action="./tools/savemain.php" method="POST">
@@ -418,7 +422,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div class="col-xs-1">
 </div>
 <div class="col-xs-10">
+	<div class="row ">
 
+		<b><label for="plz">Postleitzahl:</label></b>
+		<input type="text" name="plz" id="plz" value="<?php echo $plzold ?>"><br>
+	</div>
+	<div class="row">
+	Gültige Werte z.B. 36124 <br> Dient zur Ermittlung des GSI Index. Weitere Infos unter: <a href="https://www.corrently.de/hintergrund/gruenstromindex">Hier</a><br>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.<br><br>
+	</div><hr>
 <div class="row">
 	<b><h5><label for="Zielladen">Zielladen Ladepunkt 1:(BETA)</label></b>
 	<select type="text" name="zielladenaktivlp1" id="zielladenaktivlp1">
@@ -441,7 +452,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	Gültige Werte xx, z.B. 85 <br> Der SoC Wert auf den geladen werden soll.<br><br>
 	</div>
 	<div class="row">
-		
+
 		<b><label for="zielladenuhrzeitlp1">Zielladenuhrzeit an Ladepunkt 1:</label></b>
 		<input type="text" name="zielladenuhrzeitlp1" id="zielladenuhrzeitlp1" value="<?php echo $zielladenuhrzeitlp1old ?>"><br>
 	</div>
@@ -474,7 +485,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($zielladenalp1old == 26) echo selected ?> value="26">26</option>
 			<option <?php if($zielladenalp1old == 27) echo selected ?> value="27">27</option>
 			<option <?php if($zielladenalp1old == 28) echo selected ?> value="28">28</option>
-			<option <?php if($zielladenalp1old == 29) echo selected ?> value="29">29</option>		
+			<option <?php if($zielladenalp1old == 29) echo selected ?> value="29">29</option>
 			<option <?php if($zielladenalp1old == 30) echo selected ?> value="30">30</option>
 			<option <?php if($zielladenalp1old == 31) echo selected ?> value="31">31</option>
 			<option <?php if($zielladenalp1old == 32) echo selected ?> value="32">32</option>
@@ -491,7 +502,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 </div>
 <div id="durchslp1">
 	<div class="row bg-info">
-		
+
 		<b><label for="durchslp1">Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</label></b>
 		<input type="text" name="durchslp1" id="durchslp1" value="<?php echo $durchslp1old ?>"><br>
 	</div>
@@ -499,7 +510,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	Gültige Werte xx.xx, z.B. 14.5 <br> Dient zur Berechnung der geladenen Strecke.<br><br>
 	</div>
 	<div class="row bg-info">
-		
+
 		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1:</label></b>
 		<input type="text" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>"><br>
 	</div>
@@ -540,7 +551,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 			<option <?php if($zielladenmaxalp1old == 26) echo selected ?> value="26">26</option>
 			<option <?php if($zielladenmaxalp1old == 27) echo selected ?> value="27">27</option>
 			<option <?php if($zielladenmaxalp1old == 28) echo selected ?> value="28">28</option>
-			<option <?php if($zielladenmaxalp1old == 29) echo selected ?> value="29">29</option>		
+			<option <?php if($zielladenmaxalp1old == 29) echo selected ?> value="29">29</option>
 			<option <?php if($zielladenmaxalp1old == 30) echo selected ?> value="30">30</option>
 			<option <?php if($zielladenmaxalp1old == 31) echo selected ?> value="31">31</option>
 			<option <?php if($zielladenmaxalp1old == 32) echo selected ?> value="32">32</option>
@@ -595,7 +606,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		<option <?php if($minimalstromstaerkeold == 12) echo selected ?> value="12">12</option>
 		<option <?php if($minimalstromstaerkeold == 13) echo selected ?> value="13">13</option>
 		<option <?php if($minimalstromstaerkeold == 14) echo selected ?> value="14">14</option>
-	
+
 	</select><br>
 </div>
 <div class="row" style="background-color:#febebe">
@@ -786,7 +797,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
  			<option <?php if($nachtladenbisuhrold == 6) echo selected ?> value="6">6</option>
  			<option <?php if($nachtladenbisuhrold == 7) echo selected ?> value="7">7</option>
  			<option <?php if($nachtladenbisuhrold == 8) echo selected ?> value="8">8</option>
-			<option <?php if($nachtladenbisuhrold == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladenbisuhrold == 9) echo selected ?> value="9">9</option>
 		</select><br>
 
 	</div>
@@ -798,14 +809,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
 		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
 	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2ll">Morgens Laden Stromstärke in A:</label></b>
@@ -866,7 +877,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
  			<option <?php if($nachtladen2bisuhrold == 6) echo selected ?> value="6">6</option>
  			<option <?php if($nachtladen2bisuhrold == 7) echo selected ?> value="7">7</option>
  			<option <?php if($nachtladen2bisuhrold == 8) echo selected ?> value="8">8</option>
-			<option <?php if($nachtladen2bisuhrold == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladen2bisuhrold == 9) echo selected ?> value="9">9</option>
 			<option <?php if($nachtladen2bisuhrold == 10) echo selected ?> value="10">10</option>
 		</select><br>
 
@@ -878,42 +889,42 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <script>
 $(function() {
       if($('#nachtladen').val() == '0') {
-		$('#nachtladenaus').show(); 
+		$('#nachtladenaus').show();
 		$('#nachtladenan').hide();
       } else {
 		$('#nachtladenaus').hide();
-	       	$('#nachtladenan').show();	
-      } 
+	       	$('#nachtladenan').show();
+      }
 
 	$('#nachtladen').change(function(){
 	        if($('#nachtladen').val() == '0') {
-			$('#nachtladenaus').show(); 
+			$('#nachtladenaus').show();
 			$('#nachtladenan').hide();
 	        } else {
 			$('#nachtladenaus').hide();
-		       	$('#nachtladenan').show();	
-	        } 
+		       	$('#nachtladenan').show();
+	        }
 	    });
 });
 </script>
 <script>
 $(function() {
       if($('#u1p3paktiv').val() == '0') {
-		$('#u1p3paus').show(); 
+		$('#u1p3paus').show();
 		$('#u1p3pan').hide();
       } else {
 		$('#u1p3paus').hide();
-	       	$('#u1p3pan').show();	
-      } 
+	       	$('#u1p3pan').show();
+      }
 
 	$('#u1p3paktiv').change(function(){
 	        if($('#u1p3paktiv').val() == '0') {
-			$('#u1p3paus').show(); 
+			$('#u1p3paus').show();
 			$('#u1p3pan').hide();
 	        } else {
 			$('#u1p3paus').hide();
-		       	$('#u1p3pan').show();	
-	        } 
+		       	$('#u1p3pan').show();
+	        }
 	    });
 });
 </script>
@@ -921,17 +932,17 @@ $(function() {
 <script>
 $(function() {
       if($('#zielladenaktivlp1').val() == '0') {
-		$('#zielladenaktivlp1div').hide(); 
+		$('#zielladenaktivlp1div').hide();
       } else {
-	       	$('#zielladenaktivlp1div').show();	
-      } 
+	       	$('#zielladenaktivlp1div').show();
+      }
 
 	$('#zielladenaktivlp1').change(function(){
 	        if($('#zielladenaktivlp1').val() == '0') {
-		$('#zielladenaktivlp1div').hide(); 
+		$('#zielladenaktivlp1div').hide();
       } else {
-	       	$('#zielladenaktivlp1div').show();	
-      } 
+	       	$('#zielladenaktivlp1div').show();
+      }
 
 		});
 });
@@ -1014,7 +1025,7 @@ $(function() {
  			<option <?php if($nachtladenbisuhrs1old == 6) echo selected ?> value="6">6</option>
  			<option <?php if($nachtladenbisuhrs1old == 7) echo selected ?> value="7">7</option>
  			<option <?php if($nachtladenbisuhrs1old == 8) echo selected ?> value="8">8</option>
-			<option <?php if($nachtladenbisuhrs1old == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladenbisuhrs1old == 9) echo selected ?> value="9">9</option>
 		</select><br>
 
 	</div>
@@ -1094,7 +1105,7 @@ $(function() {
  			<option <?php if($nachtladen2bisuhrs1old == 6) echo selected ?> value="6">6</option>
  			<option <?php if($nachtladen2bisuhrs1old == 7) echo selected ?> value="7">7</option>
  			<option <?php if($nachtladen2bisuhrs1old == 8) echo selected ?> value="8">8</option>
-			<option <?php if($nachtladen2bisuhrs1old == 9) echo selected ?> value="9">9</option>	
+			<option <?php if($nachtladen2bisuhrs1old == 9) echo selected ?> value="9">9</option>
 			<option <?php if($nachtladen2bisuhrs1old == 10) echo selected ?> value="10">10</option>
 		</select><br>
 
@@ -1106,21 +1117,21 @@ $(function() {
 <script>
 $(function() {
       if($('#nachtladens1').val() == '0') {
-		$('#nachtladenauss1').show(); 
+		$('#nachtladenauss1').show();
 		$('#nachtladenans1').hide();
       } else {
 		$('#nachtladenauss1').hide();
-	       	$('#nachtladenans1').show();	
-      } 
+	       	$('#nachtladenans1').show();
+      }
 
 	$('#nachtladens1').change(function(){
 	        if($('#nachtladens1').val() == '0') {
-			$('#nachtladenauss1').show(); 
+			$('#nachtladenauss1').show();
 			$('#nachtladenans1').hide();
 	        } else {
 			$('#nachtladenauss1').hide();
-		       	$('#nachtladenans1').show();	
-	        } 
+		       	$('#nachtladenans1').show();
+	        }
 	    });
 });
 </script>
@@ -1186,11 +1197,12 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 <div class="col-xs-1">
 </div>
 
-<button type="submit" class="btn btn-primary btn-green">Save</button>	 
+<button type="submit" class="btn btn-primary btn-green">Save</button>
  </form><br><br />
 
 <br><br>
 <br><br>
+
  <button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 <br><br>
 <div class="row">
@@ -1208,4 +1220,3 @@ Open Source made with love!<br>
 
 </div>
 </body></html>
-
