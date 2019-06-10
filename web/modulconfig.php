@@ -954,7 +954,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	<input type="text" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>"><br>
 </div>
 <div class="row bg-info">
-	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+	Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Eine zu große Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich, wenn der Go-echarger z.B. gerade unterwegs genutzt wird.<br><br>
 </div>
 
 </div>
@@ -1805,7 +1805,7 @@ $(function() {
 
 <hr>
 <div class="row">
-	<b><h4><label for="lastmanagement">Zweiter Ladepunkte:</label></b>
+	<b><h4><label for="lastmanagement">Zweiter Ladepunkt:</label></b>
 	<select type="text" name="lastmanagement" id="lastmanagement">
 		<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
 		<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
