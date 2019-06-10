@@ -428,7 +428,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 
 		<div class="row">
-			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladenen werden schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
+			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist, das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln, kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
 	<br>	</div>
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
@@ -555,7 +555,7 @@ $(function() {
 			<br>
 		</div>
 		<div class="row">
-			<b><label for="logeinspeisungneg">Einspeiung im Daily Graph positiv oder negativ anzeigen:</label></b>
+			<b><label for="logeinspeisungneg">Einspeisung im Daily Graph positiv oder negativ anzeigen:</label></b>
 			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
 				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
 				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
