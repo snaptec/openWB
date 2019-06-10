@@ -55,6 +55,13 @@ foreach($lines as $line) {
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
+	if(strpos($line, "wakeupzoelp1=") !== false) {
+		list(, $wakeupzoelp1old) = explode("=", $line);
+	}
+	if(strpos($line, "wakeupzoelp2=") !== false) {
+		list(, $wakeupzoelp2old) = explode("=", $line);
+	}
+
 	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 		list(, $pvbezugeinspeisungold) = explode("=", $line);
 	}
@@ -1521,6 +1528,16 @@ $(function() {
 	<div class="row bg-info">
 		Renault Zoe Passwort<br><br>
 	</div>
+	<b><label for="wakeupzoelp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+	<select type="text" name="wakeupzoelp1" id="wakeupzoelp1">
+		<option <?php if($wakeupzoelp1old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($wakeupzoelp1old == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+	</div>
+
+
 </div>
 <div id="socevnotify">
 	<div class="row bg-info">
@@ -2320,6 +2337,15 @@ Keine Konfiguration erforderlich.<br>
 	<div class="row bg-info">
 		Renault Zoe Passwort<br><br>
 	</div>
+	<b><label for="wakeupzoelp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+	<select type="text" name="wakeupzoelp2" id="wakeupzoelp2">
+		<option <?php if($wakeupzoelp2old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($wakeupzoelp2old == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+	</div>
+
 </div>
 
 <div id="socevnotifylp2">

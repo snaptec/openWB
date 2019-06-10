@@ -166,7 +166,16 @@ foreach($lines as $line) {
 	    if(strpos($line, "evseids1=") !== false) {
 	    $result .= 'evseids1='.$_POST[evseids1]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "wakeupzoelp1=") !== false) {
+	    $result .= 'wakeupzoelp1='.$_POST[wakeupzoelp1]."\n";
+	    $writeit = '1';
 	    } 
+	    if(strpos($line, "wakeupzoelp2=") !== false) {
+	    $result .= 'wakeupzoelp2='.$_POST[wakeupzoelp2]."\n";
+	    $writeit = '1';
+	    } 
+
 	    if(strpos($line, "evseids2=") !== false) {
 	    $result .= 'evseids2='.$_POST[evseids2]."\n";
 	    $writeit = '1';
