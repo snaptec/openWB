@@ -217,22 +217,28 @@ $.ajax({
     url: "/openWB/ramdisk/plugstats1",
     complete: function(request){
 		if (request.responseText == 1) {
-			    request.responseText = "plugged";
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.add("fa");
+			element.classList.add("fa-plug");
 		    } else {
-			request.responseText = " ";
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.remove("fa");
+			element.classList.remove("fa-plug");
 			}
-      $("#plugstatlp2div").html(request.responseText);
     }
   });
   $.ajax({
     url: "/openWB/ramdisk/plugstat",
     complete: function(request){
 		if (request.responseText == 1) {
-			    request.responseText = "plugged";
+			var element = document.getElementById("plugstatlp1div");
+			element.classList.add("fa");
+			element.classList.add("fa-plug");
 		    } else {
-			request.responseText = " ";
+			var element = document.getElementById("plugstatlp1div");
+			element.classList.remove("fa");
+			element.classList.remove("fa-plug");
 			}
-      $("#plugstatlp1div").html(request.responseText);
     }
   });
 $.ajax({
