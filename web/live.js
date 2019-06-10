@@ -213,6 +213,28 @@ $.ajax({
       $("#lllp3div").html(request.responseText);
     }
   });
+  $.ajax({
+    url: "/openWB/ramdisk/plugstats1",
+    complete: function(request){
+		if (request.responseText == 1) {
+			    request.responseText = "plugged";
+		    } else {
+			request.responseText = " ";
+			}
+      $("#plugstatlp2div").html(request.responseText);
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/plugstat",
+    complete: function(request){
+		if (request.responseText == 1) {
+			    request.responseText = "plugged";
+		    } else {
+			request.responseText = " ";
+			}
+      $("#plugstatlp1div").html(request.responseText);
+    }
+  });
 $.ajax({
     url: "/openWB/ramdisk/llsoll",
     complete: function(request){

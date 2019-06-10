@@ -18,5 +18,7 @@ fi
 echo $bezugwatt
 echo $bezugwatt > /var/www/html/openWB/ramdisk/wattbezug
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+echo $pvkwhy > /var/www/html/openWB/ramdisk/pvkwh
+pvkwhk=$(echo "$pvkwh*1000" |bc)
+echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 

@@ -2,13 +2,23 @@
 . /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
-sleep 1
+sleep 3
 nc -ul 7090 >/var/www/html/openWB/ramdisk/keballlp2 &
 pidnc=$!
 disown
 
 echo -n "report 3" | socat - UDP-DATAGRAM:$kebaiplp2:7090
 output=$(</var/www/html/openWB/ramdisk/keballlp2)
+#echo $output > /var/www/html/openWB/ramdisk/keballlp2s
+echo -n > /var/www/html/openWB/ramdisk/keballlp2
+#read plug and chargingstatus
+echo -n "report 2" | socat - UDP-DATAGRAM:$kebaiplp2:7090
+output1=$(tr -d '\0' </var/www/html/openWB/ramdisk/keballlp2)
+#echo $output1 > /var/www/html/openWB/ramdisk/keballlp2s1
+#
+kill $pidnc
+rm /var/www/html/openWB/ramdisk/keballlp2
+
 watt=$(echo $output | jq '.P') 
 watt=$(echo "($watt / 1000)/1" |bc)
 if [[ $watt =~ $rekwh ]] ; then
@@ -44,15 +54,30 @@ if [[ $llv3 =~ $re ]] ; then
 fi
 chargedwh=$(echo $output | jq '."E pres"') 
 totalwh=$(echo $output | jq '."E total"') 
-llwh=$(( chargedwh + totalwh ))
+#llwh=$(( chargedwh + totalwh ))
+llwh=$(echo $chargedwh + $totalwh | bc)
 llkwh=$(echo "scale=3;$llwh / 10000" | bc -l)
 if [[ $llkwh =~ $rekwh ]] ; then
 	echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
 fi
+newplug=$(echo $output1 | jq '.Plug')
+newstatus=$(echo $output1 | jq '.State')
+#Plug Status 3 Kabel ist eingesteckt an der Ladestation, kein Auto
+#Plug Status 7 Kabel ist eingesteckt Ladestation und Auto verriegelt. 
+#Status 2 ready for charging
+#Status 3 charging
+if [[ $newplug == "7" ]] ; then
+  echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+else          
+  echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+fi
+if [[ $newstatus == "3" ]] ; then
+  echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+else          
+  echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+fi
 
 
-kill $pidnc
-rm /var/www/html/openWB/ramdisk/keballlp2
 
 
 

@@ -457,6 +457,30 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/einspeisungkwh",
+	    	complete: function(request){
+		    	$("#einspeisungkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/bezugkwh",
+	    	complete: function(request){
+		    	$("#bezugkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
 
 <script type='text/javascript'>
 	var doInterval;
@@ -1187,6 +1211,19 @@ loadstatuslog();
 				<div class="col-xs-2 text-center bg-info">
 					<div id="soclevel1"></div>
 				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					EVU Bezug [Wh]
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					<div id="bezugkwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					EVU Einspeisung [Wh]
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					<div id="einspeisungkwhdiv"></div>
+				</div>
+
 			</div>
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
