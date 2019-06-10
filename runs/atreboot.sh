@@ -1276,5 +1276,6 @@ sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/
 
 if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
+	  sudo apt-get update
 	  sudo apt-get -qq install -y php-curl
   fi
