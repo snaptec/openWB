@@ -50,8 +50,8 @@
  <div id="bedienung" style="display:block">
 	 <h3>Bedienung</h3>
 		 <p> Lademodus</p><br>
-			 Der Unterschied zwischen Standby und Stop ist, dass bei Stop keine Ladung erlaubt ist.<br>
-		 Ist Semistop Modus kann die Ladung durch Nachtladen und Zielladen aktiviert werden<br>
+			 Der Unterschied zwischen "Standby" und "Stop" ist, dass bei "Stop" keine Ladung erlaubt ist.<br>
+		 Im Semistop Modus kann die Ladung durch Nachtladen und Zielladen aktiviert werden<br>
 		 <hr>
 
 	<br>
@@ -66,9 +66,9 @@
 
 
 		 <p>Meldung "Lastmanagement aktiv, Ladeleistung reduziert"</p>
-		<br> Wurde innerhalb der letzten 2 Minuten das Lastmanagement aktiv wird diese Meldung auf der Hauptseite unterhalb des Graphen angezeigt.<br>
-		Sie dient rein der Information das das Lastmanagement von OpenWB aktiv ist und die gewünschte bzw. eingestellte Ladeleistung derzeit nicht möglich ist.<br>
-		Es besteht kein Handlungsbedarf. Wenn mehr Leistung zur Verfügung steht regelt OpenWB automatisch auf den gewünschten Wert hoch.<br>
+		<br> Wurde innerhalb der letzten 2 Minuten das Lastmanagement aktiv, wird diese Meldung auf der Hauptseite unterhalb des Graphen angezeigt.<br>
+		Sie dient rein der Information, dass das Lastmanagement von OpenWB aktiv ist und die gewünschte bzw. eingestellte Ladeleistung derzeit nicht möglich ist.<br>
+		Es besteht kein Handlungsbedarf. Wenn mehr Leistung zur Verfügung steht, regelt OpenWB automatisch auf den gewünschten Wert hoch.<br>
 		<br><br><br>
 
 		 Etwas unklar bei den Ladeeinstellungen?<br>
@@ -86,7 +86,7 @@
 		 Nutzung:<br><br>
 		 Vor Test den Lademodus auf der Hauptseite auf Stop stellen.<br>
 		 Für den gewünschten Ladepunkt auf Testen klicken<br>
-		 <br>Die Seite lädt nun neu und man erhält nach 3-10 Sekunden automatisch eine Ergebnis:<br>
+		 <br>Die Seite lädt nun neu und man erhält nach 3-10 Sekunden automatisch ein Ergebnis:<br>
 		 <br> erfolgreich = Kommunikation funktioniert
 		 <br> Fehler = Kommunikation mit der EVSE nicht möglich. Korrekte Konfiguration bzw. Verkabelung prüfen
 		 <br> Platzhalter konfiguriert = es ist an diesem Ladepunkt keine Modbus EVSE konfiguriert
