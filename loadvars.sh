@@ -5,7 +5,13 @@ if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
 	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [[ $evseplugstate > "1" ]]; then
-		echo 1 > /var/www/html/openWB/ramdisk/plugstat
+		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
+		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]]; then
+			title="Fahrzeug eingesteckt"
+    	    message="Ladung startet bei erfüllter Ladebedingung automatisch."
+        	wget https://api.pushover.net/1/messages.json --post-data="token=$pushovertoken&user=$pushoveruser&message=$message&title=$title" -qO- > /dev/null 2>&1 &
+		fi
+			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/plugstat
 	fi
