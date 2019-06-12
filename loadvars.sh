@@ -7,9 +7,8 @@ if [[ $evsecon == "modbusevse" ]]; then
 	if [[ $evseplugstate > "1" ]]; then
 		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
 		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]]; then
-			title="Fahrzeug eingesteckt"
-    	    message="Ladung startet bei erfüllter Ladebedingung automatisch."
-        	wget https://api.pushover.net/1/messages.json --post-data="token=$pushovertoken&user=$pushoveruser&message=$message&title=$title" -qO- > /dev/null 2>&1 &
+    	    		message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+			/var/www/html/openWB/runs/pushover.sh "$message"
 		fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 	else
