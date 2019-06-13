@@ -459,7 +459,12 @@
 		    	$("#verbraucher1whdiv").html(request.responseText);
 				}
 		});
-
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_whe",
+	    	complete: function(request){
+		    	$("#verbraucher1whediv").html(request.responseText);
+				}
+		});
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
@@ -1251,16 +1256,17 @@ loadstatuslog();
 					<div id="verbraucher1wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 1 [Wh]
+					Verbraucher 1 Import [Wh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher1whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-				
+					Verbraucher 1 Export [Wh]
+
 				</div>
 				<div class="col-xs-2 text-center">
-								</div>
+										<div id="verbraucher1whediv"></div>	</div>
 
 			</div>
 
