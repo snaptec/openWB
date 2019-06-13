@@ -175,7 +175,10 @@ foreach($lines as $line) {
 	    $result .= 'wakeupzoelp2='.$_POST[wakeupzoelp2]."\n";
 	    $writeit = '1';
 	    } 
-
+	    if(strpos($line, "wrsmawebbox=") !== false) {
+	    $result .= 'wrsmawebbox='.$_POST[wrsmawebbox]."\n";
+	    $writeit = '1';
+	    } 
 	    if(strpos($line, "evseids2=") !== false) {
 	    $result .= 'evseids2='.$_POST[evseids2]."\n";
 	    $writeit = '1';

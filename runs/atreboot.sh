@@ -19,7 +19,16 @@ echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
-
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_watt
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -1012,6 +1021,133 @@ if ! grep -Fq "hook1_aktiv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1_aktiv=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hook1_dauer=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1_dauer=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2ein_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2aus_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2ein_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2ein_watt=1200" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2aus_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2aus_watt=400" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2_dauer=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2_dauer=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3ein_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3aus_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3ein_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3ein_watt=1200" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3aus_watt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3aus_watt=400" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3_dauer=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3_dauer=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_typ=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_typ=http" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_name=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_name=Name" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_id=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_id=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_ip=192.168.4.123" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_source=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_source=/dev/ttyUSB5" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "verbraucher1_urlw=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_urlw='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_urlh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_name=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_name=Name" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_typ=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_typ=http" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_urlw=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_urlw='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_urlh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher3_name=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher3_name=Name" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher3_aktiv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher3_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher3_typ=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher3_typ=http" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher3_urlw=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher3_urlw='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher3_urlh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher3_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 if ! grep -Fq "nlakt_sofort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nlakt_sofort=1" >> /var/www/html/openWB/openwb.conf
@@ -1229,6 +1365,14 @@ fi
 if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
 then
 	echo "plz=36124" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pushbplug=" /var/www/html/openWB/openwb.conf
+then
+	echo "pushbplug=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrsmawebbox=" /var/www/html/openWB/openwb.conf
+then
+	echo "wrsmawebbox=0" >> /var/www/html/openWB/openwb.conf
 fi
 
 

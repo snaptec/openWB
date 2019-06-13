@@ -444,7 +444,25 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_watt",
+	    	complete: function(request){
+		    	$("#verbraucher1wattdiv").html(request.responseText);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_wh",
+	    	complete: function(request){
+		    	$("#verbraucher1whdiv").html(request.responseText);
+				}
+		});
 
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
 <script type='text/javascript'>
 	var doInterval;
 	function getfile() {
@@ -1225,6 +1243,27 @@ loadstatuslog();
 				</div>
 
 			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center ">
+					Verbraucher 1 [W]
+				</div>
+				<div class="col-xs-2 text-center ">
+					<div id="verbraucher1wattdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					Verbraucher 1 [Wh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="verbraucher1whdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+				
+				</div>
+				<div class="col-xs-2 text-center">
+								</div>
+
+			</div>
+
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
 			<?php

@@ -51,7 +51,7 @@ fi
 	
 
 #Long Time Graphing
-if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
+if (( graphtimer == 1 )); then
 	echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv.graph
 	echo $wattbezugint >> /var/www/html/openWB/ramdisk/evu.graph
 	echo $soc >> /var/www/html/openWB/ramdisk/soc.graph
@@ -71,7 +71,7 @@ if (( graphtimer == 1 )) || (( graphtimer == 4 )); then
 	if (( dpseed == "3" )); then
 		livegraphtime="240"
 	else
-		livegraphtime="1440"
+		livegraphtime="720"
 	fi
 	date +%H:%M >> /var/www/html/openWB/ramdisk/time.graph
 	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/pv.graph)" > /var/www/html/openWB/ramdisk/pv.graph
