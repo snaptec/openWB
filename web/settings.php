@@ -412,6 +412,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
     <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
     <li class="active"><a href="./settings.php">Einstellungen</a></li>
     <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+    <li><a href="./smarthome.php">Smart Home</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
 	<li><a href="./misc.php">Misc</a></li>

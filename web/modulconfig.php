@@ -722,7 +722,9 @@ foreach($lines as $line) {
 	if(strpos($line, "bezug_smartfox_ip=") !== false) {
 		list(, $bezug_smartfox_ipold) = explode("=", $line);
 	}
-
+	if(strpos($line, "wrsmawebbox=") !== false) {
+		list(, $wrsmawebboxold) = explode("=", $line);
+	}
 	if(strpos($line, "wrsma2ip=") !== false) {
 		list(, $wrsma2ipold) = explode("=", $line);
 	}
@@ -847,6 +849,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
     <LI><a data-toggle="tab" href="./index.php">Zurück</A></LI>
     <li><a href="./settings.php">Einstellungen</a></li>
     <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+    <li><a href="./smarthome.php">Smart Home</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
 	<li><a href="./misc.php">Misc</a></li>
@@ -4546,6 +4549,13 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (default deaktiviert).<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
+		<select type="text" name="wrsmawebbox" id="wrsmawebbox">
+			<option <?php if($wrsmawebboxold == 0) echo selected ?> value="0">Nein</option>
+			<option <?php if($wrsmawebboxold == 1) echo selected ?> value="1">Ja</option>
+		</select>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrsma2ip">WR 2 IP:</label></b>

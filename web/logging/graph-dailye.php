@@ -2,6 +2,7 @@
 session_start();
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
@@ -43,6 +44,20 @@ if ($speichervorhanden == 1) {
 if ($soc1vorhanden == 1) {
 	$soc1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-soc1.csv';
 	$soc1 = file($soc1file, FILE_IGNORE_NEW_LINES);
+}
+if ($verbraucher1vorhanden == 1) {
+	$verbraucher1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-verbraucher1.csv';
+	$verbraucher1 = file($verbraucher1file, FILE_IGNORE_NEW_LINES);
+	$firstviwh = reset($verbraucher1);
+	$lastviwh = end($verbraucher1);
+	$dailyviwh = number_format((($lastviwh - $firstviwh) / 1000), 2);
+	$rverbraucher1 = $verbraucher1;
+	$verbrauchere1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-verbrauchere1.csv';
+	$verbrauchere1 = file($verbrauchere1file, FILE_IGNORE_NEW_LINES);
+	$firstvewh = reset($verbrauchere1);
+	$lastvewh = end($verbrauchere1);
+	$dailyvewh = number_format((($lastvewh - $firstvewh) / 1000), 2);
+	$rverbrauchere1 = $verbrauchere1;
 }
 
 $bezug = file($bezugfile, FILE_IGNORE_NEW_LINES);
@@ -112,6 +127,16 @@ if ($speichervorhanden == 1) {
 	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
 	}
 }
+if ($verbraucher1vorhanden == 1) {
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
+	}
+
+}
+
 } else {
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
@@ -144,13 +169,25 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
 	}
+if ($verbraucher1vorhanden == 1) {
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+	    $verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
+	}
+
+}
+
+
+
 }
 
 
 
 
 for ($x = 0; $x < $anzahl; $x++){
-	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . "," . $ll3diff[$x]  . "," . $speichersoc[$x] .  PHP_EOL;
+	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . "," . $ll3diff[$x]  . "," . $speichersoc[$x] . "," . $verbraucher1diff[$x] . "," . $verbrauchere1diff[$x] . PHP_EOL;
 	print($line);
 }
 
