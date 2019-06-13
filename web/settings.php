@@ -518,7 +518,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1:</label></b>
+		<b><label for="zielladenphasenlp1">Anzahl der genutzten Phasen des EV an Ladepunkt 1:</label></b>
 		<select type="text" name="zielladenphasenlp1" id="zielladenphasenlp1">
 			<option <?php if($zielladenphasenlp1old == 1) echo selected ?> value="1">1</option>
 			<option <?php if($zielladenphasenlp1old == 2) echo selected ?> value="2">2</option>
@@ -641,7 +641,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 
 </div>
 <div class="row" style="background-color:#febebe">
-	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
+	Gibt an mit wieviel Ampere je Phase Maximal geladen wird.<br><br>
 </div>
 
 <div class="row"><hr>
@@ -1154,7 +1154,7 @@ $(function() {
 		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
 	</div>
 	<div class="row">
-Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen das Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
+Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
 	</div><br><br>
 
 <div class="row"><hr>
@@ -1175,8 +1175,8 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</select>
 </div>
 <div class="row">
-	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
-	Sie stellt in jedem Lademodus sicher das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen, diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
+	Sie stellt in jedem Lademodus sicher, das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
 	Der richtige Anschluss ist zu gewährleisten.<br>
 	Ladepunkt 1: <br>
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
@@ -1186,7 +1186,7 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 2 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 3 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 1 Ladepunkt 2</p>
-	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
+	Durch das drehen der Phasen ist sichergestellt, das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
 
 </div>
 
