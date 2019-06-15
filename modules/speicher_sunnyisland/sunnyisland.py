@@ -30,6 +30,23 @@ ladung = int(struct.unpack('>i', all.decode('hex'))[0]) * -1
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
 f.write(str(ladung))
 f.close()
-
+#print "import wh"
+resp= client.read_holding_registers(30595,2,unit=3)
+value1 = resp.registers[0]
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+ladung = int(struct.unpack('>i', all.decode('hex'))[0])
+f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
+f.write(str(ladung))
+f.close()
+#print "exportwh"
+resp= client.read_holding_registers(30597,2,unit=3)
+value1 = resp.registers[0]
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+ladung = int(struct.unpack('>i', all.decode('hex'))[0])
+f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
+f.write(str(ladung))
+f.close()
 
 

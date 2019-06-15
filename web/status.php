@@ -517,6 +517,25 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/speicherikwh",
+	    	complete: function(request){
+		    	$("#speicherikwhdiv").html(request.responseText);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/speicherekwh",
+	    	complete: function(request){
+		    	$("#speicherekwhdiv").html(request.responseText);
+				}
+		});
+
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
 
 <script type='text/javascript'>
 	var doInterval;
@@ -1204,6 +1223,26 @@ loadstatuslog();
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="yearly_pvkwhdiv"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center">
+					Speicher geladen [Wh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="speicherikwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					Speicher entladen [Wh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="speicherekwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					
+				</div>
+				<div class="col-xs-2 text-center">
+					
 				</div>
 			</div>
 			<hr>
