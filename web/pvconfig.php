@@ -130,7 +130,15 @@ foreach($lines as $line) {
 	if(strpos($line, "adaptfaktor=") !== false) {
 		list(, $adaptfaktorold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "speichersocnurpv=") !== false) {
+		list(, $speichersocnurpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "speichersocminpv=") !== false) {
+		list(, $speichersocminpvold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "speicherwattnurpv=") !== false) {
+		list(, $speicherwattnurpvold) = explode("=", $line, 2);
+	}
 
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
@@ -407,7 +415,12 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 
 
 <div id="speicherpvrangdiv">
-	<br><br><div class="row" style="background-color:#fcbe1e">
+
+	<br><br>
+		<div class="row" style="background-color:#fcbe1e">
+		<b>Speicherladeoptionen</b><br>
+		</div>
+		<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
 	       	<select type="text" name="speicherpveinbeziehen" id="speicherpveinbeziehen">
  			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
@@ -420,6 +433,8 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 		</select><br>
 
 	</div>
+
+
 	<div class="row" style="background-color:#fcbe1e">
 		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
 	<br><br>
@@ -432,7 +447,31 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 		<div class="row" style="background-color:#fcbe1e">
 		Definiert einen Wert, der trotz Vorrang des EV immer als Ladeleistung für den Speicher vorgehalten wird. Verfügbarer Überschuss über diesem Wert wird der EV Ladung zugerechnet.<br><br>
 		</div>
-	</div>
+	</div><br>
+		<div class="row" style="background-color:#fcbe1e">
+		<b>Speicherentladeoptionen</b>
+		</div>	<div class="row" style="background-color:#fcbe1e">
+			<b><label for="speichersocnurpv">Speicher Entlade SoC NurPV:</label></b>
+			<input type="text" name="speichersocnurpv" id="speichersocnurpv" value="<?php echo $speichersocnurpvold ?>"><br>
+		</div>
+	<div class="row" style="background-color:#fcbe1e">
+			<b><label for="speicherwattnurpv">Speicher Entlade Watt:</label></b>
+			<input type="text" name="speicherwattnurpv" id="speicherwattnurpv" value="<?php echo $speicherwattnurpvold ?>"><br>
+		</div>
+
+		<div class="row" style="background-color:#fcbe1e">
+		Definiert einen SoC bis zu dem bei laufender Nur PV Ladung der Speicher mit xx Leistung entladen wird.<br> Zum deaktivieren dieser Funktion (Speicher soll nicht entladen werden) den SoC auf 100 setzen.<br>
+
+		</div>
+		<div class="row" style="background-color:#fcbe1e">
+			<b><label for="speichersocminpv">Speicher Entlade SoC Min + PV:</label></b>
+			<input type="text" name="speichersocminpv" id="speichersocminpv" value="<?php echo $speichersocminpvold ?>"><br>
+		</div>
+		<div class="row" style="background-color:#fcbe1e">
+	Im Min + PV Modus wird die Ladung erst gestartet wenn der SoC über dem eingestellten Wert liegt.<br>Zum deaktivieren der Funktion den Wert auf 0 setzen.<br>
+		</div>
+
+
 
 </div>
 

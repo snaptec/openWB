@@ -373,6 +373,18 @@ if ! grep -Fq "sdm120modbusllsource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllsource=/dev/ttyUSB1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichersocnurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersocnurpv=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speichersocminpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersocminpv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherwattnurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherwattnurpv=1500" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
 then

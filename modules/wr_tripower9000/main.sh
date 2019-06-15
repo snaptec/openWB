@@ -7,7 +7,7 @@ if [[ $wrsmawebbox == "1" ]]; then
 	if [[ $? == "0" ]] ; then
 		pvwatt=$(echo $boxout | jq -r '.result.overview[0].value ')
 		pvkwh=$(echo $boxout | jq -r '.result.overview[2].value ')
-		pvwh=$(( pvkwh * 1000 ))
+		pvwh=$(echo "scale=0;$pvkwh * 1000" |bc)
 		if [[ $pvwh =~ $rekwh ]]; then
 			echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
 			echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
