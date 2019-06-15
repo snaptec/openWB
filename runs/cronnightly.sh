@@ -1,5 +1,5 @@
 #!/bin/bash
-
+. /var/www/html/openWB/openwb.conf
 echo "Start cron nightly @ $(date)"
 #gsi daten abfragen
 /var/www/html/openWB/runs/gsiabfrage.sh &
@@ -49,4 +49,18 @@ echo $speicheri >> $monthlyfile-speicheriwh.csv
 echo $speichere >> $monthlyfile-speicherewh.csv
 echo $verbraucher1iwh >> $monthlyfile-verbraucher1iwh.csv
 echo $verbraucher1ewh >> $monthlyfile-verbraucher1ewh.csv
+
+
+if [[ $verbraucher1_typ == "tasmota" ]]; then
+	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
+	if [[ $? == "0" ]]; then
+		verbraucher1_writewh=$(echo "scale=0;(($verbraucher1_oldwh * 1000) + $verbraucher1_tempwh) / 1" | bc)
+		sed -i "s/verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
+		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset1%200
+		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset2%200
+		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset3%200
+	fi
+fi
+
+
 

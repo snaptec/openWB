@@ -611,6 +611,7 @@ if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
 fi
+
 if ! grep -Fq "mpm3pmpvsource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmpvsource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
@@ -1117,6 +1118,10 @@ fi
 if ! grep -Fq "verbraucher1_urlh=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher1_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_tempwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_tempwh=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "verbraucher2_name=" /var/www/html/openWB/openwb.conf
 then

@@ -102,13 +102,13 @@ fi
 if (( verbraucher1_aktiv == "1")); then
 	echo "1" > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
 	if [[ $verbraucher1_typ == "http" ]]; then
-		verbraucher1_watt=$(curl --connect-timeout 2 -s $verbraucher1_urlw &)
+		verbraucher1_watt=$(curl --connect-timeout 3 -s $verbraucher1_urlw )
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 		if ! [[ $verbraucher1_watt =~ $rekwh ]] ; then
 	   		verbraucher1_watt="0"
 		fi
 		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
-		verbraucher1_wh=$(curl --connect-timeout 2 -s $verbraucher1_urlh &)
+		verbraucher1_wh=$(curl --connect-timeout 3 -s $verbraucher1_urlh &)
 		if ! [[ $verbraucher1_wh =~ $rekwh ]] ; then
 	   		verbraucher1_wh="0"
 		fi
@@ -120,7 +120,24 @@ if (( verbraucher1_aktiv == "1")); then
 		else
 			sudo python modules/verbraucher/mpm3pmremote.py 1 $verbraucher1_source $verbraucher1_id &
 		fi
-	fi	
+	fi
+	if [[ $verbraucher1_typ == "tasmota" ]]; then
+		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
+		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+		verbraucher1_watt=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Power')
+		if ! [[ $verbraucher1_watt =~ $rekwh ]] ; then
+	   		verbraucher1_watt="0"
+		fi
+		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
+		verbraucher1_wh=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Total')
+		verbraucher1_totalwh=$(echo "scale=0;(($verbraucher1_wh * 1000) + $verbraucher1_tempwh)  / 1" | bc)
+		if ! [[ $verbraucher1_totalwh =~ $rekwh ]] ; then
+	   		verbraucher1_totalwh="0"
+		fi
+		echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
+	fi
+
+
 fi
 
 
