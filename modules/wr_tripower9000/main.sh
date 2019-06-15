@@ -3,7 +3,7 @@
 
 if [[ $wrsmawebbox == "1" ]]; then
 	rekwh='^[-+]?[0-9]+\.?[0-9]*$'
-	boxout=$(curl --silent --conect-timeout 3 -H "Content-Type: application/json" -X POST -d RPC='{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}' http://$tri9000ip/rpc)
+	boxout=$(curl --silent --connect-timeout 3 -H "Content-Type: application/json" -X POST -d RPC='{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}' http://$tri9000ip/rpc)
 	if [[ $? == "0" ]] ; then
 		pvwatt=$(echo $boxout | jq -r '.result.overview[0].value ')
 		pvkwh=$(echo $boxout | jq -r '.result.overview[2].value ')
