@@ -5,12 +5,12 @@ if [[ $wrsmawebbox == "1" ]]; then
 	rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 	boxout=$(curl --silent --connect-timeout 3 -H "Content-Type: application/json" -X POST -d RPC='{"version": "1.0","proc": "GetPlantOverview","id": "1","format": "JSON"}' http://$tri9000ip/rpc)
 	if [[ $? == "0" ]] ; then
-		pvwatt=$(echo $boxout | jq -r '.result.overview[0].value ')
+		pvwatt=$(echo $boxout | jq -r '.result.overview[0].value ' | sed 's/\..*$//')
+		pvwatt=$(( pvwatt * -1 ))
 		pvkwh=$(echo $boxout | jq -r '.result.overview[2].value ')
 		pvwh=$(echo "scale=0;$pvkwh * 1000" |bc)
 		if [[ $pvwh =~ $rekwh ]]; then
 			echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
-			echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
 		fi
 		if [[ $pvkwh =~ $rekwh ]]; then
 			echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
