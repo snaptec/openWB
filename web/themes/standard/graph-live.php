@@ -1,4 +1,11 @@
 <?php
+$lines = file('/var/www/html/openWB/openwb.conf');
+foreach($lines as $line) {
+	if(strpos($line, "graphsocdyn=") !== false) {
+		list(, $graphsocdyn) = explode("=", $line, 2);
+	}
+}
+
 session_start();
 require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
@@ -115,6 +122,10 @@ $myData->setAxisPosition(2,AXIS_POSITION_RIGHT);
 $myData->setAxisName(1,"% SoC");
 $myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
 
+if ($graphsocdyn == 0) {
+	$minsoc = 0;
+	$maxsoc = 100;
+} 
 $AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,
 						"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
