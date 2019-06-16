@@ -4,6 +4,9 @@ foreach($lines as $line) {
 	if(strpos($line, "graphsocdyn=") !== false) {
 		list(, $graphsocdyn) = explode("=", $line, 2);
 	}
+	if(strpos($line, "chartlegendmain=") !== false) {
+		list(, $chartlegendmain) = explode("=", $line, 2);
+	}
 }
 
 session_start();
@@ -144,7 +147,9 @@ $myImage->setGraphArea(70,25,1070,175);
 //$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
 
 $myImage->drawScale($ScaleSettings);
-$myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+if ($chartlegendmain == 1) {
+	$myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+}
 $myData->setSerieDrawable("PV",false);
 $myData->setSerieDrawable("EVU",false);
 if ($speichervorhanden == 1) {
