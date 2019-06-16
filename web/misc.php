@@ -355,6 +355,9 @@ foreach($lines as $line) {
 	if(strpos($line, "graphliveam=") !== false) {
 		list(, $graphliveamold) = explode("=", $line);
 	}
+	if(strpos($line, "graphsocdyn=") !== false) {
+		list(, $graphsocdynold) = explode("=", $line);
+	}
 	if(strpos($line, "chartlegendmain=") !== false) {
 		list(, $chartlegendmainold) = explode("=", $line);
 	}
@@ -599,6 +602,13 @@ $(function() {
 			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
 				<option <?php if($graphinteractiveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
+			</select>
+	</div>
+	<div class="row">
+			<b><label for="graphsocdyn">SoC im Graph mit dynamischer Skalierung:</label></b>
+			<select type="text" name="graphsocdyn" id="graphsocdyn">
+				<option <?php if($graphsocdynold == 0) echo selected ?> value="0">Aus</option>
+				<option <?php if($graphsocdynold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br><br>
 	</div>
