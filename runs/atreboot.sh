@@ -1374,6 +1374,10 @@ if ! grep -Fq "wrsmawebbox=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsmawebbox=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "graphsocdyn=" /var/www/html/openWB/openwb.conf
+then
+	echo "graphsocdyn=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
