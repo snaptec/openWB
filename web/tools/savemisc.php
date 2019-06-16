@@ -68,6 +68,10 @@ foreach($lines as $line) {
 	    $result .= 'graphinteractiveam='.$_POST[graphinteractiveam]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "graphsocdyn=") !== false) {
+	    $result .= 'graphsocdyn='.$_POST[graphsocdyn]."\n";
+	    $writeit = '1';
+	    } 
 	   if(strpos($line, "chartlegendmain=") !== false) {
 	    $result .= 'chartlegendmain='.$_POST[chartlegendmain]."\n";
 	    $writeit = '1';
