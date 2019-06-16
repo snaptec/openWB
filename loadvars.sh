@@ -6,13 +6,15 @@ if [[ $evsecon == "modbusevse" ]]; then
 	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [[ $evseplugstate > "1" ]]; then
 		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
-		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]]; then
+		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatus == "0" ]] ; then
     	    		message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
 			/var/www/html/openWB/runs/pushover.sh "$message"
 		fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 	else
-		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+		if [[ $evseplugstate == "1" ]]; then
+			echo 0 > /var/www/html/openWB/ramdisk/plugstat
+		fi
 	fi
 	if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestat
