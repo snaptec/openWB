@@ -981,6 +981,10 @@ if ! grep -Fq "e3dcip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "e3dcip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "e3dc2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "e3dc2ip=none" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "bezug_http_l1_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_http_l1_url='http://192.168.0.17/bezuga1'" >> /var/www/html/openWB/openwb.conf
