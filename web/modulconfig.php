@@ -710,6 +710,9 @@ foreach($lines as $line) {
 	if(strpos($line, "e3dcip=") !== false) {
 		list(, $e3dcipold) = explode("=", $line);
 	}
+	if(strpos($line, "e3dc2ip=") !== false) {
+		list(, $e3dc2ipold) = explode("=", $line);
+	}
 	if(strpos($line, "speicherpwip=") !== false) {
 		list(, $speicherpwipold) = explode("=", $line);
 	}
@@ -5405,6 +5408,13 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
+		<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP oder none. IP Adresse des zweiten E3DC Speichers. Wenn nicht vorhanden none eintragen.<br><br>
 	</div>
 </div>
 <div id="divspeichersbs25">

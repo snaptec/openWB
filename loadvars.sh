@@ -60,6 +60,7 @@ if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
 	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
+	speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 	speichervorhanden="1"
 	echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 else
@@ -189,8 +190,13 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
-				speicherww=$((speicherleistung - speichermaxwatt))
-				uberschuss=$((uberschuss + speicherww))
+				if (( speichersoc > speichersocnurpv )); then
+					speicherww=$((speicherleistung + speicherwattnurpv))
+					uberschuss=$((uberschuss + speicherww))
+				else
+					speicherww=$((speicherleistung - speichermaxwatt))
+					uberschuss=$((uberschuss + speicherww))
+				fi
 			fi
 		fi
 	fi

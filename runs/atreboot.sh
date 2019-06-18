@@ -373,6 +373,18 @@ if ! grep -Fq "sdm120modbusllsource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllsource=/dev/ttyUSB1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichersocnurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersocnurpv=100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speichersocminpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersocminpv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherwattnurpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherwattnurpv=1500" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
 then
@@ -599,6 +611,7 @@ if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
 fi
+
 if ! grep -Fq "mpm3pmpvsource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmpvsource=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
@@ -968,6 +981,10 @@ if ! grep -Fq "e3dcip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "e3dcip=192.168.10.12" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "e3dc2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "e3dc2ip=none" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "bezug_http_l1_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_http_l1_url='http://192.168.0.17/bezuga1'" >> /var/www/html/openWB/openwb.conf
@@ -1105,6 +1122,10 @@ fi
 if ! grep -Fq "verbraucher1_urlh=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher1_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher1_tempwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher1_tempwh=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "verbraucher2_name=" /var/www/html/openWB/openwb.conf
 then

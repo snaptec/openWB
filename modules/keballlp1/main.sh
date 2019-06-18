@@ -2,21 +2,34 @@
 . /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
+counter=0
+while [[ -e /var/www/html/openWB/ramdisk/kebasync && $counter < 4 ]]; do
+sleep 1
+counter=$((counter + 1))
+done
+echo 0 > /var/www/html/openWB/ramdisk/kebasync
+if [[ $counter == "4" ]] ; then
+	  dtime=$(date +"%T")
+   echo " $dtime keba1 sleep overrun "
+fi
+dtime=$(date +"%T")
+#echo " $dtime keba1 status $kebaiplp1 "
 nc -ul 7090 >/var/www/html/openWB/ramdisk/keballlp1 &
 pidnc=$!
 disown
 
 echo -n "report 3" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-output=$(</var/www/html/openWB/ramdisk/keballlp1)
 sleep 1
+output=$(</var/www/html/openWB/ramdisk/keballlp1)
 echo -n > /var/www/html/openWB/ramdisk/keballlp1
 #read plug and chargingstatus
 echo -n "report 2" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+sleep 1
 output1=$(tr -d '\0' </var/www/html/openWB/ramdisk/keballlp1)
 
 kill $pidnc
 rm /var/www/html/openWB/ramdisk/keballlp1
-
+rm /var/www/html/openWB/ramdisk/kebasync
 rep3=$(echo $output | jq '.ID') 
 rep2=$(echo $output1 | jq '.ID') 
 rep3="${rep3%\"}"

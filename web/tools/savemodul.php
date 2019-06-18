@@ -792,6 +792,10 @@ foreach($lines as $line) {
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "e3dc2ip=") !== false) {
+	    $result .= 'e3dc2ip='.$_POST[e3dc2ip]."\n";
+	    $writeit = '1';
 	    }
  	   if(strpos($line, "speicherpwip=") !== false) {
 	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";

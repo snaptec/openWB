@@ -22,7 +22,7 @@ if [[ $evsedintestlp1 == "ausstehend" ]]; then
 			sudo python runs/evsewritembusdev.py $modbusevsesource $modbusevseid 1000 9
 			sleep 1
 			evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1000 1)
-			if [[ $evsedinstat == "[9]" ]]; then
+			if [[ $evsedinstat == "9" ]]; then
 				echo "EVSE LP1 Prüfung erfolgreich"
 				echo "erfolgreich" > ramdisk/evsedintestlp1
 			else
@@ -77,7 +77,7 @@ if [[ $evsedintestlp2 == "ausstehend" ]]; then
 
 		evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
 
-		if [[ $evsedinstat == "[9]" ]]; then
+		if [[ $evsedinstat == "9" ]]; then
 			echo "EVSE LP2 Prüfung erfolgreich"
 			echo "erfolgreich" > ramdisk/evsedintestlp2
 		else
@@ -116,7 +116,7 @@ if [[ $evsedintestlp3 == "ausstehend" ]]; then
 
 		evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
 
-		if [[ $evsedinstat == "[9]" ]]; then
+		if [[ $evsedinstat == "9" ]]; then
 			echo "EVSE LP3 Prüfung erfolgreich"
 			echo "erfolgreich" > ramdisk/evsedintestlp3
 		else
@@ -149,7 +149,7 @@ if [[ $evsecon == "modbusevse" ]]; then
 	fi
 	evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1000 1)
 	sleep 1
-	if [[ $evsedinstat == "[$llalt]" ]]; then
+	if [[ $evsedinstat == "$llalt" ]]; then
 		if [[ $debug == "1" ]]; then
 			echo "LP1 Modbus $llalt korrekt"
 		fi
@@ -175,7 +175,7 @@ if (( lastmanagement == 1 )); then
 		fi
 		evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
 		sleep 1
-		if [[ $evsedinstat == "[$llalts1]" ]]; then
+		if [[ $evsedinstat == "$llalts1" ]]; then
 			if [[ $debug == "1" ]]; then
 				echo "LP2 Modbus $llalts1 korrekt"
 			fi
@@ -200,7 +200,7 @@ if (( lastmanagement == 1 )); then
 				echo "echo" > /dev/null
 			fi
 			evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
-			if [[ $evsedinstat == "[$llalts2]" ]]; then
+			if [[ $evsedinstat == "$llalts2" ]]; then
 				if [[ $debug == "1" ]]; then
 					echo "LP3 Modbus $llalts2 korrekt"
 				fi
