@@ -2,7 +2,7 @@
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 minundpvlademodus(){
-	if (( speichersoc >= speichersocnurpv )); then
+	if (( speichersoc >= speichersocminpv )); then
 		if (( ladestatus == 0 )); then
 			runs/set-current.sh $minimalampv all
 			echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
