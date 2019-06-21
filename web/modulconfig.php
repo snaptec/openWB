@@ -956,14 +956,14 @@ function display_lp1 () {
 	$('#evseconswifi').hide();
 	$('#llmodullp1').hide();
 	$('#evsecongoe').hide();
-	$('#evseconmastereth').hide();
 	$('#evseconnrgkick').hide();
+	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
 
 	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show(); 
 		$('#llmodullp1').show();
-    }
+	}
 	if($('#evsecon').val() == 'modbusevse') {
 		$('#evseconmod').show();
 		$('#llmodullp1').show();	
@@ -978,7 +978,7 @@ function display_lp1 () {
 		$('#evseconmastereth').show();
 	} 
 	if($('#evsecon').val() == 'nrgkick') {
-		('#evseconnrgkick').show();
+		$('#evseconnrgkick').show();
 	}
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
@@ -1119,6 +1119,10 @@ function display_llmp1() {
 	if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 		$('#llmsdm').show();
 		$('#rs485lanlp1').show();
+<<<<<<< HEAD
+=======
+
+>>>>>>> e22ec83557c5352029253c7b226b07b9b2441ce7
 	} 
 	if($('#ladeleistungmodul').val() == 'smaemd_ll') {
 		$('#llsma').show();
