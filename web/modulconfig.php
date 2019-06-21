@@ -1119,7 +1119,6 @@ function display_llmp1() {
 	if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 		$('#llmsdm').show();
 		$('#rs485lanlp1').show();
-
 	} 
 	if($('#ladeleistungmodul').val() == 'smaemd_ll') {
 		$('#llsma').show();
