@@ -220,6 +220,7 @@ $.ajax({
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.add("fa");
 			element.classList.add("fa-plug");
+			element.setAttribute("style", "color: red;");
 		    } else {
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.remove("fa");
@@ -234,10 +235,39 @@ $.ajax({
 			var element = document.getElementById("plugstatlp1div");
 			element.classList.add("fa");
 			element.classList.add("fa-plug");
+			element.setAttribute("style", "color: red;");
 		    } else {
 			var element = document.getElementById("plugstatlp1div");
 			element.classList.remove("fa");
 			element.classList.remove("fa-plug");
+			element.setAttribute("style", "color: green;");
+
+			}
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/chargestat",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp1div");
+
+			element.setAttribute("style", "color: green;");
+		    } else {
+			var element = document.getElementById("plugstatlp1div");
+			element.setAttribute("style", "color: white;");
+			}
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/chargestats1",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp2div");
+
+			element.setAttribute("style", "color: green;");
+		    } else {
+			var element = document.getElementById("plugstatlp2div");
+			element.setAttribute("style", "color: white;");
 			}
     }
   });

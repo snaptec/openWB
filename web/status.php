@@ -455,14 +455,23 @@
 	});
 		$.ajax({
 			url: "/openWB/ramdisk/verbraucher1_wh",
-	    	complete: function(request){
-		    	$("#verbraucher1whdiv").html(request.responseText);
+				complete: function(request){
+
+					var vfinal = request.responseText;
+					vfinal = (vfinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher1whdiv").html(vfinal);
 				}
 		});
 		$.ajax({
 			url: "/openWB/ramdisk/verbraucher1_whe",
-	    	complete: function(request){
-		    	$("#verbraucher1whediv").html(request.responseText);
+				complete: function(request){
+
+					var vefinal = request.responseText;
+					vefinal = (vefinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher1whediv").html(vefinal);
+
 				}
 		});
 	}
@@ -485,8 +494,11 @@
 	function getfile() {
 		$.ajax({
 			url: "/openWB/ramdisk/einspeisungkwh",
-	    	complete: function(request){
-		    	$("#einspeisungkwhdiv").html(request.responseText);
+				complete: function(request){
+					var eefinal = request.responseText;
+					eefinal = (eefinal / 1000).toFixed(3);
+	
+		    	$("#einspeisungkwhdiv").html(eefinal);
 				}
 		});
 	}
@@ -497,8 +509,10 @@
 	function getfile() {
 		$.ajax({
 			url: "/openWB/ramdisk/bezugkwh",
-	    	complete: function(request){
-		    	$("#bezugkwhdiv").html(request.responseText);
+				complete: function(request){
+					var eifinal = request.responseText;
+					eifinal = (eifinal / 1000).toFixed(3);
+		    	$("#bezugkwhdiv").html(eifinal);
 				}
 		});
 	}
@@ -522,14 +536,18 @@
 	function getfile() {
 		$.ajax({
 			url: "/openWB/ramdisk/speicherikwh",
-	    	complete: function(request){
-		    	$("#speicherikwhdiv").html(request.responseText);
+				complete: function(request){
+					var sgfinal = request.responseText;
+					sgfinal = (sgfinal / 1000).toFixed(3);
+		    	$("#speicherikwhdiv").html(sgfinal);
 				}
 	});
 		$.ajax({
 			url: "/openWB/ramdisk/speicherekwh",
-	    	complete: function(request){
-		    	$("#speicherekwhdiv").html(request.responseText);
+				complete: function(request){
+					var sefinal = request.responseText;
+					sefinal = (sefinal / 1000).toFixed(3);
+		    	$("#speicherekwhdiv").html(sefinal);
 				}
 		});
 
@@ -1227,13 +1245,13 @@ loadstatuslog();
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center">
-					Speicher geladen [Wh]
+					Speicher geladen [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="speicherikwhdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Speicher entladen [Wh]
+					Speicher entladen [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="speicherekwhdiv"></div>
@@ -1274,13 +1292,13 @@ loadstatuslog();
 					<div id="soclevel1"></div>
 				</div>
 				<div class="col-xs-2 text-center" style="background-color:#febebe">
-					EVU Bezug [Wh]
+					EVU Bezug [kWh]
 				</div>
 				<div class="col-xs-2 text-center" style="background-color:#febebe">
 					<div id="bezugkwhdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center" style="background-color:#febebe">
-					EVU Einspeisung [Wh]
+					EVU Einspeisung [kWh]
 				</div>
 				<div class="col-xs-2 text-center" style="background-color:#febebe">
 					<div id="einspeisungkwhdiv"></div>
@@ -1295,13 +1313,13 @@ loadstatuslog();
 					<div id="verbraucher1wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 1 Import [Wh]
+					Verbraucher 1 Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher1whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 1 Export [Wh]
+					Verbraucher 1 Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
