@@ -186,7 +186,7 @@ categoryAxis.dataFields.category = "col0";
 
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "kWh";
+valueAxis.title.text = "Wh";
 /*
 valueAxis.adapter.add("getTooltipText", (text) => {
 return text * 12 + "Watt";
@@ -267,15 +267,15 @@ chart.cursor.lineX.fillOpacity = 0.1;
 // Add legend
 
 //series4.customField = 12;
-series1.legendSettings.valueText = "{valueY.sum}kWh";
+series1.legendSettings.valueText = "{valueY.sum}Wh";
 
-series4.legendSettings.valueText = "{valueY.sum}kWh";
-//series3.legendSettings.valueText = "{valueY.sum}kWh";
-series2.legendSettings.valueText = "{valueY.sum}kWh";
-series9.legendSettings.valueText = "{valueY.sum}kWh";
-series5.legendSettings.valueText = "{valueY.sum}kWh";
-series6.legendSettings.valueText = "{valueY.sum}kWh";
-//series11.legendSettings.valueText = "{valueY.sum}kWh";
+series4.legendSettings.valueText = "{valueY.sum}Wh";
+//series3.legendSettings.valueText = "{valueY.sum}Wh";
+series2.legendSettings.valueText = "{valueY.sum}Wh";
+series9.legendSettings.valueText = "{valueY.sum}Wh";
+series5.legendSettings.valueText = "{valueY.sum}Wh";
+series6.legendSettings.valueText = "{valueY.sum}Wh";
+//series11.legendSettings.valueText = "{valueY.sum}Wh";
 
 
 chart.legend = new am4charts.Legend();

@@ -121,6 +121,13 @@ if (( verbraucher1_aktiv == "1")); then
 			sudo python modules/verbraucher/mpm3pmremote.py 1 $verbraucher1_source $verbraucher1_id &
 		fi
 	fi
+	if [[ $verbraucher1_typ == "sdm120" ]]; then
+		if [[ $verbraucher1_source == *"dev"* ]]; then
+			sudo python modules/verbraucher/sdm120local.py 1 $verbraucher1_source $verbraucher1_id &
+		else
+			sudo python modules/verbraucher/sdm120remote.py 1 $verbraucher1_source $verbraucher1_id &
+		fi
+	fi
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
 		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
