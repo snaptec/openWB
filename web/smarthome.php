@@ -42,7 +42,9 @@
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "hook1_ausverz=") !== false) {
+		list(, $hook1_ausverzold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "hook1ein_url=") !== false) {
 		list(, $hook1ein_urlold) = explode("=", $line, 2);
 	}
@@ -121,6 +123,31 @@ foreach($lines as $line) {
 	if(strpos($line, "verbraucher1_source=") !== false) {
 		list(, $verbraucher1_sourceold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "verbraucher2_aktiv=") !== false) {
+		list(, $verbraucher2_aktivold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_typ=") !== false) {
+		list(, $verbraucher2_typold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_urlw=") !== false) {
+		list(, $verbraucher2_urlwold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_urlh=") !== false) {
+		list(, $verbraucher2_urlhold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_name=") !== false) {
+		list(, $verbraucher2_nameold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_id=") !== false) {
+		list(, $verbraucher2_idold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_ip=") !== false) {
+		list(, $verbraucher2_ipold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "verbraucher2_source=") !== false) {
+		list(, $verbraucher2_sourceold) = explode("=", $line, 2);
+	}
+
 
 }
 
@@ -132,6 +159,8 @@ $hook3ein_urlold = str_replace( "'", "", $hook3ein_urlold);
 $hook3aus_urlold = str_replace( "'", "", $hook3aus_urlold);
 $verbraucher1_urlwold = str_replace( "'", "", $verbraucher1_urlwold);
 $verbraucher1_urlhold = str_replace( "'", "", $verbraucher1_urlhold);
+$verbraucher2_urlwold = str_replace( "'", "", $verbraucher2_urlwold);
+$verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 
 
 
@@ -219,6 +248,15 @@ $verbraucher1_urlhold = str_replace( "'", "", $verbraucher1_urlhold);
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
 	</div>
+	<div class="row">
+       		<b><label for="hook1_ausverz">Gerät 1 Ausschaltverzögerung:</label></b>
+        	<input type="text" name="hook1_ausverz" id="hook1_ausverz" value="<?php echo $hook1_ausverzold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+	</div>
+
 
 </div>
 <script>
@@ -259,7 +297,7 @@ $(function() {
 	Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
 	</div>
 	<div class="row">
-       		<b><label for="hook2ein_watt">Gerät 1 Einschaltschwelle:</label></b>
+       		<b><label for="hook2ein_watt">Gerät 2 Einschaltschwelle:</label></b>
         	<input type="text" name="hook2ein_watt" id="hook2ein_watt" value="<?php echo $hook2ein_wattold ?>"><br>
 	<br>
 	</div>
@@ -299,6 +337,7 @@ $(function() {
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
 	</div>
+
 
 </div>
 <script>
@@ -536,6 +575,142 @@ $(function() {
 	    });
 });
 </script>
+
+<hr>
+<div class="row">
+	<b><label for="verbraucher2_aktiv">Verbraucher 2:</label></b>
+	<select type="text" name="verbraucher2_aktiv" id="verbraucher2_aktiv">
+		<option <?php if($verbraucher2_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($verbraucher2_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="verbraucher2ausdiv">
+	<br>
+</div>
+<div id="verbraucher2andiv">
+	<div class="row">
+	Externe Verbraucher lassen sich in das Logging von OpenWB mit einbinden.<br><br>
+	</div>
+	<div class="row">
+		<b><label for="verbraucher2_typ">Anbindung Verbraucher 2:</label></b>
+		<select type="text" name="verbraucher2_typ" id="verbraucher2_typ">
+			<option <?php if($verbraucher2_typold == "http\n") echo selected ?> value="http">Http Abfrage</option>
+			<option <?php if($verbraucher2_typold == "mpm3pm\n") echo selected ?> value="mpm3pm">MPM3PM</option>
+			<option <?php if($verbraucher2_typold == "sdm120\n") echo selected ?> value="sdm120">SDM120</option>
+			<option <?php if($verbraucher2_typold == "sdm630\n") echo selected ?> value="sdm630">SDM630</option>
+			<option <?php if($verbraucher2_typold == "tasmota\n") echo selected ?> value="tasmota">Sonoff mit Tasmota FW</option>
+
+		</select><br><br>
+	</div>
+	<div class="row">
+       		<b><label for="verbraucher2_name">Verbraucher 2 Name:</label></b>
+        	<input type="text" name="verbraucher2_name" id="verbraucher2_name" value="<?php echo $verbraucher2_nameold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Name des Verbrauchers 2.<br><br>
+	</div>
+<div id="v2http">
+	<div class="row">
+       		<b><label for="verbraucher2_urlw">Verbraucher 2 URL:</label></b>
+        	<input size="50" type="text" name="verbraucher2_urlw" id="verbraucher2_urlw" value="<?php echo htmlspecialchars($verbraucher2_urlwold) ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		URL des Verbrauchers Momentanleistung in Watt.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="verbraucher2_urlh">Verbraucher 2 URL:</label></b>
+	<input size="50" type="text" name="verbraucher2_urlh" id="verbraucher2_urlh" value="<?php echo htmlspecialchars($verbraucher2_urlhold) ?>"><br>
+
+	<br>
+	</div>
+	<div class="row">
+		URL des Verbrauchers Zählerststandes in Watt Stunden.<br><br>
+	</div>
+</div>
+<div id="v2modbus">
+	<div class="row">
+       		<b><label for="verbraucher2_source">Verbraucher 2 Source:</label></b>
+        	<input type="text" name="verbraucher2_source" id="verbraucher2_source" value="<?php echo $verbraucher2_sourceold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bei lokal angeschlossenem Zähler ist dies /dev/ttyUSB3 (z.B.). Wird ein Modbus Ethernet Konverter genutzt, z.B. der aus dem Shop, hier die IP Adresse eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="verbraucher2_id">Verbraucher 2 ID:</label></b>
+        	<input type="text" name="verbraucher2_id" id="verbraucher2_id" value="<?php echo $verbraucher2_idold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Modbus ID.<br><br>
+	</div>
+</div>
+<div id="v2tasmota">
+	<div class="row">
+       		<b><label for="verbraucher2_ip">Verbraucher 2 IP:</label></b>
+        	<input type="text" name="verbraucher2_ip" id="verbraucher2_ip" value="<?php echo $verbraucher2_ipold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		IP Adresse des Tasmota Sonoff Geräts.<br><br>
+	</div>
+</div>
+
+</div><br>
+
+<script>
+function display_verbraucher2 () {
+	$('#v2http').hide(); 
+	$('#v2modbus').hide();
+	$('#v2tasmota').hide();
+if($('#verbraucher2_typ').val() == 'http') {
+$('#v2http').show();
+}
+if($('#verbraucher2_typ').val() == 'mpm3pm') {
+$('#v2modbus').show();
+}
+if($('#verbraucher2_typ').val() == 'sdm630') {
+$('#v2modbus').show();
+}
+if($('#verbraucher2_typ').val() == 'sdm120') {
+$('#v2modbus').show();
+}
+if($('#verbraucher2_typ').val() == 'tasmota') {
+$('#v2tasmota').show();
+}
+
+}
+display_verbraucher2();
+$('#verbraucher2_typ').change(function(){
+	display_verbraucher2();
+});
+</script>
+
+<script>
+$(function() {
+      if($('#verbraucher2_aktiv').val() == '0') {
+		$('#verbraucher2ausdiv').show();
+		$('#verbraucher2andiv').hide();
+      } else {
+		$('#verbraucher2ausdiv').hide();
+	       	$('#verbraucher2andiv').show();
+      }
+
+	$('#verbraucher2_aktiv').change(function(){
+	      if($('#verbraucher2_aktiv').val() == '0') {
+			$('#verbraucher2ausdiv').show();
+			$('#verbraucher2andiv').hide();
+	      } else {
+			$('#verbraucher2ausdiv').hide();
+		       	$('#verbraucher2andiv').show();
+	      }
+	    });
+});
+</script>
+
 
 
 

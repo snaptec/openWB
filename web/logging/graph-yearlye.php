@@ -63,28 +63,28 @@ $rtimef = array_reverse($timefarf);
 
 $anzahl = count($timefarf);
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = floor(($rbezug[$x-1] - $rbezug[$x]) / 1000 * -1);
+	    $bezugdiff[$x] = floor(($rbezug[$x-1] - $rbezug[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $timefk[$x] = substr($rtimef[$x], 6);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = floor(($rpv[$x-1] - $rpv[$x]) / 1000 * -1);
+	    $pvdiff[$x] = floor(($rpv[$x-1] - $rpv[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = floor(($reinspeisung[$x-1] - $reinspeisung[$x]) / 1000 * -1);
+	    $einspeisungdiff[$x] = floor(($reinspeisung[$x-1] - $reinspeisung[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = floor(($rllg[$x-1] - $rllg[$x]) / 1000 * -1);
+	    $llgdiff[$x] = floor(($rllg[$x-1] - $rllg[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = floor(($rll1[$x-1] - $rll1[$x]) / 1000 * -1);
+	    $ll1diff[$x] = floor(($rll1[$x-1] - $rll1[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = floor(($rll2[$x-1] - $rll2[$x]) / 1000 * -1);
+	    $ll2diff[$x] = floor(($rll2[$x-1] - $rll2[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = floor(($rll3[$x-1] - $rll3[$x]) / 1000 * -1);
+	    $ll3diff[$x] = floor(($rll3[$x-1] - $rll3[$x]) * -1);
 }
 
 

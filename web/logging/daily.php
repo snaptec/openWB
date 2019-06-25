@@ -181,7 +181,8 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	var verbraucher1name = "Import: <?php echo $verbraucher1_nameold ?>";
 	var verbrauchere1name = "Export: <?php echo $verbraucher1_nameold ?>";
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
-	var verbraucher2name = "<?php echo $verbraucher2_nameold ?>";
+	var verbraucher2name = "Import: <?php echo $verbraucher2_nameold ?>";
+	var verbrauchere2name = "Export: <?php echo $verbraucher2_nameold ?>";
 	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
 	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
 

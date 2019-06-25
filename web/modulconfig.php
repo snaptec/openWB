@@ -301,6 +301,22 @@ foreach($lines as $line) {
 	if(strpos($line, "nachtladenbisuhrs1=") !== false) {
 		list(, $nachtladenbisuhrs1old) = explode("=", $line);
 	}
+	if(strpos($line, "httpll_w_url=") !== false) {
+		list(, $httpll_w_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "httpll_kwh_url=") !== false) {
+		list(, $httpll_kwh_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "httpll_a1_url=") !== false) {
+		list(, $httpll_a1_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "httpll_a2_url=") !== false) {
+		list(, $httpll_a2_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "httpll_a3_url=") !== false) {
+		list(, $httpll_a3_urlold) = explode("=", $line, 2);
+	}
+
 	if(strpos($line, "wr_http_w_url=") !== false) {
 		list(, $wr_http_w_urlold) = explode("=", $line, 2);
 	}
@@ -797,6 +813,11 @@ $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
 $wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
+$httpll_kwh_urlold = str_replace( "'", "", $httpll_kwh_urlold);
+$httpll_w_urlold = str_replace( "'", "", $httpll_w_urlold);
+$httpll_a1_urlold = str_replace( "'", "", $httpll_a1_urlold);
+$httpll_a2_urlold = str_replace( "'", "", $httpll_a2_urlold);
+$httpll_a3_urlold = str_replace( "'", "", $httpll_a3_urlold);
 $hsocipold = str_replace( "'", "", $hsocipold);
 $wrjsonurlold = str_replace( "'", "", $wrjsonurlold);
 $wrjsonwattold = str_replace( "'", "", $wrjsonwattold);
@@ -1054,14 +1075,54 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
 		<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
-
+		<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
 
 	</select>
 </div>
 
 <div id="llmnone">
 </div>
+<div id="httpll">
+	<div class="row bg-info" >
+		<b><label for="httpll_w_url">Vollständige URL für die Ladeleistungs Watt</label></b>
+		<input type="text" name="httpll_w_url" id="httpll_w_url" value="<?php echo htmlspecialchars($httpll_w_urlold) ?>"><br>
+	</div>
+	<div class="row bg-info" >
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
+	</div>
+	<div class="row bg-info" >
+		<b><label for="httpll_kwh_url">Vollständige URL für die Ladeleistungszählerstand in kWh</label></b>
+		<input type="text" name="httpll_kwh_url" id="httpll_kwh_url" value="<?php echo htmlspecialchars($httpll_kwh_urlold) ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in kWh sein als Trennstelle wird ein Punkt genutzt.
+	</div>
+	<div class="row bg-info" >
+		<b><label for="httpll_a1_url">Vollständige URL für die Ladeleistungs Ampere Phase 1</label></b>
+		<input type="text" name="httpll_a1_url" id="httpll_a1_url" value="<?php echo htmlspecialchars($httpll_a1_urlold) ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
+	</div>
+	<div class="row bg-info" >
+		<b><label for="httpll_a2_url">Vollständige URL für die Ladeleistungs Ampere Phase 2</label></b>
+		<input type="text" name="httpll_a2_url" id="httpll_a2_url" value="<?php echo htmlspecialchars($httpll_a2_urlold) ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
+	</div>
+	<div class="row bg-info" >
+		<b><label for="httpll_a3_url">Vollständige URL für die Ladeleistungs Ampere Phase 3</label></b>
+		<input type="text" name="httpll_a3_url" id="httpll_a3_url" value="<?php echo htmlspecialchars($httpll_a3_urlold) ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
+	</div>
 
+
+
+
+</div>
 <div id="llmpm3pm">
 		<div class="row bg-info">
 		<b><label for="mpm3pmll">MPM3PM Modbus Ladeleistung Source:</label></b>
@@ -1179,10 +1240,15 @@ function display_llmp1() {
 	$('#llsma, #sdm120div').hide();
 	$('#rs485lanlp1').hide();
 	$('#llmfsm').hide();
+	$('#httpll').hide();
 
 	if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show(); 
 	} 
+	if($('#ladeleistungmodul').val() == 'httpll') {
+		$('#httpll').show(); 
+	} 
+
 	if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 		$('#llmsdm').show();
 		$('#rs485lanlp1').show();

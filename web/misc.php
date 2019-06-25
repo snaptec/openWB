@@ -377,7 +377,9 @@ foreach($lines as $line) {
 	if(strpos($line, "heutegeladen=") !== false) {
 		list(, $heutegeladenold) = explode("=", $line);
 	}
-
+	if(strpos($line, "bootmodus=") !== false) {
+		list(, $bootmodusold) = explode("=", $line);
+	}
 
 
 }
@@ -441,6 +443,21 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 		<div class="row">
 			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
+		</div>
+		<div class="row">
+			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
+			<select type="text" name="bootmodus" id="bootmodus">
+				<option <?php if($bootmodusold == 0) echo selected ?> value="0">Sofort Laden</option>
+				<option <?php if($bootmodusold == 1) echo selected ?> value="1">Min + PV</option>
+				<option <?php if($bootmodusold == 2) echo selected ?> value="2">Nur PV</option>
+				<option <?php if($bootmodusold == 3) echo selected ?> value="3">Stop</option>
+				<option <?php if($bootmodusold == 4) echo selected ?> value="4">Standby</option>
+
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Definiert den Lademodus nach Boot der openWB.<br> <br>
 		</div>
 
 <div class="row"><hr>

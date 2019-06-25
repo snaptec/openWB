@@ -220,7 +220,7 @@ $.ajax({
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.add("fa");
 			element.classList.add("fa-plug");
-			element.setAttribute("style", "color: red;");
+	
 		    } else {
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.remove("fa");
@@ -235,13 +235,11 @@ $.ajax({
 			var element = document.getElementById("plugstatlp1div");
 			element.classList.add("fa");
 			element.classList.add("fa-plug");
-			element.setAttribute("style", "color: red;");
-		    } else {
+			    } else {
 			var element = document.getElementById("plugstatlp1div");
 			element.classList.remove("fa");
 			element.classList.remove("fa-plug");
-			element.setAttribute("style", "color: green;");
-
+		
 			}
     }
   });
@@ -251,7 +249,7 @@ $.ajax({
 		if (request.responseText == 1) {
 			var element = document.getElementById("plugstatlp1div");
 
-			element.setAttribute("style", "color: green;");
+			element.setAttribute("style", "color: darkgreen;");
 		    } else {
 			var element = document.getElementById("plugstatlp1div");
 			element.setAttribute("style", "color: white;");
@@ -264,7 +262,7 @@ $.ajax({
 		if (request.responseText == 1) {
 			var element = document.getElementById("plugstatlp2div");
 
-			element.setAttribute("style", "color: green;");
+			element.setAttribute("style", "color: darkgreen;");
 		    } else {
 			var element = document.getElementById("plugstatlp2div");
 			element.setAttribute("style", "color: white;");

@@ -77,7 +77,10 @@ foreach($lines as $line) {
 	    $result .= 'heutegeladen='.$_POST[heutegeladen]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "bootmodus=") !== false) {
+	    $result .= 'bootmodus='.$_POST[bootmodus]."\n";
+	    $writeit = '1';
+	    } 
 
 
 

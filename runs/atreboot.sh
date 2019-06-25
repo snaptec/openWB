@@ -1,10 +1,12 @@
 #!/bin/bash
 #Ramdisk mit initialen Werten befüllen nach neustart
+. /var/www/html/openWB/openwb.conf
 sleep 10
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/ramdisk/
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
@@ -29,6 +31,13 @@ echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
+echo 0 > /var/www/html/openWB/ramdisk/evseausgelesen
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp1
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp2
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp12000
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp12007
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22000
+echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -159,7 +168,7 @@ echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
-echo 3 > /var/www/html/openWB/ramdisk/lademodus
+echo $bootmodus > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/soc
@@ -1026,6 +1035,10 @@ if ! grep -Fq "hook1aus_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hook1_ausverz=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook1_ausverz=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hook1ein_watt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1ein_watt=1200" >> /var/www/html/openWB/openwb.conf
@@ -1147,6 +1160,19 @@ if ! grep -Fq "verbraucher2_urlh=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher2_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "verbraucher2_id=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_id=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_ip=192.168.4.123" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "verbraucher2_source=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_source=/dev/ttyUSB5" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "verbraucher3_name=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher3_name=Name" >> /var/www/html/openWB/openwb.conf
@@ -1395,6 +1421,31 @@ if ! grep -Fq "wrsmawebbox=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsmawebbox=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bootmodus=" /var/www/html/openWB/openwb.conf
+then
+	echo "bootmodus=3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_w_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_w_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_kwh_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_kwh_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_a1_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_a1_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_a2_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_a2_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_a3_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_a3_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 
 ethstate=$(</sys/class/net/eth0/carrier)

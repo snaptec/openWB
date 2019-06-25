@@ -61,6 +61,15 @@ if [[ $verbraucher1_typ == "tasmota" ]]; then
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset3%200
 	fi
 fi
-
+if [[ $verbraucher2_typ == "tasmota" ]]; then
+	verbraucher2_oldwh=$(curl -s http://$verbraucher2_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
+	if [[ $? == "0" ]]; then
+		verbraucher2_writewh=$(echo "scale=0;(($verbraucher2_oldwh * 1000) + $verbraucher2_tempwh) / 1" | bc)
+		sed -i "s/verbraucher2_tempwh=.*/verbraucher2_tempwh=$verbraucher2_writewh/" /var/www/html/openWB/openwb.conf
+		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset1%200
+		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset2%200
+		curl -s http://$verbraucher2_ip/cm?cmnd=EnergyReset3%200
+	fi
+fi
 
 
