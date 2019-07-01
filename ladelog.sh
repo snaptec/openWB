@@ -7,6 +7,8 @@ soc=$(<ramdisk/soc)
 soc1=$(<ramdisk/soc1)
 nachtladenstate=$(</var/www/html/openWB/ramdisk/nachtladenstate)
 nachtladen2state=$(</var/www/html/openWB/ramdisk/nachtladen2state)
+rfidlp1=$(<ramdisk/rfidlp1)
+rfidlp2=$(<ramdisk/rfidlp2)
 if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
 	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
 else
@@ -83,7 +85,7 @@ else
 			if (( ladedauer > 60 )); then
 				ladedauerh=$((ladedauer / 60))
 				laderest=$((ladedauer % 60))
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus,$rfidlp1 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -169,7 +171,7 @@ else
 			if (( ladedauers1 > 60 )); then
 				ladedauerhs1=$((ladedauers1 / 60))
 				laderests1=$((ladedauers1 % 60))
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus,$rfidlp2 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"

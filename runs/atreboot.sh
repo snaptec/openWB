@@ -38,6 +38,11 @@ echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp12000
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp12007
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22000
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
+echo 0 > /var/www/html/openWB/ramdisk/readtag
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
+
+
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -1445,7 +1450,10 @@ if ! grep -Fq "httpll_a3_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_a3_url='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)

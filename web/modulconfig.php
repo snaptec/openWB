@@ -2853,6 +2853,7 @@ $(function() {
 	<b><label for="pvwattmodul">PV Modul:</label></b>
 	<select type="text" name="pvwattmodul" id="pvwattmodul">
 		<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo selected ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
 		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">Fronius WR</option>
 		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">SDM 630 Modbus</option>
 		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">VZLogger</option>
@@ -2890,6 +2891,12 @@ $(function() {
 	
 	<div class="row" style="background-color:#febebe">
 		Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert<br>
+	</div>
+</div>
+<div id="pvmpmevu">
+	
+	<div class="row" style="background-color:#febebe">
+		Keine Einstellung nötig. Dies ist das richtige Modul wenn ein MPM3PM Zähler mit ID 8 am openWB EVU Kit mit angeschlossen ist.<br>
 	</div>
 </div>
 <div id="pvplenti">
@@ -3179,7 +3186,12 @@ function display_pvwattmodul() {
 	$('#pvsolarlog').hide();
 	$('#pvpiko2').hide();
 	$('#pvpowerwall').hide();
+	$('#pvmpmevu').hide();
 
+
+	if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
+		$('#pvmpmevu').show(); 
+	} 
 	if($('#pvwattmodul').val() == 'vzloggerpv') {
 		$('#pvvzl').show(); 
 	} 

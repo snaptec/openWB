@@ -49,7 +49,16 @@
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
-					}
+		if(strpos($line, "lastmanagement=") !== false) {
+			list(, $lastmanagementold) = explode("=", $line);
+		}
+	}
+$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
+$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
+
+
 					?>
 
 <body>
@@ -92,6 +101,15 @@
 </div>
 	'; } ?>
 
+
+<script>
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+
+</script>
 
 
 
@@ -169,7 +187,7 @@ series5.stroke = am4core.color("#845EC2");
 //series5.tensionX = 10;
 //series5.tensionY = 10;
 series5.strokeWidth = 1.5;
-
+if ( lastmanagement == 1 ) {
 var series6 = chart.series.push(new am4charts.LineSeries());
 series6.dataFields.valueY = "col5";
 series6.dataFields.categoryX = "col0";
@@ -178,7 +196,8 @@ series6.stroke = am4core.color("#aa5ec2");
 //series6.tensionX = 10;
 //series6.tensionY = 10;
 series6.strokeWidth = 1.5;
-
+}
+if ( speichervorhanden == 1 ) {
 var series3 = chart.series.push(new am4charts.LineSeries());
 series3.dataFields.valueY = "col7";
 series3.dataFields.categoryX = "col0";
@@ -199,7 +218,7 @@ series7.stroke = am4core.color("#fcbe1e");
 //series7.tensionY = 10;
 series7.strokeWidth = 1.5;
 series7.yAxis = valueAxis2;
-
+}
 var series8 = chart.series.push(new am4charts.LineSeries());
 series8.dataFields.valueY = "col9";
 series8.dataFields.categoryX = "col0";
@@ -207,7 +226,7 @@ series8.name = "Lp1 SoC";
 series8.stroke = am4core.color("#845EC2");
 series8.strokeWidth = 1.5;
 series8.yAxis = valueAxis2;
-
+if ( soc1vorhanden == 1 ) {
 var series9 = chart.series.push(new am4charts.LineSeries());
 series9.dataFields.valueY = "col10";
 series9.dataFields.categoryX = "col0";
@@ -215,7 +234,7 @@ series9.name = "Lp2 SoC";
 series9.stroke = am4core.color("#aa5ec2");
 series9.strokeWidth = 1.5;
 series9.yAxis = valueAxis2;
-
+}
 
 var series10 = chart.series.push(new am4charts.LineSeries());
 series10.dataFields.valueY = "col11";
@@ -224,7 +243,22 @@ series10.name = "Hausverbrauch";
 series10.stroke = am4core.color("#fefedf");
 series10.strokeWidth = 2;
 
-
+if ( verbraucher1vorhanden == 1) {
+    var series40 = chart.series.push(new am4charts.LineSeries());
+    series40.dataFields.valueY = "col12";
+    series40.dataFields.categoryX = "col0";
+    series40.name = "Verbraucher 1";
+    series40.stroke = am4core.color("#FFFF00");
+    series40.strokeWidth = 1.5;
+}
+if ( verbraucher2vorhanden == 1) {
+    var series41 = chart.series.push(new am4charts.LineSeries());
+    series41.dataFields.valueY = "col13";
+    series41.dataFields.categoryX = "col0";
+    series41.name = "Verbraucher 1";
+    series41.stroke = am4core.color("#FF00FF");
+    series41.strokeWidth = 1.5;
+}
 
 chart.cursor = new am4charts.XYCursor();
 

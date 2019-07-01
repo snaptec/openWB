@@ -24,7 +24,8 @@ speicherikwh=$(</var/www/html/openWB/ramdisk/speicherikwh)
 speicherekwh=$(</var/www/html/openWB/ramdisk/speicherekwh)
 verbraucher1iwh=$(</var/www/html/openWB/ramdisk/verbraucher1_wh)
 verbraucher1ewh=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
-
+verbraucher2iwh=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
+verbraucher2ewh=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
 
 
 
@@ -36,7 +37,7 @@ ll2=$(echo "$ll2 * 1000" | bc)
 ll3=$(echo "$ll3 * 1000" | bc)
 llg=$(echo "$llg * 1000" | bc)
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh >> $monthlyfile.csv
 echo $(date +%Y%m%d) >> $monthlyfile-date.csv
 echo $bezug >> $monthlyfile-bezug.csv
 echo $einspeisung >> $monthlyfile-einspeisung.csv
@@ -49,6 +50,8 @@ echo $speicheri >> $monthlyfile-speicheriwh.csv
 echo $speichere >> $monthlyfile-speicherewh.csv
 echo $verbraucher1iwh >> $monthlyfile-verbraucher1iwh.csv
 echo $verbraucher1ewh >> $monthlyfile-verbraucher1ewh.csv
+echo $verbraucher2iwh >> $monthlyfile-verbraucher2iwh.csv
+echo $verbraucher2ewh >> $monthlyfile-verbraucher2ewh.csv
 
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then

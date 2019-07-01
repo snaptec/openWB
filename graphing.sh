@@ -21,6 +21,13 @@ echo $ladeleistung >> /var/www/html/openWB/ramdisk/ev-live.graph
 echo $soc >> /var/www/html/openWB/ramdisk/soc-live.graph
 date +%H:%M >> /var/www/html/openWB/ramdisk/time-live.graph
 echo $hausverbrauch >> /var/www/html/openWB/ramdisk/hausverbrauch-live.graph
+if (( verbraucher1_aktiv == 1 )); then
+	echo $verbraucher1_watt >> /var/www/html/openWB/ramdisk/verbraucher1-live.graph
+fi
+if (( verbraucher2_aktiv == 1 )); then
+	echo $verbraucher2_watt >> /var/www/html/openWB/ramdisk/verbraucher2-live.graph
+fi
+
 
 if [[ $livegraph =~ $re ]] ; then      
 	livegraph=$((livegraph * 6 ))
@@ -28,8 +35,8 @@ if [[ $livegraph =~ $re ]] ; then
 		livegraph="30"
 	fi
 fi
-echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch >> /var/www/html/openWB/ramdisk/all-live.graph
-echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch > /var/www/html/openWB/ramdisk/all-live.graph?incremental=y
+echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt >> /var/www/html/openWB/ramdisk/all-live.graph
+echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt > /var/www/html/openWB/ramdisk/all-live.graph?incremental=y
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/all-live.graph)" > /var/www/html/openWB/ramdisk/all-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/hausverbrauch-live.graph)" > /var/www/html/openWB/ramdisk/hausverbrauch-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/pv-live.graph)" > /var/www/html/openWB/ramdisk/pv-live.graph
@@ -37,6 +44,12 @@ echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/soc-live.graph)" > /var/ww
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/evu-live.graph)" > /var/www/html/openWB/ramdisk/evu-live.graph
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev-live.graph)" > /var/www/html/openWB/ramdisk/ev-live.graph 
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev1-live.graph)" > /var/www/html/openWB/ramdisk/ev1-live.graph 
+if (( verbraucher1_aktiv == 1 )); then
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/verbraucher1-live.graph)" > /var/www/html/openWB/ramdisk/verbraucher1-live.graph 
+fi
+if (( verbraucher2_aktiv == 1 )); then
+	echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/verbraucher2-live.graph)" > /var/www/html/openWB/ramdisk/verbraucher2-live.graph 
+fi
 if (( lastmanagement == 1 )); then
 echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/ev2-live.graph)" > /var/www/html/openWB/ramdisk/ev2-live.graph 
 fi
@@ -68,6 +81,12 @@ if (( graphtimer == 1 )); then
 	if (( lastmanagement == 1 )); then
 		echo $ladeleistunglp2 >> /var/www/html/openWB/ramdisk/ev2.graph
 	fi
+	if (( verbraucher1_aktiv == 1 )); then
+		echo $verbraucher1_watt >> /var/www/html/openWB/ramdisk/verbraucher1.graph
+	fi
+	if (( verbraucher2_aktiv == 1 )); then
+		echo $verbraucher2_watt >> /var/www/html/openWB/ramdisk/verbraucher2.graph
+	fi
 	if (( dpseed == "3" )); then
 		livegraphtime="240"
 	else
@@ -80,7 +99,12 @@ if (( graphtimer == 1 )); then
 	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/ev.graph)" > /var/www/html/openWB/ramdisk/ev.graph 
 	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/ev1.graph)" > /var/www/html/openWB/ramdisk/ev1.graph
 	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/hausverbrauch.graph)" > /var/www/html/openWB/ramdisk/hausverbrauch.graph
-	
+	if (( verbraucher1_aktiv == 1 )); then
+		echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/verbraucher1.graph)" > /var/www/html/openWB/ramdisk/verbraucher1.graph 
+	fi
+	if (( verbraucher2_aktiv == 1 )); then
+		echo "$(tail -$livegraph /var/www/html/openWB/ramdisk/verbraucher2.graph)" > /var/www/html/openWB/ramdisk/verbraucher2.graph 
+	fi
 	if (( lastmanagement == 1 )); then	
 		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/ev2.graph)" > /var/www/html/openWB/ramdisk/ev2.graph 
 	fi
@@ -93,7 +117,7 @@ if (( graphtimer == 1 )); then
 		echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/soc1.graph)" > /var/www/html/openWB/ramdisk/soc1.graph
 	fi
 	#beta testing
-	echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch >> /var/www/html/openWB/ramdisk/all.graph
+	echo $(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt >> /var/www/html/openWB/ramdisk/all.graph
 	echo "$(tail -$livegraphtime /var/www/html/openWB/ramdisk/all.graph)" > /var/www/html/openWB/ramdisk/all.graph
 	#end beta testing
 

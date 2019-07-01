@@ -95,7 +95,7 @@ else
 	lla1=0
 	lla2=0
 	lla3=0
-	ladeleistung=800
+	ladeleistung=0
 	llkwh=0
 	llkwhges=$llkwh
 fi
