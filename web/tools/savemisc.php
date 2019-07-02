@@ -1,4 +1,3 @@
-
 <?php
 if(isset($_POST['debug'])) {
 $result = '';
@@ -45,6 +44,10 @@ foreach($lines as $line) {
 	    $result .= 'pushbstopl='.$_POST[pushbstopl]."\n";
 	    $writeit = '1';
 	    } 
+	    if(strpos($line, "pushbplug=") !== false) {
+	    $result .= 'pushbplug='.$_POST[pushbplug]."\n";
+	    $writeit = '1';
+	    } 
 	    if(strpos($line, "pushovertoken=") !== false) {
 	    $result .= 'pushovertoken=\''.$_POST[pushovertoken]."'\n";
 		$writeit = '1';
@@ -77,6 +80,7 @@ foreach($lines as $line) {
 	    $result .= 'heutegeladen='.$_POST[heutegeladen]."\n";
 	    $writeit = '1';
 	    } 
+
 	   if(strpos($line, "bootmodus=") !== false) {
 	    $result .= 'bootmodus='.$_POST[bootmodus]."\n";
 	    $writeit = '1';
@@ -118,15 +122,6 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-
-
-
 }
-
-
 header("Location: ../index.php");
-
 ?>
-
-
-
