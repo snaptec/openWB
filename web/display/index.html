@@ -1,23 +1,16 @@
 <!-- standard theme for openWB -->
 <!-- 2019 Kevin Wieland, Michael Ortenstein -->
-
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
-	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
-	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
 
 </script>
 
 
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<h3> OpenWB Charge Controller </h3>
-	</div>
-</div>
+
 
 <div class="row">
 	<div class="col-xs-12 text-center">
@@ -51,48 +44,6 @@
 		</div>
 	</div></div>
 </div>
-<br>
-<!-- check which graphing method is enabled and display it -->
-<?php if ($graphliveamold == 1) {
-	echo '
-		<div style="height:300px;" id="chartdiv"></div>
-';
-} else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
-				 alt="Graph lädt, bitte warten..." class="img-responsive">
-			<br></div>
-	</div>
-</div>';
-} ?>
-
-<div class="row col-xs-12 text-center">
-	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Nachtladen LP 1 aktiv
-	</div>
-	<div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Nachtladen LP 2 aktiv
-	</div>
-	<div class="col-xs-4 text-center">
-	</div>
-	<div class="row">
-		<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
-		</div>
-	</div>
-
-</div>
-
-<!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
-	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Zielladen LP 1 aktiv
-	</div>
-
-</div>
-<!-- show first charging Point -->
 <div class="row">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
@@ -127,6 +78,88 @@ echo '
 		} ?>
 	</div>
 </div>
+<div class="row" id="gesamtlldiv">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		Gesamt: <span id="gesamtllwdiv"></span>
+	</div>
+	<div class="col-xs-4 text-center" style="font-size: 2vw">
+	</div>
+</div>
+
+<!-- check which graphing method is enabled and display it -->
+<?php if ($graphliveamold == 1) {
+	echo '
+		<div style="height:300px;" id="chartdiv"></div>
+';
+} else {
+echo '
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<div class="imgwrapper">
+			<img id="livegraph" src="./display/graph-live.php"
+				 alt="Graph lädt, bitte warten..." class="img-responsive">
+			</div>
+	</div>
+</div>';
+} ?>
+<div class="row">
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h5>Aktuelle / Letzte Ladung</h5>
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-2 text-center" style="font-size: 2vw">
+			LP1 <?php echo $lp1nameold ?>
+		</div>
+		<div class="col-xs-2 text-center">
+			<span id="gelrlp1div"></span>km
+		</div>
+		<div class="col-xs-2 text-center">
+			<span id="aktgeladendiv"></span>kWh
+		</div>
+		<div  id="ladepunkts11div" class="col-xs-2 text-center">
+			LP2 <?php echo $lp2nameold ?>
+		</div>
+		<div id="ladepunkts111div" class="col-xs-2 text-center">
+			<span id="gelrlp2div"></span>km
+		</div>
+		<div id="ladepunkts1111div" class="col-xs-2 text-center">
+			<span id="aktgeladens1div"></span>kWh
+		</div>
+	</div>
+
+
+
+</div>
+
+<div class="row col-xs-12 text-center">
+	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Nachtladen LP 1 aktiv
+	</div>
+	<div id="nachtladenstates1div" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Nachtladen LP 2 aktiv
+	</div>
+	<div class="col-xs-4 text-center">
+	</div>
+	<div class="row">
+		<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
+		</div>
+	</div>
+
+</div>
+
+<!-- show zielladen if its active in settings -->
+<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
+	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
+		Zielladen LP 1 aktiv
+	</div>
+
+</div>
+
 <!-- show values for third charging point -->
 <div class="row" id="lp3lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
@@ -139,51 +172,38 @@ echo '
 	<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="gesamtlldiv">
-	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-	</div>
 
-	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		Gesamt: <span id="gesamtllwdiv"></span><br>
-	</div>
-	<div class="col-xs-4 text-center" style="font-size: 2vw">
-	</div>
-</div>
-<br>
-<hr>
 <div class="row">
 
-</div>
-<div class="col-xs-12 text-center">
-	<h5>Lademodus</h5>
 </div>
 <!-- change charging mode -->
 <div class="row">
-	<div class="col-xs-6 text-center">
+<div class="container" style="left:20px;bottom:0px;position:absolute;">
+	<div class="col-xs-3 text-center">
 		<div class="actstat">
-			<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
+			<a href="./tools/changelademodusd.php?jetzt=1" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
 		</div>
 	</div>
-	<div class="col-xs-6 text-center">
-		<div class="actstat1">
-			<a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
-		</div>
-	</div>
-</div>
-<div class="row" style="font-size: 2vw">
-	<div class="col-xs-3 text-center">
+
+
+	<div class="col-xs-2 text-center">
 		<div class="actstat4">
-			<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
+			<a href="./tools/changelademodusd.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat3">
+			<a href="./tools/changelademodusd.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat1">
+			<a href="./tools/changelademodusd.php?minundpv=1" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
 		</div>
 	</div>
 	<div class="col-xs-3 text-center">
-		<div class="actstat3">
-			<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
-		</div>
-	</div>
-	<div class="col-xs-6 text-center">
 		<div class="actstat2">
-			<a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block" style="font-size: 2vw">Nur PV</a>
+			<a href="./tools/changelademodusd.php?pvuberschuss=1" class="btn btn-lg btn-block" style="font-size: 2vw">Nur PV</a>
 		</div>
 	</div>
 </div>
@@ -199,103 +219,6 @@ echo '
 	?>
 	</div>
 
-</div>
-<div class="row">
-	<hr>
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<h5>Aktuelle / Letzte Ladung</h5>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			LP1 <?php echo $lp1nameold ?>
-		</div>
-		<div  id="ladepunkts11div" class="col-xs-4 text-center">
-			LP2 <?php echo $lp2nameold ?>
-		</div>
-		<div id="ladepunkts22div" class="col-xs-4 text-center">
-			LP3 <?php echo $lp3nameold ?>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="gelrlp1div"></span>km
-		</div>
-		<div id="ladepunkts111div" class="col-xs-4 text-center">
-			<span id="gelrlp2div"></span>km
-		</div>
-		<div id="ladepunkts222div" class="col-xs-4 text-center">
-			<span id="gelrlp3div"></span>km
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="aktgeladendiv"></span>kWh
-		</div>
-		<div id="ladepunkts1111div" class="col-xs-4 text-center">
-			<span id="aktgeladens1div"></span>kWh
-		</div>
-		<div id="ladepunkts2222div" class="col-xs-4 text-center">
-			<span id="aktgeladens2div"></span>kWh
-		</div>
-	</div>
-	<div id="heutegeladendiv">
-	<hr>
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<h5>Heute geladen</h5>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="dailychargelp1div"></span> kWh
-		</div>
-		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
-			<span id="dailychargelp2div"></span> kWh
-		</div>
-		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
-			<span id="dailychargelp3div"></span> kWh
-		</div>
-	</div>
-	</div>
-	<div class="row" id="sofortlmdiv2" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<div id="lademstatdiv">
-				<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
-			</div>
-		</div>
-		<div id="ladepunkts11111div" class="col-xs-4 text-center">
-			<div id="lademstats1div">
-				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
-			</div>
-		</div>
-		<div id="ladepunkts22222div" class="col-xs-4 text-center">
-			<div id="lademstats2div">
-				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
-			</div>
-		</div>
-	</div>
-	<div class="row" id="sofortlmdiv1" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<div id="lademstat1div">
-				Restzeit <span id="restzeitlp1div"></span>
-			</div>
-		</div>
-		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
-			<div id="lademstats1div1">
-				Restzeit <span id="restzeitlp2div"></span>
-			</div>
-		</div>
-		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
-			<div id="lademstats2div1">
-				Restzeit <span id="restzeitlp3div"></span>
-			</div>
-		</div>
-	</div>
-
-
-	<hr>
 </div>
 <!-- depending on charge mode show options -->
 <div id="sofortlmdiv">
@@ -570,34 +493,7 @@ echo '
 </div>
 </div>
 
-	<div class="row">
-		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="ladelog.php" class="btn btn-lg btn-blue" >Ladelog</a>
-		</div>
-		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="logging/index.php" class="btn btn-lg btn-blue" >Logging</a>
-		</div>
-		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			<a href="status.php" class="btn btn-lg btn-blue" >Status</a>
-			</div
-	</div>
-	<div class="row">
-		<div class="col-xs-4">
-		</div>
-		<div class="col-xs-4 text-center">
-			<a href="https://openwb.de">www.openwb.de</a><br>
-			<a href="hilfe.php">Hilfe</a>
-		</div>
-		<div class="col-xs-3 text-right">
-			<a href="settings.php">Einstellungen</a><br>
-			Ver <?php echo $owbversion ?>
-		</div>
-		<div class="col-xs-1">
-		</div>
-	</div>
 
-
-	<br><br><br><br>
 </div>
 
 <!-- load amcharts js for graph -->

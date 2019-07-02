@@ -364,6 +364,32 @@ foreach($lines as $line) {
 	if(strpos($line, "heutegeladen=") !== false) {
 		list(, $heutegeladenold) = explode("=", $line);
 	}
+
+	if(strpos($line, "bootmodus=") !== false) {
+		list(, $bootmodusold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidakt=") !== false) {
+		list(, $rfidaktold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c1=") !== false) {
+		list(, $rfidlp1c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c2=") !== false) {
+		list(, $rfidlp1c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c3=") !== false) {
+		list(, $rfidlp1c3old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c1=") !== false) {
+		list(, $rfidlp2c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c2=") !== false) {
+		list(, $rfidlp2c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c3=") !== false) {
+		list(, $rfidlp2c3old) = explode("=", $line);
+	}
+
 }
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -425,6 +451,119 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<div class="row">
 			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
 		</div>
+		<div class="row">
+			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
+			<select type="text" name="bootmodus" id="bootmodus">
+				<option <?php if($bootmodusold == 0) echo selected ?> value="0">Sofort Laden</option>
+				<option <?php if($bootmodusold == 1) echo selected ?> value="1">Min + PV</option>
+				<option <?php if($bootmodusold == 2) echo selected ?> value="2">Nur PV</option>
+				<option <?php if($bootmodusold == 3) echo selected ?> value="3">Stop</option>
+				<option <?php if($bootmodusold == 4) echo selected ?> value="4">Standby</option>
+
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Definiert den Lademodus nach Boot der openWB.<br> <br>
+		</div>
+<hr>
+<div class="row">
+	<b><label for="rfidakt">RFID Lesung:</label></b>
+	<select type="text" name="rfidakt" id="rfidakt">
+		<option <?php if($rfidaktold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($rfidaktold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="rfidausdiv">
+	<br>
+</div>
+<div id="rfidandiv">
+	<div class="row">
+	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br><br>
+	</div>
+<?php
+$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+?>
+	<div class="row">
+	Zuletzt gescannter RFID Tag: <?php echo $lastrfid ?><br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidlp1c1">Ladepunkt 1, Auto 1:</label></b>
+        	<input type="text" name="rfidlp1c1" id="rfidlp1c1" value="<?php echo $rfidlp1c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c2">Ladepunkt 1, Auto 2:</label></b>
+        	<input type="text" name="rfidlp1c2" id="rfidlp1c2" value="<?php echo $rfidlp1c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c3">Ladepunkt 1, Auto 3:</label></b>
+        	<input type="text" name="rfidlp1c3" id="rfidlp1c3" value="<?php echo $rfidlp1c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c1">Ladepunkt 2, Auto 1:</label></b>
+        	<input type="text" name="rfidlp2c1" id="rfidlp2c1" value="<?php echo $rfidlp2c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c2">Ladepunkt 2, Auto 2:</label></b>
+        	<input type="text" name="rfidlp2c2" id="rfidlp2c2" value="<?php echo $rfidlp2c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c3">Ladepunkt 2, Auto 3:</label></b>
+        	<input type="text" name="rfidlp2c3" id="rfidlp2c3" value="<?php echo $rfidlp2c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+
+</div>
+<script>
+$(function() {
+      if($('#rfidakt').val() == '0') {
+		$('#rfidausdiv').show();
+		$('#rfidandiv').hide();
+      } else {
+		$('#rfidausdiv').hide();
+	       	$('#rfidandiv').show();
+      }
+
+	$('#rfidakt').change(function(){
+	      if($('#rfidakt').val() == '0') {
+			$('#rfidausdiv').show();
+			$('#rfidandiv').hide();
+	      } else {
+			$('#rfidausdiv').hide();
+		       	$('#rfidandiv').show();
+	      }
+	    });
+});
+</script>
+
+
+
+
 
 <div class="row"><hr>
 	<h4>Benachrichtigungen mit Pushover</h4>

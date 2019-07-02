@@ -110,22 +110,7 @@ series10.dataFields.categoryX = "col0";
 series10.name = "Hausverbrauch";
 series10.stroke = am4core.color("#fefedf");
 series10.strokeWidth = 2;
-if ( verbraucher1vorhanden == 1) {
-    var series40 = chart.series.push(new am4charts.LineSeries());
-    series40.dataFields.valueY = "col12";
-    series40.dataFields.categoryX = "col0";
-    series40.name = "Verbraucher 1";
-    series40.stroke = am4core.color("#FFFF00");
-    series40.strokeWidth = 1.5;
-}
-if ( verbraucher2vorhanden == 1) {
-    var series41 = chart.series.push(new am4charts.LineSeries());
-    series41.dataFields.valueY = "col13";
-    series41.dataFields.categoryX = "col0";
-    series41.name = "Verbraucher 1";
-    series41.stroke = am4core.color("#FF00FF");
-    series41.strokeWidth = 1.5;
-}
+
 //chart.cursor = new am4charts.XYCursor();
 
 

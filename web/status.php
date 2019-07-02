@@ -481,6 +481,39 @@
 	var doInterval;
 	function getfile() {
 		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_watt",
+	    	complete: function(request){
+		    	$("#verbraucher2wattdiv").html(request.responseText);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_wh",
+				complete: function(request){
+
+					var vfinal = request.responseText;
+					vfinal = (vfinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher2whdiv").html(vfinal);
+				}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_whe",
+				complete: function(request){
+
+					var vefinal = request.responseText;
+					vefinal = (vefinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher2whediv").html(vefinal);
+
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
 			url: "/openWB/ramdisk/pvkwhk",
 	    	complete: function(request){
 		    	$("#pvkwhdiv").html(request.responseText);
@@ -1326,7 +1359,27 @@ loadstatuslog();
 										<div id="verbraucher1whediv"></div>	</div>
 
 			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center ">
+					Verbraucher 2 [W]
+				</div>
+				<div class="col-xs-2 text-center ">
+					<div id="verbraucher2wattdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					Verbraucher 2 Import [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="verbraucher2whdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					Verbraucher 2 Export [kWh]
 
+				</div>
+				<div class="col-xs-2 text-center">
+										<div id="verbraucher2whediv"></div>	</div>
+
+			</div>
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
 			<?php

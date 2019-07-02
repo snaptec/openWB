@@ -257,7 +257,28 @@ foreach($lines as $line) {
 			$result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
 	    } 
 		$writeit = '1';
+	    }
+	    if(strpos($line, "httpll_w_url=") !== false) {
+	    $result .= 'httpll_w_url=\''.$_POST[httpll_w_url]."'\n";
+	    $writeit = '1';
 	    } 
+	    if(strpos($line, "httpll_kwh_url=") !== false) {
+	    $result .= 'httpll_kwh_url=\''.$_POST[httpll_kwh_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a1_url=") !== false) {
+	    $result .= 'httpll_a1_url=\''.$_POST[httpll_a1_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a2_url=") !== false) {
+	    $result .= 'httpll_a2_url=\''.$_POST[httpll_a2_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a3_url=") !== false) {
+	    $result .= 'httpll_a3_url=\''.$_POST[httpll_a3_url]."'\n";
+	    $writeit = '1';
+	    } 
+
 	    if(strpos($line, "wr_http_w_url=") !== false) {
 	    $result .= 'wr_http_w_url=\''.$_POST[wr_http_w_url]."'\n";
 	    $writeit = '1';

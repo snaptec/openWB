@@ -2,6 +2,7 @@
 hook(){
 if (( hook1_aktiv == "1" )); then
 	if (( uberschuss > hook1ein_watt )); then
+		echo 0 > /var/www/html/openWB/ramdisk/hook1counter
 		if [ ! -e ramdisk/hook1aktiv ]; then
 			touch ramdisk/hook1aktiv
 			curl -s --connect-timeout 5 $hook1ein_url > /dev/null
@@ -19,14 +20,21 @@ if (( hook1_aktiv == "1" )); then
 	if [ -e ramdisk/hook1aktiv  ]; then
 		if test $(find "ramdisk/hook1aktiv" -mmin +$hook1_dauer); then
 			if (( uberschuss < hook1aus_watt )); then
-				rm ramdisk/hook1aktiv
-				curl -s --connect-timeout 5 $hook1aus_url > /dev/null
-				echo "$date WebHook 1 deaktiviert" >> ramdisk/ladestatus.log
-				if [[ $debug == "1" ]]; then
-					echo "Gerät 1 deaktiviert"
-				fi
-				if ((pushbenachrichtigung == "1")); then
-					./runs/pushover.sh "Gerät 1 ausgeschaltet bei $uberschuss"
+				hook1counter=$(</var/www/html/openWB/ramdisk/hook1counter)
+				if (( hook1counter < hook1_ausverz )); then
+					hook1counter=$((hook1counter + 10))
+					echo $hook1counter > /var/www/html/openWB/ramdisk/hook1counter
+				else
+					
+					rm ramdisk/hook1aktiv
+					curl -s --connect-timeout 5 $hook1aus_url > /dev/null
+					echo "$date WebHook 1 deaktiviert" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 1 deaktiviert"
+					fi
+					if ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 1 ausgeschaltet bei $uberschuss"
+					fi
 				fi
 			fi	
 		fi
@@ -104,15 +112,14 @@ if (( verbraucher1_aktiv == "1")); then
 	if [[ $verbraucher1_typ == "http" ]]; then
 		verbraucher1_watt=$(curl --connect-timeout 3 -s $verbraucher1_urlw )
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
-		if ! [[ $verbraucher1_watt =~ $rekwh ]] ; then
-	   		verbraucher1_watt="0"
+		if ! [[ $verbraucher1_watt == $rekwh ]] ; then
+	   		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
 		fi
-		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
 		verbraucher1_wh=$(curl --connect-timeout 3 -s $verbraucher1_urlh &)
-		if ! [[ $verbraucher1_wh =~ $rekwh ]] ; then
-	   		verbraucher1_wh="0"
+		if ! [[ $verbraucher1_wh == $rekwh ]] ; then
+			echo $verbraucher1_wh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 		fi
-		echo $verbraucher1_wh > /var/www/html/openWB/ramdisk/verbraucher1_wh
+
 	fi
 	if [[ $verbraucher1_typ == "mpm3pm" ]]; then
 		if [[ $verbraucher1_source == *"dev"* ]]; then
@@ -132,21 +139,68 @@ if (( verbraucher1_aktiv == "1")); then
 		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 		verbraucher1_watt=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Power')
-		if ! [[ $verbraucher1_watt =~ $rekwh ]] ; then
-	   		verbraucher1_watt="0"
+		if [ ! -z "$verbraucher1_watt" ]; then	
+			if ! [[ $verbraucher1_watt == $rekwh ]] ; then
+				echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
+			fi
 		fi
-		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
 		verbraucher1_wh=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Total')
 		verbraucher1_totalwh=$(echo "scale=0;(($verbraucher1_wh * 1000) + $verbraucher1_tempwh)  / 1" | bc)
-		if ! [[ $verbraucher1_totalwh =~ $rekwh ]] ; then
-	   		verbraucher1_totalwh="0"
+		if [ ! -z "$verbraucher1_totalwh" ]; then	
+			if ! [[ $verbraucher1_totalwh == $rekwh ]] ; then
+				echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
+			fi
 		fi
-		echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
+	fi
+fi
+if (( verbraucher2_aktiv == "1")); then
+	echo "1" > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
+	if [[ $verbraucher2_typ == "http" ]]; then
+		verbraucher2_watt=$(curl --connect-timeout 3 -s $verbraucher2_urlw )
+		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+		if ! [[ $verbraucher2_watt == $rekwh ]] ; then
+			echo $verbraucher2_watt > /var/www/html/openWB/ramdisk/verbraucher2_watt
+		fi
+		verbraucher2_wh=$(curl --connect-timeout 3 -s $verbraucher2_urlh &)
+		if ! [[ $verbraucher2_wh == $rekwh ]] ; then
+			echo $verbraucher2_wh > /var/www/html/openWB/ramdisk/verbraucher2_wh
+		fi
+	fi
+	if [[ $verbraucher2_typ == "mpm3pm" ]]; then
+		if [[ $verbraucher2_source == *"dev"* ]]; then
+			sudo python modules/verbraucher/mpm3pmlocal.py 2 $verbraucher2_source $verbraucher2_id &
+		else
+			sudo python modules/verbraucher/mpm3pmremote.py 2 $verbraucher2_source $verbraucher2_id &
+		fi
+	fi
+	if [[ $verbraucher2_typ == "sdm120" ]]; then
+		if [[ $verbraucher2_source == *"dev"* ]]; then
+			sudo python modules/verbraucher/sdm120local.py 2 $verbraucher2_source $verbraucher2_id &
+		else
+			sudo python modules/verbraucher/sdm120remote.py 2 $verbraucher2_source $verbraucher2_id &
+		fi
+	fi
+	if [[ $verbraucher2_typ == "tasmota" ]]; then
+		verbraucher2_out=$(curl --connect-timeout 3 -s $verbraucher2_ip/cm?cmnd=Status%208 )
+		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
+		verbraucher2_watt=$(echo $verbraucher2_out | jq '.StatusSNS.ENERGY.Power')
+		if [ ! -z "$verbraucher2_watt" ]; then	
+			if ! [[ $verbraucher2_watt == $rekwh ]] ; then
+				echo $verbraucher2_watt > /var/www/html/openWB/ramdisk/verbraucher2_watt
+			fi
+		fi
+		verbraucher2_wh=$(echo $verbraucher2_out | jq '.StatusSNS.ENERGY.Total')
+		verbraucher2_totalwh=$(echo "scale=0;(($verbraucher2_wh * 1000) + $verbraucher2_tempwh)  / 1" | bc)
+		if [ ! -z "$verbraucher2_totalwh" ]; then	
+			if ! [[ $verbraucher2_totalwh == $rekwh ]] ; then
+				echo $verbraucher2_totalwh > /var/www/html/openWB/ramdisk/verbraucher2_wh
+			fi
+		fi
+		echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 	fi
 
 
 fi
-
 
 
 

@@ -91,7 +91,7 @@ if (isset($_GET['bis'])) {
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km
 				</div>
-				<div class="col-xs-2 text-center" style="font-size: 1vw">
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene kWh
 				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
@@ -106,6 +106,10 @@ if (isset($_GET['bis'])) {
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
 				</div>
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					RFID
+				</div>
+
 	</div>
 </div>
 <hr>
@@ -209,7 +213,10 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
+				if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
+
+					if ( isset($_GET['rfidakt']) && $_GET['rfidakt'] == "on" ){
+					if ( $_GET['rfid'] == intval($logarray[8]) ){	
 				fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -227,7 +234,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					$sumgelkm=$sumgelkm + $logarray[2];
 
 					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[3]);
 						$sumkwh=$sumkwh + $logarray[3];
 					echo '</div>';
@@ -261,11 +268,76 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						}
 					}
 					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[8]);
+					echo '</div>';
+
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
 			$ladezeit = $ladezeit + (($stop - $start) / 60 );
-			}}
+					}} else {
+			fputcsv($extractf, $logarray);
+				echo '<div class="row">';
+				echo '<div class="col-xs-12 text-center">';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[0]);
+					$start = $startime;
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[1]);
+					$stop = $endtime;
+
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[2]);
+					$sumgelkm=$sumgelkm + $logarray[2];
+
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[3]);
+						$sumkwh=$sumkwh + $logarray[3];
+					echo '</div>';
+					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					print_r($logarray[4]);
+						$avgladel=$avgladel + $logarray[4];
+						$count=$count + 1;
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[5]);
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[6]);
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+					if (isset($logarray[7])){
+						if ($logarray[7] == '0'){
+							echo 'Sofort';
+						}
+						if ($logarray[7] == '1'){
+							echo 'Min+PV';
+						}
+						if ($logarray[7] == '2'){
+							echo 'NurPV';
+						}
+						if ($logarray[7] == '4'){
+							echo 'Standby';
+						}
+						if ($logarray[7] == '7'){
+							echo 'Nachtladen';
+						}
+					}
+					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[8]);
+					echo '</div>';
+
+				echo '</div>';
+			echo '</div>';
+			echo '<hr>';
+			$ladezeit = $ladezeit + (($stop - $start) / 60 );
+
+					}}}
 	} else {
 		fputcsv($extractf, $logarray);
 		echo '<div class="row">';
@@ -284,7 +356,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					$sumgelkm=$sumgelkm + $logarray[2];
 
 					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[3]);
 						$sumkwh=$sumkwh + $logarray[3];
 					echo '</div>';
@@ -318,6 +390,10 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 						}
 					}
 					echo '</div>';
+					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
+						print_r($logarray[8]);
+					echo '</div>';
+
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
@@ -344,7 +420,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene km gesamt
 				</div>
-				<div class="col-xs-2 text-center" style="font-size: 1vw">
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Geladene kWh gesamt
 				</div>
 				<div class="col-xs-2 text-center" style="font-size: 1vw">
@@ -359,6 +435,9 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Lademodus
 				</div>
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+					RFID
+				</div>
 	</div>
 </div>
 	<div class="row">
@@ -370,7 +449,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 								</div>
 				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
 						<?php print($sumgelkm); ?>	</div>
-				<div class="col-xs-2 text-center" style="font-size: 1.5vw">
+				<div class="col-xs-1 text-center" style="font-size: 1.5vw">
 					<?php print($sumkwh); ?>
 
 				</div>
@@ -382,6 +461,9 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				</div>
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 				</div>
+				<div class="col-xs-1 text-center" style="font-size: 1vw">
+				</div>
+
 	</div>
 </div>
 
@@ -416,7 +498,11 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 		<input id="standby" name="standby" type="checkbox" <?php if (isset($_GET['standby'])){ if ( $_GET['standby'] == "on"){ echo "checked"; }} ?> ><br>
 		<label for="nachtladenlp1">Nachtladen LP1:</label>
 		<input id="nachtladenlp1" name="nachtladenlp1" type="checkbox" <?php if (isset($_GET['nachtladenlp1'])){ if ( $_GET['nachtladenlp1'] == "on"){ echo "checked"; }} ?> ><br>
+		<label for="rfidakt">RFID:</label>
+		<input id="rfidakt" name="rfidakt" type="checkbox" <?php if (isset($_GET['rfidakt'])){ if ( $_GET['rfidakt'] == "on"){ echo "checked"; }} ?> >
 
+		<label for="rfid">TAG:</label>
+		<input id="rfid" name="rfid" type="text" value="<?php if (isset($_GET['rfid'])){  echo $_GET['rfid']; } ?>" ><br>
 
 
 
