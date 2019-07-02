@@ -43,7 +43,6 @@ foreach($lines as $line) {
 	if(strpos($line, "logeinspeisungneg=") !== false) {
 		list(, $logeinspeisungnegold) = explode("=", $line);
 	}
-
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
@@ -56,7 +55,6 @@ foreach($lines as $line) {
 	if(strpos($line, "dspeed=") !== false) {
 		list(, $dspeedold) = explode("=", $line);
 	}
-
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
@@ -84,7 +82,6 @@ foreach($lines as $line) {
 	if(strpos($line, "modbusevsesource=") !== false) {
 		list(, $modbusevsesourceold) = explode("=", $line);
 	}
-
 	if(strpos($line, "modbusevseid=") !== false) {
 		list(, $modbusevseidold) = explode("=", $line);
 	}
@@ -112,7 +109,9 @@ foreach($lines as $line) {
 	if(strpos($line, "pushbstopl=") !== false) {
 		list(, $pushbstoplold) = explode("=", $line);
 	}
-
+	if(strpos($line, "pushbplug=") !== false) {
+		list(, $pushbplugold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -125,7 +124,6 @@ foreach($lines as $line) {
 	if(strpos($line, "evseids2=") !== false) {
 		list(, $evseids2old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evselanips1=") !== false) {
 		list(, $evselanips1old) = explode("=", $line);
 	}
@@ -147,11 +145,9 @@ foreach($lines as $line) {
 	if(strpos($line, "lastmmaxw=") !== false) {
 		list(, $lastmmaxwold) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsecons1=") !== false) {
 		list(, $evsecons1old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsecons2=") !== false) {
 		list(, $evsecons2old) = explode("=", $line);
 	}
@@ -173,7 +169,6 @@ foreach($lines as $line) {
 	if(strpos($line, "wattbezugmodul=") !== false) {
 		list(, $wattbezugmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "vzloggerip=") !== false) {
 		list(, $vzloggeripold) = explode("=", $line);
 	}
@@ -195,19 +190,15 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm630modbusbezugid=") !== false) {
 		list(, $sdm630modbusbezugidold) = explode("=", $line);
 	}
-
 	if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
 		list(, $sdm630modbusbezuglanipold) = explode("=", $line);
 	}
 	if(strpos($line, "sdm630modbusbezugsource=") !== false) {
 		list(, $sdm630modbusbezugsourceold) = explode("=", $line);
 	}
-
-
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
 	}
@@ -334,15 +325,12 @@ foreach($lines as $line) {
 	if(strpos($line, "evsewifiiplp3=") !== false) {
 		list(, $evsewifiiplp3old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp1=") !== false) {
 		list(, $evsewifitimeoutlp1old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp2=") !== false) {
 		list(, $evsewifitimeoutlp2old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 		list(, $evsewifitimeoutlp3old) = explode("=", $line);
 	}
@@ -364,7 +352,6 @@ foreach($lines as $line) {
 	if(strpos($line, "graphinteractiveam=") !== false) {
 		list(, $graphinteractiveamold) = explode("=", $line);
 	}
-
 	if(strpos($line, "graphliveam=") !== false) {
 		list(, $graphliveamold) = explode("=", $line);
 	}
@@ -377,6 +364,7 @@ foreach($lines as $line) {
 	if(strpos($line, "heutegeladen=") !== false) {
 		list(, $heutegeladenold) = explode("=", $line);
 	}
+
 	if(strpos($line, "bootmodus=") !== false) {
 		list(, $bootmodusold) = explode("=", $line);
 	}
@@ -401,8 +389,8 @@ foreach($lines as $line) {
 	if(strpos($line, "rfidlp2c3=") !== false) {
 		list(, $rfidlp2c3old) = explode("=", $line);
 	}
-}
 
+}
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
@@ -632,6 +620,14 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 		</select><br><br>
 
 	</div>
+	<div class="row">
+		<b><label for="pushbplug">Beim Einstecken des Fahrzeugs:</label></b>
+	       	<select type="text" name="pushbplug" id="pushbplug">
+ 			<option <?php if($pushbplugold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbplugold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
 
 
 </div><br>
@@ -644,7 +640,6 @@ $(function() {
 		$('#pushbaus').hide();
 	       	$('#pushban').show();
       }
-
 	$('#pushbenachrichtigung').change(function(){
 	        if($('#pushbenachrichtigung').val() == '0') {
 			$('#pushbaus').show();
