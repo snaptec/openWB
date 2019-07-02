@@ -249,7 +249,7 @@ $.ajax({
 		if (request.responseText == 1) {
 			var element = document.getElementById("plugstatlp1div");
 
-			element.setAttribute("style", "color: darkgreen;");
+			element.setAttribute("style", "color: #00FF00;");
 		    } else {
 			var element = document.getElementById("plugstatlp1div");
 			element.setAttribute("style", "color: white;");
@@ -262,7 +262,7 @@ $.ajax({
 		if (request.responseText == 1) {
 			var element = document.getElementById("plugstatlp2div");
 
-			element.setAttribute("style", "color: darkgreen;");
+			element.setAttribute("style", "color: #00FF00;");
 		    } else {
 			var element = document.getElementById("plugstatlp2div");
 			element.setAttribute("style", "color: white;");
