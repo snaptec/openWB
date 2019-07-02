@@ -81,7 +81,34 @@ foreach($lines as $line) {
 	    $result .= 'bootmodus='.$_POST[bootmodus]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "rfidakt=") !== false) {
+	    $result .= 'rfidakt='.$_POST[rfidakt]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp1c1=") !== false) {
+	    $result .= 'rfidlp1c1='.$_POST[rfidlp1c1]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp1c2=") !== false) {
+	    $result .= 'rfidlp1c2='.$_POST[rfidlp1c2]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp1c3=") !== false) {
+	    $result .= 'rfidlp1c3='.$_POST[rfidlp1c3]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp2c1=") !== false) {
+	    $result .= 'rfidlp2c1='.$_POST[rfidlp2c1]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp2c2=") !== false) {
+	    $result .= 'rfidlp2c2='.$_POST[rfidlp2c2]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidlp2c3=") !== false) {
+	    $result .= 'rfidlp2c3='.$_POST[rfidlp2c3]."\n";
+	    $writeit = '1';
+	    } 
 
 
 
