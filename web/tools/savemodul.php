@@ -894,7 +894,10 @@ foreach($lines as $line) {
 	    $result .= 'wr_sdm120ip='.$_POST[wr_sdm120ip]."\n";
 	$writeit = '1';
     } 
-
+	    if(strpos($line, "sonnenecoip=") !== false) {
+	    $result .= 'sonnenecoip='.$_POST[sonnenecoip]."\n";
+	$writeit = '1';
+    } 
 
 
 	    if ( $writeit == '0') {

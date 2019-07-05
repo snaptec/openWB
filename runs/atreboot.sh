@@ -239,7 +239,10 @@ mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 
-
+if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
+then
+  echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf

@@ -51,6 +51,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "sonnenecoip=") !== false) {
+		list(, $sonnenecoipold) = explode("=", $line);
+	}
 	if(strpos($line, "wr_sdm120id=") !== false) {
 		list(, $wr_sdm120idold) = explode("=", $line);
 	}
@@ -3294,7 +3297,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
 		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
-
+		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 </option>
 
 	</select>
@@ -3312,6 +3315,16 @@ $(function() {
 		Gültige Werte IP. IP Adresse der Tesla Powerwall.<br><br>
 	</div>
 </div>
+<div id="divspeicherseco">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="sonnenecoip">Sonnen eco IP:</label></b>
+		<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+	</div>
+</div>
+
 <div id="divspeichere3dc">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="e3dcip">E3DCIP:</label></b>
@@ -3468,7 +3481,11 @@ function display_speichermodul() {
 	$('#divspeicherpw').hide();
 	$('#divspeicherplenti').hide();
 	$('#divspeichersunnyisland').hide();
+	$('#divspeicherseco').hide();
 
+	if($('#speichermodul').val() == 'speicher_sonneneco') {
+		$('#divspeichereco).show(); 
+	} 
 	if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 	} 
