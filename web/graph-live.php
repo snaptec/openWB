@@ -13,6 +13,9 @@ $evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
 $timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
 $socfile = '/var/www/html/openWB/ramdisk/soc-live.graph';
 $ev1file = '/var/www/html/openWB/ramdisk/ev1-live.graph';
+$verbraucher1_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1_name');
+$verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2_name');
+
 
 if ($speichervorhanden == 1) {
 	$speicherfile = '/var/www/html/openWB/ramdisk/speicher-live.graph';
@@ -59,15 +62,15 @@ if ($soc1vorhanden == 1) {
 	$myData->addPoints($EV2,"EV2");
 }
 if ($verbraucher1vorhanden == 1) {
-	$myData->addPoints($VER1,"Verbraucher 1");
-	$myData->setSerieOnAxis("Verbraucher 1",0);
-	$myData->setPalette("Verbraucher 1",array("R"=>255,"G"=>202,"B"=>0));
+	$myData->addPoints($VER1,$verbraucher1_name);
+	$myData->setSerieOnAxis($verbraucher1_name,0);
+	$myData->setPalette($verbraucher1_name,array("R"=>255,"G"=>202,"B"=>0));
 
 }
 if ($verbraucher2vorhanden == 1) {
-	$myData->addPoints($VER2,"Verbraucher 2");
-	$myData->setSerieOnAxis("Verbraucher 2",0);
-	$myData->setPalette("Verbraucher 2",array("R"=>255,"G"=>0,"B"=>230));
+	$myData->addPoints($VER2,$verbraucher2_name);
+	$myData->setSerieOnAxis($verbraucher2_name,0);
+	$myData->setPalette($verbraucher2_name,array("R"=>255,"G"=>0,"B"=>230));
 
 }
 $highest1 = max($EVU);

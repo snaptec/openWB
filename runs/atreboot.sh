@@ -1519,6 +1519,9 @@ sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
+echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
+
 
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch
 
