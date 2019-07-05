@@ -45,6 +45,8 @@ function loadText(){
             if(result.text == 3){
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-green");
+	        $('.actstat2 .btn').removeClass("btn-green");
+
                 $('.actstat .btn').addClass("btn-red");
                 $('.actstat1 .btn').addClass("btn-red");
                 $('.actstat .btn').removeClass("btn-green");

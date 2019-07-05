@@ -1454,7 +1454,14 @@ if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "wr_sdm120ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "wr_sdm120ip=192.168.3.5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_sdm120id=" /var/www/html/openWB/openwb.conf
+then
+	echo "wr_sdm120id=2" >> /var/www/html/openWB/openwb.conf
+fi
 
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then

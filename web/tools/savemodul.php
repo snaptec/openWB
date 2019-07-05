@@ -886,7 +886,14 @@ foreach($lines as $line) {
 	    $result .= 'bezug_smartfox_ip='.$_POST[bezug_smartfox_ip]."\n";
 	$writeit = '1';
     } 
-
+	    if(strpos($line, "wr_sdm120id=") !== false) {
+	    $result .= 'wr_sdm120id='.$_POST[wr_sdm120id]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "wr_sdm120ip=") !== false) {
+	    $result .= 'wr_sdm120ip='.$_POST[wr_sdm120ip]."\n";
+	$writeit = '1';
+    } 
 
 
 

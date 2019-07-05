@@ -51,7 +51,12 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "wr_sdm120id=") !== false) {
+		list(, $wr_sdm120idold) = explode("=", $line);
+	}
+	if(strpos($line, "wr_sdm120ip=") !== false) {
+		list(, $wr_sdm120ipold) = explode("=", $line);
+	}
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
@@ -3100,6 +3105,22 @@ $(function() {
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.<br><br>
 	</div>
 </div>
+<div id="pvethsdm120">
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wr_sdm120ip">SDM Modbus IP Adresse:</label></b>
+		<input type="text" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des ModbusLAN Konverters<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wr_sdm120id">SDM Modbus ID:</label></b>
+		<input type="text" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte 1-254. Modbus ID des SDM. <br><br>
+	</div>
+</div>
 
 <div id="pvsdmwr">
 	<div class="row" style="background-color:#BEFEBE">
@@ -3187,7 +3208,12 @@ function display_pvwattmodul() {
 	$('#pvpiko2').hide();
 	$('#pvpowerwall').hide();
 	$('#pvmpmevu').hide();
+	$('#pvethsdm120').hide();
 
+
+	if($('#pvwattmodul').val() == 'wr_ethsdm120') {
+		$('#pvethsdm120').show(); 
+	} 
 
 	if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
 		$('#pvmpmevu').show(); 

@@ -97,7 +97,7 @@
 
 				<?php
 				// das gewählte Theme einbinden
-				include 'display/index.html';
+				include 'display/gauge.html';
 			?>
 	
 
