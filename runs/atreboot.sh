@@ -263,6 +263,10 @@ if (( ladetaster == 1 )); then
 		fi
 	fi
 fi
+if (( rfidakt == 1 )); then
+	sudo python /var/www/html/openWB/runs/readrfid.py &
+fi
+
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
