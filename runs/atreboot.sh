@@ -1491,6 +1491,11 @@ if ! sudo grep -Fq "atreboot.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "@reboot /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
 fi
+if python -c "import evdev" &> /dev/null; then
+	echo 'evdev installed...'
+else
+	sudo pip install evdev
+fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get -qq update
