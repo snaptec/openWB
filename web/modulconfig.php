@@ -51,6 +51,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "bezug_victronip=") !== false) {
+		list(, $bezug_victronipold) = explode("=", $line);
+	}
 	if(strpos($line, "sonnenecoip=") !== false) {
 		list(, $sonnenecoipold) = explode("=", $line);
 	}
@@ -2422,7 +2425,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
 
 	</select>
 </div>
@@ -2434,6 +2437,15 @@ $(function() {
 <div id="wattbezugpowerwall">
 	<div class="row">
 		Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
+	</div>
+</div>
+<div id="wattbezugvictrongx">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_victronip">Victron IP:</label></b>
+		<input type="text" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. IP Adresse des Victron, z.B. GX.<br><br>
 	</div>
 </div>
 
@@ -2784,6 +2796,11 @@ function display_wattbezugmodul() {
 	$('#wattbezugkostalpiko').hide();
 	$('#wattbezugsmartfox').hide();
 	$('#wattbezugpowerwall').hide();
+	$('#wattbezugvictrongx').hide();
+
+	if($('#wattbezugmodul').val() == 'bezug_victrongx') {
+		$('#wattbezugvictrongx').show(); 
+	} 
 
 	if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -3484,7 +3501,7 @@ function display_speichermodul() {
 	$('#divspeicherseco').hide();
 
 	if($('#speichermodul').val() == 'speicher_sonneneco') {
-		$('#divspeichereco).show(); 
+		$('#divspeicherseco').show(); 
 	} 
 	if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 

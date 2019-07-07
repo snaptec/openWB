@@ -1469,6 +1469,11 @@ if ! grep -Fq "wr_sdm120id=" /var/www/html/openWB/openwb.conf
 then
 	echo "wr_sdm120id=2" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bezug_victronip=" /var/www/html/openWB/openwb.conf
+then
+	echo "bezug_victronip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
+fi
+
 
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
