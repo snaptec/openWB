@@ -26,7 +26,7 @@ w2 = str(decoder.decode_16bit_int())
 resp= client.read_holding_registers(2602,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 w3 = str(decoder.decode_16bit_int())
-watt = w1 + w2 + w3
+watt = int(w1) + int(w2) + int(w3)
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(watt))
 f.close()
@@ -35,15 +35,15 @@ f.close()
 resp= client.read_holding_registers(2617,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 a1 = str(decoder.decode_16bit_int())
-a1 = a1 / 10
+a1 = float(a1) / 10
 resp= client.read_holding_registers(2619,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 a2 = str(decoder.decode_16bit_int())
-a2 = a2 / 10
+a2 = float(a2) / 10
 resp= client.read_holding_registers(2621,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 a3 = str(decoder.decode_16bit_int())
-a3 = a3 / 10
+a3 = float(a3) / 10
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
 f.write(str(a1))
 f.close()
@@ -58,15 +58,15 @@ f.close()
 resp= client.read_holding_registers(2616,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 v1 = str(decoder.decode_16bit_uint())
-v1 = v1 / 10
+v1 = float(v1) / 10
 resp= client.read_holding_registers(2618,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 v2 = str(decoder.decode_16bit_uint())
-v2 = v2 / 10
+v2 = float(v2) / 10
 resp= client.read_holding_registers(2620,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 v3 = str(decoder.decode_16bit_uint())
-v3 = v3 / 10
+v3 = float(v3) / 10
 f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
 f.write(str(v1))
 f.close()
@@ -88,7 +88,7 @@ resp= client.read_holding_registers(2626,4,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 wh3 = str(decoder.decode_32bit_uint())
 
-whs = wh1 + wh2 + wh3
+whs = int(wh1) + int(wh2) + int(wh3)
 whs = whs * 10
 f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(whs))
@@ -105,7 +105,7 @@ resp= client.read_holding_registers(2632,4,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 whe3 = str(decoder.decode_32bit_uint())
 
-whes = whe1 + whe2 + whe3
+whes = int(whe1) + int(whe2) + int(whe3)
 whes = whes * 10
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(whes))
