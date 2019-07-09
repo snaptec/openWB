@@ -364,7 +364,15 @@ series32.tensionX = 0.8;
 series32.tensionY = 0.8;
 series32.strokeWidth = 1.5;
 series32.legendSettings.valueText = "{valueY.sum}Wh";
-
+var series52 = chart.series.push(new am4charts.LineSeries());
+series52.dataFields.valueY = "col16";
+series52.dataFields.categoryX = "col0";
+series52.name = verbrauchere2name ;
+series52.stroke = am4core.color("#fb5ec2");
+series52.tensionX = 0.8;
+series52.tensionY = 0.8;
+series52.strokeWidth = 1.5;
+series52.legendSettings.valueText = "{valueY.sum}Wh";
 }
 if ( verbraucher3vorhanden == 1) {
 var series33 = chart.series.push(new am4charts.LineSeries());

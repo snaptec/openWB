@@ -199,8 +199,6 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
 	background: transparent;
 	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
-	border: 1px solid #ccc;
-	box-shadow: 1px 1px 5px 1px #ccc;
      	margin: 5px;
 }
 

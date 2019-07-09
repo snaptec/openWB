@@ -20,26 +20,23 @@ Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen P
 Keine Gewährleistung für die Software - use at your own RISK!
 
 # Wofür?
-Steuerung einer EVSEwb für sofortiges laden, überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
+Steuerung einer EVSE DIN oder anderer Ladepunkte für sofortiges laden, überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
 
-Unterstützt wird jedes EV das den AC Ladestandard unterstützt.
-Getestet bisher: Ion, Ioniq, Soul, eGolf, Zoe, Model S/X, i3, Leaf.
+Unterstützt wird jedes EV das den AC Ladestandard mit Typ 1 oder Typ 2 Stecker unterstützt.
 
 
 # Was wird benötigt?
 Hardware:
 
 
-- "EVSE WB" (! wichtig: Es wird die WB (WallBox)-Variante benötigt - nicht die "simple EVSE" !)
+- EVSE DIN
 - Raspberry Pi 3 + Gehäuse (ev. gleich Hutschienengehäuse zur Installation in der WB)
-- 0-5V DA-Konverter MCP4725 (0-5V zur Steuerung der Ladestromstärke an der EVSE) https://www.ebay.de/itm/Digital-Analog-Wandler-MCP4725-D-A-Wandler-12-Bit-Arduino-Raspberry-Pi/152972920605?hash=item239de5871d:g:DwkAAOSwW3VaxqNE
-- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. SDM220/230 für 1-phasig, SDM630 für 3-phasig) https://www.ebay.de/itm/B-G-e-tech-LCD-Multifunktions-Dreh-Stromzahler-S0-RS485-10-100A-SDM630-Modbus/122226084121?hash=item1c753e0919:g:zToAAOSwcUBYKci1
-- USB-RS485 Converter (z.B. https://www.ebay.de/itm/252784174363 )
-- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater Modbuszähler oder bereits vorhandene Lösung mit API)
+- USB RS 485 Adapter
+- Stromzähler mit Modbus zur Ladeleistungsmessung (z.B. MPM3PM
+- Bezugsstromzähler für +Bezug (positiv) bzw. -Überschuss (z.B. vorh. Smartmeter mit IR Lesekopf und VZLogger, separater Modbuszähler oder bereits vorhandene Lösung mit API, openWB EVU Kit)
 - Auslesen der PV-Leistung (entsprechendes Softwaremodul fuer den Wechselrichter (z.B. Fronius) oder separater Zähler)
 - Schuetz entsprechend der max. Leistung
 - Ladekabel mit CP-Steuerleitung (CP => Control Pilot)
-- 2x PP- Abschlusswiderstände je Ladekabelende für max. Ladestromstärke des Ladekabels/Stecker/Buchse
 - Typ1/2 Stecker
 - Ggf. ein FI Typ B
 
@@ -48,91 +45,20 @@ Hardware:
 # Bausatz
 OpenWB gibt es unter 
 
-	https://openwb.de/shop/?product=openwb-kompletter-bausatz-3-phasig-kopie
+	https://openwb.de/shop/
 
 auch als Bausatz fertig vorkonfiguriert inkl Anleitung zu kaufen.
 
 Bausatz Anleitung:
 	
-	https://openwb.de/manuals/
-
+	https://openwb.de/main/?page_id=135
 
 
 
 # Installation
 
-Hardware:
 
-MCP4725 an Raspberry verkabeln
-
-	Vdd an +5V Pin 2
-
-	GND an GnD Pin 6
-
-	SCL an GPIO3 SCL Pin 5
-
-	SDA an GPIO2 SDA Pin 3
-
-
-
-MCP4725 an SimpleEVSE
-
-	A0 an GND EVSE
-
-	Vout an AN EVSE
-Schaltbild EVSE mit SDM für die Ladeleistung und EVU / PV per Http Modulen (vzlogger, etc...)
-![alt text](http://openwb.de/img/single_openWB_dac_wlan.jpg)
-
-Alternativ wenn EVU und PV per SDM Zähler abgefragt werden soll:
-![alt text](http://openwb.de/img/single_openWB_lanmb_wlan.jpg)
-
-
-Für die Zusammenarbeit mit openWB müssen in der "EVSE WB" bestimmte Register gesetzt werden. Dies kann mit dem BT-Modul (HC-06) und der Android App (*.apk vorab installieren) realisiert werden:
-
-APP-install: http://evracing.cz/evse/evse-wallbox/
-
-Hinweise zur BT-Modulnutzung:
-
-Um das BT-Modul nutzen zu können, muss sich die "EVSE WB" im "Modbus"-mode befinden. Dies ist häufig im Auslieferungszustand noch nicht der Fall.
-
-Zur Aktivierung ist am besten ein Taster an AN + GND anzuschließen. Sofort wenn die "EVSE WB" mit 230V verbunden wird, ist innerhalb von 3s mind. 5x der Taster zu betätigen. Danach befindet sich die EVSE WB in einem temporären "Modbus"-mode.
-
-Nun BT am Smartphone aktivieren und in den BT-Einstellungen das gefundene BT-Modul mit PW "1234" verbinden.
-
-Danach die App starten und unter configure => launch settings die MAC-Adresse des BT-Moduls auswählen sowie die "Modbus slave address" = 1 setzen.
-
-Nun in der App zurück gehen und mit "Connect" zum BT-Modul verbinden. Die LED des BT-Moduls muss von schnellem Dauerblinken auf sporadisches Blinken oder AUS umschalten (=> erfolgreicher Connect). Die APP-Anzeige springt auf "Disconnect".
-
-
-notwendige Registereinstellungen für EVSE WB mit DAC-Modul (0-5V analog), um mit openWB zu arbeiten
-
-("EVSE WB" mit Firmware 8, Bootloader 3, Stand 04.05.2018) 
-
-Register 2001 = 1 (Modbus slave-ID) -> durch 5x Taster/3s bereits eingestellt
-
-Register 2002 = 0 (erlaubt Ladestrom bis auf 0 = Ladungsstop), default=5 -> write value=0 -> "WRITE"
-
-Register 2003 = 0 (Aktivierung AN-Eingang für 0-5V Analogsignalsteuerung) default=1 -> write value=0 -> "WRITE"
-
-Register 2005 = 0 (Taster für Stromeinstellung sperren ) default=1 -> write value=0 -> "WRITE"
-
-Der Rest kann bleiben.
-
-Bereits mit 1x "WRITE" auf ein Register >=2000 wird Modbus dauerhaft aktiviert. Dies wäre hier schon mit Reg. 2002 geschehen.
-
-
-SDM Einstellung:
-	
-	Baud 9600
-	Stopbit 1
-	Parität keine
-
-
-Modbus Adapter anschließen:
-
-A an A und B an B verkabeln. Es kann je nach Adapter erforderlich sein einen Abschlusswiderstand zu montieren.
-
-150 Ohm haben sich als brauchbar erwiesen
+Siehe Verdrahtungsplan für die Hardware Verkabelung
 
 
 
@@ -142,27 +68,9 @@ Installiertes Raspbian auf einem Raspberry pi 3.
 
 Installationsanleitung für Windows: http://openwb.de/img/install_openWB_v2.pdf
 
-
 Raspbian installieren
 
 	https://www.raspberrypi.org/downloads/raspbian/
-
-
-
-Den i2c Bus aktivieren.
-
-Hierfür in der Konsole
-
-        sudo raspi-config
-
-ausführen.
-
-	Punk 5 Interfacing Options auswählen
-
-	P5 I2C auswählen und aktivieren.
-
-
-
 
 In der Shell folgendes eingeben:
 
@@ -180,8 +88,6 @@ hier einfügen:
 	* * * * * sleep 30 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 40 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
 	* * * * * sleep 50 && /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1 
-
-
 
 
 
@@ -207,26 +113,7 @@ Zum Updaten im Webinterface unter Misc den Update Button drücken.
 	UART packet length: 512 chars
 
 
-Der Raspberry funktioniert zuverlässig mit -gutes vorrausgesetzt- WLAN. Sprich er kann direkt mit EVSE WB und DAC in die Wallbox in der Garage.
-
-
- Nutzung von SMA Energy Metern:
-
-Zunächst mit dem Raspberry per SSH verbinden.
-
-Die Datei /var/www/html/openWB/web/files/smaemdconfig bearbeiten.
-	
-	vim /var/www/html/openWB/web/files/smaemdconfig
-
-In Zeile 4 und Zeile 25 die Seriennummer(n) der Meter angeben. Bei mehreren Metern mit Leerzeichen trennen.
-
-Nun das installscript ausführen:
-	
-	/var/www/html/openWB/web/tools/smaemd-install.sh
-
-Anschließen im Webinterface in den Einstellungen die SMA Module auswählen und die Seriennummer entsprechend eintragen.
-
-
+Der Raspberry funktioniert zuverlässig mit gutem WLAN. Lan Kabel ist zu bevorzugen.
 
 Taster am Raspberry zur Einstellung des Lademodi
 
@@ -279,29 +166,53 @@ Nachfolgend die Werte zur Erklärung durch deren Einheit ersetzt
 
 	curl -X GET 'http://ipdesraspi/openWB/web/api.php?get=all'
 	{
-	  "date": "Jahr:Monat:Tag-Stunde-Minute-Sekunde",
-	  "lademodus": "0,1,2,3(0 Sofort, 1 Min+PV, 2 NurPV, 3 Stop",
-	  "llsoll": "A (Ziel Ladestromstärke)",
-	  "restzeitlp1": "Min oder H + Min",
-	  "restzeitlp2": "Min oder H + Min",
-	  "restzeitlp3": "Min oder H + Min",
-	  "gelkwhlp1": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
-	  "gelkwhlp2": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
-	  "gelkwhlp3": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
-	  "gelrlp1": "km (geladene Reichweite, aktueller bzw letzer Ladevorgang)",
-	  "gelrlp2": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
-	  "gelrlp3": "kWh (geladene kWh, aktueller bzw letzter Ladevorgang)",
-	  "llgesamt": "Watt (Ladeleistung aller Ladepunkte summiert)",
-	  "evua1": "Ampere (Hausanschlusspunkt Phase 1)",
-	  "evua2": "Ampere (Hausanschlusspunkt Phase 2)",
-	  "evua3": "Ampere (Hausanschlusspunkt Phase 3)",
-	  "lllp1": "Watt Ladeleistung Ladepunkt 1",
-	  "lllp2": "Watt Ladeleistung Ladepunkt 2",
-	  "lllp3": "Watt Ladeleistung Ladepunkt 3",
-	  "evuw": "Watt am Hausanschlusspunkt (EVU)",
-	  "pvw": "Watt PV Leistung"
+	  "date": "2019:02:19-18:10:44", # aktuelles datum
+	  "lademodus": "2", # lademodus (0 Sofort, 1 Min+PV, 2 NurPV, 3 Standby, 4 Stop)
+	  "minimalstromstaerke": "6", # konfigurierte Minimalstromstärke
+	  "maximalstromstaerke": "32", # konfigurierte Maximalstromstärke
+	  "llsoll": "0", # Soll Ladestromvorgabe
+	  "restzeitlp1": "5 Min", 
+	  "restzeitlp2": "1 H 30 Min",
+	  "restzeitlp3": "--",
+	  "gelkwhlp1": "0", # im aktuellen Ladevorgang
+	  "gelkwhlp2": "0", # im aktuellen Ladevorgang
+	  "gelkwhlp3": "0", # im aktuellen Ladevorgang
+	  "gelrlp1": "3", # im aktuellen Ladevorgang geladene km
+	  "gelrlp2": "50", # im aktuellen Ladevorgang geladene km
+	  "gelrlp3": "0", # im aktuellen Ladevorgang geladene km
+	  "llgesamt": "0", # Ladeleistung aller Ladepunkte summiert
+	  "evua1": "2.5657", # Ampere Bezug am EVU
+	  "evua2": "2.6333", # Ampere Bezug am EVU
+	  "evua3": "5.0019", # Ampere Bezug am EVU
+	  "lllp1": "1315",# Ladeleistung
+	  "lllp2": "0",# Ladeleistung
+	  "lllp3": "0",# Ladeleistung
+	  "evuw": "-9",# Bezug/Überschuss am EVU
+	  "pvw": "21",# PV Leistung
+	  "evuv1": "231", #Volt am EVU
+	  "evuv2": "232", #Volt am EVU
+	  "evuv3": "229", #Volt am EVU
+	  "ladestatusLP1": "1", # ob geladen wird aktuell
+	  "ladestatusLP2": "1", # ob geladen wird aktuell
+	  "ladestatusLP3": "0", # ob geladen wird aktuell
+	  "zielladungaktiv": "0", #ob Zielladen aktiv
+	  "lla1LP1": "6", #Ampere 
+	  "lla2LP1": "0", #Ampere 
+	  "lla3LP1": "0", #Ampere 
+	  "lla1LP2": "10", #Ampere 
+	  "lla2LP2": "0.000", #Ampere 
+	  "lla3LP2": "0.000", #Ampere 
+	  "llkwhLP1": "665.43", #Zäherstand am Ladepunktzähler
+	  "llkwhLP2": "269.233", #Zäherstand am Ladepunktzähler
+	  "llkwhLP3": "358.23", #Zäherstand am Ladepunktzähler
+	  "evubezugWh": "1968573", #Zäherstand Bezug in Wh
+	  "evueinspeisungWh": "10021315", #Zäherstand Einspeisung in Wh
+	  "pvWh": "425299.8047", #Zählerstand PV in Wh
+	  "speichersoc": "40.8",# SoC des Speichers in %
+	  "socLP1": "66", # SoC des EV in %
+	  "socLP2": "63", # SoC des EV in %
+	  "speicherleistung": "-1302" #Lade / Entladeleistung des Speichers
 	}
-
 
 # Module erstellen
 

@@ -51,7 +51,18 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "bezug_victronip=") !== false) {
+		list(, $bezug_victronipold) = explode("=", $line);
+	}
+	if(strpos($line, "sonnenecoip=") !== false) {
+		list(, $sonnenecoipold) = explode("=", $line);
+	}
+	if(strpos($line, "wr_sdm120id=") !== false) {
+		list(, $wr_sdm120idold) = explode("=", $line);
+	}
+	if(strpos($line, "wr_sdm120ip=") !== false) {
+		list(, $wr_sdm120ipold) = explode("=", $line);
+	}
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
@@ -2414,7 +2425,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
 
 	</select>
 </div>
@@ -2426,6 +2437,15 @@ $(function() {
 <div id="wattbezugpowerwall">
 	<div class="row">
 		Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
+	</div>
+</div>
+<div id="wattbezugvictrongx">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="bezug_victronip">Victron IP:</label></b>
+		<input type="text" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. IP Adresse des Victron, z.B. GX.<br><br>
 	</div>
 </div>
 
@@ -2776,6 +2796,11 @@ function display_wattbezugmodul() {
 	$('#wattbezugkostalpiko').hide();
 	$('#wattbezugsmartfox').hide();
 	$('#wattbezugpowerwall').hide();
+	$('#wattbezugvictrongx').hide();
+
+	if($('#wattbezugmodul').val() == 'bezug_victrongx') {
+		$('#wattbezugvictrongx').show(); 
+	} 
 
 	if($('#wattbezugmodul').val() == 'vzlogger') {
 		$('#wattbezugvz').show(); 
@@ -2854,6 +2879,7 @@ $(function() {
 	<select type="text" name="pvwattmodul" id="pvwattmodul">
 		<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo selected ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
+		<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo selected ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
 		<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">Fronius WR</option>
 		<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">SDM 630 Modbus</option>
 		<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">VZLogger</option>
@@ -3100,6 +3126,22 @@ $(function() {
 		Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.<br><br>
 	</div>
 </div>
+<div id="pvethsdm120">
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wr_sdm120ip">SDM Modbus IP Adresse:</label></b>
+		<input type="text" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des ModbusLAN Konverters<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wr_sdm120id">SDM Modbus ID:</label></b>
+		<input type="text" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte 1-254. Modbus ID des SDM. <br><br>
+	</div>
+</div>
 
 <div id="pvsdmwr">
 	<div class="row" style="background-color:#BEFEBE">
@@ -3187,7 +3229,12 @@ function display_pvwattmodul() {
 	$('#pvpiko2').hide();
 	$('#pvpowerwall').hide();
 	$('#pvmpmevu').hide();
+	$('#pvethsdm120').hide();
 
+
+	if($('#pvwattmodul').val() == 'wr_ethsdm120') {
+		$('#pvethsdm120').show(); 
+	} 
 
 	if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
 		$('#pvmpmevu').show(); 
@@ -3267,7 +3314,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
 		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
-
+		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 </option>
 
 	</select>
@@ -3285,6 +3332,16 @@ $(function() {
 		Gültige Werte IP. IP Adresse der Tesla Powerwall.<br><br>
 	</div>
 </div>
+<div id="divspeicherseco">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="sonnenecoip">Sonnen eco IP:</label></b>
+		<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+	</div>
+</div>
+
 <div id="divspeichere3dc">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="e3dcip">E3DCIP:</label></b>
@@ -3441,7 +3498,11 @@ function display_speichermodul() {
 	$('#divspeicherpw').hide();
 	$('#divspeicherplenti').hide();
 	$('#divspeichersunnyisland').hide();
+	$('#divspeicherseco').hide();
 
+	if($('#speichermodul').val() == 'speicher_sonneneco') {
+		$('#divspeicherseco').show(); 
+	} 
 	if($('#speichermodul').val() == 'none') {
 		$('#divspeichernone').show(); 
 	} 

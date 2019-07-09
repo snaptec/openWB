@@ -239,7 +239,10 @@ mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 
-
+if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
+then
+  echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
@@ -263,6 +266,10 @@ if (( ladetaster == 1 )); then
 		fi
 	fi
 fi
+if (( rfidakt == 1 )); then
+	sudo python /var/www/html/openWB/runs/readrfid.py &
+fi
+
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
@@ -1454,6 +1461,42 @@ if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidlp1c1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp1c2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp1c3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c3=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c3=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_sdm120ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "wr_sdm120ip=192.168.3.5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr_sdm120id=" /var/www/html/openWB/openwb.conf
+then
+	echo "wr_sdm120id=2" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "bezug_victronip=" /var/www/html/openWB/openwb.conf
+then
+	echo "bezug_victronip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
@@ -1484,6 +1527,11 @@ if ! sudo grep -Fq "atreboot.sh" /var/spool/cron/crontabs/pi
 then
 	(crontab -l -u pi ; echo "@reboot /var/www/html/openWB/runs/atreboot.sh >> /var/log/openWB.log 2>&1")| crontab -u pi -
 fi
+if python -c "import evdev" &> /dev/null; then
+	echo 'evdev installed...'
+else
+	sudo pip install evdev
+fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get -qq update
@@ -1499,7 +1547,10 @@ fi
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
-curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
+echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
+echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
+
 
 sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch
 

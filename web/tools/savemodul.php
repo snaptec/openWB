@@ -886,9 +886,22 @@ foreach($lines as $line) {
 	    $result .= 'bezug_smartfox_ip='.$_POST[bezug_smartfox_ip]."\n";
 	$writeit = '1';
     } 
-
-
-
+	    if(strpos($line, "wr_sdm120id=") !== false) {
+	    $result .= 'wr_sdm120id='.$_POST[wr_sdm120id]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "wr_sdm120ip=") !== false) {
+	    $result .= 'wr_sdm120ip='.$_POST[wr_sdm120ip]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "sonnenecoip=") !== false) {
+	    $result .= 'sonnenecoip='.$_POST[sonnenecoip]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "bezug_victronip=") !== false) {
+	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";
+	$writeit = '1';
+    } 
 
 	    if ( $writeit == '0') {
 		$result .= $line;

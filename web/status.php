@@ -927,6 +927,10 @@ loadstatuslog();
             list(, $lp3nameold) = explode("=", $line);
         }
     }
+$verbraucher1_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1_name');
+$verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2_name');
+
+
 ?>
 
 <body>
@@ -1340,19 +1344,19 @@ loadstatuslog();
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					Verbraucher 1 [W]
+					<?php echo $verbraucher1_name ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher1wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 1 Import [kWh]
+					<?php echo $verbraucher1_name ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher1whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 1 Export [kWh]
+					<?php echo $verbraucher1_name ?>Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
@@ -1361,19 +1365,19 @@ loadstatuslog();
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					Verbraucher 2 [W]
+					<?php echo $verbraucher2_name ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher2wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 2 Import [kWh]
+				<?php echo $verbraucher2_name ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher2whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					Verbraucher 2 Export [kWh]
+					<?php echo $verbraucher2_name ?> Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
