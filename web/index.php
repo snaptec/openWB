@@ -101,15 +101,18 @@
 	<div class="preloader">
 		<img src="img/loader.gif" alt="Preloader image">
 	</div>
+		
+<?php
+	if ($_COOKIE['openWBTheme'] == 'desktop') {
+		echo '<div style="margin-left: 10px; margin-right: 10px;">';
+	} else {
+		echo '<div class="container">'; 
+	}
 
-	<section id="services">
-		<div class="container">
-			<?php
 				// das gewählte Theme einbinden
 				include 'themes/'.$_COOKIE['openWBTheme'].'/index.html';
 			?>
 		</div>
-    </section>
 
 	<!-- Holder for mobile navigation -->
 	<div class="mobile-nav">

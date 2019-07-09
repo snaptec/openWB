@@ -1461,6 +1461,30 @@ if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidlp1c1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp1c2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp1c3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1c3=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlp2c3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp2c3=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wr_sdm120ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "wr_sdm120ip=192.168.3.5" >> /var/www/html/openWB/openwb.conf
@@ -1523,7 +1547,7 @@ fi
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
-curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://openwb.de/tools/update.php
+curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
 echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
