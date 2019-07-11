@@ -25,6 +25,7 @@ echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
