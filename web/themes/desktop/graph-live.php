@@ -104,8 +104,7 @@ $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 $myData->setAxisName(0,"kW");
 $myData->setAxisPosition(2,AXIS_POSITION_RIGHT);
 $myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
-
-$AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
+$AxisBoundaries = array(0=>array("Min"=>$loweste,"Max"=>$highest));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>5,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,
 						"ManualScale"=>$AxisBoundaries,"LabelSkip"=>48);
 
@@ -151,6 +150,6 @@ $myImage->drawAreaChart();
 
 
 
-header("Content-Type: image/png");
+
 $myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');
 function YAxisFormat($Value) { return(round($Value/1000,2)); }

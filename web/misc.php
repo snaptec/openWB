@@ -112,6 +112,9 @@ foreach($lines as $line) {
 	if(strpos($line, "pushbplug=") !== false) {
 		list(, $pushbplugold) = explode("=", $line);
 	}
+	if(strpos($line, "pushbsmarthome=") !== false) {
+		list(, $pushbsmarthomeold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -628,7 +631,14 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 		</select><br><br>
 
 	</div>
+	<div class="row">
+		<b><label for="pushbsmarthome">Bei Triggern von Smart Home Aktionen:</label></b>
+	       	<select type="text" name="pushbsmarthome" id="pushbsmarthome">
+ 			<option <?php if($pushbsmarthomeold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbsmarthomeold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
 
+	</div>
 
 </div><br>
 <script>

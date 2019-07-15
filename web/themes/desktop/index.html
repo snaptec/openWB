@@ -56,7 +56,7 @@ background-color: black;
 	<div class="col-xs-2">
 			<canvas id="haus" style="height: auto !important; width: 100% !important;"></canvas>
 			<div id="haust" style="font-size: 15px; height: auto !important; top: 60%; position: absolute; width: 100% !important; color: white; text-align:center;">0%</div>
-			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">Hausverbrauch</div>
+			<div style="font-size: 15px; height: auto !important; top: 40%; position: absolute; text-align:center; width: 100% !important; color: white;">Hausverbrauch</div>
 	</div>
 	<div class="col-xs-2">
 
@@ -84,7 +84,7 @@ var opts = {
   radiusScale: 1.0, // Relative radius
   pointer: {
     length: 0.6, // // Relative to gauge radius
-    strokeWidth: 0.1, // The thickness
+    strokeWidth: 0.3, // The thickness
     color: '#000000' // Fill color
   },
   limitMax: true,     // If false, max value increases automatically if value > maxValue
@@ -150,7 +150,7 @@ var opts = {
   radiusScale: 1.0, // Relative radius
   pointer: {
     length: 0.6, // // Relative to gauge radius
-    strokeWidth: 0.1, // The thickness
+    strokeWidth: 0.3, // The thickness
     color: '#000000' // Fill color
   },
   limitMax: true,     // If false, max value increases automatically if value > maxValue
@@ -1037,7 +1037,9 @@ categoryAxis.dataFields.category = "col0";
 categoryAxis.renderer.labels.template.fill = am4core.color("white");
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Wh";
+valueAxis.title.text = "[white]Wh[/]";
+
+
 valueAxis.renderer.labels.template.fill = am4core.color("white");
 valueAxis.adapter.add("getTooltipText", (text) => {
 if (text.includes("k")) {
@@ -1055,7 +1057,7 @@ return text;
 
 var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis2.renderer.opposite = true;
-valueAxis2.title.text = "% SoC";
+valueAxis2.title.text = "[white]% SoC";
 valueAxis2.minimum = 0;
 valueAxis2.maximum = 100;
 valueAxis2.unit = "%";

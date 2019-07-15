@@ -240,7 +240,7 @@ var series10 = chart.series.push(new am4charts.LineSeries());
 series10.dataFields.valueY = "col11";
 series10.dataFields.categoryX = "col0";
 series10.name = "Hausverbrauch";
-series10.stroke = am4core.color("#fefedf");
+series10.stroke = am4core.color("grey");
 series10.strokeWidth = 2;
 
 if ( verbraucher1vorhanden == 1) {
