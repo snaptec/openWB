@@ -35,7 +35,7 @@ f.close()
 
 resp = client.read_input_registers(0x0048,2, unit=sdmid)
 vwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))
-vwh2 = float(vwh) * int(1000)
+vwh2 = float("%.3f" % vwh[0]) * int(1000)
 vwh3 = str(vwh2)
 vwhstring = "/var/www/html/openWB/ramdisk/verbraucher%s_wh" % (verbrauchernr)
 f = open(vwhstring, 'w')
@@ -45,7 +45,7 @@ f.close()
 
 resp = client.read_input_registers(0x004a,2, unit=sdmid)
 vwhe = struct.unpack('>f',struct.pack('>HH',*resp.registers))
-vwhe2 = float(vwhe) * int(1000)
+vwhe2 = float("%.3f" % vwhe[0]) * int(1000)
 vwhe3 = str(vwhe2)
 
 vwhestring = "/var/www/html/openWB/ramdisk/verbraucher%s_whe" % (verbrauchernr)

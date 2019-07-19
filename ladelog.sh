@@ -39,6 +39,7 @@ if (( ladeleistung > 500 )); then
 		echo $gelrlp1 > ramdisk/gelrlp1
 		restzeitlp1=$(echo "scale=6;($lademkwh - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
 		restzeitlp1=${restzeitlp1%.*}
+		echo $restzeitlp1 > ramdisk/restzeitlp1m
 		if (( restzeitlp1 > 60 )); then
 			restzeitlp1h=$((restzeitlp1 / 60))
 			restzeitlp1r=$((restzeitlp1 % 60))
@@ -123,6 +124,8 @@ if (( ladeleistungs1 > 500 )); then
 		echo $gelrlp2 > ramdisk/gelrlp2
 		restzeitlp2=$(echo "scale=6;($lademkwhs1 - $bishergeladens1)/ $ladeleistungs1 * 1000 * 60" |bc)
 		restzeitlp2=${restzeitlp2%.*}
+		echo $restzeitlp2 > ramdisk/restzeitlp2m
+
 		if (( restzeitlp2 > 60 )); then
 			restzeitlp2h=$((restzeitlp2 / 60))
 			restzeitlp2r=$((restzeitlp2 % 60))
@@ -209,6 +212,7 @@ if (( ladeleistungs2 > 500 )); then
 		echo $gelrlp3 > ramdisk/gelrlp3
 		restzeitlp3=$(echo "scale=6;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000 * 60" |bc)
 		restzeitlp3=${restzeitlp3%.*}
+		echo $restzeitlp3 > ramdisk/restzeitlp3m
 		if (( restzeitlp3 > 60 )); then
 			restzeitlp3h=$((restzeitlp3 / 60))
 			restzeitlp3r=$((restzeitlp3 % 60))

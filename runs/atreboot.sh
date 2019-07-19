@@ -25,6 +25,7 @@ echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
@@ -193,6 +194,9 @@ echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
+echo "0" > /var/www/html/openWB/ramdisk/restzeitlp1m
+echo "0" > /var/www/html/openWB/ramdisk/restzeitlp2m
+echo "0" > /var/www/html/openWB/ramdisk/restzeitlp3m
 echo 0 > /var/www/html/openWB/ramdisk/pvkwh
 echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk
@@ -1497,7 +1501,10 @@ if ! grep -Fq "bezug_victronip=" /var/www/html/openWB/openwb.conf
 then
 	echo "bezug_victronip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "pushbsmarthome=" /var/www/html/openWB/openwb.conf
+then
+	echo "pushbsmarthome=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then

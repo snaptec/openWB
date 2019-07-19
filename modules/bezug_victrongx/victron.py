@@ -10,7 +10,7 @@ import binascii
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 ipaddress = str(sys.argv[1])
-mid = int(sys.argv[2])
+mid = int(30)
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 connection = client.connect()
@@ -78,35 +78,35 @@ f.write(str(v3))
 f.close()
 
 #grid import
-resp= client.read_holding_registers(2622,4,unit=mid)
+resp= client.read_holding_registers(2623,4,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 wh1 = str(decoder.decode_32bit_uint())
-resp= client.read_holding_registers(2624,4,unit=mid)
+resp= client.read_holding_registers(2625,4,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 wh2 = str(decoder.decode_32bit_uint())
-resp= client.read_holding_registers(2626,4,unit=mid)
+resp= client.read_holding_registers(2627,4,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
 wh3 = str(decoder.decode_32bit_uint())
 
 whs = int(wh1) + int(wh2) + int(wh3)
-whs = whs * 10
+whs = whs / 100
 f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(whs))
 f.close()
 
 #grid export
-resp= client.read_holding_registers(2628,4,unit=mid)
+resp= client.read_holding_registers(2629,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
-whe1 = str(decoder.decode_32bit_uint())
-resp= client.read_holding_registers(2630,4,unit=mid)
+whe1 = str(decoder.decode_16bit_uint())
+resp= client.read_holding_registers(2631,2,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
-whe2 = str(decoder.decode_32bit_uint())
-resp= client.read_holding_registers(2632,4,unit=mid)
+whe2 = str(decoder.decode_16bit_uint())
+resp= client.read_holding_registers(2633,1,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Little)
-whe3 = str(decoder.decode_32bit_uint())
+whe3 = str(decoder.decode_16bit_uint())
 
 whes = int(whe1) + int(whe2) + int(whe3)
-whes = whes * 10
+whes = whes / 100
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(whes))
 f.close()

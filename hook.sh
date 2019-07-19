@@ -1,5 +1,6 @@
 #!/bin/bash
 hook(){
+
 if (( hook1_aktiv == "1" )); then
 	if (( uberschuss > hook1ein_watt )); then
 		echo 0 > /var/www/html/openWB/ramdisk/hook1counter
@@ -11,7 +12,7 @@ if (( hook1_aktiv == "1" )); then
 			if [[ $debug == "1" ]]; then
 				echo "Gerät 1 aktiviert"
 			fi
-			if ((pushbenachrichtigung == "1")); then
+			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 				./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
 			fi
 		fi
@@ -32,7 +33,7 @@ if (( hook1_aktiv == "1" )); then
 					if [[ $debug == "1" ]]; then
 						echo "Gerät 1 deaktiviert"
 					fi
-					if ((pushbenachrichtigung == "1")); then
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 						./runs/pushover.sh "Gerät 1 ausgeschaltet bei $uberschuss"
 					fi
 				fi
@@ -51,7 +52,7 @@ if (( hook2_aktiv == "1" )); then
 			if [[ $debug == "1" ]]; then
 				echo "Gerät 2 aktiviert"
 			fi
-			if ((pushbenachrichtigung == "1")); then
+			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 				./runs/pushover.sh "Gerät 2 eingeschaltet bei $uberschuss"
 			fi
 		fi
@@ -66,7 +67,7 @@ if (( hook2_aktiv == "1" )); then
 				if [[ $debug == "1" ]]; then
 					echo "Gerät 2 deaktiviert"
 				fi
-				if ((pushbenachrichtigung == "1")); then
+				if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 					./runs/pushover.sh "Gerät 2 ausgeschaltet bei $uberschuss"
 				fi
 			fi
@@ -84,7 +85,7 @@ if (( hook3_aktiv == "1" )); then
 			if [[ $debug == "1" ]]; then
 				echo "Gerät 3 aktiviert"
 			fi
-			if ((pushbenachrichtigung == "1")); then
+			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 				./runs/pushover.sh "Gerät 3 eingeschaltet bei $uberschuss"
 			fi
 		fi
@@ -100,7 +101,7 @@ if (( hook3_aktiv == "1" )); then
 				if [[ $debug == "1" ]]; then
 					echo "Gerät 3 deaktiviert"
 				fi
-				if ((pushbenachrichtigung == "1")); then
+				if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
 					./runs/pushover.sh "Gerät 3 ausgeschaltet bei $uberschuss"
 				fi
 			fi

@@ -47,6 +47,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "pushbplug=") !== false) {
 	    $result .= 'pushbplug='.$_POST[pushbplug]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "pushbpsmarthome=") !== false) {
+	    $result .= 'pushbsmarthome='.$_POST[pushbsmarthome]."\n";
+	    $writeit = '1';
 	    } 
 	    if(strpos($line, "pushovertoken=") !== false) {
 	    $result .= 'pushovertoken=\''.$_POST[pushovertoken]."'\n";
