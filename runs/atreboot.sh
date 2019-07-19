@@ -1505,7 +1505,10 @@ if ! grep -Fq "pushbsmarthome=" /var/www/html/openWB/openwb.conf
 then
 	echo "pushbsmarthome=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "graphsocdyn=" /var/www/html/openWB/openwb.conf
+then
+	echo "graphsocdyn=1" >> /var/www/html/openWB/openwb.conf
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
