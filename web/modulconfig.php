@@ -3304,6 +3304,7 @@ $(function() {
 	<b><label for="speicherodul">Speicher Modul:</label></b>
 	<select type="text" name="speichermodul" id="speichermodul">
 		<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
+		<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo selected ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
 		<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
 		<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
 		<option <?php if($speichermodulold == "speicher_bydhv\n") echo selected ?> value="speicher_bydhv">ByD HV</option>
@@ -3323,6 +3324,12 @@ $(function() {
 <div id="divspeichernone">
 	<br>
 </div>
+<div id="divspeicherkit">
+		<div class="row" style="background-color:#fcbe1e">
+		Keine Konfiguration erforderlich<br><br>
+	</div>
+</div>
+
 <div id="divspeicherpw">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="speicherpwip">Powerwall IP:</label></b>
@@ -3499,7 +3506,11 @@ function display_speichermodul() {
 	$('#divspeicherplenti').hide();
 	$('#divspeichersunnyisland').hide();
 	$('#divspeicherseco').hide();
+	$('#divspeicherkit').hide();
 
+	if($('#speichermodul').val() == 'speicher_mpm3pm') {
+		$('#divspeicherkit').show(); 
+	} 
 	if($('#speichermodul').val() == 'speicher_sonneneco') {
 		$('#divspeicherseco').show(); 
 	} 
