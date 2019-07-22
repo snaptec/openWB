@@ -123,7 +123,9 @@ foreach($lines as $line) {
     if(strpos($line, "heutegeladen=") !== false) {
 	    list(, $heutegeladenold) = explode("=", $line, 2);
     }
-
+    if(strpos($line, "displayconfigured=") !== false) {
+	    list(, $displayconfiguredold) = explode("=", $line, 2);
+    }
 }
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
 $lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');

@@ -202,11 +202,7 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
      	margin: 5px;
 }
 
-.btn:hover,
-.btn:focus {
-	color: white;
-	box-shadow: 2px 2px 5px 3px #ccc;
-}
+
 
 .btn.btn-blue {
 	background: #00a8ff;

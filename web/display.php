@@ -3,9 +3,6 @@
 
 <head>
 
-	<script src="js/core.js"></script>
-	<script src="js/charts.js"></script>
-	<script src="js/animated.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
@@ -52,18 +49,18 @@
 	<!-- Font Awesome, all styles -->
   <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
-	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
 	<!-- Main style -->
-	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 	<link rel="stylesheet" type="text/css" href="css/pwa.css">
-
-    <!-- include special Theme style -->
+        <link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
+        <!-- Main style -->
+        <link rel="stylesheet" type="text/css" href="css/cardio.css">
+    <!-- include special Theme style
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
-
-	<!-- Graph refresher -->
+-->
+	<!-- Graph refresher 
 	<script type = "text/javascript" src = "display/refreshEmbeddedGraph.js" ></script>
+-->
 	<!-- Data refresher -->
-    <script src="live.js"></script>
     <script src="livefunctions.js"></script>
 </head>
 
@@ -90,15 +87,20 @@
 
 
 <body>
-	<div class="preloader">
+<!--	<div class="preloader">
 		<img src="img/loader.gif" alt="Preloader image">
 	</div>
+-->
 
+<?php
+if ( $displayconfiguredold == 0 ) {
+	include 'display/welcome.html';
+} else {
 
-				<?php
-				// das gewählte Theme einbinden
-				include 'display/gauge.html';
-			?>
+	// das gewählte Theme einbinden
+	include 'display/gauge.html';
+}
+?>
 	
 
 	<!-- Holder for mobile navigation -->

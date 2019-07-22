@@ -48,7 +48,7 @@ foreach($lines as $line) {
 	    $result .= 'pushbplug='.$_POST[pushbplug]."\n";
 	    $writeit = '1';
 	    }
-	    if(strpos($line, "pushbpsmarthome=") !== false) {
+	    if(strpos($line, "pushbsmarthome=") !== false) {
 	    $result .= 'pushbsmarthome='.$_POST[pushbsmarthome]."\n";
 	    $writeit = '1';
 	    } 

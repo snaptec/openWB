@@ -5,7 +5,7 @@ sleep 10
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
-sudo chmod 777 /var/www/html/openWB/ramdisk/*
+sudo chmod 777 /var/www/html/openWB/ramdisk
 sudo chmod 777 /var/www/html/openWB/ramdisk/
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
@@ -76,6 +76,8 @@ touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/ladestatus.log
+touch /var/www/html/openWB/ramdisk/gsiforecast.csv
+chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 
 
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
@@ -1505,7 +1507,18 @@ if ! grep -Fq "pushbsmarthome=" /var/www/html/openWB/openwb.conf
 then
 	echo "pushbsmarthome=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "graphsocdyn=" /var/www/html/openWB/openwb.conf
+then
+	echo "graphsocdyn=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledsakt=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledsakt=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayconfigured=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayconfigured=0" >> /var/www/html/openWB/openwb.conf
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
@@ -1550,6 +1563,9 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
+if (( ledsakt == 1 ));
+	sudo python /var/www/html/openWB/runs/leds.py startup
+fi
 /var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 uuid=$(</sys/class/net/eth0/address)

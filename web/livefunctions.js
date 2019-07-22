@@ -365,3 +365,98 @@ $(function() {
     }
 
 });
+
+$(document).ready(function(){
+	$('.nurpv').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-green");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-red");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+	    });
+	});
+
+	$('.minpv').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-green");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-red");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+	    });
+	});
+
+	$('.stop').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?stop=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-green");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-red");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+	    });
+	});
+
+	$('.sofort').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-green");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-red");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+	    });
+	});
+	$('.standby').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-green");
+                $('.actstat4 .btn').removeClass("btn-red");
+
+
+	    });
+	});
+});
+
+
