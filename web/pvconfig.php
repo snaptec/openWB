@@ -174,33 +174,33 @@ $wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 <div class="row" style="background-color:#befebe">
 	Die Kombination aus Mindestüberschuss und Abschaltüberschuss sollte sinnvoll gewählt werden.<br>
 	Ansonsten wird im 10 Sekunden Takt die Ladung gestartet und gestoppt.<br>
-	Es macht z.B. 1320 Watt mindestuberschuss und 900 Watt abschaltuberschuss Sinn<br>
+	Ein sinnvoller Wert für den Mindestüberschuss ist beispielsweise 1320, für den Abschaltüberschuss 900.<br>
 </div>
 <div class="row" style="background-color:#befebe">
 	<b><label for="mindestuberschuss">Mindestüberschuss:</label></b>
 	<input type="text" name="mindestuberschuss" id="mindestuberschuss" value="<?php echo $mindestuberschussold ?>"><br>
 </div>
 <div class="row" style="background-color:#befebe">
-	Gültige Werte 0-9999. Mindestüberschuss in Watt bevor im Lademodus "Nur PV" die Ladung beginnt.<br> Soll wenig bis kein Netzbezug vorhanden sein macht ein Wert um 1300-1600 Sinn.<br><br>
+	Gültige Werte 0-9999. Mindestüberschuss in Watt bevor im Lademodus "Nur PV" die Ladung beginnt.<br>
+	Soll wenig bis kein Netzbezug vorhanden sein, macht ein Wert um 1300-1600 Sinn.<br>
 </div>
 <div class="row" style="background-color:#befebe">
 	<b><label for="abschaltuberschuss">Abschaltüberschuss:</label></b>
 	<input type="text" name="abschaltuberschuss" id="abschaltuberschuss" value="<?php echo $abschaltuberschussold ?>"><br>
 </div>
 <div class="row" style="background-color:#befebe">
-	Gültige Werte 0-9999. Ab wieviel Watt Bezug abgeschaltet werden soll.<br>
-Zunächst wird in jedem Zyklus die Ladeleistung Stufenweise bis auf Minimalstromstaerke reduziert. Danach greift die Abschaltung.<br>
-Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br><br>
-
-
+	Gültige Werte 0-9999. Der Wert bestimmt ab wieviel Watt Bezug abgeschaltet werden soll.<br>
+	Zunächst wird in jedem Zyklus die Ladeleistung stufenweise bis auf Minimalstromstärke reduziert. Danach greift die Abschaltung.<br>
+	Der Wert gibt an wieviel Watt insgesamt bezogen werden bevor abgeschaltet wird.<br><br>
 </div>
 <div class="row" style="background-color:#befebe">
 	<b><label for="einschaltverzoegerung">Einschaltverzögerung:</label></b>
 	<input type="text" name="einschaltverzoegerung" id="einschaltverzoegerung" value="<?php echo $einschaltverzoegerungold ?>"><br>
 </div>
 <div class="row" style="background-color:#befebe">
-Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus gewartet wird bis die Ladung startet.
-<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Überschuss größer als der Einschaltüberschuss sein.<br>
+Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im "Nur PV" Modus gewartet wird bis die Ladung startet.<br>
+Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Überschuss größer als der Einschaltüberschuss sein.<br>
+
 </div><br>
 
 <div class="row" style="background-color:#befebe">
@@ -209,8 +209,9 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 </div>
 
 <div class="row" style="background-color:#befebe">
-Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im Nur PV Modus die Abschaltung hinausgezögert wird.
-<br> Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss beginnen die 40 Sekunden erneut.<br>
+Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im "Nur PV" Modus die Abschaltung hinausgezögert wird. <br>
+Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> 
+Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss, beginnen die 40 Sekunden erneut.<br>
 </div><br>
 <div class="row" style="background-color:#befebe">
 	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
@@ -231,7 +232,7 @@ Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um 
 </div>
 
 <div class="row" style="background-color:#befebe">
-Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Laden Modus.<br>
+Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Min + PV Laden" Modus.
 </div>
 <div class="row" style="background-color:#befebe">
 	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus LP1:</label></b>
@@ -266,7 +267,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Min + PV Lade
 
 
 <div class="row" style="background-color:#befebe">
-Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden Modus.<br>
+Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV Laden" Modus.<br>
 </div>
 
 <div class="row" style="background-color:#befebe">
@@ -298,7 +299,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 
 </div>
 <div class="row" style="background-color:#befebe">
-	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
+	Gibt an mit wieviel Ampere maximal geladen wird.<br><br>
 </div>
 
 <br>
@@ -326,7 +327,8 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	</select>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Definiert einen Mindest SoC Wert (EV) bis zu welchem im Nur PV Modus immer geladen wird - auch wenn keine PV Leistung zur Verfügung steht.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	Definiert einen Mindest-SoC-Wert (EV) bis zu welchem im "Nur PV" Modus immer geladen wird, - auch wenn keine PV Leistung zur Verfügung steht.<br>
+	Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! <br>
 	</div><br>
 
 
@@ -347,7 +349,8 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 	</select>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Definiert einen Maximal SoC Wert bis zu welchem im Nur PV Modus geladen wird.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	Definiert einen Maximal-SoC-Wert bis zu welchem im "Nur PV" Modus geladen wird.<br>
+	Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! <br>
 	</div>
 <br>
 <div class="row" style="background-color:#befebe">
@@ -382,7 +385,8 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<option <?php if($minnurpvsocllold == 32) echo selected ?> value="32">32</option>
 	</select></div>
 	<div class="row" style="background-color:#befebe">
-	Definiert die Ladeleistung wenn Mindest SoC im Nur PV Laden Modus noch nicht erreicht ist.<br> Ist nur aktiv wenn nur ein Ladepunkt konfiguriert ist!
+	Definiert die Ladeleistung, wenn Mindest-SoC im "Nur PV Laden" Modus noch nicht erreicht ist.<br>
+	Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! <br>
 	</div>
 
 
@@ -398,7 +402,7 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 
 	</div>
 	<div class="row" style="background-color:#befebe">
-		Definiert die Regelung des PV Mdous. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. Die Werte sind beispielhaft fuer einphasiges Laden und definieren die Schwellen fuer das Hoch und Runterregeln des Ladestroms.<br><br>
+	Definiert die Regelung des PV Modus. Bei Einspeisung wird von 0-230W Einspeisung geregelt und bei Bezug von 230W Bezug bis 0W. <br>Die Werte sind beispielhaft für einphasiges Laden und definieren die Schwellen für das Hoch- und Runterregeln des Ladestroms.<br><br>
 	</div>
 
 	<div class="row" style="background-color:#befebe">
@@ -406,10 +410,10 @@ Definiert die Minimal erlaubte Stromstaerke in A je Phase fuer den Nur PV Laden 
 		<input type="text" name="offsetpv" id="offsetpv" value="<?php echo $offsetpvold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#befebe">
-Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
-Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
-Erlaubte Werte: Ganzzahl in Watt, minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
-z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". negative Werte entsprechend in die Richtung „Bezug".<br><br>
+	Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
+	Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
+	Erlaubte Werte: Ganzzahl in Watt, Minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
+	z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". Negative Werte entsprechend in die Richtung „Bezug“.<br><br>
 
 </div>
 
@@ -436,8 +440,11 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 
 
 	<div class="row" style="background-color:#fcbe1e">
-		Beeinflusst die Regelung des PV Mdous in Verbindung mit einem Speicher. Bei der Option Speicher hat Vorrang wird die EV Ladung erst gestartet wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>Bei der Option EV hat Vorrang wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich eine Mindestladung zu garantieren.
-	<br><br>
+	Beeinflusst die Regelung des PV Modus in Verbindung mit einem Speicher. <br>
+	Bei der Option "Speicher hat Vorrang" wird die EV Ladung erst gestartet, wenn der Speicher mit seiner maximalen Leistung lädt und der eingestellte Mindestüberschuss erreicht ist.<br>
+	Bei der Option "EV hat Vorrang" wird die Speicherladeleistung mit in den verfügbaren Überschuss eingerechnet, es ist jedoch möglich, eine Mindestladung zu garantieren.<br>
+
+	<br>
 	</div>
 	<div id="speicherevvdiv">
 		<div class="row" style="background-color:#fcbe1e">
@@ -460,15 +467,16 @@ z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W w
 		</div>
 
 		<div class="row" style="background-color:#fcbe1e">
-		Definiert einen SoC bis zu dem bei laufender Nur PV Ladung der Speicher mit xx Leistung entladen wird.<br> Zum deaktivieren dieser Funktion (Speicher soll nicht entladen werden) den SoC auf 100 setzen.<br>
-
+		Definiert einen SoC bis zu dem bei laufender Nur PV Ladung der Speicher mit xx Leistung entladen wird.<br>
+		Zum Deaktivieren dieser Funktion (Speicher soll nicht entladen werden) den SoC auf 100 setzen.<br>
 		</div>
 		<div class="row" style="background-color:#fcbe1e">
 			<b><label for="speichersocminpv">Speicher Entlade SoC Min + PV:</label></b>
 			<input type="text" name="speichersocminpv" id="speichersocminpv" value="<?php echo $speichersocminpvold ?>"><br>
 		</div>
 		<div class="row" style="background-color:#fcbe1e">
-	Im Min + PV Modus wird die Ladung erst gestartet wenn der SoC über dem eingestellten Wert liegt.<br>Zum deaktivieren der Funktion den Wert auf 0 setzen.<br>
+		Im "Min + PV" Modus wird die Ladung erst gestartet, wenn der SoC über dem eingestellten Wert liegt.<br>
+		Zum Deaktivieren der Funktion den Wert auf 0 setzen.<br>
 		</div>
 
 
@@ -508,8 +516,11 @@ $(function() {
 
 </div>
 <div class="row" style="background-color:#befebe">
-	Beeinflusst die Regelung des Nur PV Modus wenn folgende Bedingungen erfüllt sind:<br>- Laden im Nur PV Modus<br>- zwei EVs Laden gleichzeitig<br>- für beide ist ein SoC verfügbar<br>- beide EVs laden mit der selben Anzahl Phasen
-<br><br>
+	Beeinflusst die Regelung des "Nur PV" Modus, wenn folgende Bedingungen erfüllt sind:<br>
+	- Laden im "Nur PV" Modus<br>
+	- zwei EVs laden gleichzeitig<br>
+	für beide ist ein SoC verfügbar<br>
+	beide EVs laden mit der selben Anzahl Phasen <br><br>
 </div>
 <div id="adaptpvdiv">
 	<div class="row" style="background-color:#befebe">

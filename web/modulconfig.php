@@ -1140,7 +1140,7 @@ $(function() {
 		<input type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo $mpm3pmllsourceold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+		Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="mpm3pmllid">MPM3PM Modbus Ladeleistung ID:</label></b>
@@ -1221,8 +1221,9 @@ $(function() {
 		<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-		Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+		Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
+		Gültige Werte: IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+
 	</div>
 </div>
 <div id="llswifi">
@@ -1436,7 +1437,7 @@ $(function() {
 		<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		BMW i3 VIN. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
+		BMW i3 VIN. Sie ist in voller Länge anzugeben.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
@@ -2641,7 +2642,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Home Manager für Bezug/Einspeisung angeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen. Danach einen Reboot durchführen.<br><br>
+		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen. Danach einen Reboot durchführen.<br><br>
 	</div>
 </div>
 <div id="wattbezugsmartfox">
@@ -2749,9 +2750,9 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 			<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>"><br>
 		</div>
 		<div class="row" style="background-color:#febebe">
-			Gültige Werte Zeit in Sekunden, z.B. 30,50,200. <br>
+			Gültige Werte: Zeit in Sekunden, z.B. 30,50,200. <br>
 			Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
-			Sinnvoll wenn öfter kurze Lastspitzen auftreten.<br>
+			Sinnvoll, wenn öfter kurze Lastspitzen auftreten.<br>
 			Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.<br><br>
 		</div>
 		<br><br>
@@ -3025,7 +3026,7 @@ $(function() {
 		<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (default deaktiviert).<br><br>
+		Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert).<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
@@ -3039,21 +3040,21 @@ $(function() {
 		<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP Adresse oder none. IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+		Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrsma3ip">WR 3 IP:</label></b>
 		<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP Adresse oder none. IP des dritten SMA Wechselrichters. Wenn nur 2 WR genutzt werden auf none setzen.<br><br>
+		Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="wrsma4ip">WR 4 IP:</label></b>
 		<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP Adresse oder none. IP des vierten SMA Wechselrichters. Wenn nur 3 WR genutzt werden auf none setzen.<br><br>
+		Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.<br><br>
 	</div>
 </div>
 <div id="pvwrsolaredge">
@@ -3371,7 +3372,7 @@ $(function() {
 		<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
-		Gültige Werte IP. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.<br><br>
+		Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.<br><br>
 	</div>
 </div>
 <div id="divspeichersunnyisland">
