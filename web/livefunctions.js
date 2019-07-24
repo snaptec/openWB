@@ -254,7 +254,14 @@ $(function() {
 
 });
 
+$(function() {
+	if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
+        $('#speicherpvuidiv').show();
+    } else {
+        $('#speicherpvuidiv').hide();
+    }
 
+});
 
 }
 function rslp1() {
@@ -336,14 +343,7 @@ $(function() {
     }
 });
 
-$(function() {
-	if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
-        $('#speicherpvuidiv').show();
-    } else {
-        $('#speicherpvuidiv').hide();
-    }
 
-});
 $(function() {
     if($('#lastmanagement').val() == '0') {
         $('#ladepunkts1ndiv').show();
