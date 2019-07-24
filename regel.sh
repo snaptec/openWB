@@ -41,6 +41,7 @@ source evsedintest.sh
 source hook.sh
 source u1p3p.sh
 source nrgkickcheck.sh
+source rfidtag.sh
 date=$(date)
 re='^-?[0-9]+$'
 #ladelog ausfuehren
@@ -78,6 +79,10 @@ fi
 
 
 #######################################
+# check rfid
+if [[ $rfidakt == "1" ]]; then
+	rfid
+fi
 #goe mobility check
 goecheck
 # nrgkick mobility check
@@ -100,6 +105,8 @@ evsedintest
 
 #u1p3p switch
 u1p3pswitch
+#hooks - externe geraete
+hook
 #Graphing
 graphing
 
@@ -120,8 +127,7 @@ if [[ $dspeed == "3" ]]; then
 		echo 0 > ramdisk/5sec
 	fi
 fi
-#hooks - externe geraete
-hook
+
 
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)
@@ -221,7 +227,12 @@ else
 	if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
   	echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
 	fi
-	anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+	if (( u1p3paktiv == 1 )); then
+		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+	else
+		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+
+	fi
 fi
 if (( lastmanagement == 1 )); then
 	if (( llas11 > 3 )); then

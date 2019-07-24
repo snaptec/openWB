@@ -559,7 +559,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		</select><br>
 	</div>
 	<div class="row bg-info">
-	Ampere mit denen geladen werden kann um den Ziel SoC zu erreichen. Entweder was die Installation kann oder was das Auto kann.<br>
+	Ampere mit denen geladen werden kann, um den Ziel SoC zu erreichen. Orientiert an der Leistung der Hausinstallation, oder der des zu ladenden Autos.<br>
 	</div>
 </div>
 <div id="durchslp2">
@@ -611,7 +611,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird. <br>Der Wert dient lediglich als Startwert und sollte so niedrig wie möglich gewählt werden.<br> Die meisten Fahrzeuge kommen mit 6A klar. Bei der Zoe werden 8A empfohlen. <br><br>
+	Gibt an mit wieviel Ampere je Phase mindestens geladen wird. <br><br>
 </div>
 <div class="row" style="background-color:#febebe">
 	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
@@ -656,7 +656,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#33ffa8">
-	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
+	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
 </div>
 <div id="u1p3paus">
 	<br>
@@ -729,7 +729,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll.<br><br>
+	Definiert, ob Nachts geladen werden soll.<br><br>
 </div>
 <div id="nachtladenaus">
 	<br>
@@ -957,7 +957,7 @@ $(function() {
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
+	Definiert, ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
 </div>
 <div id="nachtladenauss1">
 	<br>
@@ -1176,9 +1176,10 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</select>
 </div>
 <div class="row">
-	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
-	Sie stellt in jedem Lademodus sicher das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen, diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
+	Sie stellt in jedem Lademodus sicher, dass nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
 	Der richtige Anschluss ist zu gewährleisten.<br>
+
 	Ladepunkt 1: <br>
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
 	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 2 Ladepunkt 1</p>
@@ -1187,7 +1188,7 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 2 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 3 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 1 Ladepunkt 2</p>
-	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
+	Durch das Drehen der Phasen ist sichergestellt, dass 2 einphasige Autos mit voller Geschwindigkeit laden können.<br>
 
 </div>
 

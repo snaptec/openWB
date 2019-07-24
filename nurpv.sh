@@ -120,8 +120,14 @@ if (( ladeleistung < 300 )); then
 else
 	if [[ $speichervorhanden == "1" ]]; then
 		if (( speicherleistung < 0 )); then
-			uberschuss=$((uberschuss + speicherleistung))
-			wattbezugint=$((wattbezugint - speicherleistung))
+			if (( speichersoc > speichersocnurpv )); then
+				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
+				wattbezugint=$((wattbezugint - speicherleistung - speicherwattnurpv))
+
+			else
+				uberschuss=$((uberschuss + speicherleistung))
+				wattbezugint=$((wattbezugint - speicherleistung))
+			fi
 		fi
 	fi
 	if (( uberschuss > schaltschwelle )); then

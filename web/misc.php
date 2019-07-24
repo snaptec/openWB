@@ -112,6 +112,9 @@ foreach($lines as $line) {
 	if(strpos($line, "pushbplug=") !== false) {
 		list(, $pushbplugold) = explode("=", $line);
 	}
+	if(strpos($line, "pushbsmarthome=") !== false) {
+		list(, $pushbsmarthomeold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -364,6 +367,32 @@ foreach($lines as $line) {
 	if(strpos($line, "heutegeladen=") !== false) {
 		list(, $heutegeladenold) = explode("=", $line);
 	}
+
+	if(strpos($line, "bootmodus=") !== false) {
+		list(, $bootmodusold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidakt=") !== false) {
+		list(, $rfidaktold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c1=") !== false) {
+		list(, $rfidlp1c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c2=") !== false) {
+		list(, $rfidlp1c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c3=") !== false) {
+		list(, $rfidlp1c3old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c1=") !== false) {
+		list(, $rfidlp2c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c2=") !== false) {
+		list(, $rfidlp2c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c3=") !== false) {
+		list(, $rfidlp2c3old) = explode("=", $line);
+	}
+
 }
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -398,7 +427,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
+			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
@@ -412,8 +441,13 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 
 		<div class="row">
-			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist, das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln, kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
-	<br>	</div>
+			Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
+			Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
+			Sollten Probleme, oder Fehlermeldungen auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
+			Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
+			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, "Stop", etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
+			Sehr Langsam führt zu einer Regelzeit von 60Sek.<br><br>
+		</div>
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
 			<select type="text" name="ladetaster" id="ladetaster">
@@ -423,8 +457,121 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
+			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
 		</div>
+		<div class="row">
+			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
+			<select type="text" name="bootmodus" id="bootmodus">
+				<option <?php if($bootmodusold == 0) echo selected ?> value="0">Sofort Laden</option>
+				<option <?php if($bootmodusold == 1) echo selected ?> value="1">Min + PV</option>
+				<option <?php if($bootmodusold == 2) echo selected ?> value="2">Nur PV</option>
+				<option <?php if($bootmodusold == 3) echo selected ?> value="3">Stop</option>
+				<option <?php if($bootmodusold == 4) echo selected ?> value="4">Standby</option>
+
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Definiert den Lademodus nach Boot der openWB.<br> <br>
+		</div>
+<hr>
+<div class="row">
+	<b><label for="rfidakt">RFID Lesung:</label></b>
+	<select type="text" name="rfidakt" id="rfidakt">
+		<option <?php if($rfidaktold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($rfidaktold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="rfidausdiv">
+	<br>
+</div>
+<div id="rfidandiv">
+	<div class="row">
+	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br><br>
+	</div>
+<?php
+$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+?>
+	<div class="row">
+	Zuletzt gescannter RFID Tag: <?php echo $lastrfid ?><br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidlp1c1">Ladepunkt 1, Auto 1:</label></b>
+        	<input type="text" name="rfidlp1c1" id="rfidlp1c1" value="<?php echo $rfidlp1c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c2">Ladepunkt 1, Auto 2:</label></b>
+        	<input type="text" name="rfidlp1c2" id="rfidlp1c2" value="<?php echo $rfidlp1c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c3">Ladepunkt 1, Auto 3:</label></b>
+        	<input type="text" name="rfidlp1c3" id="rfidlp1c3" value="<?php echo $rfidlp1c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c1">Ladepunkt 2, Auto 1:</label></b>
+        	<input type="text" name="rfidlp2c1" id="rfidlp2c1" value="<?php echo $rfidlp2c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c2">Ladepunkt 2, Auto 2:</label></b>
+        	<input type="text" name="rfidlp2c2" id="rfidlp2c2" value="<?php echo $rfidlp2c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c3">Ladepunkt 2, Auto 3:</label></b>
+        	<input type="text" name="rfidlp2c3" id="rfidlp2c3" value="<?php echo $rfidlp2c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+
+</div>
+<script>
+$(function() {
+      if($('#rfidakt').val() == '0') {
+		$('#rfidausdiv').show();
+		$('#rfidandiv').hide();
+      } else {
+		$('#rfidausdiv').hide();
+	       	$('#rfidandiv').show();
+      }
+
+	$('#rfidakt').change(function(){
+	      if($('#rfidakt').val() == '0') {
+			$('#rfidausdiv').show();
+			$('#rfidandiv').hide();
+	      } else {
+			$('#rfidausdiv').hide();
+		       	$('#rfidandiv').show();
+	      }
+	    });
+});
+</script>
+
+
+
+
 
 <div class="row"><hr>
 	<h4>Benachrichtigungen mit Pushover</h4>
@@ -489,7 +636,14 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 		</select><br><br>
 
 	</div>
+	<div class="row">
+		<b><label for="pushbsmarthome">Bei Triggern von Smart Home Aktionen:</label></b>
+	       	<select type="text" name="pushbsmarthome" id="pushbsmarthome">
+ 			<option <?php if($pushbsmarthomeold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbsmarthomeold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
 
+	</div>
 
 </div><br>
 <script>
@@ -615,14 +769,14 @@ $(function() {
 			<br>
 		</div>
 		<div class="row">
-			Der Stable train ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer  zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, Speichern und ein Update durchführen.<br><br>
+			Der Stablezweig ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, speichern und ein Update durchführen.<br><br>
 		</div>
 
 <br><br>
 		<button type="submit" class="btn btn-primary btn-green">Save</button>
 	</form><br><br /><hr>
 	<div class="row">
-		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
+		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungeni, Graphdaten und Ladelogfiles wieder her.<br> <br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-primary btn-red">Backup erstellen</button>
@@ -650,7 +804,7 @@ $(function() {
 </div>
 	<div class="row">
 		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
-		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtliche SoC Modul Einstellungen herausgefiltert, um die ggf. hinterlegten Benutzernamen/Passwörter NICHT zu übertragen.<br>
 	</div>
 <div class="row">
 	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>

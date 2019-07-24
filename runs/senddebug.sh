@@ -8,7 +8,7 @@ grep -F -v -e leaf -e i3 -e zoe -e tesla -e carnet /var/www/html/openWB/openwb.c
 cat /var/www/html/openWB/ramdisk/debuguser >> /var/www/html/openWB/ramdisk/debug.log
 echo "Version" >> /var/www/html/openWB/ramdisk/debug.log
 cat /var/www/html/openWB/web/version >> /var/www/html/openWB/ramdisk/debug.log
-curl --upload /var/www/html/openWB/ramdisk/debug.log http://openwb.de/tools/debug.php
+curl --upload /var/www/html/openWB/ramdisk/debug.log https://openwb.de/tools/debug.php
 
 sed -i 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
 rm /var/www/html/openWB/ramdisk/debuguser

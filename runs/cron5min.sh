@@ -22,9 +22,9 @@ verbraucher1=$(</var/www/html/openWB/ramdisk/verbraucher1_wh)
 verbraucher2=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
 verbraucher3=$(</var/www/html/openWB/ramdisk/verbraucher3_wh)
 verbrauchere1=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
+verbrauchere2=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
 
-
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbraucher3 >> $dailyfile.csv
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3 >> $dailyfile.csv
 echo $(date +%H%M) >> $dailyfile-date.csv
 echo $bezug >> $dailyfile-bezug.csv
 echo $einspeisung >> $dailyfile-einspeisung.csv
@@ -42,6 +42,7 @@ echo $verbraucher1 >> $dailyfile-verbraucher1.csv
 echo $verbraucher2 >> $dailyfile-verbraucher2.csv
 echo $verbraucher3 >> $dailyfile-verbraucher3.csv
 echo $verbrauchere1 >> $dailyfile-verbrauchere1.csv
+echo $verbrauchere2 >> $dailyfile-verbrauchere2.csv
 
 
 

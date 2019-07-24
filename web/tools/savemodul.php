@@ -257,7 +257,28 @@ foreach($lines as $line) {
 			$result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
 	    } 
 		$writeit = '1';
+	    }
+	    if(strpos($line, "httpll_w_url=") !== false) {
+	    $result .= 'httpll_w_url=\''.$_POST[httpll_w_url]."'\n";
+	    $writeit = '1';
 	    } 
+	    if(strpos($line, "httpll_kwh_url=") !== false) {
+	    $result .= 'httpll_kwh_url=\''.$_POST[httpll_kwh_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a1_url=") !== false) {
+	    $result .= 'httpll_a1_url=\''.$_POST[httpll_a1_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a2_url=") !== false) {
+	    $result .= 'httpll_a2_url=\''.$_POST[httpll_a2_url]."'\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "httpll_a3_url=") !== false) {
+	    $result .= 'httpll_a3_url=\''.$_POST[httpll_a3_url]."'\n";
+	    $writeit = '1';
+	    } 
+
 	    if(strpos($line, "wr_http_w_url=") !== false) {
 	    $result .= 'wr_http_w_url=\''.$_POST[wr_http_w_url]."'\n";
 	    $writeit = '1';
@@ -792,6 +813,10 @@ foreach($lines as $line) {
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "e3dc2ip=") !== false) {
+	    $result .= 'e3dc2ip='.$_POST[e3dc2ip]."\n";
+	    $writeit = '1';
 	    }
  	   if(strpos($line, "speicherpwip=") !== false) {
 	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
@@ -861,9 +886,22 @@ foreach($lines as $line) {
 	    $result .= 'bezug_smartfox_ip='.$_POST[bezug_smartfox_ip]."\n";
 	$writeit = '1';
     } 
-
-
-
+	    if(strpos($line, "wr_sdm120id=") !== false) {
+	    $result .= 'wr_sdm120id='.$_POST[wr_sdm120id]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "wr_sdm120ip=") !== false) {
+	    $result .= 'wr_sdm120ip='.$_POST[wr_sdm120ip]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "sonnenecoip=") !== false) {
+	    $result .= 'sonnenecoip='.$_POST[sonnenecoip]."\n";
+	$writeit = '1';
+    } 
+	    if(strpos($line, "bezug_victronip=") !== false) {
+	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";
+	$writeit = '1';
+    } 
 
 	    if ( $writeit == '0') {
 		$result .= $line;

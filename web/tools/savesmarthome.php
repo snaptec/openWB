@@ -6,7 +6,7 @@ foreach($lines as $line) {
 	$writeit = '0';
 	foreach($_POST as $k => $v) {
 	    if(strpos($line, $k.'=') !== false) {
-		if ( $k != "hook1ein_url" && $k != "hook1aus_url" && $k != "hook2ein_url" && $k != "hook2aus_url" && $k != "hook3ein_url" && $k != "hook3aus_url" && $k != "verbraucher1_urlw" && $k != "verbraucher1_urlh") {   
+		if ( $k != "hook1ein_url" && $k != "hook1aus_url" && $k != "hook2ein_url" && $k != "hook2aus_url" && $k != "hook3ein_url" && $k != "hook3aus_url" && $k != "verbraucher1_urlw" && $k != "verbraucher1_urlh" && $k != "verbraucher2_urlw" && $k != "verbraucher2_urlh") {   
 		$result .= $k.'='.$v."\n";
 		$writeit = '1';
 		}
@@ -42,6 +42,14 @@ foreach($lines as $line) {
 } 
 	    if(strpos($line, "verbraucher1_urlh=") !== false) {
 	    $result .= 'verbraucher1_urlh=\''.$_POST[verbraucher1_urlh]."'\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "verbraucher2_urlw=") !== false) {
+	    $result .= 'verbraucher2_urlw=\''.$_POST[verbraucher2_urlw]."'\n";
+	    $writeit = '1';
+} 
+	    if(strpos($line, "verbraucher2_urlh=") !== false) {
+	    $result .= 'verbraucher2_urlh=\''.$_POST[verbraucher2_urlh]."'\n";
 	    $writeit = '1';
 } 
 

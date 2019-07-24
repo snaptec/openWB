@@ -16,7 +16,7 @@ fi
 
 echo $speicherwatt > /var/www/html/openWB/ramdisk/speicherleistung
 
-speichersoc=$(echo $speicherwatttmp | jq '.Body.Data.Inverters."1".SOC')
+speichersoc=$(echo $speicherwatttmp | jq '.Body.Data.Inverters."1".SOC' |sed 's/\..*$//')
 if ! [[ $speichersoc =~ $ra ]] ; then
 		  speichersoc="0"
 fi
