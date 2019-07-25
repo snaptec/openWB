@@ -145,12 +145,12 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	</div>
 	'; } ?>
 
-<div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 400px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
+<div class="row col-xs-12 text-center" style="font-size: 12px; height: 10px; top: 430px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
 
 	    <div class=" col-xs-10">
 </div> 
         <div class=" col-xs-2"> 
-		<a href="../display.php" class="btn btn-block btn-blue">Zurück</a>
+		<a href="../display.php" class="btn btn-block btn-blue" style="height: 10px;">Zurück</a>
                 </div> 
         </div> 														 
 </div>
