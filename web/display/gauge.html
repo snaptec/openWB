@@ -1,18 +1,20 @@
 <html>
-
+	<?php include ("display/gaugevalues.php"); ?>
 <script src="/openWB/web/display/gauge.min.js"></script>
 <script src="/openWB/web/display/alllive.js"></script>
       <link rel="stylesheet" href="/openWB/web/display/pin.css">
 
+<input hidden name="" id="displayevumax" value="<?php echo $displayevumaxold ; ?>" />
+<input hidden name="" id="displaypvmax" value="<?php echo $displaypvmaxold ; ?>" />
+<input hidden name="" id="displayspeichermax" value="<?php echo $displayspeichermaxold ; ?>" />
+<input hidden name="" id="displayhausanzeigen" value="<?php echo $displayhausanzeigenold ; ?>" />
+<input hidden name="" id="displayhausmax" value="<?php echo $displayhausmaxold ; ?>" />
+<input hidden name="" id="displaylp1max" value="<?php echo $displaylp1maxold ; ?>" />
+<input hidden name="" id="displaylp2max" value="<?php echo $displaylp2maxold ; ?>" />
+<input hidden name="" id="displaypinaktiv" value="<?php echo $displaypinaktivold ; ?>" />
+<input hidden name="" id="displaypincode" value="<?php echo $displaypincodeold ; ?>" />
 
 
-<style>
-body {
-background-color: black;
-}
-</style>
-
-<body>
 
 <div style="font-size: 12px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 65px; color: white;">Beta</div>
 <canvas id="evu" style="height: 200px; top: -50px; left: 0px; position: absolute; width: 265px;"></canvas>
@@ -22,17 +24,18 @@ background-color: black;
 <canvas id="pv" style="height: 200px; top: -50px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="pvt" style="font-size: 15px; height: 200px; top: 100px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 <div style="font-size: 15px; height: 200px; top: 75px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">PV</div>
-
+<div id="speicherstatdiv">
 <canvas id="speicher" style="height: 200px; top: -50px; left: 530px; position: absolute; width: 265px;"></canvas>
 <div id="speichert" style="font-size: 15px; height: 200px; top: 100px; left: 530px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 <div style="font-size: 15px; height: 200px; top: 75px; left: 530px; text-align:center; position: absolute; width: 265px; color: white;">Speicher</div>
 <canvas id="speichers" style="height: 200px; top: -50px; left: 530px; position: absolute; width: 265px;"></canvas>
 <div id="speicherst" style="font-size: 15px; height: 100px; top: 60px; left: 530px; text-align:center; position: absolute; width: 265px; color: white;"></div>
-
-
-<canvas id="haus" style="height: 200px; top: 120px; left: 0px; position: absolute; width: 265px;"></canvas>
-<div id="haust" style="font-size: 15px; height: 200px; top: 270px; left: 0px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
-<div style="font-size: 15px; height: 200px; top: 250px; left: 0px; text-align:center; position: absolute; width: 265px; color: white;">Hausverbrauch</div>
+</div>
+<div id="hausanzeigen">
+	<canvas id="haus" style="height: 200px; top: 120px; left: 0px; position: absolute; width: 265px;"></canvas>
+	<div id="haust" style="font-size: 15px; height: 200px; top: 270px; left: 0px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
+	<div style="font-size: 15px; height: 200px; top: 250px; left: 0px; text-align:center; position: absolute; width: 265px; color: white;">Hausverbrauch</div>
+</div>
 
 <canvas id="lp1" style="height: 200px; top: 120px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="lp1t" style="font-size: 15px; height: 200px; top: 270px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
@@ -56,35 +59,42 @@ background-color: black;
                 </div> 
         </div> 														 
 </div>
+<div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 50px; position: absolute; width: 800px; color: white; text-align:center;"> 
 
+    
+        <div class=" col-xs-2"> 
+		<a href="display/tagesgraph.php" class="btn btn-block btn-blue">Tagesgraph</a>
+                </div> 
+        </div> 														 
+</div>
 <div class="row">
 <div class="container" style="left:20px;bottom:0px;position:absolute;">
 	<div class="col-xs-3 text-center">
 		<div class="actstat">
-			<input type="submit" class="sofort btn btn-lg btn-block" style="font-size: 2vw" name="sofort" value="Sofort Laden">
+			<input type="submit" class="1sofort btn btn-lg btn-block" style="font-size: 2vw" name="sofort" value="Sofort Laden">
 	
 		</div>
 	</div>
 
 	<div class="col-xs-2 text-center">
 		<div class="actstat4">
-			<input type="submit" class="standby btn btn-lg btn-block" style="font-size: 2vw" name="standby" value="Standby">
+			<input type="submit" class="1standby btn btn-lg btn-block" style="font-size: 2vw" name="standby" value="Standby">
 		</div>
 	</div>
 	<div class="col-xs-2 text-center">
 		<div class="actstat3">
-			<input type="submit" class="stop btn btn-lg btn-block" style="font-size: 2vw" name="stop" value="Stop">
+			<input type="submit" class="1stop btn btn-lg btn-block" style="font-size: 2vw" name="stop" value="Stop">
 		</div>
 	</div>
 	<div class="col-xs-2 text-center">
 		<div class="actstat1">
-			<input type="submit" class="minpv btn btn-lg btn-block" style="font-size: 2vw" name="minpv" value="Min + PV">
+			<input type="submit" class="1minpv btn btn-lg btn-block" style="font-size: 2vw" name="minpv" value="Min + PV">
 	
 		</div>
 	</div>
 	<div class="col-xs-3 text-center">
 		<div class="actstat2">
-			<input type="submit" class="nurpv btn btn-lg btn-block" style="font-size: 2vw" name="nurpv" value="Nur PV">
+			<input type="submit" class="1nurpv btn btn-lg btn-block" style="font-size: 2vw" name="nurpv" value="Nur PV">
 	
 		</div>
 	</div>
@@ -112,14 +122,31 @@ background-color: black;
 
 
 <script>
+	        $('#pin').hide();
+	var displayhausmax = <?php echo $displayhausmaxold ?>;
+	var displaylp2max = <?php echo $displaylp2maxold ?>;
+	var displaylp1max = <?php echo $displaylp1maxold ?>;
+	var displaypvmax = <?php echo $displaypvmaxold ?>;
+	var displayevumax = <?php echo $displayevumaxold ?>;
+	var displayspeichermax = <?php echo $displayspeichermaxold ?>;
+	var displayhausanzeigen = <?php echo $displayhausanzeigenold ?>;
+	var displaypincode = <?php echo $displaypincodeold ?>;
+	var displaypinaktiv = <?php echo $displaypinaktivold ?>;
+    if ( displayhausanzeigen == '1') {
+        $('#hausanzeigen').show();
+    } else {
+        $('#hausanzeigen').hide();
+
+    }
+
+
+
+
 var displaylock = 1;
 
-$(document).ready(function(){
-	$('.nurpv').click(function(){
-	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1',
-	    data =  {'action': clickBtnValue};
-	    $.post(ajaxurl, data, function (response) {
+	function execnurpv(){
+	    var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1';
+	    $.post(ajaxurl, 'nurpv', function (response) {
                 $('.actstat2 .btn').addClass("btn-green");
                 $('.actstat3 .btn').addClass("btn-red");
                 $('.actstat .btn').addClass("btn-red");
@@ -131,13 +158,11 @@ $(document).ready(function(){
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
 	    });
-	});
+	}
 
-	$('.minpv').click(function(){
-	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1',
-	    data =  {'action': clickBtnValue};
-	    $.post(ajaxurl, data, function (response) {
+	function execminpv(){
+	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1';
+	    $.post(ajaxurl, 'minpv', function (response) {
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-red");
                 $('.actstat .btn').addClass("btn-red");
@@ -149,13 +174,11 @@ $(document).ready(function(){
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
 	    });
-	});
+	}
 
-	$('.stop').click(function(){
-	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?stop=1',
-	    data =  {'action': clickBtnValue};
-	    $.post(ajaxurl, data, function (response) {
+	function execstop(){
+	    var ajaxurl = 'tools/changelademodusd.php?stop=1';
+	    $.post(ajaxurl, 'stop', function (response) {
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-green");
                 $('.actstat .btn').addClass("btn-red");
@@ -167,30 +190,12 @@ $(document).ready(function(){
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
 	    });
-	});
+	}
 
-	$('.sofort').click(function(){
-	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
-	    data =  {'action': clickBtnValue};
-	    $.post(ajaxurl, data, function (response) {
-                $('.actstat2 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-red");
-                $('.actstat .btn').addClass("btn-green");
-                $('.actstat1 .btn').addClass("btn-red");
-                $('.actstat .btn').removeClass("btn-red");
-                $('.actstat2 .btn').removeClass("btn-green");
-                $('.actstat3 .btn').removeClass("btn-green");
-                $('.actstat1 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-red");
-                $('.actstat4 .btn').removeClass("btn-green");
-	    });
-	});
-	$('.standby').click(function(){
-	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
-	    data =  {'action': clickBtnValue};
-	    $.post(ajaxurl, data, function (response) {
+
+	function execstandby(){
+	    var ajaxurl = 'tools/changelademodusd.php?semistop=1';
+	    $.post(ajaxurl, 'standby', function (response) {
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-red");
                 $('.actstat .btn').addClass("btn-red");
@@ -204,9 +209,22 @@ $(document).ready(function(){
 
 
 	    });
-	});
-});
-
+	}
+	function execsofort(){
+	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1';
+	    $.post(ajaxurl, 'sofort', function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-green");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-red");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+	    });
+	}
 var opts = {
   angle: 0, // The span of the gauge arc
   lineWidth: 0.24, // The line thickness
@@ -225,20 +243,20 @@ var opts = {
   generateGradient: true,
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [-5000, 0, 5000],  // Print labels at these values
+		labels: [displayevumax * -1, 0, displayevumax],  // Print labels at these values
 		color: "#FFFFFF",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		},
 	       staticZones: [
-	          {strokeStyle: "#F03E3E", min: 5000, max: 30000}, // Red from 100 to 130
-      {strokeStyle: "#FFDD00", min: 0, max: 5000}, // Yellow
+	          {strokeStyle: "#F03E3E", min: 2000, max: 30000}, // Red from 100 to 130
+      {strokeStyle: "#FFDD00", min: 0, max: 2000}, // Yellow
    {strokeStyle: "#30B32D", min: -20000, max: 0}, // Green
 ],  
 };
 var target = document.getElementById('evu'); // your canvas element
 var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-gauge.maxValue = 7500; // set max gauge value
-gauge.setMinValue(-7500);  // Prefer setter over gauge.minValue = 0
+gauge.maxValue = displayevumax; // set max gauge value
+gauge.setMinValue(displayevumax * -1);  // Prefer setter over gauge.minValue = 0
 gauge.animationSpeed = 50; // set animation speed (32 is default value)
 
 gauge.set(0); // set actual value
@@ -261,14 +279,14 @@ var opts = {
   generateGradient: true,
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [0, 10000],  // Print labels at these values
+		labels: [0, displaypvmax],  // Print labels at these values
 		color: "white",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		}, 
 };
 var targetpv = document.getElementById('pv'); // your canvas element
 var gaugepv = new Gauge(targetpv).setOptions(opts); // create sexy gauge!
-gaugepv.maxValue = 10000; // set max gauge value
+gaugepv.maxValue = displaypvmax; // set max gauge value
 gaugepv.setMinValue(0);  // Prefer setter over gauge.minValue = 0
 gaugepv.animationSpeed = 5; // set animation speed (32 is default value)
 gaugepv.set(000); // set actual value
@@ -291,20 +309,20 @@ var opts = {
   generateGradient: true,
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [-1500, 0, 1500],  // Print labels at these values
+		labels: [displayspeichermax * -1, 0, displayspeichermax],  // Print labels at these values
 		color: "white",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		}, 
 	       staticZones: [
-	          {strokeStyle: "#F03E3E", min: -3000, max: -300}, // Red from 100 to 130
+	          {strokeStyle: "#F03E3E", min: displayspeichermax * -1, max: -300}, // Red from 100 to 130
       {strokeStyle: "#FFDD00", min: -300, max: 0}, // Yellow
-   {strokeStyle: "#30B32D", min: 0, max: 3000}, // Green
+   {strokeStyle: "#30B32D", min: 0, max: displayspeichermax}, // Green
 ],  
 };
 var targetspeicher = document.getElementById('speicher'); // your canvas element
 var gaugespeicher = new Gauge(targetspeicher).setOptions(opts); // create sexy gauge!
-gaugespeicher.maxValue = 3000; // set max gauge value
-gaugespeicher.setMinValue(-3000);  // Prefer setter over gauge.minValue = 0
+gaugespeicher.maxValue = displayspeichermax; // set max gauge value
+gaugespeicher.setMinValue(displayspeichermax * -1);  // Prefer setter over gauge.minValue = 0
 gaugespeicher.animationSpeed = 5; // set animation speed (32 is default value)
 gaugespeicher.set(0); // set actual value
 ///////////////////
@@ -357,14 +375,14 @@ var opts = {
   generateGradient: true,
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [0, 2500],  // Print labels at these values
+		labels: [0, (displayhausmax / 2), displayhausmax],  // Print labels at these values
 		color: "white",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		}, 
 };
 var targethaus = document.getElementById('haus'); // your canvas element
 var gaugehaus = new Gauge(targethaus).setOptions(opts); // create sexy gauge!
-gaugehaus.maxValue = 2500; // set max gauge value
+gaugehaus.maxValue = displayhausmax; // set max gauge value
 gaugehaus.setMinValue(0);  // Prefer setter over gauge.minValue = 0
 gaugehaus.animationSpeed = 5; // set animation speed (32 is default value)
 gaugehaus.set(0); // set actual value
@@ -387,17 +405,17 @@ var opts = {
 percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [0, 7000],  // Print labels at these values
+		labels: [0, displaylp1max],  // Print labels at these values
 		color: "white",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		}, 
 };
 var targetlp1 = document.getElementById('lp1'); // your canvas element
 var gaugelp1 = new Gauge(targetlp1).setOptions(opts); // create sexy gauge!
-gaugelp1.maxValue = 7000; // set max gauge value
+gaugelp1.maxValue = displaylp1max; // set max gauge value
 gaugelp1.setMinValue(0);  // Prefer setter over gauge.minValue = 0
 gaugelp1.animationSpeed = 5; // set animation speed (32 is default value)
-gaugelp1.set(7000); // set actual value
+gaugelp1.set(0); // set actual value
 /////////////////////////
 var opts = {
   angle: 0, // The span of the gauge arc
@@ -448,17 +466,17 @@ percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
 
 		staticLabels: {
 		font: "13px sans-serif",  // Specifies font
-		labels: [0, 7000],  // Print labels at these values
+		labels: [0, displaylp2max],  // Print labels at these values
 		color: "white",  // Optional: Label text color
 		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
 		}, 
 };
 var targetlp2 = document.getElementById('lp2'); // your canvas element
 var gaugelp2 = new Gauge(targetlp2).setOptions(opts); // create sexy gauge!
-gaugelp2.maxValue = 7000; // set max gauge value
+gaugelp2.maxValue = displaylp2max; // set max gauge value
 gaugelp2.setMinValue(0);  // Prefer setter over gauge.minValue = 0
 gaugelp2.animationSpeed = 5; // set animation speed (32 is default value)
-gaugelp2.set(3600); // set actual value
+gaugelp2.set(0); // set actual value
 /////////////////////////
 var opts = {
   angle: 0, // The span of the gauge arc
@@ -604,49 +622,70 @@ var nurpv = 0;
 var minpv = 0;
 var lock = 0;
 $(document).ready(function(){
-	        $('#pin').hide();
+
 
 
    $('.1stop').click(function(){
 	   if ( lock == 0 ) {
-	   	stop = 1;
-		$('#pin').show();
-		lock = 1;
+		if ( displaypinaktiv == 1){
+			$('#pin').show();
+			lock = 1;
+	   	        stop = 1;
+		} else {
+			execstop();
+		}
 	   }
 });
    $('.1sofort').click(function(){
 	   if ( lock == 0 ) {
-	   sofort = 1;
-		$('#pin').show();
+	   if ( displaypinaktiv == 1){
+	   	$('#pin').show();
 		lock = 1;
+	        sofort = 1;
+		} else {
+			execsofort();
+		}
 	   }
 });
    $('.1standby').click(function(){
 	   if ( lock == 0 ) {
-	   standby = 1;
-		$('#pin').show();
+	   if ( displaypinaktiv == 1){
+	   	$('#pin').show();
 		lock = 1;
+                standby = 1;
+	   } else {
+		execstandby();
+	   }
 	   }
 });
    $('.1nurpv').click(function(){
 	   if ( lock == 0 ) {
-		lock = 1;
+		if ( displaypinaktiv == 1){
+   		   lock = 1;
 	   	nurpv = 1;
 		$('#pin').show();
+		} else {
+			execnurpv();
+		}
 	   }
 });
    $('.1minpv').click(function(){
 	   if ( lock == 0 ) {
-		lock = 1;
-	   	minpv = 1;
-		$('#pin').show();
+		if ( displaypinaktiv == 1){
+			lock = 1;
+	   		minpv = 1;
+			$('#pin').show();
+		
+		} else {
+			execminpv();
 		}
+	   }
 	   });
 
 });
 (function () {
   var input = '',
-  correct = '1593';
+  correct = displaypincode.toString().substr(0, 4);
 
   var dots = document.getElementsByClassName('dot'),
   numbers = document.getElementsByClassName('number');
@@ -663,7 +702,7 @@ $(document).ready(function(){
     if (input.length >= 4) {
       if (input !== correct) {
         dots.forEach(dot => $(dot).addClass('wrong'));
-        $(document.body).addClass('wrong');
+	$(document.body).addClass('wrong');
         setTimeout(function(){  
 	        $('#pin').hide(); 
         }, 1400);
@@ -674,23 +713,24 @@ $(document).ready(function(){
         $(document.body).addClass('correct');
 	if ( stop == 1 ) {
 		stop = 0;
-		alert("stop!");
+		execstop();
 	}
 	if ( sofort == 1 ) {
 		sofort = 0;
-		alert("sofort!");
+		execsofort();
+
 	}
 	if ( standby == 1 ) {
 		standby = 0;
-		alert("standby!");
+		execstandby();
 	}
 	if ( nurpv == 1 ) {
 		nurpv = 0;
-		alert("nurpv!");
+		execnurpv();
 	}
 	if ( minpv == 1 ) {
 		minpv = 0;
-		alert("minpv!");
+		execminpv();
 	}
 	setTimeout(function(){  
 	        $('#pin').hide(); 

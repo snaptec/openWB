@@ -1519,6 +1519,50 @@ if ! grep -Fq "displayconfigured=" /var/www/html/openWB/openwb.conf
 then
 	echo "displayconfigured=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "displayaktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayaktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayevumax=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayevumax=5000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaypvmax=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaypvmax=10000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayspeichermax=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayspeichermax=3000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayhausanzeigen=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayhausanzeigen=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayhausmax=" /var/www/html/openWB/openwb.conf
+then
+	echo "displayhausmax=5000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp1max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp1max=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp2max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp2max=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaypinaktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaypinaktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaypincode=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaypincode=1234" >> /var/www/html/openWB/openwb.conf
+fi
+
+
+
+
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up

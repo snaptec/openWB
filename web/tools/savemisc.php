@@ -117,9 +117,52 @@ foreach($lines as $line) {
 	    $result .= 'rfidlp2c3='.$_POST[rfidlp2c3]."\n";
 	    $writeit = '1';
 	    } 
+	   if(strpos($line, "displaypincode=") !== false) {
+	    $result .= 'displaypincode='.$_POST[displaypincode]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "displaypinaktiv=") !== false) {
+	    $result .= 'displaypinaktiv='.$_POST[displaypinaktiv]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "displaylp2max=") !== false) {
+	    $result .= 'displaylp2max='.$_POST[displaylp2max]."\n";
+	    $writeit = '1';
+	    } 
 
+	   if(strpos($line, "displaylp1max=") !== false) {
+	    $result .= 'displaylp1max='.$_POST[displaylp1max]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "displayhausmax=") !== false) {
+	    $result .= 'displayhausmax='.$_POST[displayhausmax]."\n";
+	    $writeit = '1';
+	    } 
 
+	   if(strpos($line, "displayhausanzeigen=") !== false) {
+	    $result .= 'displayhausanzeigen='.$_POST[displayhausanzeigen]."\n";
+	    $writeit = '1';
+	    } 
 
+	   if(strpos($line, "displayspeichermax=") !== false) {
+	    $result .= 'displayspeichermax='.$_POST[displayspeichermax]."\n";
+	    $writeit = '1';
+	    } 
+
+	   if(strpos($line, "displaypvmax=") !== false) {
+	    $result .= 'displaypvmax='.$_POST[displaypvmax]."\n";
+	    $writeit = '1';
+	    } 
+
+	   if(strpos($line, "displayevumax=") !== false) {
+	    $result .= 'displayevumax='.$_POST[displayevumax]."\n";
+	    $writeit = '1';
+	    } 
+
+	   if(strpos($line, "displayaktiv=") !== false) {
+	    $result .= 'displayaktiv='.$_POST[displayaktiv]."\n";
+	    $writeit = '1';
+	    } 
 
 	    if ( $writeit == '0') {
 		$result .= $line;
