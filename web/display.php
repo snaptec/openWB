@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+	<meta http-equiv="refresh" content="3600" >
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
@@ -39,18 +39,14 @@
 	<meta name="theme-color" content="#ffffff">
 	<meta name="google" content="notranslate">
 	<!-- Normalize -->
-	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<!-- Bootstrap -->
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<!-- Owl -->
-	<link rel="stylesheet" type="text/css" href="css/owl.css">
 	<!-- Animate.css -->
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<!-- Font Awesome, all styles -->
   <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<!-- Main style -->
-	<link rel="stylesheet" type="text/css" href="css/pwa.css">
         <link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
         <!-- Main style -->
         <link rel="stylesheet" type="text/css" href="css/cardio.css">
@@ -87,10 +83,7 @@
 
 
 <body>
-<!--	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
-	</div>
--->
+
 
 <?php
 if ( $displayconfiguredold == 0 ) {
@@ -103,19 +96,8 @@ if ( $displayconfiguredold == 0 ) {
 ?>
 	
 
-	<!-- Holder for mobile navigation -->
-	<div class="mobile-nav">
-		<ul>
-		</ul>
-		<a href="#" class="close-link"><i class="arrow_up"></i></a>
-	</div>
+
 	<!-- Scripts -->
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/wow.min.js"></script>
-	<script src="js/typewriter.js"></script>
-	<script src="js/jquery.onepagenav.js"></script>
-	<script src="js/main.js"></script>
 </body>
 
 </html>

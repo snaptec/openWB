@@ -13,7 +13,16 @@ foreach($lines as $line) {
 		list(, $logeinspeisungneg) = explode("=", $line);
 	}
 }
-$daydate1 = $_GET[thedate];
+$today = date('Y-m-d');
+if (isset($_GET[thedate])) {
+	$daydate1 = $_GET[thedate];
+
+}
+else
+{
+	$daydate1 = $today;
+
+}
 $daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
 $ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';

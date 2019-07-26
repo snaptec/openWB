@@ -40,6 +40,37 @@
 <?php
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "displayaktiv=") !== false) {
+		list(, $displayaktivold) = explode("=", $line);
+	}
+	if(strpos($line, "displayevumax=") !== false) {
+		list(, $displayevumaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaypvmax=") !== false) {
+		list(, $displaypvmaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displayspeichermax=") !== false) {
+		list(, $displayspeichermaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displayhausanzeigen=") !== false) {
+		list(, $displayhausanzeigenold) = explode("=", $line);
+	}
+	if(strpos($line, "displayhausmax=") !== false) {
+		list(, $displayhausmaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaylp1max=") !== false) {
+		list(, $displaylp1maxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaylp2max=") !== false) {
+		list(, $displaylp2maxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaypinaktiv=") !== false) {
+		list(, $displaypinaktivold) = explode("=", $line);
+	}
+
+	if(strpos($line, "displaypincode=") !== false) {
+		list(, $displaypincodeold) = explode("=", $line);
+	}
 	if(strpos($line, "logeinspeisungneg=") !== false) {
 		list(, $logeinspeisungnegold) = explode("=", $line);
 	}
@@ -666,6 +697,93 @@ $(function() {
 	    });
 });
 </script>
+<script>
+$(function() {
+      if($('#displayaktiv').val() == '0') {
+		$('#displayan').hide();
+      } else {
+	       	$('#displayan').show();
+      }
+	$('#displayaktiv').change(function(){
+	        if($('#displayaktiv').val() == '0') {
+			$('#displayan').hide();
+	        } else {
+		       	$('#displayan').show();
+	        }
+	    });
+});
+</script>
+<div class="row"><hr>
+	<h4>integriertes Display</h4>
+</div>
+<div class="row">
+	<b><label for="displayaktiv">Display installiert:</label></b>
+	<select type="text" name="displayaktiv" id="displayaktiv">
+		<option <?php if($displayaktivold == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($displayaktivold == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div id="displayan">
+
+	<div class="row">
+       		<b><label for="displayevumax">EVU Skala Min Max:</label></b>
+        	<input type="text" name="displayevumax" id="displayevumax" value="<?php echo $displayevumaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaypvmax">PV Skala Max:</label></b>
+        	<input type="text" name="displaypvmax" id="displaypvmax" value="<?php echo $displaypvmaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displayspeichermax">Speicher Skala Min Max:</label></b>
+        	<input type="text" name="displayspeichermax" id="displayspeichermax" value="<?php echo $displayspeichermaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		<b><label for="displayhausanzeigen">Hausverbrauch anzeigen:</label></b>
+	       	<select type="text" name="displayhausanzeigen" id="displayhausanzeigen">
+ 			<option <?php if($displayhausanzeigenold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displayhausanzeigenold == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+
+	</div>
+
+	<div class="row">
+       		<b><label for="displayhausmax">Hausverbrauch Skala Max:</label></b>
+        	<input type="text" name="displayhausmax" id="displayhausmax" value="<?php echo $displayhausmaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaylp1max">Ladepunkt 1 Skala Max:</label></b>
+        	<input type="text" name="displaylp1max" id="displaylp1max" value="<?php echo $displaylp1maxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaylp2max">Ladepunkt 2 Skala Max:</label></b>
+        	<input type="text" name="displaylp2max" id="displaylp2max" value="<?php echo $displaylp2maxold ?>"><br>
+	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="displaypinaktiv">Pin nötig zum ändern des Lademodus:</label></b>
+	       	<select type="text" name="displaypinaktiv" id="displaypinaktiv">
+ 			<option <?php if($displaypinaktivold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displaypinaktivold == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+	</div>
+	<div class="row">
+		<b><label for="displaypincode">Pin (4-stellig, nur Zahlen erlaubt):</label></b>
+	       	<input type="text" name="displaypincode" id="displaypincode" value="<?php echo $displaypincodeold ?>"><br><br>
+	</div>
+
+
+
+
+
+
+</div>
+
 
 		<div class="row"><hr>
 			<h3>	Optische Einstellungen</h3> <br>
