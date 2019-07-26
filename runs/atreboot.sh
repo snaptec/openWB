@@ -1545,11 +1545,11 @@ then
 fi
 if ! grep -Fq "displaylp1max=" /var/www/html/openWB/openwb.conf
 then
-	echo "displaylp1max=0" >> /var/www/html/openWB/openwb.conf
+	echo "displaylp1max=22000" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "displaylp2max=" /var/www/html/openWB/openwb.conf
 then
-	echo "displaylp2max=0" >> /var/www/html/openWB/openwb.conf
+	echo "displaylp2max=22000" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "displaypinaktiv=" /var/www/html/openWB/openwb.conf
 then

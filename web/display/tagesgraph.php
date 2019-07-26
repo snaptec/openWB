@@ -4,17 +4,9 @@
 <head>
 	<script src="../js/core.js"></script>
 	<script src="../js/charts.js"></script>
-	<script src="../js/animated.js"></script>
 	<!-- Normalize -->
-	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
-	<!-- Bootstrap -->
+
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-	<!-- Owl -->
-	<link rel="stylesheet" type="text/css" href="../css/owl.css">
-	<!-- Animate.css -->
-	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<!-- Font Awesome, all styles -->
-  <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<!-- Elegant Icons -->
 	<!-- Main style -->
 	<link rel="stylesheet" type="text/css" href="../css/pwa.css">
@@ -57,8 +49,7 @@
 	<meta name="theme-color" content="#ffffff">
 	<meta name="google" content="notranslate">
 	<!-- Main style -->
-	<link rel="stylesheet" type="text/css" href=".//css/pwa.css">
-        <link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
+
 
 </head>
 <style>
@@ -113,37 +104,11 @@ background-color: black;
 
 
 <?php
-$today = date('Y-m-d');
-if (isset($_GET[date])) {
-	$daydate = $_GET[date];
-	$_SESSION = $daydate;
-
-}
-else
-{
+	$today = date('Y-m-d');
 	$daydate = $today;
-	$_SESSION = $daydate;
-
-}
-$daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
-$nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 ?>
-		<?php if ($graphamold == 1) {
-	echo '
-	<div style="height:440px;" id="dailydiv"></div>
-';
-				   } else {
-					   echo '
 
-	<div class="row">
-	<div class="col-xs-12">
-		<div class="imgwrapper">
-			<img src="graph-daily.php?thedate='; echo $daydate;
-	echo '"
-			alt="" class="center-block img-responsive" />
-		</div>
-	</div>
-	'; } ?>
+	<div style="height:440px;" id="dailydiv"></div>
 
 <div class="row col-xs-12 text-center" style="font-size: 12px; height: 10px; top: 430px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
 
@@ -206,7 +171,7 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
 	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
 
-if ( graphinteractiveam == 1 ){
+if ( graphinteractiveam == 2 ){
 	am4core.useTheme(am4themes_animated);
 }
 // Create chart instance

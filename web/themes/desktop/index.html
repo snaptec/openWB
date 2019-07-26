@@ -1026,7 +1026,7 @@ if ( graphinteractiveam == 1 ){
 var chart = am4core.create("dailydiv", am4charts.XYChart);
  chart.numberFormatter.numberFormat = "#.## a";
 // Set up data source
-chart.dataSource.url = "/openWB/web/logging/graph-dailye.php?thedate=<?php echo $daydate ?>";
+chart.dataSource.url = "/openWB/web/logging/graph-dailye.php";
 chart.dataSource.parser = new am4core.CSVParser();
 chart.dataSource.parser.options.useColumnNames = false;
 chart.dataSource.reloadFrequency = 120000;
