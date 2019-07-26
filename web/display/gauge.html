@@ -19,7 +19,7 @@
 <div id="main">
 <div style="font-size: 12px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 65px; color: white;">Beta</div>
 <?php
-     if ( $speicherstatold == 1 ){ echo '
+     if ( $speicherstatold != "none" ){ echo '
 <canvas id="evu" style="height: 200px; top: -50px; left: 0px; position: absolute; width: 265px;"></canvas>
 <div id="evut" style="font-size: 15px; height: 200px; top: 100px; left: 0px; position: absolute; width: 265px; color: white; text-align:center;">0</div>
 <div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 265px; color: white;">EVU</div>
@@ -41,6 +41,7 @@
 <canvas id="pv" style="height: 200px; top: -50px; left: 397px; position: absolute; width: 265px;"></canvas>
 <div id="pvt" style="font-size: 15px; height: 200px; top: 100px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 <div style="font-size: 15px; height: 200px; top: 75px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;">PV</div>
+<div id="speicherstatdiv"></div>
 '; } ?>
 
 
