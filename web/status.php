@@ -1348,19 +1348,19 @@ loadstatuslog();
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					<?php echo $verbraucher1_name ?> [W]
+					<?php echo $verbraucher1_nameold ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher1wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher1_name ?> Import [kWh]
+					<?php echo $verbraucher1_nameold ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher1whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher1_name ?>Export [kWh]
+					<?php echo $verbraucher1_nameold ?>Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
@@ -1369,19 +1369,19 @@ loadstatuslog();
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					<?php echo $verbraucher2_name ?> [W]
+					<?php echo $verbraucher2_nameold ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher2wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-				<?php echo $verbraucher2_name ?> Import [kWh]
+				<?php echo $verbraucher2_nameold ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher2whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher2_name ?> Export [kWh]
+					<?php echo $verbraucher2_nameold ?> Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
