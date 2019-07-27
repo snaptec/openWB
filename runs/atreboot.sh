@@ -1607,7 +1607,7 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
-if (( ledsakt == 1 ));
+if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
 /var/www/html/openWB/runs/gsiabfrage.sh &
