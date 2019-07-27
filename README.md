@@ -66,7 +66,7 @@ Software:
 
 Installiertes Raspbian auf einem Raspberry pi 3.
 
-Installationsanleitung für Windows: http://openwb.de/img/install_openWB_v2.pdf
+Installationsanleitung für Windows: http://openwb.de/main/wp-content/uploads/2019/07/install_openWB_v2.pdf
 
 Raspbian installieren
 
