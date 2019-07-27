@@ -60,7 +60,9 @@
     <script src="livefunctions.js"></script>
 </head>
 
-<?php include ("values.php"); ?>
+<?php include ("values.php"); 
+?>
+
 <input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 <input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
 <input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />
