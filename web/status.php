@@ -925,10 +925,14 @@ loadstatuslog();
         }
         if (strpos($line, "lp3name=") !== false) {
             list(, $lp3nameold) = explode("=", $line);
+	}
+        if (strpos($line, "verbraucher1_name=") !== false) {
+            list(, $verbraucher1_nameold) = explode("=", $line);
+        }
+        if (strpos($line, "verbraucher2_name=") !== false) {
+            list(, $verbraucher2_nameold) = explode("=", $line);
         }
     }
-$verbraucher1_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1_name');
-$verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2_name');
 
 
 ?>
