@@ -909,6 +909,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
+		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
 
 	</select>
 
@@ -918,6 +919,12 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div id="evseconmastereth">
 	<div class="row bg-success">
 	Keine Konfiguration erforderlich.<br>
+	</div>
+</div>
+<div id="openwb12">
+	<div class="row bg-success">
+	Keine Konfiguration erforderlich.<br>
+	Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.<br>
 	</div>
 </div>
 
@@ -1040,6 +1047,7 @@ function display_lp1() {
 	$('#evseconnrgkick').hide();
 	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
+	$('#openwb12').hide();
 
 	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show(); 
@@ -1064,6 +1072,10 @@ function display_lp1() {
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}
+	if($('#evsecon').val() == 'openwb12') {
+		$('#openwb12').show();
+	}
+
 }
 
 $(function() {
@@ -1547,10 +1559,18 @@ $(function() {
 			<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
 			<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
+			<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo selected ?> value="openwb12s1">openWB series1/2 Duo</option>
+
 
 
 		</select>
 	</div>
+<div id="openwb12s1">
+	<div class="row bg-success">
+	Keine Konfiguration erforderlich.<br>
+	Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.<br>
+	</div>
+</div>
 <div id="evseconnrgkicks1">
 <div class="row bg-info">
 	<b><label for="nrgkickiplp2">NRGKick IP Adresse:</label></b>
@@ -1679,6 +1699,7 @@ function display_lp2() {
 	$('#evsecoslaveeth').hide();
 	$('#evseconkebas1').hide();
 	$('#evseconnrgkicks1').hide();
+	$('#openwb12s1').hide();
 
 	if($('#evsecons1').val() == 'dac') {
 		$('#evsecondacs1').show(); 
@@ -1702,6 +1723,9 @@ function display_lp2() {
 	} 
 	if($('#evsecons1').val() == 'nrgkick') {
    		$('#evseconnrgkicks1').show();
+	}
+	if($('#evsecon').val() == 'openwb12s1') {
+		$('#openwb12s1').show();
 	}
 }
 

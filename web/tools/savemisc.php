@@ -158,17 +158,65 @@ foreach($lines as $line) {
 	    $result .= 'displayevumax='.$_POST[displayevumax]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "displaysleep=") !== false) {
+	    $result .= 'displaysleep='.$_POST[displaysleep]."\n";
+	    $writeit = '1';
+	    } 
 	   if(strpos($line, "displayaktiv=") !== false) {
 	    $result .= 'displayaktiv='.$_POST[displayaktiv]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "led0sofort=") !== false) {
+	    $result .= 'led0sofort='.$_POST[led0sofort]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "led0nurpv=") !== false) {
+	    $result .= 'led0nurpv='.$_POST[led0nurpv]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "led0minpv=") !== false) {
+	    $result .= 'led0minpv='.$_POST[led0minpv]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "led0standby=") !== false) {
+	    $result .= 'led0standby='.$_POST[led0standby]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "led0stop=") !== false) {
+	    $result .= 'led0stop='.$_POST[led0stop]."\n";
+	    $writeit = '1';
+	    } 
+    
+	    if(strpos($line, "ledsofort=") !== false) {
+	    $result .= 'ledsofort='.$_POST[ledsofort]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "lednurpv=") !== false) {
+	    $result .= 'lednurpv='.$_POST[lednurpv]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "ledminpv=") !== false) {
+	    $result .= 'ledminpv='.$_POST[ledminpv]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "ledstandby=") !== false) {
+	    $result .= 'ledstandby='.$_POST[ledstandby]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "ledstop=") !== false) {
+	    $result .= 'ledstop='.$_POST[ledstop]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "ledsakt=") !== false) {
+	    $result .= 'ledsakt='.$_POST[ledsakt]."\n";
+	    $writeit = '1';
+	    } 
 	    if ( $writeit == '0') {
 		$result .= $line;
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 }
+file_put_contents('/var/www/html/openWB/ramdisk/reloaddisplay', "1");
 header("Location: ../index.php");
 ?>

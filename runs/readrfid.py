@@ -2,7 +2,8 @@ import evdev
 import sys
 import os
 from evdev import InputDevice, categorize 
-dev = InputDevice('/dev/input/event0')
+devicen = str(sys.argv[1])
+dev = InputDevice('/dev/input/event' + devicen)
 
 scancodes = {
     0: None, 1: u'ESC', 2: u'1', 3: u'2', 4: u'3', 5: u'4', 6: u'5', 7: u'6', 8: u'7', 9: u'8',

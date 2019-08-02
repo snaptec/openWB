@@ -42,7 +42,9 @@ echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
 echo 0 > /var/www/html/openWB/ramdisk/readtag
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
-
+echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
+echo 0 > /var/www/html/openWB/ramdisk/reloaddisplay
+echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -273,9 +275,11 @@ if (( ladetaster == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
-	sudo python /var/www/html/openWB/runs/readrfid.py &
+	sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv &
 fi
-
+if (( displayaktiv == 1 )); then
+	su pi - pi -c "export DISPLAY=:0 && xset s $displaysleep"
+fi
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf
@@ -1515,6 +1519,47 @@ if ! grep -Fq "ledsakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "ledsakt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "led0sofort=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0sofort=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0minpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0minpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0nurpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0nurpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0stop=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0stop=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0standby=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0standby=aus" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "ledsofort=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledsofort=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledminpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledminpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lednurpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "lednurpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledstop=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledstop=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledstandby=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledstandby=aus" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "displayconfigured=" /var/www/html/openWB/openwb.conf
 then
 	echo "displayconfigured=0" >> /var/www/html/openWB/openwb.conf
@@ -1522,6 +1567,10 @@ fi
 if ! grep -Fq "displayaktiv=" /var/www/html/openWB/openwb.conf
 then
 	echo "displayaktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaysleep=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaysleep=60" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "displayevumax=" /var/www/html/openWB/openwb.conf
 then

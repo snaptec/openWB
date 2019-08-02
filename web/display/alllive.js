@@ -165,6 +165,19 @@ $.ajax({
 			}
     }
   });
+  $.ajax({
+    url: "/openWB/ramdisk/reloaddisplay",
+    complete: function(request){
+		if (request.responseText == 1) {
+			    $.ajax({
+        url:"./tools/reloaddisplay.php",
+        type: "post", 
+        success:function(result){
+                    location.reload();	}
+	    });        
+		}    
+    }
+  });
 $.ajax({
     url: "/openWB/ramdisk/llsoll",
     complete: function(request){
@@ -244,7 +257,6 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
-
 
 }
 

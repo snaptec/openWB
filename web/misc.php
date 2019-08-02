@@ -43,6 +43,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displaysleep=") !== false) {
+		list(, $displaysleepold) = explode("=", $line);
+	}
 	if(strpos($line, "displayevumax=") !== false) {
 		list(, $displayevumaxold) = explode("=", $line);
 	}
@@ -423,7 +426,47 @@ foreach($lines as $line) {
 	if(strpos($line, "rfidlp2c3=") !== false) {
 		list(, $rfidlp2c3old) = explode("=", $line);
 	}
+	if(strpos($line, "ledsofort=") !== false) {
+		list(, $ledsofortold) = explode("=", $line);
+	}
 
+	if(strpos($line, "lednurpv=") !== false) {
+		list(, $lednurpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "ledminpv=") !== false) {
+		list(, $ledminpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "ledstandby=") !== false) {
+		list(, $ledstandbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "ledstop=") !== false) {
+		list(, $ledstopold) = explode("=", $line);
+	}
+	if(strpos($line, "led0sofort=") !== false) {
+		list(, $led0sofortold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0nurpv=") !== false) {
+		list(, $led0nurpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0minpv=") !== false) {
+		list(, $led0minpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0standby=") !== false) {
+		list(, $led0standbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0stop=") !== false) {
+		list(, $led0stopold) = explode("=", $line);
+	}
+	if(strpos($line, "ledsakt=") !== false) {
+		list(, $ledsaktold) = explode("=", $line);
+	}
 }
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -697,6 +740,247 @@ $(function() {
 	    });
 });
 </script>
+<div class="row"><hr>
+	<h4>LED Ausgänge</h4>
+</div>
+<div class="row">
+	<b><label for="ledsakt">LED Ausgänge:</label></b>
+	<select type="text" name="ledsakt" id="ledsakt">
+		<option <?php if($ledsaktold == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($ledsaktold == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+
+<div id="ledsan">
+
+	<div class="row">
+		<b><label for="led0sofort">Ladung nicht freigegeben, Sofort Laden Modus:</label></b>
+		<select type="text" name="led0sofort" id="led0sofort">
+		<option <?php if($led0sofortold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0sofortold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0sofortold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0sofortold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0sofortold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0sofortold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0sofortold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0sofortold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0sofortold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0sofortold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0sofortold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0sofortold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0sofortold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0sofortold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="led0nurpv">Ladung nicht freigegeben, Nur PV Laden Modus:</label></b>
+		<select type="text" name="led0nurpv" id="led0nurpv">
+		<option <?php if($led0nurpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0nurpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0nurpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0nurpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0nurpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0nurpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0nurpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0nurpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0nurpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0nurpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0nurpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0nurpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0nurpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0nurpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="led0minpv">Ladung nicht freigegeben, Min + PV Laden Modus:</label></b>
+		<select type="text" name="led0minpv" id="led0minpv">
+		<option <?php if($led0minpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0minpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0minpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0minpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0minpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0minpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0minpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0minpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0minpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0minpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0minpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0minpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0minpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0minpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="led0standby">Ladung nicht freigegeben, Standby Modus:</label></b>
+		<select type="text" name="led0standby" id="led0standby">
+		<option <?php if($led0standbyold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0standbyold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0standbyold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0standbyold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0standbyold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0standbyold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0standbyold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0standbyold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0standbyold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0standbyold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0standbyold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0standbyold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0standbyold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0standbyold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="led0stop">Ladung nicht freigegeben, Stop Modus:</label></b>
+		<select type="text" name="led0stop" id="led0stop">
+		<option <?php if($led0stopold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0stopold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0stopold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0stopold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0stopold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0stopold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0stopold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0stopold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0stopold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0stopold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0stopold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0stopold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0stopold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0stopold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledsofort">Ladung freigegeben, Sofort Laden Modus:</label></b>
+		<select type="text" name="ledsofort" id="ledsofort">
+		<option <?php if($ledsofortold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledsofortold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledsofortold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledsofortold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledsofortold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledsofortold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledsofortold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledsofortold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledsofortold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledsofortold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledsofortold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledsofortold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledsofortold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledsofortold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="lednurpv">Ladung freigegeben, Nur PV Laden Modus:</label></b>
+		<select type="text" name="lednurpv" id="lednurpv">
+		<option <?php if($lednurpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($lednurpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($lednurpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($lednurpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($lednurpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($lednurpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($lednurpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($lednurpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($lednurpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($lednurpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($lednurpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($lednurpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($lednurpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($lednurpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="ledminpv">Ladung freigegeben, Min + PV Laden Modus:</label></b>
+		<select type="text" name="ledminpv" id="ledminpv">
+		<option <?php if($ledminpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledminpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledminpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledminpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledminpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledminpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledminpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledminpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledminpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledminpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledminpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledminpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledminpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledminpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledstandby">Ladung freigegeben, Standby Modus:</label></b>
+		<select type="text" name="ledstandby" id="ledstandby">
+		<option <?php if($ledstandbyold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledstandbyold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledstandbyold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledstandbyold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledstandbyold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledstandbyold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledstandbyold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledstandbyold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledstandbyold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledstandbyold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledstandbyold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledstandbyold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledstandbyold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledstandbyold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledstop">Ladung freigegeben, Stop Modus:</label></b>
+		<select type="text" name="ledstop" id="ledstop">
+		<option <?php if($ledstopold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledstopold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledstopold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledstopold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledstopold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledstopold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledstopold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledstopold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledstopold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledstopold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledstopold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledstopold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledstopold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledstopold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+
+
+
+
+</div>
+<script>
+$(function() {
+      if($('#ledsakt').val() == '0') {
+		$('#ledsan').hide();
+      } else {
+	       	$('#ledsan').show();
+      }
+	$('#ledsakt').change(function(){
+	        if($('#ledsakt').val() == '0') {
+			$('#ledsan').hide();
+	        } else {
+		       	$('#ledsan').show();
+	        }
+	    });
+});
+</script>
+
 <script>
 $(function() {
       if($('#displayaktiv').val() == '0') {
@@ -713,6 +997,7 @@ $(function() {
 	    });
 });
 </script>
+
 <div class="row"><hr>
 	<h4>integriertes Display</h4>
 </div>
@@ -776,7 +1061,10 @@ $(function() {
 		<b><label for="displaypincode">Pin (4-stellig, nur Zahlen erlaubt):</label></b>
 	       	<input type="text" name="displaypincode" id="displaypincode" value="<?php echo $displaypincodeold ?>"><br><br>
 	</div>
-
+	<div class="row">
+		<b><label for="displaysleep">Display ausschalten nach x Sekunden:</label></b>
+	       	<input type="text" name="displaysleep" id="displaysleep" value="<?php echo $displaysleepold ?>"><br><br>
+	</div>
 
 
 
@@ -843,7 +1131,7 @@ $(function() {
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
 	<div class="row"><br>
-			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
+			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
@@ -851,7 +1139,7 @@ $(function() {
 
 	</div>
 	<div class="row">
-			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
+			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
 			<select type="text" name="chartlegendmain" id="chartlegendmain">
 				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
