@@ -272,7 +272,8 @@ foreach($lines as $line) {
 				$result .= 'ladeleistungs1modul=simpleevsewifis1'."\n";
 			}
 			if($_POST[evsecons1] == "openwb12s1") {
-			$result .= 'ladeleistungs1modul=mpm3pmlls1'."\n";
+				$result .= 'ladeleistungs1modul=mpm3pmlls1'."\n";
+			}
 		} else {
 			$result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
 	    } 
