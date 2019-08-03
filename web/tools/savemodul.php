@@ -399,7 +399,7 @@ foreach($lines as $line) {
     } 
 	    if(strpos($line, "mpm3pmlls1source=") !== false) {
 		if($_POST[evsecons1] == "openwb12s1") {
-			$result .= 'mpm3pmlls1source=/dev/ttyUSB0'."\n";
+			$result .= 'mpm3pmlls1source=/dev/ttyUSB1'."\n";
 		} else {
 			$result .= 'mpm3pmlls1source='.$_POST[mpm3pmlls1source]."\n";
 		}

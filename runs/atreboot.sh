@@ -43,7 +43,7 @@ echo 0 > /var/www/html/openWB/ramdisk/readtag
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
-echo 0 > /var/www/html/openWB/ramdisk/reloaddisplay
+echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 
 touch /var/www/html/openWB/ramdisk/wattbezug
@@ -275,7 +275,8 @@ if (( ladetaster == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
-	sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv &
+	sleep 10 && sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv &
+	sleep 10 && sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv &
 fi
 if (( displayaktiv == 1 )); then
 	su pi - pi -c "export DISPLAY=:0 && xset s $displaysleep"
@@ -1675,3 +1676,7 @@ then
 	  sudo apt-get update
 	  sudo apt-get -qq install -y php-curl
   fi
+  sleep 20 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
+  sleep 30 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
+  sleep 40 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
+
