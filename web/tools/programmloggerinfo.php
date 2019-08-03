@@ -18,7 +18,8 @@ $arr = array(
 		        'memuse' => trim($memuse),
 			    'memfree' => trim($memfree),
 			        'diskuse' => trim($diskuse),
-				    'diskfree' => trim($diskfree)
+				'diskfree' => trim($diskfree),
+				'ipaddr' => $_SERVER['SERVER_ADDR'] 
 			    );
 
 header("Content-type: text/json");

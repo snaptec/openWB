@@ -1,19 +1,24 @@
 #!/usr/bin/python
+# Comment youpixel - I ran it with Python 3.7, works fine!
+
 # Script to emulate VW CarNet web site
 # Author  : Rene Boer
 # Version : 1.0
 # Date    : 5 Jan 2018
 # Free for use & distribution
+# Modified by youpixel - 2019-07-26
+# 
+# Modified by ElectricArtram - 2019-08-03
+# fix to ensure compatibility to Python 2 and 3 (successfully tested with Python 2.7.13 and 3.5.3)
 
 import re
 import requests
 import json
 import sys
-from urlparse import urlsplit
 
 # Login information for the VW CarNet app
-carnetuser = sys.argv[1]
-carnetpass = sys.argv[2]
+CARNET_USERNAME = sys.argv[1]
+CARNET_PASSWORD = sys.argv[2]
 
 
 HEADERS = { 'Accept': 'application/json, text/plain, */*',
@@ -24,126 +29,191 @@ HEADERS = { 'Accept': 'application/json, text/plain, */*',
 def CarNetLogin(s,email, password):
 	AUTHHEADERS = { 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
 			'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; D5803 Build/23.5.A.1.291; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/63.0.3239.111 Mobile Safari/537.36' }
-	auth_base = "https://security.volkswagen.com"
-	base = "https://www.volkswagen-car-net.com"
+	auth_base_url = "https://identity.vwgroup.io"
+	base_url = "https://www.portal.volkswagen-we.com"
+	landing_page_url = base_url + '/portal/en_GB/web/guest/home'
+	get_login_url = base_url + '/portal/en_GB/web/guest/home/-/csrftokenhandling/get-login-url'
+	complete_login_url = base_url + "/portal/web/guest/complete-login"
 
 	# Regular expressions to extract data
+	# Comment youpixel - Modified the regex a bit to match the new input values defined e.g. in def extract_login_action_url
 	csrf_re = re.compile('<meta name="_csrf" content="([^"]*)"/>')
 	redurl_re = re.compile('<redirect url="([^"]*)"></redirect>')
-	viewstate_re = re.compile('name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0" value="([^"]*)"')
-	authcode_re = re.compile('code=([^"]*)&')
+	login_action_url_re = re.compile('<formclass="content"id="emailPasswordForm"name="emailPasswordForm"method="POST"novalidateaction="([^"]*)">')
+	login_action_url2_re = re.compile('<formclass="content"id="credentialsForm"name="credentialsForm"method="POST"action="([^"]*)">')
+	
+	
+	login_relay_state_token_re = re.compile('<inputtype="hidden"id="input_relayState"name="relayState"value="([^"]*)"/>')
+	login_csrf_re = re.compile('<inputtype="hidden"id="csrf"name="_csrf"value="([^"]*)"/>')
+	login_hmac_re = re.compile('<inputtype="hidden"id="hmac"name="hmac"value="([^"]*)"/>')
+
+	authcode_re = re.compile('&code=([^"]*)')
 	authstate_re = re.compile('state=([^"]*)')
-    
+
 	def extract_csrf(r):
 		return csrf_re.search(r.text).group(1)
 
-	def extract_redirect_url(r):
-		return redurl_re.search(r.text).group(1)
+	def extract_login_action_url(r):
+		# Comment youpixel - The form we are looking for in the output is spreaded over multiple lines. Just stripped all newlines and spaces...
+		loginhtml = r.text.replace('\n', '').replace('\r', '').replace(' ', '')
+		return login_action_url_re.search(loginhtml).group(1)
 
-	def extract_view_state(r):
-		return viewstate_re.search(r.text).group(1)
+	def extract_login_action2_url(r):
+		# Comment youpixel - Same here
+		loginhtml = r.text.replace('\n', '').replace('\r', '').replace(' ', '')
+		return login_action_url2_re.search(loginhtml).group(1)
+
+	def extract_login_relay_state_token(r):
+		# Comment youpixel - Same here
+		loginhtml = r.text.replace('\n', '').replace('\r', '').replace(' ', '')
+		return login_relay_state_token_re.search(loginhtml).group(1)
+
+	def extract_login_hmac(r):
+		# Comment youpixel - Same here
+		loginhtml = r.text.replace('\n', '').replace('\r', '').replace(' ', '')
+		return login_hmac_re.search(loginhtml).group(1)
+
+	def extract_login_csrf(r):
+		# Comment youpixel - Same here
+		loginhtml = r.text.replace('\n', '').replace('\r', '').replace(' ', '')
+		return login_csrf_re.search(loginhtml).group(1)
 
 	def extract_code(r):
 		return authcode_re.search(r).group(1)
 
-	def extract_state(r):
-		return authstate_re.search(r).group(1)
+	def build_complete_login_url(state):
+		return complete_login_url + '?p_auth=' + state + '&p_p_id=33_WAR_cored5portlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_33_WAR_cored5portlet_javax.portlet.action=getLoginStatus'
 
-	# Request landing page and get CSFR:
-	r = s.get(base + '/portal/en_GB/web/guest/home')
+	# Request landing page and get CSRF:
+	#print("Requesting first CSRF from landing page (", landing_page_url, ")...", sep='')
+	r = s.get(landing_page_url)
 	if r.status_code != 200:
 		return ""
 	csrf = extract_csrf(r)
-	#print(csrf)
-	
+	#print("CSRF found to be '", csrf, "'", sep='')
+
 	# Request login page and get CSRF
-	AUTHHEADERS["Referer"] = base + '/portal'
+	AUTHHEADERS["Referer"] = base_url + '/portal'
 	AUTHHEADERS["X-CSRF-Token"] = csrf
-	r = s.post(base + '/portal/web/guest/home/-/csrftokenhandling/get-login-url',headers=AUTHHEADERS)
+	r = s.post(get_login_url, headers=AUTHHEADERS)
 	if r.status_code != 200:
 		return ""
-	responseData = json.loads(r.content)
-	lg_url = responseData.get("loginURL").get("path")
-	#print(lg_url)
+		
+	#print("DEBUG AP: ", r.json().get("loginURL").get("path"))
+	#login_url = json.loads(r.content).get("loginURL").get("path")
+	login_url = r.json().get("loginURL").get("path")
+	#print("SSO Login url found to be '", login_url, "'", sep='')
+
 	# no redirect so we can get values we look for
-	r = s.get(lg_url, allow_redirects=False, headers=AUTHHEADERS)
+	r = s.get(login_url, allow_redirects=False, headers=AUTHHEADERS)
 	if r.status_code != 302:
 		return ""
-	ref_url = r.headers.get("location")
-	#print(ref_url)
+	login_form_url = r.headers.get("location")
+
+	r = s.get(login_form_url, headers=AUTHHEADERS)
+	if r.status_code != 200:
+		return ""
+	login_action_url = auth_base_url + extract_login_action_url(r)
+
+	login_relay_state_token = extract_login_relay_state_token(r)
+	hmac_token = extract_login_hmac(r)
+	login_csrf = extract_login_csrf(r)
 	
-	# now get actual login page and get session id and ViewState
-	r = s.get(ref_url, headers=AUTHHEADERS)
-	if r.status_code != 200:
-		return ""
-	view_state = extract_view_state(r)
-	#print(view_state)
-
 	# Login with user details
-	AUTHHEADERS["Faces-Request"] = "partial/ajax"
-	AUTHHEADERS["Referer"] = ref_url
-	AUTHHEADERS["X-CSRF-Token"] = ''
+	del AUTHHEADERS["X-CSRF-Token"]
+	AUTHHEADERS["Referer"] = login_form_url
+	AUTHHEADERS["Content-Type"] = "application/x-www-form-urlencoded"
 
+	# Comment youpixel - Sending E-Mail address for login and get URL of second step
 	post_data = {
-		'loginForm': 'loginForm',
-		'loginForm:email': email,
-		'loginForm:password': password,
-		'loginForm:j_idt19': '',
-		'javax.faces.ViewState': view_state,
-		'javax.faces.source': 'loginForm:submit',
-		'javax.faces.partial.event': 'click',
-		'javax.faces.partial.execute': 'loginForm:submit loginForm',
-		'javax.faces.partial.render': 'loginForm',
-		'javax.faces.behavior.event': 'action',
-		'javax.faces.partial.ajax': 'true'
+		'email': email,
+		'relayState': login_relay_state_token,
+		'_csrf': login_csrf,
+		'hmac': hmac_token,
 	}
-	r = s.post(auth_base + '/ap-login/jsf/login.jsf', data=post_data, headers=AUTHHEADERS)
+	r = s.post(login_action_url, data=post_data, headers=AUTHHEADERS, allow_redirects=True)
 	if r.status_code != 200:
 		return ""
-	ref_url = extract_redirect_url(r).replace('&amp;', '&')
-	#print(ref_url)
-	# redirect to link from login and extract state and code values
-	r = s.get(ref_url, allow_redirects=False, headers=AUTHHEADERS)
-	if r.status_code != 302:
+	
+	AUTHHEADERS["Referer"] = login_action_url
+	AUTHHEADERS["Content-Type"] = "application/x-www-form-urlencoded"
+	
+	login_action_url2 = auth_base_url + extract_login_action2_url(r)
+	login_relay_state_token = extract_login_relay_state_token(r)
+	hmac_token = extract_login_hmac(r)
+	login_csrf = extract_login_csrf(r)
+	
+	# Comment youpixel - Completing the authentication by entering password. HMAC is new. Relay state and CSRF stays same!
+	post_data = {
+		'email': email,
+		'password': password,
+		'relayState': login_relay_state_token,
+		'_csrf': login_csrf,
+		'hmac': hmac_token,
+		'login': 'true'
+	}
+	r = s.post(login_action_url2, data=post_data, headers=AUTHHEADERS, allow_redirects=True)
+	if r.status_code != 200:
 		return ""
-	ref_url2 = r.headers.get("location")
-	#print(ref_url2)
-	code = extract_code(ref_url2)
-	state = extract_state(ref_url2)
+
+	
+	# Now we are going through 4 redirect pages, before finally landing on complete-login page.
+	# Allow redirects to happen
+	ref2_url = r.headers.get("location")	
+	
+	#print(ref2_url)
+	#print("Successfully login through the vw auth system. Now proceeding through to the we connect portal.", ref2_url)
+
+#	state = extract_state(ref_url2)
 	# load ref page
-	r = s.get(ref_url2, headers=AUTHHEADERS)
-	if r.status_code != 200:
-		return ""
+	#r = s.get(ref2_url, headers=AUTHHEADERS, allow_redirects=True)
+	#if r.status_code != 200:
+	#	return ""
 
-	AUTHHEADERS["Faces-Request"] = ""
-	AUTHHEADERS["Referer"] = ref_url2
+	#print("OK2")
+
+	portlet_code = extract_code(r.url)
+	
+	state = extract_csrf(r)
+
+	# Extract csrf and use in new url as post
+	# We need to include post data
+	# _33_WAR_cored5portlet_code=
+
+	# We need to POST to
+	# https://www.portal.volkswagen-we.com/portal/web/guest/complete-login?p_auth=cF3xgdcf&p_p_id=33_WAR_cored5portlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_33_WAR_cored5portlet_javax.portlet.action=getLoginStatus
+	# To get the csrf for the final json requests
+	# We also need the base url for json requests as returned by the 302 location. This is the location from the redirect
+
+	AUTHHEADERS["Referer"] = ref2_url
 	post_data = {
-		'_33_WAR_cored5portlet_code': code,
-		'_33_WAR_cored5portlet_landingPageUrl': ''
+		'_33_WAR_cored5portlet_code': portlet_code
 	}
-	r = s.post(base + urlsplit(ref_url2).path + '?p_auth=' + state + '&p_p_id=33_WAR_cored5portlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_33_WAR_cored5portlet_javax.portlet.action=getLoginStatus', data=post_data, allow_redirects=False, headers=AUTHHEADERS)
+	#print("Complete_url_login: ", build_complete_login_url(state))
+	r = s.post(build_complete_login_url(state), data=post_data, allow_redirects=False, headers=AUTHHEADERS)
 	if r.status_code != 302:
 		return ""
-	ref_url3 = r.headers.get("location")
-	#print(ref_url3)
-	r = s.get(ref_url3, headers=AUTHHEADERS)
+	base_json_url = r.headers.get("location")
+	r = s.get(base_json_url, headers=AUTHHEADERS)
 	#We have a new CSRF
 	csrf = extract_csrf(r)
 	# done!!!! we are in at last
 	# Update headers for requests
-	HEADERS["Referer"] = ref_url3
+	HEADERS["Referer"] = base_json_url
 	HEADERS["X-CSRF-Token"] = csrf
-	return ref_url3
+	#print("Login successful. Base_json_url is found as", base_json_url)
+	return base_json_url
+
 	
 def CarNetPost(s,url_base,command):
 	print(command)
 	r = s.post(url_base + command, headers=HEADERS)
-	return r.content
+	return r.text
 	
 def CarNetPostAction(s,url_base,command,data):
 	print(command)
 	r = s.post(url_base + command, json=data, headers=HEADERS)
-	return r.content
+	return r.text
 
 def retrieveCarNetInfo(s,url_base):
 	print(CarNetPost(s,url_base, '/-/msgc/get-new-messages'))
@@ -203,7 +273,7 @@ def stopWindowMelt(s,url_base):
 	
 if __name__ == "__main__":
 	s = requests.Session()
-	url = CarNetLogin(s,carnetuser,carnetpass)
+	url = CarNetLogin(s,CARNET_USERNAME,CARNET_PASSWORD)
 	if url == '':
 		print("Failed to login")
 		sys.exit()
