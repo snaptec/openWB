@@ -203,7 +203,8 @@ echo '
 <div id="einstellungen">
 			<div style="font-size: 25px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 800px; color: white;">Status</div>
 	<div class="row col-xs-12 text-left" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
-		IP Adresse der openWB: <span id="ipaddr"></span>
+		IP Adresse der openWB: Kabel <span id="ethaddr"></span> Wlan <span id="wlanaddr"></span>
+
 	</div>
 	<div class="row col-xs-12 text-left" style="font-size: 22px; height: 10px; top: 50px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
 
@@ -238,7 +239,8 @@ echo '
   					document.getElementById('memfree').innerHTML = json.memfree;
   					document.getElementById('diskuse').innerHTML = json.diskuse;
   					document.getElementById('diskfree').innerHTML = json.diskfree;
- 					document.getElementById('ipaddr').innerHTML = json.ipaddr; 
+ 					document.getElementById('ethaddr').innerHTML = json.ethaddr; 
+ 					document.getElementById('wlanaddr').innerHTML = json.wlanaddr; 
 				})
   			}
   			$(document).ready(function() {
