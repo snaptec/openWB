@@ -925,10 +925,14 @@ loadstatuslog();
         }
         if (strpos($line, "lp3name=") !== false) {
             list(, $lp3nameold) = explode("=", $line);
+	}
+        if (strpos($line, "verbraucher1_name=") !== false) {
+            list(, $verbraucher1_nameold) = explode("=", $line);
+        }
+        if (strpos($line, "verbraucher2_name=") !== false) {
+            list(, $verbraucher2_nameold) = explode("=", $line);
         }
     }
-$verbraucher1_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1_name');
-$verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2_name');
 
 
 ?>
@@ -1344,19 +1348,19 @@ $verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					<?php echo $verbraucher1_name ?> [W]
+					<?php echo $verbraucher1_nameold ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher1wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher1_name ?> Import [kWh]
+					<?php echo $verbraucher1_nameold ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher1whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher1_name ?>Export [kWh]
+					<?php echo $verbraucher1_nameold ?>Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">
@@ -1365,19 +1369,19 @@ $verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher
 			</div>
 			<div class="row">
 				<div class="col-xs-2 text-center ">
-					<?php echo $verbraucher2_name ?> [W]
+					<?php echo $verbraucher2_nameold ?> [W]
 				</div>
 				<div class="col-xs-2 text-center ">
 					<div id="verbraucher2wattdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-				<?php echo $verbraucher2_name ?> Import [kWh]
+				<?php echo $verbraucher2_nameold ?> Import [kWh]
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="verbraucher2whdiv"></div>
 				</div>
 				<div class="col-xs-2 text-center">
-					<?php echo $verbraucher2_name ?> Export [kWh]
+					<?php echo $verbraucher2_nameold ?> Export [kWh]
 
 				</div>
 				<div class="col-xs-2 text-center">

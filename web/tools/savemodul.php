@@ -6,7 +6,11 @@ $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	$writeit = '0';
 	if(strpos($line, "evsecon=") !== false) {
-	    $result .= 'evsecon='.$_POST[evsecon]."\n";
+		if($_POST[evsecon] == "openwb12") {
+			$result .= 'evsecon=modbusevse'."\n";
+		} else {
+			$result .= 'evsecon='.$_POST[evsecon]."\n";
+		}
 	    $writeit = '1';
 	}
 	    if(strpos($line, "dacregisters1=") !== false) {
@@ -18,11 +22,20 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "modbusevsesource=") !== false) {
-	    $result .= 'modbusevsesource='.$_POST[modbusevsesource]."\n";
+		if($_POST[evsecon] == "openwb12") {
+			$result .= 'modbusevsesource=/dev/ttyUSB0'."\n";
+		} else {
+
+			$result .= 'modbusevsesource='.$_POST[modbusevsesource]."\n";
+		}
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "modbusevseid=") !== false) {
-	    $result .= 'modbusevseid='.$_POST[modbusevseid]."\n";
+		if($_POST[evsecon] == "openwb12") {
+			$result .= 'modbusevseid=1'."\n";
+		} else {
+	    		$result .= 'modbusevseid='.$_POST[modbusevseid]."\n";
+		}
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "wattbezugmodul=") !== false) {
@@ -66,9 +79,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	if(strpos($line, "ladeleistungmodul=") !== false) {
-		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer" or $_POST[evsecon] == "nrgkick" or $_POST[evsecon] == "keba") {
+		if($_POST[evsecon] == "simpleevsewifi" or $_POST[evsecon] == "goe" or $_POST[evsecon] == "masterethframer" or $_POST[evsecon] == "nrgkick" or $_POST[evsecon] == "keba" or $_POST[evsecon] == "openwb12") {
 			if($_POST[evsecon] == "goe") {
 				$result .= 'ladeleistungmodul=goelp1'."\n";
+			}
+			if($_POST[evsecon] == "openwb12") {
+				$result .= 'ladeleistungmodul=mpm3pmll'."\n";
 			}
 			if($_POST[evsecon] == "keba") {
 				$result .= 'ladeleistungmodul=keballlp1'."\n";
@@ -148,7 +164,13 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "evsecons1=") !== false) {
-	    $result .= 'evsecons1='.$_POST[evsecons1]."\n";
+		if($_POST[evsecons1] == "openwb12s1") {
+			$result .= 'evsecons1=modbusevse'."\n";
+		} else {
+			$result .= 'evsecons1='.$_POST[evsecons1]."\n";
+		}
+
+
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "evsecons2=") !== false) {
@@ -156,7 +178,12 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "evsesources1=") !== false) {
-	    $result .= 'evsesources1='.$_POST[evsesources1]."\n";
+		if($_POST[evsecons1] == "openwb12s1") {
+			$result .= 'evsesources1=/dev/ttyUSB1'."\n";
+		} else {
+
+			$result .= 'evsesources1='.$_POST[evsesources1]."\n";
+		}
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "evsesources2=") !== false) {
@@ -164,7 +191,11 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
 	    if(strpos($line, "evseids1=") !== false) {
-	    $result .= 'evseids1='.$_POST[evseids1]."\n";
+		if($_POST[evsecons1] == "openwb12s1") {
+			$result .= 'evseids1=1'."\n";
+		} else {
+			$result .= 'evseids1='.$_POST[evseids1]."\n";
+		}
 	    $writeit = '1';
 	    }
 	    if(strpos($line, "wakeupzoelp1=") !== false) {
@@ -224,7 +255,7 @@ foreach($lines as $line) {
 	    $writeit = '1';
 	    } 
             if(strpos($line, "ladeleistungs1modul=") !== false) {
-	    	if($_POST[evsecons1] == "simpleevsewifi" or  $_POST[evsecons1] == "nrgkick" or $_POST[evsecons1] == "keba" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth") {
+	    	if($_POST[evsecons1] == "simpleevsewifi" or  $_POST[evsecons1] == "nrgkick" or $_POST[evsecons1] == "keba" or $_POST[evsecons1] == "goe" or $_POST[evsecons1] == "slaveeth" or $_POST[evsecons1] == "openwb12s1") {
 			if($_POST[evsecons1] == "nrgkick") {
 				$result .= 'ladeleistungs1modul=nrgkicklp2'."\n";
 			}
@@ -239,6 +270,9 @@ foreach($lines as $line) {
 			}
 			if($_POST[evsecons1] == "simpleevsewifi") { 
 				$result .= 'ladeleistungs1modul=simpleevsewifis1'."\n";
+			}
+			if($_POST[evsecons1] == "openwb12s1") {
+				$result .= 'ladeleistungs1modul=mpm3pmlls1'."\n";
 			}
 		} else {
 			$result .= 'ladeleistungs1modul='.$_POST[ladeleistungs1modul]."\n";
@@ -356,11 +390,19 @@ foreach($lines as $line) {
 	$writeit = '1';
     } 
 	    if(strpos($line, "mpm3pmlls1id=") !== false) {
-	    $result .= 'mpm3pmlls1id='.$_POST[mpm3pmlls1id]."\n";
-	$writeit = '1';
+		if($_POST[evsecons1] == "openwb12s1") {
+			$result .= 'mpm3pmlls1id=6'."\n";
+		} else {
+			    $result .= 'mpm3pmlls1id='.$_POST[mpm3pmlls1id]."\n";
+		}    
+		   $writeit = '1';
     } 
 	    if(strpos($line, "mpm3pmlls1source=") !== false) {
-	    $result .= 'mpm3pmlls1source='.$_POST[mpm3pmlls1source]."\n";
+		if($_POST[evsecons1] == "openwb12s1") {
+			$result .= 'mpm3pmlls1source=/dev/ttyUSB1'."\n";
+		} else {
+			$result .= 'mpm3pmlls1source='.$_POST[mpm3pmlls1source]."\n";
+		}
 	$writeit = '1';
 	    }
 	    if(strpos($line, "mpm3pmlls2id=") !== false) {
@@ -372,12 +414,20 @@ foreach($lines as $line) {
 	$writeit = '1';
     } 
 	    if(strpos($line, "mpm3pmllid=") !== false) {
-	    $result .= 'mpm3pmllid='.$_POST[mpm3pmllid]."\n";
+		if($_POST[evsecon] == "openwb12") {
+			$result .= 'mpm3pmllid=5'."\n";
+		} else {
+			$result .= 'mpm3pmllid='.$_POST[mpm3pmllid]."\n";
+		}
 	$writeit = '1';
     } 
 	    if(strpos($line, "mpm3pmllsource=") !== false) {
+		if($_POST[evsecon] == "openwb12") {
+			$result .= 'mpm3pmllsource=/dev/ttyUSB0'."\n";
+		} else {
 	    $result .= 'mpm3pmllsource='.$_POST[mpm3pmllsource]."\n";
-	$writeit = '1';
+		}    
+	    $writeit = '1';
     } 
 	    if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 	    $result .= 'evsewifitimeoutlp3='.$_POST[evsewifitimeoutlp3]."\n";

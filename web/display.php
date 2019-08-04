@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-	<meta http-equiv="refresh" content="3600" >
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">

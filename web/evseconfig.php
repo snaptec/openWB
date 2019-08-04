@@ -14,10 +14,10 @@ $lp22007 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp22007');
 					<div class="col-xs-4 text-center bg-info"></div>
 					Ladepunkt 1:<br>
 					Stromstärke nach Neustart bis die openWB die Kontrolle übernimmt (Notfall Modus):<br>
-					<input type="number" name="lp12000" value="<?php echo $lp12000 ?>" id="lp12000" min="6" max="32">
+					<input type="text" name="lp12000" value="<?php echo $lp12000 ?>" id="lp12000">
 					<br>
 					Maximale hard codierte Stromstärke in der EVSE: <br>Gültige Werte: 0 = Per Widerstand PE/PP festgelegt, 6-32A fix<br>
-						<input type="number" name="lp12007" value="<?php echo $lp12007 ?>" id="lp12007" min="0" max="32">
+						<input type="text" name="lp12007" value="<?php echo $lp12007 ?>" id="lp12007">
 
 					<div class="col-xs-2 text-center bg-info">
 						<input type="submit" name="evselp1" value="Speichern" ></input>
@@ -27,9 +27,9 @@ $lp22007 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp22007');
 					<div class="col-xs-4 text-center bg-info"></div>
 					Ladepunkt 2:<br>
 					Stromstärke nach Neustart bis die openWB die Kontrolle übernimmt (Notfall Modus):<br>
-					<input type="number" name="lp22000" value="<?php echo $lp22000 ?>" id="lp22000" min="6" max="32">
+					<input type="text" name="lp22000" value="<?php echo $lp22000 ?>" id="lp22000">
 					<br>Maximale hard codierte Stromstärke in der EVSE: <br>Gültige Werte: 0 = Per Widerstand PE/PP festgelegt, 6-32A fix<br>
-					<input type="number" name="lp22007" value="<?php echo $lp22007 ?>" id="lp22007" min="0" max="32">
+					<input type="text" name="lp22007" value="<?php echo $lp22007 ?>" id="lp22007">
 
 					<div class="col-xs-2 text-center bg-info">
 						<input type="submit" name="evselp2" value="Speichern" ></input>

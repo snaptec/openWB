@@ -8,6 +8,9 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(24, GPIO.OUT)
 GPIO.setup(23, GPIO.OUT)
 GPIO.setup(4, GPIO.OUT)
+GPIO.output(24, GPIO.LOW)
+GPIO.output(23, GPIO.LOW)
+GPIO.output(4, GPIO.LOW)
 
 if ( sys.argv[1] == "aus"):
     GPIO.output(24, GPIO.LOW)
@@ -56,5 +59,61 @@ if ( sys.argv[1] == "startup"):
     time.sleep(3)
     GPIO.output(4, GPIO.LOW)
   
-
+if ( sys.argv[1] == "blink1"):
+    while True:
+        GPIO.output(24, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(24, GPIO.LOW)
+        time.sleep(2)
+if ( sys.argv[1] == "blink12"):
+    while True:
+        GPIO.output(24, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(24, GPIO.LOW)
+        GPIO.output(23, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(23, GPIO.LOW)
+if ( sys.argv[1] == "blink13"):
+    while True:
+        GPIO.output(24, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(24, GPIO.LOW)
+        GPIO.output(4, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(4, GPIO.LOW)
+if ( sys.argv[1] == "blink23"):
+    while True:
+        GPIO.output(23, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(23, GPIO.LOW)
+        GPIO.output(4, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(4, GPIO.LOW)
+if ( sys.argv[1] == "blink2"):
+    while True:
+        GPIO.output(23, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(23, GPIO.LOW)
+        time.sleep(2)
+if ( sys.argv[1] == "blink3"):
+    while True:
+        GPIO.output(4, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(4, GPIO.LOW)
+        time.sleep(2)
+if ( sys.argv[1] == "an1"):
+    GPIO.output(24, GPIO.HIGH)
+if ( sys.argv[1] == "an2"):
+    GPIO.output(23, GPIO.HIGH)
+if ( sys.argv[1] == "an3"):
+    GPIO.output(4, GPIO.HIGH)
+if ( sys.argv[1] == "an12"):
+    GPIO.output(24, GPIO.HIGH)
+    GPIO.output(23, GPIO.HIGH)
+if ( sys.argv[1] == "an13"):
+    GPIO.output(24, GPIO.HIGH)
+    GPIO.output(4, GPIO.HIGH)
+if ( sys.argv[1] == "an23"):
+    GPIO.output(4, GPIO.HIGH)
+    GPIO.output(23, GPIO.HIGH)
 

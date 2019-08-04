@@ -42,6 +42,7 @@ source hook.sh
 source u1p3p.sh
 source nrgkickcheck.sh
 source rfidtag.sh
+source leds.sh
 date=$(date)
 re='^-?[0-9]+$'
 #ladelog ausfuehren
@@ -75,7 +76,13 @@ else
 fi
 #######################################
 
-
+if (( displayaktiv == 1 )); then
+	execdisplay=$(<ramdisk/execdisplay)
+	if (( execdisplay == 1 )); then
+	        export DISPLAY=:0 && xset s $displaysleep
+	        echo 0 > ramdisk/execdisplay
+	fi
+fi
 
 
 #######################################
@@ -128,7 +135,9 @@ if [[ $dspeed == "3" ]]; then
 	fi
 fi
 
-
+if (( ledsakt == 1 )); then
+	ledsteuerung
+fi
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)
 if (( evsemodbustimer < 30 )); then

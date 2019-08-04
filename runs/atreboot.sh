@@ -1,4 +1,5 @@
 #!/bin/bash
+(sleep 60; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
 sleep 10
@@ -42,8 +43,10 @@ echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
 echo 0 > /var/www/html/openWB/ramdisk/readtag
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
-
-
+echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
+echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
+echo 0 > /var/www/html/openWB/ramdisk/ledstatus
+echo 1 > /var/www/html/openWB/ramdisk/execdisplay
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -273,7 +276,8 @@ if (( ladetaster == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
-	sudo python /var/www/html/openWB/runs/readrfid.py &
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
 
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
@@ -1515,6 +1519,47 @@ if ! grep -Fq "ledsakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "ledsakt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "led0sofort=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0sofort=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0minpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0minpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0nurpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0nurpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0stop=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0stop=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "led0standby=" /var/www/html/openWB/openwb.conf
+then
+	echo "led0standby=aus" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "ledsofort=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledsofort=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledminpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledminpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lednurpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "lednurpv=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledstop=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledstop=aus" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ledstandby=" /var/www/html/openWB/openwb.conf
+then
+	echo "ledstandby=aus" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "displayconfigured=" /var/www/html/openWB/openwb.conf
 then
 	echo "displayconfigured=0" >> /var/www/html/openWB/openwb.conf
@@ -1522,6 +1567,10 @@ fi
 if ! grep -Fq "displayaktiv=" /var/www/html/openWB/openwb.conf
 then
 	echo "displayaktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaysleep=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaysleep=60" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "displayevumax=" /var/www/html/openWB/openwb.conf
 then
@@ -1558,6 +1607,14 @@ fi
 if ! grep -Fq "displaypincode=" /var/www/html/openWB/openwb.conf
 then
 	echo "displaypincode=1234" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "settingspw=" /var/www/html/openWB/openwb.conf
+then
+	echo "settingspw='openwb'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "settingspwakt=" /var/www/html/openWB/openwb.conf
+then
+	echo "settingspwakt=0" >> /var/www/html/openWB/openwb.conf
 fi
 
 
@@ -1607,7 +1664,7 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
-if (( ledsakt == 1 ));
+if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
 /var/www/html/openWB/runs/gsiabfrage.sh &
@@ -1619,10 +1676,13 @@ echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 
-sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch
 
-if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
-then
-	  sudo apt-get update
-	  sudo apt-get -qq install -y php-curl
-  fi
+#if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
+#then
+#	  sudo apt-get update
+#	  sudo apt-get -qq install -y php-curl
+#  fi
+(sleep 20; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 40; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+
