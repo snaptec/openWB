@@ -1608,6 +1608,14 @@ if ! grep -Fq "displaypincode=" /var/www/html/openWB/openwb.conf
 then
 	echo "displaypincode=1234" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "settingspw=" /var/www/html/openWB/openwb.conf
+then
+	echo "settingspw='openwb'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "settingspwakt=" /var/www/html/openWB/openwb.conf
+then
+	echo "settingspwakt=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 

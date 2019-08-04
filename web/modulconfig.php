@@ -46,6 +46,9 @@ function checkmodification(){
 	  }
 	}
 </script>
+
+
+
 <?php
 
 
@@ -53,6 +56,12 @@ $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "bezug_victronip=") !== false) {
 		list(, $bezug_victronipold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspwakt=") !== false) {
+		list(, $settingspwaktold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspw=") !== false) {
+		list(, $settingspwold) = explode("=", $line);
 	}
 	if(strpos($line, "sonnenecoip=") !== false) {
 		list(, $sonnenecoipold) = explode("=", $line);
@@ -3600,4 +3609,30 @@ Open Source made with love!<br>
 </form>
 </div></div>
 </div>
+
+<script>
+	var settingspwaktold = <?php echo $settingspwaktold ?>;
+
+	var settingspwold = <?php echo $settingspwold ?>;
+if ( settingspwaktold == 1 ) {
+passWord();
+}
+function passWord() {
+var testV = 1;
+var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+
+while (testV < 3) {
+	if (!pass1) 
+		history.go(-1);
+	if (pass1.toLowerCase() == settingspwold) {
+		break;
+	} 
+	testV+=1;
+	var pass1 = prompt('Passwort falsch','Password');
+}
+if (pass1.toLowerCase()!="password" & testV == 3) 
+	history.go(-1);
+return " ";
+} 
+</script>
 </body></html>

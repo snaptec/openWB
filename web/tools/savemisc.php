@@ -36,6 +36,10 @@ foreach($lines as $line) {
 	    $result .= 'pushbenachrichtigung='.$_POST[pushbenachrichtigung]."\n";
 	    $writeit = '1';
 	    } 
+	    if(strpos($line, "settingspw=") !== false) {
+	    $result .= 'settingspw=\''.$_POST[settingspw]."'\n";
+		$writeit = '1';
+   	 	} 
 	    if(strpos($line, "pushbstartl=") !== false) {
 	    $result .= 'pushbstartl='.$_POST[pushbstartl]."\n";
 	    $writeit = '1';
@@ -209,6 +213,10 @@ foreach($lines as $line) {
 	    }
 	    if(strpos($line, "ledsakt=") !== false) {
 	    $result .= 'ledsakt='.$_POST[ledsakt]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "settingspwakt=") !== false) {
+	    $result .= 'settingspwakt='.$_POST[settingspwakt]."\n";
 	    $writeit = '1';
 	    } 
 	    if ( $writeit == '0') {

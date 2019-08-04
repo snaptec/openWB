@@ -429,7 +429,9 @@ foreach($lines as $line) {
 	if(strpos($line, "ledsofort=") !== false) {
 		list(, $ledsofortold) = explode("=", $line);
 	}
-
+	if(strpos($line, "settingspw=") !== false) {
+		list(, $settingspwold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "lednurpv=") !== false) {
 		list(, $lednurpvold) = explode("=", $line);
 	}
@@ -467,7 +469,12 @@ foreach($lines as $line) {
 	if(strpos($line, "ledsakt=") !== false) {
 		list(, $ledsaktold) = explode("=", $line);
 	}
+	if(strpos($line, "settingspwakt=") !== false) {
+		list(, $settingspwaktold) = explode("=", $line);
+	}
 }
+$settingspwsold = str_replace( "'", "", $settingspwold);
+
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 $bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
@@ -548,6 +555,18 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<div class="row">
 			Definiert den Lademodus nach Boot der openWB.<br> <br>
 		</div>
+<hr>
+
+<div class="row">
+	<b><label for="settingspwakt">Passwortabfrage für Einstellseiten:</label></b>
+	<select type="text" name="settingspwakt" id="settingspwakt">
+		<option <?php if($settingspwaktold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($settingspwaktold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select><br>Passwort:
+	<input type="password" name="settingspw" id="settingspw" value="<?php echo $settingspwsold ?>"><br>
+
+</div>
+
 <hr>
 <div class="row">
 	<b><label for="rfidakt">RFID Lesung:</label></b>
@@ -1232,4 +1251,29 @@ Open Source made with love!<br>
 </form>
 </div></div>
 </div>
+<script>
+	var settingspwaktold = <?php echo $settingspwaktold ?>;
+
+	var settingspwold = <?php echo $settingspwold ?>;
+if ( settingspwaktold == 1 ) {
+passWord();
+}
+function passWord() {
+var testV = 1;
+var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+
+while (testV < 3) {
+	if (!pass1) 
+		history.go(-1);
+	if (pass1.toLowerCase() == settingspwold) {
+		break;
+	} 
+	testV+=1;
+	var pass1 = prompt('Passwort falsch','Password');
+}
+if (pass1.toLowerCase()!="password" & testV == 3) 
+	history.go(-1);
+return " ";
+} 
+</script>
 </body></html>
