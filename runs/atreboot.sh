@@ -46,7 +46,7 @@ echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
-
+echo 1 > /var/www/html/openWB/ramdisk/execdisplay
 touch /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
@@ -279,9 +279,7 @@ if (( rfidakt == 1 )); then
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
-if (( displayaktiv == 1 )); then
-	export DISPLAY=:0 && xset s $displaysleep
-fi
+
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "minimalapv=6" >> /var/www/html/openWB/openwb.conf

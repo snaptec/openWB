@@ -76,7 +76,13 @@ else
 fi
 #######################################
 
-
+if (( displayaktiv == 1 )); then
+	execdisplay=$(<ramdisk/execdisplay)
+	if (( execdisplay == 1 )); then
+	        export DISPLAY=:0 && xset s $displaysleep
+	        echo 0 > ramdisk/execdisplay
+	fi
+fi
 
 
 #######################################
