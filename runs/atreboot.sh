@@ -1,4 +1,5 @@
 #!/bin/bash
+(sleep 60; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
 sleep 10
@@ -275,8 +276,8 @@ if (( ladetaster == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
-	sleep 10 && sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv &
-	sleep 10 && sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv &
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
 if (( displayaktiv == 1 )); then
 	export DISPLAY=:0 && xset s $displaysleep
@@ -1675,7 +1676,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
-  sleep 20 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
-  sleep 30 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
-  sleep 40 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
+(sleep 20; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 40; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 
