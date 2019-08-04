@@ -279,7 +279,7 @@ if (( rfidakt == 1 )); then
 	sleep 10 && sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv &
 fi
 if (( displayaktiv == 1 )); then
-	su pi - pi -c "export DISPLAY=:0 && xset s $displaysleep"
+	export DISPLAY=:0 && xset s $displaysleep
 fi
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
 then
@@ -1669,13 +1669,12 @@ echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 
-sudo i2cdetect -y 1 | grep -o ' .. --' |grep -o '[0-9]*' > /var/www/html/openWB/ramdisk/i2csearch
 
-if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
-then
-	  sudo apt-get update
-	  sudo apt-get -qq install -y php-curl
-  fi
+#if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
+#then
+#	  sudo apt-get update
+#	  sudo apt-get -qq install -y php-curl
+#  fi
   sleep 20 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
   sleep 30 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
   sleep 40 && echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay &
