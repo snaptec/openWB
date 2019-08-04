@@ -4,7 +4,7 @@
 	</head>
 <?php
 	echo "Update wird durchgeführt, bitte nicht vom Strom trennen";
-	exec("/var/www/html/openWB/runs/update.sh");
+	exec("/var/www/html/openWB/runs/update.sh > /dev/null &");
 	header( "refresh:20;url=../index.php" );
 ?>
 <script type="text/javascript">
