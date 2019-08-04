@@ -5,5 +5,5 @@
 <?php
 
 	echo "Update wird durchgeführt, bitte nicht vom Strom trennen";
-	exec("/var/www/html/openWB/runs/update.sh");
+	exec("/var/www/html/openWB/runs/update.sh &");
 ?>
