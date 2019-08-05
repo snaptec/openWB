@@ -12,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
@@ -1616,7 +1617,10 @@ if ! grep -Fq "settingspwakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "settingspwakt=0" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "netzabschaltunghz=" /var/www/html/openWB/openwb.conf
+then
+	echo "netzabschaltunghz=1" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 
@@ -1685,4 +1689,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 (sleep 20; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 (sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 (sleep 40; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 

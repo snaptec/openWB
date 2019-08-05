@@ -40,6 +40,9 @@
 <?php
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "netzabschaltunghz=") !== false) {
+		list(, $netzabschaltunghzold) = explode("=", $line);
+	}
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
@@ -555,6 +558,18 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<div class="row">
 			Definiert den Lademodus nach Boot der openWB.<br> <br>
 		</div>
+		<div class="row">
+			<b><label for="netzabschaltunghz">Netzschutz:</label></b>
+			<select type="text" name="netzabschaltunghz" id="netzabschaltunghz">
+				<option <?php if($netzabschaltunghzold == 0) echo selected ?> value="0">Deaktiviert</option>
+				<option <?php if($netzabschaltunghzold == 1) echo selected ?> value="1">Aktiviert</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+		</div>
+
 <hr>
 
 <div class="row">
@@ -585,6 +600,10 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	</div>
 <?php
 $lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+$vstable = file_get_contents('/var/www/html/openWB/ramdisk/vstable');
+$vbeta = file_get_contents('/var/www/html/openWB/ramdisk/vbeta');
+$vnightly = file_get_contents('/var/www/html/openWB/ramdisk/vnightly');
+$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 ?>
 	<div class="row">
 	Zuletzt gescannter RFID Tag: <?php echo $lastrfid ?><br><br>
@@ -1212,15 +1231,28 @@ $(function() {
 		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br><br>
 	</div>
 	<div class="row">
-		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-red">UPDATE openWB</button>
+		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
 	</div>
+	<div class="row">
+	Installierte Version: <?php echo $owbversion ?><br> 
+	Aktuellste Stable: <?php echo $vstable ?><br> 
+	Aktuellste Beta: <?php echo $vbeta ?><br> 
+	Aktuellste Nightly: <?php echo $vnightly ?><br> 
+	<br><br>
+	</div>
+
 	<div class="row">
 		<button onclick="window.location.href='./tools/smashmredirect.html'" class="btn btn-primary btn-red">SMA Support</button>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
-
+	<div class="row">
+		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen / Features sind dann ggf nicht mehr verfügbar<br><br>
+	</div>
+	<div class="row">
+		<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-primary btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
+	</div>
 <hr>
 <div class="row">
 

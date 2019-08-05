@@ -11,6 +11,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "dspeed=") !== false) {
 	    $result .= 'dspeed='.$_POST[dspeed]."\n";
 	    $writeit = '1';
+	    }
+	    if(strpos($line, "netzabschaltunghz=") !== false) {
+	    $result .= 'netzabschaltunghz='.$_POST[netzabschaltunghz]."\n";
+	    $writeit = '1';
 	    } 
 	    if(strpos($line, "livegraph=") !== false) {
 	    $result .= 'livegraph='.$_POST[livegraph]."\n";
