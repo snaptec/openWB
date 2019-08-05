@@ -123,8 +123,21 @@ foreach($lines as $line) {
     if(strpos($line, "heutegeladen=") !== false) {
 	    list(, $heutegeladenold) = explode("=", $line, 2);
     }
+    if(strpos($line, "displayconfigured=") !== false) {
+	    list(, $displayconfiguredold) = explode("=", $line, 2);
+    }
+	if(strpos($line, "displaypinaktiv=") !== false) {
+		list(, $displaypinaktivold) = explode("=", $line);
+	}
 
+	if(strpos($line, "displaypincode=") !== false) {
+		list(, $displaypincodeold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspw=") !== false) {
+		list(, $settingspwold) = explode("=", $line);
+	}
 }
+$displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
 $lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
 $lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
@@ -133,6 +146,10 @@ $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
+$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
+$settingspwold = str_replace("\n", '', $settingspwold);
+
 $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 if (isset($_GET[theme])) {
     $theme = $_GET[theme];

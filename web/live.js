@@ -45,6 +45,8 @@ function loadText(){
             if(result.text == 3){
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-green");
+	        $('.actstat2 .btn').removeClass("btn-green");
+
                 $('.actstat .btn').addClass("btn-red");
                 $('.actstat1 .btn').addClass("btn-red");
                 $('.actstat .btn').removeClass("btn-green");
@@ -211,6 +213,62 @@ $.ajax({
 			request.responseText = request.responseText + " W";
 			}
       $("#lllp3div").html(request.responseText);
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/plugstats1",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.add("fa");
+			element.classList.add("fa-plug");
+	
+		    } else {
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.remove("fa");
+			element.classList.remove("fa-plug");
+			}
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/plugstat",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp1div");
+			element.classList.add("fa");
+			element.classList.add("fa-plug");
+			    } else {
+			var element = document.getElementById("plugstatlp1div");
+			element.classList.remove("fa");
+			element.classList.remove("fa-plug");
+		
+			}
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/chargestat",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp1div");
+
+			element.setAttribute("style", "color: #00FF00;");
+		    } else {
+			var element = document.getElementById("plugstatlp1div");
+			element.setAttribute("style", "color: white;");
+			}
+    }
+  });
+  $.ajax({
+    url: "/openWB/ramdisk/chargestats1",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp2div");
+
+			element.setAttribute("style", "color: #00FF00;");
+		    } else {
+			var element = document.getElementById("plugstatlp2div");
+			element.setAttribute("style", "color: white;");
+			}
     }
   });
 $.ajax({

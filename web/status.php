@@ -444,7 +444,72 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_watt",
+	    	complete: function(request){
+		    	$("#verbraucher1wattdiv").html(request.responseText);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_wh",
+				complete: function(request){
 
+					var vfinal = request.responseText;
+					vfinal = (vfinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher1whdiv").html(vfinal);
+				}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher1_whe",
+				complete: function(request){
+
+					var vefinal = request.responseText;
+					vefinal = (vefinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher1whediv").html(vefinal);
+
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_watt",
+	    	complete: function(request){
+		    	$("#verbraucher2wattdiv").html(request.responseText);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_wh",
+				complete: function(request){
+
+					var vfinal = request.responseText;
+					vfinal = (vfinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher2whdiv").html(vfinal);
+				}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/verbraucher2_whe",
+				complete: function(request){
+
+					var vefinal = request.responseText;
+					vefinal = (vefinal / 1000).toFixed(3);
+	
+		    	$("#verbraucher2whediv").html(vefinal);
+
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
 <script type='text/javascript'>
 	var doInterval;
 	function getfile() {
@@ -452,6 +517,35 @@
 			url: "/openWB/ramdisk/pvkwhk",
 	    	complete: function(request){
 		    	$("#pvkwhdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/einspeisungkwh",
+				complete: function(request){
+					var eefinal = request.responseText;
+					eefinal = (eefinal / 1000).toFixed(3);
+	
+		    	$("#einspeisungkwhdiv").html(eefinal);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/bezugkwh",
+				complete: function(request){
+					var eifinal = request.responseText;
+					eifinal = (eifinal / 1000).toFixed(3);
+		    	$("#bezugkwhdiv").html(eifinal);
 				}
 		});
 	}
@@ -467,6 +561,29 @@
 		    	$("#daily_pvkwhdiv").html(request.responseText);
 				}
 		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/speicherikwh",
+				complete: function(request){
+					var sgfinal = request.responseText;
+					sgfinal = (sgfinal / 1000).toFixed(3);
+		    	$("#speicherikwhdiv").html(sgfinal);
+				}
+	});
+		$.ajax({
+			url: "/openWB/ramdisk/speicherekwh",
+				complete: function(request){
+					var sefinal = request.responseText;
+					sefinal = (sefinal / 1000).toFixed(3);
+		    	$("#speicherekwhdiv").html(sefinal);
+				}
+		});
+
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
@@ -808,8 +925,16 @@ loadstatuslog();
         }
         if (strpos($line, "lp3name=") !== false) {
             list(, $lp3nameold) = explode("=", $line);
+	}
+        if (strpos($line, "verbraucher1_name=") !== false) {
+            list(, $verbraucher1_nameold) = explode("=", $line);
+        }
+        if (strpos($line, "verbraucher2_name=") !== false) {
+            list(, $verbraucher2_nameold) = explode("=", $line);
         }
     }
+
+
 ?>
 
 <body>
@@ -1159,6 +1284,26 @@ loadstatuslog();
 					<div id="yearly_pvkwhdiv"></div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center">
+					Speicher geladen [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="speicherikwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					Speicher entladen [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="speicherekwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					
+				</div>
+				<div class="col-xs-2 text-center">
+					
+				</div>
+			</div>
 			<hr>
 			<div class="row">
 				<div class="col-xs-2 text-center bg-info">
@@ -1187,6 +1332,61 @@ loadstatuslog();
 				<div class="col-xs-2 text-center bg-info">
 					<div id="soclevel1"></div>
 				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					EVU Bezug [kWh]
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					<div id="bezugkwhdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					EVU Einspeisung [kWh]
+				</div>
+				<div class="col-xs-2 text-center" style="background-color:#febebe">
+					<div id="einspeisungkwhdiv"></div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center ">
+					<?php echo $verbraucher1_nameold ?> [W]
+				</div>
+				<div class="col-xs-2 text-center ">
+					<div id="verbraucher1wattdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					<?php echo $verbraucher1_nameold ?> Import [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="verbraucher1whdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					<?php echo $verbraucher1_nameold ?>Export [kWh]
+
+				</div>
+				<div class="col-xs-2 text-center">
+										<div id="verbraucher1whediv"></div>	</div>
+
+			</div>
+			<div class="row">
+				<div class="col-xs-2 text-center ">
+					<?php echo $verbraucher2_nameold ?> [W]
+				</div>
+				<div class="col-xs-2 text-center ">
+					<div id="verbraucher2wattdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+				<?php echo $verbraucher2_nameold ?> Import [kWh]
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="verbraucher2whdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
+					<?php echo $verbraucher2_nameold ?> Export [kWh]
+
+				</div>
+				<div class="col-xs-2 text-center">
+										<div id="verbraucher2whediv"></div>	</div>
+
 			</div>
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />

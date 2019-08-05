@@ -10,7 +10,8 @@ $memuse   = exec($MEMUSE);
 $memfree  = exec($MEMFREE);
 $diskuse  = exec($DISKUSE);
 $diskfree = exec($DISKFREE);
-
+$ethaddr = exec("ifconfig eth0 |grep 'inet ' |awk '{print $2}'");
+$wlanaddr = exec("ifconfig wlan0 |grep 'inet ' |awk '{print $2}'");
 $arr = array(
 	    'uptime' => trim($uptime),
 	        'cpuuse' => trim($cpuuse),
@@ -18,7 +19,9 @@ $arr = array(
 		        'memuse' => trim($memuse),
 			    'memfree' => trim($memfree),
 			        'diskuse' => trim($diskuse),
-				    'diskfree' => trim($diskfree)
+				'diskfree' => trim($diskfree),
+				'ethaddr' => $ethaddr,
+			       'wlanaddr' => $wlanaddr	
 			    );
 
 header("Content-type: text/json");

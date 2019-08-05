@@ -58,7 +58,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="col-xs-6 text-center">
-			<div style="font-size: 2vw"><?php echo $lp1nameold ?></div>
+			<div style="font-size: 2vw"><?php echo $lp1nameold ?><span id="plugstatlp1div"></span></div>
 			<canvas id="lp1Data" width="150" height="140">
 				Sorry, no canvas support
 			</canvas>
@@ -68,7 +68,7 @@
 	<?php if ($lastmanagementold == 1) {
 	echo '
 		<div class="col-xs-6 text-center">
-			<div style="font-size: 2vw">'; echo $lp2nameold; echo '</div>
+			<div style="font-size: 2vw">'; echo $lp2nameold; echo '<span id="plugstatlp2div"></div>
 			<canvas id="lp2Data" width="150" height="140">
 				Sorry, no canvas support
 			</canvas>
@@ -471,33 +471,33 @@ echo '
 <div class="row">
 	<div class="col-xs-6 text-center">
 		<div class="actstat">
-			<a href="./tools/changelademodus.php?jetzt=1" class="btn btn-lg btn-block" style="font-size: 2vw">Sofort Laden</a>
+                        <input type="submit" class="sofort btn btn-lg btn-block" style="font-size: 2vw" name="sofort" value="Sofort Laden">
+
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat1">
-			<a href="./tools/changelademodus.php?minundpv=1" class="btn btn-lg btn-block" style="font-size: 2vw">Min + PV</a>
+                        <input type="submit" class="minpv btn btn-lg btn-block" style="font-size: 2vw" name="minpv" value="Min + PV">
 		</div>
 	</div>
 </div>
 <div class="row" style="font-size: 2vw">
 	<div class="col-xs-3 text-center">
 		<div class="actstat4">
-			<a href="./tools/changelademodus.php?semistop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Standby</a>
+	        	<input type="submit" class="standby btn btn-lg btn-block" style="font-size: 2vw" name="standby" value="Standby">
 		</div>
 	</div>
 	<div class="col-xs-3 text-center">
 		<div class="actstat3">
-			<a href="./tools/changelademodus.php?stop=1" class="btn btn-lg btn-block" style="font-size: 2vw">Stop</a>
+                        <input type="submit" class="stop btn btn-lg btn-block" style="font-size: 2vw" name="stop" value="Stop">
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat2">
-			<a href="./tools/changelademodus.php?pvuberschuss=1" class="btn btn-lg btn-block" style="font-size: 2vw; color: black"></i>Nur PV</a>
+                        <input type="submit" class="nurpv btn btn-lg btn-block" style="font-size: 2vw" name="nurpv" value="Nur PV">
 		</div>
 	</div>
-</div>
-<div class="row" id="speicherpvuidiv">
+</div><div class="row" id="speicherpvuidiv">
 	<div class="col-xs-6"></div>
 	<div class="col-xs-3 pull-right">
 		<?php

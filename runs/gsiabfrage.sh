@@ -12,4 +12,4 @@ do
 
 	echo "$ftime,$gsi" >> /var/www/html/openWB/ramdisk/gsiforecast.csv
 done
-
+chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv

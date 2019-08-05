@@ -45,6 +45,8 @@ function loadText(){
                 $('.actstat2 .btn').addClass("btn-red");
                 $('.actstat3 .btn').addClass("btn-green");
                 $('.actstat .btn').addClass("btn-red");
+	        $('.actstat2 .btn').removeClass("btn-green");
+
                 $('.actstat1 .btn').addClass("btn-red");
                 $('.actstat .btn').removeClass("btn-green");
                 $('.actstat1 .btn').removeClass("btn-green");
@@ -68,8 +70,23 @@ function loadText(){
         }
     });
 }
+loaddivs();
+function loaddivs(){
+    $.ajax({
+        url:"./tools/lademodus.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {call: "loadfile"},
+        success:function(result){
+		document.getElementById('lademodus').value = result.text;
+		document.getElementById('sofortlm').value = result.text;
+		loaddivs2();
+	}
+    });
+}
 
 
+function loaddivs2(){
 $(function() {
     if($('#msmoduslp1').val() == '0') {
         $('#msmodusnlp1').show();
@@ -173,7 +190,80 @@ $(function() {
 
     });
 });
+$(function() {
+    if($('#sofortlm').val() == '0') {
+        $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').show();
+    } else {
+        $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').hide();
+    }
+});
+$(function() {
+    if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
+        if($('#nachtladenstate').val() == '1') {
+            $('#nachtladenstatediv').show();
+        } else {
+            $('#nachtladenstatediv').hide();
+        }
+        if($('#nachtladenstates1').val() == '1') {
+            $('#nachtladenstates1div').show();
+        } else {
+            $('#nachtladenstates1div').hide();
+        }
+    } else {
+        $('#nachtladenstatediv').hide();
+        $('#nachtladenstates1div').hide();
 
+
+    }
+
+});
+$(function() {
+    if($('#speicherstat').val() == 'none') {
+        $('#speicherstatdiv').hide();
+    } else {
+        $('#speicherstatdiv').show();
+
+    }
+
+});
+$(function() {
+    if($('#lademlp1stat').val() == '1') {
+        $('#lademstatdiv').show();
+        $('#lademstat1div').show();
+    } else {
+        $('#lademstatdiv').hide();
+        $('#lademstat1div').hide();
+
+    }
+
+});
+$(function() {
+    if($('#lademlp2stat').val() == '1') {
+        $('#lademstats1div, #lademstats1div1').show();
+    } else {
+        $('#lademstats1div, #lademstats1div1').hide();
+    }
+
+});
+$(function() {
+    if($('#lademlp3stat').val() == '1') {
+        $('#lademstats2div, #lademstats2div1').show();
+    } else {
+        $('#lademstats2div, #lademstats2div1').hide();
+    }
+
+});
+
+$(function() {
+	if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
+        $('#speicherpvuidiv').show();
+    } else {
+        $('#speicherpvuidiv').hide();
+    }
+
+});
+
+}
 function rslp1() {
     $.ajax({
         type: "POST",
@@ -219,13 +309,6 @@ function rsziellp1() {
     });
 }
 $(function() {
-    if($('#sofortlm').val() == '0') {
-        $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').show();
-    } else {
-        $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').hide();
-    }
-});
-$(function() {
     if($('#zielladenaktivlp1').val() == '1') {
         $('#zielladenaktivlp1div').show();
     } else {
@@ -242,26 +325,7 @@ $(function() {
     }
 
 });
-$(function() {
-    if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
-        if($('#nachtladenstate').val() == '1') {
-            $('#nachtladenstatediv').show();
-        } else {
-            $('#nachtladenstatediv').hide();
-        }
-        if($('#nachtladenstates1').val() == '1') {
-            $('#nachtladenstates1div').show();
-        } else {
-            $('#nachtladenstates1div').hide();
-        }
-    } else {
-        $('#nachtladenstatediv').hide();
-        $('#nachtladenstates1div').hide();
 
-
-    }
-
-});
 $(function() {
     if($('#evuglaettungakt').val() == '0') {
         $('#evuglaettungdiv').hide();
@@ -279,14 +343,7 @@ $(function() {
     }
 });
 
-$(function() {
-	if($('#lademodus').val() == '2' && $('#speicherpvui').val() == '1') {
-        $('#speicherpvuidiv').show();
-    } else {
-        $('#speicherpvuidiv').hide();
-    }
 
-});
 $(function() {
     if($('#lastmanagement').val() == '0') {
         $('#ladepunkts1ndiv').show();
@@ -327,39 +384,105 @@ $(function() {
     }
 
 });
-$(function() {
-    if($('#speicherstat').val() == 'none') {
-        $('#speicherstatdiv').hide();
-    } else {
-        $('#speicherstatdiv').show();
+$(document).ready(function(){
+	$('.nurpv').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-green");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-red");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+		    loaddivs();
 
-    }
 
+	    });
+	});
+
+	$('.minpv').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-green");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-red");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+		loaddivs();
+	    });
+	});
+
+	$('.stop').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?stop=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-green");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-red");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+		loaddivs();
+	    });
+	});
+
+	$('.sofort').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-green");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-red");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-red");
+                $('.actstat4 .btn').removeClass("btn-green");
+		    loaddivs();
+
+
+	    });
+	});
+	$('.standby').click(function(){
+	    var clickBtnValue = $(this).val();
+	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
+	    data =  {'action': clickBtnValue};
+	    $.post(ajaxurl, data, function (response) {
+                $('.actstat2 .btn').addClass("btn-red");
+                $('.actstat3 .btn').addClass("btn-red");
+                $('.actstat .btn').addClass("btn-red");
+                $('.actstat1 .btn').addClass("btn-red");
+                $('.actstat .btn').removeClass("btn-green");
+                $('.actstat2 .btn').removeClass("btn-green");
+                $('.actstat3 .btn').removeClass("btn-green");
+                $('.actstat1 .btn').removeClass("btn-green");
+                $('.actstat4 .btn').addClass("btn-green");
+                $('.actstat4 .btn').removeClass("btn-red");
+		loaddivs();
+
+	    });
+	});
 });
-$(function() {
-    if($('#lademlp1stat').val() == '1') {
-        $('#lademstatdiv').show();
-        $('#lademstat1div').show();
-    } else {
-        $('#lademstatdiv').hide();
-        $('#lademstat1div').hide();
 
-    }
 
-});
-$(function() {
-    if($('#lademlp2stat').val() == '1') {
-        $('#lademstats1div, #lademstats1div1').show();
-    } else {
-        $('#lademstats1div, #lademstats1div1').hide();
-    }
-
-});
-$(function() {
-    if($('#lademlp3stat').val() == '1') {
-        $('#lademstats2div, #lademstats2div1').show();
-    } else {
-        $('#lademstats2div, #lademstats2div1').hide();
-    }
-
-});

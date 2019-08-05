@@ -51,12 +51,27 @@
 		if(strpos($line, "lastmanagements2=") !== false) {
 			list(, $lastmanagements2old) = explode("=", $line);
 		}
+		if(strpos($line, "verbraucher1_name=") !== false) {
+			list(, $verbraucher1_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher2_name=") !== false) {
+			list(, $verbraucher2_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher3_name=") !== false) {
+			list(, $verbraucher3_nameold) = explode("=", $line);
+		}
+
 
 
 	}
 	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
-
+	$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
+	$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
+	$verbraucher3vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher3vorhanden');
+	$verbraucher1_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher1_nameold));
+	$verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
+	$verbraucher3_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher3_nameold));
 
 					?>
 
@@ -162,7 +177,14 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
-
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher1name = "Import: <?php echo $verbraucher1_nameold ?>";
+	var verbrauchere1name = "Export: <?php echo $verbraucher1_nameold ?>";
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	var verbraucher2name = "Import: <?php echo $verbraucher2_nameold ?>";
+	var verbrauchere2name = "Export: <?php echo $verbraucher2_nameold ?>";
+	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
+	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
 
 if ( graphinteractiveam == 1 ){
 	am4core.useTheme(am4themes_animated);
@@ -312,8 +334,58 @@ series30.tensionY = 0.8;
 series30.strokeWidth = 1.5;
 
 }
+if ( verbraucher1vorhanden == 1) {
+var series31 = chart.series.push(new am4charts.LineSeries());
+series31.dataFields.valueY = "col13";
+series31.dataFields.categoryX = "col0";
+series31.name = verbraucher1name ;
+series31.stroke = am4core.color("#bb5ec2");
+series31.tensionX = 0.8;
+series31.tensionY = 0.8;
+series31.strokeWidth = 1.5;
+series31.legendSettings.valueText = "{valueY.sum}Wh";
+var series41 = chart.series.push(new am4charts.LineSeries());
+series41.dataFields.valueY = "col14";
+series41.dataFields.categoryX = "col0";
+series41.name = verbrauchere1name ;
+series41.stroke = am4core.color("#e01036");
+series41.tensionX = 0.8;
+series41.tensionY = 0.8;
+series41.strokeWidth = 1.5;
+series41.legendSettings.valueText = "{valueY.sum}Wh";
+}
+if ( verbraucher2vorhanden == 1) {
+var series32 = chart.series.push(new am4charts.LineSeries());
+series32.dataFields.valueY = "col15";
+series32.dataFields.categoryX = "col0";
+series32.name = verbraucher2name ;
+series32.stroke = am4core.color("#fb5ec2");
+series32.tensionX = 0.8;
+series32.tensionY = 0.8;
+series32.strokeWidth = 1.5;
+series32.legendSettings.valueText = "{valueY.sum}Wh";
+var series52 = chart.series.push(new am4charts.LineSeries());
+series52.dataFields.valueY = "col16";
+series52.dataFields.categoryX = "col0";
+series52.name = verbrauchere2name ;
+series52.stroke = am4core.color("#fb5ec2");
+series52.tensionX = 0.8;
+series52.tensionY = 0.8;
+series52.strokeWidth = 1.5;
+series52.legendSettings.valueText = "{valueY.sum}Wh";
+}
+if ( verbraucher3vorhanden == 1) {
+var series33 = chart.series.push(new am4charts.LineSeries());
+series33.dataFields.valueY = "col16";
+series33.dataFields.categoryX = "col0";
+series33.name = verbraucher3name ;
+series33.stroke = am4core.color("#ebeec2");
+series33.tensionX = 0.8;
+series33.tensionY = 0.8;
+series33.strokeWidth = 1.5;
+series33.legendSettings.valueText = "{valueY.sum}Wh";
 
-
+}
 var series8 = chart.series.push(new am4charts.LineSeries());
 series8.dataFields.valueY = "col9";
 series8.dataFields.categoryX = "col0";
@@ -346,7 +418,6 @@ series4.legendSettings.valueText = "{valueY.sum}Wh";
 series2.legendSettings.valueText = "{valueY.sum}Wh";
 series9.legendSettings.valueText = "{valueY.sum}Wh";
 series5.legendSettings.valueText = "{valueY.sum}Wh";
-
 chart.legend = new am4charts.Legend();
 </script>
 

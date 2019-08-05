@@ -7,6 +7,8 @@ soc=$(<ramdisk/soc)
 soc1=$(<ramdisk/soc1)
 nachtladenstate=$(</var/www/html/openWB/ramdisk/nachtladenstate)
 nachtladen2state=$(</var/www/html/openWB/ramdisk/nachtladen2state)
+rfidlp1=$(<ramdisk/rfidlp1)
+rfidlp2=$(<ramdisk/rfidlp2)
 if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
 	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
 else
@@ -30,13 +32,14 @@ if (( ladeleistung > 500 )); then
 	if [ -e ramdisk/ladeustart ]; then
 
 		ladelstart=$(<ramdisk/ladelstart)
-		bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
+		bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladen > ramdisk/aktgeladen
-		gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
+		gelrlp1=$(echo "scale=2;$bishergeladen / $durchslp1 * 100" |bc)
 		gelrlp1=${gelrlp1%.*}
 		echo $gelrlp1 > ramdisk/gelrlp1
 		restzeitlp1=$(echo "scale=6;($lademkwh - $bishergeladen)/ $ladeleistung * 1000 * 60" |bc)
 		restzeitlp1=${restzeitlp1%.*}
+		echo $restzeitlp1 > ramdisk/restzeitlp1m
 		if (( restzeitlp1 > 60 )); then
 			restzeitlp1h=$((restzeitlp1 / 60))
 			restzeitlp1r=$((restzeitlp1 % 60))
@@ -71,19 +74,19 @@ else
 			echo "--" > ramdisk/restzeitlp1
 			ladelstart=$(<ramdisk/ladelstart)
 			ladeustarts=$(<ramdisk/ladeustarts)
-			bishergeladen=$(echo "scale=3;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
+			bishergeladen=$(echo "scale=2;($llkwh - $ladelstart)/1" |bc | sed 's/^\./0./')
 			start=$(<ramdisk/ladeustart)
 			jetzt=$(date +%d.%m.%y-%H:%M)
 			jetzts=$(date +%s)
 			ladedauer=$(((jetzts - ladeustarts) / 60 ))
 			ladedauers=$((jetzts - ladeustarts))
-			ladegeschw=$(echo "scale=3;$bishergeladen * 60 * 60 / $ladedauers" |bc)
-			gelrlp1=$(echo "scale=3;$bishergeladen / $durchslp1 * 100" |bc)
+			ladegeschw=$(echo "scale=2;$bishergeladen * 60 * 60 / $ladedauers" |bc)
+			gelrlp1=$(echo "scale=2;$bishergeladen / $durchslp1 * 100" |bc)
 			gelrlp1=${gelrlp1%.*}
 			if (( ladedauer > 60 )); then
 				ladedauerh=$((ladedauer / 60))
 				laderest=$((ladedauer % 60))
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus,$rfidlp1 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -114,13 +117,15 @@ if (( ladeleistungs1 > 500 )); then
 	if [ -e ramdisk/ladeustarts1 ]; then
 
 		ladelstarts1=$(<ramdisk/ladelstarts1)
-		bishergeladens1=$(echo "scale=3;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
+		bishergeladens1=$(echo "scale=2;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens1 > ramdisk/aktgeladens1
-		gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
+		gelrlp2=$(echo "scale=2;$bishergeladens1 / $durchslp2 * 100" |bc)
 		gelrlp2=${gelrlp2%.*}
 		echo $gelrlp2 > ramdisk/gelrlp2
 		restzeitlp2=$(echo "scale=6;($lademkwhs1 - $bishergeladens1)/ $ladeleistungs1 * 1000 * 60" |bc)
 		restzeitlp2=${restzeitlp2%.*}
+		echo $restzeitlp2 > ramdisk/restzeitlp2m
+
 		if (( restzeitlp2 > 60 )); then
 			restzeitlp2h=$((restzeitlp2 / 60))
 			restzeitlp2r=$((restzeitlp2 % 60))
@@ -157,19 +162,19 @@ else
 			echo "--" > ramdisk/restzeitlp2
 			ladelstarts1=$(<ramdisk/ladelstarts1)
 			ladeustartss1=$(<ramdisk/ladeustartss1)
-			bishergeladens1=$(echo "scale=3;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
+			bishergeladens1=$(echo "scale=2;($llkwhs1 - $ladelstarts1)/1" |bc | sed 's/^\./0./')
 			starts1=$(<ramdisk/ladeustarts1)
 			jetzts1=$(date +%d.%m.%y-%H:%M)
 			jetztss1=$(date +%s)
 			ladedauers1=$(((jetztss1 - ladeustartss1) / 60 ))
 			ladedauerss1=$((jetztss1 - ladeustartss1))
-			ladegeschws1=$(echo "scale=3;$bishergeladens1 * 60 * 60 / $ladedauerss1" |bc)
-			gelrlp2=$(echo "scale=3;$bishergeladens1 / $durchslp2 * 100" |bc)
+			ladegeschws1=$(echo "scale=2;$bishergeladens1 * 60 * 60 / $ladedauerss1" |bc)
+			gelrlp2=$(echo "scale=2;$bishergeladens1 / $durchslp2 * 100" |bc)
 			gelrlp2=${gelrlp2%.*}
 			if (( ladedauers1 > 60 )); then
 				ladedauerhs1=$((ladedauers1 / 60))
 				laderests1=$((ladedauers1 % 60))
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus,$rfidlp2 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
@@ -200,13 +205,14 @@ if (( ladeleistungs2 > 500 )); then
 	if [ -e ramdisk/ladeustarts2 ]; then
 
 		ladelstarts2=$(<ramdisk/ladelstarts2)
-		bishergeladens2=$(echo "scale=3;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
+		bishergeladens2=$(echo "scale=2;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
 		echo $bishergeladens2 > ramdisk/aktgeladens2
-		gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
+		gelrlp3=$(echo "scale=2;$bishergeladens2 / $durchslp3 * 100" |bc)
 		gelrlp3=${gelrlp3%.*}
 		echo $gelrlp3 > ramdisk/gelrlp3
 		restzeitlp3=$(echo "scale=6;($lademkwhs2 - $bishergeladens2)/ $ladeleistungs2 * 1000 * 60" |bc)
 		restzeitlp3=${restzeitlp3%.*}
+		echo $restzeitlp3 > ramdisk/restzeitlp3m
 		if (( restzeitlp3 > 60 )); then
 			restzeitlp3h=$((restzeitlp3 / 60))
 			restzeitlp3r=$((restzeitlp3 % 60))
@@ -241,14 +247,14 @@ else
 			echo "--" > ramdisk/restzeitlp3
 			ladelstarts2=$(<ramdisk/ladelstarts2)
 			ladeustartss2=$(<ramdisk/ladeustartss2)
-			bishergeladens2=$(echo "scale=3;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
+			bishergeladens2=$(echo "scale=2;($llkwhs2 - $ladelstarts2)/1" |bc | sed 's/^\./0./')
 			starts2=$(<ramdisk/ladeustarts2)
 			jetzts2=$(date +%d.%m.%y-%H:%M)
 			jetztss2=$(date +%s)
 			ladedauers2=$(((jetztss2 - ladeustartss2) / 60 ))
 			ladedauerss2=$((jetztss2 - ladeustartss2))
-			ladegeschws2=$(echo "scale=3;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
-			gelrlp3=$(echo "scale=3;$bishergeladens2 / $durchslp3 * 100" |bc)
+			ladegeschws2=$(echo "scale=2;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
+			gelrlp3=$(echo "scale=2;$bishergeladens2 / $durchslp3 * 100" |bc)
 			gelrlp3=${gelrlp3%.*}
 	
 			if (( ladedauers2 > 60 )); then

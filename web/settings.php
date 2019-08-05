@@ -45,6 +45,12 @@ foreach($lines as $line) {
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}
+	if(strpos($line, "settingspwakt=") !== false) {
+		list(, $settingspwaktold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspw=") !== false) {
+		list(, $settingspwold) = explode("=", $line);
+	}
 	if(strpos($line, "dspeed=") !== false) {
 		list(, $dspeedold) = explode("=", $line);
 	}
@@ -412,6 +418,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
     <li><a data-toggle="tab" href="./index.php">Zurück</a></li>
     <li class="active"><a href="./settings.php">Einstellungen</a></li>
     <li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
+    <li><a href="./smarthome.php">Smart Home</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
 	<li><a href="./misc.php">Misc</a></li>
@@ -511,14 +518,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</div>
 	<div class="row bg-info">
 
-		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1:</label></b>
+		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1 (nur für Zielladen relevant):</label></b>
 		<input type="text" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>"><br>
 	</div>
 	<div class="row bg-info">
 	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1:</label></b>
+		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1 (nur für Zielladen relevant):</label></b>
 		<select type="text" name="zielladenphasenlp1" id="zielladenphasenlp1">
 			<option <?php if($zielladenphasenlp1old == 1) echo selected ?> value="1">1</option>
 			<option <?php if($zielladenphasenlp1old == 2) echo selected ?> value="2">2</option>
@@ -558,7 +565,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 		</select><br>
 	</div>
 	<div class="row bg-info">
-	Ampere mit denen geladen werden kann um den Ziel SoC zu erreichen. Entweder was die Installation kann oder was das Auto kann.<br>
+	Ampere mit denen geladen werden kann, um den Ziel SoC zu erreichen. Orientiert an der Leistung der Hausinstallation, oder der des zu ladenden Autos.<br>
 	</div>
 </div>
 <div id="durchslp2">
@@ -610,7 +617,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gibt an mit wieviel Ampere je Phase im Sofort Laden Modus mindestens geladen wird. <br>Der Wert dient lediglich als Startwert und sollte so niedrig wie möglich gewählt werden.<br> Die meisten Fahrzeuge kommen mit 6A klar. Bei der Zoe werden 8A empfohlen. <br><br>
+	Gibt an mit wieviel Ampere je Phase mindestens geladen wird. <br><br>
 </div>
 <div class="row" style="background-color:#febebe">
 	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
@@ -655,7 +662,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#33ffa8">
-	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
+	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
 </div>
 <div id="u1p3paus">
 	<br>
@@ -728,7 +735,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll.<br><br>
+	Definiert, ob Nachts geladen werden soll.<br><br>
 </div>
 <div id="nachtladenaus">
 	<br>
@@ -956,7 +963,7 @@ $(function() {
 	</select></h5>
 </div>
 <div class="row" style="background-color:#00ada8">
-	Definiert ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
+	Definiert, ob Nachts geladen werden soll. Ist auch bei Lademodus "Stop" aktiv!<br><br>
 </div>
 <div id="nachtladenauss1">
 	<br>
@@ -1175,9 +1182,10 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	</select>
 </div>
 <div class="row">
-	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
-	Sie stellt in jedem Lademodus sicher das nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
+	Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen, diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
+	Sie stellt in jedem Lademodus sicher, dass nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
 	Der richtige Anschluss ist zu gewährleisten.<br>
+
 	Ladepunkt 1: <br>
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 1 Ladepunkt 1</p>
 	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 2 Ladepunkt 1</p>
@@ -1186,7 +1194,7 @@ Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen P
 	<p style="text-indent :2em;" >Phase 1 Zuleitung = Phase 2 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 2 Zuleitung = Phase 3 Ladepunkt 2</p>
 	<p style="text-indent :2em;" >Phase 3 Zuleitung = Phase 1 Ladepunkt 2</p>
-	Durch das drehen der Phasen ist sichergestellt das 2 einphasige Autos mit voller Geschwindigkeit Laden können.<br>
+	Durch das Drehen der Phasen ist sichergestellt, dass 2 einphasige Autos mit voller Geschwindigkeit laden können.<br>
 
 </div>
 
@@ -1219,4 +1227,29 @@ Open Source made with love!<br>
 
 
 </div>
+<script>
+	var settingspwaktold = <?php echo $settingspwaktold ?>;
+
+	var settingspwold = <?php echo $settingspwold ?>;
+if ( settingspwaktold == 1 ) {
+passWord();
+}
+function passWord() {
+var testV = 1;
+var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+
+while (testV < 3) {
+	if (!pass1) 
+		history.go(-1);
+	if (pass1 == settingspwold) {
+		break;
+	} 
+	testV+=1;
+	var pass1 = prompt('Passwort falsch','Password');
+}
+if (pass1!="password" & testV == 3) 
+	history.go(-1);
+return " ";
+} 
+</script>
 </body></html>

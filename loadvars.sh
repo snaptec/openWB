@@ -1,6 +1,42 @@
 #!/bin/bash
 loadvars(){
+# EVSE DIN Plug State
+if [[ $evsecon == "modbusevse" ]]; then
+	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
+	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
+	if [[ $evseplugstate > "1" ]]; then
+		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
+		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $pushbenachrichtigung == "1" ]]; then
+    	    		message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+			/var/www/html/openWB/runs/pushover.sh "$message"
+		fi
+			echo 1 > /var/www/html/openWB/ramdisk/plugstat
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+	fi
+	if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
+		echo 1 > /var/www/html/openWB/ramdisk/chargestat
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/chargestat
+	fi
+fi
+if [[ $lastmanagement == "1" ]]; then
+	if [[ $evsecons1 == "modbusevse" ]]; then
+		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
+		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
+		if [[ $evseplugstatelp2 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+		fi
+		if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+		fi
+	fi
+fi
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
        echo "" > ramdisk/lastregelungaktiv
@@ -24,6 +60,7 @@ if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
 	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
+	speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 	speichervorhanden="1"
 	echo 1 > /var/www/html/openWB/ramdisk/speichervorhanden
 else
@@ -63,7 +100,7 @@ else
 	lla1=0
 	lla2=0
 	lla3=0
-	ladeleistung=800
+	ladeleistung=0
 	llkwh=0
 	llkwhges=$llkwh
 fi
@@ -153,8 +190,13 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
-				speicherww=$((speicherleistung - speichermaxwatt))
-				uberschuss=$((uberschuss + speicherww))
+				if (( speichersoc > speichersocnurpv )); then
+					speicherww=$((speicherleistung + speicherwattnurpv))
+					uberschuss=$((uberschuss + speicherww))
+				else
+					speicherww=$((speicherleistung - speichermaxwatt))
+					uberschuss=$((uberschuss + speicherww))
+				fi
 			fi
 		fi
 	fi
