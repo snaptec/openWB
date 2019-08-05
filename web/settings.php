@@ -518,14 +518,14 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</div>
 	<div class="row bg-info">
 
-		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1:</label></b>
+		<b><label for="akkuglp1">Akkugröße deines Elektroautos in kWh an Ladepunkt 1 (nur für Zielladen relevant):</label></b>
 		<input type="text" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>"><br>
 	</div>
 	<div class="row bg-info">
 	Gültige Werte xx, z.B. 41 <br> Dient zur Berechnung der benötigten Ladezeit.<br><br>
 	</div>
 	<div class="row bg-info">
-		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1:</label></b>
+		<b><label for="zielladenphasenlp1">Anzahl der genutzt Phasen des EV an Ladepunkt 1 (nur für Zielladen relevant):</label></b>
 		<select type="text" name="zielladenphasenlp1" id="zielladenphasenlp1">
 			<option <?php if($zielladenphasenlp1old == 1) echo selected ?> value="1">1</option>
 			<option <?php if($zielladenphasenlp1old == 2) echo selected ?> value="2">2</option>
