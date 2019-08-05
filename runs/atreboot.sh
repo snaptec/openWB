@@ -1689,4 +1689,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 (sleep 20; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 (sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 (sleep 40; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
+curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
+curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 

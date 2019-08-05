@@ -600,6 +600,10 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 	</div>
 <?php
 $lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+$vstable = file_get_contents('/var/www/html/openWB/ramdisk/vstable');
+$vbeta = file_get_contents('/var/www/html/openWB/ramdisk/vbeta');
+$vnightly = file_get_contents('/var/www/html/openWB/ramdisk/vnightly');
+$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 ?>
 	<div class="row">
 	Zuletzt gescannter RFID Tag: <?php echo $lastrfid ?><br><br>
@@ -1227,8 +1231,16 @@ $(function() {
 		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br><br>
 	</div>
 	<div class="row">
-		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-red">UPDATE openWB</button>
+		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
 	</div>
+	<div class="row">
+	Installierte Version: <?php echo $owbversion ?><br> 
+	Aktuellste Stable: <?php echo $vstable ?><br> 
+	Aktuellste Beta: <?php echo $vbeta ?><br> 
+	Aktuellste Nightly: <?php echo $vnightly ?><br> 
+	<br><br>
+	</div>
+
 	<div class="row">
 		<button onclick="window.location.href='./tools/smashmredirect.html'" class="btn btn-primary btn-red">SMA Support</button>
 	</div>
