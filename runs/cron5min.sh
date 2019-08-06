@@ -48,12 +48,12 @@ if (( netzabschaltunghz == 1 )); then
 hz=$(</var/www/html/openWB/ramdisk/llhz)
 hz=$(echo "$hz * 100" | bc | sed 's/\..*$//')
 netzschutz=$(</var/www/html/openWB/ramdisk/netzschutz)
-if (( netzschutz == 0 )); then
+if (( netzschutz == 1 )); then
 	if (( hz > 4500 )) && (( $hz < 5300 )); then
 		if (( $hz > 5180 )); then
 			lademodus=$(</var/www/html/openWB/ramdisk/lademodus)
 			echo $lademodus > /var/www/html/openWB/ramdisk/templademodus
-			echo 3 > /var/www/html/openWB/ramdisk/lademodus) &
+			echo 3 > /var/www/html/openWB/ramdisk/lademodus
 			echo 1 > /var/www/html/openWB/ramdisk/netzschutz
 		fi
 		if (( hz < 4920 )); then
