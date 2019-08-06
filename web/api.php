@@ -149,10 +149,13 @@ if(isset($_GET["get"])) {
 			"chargestatLP1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/chargestat'))[0],
 			"chargestatLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/chargestats1'))[0],
 			"plugstatLP1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/plugstat'))[0],
-			"plugstatLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/plugstats1'))[0]
-
-
-
+			"plugstatLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/plugstats1'))[0],
+			"restzeitlp1m"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp1m'))[0],
+			"restzeitlp2m"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp2m'))[0],
+			"restzeitlp3m"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp3m'))[0],
+			"lla1LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas21'))[0],
+			"lla2LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas22'))[0],
+			"lla3LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas23'))[0]
 
 
 

@@ -199,16 +199,10 @@ nav.navbar-fixed-top .navbar-nav > li > a:not(.btn) {
 	background: transparent;
 	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
-	border: 1px solid #ccc;
-	box-shadow: 1px 1px 5px 1px #ccc;
      	margin: 5px;
 }
 
-.btn:hover,
-.btn:focus {
-	color: white;
-	box-shadow: 2px 2px 5px 3px #ccc;
-}
+
 
 .btn.btn-blue {
 	background: #00a8ff;

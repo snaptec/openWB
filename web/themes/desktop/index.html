@@ -1,0 +1,1288 @@
+<!-- standard theme for openWB -->
+
+<script>
+	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	var chartlegend = <?php echo $chartlegendmainold ?>;
+
+</script>
+
+<?php include ("daily.php"); ?>
+
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<h3> OpenWB Charge Controller (BETA Theme)</h3>
+	</div>
+</div>
+<script src="/openWB/web/display/gauge.min.js"></script>
+<script src="/openWB/web/js/jquery-1.11.1.min.js"></script>
+<script src="/openWB/web/display/alllive.js"></script>
+<link rel="stylesheet" type="text/css" href="/openWB/web/css/bootstrap.css">
+
+
+  <link href="./fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="./fonts/eleganticons/et-icons.css">
+	<link rel="stylesheet" type="text/css" href="./css/cardio.css">
+
+
+<style>
+body {
+background-color: black;
+}
+</style>
+
+<body><div class="row col-xs-12" style="min-height: 200px;">
+		<div class="col-xs-2">
+<canvas id="evu" style="height: auto !important; width: 100% !important;"></canvas>
+	<div id="evut" style="font-size: 15px; height: auto !important; top: 60%; position: absolute; width: 100% !important; color: white; text-align:center;">0%</div>
+	<div style="font-size: 15px; height: auto !important; top: 40%; position: absolute; text-align:center; width: 100% !important; color: white;">EVU</div>
+		</div>
+		<div class="col-xs-2">
+<canvas id="pv" style="height: auto !important; width: 100% !important;"></canvas>
+<div id="pvt" style="font-size: 15px; height: auto !important; top: 60%; position: absolute; width: 100% !important; color: white; text-align:center;">0%</div>
+<div style="font-size: 15px; height: auto !important; top: 40%; position: absolute; text-align:center; width: 100% !important; color: white;">PV</div>
+	</div>
+	         <div class="col-xs-2">
+<canvas id="speicher" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+<div id="speichert" style="font-size: 15px; height: 200px; top: 100px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">0%</div>
+<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">Speicher</div>
+<canvas id="speichers" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+<div id="speicherst" style="height: 100px; top: 60px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"></div>
+		 </div>
+	<div class="col-xs-2">
+			<canvas id="haus" style="height: auto !important; width: 100% !important;"></canvas>
+			<div id="haust" style="font-size: 15px; height: auto !important; top: 60%; position: absolute; width: 100% !important; color: white; text-align:center;">0%</div>
+			<div style="font-size: 15px; height: auto !important; top: 40%; position: absolute; text-align:center; width: 100% !important; color: white;">Hausverbrauch</div>
+	</div>
+	<div class="col-xs-2">
+
+			<canvas id="lp1" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+			<div id="lp1t" style="font-size: 15px; height: 200px; top: 100px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">0%</div>
+			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><?php echo $lp1nameold ?> <span id="plugstatlp1div"></span>
+</div>
+			<canvas id="lp1s" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+			<div id="lp1st" style="height: 100px; top: 60px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">0%</div>
+	</div>
+	<div class="col-xs-2">
+			<canvas id="lp2" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+			<div id="lp2t" style="font-size: 15px; height: 200px; top: 100px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"></div>
+			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><?php echo $lp2nameold ?> <span id="plugstatlp2div"></div>
+			<canvas id="lp2s" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
+			<div id="lp2st" style="height: 100px; top: 60px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"></div>
+	</div>
+	</div>
+
+
+<script>
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0.3, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: true,     // If false, max value increases automatically if value > maxValue
+  limitMin: true,     // If true, the min value of the gauge will be fixed
+  //colorStart: 'green',   // Colors
+  //colorStop: 'red',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  percentColors: [[0.0, "#00FF00" ], [1.0, "#FF0000"]],
+  generateGradient: true,
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [-15000, -7500, 0, 7500, 15000],  // Print labels at these values
+		color: "#FFFFFF",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		},
+	       staticZones: [
+	          {strokeStyle: "#F03E3E", min: 5000, max: 15000}, // Red from 100 to 130
+      {strokeStyle: "#FFDD00", min: 0, max: 5000}, // Yellow
+   {strokeStyle: "#30B32D", min: -15000, max: 0}, // Green
+],  
+};
+var target = document.getElementById('evu'); // your canvas element
+var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+gauge.maxValue = 15000; // set max gauge value
+gauge.setMinValue(-15000);  // Prefer setter over gauge.minValue = 0
+gauge.animationSpeed = 50; // set animation speed (32 is default value)
+
+gauge.set(10000); // set actual value
+////////////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: 'green',   // Colors
+  colorStop: 'green',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  percentColors: [[0.0, "#20610f" ], [1.0, "#00FF00"]],
+  generateGradient: true,
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 10000],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetpv = document.getElementById('pv'); // your canvas element
+var gaugepv = new Gauge(targetpv).setOptions(opts); // create sexy gauge!
+gaugepv.maxValue = 10000; // set max gauge value
+gaugepv.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugepv.animationSpeed = 50; // set animation speed (32 is default value)
+gaugepv.set(10000); // set actual value
+////////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0.3, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: true,     // If false, max value increases automatically if value > maxValue
+  limitMin: true,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+ percentColors: [[0.0, "#FF0000" ], [0.5, "#FFFF00"],[1.0, "#00FF00"]],
+  generateGradient: true,
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [-4000, -1500, 0, 1500, 4000],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+	       staticZones: [
+	          {strokeStyle: "#F03E3E", min: -4000, max: -300}, // Red from 100 to 130
+      {strokeStyle: "#FFDD00", min: -300, max: 0}, // Yellow
+   {strokeStyle: "#30B32D", min: 0, max: 4000}, // Green
+],  
+};
+var targetspeicher = document.getElementById('speicher'); // your canvas element
+var gaugespeicher = new Gauge(targetspeicher).setOptions(opts); // create sexy gauge!
+gaugespeicher.maxValue = 4000; // set max gauge value
+gaugespeicher.setMinValue(-4000);  // Prefer setter over gauge.minValue = 0
+gaugespeicher.animationSpeed = 50; // set animation speed (32 is default value)
+gaugespeicher.set(1000); // set actual value
+///////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.08, // The line thickness
+  radiusScale: 0.81, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 100],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetspeichers = document.getElementById('speichers'); // your canvas element
+var gaugespeichers = new Gauge(targetspeichers).setOptions(opts); // create sexy gauge!
+gaugespeichers.maxValue = 100; // set max gauge value
+gaugespeichers.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugespeichers.animationSpeed = 50; // set animation speed (32 is default value)
+gaugespeichers.set(70); // set actual value
+
+
+////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 4000, 8000],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targethaus = document.getElementById('haus'); // your canvas element
+var gaugehaus = new Gauge(targethaus).setOptions(opts); // create sexy gauge!
+gaugehaus.maxValue = 8000; // set max gauge value
+gaugehaus.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugehaus.animationSpeed = 50; // set animation speed (32 is default value)
+gaugehaus.set(500); // set actual value
+/////////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 7000],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetlp1 = document.getElementById('lp1'); // your canvas element
+var gaugelp1 = new Gauge(targetlp1).setOptions(opts); // create sexy gauge!
+gaugelp1.maxValue = 7000; // set max gauge value
+gaugelp1.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugelp1.animationSpeed = 50; // set animation speed (32 is default value)
+gaugelp1.set(7000); // set actual value
+/////////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.08, // The line thickness
+  radiusScale: 0.81, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 100],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetlp1s = document.getElementById('lp1s'); // your canvas element
+var gaugelp1s = new Gauge(targetlp1s).setOptions(opts); // create sexy gauge!
+gaugelp1s.maxValue = 100; // set max gauge value
+gaugelp1s.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugelp1s.animationSpeed = 50; // set animation speed (32 is default value)
+gaugelp1s.set(70); // set actual value
+////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.24, // The line thickness
+  radiusScale: 1.0, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 7000],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetlp2 = document.getElementById('lp2'); // your canvas element
+var gaugelp2 = new Gauge(targetlp2).setOptions(opts); // create sexy gauge!
+gaugelp2.maxValue = 7000; // set max gauge value
+gaugelp2.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugelp2.animationSpeed = 50; // set animation speed (32 is default value)
+gaugelp2.set(3600); // set actual value
+/////////////////////////
+var opts = {
+  angle: 0, // The span of the gauge arc
+  lineWidth: 0.08, // The line thickness
+  radiusScale: 0.81, // Relative radius
+  pointer: {
+    length: 0.6, // // Relative to gauge radius
+    strokeWidth: 0, // The thickness
+    color: '#000000' // Fill color
+  },
+  limitMax: false,     // If false, max value increases automatically if value > maxValue
+  limitMin: false,     // If true, the min value of the gauge will be fixed
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: 'grey',  // to see which ones work best for you
+  generateGradient: true,
+percentColors: [[0.0, "#73c0FF" ], [1.0, "#0000FF"]],
+		staticLabels: {
+		font: "8px sans-serif",  // Specifies font
+		labels: [0, 100],  // Print labels at these values
+		color: "white",  // Optional: Label text color
+		fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+		}, 
+};
+var targetlp2s = document.getElementById('lp2s'); // your canvas element
+var gaugelp2s = new Gauge(targetlp2s).setOptions(opts); // create sexy gauge!
+gaugelp2s.maxValue = 100; // set max gauge value
+gaugelp2s.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+gaugelp2s.animationSpeed = 50; // set animation speed (32 is default value)
+gaugelp2s.set(70); // set actual value
+
+
+
+var doInterval;
+function getfile() {
+	$.ajaxSetup({ cache: false});
+ $.ajax({
+    url: "/openWB/ramdisk/wattbezug",
+    complete: function(request){
+	    var wattbezug = request.responseText;
+	    var intbezug = parseInt(wattbezug, 10);
+	    gauge.set(wattbezug);
+	    if (intbezug > 0) {
+		    $("#evut").html(request.responseText + " W<br>Bezug");
+	    } else {
+		wattbezug = wattbezug * -1; 
+		$("#evut").html(wattbezug + " W<br>Einspeisung");
+   
+	    };
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/pvwatt",
+    complete: function(request){
+	    var pvwatt = request.responseText;
+	    pvwatt = pvwatt * -1;
+		gaugepv.set(pvwatt);
+		$("#pvt").html(pvwatt + " W");
+	
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/speicherleistung",
+    complete: function(request){
+	    var speicherwatt = request.responseText;
+		gaugespeicher.set(speicherwatt);
+		if ( speicherwatt > 0) {
+			$("#speichert").html(request.responseText + " W<br>Ladung");
+		} else {
+			speicherwatt = speicherwatt * -1;
+			$("#speichert").html(speicherwatt + " W<br>Entladung");
+		}
+
+
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/speichersoc",
+    complete: function(request){
+	    var speichers = request.responseText;
+		gaugespeichers.set(speichers);
+		$("#speicherst").html(request.responseText + "%");
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/hausverbrauch",
+    complete: function(request){
+	    var hausverbrauch = request.responseText;
+		gaugehaus.set(hausverbrauch);
+		$("#haust").html(request.responseText + " W");
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/llaktuell",
+    complete: function(request){
+	    var lp1w = request.responseText;
+		gaugelp1.set(lp1w);
+		$("#lp1t").html(request.responseText + " W");
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/llaktuells1",
+    complete: function(request){
+	    var lp2w = request.responseText;
+		gaugelp2.set(lp2w);
+		$("#lp2t").html(request.responseText + " W");
+
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/soc",
+    complete: function(request){
+	    var lp1s = request.responseText;
+		gaugelp1s.set(lp1s);
+		$("#lp1st").html(request.responseText + "%");
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/soc1",
+    complete: function(request){
+	    var lp2s = request.responseText;
+		gaugelp2s.set(lp2s);
+		$("#lp2st").html(request.responseText + "%");
+    }
+  });
+
+}
+
+
+
+
+doInterval = setInterval(getfile, 5000);
+//setInterval(function(){gauge.set(wattbezug)}, 200)
+	</script>
+
+
+
+
+
+<div class="row">
+	<div class="col-xs-5 text-center">
+		<div class="imgwrapper">
+			<img id="livegraph" src="./themes/desktop/graph-live.php"
+				 alt="Graph lädt, bitte warten..." class="img-responsive">
+			<br></div>
+	</div>
+	<div class="col-xs-7 text-center">
+		<div style="height:400px;" id="dailydiv"></div>
+	</div>
+</div>
+<div class="row col-xs-12 text-center">
+	<div id="nachtladenstatediv" class="col-xs-1 text-center" style="background-color:#00ada8;">
+		Nachtladen LP 1 aktiv
+	</div>
+	<div id="nachtladenstates1div" class="col-xs-1 text-center" style="background-color:#00ada8;">
+		Nachtladen LP 2 aktiv
+	</div>
+		<div id="lastregelungaktivdiv" class="col-xs-1 text-center" style="color:#990000;">
+	</div>
+<div class="col-xs-1 text-center" id="zielladenaktivlp1div">
+	<div style="background-color:#00ada8;">
+		Zielladen LP 1 aktiv
+	</div>
+
+</div>
+
+</div>
+
+<!-- show zielladen if its active in settings -->
+
+<!-- change charging mode -->
+<div class="row">
+	<div class="col-xs-1"></div>
+
+	<div class="col-xs-2 text-center">
+		<div class="actstat">
+		<input type="submit" class="sofort btn btn-block" name="sofort" value="Sofort Laden">
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat1">
+		 <input type="submit" class="minpv btn btn-block" name="minpv" value="Min + PV">
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat4">
+			<input type="submit" class="standby btn btn-block"name="standby" value="Standby">
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat3">
+		<input type="submit" class="stop btn btn-block"name="stop" value="Stop">
+		</div>
+	</div>
+	<div class="col-xs-2 text-center">
+		<div class="actstat2">
+		  <input type="submit" class="nurpv btn btn-block"name="nurpv" value="Nur PV">
+		</div>
+	</div>
+	<div class="col-xs-1"></div>
+</div>
+<div class="row" id="speicherpvuidiv">
+	<div class="col-xs-6"></div>
+	<div class="col-xs-3 pull-right">
+	<?php
+		if ($speicherpveinbeziehenold == 0) {
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
+		} else {
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+		}
+	?>
+	</div>
+
+</div><hr>
+<div class="row" style="color: white">
+	<div class="row" style="color: white">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-2 text-center" style="color: white">
+			Aktuelle / Letzte Ladung
+		</div>
+		<div class="col-xs-1 text-center" style="color: white">Heute geladen</div>
+		<div class="col-xs-7"></div>
+
+
+	</div>
+	<div class="row" style="color: white">
+		<div class="col-xs-1 text-center">
+			LP1 <?php echo $lp1nameold ?>
+		</div>
+		<div class="col-xs-1 text-center">
+			<span id="gelrlp1div"></span>km
+		</div>
+		<div class="col-xs-1 text-center">
+			<span id="aktgeladendiv"></span>kWh
+		</div>
+		<div class="col-xs-1 text-center">
+			<span id="dailychargelp1div"></span> kWh
+		</div>
+
+	</div>
+	<div class="row"  style="color: white">
+		<div  id="ladepunkts11div" class="col-xs-1 text-center">
+			LP2 <?php echo $lp2nameold ?>
+		</div>
+		<div id="ladepunkts111div" class="col-xs-1 text-center">
+			<span id="gelrlp2div"></span>km
+		</div>
+		<div id="ladepunkts1111div" class="col-xs-1 text-center">
+			<span id="aktgeladens1div"></span>kWh
+		</div>
+		<div id="ladepunkts1111111div" class="col-xs-1 text-center">
+			<span id="dailychargelp2div"></span> kWh
+		</div>
+
+	</div>
+	<div class="row" style="color: white" >
+		<div id="ladepunkts22div" class="col-xs-1 text-center">
+			LP3 <?php echo $lp3nameold ?>
+		</div>
+		<div id="ladepunkts222div" class="col-xs-1 text-center">
+			<span id="gelrlp3div"></span>km
+		</div>
+		<div id="ladepunkts2222div" class="col-xs-1 text-center">
+			<span id="aktgeladens2div"></span>kWh
+		</div>
+		<div id="ladepunkts2222222div" class="col-xs-1 text-center">
+			<span id="dailychargelp3div"></span> kWh
+		</div>
+
+	</div>
+	<div id="heutegeladendiv">
+
+	</div>
+	<div class="row" id="sofortlmdiv2" >
+		<div class="col-xs-4 text-center">
+			<div id="lademstatdiv">
+				<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+			</div>
+		</div>
+		<div id="ladepunkts11111div" class="col-xs-4 text-center">
+			<div id="lademstats1div">
+				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+			</div>
+		</div>
+		<div id="ladepunkts22222div" class="col-xs-4 text-center">
+			<div id="lademstats2div">
+				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+			</div>
+		</div>
+	</div>
+	<div class="row" id="sofortlmdiv1" >
+		<div class="col-xs-4 text-center">
+			<div id="lademstat1div">
+				Restzeit <span id="restzeitlp1div"></span>
+			</div>
+		</div>
+		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
+			<div id="lademstats1div1">
+				Restzeit <span id="restzeitlp2div"></span>
+			</div>
+		</div>
+		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
+			<div id="lademstats2div1">
+				Restzeit <span id="restzeitlp3div"></span>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+<!-- depending on charge mode show options -->
+<div id="sofortlmdiv">
+	<form name="sofortll" action="./tools/sofortll.php" method="POST">
+		<div class="row" style="color: white">
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-4 text-center" >
+					<label for="msmoduslp1"></label>
+
+					<select type="text" name="msmoduslp1" id="msmoduslp1">
+						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
+						<option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
+						<option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
+					</select>
+					<span id="msmodusmlp1">
+						<br><br>
+						<label for="lademlp1">Lademenge</label>
+						<select type="text" name="lademlp1" id="lademlp1">
+						<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
+							<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
+							<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
+							<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
+							<option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
+							<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
+							<option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
+							<option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
+							<option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
+							<option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
+							<option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
+							<option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
+							<option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
+							<option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
+							<option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
+							<option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
+							<option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
+							<option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
+							<option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
+							<option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
+							<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
+						</select> kWh
+							<br><br>
+
+						<button onclick="rslp1()">Reset</button>
+
+					</span>
+					<span id="msmodusslp1"><br><br>
+						<label for="sofortsoclp1">SoC</label>
+						<select type="text" name="sofortsoclp1" id="sofortsoclp1">
+						<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
+							<option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
+							<option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
+							<option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
+							<option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
+							<option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
+							<option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
+							<option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
+							<option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
+							<option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
+							<option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
+							<option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
+							<option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
+							<option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
+							<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
+							<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
+						</select> %
+
+					</span>
+					<span id="msmodusnlp1">
+					<br><br>
+					</span>
+				</div>
+
+				<span id="ladepunkts111111div">
+			<div class="col-xs-4 text-center" >
+						<label for="msmoduslp2"></label>
+
+						<select type="text" name="msmoduslp2" id="msmoduslp2">
+						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
+							<option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+							<option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
+						</select>
+
+
+
+					<span id="msmodusnlp2">
+					<br><br>
+					</span>
+					<span id="msmodusmlp2">
+
+						<br><br>
+						<label for="lademlp2">Lademenge</label>
+						<select type="text" name="lademlp2" id="lademlp2">
+						<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
+							<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
+							<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
+							<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
+							<option <?php if($lademkwhs1old == 8) echo 'selected' ?> value="8">8</option>
+							<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
+							<option <?php if($lademkwhs1old == 12) echo 'selected' ?> value="12">12</option>
+							<option <?php if($lademkwhs1old == 14) echo 'selected' ?> value="14">14</option>
+							<option <?php if($lademkwhs1old == 16) echo 'selected' ?> value="16">16</option>
+							<option <?php if($lademkwhs1old == 18) echo 'selected' ?> value="18">18</option>
+							<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
+							<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>
+							<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
+							<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
+							<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
+							<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
+							<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
+							<option <?php if($lademkwhs1old == 55) echo 'selected' ?> value="55">55</option>
+							<option <?php if($lademkwhs1old == 60) echo 'selected' ?> value="60">60</option>
+							<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
+							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
+						</select> kWh
+
+							<br><br>
+						<button onclick="rslp2()">Reset</button>
+
+
+					</span>
+					<span id="msmodusslp2"><br><br>
+						<label for="sofortsoclp1">SoC</label>
+						<select type="text" name="sofortsoclp2" id="sofortsoclp2">
+						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
+							<option <?php if($sofortsoclp2old == 15) echo 'selected' ?> value="15">15</option>
+							<option <?php if($sofortsoclp2old == 20) echo 'selected' ?> value="20">20</option>
+							<option <?php if($sofortsoclp2old == 30) echo 'selected' ?> value="30">30</option>
+							<option <?php if($sofortsoclp2old == 40) echo 'selected' ?> value="40">40</option>
+							<option <?php if($sofortsoclp2old == 45) echo 'selected' ?> value="45">45</option>
+							<option <?php if($sofortsoclp2old == 50) echo 'selected' ?> value="50">50</option>
+							<option <?php if($sofortsoclp2old == 55) echo 'selected' ?> value="55">55</option>
+							<option <?php if($sofortsoclp2old == 60) echo 'selected' ?> value="60">60</option>
+							<option <?php if($sofortsoclp2old == 65) echo 'selected' ?> value="65">65</option>
+							<option <?php if($sofortsoclp2old == 70) echo 'selected' ?> value="70">70</option>
+							<option <?php if($sofortsoclp2old == 75) echo 'selected' ?> value="75">75</option>
+							<option <?php if($sofortsoclp2old == 80) echo 'selected' ?> value="80">80</option>
+							<option <?php if($sofortsoclp2old == 85) echo 'selected' ?> value="85">85</option>
+							<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
+							<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
+						</select> %
+
+
+
+
+					</span>
+				</div>
+
+
+
+			<span id="ladepunkts222222div">
+					<div class="col-xs-4 text-center" >
+
+						<label for="lademstats2"></label>
+
+						<select type="text" name="lademlp3check" id="lademlp3check">
+						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
+							<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+						</select>
+
+
+					<span id="msmodusnlp3"></span>
+					<span id="msmodusmlp3">
+					<br><br>
+					<label for="lademlp3">Lademenge</label>
+					<select type="text" name="lademlp3" id="lademlp3">
+					<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
+						<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
+						<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
+						<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
+						<option <?php if($lademkwhs2old == 8) echo 'selected' ?> value="8">8</option>
+						<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
+						<option <?php if($lademkwhs2old == 12) echo 'selected' ?> value="12">12</option>
+						<option <?php if($lademkwhs2old == 14) echo 'selected' ?> value="14">14</option>
+						<option <?php if($lademkwhs2old == 16) echo 'selected' ?> value="16">16</option>
+						<option <?php if($lademkwhs2old == 18) echo 'selected' ?> value="18">18</option>
+						<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
+						<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
+						<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
+						<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
+						<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
+						<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>
+						<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
+						<option <?php if($lademkwhs2old == 55) echo 'selected' ?> value="55">55</option>
+						<option <?php if($lademkwhs2old == 60) echo 'selected' ?> value="60">60</option>
+						<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
+						<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
+					</select> kWh
+					<br><br>
+					<button onclick="rslp3()">Reset</button>
+				</span>
+				</span>
+			</div>
+
+		</div>
+</div>
+		<div class="col-xs-12 text-center" style="color: white">
+			<div class="col-xs-12 tex-center"><hr>
+				Sofortladen Stromstärke
+
+			</div>
+			<div class="col-xs-1 text-center"></div>
+
+			<div class="col-xs-4 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
+			</div>
+			<div class="col-xs-1 text-center">
+				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+			</div>
+			<script>
+				var slider = document.getElementById("sofortll");
+				var output = document.getElementById("sofortlll");
+				output.innerHTML = slider.value;
+				slider.oninput = function() {
+					output.innerHTML = this.value;
+				}
+			</script>
+
+		<div id="ladepunkts1ndiv">
+		</div>
+		<div id="ladepunkts1div">
+
+				<div class="col-xs-4 text-center">
+					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
+				</div>
+				<div class="col-xs-1 text-center">
+					<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
+				</div>
+			<div class="col-xs-1 text-center"></div>
+				<script>
+					var sliders1 = document.getElementById("sofortlls1");
+					var outputs1 = document.getElementById("sofortllls1");
+					outputs1.innerHTML = sliders1.value;
+					sliders1.oninput = function() {
+						outputs1.innerHTML = this.value;
+					}
+				</script>
+		</div>
+		<div id="ladepunkts2ndiv">
+			<br>
+		</div>
+		<div id="ladepunkts2div">
+			<br>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-8 text-center">
+					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
+				</div>
+				<div class="col-xs-4 text-center">
+					<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
+				</div>
+				<script>
+					var sliders2 = document.getElementById("sofortlls2");
+					var outputs2 = document.getElementById("sofortllls2");
+					outputs2.innerHTML = sliders2.value;
+					sliders2.oninput = function() {
+						outputs2.innerHTML = this.value;
+					}
+				</script>
+			</div>
+		</div>
+		</div>
+		<div class="col-xs-1"></div>
+		<div class="col-xs-10 text-center"><br>
+
+			<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>
+		<div class="col-xs-1"></div>
+
+		</div>
+		<br><br><br>
+		</form>
+</div>
+
+	<div class="row">
+		<div class="col-xs-7 text-center">
+		</div>
+		<div class="col-xs-1 text-center">
+			<a href="ladelog.php" class="btn btn-block btn-blue" >Ladelog</a>
+		</div>
+		<div class="col-xs-1 text-center">
+			<a href="logging/index.php" class="btn btn-block btn-blue" >Logging</a>
+		</div>
+		<div class="col-xs-1 text-center">
+			<a href="status.php" class="btn btn-block btn-blue" >Status</a>
+		</div>
+		<div class="col-xs-1 text-center">
+			<a href="settings.php" class="btn btn-block  btn-blue">Einstellungen</a>
+		</div>
+		<div style="color: white" class="col-xs-1 text-center">
+			Ver <?php echo $owbversion ?>
+		</div>
+	</div>
+
+</div>
+
+<!-- load amcharts js for graph 
+<script src="/openWB/web/themes/standard/livegraph.js"></script>
+-->
+
+
+<?php
+	$result = '';
+	$lines = file('/var/www/html/openWB/openwb.conf');
+	foreach($lines as $line) {
+		if(strpos($line, "grapham=") !== false) {
+			list(, $graphamold) = explode("=", $line);
+		}
+		if(strpos($line, "graphinteractiveam=") !== false) {
+			list(, $graphinteractiveamold) = explode("=", $line);
+		}
+
+		if(strpos($line, "lastmanagement=") !== false) {
+			list(, $lastmanagementold) = explode("=", $line);
+		}
+		if(strpos($line, "lastmanagements2=") !== false) {
+			list(, $lastmanagements2old) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher1_name=") !== false) {
+			list(, $verbraucher1_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher2_name=") !== false) {
+			list(, $verbraucher2_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher3_name=") !== false) {
+			list(, $verbraucher3_nameold) = explode("=", $line);
+		}
+
+
+
+	}
+	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
+	$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
+	$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
+	$verbraucher3vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher3vorhanden');
+	$verbraucher1_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher1_nameold));
+	$verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
+	$verbraucher3_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher3_nameold));
+
+					?>
+
+
+
+
+
+
+
+
+<?php
+$today = date('Y-m-d');
+if (isset($_GET[date])) {
+	$daydate = $_GET[date];
+	$_SESSION = $daydate;
+
+}
+else
+{
+	$daydate = $today;
+	$_SESSION = $daydate;
+
+}
+$daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
+$nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
+?>
+	
+<script>
+	// which graphs needed
+
+	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
+	var lastmanagement = <?php echo $lastmanagementold ?>;
+	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher1name = "<?php echo $verbraucher1_nameold ?> (I)";
+	var verbrauchere1name = "<?php echo $verbraucher1_nameold ?> (E)";
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	var verbraucher2name = "<?php echo $verbraucher2_nameold ?> (I)";
+	var verbrauchere2name = "<?php echo $verbraucher2_nameold ?> (E)";
+	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
+	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
+
+if ( graphinteractiveam == 1 ){
+	am4core.useTheme(am4themes_animated);
+}
+// Create chart instance
+var chart = am4core.create("dailydiv", am4charts.XYChart);
+ chart.numberFormatter.numberFormat = "#.## a";
+// Set up data source
+chart.dataSource.url = "/openWB/web/logging/graph-dailye.php";
+chart.dataSource.parser = new am4core.CSVParser();
+chart.dataSource.parser.options.useColumnNames = false;
+chart.dataSource.reloadFrequency = 120000;
+//
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "col0";
+categoryAxis.renderer.labels.template.fill = am4core.color("white");
+// Create value axis
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "[white]Wh[/]";
+
+
+valueAxis.renderer.labels.template.fill = am4core.color("white");
+valueAxis.adapter.add("getTooltipText", (text) => {
+if (text.includes("k")) {
+	text = text.substring(0, text.length -1);
+	text = text * 12 * 1000;
+	text = Math.round(text);
+	text = text +"W";
+} else {
+	text = text * 12 + "W";
+}
+
+return text;
+});
+
+
+var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis2.renderer.opposite = true;
+valueAxis2.title.text = "[white]% SoC";
+valueAxis2.minimum = 0;
+valueAxis2.maximum = 100;
+valueAxis2.unit = "%";
+valueAxis2.unitPosition = "right";
+valueAxis2.strictMinMax = true;
+valueAxis2.renderer.grid.template.disabled = true;
+valueAxis2.renderer.labels.template.fill = am4core.color("white");
+// Creaite series
+var series1 = chart.series.push(new am4charts.LineSeries());
+series1.dataFields.valueY = "col1";
+series1.dataFields.categoryX = "col0";
+series1.name = "EVU (I)";
+series1.fill = am4core.color("#ff0000");
+series1.stroke = am4core.color("#ff0000");
+series1.strokeWidth = 3;
+series1.tensionX = 0.8;
+series1.tensionY = 0.8;
+series1.strokeWidth = 1.5;
+series1.fillOpacity = 0.3;
+
+var series2 = chart.series.push(new am4charts.LineSeries());
+series2.dataFields.valueY = "col3";
+series2.dataFields.categoryX = "col0";
+series2.name = "LL Gesamt";
+series2.stroke = am4core.color("#4074c9");
+series2.tensionX = 0.8;
+series2.tensionY = 0.8;
+series2.strokeWidth = 1.5;
+series2.fill = am4core.color("#4074c9");
+series2.fillOpacity = 0.3;
+
+var series4 = chart.series.push(new am4charts.LineSeries());
+series4.dataFields.valueY = "col4";
+series4.dataFields.categoryX = "col0";
+series4.name = "PV (E)";
+series4.stroke = am4core.color("#00ff00");
+series4.tensionX = 0.8;
+series4.tensionY = 0.8;
+series4.strokeWidth = 1.5;
+series4.fill = am4core.color("#00ff00");
+series4.fillOpacity = 0.3;
+
+var series9 = chart.series.push(new am4charts.LineSeries());
+series9.dataFields.valueY = "col2";
+series9.dataFields.categoryX = "col0";
+series9.name = "EVU (E)";
+series9.stroke = am4core.color("#fff600");
+series9.tensionX = 0.8;
+series9.tensionY = 0.8;
+series9.strokeWidth = 1.5;
+series9.fill = am4core.color("#fff600");
+series9.fillOpacity = 0.3;
+
+if (speichervorhanden == 1) {
+var series11 = chart.series.push(new am4charts.LineSeries());
+series11.dataFields.valueY = "col5";
+series11.dataFields.categoryX = "col0";
+series11.name = "Speicher (I)";
+series11.stroke = am4core.color("#fcbe1e");
+series11.fill = am4core.color("#fcbe1e");
+series11.fillOpacity = 0.3;
+series11.tensionX = 0.8;
+series11.tensionY = 0.8;
+series11.strokeWidth = 1.5;
+var series3 = chart.series.push(new am4charts.LineSeries());
+series3.dataFields.valueY = "col6";
+series3.dataFields.categoryX = "col0";
+series3.name = "Speicher (E)";
+series3.stroke = am4core.color("#fc6f1e");
+series3.fill = am4core.color("#fc6f1e");
+series3.fillOpacity = 0.3;
+series3.tensionX = 0.8;
+series3.tensionY = 0.8;
+series3.strokeWidth = 1.5;
+var series12 = chart.series.push(new am4charts.LineSeries());
+series12.dataFields.valueY = "col12";
+series12.dataFields.categoryX = "col0";
+series12.name = "Speicher SoC";
+series12.stroke = am4core.color("#fc6f1e");
+series12.strokeWidth = 1.5;
+series12.yAxis = valueAxis2;
+series11.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+series3.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+
+
+
+}
+var series5 = chart.series.push(new am4charts.LineSeries());
+series5.dataFields.valueY = "col7";
+series5.dataFields.categoryX = "col0";
+series5.name = "LP 1";
+series5.stroke = am4core.color("#845EC2");
+series5.tensionX = 0.8;
+series5.tensionY = 0.8;
+series5.strokeWidth = 1.5;
+if ( lastmanagement == 1) {
+var series6 = chart.series.push(new am4charts.LineSeries());
+series6.dataFields.valueY = "col8";
+series6.dataFields.categoryX = "col0";
+series6.name = "LP 2";
+series6.stroke = am4core.color("#aa5ec2");
+series6.tensionX = 0.8;
+series6.tensionY = 0.8;
+series6.strokeWidth = 1.5;
+series6.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+
+}
+if ( lastmanagements2 == 1) {
+var series30 = chart.series.push(new am4charts.LineSeries());
+series30.dataFields.valueY = "col11";
+series30.dataFields.categoryX = "col0";
+series30.name = "LP 3";
+series30.stroke = am4core.color("#aa5ec2");
+series30.tensionX = 0.8;
+series30.tensionY = 0.8;
+series30.strokeWidth = 1.5;
+
+}
+if ( verbraucher1vorhanden == 1) {
+var series31 = chart.series.push(new am4charts.LineSeries());
+series31.dataFields.valueY = "col13";
+series31.dataFields.categoryX = "col0";
+series31.name = verbraucher1name ;
+series31.stroke = am4core.color("#bb5ec2");
+series31.tensionX = 0.8;
+series31.tensionY = 0.8;
+series31.strokeWidth = 1.5;
+series31.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+var series41 = chart.series.push(new am4charts.LineSeries());
+series41.dataFields.valueY = "col14";
+series41.dataFields.categoryX = "col0";
+series41.name = verbrauchere1name ;
+series41.stroke = am4core.color("#e01036");
+series41.tensionX = 0.8;
+series41.tensionY = 0.8;
+series41.strokeWidth = 1.5;
+series41.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+}
+if ( verbraucher2vorhanden == 1) {
+var series32 = chart.series.push(new am4charts.LineSeries());
+series32.dataFields.valueY = "col15";
+series32.dataFields.categoryX = "col0";
+series32.name = verbraucher2name ;
+series32.stroke = am4core.color("#fb5ec2");
+series32.tensionX = 0.8;
+series32.tensionY = 0.8;
+series32.strokeWidth = 1.5;
+series32.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+var series52 = chart.series.push(new am4charts.LineSeries());
+series52.dataFields.valueY = "col16";
+series52.dataFields.categoryX = "col0";
+series52.name = verbrauchere2name ;
+series52.stroke = am4core.color("#fb5ec2");
+series52.tensionX = 0.8;
+series52.tensionY = 0.8;
+series52.strokeWidth = 1.5;
+series52.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+}
+if ( verbraucher3vorhanden == 1) {
+var series33 = chart.series.push(new am4charts.LineSeries());
+series33.dataFields.valueY = "col16";
+series33.dataFields.categoryX = "col0";
+series33.name = verbraucher3name ;
+series33.stroke = am4core.color("#ebeec2");
+series33.tensionX = 0.8;
+series33.tensionY = 0.8;
+series33.strokeWidth = 1.5;
+series33.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+
+}
+var series8 = chart.series.push(new am4charts.LineSeries());
+series8.dataFields.valueY = "col9";
+series8.dataFields.categoryX = "col0";
+series8.name = "Lp1 SoC";
+series8.stroke = am4core.color("#845EC2");
+//series8.tensionX = 0.8;
+//series8.tensionY = 0.8;
+series8.strokeWidth = 1.5;
+series8.yAxis = valueAxis2;
+
+
+if (soc1vorhanden == 1) {
+var series10 = chart.series.push(new am4charts.LineSeries());
+series10.dataFields.valueY = "col10";
+series10.dataFields.categoryX = "col0";
+series10.name = "Lp2 SoC";
+series10.stroke = am4core.color("#aa5ec2");
+//series9.tensionX = 0.8;
+//series9.tensionY = 0.8;
+series10.strokeWidth = 1.5;
+series10.yAxis = valueAxis2;
+}
+
+chart.cursor = new am4charts.XYCursor();
+// Add legend
+
+series4.customField = 12;
+series1.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+series4.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+series2.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+series9.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+series5.legendSettings.valueText = "[{color} font-size: 10px]{valueY.sum}Wh[/]";
+
+chart.legend = new am4charts.Legend();
+chart.legend.labels.template.text = "[bold {color} font-size: 10px]{name}[/]";
+
+chart.legend.markers.template.disabled = true;
+chart.legend.position = "absolute";
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

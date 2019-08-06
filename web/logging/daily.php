@@ -181,7 +181,8 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	var verbraucher1name = "Import: <?php echo $verbraucher1_nameold ?>";
 	var verbrauchere1name = "Export: <?php echo $verbraucher1_nameold ?>";
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
-	var verbraucher2name = "<?php echo $verbraucher2_nameold ?>";
+	var verbraucher2name = "Import: <?php echo $verbraucher2_nameold ?>";
+	var verbrauchere2name = "Export: <?php echo $verbraucher2_nameold ?>";
 	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
 	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
 
@@ -347,7 +348,7 @@ var series41 = chart.series.push(new am4charts.LineSeries());
 series41.dataFields.valueY = "col14";
 series41.dataFields.categoryX = "col0";
 series41.name = verbrauchere1name ;
-series41.stroke = am4core.color("#bb5ef2");
+series41.stroke = am4core.color("#e01036");
 series41.tensionX = 0.8;
 series41.tensionY = 0.8;
 series41.strokeWidth = 1.5;
@@ -363,7 +364,15 @@ series32.tensionX = 0.8;
 series32.tensionY = 0.8;
 series32.strokeWidth = 1.5;
 series32.legendSettings.valueText = "{valueY.sum}Wh";
-
+var series52 = chart.series.push(new am4charts.LineSeries());
+series52.dataFields.valueY = "col16";
+series52.dataFields.categoryX = "col0";
+series52.name = verbrauchere2name ;
+series52.stroke = am4core.color("#fb5ec2");
+series52.tensionX = 0.8;
+series52.tensionY = 0.8;
+series52.strokeWidth = 1.5;
+series52.legendSettings.valueText = "{valueY.sum}Wh";
 }
 if ( verbraucher3vorhanden == 1) {
 var series33 = chart.series.push(new am4charts.LineSeries());

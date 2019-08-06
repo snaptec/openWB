@@ -40,10 +40,46 @@
 <?php
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "netzabschaltunghz=") !== false) {
+		list(, $netzabschaltunghzold) = explode("=", $line);
+	}
+	if(strpos($line, "displayaktiv=") !== false) {
+		list(, $displayaktivold) = explode("=", $line);
+	}
+	if(strpos($line, "displaysleep=") !== false) {
+		list(, $displaysleepold) = explode("=", $line);
+	}
+	if(strpos($line, "displayevumax=") !== false) {
+		list(, $displayevumaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaypvmax=") !== false) {
+		list(, $displaypvmaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displayspeichermax=") !== false) {
+		list(, $displayspeichermaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displayhausanzeigen=") !== false) {
+		list(, $displayhausanzeigenold) = explode("=", $line);
+	}
+	if(strpos($line, "displayhausmax=") !== false) {
+		list(, $displayhausmaxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaylp1max=") !== false) {
+		list(, $displaylp1maxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaylp2max=") !== false) {
+		list(, $displaylp2maxold) = explode("=", $line);
+	}
+	if(strpos($line, "displaypinaktiv=") !== false) {
+		list(, $displaypinaktivold) = explode("=", $line);
+	}
+
+	if(strpos($line, "displaypincode=") !== false) {
+		list(, $displaypincodeold) = explode("=", $line);
+	}
 	if(strpos($line, "logeinspeisungneg=") !== false) {
 		list(, $logeinspeisungnegold) = explode("=", $line);
 	}
-
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
 	}
@@ -56,7 +92,6 @@ foreach($lines as $line) {
 	if(strpos($line, "dspeed=") !== false) {
 		list(, $dspeedold) = explode("=", $line);
 	}
-
 	if(strpos($line, "sdmids1=") !== false) {
 		list(, $sdmids1old) = explode("=", $line);
 	}
@@ -84,7 +119,6 @@ foreach($lines as $line) {
 	if(strpos($line, "modbusevsesource=") !== false) {
 		list(, $modbusevsesourceold) = explode("=", $line);
 	}
-
 	if(strpos($line, "modbusevseid=") !== false) {
 		list(, $modbusevseidold) = explode("=", $line);
 	}
@@ -112,7 +146,12 @@ foreach($lines as $line) {
 	if(strpos($line, "pushbstopl=") !== false) {
 		list(, $pushbstoplold) = explode("=", $line);
 	}
-
+	if(strpos($line, "pushbplug=") !== false) {
+		list(, $pushbplugold) = explode("=", $line);
+	}
+	if(strpos($line, "pushbsmarthome=") !== false) {
+		list(, $pushbsmarthomeold) = explode("=", $line);
+	}
 	if(strpos($line, "sdm120modbusllid2s1=") !== false) {
 		list(, $sdm120modbusllid2s1old) = explode("=", $line);
 	}
@@ -125,7 +164,6 @@ foreach($lines as $line) {
 	if(strpos($line, "evseids2=") !== false) {
 		list(, $evseids2old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evselanips1=") !== false) {
 		list(, $evselanips1old) = explode("=", $line);
 	}
@@ -147,11 +185,9 @@ foreach($lines as $line) {
 	if(strpos($line, "lastmmaxw=") !== false) {
 		list(, $lastmmaxwold) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsecons1=") !== false) {
 		list(, $evsecons1old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsecons2=") !== false) {
 		list(, $evsecons2old) = explode("=", $line);
 	}
@@ -173,7 +209,6 @@ foreach($lines as $line) {
 	if(strpos($line, "wattbezugmodul=") !== false) {
 		list(, $wattbezugmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "vzloggerip=") !== false) {
 		list(, $vzloggeripold) = explode("=", $line);
 	}
@@ -195,19 +230,15 @@ foreach($lines as $line) {
 	if(strpos($line, "sdm630modbusbezugid=") !== false) {
 		list(, $sdm630modbusbezugidold) = explode("=", $line);
 	}
-
 	if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
 		list(, $sdm630modbusbezuglanipold) = explode("=", $line);
 	}
 	if(strpos($line, "sdm630modbusbezugsource=") !== false) {
 		list(, $sdm630modbusbezugsourceold) = explode("=", $line);
 	}
-
-
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
 	}
@@ -334,15 +365,12 @@ foreach($lines as $line) {
 	if(strpos($line, "evsewifiiplp3=") !== false) {
 		list(, $evsewifiiplp3old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp1=") !== false) {
 		list(, $evsewifitimeoutlp1old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp2=") !== false) {
 		list(, $evsewifitimeoutlp2old) = explode("=", $line);
 	}
-
 	if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 		list(, $evsewifitimeoutlp3old) = explode("=", $line);
 	}
@@ -364,7 +392,6 @@ foreach($lines as $line) {
 	if(strpos($line, "graphinteractiveam=") !== false) {
 		list(, $graphinteractiveamold) = explode("=", $line);
 	}
-
 	if(strpos($line, "graphliveam=") !== false) {
 		list(, $graphliveamold) = explode("=", $line);
 	}
@@ -378,9 +405,78 @@ foreach($lines as $line) {
 		list(, $heutegeladenold) = explode("=", $line);
 	}
 
+	if(strpos($line, "bootmodus=") !== false) {
+		list(, $bootmodusold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidakt=") !== false) {
+		list(, $rfidaktold) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c1=") !== false) {
+		list(, $rfidlp1c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c2=") !== false) {
+		list(, $rfidlp1c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp1c3=") !== false) {
+		list(, $rfidlp1c3old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c1=") !== false) {
+		list(, $rfidlp2c1old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c2=") !== false) {
+		list(, $rfidlp2c2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidlp2c3=") !== false) {
+		list(, $rfidlp2c3old) = explode("=", $line);
+	}
+	if(strpos($line, "ledsofort=") !== false) {
+		list(, $ledsofortold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspw=") !== false) {
+		list(, $settingspwold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "lednurpv=") !== false) {
+		list(, $lednurpvold) = explode("=", $line);
+	}
 
+	if(strpos($line, "ledminpv=") !== false) {
+		list(, $ledminpvold) = explode("=", $line);
+	}
 
+	if(strpos($line, "ledstandby=") !== false) {
+		list(, $ledstandbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "ledstop=") !== false) {
+		list(, $ledstopold) = explode("=", $line);
+	}
+	if(strpos($line, "led0sofort=") !== false) {
+		list(, $led0sofortold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0nurpv=") !== false) {
+		list(, $led0nurpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0minpv=") !== false) {
+		list(, $led0minpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0standby=") !== false) {
+		list(, $led0standbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "led0stop=") !== false) {
+		list(, $led0stopold) = explode("=", $line);
+	}
+	if(strpos($line, "ledsakt=") !== false) {
+		list(, $ledsaktold) = explode("=", $line);
+	}
+	if(strpos($line, "settingspwakt=") !== false) {
+		list(, $settingspwaktold) = explode("=", $line);
+	}
 }
+$settingspwsold = str_replace( "'", "", $settingspwold);
 
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 $bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -415,7 +511,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			0=Debug aus, 1=Schreibe Regelwerte in das log, 2= Schreibe die Berechnungsgrundlage in das log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
+			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
@@ -429,8 +525,13 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 
 		<div class="row">
-			Durch verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Vorraussetzung ist, das alle Module schnell genug Antworten.<br>Ebenso müssen die BEVs die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>Sollten Probleme oder Fehlermeldungen auftauchen zunächst das Regelintervall auf Normal stellen.<br><br>Werden Module genutzt welche z.B. eine Online API zur Abfrage nutzen oder möchte man weniger regeln, kann man das Regelintervall auf langsam(=20Sekunden) herabsetzen. <br>!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung sondern auch Ladestromänderung, Stop, etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br> Sehr Langsam führt zu einer Regelzeit von 60 Sekunden <br>
-	<br>	</div>
+			Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
+			Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
+			Sollten Probleme, oder Fehlermeldungen auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
+			Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
+			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, "Stop", etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
+			Sehr Langsam führt zu einer Regelzeit von 60Sek.<br><br>
+		</div>
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
 			<select type="text" name="ladetaster" id="ladetaster">
@@ -440,8 +541,149 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind diese Option ausschalten<br> <br>
+			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
 		</div>
+		<div class="row">
+			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
+			<select type="text" name="bootmodus" id="bootmodus">
+				<option <?php if($bootmodusold == 0) echo selected ?> value="0">Sofort Laden</option>
+				<option <?php if($bootmodusold == 1) echo selected ?> value="1">Min + PV</option>
+				<option <?php if($bootmodusold == 2) echo selected ?> value="2">Nur PV</option>
+				<option <?php if($bootmodusold == 3) echo selected ?> value="3">Stop</option>
+				<option <?php if($bootmodusold == 4) echo selected ?> value="4">Standby</option>
+
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Definiert den Lademodus nach Boot der openWB.<br> <br>
+		</div>
+		<div class="row">
+			<b><label for="netzabschaltunghz">Netzschutz:</label></b>
+			<select type="text" name="netzabschaltunghz" id="netzabschaltunghz">
+				<option <?php if($netzabschaltunghzold == 0) echo selected ?> value="0">Deaktiviert</option>
+				<option <?php if($netzabschaltunghzold == 1) echo selected ?> value="1">Aktiviert</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+		</div>
+
+<hr>
+
+<div class="row">
+	<b><label for="settingspwakt">Passwortabfrage für Einstellseiten:</label></b>
+	<select type="text" name="settingspwakt" id="settingspwakt">
+		<option <?php if($settingspwaktold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($settingspwaktold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select><br>Passwort:
+	<input type="password" name="settingspw" id="settingspw" value="<?php echo $settingspwsold ?>"><br>
+
+</div>
+
+<hr>
+<div class="row">
+	<b><label for="rfidakt">RFID Lesung:</label></b>
+	<select type="text" name="rfidakt" id="rfidakt">
+		<option <?php if($rfidaktold == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($rfidaktold == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
+
+<div id="rfidausdiv">
+	<br>
+</div>
+<div id="rfidandiv">
+	<div class="row">
+	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br><br>
+	</div>
+<?php
+$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+$vstable = file_get_contents('/var/www/html/openWB/ramdisk/vstable');
+$vbeta = file_get_contents('/var/www/html/openWB/ramdisk/vbeta');
+$vnightly = file_get_contents('/var/www/html/openWB/ramdisk/vnightly');
+$owbversion = file_get_contents('/var/www/html/openWB/web/version');
+?>
+	<div class="row">
+	Zuletzt gescannter RFID Tag: <?php echo $lastrfid ?><br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidlp1c1">Ladepunkt 1, Auto 1:</label></b>
+        	<input type="text" name="rfidlp1c1" id="rfidlp1c1" value="<?php echo $rfidlp1c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c2">Ladepunkt 1, Auto 2:</label></b>
+        	<input type="text" name="rfidlp1c2" id="rfidlp1c2" value="<?php echo $rfidlp1c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp1c3">Ladepunkt 1, Auto 3:</label></b>
+        	<input type="text" name="rfidlp1c3" id="rfidlp1c3" value="<?php echo $rfidlp1c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c1">Ladepunkt 2, Auto 1:</label></b>
+        	<input type="text" name="rfidlp2c1" id="rfidlp2c1" value="<?php echo $rfidlp2c1old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c2">Ladepunkt 2, Auto 2:</label></b>
+        	<input type="text" name="rfidlp2c2" id="rfidlp2c2" value="<?php echo $rfidlp2c2old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="rfidlp2c3">Ladepunkt 2, Auto 3:</label></b>
+        	<input type="text" name="rfidlp2c3" id="rfidlp2c3" value="<?php echo $rfidlp2c3old ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen.<br><br>
+	</div>
+
+</div>
+<script>
+$(function() {
+      if($('#rfidakt').val() == '0') {
+		$('#rfidausdiv').show();
+		$('#rfidandiv').hide();
+      } else {
+		$('#rfidausdiv').hide();
+	       	$('#rfidandiv').show();
+      }
+
+	$('#rfidakt').change(function(){
+	      if($('#rfidakt').val() == '0') {
+			$('#rfidausdiv').show();
+			$('#rfidandiv').hide();
+	      } else {
+			$('#rfidausdiv').hide();
+		       	$('#rfidandiv').show();
+	      }
+	    });
+});
+</script>
+
+
+
+
 
 <div class="row"><hr>
 	<h4>Benachrichtigungen mit Pushover</h4>
@@ -498,7 +740,22 @@ Der Token der App, sowie das User Token nachfolgend eintragen.<br><br>
 		</select><br><br>
 
 	</div>
+	<div class="row">
+		<b><label for="pushbplug">Beim Einstecken des Fahrzeugs:</label></b>
+	       	<select type="text" name="pushbplug" id="pushbplug">
+ 			<option <?php if($pushbplugold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbplugold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
 
+	</div>
+	<div class="row">
+		<b><label for="pushbsmarthome">Bei Triggern von Smart Home Aktionen:</label></b>
+	       	<select type="text" name="pushbsmarthome" id="pushbsmarthome">
+ 			<option <?php if($pushbsmarthomeold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($pushbsmarthomeold == 1) echo selected ?> value="1">Ja</option>
+		</select><br><br>
+
+	</div>
 
 </div><br>
 <script>
@@ -510,7 +767,6 @@ $(function() {
 		$('#pushbaus').hide();
 	       	$('#pushban').show();
       }
-
 	$('#pushbenachrichtigung').change(function(){
 	        if($('#pushbenachrichtigung').val() == '0') {
 			$('#pushbaus').show();
@@ -522,6 +778,338 @@ $(function() {
 	    });
 });
 </script>
+<div class="row"><hr>
+	<h4>LED Ausgänge</h4>
+</div>
+<div class="row">
+	<b><label for="ledsakt">LED Ausgänge:</label></b>
+	<select type="text" name="ledsakt" id="ledsakt">
+		<option <?php if($ledsaktold == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($ledsaktold == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+
+<div id="ledsan">
+
+	<div class="row">
+		<b><label for="led0sofort">Ladung nicht freigegeben, Sofort Laden Modus:</label></b>
+		<select type="text" name="led0sofort" id="led0sofort">
+		<option <?php if($led0sofortold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0sofortold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0sofortold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0sofortold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0sofortold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0sofortold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0sofortold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0sofortold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0sofortold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0sofortold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0sofortold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0sofortold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0sofortold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0sofortold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="led0nurpv">Ladung nicht freigegeben, Nur PV Laden Modus:</label></b>
+		<select type="text" name="led0nurpv" id="led0nurpv">
+		<option <?php if($led0nurpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0nurpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0nurpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0nurpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0nurpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0nurpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0nurpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0nurpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0nurpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0nurpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0nurpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0nurpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0nurpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0nurpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="led0minpv">Ladung nicht freigegeben, Min + PV Laden Modus:</label></b>
+		<select type="text" name="led0minpv" id="led0minpv">
+		<option <?php if($led0minpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0minpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0minpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0minpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0minpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0minpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0minpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0minpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0minpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0minpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0minpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0minpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0minpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0minpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="led0standby">Ladung nicht freigegeben, Standby Modus:</label></b>
+		<select type="text" name="led0standby" id="led0standby">
+		<option <?php if($led0standbyold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0standbyold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0standbyold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0standbyold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0standbyold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0standbyold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0standbyold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0standbyold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0standbyold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0standbyold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0standbyold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0standbyold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0standbyold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0standbyold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="led0stop">Ladung nicht freigegeben, Stop Modus:</label></b>
+		<select type="text" name="led0stop" id="led0stop">
+		<option <?php if($led0stopold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($led0stopold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($led0stopold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($led0stopold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($led0stopold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($led0stopold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($led0stopold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($led0stopold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($led0stopold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($led0stopold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($led0stopold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($led0stopold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($led0stopold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($led0stopold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledsofort">Ladung freigegeben, Sofort Laden Modus:</label></b>
+		<select type="text" name="ledsofort" id="ledsofort">
+		<option <?php if($ledsofortold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledsofortold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledsofortold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledsofortold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledsofortold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledsofortold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledsofortold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledsofortold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledsofortold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledsofortold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledsofortold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledsofortold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledsofortold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledsofortold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="lednurpv">Ladung freigegeben, Nur PV Laden Modus:</label></b>
+		<select type="text" name="lednurpv" id="lednurpv">
+		<option <?php if($lednurpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($lednurpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($lednurpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($lednurpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($lednurpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($lednurpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($lednurpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($lednurpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($lednurpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($lednurpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($lednurpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($lednurpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($lednurpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($lednurpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+	<div class="row">
+		<b><label for="ledminpv">Ladung freigegeben, Min + PV Laden Modus:</label></b>
+		<select type="text" name="ledminpv" id="ledminpv">
+		<option <?php if($ledminpvold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledminpvold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledminpvold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledminpvold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledminpvold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledminpvold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledminpvold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledminpvold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledminpvold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledminpvold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledminpvold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledminpvold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledminpvold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledminpvold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledstandby">Ladung freigegeben, Standby Modus:</label></b>
+		<select type="text" name="ledstandby" id="ledstandby">
+		<option <?php if($ledstandbyold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledstandbyold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledstandbyold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledstandbyold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledstandbyold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledstandbyold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledstandbyold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledstandbyold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledstandbyold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledstandbyold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledstandbyold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledstandbyold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledstandbyold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledstandbyold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="ledstop">Ladung freigegeben, Stop Modus:</label></b>
+		<select type="text" name="ledstop" id="ledstop">
+		<option <?php if($ledstopold == "aus\n") echo selected ?> value="aus">Alle LEDs aus</option>
+		<option <?php if($ledstopold == "an\n") echo selected ?> value="an">Alle LEDs an</option>
+		<option <?php if($ledstopold == "an1\n") echo selected ?> value="an1">LED 1 an</option>
+		<option <?php if($ledstopold == "an2\n") echo selected ?> value="an2">LED 2 an</option>
+		<option <?php if($ledstopold == "an3\n") echo selected ?> value="an3">LED 3 an</option>
+		<option <?php if($ledstopold == "an12\n") echo selected ?> value="an12">LED 1 & 2 an</option>
+		<option <?php if($ledstopold == "an13\n") echo selected ?> value="an13">LED 1 & 3 an</option>
+		<option <?php if($ledstopold == "an23\n") echo selected ?> value="an23">LED 2 & 3 an</option>
+		<option <?php if($ledstopold == "blink1\n") echo selected ?> value="blink1">LED 1 blinkend</option>
+		<option <?php if($ledstopold == "blink2\n") echo selected ?> value="blink2">LED 2 blinkend</option>
+		<option <?php if($ledstopold == "blink3\n") echo selected ?> value="blink3">LED 3 blinkend</option>
+		<option <?php if($ledstopold == "blink12\n") echo selected ?> value="blink12">LED 1 & 2 blinkend</option>
+		<option <?php if($ledstopold == "blink13\n") echo selected ?> value="blink13">LED 1 & 3 blinkend</option>
+		<option <?php if($ledstopold == "blink23\n") echo selected ?> value="blink23">LED 2 & 3 blinkend</option>
+		</select>
+        	<br>
+	</div>
+
+
+
+
+
+</div>
+<script>
+$(function() {
+      if($('#ledsakt').val() == '0') {
+		$('#ledsan').hide();
+      } else {
+	       	$('#ledsan').show();
+      }
+	$('#ledsakt').change(function(){
+	        if($('#ledsakt').val() == '0') {
+			$('#ledsan').hide();
+	        } else {
+		       	$('#ledsan').show();
+	        }
+	    });
+});
+</script>
+
+<script>
+$(function() {
+      if($('#displayaktiv').val() == '0') {
+		$('#displayan').hide();
+      } else {
+	       	$('#displayan').show();
+      }
+	$('#displayaktiv').change(function(){
+	        if($('#displayaktiv').val() == '0') {
+			$('#displayan').hide();
+	        } else {
+		       	$('#displayan').show();
+	        }
+	    });
+});
+</script>
+
+<div class="row"><hr>
+	<h4>integriertes Display</h4>
+</div>
+<div class="row">
+	<b><label for="displayaktiv">Display installiert:</label></b>
+	<select type="text" name="displayaktiv" id="displayaktiv">
+		<option <?php if($displayaktivold == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($displayaktivold == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div id="displayan">
+
+	<div class="row">
+       		<b><label for="displayevumax">EVU Skala Min Max:</label></b>
+        	<input type="text" name="displayevumax" id="displayevumax" value="<?php echo $displayevumaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaypvmax">PV Skala Max:</label></b>
+        	<input type="text" name="displaypvmax" id="displaypvmax" value="<?php echo $displaypvmaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displayspeichermax">Speicher Skala Min Max:</label></b>
+        	<input type="text" name="displayspeichermax" id="displayspeichermax" value="<?php echo $displayspeichermaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		<b><label for="displayhausanzeigen">Hausverbrauch anzeigen:</label></b>
+	       	<select type="text" name="displayhausanzeigen" id="displayhausanzeigen">
+ 			<option <?php if($displayhausanzeigenold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displayhausanzeigenold == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+
+	</div>
+
+	<div class="row">
+       		<b><label for="displayhausmax">Hausverbrauch Skala Max:</label></b>
+        	<input type="text" name="displayhausmax" id="displayhausmax" value="<?php echo $displayhausmaxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaylp1max">Ladepunkt 1 Skala Max:</label></b>
+        	<input type="text" name="displaylp1max" id="displaylp1max" value="<?php echo $displaylp1maxold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+       		<b><label for="displaylp2max">Ladepunkt 2 Skala Max:</label></b>
+        	<input type="text" name="displaylp2max" id="displaylp2max" value="<?php echo $displaylp2maxold ?>"><br>
+	<br>
+	</div>
+
+	<div class="row">
+		<b><label for="displaypinaktiv">Pin nötig zum ändern des Lademodus:</label></b>
+	       	<select type="text" name="displaypinaktiv" id="displaypinaktiv">
+ 			<option <?php if($displaypinaktivold == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displaypinaktivold == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+	</div>
+	<div class="row">
+		<b><label for="displaypincode">Pin (4-stellig, nur Zahlen erlaubt):</label></b>
+	       	<input type="text" name="displaypincode" id="displaypincode" value="<?php echo $displaypincodeold ?>"><br><br>
+	</div>
+	<div class="row">
+		<b><label for="displaysleep">Display ausschalten nach x Sekunden:</label></b>
+	       	<input type="text" name="displaysleep" id="displaysleep" value="<?php echo $displaysleepold ?>"><br><br>
+	</div>
+
+
+
+
+
+</div>
+
 
 		<div class="row"><hr>
 			<h3>	Optische Einstellungen</h3> <br>
@@ -581,7 +1169,7 @@ $(function() {
 		<div class="row">
 	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
 	<div class="row"><br>
-			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite:</label></b>
+			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
 				<option <?php if($graphliveamold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
@@ -589,7 +1177,7 @@ $(function() {
 
 	</div>
 	<div class="row">
-			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen:</label></b>
+			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
 			<select type="text" name="chartlegendmain" id="chartlegendmain">
 				<option <?php if($chartlegendmainold == 0) echo selected ?> value="0">Aus</option>
 				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
@@ -625,14 +1213,14 @@ $(function() {
 			<br>
 		</div>
 		<div class="row">
-			Der Stable train ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer  zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, Speichern und ein Update durchführen.<br><br>
+			Der Stablezweig ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, speichern und ein Update durchführen.<br><br>
 		</div>
 
 <br><br>
 		<button type="submit" class="btn btn-primary btn-green">Save</button>
 	</form><br><br /><hr>
 	<div class="row">
-		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungen und Ladelogfiles wieder her<br> <br>
+		Das Backup stellt im Falle eines Hardwaredefektes die Einstellungeni, Graphdaten und Ladelogfiles wieder her.<br> <br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-primary btn-red">Backup erstellen</button>
@@ -643,15 +1231,28 @@ $(function() {
 		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br><br>
 	</div>
 	<div class="row">
-		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-red">UPDATE openWB</button>
+		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
 	</div>
+	<div class="row">
+	Installierte Version: <?php echo $owbversion ?><br> 
+	Aktuellste Stable: <?php echo $vstable ?><br> 
+	Aktuellste Beta: <?php echo $vbeta ?><br> 
+	Aktuellste Nightly: <?php echo $vnightly ?><br> 
+	<br><br>
+	</div>
+
 	<div class="row">
 		<button onclick="window.location.href='./tools/smashmredirect.html'" class="btn btn-primary btn-red">SMA Support</button>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
-
+	<div class="row">
+		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen / Features sind dann ggf nicht mehr verfügbar<br><br>
+	</div>
+	<div class="row">
+		<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-primary btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
+	</div>
 <hr>
 <div class="row">
 
@@ -660,7 +1261,7 @@ $(function() {
 </div>
 	<div class="row">
 		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
-		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtlich SoC Modul Einstellungen herausgefiltert um die ggf. hinterlegten Benutzername/Passwörter NICHT zu übertragen.<br>
+		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtliche SoC Modul Einstellungen herausgefiltert, um die ggf. hinterlegten Benutzernamen/Passwörter NICHT zu übertragen.<br>
 	</div>
 <div class="row">
 	<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
@@ -682,4 +1283,29 @@ Open Source made with love!<br>
 </form>
 </div></div>
 </div>
+<script>
+	var settingspwaktold = <?php echo $settingspwaktold ?>;
+
+	var settingspwold = <?php echo $settingspwold ?>;
+if ( settingspwaktold == 1 ) {
+passWord();
+}
+function passWord() {
+var testV = 1;
+var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+
+while (testV < 3) {
+	if (!pass1) 
+		history.go(-1);
+	if (pass1 == settingspwold) {
+		break;
+	} 
+	testV+=1;
+	var pass1 = prompt('Passwort falsch','Password');
+}
+if (pass1!="password" & testV == 3) 
+	history.go(-1);
+return " ";
+} 
+</script>
 </body></html>
