@@ -2169,6 +2169,7 @@ $(function() {
 	<div class="row">
 		<b><label for="evsecons2">Anbindung der EVSE an Ladepunkt 3:</label></b>
 		<select type="text" name="evsecons2" id="evsecons2">
+			<option <?php if($evsecons2old == "thirdeth\n") echo selected ?> value="thirdeth">openWB dritter Ladepunkte</option>
 			<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>

@@ -36,6 +36,21 @@ if [[ $lastmanagement == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 		fi
 	fi
+	if [[ $evsecons1 == "slaveeth" ]]; then
+		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
+		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
+
+		if [[ $evseplugstatelp2 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+		fi
+		if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+		fi
+	fi
 fi
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then

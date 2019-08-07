@@ -280,13 +280,17 @@ foreach($lines as $line) {
 		$writeit = '1';
 	    } 
 	    if(strpos($line, "ladeleistungs2modul=") !== false) {
-	    	if($_POST[evsecons2] == "simpleevsewifi" or $_POST[evsecons2] == "goe") {
+	    	if($_POST[evsecons2] == "simpleevsewifi" or $_POST[evsecons2] == "goe" or $_POST[evsecons2] == "thirdeth") {
 			if($_POST[evsecons2] == "goe") {
 				$result .= 'ladeleistungs2modul=goelp3'."\n";
 			}
 			if($_POST[evsecons2] == "simpleevsewifi") { 
 				$result .= 'ladeleistungs2modul=simpleevsewifis2'."\n";
 			}
+			if($_POST[evsecons2] == "thirdeth") {
+				$result .= 'ladeleistungs2modul=mpm3pmethlls2'."\n";
+			}
+
 		} else {
 			$result .= 'ladeleistungs2modul='.$_POST[ladeleistungs2modul]."\n";
 	    } 

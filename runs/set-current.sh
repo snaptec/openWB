@@ -76,6 +76,13 @@ function setChargingCurrentMasterethframer () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
 }
+# function for openwb third kit
+function setChargingCurrentThirdeth () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evsethirdwritemodbus.py $current
+}
+
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
@@ -194,6 +201,10 @@ function setChargingCurrent () {
 	if [[ $evsecon == "slaveeth" ]]; then
 		setChargingCurrentSlaveeth $current 
 	fi
+	if [[ $evsecon == "thirdeth" ]]; then
+		setChargingCurrentThirdeth $current 
+	fi
+
 	if [[ $evsecon == "masterethframer" ]]; then
 		setChargingCurrentMasterethframer $current 
 	fi
@@ -342,7 +353,7 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 fi
 
-# set charging current - second charging point
+# set charging current - third charging point
 if [[ $lastmanagements2 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
 		evsecon=$evsecons2
