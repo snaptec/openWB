@@ -1,10 +1,11 @@
 var doInterval;
 
-function updateGauge(gauge, value, isSymmetric, bottomText) {
+function updateGauge(gauge, value, isSymmetric, bottomText, autoRescale) {
     // gauge: zu erneuernde Gauge
     // value: neuer Wert
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
     // bottomText: Text unter der Leistungsanzeige
+    // autoRescale: Skala passt sich nach defaultScaleCounter-Aufrufen selbst nach unten an
     // setzt neuen Wert und passt Skala an
     if(isNaN(value)){
         // es wurde keine Zahl als Wert übergeben
@@ -13,21 +14,36 @@ function updateGauge(gauge, value, isSymmetric, bottomText) {
     var needsScaling = false;
     var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
     if (gauge.max < newGaugeMax) {
-        // aktuelles Maximum ist größer als Skala
+        // benötigtes Maximum ist größer als Skala
         gauge.max = newGaugeMax;  // Skala positiv anpassen
         gauge.scaleCounter = defaultScaleCounter;  // Counter reset
         needsScaling = true;
+        if (!autoRescale) {
+            // neues Maximum der Gauge als Cookie speichern
+            gauge_identifier = 'dark_gauges_1_' + gauge.id;
+            $.ajax({
+                type: "GET",
+                url: "./setGaugeScaleCookie.php",
+                data: {
+                    name: gauge_identifier,
+                    value: newGaugeMax
+                }
+            });
+        }
     } else if (gauge.max > newGaugeMax) {
         // Skala ist aktuell eigentlich zu groß
-        gauge.scaleCounter -= 1; // dann Counter reduzieren
-        if (gauge.scaleCounter == 0) {
-            // wenn Zeit rum
-            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-            gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
-            needsScaling = true;
+        if (autoRescale) {
+            // und Anpassung soll automatisch erfolgen
+            gauge.scaleCounter -= 1; // dann Counter reduzieren
+            if (gauge.scaleCounter == 0) {
+                // wenn Zeit rum
+                gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+                gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
+                needsScaling = true;
+            }
         }
     } else {
-        // Skala soll bleiben
+        // Skala soll bleiben, keine automatische Anpassung
         if (gauge.scaleCounter < defaultScaleCounter) {
             // aber Zähler zum Wechsel ist schon angelaufen
             gauge.scaleCounter = defaultScaleCounter;  // Counter reset
@@ -73,7 +89,7 @@ function getfile() {
             value = 0;
         }
         // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max
-        updateGauge(gaugeHome, value, false, '');
+        updateGauge(gaugeHome, value, false, '', true);
     }
   });
 
@@ -83,7 +99,7 @@ function getfile() {
     complete: function(request){
         // Erzeugung bei Übergabe in positiven Wert umwandeln, liegt zur Regelung negativ vor
         // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max
-        updateGauge(gaugePV, (parseInt(request.responseText,10) * -1), false, '');
+        updateGauge(gaugePV, (parseInt(request.responseText,10) * -1), false, '', false);
     }
   });
 
@@ -101,7 +117,7 @@ function getfile() {
         } else if (value < 0) {
             text = 'Entadung';
         }
-        updateGauge(gaugeBatt, value, true, text);
+        updateGauge(gaugeBatt, value, true, text, false);
     }
   });
 
@@ -130,7 +146,7 @@ function getfile() {
         } else if (value < 0) {
             text = 'Bezug';
         }
-        updateGauge(gaugeEVU, value, true, text);
+        updateGauge(gaugeEVU, value, true, text, false);
     }
   });
 }
