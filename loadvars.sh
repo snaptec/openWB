@@ -12,9 +12,7 @@ if [[ $evsecon == "modbusevse" ]]; then
 		fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 	else
-		if [[ $evseplugstate == "1" ]]; then
-				echo 0 > /var/www/html/openWB/ramdisk/plugstat
-		fi
+		echo 0 > /var/www/html/openWB/ramdisk/plugstat
 	fi
 	if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestat
