@@ -13,7 +13,8 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	var defaultScaleCounter = 3600;  // Standardwert Zähler zur Anpassung Gauge-Skala, je 2 Sekunden
+	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
+	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
 
 <?php

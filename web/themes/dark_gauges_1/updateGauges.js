@@ -151,4 +151,4 @@ function getfile() {
   });
 }
 
-doInterval = setInterval(getfile, 2000);
+doInterval = setInterval(getfile, 5000);
