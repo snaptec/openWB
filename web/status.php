@@ -436,18 +436,6 @@
 	var doInterval;
 	function getfile() {
 		$.ajax({
-			url: "/openWB/ramdisk/pvcounter",
-	    	complete: function(request){
-		    	$("#pvcounterdiv").html(request.responseText);
-				}
-		});
-	}
-	doInterval = setInterval(getfile, 2000);
-</script>
-<script type='text/javascript'>
-	var doInterval;
-	function getfile() {
-		$.ajax({
 			url: "/openWB/ramdisk/verbraucher1_watt",
 	    	complete: function(request){
 		    	$("#verbraucher1wattdiv").html(request.responseText);
@@ -459,7 +447,7 @@
 
 					var vfinal = request.responseText;
 					vfinal = (vfinal / 1000).toFixed(3);
-	
+
 		    	$("#verbraucher1whdiv").html(vfinal);
 				}
 		});
@@ -469,7 +457,7 @@
 
 					var vefinal = request.responseText;
 					vefinal = (vefinal / 1000).toFixed(3);
-	
+
 		    	$("#verbraucher1whediv").html(vefinal);
 
 				}
@@ -492,7 +480,7 @@
 
 					var vfinal = request.responseText;
 					vfinal = (vfinal / 1000).toFixed(3);
-	
+
 		    	$("#verbraucher2whdiv").html(vfinal);
 				}
 		});
@@ -502,21 +490,9 @@
 
 					var vefinal = request.responseText;
 					vefinal = (vefinal / 1000).toFixed(3);
-	
+
 		    	$("#verbraucher2whediv").html(vefinal);
 
-				}
-		});
-	}
-	doInterval = setInterval(getfile, 2000);
-</script>
-<script type='text/javascript'>
-	var doInterval;
-	function getfile() {
-		$.ajax({
-			url: "/openWB/ramdisk/pvkwhk",
-	    	complete: function(request){
-		    	$("#pvkwhdiv").html(request.responseText);
 				}
 		});
 	}
@@ -530,7 +506,7 @@
 				complete: function(request){
 					var eefinal = request.responseText;
 					eefinal = (eefinal / 1000).toFixed(3);
-	
+
 		    	$("#einspeisungkwhdiv").html(eefinal);
 				}
 		});
@@ -556,18 +532,6 @@
 	var doInterval;
 	function getfile() {
 		$.ajax({
-			url: "/openWB/ramdisk/daily_pvkwhk",
-	    	complete: function(request){
-		    	$("#daily_pvkwhdiv").html(request.responseText);
-				}
-		});
-	}
-	doInterval = setInterval(getfile, 2000);
-</script>
-<script type='text/javascript'>
-	var doInterval;
-	function getfile() {
-		$.ajax({
 			url: "/openWB/ramdisk/speicherikwh",
 				complete: function(request){
 					var sgfinal = request.responseText;
@@ -589,34 +553,15 @@
 </script>
 
 <script type='text/javascript'>
+	// erste Zeile Gesamt-PV-Daten befüllen
 	var doInterval;
 	function getfile() {
 		$.ajax({
-			url: "/openWB/ramdisk/monthly_pvkwhk",
+			url: "/openWB/ramdisk/pvcounter",
 	    	complete: function(request){
-		    	$("#monthly_pvkwhdiv").html(request.responseText);
-				}
+		    	$("#pvcounterdiv").html(request.responseText);
+			}
 		});
-	}
-	doInterval = setInterval(getfile, 2000);
-</script>
-
-<script type='text/javascript'>
-	var doInterval;
-	function getfile() {
-		$.ajax({
-			url: "/openWB/ramdisk/yearly_pvkwhk",
-	    	complete: function(request){
-		    	$("#yearly_pvkwhdiv").html(request.responseText);
-				}
-		});
-	}
-	doInterval = setInterval(getfile, 2000);
-</script>
-
-<script type='text/javascript'>
-	var doInterval;
-	function getfile() {
 		$.ajax({
 			url: "/openWB/ramdisk/pvwatt",
 	    	complete: function(request){
@@ -624,7 +569,137 @@
 					// (Erzeugung liegt als Negativwert vor)
 					var value = parseInt(request.responseText) * -1;
 		    	$("#pvwattdiv").html(""+value);
-				}
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/pvkwhk",
+	    	complete: function(request){
+		    	$("#pvkwhdiv").html(request.responseText);
+			}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	// zweite Zeile Gesamt-PV-Daten befüllen
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/daily_pvkwhk",
+	    	complete: function(request){
+		    	$("#daily_pvkwhdiv").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/monthly_pvkwhk",
+	    	complete: function(request){
+		    	$("#monthly_pvkwhdiv").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/yearly_pvkwhk",
+	    	complete: function(request){
+		    	$("#yearly_pvkwhdiv").html(request.responseText);
+			}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	// erste Zeile PV-Daten WR 1 befüllen
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/pvwatt1",
+	    	complete: function(request){
+					// zur Anzeige Wert positiv darstellen
+					// (Erzeugung liegt als Negativwert vor)
+					var value = parseInt(request.responseText) * -1;
+		    	$("#pvwattdiv1").html(""+value);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/pvkwhk1",
+	    	complete: function(request){
+		    	$("#pvkwhdiv1").html(request.responseText);
+			}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	// zweite Zeile PV-Daten WR 1 befüllen
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/daily_pvkwhk1",
+	    	complete: function(request){
+		    	$("#daily_pvkwhdiv1").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/monthly_pvkwhk1",
+	    	complete: function(request){
+		    	$("#monthly_pvkwhdiv1").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/yearly_pvkwhk1",
+	    	complete: function(request){
+		    	$("#yearly_pvkwhdiv1").html(request.responseText);
+			}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	// erste Zeile PV-Daten WR 2 befüllen
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/pvwatt2",
+	    	complete: function(request){
+					// zur Anzeige Wert positiv darstellen
+					// (Erzeugung liegt als Negativwert vor)
+					var value = parseInt(request.responseText) * -1;
+		    	$("#pvwattdiv2").html(""+value);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/pvkwhk2",
+	    	complete: function(request){
+		    	$("#pvkwhdiv2").html(request.responseText);
+			}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
+
+<script type='text/javascript'>
+	// zweite Zeile PV-Daten WR 2 befüllen
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/daily_pvkwhk2",
+	    	complete: function(request){
+		    	$("#daily_pvkwhdiv2").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/monthly_pvkwhk2",
+	    	complete: function(request){
+		    	$("#monthly_pvkwhdiv2").html(request.responseText);
+			}
+		});
+		$.ajax({
+			url: "/openWB/ramdisk/yearly_pvkwhk2",
+	    	complete: function(request){
+		    	$("#yearly_pvkwhdiv2").html(request.responseText);
+			}
 		});
 	}
 	doInterval = setInterval(getfile, 2000);
@@ -932,9 +1007,23 @@ loadstatuslog();
         if (strpos($line, "verbraucher2_name=") !== false) {
             list(, $verbraucher2_nameold) = explode("=", $line);
         }
+		if (strpos($line, "name_wechselrichter1=") !== false) {
+            list(, $name_wechselrichter1old) = explode("=", $line);
+			# entferne EOL von String
+			$name_wechselrichter1old = trim(preg_replace('/\s+/', '', $name_wechselrichter1old));
+        }
+		if (strpos($line, "name_wechselrichter2=") !== false) {
+            list(, $name_wechselrichter2old) = explode("=", $line);
+			# entferne EOL von String
+			$name_wechselrichter2old = trim(preg_replace('/\s+/', '', $name_wechselrichter2old));
+        }
+		if (strpos($line, "kostalplenticoreip2=") !== false) {
+			# wird benötigt, für Anzeige der getrennten WR-Daten an/aus
+            list(, $kostalplenticoreip2old) = explode("=", $line);
+			# entferne EOL von String
+			$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
+        }
     }
-
-
 ?>
 
 <body>
@@ -1245,66 +1334,182 @@ loadstatuslog();
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
 			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-xs-2 text-center">
-					PV Counter
+				<div class="row">
+					<div class="text-center bold">
+						PV Gesamt-Anlagendaten
+					</div>
 				</div>
-				<div class="col-xs-2 text-center">
-					<div id="pvcounterdiv"></div>
+				<div class="row">
+					<div class="col-xs-2 text-center">
+						PV Counter
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="pvcounterdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+						PV Leistung [W]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="pvwattdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+						PV Gesamtertrag [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="pvkwhdiv"></div>
+					</div>
 				</div>
-				<div class="col-xs-2 text-center">
-					PV Leistung [W]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="pvwattdiv"></div>
-				</div>
-				<div class="col-xs-2 text-center">
-					PV Gesamtertrag [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="pvkwhdiv"></div>
+				<div class="row">
+					<div class="col-xs-2 text-center">
+						PV Tagesertrag [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="daily_pvkwhdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+						PV Monatsertrag [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="monthly_pvkwhdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+						PV Jahresertrag [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="yearly_pvkwhdiv"></div>
+					</div>
 				</div>
 			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-xs-2 text-center">
-					PV Tagesertrag [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="daily_pvkwhdiv"></div>
-				</div>
-				<div class="col-xs-2 text-center">
-					PV Monatsertrag [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="monthly_pvkwhdiv"></div>
-				</div>
-				<div class="col-xs-2 text-center">
-					PV Jahresertrag [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="yearly_pvkwhdiv"></div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-2 text-center">
-					Speicher geladen [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="speicherikwhdiv"></div>
-				</div>
-				<div class="col-xs-2 text-center">
-					Speicher entladen [kWh]
-				</div>
-				<div class="col-xs-2 text-center">
-					<div id="speicherekwhdiv"></div>
-				</div>
-				<div class="col-xs-2 text-center">
-					
-				</div>
-				<div class="col-xs-2 text-center">
-					
+			<div class="row" style="background-color:#FCBE1E">
+				<div class="row">
+					<div class="col-xs-2 text-center">
+						Speicher geladen [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="speicherikwhdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+						Speicher entladen [kWh]
+					</div>
+					<div class="col-xs-2 text-center">
+						<div id="speicherekwhdiv"></div>
+					</div>
+					<div class="col-xs-2 text-center">
+					</div>
+					<div class="col-xs-2 text-center">
+					</div>
 				</div>
 			</div>
 			<hr>
+			<div id="pvinverter1and2div">
+				<div class="row" style="background-color:#BEFEBE">
+					<div class="row">
+						<div  class="text-center bold">
+							PV Anlagendaten Wechselrichter 1
+							<?php
+								if ($name_wechselrichter1old != '') {
+									echo ' (';
+									echo $name_wechselrichter1old;
+									echo ')';
+								}
+							?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 text-center">
+						</div>
+						<div class="col-xs-2 text-center">
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Leistung [W]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="pvwattdiv1"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Gesamtertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="pvkwhdiv1"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 text-center">
+							PV Tagesertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="daily_pvkwhdiv1"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Monatsertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="monthly_pvkwhdiv1"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Jahresertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="yearly_pvkwhdiv1"></div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row" style="background-color:#BEFEBE">
+					<div class="row">
+						<div class="text-center bold">
+							PV Anlagendaten Wechselrichter 2
+							<?php
+								if ($name_wechselrichter2old != '') {
+									echo ' (';
+									echo $name_wechselrichter2old;
+									echo ')';
+								}
+							?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 text-center">
+						</div>
+						<div class="col-xs-2 text-center">
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Leistung [W]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="pvwattdiv2"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Gesamtertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="pvkwhdiv2"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 text-center">
+							PV Tagesertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="daily_pvkwhdiv2"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Monatsertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="monthly_pvkwhdiv2"></div>
+						</div>
+						<div class="col-xs-2 text-center">
+							PV Jahresertrag [kWh]
+						</div>
+						<div class="col-xs-2 text-center">
+							<div id="yearly_pvkwhdiv2"></div>
+						</div>
+					</div>
+				</div>
+				<hr>
+			</div>
+
 			<div class="row">
 				<div class="col-xs-2 text-center bg-info">
 					SoC LP1 [%]
@@ -1456,6 +1661,14 @@ loadstatuslog();
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
-					<script src="gsigraph.js"></script>
-				</body>
+	<script src="gsigraph.js"></script>
+
+	<script>
+		$(function() {
+			if('<?php echo $kostalplenticoreip2old ?>' == 'none') {
+				$('#pvinverter1and2div').hide();
+			}
+		});
+	</script>
+</body>
 </html>

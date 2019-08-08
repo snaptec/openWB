@@ -74,9 +74,9 @@ if [[ $rep3 == "3" ]] ; then
 	      echo $llv3 > /var/www/html/openWB/ramdisk/llvs13
     fi
     chargedwh=$(echo $output | jq '."E pres"') 
-    totalwh=$(echo $output | jq '."E total"') 
-#llwh=$(( chargedwh + totalwh ))
-    llwh=$(echo $chargedwh + $totalwh | bc)
+#   totalwh=$(echo $output | jq '."E total"') 
+#   llwh=$(echo $chargedwh + $totalwh | bc)
+    llwh=$(echo $output | jq '."E total"') 
     llkwh=$(echo "scale=3;$llwh / 10000" | bc -l)
     if [[ $llkwh =~ $rekwh ]] ; then
        	echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1
