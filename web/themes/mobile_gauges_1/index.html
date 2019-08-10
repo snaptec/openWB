@@ -1,11 +1,16 @@
 <!-- dark theme with gauges for openWB -->
-<!-- 2019 Michael Ortenstein -->
+<!-- 2019 Kevin Wieland based on theme by Michael Ortenstein -->
 <script src="js/RGraph.common.core.js"></script>
 <script src="js/RGraph.common.dynamic.js"></script>
 <script src="js/RGraph.common.effects.js"></script>
 <script src="js/RGraph.gauge.js"></script>
 <script src="js/RGraph.vprogress.js"></script>
 <script src="themes/mobile_gauges_1/updateGauges.js"></script>
+<!-- Graph refresher -->
+<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+<!-- Data refresher -->
+<script src="live.js"></script>
+<script src="livefunctions.js"></script>
 
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -13,7 +18,10 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	var defaultScaleCounter = 20;  // Standardwert Zähler zur Anpassung Gauge-Skala
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
+	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
 
 <div class="row">
@@ -63,8 +71,8 @@
 				Sorry, no canvas support
 			</canvas>
 		</div>
-	
-	
+
+
 	<?php if ($lastmanagementold == 1) {
 	echo '
 		<div class="col-xs-6 text-center">
@@ -128,7 +136,7 @@ echo '
         max: 1000,
         value: 0,
 		options: {
-			
+
 			radius: 60,
 			labelsCount: 2,
 			labelsSpecific: ['-1', '0', '1'],
@@ -264,7 +272,7 @@ echo '
         max: 1000,
         value: 0,
 		options: {
-			
+
 			radius: 60,
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],
@@ -343,7 +351,7 @@ echo '
         max: 1000,
         value: 0,
 		options: {
-			
+
 			radius: 60,
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],

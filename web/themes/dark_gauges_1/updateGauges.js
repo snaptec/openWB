@@ -1,12 +1,24 @@
-var doInterval;
+function updateGaugeBottomText(gauge, bottomText, setColor) {
+    // gauge: zu erneuernde Gauge
+    // bottomText: Text unter der Leistungsanzeige
+    // setColor: soll die Textfarbe je nach Wert der Anzeige geändert werden
+    // Text unter Leistungsanzeige wie übergeben setzen
+    gauge.set('titleBottom', bottomText);
+    // Farben der Schrift ggf. anpassen
+    if (setColor) {
+        if (gauge.value < 0) {
+            gauge.set('titleBottomColor', 'red');
+        } else {
+            gauge.set('titleBottomColor', 'green');
+        }
+    }
+}
 
-function updateGauge(gauge, value, isSymmetric, bottomText, autoRescale) {
+function updateGaugeValue(gauge, value, isSymmetric, autoRescale) {
     // gauge: zu erneuernde Gauge
     // value: neuer Wert
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
-    // bottomText: Text unter der Leistungsanzeige
     // autoRescale: Skala passt sich nach defaultScaleCounter-Aufrufen selbst nach unten an
-    // setzt neuen Wert und passt Skala an
     if(isNaN(value)){
         // es wurde keine Zahl als Wert übergeben
 	     return;  // gleich wieder zurück
@@ -62,14 +74,6 @@ function updateGauge(gauge, value, isSymmetric, bottomText, autoRescale) {
     }
     // neu zeichnen nur, wenn sich Wert oder die Skala ändert
     if (gauge.value != value || needsScaling) {
-        // Text unter Leistungsanzeige wie übergeben setzen
-        gauge.set('titleBottom', bottomText);
-        // Farben der Schrift anpassen
-        if (value < 0) {
-            gauge.set('titleBottomColor', 'red');
-        } else {
-            gauge.set('titleBottomColor', 'green');
-        }
         // neuen Wert für Gauge setzen
         gauge.value = value;
         // und Anzeige erneuern
@@ -77,78 +81,103 @@ function updateGauge(gauge, value, isSymmetric, bottomText, autoRescale) {
     }
 }
 
-function getfile() {
-  $.ajax({
-    // Gauge für Hausverbrauch anpassen
-    url: "/openWB/ramdisk/hausverbrauch",
-    complete: function(request){
-        var value = parseInt(request.responseText,10);
-        if (value < 0) {
-            // beim Hausverbrauch bleibt Gauge im positiven Bereich
-            // negative Werte werden = 0 gesetzt
-            value = 0;
-        }
-        // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max
-        updateGauge(gaugeHome, value, false, '', true);
-    }
-  });
-
-  $.ajax({
-    // Gauge für PV-Leistung anpassen
-    url: "/openWB/ramdisk/pvwatt",
-    complete: function(request){
-        // Erzeugung bei Übergabe in positiven Wert umwandeln, liegt zur Regelung negativ vor
-        // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max
-        updateGauge(gaugePV, (parseInt(request.responseText,10) * -1), false, '', false);
-    }
-  });
-
-  $.ajax({
-    // Gauge für Speicher-Leistung anpassen
-    url: "/openWB/ramdisk/speicherleistung",
-    complete: function(request){
-        // Entladung = negativ, Ladung = positiv
-        // Vorzeichen zur Darstellung umdrehen
-        // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max
-        var value = parseInt(request.responseText,10);
-        var text = '';
-        if (value > 0) {
-            text = 'Ladung';
-        } else if (value < 0) {
-            text = 'Entadung';
-        }
-        updateGauge(gaugeBatt, value, true, text, false);
-    }
-  });
-
-  $.ajax({
-    // ProgressBar für Speicher SoC anpassen
-    url: "/openWB/ramdisk/speichersoc",
-    complete: function(request){
-        // ProgressBar mit Rückgabewert erneuern
-        progressBarSoC.value = parseInt(request.responseText,10);
-        progressBarSoC.set('title', 'SoC: '+request.responseText+'%');
-        progressBarSoC.grow();
-    }
-  });
-
-  $.ajax({
-    // Gauge für EVU-Leistung anpassen
-    url: "/openWB/ramdisk/wattbezug",
-    complete: function(request){
-        // zur Regelung: Einspeisung = negativ, Bezug = positiv
-        // Vorzeichen zur Darstellung umdrehen
-        // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max
-        var value = parseInt(request.responseText,10) * -1;
-        var text = '';
-        if (value > 0) {
-            text = 'Einspeisung';
-        } else if (value < 0) {
-            text = 'Bezug';
-        }
-        updateGauge(gaugeEVU, value, true, text, false);
-    }
-  });
+function getGaugeDataLabel() {
+    // regelmäßig Werte für Gauge-Label vom Server holen
+    $.ajax({
+        // Tagesertrag PV für Gauge für PV-Leistung lesen
+        url:
+            "/openWB/ramdisk/daily_pvkwhk",
+        complete:
+            function(request){
+                var anzeigeText = request.responseText + ' kWh';
+                // Text setzen ohne Farbanpassung
+                updateGaugeBottomText(gaugePV, anzeigeText, false);
+            }
+    });
 }
 
-doInterval = setInterval(getfile, 5000);
+function getGaugeDataNeedle() {
+    // regelmäßig alle Werte für die Gauge-Needle vom Server holen
+    $.ajax({
+        // Gauge für PV-Leistung anpassen
+        url:
+            "/openWB/ramdisk/pvwatt",
+        complete:
+            function(request){
+                // Vorzeichen zur Darstellung umdrehen, wegen Regelung ist Erzeugung negativ
+                var anzeigeWert = parseInt(request.responseText,10) * -1;
+                // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max, kein AutoRescale
+                updateGaugeValue(gaugePV, anzeigeWert, false, false);
+            }
+    });
+
+    $.ajax({
+      // Gauge für Speicher-Leistung anpassen
+      url: "/openWB/ramdisk/speicherleistung",
+      complete: function(request){
+          // Entladung = negativ, Ladung = positiv
+          // Vorzeichen zur Darstellung umdrehen
+          var anzeigeWert = parseInt(request.responseText,10);
+          // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+          updateGaugeValue(gaugeBatt, anzeigeWert, true, false);
+          var anzeigeText = 'Ladung';
+          if (anzeigeWert < 0) anzeigeText = 'Entadung';
+          // Text setzen mit Farbanpassung
+          updateGaugeBottomText(gaugeBatt, anzeigeText, true);
+      }
+    });
+
+    $.ajax({
+      // ProgressBar für Speicher SoC anpassen
+      url: "/openWB/ramdisk/speichersoc",
+      complete: function(request){
+          // ProgressBar mit Rückgabewert erneuern
+          progressBarSoC.value = parseInt(request.responseText,10);
+          progressBarSoC.set('title', 'SoC: '+request.responseText+'%');
+          progressBarSoC.grow();
+      }
+    });
+
+    $.ajax({
+      // Gauge für EVU-Leistung anpassen
+      url: "/openWB/ramdisk/wattbezug",
+      complete: function(request){
+          // zur Regelung: Einspeisung = negativ, Bezug = positiv
+          // Vorzeichen zur Darstellung umdrehen
+          var anzeigeWert = parseInt(request.responseText,10) * -1;
+          // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+          updateGaugeValue(gaugeEVU, anzeigeWert, true, false);
+          var anzeigeText = 'Einspeisung';
+          if (anzeigeWert < 0) anzeigeText = 'Bezug';
+          // Text setzen mit Farbanpassung
+          updateGaugeBottomText(gaugeEVU, anzeigeText, true);
+      }
+    });
+
+    $.ajax({
+      // Gauge für Hausverbrauch anpassen
+      url:
+          "/openWB/ramdisk/hausverbrauch",
+      complete:
+          function(request){
+              var anzeigeWert = parseInt(request.responseText,10);
+              if (anzeigeWert < 0) {
+                  // beim Hausverbrauch bleibt Gauge im positiven Bereich
+                  // negative Werte werden = 0 gesetzt
+                  anzeigeWert = 0;
+              }
+              // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max, AutoRescale
+              updateGaugeValue(gaugeHome, anzeigeWert, false, true);
+          }
+      });
+}
+
+var gaugeDataIntervall, gaugeLabelIntervall;
+
+$(window).load(function() {
+    // sobal die Seite vollständig geladen ist, alle Gauges
+    // regelmäßig aktualisieren
+    // benötigt eingebundene handleIntervalls.js
+    gaugeDataIntervall = mySetInterval(getGaugeDataNeedle, 5000);  // alle 5 Sekunden Needle erneuern
+    gaugeLabelIntervall = mySetInterval(getGaugeDataLabel, 20000);  // alle 20 Sekunden Label mit Werten erneuern
+});

@@ -1,79 +1,4 @@
-var doInterval;
-var do2Interval;
-function loadText(){
-    $.ajax({
-        url:"./tools/lademodus.php",
-        type: "post", //request type,
-        dataType: 'json',
-        data: {call: "loadfile"},
-        success:function(result){
-            if(result.text == 0){
-                $('.actstat .btn').addClass("btn-green");
-                $('.actstat1 .btn').addClass("btn-red");
-                $('.actstat2 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-red");
-                $('.actstat3 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-red");
-                $('.actstat4 .btn').removeClass("btn-green");
-                $('.actstat1 .btn').removeClass("btn-green");
-                $('.actstat2 .btn').removeClass("btn-green");
-            }
-            if(result.text == 1){
-                $('.actstat1 .btn').addClass("btn-green");
-                $('.actstat .btn').addClass("btn-red");
-                $('.actstat2 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-red");
-                $('.actstat .btn').removeClass("btn-green");
-                $('.actstat3 .btn').removeClass("btn-green");
-                $('.actstat2 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-red");
-                $('.actstat4 .btn').removeClass("btn-green");
-
-            }
-            if(result.text == 2){
-                $('.actstat2 .btn').addClass("btn-green");
-                $('.actstat .btn').addClass("btn-red");
-                $('.actstat1 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-red");
-                $('.actstat .btn').removeClass("btn-green");
-                $('.actstat3 .btn').removeClass("btn-green");
-                $('.actstat1 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-red");
-                $('.actstat4 .btn').removeClass("btn-green");
-
-            }
-            if(result.text == 3){
-                $('.actstat2 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-green");
-	        $('.actstat2 .btn').removeClass("btn-green");
-
-                $('.actstat .btn').addClass("btn-red");
-                $('.actstat1 .btn').addClass("btn-red");
-                $('.actstat .btn').removeClass("btn-green");
-                $('.actstat1 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-red");
-                $('.actstat4 .btn').removeClass("btn-green");
-
-            }
-            if(result.text == 4){
-                $('.actstat2 .btn').addClass("btn-red");
-                $('.actstat3 .btn').addClass("btn-red");
-                $('.actstat .btn').addClass("btn-red");
-                $('.actstat1 .btn').addClass("btn-red");
-                $('.actstat .btn').removeClass("btn-green");
-                $('.actstat2 .btn').removeClass("btn-green");
-                $('.actstat3 .btn').removeClass("btn-green");
-                $('.actstat1 .btn').removeClass("btn-green");
-                $('.actstat4 .btn').addClass("btn-green");
-                $('.actstat4 .btn').removeClass("btn-red");
-
-            }
-        }
-    });
-}
-loadText();
-
-function getfile() {
+function getAllData() {
 $.ajaxSetup({ cache: false});
     $.ajax({
         url:"./tools/dailychargelp1.php",
@@ -222,7 +147,7 @@ $.ajax({
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.add("fa");
 			element.classList.add("fa-plug");
-	
+
 		    } else {
 			var element = document.getElementById("plugstatlp2div");
 			element.classList.remove("fa");
@@ -241,7 +166,7 @@ $.ajax({
 			var element = document.getElementById("plugstatlp1div");
 			element.classList.remove("fa");
 			element.classList.remove("fa-plug");
-		
+
 			}
     }
   });
@@ -429,11 +354,13 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
-
-
 }
 
-doInterval = setInterval(getfile, 5000);
-do2Interval = setInterval(loadText, 5000);
+var liveIntervall;
 
-getfile();
+$(window).load(function() {
+    // sobal die Seite vollständig geladen ist, alle Gauges
+    // regelmäßig aktualisieren
+    // benötigt eingebundene handleIntervalls.js
+    liveIntervall = mySetInterval(getAllData, 5000);  // alle 5 Sekunden Label mit Werten erneuern
+});
