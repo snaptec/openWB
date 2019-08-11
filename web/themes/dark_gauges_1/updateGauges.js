@@ -1,22 +1,8 @@
-function updateGaugeBottomText(gauge, bottomText, setColor) {
-    // gauge: zu erneuernde Gauge
-    // bottomText: Text unter der Leistungsanzeige
-    // setColor: soll die Textfarbe je nach Wert der Anzeige geändert werden
-    // Text unter Leistungsanzeige wie übergeben setzen
-    gauge.set('titleBottom', bottomText);
-    // Farben der Schrift ggf. anpassen
-    if (setColor) {
-        if (gauge.value < 0) {
-            gauge.set('titleBottomColor', 'red');
-        } else {
-            gauge.set('titleBottomColor', 'green');
-        }
-    }
-}
-
-function updateGaugeValue(gauge, value, isSymmetric, autoRescale) {
+function updateGaugeValue(gauge, value, text, setText, isSymmetric, autoRescale) {
     // gauge: zu erneuernde Gauge
     // value: neuer Wert
+    // text: ggf. neuer Text
+    // setText: Text und Farbe des Labels anpassen
     // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
     // autoRescale: Skala passt sich nach defaultScaleCounter-Aufrufen selbst nach unten an
     if(isNaN(value)){
@@ -72,17 +58,23 @@ function updateGaugeValue(gauge, value, isSymmetric, autoRescale) {
         // Labels in kW
         gauge.set('labelsSpecific', [(gauge.min/1000), ((gauge.max-Math.abs(gauge.min))/2000), (gauge.max/1000)]);
     }
-    // neu zeichnen nur, wenn sich Wert oder die Skala ändert
-    if (gauge.value != value || needsScaling) {
-        // neuen Wert für Gauge setzen
-        gauge.value = value;
-        // und Anzeige erneuern
-        gauge.grow();
+    // neuen Wert für Gauge setzen, ggf. Text im Label ändern
+    gauge.value = value;
+    if (setText) {
+        gauge.set('titleBottom', text);
+        // Farben der Schrift ggf. anpassen
+        if (value < 0) {
+            gauge.set('titleBottomColor', 'red');
+        } else {
+            gauge.set('titleBottomColor', 'green');
+        }
     }
+    // und Anzeige erneuern
+    gauge.grow();
 }
 
-function getGaugeDataLabel() {
-    // regelmäßig Werte für Gauge-Label vom Server holen
+function getValueDailyYieldLabel() {
+    // regelmäßig Werte für Tagesertrag-Label vom Server holen
     $.ajax({
         // Tagesertrag PV für Gauge für PV-Leistung lesen
         url:
@@ -90,8 +82,9 @@ function getGaugeDataLabel() {
         complete:
             function(request){
                 var anzeigeText = request.responseText + ' kWh';
-                // Text setzen ohne Farbanpassung
-                updateGaugeBottomText(gaugePV, anzeigeText, false);
+                // Text setzen
+                gaugePV.set('titleBottom', anzeigeText);
+                // Neuzeichnen erfolgt bei regelmäßiger Werte-Aktualisierung
             }
     });
 }
@@ -107,7 +100,9 @@ function getGaugeDataNeedle() {
                 // Vorzeichen zur Darstellung umdrehen, wegen Regelung ist Erzeugung negativ
                 var anzeigeWert = parseInt(request.responseText,10) * -1;
                 // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max, kein AutoRescale
-                updateGaugeValue(gaugePV, anzeigeWert, false, false);
+                // Anpassung des Labesl mit Tagesertrag erfolgt per separatem Ajax
+                // Gauge mit Rückgabewert erneuern, kein Text, asymmetrische Gauge 0-Max, kein AutoRescale
+                updateGaugeValue(gaugePV, anzeigeWert, '', false, false, false);
             }
     });
 
@@ -116,14 +111,14 @@ function getGaugeDataNeedle() {
       url: "/openWB/ramdisk/speicherleistung",
       complete: function(request){
           // Entladung = negativ, Ladung = positiv
-          // Vorzeichen zur Darstellung umdrehen
           var anzeigeWert = parseInt(request.responseText,10);
-          // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max, kein AutoRescale
-          updateGaugeValue(gaugeBatt, anzeigeWert, true, false);
           var anzeigeText = 'Ladung';
           if (anzeigeWert < 0) anzeigeText = 'Entadung';
-          // Text setzen mit Farbanpassung
-          updateGaugeBottomText(gaugeBatt, anzeigeText, true);
+          // Text und Farbe des Labels anpassen je nach Ladung/Entadung
+          // Neuzeichnung erfolgt bei Update der Werte
+          // updateGaugeBottomText(gaugeBatt, anzeigeText, true, true);
+          // Gauge mit Rückgabewert und Text erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+          updateGaugeValue(gaugeBatt, anzeigeWert, anzeigeText, true, true, false);
       }
     });
 
@@ -145,12 +140,13 @@ function getGaugeDataNeedle() {
           // zur Regelung: Einspeisung = negativ, Bezug = positiv
           // Vorzeichen zur Darstellung umdrehen
           var anzeigeWert = parseInt(request.responseText,10) * -1;
-          // Gauge mit Rückgabewert erneuern, symmetrische Gauge Min-Max, kein AutoRescale
-          updateGaugeValue(gaugeEVU, anzeigeWert, true, false);
           var anzeigeText = 'Einspeisung';
           if (anzeigeWert < 0) anzeigeText = 'Bezug';
-          // Text setzen mit Farbanpassung
-          updateGaugeBottomText(gaugeEVU, anzeigeText, true);
+          // Text und Farbe des Labels anpassen je nach Einspeisung/Bezug
+          // Neuzeichnung erfolgt bei Update der Werte
+          // updateGaugeBottomText(gaugeEVU, anzeigeText, true, true);
+          // Gauge mit Rückgabewert und Text erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+          updateGaugeValue(gaugeEVU, anzeigeWert, anzeigeText, true, true, false);
       }
     });
 
@@ -166,18 +162,18 @@ function getGaugeDataNeedle() {
                   // negative Werte werden = 0 gesetzt
                   anzeigeWert = 0;
               }
-              // Gauge mit Rückgabewert erneuern, asymmetrische Gauge 0-Max, AutoRescale
-              updateGaugeValue(gaugeHome, anzeigeWert, false, true);
+              // Gauge mit Rückgabewert erneuern, kein Text, asymmetrische Gauge 0-Max, AutoRescale
+              updateGaugeValue(gaugeHome, anzeigeWert, '', false, false, true);
           }
       });
 }
 
-var gaugeDataIntervall, gaugeLabelIntervall;
+var gaugeDataIntervall, dailyYieldLabelIntervall;
 
 $(window).load(function() {
     // sobal die Seite vollständig geladen ist, alle Gauges
     // regelmäßig aktualisieren
     // benötigt eingebundene handleIntervalls.js
     gaugeDataIntervall = mySetInterval(getGaugeDataNeedle, 5000);  // alle 5 Sekunden Needle erneuern
-    gaugeLabelIntervall = mySetInterval(getGaugeDataLabel, 20000);  // alle 20 Sekunden Label mit Werten erneuern
+    dailyYieldLabelIntervall = mySetInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
 });
