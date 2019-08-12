@@ -13,8 +13,30 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	var defaultScaleCounter = 120;  // Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden
+	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
+	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
+
+<?php
+	// Check ob Gauge-Skala-Cookies existiert - dann Werte übernehmen, sonst Standard setzen
+	if((isset($_COOKIE['dark_gauges_1_pvData']) === true)) {
+		$pvDataScaleMax = $_COOKIE['dark_gauges_1_pvData'];
+	} else {
+		$pvDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['dark_gauges_1_battData']) === true)) {
+		$battDataScaleMax = $_COOKIE['dark_gauges_1_battData'];
+	} else {
+		$battDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['dark_gauges_1_evuData']) === true)) {
+		$evuDataScaleMax = $_COOKIE['dark_gauges_1_evuData'];
+	} else {
+		$evuDataScaleMax = 1000;
+	}
+?>
 
 <div class="row">
 	<div class="col-xs-12 text-center">
@@ -52,17 +74,16 @@
 </div>
 
 <script>
-
     gaugePV = new RGraph.Gauge({
         id: 'pvData',
         min: 0,
-        max: 1000,
+        max: <?php echo $pvDataScaleMax?>,
         value: 0,
         options: {
 			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
-			labelsSpecific: ['0', '0.5', '1'],
+			labelsSpecific: ['0', '<?php echo $pvDataScaleMax/2000?>', '<?php echo $pvDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			tickmarksSmall: 20,
 			marginTop: 5,
@@ -79,9 +100,9 @@
 			labelsValueBold: true,
             labelsValueItalic: true,
 			labelsValueSize: 17,
-            adjustable: true,
+            adjustable: false,
             textAccessible: false,
-			colorsRanges: [[0, 1000, 'green', 3]],
+			colorsRanges: [[0, <?php echo $pvDataScaleMax?>, 'green', 3]],
 			colorsRedWidth: 0,
             colorsYellowWidth: 0,
 			anglesStart: RGraph.PI - 0.55,
@@ -92,15 +113,15 @@
 
 	gaugeBatt = new RGraph.Gauge({
         id: 'battData',
-        min: -1000,
-        max: 1000,
+        min: <?php echo $battDataScaleMax*-1?>,
+        max: <?php echo $battDataScaleMax?>,
         value: 0,
 		options: {
 			centerx: 110,
 			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
-			labelsSpecific: ['-1', '0', '1'],
+			labelsSpecific: ['<?php echo $battDataScaleMax/-1000?>', '0', '<?php echo $battDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			tickmarksSmall: 20,
 			marginTop: 5,
@@ -120,9 +141,9 @@
 			titleBottomPos: 0.61,
 			titleBottomBold: true,
 			titleBottomSize: 11,
-            adjustable: true,
+            adjustable: false,
             textAccessible: false,
-			colorsRanges: [[-1000,0, 'red', 3], [0, 1000, 'green', 3]],
+			colorsRanges: [[<?php echo $battDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $battDataScaleMax?>, 'green', 3]],
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
@@ -151,14 +172,14 @@
 
 	gaugeEVU = new RGraph.Gauge({
         id: 'evuData',
-        min: -1000,
-        max: 1000,
+        min: <?php echo $evuDataScaleMax*-1?>,
+        max: <?php echo $evuDataScaleMax?>,
         value: 0,
 		options: {
 			radius: 102,
 			titleTop: 'kW',
 			labelsCount: 2,
-			labelsSpecific: ['-1', '0', '1'],
+			labelsSpecific: ['<?php echo $evuDataScaleMax/-1000?>', '0', '<?php echo $evuDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			tickmarksSmall: 20,
 			marginTop: 5,
@@ -178,9 +199,9 @@
 			titleBottomPos: 0.61,
 			titleBottomBold: true,
 			titleBottomSize: 11,
-            adjustable: true,
+            adjustable: false,
             textAccessible: false,
-			colorsRanges: [[-1000,0, 'red', 3], [0, 1000, 'green', 3]],
+			colorsRanges: [[<?php echo $evuDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $evuDataScaleMax?>, 'green', 3]],
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
@@ -214,7 +235,7 @@
 			labelsValueBold: true,
             labelsValueItalic: true,
 			labelsValueSize: 17,
-            adjustable: true,
+            adjustable: false,
             textAccessible: false,
 			colorsRanges: [[0, 1000, 'green', 3]],
 			colorsRedWidth: 0,
@@ -778,3 +799,10 @@ echo '
 
 <!-- load amcharts js for graph -->
 <script src="/openWB/web/themes/standard/livegraph.js"></script>
+
+<!-- after pageload update all gauges -->
+<script type="text/javascript">
+	$(function() {
+		getfile();
+	});
+</script>
