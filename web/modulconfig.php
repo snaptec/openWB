@@ -566,6 +566,9 @@ foreach($lines as $line) {
 	if(strpos($line, "soc_tesla_username=") !== false) {
 		list(, $socteslausernameold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_tesla_carnumber=") !== false) {
+		list(, $socteslacarnumberold) = explode("=", $line);
+	}
 	if(strpos($line, "soc_tesla_password=") !== false) {
 		list(, $socteslapwold) = explode("=", $line);
 	}
@@ -1359,6 +1362,13 @@ $(function() {
 	</div>
 	<div class="row bg-info">
 		Password des Tesla Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="teslasoccarnumber">Auto im Account:</label></b>
+		<input type="text" name="teslasoccarnumber" id="teslasoccarnumber" value="<?php echo $socteslacarnumberold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="teslasocintervall">Abfrageintervall Standby:</label></b>

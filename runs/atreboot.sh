@@ -796,6 +796,10 @@ if ! grep -Fq "soc_tesla_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_tesla_carnumber=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_carnumber=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_tesla_password=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_password=daspasswort" >> /var/www/html/openWB/openwb.conf

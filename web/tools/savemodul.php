@@ -610,6 +610,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "soc_tesla_username=") !== false) {
 	    $result .= 'soc_tesla_username='.$_POST[teslasocuser]."\n";
 	 $writeit = '1';
+	    }
+	    if(strpos($line, "soc_tesla_carnumber=") !== false) {
+	    $result .= 'soc_tesla_carnumber='.$_POST[teslasoccarnumber]."\n";
+	 $writeit = '1';
    }
 	    if(strpos($line, "soc_tesla_password=") !== false) {
 	    $result .= 'soc_tesla_password=\''.$_POST[teslasocpw]."'\n";
