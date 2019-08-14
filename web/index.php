@@ -68,11 +68,9 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
-	<!-- Graph refresher -->
-	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
-	<!-- Data refresher -->
-    <script src="live.js"></script>
-    <script src="livefunctions.js"></script>
+	<!-- Intervall Handler -->
+	<script src="handleIntervalls.js"></script>
+	
 </head>
 
 <?php include ("values.php"); ?>
@@ -101,12 +99,12 @@
 	<div class="preloader">
 		<img src="img/loader.gif" alt="Preloader image">
 	</div>
-		
+
 <?php
 	if ($_COOKIE['openWBTheme'] == 'desktop') {
 		echo '<div style="margin-left: 10px; margin-right: 10px;">';
 	} else {
-		echo '<div class="container">'; 
+		echo '<div class="container">';
 	}
 
 				// das gewählte Theme einbinden

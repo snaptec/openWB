@@ -1,11 +1,16 @@
 <!-- dark theme with gauges for openWB -->
-<!-- 2019 Michael Ortenstein -->
+<!-- 2019 Kevin Wieland based on theme by Michael Ortenstein -->
 <script src="js/RGraph.common.core.js"></script>
 <script src="js/RGraph.common.dynamic.js"></script>
 <script src="js/RGraph.common.effects.js"></script>
 <script src="js/RGraph.gauge.js"></script>
 <script src="js/RGraph.vprogress.js"></script>
 <script src="themes/mobile_gauges_1/updateGauges.js"></script>
+<!-- Graph refresher -->
+<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+<!-- Data refresher -->
+<script src="live.js"></script>
+<script src="livefunctions.js"></script>
 
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -13,8 +18,32 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	var defaultScaleCounter = 20;  // Standardwert Zähler zur Anpassung Gauge-Skala
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
+	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
+	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
+
+<?php
+	// Check ob Gauge-Skala-Cookies existiert - dann Werte übernehmen, sonst Standard setzen
+	if((isset($_COOKIE['mobile_gauges_1_pvData']) === true)) {
+		$pvDataScaleMax = $_COOKIE['mobile_gauges_1_pvData'];
+	} else {
+		$pvDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['mobile_gauges_1_battData']) === true)) {
+		$battDataScaleMax = $_COOKIE['mobile_gauges_1_battData'];
+	} else {
+		$battDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['mobile_gauges_1_evuData']) === true)) {
+		$evuDataScaleMax = $_COOKIE['mobile_gauges_1_evuData'];
+	} else {
+		$evuDataScaleMax = 1000;
+	}
+?>
 
 <div class="row">
 	<div class="col-xs-12 text-center">
@@ -63,8 +92,8 @@
 				Sorry, no canvas support
 			</canvas>
 		</div>
-	
-	
+
+
 	<?php if ($lastmanagementold == 1) {
 	echo '
 		<div class="col-xs-6 text-center">
@@ -84,17 +113,16 @@ echo '
 </div>
 
 <script>
-
-    gaugePV = new RGraph.Gauge({
+	gaugePV = new RGraph.Gauge({
         id: 'pvData',
         min: 0,
-        max: 1000,
+        max: <?php echo $pvDataScaleMax?>,
         value: 0,
         options: {
 			radius: 65,
 			textSize: 8,
 			labelsCount: 2,
-			labelsSpecific: ['0', '0.5', '1'],
+			labelsSpecific: ['0', '<?php echo $pvDataScaleMax/2000?>', '<?php echo $pvDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			tickmarksSmall: 20,
 			marginTop: 10,
@@ -111,9 +139,12 @@ echo '
 			labelsValueBold: true,
             labelsValueItalic: true,
 			labelsValueSize: 10,
-            adjustable: true,
+			titleBottomPos: 0.61,
+			titleBottomBold: true,
+			titleBottomSize: 8,
+            adjustable: false,
             textAccessible: false,
-			colorsRanges: [[0, 1000, 'green', 3]],
+			colorsRanges: [[0, <?php echo $pvDataScaleMax?>, 'green', 3]],
 			colorsRedWidth: 0,
             colorsYellowWidth: 0,
 			anglesStart: RGraph.PI - 0.55,
@@ -124,14 +155,13 @@ echo '
 
 	gaugeBatt = new RGraph.Gauge({
         id: 'battData',
-        min: -1000,
-        max: 1000,
+        min: <?php echo $battDataScaleMax*-1?>,
+        max: <?php echo $battDataScaleMax?>,
         value: 0,
 		options: {
-			
 			radius: 60,
 			labelsCount: 2,
-			labelsSpecific: ['-1', '0', '1'],
+			labelsSpecific: ['<?php echo $battDataScaleMax/-1000?>', '0', '<?php echo $battDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			marginRight: 30,
 			tickmarksSmall: 20,
@@ -155,7 +185,7 @@ echo '
 			titleBottomSize: 8,
             adjustable: true,
             textAccessible: false,
-			colorsRanges: [[-1000,0, 'red', 3], [0, 1000, 'green', 3]],
+			colorsRanges: [[<?php echo $battDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $battDataScaleMax?>, 'green', 3]],
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
@@ -183,14 +213,14 @@ echo '
     }).draw();
 
 	gaugeEVU = new RGraph.Gauge({
-        id: 'evuData',
-        min: -1000,
-        max: 1000,
-        value: 0,
+		id: 'evuData',
+		min: <?php echo $evuDataScaleMax*-1?>,
+		max: <?php echo $evuDataScaleMax?>,
+		value: 0,
 		options: {
 			radius: 65,
 			labelsCount: 2,
-			labelsSpecific: ['-1', '0', '1'],
+			labelsSpecific: ['<?php echo $evuDataScaleMax/-1000?>', '0', '<?php echo $evuDataScaleMax/1000?>'],
 			tickmarksLarge: 4,
 			tickmarksSmall: 20,
 			marginTop: 10,
@@ -213,13 +243,12 @@ echo '
 			titleBottomSize: 8,
             adjustable: true,
             textAccessible: false,
-			colorsRanges: [[-1000,0, 'red', 3], [0, 1000, 'green', 3]],
+			colorsRanges: [[<?php echo $evuDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $evuDataScaleMax?>, 'green', 3]],
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
-        }
-    }).draw();
+		}
+	}).draw();
 	gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
-
 
 	gaugeHome = new RGraph.Gauge({
         id: 'homeData',
@@ -264,7 +293,7 @@ echo '
         max: 1000,
         value: 0,
 		options: {
-			
+
 			radius: 60,
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],
@@ -343,7 +372,7 @@ echo '
         max: 1000,
         value: 0,
 		options: {
-			
+
 			radius: 60,
 			labelsCount: 2,
 			labelsSpecific: ['0', '0.5', '1'],
