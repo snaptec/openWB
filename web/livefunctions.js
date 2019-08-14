@@ -485,11 +485,4 @@ $(document).ready(function(){
 	});
 });
 
-var livefunctionsIntervall;
 
-$(window).load(function() {
-    // sobal die Seite vollständig geladen ist, alle Gauges
-    // regelmäßig aktualisieren
-    // benötigt eingebundene handleIntervalls.js
-    livefunctionsIntervall = mySetInterval(loadText, 5000);  // alle 5 Sekunden Buttons etc. erneuern
-});

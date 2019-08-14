@@ -6,13 +6,6 @@
 <script src="js/RGraph.gauge.js"></script>
 <script src="js/RGraph.vprogress.js"></script>
 <script src="themes/dark_gauges_1/updateGauges.js"></script>
-<!-- Graph refresher -->
-<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
-<!-- load amcharts js for graph -->
-<script src="themes/dark_gauges_1/livegraph.js"></script>
-<!-- Data refresher -->
-<script src="live.js"></script>
-<script src="livefunctions.js"></script>
 
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -20,8 +13,6 @@
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var chartlegend = <?php echo $chartlegendmainold ?>;
-	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
-	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
 	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
@@ -109,9 +100,6 @@
 			labelsValueBold: true,
             labelsValueItalic: true,
 			labelsValueSize: 17,
-			titleBottomPos: 0.61,
-			titleBottomBold: true,
-			titleBottomSize: 11,
             adjustable: false,
             textAccessible: false,
 			colorsRanges: [[0, <?php echo $pvDataScaleMax?>, 'green', 3]],
@@ -172,7 +160,7 @@
 			backgroundColor: 'black',
 			colors: ['Gradient(red:yellow:green)'],
 			marginLeft: 217,
-            marginRight: 22,
+            marginRight: 24,
             textSize: 8,
 			textBold: true,
 			textColor: '#E9E9E9',
@@ -220,6 +208,7 @@
     }).draw();
 	gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
 
+
 	gaugeHome = new RGraph.Gauge({
         id: 'homeData',
         min: 0,
@@ -256,6 +245,7 @@
         }
     }).draw();
 	gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+
 </script>
 
 <!-- enable selected graphing method -->
@@ -806,3 +796,13 @@ echo '
 
 <br><br><br><br>
 </div>
+
+<!-- load amcharts js for graph -->
+<script src="/openWB/web/themes/standard/livegraph.js"></script>
+
+<!-- after pageload update all gauges -->
+<script type="text/javascript">
+	$(function() {
+		getfile();
+	});
+</script>

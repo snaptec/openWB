@@ -1,3 +1,5 @@
+var doval;
+
 function getgraph() {
 	var themeCookie = document.cookie.split("openWBTheme")[1].split("; ")[0].substr(1);
 	var source = "themes/"+themeCookie+"/graph-live.php",
@@ -8,11 +10,6 @@ function getgraph() {
 	}
 }
 
-var embeddedGraphIntervall;
+doval = setInterval(getgraph, 5000);
 
-$(window).load(function() {
-    // sobal die Seite vollständig geladen ist, alle Gauges
-    // regelmäßig aktualisieren
-    // benötigt eingebundene handleIntervalls.js
-    embeddedGraphIntervall = mySetInterval(getgraph, 5000);  // alle 5 Sekunden Graph erneuern
-});
+getgraph();
