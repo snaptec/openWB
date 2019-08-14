@@ -11,13 +11,17 @@ if [[ $evsecon == "modbusevse" ]]; then
 			/var/www/html/openWB/runs/pushover.sh "$message"
 		fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
+			plugstat=1
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+		plugstat=0
 	fi
 	if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
 		echo 1 > /var/www/html/openWB/ramdisk/chargestat
+		chargestat=1
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
+		chargestat=0
 	fi
 fi
 if [[ $lastmanagement == "1" ]]; then

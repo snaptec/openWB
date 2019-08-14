@@ -43,6 +43,9 @@ foreach($lines as $line) {
 	if(strpos($line, "netzabschaltunghz=") !== false) {
 		list(, $netzabschaltunghzold) = explode("=", $line);
 	}
+	if(strpos($line, "cpunterbrechunglp1=") !== false) {
+		list(, $cpunterbrechunglp1old) = explode("=", $line);
+	}
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
@@ -568,6 +571,17 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 		<div class="row">
 			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+		</div><br><br>
+		<div class="row">
+			<b><label for="cpunterbrechunglp1">CP Unterbrechung LP1:</label></b>
+			<select type="text" name="cpunterbrechunglp1" id="cpunterbrechunglp1netzabschaltunghz">
+				<option <?php if($cpunterbrechunglp1old == 0) echo selected ?> value="0">Deaktiviert</option>
+				<option <?php if($cpunterbrechunglp1old == 1) echo selected ?> value="1">Aktiviert</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Diese Option erforder die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br> Sie ist für Fahrzeuge die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren wenn es ohne die Option Probleme gibt<br>
 		</div>
 
 <hr>

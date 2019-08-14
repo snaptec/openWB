@@ -117,7 +117,23 @@ hook
 #Graphing
 graphing
 
-
+if (( cpunterbrechunglp1 == 1 )); then
+       if (( plugstat == 1 )); then
+               if (( llalt > 5 )); then
+                       if (( ladeleistung < 200 )); then
+                               cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
+                               if (( cpulp1waraktiv == 0 )); then
+                                       sudo python runs/cpulp1.py
+                                       echo 1 > ramdisk/cpulp1waraktiv
+                               fi
+                       else
+                               echo 0 > ramdisk/cpulp1waraktiv
+                       fi
+               fi
+       else
+               echo 0 > ramdisk/cpulp1waraktiv
+       fi
+fi
 if [[ $dspeed == "3" ]]; then
 
 	if [ -e ramdisk/5sec ]; then

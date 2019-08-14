@@ -1713,7 +1713,10 @@ if ! grep -Fq "netzabschaltunghz=" /var/www/html/openWB/openwb.conf
 then
 	echo "netzabschaltunghz=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "cpunterbrechunglp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "cpunterbrechunglp1=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
