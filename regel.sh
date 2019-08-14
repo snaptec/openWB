@@ -280,17 +280,10 @@ fi
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
-schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-if [[ $debug == "1" ]]; then
-	echo anzahlphasen "$anzahlphasen"
-fi
-if [[ $debug == "2" ]]; then
-	echo "$date"
-	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
-fi
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
+        schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 fi
 if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
@@ -299,6 +292,14 @@ fi
 if [[ $pvbezugeinspeisung == "2" ]]; then
 	pvregelungm=$offsetpv
 	schaltschwelle=$((schaltschwelle + offsetpv))
+fi
+# Debug Ausgaben
+if [[ $debug == "1" ]]; then
+	echo anzahlphasen "$anzahlphasen"
+fi
+if [[ $debug == "2" ]]; then
+	echo "$date"
+	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
 fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
