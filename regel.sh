@@ -123,6 +123,7 @@ if (( cpunterbrechunglp1 == 1 )); then
                        if (( ladeleistung < 200 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
                                if (( cpulp1waraktiv == 0 )); then
+				       echo "CP Unterbrechung an LP1 durchgeführt"
                                        sudo python runs/cpulp1.py
                                        echo 1 > ramdisk/cpulp1waraktiv
                                fi
