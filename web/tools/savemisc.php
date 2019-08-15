@@ -105,7 +105,27 @@ foreach($lines as $line) {
 	    $result .= 'rfidakt='.$_POST[rfidakt]."\n";
 	    $writeit = '1';
 	    } 
-	   if(strpos($line, "rfidlp1c1=") !== false) {
+  	   if(strpos($line, "rfidstop=") !== false) {
+	    $result .= 'rfidstop='.$_POST[rfidstop]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidstandby=") !== false) {
+	    $result .= 'rfidstandby='.$_POST[rfidstandby]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidsofort=") !== false) {
+	    $result .= 'rfidsofort='.$_POST[rfidsofort]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidminpv=") !== false) {
+	    $result .= 'rfidminpv='.$_POST[rfidminpv]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidnurpv=") !== false) {
+	    $result .= 'rfidnurpv='.$_POST[rfidnurpv]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidlp1c1=") !== false) {
 	    $result .= 'rfidlp1c1='.$_POST[rfidlp1c1]."\n";
 	    $writeit = '1';
 	    } 

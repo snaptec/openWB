@@ -414,6 +414,25 @@ foreach($lines as $line) {
 	if(strpos($line, "rfidakt=") !== false) {
 		list(, $rfidaktold) = explode("=", $line);
 	}
+	if(strpos($line, "rfidstop=") !== false) {
+		list(, $rfidstopold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidstandby=") !== false) {
+		list(, $rfidstandbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidsofort=") !== false) {
+		list(, $rfidsofortold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidnurpv=") !== false) {
+		list(, $rfidnurpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidminpv=") !== false) {
+		list(, $rfidminpvold) = explode("=", $line);
+	}
 	if(strpos($line, "rfidlp1c1=") !== false) {
 		list(, $rfidlp1c1old) = explode("=", $line);
 	}
@@ -610,7 +629,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 </div>
 <div id="rfidandiv">
 	<div class="row">
-	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br><br>
+	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br>Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.<br><br>
 	</div>
 <?php
 $lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
@@ -671,7 +690,50 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	<div class="row">
 		RFID Tag eintragen.<br><br>
 	</div>
+	<div class="row">
+       		<b><label for="rfidstop">Ändere Lademodus auf Stop:</label></b>
+        	<input type="text" name="rfidstop" id="rfidstop" value="<?php echo $rfidstopold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
 
+	<div class="row">
+       		<b><label for="rfidstandby">Ändere Lademodus auf Standby:</label></b>
+        	<input type="text" name="rfidstandby" id="rfidstandby" value="<?php echo $rfidstandbyold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidsofort">Ändere Lademodus auf Sofort Laden:</label></b>
+        	<input type="text" name="rfidsofort" id="rfidsofort" value="<?php echo $rfidsofortold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidminpv">Ändere Lademodus auf Min + PV Laden:</label></b>
+        	<input type="text" name="rfidminpv" id="rfidminpv" value="<?php echo $rfidminpvold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidnurpv">Ändere Lademodus auf Nur PV:</label></b>
+        	<input type="text" name="rfidnurpv" id="rfidnurpv" value="<?php echo $rfidnurpvold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
 </div>
 <script>
 $(function() {
