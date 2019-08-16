@@ -134,7 +134,7 @@ else
 		if (( llalt == maximalstromstaerke )); then
 			exit 0
 		fi
-		llneu=$(( llalt + (( uberschuss / 230 / anzahlphasen)))
+		llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
 		fi
@@ -187,7 +187,7 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-			llneu=$(( llalt + (( uberschuss / 230 / anzahlphasen)))
+			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
