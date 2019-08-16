@@ -48,7 +48,14 @@ echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
-
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp1
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp1startkwh
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladen
+echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer1
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp2
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp2startkwh
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp2
+echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer2
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus

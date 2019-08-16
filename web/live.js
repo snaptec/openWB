@@ -399,6 +399,18 @@ $.ajax({
       $("#speichersocdiv").html(request.responseText);
         }
         });
+ $.ajax({
+   url: "/openWB/ramdisk/pluggedladungbishergeladen",
+    complete: function(request){
+      $("#pluggedladungbishergeladendiv").html(request.responseText);
+        }
+        });
+ $.ajax({
+   url: "/openWB/ramdisk/pluggedladungbishergeladenlp2",
+    complete: function(request){
+      $("#pluggedladungbishergeladenlp2div").html(request.responseText);
+        }
+        });
 $.ajax({
    url: "/openWB/ramdisk/speicherleistung",
     complete: function(request){
