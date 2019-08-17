@@ -1413,6 +1413,10 @@ if ! grep -Fq "speicherpwip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherpwip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "vartaspeicherip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "vartaspeicherip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf

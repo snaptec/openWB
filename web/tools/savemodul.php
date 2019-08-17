@@ -878,6 +878,10 @@ foreach($lines as $line) {
  	   if(strpos($line, "speicherpwip=") !== false) {
 	    $result .= 'speicherpwip='.$_POST[speicherpwip]."\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "vartaspeicherip=") !== false) {
+	    $result .= 'vartaspeicherip='.$_POST[vartaspeicherip]."\n";
+	    $writeit = '1';
 	    }
 	    if(strpos($line, "sunnyislandip=") !== false) {
 	    $result .= 'sunnyislandip='.$_POST[sunnyislandip]."\n";

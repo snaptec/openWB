@@ -617,7 +617,9 @@ foreach($lines as $line) {
 	if(strpos($line, "solaredgespeicherip=") !== false) {
 		list(, $solaredgespeicheripold) = explode("=", $line);
 	}
-
+	if(strpos($line, "vartaspeicherip=") !== false) {
+		list(, $vartaspeicheripold) = explode("=", $line);
+	}
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -3411,6 +3413,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
+		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
 	</select>
 </div>
 
@@ -3420,6 +3423,15 @@ $(function() {
 <div id="divspeicherkit">
 		<div class="row" style="background-color:#fcbe1e">
 		Keine Konfiguration erforderlich<br><br>
+	</div>
+</div>
+<div id="divspeichervarta">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="vartaspeicherip">Varta IP:</label></b>
+		<input type="text" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse des Varta Speichers.<br><br>
 	</div>
 </div>
 
@@ -3601,6 +3613,7 @@ function display_speichermodul() {
 	$('#divspeichersunnyisland').hide();
 	$('#divspeicherseco').hide();
 	$('#divspeicherkit').hide();
+	$('#divspeichervarta').hide();
 
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
 		$('#divspeicherkit').show();
@@ -3632,6 +3645,10 @@ function display_speichermodul() {
 	if($('#speichermodul').val() == 'speicher_solaredge')   {
 		$('#divspeichersolaredge').show();
 	}
+	if($('#speichermodul').val() == 'speicher_varta')   {
+		$('#divspeichervarta').show();
+	}
+
 	if($('#speichermodul').val() == 'speicher_powerwall')   {
 		$('#divspeicherpw').show();
 	}
