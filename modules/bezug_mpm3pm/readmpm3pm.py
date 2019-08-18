@@ -34,7 +34,7 @@ f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
 f.write(str(voltage))
 f.close()
 
-resp = client.read_input_registers(0x0002,4, unit=5)
+resp = client.read_input_registers(0x0002,4, unit=sdmid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
@@ -101,7 +101,7 @@ f.close()
 
 #export kwh
 
-resp = client.read_input_registers(0x0004,4, unit=5)
+resp = client.read_input_registers(0x0004,4, unit=sdmid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')

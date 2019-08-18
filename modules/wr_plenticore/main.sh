@@ -12,8 +12,9 @@
 #
 #########################################################
 
-sudo python /var/www/html/openWB/modules/wr_plenticore/read_kostalplenticore.py $kostalplenticoreip
+# Aufruf der Leseroutine mit den IP WR 1 und ggf. WR 2
+sudo python /var/www/html/openWB/modules/wr_plenticore/read_kostalplenticore.py $kostalplenticoreip $kostalplenticoreip2
 
-# Rückgabe des Wertes PV-Leistung
+# Rückgabe des Wertes Gesamt-PV-Leistung
 pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 echo $pvwatt

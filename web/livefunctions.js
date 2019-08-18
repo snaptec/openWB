@@ -348,6 +348,7 @@ $(function() {
     if($('#lastmanagement').val() == '0') {
         $('#ladepunkts1ndiv').show();
         $('#ladepunkts1div').hide();
+	$('#ladepunkts1plugdiv').hide();
         $('#ladepunkts11div').hide();
         $('#ladepunkts111div').hide();
         $('#ladepunkts1111div').hide();
@@ -356,6 +357,7 @@ $(function() {
     } else {
         $('#ladepunkts1ndiv').hide();
         $('#ladepunkts1div').show();
+	$('#ladepunkts1plugdiv').show();
         $('#ladepunkts11div').show();
         $('#ladepunkts111div').show();
         $('#ladepunkts1111div').show();

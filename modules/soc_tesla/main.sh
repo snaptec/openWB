@@ -12,7 +12,7 @@ if (( ladeleistung > 1000 )); then
 		echo $teslatimer > /var/www/html/openWB/ramdisk/soctimer
 	else
 		re='^-?[0-9]+$'
-		soclevel=$(sudo python /var/www/html/openWB/modules/soc_tesla/tsoc.py $soc_tesla_username $soc_tesla_password | jq .battery_level)
+		soclevel=$(sudo python /var/www/html/openWB/modules/soc_tesla/tsoc.py $soc_tesla_username $soc_tesla_password $soc_tesla_carnumber | jq .battery_level)
 		if  [[ $soclevel =~ $re ]] ; then
 			if (( $soclevel != 0 )) ; then
 				echo $soclevel > /var/www/html/openWB/ramdisk/soc
@@ -26,7 +26,7 @@ else
 		echo $teslatimer > /var/www/html/openWB/ramdisk/soctimer
 	else
 		re='^-?[0-9]+$'
-		soclevel=$(sudo python /var/www/html/openWB/modules/soc_tesla/tsoc.py $soc_tesla_username $soc_tesla_password | jq .battery_level)
+		soclevel=$(sudo python /var/www/html/openWB/modules/soc_tesla/tsoc.py $soc_tesla_username $soc_tesla_password $soc_tesla_carnumber | jq .battery_level)
 		if  [[ $soclevel =~ $re ]] ; then
 			if (( $soclevel != 0 )) ; then
 				echo $soclevel > /var/www/html/openWB/ramdisk/soc

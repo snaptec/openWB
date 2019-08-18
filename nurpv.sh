@@ -134,51 +134,7 @@ else
 		if (( llalt == maximalstromstaerke )); then
 			exit 0
 		fi
-		if (( uberschuss > 1380 )); then
-			if (( anzahlphasen < 4 )); then
-				llneu=$((llalt + 5 ))
-			else
-				llneu=$((llalt + 2 ))
-			fi
-			if (( uberschuss > 2070 )); then
-            	if (( anzahlphasen < 4 )); then
-                	llneu=$((llalt + 2 ))
-                else
-            	    llneu=$((llalt + 1 ))
-                fi
-            fi
-			if (( uberschuss > 2760 )); then
-				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 2 ))
-				else
-					llneu=$((llalt + 1 ))
-				fi
-			fi
-			if (( uberschuss > 3450 )); then
-				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 2 ))
-				else
-					llneu=$((llalt + 1 ))
-				fi
-			fi
-			if (( uberschuss > 4140 )); then
-				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 2 ))
-				else
-					llneu=$((llalt + 1 ))
-				fi
-			fi
-			if (( uberschuss > 4830 )); then
-				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt + 2 ))
-				else
-					llneu=$((llalt + 1 ))
-				fi
-			fi
-
-		else
-			llneu=$((llalt + 1 ))
-		fi
+		llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
 		fi
@@ -231,78 +187,8 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-			if (( uberschuss < -1380 )); then
-				if (( anzahlphasen < 4 )); then
-					llneu=$((llalt - 6 ))
-				else
-					llneu=$((llalt - 2 ))
-				fi
-				if (( uberschuss < -2070 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -2760 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -3450 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -4140 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -4830 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -5520 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -6210 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -6900 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-				if (( uberschuss < -7590 )); then
-					if (( anzahlphasen < 4 )); then
-						llneu=$((llalt - 3 ))
-					else
-						llneu=$((llalt - 1 ))
-					fi
-				fi
-			else
-				llneu=$((llalt - 1 ))
-			fi
+			llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
 			fi
@@ -339,11 +225,25 @@ else
 					echo auf $lllower A für LP $lowerev
 				fi
 			else
-
-				runs/set-current.sh $llneu all
-				echo "$date alle Ladepunkte, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >>  ramdisk/ladestatus.log
-				if [[ $debug == "1" ]]; then
-					echo "pv ladung auf $llneu reduziert"
+				if (( minimalapv == minimalalp2pv )); then
+					runs/set-current.sh $llneu all
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung reduziert mit $llneu Ampere" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "pv ladung auf $llneu reduziert"
+					fi
+				else
+					runs/set-current.sh $llneu m
+					echo "$date LP1, Lademodus NurPV. Ladung reduziert auf $llneu Ampere" >> ramdisk/ladestatus.log
+					if (( llneu < minimalalp2pv )); then
+						llneulp2=$minimalalp2pv
+					else
+						llneulp2=$llneu
+					fi		
+					runs/set-current.sh $llneulp2 s1
+					echo "$date LP2, Lademodus NurPV. Ladung reduziert auf $llneulp2 Ampere" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "pv ladung auf $llneu bzw. $llneulp2 reduziert"
+					fi
 				fi
 			fi
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter

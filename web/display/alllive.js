@@ -16,6 +16,7 @@ function loadText(){
                 $('.actstat4 .btn').removeClass("btn-green");
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat2 .btn').removeClass("btn-green");
+ 		$('#sofortllbtn').show();
             }
             if(result.text == 1){
                 $('.actstat1 .btn').addClass("btn-green");
@@ -27,7 +28,7 @@ function loadText(){
                 $('.actstat2 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
-
+		$('#sofortllbtn').hide();
             }
             if(result.text == 2){
                 $('.actstat2 .btn').addClass("btn-green");
@@ -39,6 +40,7 @@ function loadText(){
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+		$('#sofortllbtn').hide();
 
             }
             if(result.text == 3){
@@ -51,6 +53,7 @@ function loadText(){
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+		$('#sofortllbtn').hide();
 
             }
             if(result.text == 4){
@@ -64,6 +67,7 @@ function loadText(){
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-green");
                 $('.actstat4 .btn').removeClass("btn-red");
+		$('#sofortllbtn').hide();
 
             }
         }
@@ -182,6 +186,7 @@ $.ajax({
     url: "/openWB/ramdisk/llsoll",
     complete: function(request){
       $("#llsolldiv").html(request.responseText);
+	    var llsolllp1 = request.responseText;
     }
   });
   $.ajax({

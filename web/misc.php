@@ -43,6 +43,9 @@ foreach($lines as $line) {
 	if(strpos($line, "netzabschaltunghz=") !== false) {
 		list(, $netzabschaltunghzold) = explode("=", $line);
 	}
+	if(strpos($line, "cpunterbrechunglp1=") !== false) {
+		list(, $cpunterbrechunglp1old) = explode("=", $line);
+	}
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
@@ -411,6 +414,25 @@ foreach($lines as $line) {
 	if(strpos($line, "rfidakt=") !== false) {
 		list(, $rfidaktold) = explode("=", $line);
 	}
+	if(strpos($line, "rfidstop=") !== false) {
+		list(, $rfidstopold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidstandby=") !== false) {
+		list(, $rfidstandbyold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidsofort=") !== false) {
+		list(, $rfidsofortold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidnurpv=") !== false) {
+		list(, $rfidnurpvold) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidminpv=") !== false) {
+		list(, $rfidminpvold) = explode("=", $line);
+	}
 	if(strpos($line, "rfidlp1c1=") !== false) {
 		list(, $rfidlp1c1old) = explode("=", $line);
 	}
@@ -568,6 +590,17 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		</div>
 		<div class="row">
 			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+		</div><br><br>
+		<div class="row">
+			<b><label for="cpunterbrechunglp1">CP Unterbrechung LP1:</label></b>
+			<select type="text" name="cpunterbrechunglp1" id="cpunterbrechunglp1netzabschaltunghz">
+				<option <?php if($cpunterbrechunglp1old == 0) echo selected ?> value="0">Deaktiviert</option>
+				<option <?php if($cpunterbrechunglp1old == 1) echo selected ?> value="1">Aktiviert</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			Diese Option erforder die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br> Sie ist für Fahrzeuge die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren wenn es ohne die Option Probleme gibt<br>
 		</div>
 
 <hr>
@@ -596,7 +629,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 </div>
 <div id="rfidandiv">
 	<div class="row">
-	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br><br>
+	Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br>Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.<br><br>
 	</div>
 <?php
 $lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
@@ -657,7 +690,50 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	<div class="row">
 		RFID Tag eintragen.<br><br>
 	</div>
+	<div class="row">
+       		<b><label for="rfidstop">Ändere Lademodus auf Stop:</label></b>
+        	<input type="text" name="rfidstop" id="rfidstop" value="<?php echo $rfidstopold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
 
+	<div class="row">
+       		<b><label for="rfidstandby">Ändere Lademodus auf Standby:</label></b>
+        	<input type="text" name="rfidstandby" id="rfidstandby" value="<?php echo $rfidstandbyold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidsofort">Ändere Lademodus auf Sofort Laden:</label></b>
+        	<input type="text" name="rfidsofort" id="rfidsofort" value="<?php echo $rfidsofortold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidminpv">Ändere Lademodus auf Min + PV Laden:</label></b>
+        	<input type="text" name="rfidminpv" id="rfidminpv" value="<?php echo $rfidminpvold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
+
+	<div class="row">
+       		<b><label for="rfidnurpv">Ändere Lademodus auf Nur PV:</label></b>
+        	<input type="text" name="rfidnurpv" id="rfidnurpv" value="<?php echo $rfidnurpvold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.<br><br>
+	</div>
 </div>
 <script>
 $(function() {

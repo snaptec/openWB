@@ -48,12 +48,84 @@ echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp1
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp1startkwh
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladen
+echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer1
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp2
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp2startkwh
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp2
+echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer2
 touch /var/www/html/openWB/ramdisk/wattbezug
+echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
+# Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
+echo 0 > /var/www/html/openWB/ramdisk/pvwatt
+# Leistung AC PV-Module WR 1
+touch /var/www/html/openWB/ramdisk/pvwatt1
+echo 0 > /var/www/html/openWB/ramdisk/pvwatt1
+# Leistung AC PV-Module WR 2
+touch /var/www/html/openWB/ramdisk/pvwatt2
+echo 0 > /var/www/html/openWB/ramdisk/pvwatt2
+# Gesamtertrag in Wattstunden WR 1 + 2
+touch /var/www/html/openWB/ramdisk/pvkwh
+echo 0 > /var/www/html/openWB/ramdisk/pvkwh
+# Gesamtertrag in Kilowattstunden WR 1 + 2
+touch /var/www/html/openWB/ramdisk/pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
+# Tagesertrag in Kilowattstunden WR 1 + 2
+touch /var/www/html/openWB/ramdisk/daily_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk
+# Monatsertrag in Kilowattstunden WR 1 + 2
+touch /var/www/html/openWB/ramdisk/monthly_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk
+# Jahresertrag in Kilowattstunden WR 1 + 2
+touch /var/www/html/openWB/ramdisk/yearly_pvkwhk
+echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk
+# Gesamtertrag in Kilowattstunden WR 1
+touch /var/www/html/openWB/ramdisk/pvkwhk1
+echo 0 > /var/www/html/openWB/ramdisk/pvkwhk1
+# Tagesertrag in Kilowattstunden WR 1
+touch /var/www/html/openWB/ramdisk/daily_pvkwhk1
+echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk1
+# Monatsertrag in Kilowattstunden WR 1
+touch /var/www/html/openWB/ramdisk/monthly_pvkwhk1
+echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk1
+# Jahresertrag in Kilowattstunden WR 1
+touch /var/www/html/openWB/ramdisk/yearly_pvkwhk1
+echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk1
+# Gesamtertrag in Kilowattstunden WR 2
+touch /var/www/html/openWB/ramdisk/pvkwhk2
+echo 0 > /var/www/html/openWB/ramdisk/pvkwhk2
+# Tagesertrag in Kilowattstunden WR 2
+touch /var/www/html/openWB/ramdisk/daily_pvkwhk2
+echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk2
+# Monatsertrag in Kilowattstunden WR 2
+touch /var/www/html/openWB/ramdisk/monthly_pvkwhk2
+echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk2
+# Jahresertrag in Kilowattstunden WR 2
+touch /var/www/html/openWB/ramdisk/yearly_pvkwhk2
+echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk2
+# SoC Speicher am WR 1
+touch /var/www/html/openWB/ramdisk/speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/speichersoc
+# SoC Speicher am WR 2
+touch /var/www/html/openWB/ramdisk/speichersoc2
+echo 0 > /var/www/html/openWB/ramdisk/speichersoc2
+# Gesamtleistung AC Speicher WR 1 + 2
+touch /var/www/html/openWB/ramdisk/speicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
+# Leistung AC Speicher WR 1
+touch /var/www/html/openWB/ramdisk/speicherleistung1
+echo 0 > /var/www/html/openWB/ramdisk/speicherleistung1
+# Leistung AC Speicher WR 2
+touch /var/www/html/openWB/ramdisk/speicherleistung2
+echo 0 > /var/www/html/openWB/ramdisk/speicherleistung2
+
 touch /var/www/html/openWB/ramdisk/soc
 touch /var/www/html/openWB/ramdisk/soc1
 touch /var/www/html/openWB/ramdisk/lla1
@@ -67,10 +139,6 @@ touch /var/www/html/openWB/ramdisk/llas21
 touch /var/www/html/openWB/ramdisk/llas22
 touch /var/www/html/openWB/ramdisk/llas23
 touch /var/www/html/openWB/ramdisk/llkwh
-touch /var/www/html/openWB/ramdisk/pvkwh
-touch /var/www/html/openWB/ramdisk/daily_pvkwhk
-touch /var/www/html/openWB/ramdisk/yearly_pvkwhk
-touch /var/www/html/openWB/ramdisk/monthly_pvkwhk
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
 touch /var/www/html/openWB/ramdisk/bezugkwh
@@ -83,7 +151,6 @@ touch /var/www/html/openWB/ramdisk/ladestatus.log
 touch /var/www/html/openWB/ramdisk/gsiforecast.csv
 chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 
-
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 # bei Anschluss von Speicher und Energiemanager direkt am WR
 # alle Werte im Modul des Wechselrichters aus den Registern
@@ -91,38 +158,51 @@ chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 # zu bekommen. Im jeweiligen Modul Speicher/Bezug werden
 # die Werte dann in die ramdisk für die weitere globale
 # Verarbeitung geschrieben.
+# Bezug/Einspeisung
 touch /var/www/html/openWB/ramdisk/temp_wattbezug
-touch /var/www/html/openWB/ramdisk/temp_speicherleistung
-touch /var/www/html/openWB/ramdisk/temp_speichersoc
-touch /var/www/html/openWB/ramdisk/temp_bezuga1
-touch /var/www/html/openWB/ramdisk/temp_bezuga2
-touch /var/www/html/openWB/ramdisk/temp_bezuga3
-touch /var/www/html/openWB/ramdisk/temp_evuhz
-touch /var/www/html/openWB/ramdisk/temp_bezugw1
-touch /var/www/html/openWB/ramdisk/temp_bezugw2
-touch /var/www/html/openWB/ramdisk/temp_bezugw3
-touch /var/www/html/openWB/ramdisk/temp_evuv1
-touch /var/www/html/openWB/ramdisk/temp_evuv2
-touch /var/www/html/openWB/ramdisk/temp_evuv3
-touch /var/www/html/openWB/ramdisk/temp_evupf1
-touch /var/www/html/openWB/ramdisk/temp_evupf2
-touch /var/www/html/openWB/ramdisk/temp_evupf3
-# Werte initialisieren
 echo 0 > /var/www/html/openWB/ramdisk/temp_wattbezug
+# Gesamte AC-Leistung des Speichers am WR 1 + 2
+touch /var/www/html/openWB/ramdisk/temp_speicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung
+# AC-Leistung des Speichers am WR 1
+touch /var/www/html/openWB/ramdisk/temp_speicherleistung1
+echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung1
+# AC-Leistung des Speichers am WR 2
+touch /var/www/html/openWB/ramdisk/temp_speicherleistung2
+echo 0 > /var/www/html/openWB/ramdisk/temp_peicherleistung2
+# SoC des Speichers am WR 1
+touch /var/www/html/openWB/ramdisk/temp_speichersoc
 echo 0 > /var/www/html/openWB/ramdisk/temp_speichersoc
+# Strom auf den jeweiligen Phasen
+touch /var/www/html/openWB/ramdisk/temp_bezuga1
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga1
+touch /var/www/html/openWB/ramdisk/temp_bezuga2
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga2
+touch /var/www/html/openWB/ramdisk/temp_bezuga3
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezuga3
+# Netzfrequenz
+touch /var/www/html/openWB/ramdisk/temp_evuhz
 echo 0 > /var/www/html/openWB/ramdisk/temp_evuhz
+# Leistung auf den jeweiligen Phasen
+touch /var/www/html/openWB/ramdisk/temp_bezugw1
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw1
+touch /var/www/html/openWB/ramdisk/temp_bezugw2
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw2
+touch /var/www/html/openWB/ramdisk/temp_bezugw3
 echo 0 > /var/www/html/openWB/ramdisk/temp_bezugw3
+# Spannung auf den jeweiligen Phasen
+touch /var/www/html/openWB/ramdisk/temp_evuv1
 echo 0 > /var/www/html/openWB/ramdisk/temp_evuv1
+touch /var/www/html/openWB/ramdisk/temp_evuv2
 echo 0 > /var/www/html/openWB/ramdisk/temp_evuv2
+touch /var/www/html/openWB/ramdisk/temp_evuv3
 echo 0 > /var/www/html/openWB/ramdisk/temp_evuv3
+# Wirkfaktor, wird aus historischen Gründen je Phase geschrieben
+touch /var/www/html/openWB/ramdisk/temp_evupf1
 echo 0 > /var/www/html/openWB/ramdisk/temp_evupf1
+touch /var/www/html/openWB/ramdisk/temp_evupf2
 echo 0 > /var/www/html/openWB/ramdisk/temp_evupf2
+touch /var/www/html/openWB/ramdisk/temp_evupf3
 echo 0 > /var/www/html/openWB/ramdisk/temp_evupf3
 
 echo 0 > /var/www/html/openWB/ramdisk/zielladenkorrektura
@@ -178,11 +258,11 @@ echo 0 > /var/www/html/openWB/ramdisk/aktgeladens1
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladens2
 echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
-echo 0 > /var/www/html/openWB/ramdisk/wattbezug
+
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo $bootmodus > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
-echo 0 > /var/www/html/openWB/ramdisk/pvwatt
+
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
@@ -203,11 +283,6 @@ echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp1m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp2m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp3m
-echo 0 > /var/www/html/openWB/ramdisk/pvkwh
-echo 0 > /var/www/html/openWB/ramdisk/pvkwhk
-echo 0 > /var/www/html/openWB/ramdisk/daily_pvkwhk
-echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk
-echo 0 > /var/www/html/openWB/ramdisk/monthly_pvkwhk
 echo 0 > /var/www/html/openWB/ramdisk/bezugkwh
 echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
@@ -225,8 +300,6 @@ echo 0 > /var/www/html/openWB/ramdisk/date.graph
 echo 0 > /var/www/html/openWB/ramdisk/date-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc.graph
 echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
-echo 0 > /var/www/html/openWB/ramdisk/speicherleistung
-echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
 echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
 echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
@@ -279,6 +352,16 @@ fi
 if (( rfidakt == 1 )); then
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
+fi
+if (( displayaktiv == 1 )); then
+	if ! grep -Fq "pinch" /home/pi/.config/lxsession/LXDE-pi/autostart
+	then
+		echo "not found"
+		echo "@xscreensaver -no-splash" > /home/pi/.config/lxsession/LXDE-pi/autostart
+		echo "@point-rpi" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+		echo "@xset s 600" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+		echo "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+	fi
 fi
 
 if ! grep -Fq "minimalapv=" /var/www/html/openWB/openwb.conf
@@ -704,6 +787,11 @@ if ! grep -Fq "bezug_solarlog_ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_solarlog_ip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bezug_solarlog_speicherv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_solarlog_speicherv=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "speichermodul=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichermodul=none" >> /var/www/html/openWB/openwb.conf
@@ -719,6 +807,10 @@ fi
 if ! grep -Fq "soc_tesla_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_tesla_carnumber=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_carnumber=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "soc_tesla_password=" /var/www/html/openWB/openwb.conf
 then
@@ -1046,10 +1138,22 @@ then
 then
 	  echo "offsetpv=0" >> /var/www/html/openWB/openwb.conf
   fi
- if ! grep -Fq "kostalplenticoreip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "kostalplenticoreip=" /var/www/html/openWB/openwb.conf
 then
-	  echo "kostalplenticoreip=192.168.0.30" >> /var/www/html/openWB/openwb.conf
-  fi
+    echo "kostalplenticoreip=192.168.0.30" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "kostalplenticoreip2=" /var/www/html/openWB/openwb.conf
+then
+    echo "kostalplenticoreip2=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "name_wechselrichter1=" /var/www/html/openWB/openwb.conf
+then
+    echo "name_wechselrichter1=WR1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "name_wechselrichter2=" /var/www/html/openWB/openwb.conf
+then
+    echo "name_wechselrichter2=WR2" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hook1ein_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
@@ -1314,6 +1418,10 @@ if ! grep -Fq "speicherpwip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherpwip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "vartaspeicherip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "vartaspeicherip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1472,6 +1580,29 @@ if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidsofort=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidsofort=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidstandby=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstandby=000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidstop=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstop=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidnurpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidnurpv=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidminpv=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidminpv=000" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "rfidlp1c1=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidlp1c1=0" >> /var/www/html/openWB/openwb.conf
@@ -1621,7 +1752,10 @@ if ! grep -Fq "netzabschaltunghz=" /var/www/html/openWB/openwb.conf
 then
 	echo "netzabschaltunghz=1" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "cpunterbrechunglp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "cpunterbrechunglp1=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
@@ -1692,4 +1826,3 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
-

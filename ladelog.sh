@@ -27,6 +27,28 @@ if (( soc1 > 0 )); then
 else
 	soctext1=$(echo ".")
 fi
+plugstat=$(<ramdisk/plugstat)
+if (( plugstat == 1 )); then
+	pluggedladungaktlp1=$(<ramdisk/pluggedladungaktlp1)
+	if (( pluggedladungaktlp1 == 0 )); then
+		echo $llkwh > ramdisk/pluggedladunglp1startkwh
+		echo 1 > ramdisk/pluggedladungaktlp1
+	fi
+	pluggedladunglp1startkwh=$(<ramdisk/pluggedladunglp1startkwh)
+	pluggedladungbishergeladen=$(echo "scale=2;($llkwh - $pluggedladunglp1startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladen > ramdisk/pluggedladungbishergeladen
+	echo 0 > ramdisk/pluggedtimer1
+else
+	pluggedtimer1=$(<ramdisk/pluggedtimer1)
+	if (( pluggedtimer1 < 3 )); then
+		pluggedtimer1=$((pluggedtimer1 + 1))
+		echo $pluggedtimer1 > ramdisk/pluggedtimer1
+	else
+		echo 0 > ramdisk/pluggedladungaktlp1
+	fi
+fi
+
+
 
 if (( ladeleistung > 500 )); then
 	if [ -e ramdisk/ladeustart ]; then
@@ -110,9 +132,30 @@ else
 fi
 
 if (( lastmanagement == 1 )); then
-
 ladeleistungs1=$(<ramdisk/llaktuells1)
 llkwhs1=$(<ramdisk/llkwhs1)
+plugstatlp2=$(<ramdisk/plugstats1)
+if (( plugstatlp2 == 1 )); then
+	pluggedladungaktlp2=$(<ramdisk/pluggedladungaktlp2)
+	if (( pluggedladungaktlp2 == 0 )); then
+		echo $llkwhs1 > ramdisk/pluggedladunglp2startkwh
+		echo 1 > ramdisk/pluggedladungaktlp2
+	fi
+	pluggedladunglp2startkwh=$(<ramdisk/pluggedladunglp2startkwh)
+	pluggedladungbishergeladenlp2=$(echo "scale=2;($llkwhs1 - $pluggedladunglp2startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp2 > ramdisk/pluggedladungbishergeladenlp2
+	echo 0 > ramdisk/pluggedtimer2
+else
+	pluggedtimer2=$(<ramdisk/pluggedtimer2)
+	if (( pluggedtimer2 < 3 )); then
+		pluggedtimer2=$((pluggedtimer2 + 1))
+		echo $pluggedtimer2 > ramdisk/pluggedtimer2
+	else
+		echo 0 > ramdisk/pluggedladungaktlp2
+	fi
+fi
+
+
 if (( ladeleistungs1 > 500 )); then
 	if [ -e ramdisk/ladeustarts1 ]; then
 

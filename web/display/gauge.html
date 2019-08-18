@@ -157,7 +157,12 @@ echo '
 			<input type="submit" class="1graph btn btn-blue btn-block"  name="graph" value="Tagesgraph">
 
                 </div> 
-		<div class="col-xs-7">
+		<div class="col-xs-2">
+			<div id="sofortllbtn">
+			<input type="submit" class="1sofortll btn btn-blue btn-block"  name="sofortllbtn" value="Ladestrom">
+		</div>
+		</div>
+		<div class="col-xs-5">
 
 		</div>
         <div class=" col-xs-2"> 
@@ -200,6 +205,41 @@ echo '
 </div>
 </div>
 </div>
+<div id="sofortll">
+
+		<div class="col-xs-12 text-center" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;">
+			<div class="col-xs-12 tex-center" style="text-align:center;">
+				<h5 style="color: white;">Sofortladen Stromstärke</h5><br><br>
+
+			</div>
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls" id="sofortlls">
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+			</div>
+			<script>
+				var slider = document.getElementById("sofortlls");
+				var output = document.getElementById("sofortlll");
+				output.innerHTML = slider.value;
+				slider.oninput = function() {
+					output.innerHTML = this.value;
+				}
+			</script>
+		</div>
+	<div class="row col-xs-12 text-center" style="font-size: 12px; height: 10px; top: 430px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
+
+	    <div class=" col-xs-8">
+</div>
+        <div class=" col-xs-2"> 
+		<input type="submit" class="1sllspeichern btn-blue btn btn-block" style="height: 10px; line-height: 3px !important;" name="sllspeichern" value="Speichern">
+                </div> 
+        <div class=" col-xs-2"> 
+		<input type="submit" class="1zurueck btn-blue btn btn-block" style="height: 10px; line-height: 3px !important;" name="zurueck" value="Zurück">
+                </div> 
+        </div> 		
+</div>
+
 <div id="einstellungen">
 			<div style="font-size: 25px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 800px; color: white;">Status</div>
 	<div class="row col-xs-12 text-left" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
@@ -394,6 +434,7 @@ var displaylock = 1;
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+   		$('#sofortllbtn').hide();
 	    });
 	}
 
@@ -410,6 +451,8 @@ var displaylock = 1;
                 $('.actstat1 .btn').removeClass("btn-red");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+   		$('#sofortllbtn').hide();
+
 	    });
 	}
 
@@ -426,6 +469,8 @@ var displaylock = 1;
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+   		$('#sofortllbtn').hide();
+
 	    });
 	}
 
@@ -443,6 +488,7 @@ var displaylock = 1;
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-green");
                 $('.actstat4 .btn').removeClass("btn-red");
+   		$('#sofortllbtn').hide();
 
 
 	    });
@@ -460,6 +506,8 @@ var displaylock = 1;
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
+   		$('#sofortllbtn').show();
+
 	    });
 	}
 var opts = {
@@ -854,6 +902,8 @@ getfile();
   <script>
 	       	$('#dergraph').hide();
 		$('#einstellungen').hide();
+		$('#sofortll').hide();
+		$('#sofortllbtn').hide();
 var stop = 0;
 var sofort = 0;
 var standby = 0;
@@ -880,10 +930,45 @@ $(document).ready(function(){
        
 	       	$('#dergraph').show();
        	   });
+   $('.1sofortll').click(function(){
+		var llsolllp1;
+		$('#main').hide();
+		dash = 0;
+    $.ajax({
+        url:"./tools/getsofortll.php",
+        type: "post", //request type,
+        dataType: 'json',
+        data: {call: "loadfile"},
+        success:function(result){
+            llsolllp1 = result.text; 
+    document.getElementById("sofortlls").value = llsolllp1;
+	  document.getElementById("sofortlll").innerHTML = llsolllp1;
+	       	$('#sofortll').show();
+
+  }
+    });
+   $('.1sllspeichern').click(function(){
+	    var ajaxurl = 'tools/changelademodusd.php?sofortlllp1=' + slider.value;
+	    $.post(ajaxurl, 'sofortlllp1', function (response) {
+	   $('#dergraph').hide();
+	   $('#einstellungen').hide();
+	   $('#sofortll').hide();
+		$('#main').show();
+
+	    });
+
+
+
+    });
+
+
+
+       	   });
    $('.1zurueck').click(function(){
 		dash = 1;
 	   $('#dergraph').hide();
 	   $('#einstellungen').hide();
+	   $('#sofortll').hide();
 		$('#main').show();
 
 	//	execgraph();

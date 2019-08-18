@@ -117,7 +117,24 @@ hook
 #Graphing
 graphing
 
-
+if (( cpunterbrechunglp1 == 1 )); then
+       if (( plugstat == 1 )); then
+               if (( llalt > 5 )); then
+                       if (( ladeleistung < 200 )); then
+                               cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
+                               if (( cpulp1waraktiv == 0 )); then
+				       echo "CP Unterbrechung an LP1 durchgeführt"
+                                       sudo python runs/cpulp1.py
+                                       echo 1 > ramdisk/cpulp1waraktiv
+                               fi
+                       else
+                               echo 0 > ramdisk/cpulp1waraktiv
+                       fi
+               fi
+       else
+               echo 0 > ramdisk/cpulp1waraktiv
+       fi
+fi
 if [[ $dspeed == "3" ]]; then
 
 	if [ -e ramdisk/5sec ]; then
@@ -280,17 +297,10 @@ fi
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
-schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-if [[ $debug == "1" ]]; then
-	echo anzahlphasen "$anzahlphasen"
-fi
-if [[ $debug == "2" ]]; then
-	echo "$date"
-	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
-fi
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
+        schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 fi
 if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
@@ -299,6 +309,14 @@ fi
 if [[ $pvbezugeinspeisung == "2" ]]; then
 	pvregelungm=$offsetpv
 	schaltschwelle=$((schaltschwelle + offsetpv))
+fi
+# Debug Ausgaben
+if [[ $debug == "1" ]]; then
+	echo anzahlphasen "$anzahlphasen"
+fi
+if [[ $debug == "2" ]]; then
+	echo "$date"
+	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
 fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
