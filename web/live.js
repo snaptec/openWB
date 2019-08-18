@@ -1,5 +1,15 @@
 var doInterval;
 var do2Interval;
+var pvwattarrow;
+var llaktuellarrow;
+var llaktuelllp2arrow;
+var llaktuelllp3arrow;
+var llaktuellgarrow;
+var intbezugarrow;
+var intspeicherarrow;
+var speichersoc;
+var lp1soc;
+var lp2soc;
 function loadText(){
     $.ajax({
         url:"./tools/lademodus.php",
@@ -113,6 +123,9 @@ $.ajax({
   $.ajax({
     url: "/openWB/ramdisk/llaktuell",
     complete: function(request){
+		llaktuell = parseInt(request.responseText, 10);
+		llaktuellarrow = llaktuell;
+	
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + " kW";
@@ -120,6 +133,7 @@ $.ajax({
 			request.responseText = request.responseText + " W";
 			}
       $("#lldiv").html(request.responseText);
+
     }
 });
   $.ajax({
@@ -138,6 +152,8 @@ $.ajax({
 $.ajax({
     url: "/openWB/ramdisk/llkombiniert",
     complete: function(request){
+		llaktuellg = parseInt(request.responseText, 10);
+		llaktuellgarrow = llaktuellg;
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + " kW";
@@ -177,10 +193,11 @@ $.ajax({
   $.ajax({
     url: "/openWB/ramdisk/pvwatt",
     complete: function(request){
-	    var pvwatt = parseInt(request.responseText, 10);
+	    pvwatt = parseInt(request.responseText, 10);
 	if ( pvwatt <= 0){
 		pvwatt = pvwatt * -1;
-		if (pvwatt > 999) {
+		pvwattarrow = pvwatt;
+				if (pvwatt > 999) {
 			    pvwatt = (pvwatt / 1000).toFixed(2);
 		    	    pvwatt = pvwatt + " kW Erzeugung";
 		    } else {
@@ -194,6 +211,8 @@ $.ajax({
  $.ajax({
     url: "/openWB/ramdisk/llaktuells1",
     complete: function(request){
+		llaktuelllp2 = parseInt(request.responseText, 10);
+		llaktuelllp2arrow = llaktuelllp2;
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + " kW";
@@ -206,6 +225,8 @@ $.ajax({
   $.ajax({
     url: "/openWB/ramdisk/llaktuells2",
     complete: function(request){
+		llaktuelllp3 = parseInt(request.responseText, 10);
+		llaktuelllp3arrow = llaktuelllp3;
 		if (request.responseText > 999) {
 			    request.responseText = (request.responseText / 1000).toFixed(2);
 		    	    request.responseText = request.responseText + " kW";
@@ -293,8 +314,9 @@ $.ajax({
     url: "/openWB/ramdisk/wattbezug",
     complete: function(request){
 	    var wattbezug = request.responseText;
-	    var intbezug = parseInt(wattbezug, 10);
-	    if (intbezug > 0) {
+	    intbezug = parseInt(wattbezug, 10);
+		intbezugarrow = intbezug;
+		    if (intbezug > 0) {
 		    if (intbezug > 999) {
 			    intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + " kW Bezug";
@@ -329,12 +351,16 @@ $.ajax({
  $.ajax({
    url: "/openWB/ramdisk/soc",
     complete: function(request){
-      $("#soclevel").html(request.responseText);
+	    lp1soc = request.responseText;
+	    lp1soc = parseInt(lp1soc, 10);
+	      $("#soclevel").html(request.responseText);
         }
         });
  $.ajax({
    url: "/openWB/ramdisk/soc1",
     complete: function(request){
+	    lp2soc = request.responseText;
+	    lp2soc = parseInt(lp2soc, 10);
       $("#soc1level").html(request.responseText);
         }
         });
@@ -396,7 +422,10 @@ $.ajax({
  $.ajax({
    url: "/openWB/ramdisk/speichersoc",
     complete: function(request){
-      $("#speichersocdiv").html(request.responseText);
+	    speichersoc = request.responseText;
+	    speichersoc = parseInt(speichersoc, 10);
+		
+	          $("#speichersocdiv").html(request.responseText);
         }
         });
  $.ajax({
@@ -415,7 +444,8 @@ $.ajax({
    url: "/openWB/ramdisk/speicherleistung",
     complete: function(request){
 	    var speicherwatt = request.responseText;
-	    var intspeicherw = parseInt(speicherwatt, 10);
+	    intspeicherw = parseInt(speicherwatt, 10);
+		intspeicherarrow = intspeicherw;	
 	    if (intspeicherw > 0) {
 		   if (intspeicherw > 999) {
 			intspeicherw = (intspeicherw / 1000).toFixed(2);
@@ -441,6 +471,8 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
+
+
 
 
 }

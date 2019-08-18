@@ -551,6 +551,9 @@ foreach($lines as $line) {
 	if(strpos($line, "einspeisungjsonkwh=") !== false) {
 		list(, $einspeisungjsonkwhold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "bezug_solarlog_speicherv=") !== false) {
+		list(, $bezug_solarlog_speichervold) = explode("=", $line);
+	}
 	if(strpos($line, "bezug_solarlog_ip=") !== false) {
 		list(, $bezug_solarlog_ipold) = explode("=", $line);
 	}
@@ -2770,6 +2773,13 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	</div>
 	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. Ein extra PV-Modul ist dann nicht mehr nötig.<br>
+	</div>
+	<div class="row">
+		<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
+		<select type="text" name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
+			<option <?php if($bezug_solarlog_speichervold == 0) echo selected ?> value="0">Nein</option>
+			<option <?php if($bezug_solarlog_speichervold == 1) echo selected ?> value="1">Ja</option>
+		</select>
 	</div>
 </div>
 <div id="wattbezugsolaredge">

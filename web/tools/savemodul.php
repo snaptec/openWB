@@ -586,6 +586,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "bezug_solarlog_ip=") !== false) {
 	    $result .= 'bezug_solarlog_ip=\''.$_POST[bezug_solarlog_ip]."'\n";
 	$writeit = '1';
+	    }
+	    if(strpos($line, "bezug_solarlog_speicherv=") !== false) {
+	    $result .= 'bezug_solarlog_speicherv='.$_POST[bezug_solarlog_speicherv]."\n";
+	$writeit = '1';
     }
 	    if(strpos($line, "speicherleistung_http=") !== false) {
 	    $result .= 'speicherleistung_http=\''.$_POST[speicherleistung_http]."'\n";

@@ -787,6 +787,11 @@ if ! grep -Fq "bezug_solarlog_ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_solarlog_ip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bezug_solarlog_speicherv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "bezug_solarlog_speicherv=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "speichermodul=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichermodul=none" >> /var/www/html/openWB/openwb.conf
