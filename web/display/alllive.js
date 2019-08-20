@@ -426,7 +426,15 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
+$(function() {
+    if($('#speicherstat').val() == 'none') {
+        $('#speicherstat2div').hide();
+    } else {
+        $('#speicherstat2div').show();
 
+    }
+
+});
 }
 
 doInterval = setInterval(getfile, 5000);
