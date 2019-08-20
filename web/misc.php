@@ -49,6 +49,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displaytheme=") !== false) {
+		list(, $displaythemeold) = explode("=", $line);
+	}
 	if(strpos($line, "displaysleep=") !== false) {
 		list(, $displaysleepold) = explode("=", $line);
 	}
@@ -1110,6 +1113,20 @@ $(function() {
 	        }
 	    });
 });
+$(function() {
+      if($('#displaytheme').val() == '0') {
+		$('#displaygauge').show();
+      } else {
+	       	$('#displaygauge').hide();
+      }
+	$('#displaytheme').change(function(){
+	        if($('#displaytheme').val() == '0') {
+			$('#displaygauge').show();
+	        } else {
+		       	$('#displaygauge').hide();
+	        }
+	    });
+});
 </script>
 
 <div class="row"><hr>
@@ -1123,7 +1140,15 @@ $(function() {
 	</select>
 </div>
 <div id="displayan">
-
+	<div class="row">
+       		<b><label for="displaytheme">Theme des Displays:</label></b>
+        	<select type="text" name="displaytheme" id="displaytheme">
+			<option <?php if($displaythemeold == 0) echo selected ?> value="0">Gauges</option>
+			<option <?php if($displaythemeold == 1) echo selected ?> value="1">Symbolfluss</option>
+		</select>
+	<br>
+	</div>
+<div id="displaygauge">
 	<div class="row">
        		<b><label for="displayevumax">EVU Skala Min Max:</label></b>
         	<input type="text" name="displayevumax" id="displayevumax" value="<?php echo $displayevumaxold ?>"><br>
@@ -1163,7 +1188,7 @@ $(function() {
         	<input type="text" name="displaylp2max" id="displaylp2max" value="<?php echo $displaylp2maxold ?>"><br>
 	<br>
 	</div>
-
+</div><br><br>
 	<div class="row">
 		<b><label for="displaypinaktiv">Pin nötig zum ändern des Lademodus:</label></b>
 	       	<select type="text" name="displaypinaktiv" id="displaypinaktiv">

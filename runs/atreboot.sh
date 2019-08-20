@@ -791,7 +791,10 @@ if ! grep -Fq "bezug_solarlog_speicherv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezug_solarlog_speicherv=0" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "wrfronius2ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wrfronius2ip=none" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "speichermodul=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichermodul=none" >> /var/www/html/openWB/openwb.conf

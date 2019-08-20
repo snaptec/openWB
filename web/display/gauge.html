@@ -1,7 +1,7 @@
 <html>
 	<?php include ("display/gaugevalues.php"); ?>
 <script src="/openWB/web/display/gauge.min.js"></script>
-<script src="/openWB/web/display/alllive.js"></script>
+      <link rel="stylesheet" href="/openWB/web/display/arrow.css">
       <link rel="stylesheet" href="/openWB/web/display/pin.css">
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
@@ -15,10 +15,10 @@
 <input hidden name="" id="displaypinaktiv" value="<?php echo $displaypinaktivold ; ?>" />
 <input hidden name="" id="displaypincode" value="<?php echo $displaypincodeold ; ?>" />
 
-
 <div id="main">
-
-			<div style="font-size: 18px; height: 20px; top: 0px; left: 740px; text-align:center; position: absolute; width: 65px; color: white;" id="theclock"></div>
+<div style="font-size: 18px; height: 20px; top: 0px; left: 740px; text-align:center; position: absolute; width: 65px; color: white;" id="theclock"></div>
+<div id="gaugediv">
+<div style="font-size: 18px; height: 20px; top: 0px; left: 740px; text-align:center; position: absolute; width: 65px; color: white;" id="theclock"></div>
 <?php
      if ( $speicherstatold != "none\n" ){ echo '
 <canvas id="evu" style="height: 200px; top: -50px; left: 0px; position: absolute; width: 265px;"></canvas>
@@ -139,6 +139,164 @@ echo '
 </div>';	
 }}
 ?>
+</div>
+<div id="symboldiv" style="color: white; top: 0px; left: 10px; position: absolute; font-size: 18px; width: 810px;">
+<div class="row col-xs-12 text-center" style="height: 50px;">
+		<div class="col-xs-4">
+		</div>
+
+		<div class="col-xs-4">
+
+			<i class="fas fa-2x fa-solar-panel" style="color: green;"></i>
+			<br>
+			<span id="pvdiv"></span>
+		</div>
+		<div class="col-xs-4">
+			
+		</div>
+</div>
+<div class="row col-xs-12 text-center" style="height: 50px;">
+		<div class="col-xs-6">
+		</div>
+
+	<div class="col-xs-1 text-center">
+				<div id="speedpv">
+					<div id="arrowpv"></div>
+ 				</div>
+		</div>
+		<div class="col-xs-5">
+		</div>
+</div>
+<div class="row col-xs-12 text-center" style="height: 50px;">
+		<div class="col-xs-2">
+				    <img src="img/icons/electric-tower.svg" style="filter: invert(1); -webkit-filter: invert(1);" width="40vw" >
+		</div>
+
+		<div class="col-xs-3">
+				<div id="speedevu">
+					<div id="arrowevu"></div>
+ 				</div>
+				<span id="bezugdiv"></span>
+		</div>
+	
+		<div class="col-xs-2">
+			<i class="fas fa-2x fa-home swhite" style="color: white;"></i><br><span id="hausverbrauchdiv">	
+
+		</div>
+		<div id="speicherstatdiv">
+		<div class="col-xs-3">
+				<div id="speedspeicher">
+					<div id="arrowspeicher"></div>
+ 				</div>
+				<span id="speicherleistungdiv"></span>
+
+		</div>
+		<div class="col-xs-2">
+				<span id="speichersocstatdiv" class="fas fa-2x"></span>
+				<br><span id="speichersocdiv"></span> %
+		</div>
+
+
+		</div>
+</div>
+<div class="row col-xs-12 text-center" style="height: 50px;">
+	<div class="col-xs-6">
+	</div>
+	<div class="col-xs-1 text-center">
+		<div id="speedlpg">
+			<div id="arrowlpg"></div>
+		</div>
+		</div>
+		<div class="col-xs-5">
+		</div>
+</div>
+<div class="row col-xs-12 text-center" style="height: 50px;">
+		<div class="col-xs-5">
+		</div>
+		<div class="col-xs-2 text-center">
+			<span id="gesamtllwdiv"></span><br>
+		</div>
+		<div class="col-xs-5">
+		</div>
+</div>
+<?php if ( $lastmanagementold == "1\n" ) { echo '
+
+<div class="row col-xs-12 text-center" style="height: 50px;">
+		<div class="col-xs-1">
+
+		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		</div>
+
+		<div class="col-xs-2">
+				<div id="speedlp1">
+					<div id="arrowlp1"></div>
+ 				</div>
+			<span id="lldiv"></span>
+		</div>
+
+		<div class="col-xs-1">
+			<i id="carlp1" class="fas fa-2x fa-car-side"></i><br>'.$lp1nameold.'
+
+		</div>
+		<div class="col-xs-1">
+				<span id="socstatlp1div" class="fas fa-2x"></span>
+				<br><span id="soclevel"></span>%</span>
+		</div>
+		<div class="col-xs-2">
+
+		</div>
+		<div class="col-xs-1">
+		<span id="stationlp2" class="fas fa-2x fa-charging-station"></span>	
+		</div>
+
+		<div class="col-xs-2">
+				<div id="speedlp2">
+					<div id="arrowlp2"></div>
+ 				</div>
+			<span id="lllp2div"></span>
+		</div>
+
+		<div class="col-xs-1">
+			<i id="carlp2" class="fas fa-2x fa-car-side"></i><br>'.$lp2nameold.'
+
+		</div>
+		<div class="col-xs-1">
+				<span id="socstatlp2div" class="fas fa-2x"></span>
+				<br><span id="soc1level"></span>%</span>
+		</div>
+</div>
+'; } else { echo '
+<div class="row col-xs-12 text-center" style="height: 100px;">
+		<div class="col-xs-2">
+
+		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		</div>
+
+		<div class="col-xs-3">
+				<div id="speedlp1">
+					<div id="arrowlp1"></div>
+ 				</div>
+			<span id="lldiv"></span>
+		</div>
+
+		<div class="col-xs-2">
+			<i id="carlp1" class="fas fa-2x fa-car-side"></i><br>'.$lp1nameold.'
+
+		</div>
+		<div class="col-xs-2">
+				<span id="socstatlp1div" class="fas fa-2x"></span>
+				<br><span id="soclevel"></span>% </span>
+		</div>
+		<div class="col-xs-3">
+
+		</div>
+
+
+</div> '; } ?>
+
+
+
+</div>
 
 <div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 0px; position: absolute; width: 820px; color: white; text-align:center;"> 
 
@@ -150,7 +308,7 @@ echo '
                 </div> 
         </div> 														 
 </div>
-<div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 50px; position: absolute; width: 800px; color: white; text-align:center;"> 
+<div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 40px; position: absolute; width: 800px; color: white; text-align:center;"> 
 
     
          <div class=" col-xs-2"> 
@@ -169,7 +327,9 @@ echo '
 			<input type="submit" class="1einstellungen btn btn-blue btn-block"  name="graph" value="Status">
 
                 </div> 
+		<div class="col-xs-1">
 
+		</div>
 </div>
 <div class="row">
 <div class="container" style="left:20px;bottom:0px;position:absolute;">
@@ -329,6 +489,7 @@ echo '
 
 
 	}
+    
 	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
 	$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
@@ -403,7 +564,7 @@ startTime();
 	var displaypincode = <?php echo $displaypincodeold ?>;
 	var displaypinaktiv = <?php echo $displaypinaktivold ?>;
 	var lastmanagementold = <?php echo $lastmanagementold ?>;
-    	if ( displayhausanzeigen == '1') {
+	if ( displayhausanzeigen == '1') {
         $('#hausanzeigen').show();
     } else {
         $('#hausanzeigen').hide();
@@ -510,6 +671,7 @@ var displaylock = 1;
 
 	    });
 	}
+
 var opts = {
   angle: 0, // The span of the gauge arc
   lineWidth: 0.24, // The line thickness
@@ -794,9 +956,11 @@ gaugelp2s.animationSpeed = 5; // set animation speed (32 is default value)
 gaugelp2s.set(70); // set actual value
 
 
+var displaytheme = <?php echo $displaythemeold ?>;
 
 var doInterval;
 function getfile() {
+if (displaytheme == 0) {
 	$.ajaxSetup({ cache: false});
  $.ajax({
     url: "/openWB/ramdisk/wattbezug",
@@ -891,19 +1055,31 @@ function getfile() {
 }
 
 
-
+}
 
 doInterval = setInterval(getfile, 10000);
 getfile();
+
 //setInterval(function(){gauge.set(wattbezug)}, 200)
 	</script>
 
 
   <script>
-	       	$('#dergraph').hide();
+	var displaytheme = <?php echo $displaythemeold ?>;
+$('#gaugediv').hide();
+$('#symboldiv').hide();
+
+		$('#dergraph').hide();
 		$('#einstellungen').hide();
 		$('#sofortll').hide();
 		$('#sofortllbtn').hide();
+		if ( displaytheme == 0 ) {
+	   	$('#gaugediv').show();
+		}
+		if ( displaytheme == 1 ) {
+	   	$('#symboldiv').show();
+		}
+
 var stop = 0;
 var sofort = 0;
 var standby = 0;
@@ -1116,6 +1292,8 @@ $(document).ready(function(){
 	var verbrauchere2name = "<?php echo $verbraucher2_nameold ?> (E)";
 	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
 	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
+
+
 
 if ( graphinteractiveam == 2 ){
 	am4core.useTheme(am4themes_animated);
@@ -1382,4 +1560,6 @@ chart.legend.position = "absolute";
 //}
   </script>
 </body>
+<script src="/openWB/web/display/alllive.js"></script>
+<script src="./display/symbollive.js"></script>
 </html>

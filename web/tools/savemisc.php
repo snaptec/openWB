@@ -161,7 +161,10 @@ foreach($lines as $line) {
 	    $result .= 'displaylp2max='.$_POST[displaylp2max]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "displaytheme=") !== false) {
+	    $result .= 'displaytheme='.$_POST[displaytheme]."\n";
+	    $writeit = '1';
+	    } 
 	   if(strpos($line, "displaylp1max=") !== false) {
 	    $result .= 'displaylp1max='.$_POST[displaylp1max]."\n";
 	    $writeit = '1';

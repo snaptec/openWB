@@ -781,6 +781,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "wrfroniusip=") !== false) {
     	    $result .= 'wrfroniusip='.$_POST[wrfroniusip]."\n";
     	 $writeit = '1';
+	    }
+	    if(strpos($line, "wrfronius2ip=") !== false) {
+    	    $result .= 'wrfronius2ip='.$_POST[wrfronius2ip]."\n";
+    	 $writeit = '1';
    }
 	    if(strpos($line, "mpm3pmspeicherpv=") !== false) {
     	    $result .= 'mpm3pmspeicherpv='.$_POST[mpm3pmspeicherpv]."\n";

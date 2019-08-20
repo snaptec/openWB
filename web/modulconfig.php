@@ -248,9 +248,11 @@ foreach($lines as $line) {
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrfronius2ip=") !== false) {
+		list(, $wrfronius2ipold) = explode("=", $line);
 	}
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
@@ -3208,6 +3210,13 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
+		<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung reicht die Angabe eines Wechselrichters. Sind Symo und Symo Hybrid im Einsatz müssen diese beide angegeben werden. Ist kein zweiter Wechselrichter vorhanden hier - none - eintragen.<br><br>
 	</div>
 </div>
 <div id="pvmpm3pm">
