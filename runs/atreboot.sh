@@ -799,6 +799,10 @@ if ! grep -Fq "speichermodul=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichermodul=none" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
+then
+	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherleistung_http=192.168.0.10/watt" >> /var/www/html/openWB/openwb.conf
