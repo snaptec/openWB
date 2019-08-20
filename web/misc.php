@@ -1236,22 +1236,7 @@ $(function() {
 		<div class="row">
 			<h4>	Graphen</h4> <br>
 		</div>
-		<div class="row">
-			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
-			<select type="text" name="logdailywh" id="logdailywh">
-				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
-				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
-			</select>
-			<br>
-		</div>
-		<div class="row">
-			<b><label for="logeinspeisungneg">Einspeisung im Daily Graph positiv oder negativ anzeigen:</label></b>
-			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
-				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
-				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
-			</select>
-			<br>
-		</div>
+
 <div class="row">
 	<b><label for="livegraph">Zeitintervall für den Live Graphen der Hauptseite:</label></b>
 	<select type="text" name="livegraph" id="livegraph">
@@ -1293,6 +1278,25 @@ $(function() {
 			</select>
 			<br>
 	</div>
+<div id="nonintdaily">		<div class="row">
+			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
+			<select type="text" name="logdailywh" id="logdailywh">
+				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
+				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			<b><label for="logeinspeisungneg">Einspeisung im Daily Graph positiv oder negativ anzeigen:</label></b>
+			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
+				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
+				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
+			</select>
+			<br>
+		</div>
+</div>
+
+<div id="nonintdaily">	
 	<div class="row">
 			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
 			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
@@ -1301,6 +1305,29 @@ $(function() {
 			</select>
 			<br><br>
 	</div>
+</div>
+<script>
+$(function() {
+      if($('#grapham').val() == '0') {
+		$('#nonintdaily').show();
+		$('#intdaily').hide();
+      } else {
+		$('#nonintdaily').hide();
+	       	$('#intdaily').show();
+      }
+
+	$('#grapham').change(function(){
+	      if($('#grapham').val() == '0') {
+			$('#nonintdaily').show();
+			$('#intdaily').hide();
+	      } else {
+			$('#nonintdaily').hide();
+		       	$('#intdaily').show();
+	      }
+	    });
+});
+</script>
+
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>
