@@ -134,7 +134,12 @@ else
 		if (( llalt == maximalstromstaerke )); then
 			exit 0
 		fi
-		llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+		if [[ $pvbezugeinspeisung == "0" ]]; then
+			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+
+		else
+			llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+		fi
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
 		fi
