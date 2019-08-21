@@ -111,9 +111,8 @@ function getGaugeDataNeedle() {
       url: "/openWB/ramdisk/pvwatt1",
       complete: function(request){
           // ProgressBar mit Rückgabewert erneuern
+          // wird in Watt ohne Nachkommastellen übergeben
           var pvLeistung = parseInt(request.responseText,10) / -1;  // * -1 weil zur Regelung negativ
-          //var anzeigeWert_kW = (anzeigeWert_W / 1000).toFixed(2);  // Umrechnung in kW
-          var anzeigeWert=0;
           var anzeigeText='';
           if (pvLeistung < 1000) {
               // Anzeige in Watt ohne Nachkommastellen
@@ -126,10 +125,11 @@ function getGaugeDataNeedle() {
                   // nie mehr als das Maximum, sonst passt die ProgressBar nicht
                   pvLeistung = progressBarWR1.max
               };
-              anzeigeWert_kW = progressBarWR1.max.toFixed(2);
-              anzeigeText = anzeigeWert_kW + 'kW'
+              // über den Umweg toString und parseFloat werden eventuelle unbedeutende 
+              // Nullen am Ende gelöscht: 1.30 = 1.3, 1.00 = 1 etc.
+              anzeigeText = parseFloat(pvLeistung.toString()) + 'kW'
           };
-          progressBarWR1.value = anzeigeWert;
+          progressBarWR1.value = pvLeistung;
           progressBarWR1.set('title', 'Garage: ' + anzeigeText);
           progressBarWR1.grow();
       }
@@ -140,9 +140,8 @@ function getGaugeDataNeedle() {
       url: "/openWB/ramdisk/pvwatt2",
       complete: function(request){
           // ProgressBar mit Rückgabewert erneuern
+          // wird in Watt ohne Nachkommastellen übergeben
           var pvLeistung = parseInt(request.responseText,10) / -1;  // * -1 weil zur Regelung negativ
-          //var anzeigeWert_kW = (anzeigeWert_W / 1000).toFixed(2);  // Umrechnung in kW
-          var anzeigeWert=0;
           var anzeigeText='';
           if (pvLeistung < 1000) {
               // Anzeige in Watt ohne Nachkommastellen
@@ -155,8 +154,9 @@ function getGaugeDataNeedle() {
                   // nie mehr als das Maximum, sonst passt die ProgressBar nicht
                   pvLeistung = progressBarWR2.max
               };
-              anzeigeWert_kW = progressBarWR2.max.toFixed(2);
-              anzeigeText = anzeigeWert_kW + 'kW'
+              // über den Umweg toString und parseFloat werden eventuelle unbedeutende
+              // Nullen am Ende gelöscht: 1.30 = 1.3, 1.00 = 1 etc.
+              anzeigeText = parseFloat(pvLeistung.toString()) + 'kW'
           };
           progressBarWR2.value = pvLeistung;
           progressBarWR2.set('title', 'Wohnhaus: ' + anzeigeText);
