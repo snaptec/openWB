@@ -127,7 +127,7 @@ function getGaugeDataNeedle() {
           var anzeigeWert = (parseInt(request.responseText,10) / -1000).toFixed(2);
           var anzeigeText = anzeigeWert + 'kW'
           progressBarWR2.value = anzeigeWert;
-          progressBarWR2.set('title', 'Garage: ' + anzeigeText);
+          progressBarWR2.set('title', 'Wohnhaus: ' + anzeigeText);
           progressBarWR2.grow();
       }
     });
