@@ -199,7 +199,7 @@ echo '
 
 		</div>
 </div>
-<div class="row col-xs-12 text-center" style="height: 50px;">
+<div class="row col-xs-12 text-center" style="height: 40px;">
 	<div class="col-xs-6">
 	</div>
 	<div class="col-xs-1 text-center">
@@ -210,7 +210,7 @@ echo '
 		<div class="col-xs-5">
 		</div>
 </div>
-<div class="row col-xs-12 text-center" style="height: 50px;">
+<div class="row col-xs-12 text-center" style="height: 40px;">
 		<div class="col-xs-5">
 		</div>
 		<div class="col-xs-2 text-center">
@@ -401,6 +401,7 @@ echo '
 </div>
 
 <div id="einstellungen">
+	<div id="status">
 			<div style="font-size: 25px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 800px; color: white;">Status</div>
 	<div class="row col-xs-12 text-left" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
 		IP Adresse der openWB: <span id="ethaddr"></span> <span id="wlanaddr"></span>
@@ -449,14 +450,27 @@ echo '
   			})
 			</script>
 	</div>
+	</div>
+	<div id="hilfe">
+		<div style="font-size: 25px; height: 20px; top: 0px; left: 0px; text-align:center; position: absolute; width: 800px; color: white;">Hilfe</div>
+			<div class="row col-xs-12 text-left" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;"> 
+				Symbollegende: <br>
+				<i class="fas fa-charging-station"></i> keine Ladung freigegeben, 
+				<i class="fas fa-charging-station" style="color: green;"></i>Ladung freigegeben<br>
+				<i class="fas fa-car-side"></i>Auto nicht angesteckt,<i class="fas fa-car-side" style="color: blue;"></i>Auto angesteckt<br>
+				<i class="fas fa-battery-half"></i>Auto nicht ladend,<i class="fas fa-battery-half" style="color: green"></i> Auto ladend
+			</div>
+	</div>
 	<div class="row col-xs-12 text-center" style="font-size: 12px; height: 10px; top: 430px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
-
-	    <div class=" col-xs-10">
-</div> 
-        <div class=" col-xs-2"> 
-		<input type="submit" class="1zurueck btn-blue btn btn-block" style="height: 10px; line-height: 3px !important;" name="zurueck" value="Zurück">
-                </div> 
-        </div> 		
+		<div class=" col-xs-8">
+		</div>
+        	<div class=" col-xs-2"> 
+			<input type="submit" class="1hilfe btn-blue btn btn-block" style="height: 10px; line-height: 3px !important;" name="hilfe" value="Hilfe">
+        	</div> 
+        	<div class=" col-xs-2"> 
+			<input type="submit" class="1zurueck btn-blue btn btn-block" style="height: 10px; line-height: 3px !important;" name="zurueck" value="Zurück">
+        	</div> 
+	</div> 		
 </div>
 <div id="dergraph">
 <?php
@@ -1096,6 +1110,8 @@ $(document).ready(function(){
 
        
 	       	$('#einstellungen').show();
+		$('#status').show();
+		$('#hilfe').hide();
        	   });
    $('.1graph').click(function(){
 
@@ -1142,14 +1158,21 @@ $(document).ready(function(){
        	   });
    $('.1zurueck').click(function(){
 		dash = 1;
-	   $('#dergraph').hide();
-	   $('#einstellungen').hide();
-	   $('#sofortll').hide();
-		$('#main').show();
-
-	//	execgraph();
+	$('#dergraph').hide();
+	$('#einstellungen').hide();
+	$('#sofortll').hide();
+	$('#main').show();
 });
+   $('.1hilfe').click(function(){
+		dash = 1;
+	$('#dergraph').hide();
+	$('#einstellungen').show();
+	$('#sofortll').hide();
+	$('#main').hide();
+	$('#hilfe').show();
+	$('#status').hide();
 
+});
    $('.1stop').click(function(){
 	   if ( lock == 0 ) {
 		if ( displaypinaktiv == 1){

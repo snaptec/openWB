@@ -55,7 +55,7 @@ function refresharrows() {
 			e2lement.classList.add("fa-battery-full");
 		}
 		  $.ajax({
-		    url: "/openWB/ramdisk/chargestats1",
+		    url: "/openWB/ramdisk/ladestatuss1",
 		    complete: function(request){
 			var element = document.getElementById("stationlp2");	
 			    if (request.responseText == 1) {
@@ -201,10 +201,14 @@ function refresharrows() {
 			}
     }
   });
-  $.ajax({
+
+
+
+$.ajax({
     url: "/openWB/ramdisk/plugstat",
     complete: function(request){
 			var element = document.getElementById("carlp1");
+
 		    if (request.responseText == 1) {
 
 			element.setAttribute("style", "color: blue;");
@@ -214,7 +218,7 @@ function refresharrows() {
     }
   });
   $.ajax({
-    url: "/openWB/ramdisk/chargestat",
+    url: "/openWB/ramdisk/ladestatus",
     complete: function(request){
 	var element = document.getElementById("stationlp1");	
 	    if (request.responseText == 1) {
@@ -226,7 +230,32 @@ function refresharrows() {
     }
   });
 
+ $.ajax({
+   url: "/openWB/ramdisk/chargestat",
+    complete: function(request){
+	var element = document.getElementById("socstatlp1div");	
+	    if (request.responseText == 1) {
 
+			element.setAttribute("style", "color: #00FF00;");
+		    } else {
+			element.setAttribute("style", "color: white;");
+			}
+    }
+	
+	});
+ $.ajax({
+   url: "/openWB/ramdisk/chargestats1",
+    complete: function(request){
+	var element = document.getElementById("socstatlp2div");	
+	    if (request.responseText == 1) {
+
+			element.setAttribute("style", "color: #00FF00;");
+		    } else {
+			element.setAttribute("style", "color: white;");
+			}
+    }
+	
+	});
 $('#plugstatlp1div').hide();
 $('#plugstatlp2div').hide();
 
