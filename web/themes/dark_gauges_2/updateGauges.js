@@ -112,6 +112,10 @@ function getGaugeDataNeedle() {
       complete: function(request){
           // ProgressBar mit Rückgabewert (in kW mit 2 Nachkommastellen) erneuern
           var anzeigeWert = (parseInt(request.responseText,10) / -1000).toFixed(2);
+          if (anzeigeWert > progressBarWR1.max) {
+              // nicht mehr als eingestelltes Maximum anzeigen
+              anzeigeWert = progressBarWR1.max.toFixed(2);
+          }
           var anzeigeText = anzeigeWert + 'kW'
           progressBarWR1.value = anzeigeWert;
           progressBarWR1.set('title', 'Garage: ' + anzeigeText);
@@ -125,6 +129,10 @@ function getGaugeDataNeedle() {
       complete: function(request){
           // ProgressBar mit Rückgabewert (in kW mit 2 Nachkommastellen) erneuern
           var anzeigeWert = (parseInt(request.responseText,10) / -1000).toFixed(2);
+          if (anzeigeWert > progressBarWR2.max) {
+              // nicht mehr als eingestelltes Maximum anzeigen
+              anzeigeWert = progressBarWR2.max.toFixed(2);
+          }
           var anzeigeText = anzeigeWert + 'kW'
           progressBarWR2.value = anzeigeWert;
           progressBarWR2.set('title', 'Wohnhaus: ' + anzeigeText);
