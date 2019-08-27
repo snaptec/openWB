@@ -7,7 +7,7 @@ from Crypto.Cipher import Blowfish
 import requests
 import base64
 
-def login(username, password, region_code='NE', initial_app_strings='9s5rfKVuMrT03RtzajWNcA'):
+def login(username, password, region_code='NE', initial_app_str='9s5rfKVuMrT03RtzajWNcA'):
 	baseprm = 'uyI5Dj9g8VCOFDnBRUbr3g'
 	c1  = Blowfish.new(baseprm, Blowfish.MODE_ECB)
 	packingLength = 8 - len(password) % 8
