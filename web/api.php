@@ -98,6 +98,10 @@ if(isset($_GET["get"])) {
 			"llkwlp2"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llaktuells1'))[0] / 1000),
 			"llkwlp3"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llaktuells2'))[0] / 1000),
 			"socLP1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc'))[0],
+			"speichersoc"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/speichersoc'))[0],
+			"speicherleistung"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/speicherleistung'))[0] / 1000),
+			"evuw"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/wattbezug'))[0] / 1000),
+			"pvw"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/pvwatt'))[0] / 1000),
 			"socLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc1'))[0]
 		
 		);

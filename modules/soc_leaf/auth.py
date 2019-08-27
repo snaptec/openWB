@@ -18,7 +18,7 @@ def login(username, password, region_code='NE', initial_app_str='9s5rfKVuMrT03Rt
 	data = {
 		"RegionCode": region_code,
 		"UserId": username,
-		"initial_app_str": initial_app_strings,
+		"initial_app_str": initial_app_str,
 		"Password": encodedPassword,
 	}
 	headers = {'User-Agent': 'Mozilla/5.0'}
