@@ -983,6 +983,43 @@ foreach($lines as $line) {
 	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";
 	$writeit = '1';
     }
+	    if(strpos($line, "soc_zerong_username=") !== false) {
+	    $result .= 'soc_zerong_username='.$_POST[soc_zerong_username]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_zerong_password=") !== false) {
+	    $result .= 'soc_zerong_password='.$_POST[soc_zerong_password]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_zerong_intervall=") !== false) {
+	    $result .= 'soc_zerong_intervall='.$_POST[soc_zerong_intervall]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_zerong_intervallladen=") !== false) {
+	    $result .= 'soc_zerong_intervallladen='.$_POST[soc_zerong_intervallladen]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_zeronglp2_username=") !== false) {
+	    $result .= 'soc_zeronglp2_username='.$_POST[soc_zeronglp2_username]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_zeronglp2_password=") !== false) {
+	    $result .= 'soc_zeronglp2_password='.$_POST[soc_zeronglp2_password]."\n";
+	$writeit = '1';
+	    }
+
+	    if(strpos($line, "soc_zeronglp2_intervall=") !== false) {
+	    $result .= 'soc_zeronglp2_intervall='.$_POST[soc_zeronglp2_intervall]."\n";
+	$writeit = '1';
+	    }
+
+	    if(strpos($line, "soc_zeronglp2_intervallladen=") !== false) {
+	    $result .= 'soc_zeronglp2_intervallladen='.$_POST[soc_zeronglp2_intervallladen]."\n";
+	$writeit = '1';
+	    }
+
+
+
 
 	    if ( $writeit == '0') {
 		$result .= $line;

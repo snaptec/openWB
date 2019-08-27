@@ -1763,7 +1763,38 @@ if ! grep -Fq "cpunterbrechunglp1=" /var/www/html/openWB/openwb.conf
 then
 	echo "cpunterbrechunglp1=0" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "soc_zerong_username=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zerong_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zerong_password=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zerong_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zerong_intervallladen=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zerong_intervallladen=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zerong_intervall=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zerong_intervall=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zeronglp2_username=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zeronglp2_username=" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zeronglp2_password=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zeronglp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zeronglp2_intervallladen=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zeronglp2_intervallladen=10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_zeronglp2_intervall=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_zeronglp2_intervall=20" >> /var/www/html/openWB/openwb.conf
+fi
 
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
