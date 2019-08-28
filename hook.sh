@@ -204,6 +204,22 @@ if (( verbraucher2_aktiv == "1")); then
 fi
 
 
+if (( angesteckthooklp1 == 1 )); then
+	if (( plugstat == 1 )); then
+		if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
+			touch ramdisk/angesteckthooklp1aktiv
+			curl -s --connect-timeout 5 $angesteckthooklp1_url > /dev/null
+			echo "$date angesteckt Hook LP1 ausgeführt" >> ramdisk/ladestatus.log
+			if [[ $debug == "1" ]]; then
+				echo "$date angesteckt Hook LP1 ausgeführt"
+			fi
+		fi
+	else
+		if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
+			rm ramdisk/angesteckthooklp1aktiv
+		fi
+       fi
+fi
 
 
 

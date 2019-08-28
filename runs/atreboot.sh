@@ -1165,6 +1165,10 @@ if ! grep -Fq "hook1ein_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "angesteckthooklp1_url=" /var/www/html/openWB/openwb.conf
+then
+	  echo "angesteckthooklp1_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hook1aus_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1aus_url='https://webhook.com/aus.php'" >> /var/www/html/openWB/openwb.conf
@@ -1184,6 +1188,10 @@ fi
 if ! grep -Fq "hook1_aktiv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook1_aktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "angesteckthooklp1=" /var/www/html/openWB/openwb.conf
+then
+	  echo "angesteckthooklp1=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "hook1_dauer=" /var/www/html/openWB/openwb.conf
 then
