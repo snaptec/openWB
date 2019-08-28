@@ -18,8 +18,8 @@ def login(username, password, region_code='NE', initial_app_str='9s5rfKVuMrT03Rt
 	data = {
 		"RegionCode": region_code,
 		"UserId": username,
-                "lg" => "en-US",
-                "tz" => "Europe/Berlin",
+                "lg" : "en-US",
+                "tz" : "Europe/Berlin",
 		"initial_app_str": initial_app_str,
 		"Password": encodedPassword,
 	}
