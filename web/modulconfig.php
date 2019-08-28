@@ -1439,7 +1439,7 @@ $(function() {
 
 	<div class="row bg-info">
 		<b><label for="soc_zerong_intervall">Abfrageintervall Standby:</label></b>
-		<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerongintervallold ?>"><br>
+		<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
@@ -1955,7 +1955,7 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
 		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
 		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
-		<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero ng</option>
+		<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
 
 
 	</select>
@@ -1984,7 +1984,7 @@ Keine Konfiguration erforderlich.<br>
 
 	<div class="row bg-info">
 		<b><label for="soc_zeronglp2_intervall">Abfrageintervall Standby:</label></b>
-		<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2intervallold ?>"><br>
+		<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>"><br>
 	</div>
 	<div class="row bg-info">
 		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
