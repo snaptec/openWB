@@ -205,6 +205,7 @@ fi
 
 
 if (( angesteckthooklp1 == 1 )); then
+	plugstat=$(<ramdisk/plugstat)
 	if (( plugstat == 1 )); then
 		if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
 			touch ramdisk/angesteckthooklp1aktiv
@@ -215,7 +216,7 @@ if (( angesteckthooklp1 == 1 )); then
 			fi
 		fi
 	else
-		if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
+		if [  -e ramdisk/angesteckthooklp1aktiv ]; then
 			rm ramdisk/angesteckthooklp1aktiv
 		fi
        fi
