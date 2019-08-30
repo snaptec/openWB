@@ -50,13 +50,13 @@ def publishdataretain(einheit, wert, oldwert):
 while True:
 
     #abfragen des aktuellen wertes
-    oldpvwatt=publishdata("W", "pvwatt", oldpvwatt)
-    oldevuwatt=publishdata("W", "wattbezug",oldevuwatt)
-    oldllaktuell=publishdata("W", "llaktuell",oldllaktuell)
-    oldhausverbrauch=publishdata("W", "hausverbrauch",oldhausverbrauch)
-    oldllkombiniert=publishdata("W", "llkombiniert",oldllkombiniert)
-    oldllaktuells1=publishdata("W", "llaktuells1",oldllaktuells1)
-    oldllaktuells2=publishdata("W", "llaktuells2",oldllaktuells2)
+    oldpvwatt=publishdataretain("W", "pvwatt", oldpvwatt)
+    oldevuwatt=publishdataretain("W", "wattbezug",oldevuwatt)
+    oldllaktuell=publishdataretain("W", "llaktuell",oldllaktuell)
+    oldhausverbrauch=publishdataretain("W", "hausverbrauch",oldhausverbrauch)
+    oldllkombiniert=publishdataretain("W", "llkombiniert",oldllkombiniert)
+    oldllaktuells1=publishdataretain("W", "llaktuells1",oldllaktuells1)
+    oldllaktuells2=publishdataretain("W", "llaktuells2",oldllaktuells2)
     oldspeicherleistung=publishdataretain("W", "speicherleistung",oldspeicherleistung)
 
     oldllsoll=publishdataretain("A", "llsoll",oldllsoll)
