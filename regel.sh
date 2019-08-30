@@ -106,10 +106,7 @@ if (( u1p3paktiv == 1 )); then
 		exit 0
 	fi
 fi
-if ! pgrep -f "runs/mqtt.py" > /dev/null
-then
-	python3 runs/mqtt.py
-fi
+
 
 #EVSE DIN Modbus test
 evsedintest

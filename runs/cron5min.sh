@@ -79,7 +79,10 @@ else
 	fi
 fi
 fi
-
+if ! pgrep -f "runs/mqtt.py" > /dev/null
+then
+	python3 runs/mqtt.py
+fi
 
 
 
