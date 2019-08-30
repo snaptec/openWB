@@ -1859,6 +1859,11 @@ if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/openwb.conf
 	sudo service mosquitto restart
 fi
+if python3 -c "import paho" &> /dev/null; then
+	echo 'evdev installed...'
+else
+	sudo pip3 install paho-mqtt
+fi
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
