@@ -1,4 +1,3 @@
-import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 import time
 #config variablen später durch variablen ersetzen im Webinterface einstellbar
@@ -30,25 +29,15 @@ oldplugstat=0
 oldplugstats1=0
 oldchargestat=0
 oldchargestats1=0
-def publishdata(einheit, wert, oldwert):
-    newwert=open("/var/www/html/openWB/ramdisk/" + wert + "", "r").read().rstrip()
-    #prüfen ob sich der Wert zum letzten geändert hat
-    if oldwert != newwert:
-        #ohne retain flag senden da er sich ständig ändert
-        client.publish('openWB/'+ einheit + wert +'', newwert)
-        time.sleep(0.05)
-    return newwert
 def publishdataretain(einheit, wert, oldwert):
     newwert=open("/var/www/html/openWB/ramdisk/" + wert + "", "r").read().rstrip()
     #prüfen ob sich der Wert zum letzten geändert hat
     if oldwert != newwert:
-        #ohne retain flag senden da er sich ständig ändert
-        client.publish('openWB/'+ einheit + wert +'', newwert, 1, retain=True)
-        time.sleep(0.05)
+        client.publish('openWB/'+ einheit + wert +'', newwert, 0, retain=True)
+        time.sleep(0.1)
     return newwert
 #main loop
 while True:
-
     #abfragen des aktuellen wertes
     oldpvwatt=publishdataretain("W", "pvwatt", oldpvwatt)
     oldevuwatt=publishdataretain("W", "wattbezug",oldevuwatt)
@@ -58,7 +47,6 @@ while True:
     oldllaktuells1=publishdataretain("W", "llaktuells1",oldllaktuells1)
     oldllaktuells2=publishdataretain("W", "llaktuells2",oldllaktuells2)
     oldspeicherleistung=publishdataretain("W", "speicherleistung",oldspeicherleistung)
-
     oldllsoll=publishdataretain("A", "llsoll",oldllsoll)
     oldllsolls1=publishdataretain("A", "llsolls1",oldllsolls1)
     oldllsolls2=publishdataretain("A", "llsolls2",oldllsolls2)
@@ -71,5 +59,4 @@ while True:
     oldplugstats1=publishdataretain("bool", "plugstats1",oldplugstats1)
     oldchargestat=publishdataretain("bool", "chargestat",oldchargestat)
     oldchargestats1=publishdataretain("bool", "chargestat",oldchargestats1)
-
     time.sleep(0.5)
