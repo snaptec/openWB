@@ -7,9 +7,9 @@ cp modules/soc_i3s1/auth.json /tmp/auth.json.1
 cp openwb.conf /tmp/openwb.conf
 mkdir /tmp/data
 mkdir /tmp/data/daily
-for i in web/logging/data/daily/*; do cp "$i" /tmp/data/daily/; done
+for i in /var/www/html/openWB/web/logging/data/daily/*; do cp "$i" /tmp/data/daily/; done
 mkdir /tmp/data/monthly
-for i in web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
+for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
 sudo git fetch origin
 sudo git reset --hard origin/$releasetrain
 cd /var/www/html/
@@ -19,8 +19,8 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
 sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
-for i in /tmp/data/monthly/*; do cp "$i" web/logging/data/monthly/; done
-for i in /tmp/data/daily/*; do cp "$i" web/logging/data/monthly/; done
+for i in /tmp/data/monthly/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
+for i in /tmp/data/daily/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
 sudo chmod +x /var/www/html/openWB/runs/*

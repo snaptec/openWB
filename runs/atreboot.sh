@@ -1856,7 +1856,10 @@ sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
 	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/openwb.conf
+	sudo service mosquitto restart
+fi
+if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
+	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
 	sudo service mosquitto restart
 fi
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
