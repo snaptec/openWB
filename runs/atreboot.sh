@@ -1,5 +1,5 @@
 #!/bin/bash
-(sleep 60; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
+(sleep 300; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
 sleep 10
@@ -1880,9 +1880,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
-(sleep 20; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 (sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
-(sleep 40; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
