@@ -1859,8 +1859,8 @@ if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/openwb.conf
 	sudo service mosquitto restart
 fi
-if python3 -c "import paho" &> /dev/null; then
-	echo 'evdev installed...'
+if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
+	echo 'mqtt installed...'
 else
 	sudo pip3 install paho-mqtt
 fi
