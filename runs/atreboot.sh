@@ -1853,6 +1853,12 @@ if (( ledsakt == 1 )); then
 fi
 /var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
+	sudo apt-get update
+	sudo apt-get -qq install -y mosquitto mosquitto-clients
+	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/openwb.conf
+	sudo service mosquitto restart
+fi
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php

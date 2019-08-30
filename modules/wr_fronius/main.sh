@@ -34,11 +34,20 @@ if [[ wrfronius2ip != "none" ]]; then
 	pv2watttmp=$(curl --connect-timeout 5 -s $wrfronius2ip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 	pv2kwh=$(echo $pvwatttmp | jq '.Body.Data.TOTAL_ENERGY.Values' | sed '2!d' |sed 's/.*: //' )
 	pvgkwh=$(echo "$pvkwh + $pv2kwh" | bc)
-	echo $pvgkwh > /var/www/html/openWB/ramdisk/pvkwh
+	if [[ $pvgkwh =~ $re ]] ; then
+		if (( pvgkwh > 0 )); then
+			echo $pvgkwh > /var/www/html/openWB/ramdisk/pvkwh
+		fi
+	fi
 else
 	pvwatt=$(echo "$pvwatt * -1" | bc)
 	echo $pvwatt
 	#zur weiteren verwendung im webinterface
 	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+	if [[ $pvkwh =~ $re ]] ; then
+		if (( pvkwh > 0 )); then
+			echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+		fi
+	fi
+
 fi
