@@ -56,12 +56,18 @@ echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp2startkwh
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer2
+echo 0 > /var/www/html/openWB/ramdisk/mqttlastladestatus
+echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
+echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
+echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
+echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
+
 # Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
