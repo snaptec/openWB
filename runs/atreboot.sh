@@ -1938,3 +1938,26 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+mosquitto_pub -t openWB/Wpvwatt -r -m "0"
+mosquitto_pub -t openWB/Wwattbezug -r -m "0"
+mosquitto_pub -t openWB/Wllaktuell -r -m "0"
+ladestatus=$(<ramdisk/ladestatus)
+mosquitto_pub -t openWB/ladestatus -m "$ladestatus"
+lademodus=$(<ramdisk/lademodus)
+mosquitto_pub -t openWB/lademodus -m "$lademodus"
+mosquitto_pub -t openWB/Whausverbrauch -r -m "0"
+mosquitto_pub -t openWB/Wllaktuells1 -r -m "0"
+mosquitto_pub -t openWB/Wllaktuells2 -r -m "0"
+mosquitto_pub -t openWB/Wllkombiniert -r -m "0"
+mosquitto_pub -t openWB/Wspeicherleistung -r -m "0"
+mosquitto_pub -t openWB/%speichersoc -r -m "0"
+mosquitto_pub -t openWB/%soc -r -m "0"
+mosquitto_pub -t openWB/%soc1 -r -m "0"
+plugstat=$(<ramdisk/plugstat)
+plugstats1=$(<ramdisk/plugstats1)
+chargestat=$(<ramdisk/chargestat)
+chargestats1=$(<ramdisk/chargestats1)
+mosquitto_pub -t openWB/boolplugstat -r -m "$plugstat"
+mosquitto_pub -t openWB/boolplugstats1 -r -m "$plugstats1"
+mosquitto_pub -t openWB/boolchargestats1 -r -m "$chargestats1"
+mosquitto_pub -t openWB/boolchargestat -r -m "$chargestat"
