@@ -979,8 +979,13 @@
 	function loadstatuslog() {
 		$.ajax({
 			url: "/openWB/ramdisk/ladestatus.log",
-	    	complete: function(request){
-		    	$("#ladestatuslogdiv").html(request.responseText);
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+
+					for(var i=0; i<lines.length; i++)
+						    result = lines[i] + "\n" + result;
+		    	$("#ladestatuslogdiv").html(result);
 				}
 		});
 	}

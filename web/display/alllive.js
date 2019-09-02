@@ -1,3 +1,13 @@
+var pvwattarrow;
+var llaktuellarrow;
+var llaktuelllp2arrow;
+var llaktuelllp3arrow;
+var llaktuellgarrow;
+var intbezugarrow;
+var intspeicherarrow;
+var speichersoc;
+var lp1soc;
+var lp2soc;
 do2Interval = setInterval(loadText, 5000);
 function loadText(){
     $.ajax({
@@ -249,6 +259,160 @@ $.ajax({
       $("#aktgeladens2div").html(request.responseText);
         }
         });
+  $.ajax({
+    url: "/openWB/ramdisk/pvwatt",
+    complete: function(request){
+	    pvwatt = parseInt(request.responseText, 10);
+	if ( pvwatt <= 0){
+		pvwatt = pvwatt * -1;
+		pvwattarrow = pvwatt;
+				if (pvwatt > 999) {
+			    pvwatt = (pvwatt / 1000).toFixed(2);
+		    	    pvwatt = pvwatt + " kW Erzeugung";
+		    } else {
+			pvwatt = pvwatt + " W Erzeugung";
+			}
+	}
+
+      $("#pvdiv").html(pvwatt);
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/llaktuells1",
+    complete: function(request){
+		llaktuelllp2 = parseInt(request.responseText, 10);
+		llaktuelllp2arrow = llaktuelllp2;
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + " kW";
+		    } else {
+			request.responseText = request.responseText + " W";
+			}
+      $("#lllp2div").html(request.responseText);
+    }
+  });
+ $.ajax({
+    url: "/openWB/ramdisk/wattbezug",
+    complete: function(request){
+	    var wattbezug = request.responseText;
+	    intbezug = parseInt(wattbezug, 10);
+		intbezugarrow = intbezug;
+		    if (intbezug > 0) {
+		    if (intbezug > 999) {
+			    intbezug = (intbezug / 1000).toFixed(2);
+		    	    wattbezug = intbezug + " kW Bezug";
+		    } else {
+			wattbezug = intbezug + " W Bezug";
+			}
+	    } else {
+	    	    intbezug = intbezug * -1;
+			if (intbezug > 999) {
+			    intbezug = (intbezug / 1000).toFixed(2);
+		    	    wattbezug = intbezug + " kW Einspeisung";
+		    } else {
+			wattbezug = intbezug + " W Einspeisung";
+			}
+	    }
+
+      $("#bezugdiv").html(wattbezug);
+    }
+  });
+ $.ajax({
+   url: "/openWB/ramdisk/soc",
+    complete: function(request){
+	    lp1soc = request.responseText;
+	    lp1soc = parseInt(lp1soc, 10);
+	      $("#soclevel").html(request.responseText);
+        }
+        });
+ $.ajax({
+   url: "/openWB/ramdisk/soc1",
+    complete: function(request){
+	    lp2soc = request.responseText;
+	    lp2soc = parseInt(lp2soc, 10);
+      $("#soc1level").html(request.responseText);
+        }
+        });
+ $.ajax({
+   url: "/openWB/ramdisk/speichersoc",
+    complete: function(request){
+	    speichersoc = request.responseText;
+	    speichersoc = parseInt(speichersoc, 10);
+		
+	          $("#speichersocdiv").html(request.responseText);
+        }
+        });
+$.ajax({
+   url: "/openWB/ramdisk/speicherleistung",
+    complete: function(request){
+	    var speicherwatt = request.responseText;
+	    intspeicherw = parseInt(speicherwatt, 10);
+		intspeicherarrow = intspeicherw;	
+	    if (intspeicherw > 0) {
+		   if (intspeicherw > 999) {
+			intspeicherw = (intspeicherw / 1000).toFixed(2);
+		    	    speicherwatt = intspeicherw + " kW Ladung";
+		   } else {
+		    speicherwatt = intspeicherw + " W Ladung";
+		   }
+	    } else {
+	    	    intspeicherw = intspeicherw * -1;
+	   if (intspeicherw > 999) {
+		intspeicherw = (intspeicherw / 1000).toFixed(2);
+		speicherwatt = intspeicherw + " kW Entladung";
+	} else {
+		speicherwatt = intspeicherw + " W Entladung";
+	   }
+	    }
+      $("#speicherleistungdiv").html(speicherwatt);
+        }
+        });
+ $.ajax({
+    url: "/openWB/ramdisk/llaktuell",
+    complete: function(request){
+		llaktuell = parseInt(request.responseText, 10);
+		llaktuellarrow = llaktuell;
+	
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + " kW";
+		    } else {
+			request.responseText = request.responseText + " W";
+			}
+      $("#lldiv").html(request.responseText);
+
+    }
+});
+ $.ajax({
+    url: "/openWB/ramdisk/hausverbrauch",
+    complete: function(request){
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + " kW";
+		    } else {
+			request.responseText = request.responseText + " W";
+			}
+      $("#hausverbrauchdiv").html(request.responseText);
+    }
+});
+$.ajax({
+    url: "/openWB/ramdisk/llkombiniert",
+    complete: function(request){
+		llaktuellg = parseInt(request.responseText, 10);
+		llaktuellgarrow = llaktuellg;
+		if (request.responseText > 999) {
+			    request.responseText = (request.responseText / 1000).toFixed(2);
+		    	    request.responseText = request.responseText + " kW";
+		    } else {
+			request.responseText = request.responseText + " W";
+			}
+	    $("#gesamtllwdiv").html(request.responseText);
+    }
+  });
+
+
+
+
 //  $.ajax({
 //   url: "/openWB/ramdisk/lademodus",
 //    complete: function(request){
@@ -262,7 +426,15 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
+$(function() {
+    if($('#speicherstat').val() == 'none') {
+        $('#speicherstat2div').hide();
+    } else {
+        $('#speicherstat2div').show();
 
+    }
+
+});
 }
 
 doInterval = setInterval(getfile, 5000);

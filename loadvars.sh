@@ -1,9 +1,29 @@
 #!/bin/bash
 loadvars(){
+
+#get oldvars for mqtt
+opvwatt=$(<ramdisk/pvwatt)
+owattbezug=$(<ramdisk/wattbezug)
+ollaktuell=$(<ramdisk/llaktuell)
+ohausverbrauch=$(<ramdisk/hausverbrauch)
+ollkombiniert=$(<ramdisk/llkombiniert)
+ollaktuells1=$(<ramdisk/llaktuells1)
+ollaktuells2=$(<ramdisk/llaktuells2)
+ospeicherleistung=$(<ramdisk/speicherleistung)
+oladestatus=$(<ramdisk/mqttlastladestatus)
+olademodus=$(<ramdisk/mqttlastlademodus)
+osoc=$(<ramdisk/soc)
+osoc1=$(<ramdisk/soc1)
+ospeichersoc=$(<ramdisk/speichersoc)
+oplugstat=$(<ramdisk/mqttlastplugstat)
+ochargestat=$(<ramdisk/mqttlastchargestat)
+oplugstats1=$(<ramdisk/mqttlastplugstats1)
+ochargestats1=$(<ramdisk/mqttlastchargestats1)
+ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 # EVSE DIN Plug State
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
-	ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
+
 	if [[ $evseplugstate > "1" ]]; then
 		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
 		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatus == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
@@ -256,19 +276,81 @@ fi
 hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 #Uhrzeit
-	date=$(date)
-	H=$(date +%H)
-	if [[ $debug == "1" ]]; then
-		echo "$(tail -20000 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
-		date
-		if [[ $speichermodul != "none" ]] ; then
-			echo speicherleistung $speicherleistung speichersoc $speichersoc
-		fi
-		echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-		echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-		echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
-		echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
-		echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
-       	fi
+date=$(date)
+H=$(date +%H)
+if [[ $debug == "1" ]]; then
+	echo "$(tail -20000 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
+	date
+	if [[ $speichermodul != "none" ]] ; then
+		echo speicherleistung $speicherleistung speichersoc $speichersoc
+	fi
+	echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
+	echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
+	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
+	echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
+fi
+if (( opvwatt != pvwatt )); then
+	mosquitto_pub -t openWB/Wpvwatt -r -m "$pvwatt"
+fi
+if (( owattbezug != wattbezug )); then
+	mosquitto_pub -t openWB/Wwattbezug -r -m "$wattbezug"
+fi
+if (( ollaktuell != ladeleistunglp1 )); then
+	mosquitto_pub -t openWB/Wllaktuell -r -m "$ladeleistunglp1"
+fi
+if (( oladestatus != ladestatus )); then
+	mosquitto_pub -t openWB/ladestatus -m "$ladestatus"
+	echo $ladestatus > ramdisk/mqttlastladestatus
+fi
+if (( olademodus != lademodus )); then
+	mosquitto_pub -t openWB/lademodus -m "$lademodus"
+	echo $lademodus > ramdisk/mqttlastlademodus
+fi
+if (( ohausverbrauch != hausverbrauch )); then
+	mosquitto_pub -t openWB/Whausverbrauch -r -m "$hausverbrauch"
+fi
+if (( ollaktuells1 != ladeleistungs1 )); then
+	mosquitto_pub -t openWB/Wllaktuells1 -r -m "$ladeleistungs1"
+fi
+if (( ollaktuells2 != ladeleistungs2 )); then
+	mosquitto_pub -t openWB/Wllaktuells2 -r -m "$ladeleistungs2"
+fi
+if (( ollkombiniert != ladeleistung )); then
+	mosquitto_pub -t openWB/Wllkombiniert -r -m "$ladeleistung"
+fi
+if (( ospeicherleistung != speicherleistung )); then
+	mosquitto_pub -t openWB/Wspeicherleistung -r -m "$speicherleistung"
+fi
+if (( ospeichersoc != speichersoc )); then
+	mosquitto_pub -t openWB/%speichersoc -r -m "$speichersoc"
+fi
+if (( osoc != soc )); then
+	mosquitto_pub -t openWB/%soc -r -m "$soc"
+fi
+if (( osoc1 != soc1 )); then
+	mosquitto_pub -t openWB/%soc1 -r -m "$soc1"
+fi
+plugstat=$(<ramdisk/plugstat)
+chargestat=$(<ramdisk/chargestat)
+plugstats1=$(<ramdisk/plugstats1)
+chargestats1=$(<ramdisk/chargestats1)
+if (( oplugstat != plugstat )); then
+	mosquitto_pub -t openWB/boolplugstat -r -m "$plugstat"
+	echo $plugstat > ramdisk/mqttlastplugstat
+
+fi
+if (( oplugstats1 != plugstats1 )); then
+	mosquitto_pub -t openWB/boolplugstats1 -r -m "$plugstats1"
+	echo $plugstats1 > ramdisk/mqttlastplugstats1
+fi
+if (( ochargestats1 != chargestats1 )); then
+	mosquitto_pub -t openWB/boolchargestats1 -r -m "$chargestats1"
+	echo $chargestats1 > ramdisk/mqttlastchargestats1
+fi
+if (( ochargestat != chargestat )); then
+	mosquitto_pub -t openWB/boolchargestat -r -m "$chargestat"
+	echo $chargestat > ramdisk/mqttlastchargestat
+fi
 
 }

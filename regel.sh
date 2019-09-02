@@ -107,6 +107,7 @@ if (( u1p3paktiv == 1 )); then
 	fi
 fi
 
+
 #EVSE DIN Modbus test
 evsedintest
 

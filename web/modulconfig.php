@@ -54,6 +54,31 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+
+	if(strpos($line, "soc_zerong_username=") !== false) {
+		list(, $soc_zerong_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_password=") !== false) {
+		list(, $soc_zerong_passwordold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_intervall=") !== false) {
+		list(, $soc_zerong_intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_intervallladen=") !== false) {
+		list(, $soc_zerong_intervallladenold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_username=") !== false) {
+		list(, $soc_zeronglp2_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_password=") !== false) {
+		list(, $soc_zeronglp2_passwordold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_intervall=") !== false) {
+		list(, $soc_zeronglp2_intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_intervallladen=") !== false) {
+		list(, $soc_zeronglp2_intervallladenold) = explode("=", $line);
+	}
 	if(strpos($line, "bezug_victronip=") !== false) {
 		list(, $bezug_victronipold) = explode("=", $line);
 	}
@@ -248,9 +273,11 @@ foreach($lines as $line) {
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrfronius2ip=") !== false) {
+		list(, $wrfronius2ipold) = explode("=", $line);
 	}
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
@@ -1344,7 +1371,7 @@ $(function() {
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
 		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
-
+		<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
 
 	</select>
 </div>
@@ -1392,6 +1419,42 @@ $(function() {
 
 
 </div>
+<div id="socmzerong">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_username">Zero Benutzername:</label></b>
+		<input type="text" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo $soc_zerong_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Zero Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_password">Zero Passwort:</label></b>
+		<input type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo $soc_zerong_passwordold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Zero Logins<br><br>
+	</div>
+
+	<div class="row bg-info">
+		<b><label for="soc_zerong_intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+
 <div id="socmhttp">
 	<div class="row bg-info">
 	</div>
@@ -1526,6 +1589,8 @@ function display_socmodul() {
 	$('#socevnotify').hide();
 	$('#socmtesla').hide();
 	$('#soccarnet').hide();
+	$('#socmzerong').hide();
+
 
 	if($('#socmodul').val() == 'none') {
 		$('#socmnone').show();
@@ -1533,6 +1598,10 @@ function display_socmodul() {
    	if($('#socmodul').val() == 'soc_http')   {
 		$('#socmhttp').show();
 	}
+   	if($('#socmodul').val() == 'soc_zerong')   {
+		$('#socmzerong').show();
+	}
+
   	if($('#socmodul').val() == 'soc_leaf')   {
 		$('#socleaf').show();
 	}
@@ -1886,6 +1955,8 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
 		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
 		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
+		<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
+
 
 	</select>
 	</div>
@@ -1893,6 +1964,42 @@ Keine Konfiguration erforderlich.<br>
 	<div id="socmnone1">
 		<br>
 	</div>
+<div id="socmzeronglp2">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_username">Zero Benutzername:</label></b>
+		<input type="text" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo $soc_zeronglp2_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Zero Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_password">Zero Passwort:</label></b>
+		<input type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo $soc_zeronglp2_passwordold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Zero Logins<br><br>
+	</div>
+
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo $soc_zeronglp2_intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+
 <div id="socmteslalp2">
 	<div class="row bg-info">
 	</div>
@@ -2105,6 +2212,7 @@ function display_socmodul1() {
 	$('#soczoelp2').hide();
 	$('#socmteslalp2').hide();
 	$('#soccarnetlp2').hide();
+	$('#socmzeronglp2').hide();
 
 	if($('#socmodul1').val() == 'none') {
 		$('#socmnone1').hide();
@@ -2130,6 +2238,10 @@ function display_socmodul1() {
 	if($('#socmodul1').val() == 'soc_teslalp2') {
 		$('#socmteslalp2').show();
 	}
+	if($('#socmodul1').val() == 'soc_zeronglp2') {
+		$('#socmzeronglp2').show();
+	}
+
 }
 $(function() {
 	display_socmodul1();
@@ -2581,7 +2693,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
+	Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
 <div class="row" style="background-color:#febebe">
 	<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
@@ -3208,6 +3320,13 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
+		<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung reicht die Angabe eines Wechselrichters. Sind Symo und Symo Hybrid im Einsatz müssen diese beide angegeben werden. Ist kein zweiter Wechselrichter vorhanden hier - none - eintragen.<br><br>
 	</div>
 </div>
 <div id="pvmpm3pm">

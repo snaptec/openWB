@@ -49,6 +49,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displaytheme=") !== false) {
+		list(, $displaythemeold) = explode("=", $line);
+	}
 	if(strpos($line, "displaysleep=") !== false) {
 		list(, $displaysleepold) = explode("=", $line);
 	}
@@ -433,6 +436,45 @@ foreach($lines as $line) {
 	if(strpos($line, "rfidminpv=") !== false) {
 		list(, $rfidminpvold) = explode("=", $line);
 	}
+	if(strpos($line, "rfidstop2=") !== false) {
+		list(, $rfidstop2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidstandby2=") !== false) {
+		list(, $rfidstandby2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidsofort2=") !== false) {
+		list(, $rfidsofort2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidnurpv2=") !== false) {
+		list(, $rfidnurpv2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidminpv2=") !== false) {
+		list(, $rfidminpv2old) = explode("=", $line);
+	}
+	if(strpos($line, "rfidstop3=") !== false) {
+		list(, $rfidstop3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidstandby3=") !== false) {
+		list(, $rfidstandby3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidsofort3=") !== false) {
+		list(, $rfidsofort3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidnurpv3=") !== false) {
+		list(, $rfidnurpv3old) = explode("=", $line);
+	}
+
+	if(strpos($line, "rfidminpv3=") !== false) {
+		list(, $rfidminpv3old) = explode("=", $line);
+	}
+
 	if(strpos($line, "rfidlp1c1=") !== false) {
 		list(, $rfidlp1c1old) = explode("=", $line);
 	}
@@ -691,8 +733,11 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		RFID Tag eintragen.<br><br>
 	</div>
 	<div class="row">
-       		<b><label for="rfidstop">Ändere Lademodus auf Stop:</label></b>
-        	<input type="text" name="rfidstop" id="rfidstop" value="<?php echo $rfidstopold ?>"><br>
+       		<b><label for="rfidstop">Ändere Lademodus auf Stop:</label></b><br>
+		<input type="text" name="rfidstop" id="rfidstop" value="<?php echo $rfidstopold ?>"><br>
+		<input type="text" name="rfidstop2" id="rfidstop2" value="<?php echo $rfidstop2old ?>"><br>
+		<input type="text" name="rfidstop2" id="rfidstop2" value="<?php echo $rfidstop2old ?>"><br>
+
 	<br>
 	</div>
 	<div class="row">
@@ -700,8 +745,12 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	</div>
 
 	<div class="row">
-       		<b><label for="rfidstandby">Ändere Lademodus auf Standby:</label></b>
-        	<input type="text" name="rfidstandby" id="rfidstandby" value="<?php echo $rfidstandbyold ?>"><br>
+       		<b><label for="rfidstandby">Ändere Lademodus auf Standby:</label></b><br>
+		<input type="text" name="rfidstandby" id="rfidstandby" value="<?php echo $rfidstandbyold ?>"><br>
+		<input type="text" name="rfidstandby2" id="rfidstandby2" value="<?php echo $rfidstandby2old ?>"><br>
+        	<input type="text" name="rfidstandby3" id="rfidstandby3" value="<?php echo $rfidstandby3old ?>"><br>
+
+
 	<br>
 	</div>
 	<div class="row">
@@ -709,8 +758,10 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	</div>
 
 	<div class="row">
-       		<b><label for="rfidsofort">Ändere Lademodus auf Sofort Laden:</label></b>
-        	<input type="text" name="rfidsofort" id="rfidsofort" value="<?php echo $rfidsofortold ?>"><br>
+       		<b><label for="rfidsofort">Ändere Lademodus auf Sofort Laden:</label></b><br>
+          	<input type="text" name="rfidsofort" id="rfidsofort" value="<?php echo $rfidsofortold ?>"><br>
+  	     	<input type="text" name="rfidsofort2" id="rfidsofort2" value="<?php echo $rfidsofort2old ?>"><br>
+       		<input type="text" name="rfidsofort3" id="rfidsofort3" value="<?php echo $rfidsofort3old ?>"><br>
 	<br>
 	</div>
 	<div class="row">
@@ -718,8 +769,11 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	</div>
 
 	<div class="row">
-       		<b><label for="rfidminpv">Ändere Lademodus auf Min + PV Laden:</label></b>
+       		<b><label for="rfidminpv">Ändere Lademodus auf Min + PV Laden:</label></b><br>
         	<input type="text" name="rfidminpv" id="rfidminpv" value="<?php echo $rfidminpvold ?>"><br>
+        	<input type="text" name="rfidminpv2" id="rfidminpv2" value="<?php echo $rfidminpv2old ?>"><br>
+        	<input type="text" name="rfidminpv3" id="rfidminpv3" value="<?php echo $rfidminpv3old ?>"><br>
+
 	<br>
 	</div>
 	<div class="row">
@@ -727,8 +781,11 @@ $owbversion = file_get_contents('/var/www/html/openWB/web/version');
 	</div>
 
 	<div class="row">
-       		<b><label for="rfidnurpv">Ändere Lademodus auf Nur PV:</label></b>
-        	<input type="text" name="rfidnurpv" id="rfidnurpv" value="<?php echo $rfidnurpvold ?>"><br>
+       		<b><label for="rfidnurpv">Ändere Lademodus auf Nur PV:</label></b><br>
+		<input type="text" name="rfidnurpv" id="rfidnurpv" value="<?php echo $rfidnurpvold ?>"><br>
+        	<input type="text" name="rfidnurpv2" id="rfidnurpv2" value="<?php echo $rfidnurpv2old ?>"><br>
+        	<input type="text" name="rfidnurpv3" id="rfidnurpv3" value="<?php echo $rfidnurpv3old ?>"><br>
+
 	<br>
 	</div>
 	<div class="row">
@@ -1110,6 +1167,20 @@ $(function() {
 	        }
 	    });
 });
+$(function() {
+      if($('#displaytheme').val() == '0') {
+		$('#displaygauge').show();
+      } else {
+	       	$('#displaygauge').hide();
+      }
+	$('#displaytheme').change(function(){
+	        if($('#displaytheme').val() == '0') {
+			$('#displaygauge').show();
+	        } else {
+		       	$('#displaygauge').hide();
+	        }
+	    });
+});
 </script>
 
 <div class="row"><hr>
@@ -1123,7 +1194,15 @@ $(function() {
 	</select>
 </div>
 <div id="displayan">
-
+	<div class="row">
+       		<b><label for="displaytheme">Theme des Displays:</label></b>
+        	<select type="text" name="displaytheme" id="displaytheme">
+			<option <?php if($displaythemeold == 0) echo selected ?> value="0">Gauges</option>
+			<option <?php if($displaythemeold == 1) echo selected ?> value="1">Symbolfluss</option>
+		</select>
+	<br>
+	</div>
+<div id="displaygauge">
 	<div class="row">
        		<b><label for="displayevumax">EVU Skala Min Max:</label></b>
         	<input type="text" name="displayevumax" id="displayevumax" value="<?php echo $displayevumaxold ?>"><br>
@@ -1163,7 +1242,7 @@ $(function() {
         	<input type="text" name="displaylp2max" id="displaylp2max" value="<?php echo $displaylp2maxold ?>"><br>
 	<br>
 	</div>
-
+</div><br><br>
 	<div class="row">
 		<b><label for="displaypinaktiv">Pin nötig zum ändern des Lademodus:</label></b>
 	       	<select type="text" name="displaypinaktiv" id="displaypinaktiv">
@@ -1211,22 +1290,7 @@ $(function() {
 		<div class="row">
 			<h4>	Graphen</h4> <br>
 		</div>
-		<div class="row">
-			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
-			<select type="text" name="logdailywh" id="logdailywh">
-				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
-				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
-			</select>
-			<br>
-		</div>
-		<div class="row">
-			<b><label for="logeinspeisungneg">Einspeisung im Daily Graph positiv oder negativ anzeigen:</label></b>
-			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
-				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
-				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
-			</select>
-			<br>
-		</div>
+
 <div class="row">
 	<b><label for="livegraph">Zeitintervall für den Live Graphen der Hauptseite:</label></b>
 	<select type="text" name="livegraph" id="livegraph">
@@ -1268,6 +1332,25 @@ $(function() {
 			</select>
 			<br>
 	</div>
+<div id="nonintdaily">		<div class="row">
+			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
+			<select type="text" name="logdailywh" id="logdailywh">
+				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
+				<option <?php if($logdailywhold == 1) echo selected ?> value="1">Wh</option>
+			</select>
+			<br>
+		</div>
+		<div class="row">
+			<b><label for="logeinspeisungneg">Einspeisung im Daily Graph positiv oder negativ anzeigen:</label></b>
+			<select type="text" name="logeinspeisungneg" id="logeinspeisungneg">
+				<option <?php if($logeinspeisungnegold == 0) echo selected ?>value="0">Positiv</option>
+				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
+			</select>
+			<br>
+		</div>
+</div>
+
+<div id="nonintdaily">	
 	<div class="row">
 			<b><label for="graphinteractiveam">Animation im Graph:</label></b>
 			<select type="text" name="graphinteractiveam" id="graphinteractiveam">
@@ -1276,6 +1359,29 @@ $(function() {
 			</select>
 			<br><br>
 	</div>
+</div>
+<script>
+$(function() {
+      if($('#grapham').val() == '0') {
+		$('#nonintdaily').show();
+		$('#intdaily').hide();
+      } else {
+		$('#nonintdaily').hide();
+	       	$('#intdaily').show();
+      }
+
+	$('#grapham').change(function(){
+	      if($('#grapham').val() == '0') {
+			$('#nonintdaily').show();
+			$('#intdaily').hide();
+	      } else {
+			$('#nonintdaily').hide();
+		       	$('#intdaily').show();
+	      }
+	    });
+});
+</script>
+
 		<div class="row">
 	<h3>	Releasechannel</h3> <br>
 		</div>
