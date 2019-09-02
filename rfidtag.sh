@@ -9,23 +9,23 @@ if [[ $lasttag != "0" ]]; then
 	if [ $lasttag == $rfidlp2c1 ] || [ $lasttag == $rfidlp2c2 ]  || [ $lasttag == $rfidlp2c3 ] ; then
 	       echo $lasttag > ramdisk/rfidlp2
 	fi
-	if [ $lasttag == $rfidstop ] ; then
+	if [ $lasttag == $rfidstop ] || [ $lasttag == $rfidstop2 ] || [ $lasttag == $rfidstop3 ] ; then
 		echo 3 > ramdisk/lademodus
 	fi	
 
-	if [ $lasttag == $rfidsofort ] ; then
+	if [ $lasttag == $rfidsofort ] || [ $lasttag == $rfidsofort2 ] || [ $lasttag == $rfidsofort3 ]  ; then
 		echo 0 > ramdisk/lademodus
 	fi	
 
-	if [ $lasttag == $rfidminpv ] ; then
+	if [ $lasttag == $rfidminpv ] || [ $lasttag == $rfidminpv2 ] || [ $lasttag == $rfidminpv3 ]  ; then
 		echo 1 > ramdisk/lademodus
 	fi	
 
-	if [ $lasttag == $rfidnurpv ] ; then
+	if [ $lasttag == $rfidnurpv ] || [ $lasttag == $rfidnurpv2 ] || [ $lasttag == $rfidnurpv3 ]   ; then
 		echo 2 > ramdisk/lademodus
 	fi	
 
-	if [ $lasttag == $rfidstandby ] ; then
+	if [ $lasttag == $rfidstandby ] || [ $lasttag == $rfidstandby2 ] || [ $lasttag == $rfidstandby3 ] ; then
 		echo 4 > ramdisk/lademodus
 	fi	
 	echo $lasttag > ramdisk/rfidlasttag

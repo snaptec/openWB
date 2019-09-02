@@ -624,6 +624,7 @@ if [ ! -e /var/www/html/openWB/web/ladelog ]; then
 
 	sudo chmod 777 /var/www/html/openWB/web/ladelog
 fi
+	sudo chmod 777 /var/www/html/openWB/web/ladelog
 if ! grep -Fq "leafusername=" /var/www/html/openWB/openwb.conf
 then
 	  echo "leafusername=username" >> /var/www/html/openWB/openwb.conf
@@ -1618,6 +1619,53 @@ if ! grep -Fq "rfidminpv=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidminpv=000" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidsofort2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidsofort2=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidstandby2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstandby2=000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidstop2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstop2=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidnurpv2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidnurpv2=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidminpv2=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidminpv2=000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidsofort3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidsofort3=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidstandby3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstandby3=000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidstop3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidstop3=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidnurpv3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidnurpv3=000" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "rfidminpv3=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidminpv3=000" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "rfidlp1c1=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidlp1c1=0" >> /var/www/html/openWB/openwb.conf

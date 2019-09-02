@@ -99,7 +99,8 @@ if (( ladeleistung < 300 )); then
 		exit 0
 	fi
 	if (( llalt == minimalapv )); then
-		if (( wattbezugint > abschaltuberschuss )); then
+		if (( ueberschuss < einschaltueberschuss )); then
+		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
 			#	pvcounter=$((pvcounter + 10))
@@ -109,7 +110,7 @@ if (( ladeleistung < 300 )); then
 			#	fi
 			#else
 				runs/set-current.sh 0 all
-				echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt" >> ramdisk/ladestatus.log
+				echo "$date alle Ladepunkte, Lademodus NurPV. Ladefreigabe aufgehoben, Überschuss unterschritten" >> ramdisk/ladestatus.log
 
 				if [[ $debug == "1" ]]; then
 					echo "pv ladung beendet"

@@ -79,10 +79,7 @@ else
 	fi
 fi
 fi
-if ! pgrep -f "runs/mqtt.py" > /dev/null
-then
-	python3 /var/www/html/openWB/runs/mqtt.py
-fi
+
 
 
 
