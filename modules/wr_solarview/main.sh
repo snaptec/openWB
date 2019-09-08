@@ -9,21 +9,21 @@
 
 # Checks
 if [ -z "$solarview_hostname" ]; then
-  echo "Missing required variable 'solarview_hostname'" >&2
+  >&2 echo "Missing required variable 'solarview_hostname'"
   return 1
 fi
 if [ "${solarview_port}" ]; then
   if [ "$solarview_port" -lt 1 ] || [ "$solarview_port" -gt 65535 ]; then
-    echo "Invalid value '$solarview_port' for variable 'solarview_port'" >&2
+    >&2 echo "Invalid value '$solarview_port' for variable 'solarview_port'"
     return 1
   fi
 fi
 
 
 request() {
-  command="$1"
   port="${solarview_port:-15000}"
   timeout="${solarview_timeout:-1}"
+  command='00*'
 
   response=$(echo "$command" | nc -w "$timeout" "$solarview_hostname" "$port")
   return_code="$?"
@@ -63,15 +63,7 @@ request() {
     # Werte formatiert in Variablen speichern
     id="$WR"
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
-    power=$(printf %.0f "$PAC")
-    # Sonderbehandlung: Aufbereitung der Leistung für D0-Einspeisung (21*) und D0-Bezug (22*)
-    #  PAC = '-0357' bedeutet: 357 W Bezug, 0 W Einspeisung
-    #  PAC =  '0246' bedeutet: 0 W Bezug, 246 W Einspeisung
-    [ "$command" = '21*' ] && [ "$power" -lt 0 ] && power=0
-    if [ "$command" = '22*' ]; then
-      [ "$power" -gt 0 ] && power=0
-      [ "$power" -lt 0 ] && power=$(expr -1 \* "$power")
-    fi
+    power=$(printf -- '-%.0f' "$PAC")
     energy_day=$(printf "%.1f" "$KDY")
     energy_month=$(printf "%.0f" "$KMT")
     energy_year=$(printf "%.0f" "$KYR")
@@ -98,63 +90,50 @@ request() {
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
-      echo "ID: $id"
-      echo "Zeitpunkt: $timestamp"
-      echo "Temperatur: $temperature °C"
-      echo "Leistung: $power W"
-      echo "Energie:"
-      echo "  Tag:    $energy_day kWh"
-      echo "  Monat:  $energy_month kWh"
-      echo "  Jahr:   $energy_year kWh"
-      echo "  Gesamt: $energy_total kWh"
-      echo "Generator-MPP-Tracker-1"
-      echo "  Spannung: $mpptracker1_voltage V"
-      echo "  Strom:    $mpptracker1_current A"
-      echo "Generator-MPP-Tracker-2"
-      echo "  Spannung: $mpptracker2_voltage V"
-      echo "  Strom:    $mpptracker2_current A"
-      echo "Generator-MPP-Tracker-3"
-      echo "  Spannung: $mpptracker3_voltage V"
-      echo "  Strom:    $mpptracker3_current A"
-      echo "Netz:"
-      echo "  Phase 1:"
-      echo "    Spannung: $grid1_voltage V"
-      echo "    Strom:    $grid1_current A"
+      >&2 echo "ID: $id"
+      >&2 echo "Zeitpunkt: $timestamp"
+      >&2 echo "Temperatur: $temperature °C"
+      >&2 echo "Leistung: $power W"
+      >&2 echo "Energie:"
+      >&2 echo "  Tag:    $energy_day kWh"
+      >&2 echo "  Monat:  $energy_month kWh"
+      >&2 echo "  Jahr:   $energy_year kWh"
+      >&2 echo "  Gesamt: $energy_total kWh"
+      >&2 echo "Generator-MPP-Tracker-1"
+      >&2 echo "  Spannung: $mpptracker1_voltage V"
+      >&2 echo "  Strom:    $mpptracker1_current A"
+      >&2 echo "Generator-MPP-Tracker-2"
+      >&2 echo "  Spannung: $mpptracker2_voltage V"
+      >&2 echo "  Strom:    $mpptracker2_current A"
+      >&2 echo "Generator-MPP-Tracker-3"
+      >&2 echo "  Spannung: $mpptracker3_voltage V"
+      >&2 echo "  Strom:    $mpptracker3_current A"
+      >&2 echo "Netz:"
+      >&2 echo "  Phase 1:"
+      >&2 echo "    Spannung: $grid1_voltage V"
+      >&2 echo "    Strom:    $grid1_current A"
       if [ "$grid2_voltage" ] || [ "$grid2_current" ]; then
-        echo "  Phase 2:"
-        [ "$grid2_voltage" ] && echo "    Spannung: $grid2_voltage V"
-        [ "$grid2_current" ] && echo "    Strom:    $grid2_current A"
+        >&2 echo "  Phase 2:"
+        [ "$grid2_voltage" ] && >&2 echo "    Spannung: $grid2_voltage V"
+        [ "$grid2_current" ] && >&2 echo "    Strom:    $grid2_current A"
       fi
       if [ "$grid3_voltage" ] || [ "$grid3_current" ]; then
-        echo "  Phase 3:"
-        [ "$grid3_voltage" ] && echo "    Spannung: $grid3_voltage V"
-       [ "$grid3_current" ] && echo "    Strom:    $grid3_current A"
+        >&2 echo "  Phase 3:"
+        [ "$grid3_voltage" ] && >&2 echo "    Spannung: $grid3_voltage V"
+        [ "$grid3_current" ] && >&2 echo "    Strom:    $grid3_current A"
       fi
     fi
 
     # Werte speichern
-    [ "$2" ] && echo "$energy_day"          >"/var/www/html/openWB/ramdisk/$2"
-    [ "$3" ] && echo "$energy_month"        >"/var/www/html/openWB/ramdisk/$3"
-    [ "$4" ] && echo "$energy_year"         >"/var/www/html/openWB/ramdisk/$4"
-    [ "$5" ] && echo "$energy_total"        >"/var/www/html/openWB/ramdisk/$5"
-    [ "$6" ] && echo "$power"               >"/var/www/html/openWB/ramdisk/$6"
-    [ "$7" ] && echo "$mpptracker1_current" >"/var/www/html/openWB/ramdisk/$7"
-    [ "$8" ] && echo "$mpptracker2_current" >"/var/www/html/openWB/ramdisk/$8"
-    [ "$9" ] && echo "$mpptracker3_current" >"/var/www/html/openWB/ramdisk/$9"
+    echo "-$power"              >'/var/www/html/openWB/ramdisk/pvwatt'
+    echo "$energy_total"        >'/var/www/html/openWB/ramdisk/pvkwhk'
+    echo "$energy_day"          >'/var/www/html/openWB/ramdisk/daily_pvkwhk'
+    echo "$energy_month"        >'/var/www/html/openWB/ramdisk/monthly_pvkwhk'
+    echo "$energy_year"         >'/var/www/html/openWB/ramdisk/yearly_pvkwhk'
   done
+
+  # Aktuelle Leistung an der Aufrufer zurückliefern
+  echo "$power"
 }
 
-echo
-echo Wechselrichter Gesamt
-echo ---------------------
-request '00*' 'daily_pvkwhk' 'monthly_pvkwhk' 'yearly_pvkwhk' 'pvkwhk' 'pvwatt'
-
-echo
-echo Wechselrichter 1
-echo ----------------
-request '01*' 'daily_pvkwhk1' 'monthly_pvkwhk1' 'yearly_pvkwhk1' 'pvkwhk1' 'pvwatt1' 'pva1' 'pva2' 'pva3'
-
-echo
-echo Wechselrichter 2
-echo ----------------
-request '02*' 'daily_pvkwhk2' 'monthly_pvkwhk2' 'yearly_pvkwhk2' 'pvkwhk2' 'pvwatt2' 'pva1' 'pva2' 'pva3'
+request
