@@ -158,13 +158,3 @@ echo
 echo Wechselrichter 2
 echo ----------------
 request '02*' 'daily_pvkwhk2' 'monthly_pvkwhk2' 'yearly_pvkwhk2' 'pvkwhk2' 'pvwatt2' 'pva1' 'pva2' 'pva3'
-
-echo
-echo D0-Einspeisung
-echo --------------
-request '21*' '' '' '' 'einspeisungkwh' ''
-
-echo
-echo D0-Bezug
-echo --------
-request '22*' '' '' '' 'bezugkwh' 'bezugwatt'
