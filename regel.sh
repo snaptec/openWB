@@ -65,6 +65,11 @@ if [[ $dspeed == "2" ]]; then
 		echo 0 > ramdisk/5sec
 	fi
 fi
+updateinprogress=$(<ramdisk/updateinprogress)
+if (( updateinprogress == "1" )); then
+	echo "Update in progress"
+	exit 0
+fi
 
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then

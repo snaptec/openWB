@@ -2907,7 +2907,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 </div>
 <div id="wattbezuge3dc">
 	<div class="row" style="background-color:#febebe">
-		Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br>
+		Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br> Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.<br>
 	</div>
 </div>
 <div id="wattbezugsbs25">

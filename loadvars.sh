@@ -23,25 +23,26 @@ ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 # EVSE DIN Plug State
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
-
-	if [[ $evseplugstate > "1" ]]; then
-		plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
-		if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatus == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-    	    		message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-			/var/www/html/openWB/runs/pushover.sh "$message"
+	if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
+		if [[ $evseplugstate > "1" ]]; then
+			plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
+			if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatus == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+				/var/www/html/openWB/runs/pushover.sh "$message"
+			fi
+				echo 1 > /var/www/html/openWB/ramdisk/plugstat
+				plugstat=1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstat
+			plugstat=0
 		fi
-			echo 1 > /var/www/html/openWB/ramdisk/plugstat
-			plugstat=1
-	else
-		echo 0 > /var/www/html/openWB/ramdisk/plugstat
-		plugstat=0
-	fi
-	if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
-		echo 1 > /var/www/html/openWB/ramdisk/chargestat
-		chargestat=1
-	else
-		echo 0 > /var/www/html/openWB/ramdisk/chargestat
-		chargestat=0
+		if [[ $evseplugstate > "2" ]] && [[ $ladestatus == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestat
+			chargestat=1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestat
+			chargestat=0
+		fi
 	fi
 fi
 if [[ $lastmanagement == "1" ]]; then

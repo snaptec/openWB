@@ -139,7 +139,11 @@ else
 			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 
 		else
-			llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+			if (( llalt == minimalapv )); then
+				llneu=$(( llalt + 1 ))
+			else
+				llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+			fi
 		fi
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke

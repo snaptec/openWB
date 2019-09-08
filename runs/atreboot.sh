@@ -12,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
@@ -334,11 +335,11 @@ then
 fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
-  echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+  echo "abschaltverzoegerung=600" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
-  echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+  echo "einschaltverzoegerung=30" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "ladetaster=" /var/www/html/openWB/openwb.conf
 then
