@@ -32,7 +32,7 @@ request() {
     return "$return_code"
   fi
 
-  [ "$debug" -ne 0 ] && echo "Raw response: $response"
+  [ "$debug" -ne 0 ] && >&2 echo "Raw response: $response"
   #
   # Format:   {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
   # Beispiel: {01,05,09,2019,06,25,0000.0,00038,002574,00018647,00000,037,000.0,000,000.0,000,000.0,227,000.0,00},F
@@ -63,7 +63,10 @@ request() {
     # Werte formatiert in Variablen speichern
     id="$WR"
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
-    power=$(printf -- '-%.0f' "$PAC")
+    power=$(printf -- '%.0f' "$PAC")
+    if [ "$power" -gt 0 ]; then
+      power="-$power"
+    fi
     energy_day=$(printf "%.1f" "$KDY")
     energy_month=$(printf "%.0f" "$KMT")
     energy_year=$(printf "%.0f" "$KYR")
@@ -77,7 +80,7 @@ request() {
     grid1_voltage=$(printf "%.0f" "$UL1")
     grid1_current=$(printf "%.1f" "$IL1")
     # Bei einphasigen Wechselrichtern fehlen die Werte von Phase 2 und 3 in der Response.
-    # Auf der Variable 'IL1' steht dann die Temperatur und alle nachfolgenden Variablen sind unbelegt
+    # Auf der Variable 'IL2' steht dann die Temperatur und alle nachfolgenden Variablen sind unbelegt
     if [ "$IL2" ]; then
       grid2_voltage=$(printf "%.0f" "$UL2")
       grid2_current=$(printf "%.1f" "$IL2")
@@ -125,15 +128,15 @@ request() {
     fi
 
     # Werte speichern
-    echo "-$power"              >'/var/www/html/openWB/ramdisk/pvwatt'
+    echo "$power"              >'/var/www/html/openWB/ramdisk/pvwatt'
     echo "$energy_total"        >'/var/www/html/openWB/ramdisk/pvkwhk'
     echo "$energy_day"          >'/var/www/html/openWB/ramdisk/daily_pvkwhk'
     echo "$energy_month"        >'/var/www/html/openWB/ramdisk/monthly_pvkwhk'
     echo "$energy_year"         >'/var/www/html/openWB/ramdisk/yearly_pvkwhk'
-  done
 
-  # Aktuelle Leistung an der Aufrufer zurückliefern
-  echo "$power"
+    # Aktuelle Leistung an der Aufrufer zurückliefern
+    echo "$power"
+  done
 }
 
 request

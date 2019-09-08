@@ -25,7 +25,7 @@ request() {
   port="${solarview_port:-15000}"
   timeout="${solarview_timeout:-1}"
 
-  response_bezug=$(echo "$command" | nc -w "$timeout" "$solarview_hostname" "$port")
+  response=$(echo "$command" | nc -w "$timeout" "$solarview_hostname" "$port")
   return_code="$?"
   if [ "$return_code" -ne 0 ]; then
     >&2 echo "Error: request to SolarView failed. Details: return-code: '$return_code', host: '$solarview_hostname', port: '$port', timeout: '$timeout'"
@@ -129,8 +129,8 @@ request() {
     fi
 
     # Werte speichern
-    [ "$command" -eq '21*' ] && echo "$energy_total" >'/var/www/html/openWB/ramdisk/einspeisungkwh'
-    if [ "$command" -eq '22*' ]; then
+    [ "$command" = '21*' ] && echo "$energy_total" >'/var/www/html/openWB/ramdisk/einspeisungkwh'
+    if [ "$command" = '22*' ]; then
       echo "$power"         >'/var/www/html/openWB/ramdisk/wattbezug'
       echo "$energy_total"  >'/var/www/html/openWB/ramdisk/bezugkwh'
       echo "$grid1_current" >'/var/www/html/openWB/ramdisk/bezuga1'
@@ -140,11 +140,12 @@ request() {
       echo "$grid2_voltage" >'/var/www/html/openWB/ramdisk/evuv2'
       echo "$grid3_voltage" >'/var/www/html/openWB/ramdisk/evuv3'
     fi
+    echo "$power"
   done
 }
 
 # '21*': Einspeisung
-request '21*'
+request '21*' >/dev/null
 # '21*': Bezug
 power=$(request '22*')
 
