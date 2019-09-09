@@ -5,7 +5,11 @@
 # Details zur API: https://solarview.info/solarview-fb_Installieren.pdf
 #
 
-. /var/www/html/openWB/openwb.conf
+openwb_home=/var/www/html/openWB
+target="$openwb_home/ramdisk"
+
+. "$openwb_home/openwb.conf"
+
 
 # Checks
 if [ -z "$solarview_hostname" ]; then
@@ -54,8 +58,7 @@ request() {
 
   # Werte auslesen und verarbeiten
   local LANG=C
-  local IFS=','
-  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UDCD IDCD TKK
+  echo "$values" | while IFS=',' read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UDCD IDCD TKK
   do
 
     # Werte formatiert in Variablen speichern
@@ -106,16 +109,16 @@ request() {
 
     # Werte speichern
     if [ "$command" = '21*' ]; then
-      echo "$energy_total"  >'/var/www/html/openWB/ramdisk/einspeisungkwh'
+      echo "$energy_total"  >"$target/einspeisungkwh"
     elif [ "$command" = '22*' ]; then
-      echo "$power"         >'/var/www/html/openWB/ramdisk/wattbezug'
-      echo "$energy_total"  >'/var/www/html/openWB/ramdisk/bezugkwh'
-      echo "$grid1_current" >'/var/www/html/openWB/ramdisk/bezuga1'
-      echo "$grid2_current" >'/var/www/html/openWB/ramdisk/bezuga2'
-      echo "$grid3_current" >'/var/www/html/openWB/ramdisk/bezuga3'
-      echo "$grid1_voltage" >'/var/www/html/openWB/ramdisk/evuv1'
-      echo "$grid2_voltage" >'/var/www/html/openWB/ramdisk/evuv2'
-      echo "$grid3_voltage" >'/var/www/html/openWB/ramdisk/evuv3'
+      echo "$power"         >"$target/wattbezug"
+      echo "$energy_total"  >"$target/bezugkwh"
+      echo "$grid1_current" >"$target/bezuga1"
+      echo "$grid2_current" >"$target/bezuga2"
+      echo "$grid3_current" >"$target/bezuga3"
+      echo "$grid1_voltage" >"$target/evuv1"
+      echo "$grid2_voltage" >"$target/evuv2"
+      echo "$grid3_voltage" >"$target/evuv3"
     fi
 
     # Aktuelle Leistung an der Aufrufer zurückliefern

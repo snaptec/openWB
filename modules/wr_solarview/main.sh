@@ -5,7 +5,10 @@
 # Details zur API: https://solarview.info/solarview-fb_Installieren.pdf
 #
 
-. /var/www/html/openWB/openwb.conf
+openwb_home=/var/www/html/openWB
+target="$openwb_home/ramdisk"
+
+. "$openwb_home/openwb.conf"
 
 # Checks
 if [ -z "$solarview_hostname" ]; then
@@ -56,8 +59,7 @@ request() {
 
   # Werte auslesen und verarbeiten
   local LANG=C
-  local IFS=','
-  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UDCD IDCD UL1 IL1 UL2 IL2 UL3 IL3 TKK
+  echo "$values" | while IFS=',' read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UDCD IDCD UL1 IL1 UL2 IL2 UL3 IL3 TKK
   do
 
     # Werte formatiert in Variablen speichern
@@ -121,11 +123,11 @@ request() {
     fi
 
     # Werte speichern
-    echo "$power"              >'/var/www/html/openWB/ramdisk/pvwatt'
-    echo "$energy_total"        >'/var/www/html/openWB/ramdisk/pvkwhk'
-    echo "$energy_day"          >'/var/www/html/openWB/ramdisk/daily_pvkwhk'
-    echo "$energy_month"        >'/var/www/html/openWB/ramdisk/monthly_pvkwhk'
-    echo "$energy_year"         >'/var/www/html/openWB/ramdisk/yearly_pvkwhk'
+    echo "$power"        >"$target/pvwatt"
+    echo "$energy_total" >"$target/pvkwhk"
+    echo "$energy_day"   >"$target/daily_pvkwhk"
+    echo "$energy_month" >"$target/monthly_pvkwhk"
+    echo "$energy_year"  >"$target/yearly_pvkwhk"
 
     # Aktuelle Leistung an der Aufrufer zurückliefern
     echo "$power"
