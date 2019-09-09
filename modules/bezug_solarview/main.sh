@@ -22,6 +22,8 @@ if [ "${solarview_port}" ]; then
   fi
 fi
 
+command_bezug='22*'
+command_einspeisung='21*'
 
 request() {
   command="$1"
@@ -106,9 +108,9 @@ request() {
     fi
 
     # Werte speichern
-    if [ "$command" = '21*' ]; then
+    if [ "$command" = "$command_einspeisung" ]; then
       echo "$energy_total"  >"$target/einspeisungkwh"
-    elif [ "$command" = '22*' ]; then
+    elif [ "$command" = "$command_bezug" ]; then
       echo "$power"         >"$target/wattbezug"
       echo "$energy_total"  >"$target/bezugkwh"
       echo "$grid1_current" >"$target/bezuga1"
@@ -124,9 +126,7 @@ request() {
   done
 }
 
-# '21*': Einspeisung
-request '21*' >/dev/null
-# '21*': Bezug
-power=$(request '22*')
+request "$command_einspeisung" >/dev/null
+power=$(request "$command_bezug")
 
 echo "$power"
