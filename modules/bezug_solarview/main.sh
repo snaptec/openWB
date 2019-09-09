@@ -34,8 +34,9 @@ request() {
 
   [ "$debug" -ne 0 ] && >&2 echo "Raw response: $response"
   #
-  # Format:   {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
-  # Beispiel: {01,05,09,2019,06,25,0000.0,00038,002574,00018647,00000,037,000.0,000,000.0,000,000.0,227,000.0,00},F
+  # Format:    {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,???,???,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
+  # Beispiele: {22,09,09,2019,10,37,0001.2,00024,000903,00007817,01365,000,000.0,000,000.0,000,000.0,000,000.0,00},:
+  #            {21,09,09,2019,10,37,0002.3,00141,004233,00029525,01365,000,000.0,000,000.0,000,000.0,000,000.0,00},;
   #
   # Bedeutung (siehe SolarView-Dokumentation):
   #  KDY= Tagesertrag (kWh)
@@ -43,8 +44,6 @@ request() {
   #  KYR= Jahresertrag (kWh)
   #  KT0= Gesamtertrag (kWh)
   #  PAC= Generatorleistung in W
-  #  UDC, UDCB, UDCC= Generator-Spannungen in Volt pro MPP-Tracker
-  #  IDC, IDCB, IDCC= Generator-Ströme in Ampere pro MPP-Tracker
   #  UL1, IL1= Netzspannung, Netzstrom Phase 1
   #  UL2, IL2= Netzspannung, Netzstrom Phase 2
   #  UL3, IL3= Netzspannung, Netzstrom Phase 3
@@ -57,40 +56,29 @@ request() {
   # Werte auslesen und verarbeiten
   local LANG=C
   local IFS=','
-  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UL1 IL1 UL2 IL2 UL3 IL3 TKK
+  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC X1 X2 UL1 IL1 UL2 IL2 UL3 IL3 TKK
   do
 
     # Werte formatiert in Variablen speichern
     id="$WR"
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
-    # Aufbereitung der Leistung für D0-Einspeisung (21*) und D0-Bezug (22*)
     #  PAC = '-0357' bedeutet: 357 W Bezug, 0 W Einspeisung
     #  PAC =  '0246' bedeutet: 0 W Bezug, 246 W Einspeisung
-    power=$(printf %.0f "$PAC")
+    power=$(printf "%.0f" "$PAC")
     power=$(expr -1 \* "$power")
     energy_day=$(printf "%.1f" "$KDY")
     energy_month=$(printf "%.0f" "$KMT")
     energy_year=$(printf "%.0f" "$KYR")
     energy_total=$(printf "%.0f" "$KT0")
-    mpptracker1_voltage=$(printf "%.0f" "$UDC")
-    mpptracker1_current=$(printf "%.1f" "$IDC")
-    mpptracker2_voltage=$(printf "%.0f" "$UDCB")
-    mpptracker2_current=$(printf "%.1f" "$IDCB")
-    mpptracker3_voltage=$(printf "%.0f" "$UDCC")
-    mpptracker3_current=$(printf "%.1f" "$IDCC")
+    x1=$(printf "%.0f" "$X1")
+    x2=$(printf "%.1f" "$X2")
     grid1_voltage=$(printf "%.0f" "$UL1")
     grid1_current=$(printf "%.1f" "$IL1")
-    # Bei einphasigen Wechselrichtern fehlen die Werte von Phase 2 und 3 in der Response.
-    # Auf der Variable 'IL2' steht dann die Temperatur und alle nachfolgenden Variablen sind unbelegt
-    if [ "$IL2" ]; then
-      grid2_voltage=$(printf "%.0f" "$UL2")
-      grid2_current=$(printf "%.1f" "$IL2")
-      grid3_voltage=$(printf "%.0f" "$UL3")
-      grid3_current=$(printf "%.1f" "$IL3")
-      temperature=$(printf "%.0f" "$TKK")
-    else
-      temperature=$(printf "%.0f" "$IL2")
-    fi
+    grid2_voltage=$(printf "%.0f" "$UL2")
+    grid2_current=$(printf "%.1f" "$IL2")
+    grid3_voltage=$(printf "%.0f" "$UL3")
+    grid3_current=$(printf "%.1f" "$IL3")
+    temperature=$(printf "%.0f" "$TKK")
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
@@ -103,34 +91,24 @@ request() {
       >&2 echo "  Monat:  $energy_month kWh"
       >&2 echo "  Jahr:   $energy_year kWh"
       >&2 echo "  Gesamt: $energy_total kWh"
-      >&2 echo "Generator-MPP-Tracker-1"
-      >&2 echo "  Spannung: $mpptracker1_voltage V"
-      >&2 echo "  Strom:    $mpptracker1_current A"
-      >&2 echo "Generator-MPP-Tracker-2"
-      >&2 echo "  Spannung: $mpptracker2_voltage V"
-      >&2 echo "  Strom:    $mpptracker2_current A"
-      >&2 echo "Generator-MPP-Tracker-3"
-      >&2 echo "  Spannung: $mpptracker3_voltage V"
-      >&2 echo "  Strom:    $mpptracker3_current A"
+      >&2 echo "Unbekannt 1: $x1"
+      >&2 echo "Unbekannt 2: $x2"
       >&2 echo "Netz:"
       >&2 echo "  Phase 1:"
       >&2 echo "    Spannung: $grid1_voltage V"
       >&2 echo "    Strom:    $grid1_current A"
-      if [ "$grid2_voltage" ] || [ "$grid2_current" ]; then
-        >&2 echo "  Phase 2:"
-        [ "$grid2_voltage" ] && >&2 echo "    Spannung: $grid2_voltage V"
-        [ "$grid2_current" ] && >&2 echo "    Strom:    $grid2_current A"
-      fi
-      if [ "$grid3_voltage" ] || [ "$grid3_current" ]; then
-        >&2 echo "  Phase 3:"
-        [ "$grid3_voltage" ] && >&2 echo "    Spannung: $grid3_voltage V"
-        [ "$grid3_current" ] && >&2 echo "    Strom:    $grid3_current A"
-      fi
+      >&2 echo "  Phase 2:"
+      >&2 echo "    Spannung: $grid2_voltage V"
+      >&2 echo "    Strom:    $grid2_current A"
+      >&2 echo "  Phase 3:"
+      >&2 echo "    Spannung: $grid3_voltage V"
+      >&2 echo "    Strom:    $grid3_current A"
     fi
 
     # Werte speichern
-    [ "$command" = '21*' ] && echo "$energy_total" >'/var/www/html/openWB/ramdisk/einspeisungkwh'
-    if [ "$command" = '22*' ]; then
+    if [ "$command" = '21*' ]; then
+      echo "$energy_total"  >'/var/www/html/openWB/ramdisk/einspeisungkwh'
+    elif [ "$command" = '22*' ]; then
       echo "$power"         >'/var/www/html/openWB/ramdisk/wattbezug'
       echo "$energy_total"  >'/var/www/html/openWB/ramdisk/bezugkwh'
       echo "$grid1_current" >'/var/www/html/openWB/ramdisk/bezuga1'
@@ -140,6 +118,8 @@ request() {
       echo "$grid2_voltage" >'/var/www/html/openWB/ramdisk/evuv2'
       echo "$grid3_voltage" >'/var/www/html/openWB/ramdisk/evuv3'
     fi
+
+    # Aktuelle Leistung an der Aufrufer zurückliefern
     echo "$power"
   done
 }

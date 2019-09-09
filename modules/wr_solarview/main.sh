@@ -7,6 +7,13 @@
 
 . /var/www/html/openWB/openwb.conf
 
+
+# Sende-Kommando (siehe SolarView-Dokumentation); Beispiele:
+# '00*': Gesamte Anlage
+# '01*': Wechselrichter 1
+# '02*': Wechselrichter 2
+command="${1:-00*}"
+
 # Checks
 if [ -z "$solarview_hostname" ]; then
   >&2 echo "Missing required variable 'solarview_hostname'"
@@ -21,9 +28,9 @@ fi
 
 
 request() {
+  command="$1"
   port="${solarview_port:-15000}"
   timeout="${solarview_timeout:-1}"
-  command='00*'
 
   response=$(echo "$command" | nc -w "$timeout" "$solarview_hostname" "$port")
   return_code="$?"
@@ -34,8 +41,8 @@ request() {
 
   [ "$debug" -ne 0 ] && >&2 echo "Raw response: $response"
   #
-  # Format:   {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
-  # Beispiel: {01,05,09,2019,06,25,0000.0,00038,002574,00018647,00000,037,000.0,000,000.0,000,000.0,227,000.0,00},F
+  # Format:   {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,???,???,UL1,IL1,UL2,IL2,UL3,IL3,TKK},Checksum
+  # Beispiel: {01,09,09,2019,08,18,0000.0,00082,002617,00018691,00104,451,000.2,000,000.0,000,000.0,000,000.0,226,000.4,000,000.0,000,000.0,00},▒
   #
   # Bedeutung (siehe SolarView-Dokumentation):
   #  KDY= Tagesertrag (kWh)
@@ -57,20 +64,20 @@ request() {
   # Werte auslesen und verarbeiten
   local LANG=C
   local IFS=','
-  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC UL1 IL1 UL2 IL2 UL3 IL3 TKK
+  echo "$values" | while read -r WR Tag Monat Jahr Stunde Minute KDY KMT KYR KT0 PAC UDC IDC UDCB IDCB UDCC IDCC X1 X2 UL1 IL1 UL2 IL2 UL3 IL3 TKK
   do
 
     # Werte formatiert in Variablen speichern
     id="$WR"
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
-    power=$(printf -- '%.0f' "$PAC")
-    if [ "$power" -gt 0 ]; then
-      power="-$power"
-    fi
+    power=$(printf "%.0f" "$PAC")
+    power=$(expr -1 \* "$power")
     energy_day=$(printf "%.1f" "$KDY")
     energy_month=$(printf "%.0f" "$KMT")
     energy_year=$(printf "%.0f" "$KYR")
     energy_total=$(printf "%.0f" "$KT0")
+    x1=$(printf "%.0f" "$X1")
+    x2=$(printf "%.1f" "$X2")
     mpptracker1_voltage=$(printf "%.0f" "$UDC")
     mpptracker1_current=$(printf "%.1f" "$IDC")
     mpptracker2_voltage=$(printf "%.0f" "$UDCB")
@@ -79,17 +86,11 @@ request() {
     mpptracker3_current=$(printf "%.1f" "$IDCC")
     grid1_voltage=$(printf "%.0f" "$UL1")
     grid1_current=$(printf "%.1f" "$IL1")
-    # Bei einphasigen Wechselrichtern fehlen die Werte von Phase 2 und 3 in der Response.
-    # Auf der Variable 'IL2' steht dann die Temperatur und alle nachfolgenden Variablen sind unbelegt
-    if [ "$IL2" ]; then
-      grid2_voltage=$(printf "%.0f" "$UL2")
-      grid2_current=$(printf "%.1f" "$IL2")
-      grid3_voltage=$(printf "%.0f" "$UL3")
-      grid3_current=$(printf "%.1f" "$IL3")
-      temperature=$(printf "%.0f" "$TKK")
-    else
-      temperature=$(printf "%.0f" "$IL2")
-    fi
+    grid2_voltage=$(printf "%.0f" "$UL2")
+    grid2_current=$(printf "%.1f" "$IL2")
+    grid3_voltage=$(printf "%.0f" "$UL3")
+    grid3_current=$(printf "%.1f" "$IL3")
+    temperature=$(printf "%.0f" "$TKK")
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
@@ -102,6 +103,8 @@ request() {
       >&2 echo "  Monat:  $energy_month kWh"
       >&2 echo "  Jahr:   $energy_year kWh"
       >&2 echo "  Gesamt: $energy_total kWh"
+      >&2 echo "Unbekannt 1: $x1"
+      >&2 echo "Unbekannt 2: $x2"
       >&2 echo "Generator-MPP-Tracker-1"
       >&2 echo "  Spannung: $mpptracker1_voltage V"
       >&2 echo "  Strom:    $mpptracker1_current A"
@@ -115,16 +118,12 @@ request() {
       >&2 echo "  Phase 1:"
       >&2 echo "    Spannung: $grid1_voltage V"
       >&2 echo "    Strom:    $grid1_current A"
-      if [ "$grid2_voltage" ] || [ "$grid2_current" ]; then
-        >&2 echo "  Phase 2:"
-        [ "$grid2_voltage" ] && >&2 echo "    Spannung: $grid2_voltage V"
-        [ "$grid2_current" ] && >&2 echo "    Strom:    $grid2_current A"
-      fi
-      if [ "$grid3_voltage" ] || [ "$grid3_current" ]; then
-        >&2 echo "  Phase 3:"
-        [ "$grid3_voltage" ] && >&2 echo "    Spannung: $grid3_voltage V"
-        [ "$grid3_current" ] && >&2 echo "    Strom:    $grid3_current A"
-      fi
+      >&2 echo "  Phase 2:"
+      >&2 echo "    Spannung: $grid2_voltage V"
+      >&2 echo "    Strom:    $grid2_current A"
+      >&2 echo "  Phase 3:"
+      >&2 echo "    Spannung: $grid3_voltage V"
+      >&2 echo "    Strom:    $grid3_current A"
     fi
 
     # Werte speichern
@@ -139,4 +138,5 @@ request() {
   done
 }
 
-request
+power=$(request "$command")
+echo "$power"
