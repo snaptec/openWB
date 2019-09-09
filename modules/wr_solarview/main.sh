@@ -65,12 +65,11 @@ request() {
     # Werte formatiert in Variablen speichern
     id="$WR"
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
-    power=$(printf "%.0f" "$PAC")
-    power=$(expr -1 \* "$power")
-    energy_day=$(printf "%.1f" "$KDY")
-    energy_month=$(printf "%.0f" "$KMT")
-    energy_year=$(printf "%.0f" "$KYR")
-    energy_total=$(printf "%.0f" "$KT0")
+    power=$(       awk "BEGIN{print   -1 * $PAC}")
+    energy_day=$(  awk "BEGIN{print 1000 * $KDY}")
+    energy_month=$(awk "BEGIN{print 1000 * $KMT}")
+    energy_year=$( awk "BEGIN{print 1000 * $KYR}")
+    energy_total=$(awk "BEGIN{print 1000 * $KT0}")
     mpptracker1_voltage=$(printf "%.0f" "$UDC")
     mpptracker1_current=$(printf "%.1f" "$IDC")
     mpptracker2_voltage=$(printf "%.0f" "$UDCB")
@@ -79,13 +78,13 @@ request() {
     mpptracker3_current=$(printf "%.1f" "$IDCC")
     mpptracker4_voltage=$(printf "%.0f" "$UDCD")
     mpptracker4_current=$(printf "%.1f" "$IDCD")
-    grid1_voltage=$(printf "%.0f" "$UL1")
-    grid1_current=$(printf "%.1f" "$IL1")
-    grid2_voltage=$(printf "%.0f" "$UL2")
-    grid2_current=$(printf "%.1f" "$IL2")
-    grid3_voltage=$(printf "%.0f" "$UL3")
-    grid3_current=$(printf "%.1f" "$IL3")
-    temperature=$(printf "%.0f" "$TKK")
+    grid1_voltage=$(      printf "%.0f" "$UL1")
+    grid1_current=$(      printf "%.1f" "$IL1")
+    grid2_voltage=$(      printf "%.0f" "$UL2")
+    grid2_current=$(      printf "%.1f" "$IL2")
+    grid3_voltage=$(      printf "%.0f" "$UL3")
+    grid3_current=$(      printf "%.1f" "$IL3")
+    temperature=$(        printf "%.0f" "$TKK")
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
@@ -94,10 +93,10 @@ request() {
       >&2 echo "Temperatur: $temperature °C"
       >&2 echo "Leistung: $power W"
       >&2 echo "Energie:"
-      >&2 echo "  Tag:    $energy_day kWh"
-      >&2 echo "  Monat:  $energy_month kWh"
-      >&2 echo "  Jahr:   $energy_year kWh"
-      >&2 echo "  Gesamt: $energy_total kWh"
+      >&2 echo "  Tag:    $energy_day Wh"
+      >&2 echo "  Monat:  $energy_month Wh"
+      >&2 echo "  Jahr:   $energy_year Wh"
+      >&2 echo "  Gesamt: $energy_total Wh"
       >&2 echo "Generator-MPP-Tracker-1"
       >&2 echo "  Spannung: $mpptracker1_voltage V"
       >&2 echo "  Strom:    $mpptracker1_current A"
@@ -124,10 +123,10 @@ request() {
 
     # Werte speichern
     echo "$power"        >"$target/pvwatt"
-    echo "$energy_total" >"$target/pvkwhk"
-    echo "$energy_day"   >"$target/daily_pvkwhk"
-    echo "$energy_month" >"$target/monthly_pvkwhk"
-    echo "$energy_year"  >"$target/yearly_pvkwhk"
+    echo "$energy_total" >"$target/pvkwh"
+    echo "$energy_day"   >"$target/daily_pvkwh"
+    echo "$energy_month" >"$target/monthly_pvkwh"
+    echo "$energy_year"  >"$target/yearly_pvkwh"
 
     # Aktuelle Leistung an der Aufrufer zurückliefern
     echo "$power"

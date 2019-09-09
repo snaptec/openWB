@@ -10,7 +10,6 @@ target="$openwb_home/ramdisk"
 
 . "$openwb_home/openwb.conf"
 
-
 # Checks
 if [ -z "$solarview_hostname" ]; then
   >&2 echo "Missing required variable 'solarview_hostname'"
@@ -66,12 +65,11 @@ request() {
     timestamp="$Jahr-$Monat-$Tag $Stunde:$Minute"
     #  PAC = '-0357' bedeutet: 357 W Bezug, 0 W Einspeisung
     #  PAC =  '0246' bedeutet: 0 W Bezug, 246 W Einspeisung
-    power=$(printf "%.0f" "$PAC")
-    power=$(expr -1 \* "$power")
-    energy_day=$(printf "%.1f" "$KDY")
-    energy_month=$(printf "%.0f" "$KMT")
-    energy_year=$(printf "%.0f" "$KYR")
-    energy_total=$(printf "%.0f" "$KT0")
+    power=$(       awk "BEGIN{print   -1 * $PAC}")
+    energy_day=$(  awk "BEGIN{print 1000 * $KDY}")
+    energy_month=$(awk "BEGIN{print 1000 * $KMT}")
+    energy_year=$( awk "BEGIN{print 1000 * $KYR}")
+    energy_total=$(awk "BEGIN{print 1000 * $KT0}")
     mpptracker1_voltage=$(printf "%.0f" "$UDC")
     mpptracker1_current=$(printf "%.1f" "$IDC")
     mpptracker2_voltage=$(printf "%.0f" "$UDCB")
@@ -80,7 +78,7 @@ request() {
     mpptracker3_current=$(printf "%.1f" "$IDCC")
     mpptracker4_voltage=$(printf "%.0f" "$UDCD")
     mpptracker4_current=$(printf "%.1f" "$IDCD")
-    temperature=$(printf "%.0f" "$TKK")
+    temperature=$(        printf "%.0f" "$TKK")
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
@@ -89,10 +87,10 @@ request() {
       >&2 echo "Temperatur: $temperature °C"
       >&2 echo "Leistung: $power W"
       >&2 echo "Energie:"
-      >&2 echo "  Tag:    $energy_day kWh"
-      >&2 echo "  Monat:  $energy_month kWh"
-      >&2 echo "  Jahr:   $energy_year kWh"
-      >&2 echo "  Gesamt: $energy_total kWh"
+      >&2 echo "  Tag:    $energy_day Wh"
+      >&2 echo "  Monat:  $energy_month Wh"
+      >&2 echo "  Jahr:   $energy_year Wh"
+      >&2 echo "  Gesamt: $energy_total Wh"
       >&2 echo "Generator-MPP-Tracker-1"
       >&2 echo "  Spannung: $mpptracker1_voltage V"
       >&2 echo "  Strom:    $mpptracker1_current A"
