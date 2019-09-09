@@ -129,7 +129,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displaypinaktiv=") !== false) {
 		list(, $displaypinaktivold) = explode("=", $line);
 	}
-
+	if(strpos($line, "displaytagesgraph=") !== false) {
+		list(, $displaytagesgraphold) = explode("=", $line);
+	}
 	if(strpos($line, "displaypincode=") !== false) {
 		list(, $displaypincodeold) = explode("=", $line);
 	}

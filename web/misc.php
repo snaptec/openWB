@@ -49,6 +49,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displaytagesgraph=") !== false) {
+		list(, $displaytagesgraphold) = explode("=", $line);
+	}
 	if(strpos($line, "displaytheme=") !== false) {
 		list(, $displaythemeold) = explode("=", $line);
 	}
@@ -1195,6 +1198,14 @@ $(function() {
 </div>
 <div id="displayan">
 	<div class="row">
+       		<b><label for="displaytagesgraph">Tagesgraph anzeigbar (Ja vermindert die Performance):</label></b>
+        	<select type="text" name="displaytagesgraph" id="displaytagesgraph">
+			<option <?php if($displaytagesgraphold == 0) echo selected ?> value="0">Nein</option>
+			<option <?php if($displaytagesgraphold == 1) echo selected ?> value="1">Ja</option>
+		</select>
+	<br>
+	</div>
+	<div class="row">
        		<b><label for="displaytheme">Theme des Displays:</label></b>
         	<select type="text" name="displaytheme" id="displaytheme">
 			<option <?php if($displaythemeold == 0) echo selected ?> value="0">Gauges</option>
@@ -1202,6 +1213,7 @@ $(function() {
 		</select>
 	<br>
 	</div>
+
 <div id="displaygauge">
 	<div class="row">
        		<b><label for="displayevumax">EVU Skala Min Max:</label></b>
