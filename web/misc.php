@@ -1263,7 +1263,7 @@ $(function() {
 		</select><br>
 	</div>
 	<div class="row">
-		<b><label for="displaypincode">Pin (4-stellig, nur Zahlen erlaubt):</label></b>
+		<b><label for="displaypincode">Pin (4-stellig, nur Zahlen erlaubt von 1-9):</label></b>
 	       	<input type="text" name="displaypincode" id="displaypincode" value="<?php echo $displaypincodeold ?>"><br><br>
 	</div>
 	<div class="row">

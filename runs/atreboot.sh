@@ -718,6 +718,14 @@ if ! grep -Fq "evnotifytoken=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifytoken=token" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "evnotifyakeylp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifyakeylp2=abcdef" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evnotifytokenlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifytokenlp2=token" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wrjsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
