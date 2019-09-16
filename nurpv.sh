@@ -99,7 +99,7 @@ if (( ladeleistung < 300 )); then
 		exit 0
 	fi
 	if (( llalt == minimalapv )); then
-		if (( ueberschuss < einschaltueberschuss )); then
+		if (( ueberschuss < mindestuberschussphasen )); then
 		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
