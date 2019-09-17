@@ -12,18 +12,22 @@ target="$openwb_home/ramdisk"
 
 # Checks
 if [ -z "$solarview_hostname" ]; then
-  >&2 echo "Missing required variable 'solarview_hostname'"
+  log "Missing required variable 'solarview_hostname'"
   return 1
 fi
 if [ "${solarview_port}" ]; then
   if [ "$solarview_port" -lt 1 ] || [ "$solarview_port" -gt 65535 ]; then
-    >&2 echo "Invalid value '$solarview_port' for variable 'solarview_port'"
+    log "Invalid value '$solarview_port' for variable 'solarview_port'"
     return 1
   fi
 fi
 
 command_bezug='22*'
 command_einspeisung='21*'
+
+log() {
+  echo "[bezug_solarview] $*" >>"$target/openwb.log"
+}
 
 request() {
   command="$1"
@@ -33,11 +37,11 @@ request() {
   response=$(echo "$command" | nc -w "$timeout" "$solarview_hostname" "$port")
   return_code="$?"
   if [ "$return_code" -ne 0 ]; then
-    >&2 echo "Error: request to SolarView failed. Details: return-code: '$return_code', host: '$solarview_hostname', port: '$port', timeout: '$timeout'"
+    log "Error: request to SolarView failed. Details: return-code: '$return_code', host: '$solarview_hostname', port: '$port', timeout: '$timeout'"
     return "$return_code"
   fi
 
-  [ "$debug" -ne 0 ] && >&2 echo "Raw response: $response"
+  [ "$debug" -ne 0 ] && log "Raw response: $response"
   #
   # Format:    {WR,Tag,Monat,Jahr,Stunde,Minute,KDY,KMT,KYR,KT0,PAC,UDC,IDC,UDCB,IDCB,UDCC,IDCC,UDCD,IDCD,TKK},Checksum
   # Beispiele: {22,09,09,2019,10,37,0001.2,00024,000903,00007817,01365,000,000.0,000,000.0,000,000.0,000,000.0,00},:
@@ -84,27 +88,27 @@ request() {
 
     if [ "$debug" -ne 0 ]; then
       # Werte ausgeben
-      >&2 echo "ID: $id"
-      >&2 echo "Zeitpunkt: $timestamp"
-      >&2 echo "Temperatur: $temperature °C"
-      >&2 echo "Leistung: $power W"
-      >&2 echo "Energie:"
-      >&2 echo "  Tag:    $energy_day Wh"
-      >&2 echo "  Monat:  $energy_month Wh"
-      >&2 echo "  Jahr:   $energy_year Wh"
-      >&2 echo "  Gesamt: $energy_total Wh"
-      >&2 echo "Generator-MPP-Tracker-1"
-      >&2 echo "  Spannung: $mpptracker1_voltage V"
-      >&2 echo "  Strom:    $mpptracker1_current A"
-      >&2 echo "Generator-MPP-Tracker-2"
-      >&2 echo "  Spannung: $mpptracker2_voltage V"
-      >&2 echo "  Strom:    $mpptracker2_current A"
-      >&2 echo "Generator-MPP-Tracker-3"
-      >&2 echo "  Spannung: $mpptracker3_voltage V"
-      >&2 echo "  Strom:    $mpptracker3_current A"
-      >&2 echo "Generator-MPP-Tracker-4"
-      >&2 echo "  Spannung: $mpptracker4_voltage V"
-      >&2 echo "  Strom:    $mpptracker4_current A"
+      log "ID: $id"
+      log "Zeitpunkt: $timestamp"
+      log "Temperatur: $temperature °C"
+      log "Leistung: $power W"
+      log "Energie:"
+      log "  Tag:    $energy_day Wh"
+      log "  Monat:  $energy_month Wh"
+      log "  Jahr:   $energy_year Wh"
+      log "  Gesamt: $energy_total Wh"
+      log "Generator-MPP-Tracker-1"
+      log "  Spannung: $mpptracker1_voltage V"
+      log "  Strom:    $mpptracker1_current A"
+      log "Generator-MPP-Tracker-2"
+      log "  Spannung: $mpptracker2_voltage V"
+      log "  Strom:    $mpptracker2_current A"
+      log "Generator-MPP-Tracker-3"
+      log "  Spannung: $mpptracker3_voltage V"
+      log "  Strom:    $mpptracker3_current A"
+      log "Generator-MPP-Tracker-4"
+      log "  Spannung: $mpptracker4_voltage V"
+      log "  Strom:    $mpptracker4_current A"
     fi
 
     # Werte speichern
