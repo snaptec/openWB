@@ -718,6 +718,14 @@ if ! grep -Fq "evnotifytoken=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifytoken=token" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "evnotifyakeylp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifyakeylp2=abcdef" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evnotifytokenlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifytokenlp2=token" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wrjsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
@@ -810,6 +818,10 @@ fi
 if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
+then
+	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
 then
@@ -1935,7 +1947,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
-(sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable

@@ -3,8 +3,11 @@
 <script src="/openWB/web/display/gauge.min.js"></script>
       <link rel="stylesheet" href="/openWB/web/display/arrow.css">
       <link rel="stylesheet" href="/openWB/web/display/pin.css">
-	<script src="js/core.js"></script>
-	<script src="js/charts.js"></script>
+<?php 
+			     if ( $displaytagesgraphold == "1\n") {
+     echo ' <script src="js/core.js"></script>
+	<script src="js/charts.js"></script>';
+	} ?>
 <input hidden name="" id="displayevumax" value="<?php echo $displayevumaxold ; ?>" />
 <input hidden name="" id="displaypvmax" value="<?php echo $displaypvmaxold ; ?>" />
 <input hidden name="" id="displayspeichermax" value="<?php echo $displayspeichermaxold ; ?>" />
@@ -312,8 +315,11 @@ echo '
 
     
          <div class=" col-xs-2"> 
-			<input type="submit" class="1graph btn btn-blue btn-block"  name="graph" value="Tagesgraph">
-
+	<?php 
+			     if ( $displaytagesgraphold == "1\n") {
+     echo ' 	
+	 	 <input type="submit" class="1graph btn btn-blue btn-block"  name="graph" value="Tagesgraph">
+		'; } ?>
                 </div> 
 		<div class="col-xs-2">
 			<div id="sofortllbtn">
@@ -1299,7 +1305,7 @@ $(document).ready(function(){
   });
 })();
   </script>
-  <script>
+   <script>
 //function execgraph() {
 //	if ( dash == 0 ){
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
@@ -1315,8 +1321,13 @@ $(document).ready(function(){
 	var verbrauchere2name = "<?php echo $verbraucher2_nameold ?> (E)";
 	var verbraucher3vorhanden = <?php echo $verbraucher3vorhanden ?>;
 	var verbraucher3name = "<?php echo $verbraucher3_nameold ?>";
+   </script>
+ <?php 
+			     if ( $displaytagesgraphold == "1\n") {
+     echo ' 
 
 
+	     <script>
 
 if ( graphinteractiveam == 2 ){
 	am4core.useTheme(am4themes_animated);
@@ -1582,6 +1593,7 @@ chart.legend.position = "absolute";
 //}
 //}
   </script>
+  '; } ?>
 </body>
 <script src="/openWB/web/display/alllive.js"></script>
 <script src="./display/symbollive.js"></script>
