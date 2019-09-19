@@ -742,6 +742,14 @@ if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "twcmanagerlp1ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "twcmanagerlp1ip=192.168.0.15" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "twcmanagerlp1phasen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "twcmanagerlp1phasen=3" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "mpm3pmpvsource=" /var/www/html/openWB/openwb.conf
 then

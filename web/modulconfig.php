@@ -135,6 +135,13 @@ foreach($lines as $line) {
 	if(strpos($line, "evsecon=") !== false) {
 		list(, $evseconold) = explode("=", $line);
 	}
+	if(strpos($line, "twcmanagerlp1ip=") !== false) {
+		list(, $twcmanagerlp1ipold) = explode("=", $line);
+	}
+	if(strpos($line, "twcmanagerlp1phasen=") !== false) {
+		list(, $twcmanagerlp1phasenold) = explode("=", $line);
+	}
+
 	if(strpos($line, "dacregister=") !== false) {
 		list(, $dacregisterold) = explode("=", $line);
 	}
@@ -961,6 +968,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
 		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+		<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
 		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
 
@@ -1039,6 +1047,23 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 </div>
 </div>
+<div id="evsecontwcmanager">
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
+	<input type="text" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> <br>
+</div>
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1phasen">TWCManager Anzahl Phasen:</label></b>
+	<input type="text" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA) <br> <br>
+</div>
+
+</div>
 
 <div id="evsecongoe">
 <div class="row bg-info">
@@ -1101,7 +1126,7 @@ function display_lp1() {
 	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
 	$('#openwb12').hide();
-
+	$('#evsecontwcmanager').hide();
 	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show();
 		$('#llmodullp1').show();
@@ -1125,6 +1150,10 @@ function display_lp1() {
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}
+	if($('#evsecon').val() == 'twcmanager') {
+		$('#evsecontwcmanager').show();
+	}
+
 	if($('#evsecon').val() == 'openwb12') {
 		$('#openwb12').show();
 	}

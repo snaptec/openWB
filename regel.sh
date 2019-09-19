@@ -101,7 +101,6 @@ goecheck
 nrgkickcheck
 #load charging vars
 loadvars
-
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then
