@@ -172,6 +172,23 @@
 
 		</div>
 </div>
+<!-- hook status -->
+<div class="row col-xs-12 text-center" style="height: 20px;">
+		<div class="col-xs-2">
+
+		<span id="hook1div" class="fas fa-2x"></span>
+		</div>
+
+		<div class="col-xs-2">
+			<span id="hook2div" class="fas fa-2x"></span>
+		</div>
+
+		<div class="col-xs-2">
+			<span id="hook3div" class="fas fa-2x"></span>
+
+		</div>
+		
+</div>
 <!-- check which graphing method is enabled and display it -->
 <!--
 <?php if ($graphliveamold == 1) {
@@ -690,4 +707,7 @@ echo '
 
 <!-- load amcharts js for graph -->
 <script src="./themes/symbol/livesymbol.js"></script>
-<script src="/openWB/web/themes/symbol/livegraph.js"></script>
+<?php if ($graphliveamold == 1) {
+	echo '
+
+	<script src="/openWB/web/themes/standard/livegraph.js"></script>';} ?>

@@ -74,8 +74,13 @@
     <script src="live.js"></script>
     <script src="livefunctions.js"></script>
 </head>
-
 <?php include ("values.php"); ?>
+<script>
+	var hook1_aktiv = <?php echo $hook1_aktivold ?>;
+	var hook2_aktiv = <?php echo $hook2_aktivold ?>;
+	var hook3_aktiv = <?php echo $hook3_aktivold ?>;
+	var activetheme = "<?php echo $themeCookie ?>";
+</script>
 <input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 <input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
 <input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />

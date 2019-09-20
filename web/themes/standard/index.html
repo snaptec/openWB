@@ -38,19 +38,32 @@
 </div>
 
 <div id="speicherstatdiv">
-	<div class="row"><div class="col-xs-12 text-center">
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			Speicher:
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+				Speicher:
+			</div>
+			<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+				<span id="speicherleistungdiv"></span>
+			</div>
+			<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
+				<span id="speichersocdiv"></span> % SoC
+			</div>
 		</div>
-
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			<span id="speicherleistungdiv"></span>
-		</div>
-		<div class="col-xs-4 text-center" style="background-color:#fcbe1e;font-size: 2vw">
-			<span id="speichersocdiv"></span> % SoC
-		</div>
-	</div></div>
+	</div>
 </div>
+	<div class="row">
+		<div class="col-xs-12 text-center" style="font-size: 1.5vw">
+			<div id="hook1div" class="col-xs-2 text-center" style="font-size: 1.5vw;visibility: hidden">
+				Externes Gerät 1
+			</div>
+			<div id="hook2div" class="col-xs-2 text-center" style="font-size: 1.5vw; visibility: hidden">
+				Externes Gerät 2
+			</div>
+			<div id="hook3div" class="col-xs-2 text-center" style="font-size: 1.5vw; visibility: hidden">
+				Externes Gerät 3
+		</div>
+	</div>
 <br>
 <!-- check which graphing method is enabled and display it -->
 <?php if ($graphliveamold == 1) {
@@ -619,4 +632,7 @@ echo '
 	<br><br><br><br>
 </div>
 <!-- load amcharts js for graph -->
-<script src="/openWB/web/themes/standard/livegraph.js"></script>
+<?php if ($graphliveamold == 1) {
+	echo '
+
+	<script src="/openWB/web/themes/standard/livegraph.js"></script>';} ?>

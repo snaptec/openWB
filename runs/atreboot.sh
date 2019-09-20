@@ -64,6 +64,9 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
+echo 0 > /var/www/html/openWB/ramdisk/hook1akt
+echo 0 > /var/www/html/openWB/ramdisk/hook2akt
+echo 0 > /var/www/html/openWB/ramdisk/hook3akt
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
@@ -1249,6 +1252,10 @@ if ! grep -Fq "hook2_dauer=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook2_dauer=5" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hook2_ausverz=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2_ausverz=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hook3ein_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook3ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
@@ -1272,6 +1279,10 @@ fi
 if ! grep -Fq "hook3_dauer=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook3_dauer=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3_ausverz=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3_ausverz=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "verbraucher1_aktiv=" /var/www/html/openWB/openwb.conf
 then
@@ -1878,7 +1889,10 @@ if ! grep -Fq "soc_zeronglp2_intervall=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_zeronglp2_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "alphaessip=" /var/www/html/openWB/openwb.conf
+then
+	echo "alphaessip=192.168.193.31" >> /var/www/html/openWB/openwb.conf
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up

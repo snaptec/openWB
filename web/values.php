@@ -138,6 +138,16 @@ foreach($lines as $line) {
 	if(strpos($line, "settingspw=") !== false) {
 		list(, $settingspwold) = explode("=", $line);
 	}
+	if(strpos($line, "hook1_aktiv=") !== false) {
+		list(, $hook1_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "hook2_aktiv=") !== false) {
+		list(, $hook2_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "hook3_aktiv=") !== false) {
+		list(, $hook3_aktivold) = explode("=", $line);
+	}
+
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);

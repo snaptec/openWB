@@ -471,10 +471,115 @@ $.ajax({
       $("#lastregelungaktivdiv").html(request.responseText);
         }
         });
+if (document.getElementById("hook1div")) {
 
+$(function() {
+    if(hook1_aktiv == '1') {
+ $.ajax({
+    url: "/openWB/ramdisk/hook1akt",
+    complete: function(request){
+		if (request.responseText == 1) {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook1div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: green;");
+			    } else {
+				var element = document.getElementById("hook1div");
+				element.setAttribute("style", "background-color: green;");
+			    }
+		    } else {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook1div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: red;");
+			    } else {
+				var element = document.getElementById("hook1div");
+				element.setAttribute("style", "background-color: red;");
+			}
+		    }
+    }
+  });
+} else {
+        $('#hook1div').hide();
+    }
+});
+}
+if (document.getElementById("hook2div")) {
+$(function() {
+    if(hook2_aktiv == '1') {
 
+ $.ajax({
+    url: "/openWB/ramdisk/hook2akt",
+    complete: function(request){
+		if (request.responseText == 1) {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook2div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: green;");
+			    } else {
+				var element = document.getElementById("hook2div");
+				element.setAttribute("style", "background-color: green;");
+			    }
+		    } else {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook1div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: red;");
+			    } else {
 
+				var element = document.getElementById("hook2div");
+				element.setAttribute("style", "background-color: red;");
+			}
+		    }
+    }
+  });
+   } else {
+        $('#hook2div').hide();
+    }
+});
+}
+if (document.getElementById("hook3div")) {
 
+    $(function() {
+    if(hook3_aktiv == '1') {
+
+ $.ajax({
+    url: "/openWB/ramdisk/hook3akt",
+    complete: function(request){
+		if (request.responseText == 1) {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook3div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: green;");
+			    } else {
+
+				var element = document.getElementById("hook3div");
+				element.setAttribute("style", "background-color: green;");
+			    }
+		    } else {
+			if ( activetheme == "symbol") {
+				var element = document.getElementById("hook3div");
+				element.classList.add("fa");
+				element.classList.add("fa-plug");
+				element.setAttribute("style", "color: red;");
+			    } else {
+
+				var element = document.getElementById("hook3div");
+				element.setAttribute("style", "background-color: red;");
+			}
+		    }
+    }
+  });
+  } else {
+        $('#hook3div').hide();
+    }
+});
+}
 }
 
 doInterval = setInterval(getfile, 5000);
