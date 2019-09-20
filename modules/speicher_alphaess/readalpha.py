@@ -24,7 +24,6 @@ time.sleep(0.1)
 #reg bat volt
 resp = client.read_holding_registers(0x0010,2, unit=sdmid)
 voltr = resp.registers[0]
-print "reg10 bat volt final * 0.02V= " + str(value1 * 0.02)
 time.sleep(0.1)
 #reg battamp
 resp = client.read_holding_registers(0x0011,2, unit=sdmid)
@@ -32,7 +31,7 @@ value1 = resp.registers[0]
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 value1 = int(decoder.decode_16bit_int())
 volt = voltr * 0.02
-amp = value * 0.1
+amp = value1 * 0.1
 battwatt = int(volt * amp * -1)
 f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
 f.write(str(battwatt))
@@ -50,12 +49,10 @@ time.sleep(0.1)
 resp = client.read_holding_registers(0x0030,2, unit=sdmid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 pvw = int(decoder.decode_16bit_int())
-print "reg30 pvwatt= " + str(pvw)
 time.sleep(0.1)
 resp = client.read_holding_registers(0x0033,2, unit=sdmid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 pvw2 = int(decoder.decode_16bit_int())
-print "reg30 pvwatt2= " + str(pvw2)
 pvwg = int((pvw + pvw2) * -1)
 oldpv = open('/var/www/html/openWB/ramdisk/pvwatt', 'r')
 oldpv = int(oldpv.read())

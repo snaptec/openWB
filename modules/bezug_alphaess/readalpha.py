@@ -21,11 +21,9 @@ else:
 
 sdmid = int(85)
 time.sleep(0.1)
-#print "reg08"
 resp = client.read_holding_registers(0x0008,2, unit=sdmid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 w2 = str(decoder.decode_16bit_int())
-print "reg08 " + w2
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(w2))
 f.close()

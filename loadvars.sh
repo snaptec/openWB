@@ -106,7 +106,6 @@ if [[ $speichermodul != "none" ]] ; then
 	if [[ $speichermodul == "speicher_alphaess" ]] ; then
 		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 	fi
-
 else
 	speichervorhanden="0"
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
