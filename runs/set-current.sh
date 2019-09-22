@@ -112,7 +112,7 @@ function setChargingCurrentWifi () {
 function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
-			fi
+	fi
 }
 # function for setting the current - go-e charger
 # Parameters:

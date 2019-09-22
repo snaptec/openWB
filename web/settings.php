@@ -694,8 +694,13 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	<select type="text" name="u1p3pnurpv" id="u1p3pnurpv">
 		<option <?php if($u1p3pnurpvold == 1) echo selected ?> value="1">einphasig</option>
 		<option <?php if($u1p3pnurpvold == 3) echo selected ?> value="3">dreiphasig</option>
+		<option <?php if($u1p3pnurpvold == 3) echo selected ?> value="4">Automatikmodus</option>
 	</select>
 </div>
+<div class="row" style="background-color:#33ffa8">
+Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke wird wieder auf einphasige Ladung gewechselt.<br><br>
+</div>
+
 <div class="row" style="background-color:#33ffa8">
 	<b><label for="u1p3pnl">Nachtladen:</label></b>
 	<select type="text" name="u1p3pnl" id="u1p3pnl">

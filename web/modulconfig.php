@@ -54,7 +54,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "alphaessip=") !== false) {
+		list(, $alphaessipold) = explode("=", $line);
+	}
 	if(strpos($line, "soc_zerong_username=") !== false) {
 		list(, $soc_zerong_usernameold) = explode("=", $line);
 	}
@@ -876,6 +878,7 @@ foreach($lines as $line) {
 
 
 }
+$twcmanagerlp1ipold = str_replace( "'", "", $twcmanagerlp1ipold);
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
 $bezug_http_l2_urlold = str_replace( "'", "", $bezug_http_l2_urlold);
 $bezug_http_l3_urlold = str_replace( "'", "", $bezug_http_l3_urlold);
@@ -2626,6 +2629,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
 		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
 	</select>
 </div>
 <div id="wattbezugethmpm3pm">
@@ -3572,6 +3576,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
+		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
 	</select>
 </div>
 
@@ -3590,6 +3595,15 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse des Varta Speichers.<br><br>
+	</div>
+</div>
+<div id="divspeicheralphaess">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="alphaessip">Anbindung:</label></b>
+		<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1<br><br>
 	</div>
 </div>
 
@@ -3772,6 +3786,11 @@ function display_speichermodul() {
 	$('#divspeicherseco').hide();
 	$('#divspeicherkit').hide();
 	$('#divspeichervarta').hide();
+	$('#divspeicheralphaess').hide();
+
+	if($('#speichermodul').val() == 'speicher_alphaess') {
+		$('#divspeicheralphaess').show();
+	}
 
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
 		$('#divspeicherkit').show();

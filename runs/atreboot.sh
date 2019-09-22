@@ -67,6 +67,10 @@ echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/hook1akt
 echo 0 > /var/www/html/openWB/ramdisk/hook2akt
 echo 0 > /var/www/html/openWB/ramdisk/hook3akt
+echo 0 > /var/www/html/openWB/ramdisk/urcounter
+echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+
+
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
@@ -362,6 +366,11 @@ fi
 if (( rfidakt == 1 )); then
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
+fi
+if [[ $evsecon == twcmanager ]]; then
+	if [[ $twcmanagerlp1ip == "localhost/TWC" ]]; then
+		su - pi -c "screen -dm -S TWCManager /var/www/html/TWC/TWCManager.py" &
+	fi
 fi
 if (( displayaktiv == 1 )); then
 	if ! grep -Fq "pinch" /home/pi/.config/lxsession/LXDE-pi/autostart
@@ -747,7 +756,7 @@ then
 fi
 if ! grep -Fq "twcmanagerlp1ip=" /var/www/html/openWB/openwb.conf
 then
-	  echo "twcmanagerlp1ip=192.168.0.15" >> /var/www/html/openWB/openwb.conf
+	  echo "twcmanagerlp1ip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "twcmanagerlp1phasen=" /var/www/html/openWB/openwb.conf
 then

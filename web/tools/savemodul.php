@@ -1021,14 +1021,17 @@ foreach($lines as $line) {
 	$writeit = '1';
 	    }
 	    if(strpos($line, "twcmanagerlp1ip=") !== false) {
-	    $result .= 'twcmanagerlp1ip='.$_POST[twcmanagerlp1ip]."\n";
+	    $result .= 'twcmanagerlp1ip=\''.$_POST[twcmanagerlp1ip]."'\n";
 	$writeit = '1';
     }
 	    if(strpos($line, "twcmanagerlp1phasen=") !== false) {
 	    $result .= 'twcmanagerlp1phasen='.$_POST[twcmanagerlp1phasen]."\n";
 	$writeit = '1';
     }
-
+	    if(strpos($line, "alphaessip=") !== false) {
+	    $result .= 'alphaessip='.$_POST[alphaessip]."\n";
+	$writeit = '1';
+    }
 
 
 	    if ( $writeit == '0') {

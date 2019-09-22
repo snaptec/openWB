@@ -109,11 +109,15 @@ if (( ladeleistung < 300 )); then
 			#		echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
 			#	fi
 			#else
-				runs/set-current.sh 0 all
-				echo "$date alle Ladepunkte, Lademodus NurPV. Ladefreigabe aufgehoben, Überschuss unterschritten" >> ramdisk/ladestatus.log
-
-				if [[ $debug == "1" ]]; then
-					echo "pv ladung beendet"
+				if [ -e ramdisk/nurpvoff ]; then
+					runs/set-current.sh 0 all
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladefreigabe aufgehoben, Überschuss unterschritten" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "pv ladung beendet"
+					fi
+					rm ramdisk/nurpvoff
+				else
+					touch ramdisk/nurpvoff
 				fi
 			#fi
 		fi
