@@ -12,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
@@ -63,6 +64,13 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
+echo 0 > /var/www/html/openWB/ramdisk/hook1akt
+echo 0 > /var/www/html/openWB/ramdisk/hook2akt
+echo 0 > /var/www/html/openWB/ramdisk/hook3akt
+echo 0 > /var/www/html/openWB/ramdisk/urcounter
+echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+
+
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
@@ -334,11 +342,11 @@ then
 fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
-  echo "abschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+  echo "abschaltverzoegerung=600" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "einschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
-  echo "einschaltverzoegerung=10" >> /var/www/html/openWB/openwb.conf
+  echo "einschaltverzoegerung=30" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "ladetaster=" /var/www/html/openWB/openwb.conf
 then
@@ -358,6 +366,11 @@ fi
 if (( rfidakt == 1 )); then
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
+fi
+if [[ $evsecon == twcmanager ]]; then
+	if [[ $twcmanagerlp1ip == "localhost/TWC" ]]; then
+		su - pi -c "screen -dm -S TWCManager /var/www/html/TWC/TWCManager.py" &
+	fi
 fi
 if (( displayaktiv == 1 )); then
 	if ! grep -Fq "pinch" /home/pi/.config/lxsession/LXDE-pi/autostart
@@ -717,6 +730,14 @@ if ! grep -Fq "evnotifytoken=" /var/www/html/openWB/openwb.conf
 then
 	  echo "evnotifytoken=token" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "evnotifyakeylp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifyakeylp2=abcdef" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evnotifytokenlp2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "evnotifytokenlp2=token" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wrjsonwatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wrjsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
@@ -732,6 +753,14 @@ fi
 if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "twcmanagerlp1ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "twcmanagerlp1ip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "twcmanagerlp1phasen=" /var/www/html/openWB/openwb.conf
+then
+	  echo "twcmanagerlp1phasen=3" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "mpm3pmpvsource=" /var/www/html/openWB/openwb.conf
@@ -809,6 +838,10 @@ fi
 if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
+then
+	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
 then
@@ -1228,6 +1261,10 @@ if ! grep -Fq "hook2_dauer=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook2_dauer=5" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "hook2_ausverz=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook2_ausverz=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hook3ein_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook3ein_url='https://webhook.com/ein.php'" >> /var/www/html/openWB/openwb.conf
@@ -1251,6 +1288,10 @@ fi
 if ! grep -Fq "hook3_dauer=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hook3_dauer=5" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook3_ausverz=" /var/www/html/openWB/openwb.conf
+then
+	  echo "hook3_ausverz=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "verbraucher1_aktiv=" /var/www/html/openWB/openwb.conf
 then
@@ -1857,7 +1898,10 @@ if ! grep -Fq "soc_zeronglp2_intervall=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_zeronglp2_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "alphaessip=" /var/www/html/openWB/openwb.conf
+then
+	echo "alphaessip=192.168.193.31" >> /var/www/html/openWB/openwb.conf
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
@@ -1934,7 +1978,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
-(sleep 30; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+(sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable

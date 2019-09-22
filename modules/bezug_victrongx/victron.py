@@ -91,7 +91,6 @@ whs = int(wh1) + int(wh2) + int(wh3)
 whs = whs / 100
 f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(whs))
-print whs
 f.close()
 
 #grid export
@@ -109,7 +108,6 @@ whes = int(whe1) + int(whe2) + int(whe3)
 whes = whes / 100
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(whes))
-print whes
 f.close()
 
 

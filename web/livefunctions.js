@@ -88,6 +88,8 @@ function loaddivs(){
 
 function loaddivs2(){
 $(function() {
+
+
     if($('#msmoduslp1').val() == '0') {
         $('#msmodusnlp1').show();
         $('#msmodusslp1').hide();
@@ -197,6 +199,8 @@ $(function() {
         $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').hide();
     }
 });
+
+
 $(function() {
     if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
         if($('#nachtladenstate').val() == '1') {

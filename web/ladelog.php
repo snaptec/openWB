@@ -264,7 +264,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '7'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';
@@ -324,7 +324,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '7'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';
@@ -386,7 +386,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '4'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';

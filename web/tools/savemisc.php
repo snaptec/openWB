@@ -205,6 +205,10 @@ foreach($lines as $line) {
 	   if(strpos($line, "displaytheme=") !== false) {
 	    $result .= 'displaytheme='.$_POST[displaytheme]."\n";
 	    $writeit = '1';
+	   }
+	   if(strpos($line, "displaytagesgraph=") !== false) {
+	    $result .= 'displaytagesgraph='.$_POST[displaytagesgraph]."\n";
+	    $writeit = '1';
 	    } 
 	   if(strpos($line, "displaylp1max=") !== false) {
 	    $result .= 'displaylp1max='.$_POST[displaylp1max]."\n";

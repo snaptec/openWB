@@ -54,7 +54,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-
+	if(strpos($line, "alphaessip=") !== false) {
+		list(, $alphaessipold) = explode("=", $line);
+	}
 	if(strpos($line, "soc_zerong_username=") !== false) {
 		list(, $soc_zerong_usernameold) = explode("=", $line);
 	}
@@ -135,6 +137,13 @@ foreach($lines as $line) {
 	if(strpos($line, "evsecon=") !== false) {
 		list(, $evseconold) = explode("=", $line);
 	}
+	if(strpos($line, "twcmanagerlp1ip=") !== false) {
+		list(, $twcmanagerlp1ipold) = explode("=", $line);
+	}
+	if(strpos($line, "twcmanagerlp1phasen=") !== false) {
+		list(, $twcmanagerlp1phasenold) = explode("=", $line);
+	}
+
 	if(strpos($line, "dacregister=") !== false) {
 		list(, $dacregisterold) = explode("=", $line);
 	}
@@ -869,6 +878,7 @@ foreach($lines as $line) {
 
 
 }
+$twcmanagerlp1ipold = str_replace( "'", "", $twcmanagerlp1ipold);
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
 $bezug_http_l2_urlold = str_replace( "'", "", $bezug_http_l2_urlold);
 $bezug_http_l3_urlold = str_replace( "'", "", $bezug_http_l3_urlold);
@@ -961,6 +971,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
 		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+		<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
 		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
 
@@ -1039,6 +1050,23 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 </div>
 </div>
+<div id="evsecontwcmanager">
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
+	<input type="text" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> <br>
+</div>
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1phasen">TWCManager Anzahl Phasen:</label></b>
+	<input type="text" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA) <br> <br>
+</div>
+
+</div>
 
 <div id="evsecongoe">
 <div class="row bg-info">
@@ -1101,7 +1129,7 @@ function display_lp1() {
 	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
 	$('#openwb12').hide();
-
+	$('#evsecontwcmanager').hide();
 	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show();
 		$('#llmodullp1').show();
@@ -1125,6 +1153,10 @@ function display_lp1() {
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}
+	if($('#evsecon').val() == 'twcmanager') {
+		$('#evsecontwcmanager').show();
+	}
+
 	if($('#evsecon').val() == 'openwb12') {
 		$('#openwb12').show();
 	}
@@ -2597,6 +2629,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
 		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
 	</select>
 </div>
 <div id="wattbezugethmpm3pm">
@@ -2907,7 +2940,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 </div>
 <div id="wattbezuge3dc">
 	<div class="row" style="background-color:#febebe">
-		Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br>
+		Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br> Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.<br>
 	</div>
 </div>
 <div id="wattbezugsbs25">
@@ -3543,6 +3576,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
+		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
 	</select>
 </div>
 
@@ -3561,6 +3595,15 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse des Varta Speichers.<br><br>
+	</div>
+</div>
+<div id="divspeicheralphaess">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="alphaessip">Anbindung:</label></b>
+		<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1<br><br>
 	</div>
 </div>
 
@@ -3743,6 +3786,11 @@ function display_speichermodul() {
 	$('#divspeicherseco').hide();
 	$('#divspeicherkit').hide();
 	$('#divspeichervarta').hide();
+	$('#divspeicheralphaess').hide();
+
+	if($('#speichermodul').val() == 'speicher_alphaess') {
+		$('#divspeicheralphaess').show();
+	}
 
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
 		$('#divspeicherkit').show();

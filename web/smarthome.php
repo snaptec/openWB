@@ -48,7 +48,12 @@ foreach($lines as $line) {
 	if(strpos($line, "settingspwakt=") !== false) {
 		list(, $settingspwaktold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "hook2_ausverz=") !== false) {
+		list(, $hook2_ausverzold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook3_ausverz=") !== false) {
+		list(, $hook3_ausverzold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "hook1_ausverz=") !== false) {
 		list(, $hook1_ausverzold) = explode("=", $line, 2);
 	}
@@ -395,7 +400,14 @@ $(function() {
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
 	</div>
-
+	<div class="row">
+       		<b><label for="hook2_ausverz">Gerät 2 Ausschaltverzögerung:</label></b>
+        	<input type="text" name="hook2_ausverz" id="hook2_ausverz" value="<?php echo $hook2_ausverzold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+	</div>
 
 </div>
 <script>
@@ -475,6 +487,14 @@ $(function() {
 	</div>
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1_ausverz">Gerät 3 Ausschaltverzögerung:</label></b>
+        	<input type="text" name="hook3_ausverz" id="hook3_ausverz" value="<?php echo $hook3_ausverzold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
 	</div>
 
 </div><hr>

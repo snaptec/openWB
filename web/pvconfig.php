@@ -216,8 +216,9 @@ Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der 
 
 <div class="row" style="background-color:#befebe">
 Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im "Nur PV" Modus die Abschaltung hinausgezögert wird. <br>
-Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> 
-Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss, beginnen die 40 Sekunden erneut.<br>
+Gibt man hier 120 Sekunden an, muss über die gesamte Spanne von 120 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> 
+Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss, beginnen die 120 Sekunden erneut.<br> 
+Es wird empfohlen die Abschaltverzögerung nicht zu gering zu setzen da dies unter ungünstigen Umständen ein häufiges starten/stoppen zur Folge hat.<br>
 </div><br>
 <div class="row" style="background-color:#befebe">
 	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
