@@ -1032,6 +1032,15 @@ foreach($lines as $line) {
 	    $result .= 'alphaessip='.$_POST[alphaessip]."\n";
 	$writeit = '1';
     }
+	    if(strpos($line, "solarview_hostname=") !== false) {
+	    $result .= 'solarview_hostname='.$_POST[solarview_hostname]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "solarview_port=") !== false) {
+	    $result .= 'solarview_port='.$_POST[solarview_port]."\n";
+	$writeit = '1';
+    }
+
 
 
 	    if ( $writeit == '0') {

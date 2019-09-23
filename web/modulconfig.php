@@ -54,6 +54,13 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "solarview_hostname=") !== false) {
+		list(, $solarview_hostnameold) = explode("=", $line);
+	}
+	if(strpos($line, "solarview_port=") !== false) {
+		list(, $solarview_portold) = explode("=", $line);
+	}
+
 	if(strpos($line, "alphaessip=") !== false) {
 		list(, $alphaessipold) = explode("=", $line);
 	}
@@ -2630,6 +2637,7 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
 		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
 		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
+		<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
 	</select>
 </div>
 <div id="wattbezugethmpm3pm">
@@ -2637,6 +2645,12 @@ $(function() {
 		Keine Konfiguration erforderlich.<br><br>
 	</div>
 </div>
+<div id="wattbezugsolarview">
+	<div class="row">
+		Konfiguration im zugehörigen PV Modul erforderlich.<br><br>
+	</div>
+</div>
+
 <div id="wattbezugpowerwall">
 	<div class="row">
 		Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
@@ -3021,10 +3035,12 @@ function display_wattbezugmodul() {
 	$('#wattbezugsmartfox').hide();
 	$('#wattbezugpowerwall').hide();
 	$('#wattbezugvictrongx').hide();
-
+	$('#wattbezugsolarview').hide();
 	// Auswahl PV-Modul generell erlauben
 	enable_pv_selector();
-
+	if($('#wattbezugmodul').val() == 'bezug_solarview') {
+		$('#wattbezugsolarview').show();
+	}
 	if($('#wattbezugmodul').val() == 'bezug_victrongx') {
 		$('#wattbezugvictrongx').show();
 	}
@@ -3132,6 +3148,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 		<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
 		<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
+		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
 	</select>
 </div>
 
@@ -3148,6 +3165,24 @@ $(function() {
 		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br>
 	</div>
 </div>
+<div id="pvsolarview">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+		<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. <br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="solarview_port">Port des Solarview</label></b>
+		<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte Port, z.B. 80. <br>
+	</div>
+
+</div>
+
 <div id="pvpowerwall">
 
 	<div class="row" style="background-color:#febebe">
@@ -3489,6 +3524,10 @@ function display_pvwattmodul() {
 	$('#pvpowerwall').hide();
 	$('#pvmpmevu').hide();
 	$('#pvethsdm120').hide();
+	$('#pvsolarview').hide();
+	if($('#pvwattmodul').val() == 'wr_solarview') {
+		$('#pvsolarview').show();
+	}
 
 
 	if($('#pvwattmodul').val() == 'wr_ethsdm120') {

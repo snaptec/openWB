@@ -1902,6 +1902,16 @@ if ! grep -Fq "alphaessip=" /var/www/html/openWB/openwb.conf
 then
 	echo "alphaessip=192.168.193.31" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solarview_hostname=" /var/www/html/openWB/openwb.conf
+then
+	echo "solarview_hostname=192.168.0.31" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solarview_port=" /var/www/html/openWB/openwb.conf
+then
+	echo "solarview_port=80" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
