@@ -694,7 +694,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	<select type="text" name="u1p3pnurpv" id="u1p3pnurpv">
 		<option <?php if($u1p3pnurpvold == 1) echo selected ?> value="1">einphasig</option>
 		<option <?php if($u1p3pnurpvold == 3) echo selected ?> value="3">dreiphasig</option>
-		<option <?php if($u1p3pnurpvold == 3) echo selected ?> value="4">Automatikmodus</option>
+		<option <?php if($u1p3pnurpvold == 4) echo selected ?> value="4">Automatikmodus</option>
 	</select>
 </div>
 <div class="row" style="background-color:#33ffa8">
