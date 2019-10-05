@@ -1040,7 +1040,22 @@ foreach($lines as $line) {
 	    $result .= 'solarview_port='.$_POST[solarview_port]."\n";
 	$writeit = '1';
     }
-
+	    if(strpos($line, "discovergyuser=") !== false) {
+	    $result .= 'discovergyuser='.$_POST[discovergyuser]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergypass=") !== false) {
+	    $result .= 'discovergypass='.$_POST[discovergypass]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergyevuid=") !== false) {
+	    $result .= 'discovergyevuid='.$_POST[discovergyevuid]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergypvid=") !== false) {
+	    $result .= 'discovergypvid='.$_POST[discovergypvid]."\n";
+	$writeit = '1';
+    }
 
 
 	    if ( $writeit == '0') {

@@ -239,7 +239,7 @@ Es wird empfohlen die Abschaltverzögerung nicht zu gering zu setzen da dies unt
 </div>
 
 <div class="row" style="background-color:#befebe">
-Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Min + PV Laden" Modus.
+Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Min + PV Laden" Modus. Bei manchen Fahrzeugen, z.B. der Zoe, sind 7-12A nötig, sonst wird die Ladung nicht gestartet.
 </div>
 <div class="row" style="background-color:#befebe">
 	<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus LP1:</label></b>
@@ -274,7 +274,8 @@ Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Min + P
 
 
 <div class="row" style="background-color:#befebe">
-Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV Laden" Modus.<br>
+Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV Laden" Modus. Bei manchen Fahrzeugen, z.B. der Zoe, sind 7-12A nötig, sonst wird die Ladung nicht gestartet.
+<br>
 </div>
 
 <div class="row" style="background-color:#befebe">

@@ -54,6 +54,19 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "discovergyuser=") !== false) {
+		list(, $discovergyuserold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergypass=") !== false) {
+		list(, $discovergypassold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergyevuid=") !== false) {
+		list(, $discovergyevuidold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergypvid=") !== false) {
+		list(, $discovergypvidold) = explode("=", $line);
+	}
+
 	if(strpos($line, "solarview_hostname=") !== false) {
 		list(, $solarview_hostnameold) = explode("=", $line);
 	}
@@ -2638,6 +2651,8 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
 		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
+		<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
+
 	</select>
 </div>
 <div id="wattbezugethmpm3pm">
@@ -2663,6 +2678,23 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#febebe">
 		Gültige Werte IP. IP Adresse des Victron, z.B. GX.<br><br>
+	</div>
+</div>
+<div id="wattbezugdiscovergy">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergyuser">Discovergy Username (Email):</label></b>
+		<input type="text" name="discovergyuser" id="discovergyuser" value="<?php echo $discovergyuserold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergypass">Discovergy Passwort:</label></b>
+		<input type="text" name="discovergypass" id="discovergypass" value="<?php echo $discovergypassold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergyevuid">Meter ID:</label></b>
+		<input type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>
 	</div>
 </div>
 
@@ -3036,11 +3068,16 @@ function display_wattbezugmodul() {
 	$('#wattbezugpowerwall').hide();
 	$('#wattbezugvictrongx').hide();
 	$('#wattbezugsolarview').hide();
+	$('#wattbezugdiscovergy').hide();
 	// Auswahl PV-Modul generell erlauben
 	enable_pv_selector();
 	if($('#wattbezugmodul').val() == 'bezug_solarview') {
 		$('#wattbezugsolarview').show();
 	}
+	if($('#wattbezugmodul').val() == 'bezug_discovergy') {
+		$('#wattbezugdiscovergy').show();
+	}
+
 	if($('#wattbezugmodul').val() == 'bezug_victrongx') {
 		$('#wattbezugvictrongx').show();
 	}
@@ -3149,6 +3186,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
 		<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
 		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
+		<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
 	</select>
 </div>
 
@@ -3165,6 +3203,16 @@ $(function() {
 		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br>
 	</div>
 </div>
+<div id="pvdiscovergy">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergypvid">Meter ID des Zählers</label></b>
+		<input type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert<br>
+	</div>
+</div>
+
 <div id="pvsolarview">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
@@ -3525,11 +3573,14 @@ function display_pvwattmodul() {
 	$('#pvmpmevu').hide();
 	$('#pvethsdm120').hide();
 	$('#pvsolarview').hide();
+	$('#pvdiscovergy').hide();
+
 	if($('#pvwattmodul').val() == 'wr_solarview') {
 		$('#pvsolarview').show();
 	}
-
-
+	if($('#pvwattmodul').val() == 'wr_discovergy') {
+		$('#pvdiscovergy').show();
+	}
 	if($('#pvwattmodul').val() == 'wr_ethsdm120') {
 		$('#pvethsdm120').show();
 	}

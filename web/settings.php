@@ -617,7 +617,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gibt an mit wieviel Ampere je Phase mindestens geladen wird, gilt auch für das Nachtladen. <br><br>
+	Gibt an mit wieviel Ampere je Phase mindestens geladen wird, gilt auch für das Nachtladen. Bei der Zoe z.B. sind 7-12A nötig, sonst wird das Laden nicht begonnen. <br><br>
 </div>
 <div class="row" style="background-color:#febebe">
 	<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>

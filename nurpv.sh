@@ -201,7 +201,7 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-			llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
