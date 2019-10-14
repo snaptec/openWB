@@ -70,7 +70,18 @@
 	}
 	doInterval = setInterval(getfile, 2000);
 </script>
-
+<script type='text/javascript'>
+	var doInterval;
+	function getfile() {
+		$.ajax({
+			url: "/openWB/ramdisk/schieflast",
+	    	complete: function(request){
+		    	$("#schieflastdiv").html(request.responseText);
+				}
+		});
+	}
+	doInterval = setInterval(getfile, 2000);
+</script>
 <script type='text/javascript'>
 	var doInterval;
 	function getfile() {
@@ -1083,6 +1094,17 @@ loadstatuslog();
 				</div>
 				<div class="col-xs-2 text-center">
 					<div id="bezuga3div"></div>
+				</div>
+			</div>
+			<div class="row" style="background-color:#febebe">
+				<div class="col-xs-4 text-center">
+				EVU Schieflast [A]</div>
+				<div class="col-xs-2 text-center">
+				</div>
+				<div class="col-xs-2 text-center">
+					<div id="schieflastdiv"></div>
+				</div>
+				<div class="col-xs-2 text-center">
 				</div>
 			</div>
 			<hr>

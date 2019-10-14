@@ -258,6 +258,17 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $evua3 =~ $re ]] ; then
 		evua3="0"
 	fi
+	evuas=($evua1 $evua2 $evua3)
+	maxevu=${evuas[0]}
+	for v in "${evuas[@]}"; do
+		if (( v > maxevu )); then maxevu=$v; fi;
+			done
+	lowevu=${evuas[0]}
+	for v in "${evuas[@]}"; do
+		if (( v < lowevu )); then lowevu=$v; fi;
+			done
+	schieflast=$(( maxevu - lowevu ))
+	echo $schieflast > /var/www/html/openWB/ramdisk/schieflast
 else
 	wattbezug=$pvwatt
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
