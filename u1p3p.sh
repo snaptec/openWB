@@ -70,6 +70,9 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 						if (( u1p3pstat == 3 )); then
 							urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 							if (( urcounter < 600 )); then
+								if (( urcounter < 540 )); then
+									urcounter=540
+								fi
 								urcounter=$((urcounter + 10))
 								echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
 							else
