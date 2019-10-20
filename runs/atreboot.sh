@@ -1927,6 +1927,90 @@ if ! grep -Fq "discovergypvid=" /var/www/html/openWB/openwb.conf
 then
 	echo "discovergypvid=idesmeters" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mollp1moab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1moab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1diab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1diab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dibis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dibis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1miab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1miab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mibis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mibis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1doab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1doab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frbis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frbis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sabis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1sabis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1soab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1soab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1sobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1saab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1saab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1moll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1moll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dill=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dill=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mill=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mill=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1doll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1doll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sall=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1msal=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
+fi
 
 
 ethstate=$(</sys/class/net/eth0/carrier)
