@@ -2009,7 +2009,7 @@ then
 fi
 if ! grep -Fq "mollp1sall=" /var/www/html/openWB/openwb.conf
 then
-	echo "mollp1msal=13" >> /var/www/html/openWB/openwb.conf
+	echo "mollp1sall=13" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
