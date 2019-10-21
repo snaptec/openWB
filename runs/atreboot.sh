@@ -341,6 +341,10 @@ if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
 then
   echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "sonnenecoalternativ=" /var/www/html/openWB/openwb.conf
+then
+  echo "sonnenecoalternativ=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
   echo "abschaltverzoegerung=600" >> /var/www/html/openWB/openwb.conf

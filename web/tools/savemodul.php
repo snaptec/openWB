@@ -981,6 +981,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "sonnenecoip=") !== false) {
 	    $result .= 'sonnenecoip='.$_POST[sonnenecoip]."\n";
 	$writeit = '1';
+	    }
+	    if(strpos($line, "sonnenecoalternativ=") !== false) {
+	    $result .= 'sonnenecoalternativ='.$_POST[sonnenecoalternativ]."\n";
+	$writeit = '1';
     }
 	    if(strpos($line, "bezug_victronip=") !== false) {
 	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";

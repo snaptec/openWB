@@ -113,6 +113,9 @@ foreach($lines as $line) {
 	if(strpos($line, "sonnenecoip=") !== false) {
 		list(, $sonnenecoipold) = explode("=", $line);
 	}
+	if(strpos($line, "sonnenecoalternativ=") !== false) {
+		list(, $sonnenecoalternativold) = explode("=", $line);
+	}
 	if(strpos($line, "wr_sdm120id=") !== false) {
 		list(, $wr_sdm120idold) = explode("=", $line);
 	}
@@ -3713,6 +3716,14 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+	</div>
+	<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
+	<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
+		<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
 	</div>
 </div>
 
