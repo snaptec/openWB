@@ -228,7 +228,7 @@ echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
 echo 0 > /var/www/html/openWB/ramdisk/nachtladen2states1
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
-echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
+
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
@@ -2094,7 +2094,7 @@ echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 
-
+echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 #if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
 #then
 #	  sudo apt-get update

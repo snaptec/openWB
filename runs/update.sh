@@ -3,6 +3,7 @@
 cd /var/www/html/openWB
 . /var/www/html/openWB/openwb.conf
 echo 1 > /var/www/html/openWB/ramdisk/updateinprogress
+echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 cp modules/soc_i3/auth.json /tmp/auth.json
 cp modules/soc_i3s1/auth.json /tmp/auth.json.1
 cp openwb.conf /tmp/openwb.conf

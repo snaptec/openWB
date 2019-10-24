@@ -476,7 +476,7 @@ if (( ogelrlp3 != gelrlp3 )); then
 	mosquitto_pub -t openWB/lp3/kmcharged -r -m "$gelrlp3"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
-if (( opluggedchargedkwhlp1 != pluggedchargedkwhlp1 )); then
+if [[ "$opluggedchargedkwhlp1" != "$pluggedchargedkwhlp1" ]]; then
 	mosquitto_pub -t openWB/lp1/kWhchargedsinceplugged -r -m "$pluggedchargedkwhlp1"
 	echo $pluggedchargedkwhlp1 > ramdisk/mqttpluggedchargedkwhlp1
 fi
