@@ -70,6 +70,8 @@ echo 0 > /var/www/html/openWB/ramdisk/hook2akt
 echo 0 > /var/www/html/openWB/ramdisk/hook3akt
 echo 0 > /var/www/html/openWB/ramdisk/urcounter
 echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls1
+echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls2
 
 
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -265,6 +267,11 @@ echo 0 > /var/www/html/openWB/ramdisk/evupf3
 echo 0 > /var/www/html/openWB/ramdisk/evuhz
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp1
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp2
+echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp3
+
 echo 0 > /var/www/html/openWB/ramdisk/llsolls1
 echo 0 > /var/www/html/openWB/ramdisk/llsolls2
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
@@ -2015,8 +2022,8 @@ if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
 fi
-
-
+sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
+(sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up

@@ -29,10 +29,12 @@ fi
 echo $speichersoc > /var/www/html/openWB/ramdisk/speichersoc
 else
 	speicherantwort=$(curl --connect-timeout 5 -s "$sonnenecoip/api/v1/status")
-	speicherwatt=$(echo $speicherantwort | jq .GridFeedIn_W)
+	speicherwatt=$(echo $speicherantwort | jq .Pac_total_W)
 	speichersoc=$(echo $speicherantwort | jq .USOC)
 	if ! [[ $speicherwatt =~ $ra ]] ; then
 		  speicherwatt="0"
+	  else
+		  speicherwatt=$((speicherwatt * -1))
 	fi
 	echo $speicherwatt > /var/www/html/openWB/ramdisk/speicherleistung
 	if ! [[ $speichersoc =~ $ra ]] ; then
