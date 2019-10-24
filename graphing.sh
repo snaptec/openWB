@@ -64,7 +64,6 @@ fi
 mosquitto_pub -t openWB/graphalllivevalues -r -m "$(cat /var/www/html/openWB/ramdisk/all-live.graph)" &
 mosquitto_pub -t openWB/graphlastlivevalues -r -m "$(date +%H:%M:%S),$wattbezugint,$ladeleistung,$pvgraph,$ladeleistunglp1,$ladeleistunglp2,$ladeleistung,$speicherleistung,$speichersoc,$soc,$soc1,$hausverbrauch,$verbraucher1_watt,$verbraucher2_watt" &
 
-echo "hier"
 #Long Time Graphing
 if (( graphtimer == 1 )); then
 	echo $((pvwatt * -1)) >> /var/www/html/openWB/ramdisk/pv.graph
