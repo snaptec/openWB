@@ -67,9 +67,16 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 			if (( lademodus == 2 )); then
 				if (( u1p3pstat != u1p3pnurpv )); then
 					if (( u1p3pnurpv == 4 )); then
+						if (( u1p3pstat == 0 )); then
+							sudo python runs trigopen.py
+							echo 1 > ramdisk/u1p3pstat
+						fi
 						if (( u1p3pstat == 3 )); then
 							urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 							if (( urcounter < 600 )); then
+								if (( urcounter < 540 )); then
+									urcounter=540
+								fi
 								urcounter=$((urcounter + 10))
 								echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
 							else

@@ -12,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
@@ -69,6 +70,8 @@ echo 0 > /var/www/html/openWB/ramdisk/hook2akt
 echo 0 > /var/www/html/openWB/ramdisk/hook3akt
 echo 0 > /var/www/html/openWB/ramdisk/urcounter
 echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls1
+echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls2
 
 
 touch /var/www/html/openWB/ramdisk/ladestatus
@@ -225,7 +228,7 @@ echo 0 > /var/www/html/openWB/ramdisk/nachtladen2state
 echo 0 > /var/www/html/openWB/ramdisk/nachtladen2states1
 echo 0 > /var/www/html/openWB/ramdisk/nachtladenstates1
 echo 4 > /var/www/html/openWB/ramdisk/graphtimer
-echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
+
 echo 0 > /var/www/html/openWB/ramdisk/speicher
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo 0 > /var/www/html/openWB/ramdisk/ladestatuss1
@@ -264,6 +267,11 @@ echo 0 > /var/www/html/openWB/ramdisk/evupf3
 echo 0 > /var/www/html/openWB/ramdisk/evuhz
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp1
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp2
+echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttgelrlp3
+
 echo 0 > /var/www/html/openWB/ramdisk/llsolls1
 echo 0 > /var/www/html/openWB/ramdisk/llsolls2
 echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
@@ -339,6 +347,10 @@ sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
 then
   echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "sonnenecoalternativ=" /var/www/html/openWB/openwb.conf
+then
+  echo "sonnenecoalternativ=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "abschaltverzoegerung=" /var/www/html/openWB/openwb.conf
 then
@@ -1902,6 +1914,116 @@ if ! grep -Fq "alphaessip=" /var/www/html/openWB/openwb.conf
 then
 	echo "alphaessip=192.168.193.31" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solarview_hostname=" /var/www/html/openWB/openwb.conf
+then
+	echo "solarview_hostname=192.168.0.31" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solarview_port=" /var/www/html/openWB/openwb.conf
+then
+	echo "solarview_port=80" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "discovergyuser=" /var/www/html/openWB/openwb.conf
+then
+	echo "discovergyuser=name@mail.de" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "discovergypass=" /var/www/html/openWB/openwb.conf
+then
+	echo "discovergypass=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "discovergyevuid=" /var/www/html/openWB/openwb.conf
+then
+	echo "discovergyevuid=idesmeters" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "discovergypvid=" /var/www/html/openWB/openwb.conf
+then
+	echo "discovergypvid=idesmeters" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1moab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1moab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1diab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1diab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dibis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dibis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1miab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1miab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mibis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mibis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1doab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1doab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frbis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frbis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sabis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1sabis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1soab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1soab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sobis=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1sobis=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1saab=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1saab=06:00" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1moll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1moll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1dill=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1dill=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1mill=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1mill=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1doll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1doll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1frll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1frll=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1sall=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1sall=13" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
+then
+	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
+fi
+sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
+(sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
@@ -1972,7 +2094,7 @@ echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 
-
+echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 #if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
 #then
 #	  sudo apt-get update

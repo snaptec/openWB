@@ -99,7 +99,7 @@ if (( ladeleistung < 300 )); then
 		exit 0
 	fi
 	if (( llalt == minimalapv )); then
-		if (( ueberschuss < mindestuberschussphasen )); then
+		if (( uberschuss < mindestuberschussphasen )); then
 		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
@@ -201,7 +201,7 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-			llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv

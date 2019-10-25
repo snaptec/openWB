@@ -172,6 +172,8 @@ if (( verbraucher1_aktiv == "1")); then
 			fi
 		fi
 	fi
+else
+	verbraucher1_watt=0
 fi
 if (( verbraucher2_aktiv == "1")); then
 	echo "1" > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
@@ -218,7 +220,8 @@ if (( verbraucher2_aktiv == "1")); then
 		fi
 		echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 	fi
-
+else
+	verbraucher2_watt=0
 
 fi
 

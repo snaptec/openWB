@@ -981,6 +981,10 @@ foreach($lines as $line) {
 	    if(strpos($line, "sonnenecoip=") !== false) {
 	    $result .= 'sonnenecoip='.$_POST[sonnenecoip]."\n";
 	$writeit = '1';
+	    }
+	    if(strpos($line, "sonnenecoalternativ=") !== false) {
+	    $result .= 'sonnenecoalternativ='.$_POST[sonnenecoalternativ]."\n";
+	$writeit = '1';
     }
 	    if(strpos($line, "bezug_victronip=") !== false) {
 	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";
@@ -1030,6 +1034,30 @@ foreach($lines as $line) {
     }
 	    if(strpos($line, "alphaessip=") !== false) {
 	    $result .= 'alphaessip='.$_POST[alphaessip]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "solarview_hostname=") !== false) {
+	    $result .= 'solarview_hostname='.$_POST[solarview_hostname]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "solarview_port=") !== false) {
+	    $result .= 'solarview_port='.$_POST[solarview_port]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergyuser=") !== false) {
+	    $result .= 'discovergyuser='.$_POST[discovergyuser]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergypass=") !== false) {
+	    $result .= 'discovergypass='.$_POST[discovergypass]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergyevuid=") !== false) {
+	    $result .= 'discovergyevuid='.$_POST[discovergyevuid]."\n";
+	$writeit = '1';
+    }
+	    if(strpos($line, "discovergypvid=") !== false) {
+	    $result .= 'discovergypvid='.$_POST[discovergypvid]."\n";
 	$writeit = '1';
     }
 

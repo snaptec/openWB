@@ -8,6 +8,90 @@ foreach($lines as $line) {
    	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 	    $result .= 'pvbezugeinspeisung='.$_POST[pvbezugeinspeisung]."\n";
 	    $writeit = '1';
+	}
+   	if(strpos($line, "mollp1moab=") !== false) {
+	    $result .= 'mollp1moab='.$_POST[mollp1moab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1mobis=") !== false) {
+	    $result .= 'mollp1mobis='.$_POST[mollp1mobis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1moll=") !== false) {
+	    $result .= 'mollp1moll='.$_POST[mollp1moll]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1diab=") !== false) {
+	    $result .= 'mollp1diab='.$_POST[mollp1diab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1dibis=") !== false) {
+	    $result .= 'mollp1dibis='.$_POST[mollp1dibis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1dill=") !== false) {
+	    $result .= 'mollp1dill='.$_POST[mollp1dill]."\n";
+	    $writeit = '1';
+	}
+   	if(strpos($line, "mollp1miab=") !== false) {
+	    $result .= 'mollp1miab='.$_POST[mollp1miab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1mibis=") !== false) {
+	    $result .= 'mollp1mibis='.$_POST[mollp1mibis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1mill=") !== false) {
+	    $result .= 'mollp1mill='.$_POST[mollp1mill]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1doab=") !== false) {
+	    $result .= 'mollp1doab='.$_POST[mollp1doab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1dobis=") !== false) {
+	    $result .= 'mollp1dobis='.$_POST[mollp1dobis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1doll=") !== false) {
+	    $result .= 'mollp1doll='.$_POST[mollp1doll]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1frab=") !== false) {
+	    $result .= 'mollp1frab='.$_POST[mollp1frab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1frll=") !== false) {
+	    $result .= 'mollp1frll='.$_POST[mollp1frll]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1saab=") !== false) {
+	    $result .= 'mollp1saab='.$_POST[mollp1saab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1sabis=") !== false) {
+	    $result .= 'mollp1sabis='.$_POST[mollp1sabis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1sall=") !== false) {
+	    $result .= 'mollp1sall='.$_POST[mollp1sall]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1soab=") !== false) {
+	    $result .= 'mollp1soab='.$_POST[mollp1soab]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1sobis=") !== false) {
+	    $result .= 'mollp1sobis='.$_POST[mollp1sobis]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1soll=") !== false) {
+	    $result .= 'mollp1soll='.$_POST[mollp1soll]."\n";
+	    $writeit = '1';
+	} 
+   	if(strpos($line, "mollp1frbis=") !== false) {
+	    $result .= 'mollp1frbis='.$_POST[mollp1frbis]."\n";
+	    $writeit = '1';
 	} 
 	    if(strpos($line, "minimalampv=") !== false) {
 	    $result .= 'minimalampv='.$_POST[minimalampv]."\n";
