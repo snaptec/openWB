@@ -23,21 +23,21 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/set/#")
 # handle each set topic 
 def on_message(client, userdata, msg): 
-    if (msg.topic == "openWB/set/lademodus"):
+    if (msg.topic == "openWB/set/Lademodus"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=4):
             f = open('/var/www/html/openWB/ramdisk/lademodus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/lp1/Adirectchargeamps"):
+    if (msg.topic == "openWB/set/lp1/ADirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             replaceAll("sofortll=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp2/directchargeamps"):
+    if (msg.topic == "openWB/set/lp2/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             replaceAll("sofortlls1=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp3/directchargeamps"):
+    if (msg.topic == "openWB/set/lp3/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             replaceAll("sofortlls2=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp1/boolresetdirectcharge"):
+    if (msg.topic == "openWB/set/lp1/boolResetDirectCharge"):
         if (int(msg.payload) == 1):
             f = open('/var/www/html/openWB/ramdisk/aktgeladen', 'w')
             f.write("0")
@@ -46,7 +46,7 @@ def on_message(client, userdata, msg):
             f.write("0")
             f.close()
             client.publish("openWB/set/resetsofortladenlp1", "0", qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp2/resetdirectcharge"):
+    if (msg.topic == "openWB/set/lp2/ResetDirectCharge"):
         if (int(msg.payload) == 1):
             f = open('/var/www/html/openWB/ramdisk/aktgeladens1', 'w')
             f.write("0")
@@ -55,7 +55,7 @@ def on_message(client, userdata, msg):
             f.write("0")
             f.close()
             client.publish("openWB/set/resetsofortladenlp2", "0", qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp3/resetdirectcharge"):
+    if (msg.topic == "openWB/set/lp3/ResetDirectCharge"):
         if (int(msg.payload) == 1):
             f = open('/var/www/html/openWB/ramdisk/aktgeladens2', 'w')
             f.write("0")
@@ -64,16 +64,16 @@ def on_message(client, userdata, msg):
             f.write("0")
             f.close()
             client.publish("openWB/set/resetsofortladenlp3", "0", qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp1/kWhdirectchargetocharge"):
+    if (msg.topic == "openWB/set/lp1/kWhDirectChargeToCharge"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("lademkwh=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp2/kWhdirectchargetocharge"):
+    if (msg.topic == "openWB/set/lp2/kWhDirectChargeToCharge"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("lademkwhs1=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp3/kWhdirectchargetocharge"):
+    if (msg.topic == "openWB/set/lp3/kWhDirectChargeToCharge"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("lademkwhs2=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp1/directchargesubmode"):
+    if (msg.topic == "openWB/set/lp1/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
             replaceAll("lademstat=",msg.payload.decode("utf-8"))
             replaceAll("sofortsocstatlp1=",msg.payload.decode("utf-8"))
@@ -83,7 +83,7 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 2):
             replaceAll("lademstat=","0")
             replaceAll("sofortsocstatlp1=","1")
-    if (msg.topic == "openWB/lp2/directchargesubmode"):
+    if (msg.topic == "openWB/set/lp2/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
             replaceAll("lademstats1=",msg.payload.decode("utf-8"))
             replaceAll("sofortsocstatlp2=",msg.payload.decode("utf-8"))
@@ -93,7 +93,7 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 2):
             replaceAll("lademstats1=","0")
             replaceAll("sofortsocstatlp2=","1")
-    if (msg.topic == "openWB/lp3/directchargesubmode"):
+    if (msg.topic == "openWB/set/lp3/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
             replaceAll("lademstats2=",msg.payload.decode("utf-8"))
             #replaceAll("sofortsocstatlp2=",msg.payload.decode("utf-8"))
@@ -103,10 +103,10 @@ def on_message(client, userdata, msg):
         #if (int(msg.payload) == 2):
         #    replaceAll("lademstats1=","0")
         #    replaceAll("sofortsocstatlp2=","1")
-    if (msg.topic == "openWB/set/lp1/directchargesoc"):
+    if (msg.topic == "openWB/set/lp1/DirectChargeSoc"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("sofortsoclp1=",msg.payload.decode("utf-8"))
-    if (msg.topic == "openWB/set/lp2/directchargesoc"):
+    if (msg.topic == "openWB/set/lp2/DirectChargeSoc"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("sofortsoclp2=",msg.payload.decode("utf-8"))
 
