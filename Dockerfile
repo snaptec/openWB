@@ -1,16 +1,11 @@
 FROM debian
 
-# PHP 7.0 repo
-RUN apt-get update && apt-get install -y wget gnupg
-RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
-RUN echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
-
 # packages
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y \
     apache2 \
-    php7.0 php7.0-gd php7.0-xml \
+    php php-gd php-xml \
     python-pip python3-pip \
     cron \
     curl \
