@@ -16,7 +16,9 @@ minundpvlademodus(){
 			else
 				if (( uberschuss < pvregelungm )); then
 					if (( llalt > minimalampv )); then
-						llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+						#llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+						llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+
 
 						#runs/set-current.sh $llneu all
 					else
