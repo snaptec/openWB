@@ -1,22 +1,22 @@
 #!/bin/bash
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
-minundpvlademodus(){
-	if (( speichersoc >= speichersocminpv )); then
-		if (( ladestatus == 0 )); then
+minundpvlademodus() {
+	if ((speichersoc >= speichersocminpv)); then
+		if ((ladestatus == 0)); then
 			runs/set-current.sh $minimalampv all
-			echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
+			echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >>ramdisk/ladestatus.log
 			if [[ $debug == "1" ]]; then
 				echo "starte min + pv ladung mit $minimalampv"
 			fi
 		else
-			if (( ladeleistung < 500 )); then
+			if ((ladeleistung < 500)); then
 				llneu=$minimalampv
-				#runs/set-current.sh $llneu all 
+				#runs/set-current.sh $llneu all
 			else
-				if (( uberschuss < pvregelungm )); then
-					if (( llalt > minimalampv )); then
-						llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+				if ((uberschuss < pvregelungm)); then
+					if ((llalt > minimalampv)); then
+						llneu=$((llalt + (uberschuss / 230 / anzahlphasen)))
 
 						#runs/set-current.sh $llneu all
 					else
@@ -26,25 +26,24 @@ minundpvlademodus(){
 				else
 					llneu=$llalt
 				fi
-				if (( uberschuss > schaltschwelle )); then
-					llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+				if ((uberschuss > schaltschwelle)); then
+					llneu=$((llalt + (uberschuss / 230 / anzahlphasen)))
 				fi
 			fi
 		fi
-		if (( llneu < minimalampv )); then
+		if ((llneu < minimalampv)); then
 			llneu=$minimalampv
 
 		fi
-		if (( llneu > maximalstromstaerke )); then
+		if ((llneu > maximalstromstaerke)); then
 			llneu=$maximalstromstaerke
 		fi
 		runs/set-current.sh $llneu all
-		if (( llalt != llneu )); then
-			echo "$date alle Ladepunkte, Lademodus Min und PV. Ändere Ladeleistung auf $llneu Ampere" >> ramdisk/ladestatus.log
+		if ((llalt != llneu)); then
+			echo "$date alle Ladepunkte, Lademodus Min und PV. Ändere Ladeleistung auf $llneu Ampere" >>ramdisk/ladestatus.log
 		fi
 	else
 		runs/set-current.sh 0 all
 	fi
 
 }
-

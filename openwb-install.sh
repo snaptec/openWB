@@ -8,21 +8,20 @@ if ! [ -x "$(command -v vim)" ]; then
 	apt-get -qq install -y vim
 	echo "... installed"
 else
-	    echo "...ok"
+	echo "...ok"
 fi
 echo "check for timezone"
-if  grep -Fxq "Europe/Berlin" /etc/timezone
-then
+if grep -Fxq "Europe/Berlin" /etc/timezone; then
 	echo "...ok"
 else
-	echo 'Europe/Berlin' > /etc/timezone
+	echo 'Europe/Berlin' >/etc/timezone
 	dpkg-reconfigure -f noninteractive tzdata
 	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 	echo "...changed"
 fi
 
 echo "check for bc"
-if ! [ -x "$(command -v bc)" ];then
+if ! [ -x "$(command -v bc)" ]; then
 	apt-get -qq install bc
 	echo "...installed"
 else
@@ -32,15 +31,15 @@ fi
 echo "check for apache"
 if ! [ -x "$(command -v apachectl)" ]; then
 	apt-get -qq install -y apache2
-        sleep 2
+	sleep 2
 	apt-get -qq install -y php
 	sleep 1
 	apt-get -qq install -y php-gd
 	sleep 1
 	apt-get -qq install -y php7.0-xml
 	sleep 2
-        apt-get -qq install -y php-curl
-	sleep 1	
+	apt-get -qq install -y php-curl
+	sleep 1
 	apt-get -qq install -y libapache2-mod-php7.0
 	sleep 2
 	apt-get -qq install -y jq
@@ -52,15 +51,14 @@ else
 fi
 
 echo "check for i2c bus"
-if grep -Fxq "i2c-bcm2835" /etc/modules
-then
+if grep -Fxq "i2c-bcm2835" /etc/modules; then
 	echo "...ok"
 else
-	echo "i2c-dev" >> /etc/modules
-	echo "i2c-bcm2708" >> /etc/modules
-	echo "snd-bcm2835" >> /etc/modules
-	echo "dtparam=i2c1=on" >> /etc/modules
-	echo "dtparam=i2c_arm=on" >> /etc/modules
+	echo "i2c-dev" >>/etc/modules
+	echo "i2c-bcm2708" >>/etc/modules
+	echo "snd-bcm2835" >>/etc/modules
+	echo "dtparam=i2c1=on" >>/etc/modules
+	echo "dtparam=i2c_arm=on" >>/etc/modules
 fi
 
 echo "check for i2c package"
@@ -84,33 +82,30 @@ echo "check for initial git clone"
 if [ ! -d /var/www/html/openWB/web ]; then
 	cd /var/www/html/
 	git clone https://github.com/snaptec/openWB.git --branch stable
-	chown -R pi:pi openWB 
+	chown -R pi:pi openWB
 	echo "... git cloned"
 else
 	echo "...ok"
 fi
 
-echo "check for ramdisk" 
-if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab 
-then
+echo "check for ramdisk"
+if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab; then
 	echo "...ok"
 else
 	mkdir -p /var/www/html/openWB/ramdisk
-	echo "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" >> /etc/fstab
+	echo "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" >>/etc/fstab
 	mount -a
-	echo "0" > /var/www/html/openWB/ramdisk/ladestatus
-	echo "0" > /var/www/html/openWB/ramdisk/llsoll
-	echo "0" > /var/www/html/openWB/ramdisk/soc
+	echo "0" >/var/www/html/openWB/ramdisk/ladestatus
+	echo "0" >/var/www/html/openWB/ramdisk/llsoll
+	echo "0" >/var/www/html/openWB/ramdisk/soc
 	echo "...created"
 fi
 
-
 echo "check for crontab"
-if grep -Fxq "@reboot /var/www/html/openWB/runs/atreboot.sh &" /var/spool/cron/crontabs/root
-then
+if grep -Fxq "@reboot /var/www/html/openWB/runs/atreboot.sh &" /var/spool/cron/crontabs/root; then
 	echo "...ok"
 else
-	echo "@reboot /var/www/html/openWB/runs/atreboot.sh &" >> /tmp/tocrontab
+	echo "@reboot /var/www/html/openWB/runs/atreboot.sh &" >>/tmp/tocrontab
 	crontab -l -u root | cat - /tmp/tocrontab | crontab -u root -
 	rm /tmp/tocrontab
 	echo "...added"
@@ -128,7 +123,6 @@ else
 	echo "...ok"
 fi
 
-
 echo "check for socat"
 if ! [ -x "$(command -v socat)" ]; then
 	apt-get -qq install -y socat
@@ -137,21 +131,19 @@ else
 	echo "...ok"
 fi
 
-
 echo "disable cronjob logging"
-if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
-then
+if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron; then
 	echo "...ok"
 else
-	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
+	echo "EXTRA_OPTS="-L 0"" >>/etc/default/cron
 fi
 sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo apt-get -qq install -y python-pip
-sudo pip install  -U pymodbus
-echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
+sudo pip install -U pymodbus
+echo "www-data ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers.d/010_pi-nopasswd
 
 chmod 777 /var/www/html/openWB/openwb.conf
-chmod +x /var/www/html/openWB/modules/*                     
+chmod +x /var/www/html/openWB/modules/*
 chmod +x /var/www/html/openWB/runs/*
 touch /var/log/openWB.log
 chmod 777 /var/log/openWB.log

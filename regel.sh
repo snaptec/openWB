@@ -50,10 +50,10 @@ re='^-?[0-9]+$'
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then
-		sleep 5 && ./regel.sh >> /var/log/openWB.log 2>&1 &
+		sleep 5 && ./regel.sh >>/var/log/openWB.log 2>&1 &
 		rm ramdisk/5sec
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 >ramdisk/5sec
 	fi
 fi
 if [[ $dspeed == "2" ]]; then
@@ -62,33 +62,32 @@ if [[ $dspeed == "2" ]]; then
 		rm ramdisk/5sec
 		exit 0
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 >ramdisk/5sec
 	fi
 fi
 updateinprogress=$(<ramdisk/updateinprogress)
-if (( updateinprogress == "1" )); then
+if ((updateinprogress == "1")); then
 	echo "Update in progress"
 	exit 0
 fi
 
 graphtimer=$(<ramdisk/graphtimer)
-if (( graphtimer < 4 )); then
-	graphtimer=$((graphtimer+1))
-	echo $graphtimer > ramdisk/graphtimer
+if ((graphtimer < 4)); then
+	graphtimer=$((graphtimer + 1))
+	echo $graphtimer >ramdisk/graphtimer
 else
 	graphtimer=0
-	echo $graphtimer > ramdisk/graphtimer
+	echo $graphtimer >ramdisk/graphtimer
 fi
 #######################################
 
-if (( displayaktiv == 1 )); then
+if ((displayaktiv == 1)); then
 	execdisplay=$(<ramdisk/execdisplay)
-	if (( execdisplay == 1 )); then
-	        export DISPLAY=:0 && xset s $displaysleep
-	        echo 0 > ramdisk/execdisplay
+	if ((execdisplay == 1)); then
+		export DISPLAY=:0 && xset s $displaysleep
+		echo 0 >ramdisk/execdisplay
 	fi
 fi
-
 
 #######################################
 # check rfid
@@ -100,25 +99,24 @@ goecheck
 # nrgkick mobility check
 nrgkickcheck
 #load charging vars
-if (( debug == 1)); then
+if ((debug == 1)); then
 	startloadvars=$(date +%s)
 fi
 loadvars
-if (( debug == 1)); then
+if ((debug == 1)); then
 	endloadvars=$(date +%s)
-	timeloadvars=$((endloadvars-startloadvars))
+	timeloadvars=$((endloadvars - startloadvars))
 	echo "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
 fi
-if (( u1p3paktiv == 1 )); then
+if ((u1p3paktiv == 1)); then
 	blockall=$(<ramdisk/blockall)
-	if (( blockall == 1 )); then
+	if ((blockall == 1)); then
 		if [[ $debug == "1" ]]; then
 			echo "Phasen Umschaltung noch aktiv... beende"
 		fi
 		exit 0
 	fi
 fi
-
 
 #EVSE DIN Modbus test
 evsedintest
@@ -130,105 +128,104 @@ hook
 #Graphing
 graphing
 
-if (( cpunterbrechunglp1 == 1 )); then
-       if (( plugstat == 1 )); then
-               if (( llalt > 5 )); then
-                       if (( ladeleistung < 200 )); then
-                               cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
-                               if (( cpulp1waraktiv == 0 )); then
-				       echo "CP Unterbrechung an LP1 durchgeführt"
-                                       sudo python runs/cpulp1.py
-                                       echo 1 > ramdisk/cpulp1waraktiv
-                               fi
-                       else
-                               echo 0 > ramdisk/cpulp1waraktiv
-                       fi
-               fi
-       else
-               echo 0 > ramdisk/cpulp1waraktiv
-       fi
+if ((cpunterbrechunglp1 == 1)); then
+	if ((plugstat == 1)); then
+		if ((llalt > 5)); then
+			if ((ladeleistung < 200)); then
+				cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
+				if ((cpulp1waraktiv == 0)); then
+					echo "CP Unterbrechung an LP1 durchgeführt"
+					sudo python runs/cpulp1.py
+					echo 1 >ramdisk/cpulp1waraktiv
+				fi
+			else
+				echo 0 >ramdisk/cpulp1waraktiv
+			fi
+		fi
+	else
+		echo 0 >ramdisk/cpulp1waraktiv
+	fi
 fi
 if [[ $dspeed == "3" ]]; then
 
 	if [ -e ramdisk/5sec ]; then
 		regeltimer=$(<ramdisk/5sec)
-		if (( regeltimer < 5 )); then
-			regeltimer=$((regeltimer+1))
-			echo $regeltimer > ramdisk/5sec
+		if ((regeltimer < 5)); then
+			regeltimer=$((regeltimer + 1))
+			echo $regeltimer >ramdisk/5sec
 			exit 0
 		else
 			regeltimer=0
-			echo $regeltimer > ramdisk/5sec
+			echo $regeltimer >ramdisk/5sec
 		fi
 	else
-		echo 0 > ramdisk/5sec
+		echo 0 >ramdisk/5sec
 	fi
 fi
 
-if (( ledsakt == 1 )); then
+if ((ledsakt == 1)); then
 	ledsteuerung
 fi
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)
-if (( evsemodbustimer < 30 )); then
-	evsemodbustimer=$((evsemodbustimer+1))
-	echo $evsemodbustimer > ramdisk/evsemodbustimer
+if ((evsemodbustimer < 30)); then
+	evsemodbustimer=$((evsemodbustimer + 1))
+	echo $evsemodbustimer >ramdisk/evsemodbustimer
 else
 	evsemodbustimer=0
-	echo $evsemodbustimer > ramdisk/evsemodbustimer
+	echo $evsemodbustimer >ramdisk/evsemodbustimer
 	evsemodbuscheck
 fi
 #Lademodus 3 == Aus
 
-if (( lademodus == 3 )); then
+if ((lademodus == 3)); then
 	auslademodus
 fi
 
 #loadsharing check
 if [[ $loadsharinglp12 == "1" ]]; then
-	if (( loadsharingalp12 == 16 )); then
+	if ((loadsharingalp12 == 16)); then
 		agrenze=8
 		aagrenze=16
-		if (( current > 16 )); then
+		if ((current > 16)); then
 			current=16
 		fi
 	else
 		agrenze=16
 		aagrenze=32
 	fi
-	tcurrent=$(( llalt + llalts1 ))
-	if (( tcurrent > aagrenze )); then
+	tcurrent=$((llalt + llalts1))
+	if ((tcurrent > aagrenze)); then
 		#detect charging cars
-		if (( lla1 > 1 )); then
+		if ((lla1 > 1)); then
 			lp1c=1
-			if (( lla2 > 1 )); then
+			if ((lla2 > 1)); then
 				lp1c=2
 			fi
 		else
 			lp1c=0
 		fi
-		if (( llas11 > 1 )); then
+		if ((llas11 > 1)); then
 			lp2c=1
-			if (( llas12 > 1 )); then
+			if ((llas12 > 1)); then
 				lp2c=2
 			fi
 		else
 			lp2c=0
 		fi
-		chargingphases=$(( lp1c + lp2c ))
-		if (( chargingphases > 2 )); then
+		chargingphases=$((lp1c + lp2c))
+		if ((chargingphases > 2)); then
 			runs/set-current.sh "$agrenze" all
-			echo "$date Alle Ladepunkte, Loadsharing LP1-LP2 aktiv. Setze Ladestromstärke auf $agrenze" >> ramdisk/ladestatus.log
+			echo "$date Alle Ladepunkte, Loadsharing LP1-LP2 aktiv. Setze Ladestromstärke auf $agrenze" >>ramdisk/ladestatus.log
 			exit 0
 		fi
 	fi
 fi
 
-
 #########################################
 #Regelautomatiken
 
-if (( zielladenaktivlp1 == 1 )); then
+if ((zielladenaktivlp1 == 1)); then
 	ziellademodus
 fi
 ####################
@@ -238,68 +235,68 @@ prenachtlademodus
 
 ########################
 # Sofort Laden
-if (( lademodus == 0 )); then
-	sofortlademodus	
+if ((lademodus == 0)); then
+	sofortlademodus
 fi
 
 #######################
 #Ladestromstarke berechnen
 anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
-if (( anzahlphasen > 9 )); then
+if ((anzahlphasen > 9)); then
 	anzahlphasen=1
 fi
 llphasentest=3
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
-if (( llalt > 3 )); then
+if ((llalt > 3)); then
 	anzahlphasen=0
 	if [ $lla1 -ge $llphasentest ]; then
-		anzahlphasen=$((anzahlphasen + 1 ))
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
 	if [ $lla2 -ge $llphasentest ]; then
-  	anzahlphasen=$((anzahlphasen + 1 ))
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
 	if [ $lla3 -ge $llphasentest ]; then
-		anzahlphasen=$((anzahlphasen + 1 ))
+		anzahlphasen=$((anzahlphasen + 1))
 	fi
-	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+	echo $anzahlphasen >/var/www/html/openWB/ramdisk/anzahlphasen
 else
 	if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-  	echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo 1 >/var/www/html/openWB/ramdisk/anzahlphasen
 	fi
-	if (( u1p3paktiv == 1 )); then
+	if ((u1p3paktiv == 1)); then
 		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
 	else
 		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
 
 	fi
 fi
-if (( lastmanagement == 1 )); then
-	if (( llas11 > 3 )); then
+if ((lastmanagement == 1)); then
+	if ((llas11 > 3)); then
 		if [ "$llas11" -ge $llphasentest ]; then
-			anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
 		if [ "$llas12" -ge $llphasentest ]; then
-	  	anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
 		if [ "$llas13" -ge $llphasentest ]; then
-			anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
 
-		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo $anzahlphasen >/var/www/html/openWB/ramdisk/anzahlphasen
 	fi
 fi
-if (( lastmanagements2 == 1 )); then
-	if (( llas21 > 3 )); then
+if ((lastmanagements2 == 1)); then
+	if ((llas21 > 3)); then
 		if [ "$llas21" -ge $llphasentest ]; then
-			anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
 		if [ "$llas22" -ge $llphasentest ]; then
-	  	anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
 		if [ "$llas23" -ge $llphasentest ]; then
-			anzahlphasen=$((anzahlphasen + 1 ))
+			anzahlphasen=$((anzahlphasen + 1))
 		fi
-		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo $anzahlphasen >/var/www/html/openWB/ramdisk/anzahlphasen
 	fi
 fi
 if [ $anzahlphasen -eq 0 ]; then
@@ -313,7 +310,7 @@ abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
-        schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
+	schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 fi
 if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
@@ -333,20 +330,18 @@ if [[ $debug == "2" ]]; then
 fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
-if (( lademodus == 1 )); then
+if ((lademodus == 1)); then
 	minundpvlademodus
 fi
 ########################
 #NUR PV Uberschussregelung lademodus 2
 # wenn evse aus und $mindestuberschuss vorhanden, starte evse mit 6A Ladestromstaerke (1320 - 3960 Watt je nach Anzahl Phasen)
-if (( lademodus == 2 )); then
+if ((lademodus == 2)); then
 	nurpvlademodus
 fi
 
-
-
 #Lademodus 4 == SemiAus
 
-if (( lademodus == 4 )); then
+if ((lademodus == 4)); then
 	semiauslademodus
 fi

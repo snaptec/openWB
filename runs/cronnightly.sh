@@ -4,13 +4,8 @@ echo "Start cron nightly @ $(date)"
 #gsi daten abfragen
 /var/www/html/openWB/runs/gsiabfrage.sh &
 #logfile aufräumen
-echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
-echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
-
-
-
-
-
+echo "$(tail -1000 /var/log/openWB.log)" >/var/log/openWB.log
+echo 1 >/var/www/html/openWB/ramdisk/reloaddisplay
 
 monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
 
@@ -28,32 +23,26 @@ verbraucher1ewh=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
 verbraucher2iwh=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
 verbraucher2ewh=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
 
-
-
-
-
-
 ll1=$(echo "$ll1 * 1000" | bc)
 ll2=$(echo "$ll2 * 1000" | bc)
 ll3=$(echo "$ll3 * 1000" | bc)
 llg=$(echo "$llg * 1000" | bc)
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh >> $monthlyfile.csv
-echo $(date +%Y%m%d) >> $monthlyfile-date.csv
-echo $bezug >> $monthlyfile-bezug.csv
-echo $einspeisung >> $monthlyfile-einspeisung.csv
-echo $pv >> $monthlyfile-pv.csv
-echo $ll1 >> $monthlyfile-ll1.csv
-echo $ll2 >> $monthlyfile-ll2.csv
-echo $ll3 >> $monthlyfile-ll3.csv
-echo $llg >> $monthlyfile-llg.csv
-echo $speicheri >> $monthlyfile-speicheriwh.csv
-echo $speichere >> $monthlyfile-speicherewh.csv
-echo $verbraucher1iwh >> $monthlyfile-verbraucher1iwh.csv
-echo $verbraucher1ewh >> $monthlyfile-verbraucher1ewh.csv
-echo $verbraucher2iwh >> $monthlyfile-verbraucher2iwh.csv
-echo $verbraucher2ewh >> $monthlyfile-verbraucher2ewh.csv
-
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh >>$monthlyfile.csv
+echo $(date +%Y%m%d) >>$monthlyfile-date.csv
+echo $bezug >>$monthlyfile-bezug.csv
+echo $einspeisung >>$monthlyfile-einspeisung.csv
+echo $pv >>$monthlyfile-pv.csv
+echo $ll1 >>$monthlyfile-ll1.csv
+echo $ll2 >>$monthlyfile-ll2.csv
+echo $ll3 >>$monthlyfile-ll3.csv
+echo $llg >>$monthlyfile-llg.csv
+echo $speicheri >>$monthlyfile-speicheriwh.csv
+echo $speichere >>$monthlyfile-speicherewh.csv
+echo $verbraucher1iwh >>$monthlyfile-verbraucher1iwh.csv
+echo $verbraucher1ewh >>$monthlyfile-verbraucher1ewh.csv
+echo $verbraucher2iwh >>$monthlyfile-verbraucher2iwh.csv
+echo $verbraucher2ewh >>$monthlyfile-verbraucher2ewh.csv
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
@@ -76,7 +65,6 @@ if [[ $verbraucher2_typ == "tasmota" ]]; then
 	fi
 fi
 
-curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
-curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
-curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
-
+curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version >/var/www/html/openWB/ramdisk/vnightly
+curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version >/var/www/html/openWB/ramdisk/vbeta
+curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version >/var/www/html/openWB/ramdisk/vstable
