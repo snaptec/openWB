@@ -43,11 +43,6 @@ ohook2aktiv=$(<ramdisk/hook2akt)
 ohook3aktiv=$(<ramdisk/hook3akt)
 
 
-
-
-
-
-
 # EVSE DIN Plug State
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
@@ -683,20 +678,7 @@ if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	mosquitto_pub -t openWB/boolDisplayHouseBatteryPriority -r -m "$speicherpvui"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
 fi
-oevua1=$(<ramdisk/mqttevua1)
-if [[ "$oevua1" != "$evua1" ]]; then
-	mosquitto_pub -t openWB/evu/APhase1 -r -m "$evua1"
-	echo $evua1 > ramdisk/mqttevua1
-fi
-oevua2=$(<ramdisk/mqttevua2)
-if [[ "$oevua2" != "$evua2" ]]; then
-	mosquitto_pub -t openWB/evu/APhase2 -r -m "$evua2"
-	echo $evua2 > ramdisk/mqttevua2
-fi
-oevua3=$(<ramdisk/mqttevua3)
-if [[ "$oevua3" != "$evua3" ]]; then
-	mosquitto_pub -t openWB/evu/APhase3 -r -m "$evua3"
-	echo $evua3 > ramdisk/mqttevua3
-fi
+
+runs/pubmqtt.sh &
 
 }

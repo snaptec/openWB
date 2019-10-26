@@ -155,6 +155,9 @@ touch /var/www/html/openWB/ramdisk/llas13
 touch /var/www/html/openWB/ramdisk/llas21
 touch /var/www/html/openWB/ramdisk/llas22
 touch /var/www/html/openWB/ramdisk/llas23
+echo 0 > /var/www/html/openWB/ramdisk/llas21
+echo 0 > /var/www/html/openWB/ramdisk/llas22
+echo 0 > /var/www/html/openWB/ramdisk/llas23
 touch /var/www/html/openWB/ramdisk/llkwh
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
