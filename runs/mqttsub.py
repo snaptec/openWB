@@ -65,13 +65,13 @@ def on_message(client, userdata, msg):
             f.close()
             client.publish("openWB/set/resetsofortladenlp3", "0", qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/kWhDirectChargeToCharge"):
-        if (int(msg.payload) >= 1 and int(msg.payload) <=100):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=100):
             replaceAll("lademkwh=",msg.payload.decode("utf-8"))
     if (msg.topic == "openWB/set/lp2/kWhDirectChargeToCharge"):
-        if (int(msg.payload) >= 1 and int(msg.payload) <=100):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=100):
             replaceAll("lademkwhs1=",msg.payload.decode("utf-8"))
     if (msg.topic == "openWB/set/lp3/kWhDirectChargeToCharge"):
-        if (int(msg.payload) >= 1 and int(msg.payload) <=100):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=100):
             replaceAll("lademkwhs2=",msg.payload.decode("utf-8"))
     if (msg.topic == "openWB/set/lp1/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
