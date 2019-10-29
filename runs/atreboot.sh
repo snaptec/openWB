@@ -63,6 +63,7 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/hook1akt
@@ -2031,7 +2032,7 @@ then
 fi
 if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc_audi_pwasswort=passwort" >> /var/www/html/openWB/openwb.conf
+	echo "soc_audi_passwort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
 
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
