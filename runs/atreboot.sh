@@ -2025,6 +2025,15 @@ if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_audi_username=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_audi_username=demo@demo.de" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_audi_pwasswort=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 (sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
 ethstate=$(</sys/class/net/eth0/carrier)

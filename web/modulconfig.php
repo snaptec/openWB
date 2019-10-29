@@ -77,6 +77,13 @@ foreach($lines as $line) {
 	if(strpos($line, "alphaessip=") !== false) {
 		list(, $alphaessipold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_audi_username=") !== false) {
+		list(, $soc_audi_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_audi_passwort=") !== false) {
+		list(, $soc_audi_passwortold) = explode("=", $line);
+	}
+
 	if(strpos($line, "soc_zerong_username=") !== false) {
 		list(, $soc_zerong_usernameold) = explode("=", $line);
 	}
@@ -1427,7 +1434,7 @@ $(function() {
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
 		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
 		<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
-
+		<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
 	</select>
 </div>
 <div id="socmnone">
@@ -1509,6 +1516,26 @@ $(function() {
 
 
 </div>
+<div id="socmaudi">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_username">Audi Benutzername:</label></b>
+		<input type="text" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Audi Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_passwort">Audi Passwort:</label></b>
+		<input type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Audi Logins<br><br>
+	</div>
+
+</div>
+
 
 <div id="socmhttp">
 	<div class="row bg-info">
@@ -1645,7 +1672,10 @@ function display_socmodul() {
 	$('#socmtesla').hide();
 	$('#soccarnet').hide();
 	$('#socmzerong').hide();
-
+	$('#socmaudi').hide();
+   	if($('#socmodul').val() == 'soc_audi')   {
+		$('#socmaudi').show();
+	}
 
 	if($('#socmodul').val() == 'none') {
 		$('#socmnone').show();
@@ -3143,8 +3173,8 @@ function display_wattbezugmodul() {
 		display_pvwattmodul();
 		// passendes Speichermodul 'optisch' voreinstellen, da automatisch alle Werte
 		// mit aus dem WR gelesen werden
-		document.getElementById('speichermodul').value = 'speicher_kostalplenticore';
-		display_speichermodul();
+		//document.getElementById('speichermodul').value = 'speicher_kostalplenticore';
+		//display_speichermodul();
 	}
 	if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
 		$('#wattbezugkostalpiko').show();

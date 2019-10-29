@@ -989,7 +989,16 @@ foreach($lines as $line) {
 	    if(strpos($line, "bezug_victronip=") !== false) {
 	    $result .= 'bezug_victronip='.$_POST[bezug_victronip]."\n";
 	$writeit = '1';
-    }
+	    }
+	    if(strpos($line, "soc_audi_username=") !== false) {
+	    $result .= 'soc_audi_username='.$_POST[soc_audi_username]."\n";
+	$writeit = '1';
+	    }
+	    if(strpos($line, "soc_audi_passwort=") !== false) {
+	    $result .= 'soc_audi_passwort='.$_POST[soc_audi_passwort]."\n";
+	$writeit = '1';
+	    }
+
 	    if(strpos($line, "soc_zerong_username=") !== false) {
 	    $result .= 'soc_zerong_username='.$_POST[soc_zerong_username]."\n";
 	$writeit = '1';
