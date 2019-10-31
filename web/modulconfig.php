@@ -1440,10 +1440,10 @@ $(function() {
 		<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
 	</select>
 </div>
-	<b><label for="stopsocnotpluggedp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
-	<select type="text" name="stopsocnotpluggedp1" id="stopsocnotpluggedp1">
-		<option <?php if($stopsocnotpluggedp1old == "0\n") echo selected ?> value="0">Nein</option>
-		<option <?php if($stopsocnotpluggedp1old == "1\n") echo selected ?> value="1">Ja</option>
+	<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
+	<select type="text" name="stopsocnotpluggedlp1" id="stopsocnotpluggedp1">
+		<option <?php if($stopsocnotpluggedlp1old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($stopsocnotpluggedlp1old == "1\n") echo selected ?> value="1">Ja</option>
 	</select>
 	<div class="row bg-info">
 		Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
