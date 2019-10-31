@@ -347,7 +347,10 @@ ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
-
+if ! grep -Fq "stopsocnotpluggedlp1=" /var/www/html/openWB/openwb.conf
+then
+  echo "stopsocnotpluggedlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
 then
   echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf

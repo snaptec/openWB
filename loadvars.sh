@@ -304,10 +304,22 @@ fi
 
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
-	timeout 10 modules/$socmodul/main.sh || true
-	soc=$(</var/www/html/openWB/ramdisk/soc)
-	if ! [[ $soc =~ $re ]] ; then
-	 soc="0"
+	if (( stopsocnotpluggedlp1 == 1 )); then
+		if (( plugstat == 1 )); then
+			timeout 10 modules/$socmodul/main.sh || true
+			soc=$(</var/www/html/openWB/ramdisk/soc)
+			if ! [[ $soc =~ $re ]] ; then
+				soc="0"
+			fi
+		else
+			echo 600 > /var/www/html/openWB/ramdisk/soctimer
+		fi
+	else
+		timeout 10 modules/$socmodul/main.sh || true
+		soc=$(</var/www/html/openWB/ramdisk/soc)
+		if ! [[ $soc =~ $re ]] ; then
+			soc="0"
+		fi
 	fi
 else
 	soc=0

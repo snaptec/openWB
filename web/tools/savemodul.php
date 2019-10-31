@@ -998,7 +998,10 @@ foreach($lines as $line) {
 	    $result .= 'soc_audi_passwort='.$_POST[soc_audi_passwort]."\n";
 	$writeit = '1';
 	    }
-
+	    if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
+	    $result .= 'stopsocnotpluggedlp1='.$_POST[stopsocnotpluggedlp1]."\n";
+	$writeit = '1';
+	    }
 	    if(strpos($line, "soc_zerong_username=") !== false) {
 	    $result .= 'soc_zerong_username='.$_POST[soc_zerong_username]."\n";
 	$writeit = '1';

@@ -54,6 +54,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
+		list(, $stopsocnotpluggedlp1old) = explode("=", $line);
+	}
 	if(strpos($line, "discovergyuser=") !== false) {
 		list(, $discovergyuserold) = explode("=", $line);
 	}
@@ -1437,6 +1440,15 @@ $(function() {
 		<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
 	</select>
 </div>
+	<b><label for="stopsocnotpluggedp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
+	<select type="text" name="stopsocnotpluggedp1" id="stopsocnotpluggedp1">
+		<option <?php if($stopsocnotpluggedp1old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($stopsocnotpluggedp1old == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
+	</div>
+
 <div id="socmnone">
 	<br>
 </div>
@@ -3700,6 +3712,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
 		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
+		<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 	</select>
 </div>
 
@@ -3711,6 +3724,12 @@ $(function() {
 		Keine Konfiguration erforderlich<br><br>
 	</div>
 </div>
+<div id="divspeichervictron">
+		<div class="row" style="background-color:#fcbe1e">
+		Konfiguration im Bezug Victron Modul<br><br>
+	</div>
+</div>
+
 <div id="divspeichervarta">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="vartaspeicherip">Varta IP:</label></b>
@@ -3918,11 +3937,14 @@ function display_speichermodul() {
 	$('#divspeicherkit').hide();
 	$('#divspeichervarta').hide();
 	$('#divspeicheralphaess').hide();
+	$('#divspeichervictron').hide();
 
 	if($('#speichermodul').val() == 'speicher_alphaess') {
 		$('#divspeicheralphaess').show();
 	}
-
+	if($('#speichermodul').val() == 'speicher_victron') {
+		$('#divspeichervictron').show();
+	}
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
 		$('#divspeicherkit').show();
 	}
