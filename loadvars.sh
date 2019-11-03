@@ -313,6 +313,7 @@ if [[ $socmodul != "none" ]]; then
 			fi
 		else
 			echo 600 > /var/www/html/openWB/ramdisk/soctimer
+			soc=$(</var/www/html/openWB/ramdisk/soc)
 		fi
 	else
 		timeout 10 modules/$socmodul/main.sh || true

@@ -2,23 +2,35 @@
 hook(){
 
 if (( hook1_aktiv == "1" )); then
-	if (( uberschuss > hook1ein_watt )); then
-		echo 0 > /var/www/html/openWB/ramdisk/hook1counter
-		if [ ! -e ramdisk/hook1aktiv ]; then
-			touch ramdisk/hook1aktiv
-			echo 1 > ramdisk/hook1akt
-			curl -s --connect-timeout 5 $hook1ein_url > /dev/null
-			echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
+	if (( hook1akt == 0 )); then
+		hook1einschaltverzcounter=$(</var/www/html/openWB/ramdisk/hook1einschaltverzcounter)
+		if (( uberschuss > hook1ein_watt )); then
+			if (( hook1einschaltverzcounter > hook1einschaltverz)); then
+				echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
+				echo 0 > /var/www/html/openWB/ramdisk/hook1counter
+				if [ ! -e ramdisk/hook1aktiv ]; then
+					touch ramdisk/hook1aktiv
+					echo 1 > ramdisk/hook1akt
+					curl -s --connect-timeout 5 $hook1ein_url > /dev/null
+					echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
 
-			if [[ $debug == "1" ]]; then
-				echo "Gerät 1 aktiviert"
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 1 aktiviert"
+					fi
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
+					fi
+				fi
+			else
+				hook1einschaltverzcounter=$((hook1einschaltverzcounter +10))
+				echo $hook1einschaltverzcounter > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
 			fi
-			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
-				./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
-			fi
+		else
+			hook1einschaltverzcounter=0
 		fi
-
 	fi
+
+
 	if [ -e ramdisk/hook1aktiv  ]; then
 		if test $(find "ramdisk/hook1aktiv" -mmin +$hook1_dauer); then
 			if (( uberschuss < hook1aus_watt )); then
