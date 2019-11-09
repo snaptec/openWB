@@ -25,7 +25,22 @@ function refresharrows() {
 			lp3speed.classList.add("arrowSlidingRightMid");
 			lp3arrow.classList.add("arrowrightblue");
 		}
-
+		var lp4arrow = document.getElementById("arrowlp4");
+		var lp4speed = document.getElementById("speedlp4");
+		lp4arrow.classList.remove("arrowrightblue");
+		lp4speed.classList.remove("arrowSlidingRightMid");
+		if (llaktuelllp4arrow > 99) {
+			lp4speed.classList.add("arrowSlidingRightMid");
+			lp4arrow.classList.add("arrowrightblue");
+		}
+		var lp5arrow = document.getElementById("arrowlp5");
+		var lp5speed = document.getElementById("speedlp5");
+		lp5arrow.classList.remove("arrowrightblue");
+		lp5speed.classList.remove("arrowSlidingRightMid");
+		if (llaktuelllp5arrow > 99) {
+			lp5speed.classList.add("arrowSlidingRightMid");
+			lp5arrow.classList.add("arrowrightblue");
+		}
 		var lpgarrow = document.getElementById("arrowlpg");
 		var lpgspeed = document.getElementById("speedlpg");
 		lpgarrow.classList.remove("arrowdownblue");
@@ -183,57 +198,18 @@ function refresharrows() {
 			e2lement.classList.remove("fa-battery-three-quarters");
 			e2lement.classList.add("fa-battery-full");
 		}
-   $.ajax({
-    url: "/openWB/ramdisk/plugstats1",
-    complete: function(request){
-			var element = document.getElementById("carlp2");
-		    if (request.responseText == 1) {
 
-			element.setAttribute("style", "color: blue;");
-		    } else {
-			element.setAttribute("style", "color: black;");
-			}
-    }
-  });
-  $.ajax({
-    url: "/openWB/ramdisk/plugstat",
-    complete: function(request){
-			var element = document.getElementById("carlp1");
-		    if (request.responseText == 1) {
 
-			element.setAttribute("style", "color: blue;");
-		    } else {
-			element.setAttribute("style", "color: black;");
-			}
-    }
-  });
-  $.ajax({
-    url: "/openWB/ramdisk/chargestat",
-    complete: function(request){
-	var element = document.getElementById("stationlp1");	
-	    if (request.responseText == 1) {
 
-			element.setAttribute("style", "color: #00FF00;");
-		    } else {
-			element.setAttribute("style", "color: black;");
-			}
-    }
-  });
-  $.ajax({
-    url: "/openWB/ramdisk/chargestats1",
-    complete: function(request){
-	var element = document.getElementById("stationlp2");	
-	    if (request.responseText == 1) {
-
-			element.setAttribute("style", "color: #00FF00;");
-		    } else {
-			element.setAttribute("style", "color: black;");
-			}    }
-  });
 
 $('#plugstatlp1div').hide();
 $('#plugstatlp2div').hide();
-
+$('#plugstatlp3div').hide();
+$('#plugstatlp4div').hide();
+$('#plugstatlp5div').hide();
+$('#plugstatlp6div').hide();
+$('#plugstatlp7div').hide();
+$('#plugstatlp8div').hide();
 
 }
 do3Interval = setInterval(refresharrows, 500);

@@ -16,6 +16,7 @@
 	<script src="js/charts.js"></script>
 	<script src="js/animated.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
+	<script type = "text/javascript" src = "js/mqttws31.js" ></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
          <meta name="apple-mobile-web-app-capable" content="yes">

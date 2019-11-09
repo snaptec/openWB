@@ -225,9 +225,9 @@ echo '
 <?php if ( $lastmanagementold == "1\n" ) { echo '
 
 <div class="row col-xs-12 text-center" style="height: 50px;">
-		<div class="col-xs-1">
+		<div class="col-xs-2">
 
-		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer; outline:none;" onclick="lp1checkenabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-2">
@@ -245,11 +245,9 @@ echo '
 				<span id="socstatlp1div" class="fas fa-2x"></span>
 				<br><span id="soclevel"></span>%</span>
 		</div>
-		<div class="col-xs-2">
 
-		</div>
-		<div class="col-xs-1">
-		<span id="stationlp2" class="fas fa-2x fa-charging-station"></span>	
+		<div class="col-xs-2">
+		<span id="lp2enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp2checkenabledclick()"></span><span id="stationlp2" class="fas fa-2x fa-charging-station"></span>	
 		</div>
 
 		<div class="col-xs-2">
@@ -272,7 +270,7 @@ echo '
 <div class="row col-xs-12 text-center" style="height: 100px;">
 		<div class="col-xs-2">
 
-		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-3">
@@ -314,7 +312,7 @@ echo '
 <div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 40px; position: absolute; width: 800px; color: white; text-align:center;"> 
 
     
-         <div class=" col-xs-2"> 
+         <div class=" col-xs-1"> 
 	<?php 
 			     if ( $displaytagesgraphold == "1\n") {
      echo ' 	
@@ -326,8 +324,13 @@ echo '
 			<input type="submit" class="1sofortll btn btn-blue btn-block"  name="sofortllbtn" value="Ladestrom">
 		</div>
 		</div>
-		<div class="col-xs-5">
 
+		<div class="col-xs-3">
+		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP1 (de-)aktivieren" onclick="lp1checkenabledclick();" />
+		</div>
+
+		<div class="col-xs-3">
+		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP2 (de-)aktivieren" onclick="lp2checkenabledclick();" />
 		</div>
         <div class=" col-xs-2"> 
 			<input type="submit" class="1einstellungen btn btn-blue btn-block"  name="graph" value="Status">
@@ -374,24 +377,42 @@ echo '
 <div id="sofortll">
 
 		<div class="col-xs-12 text-center" style="font-size: 22px; height: 10px; top: 30px; left: 50px; position: absolute; width: 750px; color: white; text-align:left;">
-			<div class="col-xs-12 tex-center" style="text-align:center;">
-				<h5 style="color: white;">Sofortladen Stromstärke</h5><br><br>
+		<div id="slider1div" class="col-xs-12 text-center">
 
-			</div>
 			<div class="col-xs-8 text-center">
-				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls" id="sofortlls">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp1s" id="sofortlllp1s">
+				
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp1DirectChargeAmpsClick()"></span>
 			</div>
 			<script>
-				var slider = document.getElementById("sofortlls");
-				var output = document.getElementById("sofortlll");
-				output.innerHTML = slider.value;
-				slider.oninput = function() {
-					output.innerHTML = this.value;
+				var slider1 = document.getElementById("sofortlllp1s");
+				var output1 = document.getElementById("sofortlllp1l");
+				output1.innerHTML = slider1.value;
+				slider1.oninput = function() {
+					output1.innerHTML = this.value;
 				}
 			</script>
+		</div>
+		<div id="slider2div" class="col-xs-12 text-center">
+
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
+				
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp2DirectChargeAmpsClick()"></span>
+			</div>
+			<script>
+				var slider2 = document.getElementById("sofortlllp2s");
+				var output2 = document.getElementById("sofortlllp2l");
+				output2.innerHTML = slider2.value;
+				slider2.oninput = function() {
+					output2.innerHTML = this.value;
+				}
+			</script>
+		</div>
 		</div>
 	<div class="row col-xs-12 text-center" style="font-size: 12px; height: 10px; top: 430px; left: 50px; position: absolute; width: 750px; color: white; text-align:center;"> 
 
@@ -1131,20 +1152,9 @@ $(document).ready(function(){
    $('.1sofortll').click(function(){
 		var llsolllp1;
 		$('#main').hide();
-		dash = 0;
-    $.ajax({
-        url:"./tools/getsofortll.php",
-        type: "post", //request type,
-        dataType: 'json',
-        data: {call: "loadfile"},
-        success:function(result){
-            llsolllp1 = result.text; 
-    document.getElementById("sofortlls").value = llsolllp1;
-	  document.getElementById("sofortlll").innerHTML = llsolllp1;
 	       	$('#sofortll').show();
+		dash = 0;
 
-  }
-    });
    $('.1sllspeichern').click(function(){
 	    var ajaxurl = 'tools/changelademodusd.php?sofortlllp1=' + slider.value;
 	    $.post(ajaxurl, 'sofortlllp1', function (response) {
@@ -1237,6 +1247,31 @@ $(document).ready(function(){
 	   });
 
 });
+   function lp1checkenabledclick(){
+	   if ( lock == 0 ) {
+		if ( displaypinaktiv == 1){
+			lock = 1;
+	   		lp1enab = 1;
+			$('#pin').show();
+		
+		} else {
+			lp1enabledclick();
+		}
+	   }
+	   };
+   function lp2checkenabledclick(){
+	   if ( lock == 0 ) {
+		if ( displaypinaktiv == 1){
+			lock = 1;
+	   		lp2enab = 1;
+			$('#pin').show();
+		
+		} else {
+			lp2enabledclick();
+		}
+	   }
+	   };
+
 (function () {
   var input = '',
   correct = displaypincode.toString().substr(0, 4);
@@ -1261,6 +1296,13 @@ $(document).ready(function(){
 	        $('#pin').hide(); 
         }, 1400);
 	lock = 0;
+	stop = 0;
+	lp1enab = 0;
+	minpv = 0;
+	nurpv = 0;
+	sofort = 0;
+	standby = 0;
+	lp2enab = 0;
       } else
       {
         dots.forEach(dot => $(dot).addClass('correct'));
@@ -1286,6 +1328,15 @@ $(document).ready(function(){
 		minpv = 0;
 		execminpv();
 	}
+	if ( lp1enab == 1 ) {
+		lp1enab = 0;
+		lp1enabledclick();
+	}
+	if ( lp2enab == 1 ) {
+		lp2enab = 0;
+		lp2enabledclick();
+	}
+
 	setTimeout(function(){  
 	        $('#pin').hide(); 
         }, 1400);
@@ -1595,6 +1646,9 @@ chart.legend.position = "absolute";
   </script>
   '; } ?>
 </body>
+<script src="/openWB/web/js/mqttws31.js"></script>
+
 <script src="/openWB/web/display/alllive.js"></script>
 <script src="./display/symbollive.js"></script>
+<script src="/openWB/web/live.js"></script>
 </html>

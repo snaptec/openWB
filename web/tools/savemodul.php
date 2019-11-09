@@ -42,6 +42,106 @@ foreach($lines as $line) {
 	    $result .= 'wattbezugmodul='.$_POST[wattbezugmodul]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "evseidlp4=") !== false) {
+	    $result .= 'evseidlp4='.$_POST[evseidlp4]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp4=") !== false) {
+	    $result .= 'evseiplp4='.$_POST[evseiplp4]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp4id=") !== false) {
+	    $result .= 'mpmlp4id='.$_POST[mpmlp4id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp4ip=") !== false) {
+	    $result .= 'mpmlp4ip='.$_POST[mpmlp4ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "lastmanagementlp4=") !== false) {
+	    $result .= 'lastmanagementlp4='.$_POST[lastmanagementlp4]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp5=") !== false) {
+	    $result .= 'evseidlp5='.$_POST[evseidlp5]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp5=") !== false) {
+	    $result .= 'evseiplp5='.$_POST[evseiplp5]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp5id=") !== false) {
+	    $result .= 'mpmlp5id='.$_POST[mpmlp5id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp5ip=") !== false) {
+	    $result .= 'mpmlp5ip='.$_POST[mpmlp5ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "lastmanagementlp5=") !== false) {
+	    $result .= 'lastmanagementlp5='.$_POST[lastmanagementlp5]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp6=") !== false) {
+	    $result .= 'evseidlp6='.$_POST[evseidlp6]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp6=") !== false) {
+	    $result .= 'evseiplp6='.$_POST[evseiplp6]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp6id=") !== false) {
+	    $result .= 'mpmlp6id='.$_POST[mpmlp6id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp6ip=") !== false) {
+	    $result .= 'mpmlp6ip='.$_POST[mpmlp6ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "lastmanagementlp6=") !== false) {
+	    $result .= 'lastmanagementlp6='.$_POST[lastmanagementlp6]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp7=") !== false) {
+	    $result .= 'evseidlp7='.$_POST[evseidlp7]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp7=") !== false) {
+	    $result .= 'evseiplp7='.$_POST[evseiplp7]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp7id=") !== false) {
+	    $result .= 'mpmlp7id='.$_POST[mpmlp7id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp7ip=") !== false) {
+	    $result .= 'mpmlp7ip='.$_POST[mpmlp7ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "lastmanagementlp7=") !== false) {
+	    $result .= 'lastmanagementlp7='.$_POST[lastmanagementlp7]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp8=") !== false) {
+	    $result .= 'evseidlp8='.$_POST[evseidlp8]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp8=") !== false) {
+	    $result .= 'evseiplp8='.$_POST[evseiplp8]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp8id=") !== false) {
+	    $result .= 'mpmlp8id='.$_POST[mpmlp8id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp8ip=") !== false) {
+	    $result .= 'mpmlp8ip='.$_POST[mpmlp8ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "lastmanagementlp8=") !== false) {
+	    $result .= 'lastmanagementlp8='.$_POST[lastmanagementlp8]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "vzloggerip=") !== false) {
 	    $result .= 'vzloggerip='.$_POST[vzloggerip]."\n";
 	    $writeit = '1';
@@ -719,6 +819,26 @@ foreach($lines as $line) {
    }
 	    if(strpos($line, "lp3name=") !== false) {
 		$result .= 'lp3name=\''.$_POST[lp3name]."'\n";
+    	 $writeit = '1';
+	    }
+	    if(strpos($line, "lp4name=") !== false) {
+		$result .= 'lp4name=\''.$_POST[lp4name]."'\n";
+    	 $writeit = '1';
+   }
+	    if(strpos($line, "lp8name=") !== false) {
+		$result .= 'lp8name=\''.$_POST[lp8name]."'\n";
+    	 $writeit = '1';
+   }
+	    if(strpos($line, "lp7name=") !== false) {
+		$result .= 'lp7name=\''.$_POST[lp7name]."'\n";
+    	 $writeit = '1';
+   }
+	    if(strpos($line, "lp6name=") !== false) {
+		$result .= 'lp6name=\''.$_POST[lp6name]."'\n";
+    	 $writeit = '1';
+   }
+	    if(strpos($line, "lp5name=") !== false) {
+		$result .= 'lp5name=\''.$_POST[lp5name]."'\n";
     	 $writeit = '1';
    }
 	    if(strpos($line, "nrgkickiplp1=") !== false) {

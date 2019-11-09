@@ -15,10 +15,6 @@ olademodus=$(<ramdisk/mqttlastlademodus)
 osoc=$(<ramdisk/soc)
 osoc1=$(<ramdisk/soc1)
 ospeichersoc=$(<ramdisk/speichersoc)
-oplugstat=$(<ramdisk/mqttlastplugstat)
-ochargestat=$(<ramdisk/mqttlastchargestat)
-oplugstats1=$(<ramdisk/mqttlastplugstats1)
-ochargestats1=$(<ramdisk/mqttlastchargestats1)
 ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 odailychargelp1=$(<ramdisk/mqttdailychargelp1)
 odailychargelp2=$(<ramdisk/mqttdailychargelp2)
@@ -26,23 +22,24 @@ odailychargelp3=$(<ramdisk/mqttdailychargelp3)
 oaktgeladens1=$(<ramdisk/mqttaktgeladens1)
 oaktgeladens2=$(<ramdisk/mqttaktgeladens2)
 oaktgeladen=$(<ramdisk/mqttaktgeladen)
-ollsoll=$(<ramdisk/mqttllsoll)
-ollsolls1=$(<ramdisk/mqttllsolls1)
-ollsolls2=$(<ramdisk/mqttllsolls2)
 orestzeitlp1=$(<ramdisk/mqttrestzeitlp1)
 orestzeitlp2=$(<ramdisk/mqttrestzeitlp2)
 orestzeitlp3=$(<ramdisk/mqttrestzeitlp3)
 ogelrlp1=$(<ramdisk/mqttgelrlp1)
 ogelrlp2=$(<ramdisk/mqttgelrlp2)
 ogelrlp3=$(<ramdisk/mqttgelrlp3)
-opluggedchargedkwhlp1=$(<ramdisk/pluggedladungbishergeladen)
-opluggedchargedkwhlp2=$(<ramdisk/pluggedladungbishergeladenlp2)
 olastregelungaktiv=$(<ramdisk/lastregelungaktiv)
 ohook1aktiv=$(<ramdisk/hook1akt)
 ohook2aktiv=$(<ramdisk/hook2akt)
 ohook3aktiv=$(<ramdisk/hook3akt)
-
-
+lp1enabled=$(<ramdisk/lp1enabled)
+lp2enabled=$(<ramdisk/lp2enabled)
+lp3enabled=$(<ramdisk/lp3enabled)
+lp4enabled=$(<ramdisk/lp4enabled)
+lp5enabled=$(<ramdisk/lp5enabled)
+lp6enabled=$(<ramdisk/lp6enabled)
+lp7enabled=$(<ramdisk/lp7enabled)
+lp8enabled=$(<ramdisk/lp8enabled)
 # EVSE DIN Plug State
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
@@ -100,6 +97,92 @@ if [[ $lastmanagement == "1" ]]; then
 		fi
 	fi
 fi
+if [[ $lastmanagementlp4 == "1" ]]; then
+	if [[ $evseconlp4 == "ipevse" ]]; then
+		evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
+		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
+
+		if [[ $evseplugstatelp4 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstatlp4
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
+		fi
+		if [[ $evseplugstatelp4 > "2" ]] && [[ $ladestatuslp4 == "1" ]] && [[ $lp4enabled == "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestatlp4
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp4
+		fi
+	fi
+fi
+if [[ $lastmanagementlp5 == "1" ]]; then
+	if [[ $evseconlp5 == "ipevse" ]]; then
+		evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
+		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
+
+		if [[ $evseplugstatelp5 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstatlp5
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstatlp5
+		fi
+		if [[ $evseplugstatelp5 > "2" ]] && [[ $ladestatuslp5 == "1" ]] && [[ $lp5enabled == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestatlp5
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp5
+		fi
+	fi
+fi
+if [[ $lastmanagementlp6 == "1" ]]; then
+	if [[ $evseconlp6 == "ipevse" ]]; then
+		evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
+		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
+
+		if [[ $evseplugstatelp6 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstatlp6
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstatlp6
+		fi
+		if [[ $evseplugstatelp6 > "2" ]] && [[ $ladestatuslp6 == "1" ]] && [[ $lp6enabled == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestatlp6
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp6
+		fi
+	fi
+fi
+if [[ $lastmanagementlp7 == "1" ]]; then
+	if [[ $evseconlp7 == "ipevse" ]]; then
+		evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
+		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
+
+		if [[ $evseplugstatelp7 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstatlp7
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstatlp7
+		fi
+		if [[ $evseplugstatelp7 > "2" ]] && [[ $ladestatuslp7 == "1" ]] && [[ $lp7enabled == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestatlp7
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp7
+		fi
+	fi
+fi
+if [[ $lastmanagementlp8 == "1" ]]; then
+	if [[ $evseconlp8 == "ipevse" ]]; then
+		evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
+		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
+
+		if [[ $evseplugstatelp8 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstatlp8
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstatlp8
+		fi
+		if [[ $evseplugstatelp8 > "2" ]] && [[ $ladestatuslp8 == "1" ]] && [[ $lp8enabled == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestatlp8
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp8
+		fi
+	fi
+fi
+
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
        echo "" > ramdisk/lastregelungaktiv
@@ -212,6 +295,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 	llkwhges=$(echo "$llkwhges + $llkwhs2" |bc)
 	llalts2=$(cat /var/www/html/openWB/ramdisk/llsolls2)
 	ladeleistungs2=$(cat /var/www/html/openWB/ramdisk/llaktuells2)
+	ladeleistunglp3=$ladeleistungs2
 	llas21=$(cat /var/www/html/openWB/ramdisk/llas21)
 	llas22=$(cat /var/www/html/openWB/ramdisk/llas22)
 	llas23=$(cat /var/www/html/openWB/ramdisk/llas23)
@@ -226,8 +310,119 @@ if [[ $lastmanagements2 == "1" ]]; then
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 else
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
+	ladeleistungs2="0"
+	ladeleistunglp3=0
 fi
+#vierter ladepunkt
+if [[ $lastmanagementlp4 == "1" ]]; then
+	timeout 3 modules/mpm3pmlllp4/main.sh || true
+	llkwhlp4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
+	llkwhges=$(echo "$llkwhges + $llkwhlp4" |bc)
+	llaltlp4=$(cat /var/www/html/openWB/ramdisk/llsolllp4)
+	ladeleistunglp4=$(cat /var/www/html/openWB/ramdisk/llaktuelllp4)
+	lla1lp4=$(cat /var/www/html/openWB/ramdisk/lla1lp4)
+	lla2lp4=$(cat /var/www/html/openWB/ramdisk/lla2lp4)
+	lla3lp4=$(cat /var/www/html/openWB/ramdisk/lla3lp4)
+	lla1lp4=$(echo $lla1lp4 | sed 's/\..*$//')
+	lla2lp4=$(echo $lla2lp4 | sed 's/\..*$//')
+	lla3lp4=$(echo $lla3lp4 | sed 's/\..*$//')
+	ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
+	if ! [[ $ladeleistunglp4 =~ $re ]] ; then
+	 ladeleistunglp4="0"
+	fi
+	ladeleistung=$(( ladeleistung + ladeleistunglp4 ))
+else
+	ladeleistunglp4=0
+fi
+#fünfter ladepunkt
+if [[ $lastmanagementlp5 == "1" ]]; then
+	timeout 3 modules/mpm3pmlllp5/main.sh || true
+	llkwhlp5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
+	llkwhges=$(echo "$llkwhges + $llkwhlp5" |bc)
+	llaltlp5=$(cat /var/www/html/openWB/ramdisk/llsolllp5)
+	ladeleistunglp5=$(cat /var/www/html/openWB/ramdisk/llaktuelllp5)
+	lla1lp5=$(cat /var/www/html/openWB/ramdisk/lla1lp5)
+	lla2lp5=$(cat /var/www/html/openWB/ramdisk/lla2lp5)
+	lla3lp5=$(cat /var/www/html/openWB/ramdisk/lla3lp5)
+	lla1lp5=$(echo $lla1lp5 | sed 's/\..*$//')
+	lla2lp5=$(echo $lla2lp5 | sed 's/\..*$//')
+	lla3lp5=$(echo $lla3lp5 | sed 's/\..*$//')
+	ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
+	if ! [[ $ladeleistunglp5 =~ $re ]] ; then
+	 ladeleistunglp5="0"
+	fi
+	ladeleistung=$(( ladeleistung + ladeleistunglp5 ))
+else
+	ladeleistunglp5=0
+fi
+#sechster ladepunkt
+if [[ $lastmanagementlp6 == "1" ]]; then
+	timeout 3 modules/mpm3pmlllp6/main.sh || true
+	llkwhlp6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
+	llkwhges=$(echo "$llkwhges + $llkwhlp6" |bc)
+	llaltlp6=$(cat /var/www/html/openWB/ramdisk/llsolllp6)
+	ladeleistunglp6=$(cat /var/www/html/openWB/ramdisk/llaktuelllp6)
+	lla1lp6=$(cat /var/www/html/openWB/ramdisk/lla1lp6)
+	lla2lp6=$(cat /var/www/html/openWB/ramdisk/lla2lp6)
+	lla3lp6=$(cat /var/www/html/openWB/ramdisk/lla3lp6)
+	lla1lp6=$(echo $lla1lp6 | sed 's/\..*$//')
+	lla2lp6=$(echo $lla2lp6 | sed 's/\..*$//')
+	lla3lp6=$(echo $lla3lp6 | sed 's/\..*$//')
+	ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
+	if ! [[ $ladeleistunglp6 =~ $re ]] ; then
+	 ladeleistunglp6="0"
+	fi
+	ladeleistung=$(( ladeleistung + ladeleistunglp6 ))
+else
+	ladeleistunglp6=0
+fi
+#siebter ladepunkt
+if [[ $lastmanagementlp7 == "1" ]]; then
+	timeout 3 modules/mpm3pmlllp7/main.sh || true
+	llkwhlp7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
+	llkwhges=$(echo "$llkwhges + $llkwhlp7" |bc)
+	llaltlp7=$(cat /var/www/html/openWB/ramdisk/llsolllp7)
+	ladeleistunglp7=$(cat /var/www/html/openWB/ramdisk/llaktuelllp7)
+	lla1lp7=$(cat /var/www/html/openWB/ramdisk/lla1lp7)
+	lla2lp7=$(cat /var/www/html/openWB/ramdisk/lla2lp7)
+	lla3lp7=$(cat /var/www/html/openWB/ramdisk/lla3lp7)
+	lla1lp7=$(echo $lla1lp7 | sed 's/\..*$//')
+	lla2lp7=$(echo $lla2lp7 | sed 's/\..*$//')
+	lla3lp7=$(echo $lla3lp7 | sed 's/\..*$//')
+	ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
+	if ! [[ $ladeleistunglp7 =~ $re ]] ; then
+	 ladeleistunglp7="0"
+	fi
+	ladeleistung=$(( ladeleistung + ladeleistunglp7 ))
+else
+	ladeleistunglp7=0
+fi
+#achter ladepunkt
+if [[ $lastmanagementlp8 == "1" ]]; then
+	timeout 3 modules/mpm3pmlllp8/main.sh || true
+	llkwhlp8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
+	llkwhges=$(echo "$llkwhges + $llkwhlp8" |bc)
+	llaltlp8=$(cat /var/www/html/openWB/ramdisk/llsolllp8)
+	ladeleistunglp8=$(cat /var/www/html/openWB/ramdisk/llaktuelllp8)
+	lla1lp8=$(cat /var/www/html/openWB/ramdisk/lla1lp8)
+	lla2lp8=$(cat /var/www/html/openWB/ramdisk/lla2lp8)
+	lla3lp8=$(cat /var/www/html/openWB/ramdisk/lla3lp8)
+	lla1lp8=$(echo $lla1lp8 | sed 's/\..*$//')
+	lla2lp8=$(echo $lla2lp8 | sed 's/\..*$//')
+	lla3lp8=$(echo $lla3lp8 | sed 's/\..*$//')
+	ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
+	if ! [[ $ladeleistunglp8 =~ $re ]] ; then
+	 ladeleistunglp8="0"
+	fi
+	ladeleistung=$(( ladeleistung + ladeleistunglp8 ))
+else
+	ladeleistunglp8=0
+fi
+
+
+echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 echo $llkwhges > ramdisk/llkwhges
+
 
 #Wattbezug
 if [[ $wattbezugmodul != "none" ]]; then
@@ -341,6 +536,8 @@ if [[ $debug == "1" ]]; then
 	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
 	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
+	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
+
 fi
 if (( opvwatt != pvwatt )); then
 	mosquitto_pub -t openWB/pv/W -r -m "$pvwatt"
@@ -383,44 +580,17 @@ fi
 if (( osoc1 != soc1 )); then
 	mosquitto_pub -t openWB/lp2/%Soc -r -m "$soc1"
 fi
-plugstat=$(<ramdisk/plugstat)
-chargestat=$(<ramdisk/chargestat)
-plugstats1=$(<ramdisk/plugstats1)
-chargestats1=$(<ramdisk/chargestats1)
-if (( oplugstat != plugstat )); then
-	mosquitto_pub -t openWB/lp1/boolPlugStat -r -m "$plugstat"
-	echo $plugstat > ramdisk/mqttlastplugstat
 
-fi
-if (( oplugstats1 != plugstats1 )); then
-	mosquitto_pub -t openWB/lp2/boolPlugStat -r -m "$plugstats1"
-	echo $plugstats1 > ramdisk/mqttlastplugstats1
-fi
-if (( ochargestats1 != chargestats1 )); then
-	mosquitto_pub -t openWB/lp2/boolChargeStat -r -m "$chargestats1"
-	echo $chargestats1 > ramdisk/mqttlastchargestats1
-fi
-if (( ochargestat != chargestat )); then
-	mosquitto_pub -t openWB/lp1/boolChargeStat -r -m "$chargestat"
-	echo $chargestat > ramdisk/mqttlastchargestat
-fi
 dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
 dailychargelp2=$(curl -s -X POST -d "dailychargelp2call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp2.php | jq -r .text)
 dailychargelp3=$(curl -s -X POST -d "dailychargelp3call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp3.php | jq -r .text)
-aktgeladens1=$(<ramdisk/aktgeladens1)
-aktgeladens2=$(<ramdisk/aktgeladens2)
-aktgeladen=$(<ramdisk/aktgeladen)
-llsoll=$(<ramdisk/llsoll)
-llsolls1=$(<ramdisk/llsolls1)
-llsolls2=$(<ramdisk/llsolls2)
 restzeitlp1=$(<ramdisk/restzeitlp1)
 restzeitlp2=$(<ramdisk/restzeitlp2)
 restzeitlp3=$(<ramdisk/restzeitlp3)
 gelrlp1=$(<ramdisk/gelrlp1)
 gelrlp2=$(<ramdisk/gelrlp2)
 gelrlp3=$(<ramdisk/gelrlp3)
-pluggedchargedkwhlp1=$(<ramdisk/pluggedladungbishergeladen)
-pluggedchargedkwhlp2=$(<ramdisk/pluggedladungbishergeladenlp2)
+
 lastregelungaktiv=$(<ramdisk/lastregelungaktiv)
 hook1aktiv=$(<ramdisk/hook1akt)
 hook2aktiv=$(<ramdisk/hook2akt)
@@ -436,30 +606,6 @@ fi
 if [[ "$odailychargelp3" != "$dailychargelp3" ]]; then
 	mosquitto_pub -t openWB/lp3/kWhDailyCharged -r -m "$dailychargelp3"
 	echo $dailychargelp3 > ramdisk/mqttdailychargelp3
-fi
-if [[ "$oaktgeladen" != "$aktgeladen" ]]; then
-	mosquitto_pub -t openWB/lp1/kWhActualCharged -r -m "$aktgeladen"
-	echo $aktgeladen > ramdisk/mqttaktgeladen
-fi
-if [[ "$oaktgeladens1" != "$aktgeladens1" ]]; then
-	mosquitto_pub -t openWB/lp2/kWhActualCharged -r -m "$aktgeladens1"
-	echo $aktgeladens1 > ramdisk/mqttaktgeladens1
-fi
-if [[ "$oaktgeladens2" != "$aktgeladens2" ]]; then
-	mosquitto_pub -t openWB/lp3/kWhActualCharged -r -m "$aktgeladens2"
-	echo $aktgeladens2 > ramdisk/mqttaktgeladens2
-fi
-if (( ollsoll != llsoll )); then
-	mosquitto_pub -t openWB/lp1/AConfigured -r -m "$llsoll"
-	echo $llsoll > ramdisk/mqttllsoll
-fi
-if (( ollsolls1 != llsolls1 )); then
-	mosquitto_pub -t openWB/lp2/AConfigured -r -m "$llsolls1"
-	echo $llsolls1 > ramdisk/mqttllsolls1
-fi
-if (( ollsolls2 != llsolls2 )); then
-	mosquitto_pub -t openWB/lp3/AConfigured -r -m "$llsolls2"
-	echo $llsolls2 > ramdisk/mqttllsolls2
 fi
 if [[ "$orestzeitlp1" != "$restzeitlp1" ]]; then
 	mosquitto_pub -t openWB/lp1/TimeRemaining -r -m "$restzeitlp1"
@@ -485,14 +631,7 @@ if (( ogelrlp3 != gelrlp3 )); then
 	mosquitto_pub -t openWB/lp3/kmCharged -r -m "$gelrlp3"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
-if [[ "$opluggedchargedkwhlp1" != "$pluggedchargedkwhlp1" ]]; then
-	mosquitto_pub -t openWB/lp1/kWhChargedSincePlugged -r -m "$pluggedchargedkwhlp1"
-	echo $pluggedchargedkwhlp1 > ramdisk/mqttpluggedchargedkwhlp1
-fi
-if [[ "$opluggedchargedkwhlp2" != "$pluggedchargedkwhlp2" ]]; then
-	mosquitto_pub -t openWB/lp2/kWhChargedSincePlugged -r -m "$pluggedchargedkwhlp2"
-	echo $pluggedchargedkwhlp2 > ramdisk/mqttpluggedchargedkwhlp2
-fi
+
 if (( ohook1aktiv != hook1aktiv )); then
 	mosquitto_pub -t openWB/boolHook1Active -r -m "$hook1aktiv"
 	echo $hook1aktiv > ramdisk/mqtthook1aktiv
@@ -530,6 +669,32 @@ if (( osofortlls2 != sofortlls2 )); then
 	mosquitto_pub -t openWB/lp3/ADirectModeAmps -r -m "$sofortlls2"
 	echo $sofortlls2 > ramdisk/mqttsofortlls2
 fi
+osofortlllp4=$(<ramdisk/mqttsofortlllp4)
+if (( osofortlllp4 != sofortlllp4 )); then
+	mosquitto_pub -t openWB/lp4/ADirectModeAmps -r -m "$sofortlllp4"
+	echo $sofortlllp4 > ramdisk/mqttsofortlllp4
+fi
+osofortlllp5=$(<ramdisk/mqttsofortlllp5)
+if (( osofortlllp5 != sofortlllp5 )); then
+	mosquitto_pub -t openWB/lp5/ADirectModeAmps -r -m "$sofortlllp5"
+	echo $sofortlllp5 > ramdisk/mqttsofortlllp5
+fi
+osofortlllp6=$(<ramdisk/mqttsofortlllp6)
+if (( osofortlllp6 != sofortlllp6 )); then
+	mosquitto_pub -t openWB/lp6/ADirectModeAmps -r -m "$sofortlllp6"
+	echo $sofortlllp6 > ramdisk/mqttsofortlllp6
+fi
+osofortlllp7=$(<ramdisk/mqttsofortlllp7)
+if (( osofortlllp7 != sofortlllp7 )); then
+	mosquitto_pub -t openWB/lp7/ADirectModeAmps -r -m "$sofortlllp7"
+	echo $sofortlllp7 > ramdisk/mqttsofortlllp7
+fi
+osofortlllp8=$(<ramdisk/mqttsofortlllp8)
+if (( osofortlllp8 != sofortlllp8 )); then
+	mosquitto_pub -t openWB/lp8/ADirectModeAmps -r -m "$sofortlllp8"
+	echo $sofortlllp8 > ramdisk/mqttsofortlllp8
+fi
+
 olastmanagement=$(<ramdisk/mqttlastmanagement)
 if [[ "$olastmanagement" != "$lastmanagement" ]]; then
 	mosquitto_pub -t openWB/lp2/boolChargePointConfigured -r -m "$lastmanagement"
@@ -539,6 +704,31 @@ olastmanagements2=$(<ramdisk/mqttlastmanagements2)
 if [[ "$olastmanagements2" != "$lastmanagements2" ]]; then
 	mosquitto_pub -t openWB/lp3/boolChargePointConfigured -r -m "$lastmanagements2"
 	echo $lastmanagements2 > ramdisk/mqttlastmanagements2
+fi
+olastmanagementlp4=$(<ramdisk/mqttlastmanagementlp4)
+if [[ "$olastmanagementlp4" != "$lastmanagementlp4" ]]; then
+	mosquitto_pub -t openWB/lp4/boolChargePointConfigured -r -m "$lastmanagementlp4"
+	echo $lastmanagementlp4 > ramdisk/mqttlastmanagementlp4
+fi
+olastmanagementlp5=$(<ramdisk/mqttlastmanagementlp5)
+if [[ "$olastmanagementlp5" != "$lastmanagementlp5" ]]; then
+	mosquitto_pub -t openWB/lp5/boolChargePointConfigured -r -m "$lastmanagementlp5"
+	echo $lastmanagementlp5 > ramdisk/mqttlastmanagementlp5
+fi
+olastmanagementlp6=$(<ramdisk/mqttlastmanagementlp6)
+if [[ "$olastmanagementlp6" != "$lastmanagementlp6" ]]; then
+	mosquitto_pub -t openWB/lp6/boolChargePointConfigured -r -m "$lastmanagementlp6"
+	echo $lastmanagementlp6 > ramdisk/mqttlastmanagementlp6
+fi
+olastmanagementlp7=$(<ramdisk/mqttlastmanagementlp7)
+if [[ "$olastmanagementlp7" != "$lastmanagementlp7" ]]; then
+	mosquitto_pub -t openWB/lp7/boolChargePointConfigured -r -m "$lastmanagementlp7"
+	echo $lastmanagementlp7 > ramdisk/mqttlastmanagementlp7
+fi
+olastmanagementlp8=$(<ramdisk/mqttlastmanagementlp8)
+if [[ "$olastmanagementlp8" != "$lastmanagementlp8" ]]; then
+	mosquitto_pub -t openWB/lp8/boolChargePointConfigured -r -m "$lastmanagementlp8"
+	echo $lastmanagementlp8 > ramdisk/mqttlastmanagementlp8
 fi
 olademstat=$(<ramdisk/mqttlademstat)
 if [[ "$olademstat" != "$lademstat" ]]; then
@@ -629,6 +819,31 @@ olp3name=$(<ramdisk/mqttlp3name)
 if [[ "$olp3name" != "$lp3name" ]]; then
 	mosquitto_pub -t openWB/lp3/strChargePointName -r -m "$lp3name"
 	echo $lp3name > ramdisk/mqttlp3name
+fi
+olp4name=$(<ramdisk/mqttlp4name)
+if [[ "$olp4name" != "$lp4name" ]]; then
+	mosquitto_pub -t openWB/lp4/strChargePointName -r -m "$lp4name"
+	echo $lp4name > ramdisk/mqttlp4name
+fi
+olp5name=$(<ramdisk/mqttlp5name)
+if [[ "$olp5name" != "$lp5name" ]]; then
+	mosquitto_pub -t openWB/lp5/strChargePointName -r -m "$lp5name"
+	echo $lp5name > ramdisk/mqttlp5name
+fi
+olp6name=$(<ramdisk/mqttlp6name)
+if [[ "$olp6name" != "$lp6name" ]]; then
+	mosquitto_pub -t openWB/lp6/strChargePointName -r -m "$lp6name"
+	echo $lp6name > ramdisk/mqttlp6name
+fi
+olp7name=$(<ramdisk/mqttlp7name)
+if [[ "$olp7name" != "$lp7name" ]]; then
+	mosquitto_pub -t openWB/lp7/strChargePointName -r -m "$lp7name"
+	echo $lp7name > ramdisk/mqttlp7name
+fi
+olp8name=$(<ramdisk/mqttlp8name)
+if [[ "$olp8name" != "$lp8name" ]]; then
+	mosquitto_pub -t openWB/lp8/strChargePointName -r -m "$lp8name"
+	echo $lp8name > ramdisk/mqttlp8name
 fi
 ozielladenaktivlp1=$(<ramdisk/mqttzielladenaktivlp1)
 if [[ "$ozielladenaktivlp1" != "$zielladenaktivlp1" ]]; then

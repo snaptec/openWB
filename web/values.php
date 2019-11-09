@@ -6,6 +6,9 @@ foreach($lines as $line) {
     if(strpos($line, "minimalstromstaerke=") !== false) {
         list(, $minimalstromstaerkeold) = explode("=", $line);
     }
+    if(strpos($line, "simplemode=") !== false) {
+        list(, $simplemodeold) = explode("=", $line);
+    }
     if(strpos($line, "maximalstromstaerke=") !== false) {
         list(, $maximalstromstaerkeold) = explode("=", $line);
     }
