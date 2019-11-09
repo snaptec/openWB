@@ -12,12 +12,25 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp2enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp3enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp4enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp5enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp6enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
+echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
 echo 0 > /var/www/html/openWB/ramdisk/llsoll
+echo 0 > /var/www/html/openWB/ramdisk/llsolllp4
+echo 0 > /var/www/html/openWB/ramdisk/llsolllp5
+echo 0 > /var/www/html/openWB/ramdisk/llsolllp6
+echo 0 > /var/www/html/openWB/ramdisk/llsolllp7
+echo 0 > /var/www/html/openWB/ramdisk/llsolllp8
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp1
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
@@ -25,6 +38,16 @@ echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp5
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp6
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp7
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp8
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp4
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp5
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp6
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp7
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp8
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
@@ -58,11 +81,18 @@ echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp2startkwh
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer2
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp3
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp4
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp5
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp6
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp7
+echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp8
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastladestatus
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/hook1akt
@@ -72,8 +102,51 @@ echo 0 > /var/www/html/openWB/ramdisk/urcounter
 echo 0 > /var/www/html/openWB/ramdisk/uhcounter
 echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls1
 echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls2
-
-
+echo 0 > /var/www/html/openWB/ramdisk/lla1lp4
+echo 0 > /var/www/html/openWB/ramdisk/lla2lp4
+echo 0 > /var/www/html/openWB/ramdisk/lla3lp4
+echo 0 > /var/www/html/openWB/ramdisk/llv1lp4
+echo 0 > /var/www/html/openWB/ramdisk/llv2lp4
+echo 0 > /var/www/html/openWB/ramdisk/llv3lp4
+echo 0 > /var/www/html/openWB/ramdisk/ladeleistunglp4
+echo 0 > /var/www/html/openWB/ramdisk/llkwhlp4
+echo 0 > /var/www/html/openWB/ramdisk/lla1lp5
+echo 0 > /var/www/html/openWB/ramdisk/lla2lp5
+echo 0 > /var/www/html/openWB/ramdisk/lla3lp5
+echo 0 > /var/www/html/openWB/ramdisk/llv1lp5
+echo 0 > /var/www/html/openWB/ramdisk/llv2lp5
+echo 0 > /var/www/html/openWB/ramdisk/llv3lp5
+echo 0 > /var/www/html/openWB/ramdisk/ladeleistunglp5
+echo 0 > /var/www/html/openWB/ramdisk/llkwhlp5
+echo 0 > /var/www/html/openWB/ramdisk/lla1lp6
+echo 0 > /var/www/html/openWB/ramdisk/lla2lp6
+echo 0 > /var/www/html/openWB/ramdisk/lla3lp6
+echo 0 > /var/www/html/openWB/ramdisk/llv1lp6
+echo 0 > /var/www/html/openWB/ramdisk/llv2lp6
+echo 0 > /var/www/html/openWB/ramdisk/llv3lp6
+echo 0 > /var/www/html/openWB/ramdisk/ladeleistunglp6
+echo 0 > /var/www/html/openWB/ramdisk/llkwhlp6
+echo 0 > /var/www/html/openWB/ramdisk/lla1lp7
+echo 0 > /var/www/html/openWB/ramdisk/lla2lp7
+echo 0 > /var/www/html/openWB/ramdisk/lla3lp7
+echo 0 > /var/www/html/openWB/ramdisk/llv1lp7
+echo 0 > /var/www/html/openWB/ramdisk/llv2lp7
+echo 0 > /var/www/html/openWB/ramdisk/llv3lp7
+echo 0 > /var/www/html/openWB/ramdisk/ladeleistunglp7
+echo 0 > /var/www/html/openWB/ramdisk/llkwhlp7
+echo 0 > /var/www/html/openWB/ramdisk/lla1lp8
+echo 0 > /var/www/html/openWB/ramdisk/lla2lp8
+echo 0 > /var/www/html/openWB/ramdisk/lla3lp8
+echo 0 > /var/www/html/openWB/ramdisk/llv1lp8
+echo 0 > /var/www/html/openWB/ramdisk/llv2lp8
+echo 0 > /var/www/html/openWB/ramdisk/llv3lp8
+echo 0 > /var/www/html/openWB/ramdisk/ladeleistunglp8
+echo 0 > /var/www/html/openWB/ramdisk/llkwhlp8
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuslp4
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuslp5
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuslp6
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuslp7
+echo 0 > /var/www/html/openWB/ramdisk/ladestatuslp8
 touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
@@ -155,6 +228,9 @@ touch /var/www/html/openWB/ramdisk/llas13
 touch /var/www/html/openWB/ramdisk/llas21
 touch /var/www/html/openWB/ramdisk/llas22
 touch /var/www/html/openWB/ramdisk/llas23
+echo 0 > /var/www/html/openWB/ramdisk/llas21
+echo 0 > /var/www/html/openWB/ramdisk/llas22
+echo 0 > /var/www/html/openWB/ramdisk/llas23
 touch /var/www/html/openWB/ramdisk/llkwh
 touch /var/www/html/openWB/ramdisk/llkwhs1
 touch /var/www/html/openWB/ramdisk/einspeisungkwh
@@ -278,13 +354,24 @@ echo 0 > /var/www/html/openWB/ramdisk/gelrlp3
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladen
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladens1
 echo 0 > /var/www/html/openWB/ramdisk/aktgeladens2
+echo 0 > /var/www/html/openWB/ramdisk/aktgeladenlp4
+echo 0 > /var/www/html/openWB/ramdisk/aktgeladenlp5
+echo 0 > /var/www/html/openWB/ramdisk/aktgeladenlp6
+echo 0 > /var/www/html/openWB/ramdisk/aktgeladenlp7
+echo 0 > /var/www/html/openWB/ramdisk/aktgeladenlp8
 echo 0 > /var/www/html/openWB/ramdisk/llas12
 echo 0 > /var/www/html/openWB/ramdisk/llas13
 
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo $bootmodus > /var/www/html/openWB/ramdisk/lademodus
 echo 0 > /var/www/html/openWB/ramdisk/llaktuell
-
+echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
+echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
+echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp4
+echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp5
+echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp6
+echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp7
+echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp8
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
@@ -329,7 +416,7 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
-
+echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
@@ -343,7 +430,14 @@ ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
-
+if ! grep -Fq "hook1einschaltverz=" /var/www/html/openWB/openwb.conf
+then
+  echo "hook1einschaltverz=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "stopsocnotpluggedlp1=" /var/www/html/openWB/openwb.conf
+then
+  echo "stopsocnotpluggedlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "sonnenecoip=" /var/www/html/openWB/openwb.conf
 then
   echo "sonnenecoip=192.168.15.3" >> /var/www/html/openWB/openwb.conf
@@ -2022,6 +2116,86 @@ if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_audi_username=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_audi_username=demo@demo.de" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_audi_passwort=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mpmlp4ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "mpmlp4ip=192.168.193.54" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp5ip=192.168.193.55" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp6ip=192.168.193.56" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp7ip=192.168.193.57" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp8ip=192.168.193.58" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp4id=14" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp5id=15" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp6id=16" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp7id=17" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp8id=18" >> /var/www/html/openWB/openwb.conf
+	echo "lastmanagementlp4=0" >> /var/www/html/openWB/openwb.conf
+	echo "lastmanagementlp5=0" >> /var/www/html/openWB/openwb.conf
+	echo "lastmanagementlp6=0" >> /var/www/html/openWB/openwb.conf
+	echo "lastmanagementlp7=0" >> /var/www/html/openWB/openwb.conf
+	echo "lastmanagementlp8=0" >> /var/www/html/openWB/openwb.conf
+	echo "evseconlp4=ipevse" >> /var/www/html/openWB/openwb.conf
+	echo "evseconlp5=ipevse" >> /var/www/html/openWB/openwb.conf
+	echo "evseconlp6=ipevse" >> /var/www/html/openWB/openwb.conf
+	echo "evseconlp7=ipevse" >> /var/www/html/openWB/openwb.conf
+	echo "evseconlp8=ipevse" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp4=24" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp5=25" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp6=26" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp7=27" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp8=28" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp4=192.168.193.44" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp5=192.168.193.45" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp6=192.168.193.46" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp7=192.168.193.47" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp8=192.168.193.48" >> /var/www/html/openWB/openwb.conf
+	echo "sofortlllp4=13" >> /var/www/html/openWB/openwb.conf
+	echo "sofortlllp5=13" >> /var/www/html/openWB/openwb.conf
+	echo "sofortlllp6=13" >> /var/www/html/openWB/openwb.conf
+	echo "sofortlllp7=13" >> /var/www/html/openWB/openwb.conf
+	echo "sofortlllp8=13" >> /var/www/html/openWB/openwb.conf
+	echo "lademkwhlp4=10" >> /var/www/html/openWB/openwb.conf
+	echo "lademkwhlp5=10" >> /var/www/html/openWB/openwb.conf
+	echo "lademkwhlp6=10" >> /var/www/html/openWB/openwb.conf
+	echo "lademkwhlp7=10" >> /var/www/html/openWB/openwb.conf
+	echo "lademkwhlp8=10" >> /var/www/html/openWB/openwb.conf
+	echo "durchslp4=20" >> /var/www/html/openWB/openwb.conf
+	echo "durchslp5=20" >> /var/www/html/openWB/openwb.conf
+	echo "durchslp6=20" >> /var/www/html/openWB/openwb.conf
+	echo "durchslp7=20" >> /var/www/html/openWB/openwb.conf
+	echo "durchslp8=20" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp1=21" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp2=22" >> /var/www/html/openWB/openwb.conf
+	echo "evseidlp3=23" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp1=192.168.193.41" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp2=192.168.193.42" >> /var/www/html/openWB/openwb.conf
+	echo "evseiplp3=192.168.193.43" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp1ip=192.168.193.51" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp2ip=192.168.193.52" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp3ip=192.168.193.53" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp1id=11" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp2id=12" >> /var/www/html/openWB/openwb.conf
+	echo "mpmlp3id=13" >> /var/www/html/openWB/openwb.conf
+	echo "lp4name=LP4" >> /var/www/html/openWB/openwb.conf
+	echo "lp5name=LP5" >> /var/www/html/openWB/openwb.conf
+	echo "lp6name=LP6" >> /var/www/html/openWB/openwb.conf
+	echo "lp7name=LP7" >> /var/www/html/openWB/openwb.conf
+	echo "lp8name=LP8" >> /var/www/html/openWB/openwb.conf
+	echo "simplemode=1" >> /var/www/html/openWB/openwb.conf
+	echo "lademstatlp4=01" >> /var/www/html/openWB/openwb.conf
+	echo "lademstatlp5=0" >> /var/www/html/openWB/openwb.conf
+	echo "lademstatlp6=0" >> /var/www/html/openWB/openwb.conf
+	echo "lademstatlp7=0" >> /var/www/html/openWB/openwb.conf
+	echo "lademstatlp8=0" >> /var/www/html/openWB/openwb.conf
+
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 (sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
 ethstate=$(</sys/class/net/eth0/carrier)
@@ -2095,6 +2269,7 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
+echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
 #then
 #	  sudo apt-get update

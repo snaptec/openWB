@@ -54,6 +54,91 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "lastmanagementlp4=") !== false) {
+		list(, $lastmanagementlp4old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp5=") !== false) {
+		list(, $lastmanagementlp5old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp5=") !== false) {
+		list(, $lastmanagementlp5old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp6=") !== false) {
+		list(, $lastmanagementlp6old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp7=") !== false) {
+		list(, $lastmanagementlp7old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp8=") !== false) {
+		list(, $lastmanagementlp8old) = explode("=", $line);
+	}
+
+	if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
+		list(, $stopsocnotpluggedlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp4=") !== false) {
+		list(, $evseiplp4old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp4=") !== false) {
+		list(, $evseidlp4old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp4id=") !== false) {
+		list(, $mpmlp4idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp4ip=") !== false) {
+		list(, $mpmlp4ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp5=") !== false) {
+		list(, $evseiplp5old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp5=") !== false) {
+		list(, $evseidlp5old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp5id=") !== false) {
+		list(, $mpmlp5idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp5ip=") !== false) {
+		list(, $mpmlp5ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp6=") !== false) {
+		list(, $evseiplp6old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp6=") !== false) {
+		list(, $evseidlp6old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp6id=") !== false) {
+		list(, $mpmlp6idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp6ip=") !== false) {
+		list(, $mpmlp6ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp7=") !== false) {
+		list(, $evseiplp7old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp7=") !== false) {
+		list(, $evseidlp7old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp7id=") !== false) {
+		list(, $mpmlp7idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp7ip=") !== false) {
+		list(, $mpmlp7ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp8=") !== false) {
+		list(, $evseiplp8old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp8=") !== false) {
+		list(, $evseidlp8old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp8id=") !== false) {
+		list(, $mpmlp8idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp8ip=") !== false) {
+		list(, $mpmlp8ipold) = explode("=", $line);
+	}
 	if(strpos($line, "discovergyuser=") !== false) {
 		list(, $discovergyuserold) = explode("=", $line);
 	}
@@ -77,6 +162,13 @@ foreach($lines as $line) {
 	if(strpos($line, "alphaessip=") !== false) {
 		list(, $alphaessipold) = explode("=", $line);
 	}
+	if(strpos($line, "soc_audi_username=") !== false) {
+		list(, $soc_audi_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_audi_passwort=") !== false) {
+		list(, $soc_audi_passwortold) = explode("=", $line);
+	}
+
 	if(strpos($line, "soc_zerong_username=") !== false) {
 		list(, $soc_zerong_usernameold) = explode("=", $line);
 	}
@@ -709,6 +801,21 @@ foreach($lines as $line) {
 	if(strpos($line, "lp3name=") !== false) {
 		list(, $lp3nameold) = explode("=", $line);
 	}
+	if(strpos($line, "lp4name=") !== false) {
+		list(, $lp4nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp5name=") !== false) {
+		list(, $lp5nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp6name=") !== false) {
+		list(, $lp6nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp7name=") !== false) {
+		list(, $lp7nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp8name=") !== false) {
+		list(, $lp8nameold) = explode("=", $line);
+	}
 	if(strpos($line, "goeiplp1=") !== false) {
 		list(, $goeiplp1old) = explode("=", $line);
 	}
@@ -951,6 +1058,11 @@ $solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
+$lp4nameold = str_replace( "'", "", $lp4nameold);
+$lp5nameold = str_replace( "'", "", $lp5nameold);
+$lp6nameold = str_replace( "'", "", $lp6nameold);
+$lp7nameold = str_replace( "'", "", $lp7nameold);
+$lp8nameold = str_replace( "'", "", $lp8nameold);
 $zoepasswortold = str_replace( "'", "", $zoepasswortold);
 $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
@@ -1427,9 +1539,18 @@ $(function() {
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
 		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
 		<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
-
+		<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
 	</select>
 </div>
+	<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
+	<select type="text" name="stopsocnotpluggedlp1" id="stopsocnotpluggedp1">
+		<option <?php if($stopsocnotpluggedlp1old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($stopsocnotpluggedlp1old == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
+	</div>
+
 <div id="socmnone">
 	<br>
 </div>
@@ -1509,6 +1630,26 @@ $(function() {
 
 
 </div>
+<div id="socmaudi">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_username">Audi Benutzername:</label></b>
+		<input type="text" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Audi Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_passwort">Audi Passwort:</label></b>
+		<input type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Audi Logins<br><br>
+	</div>
+
+</div>
+
 
 <div id="socmhttp">
 	<div class="row bg-info">
@@ -1645,7 +1786,10 @@ function display_socmodul() {
 	$('#socmtesla').hide();
 	$('#soccarnet').hide();
 	$('#socmzerong').hide();
-
+	$('#socmaudi').hide();
+   	if($('#socmodul').val() == 'soc_audi')   {
+		$('#socmaudi').show();
+	}
 
 	if($('#socmodul').val() == 'none') {
 		$('#socmnone').show();
@@ -2625,6 +2769,335 @@ $(function() {
 });
 </script>
 
+
+<div class="row">
+	<b><h4><label for="lastmanagementlp4">Vierter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp4" id="lastmanagementlp4">
+		<option <?php if($lastmanagementlp4old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp4old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp4mmaus">
+	<br>
+</div>
+<div id="lastlp4mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp3name">Name Ladepunkt 4:</label></b>
+			<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp4">EVSE IP:</label></b>
+		<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp4">EVSE ID:</label></b>
+		<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp4ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp4id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp4() {
+	if($('#lastmanagementlp4').val() == '0') {
+		$('#lastlp4mmaus').show();
+		$('#lastlp4mman').hide();
+	}
+	else {
+		$('#lastlp4mmaus').hide();
+		$('#lastlp4mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp4();
+	$('#lastmanagementlp4').change( function() {
+		display_lastmanagementlp4();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp5">Fünfter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp5" id="lastmanagementlp5">
+		<option <?php if($lastmanagementlp5old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp5old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp5mmaus">
+	<br>
+</div>
+<div id="lastlp5mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp5name">Name Ladepunkt 5:</label></b>
+			<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp5">EVSE IP:</label></b>
+		<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp5">EVSE ID:</label></b>
+		<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp5ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp5id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp5() {
+	if($('#lastmanagementlp5').val() == '0') {
+		$('#lastlp5mmaus').show();
+		$('#lastlp5mman').hide();
+	}
+	else {
+		$('#lastlp5mmaus').hide();
+		$('#lastlp5mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp5();
+	$('#lastmanagementlp5').change( function() {
+		display_lastmanagementlp5();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp6">Sechster Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp6" id="lastmanagementlp6">
+		<option <?php if($lastmanagementlp6old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp6old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp6mmaus">
+	<br>
+</div>
+<div id="lastlp6mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp6name">Name Ladepunkt 6:</label></b>
+			<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp6">EVSE IP:</label></b>
+		<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp6">EVSE ID:</label></b>
+		<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp6ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp6id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp6() {
+	if($('#lastmanagementlp6').val() == '0') {
+		$('#lastlp6mmaus').show();
+		$('#lastlp6mman').hide();
+	}
+	else {
+		$('#lastlp6mmaus').hide();
+		$('#lastlp6mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp6();
+	$('#lastmanagementlp6').change( function() {
+		display_lastmanagementlp6();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp7">Siebter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp7" id="lastmanagementlp7">
+		<option <?php if($lastmanagementlp7old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp7old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp7mmaus">
+	<br>
+</div>
+<div id="lastlp7mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp7name">Name Ladepunkt 7:</label></b>
+			<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp7">EVSE IP:</label></b>
+		<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp7">EVSE ID:</label></b>
+		<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp7ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp7id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp7() {
+	if($('#lastmanagementlp7').val() == '0') {
+		$('#lastlp7mmaus').show();
+		$('#lastlp7mman').hide();
+	}
+	else {
+		$('#lastlp7mmaus').hide();
+		$('#lastlp7mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp7();
+	$('#lastmanagementlp7').change( function() {
+		display_lastmanagementlp7();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp8">Achter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp8" id="lastmanagementlp8">
+		<option <?php if($lastmanagementlp8old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp8old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp8mmaus">
+	<br>
+</div>
+<div id="lastlp8mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp8name">Name Ladepunkt 8:</label></b>
+			<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp8">EVSE IP:</label></b>
+		<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp8">EVSE ID:</label></b>
+		<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp8() {
+	if($('#lastmanagementlp8').val() == '0') {
+		$('#lastlp8mmaus').show();
+		$('#lastlp8mman').hide();
+	}
+	else {
+		$('#lastlp8mmaus').hide();
+		$('#lastlp8mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp8();
+	$('#lastmanagementlp8').change( function() {
+		display_lastmanagementlp8();
+	});
+});
+</script>
+
+
+
+
+
+
+
+
 <div class="row">	<hr>
 	<h3> Strombezugsmessmodul (EVU-Übergabepunkt)</h3>
 </div>
@@ -3143,8 +3616,8 @@ function display_wattbezugmodul() {
 		display_pvwattmodul();
 		// passendes Speichermodul 'optisch' voreinstellen, da automatisch alle Werte
 		// mit aus dem WR gelesen werden
-		document.getElementById('speichermodul').value = 'speicher_kostalplenticore';
-		display_speichermodul();
+		//document.getElementById('speichermodul').value = 'speicher_kostalplenticore';
+		//display_speichermodul();
 	}
 	if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
 		$('#wattbezugkostalpiko').show();
@@ -3670,6 +4143,7 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
 		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
+		<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 	</select>
 </div>
 
@@ -3681,6 +4155,12 @@ $(function() {
 		Keine Konfiguration erforderlich<br><br>
 	</div>
 </div>
+<div id="divspeichervictron">
+		<div class="row" style="background-color:#fcbe1e">
+		Konfiguration im Bezug Victron Modul<br><br>
+	</div>
+</div>
+
 <div id="divspeichervarta">
 	<div class="row" style="background-color:#fcbe1e">
 		<b><label for="vartaspeicherip">Varta IP:</label></b>
@@ -3888,11 +4368,14 @@ function display_speichermodul() {
 	$('#divspeicherkit').hide();
 	$('#divspeichervarta').hide();
 	$('#divspeicheralphaess').hide();
+	$('#divspeichervictron').hide();
 
 	if($('#speichermodul').val() == 'speicher_alphaess') {
 		$('#divspeicheralphaess').show();
 	}
-
+	if($('#speichermodul').val() == 'speicher_victron') {
+		$('#divspeichervictron').show();
+	}
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
 		$('#divspeicherkit').show();
 	}

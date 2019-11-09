@@ -10,6 +10,6 @@ function getgraph() {
 	}
 }
 
-doval = setInterval(getgraph, 5000);
+doval = setInterval(getgraph, 20000);
 
 getgraph();

@@ -23,8 +23,17 @@ verbraucher2=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
 verbraucher3=$(</var/www/html/openWB/ramdisk/verbraucher3_wh)
 verbrauchere1=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
 verbrauchere2=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
-
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3 >> $dailyfile.csv
+ll4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
+ll5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
+ll6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
+ll7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
+ll8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
+ll4=$(echo "$ll4 * 1000" | bc)
+ll5=$(echo "$ll5 * 1000" | bc)
+ll6=$(echo "$ll6 * 1000" | bc)
+ll7=$(echo "$ll7 * 1000" | bc)
+ll8=$(echo "$ll8 * 1000" | bc)
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8 >> $dailyfile.csv
 echo $(date +%H%M) >> $dailyfile-date.csv
 echo $bezug >> $dailyfile-bezug.csv
 echo $einspeisung >> $dailyfile-einspeisung.csv

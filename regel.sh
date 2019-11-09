@@ -118,8 +118,46 @@ if (( u1p3paktiv == 1 )); then
 		exit 0
 	fi
 fi
-
-
+if (( lp1enabled == 0)); then
+	if (( ladeleistunglp1 > 100 )) || (( llalt > 0 )); then
+		runs/set-current.sh 0 m
+	fi
+fi
+if (( lp2enabled == 0)); then
+	if (( ladeleistunglp2 > 100 )) || (( llalts1 > 0 )); then
+		runs/set-current.sh 0 s1
+	fi
+fi
+if (( lp3enabled == 0)); then
+	if (( ladeleistunglp3 > 100 )) || (( llalts2 > 0 )); then
+		runs/set-current.sh 0 s2
+	fi
+fi
+if (( lp4enabled == 0)); then
+	if (( ladeleistunglp4 > 100 )) || (( llaltlp4 > 0 )); then
+		runs/set-current.sh 0 lp4
+	fi
+fi
+if (( lp5enabled == 0)); then
+	if (( ladeleistunglp5 > 100 )) || (( llaltlp5 > 0 )); then
+		runs/set-current.sh 0 lp5
+	fi
+fi
+if (( lp6enabled == 0)); then
+	if (( ladeleistunglp6 > 100 )) || (( llaltlp6 > 0 )); then
+		runs/set-current.sh 0 lp6
+	fi
+fi
+if (( lp7enabled == 0)); then
+	if (( ladeleistunglp7 > 100 )) || (( llaltlp7 > 0 )); then
+		runs/set-current.sh 0 lp7
+	fi
+fi
+if (( lp8enabled == 0)); then
+	if (( ladeleistunglp8 > 100 )) || (( llaltlp8 > 0 )); then
+		runs/set-current.sh 0 lp8
+	fi
+fi
 #EVSE DIN Modbus test
 evsedintest
 

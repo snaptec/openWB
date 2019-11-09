@@ -451,6 +451,7 @@ $(document).ready(function(){
 	});
 
 	$('.sofort').click(function(){
+	//	publish("0","openWB/set/Lademodus");
 	    var clickBtnValue = $(this).val();
 	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
 	    data =  {'action': clickBtnValue};
@@ -465,12 +466,13 @@ $(document).ready(function(){
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
-		    loaddivs();
+		loaddivs();
 
 
 	    });
 	});
 	$('.standby').click(function(){
+		//publish("4","openWB/set/Lademodus");
 	    var clickBtnValue = $(this).val();
 	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
 	    data =  {'action': clickBtnValue};
