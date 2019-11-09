@@ -48,7 +48,7 @@ if [[ $lastmanagement == "0" ]]; then
        			fi
 		else
 			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
-				if (( ladeleistung < 500 )); then
+				if (( ladeleistung < 100 )); then
 					if (( llalt > minimalstromstaerke )); then
         	                        	llneu=$((llalt - 1 ))
         	                        	runs/set-current.sh $llneu m
@@ -173,7 +173,7 @@ else
 					fi
 				fi
 			else
-				if (( ladeleistung < 500 )); then
+				if (( ladeleistung < 100 )); then
 					if (( llalt > minimalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
@@ -245,7 +245,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistung < 500 )); then
+			if (( ladeleistung < 100 )); then
 				if (( llalt > minimalstromstaerke )); then
 					llneu=$((llalt - 1 ))
 					runs/set-current.sh "$llneu" m
@@ -318,7 +318,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistungs1 < 500 )); then
+			if (( ladeleistungs1 < 100 )); then
 				if (( llalts1 > minimalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
@@ -388,7 +388,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistungs1 < 500 )); then
+			if (( ladeleistungs1 < 100 )); then
 				if (( llalts1 > minimalstromstaerke )); then
 					llneus1=$((llalts1 - 1 ))
 					runs/set-current.sh "$llneus1" s1
@@ -462,7 +462,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistungs2 < 500 )); then
+			if (( ladeleistungs2 < 100 )); then
 				if (( llalts2 > minimalstromstaerke )); then
 					llneus2=$((llalts2 - 1 ))
 					runs/set-current.sh "$llneus2" s2
@@ -535,7 +535,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistunglp4 < 500 )); then
+			if (( ladeleistunglp4 < 100 )); then
 				if (( llaltlp4 > minimalstromstaerke )); then
 					llneulp4=$((llaltlp4 - 1 ))
 					runs/set-current.sh "$llneulp4" lp4
@@ -608,7 +608,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistunglp5 < 500 )); then
+			if (( ladeleistunglp5 < 100 )); then
 				if (( llaltlp5 > minimalstromstaerke )); then
 					llneulp5=$((llaltlp5 - 1 ))
 					runs/set-current.sh "$llneulp5" lp5

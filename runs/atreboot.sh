@@ -2188,7 +2188,7 @@ then
 	echo "lp6name=LP6" >> /var/www/html/openWB/openwb.conf
 	echo "lp7name=LP7" >> /var/www/html/openWB/openwb.conf
 	echo "lp8name=LP8" >> /var/www/html/openWB/openwb.conf
-	echo "simplemode=1" >> /var/www/html/openWB/openwb.conf
+	echo "simplemode=0" >> /var/www/html/openWB/openwb.conf
 	echo "lademstatlp4=01" >> /var/www/html/openWB/openwb.conf
 	echo "lademstatlp5=0" >> /var/www/html/openWB/openwb.conf
 	echo "lademstatlp6=0" >> /var/www/html/openWB/openwb.conf
