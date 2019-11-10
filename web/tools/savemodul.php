@@ -808,7 +808,10 @@ foreach($lines as $line) {
     	    $result .= 'lllaniplp3='.$_POST[lllaniplp3]."\n";
     	 $writeit = '1';
    }
-
+	    if(strpos($line, "wryoulessip=") !== false) {
+    	    $result .= 'wryoulessip='.$_POST[wryoulessip]."\n";
+    	 $writeit = '1';
+   }
 	    if(strpos($line, "lp1name=") !== false) {
 		    $result .= 'lp1name=\''.$_POST[lp1name]."'\n";
     	 $writeit = '1';

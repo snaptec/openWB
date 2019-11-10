@@ -12,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp2enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp3enabled
@@ -2116,6 +2117,10 @@ if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wryoulessip=" /var/www/html/openWB/openwb.conf
+then
+	echo "wryoulessip=192.168.0.3" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_audi_username=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_audi_username=demo@demo.de" >> /var/www/html/openWB/openwb.conf
@@ -2197,7 +2202,14 @@ then
 
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
-(sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
+if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
+then
+	echo "test" > /dev/null
+else
+	python3 /var/www/html/openWB/runs/mqttsub.py &
+fi
+
+
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up

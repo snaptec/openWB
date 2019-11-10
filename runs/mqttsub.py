@@ -5,14 +5,20 @@ import sys
 import subprocess
 import time
 import fileinput
-
+global inaction
+inaction=0
 
 
 def replaceAll(changeval,newval):
-        for line in fileinput.input('openwb.conf', inplace=1):
+    if ( inaction == 0 ):
+        global inaction
+        inaction=1
+        for line in fileinput.input('/var/www/html/openWB/openwb.conf', inplace=1):
             if line.startswith(changeval):
                 line = changeval + newval + "\n"
             sys.stdout.write(line)
+        time.sleep(0.1)
+        inaction=0
 
 mqtt_broker_ip = "localhost"
 client = mqtt.Client() 
@@ -274,8 +280,10 @@ def on_message(client, userdata, msg):
 
 
 
-
+    file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+    sys.stdout = file
     print("Topic: ", msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8"))) 
+    file.close()
 
 client.on_connect = on_connect
 client.on_message = on_message

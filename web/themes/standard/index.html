@@ -126,7 +126,7 @@ echo '
 	</div>
 </div>
 <!-- show values for second charging point -->
-<div class="row" id="lp2lldiv">
+<div class="row" id="lp2lldiv" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
 	</div>
@@ -147,7 +147,7 @@ echo '
 	</div>
 </div>
 <!-- show values for third charging point -->
-<div class="row" id="lp3lldiv">
+<div class="row" id="lp3lldiv" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp3enableddiv" class="fa" style="cursor: pointer;" onclick="lp3enabledclick()"><?php echo $lp3nameold ?>
 	</div>
@@ -162,7 +162,7 @@ echo '
 	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="lp4div">
+<div class="row" id="lp4div" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp4enableddiv" class="fa" style="cursor: pointer;" onclick="lp4enabledclick()"></span><span id="lp4name"></span><span id="plugstatlp4div"></span>
 
@@ -178,7 +178,7 @@ echo '
 	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="lp5div">
+<div class="row" id="lp5div" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp5enableddiv" class="fa" style="cursor: pointer;" onclick="lp5enabledclick()"></span><span id="lp5name"></span><span id="plugstatlp5div"></span>
 	</div>
@@ -193,7 +193,7 @@ echo '
 	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="lp6div">
+<div class="row" id="lp6div" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp6enableddiv" class="fa" style="cursor: pointer;" onclick="lp6enabledclick()"></span><span id="lp6name"></span><span id="plugstatlp6div"></span>
 	</div>
@@ -208,7 +208,7 @@ echo '
 	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="lp7div">
+<div class="row" id="lp7div" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp7enableddiv" class="fa" style="cursor: pointer;" onclick="lp7enabledclick()"></span><span id="lp7name"></span><span id="plugstatlp7div"></span>
 	</div>
@@ -223,7 +223,7 @@ echo '
 	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
-<div class="row" id="lp8div">
+<div class="row" id="lp8div" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp8enableddiv" class="fa" style="cursor: pointer;" onclick="lp8enabledclick()"></span><span id="lp8name"></span><span id="plugstatlp8div"></span>
 	</div>
@@ -621,7 +621,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider2div" class="col-xs-12 text-center">
+		<div id="slider2div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
 				
@@ -638,7 +638,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider3div" class="col-xs-12 text-center">
+		<div id="slider3div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s">
 				
@@ -655,7 +655,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider4div" class="col-xs-12 text-center">
+		<div id="slider4div" class="col-xs-12 text-center" style="display: none;">
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s">
@@ -673,7 +673,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider5div" class="col-xs-12 text-center">
+		<div id="slider5div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s">
 				
@@ -691,7 +691,7 @@ echo '
 			</script>
 		</div>
 
-		<div id="slider6div" class="col-xs-12 text-center">
+		<div id="slider6div" class="col-xs-12 text-center" style="display: none;">
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s">
@@ -709,7 +709,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider7div" class="col-xs-12 text-center">
+		<div id="slider7div" class="col-xs-12 text-center" style="display: none;">
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s">
@@ -727,7 +727,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider8div" class="col-xs-12 text-center">
+		<div id="slider8div" class="col-xs-12 text-center" style="display: none;">
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s">

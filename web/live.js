@@ -27,9 +27,9 @@ var thevalues = [
 ["openWB/lp1/kWhDailyCharged", "#dailychargelp1div"],
 ["openWB/lp2/kWhDailyCharged", "#dailychargelp2div"],
 ["openWB/lp3/kWhDailyCharged", "#dailychargelp3div"],
-["openWB/lp1/kWhActualharged", "#aktgeladendiv"],
-["openWB/lp2/kWhActualharged", "#aktgeladens1div"],
-["openWB/lp3/kWhActualharged", "#aktgeladens2div"],
+["openWB/lp1/kWhActualCharged", "#aktgeladendiv"],
+["openWB/lp2/kWhActualCharged", "#aktgeladens1div"],
+["openWB/lp3/kWhActualCharged", "#aktgeladens2div"],
 ["openWB/pv/W", "#"],
 ["openWB/lp1/W", "#"],
 ["openWB/lp2/W", "#"],
@@ -1049,6 +1049,14 @@ var publish = function (payload, topic) {
 	message.qos = 2;
 	client.send(message);
 }
+
+$('#lp2div').hide();
+$('#lp3div').hide();
+$('#lp4div').hide();
+$('#lp5div').hide();
+$('#lp6div').hide();
+$('#lp7div').hide();
+$('#lp8div').hide();
 client.connect(options);
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {

@@ -1422,7 +1422,7 @@ $(function() {
 	</div>
 	<br><br><hr>
 	<div class="row">
-		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br><br>
+		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu zehn Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen. Fahrzeug vor Update abstecken!<br><br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
