@@ -1319,7 +1319,7 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
 		<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
-
+		<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo selected ?> value="mpm3pmtripple">openWB Tripple</option>
 	</select>
 </div>
 
@@ -1489,6 +1489,10 @@ function display_llmp1() {
 	if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show();
 	}
+	if($('#ladeleistungmodul').val() == 'mpm3pmtripple') {
+		$('#llmnone').show();
+	}
+
 	if($('#ladeleistungmodul').val() == 'httpll') {
 		$('#httpll').show();
 	}
@@ -2042,12 +2046,14 @@ $(function() {
 <div id="llmodullp2">
 	<div class="row"><br>
 		<b><label for="ladeleistungs1modul">Ladeleistungsmodul für Ladepunkt 2:</label></b>
-		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
+		<select type="text" name="ladeleistungs1modul" id="ladeleistungs1modul">
 			<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
+			<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo selected ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+
 		</select>
 	</div>
 	<div class="row">
@@ -2375,30 +2381,33 @@ function display_llmp2() {
 	$('#mpm3pmlls1div').hide();
 	$('#rs485laniplp2').hide();
 
-	if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
+	if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
 		$('#sdm630s1div').show();
 		$('#rs485laniplp2').show();
 	}
-	if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
+	if($('#ladeleistungs1modul').val() == 'sdm120modbuslls1') {
 		$('#sdm120s1div').show();
 		$('#rs485laniplp2').show();
 	}
-	if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
+	if($('#ladeleistungs1modul').val() == 'simpleevsewifis1') {
 		$('#swifis1div').show();
 	}
-    if($('#ladeleistungss1modul').val() == 'goelp2') {
+    if($('#ladeleistungs1modul').val() == 'goelp2') {
 		$('#swifis1div').show();
 	}
-	if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
+	if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 		$('#mpm3pmlls1div').show();
 		$('#rs485laniplp2').show();
 	}
 }
 
 $(function() {
-	display_llmp2();
-	$('#ladeleistungss1modul').change( display_llmp2() );
+	display_llmp2 ();
+	$('#ladeleistungs1modul').change( function(){
+		display_llmp2();
+	});
 });
+
 </script>
 
 <script>
@@ -2509,6 +2518,7 @@ $(function() {
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
+
 		</select>
 	</div>
 	<div id="evseconmbs2">
@@ -2623,6 +2633,7 @@ $(function() {
 			<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo selected ?> value="mpm3pmtripplelp3">openWB Tripple</option>
 		</select>
 	</div>
 	<div class="row">

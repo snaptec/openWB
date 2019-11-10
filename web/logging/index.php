@@ -45,7 +45,12 @@
 			list(, $graphinteractiveamold) = explode("=", $line);
 		}
 
-
+		if(strpos($line, "verbraucher1_name=") !== false) {
+			list(, $verbraucher1_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher2_name=") !== false) {
+			list(, $verbraucher2_nameold) = explode("=", $line);
+		}
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
@@ -57,7 +62,8 @@ $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervor
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
 $verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
 $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
-
+$verbraucher1_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher1_nameold));
+$verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
 
 					?>
 
@@ -108,7 +114,8 @@ $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbrau
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-
+	var verbraucher1name = "<?php echo $verbraucher1_nameold ?>";
+	var verbraucher2name = "<?php echo $verbraucher2_nameold ?>";
 </script>
 
 
@@ -247,15 +254,15 @@ if ( verbraucher1vorhanden == 1) {
     var series40 = chart.series.push(new am4charts.LineSeries());
     series40.dataFields.valueY = "col12";
     series40.dataFields.categoryX = "col0";
-    series40.name = "Verbraucher 1";
-    series40.stroke = am4core.color("#FFFF00");
+    series40.name = verbraucher1name ;
+    series40.stroke = am4core.color("#FF8B00");
     series40.strokeWidth = 1.5;
 }
 if ( verbraucher2vorhanden == 1) {
     var series41 = chart.series.push(new am4charts.LineSeries());
     series41.dataFields.valueY = "col13";
     series41.dataFields.categoryX = "col0";
-    series41.name = "Verbraucher 1";
+    series41.name = verbraucher2name ;
     series41.stroke = am4core.color("#FF00FF");
     series41.strokeWidth = 1.5;
 }
