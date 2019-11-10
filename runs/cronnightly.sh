@@ -6,7 +6,7 @@ echo "Start cron nightly @ $(date)"
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
-
+echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
 
 

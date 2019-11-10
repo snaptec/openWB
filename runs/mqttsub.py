@@ -274,8 +274,10 @@ def on_message(client, userdata, msg):
 
 
 
-
+    file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+    sys.stdout = file
     print("Topic: ", msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8"))) 
+    file.close()
 
 client.on_connect = on_connect
 client.on_message = on_message
