@@ -54,6 +54,9 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "wryoulessip=") !== false) {
+		list(, $wryoulessipold) = explode("=", $line);
+	}
 	if(strpos($line, "lastmanagementlp4=") !== false) {
 		list(, $lastmanagementlp4old) = explode("=", $line);
 	}
@@ -3674,6 +3677,7 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
 		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
 		<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
+		<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 	</select>
 </div>
 
@@ -3681,6 +3685,16 @@ $(function() {
 <div id="pvnone">
 	<br>
 </div>
+<div id="pvyouless">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="wryoulessip">IP Adresse des Youless</label></b>
+		<input type="text" name="wryoulessip" id="wryoulessip" value="<?php echo htmlspecialchars($wryoulessipold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. <br>
+	</div>
+</div>
+
 <div id="pvsolarlog">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
@@ -4061,6 +4075,11 @@ function display_pvwattmodul() {
 	$('#pvethsdm120').hide();
 	$('#pvsolarview').hide();
 	$('#pvdiscovergy').hide();
+	$('#pvyouless').hide();
+
+	if($('#pvwattmodul').val() == 'wr_youless120') {
+		$('#pvyouless').show();
+	}
 
 	if($('#pvwattmodul').val() == 'wr_solarview') {
 		$('#pvsolarview').show();

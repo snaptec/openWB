@@ -2116,6 +2116,10 @@ if ! grep -Fq "mollp1soll=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1soll=13" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wryoulessip=" /var/www/html/openWB/openwb.conf
+then
+	echo "wryoulessip=192.168.0.3" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_audi_username=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_audi_username=demo@demo.de" >> /var/www/html/openWB/openwb.conf
