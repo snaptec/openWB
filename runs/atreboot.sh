@@ -2202,7 +2202,14 @@ then
 
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
-(sleep 10 && sudo python3 /var/www/html/openWB/runs/mqttsub.py) &
+if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
+then
+	echo "test" > /dev/null
+else
+	python3 /var/www/html/openWB/runs/mqttsub.py &
+fi
+
+
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
