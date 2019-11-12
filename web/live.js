@@ -1047,6 +1047,7 @@ var publish = function (payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
 	message.qos = 2;
+	message.retained = true;
 	client.send(message);
 }
 

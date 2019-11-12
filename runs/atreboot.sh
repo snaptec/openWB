@@ -2293,4 +2293,5 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 
