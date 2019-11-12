@@ -13,7 +13,7 @@ client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
                                 stopbits=1, bytesize=8, timeout=1)
 
 
-sdmid = int(sys.argv[2])
+idadd = int(sys.argv[2])
 resp = client.read_input_registers(0x00,2, unit=idadd)
 voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
 voltage = float("%.1f" % voltage)
