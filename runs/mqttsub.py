@@ -10,8 +10,8 @@ inaction=0
 
 
 def replaceAll(changeval,newval):
+    global inaction
     if ( inaction == 0 ):
-        global inaction
         inaction=1
         for line in fileinput.input('/var/www/html/openWB/openwb.conf', inplace=1):
             if line.startswith(changeval):
