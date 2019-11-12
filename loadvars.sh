@@ -5,18 +5,21 @@ while read lines; do
 	value=$(echo $lines | awk '{print $2}')
 	if [[ $var == "openWB/set/lp1/DirectChargeAmps" ]]; then
 	      if [[ $sofortll != $value ]]; then
-		sed -i 's/sofortll=.*/sofortll='$value'/' /var/www/html/openWB/openwb.conf
-		echo "SofortLLLp1 geändert" >> /var/www/html/openWB/ramdisk/openWB.log
-
+		      if (( value >= 6 )) && (( value <= 32 )); then
+			sed -i 's/sofortll=.*/sofortll='$value'/' /var/www/html/openWB/openwb.conf
+			echo "SofortLLLp1 geändert" >> /var/www/html/openWB/ramdisk/openWB.log
+		fi
 	      fi
 	fi
 	var=$(echo $lines | awk '{print $1}')
 	value=$(echo $lines | awk '{print $2}')
 	if [[ $var == "openWB/set/lp2/DirectChargeAmps" ]]; then
-	      if [[ $sofortll != $value ]]; then
-		sed -i 's/sofortlls1=.*/sofortlls1='$value'/' /var/www/html/openWB/openwb.conf
-		echo "SofortLLLp2 geändert" >> /var/www/html/openWB/ramdisk/openWB.log
-	      fi
+		if [[ $sofortlls1 != $value ]]; then
+			if (( value >= 6 )) && (( value <= 32 )); then
+				sed -i 's/sofortlls1=.*/sofortlls1='$value'/' /var/www/html/openWB/openwb.conf
+				echo "SofortLLLp2 geändert" >> /var/www/html/openWB/ramdisk/openWB.log
+			fi
+		  fi
 	fi	
 done < <(timeout 1s mosquitto_sub -v -t "openWB/set/#")
 
