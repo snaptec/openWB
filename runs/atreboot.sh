@@ -373,14 +373,14 @@ echo 0 > /var/www/html/openWB/ramdisk/llas13
 
 echo 0 > /var/www/html/openWB/ramdisk/ladestatus
 echo $bootmodus > /var/www/html/openWB/ramdisk/lademodus
-echo 0 > /var/www/html/openWB/ramdisk/llaktuell
-echo 0 > /var/www/html/openWB/ramdisk/llaktuells1
-echo 0 > /var/www/html/openWB/ramdisk/llaktuells2
-echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp4
-echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp5
-echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp6
-echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp7
-echo 0 > /var/www/html/openWB/ramdisk/llaktuelllp8
+echo 1 > /var/www/html/openWB/ramdisk/llaktuell
+echo 1 > /var/www/html/openWB/ramdisk/llaktuells1
+echo 1 > /var/www/html/openWB/ramdisk/llaktuells2
+echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp4
+echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp5
+echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp6
+echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp7
+echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp8
 echo 0 > /var/www/html/openWB/ramdisk/soc
 echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
