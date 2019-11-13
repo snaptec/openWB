@@ -121,3 +121,33 @@ f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(hz))
 f.close()
 
+#Power Factor
+resp = client.read_input_registers(0x20,4, unit=5)
+value1 = resp.registers[0] 
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+evupf1 = int(struct.unpack('>i', all.decode('hex'))[0]) 
+evupf1 = round((float(evupf1) / 10), 0)
+f = open('/var/www/html/openWB/ramdisk/evupf1', 'w')
+f.write(str(evupf1))
+f.close()
+
+resp = client.read_input_registers(0x22,4, unit=5)
+value1 = resp.registers[0] 
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+evupf2 = int(struct.unpack('>i', all.decode('hex'))[0]) 
+evupf2 = round((float(evupf2) / 10), 0)
+f = open('/var/www/html/openWB/ramdisk/evupf2', 'w')
+f.write(str(evupf2))
+f.close()
+
+resp = client.read_input_registers(0x24,4, unit=5)
+value1 = resp.registers[0] 
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+evupf3 = int(struct.unpack('>i', all.decode('hex'))[0]) 
+evupf3 = round((float(evupf3) / 10), 0)
+f = open('/var/www/html/openWB/ramdisk/evupf3', 'w')
+f.write(str(evupf3))
+f.close()
