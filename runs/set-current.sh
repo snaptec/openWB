@@ -386,7 +386,6 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkicktimeoutlp1=$nrgkicktimeoutlp2
 		nrgkickmaclp1=$nrgkickmaclp2
 		nrgkickpwlp1=$nrgkickpwlp2
-		evsecon=$evseconlp2
 		evseip=$evseiplp2
 		modbusevseid=$evseidlp2
 
@@ -417,7 +416,6 @@ if [[ $lastmanagements2 == "1" ]]; then
 		evsewifiiplp1=$evsewifiiplp3
 		goeiplp1=$goeiplp3
 		goetimeoutlp1=$goetimeoutlp3
-		evsecon=$evseconlp3
 		evseip=$evseiplp3
 		modbusevseid=$evseidlp3
 
