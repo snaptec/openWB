@@ -76,7 +76,23 @@ if [[ $evsecon == "modbusevse" ]]; then
 			chargestat=0
 		fi
 	fi
+
 fi
+if [[ $evsecon == "ipevse" ]]; then
+	evseplugstatelp1=$(sudo python runs/readipmodbus.py $evseiplp1 $evseidlp1 1002 1)
+	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
+	if [[ $evseplugstatelp1 > "1" ]]; then
+		echo 1 > /var/www/html/openWB/ramdisk/plugstat
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/plugstat
+	fi
+	if [[ $evseplugstatelp1 > "2" ]] && [[ $ladestatuslp1 == "1" ]] && [[ $lp1enabled == "1" ]]; then
+		echo 1 > /var/www/html/openWB/ramdisk/chargestat
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/chargestat
+	fi
+fi
+
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
@@ -103,6 +119,21 @@ if [[ $lastmanagement == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 		fi
 		if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
+			echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+		fi
+	fi
+	if [[ $evsecons1 == "ipevse" ]]; then
+		evseplugstatelp2=$(sudo python runs/readipmodbus.py $evseiplp2 $evseidlp2 1002 1)
+		ladestatuslp2=$(</var/www/html/openWB/ramdisk/ladestatuss1)
+
+		if [[ $evseplugstatelp2 > "1" ]]; then
+			echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+		else
+			echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+		fi
+		if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuslp2 == "1" ]] && [[ $lp2enabled == "1" ]]; then
 			echo 1 > /var/www/html/openWB/ramdisk/chargestats1
 		else
 			echo 0 > /var/www/html/openWB/ramdisk/chargestats1
