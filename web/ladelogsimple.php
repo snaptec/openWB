@@ -36,12 +36,12 @@
 	<link rel="stylesheet" type="text/css" href="css/cardio.css">
 </head>
 <?php
-$limit = 10;
+$limit = 50;
 if (isset($_GET['lines'])) {
 	$limit = $_GET['lines'];
 	$_SESSION = $limit;
 } else {
-	$limit = 20;
+	$limit = 50;
 	$_SESSION = $limit;
 }
 if (isset($_GET['von'])) {
@@ -60,7 +60,7 @@ if (isset($_GET['bis'])) {
 
 <body>
 	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
+		<img src="img/loading.gif" alt="Preloader image">
 	</div>
 <section id="services">
 		<div class="container">
@@ -103,12 +103,6 @@ if (isset($_GET['bis'])) {
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
 				</div>
-				<div class="col-xs-1 text-center" style="font-size: 1vw">
-					Lademodus
-				</div>
-				<div class="col-xs-1 text-center" style="font-size: 1vw">
-					RFID
-				</div>
 
 	</div>
 </div>
@@ -134,78 +128,6 @@ $sumkwh = 0;
 $sumgelkm = 0;
 $file = fopen('../ramdisk/tladelog', 'r');
 $extractf = fopen('../ramdisk/ladelog.csv', "w+");
-if (isset($_GET['lp1akt'])) {
-	if ($_GET['lp1akt'] == "on"){
-		$lp1akt = "1";
-	} else {
-		$lp1akt = 0;
-	}
-} else {
-	$lp1akt = 0;
-}
-if (isset($_GET['lp2akt'])) {
-	if ($_GET['lp2akt'] == "on"){
-		$lp2akt = "2";
-	} else {
-		$lp2akt = 0;
-	}
-} else {
-	$lp2akt = 0;
-}
-if (isset($_GET['lp3akt'])) {
-	if ($_GET['lp3akt'] == "on"){
-		$lp3akt = "3";
-	} else {
-		$lp3akt = 0;
-	}
-} else {
-	$lp3akt = 0;
-}
-if (isset($_GET['sofort'])) {
-	if ($_GET['sofort'] == "on"){
-		$sofort = "0";
-	} else {
-		$sofort = 8;
-	}
-} else {
-	$sofort = 8;
-}
-if (isset($_GET['minpv'])) {
-	if ($_GET['minpv'] == "on"){
-		$minpv = "1";
-	} else {
-		$minpv = 8;
-	}
-} else {
-	$minpv = 8;
-}
-if (isset($_GET['nurpv'])) {
-	if ($_GET['nurpv'] == "on"){
-		$nurpv = "2";
-	} else {
-		$nurpv = 8;
-	}
-} else {
-	$nurpv = 8;
-}
-if (isset($_GET['standby'])) {
-	if ($_GET['standby'] == "on"){
-		$standby = "4";
-	} else {
-		$standby = 8;
-	}
-} else {
-	$standby = 8;
-}
-if (isset($_GET['nachtladenlp1'])) {
-	if ($_GET['nachtladenlp1'] == "on"){
-		$nachtladenlp1 = "7";
-	} else {
-		$nachtladenlp1 = 8;
-	}
-} else {
-	$standby = 8;
-}
 while (($logarray = fgetcsv($file)) !== FALSE) {
 	$startime = str_replace('.', '-', $logarray[0]);
 	$startime = strtotime(substr_replace($startime, "20", "6", 0));
@@ -213,70 +135,9 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
 	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
 			if ( $wahlstart < $startime && $wahlstop > $endtime) {
-				if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
 
-					if ( isset($_GET['rfidakt']) && $_GET['rfidakt'] == "on" ){
-					if ( $_GET['rfid'] == intval($logarray[8]) ){	
-				fputcsv($extractf, $logarray);
-				echo '<div class="row">';
-				echo '<div class="col-xs-12 text-center">';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-					print_r($logarray[0]);
-					$start = $startime;
-					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-					print_r($logarray[1]);
-					$stop = $endtime;
 
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-					print_r($logarray[2]);
-					$sumgelkm=$sumgelkm + $logarray[2];
 
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[3]);
-						$sumkwh=$sumkwh + $logarray[3];
-					echo '</div>';
-					echo '<div class="col-xs-2 text-center" style="font-size: 1.5vw">';
-					print_r($logarray[4]);
-						$avgladel=$avgladel + $logarray[4];
-						$count=$count + 1;
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[5]);
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[6]);
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-					if (isset($logarray[7])){
-						if ($logarray[7] == '0'){
-							echo 'Sofort';
-						}
-						if ($logarray[7] == '1'){
-							echo 'Min+PV';
-						}
-						if ($logarray[7] == '2'){
-							echo 'NurPV';
-						}
-						if ($logarray[7] == '4'){
-							echo 'Standby';
-						}
-						if ($logarray[7] == '7'){
-							echo 'NL';
-						}
-					}
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[8]);
-					echo '</div>';
-
-				echo '</div>';
-			echo '</div>';
-			echo '<hr>';
-			$ladezeit = $ladezeit + (($stop - $start) / 60 );
-					}} else {
 			fputcsv($extractf, $logarray);
 				echo '<div class="row">';
 				echo '<div class="col-xs-12 text-center">';
@@ -309,35 +170,14 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[6]);
 					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-					if (isset($logarray[7])){
-						if ($logarray[7] == '0'){
-							echo 'Sofort';
-						}
-						if ($logarray[7] == '1'){
-							echo 'Min+PV';
-						}
-						if ($logarray[7] == '2'){
-							echo 'NurPV';
-						}
-						if ($logarray[7] == '4'){
-							echo 'Standby';
-						}
-						if ($logarray[7] == '7'){
-							echo 'NL';
-						}
-					}
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[8]);
-					echo '</div>';
+
 
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
 			$ladezeit = $ladezeit + (($stop - $start) / 60 );
 
-					}}}
+					}
 	} else {
 		fputcsv($extractf, $logarray);
 		echo '<div class="row">';
@@ -371,29 +211,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
 						print_r($logarray[6]);
 					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-					if (isset($logarray[7])){
-						if ($logarray[7] == '0'){
-							echo 'Sofort';
-						}
-						if ($logarray[7] == '1'){
-							echo 'Min+PV';
-						}
-						if ($logarray[7] == '2'){
-							echo 'NurPV';
-						}
-						if ($logarray[7] == '4'){
-							echo 'Standby';
-						}
-						if ($logarray[7] == '4'){
-							echo 'NL';
-						}
-					}
-					echo '</div>';
-					echo '<div class="col-xs-1 text-center" style="font-size: 1.5vw">';
-						print_r($logarray[8]);
-					echo '</div>';
-
+			
 				echo '</div>';
 			echo '</div>';
 			echo '<hr>';
@@ -432,12 +250,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 				<div class="col-xs-1 text-center" style="font-size: 1vw">
 					Ladepunkt
 				</div>
-				<div class="col-xs-1 text-center" style="font-size: 1vw">
-					Lademodus
-				</div>
-				<div class="col-xs-1 text-center" style="font-size: 1vw">
-					RFID
-				</div>
+
 	</div>
 </div>
 	<div class="row">
@@ -471,7 +284,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 	<div class="col-xs-1">
 	</div>
 	<div class="col-xs-7">
-	<form name="limitlines" id="limitlines" action="ladelog.php" method="GET">
+	<form name="limitlines" id="limitlines" action="ladelogsimple.php" method="GET">
 		<label for="lines">Anzahl berücksichtiger Ladungen</label>
 		<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" /><br>
 		<label for="zeitakt">Filter aktiv:</label>
@@ -481,7 +294,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 		<label for="bis">Enddatum:</label>
 		<input id="bis" name="bis" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstop) ?>" required="required" />
 		<br>
-		<label for="lp1akt">LP1:</label>
+	<!--	<label for="lp1akt">LP1:</label>
 		<input id="lp1akt" name="lp1akt" type="checkbox" <?php if (isset($_GET['lp1akt'])){ if ( $_GET['lp1akt'] == "on"){ echo "checked"; }} ?> >
 		<label for="lp2akt">LP2:</label>
 		<input id="lp2akt" name="lp2akt" type="checkbox" <?php if (isset($_GET['lp2akt'])){ if ( $_GET['lp2akt'] == "on"){ echo "checked"; }} ?> >
@@ -503,7 +316,7 @@ $ladezeit = intval(round($ladezeit / $count, 2));
 
 		<label for="rfid">TAG:</label>
 		<input id="rfid" name="rfid" type="text" value="<?php if (isset($_GET['rfid'])){  echo $_GET['rfid']; } ?>" ><br>
-
+-->
 
 
 

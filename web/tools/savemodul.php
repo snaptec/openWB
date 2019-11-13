@@ -42,6 +42,30 @@ foreach($lines as $line) {
 	    $result .= 'wattbezugmodul='.$_POST[wattbezugmodul]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "evseidlp3=") !== false) {
+	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp3=") !== false) {
+	    $result .= 'evseiplp3='.$_POST[evseiplp3]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp1=") !== false) {
+	    $result .= 'evseidlp1='.$_POST[evseidlp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp1=") !== false) {
+	    $result .= 'evseiplp1='.$_POST[evseiplp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseidlp2=") !== false) {
+	    $result .= 'evseidlp2='.$_POST[evseidlp2]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "evseiplp2=") !== false) {
+	    $result .= 'evseiplp2='.$_POST[evseiplp2]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "evseidlp4=") !== false) {
 	    $result .= 'evseidlp4='.$_POST[evseidlp4]."\n";
 	    $writeit = '1';
@@ -56,6 +80,30 @@ foreach($lines as $line) {
 	    }
 	    if(strpos($line, "mpmlp4ip=") !== false) {
 	    $result .= 'mpmlp4ip='.$_POST[mpmlp4ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp1id=") !== false) {
+	    $result .= 'mpmlp1id='.$_POST[mpmlp1id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp1ip=") !== false) {
+	    $result .= 'mpmlp1ip='.$_POST[mpmlp1ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp2id=") !== false) {
+	    $result .= 'mpmlp2id='.$_POST[mpmlp2id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp2ip=") !== false) {
+	    $result .= 'mpmlp2ip='.$_POST[mpmlp2ip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp3id=") !== false) {
+	    $result .= 'mpmlp3id='.$_POST[mpmlp3id]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "mpmlp3ip=") !== false) {
+	    $result .= 'mpmlp3ip='.$_POST[mpmlp3ip]."\n";
 	    $writeit = '1';
 	    }
 	    if(strpos($line, "lastmanagementlp4=") !== false) {

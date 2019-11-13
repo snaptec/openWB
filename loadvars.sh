@@ -1,5 +1,17 @@
 #!/bin/bash
 loadvars(){
+#get temp vars
+sofortll=$(<ramdisk/lp1sofortll)
+sofortlls1=$(<ramdisk/lp2sofortll)
+sofortlls2=$(<ramdisk/lp3sofortll)
+sofortlllp4=$(<ramdisk/lp4sofortll)
+sofortlllp5=$(<ramdisk/lp5sofortll)
+sofortlllp6=$(<ramdisk/lp6sofortll)
+sofortlllp7=$(<ramdisk/lp7sofortll)
+sofortlllp8=$(<ramdisk/lp8sofortll)
+
+
+
 
 #get oldvars for mqtt
 opvwatt=$(<ramdisk/pvwatt)

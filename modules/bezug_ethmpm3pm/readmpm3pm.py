@@ -110,4 +110,14 @@ ekwh = float(ekwh) * 10
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(ekwh))
 f.close()
+#evuhz
+resp = client.read_input_registers(0x2c,4, unit=sdmid)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+hz = int(struct.unpack('>i', all.decode('hex'))[0]) 
+hz = round((float(hz) / 100), 2)
+f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
+f.write(str(hz))
+f.close()
 

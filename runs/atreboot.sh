@@ -95,6 +95,14 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 touch /var/www/html/openWB/ramdisk/wattbezug
+echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp3sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp4sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp5sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp6sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp7sofortll
+echo 10 > /var/www/html/openWB/ramdisk/lp8sofortll
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/hook1akt
 echo 0 > /var/www/html/openWB/ramdisk/hook2akt
@@ -1437,6 +1445,10 @@ if ! grep -Fq "verbraucher1_tempwh=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher1_tempwh=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "verbraucher2_tempwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "verbraucher2_tempwh=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "verbraucher2_name=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher2_name=Name" >> /var/www/html/openWB/openwb.conf
@@ -2282,6 +2294,8 @@ echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
 
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
+
 #if [ $(dpkg-query -W -f='${Status}' php-curl 2>/dev/null | grep -c "ok installed") -eq 0 ];
 #then
 #	  sudo apt-get update
@@ -2293,4 +2307,5 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 
