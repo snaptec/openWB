@@ -111,7 +111,7 @@ f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(ekwh))
 f.close()
 #evuhz
-resp = client.read_input_registers(0x2c,4, unit=sdmid)
+resp = client.read_input_registers(0x2c,4, unit=5)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
