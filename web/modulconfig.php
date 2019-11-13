@@ -82,6 +82,43 @@ foreach($lines as $line) {
 	if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
 		list(, $stopsocnotpluggedlp1old) = explode("=", $line);
 	}
+	if(strpos($line, "evseiplp3=") !== false) {
+		list(, $evseiplp3old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp3=") !== false) {
+		list(, $evseidlp3old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp3id=") !== false) {
+		list(, $mpmlp3idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp3ip=") !== false) {
+		list(, $mpmlp3ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp2=") !== false) {
+		list(, $evseiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp2=") !== false) {
+		list(, $evseidlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp2id=") !== false) {
+		list(, $mpmlp2idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp2ip=") !== false) {
+		list(, $mpmlp2ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp1=") !== false) {
+		list(, $evseiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp1=") !== false) {
+		list(, $evseidlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp1id=") !== false) {
+		list(, $mpmlp1idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp1ip=") !== false) {
+		list(, $mpmlp1ipold) = explode("=", $line);
+	}
+
 	if(strpos($line, "evseiplp4=") !== false) {
 		list(, $evseiplp4old) = explode("=", $line);
 	}
@@ -1112,7 +1149,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
 		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
-
+		<option <?php if($evseconold == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit </option>
 	</select>
 
 </div>
@@ -1177,6 +1214,22 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 </div>
 <div class="row bg-info">
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
+</div>
+</div>
+<div id="evseconipevse">
+<div class="row bg-info">
+	<b><label for="evseiplp1">IP Adresse:</label></b>
+	<input type="text" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp1">EVSE ID:</label></b>
+	<input type="text" name="evseidlp1" id="evseidlp1" value="<?php echo $evseidlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
 </div>
 </div>
 <div id="evseconkeba">
@@ -1268,6 +1321,14 @@ function display_lp1() {
 	$('#evseconkeba').hide();
 	$('#openwb12').hide();
 	$('#evsecontwcmanager').hide();
+	$('#evseconipevse').hide();
+	if($('#evsecon').val() == 'ipevse') {
+		$('#evseconipevse').show();
+		$('#llmodullp1').show();
+
+	}
+
+
 	if($('#evsecon').val() == 'dac') {
 		$('#evsecondac').show();
 		$('#llmodullp1').show();
@@ -1298,6 +1359,9 @@ function display_lp1() {
 	if($('#evsecon').val() == 'openwb12') {
 		$('#openwb12').show();
 	}
+	if($('#evsecon').val() == 'ipevse') {
+		$('#evseconipevse').show();
+	}
 
 }
 
@@ -1323,7 +1387,25 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
 		<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo selected ?> value="mpm3pmtripple">openWB Tripple</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo selected ?> value="mpm3pmlllp1">openWB Satellit</option>
+
 	</select>
+</div>
+<div id="mpm3pmlllp1div">
+	<div class="row bg-info">
+		<b><label for="mpmlp1ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo $mpmlp1ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp1id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp1id" id="mpmlp1id" value="<?php echo $mpmlp1idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
 </div>
 
 <div id="llmnone">
@@ -1488,7 +1570,12 @@ function display_llmp1() {
 	$('#rs485lanlp1').hide();
 	$('#llmfsm').hide();
 	$('#httpll').hide();
+	$('#mpm3pmlllp1div').hide();
 
+
+	if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
+		$('#mpm3pmlllp1div').show();
+	}
 	if($('#ladeleistungmodul').val() == 'none') {
 		$('#llmnone').show();
 	}
@@ -1868,11 +1955,28 @@ $(function() {
 			<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
 			<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo selected ?> value="openwb12s1">openWB series1/2 Duo</option>
+			<option <?php if($evsecons1old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
 
 
 
 		</select>
 	</div>
+<div id="evseconipevselp2">
+<div class="row bg-info">
+	<b><label for="evseiplp2">IP Adresse:</label></b>
+	<input type="text" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp2">EVSE ID:</label></b>
+	<input type="text" name="evseidlp2" id="evseidlp2" value="<?php echo $evseidlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+</div>
 <div id="openwb12s1">
 	<div class="row bg-success">
 	Keine Konfiguration erforderlich.<br>
@@ -2008,6 +2112,11 @@ function display_lp2() {
 	$('#evseconkebas1').hide();
 	$('#evseconnrgkicks1').hide();
 	$('#openwb12s1').hide();
+	$('#evseconipevselp2').hide();
+	if($('#evsecons1').val() == 'ipevse') {
+		$('#evseconipevselp2').show();
+		$('#llmodullp2').show();
+	}
 
 	if($('#evsecons1').val() == 'dac') {
 		$('#evsecondacs1').show();
@@ -2056,13 +2165,28 @@ $(function() {
 			<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
 			<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo selected ?> value="mpm3pmtripplelp2">openWB Tripple</option>
-
+			<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo selected ?> value="mpm3pmlllp2">openWB Satelit</option>
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
-
+<div id="mpm3pmlllp2div">
+	<div class="row bg-info">
+		<b><label for="mpmlp2ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo $mpmlp2ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp2id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp2id" id="mpmlp2id" value="<?php echo $mpmlp2idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
 
 
 <div id="mpm3pmlls1div">
@@ -2383,7 +2507,7 @@ function display_llmp2() {
 	$('#swifis1div').hide();
 	$('#mpm3pmlls1div').hide();
 	$('#rs485laniplp2').hide();
-
+	$('#mpm3pmlllp2div').hide();
 	if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
 		$('#sdm630s1div').show();
 		$('#rs485laniplp2').show();
@@ -2397,7 +2521,11 @@ function display_llmp2() {
 	}
     if($('#ladeleistungs1modul').val() == 'goelp2') {
 		$('#swifis1div').show();
+    }
+    if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
+		$('#mpm3pmlllp2div').show();
 	}
+
 	if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 		$('#mpm3pmlls1div').show();
 		$('#rs485laniplp2').show();
@@ -2521,9 +2649,25 @@ $(function() {
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
-
+			<option <?php if($evsecons2old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
 		</select>
 	</div>
+<div id="evseconipevselp3">
+<div class="row bg-info">
+	<b><label for="evseiplp3">IP Adresse:</label></b>
+	<input type="text" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp3">EVSE ID:</label></b>
+	<input type="text" name="evseidlp3" id="evseidlp3" value="<?php echo $evseidlp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+</div>
 	<div id="evseconmbs2">
 		<div class="row">
 			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br>Zudem gibt es einen Bug das die EVSE ID der EVSE DIN sich nicht verstellen und speichern lässt!<br><br>
@@ -2602,6 +2746,8 @@ function display_lp3 () {
 	$('#evseconswifis2').hide();
 	$('#llmodullp3').hide();
 	$('#evsecongoes2').hide();
+	$('#evseconipevselp3').hide();
+
 
 	if($('#evsecons2').val() == 'dac') {
 		$('#evsecondacs2').show();
@@ -2616,6 +2762,10 @@ function display_lp3 () {
 	}
 	if($('#evsecons2').val() == 'goe') {
 		$('#evsecongoes2').show();
+	}
+	if($('#evsecons2').val() == 'ipevse') {
+		$('#evseconipevselp3').show();
+		$('#llmodullp3').show();
 	}
 }
 
@@ -2637,11 +2787,29 @@ $(function() {
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
 			<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo selected ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo selected ?> value="mpm3pmlllp3">openWB Satellit</option>
+
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
 	</div>
+<div id="mpm3pmlllp3div">
+	<div class="row bg-info">
+		<b><label for="mpmlp3ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp3id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
 	<div id="swifis2div">
 		<div class="row">
 			Keine Konfiguration erforderlich.<br>
@@ -2733,6 +2901,13 @@ function display_llmp3 () {
 	$('#swifis2div').hide();
 	$('#rs485lanlp3').hide();
 	$('#mpm3pmlls2div').hide();
+	$('#mpm3pmlllp3div').hide();
+
+
+	if($('#ladeleistungss2modul').val() == 'mpm3pmlllp3') {
+		$('#mpm3pmlllp3div').show();
+		$('#rs485lanlp3').show();
+	}
 
 	if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
 		$('#sdm630s2div').show();

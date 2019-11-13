@@ -15,7 +15,7 @@
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<h3>openWB Charge Controller </h3>
+		<h3>Charge Controller </h3>
 	</div>
 </div>
 
@@ -53,7 +53,7 @@
 	</div>
 </div>
 	<div class="row">
-		<div class="col-xs-12 text-center" style="font-size: 1.5vw;">
+		<div class="col-xs-12 text-center" style="font-size: 1.5vw; display: none;">
 			<div id="hook1div" class="col-xs-2 text-center" style="font-size: 1.5vw;visibility: hidden">
 				Externes Gerät 1
 			</div>
@@ -82,7 +82,7 @@ echo '
 </div>';
 } ?>
 
-<div class="row col-xs-12 text-center">
+<div class="row col-xs-12 text-center" style="display: none;">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 		Nachtladen LP 1 aktiv
 	</div>
@@ -100,7 +100,7 @@ echo '
 
 
 <!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
+<div class="row col-xs-12 text-center" id="zielladenaktivlp1div" style="display: none;">
 	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 		Zielladen LP 1 aktiv
 	</div>
@@ -117,7 +117,7 @@ echo '
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladendiv"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw; display: none;">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
 		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
@@ -127,7 +127,7 @@ echo '
 	</div>
 </div>
 <!-- show values for second charging point -->
-<div class="row" id="lp2lldiv">
+<div class="row" id="lp2lldiv" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
 	</div>
@@ -138,7 +138,7 @@ echo '
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladenlp2div"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw; display: none;">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
 		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
@@ -255,11 +255,11 @@ echo '
 <div class="row">
 
 </div>
-<div class="col-xs-12 text-center">
+<div class="col-xs-12 text-center" style="display: none;">
 	<h5>Lademodus</h5>
 </div>
 <!-- change charging mode -->
-<div class="row">
+<div class="row" style="display: none;">
 	<div class="col-xs-6 text-center">
 		<div class="actstat">
                         <input type="submit" class="sofort btn btn-lg btn-block" style="font-size: 2vw" name="sofort" value="Sofort Laden">
@@ -272,7 +272,7 @@ echo '
 		</div>
 	</div>
 </div>
-<div class="row" style="font-size: 2vw;">
+<div class="row" style="font-size: 2vw; display: none;">
 	<div class="col-xs-3 text-center">
 		<div class="actstat4">
 	        	<input type="submit" class="standby btn btn-lg btn-block" style="font-size: 2vw" name="standby" value="Standby">
@@ -289,7 +289,7 @@ echo '
 		</div>
 	</div>
 </div>
-<div class="row" id="speicherpvuidiv">
+<div class="row" id="speicherpvuidiv" style="display: none;">
 	<div class="col-xs-6"></div>
 	<div class="col-xs-3 pull-right">
 	<?php
@@ -302,7 +302,7 @@ echo '
 	</div>
 
 </div>
-<div class="row">
+<div class="row" style="display: none;">
 	<hr>
 	<div class="row">
 		<div class="col-xs-12 text-center">
@@ -403,11 +403,11 @@ echo '
 	<hr>
 </div>
 <!-- depending on charge mode show options -->
-<div id="sofortlmdiv">
+<div id="sofortlmdiv" style="display: none;">
 	<form name="sofortll" action="./tools/sofortll.php" method="POST">
 		<div class="row">
 			<div class="col-xs-12 text-center">
-				<div class="col-xs-4 text-center" style="font-size: 2vw;">
+				<div class="col-xs-4 text-center" style="font-size: 2vw; display: none;">
 					<label for="msmoduslp1"></label>
 
 					<select type="text" name="msmoduslp1" id="msmoduslp1">
@@ -474,7 +474,7 @@ echo '
 				</div>
 
 				<span id="ladepunkts111111div">
-			<div class="col-xs-4 text-center" style="font-size: 2vw;">
+			<div class="col-xs-4 text-center" style="font-size: 2vw; display: none;">
 						<label for="msmoduslp2"></label>
 
 						<select type="text" name="msmoduslp2" id="msmoduslp2">
@@ -551,7 +551,7 @@ echo '
 
 
 			<span id="ladepunkts222222div">
-					<div class="col-xs-4 text-center" style="font-size: 2vw;">
+					<div class="col-xs-4 text-center" style="font-size: 2vw; display: none;">
 
 						<label for="lademstats2"></label>
 
@@ -599,7 +599,7 @@ echo '
 <div class="row">
 	<div class="col-xs-12 text-center">
 
-		<div class="col-xs-12 text-center">
+		<div class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-12 tex-center"><hr>
 				<h5>Sofortladen Stromstärke</h5><br><br>
 
@@ -622,7 +622,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider2div" class="col-xs-12 text-center">
+		<div id="slider2div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
 				
@@ -639,7 +639,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div id="slider3div" class="col-xs-12 text-center">
+		<div id="slider3div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s">
 				
@@ -746,7 +746,7 @@ echo '
 				}
 			</script>
 		</div>
-		<div class="col-xs-12 text-center"><br><br>
+		<div class="col-xs-12 text-center" style="display: none;"><br><br>
 			<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>
 		</div>
 		<br><br><br>
@@ -769,7 +769,7 @@ echo '
 			<a href="status.php" class="btn btn-lg btn-blue" >Status</a>
 			</div
 	</div>
-	<div class="row">
+	<div class="row" style="display: none;">
 		<div class="col-xs-4">
 		</div>
 		<div class="col-xs-4 text-center">

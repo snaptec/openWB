@@ -13,7 +13,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>OpenWB Logging</title>
+	<title>Logging</title>
 	<meta name="description" content="Control your charge" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
@@ -41,7 +41,12 @@
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
-					}
+		if(strpos($line, "simplemode=") !== false) {
+			list(, $simplemodeold) = explode("=", $line);
+		}
+
+	}
+
 					?>
 
 
@@ -60,7 +65,9 @@
 
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="Preloader image">
+<?php if ( $simplemodeold == 1 ) {
+echo '	<img src="../img/loading.gif" alt="loading...">';} else {
+echo '<img src="../img/loader.gif" alt="openWB loading...">'; } ?>
 	</div>
 <section id="services">
 

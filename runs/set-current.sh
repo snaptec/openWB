@@ -241,7 +241,7 @@ function setChargingCurrent () {
 		setChargingCurrenttwcmanager $current $twcmanagerlp1ip
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		setChargingCurrentIpModbus $current $evseip $modbusevseid 
+		setChargingCurrentIpModbus $current $evseip $modbusevseid
 	fi
 }
 
@@ -353,6 +353,9 @@ fi
 
 # set charging current - first charging point
 if [[ $points == "all" ]] || [[ $points == "m" ]]; then
+		evseip=$evseiplp1
+		modbusevseid=$evseidlp1
+
 	if (( lp1enabled == 0 )); then
 		oldcurrent=$current
 		current=0

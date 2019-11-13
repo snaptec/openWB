@@ -1017,6 +1017,9 @@ loadstatuslog();
         if (strpos($line, "lp3name=") !== false) {
             list(, $lp3nameold) = explode("=", $line);
 	}
+        if (strpos($line, "simplemode=") !== false) {
+            list(, $simplemodeold) = explode("=", $line);
+	}
         if (strpos($line, "verbraucher1_name=") !== false) {
             list(, $verbraucher1_nameold) = explode("=", $line);
         }
@@ -1044,13 +1047,15 @@ loadstatuslog();
 
 <body>
 	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
+<?php if ( $simplemodeold == 1 ) {
+echo '	<img src="../img/loading.gif" alt="loading...">';} else {
+echo '<img src="../img/loader.gif" alt="openWB loading...">'; } ?>
 	</div>
 	<section id="services">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h3> OpenWB Status </h3>
+					<h3> Status </h3>
 				</div>
 			</div>
 			<br><br>

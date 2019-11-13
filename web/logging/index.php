@@ -15,7 +15,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>OpenWB Logging</title>
+	<title>Live Langzeitansicht</title>
 	<meta name="description" content="Control your charge" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
@@ -57,6 +57,10 @@
 		if(strpos($line, "lastmanagement=") !== false) {
 			list(, $lastmanagementold) = explode("=", $line);
 		}
+		if(strpos($line, "simplemode=") !== false) {
+			list(, $simplemodeold) = explode("=", $line);
+		}
+
 	}
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
@@ -79,13 +83,15 @@ $verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
 		 </ul>
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="OpenWB loading...">
+<?php if ( $simplemodeold == 1 ) {
+echo '	<img src="../img/loading.gif" alt="loading...">';} else {
+echo '<img src="../img/loader.gif" alt="OpenWB loading...">'; } ?>
 	</div>
 
 
 <div class="row">
 	<div class="text-center">
-		<br><h3> OpenWB Logging</h3><br>
+		<br><h3> Langzeit Live Logging</h3><br>
 	</div>
 </div>
 

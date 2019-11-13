@@ -84,35 +84,51 @@ def on_message(client, userdata, msg):
             client.publish("openWB/lp8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortll=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp1sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp1/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp2/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlls1=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp2sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp2/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp3/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlls2=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp3sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp3/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp4/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlllp4=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp4sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp4/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp5/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlllp5=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp5sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp5/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp8/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlllp8=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp8sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp8/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp6/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlllp6=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp6sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp6/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp7/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            replaceAll("sofortlllp7=",msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/lp7sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
             client.publish("openWB/lp7/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/boolResetDirectCharge"):
         if (int(msg.payload) == 1):
