@@ -354,7 +354,7 @@ fi
 # set charging current - first charging point
 if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 		evseip=$evseiplp1
-		modbusevseid=$evseidlp1
+		#modbusevseid=$evseidlp1
 
 	if (( lp1enabled == 0 )); then
 		oldcurrent=$current
