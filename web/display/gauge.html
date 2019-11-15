@@ -328,10 +328,11 @@ echo '
 		<div class="col-xs-3">
 		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP1 (de-)aktivieren" onclick="lp1checkenabledclick();" />
 		</div>
-
+	<?php if ( $lastmanagementold == "1\n" ) { echo '
 		<div class="col-xs-3">
-		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP2 (de-)aktivieren" onclick="lp2checkenabledclick();" />
-		</div>
+		<input id="lp2checkenabled" type="button" class="btn btn-blue btn-block" value="LP2 (de-)aktivieren" onclick="lp2checkenabledclick();" />
+		</div>'; } else { echo '
+		<div class="col-xs-3"></div>'; } ?>
         <div class=" col-xs-2"> 
 			<input type="submit" class="1einstellungen btn btn-blue btn-block"  name="graph" value="Status">
 
