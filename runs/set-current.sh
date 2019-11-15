@@ -77,9 +77,9 @@ function setChargingCurrentModbus () {
 function setChargingCurrentIpModbus () {
 	current=$1
 	evseip=$2
-	modbusevseid=$3
+	ipevseid=$3
 	# set desired charging current
-	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $modbusevseid
+	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
 }
 
 
@@ -241,7 +241,7 @@ function setChargingCurrent () {
 		setChargingCurrenttwcmanager $current $twcmanagerlp1ip
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		setChargingCurrentIpModbus $current $evseip $modbusevseid
+		setChargingCurrentIpModbus $current $evseip $ipevseid
 	fi
 }
 
@@ -354,7 +354,7 @@ fi
 # set charging current - first charging point
 if [[ $points == "all" ]] || [[ $points == "m" ]]; then
 		evseip=$evseiplp1
-		#modbusevseid=$evseidlp1
+		ipevseid=$evseidlp1
 
 	if (( lp1enabled == 0 )); then
 		oldcurrent=$current
@@ -387,7 +387,7 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkickmaclp1=$nrgkickmaclp2
 		nrgkickpwlp1=$nrgkickpwlp2
 		evseip=$evseiplp2
-		modbusevseid=$evseidlp2
+		ipevseid=$evseidlp2
 
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
@@ -417,7 +417,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		goeiplp1=$goeiplp3
 		goetimeoutlp1=$goetimeoutlp3
 		evseip=$evseiplp3
-		modbusevseid=$evseidlp3
+		ipevseid=$evseidlp3
 
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
@@ -437,7 +437,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "lp4" ]]; then
 		evsecon=$evseconlp4
 		evseip=$evseiplp4
-		modbusevseid=$evseidlp4
+		ipevseid=$evseidlp4
 		if (( lp4enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -456,7 +456,7 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then 
 		evsecon=$evseconlp5
 		evseip=$evseiplp5
-		modbusevseid=$evseidlp5
+		ipevseid=$evseidlp5
 		if (( lp5enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -475,7 +475,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then 
 		evsecon=$evseconlp6
 		evseip=$evseiplp6
-		modbusevseid=$evseidlp6
+		ipevseid=$evseidlp6
 		if (( lp6enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -494,7 +494,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then 
 		evsecon=$evseconlp7
 		evseip=$evseiplp7
-		modbusevseid=$evseidlp7
+		ipevseid=$evseidlp7
 		if (( lp7enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -513,7 +513,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then 
 		evsecon=$evseconlp8
 		evseip=$evseiplp8
-		modbusevseid=$evseidlp8
+		ipevseid=$evseidlp8
 		if (( lp8enabled == 0 )); then
 			oldcurrent=$current
 			current=0
