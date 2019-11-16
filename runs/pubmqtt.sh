@@ -158,7 +158,7 @@ for mq in "${!mqttvar[@]}"; do
 	tempoldname=o${mqttvar[$mq]}
 	tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
 	tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
-	if [[ "$tempoldname" != "!$tempnewname" ]]; then
+	if [[ "$tempoldname" != "$tempnewname" ]]; then
 		tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
 		echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
 	fi
