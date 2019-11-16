@@ -148,6 +148,8 @@ mqttvar["lp6/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp6
 mqttvar["lp7/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp7
 mqttvar["lp8/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp8
 
+
+tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
 	declare ${mqttvar[$mq]}
@@ -156,13 +158,15 @@ for mq in "${!mqttvar[@]}"; do
 	tempoldname=o${mqttvar[$mq]}
 	tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
 	tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
-	if [[ "$tempoldname" != "$tempnewname" ]]; then
-		mosquitto_pub -t openWB/$mq -r -m "$tempnewname"
-		#echo "neu  $mq $tempnewname"
+	if [[ "$tempoldname" != "!$tempnewname" ]]; then
+		tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
 		echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
 	fi
 	#echo ${mqttvar[$mq]} $mq 
 done
 
+#echo "Publist:"
+#echo -e $tempPubList
 
-
+#echo "Running Python:"
+echo -e $tempPubList | python3 runs/mqttpub.py -q 2 -r
