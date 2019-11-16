@@ -24,5 +24,7 @@ def main():
       #print("Publishing '%s' :: '%s'" % (m.group(1), m.group(2)))
       client.publish(m.group(1), payload=m.group(2), qos=args.qos, retain=args.retain)
 
+  client.loop(timeout=2.0)
+
 if __name__ == "__main__":
     main()
