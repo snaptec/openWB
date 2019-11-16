@@ -1025,11 +1025,11 @@ client.onMessageArrived = function (message) {
 		handlevar(message.destinationName, message.payloadString, thevar[0], thevar[1]);
 	});
 };
-
+var retries = 5;
 
 //Connect Options
 var options = {
-	timeout: 3,
+	timeout: 5,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		thevalues.forEach(function(thevar) {
@@ -1038,8 +1038,12 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		alert("Connection failed: " + message.errorMessage);
-	}
+		if ( retries < 5 ) {
+			retries = retries + 1;
+			client.connect(options);
+		} else {
+		alert("Verbindung zum openWB WebSocekt Port 9001 nicht möglich. Netzwerkkonnektivität prüfen");
+	 }}
 	};
 
 //Creates a new Messaging.Message Object and sends it 
