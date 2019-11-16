@@ -9,7 +9,7 @@ import argparse
 def main():
 
   parser = argparse.ArgumentParser(description='OpenWB MQTT Publisher')
-  parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=2)
+  parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
   parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
   parser.set_defaults(retain=False)
 
