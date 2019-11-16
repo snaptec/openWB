@@ -1025,13 +1025,14 @@ client.onMessageArrived = function (message) {
 		handlevar(message.destinationName, message.payloadString, thevar[0], thevar[1]);
 	});
 };
-var retries = 5;
+var retries = 0;
 
 //Connect Options
 var options = {
 	timeout: 5,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
+		retries = 0;
 		thevalues.forEach(function(thevar) {
 			client.subscribe(thevar[0], {qos: 0});
 		});
