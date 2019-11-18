@@ -72,7 +72,7 @@ f.close()
 #resp = client.read_input_registers(0x0E,2, unit=5)
 #lla1 = resp.registers[1]
 #lla1 = float(lla1) / 100
-lla1=int(float(finalw1) / float(voltage1)) 
+lla1=round(float(float(finalw1) / float(voltage1)), 2)
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
 f.write(str(lla1))
 f.close()
@@ -80,7 +80,7 @@ f.close()
 #resp = client.read_input_registers(0x10,2, unit=5)
 #lla2 = resp.registers[1]
 #lla2 = float(lla2) / 100
-lla2=int(float(finalw2) / float(voltage2)) 
+lla2=round(float(float(finalw2) / float(voltage2)), 2)
 f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
 f.write(str(lla2))
 f.close()
@@ -88,7 +88,7 @@ f.close()
 #resp = client.read_input_registers(0x12,2, unit=5)
 #lla3 = resp.registers[1]
 #lla3 = float(lla3) / 100
-lla3=int(float(finalw3) / float(voltage3)) 
+lla3=round(float(float(finalw3) / float(voltage3)), 2) 
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
 f.write(str(lla3))
 f.close()
