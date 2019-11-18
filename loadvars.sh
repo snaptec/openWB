@@ -954,7 +954,9 @@ if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	mosquitto_pub -t openWB/boolDisplayHouseBatteryPriority -r -m "$speicherpvui"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
 fi
-
+mosquitto_pub -t openWB/system/Uptime -r -m "$(uptime)"
+mosquitto_pub -t openWB/system/Date -r -m "$(date)"
+mosquitto_pub -t openWB/system/Timestamp -r -m "$(date +%s)"
 runs/pubmqtt.sh &
 
 }
