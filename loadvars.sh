@@ -587,17 +587,20 @@ if [[ $debug == "1" ]]; then
 
 
 fi
+
+tempPubList=""
+
 if (( opvwatt != pvwatt )); then
-	mosquitto_pub -t openWB/pv/W -r -m "$pvwatt"
+	tempPubList="${tempPubList}\nopenWB/pv/W=${pvwatt}"
 fi
 if (( owattbezug != wattbezug )); then
-	mosquitto_pub -t openWB/evu/W -r -m "$wattbezug"
+	tempPubList="${tempPubList}\nopenWB/evu/W=${wattbezug}"
 fi
 if (( ollaktuell != ladeleistunglp1 )); then
-	mosquitto_pub -t openWB/lp1/W -r -m "$ladeleistunglp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/W=${ladeleistunglp1}"
 fi
 if (( oladestatus != ladestatus )); then
-	mosquitto_pub -t openWB/ChargeStatus -m "$ladestatus"
+	tempPubList="${tempPubList}\nopenWB/ChargeStatus=${ladelestatus}"
 	echo $ladestatus > ramdisk/mqttlastladestatus
 fi
 if (( olademodus != lademodus )); then
@@ -605,28 +608,28 @@ if (( olademodus != lademodus )); then
 	echo $lademodus > ramdisk/mqttlastlademodus
 fi
 if (( ohausverbrauch != hausverbrauch )); then
-	mosquitto_pub -t openWB/WHouseConsumption -r -m "$hausverbrauch"
+	tempPubList="${tempPubList}\nopenWB/WHouseConsumption=${hausverbrauch}"
 fi
 if (( ollaktuells1 != ladeleistungs1 )); then
-	mosquitto_pub -t openWB/lp2/W -r -m "$ladeleistungs1"
+	tempPubList="${tempPubList}\nopenWB/lp2/W=${ladeleistungs1}"
 fi
 if (( ollaktuells2 != ladeleistungs2 )); then
-	mosquitto_pub -t openWB/lp3/W -r -m "$ladeleistungs2"
+	tempPubList="${tempPubList}\nopenWB/lp3/W=${ladeleistungs2}"
 fi
 if (( ollkombiniert != ladeleistung )); then
-	mosquitto_pub -t openWB/WAllChargePoints -r -m "$ladeleistung"
+	tempPubList="${tempPubList}\nopenWB/WAllChargePoints=${ladeleistung}"
 fi
 if (( ospeicherleistung != speicherleistung )); then
-	mosquitto_pub -t openWB/housebattery/W -r -m "$speicherleistung"
+	tempPubList="${tempPubList}\nopenWB/housebattery/W=${speicherleistung}"
 fi
 if (( ospeichersoc != speichersoc )); then
-	mosquitto_pub -t openWB/housebattery/%Soc -r -m "$speichersoc"
+	tempPubList="${tempPubList}\nopenWB/housebattery/%Soc=${speichersoc}"
 fi
 if (( osoc != soc )); then
-	mosquitto_pub -t openWB/lp1/%Soc -r -m "$soc"
+	tempPubList="${tempPubList}\nopenWB/lp1/%Soc=${soc}"
 fi
 if (( osoc1 != soc1 )); then
-	mosquitto_pub -t openWB/lp2/%Soc -r -m "$soc1"
+	tempPubList="${tempPubList}\nopenWB/lp2/%Soc=${soc1}"
 fi
 
 dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
@@ -644,319 +647,320 @@ hook1aktiv=$(<ramdisk/hook1akt)
 hook2aktiv=$(<ramdisk/hook2akt)
 hook3aktiv=$(<ramdisk/hook3akt)
 if [[ "$odailychargelp1" != "$dailychargelp1" ]]; then
-	mosquitto_pub -t openWB/lp1/kWhDailyCharged -r -m "$dailychargelp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/kWhDailyCharged=${dailychargelp1}"
 	echo $dailychargelp1 > ramdisk/mqttdailychargelp1
 fi
 if [[ "$odailychargelp2" != "$dailychargelp2" ]]; then
-	mosquitto_pub -t openWB/lp2/kWhDailyCharged -r -m "$dailychargelp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/kWhDailyCharged=${dailychargelp2}"
 	echo $dailychargelp2 > ramdisk/mqttdailychargelp2
 fi
 if [[ "$odailychargelp3" != "$dailychargelp3" ]]; then
-	mosquitto_pub -t openWB/lp3/kWhDailyCharged -r -m "$dailychargelp3"
+	tempPubList="${tempPubList}\nopenWB/lp3/kWhDailyCharged=${dailychargelp3}"
 	echo $dailychargelp3 > ramdisk/mqttdailychargelp3
 fi
 if [[ "$orestzeitlp1" != "$restzeitlp1" ]]; then
-	mosquitto_pub -t openWB/lp1/TimeRemaining -r -m "$restzeitlp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/TimeRemaining=${restzeitlp1}"
 	echo $restzeitlp1 > ramdisk/mqttrestzeitlp1
 fi
 if [[ "$orestzeitlp2" != "$restzeitlp2" ]]; then
-	mosquitto_pub -t openWB/lp2/TimeRemaining -r -m "$restzeitlp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/TimeRemaining=${restzeitlp2}"
 	echo $restzeitlp2 > ramdisk/mqttrestzeitlp2
 fi
 if [[ "$orestzeitlp3" != "$restzeitlp3" ]]; then
-	mosquitto_pub -t openWB/lp3/TimeRemaining -r -m "$restzeitlp3"
+	tempPubList="${tempPubList}\nopenWB/lp3/TimeRemaining=${restzeitlp3}"
 	echo $restzeitlp3 > ramdisk/mqttrestzeitlp3
 fi
 if (( ogelrlp1 != gelrlp1 )); then
-	mosquitto_pub -t openWB/lp1/kmCharged -r -m "$gelrlp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/kmCharged=${gelrlp1}"
 	echo $gelrlp1 > ramdisk/mqttgelrlp1
 fi
 if (( ogelrlp2 != gelrlp2 )); then
-	mosquitto_pub -t openWB/lp2/kmCharged -r -m "$gelrlp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/kmCharged=${gelrlp2}"
 	echo $gelrlp2 > ramdisk/mqttgelrlp2
 fi
 if (( ogelrlp3 != gelrlp3 )); then
-	mosquitto_pub -t openWB/lp3/kmCharged -r -m "$gelrlp3"
+	tempPubList="${tempPubList}\nopenWB/lp3/kmCharged=${gelrlp3}"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
 
 if (( ohook1aktiv != hook1aktiv )); then
-	mosquitto_pub -t openWB/boolHook1Active -r -m "$hook1aktiv"
+	tempPubList="${tempPubList}\nopenWB/boolHook1Active=${hook1aktiv}"
 	echo $hook1aktiv > ramdisk/mqtthook1aktiv
 fi
 if (( ohook2aktiv != hook2aktiv )); then
-	mosquitto_pub -t openWB/boolHook2Active -r -m "$hook2aktiv"
+	tempPubList="${tempPubList}\nopenWB/boolHook2Active=${hook2aktiv}"
 	echo $hook2aktiv > ramdisk/mqtthook2aktiv
 fi
 if (( ohook3aktiv != hook3aktiv )); then
-	mosquitto_pub -t openWB/boolHook3Active -r -m "$hook3aktiv"
+	tempPubList="${tempPubList}\nopenWB/boolHook3Active=${hook3aktiv}"
 	echo $hook3aktiv > ramdisk/mqtthook3aktiv
 fi
 ominimalstromstaerke=$(<ramdisk/mqttminimalstromstaerke)
 if (( ominimalstromstaerke != minimalstromstaerke )); then
-	mosquitto_pub -t openWB/AMinimalAmpsConfigured -r -m "$minimalstromstaerke"
+	tempPubList="${tempPubList}\nopenWB/AMinimalAmpsConfigured=${minimalstromstaerke}"
 	echo $minimalstromstaerke > ramdisk/mqttminimalstromstaerke
 fi
 omaximalstromstaerke=$(<ramdisk/mqttmaximalstromstaerke)
 if (( omaximalstromstaerke != maximalstromstaerke )); then
-	mosquitto_pub -t openWB/AMaximalAmpsConfigured -r -m "$maximalstromstaerke"
+	tempPubList="${tempPubList}\nopenWB/AMaximalAmpsConfigured=${maximalstromstaerke}"
 	echo $maximalstromstaerke > ramdisk/mqttmaximalstromstaerke
 fi
 osofortll=$(<ramdisk/mqttsofortll)
 if (( osofortll != sofortll )); then
-	mosquitto_pub -t openWB/lp1/ADirectModeAmps -r -m "$sofortll"
+	tempPubList="${tempPubList}\nopenWB/lp1/ADirectModeAmps=${sofortll}"
 	echo $sofortll > ramdisk/mqttsofortll
 fi
 osofortlls1=$(<ramdisk/mqttsofortlls1)
 if (( osofortlls1 != sofortlls1 )); then
-	mosquitto_pub -t openWB/lp2/ADirectModeAmps -r -m "$sofortlls1"
+	tempPubList="${tempPubList}\nopenWB/lp2/ADirectModeAmps=${sofortlls1}"
 	echo $sofortlls1 > ramdisk/mqttsofortlls1
 fi
 osofortlls2=$(<ramdisk/mqttsofortlls2)
 if (( osofortlls2 != sofortlls2 )); then
-	mosquitto_pub -t openWB/lp3/ADirectModeAmps -r -m "$sofortlls2"
+	tempPubList="${tempPubList}\nopenWB/lp3/ADirectModeAmps=${sofortlls2}"
 	echo $sofortlls2 > ramdisk/mqttsofortlls2
 fi
 osofortlllp4=$(<ramdisk/mqttsofortlllp4)
 if (( osofortlllp4 != sofortlllp4 )); then
-	mosquitto_pub -t openWB/lp4/ADirectModeAmps -r -m "$sofortlllp4"
+	tempPubList="${tempPubList}\nopenWB/lp4/ADirectModeAmps=${sofortlllp4}"
 	echo $sofortlllp4 > ramdisk/mqttsofortlllp4
 fi
 osofortlllp5=$(<ramdisk/mqttsofortlllp5)
 if (( osofortlllp5 != sofortlllp5 )); then
-	mosquitto_pub -t openWB/lp5/ADirectModeAmps -r -m "$sofortlllp5"
+	tempPubList="${tempPubList}\nopenWB/lp5/ADirectModeAmps=${sofortlllp5}"
 	echo $sofortlllp5 > ramdisk/mqttsofortlllp5
 fi
 osofortlllp6=$(<ramdisk/mqttsofortlllp6)
 if (( osofortlllp6 != sofortlllp6 )); then
-	mosquitto_pub -t openWB/lp6/ADirectModeAmps -r -m "$sofortlllp6"
+	tempPubList="${tempPubList}\nopenWB/lp6/ADirectModeAmps=${sofortlllp6}"
 	echo $sofortlllp6 > ramdisk/mqttsofortlllp6
 fi
 osofortlllp7=$(<ramdisk/mqttsofortlllp7)
 if (( osofortlllp7 != sofortlllp7 )); then
-	mosquitto_pub -t openWB/lp7/ADirectModeAmps -r -m "$sofortlllp7"
+	tempPubList="${tempPubList}\nopenWB/lp7/ADirectModeAmps=${sofortlllp7}"
 	echo $sofortlllp7 > ramdisk/mqttsofortlllp7
 fi
 osofortlllp8=$(<ramdisk/mqttsofortlllp8)
 if (( osofortlllp8 != sofortlllp8 )); then
-	mosquitto_pub -t openWB/lp8/ADirectModeAmps -r -m "$sofortlllp8"
+	tempPubList="${tempPubList}\nopenWB/lp8/ADirectModeAmps=${sofortlllp8}"
 	echo $sofortlllp8 > ramdisk/mqttsofortlllp8
 fi
 
 olastmanagement=$(<ramdisk/mqttlastmanagement)
 if [[ "$olastmanagement" != "$lastmanagement" ]]; then
-	mosquitto_pub -t openWB/lp2/boolChargePointConfigured -r -m "$lastmanagement"
+	tempPubList="${tempPubList}\nopenWB/lp2/boolChargePointConfigured=${lastmanagement}"
 	echo $lastmanagement > ramdisk/mqttlastmanagement
 fi
 olastmanagements2=$(<ramdisk/mqttlastmanagements2)
 if [[ "$olastmanagements2" != "$lastmanagements2" ]]; then
-	mosquitto_pub -t openWB/lp3/boolChargePointConfigured -r -m "$lastmanagements2"
+	tempPubList="${tempPubList}\nopenWB/lp3/boolChargePointConfigured=${lastmanagements2}"
 	echo $lastmanagements2 > ramdisk/mqttlastmanagements2
 fi
 olastmanagementlp4=$(<ramdisk/mqttlastmanagementlp4)
 if [[ "$olastmanagementlp4" != "$lastmanagementlp4" ]]; then
-	mosquitto_pub -t openWB/lp4/boolChargePointConfigured -r -m "$lastmanagementlp4"
+	tempPubList="${tempPubList}\nopenWB/lp4/boolChargePointConfigured=${lastmanagementlp4}"
 	echo $lastmanagementlp4 > ramdisk/mqttlastmanagementlp4
 fi
 olastmanagementlp5=$(<ramdisk/mqttlastmanagementlp5)
 if [[ "$olastmanagementlp5" != "$lastmanagementlp5" ]]; then
-	mosquitto_pub -t openWB/lp5/boolChargePointConfigured -r -m "$lastmanagementlp5"
+	tempPubList="${tempPubList}\nopenWB/lp5/boolChargePointConfigured=${lastmanagementlp5}"
 	echo $lastmanagementlp5 > ramdisk/mqttlastmanagementlp5
 fi
 olastmanagementlp6=$(<ramdisk/mqttlastmanagementlp6)
 if [[ "$olastmanagementlp6" != "$lastmanagementlp6" ]]; then
-	mosquitto_pub -t openWB/lp6/boolChargePointConfigured -r -m "$lastmanagementlp6"
+	tempPubList="${tempPubList}\nopenWB/lp6/boolChargePointConfigured=${lastmanagementlp6}"
 	echo $lastmanagementlp6 > ramdisk/mqttlastmanagementlp6
 fi
 olastmanagementlp7=$(<ramdisk/mqttlastmanagementlp7)
 if [[ "$olastmanagementlp7" != "$lastmanagementlp7" ]]; then
-	mosquitto_pub -t openWB/lp7/boolChargePointConfigured -r -m "$lastmanagementlp7"
+	tempPubList="${tempPubList}\nopenWB/lp7/boolChargePointConfigured=${lastmanagementlp7}"
 	echo $lastmanagementlp7 > ramdisk/mqttlastmanagementlp7
 fi
 olastmanagementlp8=$(<ramdisk/mqttlastmanagementlp8)
 if [[ "$olastmanagementlp8" != "$lastmanagementlp8" ]]; then
-	mosquitto_pub -t openWB/lp8/boolChargePointConfigured -r -m "$lastmanagementlp8"
+	tempPubList="${tempPubList}\nopenWB/lp8/boolChargePointConfigured=${lastmanagementlp8}"
 	echo $lastmanagementlp8 > ramdisk/mqttlastmanagementlp8
 fi
 olademstat=$(<ramdisk/mqttlademstat)
 if [[ "$olademstat" != "$lademstat" ]]; then
-	mosquitto_pub -t openWB/lp1/boolDirectModeChargekWh -r -m "$lademstat"
+	tempPubList="${tempPubList}\nopenWB/lp1/boolDirectModeChargekWh=${lademstat}"
 	echo $lademstat > ramdisk/mqttlademstat
 fi
 olademstats1=$(<ramdisk/mqttlademstats1)
 if [[ "$olademstats1" != "$lademstats1" ]]; then
-	mosquitto_pub -t openWB/lp2/boolDirectModeChargekWh -r -m "$lademstats1"
+	tempPubList="${tempPubList}\nopenWB/lp2/boolDirectModeChargekWh=${lademstats1}"
 	echo $lademstats1 > ramdisk/mqttlademstats1
 fi
 olademstats2=$(<ramdisk/mqttlademstats2)
 if [[ "$olademstats2" != "$lademstats2" ]]; then
-	mosquitto_pub -t openWB/lp3/boolDirectModeChargekWh -r -m "$lademstats2"
+	tempPubList="${tempPubList}\nopenWB/lp3/boolDirectModeChargekWh=${lademstats2}"
 	echo $lademstats2 > ramdisk/mqttlademstats2
 fi
 olademkwh=$(<ramdisk/mqttlademkwh)
 if (( olademkwh != lademkwh )); then
-	mosquitto_pub -t openWB/lp1/kWhDirectModeToChargekWh -r -m "$lademkwh"
+	tempPubList="${tempPubList}\nopenWB/lp1/kWhDirectModeToChargekWh=${lademkwh}"
 	echo $lademkwh > ramdisk/mqttlademkwh
 fi
 olademkwhs1=$(<ramdisk/mqttlademkwhs1)
 if (( olademkwhs1 != lademkwhs1 )); then
-	mosquitto_pub -t openWB/lp2/kWhDirectModeToChargekWh -r -m "$lademkwhs1"
+	tempPubList="${tempPubList}\nopenWB/lp2/kWhDirectModeToChargekWh=${lademkwhs1}"
 	echo $lademkwhs1 > ramdisk/mqttlademkwhs1
 fi
 olademkwhs2=$(<ramdisk/mqttlademkwhs2)
 if (( olademkwhs2 != lademkwhs2 )); then
-	mosquitto_pub -t openWB/lp3/kWhDirectModeToChargekWh -r -m "$lademkwhs2"
+	tempPubList="${tempPubList}\nopenWB/lp3/kWhDirectModeToChargekWh=${lademkwhs2}"
 	echo $lademkwhs2 > ramdisk/mqttlademkwhs2
 fi
 osofortsocstatlp1=$(<ramdisk/mqttsofortsocstatlp1)
 if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
-	mosquitto_pub -t openWB/lp1/boolDirectChargeModeSoc -r -m "$sofortsocstatlp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/boolDirectChargeModeSoc=${sofortsocstatlp1}"
 	echo $sofortsocstatlp1 > ramdisk/mqttsofortsocstatlp1
 fi
 osofortsoclp1=$(<ramdisk/mqttsofortsoclp1)
 if [[ "$osofortsoclp1" != "$sofortsoclp1" ]]; then
-	mosquitto_pub -t openWB/lp1/PercentDirectChargeModeSoc -r -m "$sofortsoclp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/PercentDirectChargeModeSoc=${sofortsoclp1}"
 	echo $sofortsoclp1 > ramdisk/mqttsofortsoclp1
 fi
 osofortsocstatlp2=$(<ramdisk/mqttsofortsocstatlp2)
 if [[ "$osofortsocstatlp2" != "$sofortsocstatlp2" ]]; then
-	mosquitto_pub -t openWB/lp2/boolDirectChargeModeSoc -r -m "$sofortsocstatlp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/boolDirectChargeModeSoc=${sofortsocstatlp2}"
 	echo $sofortsocstatlp2 > ramdisk/mqttsofortsocstatlp2
 fi
 osofortsoclp2=$(<ramdisk/mqttsofortsoclp2)
 if [[ "$osofortsoclp2" != "$sofortsoclp2" ]]; then
-	mosquitto_pub -t openWB/lp2/percentDirectChargeModeSoc -r -m "$sofortsoclp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/percentDirectChargeModeSoc=${sofortsoclp2}"
 	echo $sofortsoclp2 > ramdisk/mqttsofortsoclp2
 fi
 #osofortsocstatlp3=$(<ramdisk/mqttsofortsocstatlp3)
 #if (( osofortsocstatlp3 != sofortsocstatlp3 )); then
-#	mosquitto_pub -t openWB/boolsofortlademodussoclp3 -r -m "$sofortsocstatlp3"
+#	tempPubList="${tempPubList}\nopenWB/boolsofortlademodussoclp3=${sofortsocstatlp3}"
 #	echo $sofortsocstatlp3 > ramdisk/mqttsofortsocstatlp3
 #fi
 #osofortsoclp3=$(<ramdisk/mqttsofortsoclp3)
 #if (( osofortsoclp3 != sofortsoclp3 )); then
-#	mosquitto_pub -t openWB/percentsofortlademodussoclp3 -r -m "$sofortsoclp3"
+#	tempPubList="${tempPubList}\nopenWB/percentsofortlademodussoclp3=${sofortsoclp3}"
 #	echo $sofortsoclp3 > ramdisk/mqttsofortsoclp3
 #fi
 omsmoduslp1=$(<ramdisk/mqttmsmoduslp1)
 if [[ "$omsmoduslp1" != "$msmoduslp1" ]]; then
-	mosquitto_pub -t openWB/lp1/boolDirectChargeMode_none_kwh_soc -r -m "$msmoduslp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/boolDirectChargeMode_none_kwh_soc=${msmoduslp1}"
 	echo $msmoduslp1 > ramdisk/mqttmsmoduslp1
 fi
 omsmoduslp2=$(<ramdisk/mqttmsmoduslp2)
 if [[ "$omsmoduslp2" != "$msmoduslp2" ]]; then
-	mosquitto_pub -t openWB/lp2/boolDirectChargeMode_none_kwh_soc -r -m "$msmoduslp2"
+	tempPubList="${tempPubList}\nopenWB/lp2/boolDirectChargeMode_none_kwh_soc=${msmoduslp2}"
 	echo $msmoduslp2 > ramdisk/mqttmsmoduslp2
 fi
 ospeichervorhanden=$(<ramdisk/mqttspeichervorhanden)
 if (( ospeichervorhanden != speichervorhanden )); then
-	mosquitto_pub -t openWB/housebattery/boolHouseBatteryConfigured -r -m "$speichervorhanden"
+	tempPubList="${tempPubList}\nopenWB/housebattery/boolHouseBatteryConfigured=${speichervorhanden}"
 	echo $speichervorhanden > ramdisk/mqttspeichervorhanden
 fi
 olp1name=$(<ramdisk/mqttlp1name)
 if [[ "$olp1name" != "$lp1name" ]]; then
-	mosquitto_pub -t openWB/lp1/strChargePointName -r -m "$lp1name"
+	tempPubList="${tempPubList}\nopenWB/lp1/strChargePointName=${lp1name}"
 	echo $lp1name > ramdisk/mqttlp1name
 fi
 olp2name=$(<ramdisk/mqttlp2name)
 if [[ "$olp2name" != "$lp2name" ]]; then
-	mosquitto_pub -t openWB/lp2/strChargePointName -r -m "$lp2name"
+	tempPubList="${tempPubList}\nopenWB/lp2/strChargePointName=${lp2name}"
 	echo $lp2name > ramdisk/mqttlp2name
 fi
 olp3name=$(<ramdisk/mqttlp3name)
 if [[ "$olp3name" != "$lp3name" ]]; then
-	mosquitto_pub -t openWB/lp3/strChargePointName -r -m "$lp3name"
+	tempPubList="${tempPubList}\nopenWB/lp3/strChargePointName=${lp3name}"
 	echo $lp3name > ramdisk/mqttlp3name
 fi
 olp4name=$(<ramdisk/mqttlp4name)
 if [[ "$olp4name" != "$lp4name" ]]; then
-	mosquitto_pub -t openWB/lp4/strChargePointName -r -m "$lp4name"
+	tempPubList="${tempPubList}\nopenWB/lp4/strChargePointName=${lp4name}"
 	echo $lp4name > ramdisk/mqttlp4name
 fi
 olp5name=$(<ramdisk/mqttlp5name)
 if [[ "$olp5name" != "$lp5name" ]]; then
-	mosquitto_pub -t openWB/lp5/strChargePointName -r -m "$lp5name"
+	tempPubList="${tempPubList}\nopenWB/lp5/strChargePointName=${lp5name}"
 	echo $lp5name > ramdisk/mqttlp5name
 fi
 olp6name=$(<ramdisk/mqttlp6name)
 if [[ "$olp6name" != "$lp6name" ]]; then
-	mosquitto_pub -t openWB/lp6/strChargePointName -r -m "$lp6name"
+	tempPubList="${tempPubList}\nopenWB/lp6/strChargePointName=${lp6name}"
 	echo $lp6name > ramdisk/mqttlp6name
 fi
 olp7name=$(<ramdisk/mqttlp7name)
 if [[ "$olp7name" != "$lp7name" ]]; then
-	mosquitto_pub -t openWB/lp7/strChargePointName -r -m "$lp7name"
+	tempPubList="${tempPubList}\nopenWB/lp7/strChargePointName=${lp7name}"
 	echo $lp7name > ramdisk/mqttlp7name
 fi
 olp8name=$(<ramdisk/mqttlp8name)
 if [[ "$olp8name" != "$lp8name" ]]; then
-	mosquitto_pub -t openWB/lp8/strChargePointName -r -m "$lp8name"
+	tempPubList="${tempPubList}\nopenWB/lp8/strChargePointName=${lp8name}"
 	echo $lp8name > ramdisk/mqttlp8name
 fi
 ozielladenaktivlp1=$(<ramdisk/mqttzielladenaktivlp1)
 if [[ "$ozielladenaktivlp1" != "$zielladenaktivlp1" ]]; then
-	mosquitto_pub -t openWB/lp1/boolFinishAtTimeChargeActive -r -m "$zielladenaktivlp1"
+	tempPubList="${tempPubList}\nopenWB/lp1/boolFinishAtTimeChargeActive=${zielladenaktivlp1}"
 	echo $zielladenaktivlp1 > ramdisk/mqttzielladenaktivlp1
 fi
 onachtladen=$(<ramdisk/mqttnachtladen)
 if [[ "$onachtladen" != "$nachtladen" ]]; then
-	mosquitto_pub -t openWB/lp1/boolChargeAtNight -r -m "$nachtladen"
+	tempPubList="${tempPubList}\nopenWB/lp1/boolChargeAtNight=${nachtladen}"
 	echo $nachtladen > ramdisk/mqttnachtladen
 fi
 onachtladens1=$(<ramdisk/mqttnachtladens1)
 if [[ "$onachtladens1" != "$nachtladens1" ]]; then
-	mosquitto_pub -t openWB/lp2/boolChargeAtNight -r -m "$nachtladens1"
+	tempPubList="${tempPubList}\nopenWB/lp2/boolChargeAtNight=${nachtladens1}"
 	echo $nachtladens1 > ramdisk/mqttnachtladens1
 fi
 onlakt_sofort=$(<ramdisk/mqttnlakt_sofort)
 if [[ "$onlakt_sofort" != "$nlakt_sofort" ]]; then
-	mosquitto_pub -t openWB/boolChargeAtNight_direct -r -m "$nlakt_sofort"
+	tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_direct=${nlakt_sofort}"
 	echo $nlakt_sofort > ramdisk/mqttnlakt_sofort
 fi
 onlakt_nurpv=$(<ramdisk/mqttnlakt_nurpv)
 if [[ "$onlakt_nurpv" != "$nlakt_nurpv" ]]; then
-	mosquitto_pub -t openWB/boolChargeAtNight_nurpv -r -m "$nlakt_nurpv"
+	tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_nurpv=${nlakt_nurpv}"
 	echo $nlakt_nurpv > ramdisk/mqttnlakt_nurpv
 fi
 onlakt_minpv=$(<ramdisk/mqttnlakt_minpv)
 if [[ "$onlakt_minpv" != "$nlakt_minpv" ]]; then
-	mosquitto_pub -t openWB/boolChargeAtNight_minpv -r -m "$nlakt_minpv"
+	tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_minpv=${nlakt_minpv}"
 	echo $nlakt_minpv > ramdisk/mqttnlakt_minpv
 fi
 
 onlakt_standby=$(<ramdisk/mqttnlakt_sofort)
 if [[ "$onlakt_standby" != "$nlakt_standby" ]]; then
-	mosquitto_pub -t openWB/boolChargeAtNight_standby -r -m "$nlakt_standby"
+	tempPubList="${tempPubList}\nopenWB/boolChargeAtNight_standby=${nlakt_standby}"
 	echo $nlakt_standby > ramdisk/mqttnlakt_standby
 fi
 ohausverbrauchstat=$(<ramdisk/mqtthausverbrauchstat)
 if [[ "$ohausverbrauchstat" != "$hausverbrauchstat" ]]; then
-	mosquitto_pub -t openWB/boolDisplayHouseConsumption -r -m "$hausverbrauchstat"
+	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseConsumption=${hausverbrauchstat}"
 	echo $hausverbrauchstat > ramdisk/mqtthausverbrauchstat
 fi
 oheutegeladen=$(<ramdisk/mqttheutegeladen)
 if [[ "$oheutegeladen" != "$heutegeladen" ]]; then
-	mosquitto_pub -t openWB/boolDisplayDailyCharged -r -m "$heutegeladen"
+	tempPubList="${tempPubList}\nopenWB/boolDisplayDailyCharged=${heutegeladen}"
 	echo $heutegeladen > ramdisk/mqttheutegeladen
 fi
 oevuglaettungakt=$(<ramdisk/mqttevuglaettungakt)
 if [[ "$oevuglaettungakt" != "$evuglaettungakt" ]]; then
-	mosquitto_pub -t openWB/boolEvuSmoothedActive -r -m "$evuglaettungakt"
+	tempPubList="${tempPubList}\nopenWB/boolEvuSmoothedActive=${evuglaettungakt}"
 	echo $evuglaettungakt > ramdisk/mqttevuglaettungakt
 fi
 ographliveam=$(<ramdisk/mqttgraphliveam)
 if [[ "$ographliveam" != "$graphliveam" ]]; then
-	mosquitto_pub -t openWB/boolGraphLiveAM -r -m "$graphliveam"
+	tempPubList="${tempPubList}\nopenWB/boolGraphLiveAM=${graphliveam}"
 	echo $graphliveam > ramdisk/mqttgraphliveam
 fi
 ospeicherpvui=$(<ramdisk/mqttspeicherpvui)
 if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
-	mosquitto_pub -t openWB/boolDisplayHouseBatteryPriority -r -m "$speicherpvui"
+	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
 fi
-mosquitto_pub -t openWB/system/Uptime -r -m "$(uptime)"
-mosquitto_pub -t openWB/system/Date -r -m "$(date)"
-mosquitto_pub -t openWB/system/Timestamp -r -m "$(date +%s)"
-runs/pubmqtt.sh &
+tempPubList="${tempPubList}\nopenWB/system/Uptime=$(uptime)"
+tempPubList="${tempPubList}\nopenWB/system/Date=$(date)"
+tempPubList="${tempPubList}\nopenWB/system/Timestamp=$(date +%s)"
+
+echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
 
 }

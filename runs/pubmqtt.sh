@@ -169,4 +169,4 @@ done
 #echo -e $tempPubList
 
 #echo "Running Python:"
-echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r
+echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
