@@ -963,4 +963,6 @@ tempPubList="${tempPubList}\nopenWB/system/Timestamp=$(date +%s)"
 
 echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
 
+runs/pubmqtt.sh &
+
 }
