@@ -26,15 +26,15 @@ if [[ $? == "0" ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
-	if [[ $lla1 =~ $re ]] ; then
+	if [[ $llv1 =~ $re ]] ; then
 		echo $llv1 > /var/www/html/openWB/ramdisk/llv1
 	fi
 	llv2=$(echo $output | jq -r '.nrg[1]')
-	if [[ $lla2 =~ $re ]] ; then
+	if [[ $llv2 =~ $re ]] ; then
 		echo $llv2 > /var/www/html/openWB/ramdisk/llv2
 	fi
 	llv3=$(echo $output | jq -r '.nrg[2]')
-	if [[ $lla3 =~ $re ]] ; then
+	if [[ $llv3 =~ $re ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llv3
 	fi
 
@@ -50,7 +50,7 @@ if [[ $? == "0" ]] ; then
 		echo $rfid > /var/www/html/openWB/ramdisk/tmpgoelp1rfid
 	fi
 #car status 1 Ladestation bereit, kein Auto
-#car status 2 Auto l‰dt
+#car status 2 Auto l√§dt
 #car status 3 Warte auf Fahrzeug
 #car status 4 Ladung beendet, Fahrzeug verbunden
     car=$(echo $output | jq -r '.car')
