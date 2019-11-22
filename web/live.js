@@ -21,7 +21,7 @@ var lp3enabled
 
 var thevalues = [
 ["openWB/evu/W", "#bezugdiv"],
-["openWB/WHouseConsumption", "#hausverbrauchdiv"],
+["openWB/global/WHouseConsumption", "#hausverbrauchdiv"],
 ["openWB/lp1/%Soc", "#"],
 ["openWB/lp2/%Soc", "#"],
 ["openWB/lp1/kWhDailyCharged", "#dailychargelp1div"],
@@ -87,11 +87,11 @@ var thevalues = [
 ["openWB/lp6/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp6div"],
 ["openWB/lp7/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp7div"],
 ["openWB/lp8/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp8div"],
-["openWB/ChargeMode", "#"],
-["openWB/WAllChargePoints", "#"],
+["openWB/global/ChargeMode", "#"],
+["openWB/global/WAllChargePoints", "#"],
 ["openWB/housebattery/W", "#speicherleistungdiv"],
 ["openWB/housebattery/%Soc", "#"],
-["openWB/strLastmanagementActive", "#lastregelungaktivdiv"],
+["openWB/global/strLastmanagementActive", "#lastregelungaktivdiv"],
 ["openWB/lp1/boolChargePointConfigured", "#"],
 ["openWB/lp2/boolChargePointConfigured", "#"],
 ["openWB/lp3/boolChargePointConfigured", "#"],
@@ -252,7 +252,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		$("#speicherleistungdiv").html(speicherwatt);
 	}
-	else if ( mqttmsg == "openWB/WHouseConsumption" ) {
+	else if ( mqttmsg == "openWB/global/WHouseConsumption" ) {
 		if (mqttpayload > 999) {
 			mqttpayload = (mqttpayload / 1000).toFixed(2);
 		    	mqttpayload = mqttpayload + " kW";
@@ -480,7 +480,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		$("#lllp8div").html(mqttpayload);
 	}
-	else if ( mqttmsg == "openWB/WAllChargePoints") {
+	else if ( mqttmsg == "openWB/global/WAllChargePoints") {
 		llaktuell = parseInt(mqttpayload, 10);
 		llaktuellgarrow = llaktuell;
 		if (mqttpayload > 999) {
@@ -911,7 +911,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 	}
 
-	else if ( mqttmsg == "openWB/ChargeMode" ) {
+	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
 		     if(mqttpayload == 0){
 			$('.actstat .btn').addClass("btn-green");
 			$('.actstat1 .btn').addClass("btn-red");
@@ -1039,12 +1039,8 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		if ( retries < 5 ) {
-			retries = retries + 1;
-			client.connect(options);
-		} else {
-		alert("Verbindung zum openWB WebSocekt Port 9001 nicht möglich. Netzwerkkonnektivität prüfen");
-	 }}
+		client.connect(options);
+	}
 	};
 
 //Creates a new Messaging.Message Object and sends it 
