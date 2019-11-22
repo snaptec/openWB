@@ -2301,7 +2301,6 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
-sed -i 's/simplemode.*/simplemode=0/' /var/www/html/openWB/openwb.conf
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta

@@ -244,7 +244,7 @@ fi
 if (( lastmanagements2 == 1 )); then
 ladeleistungs2=$(<ramdisk/llaktuells2)
 llkwhs2=$(<ramdisk/llkwhs2)
-plugstatlp3=$(<ramdisk/plugstats2)
+plugstatlp3=$(<ramdisk/plugstatlp3)
 if (( plugstatlp3 == 1 )); then
 	pluggedladungaktlp3=$(<ramdisk/pluggedladungaktlp3)
 	if (( pluggedladungaktlp3 == 0 )); then
