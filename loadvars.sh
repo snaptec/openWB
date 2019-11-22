@@ -621,11 +621,11 @@ if (( oladestatus != ladestatus )); then
 	echo $ladestatus > ramdisk/mqttlastladestatus
 fi
 if (( olademodus != lademodus )); then
-	mosquitto_pub -t openWB/ChargeMode -m "$lademodus"
+	mosquitto_pub -t openWB/global/ChargeMode -m "$lademodus"
 	echo $lademodus > ramdisk/mqttlastlademodus
 fi
 if (( ohausverbrauch != hausverbrauch )); then
-	tempPubList="${tempPubList}\nopenWB/WHouseConsumption=${hausverbrauch}"
+	tempPubList="${tempPubList}\nopenWB/global/WHouseConsumption=${hausverbrauch}"
 fi
 if (( ollaktuells1 != ladeleistungs1 )); then
 	tempPubList="${tempPubList}\nopenWB/lp2/W=${ladeleistungs1}"
@@ -634,7 +634,7 @@ if (( ollaktuells2 != ladeleistungs2 )); then
 	tempPubList="${tempPubList}\nopenWB/lp3/W=${ladeleistungs2}"
 fi
 if (( ollkombiniert != ladeleistung )); then
-	tempPubList="${tempPubList}\nopenWB/WAllChargePoints=${ladeleistung}"
+	tempPubList="${tempPubList}\nopenWB/global/WAllChargePoints=${ladeleistung}"
 fi
 if (( ospeicherleistung != speicherleistung )); then
 	tempPubList="${tempPubList}\nopenWB/housebattery/W=${speicherleistung}"
