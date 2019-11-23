@@ -621,7 +621,7 @@ if (( oladestatus != ladestatus )); then
 	echo $ladestatus > ramdisk/mqttlastladestatus
 fi
 if (( olademodus != lademodus )); then
-	mosquitto_pub -t openWB/global/ChargeMode -m "$lademodus"
+	tempPubList="${tempPubList}\nopenWB/global/ChargeMode=${lademodus}"
 	echo $lademodus > ramdisk/mqttlastlademodus
 fi
 if (( ohausverbrauch != hausverbrauch )); then
