@@ -2,22 +2,35 @@
 hook(){
 
 if (( hook1_aktiv == "1" )); then
-	if (( uberschuss > hook1ein_watt )); then
-		echo 0 > /var/www/html/openWB/ramdisk/hook1counter
-		if [ ! -e ramdisk/hook1aktiv ]; then
-			touch ramdisk/hook1aktiv
-			curl -s --connect-timeout 5 $hook1ein_url > /dev/null
-			echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
+	if (( hook1akt == 0 )); then
+		hook1einschaltverzcounter=$(</var/www/html/openWB/ramdisk/hook1einschaltverzcounter)
+		if (( uberschuss > hook1ein_watt )); then
+			if (( hook1einschaltverzcounter > hook1einschaltverz)); then
+				echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
+				echo 0 > /var/www/html/openWB/ramdisk/hook1counter
+				if [ ! -e ramdisk/hook1aktiv ]; then
+					touch ramdisk/hook1aktiv
+					echo 1 > ramdisk/hook1akt
+					curl -s --connect-timeout 5 $hook1ein_url > /dev/null
+					echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
 
-			if [[ $debug == "1" ]]; then
-				echo "Gerät 1 aktiviert"
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 1 aktiviert"
+					fi
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
+					fi
+				fi
+			else
+				hook1einschaltverzcounter=$((hook1einschaltverzcounter +10))
+				echo $hook1einschaltverzcounter > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
 			fi
-			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
-				./runs/pushover.sh "Gerät 1 eingeschaltet bei $uberschuss"
-			fi
+		else
+			hook1einschaltverzcounter=0
 		fi
-
 	fi
+
+
 	if [ -e ramdisk/hook1aktiv  ]; then
 		if test $(find "ramdisk/hook1aktiv" -mmin +$hook1_dauer); then
 			if (( uberschuss < hook1aus_watt )); then
@@ -28,6 +41,7 @@ if (( hook1_aktiv == "1" )); then
 				else
 					
 					rm ramdisk/hook1aktiv
+					echo 0 > ramdisk/hook1akt
 					curl -s --connect-timeout 5 $hook1aus_url > /dev/null
 					echo "$date WebHook 1 deaktiviert" >> ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
@@ -44,8 +58,10 @@ if (( hook1_aktiv == "1" )); then
 fi
 if (( hook2_aktiv == "1" )); then
 	if (( uberschuss > hook2ein_watt )); then
+		echo 0 > /var/www/html/openWB/ramdisk/hook2counter
 		if [ ! -e ramdisk/hook2aktiv ]; then
 			touch ramdisk/hook2aktiv
+			echo 1 > ramdisk/hook2akt
 			curl -s --connect-timeout 5 $hook2ein_url > /dev/null
 			echo "$date WebHook 2 aktiviert" >> ramdisk/ladestatus.log
 
@@ -61,14 +77,21 @@ if (( hook2_aktiv == "1" )); then
 	if [ -e ramdisk/hook2aktiv  ]; then
 		if test $(find "ramdisk/hook2aktiv" -mmin +$hook2_dauer); then
 			if (( uberschuss < hook2aus_watt )); then
-				rm ramdisk/hook2aktiv
-				curl -s --connect-timeout 5 $hook2aus_url > /dev/null
-				echo "$date WebHook 2 deaktiviert" >> ramdisk/ladestatus.log
-				if [[ $debug == "1" ]]; then
-					echo "Gerät 2 deaktiviert"
-				fi
-				if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
-					./runs/pushover.sh "Gerät 2 ausgeschaltet bei $uberschuss"
+				hook2counter=$(</var/www/html/openWB/ramdisk/hook2counter)
+				if (( hook2counter < hook2_ausverz )); then
+					hook2counter=$((hook2counter + 10))
+					echo $hook2counter > /var/www/html/openWB/ramdisk/hook2counter
+				else
+					rm ramdisk/hook2aktiv
+					echo 0 > ramdisk/hook2akt
+					curl -s --connect-timeout 5 $hook2aus_url > /dev/null
+					echo "$date WebHook 2 deaktiviert" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 2 deaktiviert"
+					fi
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 2 ausgeschaltet bei $uberschuss"
+					fi
 				fi
 			fi
 		fi	
@@ -77,8 +100,10 @@ if (( hook2_aktiv == "1" )); then
 fi
 if (( hook3_aktiv == "1" )); then
 	if (( uberschuss > hook3ein_watt )); then
+		echo 0 > /var/www/html/openWB/ramdisk/hook3counter
 		if [ ! -e ramdisk/hook3aktiv ]; then
 			touch ramdisk/hook3aktiv
+			echo 1 > ramdisk/hook3akt
 			curl -s --connect-timeout 5 $hook3ein_url > /dev/null
 			echo "$date WebHook 3 aktiviert" >> ramdisk/ladestatus.log
 
@@ -94,15 +119,21 @@ if (( hook3_aktiv == "1" )); then
 	if [ -e ramdisk/hook3aktiv  ]; then
 		if test $(find "ramdisk/hook3aktiv" -mmin +$hook3_dauer); then
 			if (( uberschuss < hook3aus_watt )); then
-				rm ramdisk/hook3aktiv
-				curl -s --connect-timeout 5 $hook3aus_url > /dev/null
-				echo "$date WebHook 3 deaktiviert" >> ramdisk/ladestatus.log
-	
-				if [[ $debug == "1" ]]; then
-					echo "Gerät 3 deaktiviert"
-				fi
-				if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
-					./runs/pushover.sh "Gerät 3 ausgeschaltet bei $uberschuss"
+				hook3counter=$(</var/www/html/openWB/ramdisk/hook3counter)
+				if (( hook3counter < hook3_ausverz )); then
+					hook3counter=$((hook3counter + 10))
+					echo $hook3counter > /var/www/html/openWB/ramdisk/hook3counter
+				else
+					rm ramdisk/hook3aktiv
+					echo 0 > ramdisk/hook3akt
+					curl -s --connect-timeout 5 $hook3aus_url > /dev/null
+					echo "$date WebHook 3 deaktiviert" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 3 deaktiviert"
+					fi
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 3 ausgeschaltet bei $uberschuss"
+					fi
 				fi
 			fi
 		fi
@@ -153,6 +184,8 @@ if (( verbraucher1_aktiv == "1")); then
 			fi
 		fi
 	fi
+else
+	verbraucher1_watt=0
 fi
 if (( verbraucher2_aktiv == "1")); then
 	echo "1" > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
@@ -199,11 +232,29 @@ if (( verbraucher2_aktiv == "1")); then
 		fi
 		echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 	fi
-
+else
+	verbraucher2_watt=0
 
 fi
 
 
+if (( angesteckthooklp1 == 1 )); then
+	plugstat=$(<ramdisk/plugstat)
+	if (( plugstat == 1 )); then
+		if [ ! -e ramdisk/angesteckthooklp1aktiv ]; then
+			touch ramdisk/angesteckthooklp1aktiv
+			curl -s --connect-timeout 5 $angesteckthooklp1_url > /dev/null
+			echo "$date angesteckt Hook LP1 ausgeführt" >> ramdisk/ladestatus.log
+			if [[ $debug == "1" ]]; then
+				echo "$date angesteckt Hook LP1 ausgeführt"
+			fi
+		fi
+	else
+		if [  -e ramdisk/angesteckthooklp1aktiv ]; then
+			rm ramdisk/angesteckthooklp1aktiv
+		fi
+       fi
+fi
 
 
 

@@ -65,6 +65,11 @@ if [[ $dspeed == "2" ]]; then
 		echo 0 > ramdisk/5sec
 	fi
 fi
+updateinprogress=$(<ramdisk/updateinprogress)
+if (( updateinprogress == "1" )); then
+	echo "Update in progress"
+	exit 0
+fi
 
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
@@ -95,8 +100,15 @@ goecheck
 # nrgkick mobility check
 nrgkickcheck
 #load charging vars
+if (( debug == 1)); then
+	startloadvars=$(date +%s)
+fi
 loadvars
-
+if (( debug == 1)); then
+	endloadvars=$(date +%s)
+	timeloadvars=$((endloadvars-startloadvars))
+	echo "Zeit zum abfragen aller Werte $timeloadvars Sekunden"
+fi
 if (( u1p3paktiv == 1 )); then
 	blockall=$(<ramdisk/blockall)
 	if (( blockall == 1 )); then
@@ -106,7 +118,46 @@ if (( u1p3paktiv == 1 )); then
 		exit 0
 	fi
 fi
-
+if (( lp1enabled == 0)); then
+	if (( ladeleistunglp1 > 100 )) || (( llalt > 0 )); then
+		runs/set-current.sh 0 m
+	fi
+fi
+if (( lp2enabled == 0)); then
+	if (( ladeleistunglp2 > 100 )) || (( llalts1 > 0 )); then
+		runs/set-current.sh 0 s1
+	fi
+fi
+if (( lp3enabled == 0)); then
+	if (( ladeleistunglp3 > 100 )) || (( llalts2 > 0 )); then
+		runs/set-current.sh 0 s2
+	fi
+fi
+if (( lp4enabled == 0)); then
+	if (( ladeleistunglp4 > 100 )) || (( llaltlp4 > 0 )); then
+		runs/set-current.sh 0 lp4
+	fi
+fi
+if (( lp5enabled == 0)); then
+	if (( ladeleistunglp5 > 100 )) || (( llaltlp5 > 0 )); then
+		runs/set-current.sh 0 lp5
+	fi
+fi
+if (( lp6enabled == 0)); then
+	if (( ladeleistunglp6 > 100 )) || (( llaltlp6 > 0 )); then
+		runs/set-current.sh 0 lp6
+	fi
+fi
+if (( lp7enabled == 0)); then
+	if (( ladeleistunglp7 > 100 )) || (( llaltlp7 > 0 )); then
+		runs/set-current.sh 0 lp7
+	fi
+fi
+if (( lp8enabled == 0)); then
+	if (( ladeleistunglp8 > 100 )) || (( llaltlp8 > 0 )); then
+		runs/set-current.sh 0 lp8
+	fi
+fi
 #EVSE DIN Modbus test
 evsedintest
 
@@ -117,7 +168,24 @@ hook
 #Graphing
 graphing
 
-
+if (( cpunterbrechunglp1 == 1 )); then
+       if (( plugstat == 1 )); then
+               if (( llalt > 5 )); then
+                       if (( ladeleistung < 200 )); then
+                               cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
+                               if (( cpulp1waraktiv == 0 )); then
+				       echo "CP Unterbrechung an LP1 durchgeführt"
+                                       sudo python runs/cpulp1.py
+                                       echo 1 > ramdisk/cpulp1waraktiv
+                               fi
+                       else
+                               echo 0 > ramdisk/cpulp1waraktiv
+                       fi
+               fi
+       else
+               echo 0 > ramdisk/cpulp1waraktiv
+       fi
+fi
 if [[ $dspeed == "3" ]]; then
 
 	if [ -e ramdisk/5sec ]; then
@@ -280,17 +348,10 @@ fi
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
-schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
-if [[ $debug == "1" ]]; then
-	echo anzahlphasen "$anzahlphasen"
-fi
-if [[ $debug == "2" ]]; then
-	echo "$date"
-	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
-fi
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
+        schaltschwelle=$(echo "(230*$anzahlphasen)" | bc)
 fi
 if [[ $pvbezugeinspeisung == "1" ]]; then
 	pvregelungm=$(echo "(230*$anzahlphasen*-1)" | bc)
@@ -299,6 +360,14 @@ fi
 if [[ $pvbezugeinspeisung == "2" ]]; then
 	pvregelungm=$offsetpv
 	schaltschwelle=$((schaltschwelle + offsetpv))
+fi
+# Debug Ausgaben
+if [[ $debug == "1" ]]; then
+	echo anzahlphasen "$anzahlphasen"
+fi
+if [[ $debug == "2" ]]; then
+	echo "$date"
+	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
 fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1

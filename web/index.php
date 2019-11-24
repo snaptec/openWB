@@ -16,18 +16,20 @@
 	<script src="js/charts.js"></script>
 	<script src="js/animated.js"></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
+	<script type = "text/javascript" src = "js/mqttws31.js" ></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
          <meta name="apple-mobile-web-app-capable" content="yes">
          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-         <meta name="apple-mobile-web-app-title" content="OpenWB">
+         <meta name="apple-mobile-web-app-title" content="openWB">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
-	<meta name="apple-mobile-web-app-title" content="OpenWB">
-	<title>OpenWB</title>
-	<meta name="description" content="OpenWB" />
-	<meta name="keywords" content="OpenWB" />
+	<meta name="apple-mobile-web-app-title" content="openWB">
+	
+
+	<meta name="description" content="openWB" />
+	<meta name="keywords" content="openWB" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
@@ -46,7 +48,7 @@
 	<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
 	<link rel="manifest" href="manifest.json">
 	<link rel="shortcut icon" href="img/favicons/favicon.ico">
-	<link rel="apple-touch-startup-image" href="img/loader.gif">
+	<!-- <link rel="apple-touch-startup-image" href="img/loader.gif"> -->
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
 	<!-- Normalize -->
@@ -68,12 +70,25 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
-	<!-- Intervall Handler -->
-	<script src="handleIntervalls.js"></script>
-	
-</head>
+	<!-- Graph refresher -->
+	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+	<!-- Data refresher -->
+    <script src="live.js"></script>
+    <script src="livefunctions.js"></script>
+<?php include ("values.php"); 
+if ( $simplemodeold == 1 ) {
+	echo '<title>ChargeController</title>';
+}else{
+	echo'<title>openWB</title>';}
+?>
 
-<?php include ("values.php"); ?>
+</head>
+<script>
+	var hook1_aktiv = <?php echo $hook1_aktivold ?>;
+	var hook2_aktiv = <?php echo $hook2_aktivold ?>;
+	var hook3_aktiv = <?php echo $hook3_aktivold ?>;
+	var activetheme = "<?php echo $themeCookie ?>";
+</script>
 <input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 <input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
 <input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />
@@ -97,19 +112,28 @@
 
 <body>
 	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
+	<?php
+		if ( $simplemodeold == 1 ){
+		echo '<img src="img/loading.gif" alt="Preloader image">
+				';
+		} else {
+		echo '<img src="img/loader.gif" alt="Preloader image">
+				';} ?>
 	</div>
-
+		
 <?php
 	if ($_COOKIE['openWBTheme'] == 'desktop') {
 		echo '<div style="margin-left: 10px; margin-right: 10px;">';
 	} else {
-		echo '<div class="container">';
+		echo '<div class="container">'; 
 	}
-
-				// das gewählte Theme einbinden
-				include 'themes/'.$_COOKIE['openWBTheme'].'/index.html';
-			?>
+	if ( $simplemodeold == 1 ) {
+		include 'simplemode.html';
+	}else{
+		// das gewählte Theme einbinden
+		include 'themes/'.$_COOKIE['openWBTheme'].'/index.html';
+	}
+	?>
 		</div>
 
 	<!-- Holder for mobile navigation -->

@@ -6,6 +6,9 @@ foreach($lines as $line) {
     if(strpos($line, "minimalstromstaerke=") !== false) {
         list(, $minimalstromstaerkeold) = explode("=", $line);
     }
+    if(strpos($line, "simplemode=") !== false) {
+        list(, $simplemodeold) = explode("=", $line);
+    }
     if(strpos($line, "maximalstromstaerke=") !== false) {
         list(, $maximalstromstaerkeold) = explode("=", $line);
     }
@@ -129,13 +132,25 @@ foreach($lines as $line) {
 	if(strpos($line, "displaypinaktiv=") !== false) {
 		list(, $displaypinaktivold) = explode("=", $line);
 	}
-
+	if(strpos($line, "displaytagesgraph=") !== false) {
+		list(, $displaytagesgraphold) = explode("=", $line);
+	}
 	if(strpos($line, "displaypincode=") !== false) {
 		list(, $displaypincodeold) = explode("=", $line);
 	}
 	if(strpos($line, "settingspw=") !== false) {
 		list(, $settingspwold) = explode("=", $line);
 	}
+	if(strpos($line, "hook1_aktiv=") !== false) {
+		list(, $hook1_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "hook2_aktiv=") !== false) {
+		list(, $hook2_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "hook3_aktiv=") !== false) {
+		list(, $hook3_aktivold) = explode("=", $line);
+	}
+
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);

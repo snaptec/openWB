@@ -88,6 +88,8 @@ function loaddivs(){
 
 function loaddivs2(){
 $(function() {
+
+
     if($('#msmoduslp1').val() == '0') {
         $('#msmodusnlp1').show();
         $('#msmodusslp1').hide();
@@ -197,6 +199,8 @@ $(function() {
         $('#sofortlmdiv, #sofortlmdiv1, #sofortlmdiv2').hide();
     }
 });
+
+
 $(function() {
     if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
         if($('#nachtladenstate').val() == '1') {
@@ -348,6 +352,7 @@ $(function() {
     if($('#lastmanagement').val() == '0') {
         $('#ladepunkts1ndiv').show();
         $('#ladepunkts1div').hide();
+	$('#ladepunkts1plugdiv').hide();
         $('#ladepunkts11div').hide();
         $('#ladepunkts111div').hide();
         $('#ladepunkts1111div').hide();
@@ -356,6 +361,7 @@ $(function() {
     } else {
         $('#ladepunkts1ndiv').hide();
         $('#ladepunkts1div').show();
+	$('#ladepunkts1plugdiv').show();
         $('#ladepunkts11div').show();
         $('#ladepunkts111div').show();
         $('#ladepunkts1111div').show();
@@ -445,6 +451,7 @@ $(document).ready(function(){
 	});
 
 	$('.sofort').click(function(){
+	//	publish("0","openWB/set/Lademodus");
 	    var clickBtnValue = $(this).val();
 	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
 	    data =  {'action': clickBtnValue};
@@ -459,12 +466,13 @@ $(document).ready(function(){
                 $('.actstat1 .btn').removeClass("btn-green");
                 $('.actstat4 .btn').addClass("btn-red");
                 $('.actstat4 .btn').removeClass("btn-green");
-		    loaddivs();
+		loaddivs();
 
 
 	    });
 	});
 	$('.standby').click(function(){
+		//publish("4","openWB/set/Lademodus");
 	    var clickBtnValue = $(this).val();
 	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
 	    data =  {'action': clickBtnValue};
@@ -485,11 +493,4 @@ $(document).ready(function(){
 	});
 });
 
-var livefunctionsIntervall;
 
-$(window).load(function() {
-    // sobal die Seite vollständig geladen ist, alle Gauges
-    // regelmäßig aktualisieren
-    // benötigt eingebundene handleIntervalls.js
-    livefunctionsIntervall = mySetInterval(loadText, 5000);  // alle 5 Sekunden Buttons etc. erneuern
-});

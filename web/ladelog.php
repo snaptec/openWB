@@ -66,7 +66,7 @@ if (isset($_GET['bis'])) {
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h3> OpenWB Ladelog </h3>
+					<h3> Ladelog </h3>
 				</div>
 			</div>
 			<br><br>
@@ -264,7 +264,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '7'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';
@@ -324,7 +324,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '7'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';
@@ -386,7 +386,7 @@ while (($logarray = fgetcsv($file)) !== FALSE) {
 							echo 'Standby';
 						}
 						if ($logarray[7] == '4'){
-							echo 'Nachtladen';
+							echo 'NL';
 						}
 					}
 					echo '</div>';

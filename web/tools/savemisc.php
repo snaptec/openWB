@@ -16,6 +16,10 @@ foreach($lines as $line) {
 	    $result .= 'netzabschaltunghz='.$_POST[netzabschaltunghz]."\n";
 	    $writeit = '1';
 	    } 
+	    if(strpos($line, "cpunterbrechunglp1=") !== false) {
+	    $result .= 'cpunterbrechunglp1='.$_POST[cpunterbrechunglp1]."\n";
+	    $writeit = '1';
+	    } 
 	    if(strpos($line, "livegraph=") !== false) {
 	    $result .= 'livegraph='.$_POST[livegraph]."\n";
 	    $writeit = '1';
@@ -101,7 +105,68 @@ foreach($lines as $line) {
 	    $result .= 'rfidakt='.$_POST[rfidakt]."\n";
 	    $writeit = '1';
 	    } 
-	   if(strpos($line, "rfidlp1c1=") !== false) {
+  	   if(strpos($line, "rfidstop=") !== false) {
+	    $result .= 'rfidstop='.$_POST[rfidstop]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidstandby=") !== false) {
+	    $result .= 'rfidstandby='.$_POST[rfidstandby]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidsofort=") !== false) {
+	    $result .= 'rfidsofort='.$_POST[rfidsofort]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidminpv=") !== false) {
+	    $result .= 'rfidminpv='.$_POST[rfidminpv]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidnurpv=") !== false) {
+	    $result .= 'rfidnurpv='.$_POST[rfidnurpv]."\n";
+	    $writeit = '1';
+	    }
+	   if(strpos($line, "rfidstop2=") !== false) {
+	    $result .= 'rfidstop2='.$_POST[rfidstop2]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidstandby2=") !== false) {
+	    $result .= 'rfidstandby2='.$_POST[rfidstandby2]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidsofort2=") !== false) {
+	    $result .= 'rfidsofort2='.$_POST[rfidsofort2]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidminpv2=") !== false) {
+	    $result .= 'rfidminpv2='.$_POST[rfidminpv2]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidnurpv2=") !== false) {
+	    $result .= 'rfidnurpv2='.$_POST[rfidnurpv2]."\n";
+	    $writeit = '1';
+	    } 
+	   if(strpos($line, "rfidstop3=") !== false) {
+	    $result .= 'rfidstop3='.$_POST[rfidstop3]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidstandby3=") !== false) {
+	    $result .= 'rfidstandby3='.$_POST[rfidstandby3]."\n";
+	    $writeit = '1';
+	    } 
+ 	   if(strpos($line, "rfidsofort3=") !== false) {
+	    $result .= 'rfidsofort3='.$_POST[rfidsofort3]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidminpv3=") !== false) {
+	    $result .= 'rfidminpv3='.$_POST[rfidminpv3]."\n";
+	    $writeit = '1';
+	    } 
+	    if(strpos($line, "rfidnurpv3=") !== false) {
+	    $result .= 'rfidnurpv3='.$_POST[rfidnurpv3]."\n";
+	    $writeit = '1';
+	    } 
+
+	    if(strpos($line, "rfidlp1c1=") !== false) {
 	    $result .= 'rfidlp1c1='.$_POST[rfidlp1c1]."\n";
 	    $writeit = '1';
 	    } 
@@ -137,7 +202,14 @@ foreach($lines as $line) {
 	    $result .= 'displaylp2max='.$_POST[displaylp2max]."\n";
 	    $writeit = '1';
 	    } 
-
+	   if(strpos($line, "displaytheme=") !== false) {
+	    $result .= 'displaytheme='.$_POST[displaytheme]."\n";
+	    $writeit = '1';
+	   }
+	   if(strpos($line, "displaytagesgraph=") !== false) {
+	    $result .= 'displaytagesgraph='.$_POST[displaytagesgraph]."\n";
+	    $writeit = '1';
+	    } 
 	   if(strpos($line, "displaylp1max=") !== false) {
 	    $result .= 'displaylp1max='.$_POST[displaylp1max]."\n";
 	    $writeit = '1';

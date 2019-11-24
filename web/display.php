@@ -11,10 +11,10 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
-	<meta name="apple-mobile-web-app-title" content="OpenWB">
+	<meta name="apple-mobile-web-app-title" content="openWB">
 	<title>OpenWB</title>
-	<meta name="description" content="OpenWB" />
-	<meta name="keywords" content="OpenWB" />
+	<meta name="description" content="openWB" />
+	<meta name="keywords" content="openWB" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
@@ -87,12 +87,15 @@
 
 
 <?php
-if ( $displayconfiguredold == 0 ) {
-	include 'display/welcome.html';
+if ( $simplemodeold == 1 ) {
+	include 'display/simple.html';
 } else {
-
-	// das gewählte Theme einbinden
-	include 'display/gauge.html';
+	if ( $displayconfiguredold == 0 ) {
+		include 'display/welcome.html';
+	} else {
+		// das gewählte Theme einbinden
+		include 'display/gauge.html';
+	}
 }
 ?>
 	

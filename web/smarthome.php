@@ -48,12 +48,23 @@ foreach($lines as $line) {
 	if(strpos($line, "settingspwakt=") !== false) {
 		list(, $settingspwaktold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "hook1einschaltverz=") !== false) {
+		list(, $hook1einschaltverzold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook2_ausverz=") !== false) {
+		list(, $hook2_ausverzold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "hook3_ausverz=") !== false) {
+		list(, $hook3_ausverzold) = explode("=", $line, 2);
+	}
 	if(strpos($line, "hook1_ausverz=") !== false) {
 		list(, $hook1_ausverzold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "hook1ein_url=") !== false) {
 		list(, $hook1ein_urlold) = explode("=", $line, 2);
+	}
+	if(strpos($line, "angesteckthooklp1_url=") !== false) {
+		list(, $angesteckthooklp1_urlold) = explode("=", $line, 2);
 	}
 	if(strpos($line, "hook1aus_url=") !== false) {
 		list(, $hook1aus_urlold) = explode("=", $line, 2);
@@ -67,6 +78,10 @@ foreach($lines as $line) {
 	if(strpos($line, "hook1_aktiv=") !== false) {
 		list(, $hook1_aktivold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "angesteckthooklp1=") !== false) {
+		list(, $angesteckthooklp1old) = explode("=", $line, 2);
+	}
+
 	if(strpos($line, "hook1_dauer=") !== false) {
 		list(, $hook1_dauerold) = explode("=", $line, 2);
 	}
@@ -158,6 +173,8 @@ foreach($lines as $line) {
 
 }
 
+$angesteckthooklp1_urlold = str_replace( "'", "", $angesteckthooklp1_urlold);
+
 $hook1ein_urlold = str_replace( "'", "", $hook1ein_urlold);
 $hook1aus_urlold = str_replace( "'", "", $hook1aus_urlold);
 $hook2ein_urlold = str_replace( "'", "", $hook2ein_urlold);
@@ -197,7 +214,49 @@ $verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 </div>
 <div class="col-xs-10">
 
+<div class="row">
+	<b><label for="angesteckthooklp1">Webhook bei Anstecken an LP1:</label></b>
+	<select type="text" name="angesteckthooklp1" id="angesteckthooklp1">
+		<option <?php if($angesteckthooklp1old == 0) echo selected ?> value="0">Deaktiviert</option>
+		<option <?php if($angesteckthooklp1old == 1) echo selected ?> value="1">Aktiviert</option>
+	</select>
+</div>
 
+<div id="angesteckthooklp1ausdiv">
+	<br>
+</div>
+<div id="angesteckthooklp1andiv">
+	<div class="row">
+       		<b><label for="angesteckthooklp1_url">URL:</label></b>
+        	<input type="text" name="angesteckthooklp1_url" id="angesteckthooklp1_url" value="<?php echo htmlspecialchars($angesteckthooklp1_urlold) ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		URL die (einmalig) aufgerufen wird wenn ein Fahrzeug an LP1 angesteckt wird. Erneutes Ausführen erfolgt erst nachdem abgesteckt wurde.<br><br>
+	</div>
+</div>
+<hr>
+<script>
+$(function() {
+      if($('#angesteckthooklp1').val() == '0') {
+		$('#angesteckthooklp1ausdiv').show();
+		$('#angesteckthooklp1andiv').hide();
+      } else {
+		$('#angesteckthooklp1ausdiv').hide();
+	       	$('#angesteckthooklp1andiv').show();
+      }
+
+	$('#angesteckthooklp1').change(function(){
+	      if($('#angesteckthooklp1').val() == '0') {
+			$('#angesteckthooklp1ausdiv').show();
+			$('#angesteckthooklp1andiv').hide();
+	      } else {
+			$('#angesteckthooklp1ausdiv').hide();
+		       	$('#angesteckthooklp1andiv').show();
+	      }
+	    });
+});
+</script>
 
 <div class="row">
 	<b><label for="hook1_aktiv">Externes Gerät 1:</label></b>
@@ -222,6 +281,15 @@ $verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 	<div class="row">
 		Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
 	</div>
+       <div class="row">
+                <b><label for="hook1einschaltverz">Gerät 1 Einschaltverzögerung:</label></b>
+                <input type="text" name="hook1einschaltverz" id="hook1einschaltverz" value="<?php echo $hook1einschaltverzold ?>"><br>
+        <br>
+        </div>
+        <div class="row">
+                Bestimmt die Dauer für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.<br><br>
+        </div>
+
 	<div class="row">
        		<b><label for="hook1ein_url">Gerät 1 Einschalturl:</label></b>
         	<input type="text" name="hook1ein_url" id="hook1ein_url" value="<?php echo htmlspecialchars($hook1ein_urlold) ?>"><br>
@@ -344,7 +412,14 @@ $(function() {
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
 	</div>
-
+	<div class="row">
+       		<b><label for="hook2_ausverz">Gerät 2 Ausschaltverzögerung:</label></b>
+        	<input type="text" name="hook2_ausverz" id="hook2_ausverz" value="<?php echo $hook2_ausverzold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+	</div>
 
 </div>
 <script>
@@ -424,6 +499,14 @@ $(function() {
 	</div>
 	<div class="row">
 		Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+	</div>
+	<div class="row">
+       		<b><label for="hook1_ausverz">Gerät 3 Ausschaltverzögerung:</label></b>
+        	<input type="text" name="hook3_ausverz" id="hook3_ausverz" value="<?php echo $hook3_ausverzold ?>"><br>
+	<br>
+	</div>
+	<div class="row">
+		Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
 	</div>
 
 </div><hr>

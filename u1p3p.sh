@@ -66,20 +66,44 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 			fi
 			if (( lademodus == 2 )); then
 				if (( u1p3pstat != u1p3pnurpv )); then
-					if (( debug == 1 )); then
-						echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pnurpv konfiguriert, aendere..."
-					fi
-					if (( u1p3pnurpv == 3 )); then
-						sudo python runs/trigclose.py
-						echo 3 > ramdisk/u1p3pstat
-					else
-						sudo python runs/trigopen.py
-						echo 1 > ramdisk/u1p3pstat
-					fi
-					if (( debug == 1 )); then
-						echo "auf $u1p3pnurpv Phasen geaendert"
-					fi
+					if (( u1p3pnurpv == 4 )); then
+						if (( u1p3pstat == 0 )); then
+							sudo python runs trigopen.py
+							echo 1 > ramdisk/u1p3pstat
+						fi
+						if (( u1p3pstat == 3 )); then
+							urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
+							if (( urcounter < 600 )); then
+								if (( urcounter < 540 )); then
+									urcounter=540
+								fi
+								urcounter=$((urcounter + 10))
+								echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
+							else
+								sudo python runs/trigopen.py
+								echo 1 > ramdisk/u1p3pstat
+								if (( debug == 1 )); then
+									echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf 1 Nur PV konfiguriert, aendere..."
+								fi
+								echo 0 > /var/www/html/openWB/ramdisk/urcounter
 
+							fi
+						fi
+					else
+						if (( debug == 1 )); then
+							echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pnurpv konfiguriert, aendere..."
+						fi
+						if (( u1p3pnurpv == 3 )); then
+							sudo python runs/trigclose.py
+							echo 3 > ramdisk/u1p3pstat
+						else
+							sudo python runs/trigopen.py
+							echo 1 > ramdisk/u1p3pstat
+						fi
+						if (( debug == 1 )); then
+							echo "auf $u1p3pnurpv Phasen geaendert"
+						fi
+					fi
 				fi		
 			fi
 			if (( lademodus == 4 )); then
@@ -177,27 +201,87 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 			fi
 			if (( lademodus == 2 )); then
 				if (( u1p3pstat != u1p3pnurpv )); then
-					if (( debug == 1 )); then
-						echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pnurpv konfiguriert, unterbreche Ladung und  aendere..."
-					fi
-					echo 1 > ramdisk/blockall
-					oldll=$(<ramdisk/llsoll)
-					runs/set-current.sh 0 m
-					sleep 5
-					if (( u1p3pnurpv == 3 )); then
-						sudo python runs/trigclose.py
-						echo 3 > ramdisk/u1p3pstat
-					else
-						sudo python runs/trigopen.py
-						echo 1 > ramdisk/u1p3pstat
-					fi
-					sleep 1
-					runs/set-current.sh $oldll m
-					echo 0 > ramdisk/blockall
-					if (( debug == 1 )); then
-						echo "auf $u1p3pnurpv Phasen geaendert"
-					fi
+					if (( u1p3pnurpv == 4 )); then
+						oldll=$(<ramdisk/llsoll)
+						if (( u1p3pstat == 1 )); then
+							if (( oldll == maximalstromstaerke )); then
+								uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
+								if (( uhcounter < 600 )); then
+									uhcounter=$((uhcounter + 10))
+									echo $uhcounter > /var/www/html/openWB/ramdisk/uhcounter
+									if (( debug == 1 )); then
+										echo "Umschaltcounter Erhoehung auf $uhcounter erhoeht fuer PV Automatik Phasenumschaltung"
+									fi
+								else
+									if (( debug == 1 )); then
+										echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf NurPV Automatik konfiguriert, unterbreche Ladung und  aendere auf 3 Phasen..."
+									fi
+									echo 1 > ramdisk/blockall
+									runs/set-current.sh 0 m
+									sleep 8
+									sudo python runs/trigclose.py
+									echo 3 > ramdisk/u1p3pstat
+									sleep 20
+									runs/set-current.sh $minimalapv m
+									(sleep 25 && echo 0 > ramdisk/blockall)&
+									if (( debug == 1 )); then
+										echo "auf 3 Phasen NurPV Automatik geaendert"
+									fi
+									echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+								fi
+							else
+								echo 0 > /var/www/html/openWB/ramdisk/uhcounter
+							fi
+						else
+							if (( oldll == minimalapv )); then
+								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
+								if (( urcounter < 500 )); then
+									urcounter=$((urcounter + 10))
+									echo $urcounter > /var/www/html/openWB/ramdisk/urcounter
+									if (( debug == 1 )); then
+										echo "Umschaltcounter Reduzierung auf $urcounter erhoeht fuer PV Automatik Phasenumschaltung"
+									fi
 
+								else
+									echo 0 > /var/www/html/openWB/ramdisk/urcounter
+									echo 1 > ramdisk/blockall
+									runs/set-current.sh 0 m
+									sleep 8
+									sudo python runs/trigopen.py
+									echo 1 > ramdisk/u1p3pstat
+									sleep 20
+									runs/set-current.sh $minimalapv m
+									(sleep 25 && echo 0 > ramdisk/blockall)&
+									if (( debug == 1 )); then
+										echo "auf 1 Phasen NurPV Automatik geaendert"
+									fi
+								fi
+							else
+								echo 0 > /var/www/html/openWB/ramdisk/urcounter
+							fi		
+						fi
+					else
+						if (( debug == 1 )); then
+							echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf $u1p3pnurpv konfiguriert, unterbreche Ladung und  aendere..."
+						fi
+						echo 1 > ramdisk/blockall
+						oldll=$(<ramdisk/llsoll)
+						runs/set-current.sh 0 m
+						sleep 5
+						if (( u1p3pnurpv == 3 )); then
+							sudo python runs/trigclose.py
+							echo 3 > ramdisk/u1p3pstat
+						else
+							sudo python runs/trigopen.py
+							echo 1 > ramdisk/u1p3pstat
+						fi
+						sleep 1
+						runs/set-current.sh $oldll m
+						echo 0 > ramdisk/blockall
+						if (( debug == 1 )); then
+							echo "auf $u1p3pnurpv Phasen geaendert"
+						fi
+					fi
 				fi		
 			fi
 			if (( lademodus == 4 )); then
