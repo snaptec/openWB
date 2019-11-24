@@ -26,7 +26,7 @@ else
 		echo $teslatimer > /var/www/html/openWB/ramdisk/soctimer1
 	else
 		re='^-?[0-9]+$'
-		soclevel=$(sudo python /var/www/html/openWB/modules/soc_teslalp2/tsoc.py $soc_tesla_username $soc_tesla_password | jq .battery_level)
+		soclevel=$(sudo python /var/www/html/openWB/modules/soc_teslalp2/tsoc.py $soc_teslalp2_username $soc_teslalp2_password | jq .battery_level)
 		if  [[ $soclevel =~ $re ]] ; then
 			if (( $soclevel != 0 )) ; then
 				echo $soclevel > /var/www/html/openWB/ramdisk/soc1

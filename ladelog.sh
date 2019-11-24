@@ -27,8 +27,30 @@ if (( soc1 > 0 )); then
 else
 	soctext1=$(echo ".")
 fi
+plugstat=$(<ramdisk/plugstat)
+if (( plugstat == 1 )); then
+	pluggedladungaktlp1=$(<ramdisk/pluggedladungaktlp1)
+	if (( pluggedladungaktlp1 == 0 )); then
+		echo $llkwh > ramdisk/pluggedladunglp1startkwh
+		echo 1 > ramdisk/pluggedladungaktlp1
+	fi
+	pluggedladunglp1startkwh=$(<ramdisk/pluggedladunglp1startkwh)
+	pluggedladungbishergeladen=$(echo "scale=2;($llkwh - $pluggedladunglp1startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladen > ramdisk/pluggedladungbishergeladen
+	echo 0 > ramdisk/pluggedtimer1
+else
+	pluggedtimer1=$(<ramdisk/pluggedtimer1)
+	if (( pluggedtimer1 < 3 )); then
+		pluggedtimer1=$((pluggedtimer1 + 1))
+		echo $pluggedtimer1 > ramdisk/pluggedtimer1
+	else
+		echo 0 > ramdisk/pluggedladungaktlp1
+	fi
+fi
 
-if (( ladeleistung > 500 )); then
+
+
+if (( ladeleistung > 100 )); then
 	if [ -e ramdisk/ladeustart ]; then
 
 		ladelstart=$(<ramdisk/ladelstart)
@@ -94,7 +116,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1 ',$lademodus web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1',$lademodus,$rfidlp1 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauer Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -110,10 +132,31 @@ else
 fi
 
 if (( lastmanagement == 1 )); then
-
 ladeleistungs1=$(<ramdisk/llaktuells1)
 llkwhs1=$(<ramdisk/llkwhs1)
-if (( ladeleistungs1 > 500 )); then
+plugstatlp2=$(<ramdisk/plugstats1)
+if (( plugstatlp2 == 1 )); then
+	pluggedladungaktlp2=$(<ramdisk/pluggedladungaktlp2)
+	if (( pluggedladungaktlp2 == 0 )); then
+		echo $llkwhs1 > ramdisk/pluggedladunglp2startkwh
+		echo 1 > ramdisk/pluggedladungaktlp2
+	fi
+	pluggedladunglp2startkwh=$(<ramdisk/pluggedladunglp2startkwh)
+	pluggedladungbishergeladenlp2=$(echo "scale=2;($llkwhs1 - $pluggedladunglp2startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp2 > ramdisk/pluggedladungbishergeladenlp2
+	echo 0 > ramdisk/pluggedtimer2
+else
+	pluggedtimer2=$(<ramdisk/pluggedtimer2)
+	if (( pluggedtimer2 < 3 )); then
+		pluggedtimer2=$((pluggedtimer2 + 1))
+		echo $pluggedtimer2 > ramdisk/pluggedtimer2
+	else
+		echo 0 > ramdisk/pluggedladungaktlp2
+	fi
+fi
+
+
+if (( ladeleistungs1 > 100 )); then
 	if [ -e ramdisk/ladeustarts1 ]; then
 
 		ladelstarts1=$(<ramdisk/ladelstarts1)
@@ -181,7 +224,7 @@ else
 					fi
 				fi
 			else
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$lademodus web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$lademodus,$rfidlp2 web/ladelog
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauers1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
@@ -201,7 +244,28 @@ fi
 if (( lastmanagements2 == 1 )); then
 ladeleistungs2=$(<ramdisk/llaktuells2)
 llkwhs2=$(<ramdisk/llkwhs2)
-if (( ladeleistungs2 > 500 )); then
+plugstatlp3=$(<ramdisk/plugstatlp3)
+if (( plugstatlp3 == 1 )); then
+	pluggedladungaktlp3=$(<ramdisk/pluggedladungaktlp3)
+	if (( pluggedladungaktlp3 == 0 )); then
+		echo $llkwhs2 > ramdisk/pluggedladunglp3startkwh
+		echo 1 > ramdisk/pluggedladungaktlp3
+	fi
+	pluggedladunglp3startkwh=$(<ramdisk/pluggedladunglp3startkwh)
+	pluggedladungbishergeladenlp3=$(echo "scale=2;($llkwhs2 - $pluggedladunglp3startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp3 > ramdisk/pluggedladungbishergeladenlp3
+	echo 0 > ramdisk/pluggedtimer3
+else
+	pluggedtimer3=$(<ramdisk/pluggedtimer3)
+	if (( pluggedtimer3 < 3 )); then
+		pluggedtimer3=$((pluggedtimer3 + 1))
+		echo $pluggedtimer3 > ramdisk/pluggedtimer3
+	else
+		echo 0 > ramdisk/pluggedladungaktlp3
+	fi
+fi
+
+if (( ladeleistungs2 > 100 )); then
 	if [ -e ramdisk/ladeustarts2 ]; then
 
 		ladelstarts2=$(<ramdisk/ladelstarts2)
@@ -284,5 +348,541 @@ else
 
 fi
 fi
+if (( lastmanagementlp4 == 1 )); then
+ladeleistunglp4=$(<ramdisk/llaktuelllp4)
+llkwhlp4=$(<ramdisk/llkwhlp4)
+plugstatlp4=$(<ramdisk/plugstatlp4)
+if (( plugstatlp4 == 1 )); then
+	pluggedladungaktlp4=$(<ramdisk/pluggedladungaktlp4)
+	if (( pluggedladungaktlp4 == 0 )); then
+		echo $llkwhlp4 > ramdisk/pluggedladunglp4startkwh
+		echo 1 > ramdisk/pluggedladungaktlp4
+	fi
+	pluggedladunglp4startkwh=$(<ramdisk/pluggedladunglp4startkwh)
+	pluggedladungbishergeladenlp4=$(echo "scale=2;($llkwhlp4 - $pluggedladunglp4startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp4 > ramdisk/pluggedladungbishergeladenlp4
+	echo 0 > ramdisk/pluggedtimerlp4
+else
+	pluggedtimerlp4=$(<ramdisk/pluggedtimerlp4)
+	if (( pluggedtimerlp4 < 6 )); then
+		pluggedtimerlp4=$((pluggedtimerlp4 + 1))
+		echo $pluggedtimerlp4 > ramdisk/pluggedtimerlp4
+	else
+		echo 0 > ramdisk/pluggedladungaktlp4
+	fi
+fi
+
+
+if (( ladeleistunglp4 > 100 )); then
+	if [ -e ramdisk/ladeustartlp4 ]; then
+
+		ladelstartlp4=$(<ramdisk/ladelstartlp4)
+		bishergeladenlp4=$(echo "scale=2;($llkwhlp4 - $ladelstartlp4)/1" |bc | sed 's/^\./0./')
+		echo $bishergeladenlp4 > ramdisk/aktgeladenlp4
+		gelrlp4=$(echo "scale=2;$bishergeladenlp4 / $durchslp4 * 100" |bc)
+		gelrlp4=${gelrlp4%.*}
+		echo $gelrlp4 > ramdisk/gelrlp4
+		restzeitlp4=$(echo "scale=6;($lademkwhlp4 - $bishergeladenlp4)/ $ladeleistunglp4 * 1000 * 60" |bc)
+		restzeitlp4=${restzeitlp4%.*}
+		echo $restzeitlp4 > ramdisk/restzeitlp4m
+		if (( restzeitlp4 > 60 )); then
+			restzeitlp4h=$((restzeitlp4 / 60))
+			restzeitlp4r=$((restzeitlp4 % 60))
+			echo "$restzeitlp4h H $restzeitlp4r Min" > ramdisk/restzeitlp4
+		else
+			echo "$restzeitlp4 Min" > ramdisk/restzeitlp4
+		fi
+	else
+		if ((pushbenachrichtigung == "1")) ; then
+			if ((pushbstartl == "1")) ; then
+				./runs/pushover.sh "$lp4name Ladung gestartet"
+			fi
+		fi
+		echo "$date LP4, Ladung gestartet" >> ramdisk/ladestatus.log
+
+		echo 1 > ramdisk/ladungaktivlp4
+		touch ramdisk/ladeustartlp4
+		echo $lmodus > ramdisk/loglademodus
+		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustartlp4
+		echo -e $(date +%s) > ramdisk/ladeustartslp4
+		echo $llkwhlp4 > ramdisk/ladelstartlp4
+	fi
+	echo 0 > ramdisk/lloglp4
+else
+	lloglp4=$(<ramdisk/lloglp4)
+	if (( lloglp4 < 5 )); then
+		lloglp4=$((lloglp4 + 1))
+		echo $lloglp4 > ramdisk/lloglp4
+	else
+		if [ -e ramdisk/ladeustartlp4 ]; then
+			echo 0 > ramdisk/ladungaktivlp4
+			echo "--" > ramdisk/restzeitlp4
+			ladelstartlp4=$(<ramdisk/ladelstartlp4)
+			ladeustartslp4=$(<ramdisk/ladeustartslp4)
+			bishergeladenlp4=$(echo "scale=2;($llkwhlp4 - $ladelstartlp4)/1" |bc | sed 's/^\./0./')
+			startlp4=$(<ramdisk/ladeustartlp4)
+			jetztlp4=$(date +%d.%m.%y-%H:%M)
+			jetztslp4=$(date +%s)
+			ladedauerlp4=$(((jetztslp4 - ladeustartslp4) / 60 ))
+			ladedauerslp4=$((jetztslp4 - ladeustartslp4))
+			ladegeschwlp4=$(echo "scale=2;$bishergeladenlp4 * 60 * 60 / $ladedauerslp4" |bc)
+			gelrlp4=$(echo "scale=2;$bishergeladenlp4 / $durchslp4 * 100" |bc)
+			gelrlp4=${gelrlp4%.*}
+	
+			if (( ladedauerlp4 > 60 )); then
+				ladedauerhlp4=$((ladedauerlp4 / 60))
+				laderestlp4=$((ladedauerlp4 % 60))
+				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerhlp4' H '$laderestlp4' Min,4',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerhlp4 H $laderestlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
+					fi
+				fi
+
+			else
+				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerlp4' Min,4',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
+					fi
+				fi
+
+			fi
+			echo "$date LP4, Ladung gestoppt" >> ramdisk/ladestatus.log
+
+			rm ramdisk/ladeustartlp4
+		fi
+	fi
+
+fi
+fi
+if (( lastmanagementlp5 == 1 )); then
+ladeleistunglp5=$(<ramdisk/llaktuelllp5)
+llkwhlp5=$(<ramdisk/llkwhlp5)
+plugstatlp5=$(<ramdisk/plugstatlp5)
+if (( plugstatlp5 == 1 )); then
+	pluggedladungaktlp5=$(<ramdisk/pluggedladungaktlp5)
+	if (( pluggedladungaktlp5 == 0 )); then
+		echo $llkwhlp5 > ramdisk/pluggedladunglp5startkwh
+		echo 1 > ramdisk/pluggedladungaktlp5
+	fi
+	pluggedladunglp5startkwh=$(<ramdisk/pluggedladunglp5startkwh)
+	pluggedladungbishergeladenlp5=$(echo "scale=2;($llkwhlp5 - $pluggedladunglp5startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp5 > ramdisk/pluggedladungbishergeladenlp5
+	echo 0 > ramdisk/pluggedtimerlp5
+else
+	pluggedtimerlp5=$(<ramdisk/pluggedtimerlp5)
+	if (( pluggedtimerlp5 < 6 )); then
+		pluggedtimerlp5=$((pluggedtimerlp5 + 1))
+		echo $pluggedtimerlp5 > ramdisk/pluggedtimerlp5
+	else
+		echo 0 > ramdisk/pluggedladungaktlp5
+	fi
+fi
+if (( ladeleistunglp5 > 60 )); then
+	if [ -e ramdisk/ladeustartlp5 ]; then
+
+		ladelstartlp5=$(<ramdisk/ladelstartlp5)
+		bishergeladenlp5=$(echo "scale=2;($llkwhlp5 - $ladelstartlp5)/1" |bc | sed 's/^\./0./')
+		echo $bishergeladenlp5 > ramdisk/aktgeladenlp5
+		gelrlp5=$(echo "scale=2;$bishergeladenlp5 / $durchslp5 * 100" |bc)
+		gelrlp5=${gelrlp5%.*}
+		echo $gelrlp5 > ramdisk/gelrlp5
+		restzeitlp5=$(echo "scale=6;($lademkwhlp5 - $bishergeladenlp5)/ $ladeleistunglp5 * 1000 * 60" |bc)
+		restzeitlp5=${restzeitlp5%.*}
+		echo $restzeitlp5 > ramdisk/restzeitlp5m
+		if (( restzeitlp5 > 60 )); then
+			restzeitlp5h=$((restzeitlp5 / 60))
+			restzeitlp5r=$((restzeitlp5 % 60))
+			echo "$restzeitlp5h H $restzeitlp5r Min" > ramdisk/restzeitlp5
+		else
+			echo "$restzeitlp5 Min" > ramdisk/restzeitlp5
+		fi
+	else
+		if ((pushbenachrichtigung == "1")) ; then
+			if ((pushbstartl == "1")) ; then
+				./runs/pushover.sh "$lp5name Ladung gestartet"
+			fi
+		fi
+		echo "$date LP5, Ladung gestartet" >> ramdisk/ladestatus.log
+
+		echo 1 > ramdisk/ladungaktivlp5
+		touch ramdisk/ladeustartlp5
+		echo $lmodus > ramdisk/loglademodus
+		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustartlp5
+		echo -e $(date +%s) > ramdisk/ladeustartslp5
+		echo $llkwhlp5 > ramdisk/ladelstartlp5
+	fi
+	echo 0 > ramdisk/lloglp5
+else
+	lloglp5=$(<ramdisk/lloglp5)
+	if (( lloglp5 < 5 )); then
+		lloglp5=$((lloglp5 + 1))
+		echo $lloglp5 > ramdisk/lloglp5
+	else
+		if [ -e ramdisk/ladeustartlp5 ]; then
+			echo 0 > ramdisk/ladungaktivlp5
+			echo "--" > ramdisk/restzeitlp5
+			ladelstartlp5=$(<ramdisk/ladelstartlp5)
+			ladeustartslp5=$(<ramdisk/ladeustartslp5)
+			bishergeladenlp5=$(echo "scale=2;($llkwhlp5 - $ladelstartlp5)/1" |bc | sed 's/^\./0./')
+			startlp5=$(<ramdisk/ladeustartlp5)
+			jetztlp5=$(date +%d.%m.%y-%H:%M)
+			jetztslp5=$(date +%s)
+			ladedauerlp5=$(((jetztslp5 - ladeustartslp5) / 60 ))
+			ladedauerslp5=$((jetztslp5 - ladeustartslp5))
+			ladegeschwlp5=$(echo "scale=2;$bishergeladenlp5 * 60 * 60 / $ladedauerslp5" |bc)
+			gelrlp5=$(echo "scale=2;$bishergeladenlp5 / $durchslp5 * 100" |bc)
+			gelrlp5=${gelrlp5%.*}
+	
+			if (( ladedauerlp5 > 60 )); then
+				ladedauerhlp5=$((ladedauerlp5 / 60))
+				laderestlp5=$((ladedauerlp5 % 60))
+				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerhlp5' H '$laderestlp5' Min,5',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerhlp5 H $laderestlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
+					fi
+				fi
+
+			else
+				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerlp5' Min,5',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
+					fi
+				fi
+
+			fi
+			echo "$date LP5, Ladung gestoppt" >> ramdisk/ladestatus.log
+
+			rm ramdisk/ladeustartlp5
+		fi
+	fi
+
+fi
+fi
+if (( lastmanagementlp6 == 1 )); then
+ladeleistunglp6=$(<ramdisk/llaktuelllp6)
+llkwhlp6=$(<ramdisk/llkwhlp6)
+plugstatlp6=$(<ramdisk/plugstatlp6)
+if (( plugstatlp6 == 1 )); then
+	pluggedladungaktlp6=$(<ramdisk/pluggedladungaktlp6)
+	if (( pluggedladungaktlp6 == 0 )); then
+		echo $llkwhlp6 > ramdisk/pluggedladunglp6startkwh
+		echo 1 > ramdisk/pluggedladungaktlp6
+	fi
+	pluggedladunglp6startkwh=$(<ramdisk/pluggedladunglp6startkwh)
+	pluggedladungbishergeladenlp6=$(echo "scale=2;($llkwhlp6 - $pluggedladunglp6startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp6 > ramdisk/pluggedladungbishergeladenlp6
+	echo 0 > ramdisk/pluggedtimerlp6
+else
+	pluggedtimerlp6=$(<ramdisk/pluggedtimerlp6)
+	if (( pluggedtimerlp6 < 6 )); then
+		pluggedtimerlp6=$((pluggedtimerlp6 + 1))
+		echo $pluggedtimerlp6 > ramdisk/pluggedtimerlp6
+	else
+		echo 0 > ramdisk/pluggedladungaktlp6
+	fi
+fi
+if (( ladeleistunglp6 > 100 )); then
+	if [ -e ramdisk/ladeustartlp6 ]; then
+
+		ladelstartlp6=$(<ramdisk/ladelstartlp6)
+		bishergeladenlp6=$(echo "scale=2;($llkwhlp6 - $ladelstartlp6)/1" |bc | sed 's/^\./0./')
+		echo $bishergeladenlp6 > ramdisk/aktgeladenlp6
+		gelrlp6=$(echo "scale=2;$bishergeladenlp6 / $durchslp6 * 100" |bc)
+		gelrlp6=${gelrlp6%.*}
+		echo $gelrlp6 > ramdisk/gelrlp6
+		restzeitlp6=$(echo "scale=6;($lademkwhlp6 - $bishergeladenlp6)/ $ladeleistunglp6 * 1000 * 60" |bc)
+		restzeitlp6=${restzeitlp6%.*}
+		echo $restzeitlp6 > ramdisk/restzeitlp6m
+		if (( restzeitlp6 > 60 )); then
+			restzeitlp6h=$((restzeitlp6 / 60))
+			restzeitlp6r=$((restzeitlp6 % 60))
+			echo "$restzeitlp6h H $restzeitlp6r Min" > ramdisk/restzeitlp6
+		else
+			echo "$restzeitlp6 Min" > ramdisk/restzeitlp6
+		fi
+	else
+		if ((pushbenachrichtigung == "1")) ; then
+			if ((pushbstartl == "1")) ; then
+				./runs/pushover.sh "$lp6name Ladung gestartet"
+			fi
+		fi
+		echo "$date LP6, Ladung gestartet" >> ramdisk/ladestatus.log
+
+		echo 1 > ramdisk/ladungaktivlp6
+		touch ramdisk/ladeustartlp6
+		echo $lmodus > ramdisk/loglademodus
+		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustartlp6
+		echo -e $(date +%s) > ramdisk/ladeustartslp6
+		echo $llkwhlp6 > ramdisk/ladelstartlp6
+	fi
+	echo 0 > ramdisk/lloglp6
+else
+	lloglp6=$(<ramdisk/lloglp6)
+	if (( lloglp6 < 5 )); then
+		lloglp6=$((lloglp6 + 1))
+		echo $lloglp6 > ramdisk/lloglp6
+	else
+		if [ -e ramdisk/ladeustartlp6 ]; then
+			echo 0 > ramdisk/ladungaktivlp6
+			echo "--" > ramdisk/restzeitlp6
+			ladelstartlp6=$(<ramdisk/ladelstartlp6)
+			ladeustartslp6=$(<ramdisk/ladeustartslp6)
+			bishergeladenlp6=$(echo "scale=2;($llkwhlp6 - $ladelstartlp6)/1" |bc | sed 's/^\./0./')
+			startlp6=$(<ramdisk/ladeustartlp6)
+			jetztlp6=$(date +%d.%m.%y-%H:%M)
+			jetztslp6=$(date +%s)
+			ladedauerlp6=$(((jetztslp6 - ladeustartslp6) / 60 ))
+			ladedauerslp6=$((jetztslp6 - ladeustartslp6))
+			ladegeschwlp6=$(echo "scale=2;$bishergeladenlp6 * 60 * 60 / $ladedauerslp6" |bc)
+			gelrlp6=$(echo "scale=2;$bishergeladenlp6 / $durchslp6 * 100" |bc)
+			gelrlp6=${gelrlp6%.*}
+	
+			if (( ladedauerlp6 > 60 )); then
+				ladedauerhlp6=$((ladedauerlp6 / 60))
+				laderestlp6=$((ladedauerlp6 % 60))
+				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerhlp6' H '$laderestlp6' Min,6',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerhlp6 H $laderestlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
+					fi
+				fi
+
+			else
+				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerlp6' Min,6',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
+					fi
+				fi
+
+			fi
+			echo "$date LP6, Ladung gestoppt" >> ramdisk/ladestatus.log
+
+			rm ramdisk/ladeustartlp6
+		fi
+	fi
+
+fi
+fi
+if (( lastmanagementlp7 == 1 )); then
+ladeleistunglp7=$(<ramdisk/llaktuelllp7)
+llkwhlp7=$(<ramdisk/llkwhlp7)
+plugstatlp7=$(<ramdisk/plugstatlp7)
+if (( plugstatlp7 == 1 )); then
+	pluggedladungaktlp7=$(<ramdisk/pluggedladungaktlp7)
+	if (( pluggedladungaktlp7 == 0 )); then
+		echo $llkwhlp7 > ramdisk/pluggedladunglp7startkwh
+		echo 1 > ramdisk/pluggedladungaktlp7
+	fi
+	pluggedladunglp7startkwh=$(<ramdisk/pluggedladunglp7startkwh)
+	pluggedladungbishergeladenlp7=$(echo "scale=2;($llkwhlp7 - $pluggedladunglp7startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp7 > ramdisk/pluggedladungbishergeladenlp7
+	echo 0 > ramdisk/pluggedtimerlp7
+else
+	pluggedtimerlp7=$(<ramdisk/pluggedtimerlp7)
+	if (( pluggedtimerlp7 < 6 )); then
+		pluggedtimerlp7=$((pluggedtimerlp7 + 1))
+		echo $pluggedtimerlp7 > ramdisk/pluggedtimerlp7
+	else
+		echo 0 > ramdisk/pluggedladungaktlp7
+	fi
+fi
+if (( ladeleistunglp7 > 100 )); then
+	if [ -e ramdisk/ladeustartlp7 ]; then
+
+		ladelstartlp7=$(<ramdisk/ladelstartlp7)
+		bishergeladenlp7=$(echo "scale=2;($llkwhlp7 - $ladelstartlp7)/1" |bc | sed 's/^\./0./')
+		echo $bishergeladenlp7 > ramdisk/aktgeladenlp7
+		gelrlp7=$(echo "scale=2;$bishergeladenlp7 / $durchslp7 * 100" |bc)
+		gelrlp7=${gelrlp7%.*}
+		echo $gelrlp7 > ramdisk/gelrlp7
+		restzeitlp7=$(echo "scale=6;($lademkwhlp7 - $bishergeladenlp7)/ $ladeleistunglp7 * 1000 * 60" |bc)
+		restzeitlp7=${restzeitlp7%.*}
+		echo $restzeitlp7 > ramdisk/restzeitlp7m
+		if (( restzeitlp7 > 60 )); then
+			restzeitlp7h=$((restzeitlp7 / 60))
+			restzeitlp7r=$((restzeitlp7 % 60))
+			echo "$restzeitlp7h H $restzeitlp7r Min" > ramdisk/restzeitlp7
+		else
+			echo "$restzeitlp7 Min" > ramdisk/restzeitlp7
+		fi
+	else
+		if ((pushbenachrichtigung == "1")) ; then
+			if ((pushbstartl == "1")) ; then
+				./runs/pushover.sh "$lp7name Ladung gestartet"
+			fi
+		fi
+		echo "$date LP7, Ladung gestartet" >> ramdisk/ladestatus.log
+
+		echo 1 > ramdisk/ladungaktivlp7
+		touch ramdisk/ladeustartlp7
+		echo $lmodus > ramdisk/loglademodus
+		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustartlp7
+		echo -e $(date +%s) > ramdisk/ladeustartslp7
+		echo $llkwhlp7 > ramdisk/ladelstartlp7
+	fi
+	echo 0 > ramdisk/lloglp7
+else
+	lloglp7=$(<ramdisk/lloglp7)
+	if (( lloglp7 < 5 )); then
+		lloglp7=$((lloglp7 + 1))
+		echo $lloglp7 > ramdisk/lloglp7
+	else
+		if [ -e ramdisk/ladeustartlp7 ]; then
+			echo 0 > ramdisk/ladungaktivlp7
+			echo "--" > ramdisk/restzeitlp7
+			ladelstartlp7=$(<ramdisk/ladelstartlp7)
+			ladeustartslp7=$(<ramdisk/ladeustartslp7)
+			bishergeladenlp7=$(echo "scale=2;($llkwhlp7 - $ladelstartlp7)/1" |bc | sed 's/^\./0./')
+			startlp7=$(<ramdisk/ladeustartlp7)
+			jetztlp7=$(date +%d.%m.%y-%H:%M)
+			jetztslp7=$(date +%s)
+			ladedauerlp7=$(((jetztslp7 - ladeustartslp7) / 60 ))
+			ladedauerslp7=$((jetztslp7 - ladeustartslp7))
+			ladegeschwlp7=$(echo "scale=2;$bishergeladenlp7 * 60 * 60 / $ladedauerslp7" |bc)
+			gelrlp7=$(echo "scale=2;$bishergeladenlp7 / $durchslp7 * 100" |bc)
+			gelrlp7=${gelrlp7%.*}
+	
+			if (( ladedauerlp7 > 60 )); then
+				ladedauerhlp7=$((ladedauerlp7 / 60))
+				laderestlp7=$((ladedauerlp7 % 60))
+				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerhlp7' H '$laderestlp7' Min,7',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerhlp7 H $laderestlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
+					fi
+				fi
+
+			else
+				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerlp7' Min,7',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
+					fi
+				fi
+
+			fi
+			echo "$date LP7, Ladung gestoppt" >> ramdisk/ladestatus.log
+
+			rm ramdisk/ladeustartlp7
+		fi
+	fi
+
+fi
+fi
+if (( lastmanagementlp8 == 1 )); then
+ladeleistunglp8=$(<ramdisk/llaktuelllp8)
+llkwhlp8=$(<ramdisk/llkwhlp8)
+plugstatlp8=$(<ramdisk/plugstatlp8)
+if (( plugstatlp8 == 1 )); then
+	pluggedladungaktlp8=$(<ramdisk/pluggedladungaktlp8)
+	if (( pluggedladungaktlp8 == 0 )); then
+		echo $llkwhlp8 > ramdisk/pluggedladunglp8startkwh
+		echo 1 > ramdisk/pluggedladungaktlp8
+	fi
+	pluggedladunglp8startkwh=$(<ramdisk/pluggedladunglp8startkwh)
+	pluggedladungbishergeladenlp8=$(echo "scale=2;($llkwhlp8 - $pluggedladunglp8startkwh)/1" |bc | sed 's/^\./0./')
+	echo $pluggedladungbishergeladenlp8 > ramdisk/pluggedladungbishergeladenlp8
+	echo 0 > ramdisk/pluggedtimerlp8
+else
+	pluggedtimerlp8=$(<ramdisk/pluggedtimerlp8)
+	if (( pluggedtimerlp8 < 6 )); then
+		pluggedtimerlp8=$((pluggedtimerlp8 + 1))
+		echo $pluggedtimerlp8 > ramdisk/pluggedtimerlp8
+	else
+		echo 0 > ramdisk/pluggedladungaktlp8
+	fi
+fi
+if (( ladeleistunglp8 > 100 )); then
+	if [ -e ramdisk/ladeustartlp8 ]; then
+
+		ladelstartlp8=$(<ramdisk/ladelstartlp8)
+		bishergeladenlp8=$(echo "scale=2;($llkwhlp8 - $ladelstartlp8)/1" |bc | sed 's/^\./0./')
+		echo $bishergeladenlp8 > ramdisk/aktgeladenlp8
+		gelrlp8=$(echo "scale=2;$bishergeladenlp8 / $durchslp8 * 100" |bc)
+		gelrlp8=${gelrlp8%.*}
+		echo $gelrlp8 > ramdisk/gelrlp8
+		restzeitlp8=$(echo "scale=6;($lademkwhlp8 - $bishergeladenlp8)/ $ladeleistunglp8 * 1000 * 60" |bc)
+		restzeitlp8=${restzeitlp8%.*}
+		echo $restzeitlp8 > ramdisk/restzeitlp8m
+		if (( restzeitlp8 > 60 )); then
+			restzeitlp8h=$((restzeitlp8 / 60))
+			restzeitlp8r=$((restzeitlp8 % 60))
+			echo "$restzeitlp8h H $restzeitlp8r Min" > ramdisk/restzeitlp8
+		else
+			echo "$restzeitlp8 Min" > ramdisk/restzeitlp8
+		fi
+	else
+		if ((pushbenachrichtigung == "1")) ; then
+			if ((pushbstartl == "1")) ; then
+				./runs/pushover.sh "$lp8name Ladung gestartet"
+			fi
+		fi
+		echo "$date LP8, Ladung gestartet" >> ramdisk/ladestatus.log
+
+		echo 1 > ramdisk/ladungaktivlp8
+		touch ramdisk/ladeustartlp8
+		echo $lmodus > ramdisk/loglademodus
+		echo -e $(date +%d.%m.%y-%H:%M) > ramdisk/ladeustartlp8
+		echo -e $(date +%s) > ramdisk/ladeustartslp8
+		echo $llkwhlp8 > ramdisk/ladelstartlp8
+	fi
+	echo 0 > ramdisk/lloglp8
+else
+	lloglp8=$(<ramdisk/lloglp8)
+	if (( lloglp8 < 5 )); then
+		lloglp8=$((lloglp8 + 1))
+		echo $lloglp8 > ramdisk/lloglp8
+	else
+		if [ -e ramdisk/ladeustartlp8 ]; then
+			echo 0 > ramdisk/ladungaktivlp8
+			echo "--" > ramdisk/restzeitlp8
+			ladelstartlp8=$(<ramdisk/ladelstartlp8)
+			ladeustartslp8=$(<ramdisk/ladeustartslp8)
+			bishergeladenlp8=$(echo "scale=2;($llkwhlp8 - $ladelstartlp8)/1" |bc | sed 's/^\./0./')
+			startlp8=$(<ramdisk/ladeustartlp8)
+			jetztlp8=$(date +%d.%m.%y-%H:%M)
+			jetztslp8=$(date +%s)
+			ladedauerlp8=$(((jetztslp8 - ladeustartslp8) / 60 ))
+			ladedauerslp8=$((jetztslp8 - ladeustartslp8))
+			ladegeschwlp8=$(echo "scale=2;$bishergeladenlp8 * 60 * 60 / $ladedauerslp8" |bc)
+			gelrlp8=$(echo "scale=2;$bishergeladenlp8 / $durchslp8 * 100" |bc)
+			gelrlp8=${gelrlp8%.*}
+	
+			if (( ladedauerlp8 > 60 )); then
+				ladedauerhlp8=$((ladedauerlp8 / 60))
+				laderestlp8=$((ladedauerlp8 % 60))
+				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerhlp8' H '$laderestlp8' Min,8',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerhlp8 H $laderestlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
+					fi
+				fi
+
+			else
+				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerlp8' Min,8',$lademodus web/ladelog
+				if ((pushbenachrichtigung == "1")) ; then
+					if ((pushbstopl == "1")) ; then
+						./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
+					fi
+				fi
+
+			fi
+			echo "$date LP8, Ladung gestoppt" >> ramdisk/ladestatus.log
+
+			rm ramdisk/ladeustartlp8
+		fi
+	fi
+
+fi
+fi
+
+
+
+
 
 

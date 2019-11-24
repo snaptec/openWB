@@ -26,6 +26,17 @@ whstring = "/var/www/html/openWB/ramdisk/verbraucher%s_wh" % (verbrauchernr)
 f = open(whstring, 'w')
 f.write(str(ikwh))
 f.close()
+resp = client.read_input_registers(0x0004,4, unit=sdmid)
+value1 = resp.registers[0] 
+value2 = resp.registers[1] 
+all = format(value1, '04x') + format(value2, '04x')
+ekwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
+ekwh = float(ekwh) * 10
+whestring = "/var/www/html/openWB/ramdisk/verbraucher%s_whe" % (verbrauchernr)
+f = open(whestring, 'w')
+f.write(str(ekwh))
+f.close()
+
 
 resp = client.read_input_registers(0x26,2, unit=sdmid)
 value1 = resp.registers[0] 
@@ -33,7 +44,6 @@ value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
 wstring = "/var/www/html/openWB/ramdisk/verbraucher%s_watt" % (verbrauchernr)
-f = open(whstring, 'w')
 f = open(wstring, 'w')
 f.write(str(final))
 f.close()

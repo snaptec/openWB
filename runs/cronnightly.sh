@@ -6,7 +6,7 @@ echo "Start cron nightly @ $(date)"
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
-
+echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
 
 
@@ -27,18 +27,24 @@ verbraucher1iwh=$(</var/www/html/openWB/ramdisk/verbraucher1_wh)
 verbraucher1ewh=$(</var/www/html/openWB/ramdisk/verbraucher1_whe)
 verbraucher2iwh=$(</var/www/html/openWB/ramdisk/verbraucher2_wh)
 verbraucher2ewh=$(</var/www/html/openWB/ramdisk/verbraucher2_whe)
-
-
-
-
+ll4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
+ll5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
+ll6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
+ll7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
+ll8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
 
 
 ll1=$(echo "$ll1 * 1000" | bc)
 ll2=$(echo "$ll2 * 1000" | bc)
 ll3=$(echo "$ll3 * 1000" | bc)
 llg=$(echo "$llg * 1000" | bc)
+ll4=$(echo "$ll4 * 1000" | bc)
+ll5=$(echo "$ll5 * 1000" | bc)
+ll6=$(echo "$ll6 * 1000" | bc)
+ll7=$(echo "$ll7 * 1000" | bc)
+ll8=$(echo "$ll8 * 1000" | bc)
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8 >> $monthlyfile.csv
 echo $(date +%Y%m%d) >> $monthlyfile-date.csv
 echo $bezug >> $monthlyfile-bezug.csv
 echo $einspeisung >> $monthlyfile-einspeisung.csv

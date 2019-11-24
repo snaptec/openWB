@@ -54,6 +54,185 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "wryoulessip=") !== false) {
+		list(, $wryoulessipold) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp4=") !== false) {
+		list(, $lastmanagementlp4old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp5=") !== false) {
+		list(, $lastmanagementlp5old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp5=") !== false) {
+		list(, $lastmanagementlp5old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp6=") !== false) {
+		list(, $lastmanagementlp6old) = explode("=", $line);
+	}
+
+	if(strpos($line, "lastmanagementlp7=") !== false) {
+		list(, $lastmanagementlp7old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp8=") !== false) {
+		list(, $lastmanagementlp8old) = explode("=", $line);
+	}
+
+	if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
+		list(, $stopsocnotpluggedlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp3=") !== false) {
+		list(, $evseiplp3old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp3=") !== false) {
+		list(, $evseidlp3old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp3id=") !== false) {
+		list(, $mpmlp3idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp3ip=") !== false) {
+		list(, $mpmlp3ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp2=") !== false) {
+		list(, $evseiplp2old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp2=") !== false) {
+		list(, $evseidlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp2id=") !== false) {
+		list(, $mpmlp2idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp2ip=") !== false) {
+		list(, $mpmlp2ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp1=") !== false) {
+		list(, $evseiplp1old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp1=") !== false) {
+		list(, $evseidlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp1id=") !== false) {
+		list(, $mpmlp1idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp1ip=") !== false) {
+		list(, $mpmlp1ipold) = explode("=", $line);
+	}
+
+	if(strpos($line, "evseiplp4=") !== false) {
+		list(, $evseiplp4old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp4=") !== false) {
+		list(, $evseidlp4old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp4id=") !== false) {
+		list(, $mpmlp4idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp4ip=") !== false) {
+		list(, $mpmlp4ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp5=") !== false) {
+		list(, $evseiplp5old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp5=") !== false) {
+		list(, $evseidlp5old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp5id=") !== false) {
+		list(, $mpmlp5idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp5ip=") !== false) {
+		list(, $mpmlp5ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp6=") !== false) {
+		list(, $evseiplp6old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp6=") !== false) {
+		list(, $evseidlp6old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp6id=") !== false) {
+		list(, $mpmlp6idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp6ip=") !== false) {
+		list(, $mpmlp6ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp7=") !== false) {
+		list(, $evseiplp7old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp7=") !== false) {
+		list(, $evseidlp7old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp7id=") !== false) {
+		list(, $mpmlp7idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp7ip=") !== false) {
+		list(, $mpmlp7ipold) = explode("=", $line);
+	}
+	if(strpos($line, "evseiplp8=") !== false) {
+		list(, $evseiplp8old) = explode("=", $line);
+	}
+	if(strpos($line, "evseidlp8=") !== false) {
+		list(, $evseidlp8old) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp8id=") !== false) {
+		list(, $mpmlp8idold) = explode("=", $line);
+	}
+	if(strpos($line, "mpmlp8ip=") !== false) {
+		list(, $mpmlp8ipold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergyuser=") !== false) {
+		list(, $discovergyuserold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergypass=") !== false) {
+		list(, $discovergypassold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergyevuid=") !== false) {
+		list(, $discovergyevuidold) = explode("=", $line);
+	}
+	if(strpos($line, "discovergypvid=") !== false) {
+		list(, $discovergypvidold) = explode("=", $line);
+	}
+
+	if(strpos($line, "solarview_hostname=") !== false) {
+		list(, $solarview_hostnameold) = explode("=", $line);
+	}
+	if(strpos($line, "solarview_port=") !== false) {
+		list(, $solarview_portold) = explode("=", $line);
+	}
+
+	if(strpos($line, "alphaessip=") !== false) {
+		list(, $alphaessipold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_audi_username=") !== false) {
+		list(, $soc_audi_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_audi_passwort=") !== false) {
+		list(, $soc_audi_passwortold) = explode("=", $line);
+	}
+
+	if(strpos($line, "soc_zerong_username=") !== false) {
+		list(, $soc_zerong_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_password=") !== false) {
+		list(, $soc_zerong_passwordold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_intervall=") !== false) {
+		list(, $soc_zerong_intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zerong_intervallladen=") !== false) {
+		list(, $soc_zerong_intervallladenold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_username=") !== false) {
+		list(, $soc_zeronglp2_usernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_password=") !== false) {
+		list(, $soc_zeronglp2_passwordold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_intervall=") !== false) {
+		list(, $soc_zeronglp2_intervallold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_zeronglp2_intervallladen=") !== false) {
+		list(, $soc_zeronglp2_intervallladenold) = explode("=", $line);
+	}
 	if(strpos($line, "bezug_victronip=") !== false) {
 		list(, $bezug_victronipold) = explode("=", $line);
 	}
@@ -65,6 +244,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "sonnenecoip=") !== false) {
 		list(, $sonnenecoipold) = explode("=", $line);
+	}
+	if(strpos($line, "sonnenecoalternativ=") !== false) {
+		list(, $sonnenecoalternativold) = explode("=", $line);
 	}
 	if(strpos($line, "wr_sdm120id=") !== false) {
 		list(, $wr_sdm120idold) = explode("=", $line);
@@ -110,6 +292,13 @@ foreach($lines as $line) {
 	if(strpos($line, "evsecon=") !== false) {
 		list(, $evseconold) = explode("=", $line);
 	}
+	if(strpos($line, "twcmanagerlp1ip=") !== false) {
+		list(, $twcmanagerlp1ipold) = explode("=", $line);
+	}
+	if(strpos($line, "twcmanagerlp1phasen=") !== false) {
+		list(, $twcmanagerlp1phasenold) = explode("=", $line);
+	}
+
 	if(strpos($line, "dacregister=") !== false) {
 		list(, $dacregisterold) = explode("=", $line);
 	}
@@ -248,9 +437,11 @@ foreach($lines as $line) {
 	if(strpos($line, "pvwattmodul=") !== false) {
 		list(, $pvwattmodulold) = explode("=", $line);
 	}
-
 	if(strpos($line, "wrfroniusip=") !== false) {
 		list(, $wrfroniusipold) = explode("=", $line);
+	}
+	if(strpos($line, "wrfronius2ip=") !== false) {
+		list(, $wrfronius2ipold) = explode("=", $line);
 	}
 	if(strpos($line, "wrkostalpikoip=") !== false) {
 		list(, $wrkostalpikoipold) = explode("=", $line);
@@ -551,6 +742,9 @@ foreach($lines as $line) {
 	if(strpos($line, "einspeisungjsonkwh=") !== false) {
 		list(, $einspeisungjsonkwhold) = explode("=", $line, 2);
 	}
+	if(strpos($line, "bezug_solarlog_speicherv=") !== false) {
+		list(, $bezug_solarlog_speichervold) = explode("=", $line);
+	}
 	if(strpos($line, "bezug_solarlog_ip=") !== false) {
 		list(, $bezug_solarlog_ipold) = explode("=", $line);
 	}
@@ -565,6 +759,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "soc_tesla_username=") !== false) {
 		list(, $socteslausernameold) = explode("=", $line);
+	}
+	if(strpos($line, "soc_tesla_carnumber=") !== false) {
+		list(, $socteslacarnumberold) = explode("=", $line);
 	}
 	if(strpos($line, "soc_tesla_password=") !== false) {
 		list(, $socteslapwold) = explode("=", $line);
@@ -614,7 +811,9 @@ foreach($lines as $line) {
 	if(strpos($line, "solaredgespeicherip=") !== false) {
 		list(, $solaredgespeicheripold) = explode("=", $line);
 	}
-
+	if(strpos($line, "vartaspeicherip=") !== false) {
+		list(, $vartaspeicheripold) = explode("=", $line);
+	}
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -641,6 +840,21 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "lp3name=") !== false) {
 		list(, $lp3nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp4name=") !== false) {
+		list(, $lp4nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp5name=") !== false) {
+		list(, $lp5nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp6name=") !== false) {
+		list(, $lp6nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp7name=") !== false) {
+		list(, $lp7nameold) = explode("=", $line);
+	}
+	if(strpos($line, "lp8name=") !== false) {
+		list(, $lp8nameold) = explode("=", $line);
 	}
 	if(strpos($line, "goeiplp1=") !== false) {
 		list(, $goeiplp1old) = explode("=", $line);
@@ -776,6 +990,15 @@ foreach($lines as $line) {
 	if(strpos($line, "kostalplenticoreip=") !== false) {
 		list(, $kostalplenticoreipold) = explode("=", $line);
 	}
+	if(strpos($line, "kostalplenticoreip2=") !== false) {
+		list(, $kostalplenticoreip2old) = explode("=", $line);
+	}
+	if(strpos($line, "name_wechselrichter1=") !== false) {
+		list(, $name_wechselrichter1old) = explode("=", $line);
+	}
+	if(strpos($line, "name_wechselrichter2=") !== false) {
+		list(, $name_wechselrichter2old) = explode("=", $line);
+	}
 
 	if(strpos($line, "mpm3pmevuhaus=") !== false) {
 		list(, $mpm3pmevuhausold) = explode("=", $line);
@@ -825,6 +1048,7 @@ foreach($lines as $line) {
 
 
 }
+$twcmanagerlp1ipold = str_replace( "'", "", $twcmanagerlp1ipold);
 $bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
 $bezug_http_l2_urlold = str_replace( "'", "", $bezug_http_l2_urlold);
 $bezug_http_l3_urlold = str_replace( "'", "", $bezug_http_l3_urlold);
@@ -874,6 +1098,11 @@ $solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
+$lp4nameold = str_replace( "'", "", $lp4nameold);
+$lp5nameold = str_replace( "'", "", $lp5nameold);
+$lp6nameold = str_replace( "'", "", $lp6nameold);
+$lp7nameold = str_replace( "'", "", $lp7nameold);
+$lp8nameold = str_replace( "'", "", $lp8nameold);
 $zoepasswortold = str_replace( "'", "", $zoepasswortold);
 $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
@@ -916,10 +1145,11 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 		<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
 		<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
-		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">OpenWB Master</option>
+		<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+		<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
 		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
-
+		<option <?php if($evseconold == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit </option>
 	</select>
 
 </div>
@@ -986,6 +1216,22 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 	Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
 </div>
 </div>
+<div id="evseconipevse">
+<div class="row bg-info">
+	<b><label for="evseiplp1">IP Adresse:</label></b>
+	<input type="text" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp1">EVSE ID:</label></b>
+	<input type="text" name="evseidlp1" id="evseidlp1" value="<?php echo $evseidlp1old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+</div>
 <div id="evseconkeba">
 <div class="row bg-info">
 	<b><label for="kebaiplp1">Keba IP Adresse:</label></b>
@@ -994,6 +1240,23 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div class="row bg-info">
 	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
 </div>
+</div>
+<div id="evsecontwcmanager">
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
+	<input type="text" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP Adresse im Format: 192.168.0.12 <br> <br>
+</div>
+<div class="row bg-info">
+	<b><label for="twcmanagerlp1phasen">TWCManager Anzahl Phasen:</label></b>
+	<input type="text" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte Zahl. Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA) <br> <br>
+</div>
+
 </div>
 
 <div id="evsecongoe">
@@ -1048,7 +1311,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 
 <script>
 function display_lp1() {
-	$('#evsecondac').hide(); 
+	$('#evsecondac').hide();
 	$('#evseconmod').hide();
 	$('#evseconswifi').hide();
 	$('#llmodullp1').hide();
@@ -1057,32 +1320,47 @@ function display_lp1() {
 	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
 	$('#openwb12').hide();
+	$('#evsecontwcmanager').hide();
+	$('#evseconipevse').hide();
+	if($('#evsecon').val() == 'ipevse') {
+		$('#evseconipevse').show();
+		$('#llmodullp1').show();
+
+	}
+
 
 	if($('#evsecon').val() == 'dac') {
-		$('#evsecondac').show(); 
+		$('#evsecondac').show();
 		$('#llmodullp1').show();
 	}
 	if($('#evsecon').val() == 'modbusevse') {
 		$('#evseconmod').show();
-		$('#llmodullp1').show();	
-	} 
+		$('#llmodullp1').show();
+	}
 	if($('#evsecon').val() == 'simpleevsewifi') {
 		$('#evseconswifi').show();
-	} 
+	}
 	if($('#evsecon').val() == 'goe') {
 		$('#evsecongoe').show();
-	} 
+	}
 	if($('#evsecon').val() == 'masterethframer') {
 		$('#evseconmastereth').show();
-	} 
+	}
 	if($('#evsecon').val() == 'nrgkick') {
 		$('#evseconnrgkick').show();
 	}
 	if($('#evsecon').val() == 'keba') {
 		$('#evseconkeba').show();
 	}
+	if($('#evsecon').val() == 'twcmanager') {
+		$('#evsecontwcmanager').show();
+	}
+
 	if($('#evsecon').val() == 'openwb12') {
 		$('#openwb12').show();
+	}
+	if($('#evsecon').val() == 'ipevse') {
+		$('#evseconipevse').show();
 	}
 
 }
@@ -1108,8 +1386,26 @@ $(function() {
 		<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
 		<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
 		<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo selected ?> value="mpm3pmtripple">openWB Tripple</option>
+		<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo selected ?> value="mpm3pmlllp1">openWB Satellit</option>
 
 	</select>
+</div>
+<div id="mpm3pmlllp1div">
+	<div class="row bg-info">
+		<b><label for="mpmlp1ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo $mpmlp1ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp1id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp1id" id="mpmlp1id" value="<?php echo $mpmlp1idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
 </div>
 
 <div id="llmnone">
@@ -1266,7 +1562,7 @@ Keine Konfiguration erforderlich.<br>
 
 <script>
 function display_llmp1() {
-	$('#llmnone').hide(); 
+	$('#llmnone').hide();
 	$('#llmsdm').hide();
 	$('#llmpm3pm').hide();
 	$('#llswifi').hide();
@@ -1274,32 +1570,41 @@ function display_llmp1() {
 	$('#rs485lanlp1').hide();
 	$('#llmfsm').hide();
 	$('#httpll').hide();
+	$('#mpm3pmlllp1div').hide();
 
+
+	if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
+		$('#mpm3pmlllp1div').show();
+	}
 	if($('#ladeleistungmodul').val() == 'none') {
-		$('#llmnone').show(); 
-	} 
+		$('#llmnone').show();
+	}
+	if($('#ladeleistungmodul').val() == 'mpm3pmtripple') {
+		$('#llmnone').show();
+	}
+
 	if($('#ladeleistungmodul').val() == 'httpll') {
-		$('#httpll').show(); 
-	} 
+		$('#httpll').show();
+	}
 
 	if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
 		$('#llmsdm').show();
 		$('#rs485lanlp1').show();
-	} 
+	}
 	if($('#ladeleistungmodul').val() == 'smaemd_ll') {
 		$('#llsma').show();
-	} 
+	}
 	if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
 		$('#sdm120div').show();
 		$('#rs485lanlp1').show();
-	} 
+	}
 	if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
 		$('#llswifi').show();
-	} 
+	}
 	if($('#ladeleistungmodul').val() == 'mpm3pmll') {
 		$('#llmpm3pm').show();
 		$('#rs485lanlp1').show();
-	} 
+	}
 	if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
 		$('#rs485lanlp1').show();
 		$('#llmfsm').show();
@@ -1327,10 +1632,19 @@ $(function() {
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
 		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
-
-
+		<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
+		<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
 	</select>
 </div>
+	<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
+	<select type="text" name="stopsocnotpluggedlp1" id="stopsocnotpluggedp1">
+		<option <?php if($stopsocnotpluggedlp1old == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($stopsocnotpluggedlp1old == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
+	</div>
+
 <div id="socmnone">
 	<br>
 </div>
@@ -1352,6 +1666,13 @@ $(function() {
 		Password des Tesla Logins<br><br>
 	</div>
 	<div class="row bg-info">
+		<b><label for="teslasoccarnumber">Auto im Account:</label></b>
+		<input type="text" name="teslasoccarnumber" id="teslasoccarnumber" value="<?php echo $socteslacarnumberold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.<br><br>
+	</div>
+	<div class="row bg-info">
 		<b><label for="teslasocintervall">Abfrageintervall Standby:</label></b>
 		<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>"><br>
 	</div>
@@ -1368,6 +1689,62 @@ $(function() {
 
 
 </div>
+<div id="socmzerong">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_username">Zero Benutzername:</label></b>
+		<input type="text" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo $soc_zerong_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Zero Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_password">Zero Passwort:</label></b>
+		<input type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo $soc_zerong_passwordold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Zero Logins<br><br>
+	</div>
+
+	<div class="row bg-info">
+		<b><label for="soc_zerong_intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zerong_intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+<div id="socmaudi">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_username">Audi Benutzername:</label></b>
+		<input type="text" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Audi Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_audi_passwort">Audi Passwort:</label></b>
+		<input type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Audi Logins<br><br>
+	</div>
+
+</div>
+
+
 <div id="socmhttp">
 	<div class="row bg-info">
 	</div>
@@ -1494,7 +1871,7 @@ $(function() {
 
 <script>
 function display_socmodul() {
-	$('#socmnone').hide(); 
+	$('#socmnone').hide();
 	$('#socmhttp').hide();
 	$('#socleaf').hide();
 	$('#soci3').hide();
@@ -1502,19 +1879,28 @@ function display_socmodul() {
 	$('#socevnotify').hide();
 	$('#socmtesla').hide();
 	$('#soccarnet').hide();
+	$('#socmzerong').hide();
+	$('#socmaudi').hide();
+   	if($('#socmodul').val() == 'soc_audi')   {
+		$('#socmaudi').show();
+	}
 
 	if($('#socmodul').val() == 'none') {
-		$('#socmnone').show(); 
-	}      
+		$('#socmnone').show();
+	}
    	if($('#socmodul').val() == 'soc_http')   {
-		$('#socmhttp').show();	
-	} 
+		$('#socmhttp').show();
+	}
+   	if($('#socmodul').val() == 'soc_zerong')   {
+		$('#socmzerong').show();
+	}
+
   	if($('#socmodul').val() == 'soc_leaf')   {
 		$('#socleaf').show();
-	} 
+	}
     if($('#socmodul').val() == 'soc_i3')   {
 		$('#soci3').show();
-	} 
+	}
     if($('#socmodul').val() == 'soc_zoe')   {
 		$('#soczoe').show();
     }
@@ -1526,7 +1912,7 @@ function display_socmodul() {
 	}
 	if($('#socmodul').val() == 'soc_carnet')   {
 		$('#soccarnet').show();
-	} 
+	}
 }
 
 $(function() {
@@ -1569,11 +1955,28 @@ $(function() {
 			<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
 			<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
 			<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo selected ?> value="openwb12s1">openWB series1/2 Duo</option>
+			<option <?php if($evsecons1old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
 
 
 
 		</select>
 	</div>
+<div id="evseconipevselp2">
+<div class="row bg-info">
+	<b><label for="evseiplp2">IP Adresse:</label></b>
+	<input type="text" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp2">EVSE ID:</label></b>
+	<input type="text" name="evseidlp2" id="evseidlp2" value="<?php echo $evseidlp2old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+</div>
 <div id="openwb12s1">
 	<div class="row bg-success">
 	Keine Konfiguration erforderlich.<br>
@@ -1700,7 +2103,7 @@ $(function() {
 
 <script>
 function display_lp2() {
-	$('#evsecondacs1').hide(); 
+	$('#evsecondacs1').hide();
 	$('#evseconmbs1').hide();
 	$('#evseconswifis1').hide();
 	$('#llmodullp2').hide();
@@ -1709,27 +2112,32 @@ function display_lp2() {
 	$('#evseconkebas1').hide();
 	$('#evseconnrgkicks1').hide();
 	$('#openwb12s1').hide();
+	$('#evseconipevselp2').hide();
+	if($('#evsecons1').val() == 'ipevse') {
+		$('#evseconipevselp2').show();
+		$('#llmodullp2').show();
+	}
 
 	if($('#evsecons1').val() == 'dac') {
-		$('#evsecondacs1').show(); 
+		$('#evsecondacs1').show();
 		$('#llmodullp2').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'modbusevse') {
 		$('#evseconmbs1').show();
 		$('#llmodullp2').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'simpleevsewifi') {
 		$('#evseconswifis1').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'goe') {
 		$('#evsecongoes1').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'slaveeth') {
 		$('#evsecoslaveeth').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'keba') {
 		$('#evseconkebas1').show();
-	} 
+	}
 	if($('#evsecons1').val() == 'nrgkick') {
    		$('#evseconnrgkicks1').show();
 	}
@@ -1741,7 +2149,7 @@ function display_lp2() {
 $(function() {
 	display_lp2();
 	$('#evsecons1').change( function(){
-		display_lp2(); 
+		display_lp2();
 	});
 });
 </script>
@@ -1750,18 +2158,35 @@ $(function() {
 <div id="llmodullp2">
 	<div class="row"><br>
 		<b><label for="ladeleistungs1modul">Ladeleistungsmodul für Ladepunkt 2:</label></b>
-		<select type="text" name="ladeleistungs1modul" id="ladeleistungss1modul">
+		<select type="text" name="ladeleistungs1modul" id="ladeleistungs1modul">
 			<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
+			<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo selected ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+			<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo selected ?> value="mpm3pmlllp2">openWB Satelit</option>
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
 	</div>
-
+<div id="mpm3pmlllp2div">
+	<div class="row bg-info">
+		<b><label for="mpmlp2ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo $mpmlp2ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp2id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp2id" id="mpmlp2id" value="<?php echo $mpmlp2idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
 
 
 <div id="mpm3pmlls1div">
@@ -1862,6 +2287,8 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
 		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
 		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
+		<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
+
 
 	</select>
 	</div>
@@ -1869,6 +2296,42 @@ Keine Konfiguration erforderlich.<br>
 	<div id="socmnone1">
 		<br>
 	</div>
+<div id="socmzeronglp2">
+	<div class="row bg-info">
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_username">Zero Benutzername:</label></b>
+		<input type="text" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo $soc_zeronglp2_usernameold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Email Adresse des Zero Logins<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_password">Zero Passwort:</label></b>
+		<input type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo $soc_zeronglp2_passwordold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Password des Zero Logins<br><br>
+	</div>
+
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_intervall">Abfrageintervall Standby:</label></b>
+		<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="soc_zeronglp2_intervallladen">Abfrageintervall Laden:</label></b>
+		<input type="text" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo $soc_zeronglp2_intervallladenold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+	</div>
+
+
+</div>
+
 <div id="socmteslalp2">
 	<div class="row bg-info">
 	</div>
@@ -2039,41 +2502,48 @@ Keine Konfiguration erforderlich.<br>
 
 <script>
 function display_llmp2() {
-	$('#sdm630s1div').hide(); 
+	$('#sdm630s1div').hide();
 	$('#sdm120s1div').hide();
-	$('#swifis1div').hide();	
+	$('#swifis1div').hide();
 	$('#mpm3pmlls1div').hide();
-	$('#rs485laniplp2').hide();	
-
-	if($('#ladeleistungss1modul').val() == 'sdm630modbuslls1') {
-		$('#sdm630s1div').show(); 
-		$('#rs485laniplp2').show();	
-	} 
-	if($('#ladeleistungss1modul').val() == 'sdm120modbuslls1') {
+	$('#rs485laniplp2').hide();
+	$('#mpm3pmlllp2div').hide();
+	if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
+		$('#sdm630s1div').show();
+		$('#rs485laniplp2').show();
+	}
+	if($('#ladeleistungs1modul').val() == 'sdm120modbuslls1') {
 		$('#sdm120s1div').show();
-		$('#rs485laniplp2').show();	
-	} 
-	if($('#ladeleistungss1modul').val() == 'simpleevsewifis1') {
-		$('#swifis1div').show();	
-	} 
-    if($('#ladeleistungss1modul').val() == 'goelp2') {
-		$('#swifis1div').show();	
-	} 
-	if($('#ladeleistungss1modul').val() == 'mpm3pmlls1') {
+		$('#rs485laniplp2').show();
+	}
+	if($('#ladeleistungs1modul').val() == 'simpleevsewifis1') {
+		$('#swifis1div').show();
+	}
+    if($('#ladeleistungs1modul').val() == 'goelp2') {
+		$('#swifis1div').show();
+    }
+    if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
+		$('#mpm3pmlllp2div').show();
+	}
+
+	if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 		$('#mpm3pmlls1div').show();
-		$('#rs485laniplp2').show();	
-	} 
+		$('#rs485laniplp2').show();
+	}
 }
 
 $(function() {
-	display_llmp2();
-	$('#ladeleistungss1modul').change( display_llmp2() );
+	display_llmp2 ();
+	$('#ladeleistungs1modul').change( function(){
+		display_llmp2();
+	});
 });
+
 </script>
 
 <script>
 function display_socmodul1() {
-	$('#socmnone1').hide(); 
+	$('#socmnone1').hide();
 	$('#socmhttp1').hide();
 	$('#socleaf1').hide();
 	$('#soci31').hide();
@@ -2081,31 +2551,36 @@ function display_socmodul1() {
 	$('#soczoelp2').hide();
 	$('#socmteslalp2').hide();
 	$('#soccarnetlp2').hide();
+	$('#socmzeronglp2').hide();
 
 	if($('#socmodul1').val() == 'none') {
-		$('#socmnone1').hide(); 
+		$('#socmnone1').hide();
 	}
 	if($('#socmodul1').val() == 'soc_http1') {
-		$('#socmhttp1').show();	
-	} 
+		$('#socmhttp1').show();
+	}
 	if($('#socmodul1').val() == 'soc_leafs1') {
 		$('#socleaf1').show();
-	} 
+	}
 	if($('#socmodul1').val() == 'soc_i3s1') {
 		$('#soci31').show();
-	} 
+	}
 	if($('#socmodul1').val() == 'soc_evnotifys1') {
 		$('#socevnotifylp2').show();
-	} 
+	}
 	if($('#socmodul1').val() == 'soc_zoelp2') {
  		$('#soczoelp2').show();
-	} 
+	}
 	if($('#socmodul1').val() == 'soc_carnetlp2') {
 		$('#soccarnetlp2').show();
-	} 
+	}
 	if($('#socmodul1').val() == 'soc_teslalp2') {
 		$('#socmteslalp2').show();
-	} 
+	}
+	if($('#socmodul1').val() == 'soc_zeronglp2') {
+		$('#socmzeronglp2').show();
+	}
+
 }
 $(function() {
 	display_socmodul1();
@@ -2120,17 +2595,17 @@ $(function() {
 <script>
 function display_lastmanagement() {
 	if($('#lastmanagement').val() == '0') {
-		$('#lastmmaus').show(); 
+		$('#lastmmaus').show();
 		$('#lastmman').hide();
 		$('#durchslp2').hide();
 		$('#nachtls1div').hide();
-	} 
+	}
 	else {
 		$('#lastmmaus').hide();
-		$('#lastmman').show();	
+		$('#lastmman').show();
 		$('#durchslp2').show();
 		$('#nachtls1div').show();
-	} 
+	}
 }
 
 $(function() {
@@ -2174,8 +2649,25 @@ $(function() {
 			<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
 			<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 			<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
+			<option <?php if($evsecons2old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
 		</select>
 	</div>
+<div id="evseconipevselp3">
+<div class="row bg-info">
+	<b><label for="evseiplp3">IP Adresse:</label></b>
+	<input type="text" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+<div class="row bg-info">
+	<b><label for="evseidlp3">EVSE ID:</label></b>
+	<input type="text" name="evseidlp3" id="evseidlp3" value="<?php echo $evseidlp3old ?>"><br>
+</div>
+<div class="row bg-info">
+	Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+</div>
+</div>
 	<div id="evseconmbs2">
 		<div class="row">
 			Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br>Zudem gibt es einen Bug das die EVSE ID der EVSE DIN sich nicht verstellen und speichern lässt!<br><br>
@@ -2249,32 +2741,38 @@ $(function() {
 
 <script>
 function display_lp3 () {
-	$('#evsecondacs2').hide(); 
+	$('#evsecondacs2').hide();
 	$('#evseconmbs2').hide();
 	$('#evseconswifis2').hide();
 	$('#llmodullp3').hide();
 	$('#evsecongoes2').hide();
+	$('#evseconipevselp3').hide();
+
 
 	if($('#evsecons2').val() == 'dac') {
-		$('#evsecondacs2').show(); 
+		$('#evsecondacs2').show();
 		$('#llmodullp3').show();
-	} 
+	}
 	if($('#evsecons2').val() == 'modbusevse') {
 		$('#evseconmbs2').show();
 		$('#llmodullp3').show();
-	} 
+	}
 	if($('#evsecons2').val() == 'simpleevsewifi') {
 		$('#evseconswifis2').show();
-	} 
+	}
 	if($('#evsecons2').val() == 'goe') {
 		$('#evsecongoes2').show();
-	} 
+	}
+	if($('#evsecons2').val() == 'ipevse') {
+		$('#evseconipevselp3').show();
+		$('#llmodullp3').show();
+	}
 }
 
 $(function() {
 	display_lp3();
 	$('#evsecons2').change( function(){
-		display_lp3(); 
+		display_lp3();
 	});
 });
 </script>
@@ -2288,11 +2786,30 @@ $(function() {
 			<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
 			<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 			<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo selected ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+			<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo selected ?> value="mpm3pmlllp3">openWB Satellit</option>
+
 		</select>
 	</div>
 	<div class="row">
 		Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
 	</div>
+<div id="mpm3pmlllp3div">
+	<div class="row bg-info">
+		<b><label for="mpmlp3ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp3id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
 	<div id="swifis2div">
 		<div class="row">
 			Keine Konfiguration erforderlich.<br>
@@ -2379,30 +2896,37 @@ $(function() {
 
 <script>
 function display_llmp3 () {
-	$('#sdm630s2div').hide(); 
+	$('#sdm630s2div').hide();
 	$('#sdm120s2div').hide();
 	$('#swifis2div').hide();
-	$('#rs485lanlp3').hide(); 
+	$('#rs485lanlp3').hide();
 	$('#mpm3pmlls2div').hide();
+	$('#mpm3pmlllp3div').hide();
+
+
+	if($('#ladeleistungss2modul').val() == 'mpm3pmlllp3') {
+		$('#mpm3pmlllp3div').show();
+		$('#rs485lanlp3').show();
+	}
 
 	if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
-		$('#sdm630s2div').show(); 
-		$('#rs485lanlp3').show(); 
-	} 	
+		$('#sdm630s2div').show();
+		$('#rs485lanlp3').show();
+	}
 	if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
 		$('#sdm120s2div').show();
-		$('#rs485lanlp3').show(); 
-	} 
+		$('#rs485lanlp3').show();
+	}
 	if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
 		$('#swifis2div').show();
-	} 
+	}
 	if($('#ladeleistungss2modul').val() == 'goelp3') {
 		$('#swifis2div').show();
-	} 
+	}
 	if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
 		$('#mpm3pmlls2div').show();
-		$('#rs485lanlp3').show();	
-	} 
+		$('#rs485lanlp3').show();
+	}
 
 }
 $(function() {
@@ -2416,15 +2940,15 @@ $(function() {
 <script>
 function display_lastmanagement2() {
 	if($('#lastmanagements2').val() == '0') {
-		$('#lasts2mmaus').show(); 
+		$('#lasts2mmaus').show();
 		$('#lasts2mman').hide();
 		$('#durchslp3').hide();
-	} 
+	}
 	else {
 		$('#lasts2mmaus').hide();
 		$('#lasts2mman').show();
 		$('#durchslp3').show();
-	} 
+	}
 }
 $(function() {
 	display_lastmanagement2();
@@ -2433,6 +2957,335 @@ $(function() {
 	});
 });
 </script>
+
+
+<div class="row">
+	<b><h4><label for="lastmanagementlp4">Vierter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp4" id="lastmanagementlp4">
+		<option <?php if($lastmanagementlp4old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp4old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp4mmaus">
+	<br>
+</div>
+<div id="lastlp4mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp3name">Name Ladepunkt 4:</label></b>
+			<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp4">EVSE IP:</label></b>
+		<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp4">EVSE ID:</label></b>
+		<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp4ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp4id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp4() {
+	if($('#lastmanagementlp4').val() == '0') {
+		$('#lastlp4mmaus').show();
+		$('#lastlp4mman').hide();
+	}
+	else {
+		$('#lastlp4mmaus').hide();
+		$('#lastlp4mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp4();
+	$('#lastmanagementlp4').change( function() {
+		display_lastmanagementlp4();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp5">Fünfter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp5" id="lastmanagementlp5">
+		<option <?php if($lastmanagementlp5old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp5old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp5mmaus">
+	<br>
+</div>
+<div id="lastlp5mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp5name">Name Ladepunkt 5:</label></b>
+			<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp5">EVSE IP:</label></b>
+		<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp5">EVSE ID:</label></b>
+		<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp5ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp5id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp5() {
+	if($('#lastmanagementlp5').val() == '0') {
+		$('#lastlp5mmaus').show();
+		$('#lastlp5mman').hide();
+	}
+	else {
+		$('#lastlp5mmaus').hide();
+		$('#lastlp5mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp5();
+	$('#lastmanagementlp5').change( function() {
+		display_lastmanagementlp5();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp6">Sechster Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp6" id="lastmanagementlp6">
+		<option <?php if($lastmanagementlp6old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp6old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp6mmaus">
+	<br>
+</div>
+<div id="lastlp6mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp6name">Name Ladepunkt 6:</label></b>
+			<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp6">EVSE IP:</label></b>
+		<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp6">EVSE ID:</label></b>
+		<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp6ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp6id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp6() {
+	if($('#lastmanagementlp6').val() == '0') {
+		$('#lastlp6mmaus').show();
+		$('#lastlp6mman').hide();
+	}
+	else {
+		$('#lastlp6mmaus').hide();
+		$('#lastlp6mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp6();
+	$('#lastmanagementlp6').change( function() {
+		display_lastmanagementlp6();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp7">Siebter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp7" id="lastmanagementlp7">
+		<option <?php if($lastmanagementlp7old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp7old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp7mmaus">
+	<br>
+</div>
+<div id="lastlp7mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp7name">Name Ladepunkt 7:</label></b>
+			<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp7">EVSE IP:</label></b>
+		<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp7">EVSE ID:</label></b>
+		<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp7ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp7id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp7() {
+	if($('#lastmanagementlp7').val() == '0') {
+		$('#lastlp7mmaus').show();
+		$('#lastlp7mman').hide();
+	}
+	else {
+		$('#lastlp7mmaus').hide();
+		$('#lastlp7mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp7();
+	$('#lastmanagementlp7').change( function() {
+		display_lastmanagementlp7();
+	});
+});
+</script>
+<div class="row">
+	<b><h4><label for="lastmanagementlp8">Achter Ladepunkt:</label></b>
+	<select type="text" name="lastmanagementlp8" id="lastmanagementlp8">
+		<option <?php if($lastmanagementlp8old == 0) echo selected ?> value="0">Aus</option>
+		<option <?php if($lastmanagementlp8old == 1) echo selected ?> value="1">An</option>
+	</select></h4>
+</div>
+
+<div id="lastlp8mmaus">
+	<br>
+</div>
+<div id="lastlp8mman" style="margin:5em;">
+<div class="row">
+	<b><label for="lp8name">Name Ladepunkt 8:</label></b>
+			<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>"><br>
+
+</div>
+	<div class="row bg-info">
+		<b><label for="evseiplp8">EVSE IP:</label></b>
+		<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="evseidlp8">EVSE ID:</label></b>
+		<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+		<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
+		<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>"><br>
+	</div>
+	<div class="row bg-info">
+		Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+	</div>
+</div>
+<script>
+function display_lastmanagementlp8() {
+	if($('#lastmanagementlp8').val() == '0') {
+		$('#lastlp8mmaus').show();
+		$('#lastlp8mman').hide();
+	}
+	else {
+		$('#lastlp8mmaus').hide();
+		$('#lastlp8mman').show();
+	}
+}
+$(function() {
+	display_lastmanagementlp8();
+	$('#lastmanagementlp8').change( function() {
+		display_lastmanagementlp8();
+	});
+});
+</script>
+
+
+
+
+
+
+
 
 <div class="row">	<hr>
 	<h3> Strombezugsmessmodul (EVU-Übergabepunkt)</h3>
@@ -2456,11 +3309,14 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
 		<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo selected ?> value="bezug_e3dc">E3DC Speicher</option>
 		<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo selected ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
-		<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300 SM</option>
+		<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 		<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 		<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
 		<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
 		<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
+		<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
+		<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
 
 	</select>
 </div>
@@ -2469,6 +3325,12 @@ $(function() {
 		Keine Konfiguration erforderlich.<br><br>
 	</div>
 </div>
+<div id="wattbezugsolarview">
+	<div class="row">
+		Konfiguration im zugehörigen PV Modul erforderlich.<br><br>
+	</div>
+</div>
+
 <div id="wattbezugpowerwall">
 	<div class="row">
 		Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
@@ -2483,6 +3345,23 @@ $(function() {
 		Gültige Werte IP. IP Adresse des Victron, z.B. GX.<br><br>
 	</div>
 </div>
+<div id="wattbezugdiscovergy">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergyuser">Discovergy Username (Email):</label></b>
+		<input type="text" name="discovergyuser" id="discovergyuser" value="<?php echo $discovergyuserold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergypass">Discovergy Passwort:</label></b>
+		<input type="text" name="discovergypass" id="discovergypass" value="<?php echo $discovergypassold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergyevuid">Meter ID:</label></b>
+		<input type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>
+	</div>
+</div>
 
 <div id="wattbezugkostalpiko">
 	<div class="row" style="background-color:#febebe">
@@ -2490,18 +3369,21 @@ $(function() {
 		<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. IP Adresse Kostal Wechselrichter. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby. <br> Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>Ein extra PV Modul muss nicht mehr ausgewählt werden.<br><br>
+		Gültige Werte IP. IP Adresse Kostal Wechselrichter. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby. <br> Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>Ein extra PV-Modul muss nicht mehr ausgewählt werden.<br><br>
 	</div>
 </div>
 
 <div id="wattbezugplentihaus">
 	<div class="row" style="background-color:#febebe">
-		Das zugehörige PV Modul (Kostal Plenticore) muss gewählt werden. Dieses Modul erfordert einen (z.B. EM300) Smart Meter im Hausverbrauchszweig.<br>
+		Dieses Modul erfordert einen am Plenticore angeschlossenen EM300 bzw. KSEM. Nach Wahl dieses Moduls ist die Auswahl des PV-Moduls fest auf Kostal Plenticore eingestellt.
+		Alle relevanten Daten werden aus dem Wechselrichter gelesen. Die IP des WR ist im PV-Modul anzugeben. Ein am Plenticore angeschlossener Speicher wird ebenfalls ohne weitere
+		Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt. Ein zusätzlicher und nicht am Plenticore angeschlossener Speicher kann im Speicher-Modul
+		extra konfiguriert werden.
+		<br>Bitte einstellen: EM300/KSEM verbaut im Hausverbrauchs-Zweig (Pos. 1) oder Netzanschluss-Zweig (Pos. 2).<br>
 	</div>
 	<input type='hidden' value='0' name='kostalplenticorehaus'>
 	<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
-	<label for="kostalplenticorehaus">EM300 im EVU zweig</label><br>
-
+	<label for="kostalplenticorehaus">EM300/KSEM im Netzanschluss-Zweig (Pos. 2)</label><br>
 </div>
 
 <div id="wattbezugmpm3pm">
@@ -2543,7 +3425,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>"><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV Modul<br><br>
+	Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV-Modul<br><br>
 </div>
 
 
@@ -2555,7 +3437,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 	<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
 </div>
 <div class="row" style="background-color:#febebe">
-	Gültige Werte /dev/ttyUSB0, /dev/virtualcom. Serieller Port an dem der SDM angeschlossen ist.<br><br>
+	Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.<br><br>
 </div>
 <div class="row" style="background-color:#febebe">
 	<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
@@ -2700,7 +3582,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 </div>
 <div id="wattbezugfronius">
 	<div class="row" style="background-color:#febebe">
-		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
+		Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.<br>
 	</div>
 	<input type='hidden' value='0' name='froniusprimo'>
 	<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
@@ -2746,7 +3628,14 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte IP. Ein extra PV Modul ist dann nicht mehr nötig.<br>
+		Gültige Werte IP. Ein extra PV-Modul ist dann nicht mehr nötig.<br>
+	</div>
+	<div class="row">
+		<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
+		<select type="text" name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
+			<option <?php if($bezug_solarlog_speichervold == 0) echo selected ?> value="0">Nein</option>
+			<option <?php if($bezug_solarlog_speichervold == 1) echo selected ?> value="1">Ja</option>
+		</select>
 	</div>
 </div>
 <div id="wattbezugsolaredge">
@@ -2762,12 +3651,12 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 </div>
 <div id="wattbezuge3dc">
 	<div class="row" style="background-color:#febebe">
-		Die IP des Speichers wird im dazugehörigen E3DC Speicher Modul eingestellt.<br>
+		Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br> Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.<br>
 	</div>
 </div>
 <div id="wattbezugsbs25">
 	<div class="row" style="background-color:#febebe">
-		Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher Modul eingestellt.<br>
+		Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.<br>
 	</div>
 </div>
 <div class="row">
@@ -2805,14 +3694,25 @@ $(function() {
 			$('#evuglaettungdiv').hide();
 		} else {
 			$('#evuglaettungdiv').show();
-		} 	    
+		}
 	});
 });
 </script>
 
 <script>
+	function enable_pv_selector() {
+		// enable das Dropdown-Element zur Auswahl des PV-Moduls
+		document.getElementById("pvwattmodul").disabled=false;
+	}
+	function disable_pv_selector() {
+		// disable das Dropdown-Element zur Auswahl des PV-Moduls
+		document.getElementById("pvwattmodul").disabled=true;
+	}
+</script>
+
+<script>
 function display_wattbezugmodul() {
-	$('#wattbezugvz').hide(); 
+	$('#wattbezugvz').hide();
 	$('#wattbezugsdm').hide();
 	$('#wattbezugnone').hide();
 	$('#wattbezughttp').hide();
@@ -2832,23 +3732,33 @@ function display_wattbezugmodul() {
 	$('#wattbezugsmartfox').hide();
 	$('#wattbezugpowerwall').hide();
 	$('#wattbezugvictrongx').hide();
+	$('#wattbezugsolarview').hide();
+	$('#wattbezugdiscovergy').hide();
+	// Auswahl PV-Modul generell erlauben
+	enable_pv_selector();
+	if($('#wattbezugmodul').val() == 'bezug_solarview') {
+		$('#wattbezugsolarview').show();
+	}
+	if($('#wattbezugmodul').val() == 'bezug_discovergy') {
+		$('#wattbezugdiscovergy').show();
+	}
 
 	if($('#wattbezugmodul').val() == 'bezug_victrongx') {
-		$('#wattbezugvictrongx').show(); 
-	} 
+		$('#wattbezugvictrongx').show();
+	}
 
 	if($('#wattbezugmodul').val() == 'vzlogger') {
-		$('#wattbezugvz').show(); 
-	} 
+		$('#wattbezugvz').show();
+	}
 	if($('#wattbezugmodul').val() == 'sdm630modbusbezug')   {
 		$('#wattbezugsdm').show();
-	} 
+	}
 	if($('#wattbezugmodul').val() == 'none')   {
 		$('#wattbezugnone').show();
-	} 
+	}
 	if($('#wattbezugmodul').val() == 'bezug_http')   {
 		$('#wattbezughttp').show();
-	} 
+	}
 	if($('#wattbezugmodul').val() == 'smaemd_bezug')   {
  		$('#wattbezugsma').show();
 	}
@@ -2860,7 +3770,7 @@ function display_wattbezugmodul() {
 	}
 	if($('#wattbezugmodul').val() == 'bezug_json')   {
 		$('#wattbezugjson').show();
-	} 
+	}
 	if($('#wattbezugmodul').val() == 'bezug_mpm3pm')   {
 		$('#wattbezugmpm3pm').show();
 	}
@@ -2887,9 +3797,19 @@ function display_wattbezugmodul() {
 	}
 	if($('#wattbezugmodul').val() == 'bezug_kostalplenticoreem300haus')   {
 		$('#wattbezugplentihaus').show();
+		// keine Auswahl PV-Modul in dieser Konfiguration
+		// Plenticore immer fix auswählen
+		document.getElementById('pvwattmodul').value = 'wr_plenticore';
+		// und Einstellung sperren
+		disable_pv_selector();
+		display_pvwattmodul();
+		// passendes Speichermodul 'optisch' voreinstellen, da automatisch alle Werte
+		// mit aus dem WR gelesen werden
+		//document.getElementById('speichermodul').value = 'speicher_kostalplenticore';
+		//display_speichermodul();
 	}
 	if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
-		$('#wattbezugkostalpiko').show(); 
+		$('#wattbezugkostalpiko').show();
 	}
 	if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
 		$('#wattbezugsmartfox').show();
@@ -2907,10 +3827,10 @@ $(function() {
 </script>
 
 <div class="row"><hr>
-	<h3> PV Modul </h3>
+	<h3> PV-Modul </h3>
 </div>
 <div class="row">
-	<b><label for="pvwattmodul">PV Modul:</label></b>
+	<b><label for="pvwattmodul">PV-Modul:</label></b>
 	<select type="text" name="pvwattmodul" id="pvwattmodul">
 		<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo selected ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
@@ -2930,15 +3850,26 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
 		<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
 		<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
-</select>
+		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
+		<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
+		<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
+	</select>
 </div>
 
-<div class="row">
-	<br><br>
-</div>
+
 <div id="pvnone">
 	<br>
 </div>
+<div id="pvyouless">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="wryoulessip">IP Adresse des Youless</label></b>
+		<input type="text" name="wryoulessip" id="wryoulessip" value="<?php echo htmlspecialchars($wryoulessipold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. <br>
+	</div>
+</div>
+
 <div id="pvsolarlog">
 	<div class="row" style="background-color:#febebe">
 		<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
@@ -2948,30 +3879,75 @@ $(function() {
 		Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br>
 	</div>
 </div>
+<div id="pvdiscovergy">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="discovergypvid">Meter ID des Zählers</label></b>
+		<input type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert<br>
+	</div>
+</div>
+
+<div id="pvsolarview">
+	<div class="row" style="background-color:#febebe">
+		<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+		<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte IP. <br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		<b><label for="solarview_port">Port des Solarview</label></b>
+		<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>"><br>
+	</div>
+	<div class="row" style="background-color:#febebe">
+		Gültige Werte Port, z.B. 80. <br>
+	</div>
+
+</div>
+
 <div id="pvpowerwall">
-	
+
 	<div class="row" style="background-color:#febebe">
 		Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert<br>
 	</div>
 </div>
 <div id="pvmpmevu">
-	
+
 	<div class="row" style="background-color:#febebe">
 		Keine Einstellung nötig. Dies ist das richtige Modul wenn ein MPM3PM Zähler mit ID 8 am openWB EVU Kit mit angeschlossen ist.<br>
 	</div>
 </div>
 <div id="pvplenti">
 	<div class="row" style="background-color:#befebe">
-		<b><label for="kostalplenticoreip">IP Adresse des Kostal Plenticore:</label></b>
+		<b><label for="kostalplenticoreip">IP Adresse des 1. Kostal Plenticore:</label></b>
 		<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#befebe">
-		Gültige Werte IP.<br>
+		Gültige Werte: IP-Adresse. IP-Adresse des ersten Kostal Plenticore. An diesem sollte (wenn vorhanden) der EM300/KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).<br><br>
 	</div>
-<!--	<input type='hidden' value='0' name='kostalplenticorebatt'>
-	<input id="kostalplenticorebatt" name="kostalplenticorebatt" value="1" type="checkbox" <?php if ( $kostalplenticorebattold == 1){ echo "checked"; } ?> >
-	<label for="kostalplenticorebatt">Batterie am Kostal angeschlossen</label><br>
--->
+	<div class="row" style="background-color:#befebe">
+		<b><label for="name_wechselrichter1">Bezeichnung des 1. Kostal Plenticore:</label></b>
+		<input type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo $name_wechselrichter1old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.<br><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="kostalplenticoreip2">IP Adresse des weiteren Kostal Plenticore:</label></b>
+		<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		Gültige Werte: IP-Adresse oder "none". IP-Adresse des weiteren Kostal Plenticore. Bei diesem wird nur die PV-Leistung und ggf. ein angeschlossener Speicher ausgelesen. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).<br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		<b><label for="name_wechselrichter2">Bezeichnung des 2. Kostal Plenticore:</label></b>
+		<input type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>"><br>
+	</div>
+	<div class="row" style="background-color:#befebe">
+		Gültige Werte: Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.<br><br>
+	</div>
 </div>
 
 <div id="pvsmartme">
@@ -3137,6 +4113,13 @@ $(function() {
 	<div class="row" style="background-color:#BEFEBE">
 		Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
 	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
+		<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#BEFEBE">
+		Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung reicht die Angabe eines Wechselrichters. Sind Symo und Symo Hybrid im Einsatz müssen diese beide angegeben werden. Ist kein zweiter Wechselrichter vorhanden hier - none - eintragen.<br><br>
+	</div>
 </div>
 <div id="pvmpm3pm">
 	<div class="row" style="background-color:#BEFEBE">
@@ -3247,7 +4230,7 @@ $(function() {
 
 <script>
 function display_pvwattmodul() {
-	$('#pvvzl').hide(); 
+	$('#pvvzl').hide();
 	$('#pvsdmwr').hide();
 	$('#pvwrfronius').hide();
 	$('#pvnone').hide();
@@ -3265,57 +4248,69 @@ function display_pvwattmodul() {
 	$('#pvpowerwall').hide();
 	$('#pvmpmevu').hide();
 	$('#pvethsdm120').hide();
+	$('#pvsolarview').hide();
+	$('#pvdiscovergy').hide();
+	$('#pvyouless').hide();
 
+	if($('#pvwattmodul').val() == 'wr_youless120') {
+		$('#pvyouless').show();
+	}
 
+	if($('#pvwattmodul').val() == 'wr_solarview') {
+		$('#pvsolarview').show();
+	}
+	if($('#pvwattmodul').val() == 'wr_discovergy') {
+		$('#pvdiscovergy').show();
+	}
 	if($('#pvwattmodul').val() == 'wr_ethsdm120') {
-		$('#pvethsdm120').show(); 
-	} 
+		$('#pvethsdm120').show();
+	}
 
 	if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
-		$('#pvmpmevu').show(); 
-	} 
+		$('#pvmpmevu').show();
+	}
 	if($('#pvwattmodul').val() == 'vzloggerpv') {
-		$('#pvvzl').show(); 
-	} 
+		$('#pvvzl').show();
+	}
 	if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
 		$('#pvsdmwr').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_fronius')   {
 		$('#pvwrfronius').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'none')   {
 		$('#pvnone').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_http')   {
 		$('#pvhttp').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'smaemd_pv')   {
 		$('#pvsma').show();
 	}
 	if($('#pvwattmodul').val() == 'wr_json')   {
 		$('#pvwrjson').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'mpm3pmpv')   {
 		$('#pvmpm3pm').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
 		$('#pvwrkostalpiko').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_solaredge')   {
 		$('#pvwrsolaredge').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_smartme')   {
 		$('#pvsmartme').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_tripower9000')   {
 		$('#pvwrtri9000').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_plenticore')   {
 		$('#pvplenti').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_solarlog')   {
 		$('#pvsolarlog').show();
-	} 
+	}
 	if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
 		$('#pvpiko2').show();
 	}
@@ -3333,10 +4328,10 @@ $(function() {
 </script>
 
 <div class="row"><hr>
-	<h3> Speicher Modul </h3>
+	<h3> Speicher-Modul </h3>
 </div>
 <div class="row">
-	<b><label for="speicherodul">Speicher Modul:</label></b>
+	<b><label for="speicherodul">Speicher-Modul:</label></b>
 	<select type="text" name="speichermodul" id="speichermodul">
 		<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
 		<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo selected ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
@@ -3348,11 +4343,12 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
 		<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher</option>
 		<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
-		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore
+		<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
 		<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
-</option>
-
+		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
+		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
+		<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 	</select>
 </div>
 
@@ -3362,6 +4358,30 @@ $(function() {
 <div id="divspeicherkit">
 		<div class="row" style="background-color:#fcbe1e">
 		Keine Konfiguration erforderlich<br><br>
+	</div>
+</div>
+<div id="divspeichervictron">
+		<div class="row" style="background-color:#fcbe1e">
+		Konfiguration im Bezug Victron Modul<br><br>
+	</div>
+</div>
+
+<div id="divspeichervarta">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="vartaspeicherip">Varta IP:</label></b>
+		<input type="text" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP Adresse des Varta Speichers.<br><br>
+	</div>
+</div>
+<div id="divspeicheralphaess">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="alphaessip">Anbindung:</label></b>
+		<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1<br><br>
 	</div>
 </div>
 
@@ -3381,6 +4401,14 @@ $(function() {
 	</div>
 	<div class="row" style="background-color:#fcbe1e">
 		Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+	</div>
+	<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
+	<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
+		<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
+		<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
+	</select>
+	<div class="row bg-info">
+		Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
 	</div>
 </div>
 
@@ -3430,12 +4458,13 @@ $(function() {
 </div>
 <div id="divspeicherplenti">
 	<div class="row" style="background-color:#fcbe1e">
-		IP Konfiguration erfolgt im PV Plenticore Modul<br><br>
+		Ein am Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und
+		Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.<br>
 	</div>
 </div>
 <div id="divspeicherfronius">
 	<div class="row" style="background-color:#fcbe1e">
-		Die IP des Wechselrichters wird im dazugehörigen Fronius PV Modul eingestellt.<br>
+		Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.<br>
 	</div>
 </div>
 
@@ -3529,7 +4558,7 @@ $(function() {
 
 <script>
 function display_speichermodul() {
-	$('#divspeichernone').hide(); 
+	$('#divspeichernone').hide();
 	$('#divspeicherhttp').hide();
 	$('#divspeichermpm3pm').hide();
 	$('#divspeicherbydhv').hide();
@@ -3542,16 +4571,25 @@ function display_speichermodul() {
 	$('#divspeichersunnyisland').hide();
 	$('#divspeicherseco').hide();
 	$('#divspeicherkit').hide();
+	$('#divspeichervarta').hide();
+	$('#divspeicheralphaess').hide();
+	$('#divspeichervictron').hide();
 
+	if($('#speichermodul').val() == 'speicher_alphaess') {
+		$('#divspeicheralphaess').show();
+	}
+	if($('#speichermodul').val() == 'speicher_victron') {
+		$('#divspeichervictron').show();
+	}
 	if($('#speichermodul').val() == 'speicher_mpm3pm') {
-		$('#divspeicherkit').show(); 
-	} 
+		$('#divspeicherkit').show();
+	}
 	if($('#speichermodul').val() == 'speicher_sonneneco') {
-		$('#divspeicherseco').show(); 
-	} 
+		$('#divspeicherseco').show();
+	}
 	if($('#speichermodul').val() == 'none') {
-		$('#divspeichernone').show(); 
-	} 
+		$('#divspeichernone').show();
+	}
 	if($('#speichermodul').val() == 'speicher_http')   {
 		$('#divspeicherhttp').show();
 	}
@@ -3573,6 +4611,10 @@ function display_speichermodul() {
 	if($('#speichermodul').val() == 'speicher_solaredge')   {
 		$('#divspeichersolaredge').show();
 	}
+	if($('#speichermodul').val() == 'speicher_varta')   {
+		$('#divspeichervarta').show();
+	}
+
 	if($('#speichermodul').val() == 'speicher_powerwall')   {
 		$('#divspeicherpw').show();
 	}
@@ -3592,7 +4634,7 @@ display_speichermodul();
 </script>
 
 <br><br>
-<button type="submit" class="btn btn-primary btn-green">Save</button>
+<button type="submit" class="btn btn-primary btn-green" onclick="enable_pv_selector()">Save</button>
  </form><br><br />
 <br><br>
 <br><br>
@@ -3623,17 +4665,17 @@ var testV = 1;
 var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
 
 while (testV < 3) {
-	if (!pass1) 
+	if (!pass1)
 		history.go(-1);
 	if (pass1 == settingspwold) {
 		break;
-	} 
+	}
 	testV+=1;
 	var pass1 = prompt('Passwort falsch','Password');
 }
-if (pass1!="password" & testV == 3) 
+if (pass1!="password" & testV == 3)
 	history.go(-1);
 return " ";
-} 
+}
 </script>
 </body></html>

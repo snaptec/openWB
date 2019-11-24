@@ -25,17 +25,14 @@ if [ $kostalplenticorehaus -eq 1 ]; then
 else
   # EM300 Sensorposition 1 (im Hausverbrauchszweig = home consumption)
   # Werte aus (temporärer) ramdisk lesen
-  # Hausverbrauch
+  # aktueller Hausverbrauch
   Home_consumption=$(</var/www/html/openWB/ramdisk/temp_wattbezug)
-  # PV-Leistung
+  # aktuelle PV-Leistung
   PV_power_ac=$(</var/www/html/openWB/ramdisk/pvwatt)
-  # Speicherleistung
+  # aktuelle Speicherleistung
   Actual_batt_ch_disch_power=$(</var/www/html/openWB/ramdisk/temp_speicherleistung)
   # Bezug berechnen
-  #Test Em 300 haus position
   Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power + $Home_consumption)" |bc)
-  #orig version
-  #Bezug=$(echo "($PV_power_ac + $Actual_batt_ch_disch_power - $Home_consumption)" |bc)
   # und in die ramdisk
 	echo $Bezug > /var/www/html/openWB/ramdisk/wattbezug
 fi

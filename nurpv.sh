@@ -99,7 +99,8 @@ if (( ladeleistung < 300 )); then
 		exit 0
 	fi
 	if (( llalt == minimalapv )); then
-		if (( wattbezugint > abschaltuberschuss )); then
+		if (( uberschuss < mindestuberschussphasen )); then
+		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
 			#	pvcounter=$((pvcounter + 10))
@@ -108,11 +109,15 @@ if (( ladeleistung < 300 )); then
 			#		echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
 			#	fi
 			#else
-				runs/set-current.sh 0 all
-				echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt" >> ramdisk/ladestatus.log
-
-				if [[ $debug == "1" ]]; then
-					echo "pv ladung beendet"
+				if [ -e ramdisk/nurpvoff ]; then
+					runs/set-current.sh 0 all
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladefreigabe aufgehoben, Überschuss unterschritten" >> ramdisk/ladestatus.log
+					if [[ $debug == "1" ]]; then
+						echo "pv ladung beendet"
+					fi
+					rm ramdisk/nurpvoff
+				else
+					touch ramdisk/nurpvoff
 				fi
 			#fi
 		fi
@@ -138,7 +143,15 @@ else
 			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 
 		else
+<<<<<<< HEAD
 			llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+=======
+			if (( llalt == minimalapv )); then
+				llneu=$(( llalt + 1 ))
+			else
+				llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+			fi
+>>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 		fi
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
@@ -192,7 +205,11 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
+<<<<<<< HEAD
 			llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+=======
+			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
+>>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
@@ -232,20 +249,32 @@ else
 			else
 				if (( minimalapv == minimalalp2pv )); then
 					runs/set-current.sh $llneu all
+<<<<<<< HEAD
 					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung reduziert mit $llneu Ampere" >> ramdisk/ladestatus.log
+=======
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+>>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung auf $llneu reduziert"
 					fi
 				else
 					runs/set-current.sh $llneu m
+<<<<<<< HEAD
 					echo "$date LP1, Lademodus NurPV. Ladung reduziert auf $llneu Ampere" >> ramdisk/ladestatus.log
+=======
+					echo "$date LP1, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+>>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if (( llneu < minimalalp2pv )); then
 						llneulp2=$minimalalp2pv
 					else
 						llneulp2=$llneu
 					fi		
 					runs/set-current.sh $llneulp2 s1
+<<<<<<< HEAD
 					echo "$date LP2, Lademodus NurPV. Ladung reduziert auf $llneulp2 Ampere" >> ramdisk/ladestatus.log
+=======
+					echo "$date LP2, Lademodus NurPV. Ladung geändert auf $llneulp2 Ampere" >> ramdisk/ladestatus.log
+>>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung auf $llneu bzw. $llneulp2 reduziert"
 					fi

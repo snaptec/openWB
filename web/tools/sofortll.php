@@ -2,24 +2,13 @@
 <?php
 
 
-if(isset($_POST['sofortll'])) {
+if(isset($_POST['lademlp1'])) {
 
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	$writeit = '0';      
-	if(strpos($line, "sofortll=") !== false) {
-	       $result .= 'sofortll='.$_POST['sofortll']."\n";
-	    $writeit = '1';
-	}
-	if(strpos($line, "sofortlls1=") !== false) {
-	       $result .= 'sofortlls1='.$_POST['sofortlls1']."\n";
-		$writeit = '1';
-	} 
-	if(strpos($line, "sofortlls2=") !== false) {
-		$result .= 'sofortlls2='.$_POST['sofortlls2']."\n";
-		$writeit = '1';
-	} 
+
 	if(strpos($line, "lademkwh=") !== false) {
 		$result .= 'lademkwh='.$_POST['lademlp1']."\n";
 		$writeit = '1';	

@@ -19,6 +19,12 @@ evuv3=$(echo "scale=2; $(echo $response | jq '.Body.Data.Voltage_AC_Phase_3')/1"
 bezugw1=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerReal_P_Phase_1')/1" | bc)
 bezugw2=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerReal_P_Phase_2')/1" | bc)
 bezugw3=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerReal_P_Phase_3')/1" | bc)
+# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
+# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
+bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
+bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
+bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
+evuhz=$(echo "scale=2; $(echo $response | jq '.Body.Data.Frequency_Phase_Average')/1" | bc)
 evupf1=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerFactor_Phase_1')/1" | bc)
 evupf2=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerFactor_Phase_2')/1" | bc)
 evupf3=$(echo "scale=2; $(echo $response | jq '.Body.Data.PowerFactor_Phase_3')/1" | bc)
@@ -36,14 +42,10 @@ echo $evuv3 > /var/www/html/openWB/ramdisk/evuv3
 echo $bezugw1 > /var/www/html/openWB/ramdisk/bezugw1
 echo $bezugw2 > /var/www/html/openWB/ramdisk/bezugw2
 echo $bezugw3 > /var/www/html/openWB/ramdisk/bezugw3
-# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
-# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
-bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
-bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
-bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
 echo $bezuga1 > /var/www/html/openWB/ramdisk/bezuga1
 echo $bezuga2 > /var/www/html/openWB/ramdisk/bezuga2
 echo $bezuga3 > /var/www/html/openWB/ramdisk/bezuga3
+echo $evuhz > /var/www/html/openWB/ramdisk/evuhz
 echo $evupf1 > /var/www/html/openWB/ramdisk/evupf1
 echo $evupf2 > /var/www/html/openWB/ramdisk/evupf2
 echo $evupf3 > /var/www/html/openWB/ramdisk/evupf3

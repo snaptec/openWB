@@ -15,7 +15,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>OpenWB Logging</title>
+	<title>Live Langzeitansicht</title>
 	<meta name="description" content="Control your charge" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
@@ -45,19 +45,29 @@
 			list(, $graphinteractiveamold) = explode("=", $line);
 		}
 
-
+		if(strpos($line, "verbraucher1_name=") !== false) {
+			list(, $verbraucher1_nameold) = explode("=", $line);
+		}
+		if(strpos($line, "verbraucher2_name=") !== false) {
+			list(, $verbraucher2_nameold) = explode("=", $line);
+		}
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
 		}
 		if(strpos($line, "lastmanagement=") !== false) {
 			list(, $lastmanagementold) = explode("=", $line);
 		}
+		if(strpos($line, "simplemode=") !== false) {
+			list(, $simplemodeold) = explode("=", $line);
+		}
+
 	}
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
 $verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
 $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
-
+$verbraucher1_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher1_nameold));
+$verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
 
 					?>
 
@@ -73,13 +83,15 @@ $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbrau
 		 </ul>
 
 	<div class="preloader">
-		<img src="../img/loader.gif" alt="OpenWB loading...">
+<?php if ( $simplemodeold == 1 ) {
+echo '	<img src="../img/loading.gif" alt="loading...">';} else {
+echo '<img src="../img/loader.gif" alt="OpenWB loading...">'; } ?>
 	</div>
 
 
 <div class="row">
 	<div class="text-center">
-		<br><h3> OpenWB Logging</h3><br>
+		<br><h3> Langzeit Live Logging</h3><br>
 	</div>
 </div>
 
@@ -108,7 +120,8 @@ $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbrau
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-
+	var verbraucher1name = "<?php echo $verbraucher1_nameold ?>";
+	var verbraucher2name = "<?php echo $verbraucher2_nameold ?>";
 </script>
 
 
@@ -247,15 +260,15 @@ if ( verbraucher1vorhanden == 1) {
     var series40 = chart.series.push(new am4charts.LineSeries());
     series40.dataFields.valueY = "col12";
     series40.dataFields.categoryX = "col0";
-    series40.name = "Verbraucher 1";
-    series40.stroke = am4core.color("#FFFF00");
+    series40.name = verbraucher1name ;
+    series40.stroke = am4core.color("#FF8B00");
     series40.strokeWidth = 1.5;
 }
 if ( verbraucher2vorhanden == 1) {
     var series41 = chart.series.push(new am4charts.LineSeries());
     series41.dataFields.valueY = "col13";
     series41.dataFields.categoryX = "col0";
-    series41.name = "Verbraucher 1";
+    series41.name = verbraucher2name ;
     series41.stroke = am4core.color("#FF00FF");
     series41.strokeWidth = 1.5;
 }

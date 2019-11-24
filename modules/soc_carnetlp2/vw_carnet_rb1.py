@@ -39,7 +39,7 @@ def CarNetLogin(s,email, password):
 	# Comment youpixel - Modified the regex a bit to match the new input values defined e.g. in def extract_login_action_url
 	csrf_re = re.compile('<meta name="_csrf" content="([^"]*)"/>')
 	redurl_re = re.compile('<redirect url="([^"]*)"></redirect>')
-	login_action_url_re = re.compile('<formclass="content"id="emailPasswordForm"name="emailPasswordForm"method="POST"novalidateaction="([^"]*)">')
+	login_action_url_re = re.compile('<formclass="content"id="emailPasswordForm"name="emailPasswordForm"method="POST"novalidate.*action="([^"]*)">')
 	login_action_url2_re = re.compile('<formclass="content"id="credentialsForm"name="credentialsForm"method="POST"action="([^"]*)">')
 	
 	

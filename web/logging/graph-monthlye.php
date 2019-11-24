@@ -61,9 +61,8 @@ for ($x = $anzahl - 1; $x > 0; $x--) {
 	    $ll3diff[$x] = floor(($rll3[$x-1] - $rll3[$x]) );
 }
 
-
-for ($x = 0; $x < $anzahl; $x++){
-	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . PHP_EOL;
+for ($x = $anzahl; $x > 0; $x--){
+	$line = $rtimef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . PHP_EOL;
 	print($line);
 }
 
