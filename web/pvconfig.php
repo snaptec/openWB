@@ -218,7 +218,7 @@ Gibt man hier 40 Sekunden an, muss über die gesamte Spanne von 40 Sekunden der 
 Gültige Werte Zeit in Sekunden in 10ner Schritten. Die Verzögerung gibt an um wieviel Sekunden (0,10,20,30,...300,310,320, usw.) im "Nur PV" Modus die Abschaltung hinausgezögert wird. <br>
 Gibt man hier 120 Sekunden an, muss über die gesamte Spanne von 120 Sekunden der Bezug größer als der Abschaltüberschuss sein. <br> 
 Ist der Bezug nach 20 Sekunden kurzzeitig kleiner als der Abschaltüberschuss, beginnen die 120 Sekunden erneut.<br> 
-Es wird empfohlen die Abschaltverzögerung nicht zu gering zu setzen da dies unter ungünstigen Umständen ein häufiges starten/stoppen zur Folge hat.<br>
+Es wird empfohlen, die Abschaltverzögerung nicht zu gering zu setzen, da dies unter ungünstigen Umständen ein häufiges Starten/Stoppen zur Folge hat.<br>
 </div><br>
 <div class="row" style="background-color:#befebe">
 	<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
@@ -335,8 +335,8 @@ Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV 
 	</select>
 	</div>
 	<div class="row" style="background-color:#befebe">
-	Definiert einen Mindest-SoC-Wert (EV) bis zu welchem im "Nur PV" Modus immer geladen wird, - auch wenn keine PV Leistung zur Verfügung steht.<br>
-	Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! <br>
+	Definiert einen Mindest-SoC-Wert (EV) bis zu welchem im "Nur PV" Modus immer geladen wird, auch, wenn keine PV Leistung zur Verfügung steht.<br>
+Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!  <br>
 	</div><br>
 
 
@@ -419,9 +419,9 @@ Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV 
 	</div>
 	<div class="row" style="background-color:#befebe">
 	Manuelles Offset in Watt für die PV Regelmodi zum Einbau eines zusätzlichen Regelpuffers. Verschiebt den Nullpunkt der Regelung. <br>
-	Bei PV-Lademodus muss „Manueller Offset" aktiviert sein.<br>
+Bei „PV-Lademodus“ muss „Manueller Offset" aktiviert sein.<br>
 	Erlaubte Werte: Ganzzahl in Watt, Minus als Vorzeichen, z.B.: -200, 200, 356, usw.<br>
-	z.B.: bei "200" wird von 200 W-430 W Einspeisung geregelt, anstatt von 0-230 W wie beim Modus „Einspeisung". Negative Werte entsprechend in die Richtung „Bezug“.<br><br>
+	z.B.: bei "200" wird von 200W-430W Einspeisung geregelt, anstatt von 0-230W wie beim Modus „Einspeisung". Negative Werte entsprechend in die Richtung „Bezug“.<br><br>
 
 </div>
 
@@ -475,8 +475,8 @@ Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Nur PV 
 		</div>
 
 		<div class="row" style="background-color:#fcbe1e">
-		Definiert einen SoC bis zu dem bei laufender Nur PV Ladung der Speicher mit xx Leistung entladen wird.<br>
-		Zum Deaktivieren dieser Funktion (Speicher soll nicht entladen werden) den SoC auf 100 setzen.<br>
+		Definiert einen SoC bis zu dem bei laufender „Nur PV“ Ladung der Speicher mit xxxx(W) Leistung entladen wird.<br>
+Zum Deaktivieren dieser Funktion (Speicher soll nicht entladen werden) den SoC auf 100 setzen.<br>
 		</div>
 		<div class="row" style="background-color:#fcbe1e">
 			<b><label for="speichersocminpv">Speicher Entlade SoC Min + PV:</label></b>
@@ -527,8 +527,8 @@ $(function() {
 	Beeinflusst die Regelung des "Nur PV" Modus, wenn folgende Bedingungen erfüllt sind:<br>
 	- Laden im "Nur PV" Modus<br>
 	- zwei EVs laden gleichzeitig<br>
-	für beide ist ein SoC verfügbar<br>
-	beide EVs laden mit der selben Anzahl Phasen <br><br>
+	- für beide ist ein SoC verfügbar<br>
+	- beide EVs laden mit der selben Anzahl Phasen<br><br>
 </div>
 <div id="adaptpvdiv">
 	<div class="row" style="background-color:#befebe">
