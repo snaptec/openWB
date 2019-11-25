@@ -152,9 +152,9 @@
 
 </div>
 <!-- show values for third charging point -->
-<div class="row" id="lp3lldiv" style="height: 100px; display: none;">
+<div class="row col-xs-12 text-center" id="lp3div" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp3enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp3enabledclick()"></span><span class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp3enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp3enabledclick()"></span><span id="stationlp3" class="fas fa-2x fa-charging-station"></span>	
 		</div>
 
 		<div class="col-xs-4">
@@ -166,7 +166,7 @@
 		</div>
 
 		<div class="col-xs-2">
-			<i class="fas fa-2x fa-car-side"></i><br><?php echo $lp3nameold ?>
+			<i id="carlp3" class="fas fa-2x fa-car-side"></i><br><span id="lp3name"></span>
 
 		</div>
 		<div class="col-xs-3">

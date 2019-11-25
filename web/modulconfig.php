@@ -1163,7 +1163,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div id="openwb12">
 	<div class="row bg-success">
 	Keine Konfiguration erforderlich.<br>
-	Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.<br>
+	Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.<br>
 	</div>
 </div>
 
@@ -1554,7 +1554,7 @@ Keine Konfiguration erforderlich.<br>
 		<input type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>"><br>
 	</div>
 	<div class="row">
-		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
 
 	</div>
 </div>

@@ -312,7 +312,7 @@ echo '
 <div class="row col-xs-12 text-center" style="font-size: 15px; height: 20px; top: 320px; left: 40px; position: absolute; width: 800px; color: white; text-align:center;"> 
 
     
-         <div class=" col-xs-1"> 
+         <div class=" col-xs-2"> 
 	<?php 
 			     if ( $displaytagesgraphold == "1\n") {
      echo ' 	
@@ -328,17 +328,16 @@ echo '
 		<div class="col-xs-3">
 		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP1 (de-)aktivieren" onclick="lp1checkenabledclick();" />
 		</div>
-
+	<?php if ( $lastmanagementold == "1\n" ) { echo '
 		<div class="col-xs-3">
-		<input id="lp1checkenabled" type="button" class="btn btn-blue btn-block" value="LP2 (de-)aktivieren" onclick="lp2checkenabledclick();" />
-		</div>
+		<input id="lp2checkenabled" type="button" class="btn btn-blue btn-block" value="LP2 (de-)aktivieren" onclick="lp2checkenabledclick();" />
+		</div>'; } else { echo '
+		<div class="col-xs-2"></div>'; } ?>
         <div class=" col-xs-2"> 
 			<input type="submit" class="1einstellungen btn btn-blue btn-block"  name="graph" value="Status">
 
                 </div> 
-		<div class="col-xs-1">
 
-		</div>
 </div>
 <div class="row">
 <div class="container" style="left:20px;bottom:0px;position:absolute;">

@@ -594,10 +594,10 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<div class="row">
 			Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
 			Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
-			Sollten Probleme, oder Fehlermeldungen auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
+			Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
 			Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
-			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, "Stop", etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
-			Sehr Langsam führt zu einer Regelzeit von 60Sek.<br><br>
+			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
+			Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60Sek.<br><br>
 		</div>
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
@@ -608,7 +608,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
+			Wenn aktiviert, sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
@@ -634,7 +634,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+			Diese Option ist standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall, wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet.  <br>Die Erhöhung der Frequenz wird durchgeführt, um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
 		</div><br><br>
 		<div class="row">
 			<b><label for="cpunterbrechunglp1">CP Unterbrechung LP1:</label></b>
@@ -645,7 +645,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Diese Option erforder die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br> Sie ist für Fahrzeuge die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren wenn es ohne die Option Probleme gibt<br>
+			Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.<br>
 		</div>
 
 <hr>
@@ -1442,7 +1442,7 @@ $(function() {
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
 	<div class="row">
-		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen / Features sind dann ggf nicht mehr verfügbar<br><br>
+		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen/Features sind dann ggf. nicht mehr verfügbar.<br><br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-primary btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
@@ -1454,7 +1454,7 @@ $(function() {
 	<h3>Debug Daten senden</h3>
 </div>
 	<div class="row">
-		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
+		Beim Senden von Debug Daten wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
 		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtliche SoC Modul Einstellungen herausgefiltert, um die ggf. hinterlegten Benutzernamen/Passwörter NICHT zu übertragen.<br>
 	</div>
 <div class="row">
