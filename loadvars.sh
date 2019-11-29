@@ -159,6 +159,20 @@ if [[ $lastmanagements2 == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 	fi
+	if [[ $evsecons2 == "modbusevse" ]]; then
+	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
+	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
+	        if [[ $evseplugstatelp3 > "1" ]]; then
+	                echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
+	        else
+	                echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
+                fi
+                if [[ $evseplugstatelp3 > "2" ]] && [[ $ladestatuss2 == "1" ]] ; then
+	                echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
+                else
+                        echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
+                fi
+        fi
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $evseconlp4 == "ipevse" ]]; then

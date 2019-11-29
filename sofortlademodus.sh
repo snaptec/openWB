@@ -48,7 +48,7 @@ if [[ $lastmanagement == "0" ]]; then
        			fi
 		else
 			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
-				if (( ladeleistung < 100 )); then
+				if (( ladeleistunglp1 < 100 )); then
 					if (( llalt > minimalstromstaerke )); then
         	                        	llneu=$((llalt - 1 ))
         	                        	runs/set-current.sh $llneu m
@@ -182,7 +182,7 @@ else
 					fi
 				fi
 			else
-				if (( ladeleistung < 100 )); then
+				if (( ladeleistunglp1 < 100 )); then
 					if (( llalt > minimalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
@@ -263,7 +263,7 @@ else
 				fi
 			fi
 		else
-			if (( ladeleistung < 100 )); then
+			if (( ladeleistunglp1 < 100 )); then
 				if (( llalt > minimalstromstaerke )); then
 					llneu=$((llalt - 1 ))
 					runs/set-current.sh "$llneu" m
