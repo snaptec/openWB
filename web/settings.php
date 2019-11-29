@@ -725,7 +725,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#33ffa8">
-	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
+	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Je nach gekaufter Hardwareoption gültig für alle Ladepunkte!<br><br>
 </div>
 <div id="u1p3paus">
 	<br>

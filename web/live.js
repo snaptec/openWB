@@ -18,7 +18,20 @@ var lp2soc;
 var lp1enabled
 var lp2enabled
 var lp3enabled
-
+$('#lp2div').hide();
+$('#lp3div').hide();
+$('#lp4div').hide();
+$('#lp5div').hide();
+$('#lp6div').hide();
+$('#lp7div').hide();
+$('#lp8div').hide();
+$('#slider2div').hide();
+$('#slider3div').hide();
+$('#slider4div').hide();
+$('#slider5div').hide();
+$('#slider6div').hide();
+$('#slider7div').hide();
+$('#slider8div').hide();
 var thevalues = [
 ["openWB/evu/W", "#bezugdiv"],
 ["openWB/global/WHouseConsumption", "#hausverbrauchdiv"],
@@ -1052,13 +1065,7 @@ var publish = function (payload, topic) {
 	client.send(message);
 }
 
-$('#lp2div').hide();
-$('#lp3div').hide();
-$('#lp4div').hide();
-$('#lp5div').hide();
-$('#lp6div').hide();
-$('#lp7div').hide();
-$('#lp8div').hide();
+
 client.connect(options);
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {

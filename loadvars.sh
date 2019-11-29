@@ -849,7 +849,7 @@ if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
 fi
 osofortsoclp1=$(<ramdisk/mqttsofortsoclp1)
 if [[ "$osofortsoclp1" != "$sofortsoclp1" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/PercentDirectChargeModeSoc=${sofortsoclp1}"
+	tempPubList="${tempPubList}\nopenWB/lp/1/percentDirectChargeModeSoc=${sofortsoclp1}"
 	echo $sofortsoclp1 > ramdisk/mqttsofortsoclp1
 fi
 osofortsocstatlp2=$(<ramdisk/mqttsofortsocstatlp2)
