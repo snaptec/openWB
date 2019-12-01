@@ -58,7 +58,7 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
 <div class="container">
 	<div class="row"><br>
 		<ul class="nav nav-tabs">
-			<li><a data-toggle="tab" href="./index.php">Zurück</a></li>
+			<li><a data-toggle="tab" href="./index.php">Zur&uuml;ck</a></li>
 			<li><a href="./settings.php">Einstellungen</a></li>
   			<li><a href="./pvconfig.php">PV Ladeeinstellungen</a></li>
 			<li><a href="./smarthome.php">Smart Home</a></li>
@@ -78,12 +78,12 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
             $currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
 
             $bridgeLines = file($currentFile);
-            $connectionName = "unique-connection-name";
-            $remoteAddressAndPort = "your.remote.mqtt.host:8883";
+            $connectionName = "eindeutiger-verbindungs-bezeichner";
+            $remoteAddressAndPort = "entfernter.mqtt.host:8883";
             $remotePrefix = NULL;
-            $remoteUser = "remote-mqtt-host-user-name";
+            $remoteUser = "nutzername-auf-dem-entfernten-host";
             $remotePassword = "";
-            $remoteClientId = "unique-mqtt-client-id-used-with-remote";
+            $remoteClientId = "client-id-fuer-den-entfernten-host";
             $mqttProtocol = "mqttv31";
             $exportGlobal = false;
             $exportEvu = false;
@@ -133,6 +133,9 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                 if(preg_match('/^\s*topic\s+openWB\/lp\/#/', $bridgeLine) === 1) {
                     $exportAllLps = true;
                 }
+                if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
+                    $exportHousebattery = true;
+                }
                 if(preg_match('/^\s*topic\s+openWB\/set\/Lademodus/', $bridgeLine) === 1) {
                     $subscribeChargeMode = true;
                 }
@@ -145,31 +148,31 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
     ?>
             <form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
                 <div class="row">
-                    <input type="checkbox" name="bridgeEnabled" value="bridgeEnabled" <?php echo $bridgeEnabled ? "checked=\"checked\"" : "" ?>><?php echo $bridgeEnabled ? "": "&nbsp;&nbsp;<em>! Disabled !</em>" ?><b><label>&nbsp;&nbsp;Bridge&nbsp;&nbsp;<input type="text" size="35" name="ConnectionName" id="ConnectionName" value="<?php echo $connectionName; ?>" /></label></b><br/>
-                    <?php if($debugold >= 1) echo "<small>in file '$currentFile'</small>"; ?><br/>
-                    <span style="color: red; font-weight: bold; font-size:small;"><u>ATTENTION</u>: Configuring an MQTT might allow all users with access to the remote MQTT server to see your openWB data !<br/>
-                    It's highly recommended to enable only for private MQTT servers with strong transport encryption, personal login and strict access control, at least for topics starting with the "Remote Prefix" configured below !</span>
+                    <input type="checkbox" name="bridgeEnabled" value="bridgeEnabled" <?php echo $bridgeEnabled ? "checked=\"checked\"" : "" ?>><?php echo $bridgeEnabled ? "": "&nbsp;&nbsp;<em>! Deaktiviert !</em>" ?><b><label>&nbsp;&nbsp;Br&uuml;cke&nbsp;&nbsp;<input type="text" size="35" name="ConnectionName" id="ConnectionName" value="<?php echo $connectionName; ?>" /></label></b><br/>
+                    <?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?><br/>
+                    <span style="color: red; font-weight: bold; font-size:small;"><u>ACHTUNG</u>: Die Konfiguration einer MQTT-Br&uuml;cke erlaubt allen Nutzern mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten dieser openWB einzusehen !<br/>
+                    Es wird schwer empfohlen dies nur f&uuml;r nicht-&ouml;ffentliche MQTT-Server unter Verwendung starker Transport-Verschl&uuml;sselung (TLS)  mit personfiziertem Login und strenger Zugriffskontrolle (zumindest f&uuml;r die MQTT-Thema unterhalb von &quot;Entfernter Pr&auml;fix&quot;) zu aktivieren !</span>
                 </div>
                 <div style="margin-top: 15px;">
-                    Remote Address and Port:&nbsp;<input type="text" size="50" name="RemoteAddress" id="RemoteAddress" value="<?php echo $remoteAddressAndPort; ?>" /><br/>
-                    <small>Remote MQTT server address and port number. Default port is 8883 for TLS protected connections.</small>
+                    Addresse und Portnummer des entfernten MQTT-Servers:&nbsp;<input type="text" size="50" name="RemoteAddress" id="RemoteAddress" value="<?php echo $remoteAddressAndPort; ?>" /><br/>
+                    <small>Entfernter MQTT-Server und Port-Nummer. Standard Port ist 8883 f&uuml;r eine TLS-gesch&uuml;tzte Verbindung.</small>
                 </div>
                 <div style="margin-top: 15px;">
-                    Remote User:&nbsp;<input type="text" size="35" name="RemoteUser" id="RemoteUser" value="<?php echo $remoteUser; ?>" /><br/>
-                    <small>User name to log in on the remote MQTT server.</small>
+                    Benutzer:&nbsp;<input type="text" size="35" name="RemoteUser" id="RemoteUser" value="<?php echo $remoteUser; ?>" /><br/>
+                    <small>Benutzername f&uuml;r den Login auf dem entfernten MQTT-Server.</small>
                 </div>
                 <div style="margin-top: 15px;">
-                    Remote Password:&nbsp;<input type="password" size="35" name="RemotePass" id="RemotePass" value="<?php echo $remotePassword; ?>" /><br/>
-                    <small>Password to log in on the remote MQTT server. White spaces at beginning or end of the password are NOT supported.</small>
+                    Passwort:&nbsp;<input type="password" size="35" name="RemotePass" id="RemotePass" value="<?php echo $remotePassword; ?>" /><br/>
+                    <small>Passwort f&uuml;r den Login auf dem entfernten MQTT-Server. Leerzeichen am Anfang und Ende des Passworts werden nicht unterst&uuml;tzt.</small>
                 </div>
                 <div style="margin-top: 15px;">
-                    Remote Prefix:&nbsp;<input type="text" size="55" name="RemotePrefix" id="RemotePrefix" value="<?php echo $remotePrefix; ?>" /><br/>
-                    <small>The topic prefix to prepend to the 'openWB/...' topics.<br/>
-                    Example: If this field is 'pfx' then the topic publish and subscribed to remote will be 'pfx/openWB/...' </small>
+                    Entfernter Pr&auml;fix:&nbsp;<input type="text" size="55" name="RemotePrefix" id="RemotePrefix" value="<?php echo $remotePrefix; ?>" /><br/>
+                    <small>MQTT-Thema Pr&auml;fix welches dem 'openWB/...' vorangestellt wird.<br/>
+                    Beispiel: Wenn in diesem Feld 'pfx' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</small>
                 </div>
                 <div style="margin-top: 15px;">
-                    MQTT Protocol:<br/>
-                    <small>The MQTT protocol version to use when talking to the remote MQTT server.</small>
+                    MQTT Protokoll:<br/>
+                    <small>Version des MQTT Protokolls welches zur Kommunikation mit dem entfernten Server verwendet wird.</small>
                     <fieldset>
                         <table>
                         <tr>
@@ -180,52 +183,54 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                     </fieldset>
                 </div>
                 <div style="margin-top: 15px;">
-                    TLS Protocol:<br/>
-                    <small>The TLS protocol version to use for encrypting the traffic to the remote MQTT server.</small>
+                    TLS Protokoll:<br/>
+                    <small>Version des TLS Protokolls welches zur Verschl&uuml;sselung der Kommunikation mit dem entfernten Server verwendet wird.</small>
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.3" disabled <?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3<br/><span style="color: darkgreen; font-size:small;">Recommended<br/>But not supported on<br/>Debian Stretch</span></td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2<br/><span style="color: lightgreen; font-size:small;">Recommended</span></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.3" disabled <?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3<br/><span style="color: darkgreen; font-size:small;">Empfohlen<br/>Aber auf Debian Stretch<br/>nicht unterst&uuml;tzt</span></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2<br/><span style="color: lightgreen; font-size:small;">Empfohlen</span></td>
                             <!-- td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.1" <?php echo $tlsVersion == "tlsv1.1" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.1<br/><span style="color: darkred; font-size:small;">Can be broken.</span><td/ -->
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="none" <?php echo $tlsVersion == "none" ? "checked=\"checked\"" : "" ?>>&nbsp;No encryption<br/><span style="color: red; font-size:small;">Highly unsafe !<br/>Transmits plain-text passwords.<br/>Use only in protected environments!</span></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="none" <?php echo $tlsVersion == "none" ? "checked=\"checked\"" : "" ?>>&nbsp;Keine Verschl&uuml;sselung<br/><span style="color: red; font-size:small;">Hochgradig unsicher !<br/>&Uuml;bertr&auml;gt Passw&ouml;rter im Klartext!<br/>Nur in gesch&uuml;tzten Umgebungen verwenden!</span></td>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div style="margin-top: 15px;">
-                    <b>Publish to remote:</b><br/>
-                    <small>The data that shall be sent to the remote MQTT server.</small>
+                    <b>Zum entfernten Server weiterleiten:</b><br/>
+                    <small>Diese Daten werden von der openWB zum entfernten Server weitergeleitet.</small>
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="globalData" value="globalData" <?php echo $exportGlobal ? "checked=\"checked\"" : "" ?>>&nbsp;Global Data</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="evuData" value="evuData" <?php echo $exportEvu ? "checked=\"checked\"" : "" ?>>&nbsp;EP Data<td/>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="pvData" value="pvData" <?php echo $exportPv ? "checked=\"checked\"" : "" ?>>&nbsp;PV Data</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="globalData" value="globalData" <?php echo $exportGlobal ? "checked=\"checked\"" : "" ?>>&nbsp;Allgemeine Daten<br/><small>z.B. Hausverbrauch</small></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="evuData" value="evuData" <?php echo $exportEvu ? "checked=\"checked\"" : "" ?>>&nbsp;EVU (Energieversorger) Daten</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="pvData" value="pvData" <?php echo $exportPv ? "checked=\"checked\"" : "" ?>>&nbsp;PV (Photovoltaik) Daten</td>
+                        </tr>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="allLps" value="allLps" <?php echo $exportAllLps ? "checked=\"checked\"" : "" ?>>&nbsp;All Charging Points</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="graph" value="graph" <?php echo $exportGraph ? "checked=\"checked\"" : "" ?>>&nbsp;Graphing Data</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="housebattery" value="housebattery" <?php echo $exportHousebattery ? "checked=\"checked\"" : "" ?>>&nbsp;Daten des Energiespeichers</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="allLps" value="allLps" <?php echo $exportAllLps ? "checked=\"checked\"" : "" ?>>&nbsp;Daten aller Ladepunkte</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="graph" value="graph" <?php echo $exportGraph ? "checked=\"checked\"" : "" ?>>&nbsp;Daten f&uuml;r Diagramme</td>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div style="margin-top: 15px;">
-                    <b>Subscribe on remote:</b><br/>
-                    <small>The data that we subscribe to on the remote MQTT server.<br/>
-                    <span style="color: red; font-weight: bold; font-size:small;"><u>ATTENTION</u>: This will allow all users with write access to the remote MQTT server's topics to remote-control this openWB !<br/>
-                    It's highly recommended to enable only for private MQTT servers with strong transport encryption, personal login and strict access control !<br/>
-                    DO NOT ENABLE ANY OF THESE FOR <u>PUBLIC</u> MQTT SERVERS !!!</b></span>
+                    <b>Auf dem entfernten Server registrierte Konfigurationsm&ouml;glichkeiten:</b><br/>
+                    <small>MQTT-Themen &uuml;ber welche die openWB Einstellungen vom entfernten Server empfangen soll.<br/>
+                    <span style="color: red; font-weight: bold; font-size:small;"><u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Server mit Zugriff auf die entsprechenden Themen diese openWB fern zu steuern !<br/>
+                    Es wird schwer empfohlen dies nur f&uuml;r nicht-&ouml;ffentliche MQTT-Server unter Verwendung starker Transport-Verschl&uuml;sselung (TLS)  mit personfiziertem Login und strenger Zugriffskontrolle zu aktivieren !<br/>
+                    KEINESFALLS AUF <u>&Ouml;FFENTLICHE ZUG&Auml;NGLICHEN</u> MQTT-SERVERN AKTIVEREN !!!</b></span>
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subChargeMode" name="SubscribeChargeMode" value="subChargeMode" <?php echo $subscribeChargeMode ? "checked=\"checked\"" : "" ?>>&nbsp;Charge Mode</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="lp1Control" name="lp1Control" value="lp1Control" <?php echo $subscribeLp1 ? "checked=\"checked\"" : "" ?>>&nbsp;Charge Point 1 Control<td/>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subChargeMode" name="SubscribeChargeMode" value="subChargeMode" <?php echo $subscribeChargeMode ? "checked=\"checked\"" : "" ?>>&nbsp;openWB Lademodus</td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="lp1Control" name="lp1Control" value="lp1Control" <?php echo $subscribeLp1 ? "checked=\"checked\"" : "" ?>>&nbsp;Steuerung f&uuml;r Ladepunkt 1<td/>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div>
-                    <button type="submit" name="action" value="saveBridge">Save bridge '<?php echo urlencode($connectionName); ?>'</button>
+                    <button type="submit" name="action" value="saveBridge">Einstellungen f&uuml;r Br&uuml;cke '<?php echo urlencode($connectionName); ?>' speichern</button>
                 </div>
             </form>
     <?php
