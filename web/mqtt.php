@@ -58,10 +58,13 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "settingspwakt=") !== false) {
 		list(, $settingspwaktold) = explode("=", $line);
-	}
+    }
 }
 
 $settingspwsold = str_replace( "'", "", $settingspwold);
+
+$lines = file('/etc/os-release');
+$tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && empty(preg_grep('/VERSION_CODENAME=jessie/', $lines)) && empty(preg_grep('/VERSION_CODENAME=wheezy/', $lines));
 ?>
 
 <div class="container">
@@ -196,8 +199,8 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.3" disabled <?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3<br/><span style="color: darkgreen; font-size:small;">Empfohlen<br/>Aber auf Debian Stretch<br/>nicht unterst&uuml;tzt</span></td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2<br/><span style="color: lightgreen; font-size:small;">Empfohlen</span></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.3" <?php if (!$tlsv13Supported) echo "disabled"; ?> <?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3<br/><span style="color: green; font-size:small;"><?php echo $tlsv13Supported ? "Bevorzugt" : "<br/>Auf Debian Versionen kleiner<br/>'Buster' nicht unterst&uuml;tzt"; ?></span></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2<br/><span style="color: green; font-size:small;"><?php if (!$tlsv13Supported) echo "<br/>Empfohlen"; ?></span></td>
                             <!-- td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.1" <?php echo $tlsVersion == "tlsv1.1" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.1<br/><span style="color: darkred; font-size:small;">Can be broken.</span><td/ -->
                         </tr>
                         </table>
