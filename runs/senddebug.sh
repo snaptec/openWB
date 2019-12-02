@@ -24,7 +24,7 @@ echo "############################ version ##############" >> $debugFile
 echo "Version" >> $debugFile
 cat /var/www/html/openWB/web/version >> $debugFile
 
-#curl --upload $debugFile https://openwb.de/tools/debug.php
+curl --upload $debugFile https://openwb.de/tools/debug.php
 
 sed -i 's/debug.*/debug=0/' /var/www/html/openWB/openwb.conf
 rm /var/www/html/openWB/ramdisk/debuguser
