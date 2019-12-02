@@ -40,9 +40,17 @@
 
 <?php
 $lines = file('/var/www/html/openWB/openwb.conf');
+$refreshDuration = 12;
 foreach($lines as $line) {
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
+	}
+	if(strpos($line, "dspeed=") !== false) {
+        list(, $dspeedold) = explode("=", $line);
+        if ($dspeedold == 0) $refreshDuration = 12;
+        else if ($dspeedold == 1) $refreshDuration = 7;
+        else if ($dspeedold == 2) $refreshDuration = 22;
+        else if ($dspeedold == 3) $refreshDuration = 62;
 	}
 
     if(strpos($line, "settingspw=") !== false) {
@@ -92,11 +100,10 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
             $exportAllLps = false;
             $subscribeChargeMode = false;
             $exportGraph = false;
-            $exportHousebattery = false;
+            $exportStatus = false;
             $tlsVersion = "tlsv1.2";
             $bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
-            $exportLp = array(false, false, false, false, false, false, false, false, false); // we init element 0 but don't use it as config file starts counting at 1 --> we need 9 elements for 8 CPs
-            $subscribeLp = array(false, false, false, false, false, false, false, false, false); // we init element 0 but don't use it as config file starts counting at 1 --> we need 9 elements for 8 CPs
+            $subscribeConfigs = false;
             foreach($bridgeLines as $bridgeLine) {
                 //echo "line '$bridgeLine'<br/>";
                 if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
@@ -113,7 +120,7 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                     $remoteUser = trim($matches[1]);
                 }
                 else if(preg_match('/^\s*remote_password\s+(.+)/', $bridgeLine, $matches) === 1) {
-                    $remotePassword = preg_replace('/./', '*', trim($matches[1]));
+                    $remotePassword = trim($matches[1]); //preg_replace('/./', '*', trim($matches[1]));
                 }
                 else if(preg_match('/^\s*bridge_protocol_version\s+(.+)/', $bridgeLine, $matches) === 1) {
                     $mqttProtocol = trim($matches[1]);
@@ -123,28 +130,25 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                 }
                 
                 if(preg_match('/^\s*topic\s+openWB\/global\/#/', $bridgeLine) === 1) {
-                    $exportGlobal = true;
+                    $exportStatus = true;
                 }
                 if(preg_match('/^\s*topic\s+openWB\/evu\/#/', $bridgeLine) === 1) {
-                    $exportEvu = true;
+                    $exportStatus = true;
                 }
                 if(preg_match('/^\s*topic\s+openWB\/pv\/#/', $bridgeLine) === 1) {
-                    $exportPv = true;
+                    $exportStatus = true;
+                }
+                if(preg_match('/^\s*topic\s+openWB\/lp\/\d+\/#/', $bridgeLine) === 1) {
+                    $exportStatus = true;
+                }
+                if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
+                    $exportStatus = true;
                 }
                 if(preg_match('/^\s*topic\s+openWB\/graph\/#/', $bridgeLine) === 1) {
                     $exportGraph = true;
                 }
-                if(preg_match('/^\s*topic\s+openWB\/lp\/(\d+)\/#/', $bridgeLine, $matches) === 1) {
-                    $exportLp[$matches[1]] = true;
-                }
-                if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
-                    $exportHousebattery = true;
-                }
-                if(preg_match('/^\s*topic\s+openWB\/set\/Lademodus/', $bridgeLine) === 1) {
-                    $subscribeChargeMode = true;
-                }
-                if(preg_match('/^\s*topic\s+openWB\/set\/lp(\d+)\/#/', $bridgeLine, $matches) === 1) {
-                    $subscribeLp[$matches[1]] = true;
+                if(preg_match('/^\s*topic\s+openWB\/set\//', $bridgeLine) === 1) {
+                    $subscribeConfigs = true;
                 }
             }
 
@@ -205,69 +209,30 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="globalData" value="globalData" <?php echo $exportGlobal ? "checked=\"checked\"" : "" ?>>&nbsp;Allgemeine Daten<br/><small>z.B. Hausverbrauch</small></td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="evuData" value="evuData" <?php echo $exportEvu ? "checked=\"checked\"" : "" ?>>&nbsp;EVU (Energieversorger) Daten</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="pvData" value="pvData" <?php echo $exportPv ? "checked=\"checked\"" : "" ?>>&nbsp;PV (Photovoltaik) Daten</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="housebattery" value="housebattery" <?php echo $exportHousebattery ? "checked=\"checked\"" : "" ?>>&nbsp;Daten des Energiespeichers</td>
-                            <!-- td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="allLps" value="allLps" <?php echo $exportAllLps ? "checked=\"checked\"" : "" ?>>&nbsp;Daten aller Ladepunkte</td -->
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="graph" value="graph" <?php echo $exportGraph ? "checked=\"checked\"" : "" ?>>&nbsp;Daten f&uuml;r Diagramme</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="text-align: left; vertical-align: center; padding: 10px;">
-                                <u>Ladepunkte:</u><br/>
-                                <table>
-                                    <tr>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp1" value="exportLp1" <?php echo $exportLp[1] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 1</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp2" value="exportLp2" <?php echo $exportLp[2] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 2</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp3" value="exportLp3" <?php echo $exportLp[3] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 3</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp4" value="exportLp4" <?php echo $exportLp[4] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 4</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp5" value="exportLp5" <?php echo $exportLp[5] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 5</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp6" value="exportLp6" <?php echo $exportLp[6] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 6</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp7" value="exportLp7" <?php echo $exportLp[7] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 7</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp8" value="exportLp8" <?php echo $exportLp[8] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 8</td>
-                                    </tr>
-                                </table>
-                            </td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportStatus" value="exportStatus" <?php echo $exportStatus ? "checked=\"checked\"" : "" ?>>&nbsp;Alle Status Daten<br/><small>Hausverbrauch, EVU, PV, Ladepunkte, Speicher</small></td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportGraph" value="exportGraph" <?php echo $exportGraph ? "checked=\"checked\"" : "" ?>>&nbsp;Datenserien f&uuml;r Diagramme</td>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div style="margin-top: 15px;">
-                    <b>Auf dem entfernten Server registrierte Konfigurationsm&ouml;glichkeiten:</b><br/>
-                    <small>MQTT-Themen &uuml;ber welche die openWB Einstellungen vom entfernten Server empfangen soll.<br/>
+                    <b>Konfiguration der openWB durch entfernten Server erm&ouml;glichen:</b><br/>
                     <span style="color: red; font-weight: bold; font-size:small;"><u>ACHTUNG</u>: Dies erlaubt jedem Nutzer des entfernten MQTT-Server mit Zugriff auf die entsprechenden Themen diese openWB fern zu steuern !<br/>
                     Es wird schwer empfohlen dies nur f&uuml;r nicht-&ouml;ffentliche MQTT-Server unter Verwendung starker Transport-Verschl&uuml;sselung (TLS)  mit personfiziertem Login und strenger Zugriffskontrolle zu aktivieren !<br/>
                     KEINESFALLS AUF <u>&Ouml;FFENTLICHE ZUG&Auml;NGLICHEN</u> MQTT-SERVERN AKTIVEREN !!!</b></span>
                     <fieldset>
                         <table>
                         <tr>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subChargeMode" name="SubscribeChargeMode" value="subChargeMode" <?php echo $subscribeChargeMode ? "checked=\"checked\"" : "" ?>>&nbsp;openWB Lademodus</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: left; vertical-align: center; padding: 10px;">
-                                <u>Steuerung f&uuml; Ladepunkte:</u><br/>
-                                <table>
-                                    <tr>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp1" value="subscribeLp1" <?php echo $subscribeLp[1] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 1</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp2" value="subscribeLp2" <?php echo $subscribeLp[2] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 2</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp3" value="subscribeLp3" <?php echo $subscribeLp[3] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 3</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp4" value="subscribeLp4" <?php echo $subscribeLp[4] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 4</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp5" value="subscribeLp5" <?php echo $subscribeLp[5] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 5</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp6" value="subscribeLp6" <?php echo $subscribeLp[6] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 6</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp7" value="subscribeLp7" <?php echo $subscribeLp[7] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 7</td>
-                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp8" value="subscribeLp8" <?php echo $subscribeLp[8] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 8</td>
-                                    </tr>
-                                </table>
-                            </td>
+                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeConfigs" value="subscribeConfigs" <?php echo $subscribeConfigs ? "checked=\"checked\"" : "" ?>>&nbsp;Fernkonfiguration erm&ouml;glichen (gef&auml;hrlich)</td>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div>
+                    Das Anwenden der Änderungen dauert <?php echo $refreshDuration ?> Sekunden. Bitte auf den Refresh der Website warten!<br/>
                     <button type="submit" name="action" value="saveBridge">Einstellungen f&uuml;r Br&uuml;cke '<?php echo urlencode($connectionName); ?>' speichern</button>
                     <button type="submit" name="action" value="deleteBridge">Br&uuml;cke '<?php echo urlencode($connectionName); ?>' l&ouml;schen</button>
+                    <button type="submit" name="action" value="backNoChange">Zur&uuml;ck ohne &Auml;nderung</button>
                 </div>
             </form>
     <?php

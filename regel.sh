@@ -43,6 +43,7 @@ source u1p3p.sh
 source nrgkickcheck.sh
 source rfidtag.sh
 source leds.sh
+source mqttBridgeConfig.sh
 date=$(date)
 re='^-?[0-9]+$'
 #ladelog ausfuehren
