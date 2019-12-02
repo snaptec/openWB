@@ -1,8 +1,11 @@
 #!/bin/bash
 #set -e
-. openwb.conf
+#. openwb.conf
+
+cd /var/www/html/openWB
 
 #TEST=echo
+#debug=2
 
 if [[ $debug == "2" ]]; then
     echo "Checking for MQTT bridge configs"
@@ -12,7 +15,6 @@ fi
 mosquittoConfDir=/etc/mosquitto/conf.d
 deleteFile=ramdisk/99-bridgesToDelete
 sudo=sudo
-waitTime=3
 
 # perform the actual installation of a single config
 function InstallConfig {
@@ -33,10 +35,6 @@ function TriggerMosquittoConfigRead {
 
     #$TEST $sudo kill -HUP $process_id
     $TEST $sudo service mosquitto restart
-
-    # wait some seconds to allow Mosquitto to fully come up again before rest of regel.sh starts publishing data
-    echo "Waiting $waitTime seconds for Mosquitto to come up again before going ahead with rest of 'regel.sh' script"
-    sleep $waitTime
 }
 
 ###############
