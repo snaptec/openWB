@@ -3,7 +3,8 @@
 
 <head>
 	<script src="js/jquery-1.11.1.min.js"></script>
-	<meta charset="UTF-8">
+
+    <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>OpenWB</title>
@@ -77,7 +78,7 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
         {
             $currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
 
-            $bridgeLines = file($currentFile);
+            $bridgeLines = $currentFile != "" ? file($currentFile) : array();
             $connectionName = "eindeutiger-verbindungs-bezeichner";
             $remoteAddressAndPort = "entfernter.mqtt.host:8883";
             $remotePrefix = NULL;
@@ -91,8 +92,11 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
             $exportAllLps = false;
             $subscribeChargeMode = false;
             $exportGraph = false;
+            $exportHousebattery = false;
             $tlsVersion = "tlsv1.2";
             $bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
+            $exportLp = array(false, false, false, false, false, false, false, false, false); // we init element 0 but don't use it as config file starts counting at 1 --> we need 9 elements for 8 CPs
+            $subscribeLp = array(false, false, false, false, false, false, false, false, false); // we init element 0 but don't use it as config file starts counting at 1 --> we need 9 elements for 8 CPs
             foreach($bridgeLines as $bridgeLine) {
                 //echo "line '$bridgeLine'<br/>";
                 if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
@@ -130,8 +134,8 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                 if(preg_match('/^\s*topic\s+openWB\/graph\/#/', $bridgeLine) === 1) {
                     $exportGraph = true;
                 }
-                if(preg_match('/^\s*topic\s+openWB\/lp\/#/', $bridgeLine) === 1) {
-                    $exportAllLps = true;
+                if(preg_match('/^\s*topic\s+openWB\/lp\/(\d+)\/#/', $bridgeLine, $matches) === 1) {
+                    $exportLp[$matches[1]] = true;
                 }
                 if(preg_match('/^\s*topic\s+openWB\/housebattery\/#/', $bridgeLine) === 1) {
                     $exportHousebattery = true;
@@ -139,8 +143,8 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                 if(preg_match('/^\s*topic\s+openWB\/set\/Lademodus/', $bridgeLine) === 1) {
                     $subscribeChargeMode = true;
                 }
-                if(preg_match('/^\s*topic\s+openWB\/set\/lp1/', $bridgeLine) === 1) {
-                    $subscribeLp1 = true;
+                if(preg_match('/^\s*topic\s+openWB\/set\/lp(\d+)\/#/', $bridgeLine, $matches) === 1) {
+                    $subscribeLp[$matches[1]] = true;
                 }
             }
 
@@ -191,7 +195,6 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                             <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.3" disabled <?php echo $tlsVersion == "tlsv1.3" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.3<br/><span style="color: darkgreen; font-size:small;">Empfohlen<br/>Aber auf Debian Stretch<br/>nicht unterst&uuml;tzt</span></td>
                             <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.2" <?php echo $tlsVersion == "tlsv1.2" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.2<br/><span style="color: lightgreen; font-size:small;">Empfohlen</span></td>
                             <!-- td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="tlsv1.1" <?php echo $tlsVersion == "tlsv1.1" ? "checked=\"checked\"" : "" ?>>&nbsp;TLSv1.1<br/><span style="color: darkred; font-size:small;">Can be broken.</span><td/ -->
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="radio" name="tlsProtocol" value="none" <?php echo $tlsVersion == "none" ? "checked=\"checked\"" : "" ?>>&nbsp;Keine Verschl&uuml;sselung<br/><span style="color: red; font-size:small;">Hochgradig unsicher !<br/>&Uuml;bertr&auml;gt Passw&ouml;rter im Klartext!<br/>Nur in gesch&uuml;tzten Umgebungen verwenden!</span></td>
                         </tr>
                         </table>
                     </fieldset>
@@ -208,8 +211,25 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                         </tr>
                         <tr>
                             <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="housebattery" value="housebattery" <?php echo $exportHousebattery ? "checked=\"checked\"" : "" ?>>&nbsp;Daten des Energiespeichers</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="allLps" value="allLps" <?php echo $exportAllLps ? "checked=\"checked\"" : "" ?>>&nbsp;Daten aller Ladepunkte</td>
+                            <!-- td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="allLps" value="allLps" <?php echo $exportAllLps ? "checked=\"checked\"" : "" ?>>&nbsp;Daten aller Ladepunkte</td -->
                             <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="graph" value="graph" <?php echo $exportGraph ? "checked=\"checked\"" : "" ?>>&nbsp;Daten f&uuml;r Diagramme</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: left; vertical-align: center; padding: 10px;">
+                                <u>Ladepunkte:</u><br/>
+                                <table>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp1" value="exportLp1" <?php echo $exportLp[1] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 1</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp2" value="exportLp2" <?php echo $exportLp[2] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 2</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp3" value="exportLp3" <?php echo $exportLp[3] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 3</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp4" value="exportLp4" <?php echo $exportLp[4] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 4</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp5" value="exportLp5" <?php echo $exportLp[5] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 5</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp6" value="exportLp6" <?php echo $exportLp[6] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 6</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp7" value="exportLp7" <?php echo $exportLp[7] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 7</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="exportLp8" value="exportLp8" <?php echo $exportLp[8] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 8</td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         </table>
                     </fieldset>
@@ -224,13 +244,30 @@ $settingspwsold = str_replace( "'", "", $settingspwold);
                         <table>
                         <tr>
                             <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subChargeMode" name="SubscribeChargeMode" value="subChargeMode" <?php echo $subscribeChargeMode ? "checked=\"checked\"" : "" ?>>&nbsp;openWB Lademodus</td>
-                            <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="lp1Control" name="lp1Control" value="lp1Control" <?php echo $subscribeLp1 ? "checked=\"checked\"" : "" ?>>&nbsp;Steuerung f&uuml;r Ladepunkt 1<td/>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: left; vertical-align: center; padding: 10px;">
+                                <u>Steuerung f&uuml; Ladepunkte:</u><br/>
+                                <table>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp1" value="subscribeLp1" <?php echo $subscribeLp[1] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 1</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp2" value="subscribeLp2" <?php echo $subscribeLp[2] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 2</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp3" value="subscribeLp3" <?php echo $subscribeLp[3] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 3</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp4" value="subscribeLp4" <?php echo $subscribeLp[4] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 4</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp5" value="subscribeLp5" <?php echo $subscribeLp[5] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 5</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp6" value="subscribeLp6" <?php echo $subscribeLp[6] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 6</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp7" value="subscribeLp7" <?php echo $subscribeLp[7] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 7</td>
+                                        <td style="text-align: left; vertical-align: center; padding: 10px;"><input type="checkbox" name="subscribeLp8" value="subscribeLp8" <?php echo $subscribeLp[8] ? "checked=\"checked\"" : "" ?>>&nbsp;LP 8</td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         </table>
                     </fieldset>
                 </div>
                 <div>
                     <button type="submit" name="action" value="saveBridge">Einstellungen f&uuml;r Br&uuml;cke '<?php echo urlencode($connectionName); ?>' speichern</button>
+                    <button type="submit" name="action" value="deleteBridge">Br&uuml;cke '<?php echo urlencode($connectionName); ?>' l&ouml;schen</button>
                 </div>
             </form>
     <?php
@@ -252,7 +289,7 @@ Open Source made with love!<br>
 </div></div>
 </div>
 <script>
-	var settingspwaktold = <?php echo $settingspwaktold ?>;
+    var settingspwaktold = <?php echo $settingspwaktold ?>;
 
 	var settingspwold = <?php echo $settingspwold ?>;
 if ( settingspwaktold == 1 ) {
