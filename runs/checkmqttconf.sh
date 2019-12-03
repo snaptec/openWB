@@ -1,11 +1,10 @@
 #!/bin/bash
 #set -e
-#. openwb.conf
+. ../../openwb.conf
 
 cd /var/www/html/openWB
 
 #TEST=echo
-#debug=2
 
 if [[ $debug == "2" ]]; then
     echo "Checking for MQTT bridge configs"
@@ -40,6 +39,9 @@ function TriggerMosquittoConfigRead {
 ###############
 # main script #
 ###############
+if [[ $debug == "1" ]]; then
+    echo "**** MQTT configuration starting at `date` ****"
+fi
 anyConfigChanged="0"
 
 # handle bridges to delete
@@ -72,4 +74,8 @@ if [ "$anyConfigChanged" != "0" ]; then
     TriggerMosquittoConfigRead
 #else
     # echo "No bridges to be installed/updated"
+fi
+
+if [[ $debug == "1" ]]; then
+    echo "**** MQTT configuration done at `date` ****"
 fi

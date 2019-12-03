@@ -79,8 +79,6 @@ foreach($files as $currentFile)
 
 if ($_POST['action'] === 'deleteBridge')
 {
-	sleep($bridgeOperationDuration);
-
 	header("Location: ../mqtt.php");
 	
 	return;
@@ -323,10 +321,10 @@ EOS
 fclose($configFile);
 
 echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom trennen";
-exec("/var/www/html/openWB/runs/checkmqttconf.sh");
+exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log");
 
 ?>
 
 <script type="text/javascript">
-	setTimeout(function() { window.location = "../mqtt.php"; }, 10000);
+	setTimeout(function() { window.location = "../mqtt.php"; }, 8000);
 </script>

@@ -40,17 +40,10 @@
 
 <?php
 $lines = file('/var/www/html/openWB/openwb.conf');
-$refreshDuration = 12;
+$refreshDuration = 8;
 foreach($lines as $line) {
 	if(strpos($line, "debug=") !== false) {
 		list(, $debugold) = explode("=", $line);
-	}
-	if(strpos($line, "dspeed=") !== false) {
-        list(, $dspeedold) = explode("=", $line);
-        if ($dspeedold == 0) $refreshDuration = 12;
-        else if ($dspeedold == 1) $refreshDuration = 7;
-        else if ($dspeedold == 2) $refreshDuration = 22;
-        else if ($dspeedold == 3) $refreshDuration = 62;
 	}
 
     if(strpos($line, "settingspw=") !== false) {
@@ -82,8 +75,12 @@ $tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && emp
 	</div>
 
     <?php
-        $files = glob('/etc/mosquitto/conf.d/*-bridge-*.conf*');
-        array_push($files, "");
+        $files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
+        if (count($files) == 0)
+        {
+            array_push($files, "");
+        }
+
         $firstLoopDone = false;
         foreach($files as $currentFile)
         {
@@ -232,7 +229,7 @@ $tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && emp
                     </fieldset>
                 </div>
                 <div>
-                    Das Anwenden der Änderungen dauert <?php echo $refreshDuration ?> Sekunden. Bitte auf den Refresh der Website warten!<br/>
+                    Das Anwenden der Änderungen dauert <?php echo $refreshDuration ?> Sekunden. Bitte die openWB in dieser Zeit nicht vom Strom trennen!<br/>
                     <button type="submit" name="action" value="saveBridge">Einstellungen f&uuml;r Br&uuml;cke '<?php echo urlencode($connectionName); ?>' speichern</button>
                     <button type="submit" name="action" value="deleteBridge">Br&uuml;cke '<?php echo urlencode($connectionName); ?>' l&ouml;schen</button>
                     <button type="submit" name="action" value="backNoChange">Zur&uuml;ck ohne &Auml;nderung</button>
