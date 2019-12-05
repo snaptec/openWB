@@ -1119,6 +1119,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
     <li><a href="./smarthome.php">Smart Home</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./mqtt.php">MQTT</a></li>
 	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
