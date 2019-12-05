@@ -29,7 +29,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/set/#")
 # handle each set topic 
 def on_message(client, userdata, msg): 
-    if (msg.topic == "openWB/set/Lademodus"):
+    if (msg.topic == "openWB/set/ChargeMode"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=4):
             f = open('/var/www/html/openWB/ramdisk/lademodus', 'w')
             f.write(msg.payload.decode("utf-8"))
