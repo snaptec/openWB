@@ -209,7 +209,7 @@ topic openWB/evu/# out 2 "" $remotePrefix
 topic openWB/lp/# out 2 "" $remotePrefix
 
 # export all charge point data to remote
-topic openWB/houseBhousebattery/# out 2 "" $remotePrefix
+topic openWB/housebattery/# out 2 "" $remotePrefix
 
 # export all charge point data to remote
 topic openWB/pv/# out 2 "" $remotePrefix

@@ -75,7 +75,15 @@ if [ "$anyConfigChanged" != "0" ]; then
 #else
     # echo "No bridges to be installed/updated"
 fi
-
+#force pushing all values in broker
+timeout 3 mosquitto_sub -v -h localhost -t "openWB/#" > /tmp/mqttvars
+while read line; do
+	if [[ $line == *"openWB"* ]];then
+		value=$(echo -e $line | awk '{print $2;}')
+		name=$(echo -e $line | awk '{print $1;}')
+		mosquitto_pub -r -t $name -m $value
+	fi
+done < /tmp/mqttvars
 if [[ $debug == "1" ]]; then
     echo "**** MQTT configuration done at `date` ****"
 fi
