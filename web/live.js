@@ -502,7 +502,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 		mqttpayload = mqttpayload + " W";
 		}
-		$("#llgdiv").html(mqttpayload);
+		$("#gesamtllwdiv").html(mqttpayload);
 	}
 	else if ( mqttmsg == "openWB/lp/1/boolPlugStat") {
 		if ($('#plugstatlp1div').length > 0) {
