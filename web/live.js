@@ -1148,6 +1148,29 @@ function lp7DirectChargeAmpsClick() {
 function lp8DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
 };
+function sofortclick() {
+	        publish("0","openWB/set/ChargeMode");
+	        publish("0","openWB/global/ChargeMode");
+};
+function minundpvclick() {
+	        publish("1","openWB/set/ChargeMode");
+	        publish("1","openWB/global/ChargeMode");
+
+};
+function nurpvclick() {
+	        publish("2","openWB/set/ChargeMode");
+	        publish("2","openWB/global/ChargeMode");
+};
+function standbyclick() {
+	        publish("4","openWB/set/ChargeMode");
+	        publish("4","openWB/global/ChargeMode");
+};
+function stopclick() {
+	        publish("3","openWB/set/ChargeMode");
+	        publish("3","openWB/global/ChargeMode");
+};
+
+
 function getfile() {
 
 
