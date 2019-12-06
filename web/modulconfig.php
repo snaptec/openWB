@@ -814,6 +814,12 @@ foreach($lines as $line) {
 	if(strpos($line, "vartaspeicherip=") !== false) {
 		list(, $vartaspeicheripold) = explode("=", $line);
 	}
+	if(strpos($line, "lgessv1ip=") !== false) {
+		list(, $lgessv1ipold) = explode("=", $line);
+	}
+		if(strpos($line, "lgessv1pass=") !== false) {
+		list(, $lgessv1passold) = explode("=", $line);
+	}	
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -3318,9 +3324,14 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
 		<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 	</select>
 </div>
+<div id="wattbezuglgessv1">
+	<div class="row">
+		Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+	</div>
+</div>3748
 <div id="wattbezugethmpm3pm">
 	<div class="row">
 		Keine Konfiguration erforderlich.<br><br>
@@ -3735,6 +3746,7 @@ function display_wattbezugmodul() {
 	$('#wattbezugvictrongx').hide();
 	$('#wattbezugsolarview').hide();
 	$('#wattbezugdiscovergy').hide();
+	$('#wattbezuglgessv1').hide();
 	// Auswahl PV-Modul generell erlauben
 	enable_pv_selector();
 	if($('#wattbezugmodul').val() == 'bezug_solarview') {
@@ -3818,6 +3830,9 @@ function display_wattbezugmodul() {
 	if($('#wattbezugmodul').val() == 'bezug_powerwall')   {
   		$('#wattbezugpowerwall').show();
 	}
+	if($('#wattbezugmodul').val() == 'bezug_lgessv1')   {
+  		$('#wattbezuglgessv1').show();
+	}
 }
 $(function() {
 	display_wattbezugmodul();
@@ -3854,12 +3869,18 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
 		<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
 		<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
+		<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 	</select>
 </div>
 
 
 <div id="pvnone">
 	<br>
+</div>
+<div id="pvlgessv1">
+	<div class="row">
+		Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+	</div>
 </div>
 <div id="pvyouless">
 	<div class="row" style="background-color:#febebe">
@@ -4252,6 +4273,7 @@ function display_pvwattmodul() {
 	$('#pvsolarview').hide();
 	$('#pvdiscovergy').hide();
 	$('#pvyouless').hide();
+	$('#pvlgessv1').hide();
 
 	if($('#pvwattmodul').val() == 'wr_youless120') {
 		$('#pvyouless').show();
@@ -4318,7 +4340,9 @@ function display_pvwattmodul() {
 	if($('#pvwattmodul').val() == 'wr_powerwall')   {
 		$('#pvpowerwall').show();
 	}
-
+    if($('#pvwattmodul').val() == 'wr_lgessv1')   {
+		$('#pvlgessv1').show();
+	}
 }
 $(function() {
 	display_pvwattmodul();
@@ -4350,9 +4374,28 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
 		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
 		<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+		<option <?php if($speichermodulold == "speicher_lgessv1\n") echo selected ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 	</select>
 </div>
 
+
+
+<div id="divspeicherlgessv1">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="lgessv1ip">LG ESS 1.0VI IP:</label></b>
+		<input type="text" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP-Adresse des LG ESS 1.0VI<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="lgessv1pass">LG ESS 1.0VI Passwort:</label></b>
+		<input type="text" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
+	</div>
+</div>	
 <div id="divspeichernone">
 	<br>
 </div>
@@ -4575,7 +4618,8 @@ function display_speichermodul() {
 	$('#divspeichervarta').hide();
 	$('#divspeicheralphaess').hide();
 	$('#divspeichervictron').hide();
-
+    $('#divspeicherlgessv1').hide();
+	
 	if($('#speichermodul').val() == 'speicher_alphaess') {
 		$('#divspeicheralphaess').show();
 	}
@@ -4625,6 +4669,9 @@ function display_speichermodul() {
 	if($('#speichermodul').val() == 'speicher_sunnyisland')   {
 		$('#divspeichersunnyisland').show();
    }
+   if($('#speichermodul').val() == 'speicher_lgessv1')   {
+		$('#divspeicherlgessv1').show();
+    }
 }
 $(function() {
 display_speichermodul();
