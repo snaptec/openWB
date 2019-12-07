@@ -935,7 +935,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat4 .btn').removeClass("btn-green");
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
-		    }
+		   	loaddivs();
+		     }
 		    if(mqttpayload == 1){
 			$('.actstat1 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
@@ -946,7 +947,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat2 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 2){
 			$('.actstat2 .btn').addClass("btn-green");
@@ -958,7 +959,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 3){
 			$('.actstat2 .btn').addClass("btn-red");
@@ -971,7 +972,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 4){
 			$('.actstat2 .btn').addClass("btn-red");
@@ -984,7 +985,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-green");
 			$('.actstat4 .btn').removeClass("btn-red");
-
+		   	loaddivs();
 		    }
 	}
 	else if ( mqttmsg == "openWB/lp/1/ADirectModeAmps" ) {
