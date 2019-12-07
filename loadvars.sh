@@ -59,9 +59,14 @@ if [[ $evsecon == "modbusevse" ]]; then
 	if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
 		if [[ $evseplugstate > "1" ]]; then
 			plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
-			if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-				/var/www/html/openWB/runs/pushover.sh "$message"
+			if [[ $plugstat == "0" ]] ; then
+				if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+					message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+					/var/www/html/openWB/runs/pushover.sh "$message"
+				fi
+				if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+				fi
 			fi
 				echo 1 > /var/www/html/openWB/ramdisk/plugstat
 				plugstat=1
