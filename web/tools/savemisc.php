@@ -242,6 +242,10 @@ foreach($lines as $line) {
 	    $result .= 'displaysleep='.$_POST[displaysleep]."\n";
 	    $writeit = '1';
 	    } 
+       if(strpos($line, "displayEinBeimAnstecken=") !== false) {
+		$result .= 'displayEinBeimAnstecken='.$_POST[displayEinBeimAnstecken]."\n";
+		$writeit = '1';
+		} 
 	   if(strpos($line, "displayaktiv=") !== false) {
 	    $result .= 'displayaktiv='.$_POST[displayaktiv]."\n";
 	    $writeit = '1';
