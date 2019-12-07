@@ -960,6 +960,10 @@ if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "displayEinBeimAnstecken=" /var/www/html/openWB/openwb.conf
+then
+	  echo "displayEinBeimAnstecken=1" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherleistung_http=192.168.0.10/watt" >> /var/www/html/openWB/openwb.conf
