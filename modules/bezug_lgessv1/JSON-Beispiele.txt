@@ -1,13 +1,13 @@
 Login:
 
-$ curl -k --connect-timeout 5 -d '{"password":"DE1807BKRD0093E8"}' -H "Content-Type: application/json" -X PUT https://192.168.0.248/v1/login
+$ curl -k --connect-timeout 5 -d '{"password":"XXXXXXXXXXXX"}' -H "Content-Type: application/json" -X PUT https://192.168.0.248/v1/login
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   174    0   143  100    31    143     31  0:00:01 --:--:--  0:00:01   743
 {
     "status": "success",
     "auth_key": "67567d76-0c83-11ea-8a59-d84fb802005a",
-    "regnum": "DE1807BKRD0093E8",
+    "regnum": "XXXXXXXXXXXX",
     "role": "installer"
 }
 
