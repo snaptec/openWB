@@ -1,5 +1,12 @@
 #!/bin/bash
 loadvars(){
+#reload mqtt vars
+renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
+if (( renewmqtt == 1 )); then
+	echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
+	echo 0 | tee ramdisk/mqtt*
+fi
+	
 #get temp vars
 sofortll=$(<ramdisk/lp1sofortll)
 sofortlls1=$(<ramdisk/lp2sofortll)

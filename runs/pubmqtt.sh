@@ -167,6 +167,7 @@ for mq in "${!mqttvar[@]}"; do
 	#echo ${mqttvar[$mq]} $mq 
 done
 
+
 #echo "Publist:"
 #echo -e $tempPubList
 

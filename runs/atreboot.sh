@@ -22,6 +22,7 @@ echo 1 > /var/www/html/openWB/ramdisk/lp6enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
+echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
@@ -2315,7 +2316,8 @@ mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
-
+mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus
+mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 

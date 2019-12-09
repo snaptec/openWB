@@ -45,7 +45,7 @@ ekwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 
 
 pvkwhk=$(echo "scale=3;$ekwh / 1000" |bc)
-echo $pvkwhk > ramdisk/pvkwhk
+echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 
 
 

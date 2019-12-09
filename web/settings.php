@@ -512,7 +512,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div id="zielladenaktivlp1div">
 	<div class="row">
 		<b>Beta Feature</b><br>
-		Vorgehensweise zum testen: Lademodus auf Stop stellen. Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen.<br>
+		Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen.<br>
 		Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.<br>
 	</div>
 	<div class="row">

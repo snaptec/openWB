@@ -1170,7 +1170,9 @@ function stopclick() {
 	        publish("3","openWB/set/ChargeMode");
 	        publish("3","openWB/global/ChargeMode");
 };
-
+function renewMQTTclick() {
+	        publish("1","openWB/set/RenewMQTT");
+}
 
 function getfile() {
 
