@@ -1172,6 +1172,7 @@ function stopclick() {
 };
 function renewMQTTclick() {
 	        publish("1","openWB/set/RenewMQTT");
+		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");	
 }
 
 function getfile() {
