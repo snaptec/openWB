@@ -3331,7 +3331,7 @@ $(function() {
 	<div class="row">
 		Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
 	</div>
-</div>3748
+</div>
 <div id="wattbezugethmpm3pm">
 	<div class="row">
 		Keine Konfiguration erforderlich.<br><br>
