@@ -2303,6 +2303,7 @@ fi
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
 	echo 'mqtt installed...'
 else
+	sudo apt-get -qq install -y python3-pip
 	sudo pip3 install paho-mqtt
 fi
 uuid=$(</sys/class/net/eth0/address)
