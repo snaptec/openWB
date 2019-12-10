@@ -1065,6 +1065,14 @@ foreach($lines as $line) {
 	    $result .= 'vartaspeicherip='.$_POST[vartaspeicherip]."\n";
 	    $writeit = '1';
 	    }
+	   if(strpos($line, "lgessv1ip=") !== false) {
+	    $result .= 'lgessv1ip='.$_POST[lgessv1ip]."\n";
+	    $writeit = '1';
+	    }
+       if(strpos($line, "lgessv1pass=") !== false) {
+	    $result .= 'lgessv1pass='.$_POST[lgessv1pass]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "sunnyislandip=") !== false) {
 	    $result .= 'sunnyislandip='.$_POST[sunnyislandip]."\n";
 	    $writeit = '1';
