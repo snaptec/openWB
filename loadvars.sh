@@ -4,7 +4,7 @@ loadvars(){
 renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
 if (( renewmqtt == 1 )); then
 	echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
-	echo 0 | tee ramdisk/mqtt*
+	echo 01 | tee ramdisk/mqtt*
 fi
 	
 #get temp vars
@@ -21,19 +21,19 @@ sofortlllp8=$(<ramdisk/lp8sofortll)
 
 
 #get oldvars for mqtt
-opvwatt=$(<ramdisk/pvwatt)
-owattbezug=$(<ramdisk/wattbezug)
-ollaktuell=$(<ramdisk/llaktuell)
-ohausverbrauch=$(<ramdisk/hausverbrauch)
+opvwatt=$(<ramdisk/mqttpvwatt)
+owattbezug=$(<ramdisk/mqttwattbezug)
+ollaktuell=$(<ramdisk/mqttladeleistunglp1)
+ohausverbrauch=$(<ramdisk/mqtthausverbrauch)
 ollkombiniert=$(<ramdisk/llkombiniert)
-ollaktuells1=$(<ramdisk/llaktuells1)
-ollaktuells2=$(<ramdisk/llaktuells2)
-ospeicherleistung=$(<ramdisk/speicherleistung)
+ollaktuells1=$(<ramdisk/mqttladeleistungs1)
+ollaktuells2=$(<ramdisk/mqttladeleistungs2)
+ospeicherleistung=$(<ramdisk/mqttspeicherleistung)
 oladestatus=$(<ramdisk/mqttlastladestatus)
 olademodus=$(<ramdisk/mqttlastlademodus)
-osoc=$(<ramdisk/soc)
-osoc1=$(<ramdisk/soc1)
-ospeichersoc=$(<ramdisk/speichersoc)
+osoc=$(<ramdisk/mqttsoc)
+osoc1=$(<ramdisk/mqttsoc1)
+ospeichersoc=$(<ramdisk/mqttspeichersoc)
 ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 odailychargelp1=$(<ramdisk/mqttdailychargelp1)
 odailychargelp2=$(<ramdisk/mqttdailychargelp2)
@@ -637,46 +637,58 @@ fi
 
 tempPubList=""
 
-if (( opvwatt != pvwatt )); then
+if [[ "$opvwatt" != "$pvwatt" ]]; then
 	tempPubList="${tempPubList}\nopenWB/pv/W=${pvwatt}"
+	echo $pvwatt > ramdisk/mqttpvwatt
 fi
-if (( owattbezug != wattbezug )); then
+if [[ "$owattbezug" != "$wattbezug" ]]; then
 	tempPubList="${tempPubList}\nopenWB/evu/W=${wattbezug}"
+	echo $wattbezug > ramdisk/mqttwattbezug
 fi
-if (( ollaktuell != ladeleistunglp1 )); then
+if [[ "$ollaktuell" != "$ladeleistunglp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/W=${ladeleistunglp1}"
+	echo $ladeleistunglp1 > ramdisk/mqttladeleistunglp1
 fi
-if (( oladestatus != ladestatus )); then
+if [[ "$oladestatus" != "$ladestatus" ]]; then
 	tempPubList="${tempPubList}\nopenWB/ChargeStatus=${ladelestatus}"
 	echo $ladestatus > ramdisk/mqttlastladestatus
 fi
-if (( olademodus != lademodus )); then
+if [[ "$olademodus" != "$lademodus" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/ChargeMode=${lademodus}"
 	echo $lademodus > ramdisk/mqttlastlademodus
 fi
-if (( ohausverbrauch != hausverbrauch )); then
+if [[ "$ohausverbrauch" != "$hausverbrauch" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/WHouseConsumption=${hausverbrauch}"
+	echo $hausverbrauch > ramdisk/mqtthausverbrauch
 fi
-if (( ollaktuells1 != ladeleistungs1 )); then
+if [[ "$ollaktuells1" != "$ladeleistungs1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/W=${ladeleistungs1}"
+	echo $ladeleistungs1 > ramdisk/mqttladeleistungs1
+
 fi
-if (( ollaktuells2 != ladeleistungs2 )); then
+if [[ "$ollaktuells2" != "$ladeleistungs2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/W=${ladeleistungs2}"
+	echo $ladeleistungs2 > ramdisk/mqttladeleistungs2
 fi
-if (( ollkombiniert != ladeleistung )); then
+if [[ "$ollkombiniert" != "$ladeleistung" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/WAllChargePoints=${ladeleistung}"
+	echo $ladeleistung > ramdisk/mqttladeleistung
 fi
-if (( ospeicherleistung != speicherleistung )); then
+if [[ "$ospeicherleistung" != "$speicherleistung" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/W=${speicherleistung}"
+	echo $speichersoc > ramdisk/mqttspeicherleistung
 fi
-if (( ospeichersoc != speichersoc )); then
+if [[ "$ospeichersoc" != "$speichersoc" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/%Soc=${speichersoc}"
+	echo $speichersoc > ramdisk/mqttspeichersoc
 fi
-if (( osoc != soc )); then
+if [[ "$osoc" != "$soc" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/%Soc=${soc}"
+	echo $soc > ramdisk/mqttsoc
 fi
-if (( osoc1 != soc1 )); then
+if [[ "$osoc1" != "$soc1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/%Soc=${soc1}"
+	echo $soc1 > ramdisk/mqttsoc1
 fi
 
 dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)

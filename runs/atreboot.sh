@@ -97,6 +97,11 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeichersoc
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
