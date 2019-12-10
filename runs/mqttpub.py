@@ -5,6 +5,7 @@ import sys
 import time
 import fileinput
 import argparse
+import os
 
 def main():
 
@@ -15,7 +16,7 @@ def main():
 
   args = parser.parse_args()
 
-  client = mqtt.Client()
+  client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
   client.connect("localhost")
 
   for line in sys.stdin:
