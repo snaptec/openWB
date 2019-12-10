@@ -18,7 +18,20 @@ var lp2soc;
 var lp1enabled
 var lp2enabled
 var lp3enabled
-
+$('#lp2div').hide();
+$('#lp3div').hide();
+$('#lp4div').hide();
+$('#lp5div').hide();
+$('#lp6div').hide();
+$('#lp7div').hide();
+$('#lp8div').hide();
+$('#slider2div').hide();
+$('#slider3div').hide();
+$('#slider4div').hide();
+$('#slider5div').hide();
+$('#slider6div').hide();
+$('#slider7div').hide();
+$('#slider8div').hide();
 var thevalues = [
 ["openWB/evu/W", "#bezugdiv"],
 ["openWB/global/WHouseConsumption", "#hausverbrauchdiv"],
@@ -489,7 +502,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 		mqttpayload = mqttpayload + " W";
 		}
-		$("#llgdiv").html(mqttpayload);
+		$("#gesamtllwdiv").html(mqttpayload);
 	}
 	else if ( mqttmsg == "openWB/lp/1/boolPlugStat") {
 		if ($('#plugstatlp1div').length > 0) {
@@ -922,7 +935,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat4 .btn').removeClass("btn-green");
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
-		    }
+		   	loaddivs();
+		     }
 		    if(mqttpayload == 1){
 			$('.actstat1 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
@@ -933,7 +947,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat2 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 2){
 			$('.actstat2 .btn').addClass("btn-green");
@@ -945,7 +959,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 3){
 			$('.actstat2 .btn').addClass("btn-red");
@@ -958,7 +972,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-
+		   	loaddivs();
 		    }
 		    if(mqttpayload == 4){
 			$('.actstat2 .btn').addClass("btn-red");
@@ -971,7 +985,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-green");
 			$('.actstat4 .btn').removeClass("btn-red");
-
+		   	loaddivs();
 		    }
 	}
 	else if ( mqttmsg == "openWB/lp/1/ADirectModeAmps" ) {
@@ -1052,13 +1066,7 @@ var publish = function (payload, topic) {
 	client.send(message);
 }
 
-$('#lp2div').hide();
-$('#lp3div').hide();
-$('#lp4div').hide();
-$('#lp5div').hide();
-$('#lp6div').hide();
-$('#lp7div').hide();
-$('#lp8div').hide();
+
 client.connect(options);
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {
@@ -1141,6 +1149,32 @@ function lp7DirectChargeAmpsClick() {
 function lp8DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
 };
+function sofortclick() {
+	        publish("0","openWB/set/ChargeMode");
+	        publish("0","openWB/global/ChargeMode");
+};
+function minundpvclick() {
+	        publish("1","openWB/set/ChargeMode");
+	        publish("1","openWB/global/ChargeMode");
+
+};
+function nurpvclick() {
+	        publish("2","openWB/set/ChargeMode");
+	        publish("2","openWB/global/ChargeMode");
+};
+function standbyclick() {
+	        publish("4","openWB/set/ChargeMode");
+	        publish("4","openWB/global/ChargeMode");
+};
+function stopclick() {
+	        publish("3","openWB/set/ChargeMode");
+	        publish("3","openWB/global/ChargeMode");
+};
+function renewMQTTclick() {
+	        publish("1","openWB/set/RenewMQTT");
+		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");	
+}
+
 function getfile() {
 
 

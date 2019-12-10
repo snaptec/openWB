@@ -22,6 +22,7 @@ echo 1 > /var/www/html/openWB/ramdisk/lp6enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
+echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
@@ -39,6 +40,8 @@ echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
+echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp5
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp6
@@ -94,6 +97,11 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeichersoc
+echo 0 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
+echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
@@ -957,6 +965,10 @@ fi
 if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displayEinBeimAnstecken=" /var/www/html/openWB/openwb.conf
+then
+	  echo "displayEinBeimAnstecken=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "speicherleistung_http=" /var/www/html/openWB/openwb.conf
 then
@@ -2306,6 +2318,11 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /v
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
+mosquitto_pub -t openWB/lp/1/W -r -m "0"
+mosquitto_pub -t openWB/lp/2/W -r -m "0"
+mosquitto_pub -t openWB/lp/3/W -r -m "0"
+mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus
+mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 

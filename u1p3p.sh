@@ -134,6 +134,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 				echo 1 > ramdisk/blockall
 				oldll=$(<ramdisk/llsoll)
 				runs/set-current.sh 0 m
+				if (( u1p3plp2aktiv == 1 )); then
+					oldlllp2=$(<ramdisk/llsolls1)
+					runs/set-current.sh 0 s1
+				fi
 				sleep 5
 				if (( u1p3pnl == 3 )); then
 					sudo python runs/trigclose.py
@@ -144,6 +148,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 				fi
 				sleep 1
 				runs/set-current.sh $oldll m
+				if (( u1p3plp2aktiv == 1 )); then
+					runs/set-current.sh $oldlllp2 s1
+				fi
+
 				echo 0 > ramdisk/blockall
 				if (( debug == 1 )); then
 					echo "auf $u1p3pnl Phasen geaendert"
@@ -158,6 +166,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					echo 1 > ramdisk/blockall
 					oldll=$(<ramdisk/llsoll)
 					runs/set-current.sh 0 m
+					if (( u1p3plp2aktiv == 1 )); then
+						oldlllp2=$(<ramdisk/llsolls1)
+						runs/set-current.sh 0 s1
+					fi
 					sleep 5
 					if (( u1p3psofort == 3 )); then
 						sudo python runs/trigclose.py
@@ -168,6 +180,9 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					fi
 					sleep 1
 					runs/set-current.sh $oldll m
+					if (( u1p3plp2aktiv == 1 )); then
+						runs/set-current.sh $oldlllp2 s1
+					fi
 					echo 0 > ramdisk/blockall
 					if (( debug == 1 )); then
 						echo "auf $u1p3psofort Phasen geaendert"
@@ -181,6 +196,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					fi
 					echo 1 > ramdisk/blockall
 					oldll=$(<ramdisk/llsoll)
+					if (( u1p3plp2aktiv == 1 )); then
+						oldlllp2=$(<ramdisk/llsolls1)
+						runs/set-current.sh 0 s1
+					fi
 					runs/set-current.sh 0 m
 					sleep 5
 					if (( u1p3pminundpv == 3 )); then
@@ -192,6 +211,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					fi
 					sleep 1
 					runs/set-current.sh $oldll m
+					if (( u1p3plp2aktiv == 1 )); then
+						runs/set-current.sh $oldlllp2 s1
+					fi
+
 					echo 0 > ramdisk/blockall
 					if (( debug == 1 )); then
 						echo "auf $u1p3pminundpv Phasen geaendert"
@@ -218,11 +241,18 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 									fi
 									echo 1 > ramdisk/blockall
 									runs/set-current.sh 0 m
+									if (( u1p3plp2aktiv == 1 )); then
+										oldlllp2=$(<ramdisk/llsolls1)
+										runs/set-current.sh 0 s1
+									fi
 									sleep 8
 									sudo python runs/trigclose.py
 									echo 3 > ramdisk/u1p3pstat
 									sleep 20
 									runs/set-current.sh $minimalapv m
+									if (( u1p3plp2aktiv == 1 )); then
+										runs/set-current.sh $minimalapv s1
+									fi
 									(sleep 25 && echo 0 > ramdisk/blockall)&
 									if (( debug == 1 )); then
 										echo "auf 3 Phasen NurPV Automatik geaendert"
@@ -246,11 +276,19 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 									echo 0 > /var/www/html/openWB/ramdisk/urcounter
 									echo 1 > ramdisk/blockall
 									runs/set-current.sh 0 m
+									if (( u1p3plp2aktiv == 1 )); then
+										oldlllp2=$(<ramdisk/llsolls1)
+										runs/set-current.sh 0 s1
+									fi
 									sleep 8
 									sudo python runs/trigopen.py
 									echo 1 > ramdisk/u1p3pstat
 									sleep 20
 									runs/set-current.sh $minimalapv m
+									if (( u1p3plp2aktiv == 1 )); then
+										runs/set-current.sh $minimalapv s1
+									fi
+
 									(sleep 25 && echo 0 > ramdisk/blockall)&
 									if (( debug == 1 )); then
 										echo "auf 1 Phasen NurPV Automatik geaendert"
@@ -267,6 +305,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 						echo 1 > ramdisk/blockall
 						oldll=$(<ramdisk/llsoll)
 						runs/set-current.sh 0 m
+						if (( u1p3plp2aktiv == 1 )); then
+							oldlllp2=$(<ramdisk/llsolls1)
+							runs/set-current.sh 0 s1
+						fi
 						sleep 5
 						if (( u1p3pnurpv == 3 )); then
 							sudo python runs/trigclose.py
@@ -277,6 +319,9 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 						fi
 						sleep 1
 						runs/set-current.sh $oldll m
+						if (( u1p3plp2aktiv == 1 )); then
+							runs/set-current.sh $oldlllp2 s1
+						fi
 						echo 0 > ramdisk/blockall
 						if (( debug == 1 )); then
 							echo "auf $u1p3pnurpv Phasen geaendert"
@@ -292,6 +337,10 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					echo 1 > ramdisk/blockall
 					oldll=$(<ramdisk/llsoll)
 					runs/set-current.sh 0 m
+					if (( u1p3plp2aktiv == 1 )); then
+						oldlllp2=$(<ramdisk/llsolls1)
+						runs/set-current.sh 0 s1
+					fi
 					sleep 5
 
 					if (( u1p3pstandby == 3 )); then
@@ -303,6 +352,9 @@ if (( u1p3paktiv == 1 && evsecon == "modbusevse" )); then
 					fi
 					sleep 1
 					runs/set-current.sh $oldll m
+					if (( u1p3plp2aktiv == 1 )); then
+						runs/set-current.sh $oldlllp2 s1
+					fi
 					echo 0 > ramdisk/blockall
 					if (( debug == 1 )); then
 						echo "auf $u1p3pstandby Phasen geaendert"

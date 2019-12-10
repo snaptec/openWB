@@ -383,7 +383,7 @@ echo '
 				
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp1DirectChargeAmpsClick()"></span>
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  
 			</div>
 			<script>
 				var slider1 = document.getElementById("sofortlllp1s");
@@ -391,6 +391,7 @@ echo '
 				output1.innerHTML = slider1.value;
 				slider1.oninput = function() {
 					output1.innerHTML = this.value;
+					lp1DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -401,7 +402,7 @@ echo '
 				
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp2DirectChargeAmpsClick()"></span>
+				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>  
 			</div>
 			<script>
 				var slider2 = document.getElementById("sofortlllp2s");
@@ -409,6 +410,7 @@ echo '
 				output2.innerHTML = slider2.value;
 				slider2.oninput = function() {
 					output2.innerHTML = this.value;
+					lp2DirectChargeAmpsClick();	
 				}
 			</script>
 		</div>

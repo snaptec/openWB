@@ -1119,6 +1119,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
     <li><a href="./smarthome.php">Smart Home</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./mqtt.php">MQTT</a></li>
 	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
@@ -4073,7 +4074,7 @@ $(function() {
 		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
+		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>

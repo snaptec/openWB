@@ -1,5 +1,12 @@
 #!/bin/bash
 loadvars(){
+#reload mqtt vars
+renewmqtt=$(</var/www/html/openWB/ramdisk/renewmqtt)
+if (( renewmqtt == 1 )); then
+	echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
+	echo 01 | tee ramdisk/mqtt*
+fi
+	
 #get temp vars
 sofortll=$(<ramdisk/lp1sofortll)
 sofortlls1=$(<ramdisk/lp2sofortll)
@@ -14,19 +21,19 @@ sofortlllp8=$(<ramdisk/lp8sofortll)
 
 
 #get oldvars for mqtt
-opvwatt=$(<ramdisk/pvwatt)
-owattbezug=$(<ramdisk/wattbezug)
-ollaktuell=$(<ramdisk/llaktuell)
-ohausverbrauch=$(<ramdisk/hausverbrauch)
+opvwatt=$(<ramdisk/mqttpvwatt)
+owattbezug=$(<ramdisk/mqttwattbezug)
+ollaktuell=$(<ramdisk/mqttladeleistunglp1)
+ohausverbrauch=$(<ramdisk/mqtthausverbrauch)
 ollkombiniert=$(<ramdisk/llkombiniert)
-ollaktuells1=$(<ramdisk/llaktuells1)
-ollaktuells2=$(<ramdisk/llaktuells2)
-ospeicherleistung=$(<ramdisk/speicherleistung)
+ollaktuells1=$(<ramdisk/mqttladeleistungs1)
+ollaktuells2=$(<ramdisk/mqttladeleistungs2)
+ospeicherleistung=$(<ramdisk/mqttspeicherleistung)
 oladestatus=$(<ramdisk/mqttlastladestatus)
 olademodus=$(<ramdisk/mqttlastlademodus)
-osoc=$(<ramdisk/soc)
-osoc1=$(<ramdisk/soc1)
-ospeichersoc=$(<ramdisk/speichersoc)
+osoc=$(<ramdisk/mqttsoc)
+osoc1=$(<ramdisk/mqttsoc1)
+ospeichersoc=$(<ramdisk/mqttspeichersoc)
 ladestatus=$(</var/www/html/openWB/ramdisk/ladestatus)
 odailychargelp1=$(<ramdisk/mqttdailychargelp1)
 odailychargelp2=$(<ramdisk/mqttdailychargelp2)
@@ -59,9 +66,14 @@ if [[ $evsecon == "modbusevse" ]]; then
 	if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
 		if [[ $evseplugstate > "1" ]]; then
 			plugstat=$(</var/www/html/openWB/ramdisk/plugstat)
-			if [[ $plugstat == "0" ]] && [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
-				message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
-				/var/www/html/openWB/runs/pushover.sh "$message"
+			if [[ $plugstat == "0" ]] ; then
+				if [[ $pushbplug == "1" ]] && [[ $ladestatuslp1 == "0" ]] && [[ $pushbenachrichtigung == "1" ]] ; then
+					message="Fahrzeug eingesteckt. Ladung startet bei erfüllter Ladebedingung automatisch."
+					/var/www/html/openWB/runs/pushover.sh "$message"
+				fi
+				if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+				fi
 			fi
 				echo 1 > /var/www/html/openWB/ramdisk/plugstat
 				plugstat=1
@@ -159,6 +171,20 @@ if [[ $lastmanagements2 == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 	fi
+	if [[ $evsecons2 == "modbusevse" ]]; then
+	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
+	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
+	        if [[ $evseplugstatelp3 > "1" ]]; then
+	                echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
+	        else
+	                echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
+                fi
+                if [[ $evseplugstatelp3 > "2" ]] && [[ $ladestatuss2 == "1" ]] ; then
+	                echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
+                else
+                        echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
+                fi
+        fi
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $evseconlp4 == "ipevse" ]]; then
@@ -275,6 +301,10 @@ if [[ $speichermodul != "none" ]] ; then
 	if [[ $speichermodul == "speicher_alphaess" ]] ; then
 		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 	fi
+	if [[ $speichermodul == "speicher_e3dc" ]] ; then
+		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+	fi
+
 else
 	speichervorhanden="0"
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
@@ -607,46 +637,58 @@ fi
 
 tempPubList=""
 
-if (( opvwatt != pvwatt )); then
+if [[ "$opvwatt" != "$pvwatt" ]]; then
 	tempPubList="${tempPubList}\nopenWB/pv/W=${pvwatt}"
+	echo $pvwatt > ramdisk/mqttpvwatt
 fi
-if (( owattbezug != wattbezug )); then
+if [[ "$owattbezug" != "$wattbezug" ]]; then
 	tempPubList="${tempPubList}\nopenWB/evu/W=${wattbezug}"
+	echo $wattbezug > ramdisk/mqttwattbezug
 fi
-if (( ollaktuell != ladeleistunglp1 )); then
+if [[ "$ollaktuell" != "$ladeleistunglp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/W=${ladeleistunglp1}"
+	echo $ladeleistunglp1 > ramdisk/mqttladeleistunglp1
 fi
-if (( oladestatus != ladestatus )); then
+if [[ "$oladestatus" != "$ladestatus" ]]; then
 	tempPubList="${tempPubList}\nopenWB/ChargeStatus=${ladelestatus}"
 	echo $ladestatus > ramdisk/mqttlastladestatus
 fi
-if (( olademodus != lademodus )); then
+if [[ "$olademodus" != "$lademodus" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/ChargeMode=${lademodus}"
 	echo $lademodus > ramdisk/mqttlastlademodus
 fi
-if (( ohausverbrauch != hausverbrauch )); then
+if [[ "$ohausverbrauch" != "$hausverbrauch" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/WHouseConsumption=${hausverbrauch}"
+	echo $hausverbrauch > ramdisk/mqtthausverbrauch
 fi
-if (( ollaktuells1 != ladeleistungs1 )); then
+if [[ "$ollaktuells1" != "$ladeleistungs1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/W=${ladeleistungs1}"
+	echo $ladeleistungs1 > ramdisk/mqttladeleistungs1
+
 fi
-if (( ollaktuells2 != ladeleistungs2 )); then
+if [[ "$ollaktuells2" != "$ladeleistungs2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/W=${ladeleistungs2}"
+	echo $ladeleistungs2 > ramdisk/mqttladeleistungs2
 fi
-if (( ollkombiniert != ladeleistung )); then
+if [[ "$ollkombiniert" != "$ladeleistung" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/WAllChargePoints=${ladeleistung}"
+	echo $ladeleistung > ramdisk/mqttladeleistung
 fi
-if (( ospeicherleistung != speicherleistung )); then
+if [[ "$ospeicherleistung" != "$speicherleistung" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/W=${speicherleistung}"
+	echo $speichersoc > ramdisk/mqttspeicherleistung
 fi
-if (( ospeichersoc != speichersoc )); then
+if [[ "$ospeichersoc" != "$speichersoc" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/%Soc=${speichersoc}"
+	echo $speichersoc > ramdisk/mqttspeichersoc
 fi
-if (( osoc != soc )); then
+if [[ "$osoc" != "$soc" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/%Soc=${soc}"
+	echo $soc > ramdisk/mqttsoc
 fi
-if (( osoc1 != soc1 )); then
+if [[ "$osoc1" != "$soc1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/%Soc=${soc1}"
+	echo $soc1 > ramdisk/mqttsoc1
 fi
 
 dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
@@ -835,7 +877,7 @@ if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
 fi
 osofortsoclp1=$(<ramdisk/mqttsofortsoclp1)
 if [[ "$osofortsoclp1" != "$sofortsoclp1" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/PercentDirectChargeModeSoc=${sofortsoclp1}"
+	tempPubList="${tempPubList}\nopenWB/lp/1/percentDirectChargeModeSoc=${sofortsoclp1}"
 	echo $sofortsoclp1 > ramdisk/mqttsofortsoclp1
 fi
 osofortsocstatlp2=$(<ramdisk/mqttsofortsocstatlp2)

@@ -28,12 +28,21 @@ def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
     client.subscribe("openWB/set/#")
 # handle each set topic 
-def on_message(client, userdata, msg): 
-    if (msg.topic == "openWB/set/Lademodus"):
+def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/RenewMQTT"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
+            #time.sleep(0.5)
+            #subprocess.Popen("/var/www/html/openWB/runs/renewmqtt.sh")
+            f = open('/var/www/html/openWB/ramdisk/renewmqtt', 'w')
+            f.write("1")
+            f.close()
+    if (msg.topic == "openWB/set/ChargeMode"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=4):
             f = open('/var/www/html/openWB/ramdisk/lademodus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            client.publish("openWB/global/ChargeMode", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp1enabled', 'w')

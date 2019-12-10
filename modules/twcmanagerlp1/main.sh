@@ -10,6 +10,11 @@ if (( twcmanagerlp1phasen == 1 )); then
 	watt=$(echo "scale=0;$amps * 230 /1" | bc | sed 's/\..*$//')
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
 fi
+if (( twcmanagerlp1phasen == 2 )); then
+	watt=$(echo "scale=0;$amps * 230 * 2" | bc | sed 's/\..*$//')
+	echo $amps > /var/www/html/openWB/ramdisk/lla1
+	echo $amps > /var/www/html/openWB/ramdisk/lla2
+fi
 if (( twcmanagerlp1phasen == 3 )); then
 	watt=$(echo "scale=0;$amps * 230 * 3" | bc | sed 's/\..*$//')
 	echo $amps > /var/www/html/openWB/ramdisk/lla1
