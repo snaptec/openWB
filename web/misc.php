@@ -49,6 +49,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displayEinBeimAnstecken=") !== false) {
+		list(, $displayEinBeimAnsteckenOld) = explode("=", $line);
+	}
 	if(strpos($line, "displaytagesgraph=") !== false) {
 		list(, $displaytagesgraphold) = explode("=", $line);
 	}
@@ -1271,10 +1274,13 @@ $(function() {
 		<b><label for="displaysleep">Display ausschalten nach x Sekunden:</label></b>
 	       	<input type="text" name="displaysleep" id="displaysleep" value="<?php echo $displaysleepold ?>"><br><br>
 	</div>
-
-
-
-
+	<div class="row">
+		<b><label for="displayEinBeimAnstecken">Display beim Einstecken des Fahrzeugs einschalten<br/><small>(f&uuml;r oben konfigurierte Dauer):</small></label></b>
+			<select type="text" name="displayEinBeimAnstecken" id="displayEinBeimAnstecken">
+ 			<option <?php if($displayEinBeimAnsteckenOld == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displayEinBeimAnsteckenOld == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+	</div>
 
 </div>
 

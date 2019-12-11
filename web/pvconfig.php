@@ -268,6 +268,8 @@ Definiert die minimal erlaubte Stromstärke in Ampere je Phase für den "Min + P
 		<option <?php if($minimalalp2pvold == 8) echo selected ?> value="8">8</option>
 		<option <?php if($minimalalp2pvold == 9) echo selected ?> value="9">9</option>
 		<option <?php if($minimalalp2pvold == 10) echo selected ?> value="10">10</option>
+		<option <?php if($minimalalp2pvold == 11) echo selected ?> value="11">11</option>
+		<option <?php if($minimalalp2pvold == 12) echo selected ?> value="12">12</option>
 	</select><br>
 
 
