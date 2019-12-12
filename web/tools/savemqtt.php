@@ -8,6 +8,7 @@ if ($_POST['action'] === 'backNoChange')
 
 $bridgePrefix = "99-bridge-";
 $bridgeOperationDuration = 15;
+$randomnr = rand(1, 1000000);
 
 //
 // validate bridge name and check if it had already been configured and
@@ -202,6 +203,9 @@ if ($exportStatus)
 # export global data to remote
 topic openWB/global/# out 2 "" $remotePrefix
 
+# export global data to remote
+topic openWB/system/# out 2 "" $remotePrefix
+
 # export all EVU data to remote
 topic openWB/evu/# out 2 "" $remotePrefix
 
@@ -242,12 +246,6 @@ EOS
 if ($subscribeConfigs)
 {
 	fwrite($configFile, <<<EOS
-# allow MQTT setting of main charge mode
-# 0 = Direct
-# 1 = Min + PV
-# 2 = PV only
-# 3 = Stop
-# 4 = Standby
 topic openWB/set/# in 2 "" $remotePrefix
 EOS
 	);
@@ -273,7 +271,7 @@ remote_password $remotePass
 # Client ID that appears in remote MQTT server's log data.
 # Setting it might simplify debugging.
 # Commenting uses a random ID and thus gives more privacy.
-remote_clientid openwbBridge$bridgeToConfig
+remote_clientid openwbBridge$bridgeToConfig-$randomnr
 
 # MQTT protocol to use - ideally leave at latest version (mqttv311).
 # Only change if remote doesn't support mqtt protocol version 3.11.
