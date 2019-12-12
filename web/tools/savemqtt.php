@@ -202,6 +202,9 @@ if ($exportStatus)
 # export global data to remote
 topic openWB/global/# out 2 "" $remotePrefix
 
+# export global data to remote
+topic openWB/system/# out 2 "" $remotePrefix
+
 # export all EVU data to remote
 topic openWB/evu/# out 2 "" $remotePrefix
 
@@ -242,12 +245,6 @@ EOS
 if ($subscribeConfigs)
 {
 	fwrite($configFile, <<<EOS
-# allow MQTT setting of main charge mode
-# 0 = Direct
-# 1 = Min + PV
-# 2 = PV only
-# 3 = Stop
-# 4 = Standby
 topic openWB/set/# in 2 "" $remotePrefix
 EOS
 	);
