@@ -8,6 +8,7 @@ if ($_POST['action'] === 'backNoChange')
 
 $bridgePrefix = "99-bridge-";
 $bridgeOperationDuration = 15;
+$randomnr = rand(1, 1000000);
 
 //
 // validate bridge name and check if it had already been configured and
@@ -270,7 +271,7 @@ remote_password $remotePass
 # Client ID that appears in remote MQTT server's log data.
 # Setting it might simplify debugging.
 # Commenting uses a random ID and thus gives more privacy.
-remote_clientid openwbBridge$bridgeToConfig
+remote_clientid openwbBridge$bridgeToConfig-$randomnr
 
 # MQTT protocol to use - ideally leave at latest version (mqttv311).
 # Only change if remote doesn't support mqtt protocol version 3.11.
