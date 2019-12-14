@@ -105,7 +105,7 @@ var lineChartData = {
 		label: 'LP Gesamt',
 		borderColor: "rgba(50, 50, 55, 0.1)",
 		backgroundColor: "rgba(0, 0, 255, 0.1)",
-		fill: false,
+		fill: true,
 		borderWidth: 2,
 		data: alpa,
 		hidden: boolDisplayLpAll,
