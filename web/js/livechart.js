@@ -2,6 +2,7 @@ function loadgraph() {
 var lineChartData = {
 	labels: atime,
 	datasets: [{
+		
 		label: 'Lp1',
 		borderColor: "rgba(0, 0, 255, 0.7)",
 		backgroundColor: 'blue',
@@ -18,7 +19,7 @@ var lineChartData = {
 		hidden: boolDisplayLp2,
 		data: alp2,
 		yAxisID: 'y-axis-1',
-	} , {
+	} , { 
 		label: 'Bezug',
 		borderColor: "rgba(255, 0, 0, 0.7)",
 		backgroundColor: "rgba(255, 10, 13, 0.3)",
@@ -36,7 +37,7 @@ var lineChartData = {
 		borderWidth: 1,
 		data: apv,
 		yAxisID: 'y-axis-1',
-	} , {
+	}  , {
 		label: 'Speicherleistung',
 		borderColor: 'orange',
 		backgroundColor: "rgba(200, 255, 13, 0.3)",
