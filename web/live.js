@@ -15,9 +15,32 @@ var intspeicherarrow;
 var speichersoc;
 var lp1soc;
 var lp2soc;
-var lp1enabled
-var lp2enabled
-var lp3enabled
+var lp1enabled;
+var lp2enabled;
+var lp3enabled;
+var initialread = 0;
+var graphloaded = 0;
+var boolDisplayHouseConsumption;
+var boolDisplayLoad1;
+var boolDisplayLp1Soc;
+var boolDisplayLoad2;
+var boolDisplayLp2Soc;
+var boolDisplayLp2;
+var boolDisplayLp3;
+var boolDisplayLp4;
+var boolDisplayLp5;
+var boolDisplayLp6;
+var boolDisplayLp7;
+var boolDisplayLp8;
+var boolDisplayLpAll;
+var boolDisplaySpeicherSoc;
+var boolDisplaySpeicher;
+var boolDisplayEvu;
+var boolDisplayPv;
+var boolDisplayLegend;
+var boolDisplayLiveGraph;
+var datasend = 0;
+
 $('#lp2div').hide();
 $('#lp3div').hide();
 $('#lp4div').hide();
@@ -33,6 +56,27 @@ $('#slider6div').hide();
 $('#slider7div').hide();
 $('#slider8div').hide();
 var thevalues = [
+["openWB/graph/lastlivevalues", "#"],
+["openWB/graph/alllivevalues", "#"],
+["openWB/graph/boolDisplayHouseConsumption", "#"],
+["openWB/graph/boolDisplayLoad1", "#"],
+["openWB/graph/boolDisplayLoad2", "#"],
+["openWB/graph/boolDisplayLp1Soc", "#"],
+["openWB/graph/boolDisplayLp2Soc", "#"],
+["openWB/graph/boolDisplayLp2", "#"],
+["openWB/graph/boolDisplayLp3", "#"],
+["openWB/graph/boolDisplayLp4", "#"],
+["openWB/graph/boolDisplayLp5", "#"],
+["openWB/graph/boolDisplayLp6", "#"],
+["openWB/graph/boolDisplayLp7", "#"],
+["openWB/graph/boolDisplayLp8", "#"],
+["openWB/graph/boolDisplayLpAll", "#"],
+["openWB/graph/boolDisplaySpeicherSoc", "#"],
+["openWB/graph/boolDisplaySpeicher", "#"],
+["openWB/graph/boolDisplayEvu", "#"],
+["openWB/graph/boolDisplayLegend", "#"],
+["openWB/graph/boolDisplayLiveGraph", "#"],
+["openWB/graph/boolDisplayPv", "#"],
 ["openWB/evu/W", "#bezugdiv"],
 ["openWB/global/WHouseConsumption", "#hausverbrauchdiv"],
 ["openWB/lp/1/%Soc", "#"],
@@ -138,6 +182,14 @@ var thevalues = [
 ["openWB/lp/7/ADirectModeAmps", "#"],
 ["openWB/lp/8/ADirectModeAmps", "#"]
 ];
+function getCol(matrix, col){
+	var column = [];
+	for(var i=0; i<matrix.length; i++){
+		column.push(matrix[i][col]);
+	}
+	return column;
+}
+
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
@@ -163,6 +215,250 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	    }
 	    $("#bezugdiv").html(wattbezug);
 	 }
+	else if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayHouseConsumption = false;
+		} else {
+			boolDisplayHouseConsumption = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLegend" ) {
+		if ( mqttpayload == 0) {
+			boolDisplayLegend = false;
+		} else {
+			boolDisplayLegend = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLiveGraph" ) {
+		if ( mqttpayload == 0) {
+			$('#thegraph').hide();
+			boolDisplayLiveGraph = false;
+		} else {
+			$('#thegraph').show();
+			boolDisplayLiveGraph = true;
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayEvu = false;
+		} else {
+			boolDisplayEvu = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayPv" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayPv = false;
+		} else {
+			boolDisplayPv = true;
+		}
+		checkgraphload();
+	}
+
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp2" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp2 = false;
+		} else {
+			boolDisplayLp2 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp3" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp3 = false;
+		} else {
+			boolDisplayLp3 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp4" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp4 = false;
+		} else {
+			boolDisplayLp4 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp5" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp5 = false;
+		} else {
+			boolDisplayLp5 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp6" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp6 = false;
+		} else {
+			boolDisplayLp6 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp7" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp7 = false;
+		} else {
+			boolDisplayLp7 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp8" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp8 = false;
+		} else {
+			boolDisplayLp8 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLpAll = false;
+		} else {
+			boolDisplayLpAll = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
+		if ( mqttpayload == 1) {
+			boolDisplaySpeicher = false;
+		} else {
+			boolDisplaySpeicher = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
+		if ( mqttpayload == 1) {
+			boolDisplaySpeicherSoc = false;
+		} else {
+			boolDisplaySpeicherSoc = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp1Soc = false;
+		} else {
+			boolDisplayLp1Soc = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp2Soc = false;
+		} else {
+			boolDisplayLp2Soc = true;
+		}
+		checkgraphload();
+	}
+
+	else if ( mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLoad1 = false;
+		} else {
+			boolDisplayLoad1 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLoad2" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLoad2 = false;
+		} else {
+			boolDisplayLoad2 = true;
+		}
+		checkgraphload();
+	}
+	else if ( mqttmsg == "openWB/graph/alllivevalues" ) {
+		if ( initialread == 0) {
+			var csvData = new Array();
+			var rawcsv = mqttpayload.split(/\r?\n|\r/);
+			for (var i = 0; i < rawcsv.length; i++) {
+				  csvData.push(rawcsv[i].split(','));
+			}
+			// Retrived data from csv file content
+			var splittime = new Array();
+			getCol(csvData, 0).forEach(function(zeit){
+				splittime.push(zeit.substring(0, zeit.length -3));
+			});
+			atime = splittime;
+	 		//atime = getCol(csvData, 0);
+			abezug = getCol(csvData, 1);
+			alpa = getCol(csvData, 2);
+			apv = getCol(csvData, 3);
+			alp1 = getCol(csvData, 4);
+			alp2 = getCol(csvData, 5);
+			aspeicherl = getCol(csvData, 7);
+			aspeichersoc = getCol(csvData, 8);
+			asoc = getCol(csvData, 9);
+			asoc1 = getCol(csvData, 10);
+			ahausverbrauch = getCol(csvData, 11);
+			averbraucher1 = getCol(csvData, 12);
+			averbraucher2 = getCol(csvData, 13);
+			alp3 = getCol(csvData, 14);
+			alp4 = getCol(csvData, 15);
+			alp5 = getCol(csvData, 16);
+			alp6 = getCol(csvData, 17);
+			alp7 = getCol(csvData, 18);
+			alp8 = getCol(csvData, 19);
+			initialread +=1 ;
+			checkgraphload();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/lastlivevalues" ) {
+		if ( initialread != 0) {
+			var lines = mqttpayload.split("\n");
+			for (var i = 0; i < lines.length; i++) {
+				var ldate = lines[i].split(",")[0];     
+				var lbezug = lines[i].split(",")[1];
+				var lpv = lines[i].split(",")[3];
+				var llp2 = lines[i].split(",")[5];
+				var lspeicherl = lines[i].split(",")[7];
+				var lsoc = lines[i].split(",")[9];
+				var lspeichersoc = lines[i].split(",")[8];
+				var lpa = lines[i].split(",")[2];
+				var llp1 = lines[i].split(",")[4];
+				var lsoc1 = lines[i].split(",")[10];
+				var lhausverbrauch = lines[i].split(",")[11];
+				var lverbraucher1 = lines[i].split(",")[12];
+				var lverbraucher2 = lines[i].split(",")[13];
+				var lp3 = lines[i].split(",")[14];
+				var lp4 = lines[i].split(",")[15];
+				var lp5 = lines[i].split(",")[16];
+				var lp6 = lines[i].split(",")[17];
+				var lp7 = lines[i].split(",")[18];
+				var lp8 = lines[i].split(",")[19];
+			}
+				
+			myLine.data.labels.push(ldate.substring(0, ldate.length -3));
+			myLine.data.datasets[2].data.push(lbezug);
+			myLine.data.datasets[3].data.push(lpv);
+			myLine.data.datasets[4].data.push(lspeicherl);
+			myLine.data.datasets[5].data.push(lspeichersoc);
+			myLine.data.datasets[6].data.push(lsoc);
+			myLine.data.datasets[0].data.push(llp1);
+			myLine.data.datasets[1].data.push(llp2);
+			myLine.data.datasets[7].data.push(lsoc1);
+			myLine.data.datasets[8].data.push(lhausverbrauch);
+			myLine.data.datasets[9].data.push(lverbraucher1);
+			myLine.data.datasets[10].data.push(lverbraucher2);
+			myLine.data.datasets[11].data.push(lp3);
+			myLine.data.datasets[12].data.push(lp4);
+			myLine.data.datasets[13].data.push(lp5);
+			myLine.data.datasets[14].data.push(lp6);
+			myLine.data.datasets[15].data.push(lp7);
+			myLine.data.datasets[16].data.push(lp8);
+
+			myLine.data.labels.splice(0, 1);
+			myLine.data.datasets.forEach(function(dataset) {
+				dataset.data.splice(0, 1);
+			});
+			window.myLine.update();
+		}
+
+	}
+
 	else if ( mqttmsg == "openWB/lp/1/boolChargePointConfigured" ) {
  		if ( mqttpayload == 0 ) {
 			$('#lp1div').hide();
@@ -1022,11 +1318,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		document.getElementById("sofortlllp8s").value = mqttpayload;
 		document.getElementById("sofortlllp8l").innerHTML = mqttpayload;
 	}
-	else if ( mqttmsg  == mqtttopic ) {
-		$(htmldiv).html(mqttpayload);
-	}
 	else {
-		//do nothing
+		thevalues.forEach(function(thevar){
+			if ( mqttmsg == thevar[0] ) {
+				$(thevar[1]).html(mqttpayload);
+			}
+		});
 	} 
 }
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
@@ -1035,9 +1332,7 @@ client.onConnectionLost = function (responseObject) {
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-	thevalues.forEach(function(thevar) {
-		handlevar(message.destinationName, message.payloadString, thevar[0], thevar[1]);
-	});
+		handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
 };
 var retries = 0;
 
@@ -1068,6 +1363,13 @@ var publish = function (payload, topic) {
 
 
 client.connect(options);
+function graphoptionclick() {
+	if ( document.getElementById("graphoptiondiv").style.display === "none") {
+		document.getElementById("graphoptiondiv").style.display = "block";
+	} else {
+		document.getElementById("graphoptiondiv").style.display = "none";
+	}
+}
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {
 	publish("1","openWB/set/lp1/ChargePointEnabled");
@@ -1185,6 +1487,7 @@ $(function() {
     if(hook1_aktiv == '1') {
  $.ajax({
     url: "/openWB/ramdisk/hook1akt",
+    dataType: "text",
     complete: function(request){
 		if (request.responseText == 1) {
 			if ( activetheme == "symbol") {
