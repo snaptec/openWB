@@ -16,7 +16,7 @@
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<h3> OpenWB Charge Controller </h3>
+		<h3> openWB Charge Controller </h3>
 	</div>
 </div>
 <div class="row col-xs-12 text-center" style="height: 50px;">
@@ -357,6 +357,36 @@ echo '
 <div class="row">
 
 </div>
+<script src="js/Chart.bundle.js"></script>
+<script src="js/livechart.js?version=2"></script>
+
+<div class="row" id="thegraph" style="display: none;">
+	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<div id="graphoptiondiv" style="display: none;">
+		<input type="button" value="Legende" label="Legende" onclick="showhidelegend('boolDisplayLegend')"/>
+		<input type="button" value="Lp2" label="Lp2" onclick="showhidedataset('boolDisplayLp2')"/>
+		<input type="button" value="Bezug" label="Bezug" onclick="showhidedataset('boolDisplayEvu')"/>
+		<input type="button" value="Pv" label="Pv" onclick="showhidedataset('boolDisplayPv')"/>
+		<input type="button" value="Speicherleistung" label="Speicherleistung" onclick="showhidedataset('boolDisplaySpeicher')"/>
+		<input type="button" value="Speicher SoC" label="Speicher Soc" onclick="showhidedataset('boolDisplaySpeicherSoc')"/>
+		<input type="button" value="Lp1 Soc" label="Lp1 Soc" onclick="showhidedataset('boolDisplayLp1Soc')"/>
+		<input type="button" value="Lp2 Soc" label="Lp2 Soc" onclick="showhidedataset('boolDisplayLp2Soc')"/>
+		<input type="button" value="Hausverbrauch" label="Hausverbrauch" onclick="showhidedataset('boolDisplayHouseConsumption')"/>
+		<input type="button" value="Verbraucher 1" label="Verbraucher 1" onclick="showhidedataset('boolDisplayLoad1')"/>
+		<input type="button" value="Verbraucher 2" label="Verbraucher 2" onclick="showhidedataset('boolDisplayLoad2')"/>
+		<input type="button" value="Lp Gesamt" label="Lp Gesamt" onclick="showhidedataset('boolDisplayLpAll')"/>
+		<input type="button" value="Lp3" label="Lp3" onclick="showhidedataset('boolDisplayLp3')"/>
+		<input type="button" value="Lp4" label="Lp4" onclick="showhidedataset('boolDisplayLp4')"/>
+		<input type="button" value="Lp5" label="Lp5" onclick="showhidedataset('boolDisplayLp5')"/>
+		<input type="button" value="Lp6" label="Lp6" onclick="showhidedataset('boolDisplayLp6')"/>
+		<input type="button" value="Lp7" label="Lp7" onclick="showhidedataset('boolDisplayLp7')"/>
+		<input type="button" value="Lp8" label="Lp8" onclick="showhidedataset('boolDisplayLp8')"/>
+	</div>
+</div>
+
 <div class="col-xs-12 text-center">
 	<h5>Lademodus</h5>
 </div>
@@ -404,6 +434,7 @@ echo '
 	</div>
 
 </div>
+
 <div class="row">
 	<hr>
 	<div class="row">
@@ -882,6 +913,8 @@ echo '
 		<div class="col-xs-4">
 			Beta Feature <br>
 			<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/>
+			<input type="button" value="GraphOptionen" label="GraphOptionen" onclick="graphoptionclick()"/>
+			<input type="button" value="GraphAnzeigen" label="GraphAnzeigen" onclick="showhidelegend('boolDisplayLiveGraph')"/>
 		</div>
 		<div class="col-xs-4 text-center">
 			<a href="https://openwb.de">www.openwb.de</a><br>
