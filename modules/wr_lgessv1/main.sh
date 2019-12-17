@@ -58,8 +58,18 @@ fi
 #
 pcs_pv_total_power=$(echo $json | jq '.statistics.pcs_pv_total_power' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//')
 #
+## Daten für Langzeitlog holen
+#
+jahr=$(date +%Y)
+year_of_stat='"'year'"':'"'$jahr'"'
+json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/pv/year')
+pvkwh=$(echo $json | jq '.loginfo[13].total_generation' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+ekwh=$(echo $json | jq '.loginfo[13].total_Feed_in' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+#
 ## Daten in Ramdisk schreiben
 #echo $json
 #
+echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo '-'$pcs_pv_total_power > /var/www/html/openWB/ramdisk/pvwatt
 echo '-'$pcs_pv_total_power

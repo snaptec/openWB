@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 #
 #
 ## TODO: ess_url und ess_pass aus Webseite
@@ -63,8 +63,17 @@ if [ "$is_grid_selling_" = "1" ]; then
 	grid_power=$(echo "$grid_power*-1" |bc)
 fi
 #
-## Daten in Ramdisk schreiben
-#echo $json
+## Daten für Langzeitlog holen
 #
+jahr=$(date +%Y)
+year_of_stat='"'year'"':'"'$jahr'"'
+json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/load/year')
+ikwh=$(echo $json | jq '.loginfo[13].total_purchase' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+loadkwh=$(echo $json | jq '.loginfo[13].total_consumption' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+#
+## Daten in Ramdisk schreiben
+#
+echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
+#echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo $grid_power > /var/www/html/openWB/ramdisk/wattbezug
 echo $grid_power
