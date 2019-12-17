@@ -216,6 +216,7 @@ var lineChartData = {
 		}
 	});
 initialread = 1;
+console.log("graphloaded");
 $('#loadlivegraph').hide();
 };			
 function checkgraphload(){

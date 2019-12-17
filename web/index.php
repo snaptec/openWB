@@ -73,7 +73,7 @@
 	<!-- Graph refresher -->
 	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
 	<!-- Data refresher -->
-    <script src="live.js?vers=8"></script>
+    <script src="live.js?vers=10"></script>
     <script src="livefunctions.js?vers=6"></script>
 <?php include ("values.php"); 
 if ( $simplemodeold == 1 ) {
@@ -110,6 +110,10 @@ registerPageVisibility()
 			all3 = 0;
 			all4 = 0;
 			all5 = 0;
+			all6 = 0;
+			all7 = 0;
+			all8 = 0;
+			console.log("graphrefreshtriggered");
 		}
 	});
 }
