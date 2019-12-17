@@ -29,6 +29,11 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/set/#")
 # handle each set topic 
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
+        if (int(msg.payload) == 1):
+            subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
+        else:
+            client.publish("openWB/system/LiveGraphData", "empty", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
