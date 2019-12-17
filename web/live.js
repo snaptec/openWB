@@ -25,6 +25,7 @@ var boolDisplayLoad1;
 var boolDisplayLp1Soc;
 var boolDisplayLoad2;
 var boolDisplayLp2Soc;
+var boolDisplayLp1;
 var boolDisplayLp2;
 var boolDisplayLp3;
 var boolDisplayLp4;
@@ -40,7 +41,16 @@ var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
 var datasend = 0;
-
+var all1 = 0;
+var all2 = 0;
+var all3 = 0;
+var all4 = 0;
+var all5 = 0;
+var all1p;
+var all2p;
+var all3p;
+var all4p;
+var all5p;
 $('#lp2div').hide();
 $('#lp3div').hide();
 $('#lp4div').hide();
@@ -58,11 +68,17 @@ $('#slider8div').hide();
 var thevalues = [
 ["openWB/graph/lastlivevalues", "#"],
 ["openWB/graph/alllivevalues", "#"],
+["openWB/graph/1alllivevalues", "#"],
+["openWB/graph/2alllivevalues", "#"],
+["openWB/graph/3alllivevalues", "#"],
+["openWB/graph/4alllivevalues", "#"],
+["openWB/graph/5alllivevalues", "#"],
 ["openWB/graph/boolDisplayHouseConsumption", "#"],
 ["openWB/graph/boolDisplayLoad1", "#"],
 ["openWB/graph/boolDisplayLoad2", "#"],
 ["openWB/graph/boolDisplayLp1Soc", "#"],
 ["openWB/graph/boolDisplayLp2Soc", "#"],
+["openWB/graph/boolDisplayLp1", "#"],
 ["openWB/graph/boolDisplayLp2", "#"],
 ["openWB/graph/boolDisplayLp3", "#"],
 ["openWB/graph/boolDisplayLp4", "#"],
@@ -218,16 +234,30 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
+			document.getElementById("graphhausdiv").setAttribute("style", "color: green;");
+			graphhausdiv.classList.remove("fa-toggle-off");
+			graphhausdiv.classList.add("fa-toggle-on");
+
 		} else {
 			boolDisplayHouseConsumption = true;
+			document.getElementById("graphhausdiv").setAttribute("style", "color: red;");
+			graphhausdiv.classList.remove("fa-toggle-on");
+			graphhausdiv.classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLegend" ) {
 		if ( mqttpayload == 0) {
 			boolDisplayLegend = false;
+			document.getElementById("graphlegenddiv").setAttribute("style", "color: red;");
+			graphlegenddiv.classList.remove("fa-toggle-on");
+			graphlegenddiv.classList.add("fa-toggle-off");
 		} else {
 			boolDisplayLegend = true;
+			document.getElementById("graphlegenddiv").setAttribute("style", "color: green;");
+			graphlegenddiv.classList.remove("fa-toggle-off");
+			graphlegenddiv.classList.add("fa-toggle-on");
+
 		}
 		checkgraphload();
 	}
@@ -235,121 +265,251 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		if ( mqttpayload == 0) {
 			$('#thegraph').hide();
 			boolDisplayLiveGraph = false;
+			document.getElementById("graphgraphdiv").setAttribute("style", "color: red;");
+			graphgraphdiv.classList.remove("fa-toggle-on");
+			graphgraphdiv.classList.add("fa-toggle-off");
 		} else {
 			$('#thegraph').show();
 			boolDisplayLiveGraph = true;
+			document.getElementById("graphgraphdiv").setAttribute("style", "color: green;");
+			graphgraphdiv.classList.remove("fa-toggle-off");
+			graphgraphdiv.classList.add("fa-toggle-on");
 		}
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
+			document.getElementById("graphevudiv").setAttribute("style", "color: green;");
+			graphevudiv.classList.remove("fa-toggle-off");
+			graphevudiv.classList.add("fa-toggle-on");
+
 		} else {
 			boolDisplayEvu = true;
+			document.getElementById("graphevudiv").setAttribute("style", "color: red;");
+			graphevudiv.classList.remove("fa-toggle-on");
+			graphevudiv.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayPv" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
+			document.getElementById("graphpvdiv").setAttribute("style", "color: green;");
+			graphpvdiv.classList.remove("fa-toggle-off");
+			graphpvdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayPv = true;
+			document.getElementById("graphpvdiv").setAttribute("style", "color: red;");
+			graphpvdiv.classList.remove("fa-toggle-on");
+			graphpvdiv.classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp1" ) {
+		if ( mqttpayload == 1) {
+			boolDisplayLp1 = false;
+			document.getElementById("graphlp1div").setAttribute("style", "color: green;");
+			graphlp1div.classList.remove("fa-toggle-off");
+			graphlp1div.classList.add("fa-toggle-on");
+		} else {
+			boolDisplayLp1 = true;
+			document.getElementById("graphlp1div").setAttribute("style", "color: red;");
+			graphlp1div.classList.remove("fa-toggle-on");
+			graphlp1div.classList.add("fa-toggle-off");
 
+		}
+
+		checkgraphload();
+	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp2" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp2 = false;
+			var element = document.getElementById("graphlp2div");
+			graphlp2div.classList.remove("fa-toggle-off");
+			graphlp2div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp2div");
 			boolDisplayLp2 = true;
+			graphlp2div.classList.remove("fa-toggle-on");
+			graphlp2div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
+
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp3" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp3 = false;
+			var element = document.getElementById("graphlp3div");
+			graphlp3div.classList.remove("fa-toggle-off");
+			graphlp3div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp3div");
 			boolDisplayLp3 = true;
+			graphlp3div.classList.remove("fa-toggle-on");
+			graphlp3div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp4" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp4 = false;
+			var element = document.getElementById("graphlp4div");
+			graphlp4div.classList.remove("fa-toggle-off");
+			graphlp4div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp4div");
 			boolDisplayLp4 = true;
+			graphlp4div.classList.remove("fa-toggle-on");
+			graphlp4div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp5" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp5 = false;
+			var element = document.getElementById("graphlp5div");
+			graphlp5div.classList.remove("fa-toggle-off");
+			graphlp5div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp5div");
 			boolDisplayLp5 = true;
+			graphlp5div.classList.remove("fa-toggle-on");
+			graphlp5div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp6" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp6 = false;
+			var element = document.getElementById("graphlp6div");
+			graphlp6div.classList.remove("fa-toggle-off");
+			graphlp6div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp6div");
 			boolDisplayLp6 = true;
+			graphlp6div.classList.remove("fa-toggle-on");
+			graphlp6div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp7" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp7 = false;
+			var element = document.getElementById("graphlp7div");
+			graphlp7div.classList.remove("fa-toggle-off");
+			graphlp7div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp7div");
 			boolDisplayLp7 = true;
+			graphlp7div.classList.remove("fa-toggle-on");
+			graphlp7div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp8" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp8 = false;
+			var element = document.getElementById("graphlp8div");
+			graphlp8div.classList.remove("fa-toggle-off");
+			graphlp8div.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
+			var element = document.getElementById("graphlp8div");
 			boolDisplayLp8 = true;
+			graphlp8div.classList.remove("fa-toggle-on");
+			graphlp8div.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
+			var element = document.getElementById("graphlpalldiv");
+			graphlpalldiv.classList.remove("fa-toggle-off");
+			graphlpalldiv.classList.add("fa-toggle-on");
+			element.setAttribute("style", "color: green;");
 		} else {
 			boolDisplayLpAll = true;
+			var element = document.getElementById("graphlpalldiv");
+			graphlpalldiv.classList.remove("fa-toggle-on");
+			graphlpalldiv.classList.add("fa-toggle-off");
+			element.setAttribute("style", "color: red;");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
+			document.getElementById("graphspeicherdiv").setAttribute("style", "color: green;");
+			graphspeicherdiv.classList.remove("fa-toggle-off");
+			graphspeicherdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplaySpeicher = true;
+			document.getElementById("graphspeicherdiv").setAttribute("style", "color: red;");
+			graphspeicherdiv.classList.remove("fa-toggle-on");
+			graphspeicherdiv.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicherSoc = false;
+			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: green;");
+			graphspeichersocdiv.classList.remove("fa-toggle-off");
+			graphspeichersocdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplaySpeicherSoc = true;
+			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: red;");
+			graphspeichersocdiv.classList.remove("fa-toggle-on");
+			graphspeichersocdiv.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp1Soc = false;
+			document.getElementById("graphlp1socdiv").setAttribute("style", "color: green;");
+			graphlp1socdiv.classList.remove("fa-toggle-off");
+			graphlp1socdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayLp1Soc = true;
+			document.getElementById("graphlp1socdiv").setAttribute("style", "color: red;");
+			graphlp1socdiv.classList.remove("fa-toggle-on");
+			graphlp1socdiv.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp2Soc = false;
+			document.getElementById("graphlp2socdiv").setAttribute("style", "color: green;");
+			graphlp2socdiv.classList.remove("fa-toggle-off");
+			graphlp2socdiv.classList.add("fa-toggle-on");
+
 		} else {
 			boolDisplayLp2Soc = true;
+			document.getElementById("graphlp2socdiv").setAttribute("style", "color: red;");
+			graphlp2socdiv.classList.remove("fa-toggle-on");
+			graphlp2socdiv.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
@@ -357,21 +517,72 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLoad1 = false;
+			document.getElementById("graphload1div").setAttribute("style", "color: green;");
+			graphload1div.classList.remove("fa-toggle-off");
+			graphload1div.classList.add("fa-toggle-on");
+
 		} else {
 			boolDisplayLoad1 = true;
+			document.getElementById("graphload1div").setAttribute("style", "color: red;");
+			graphload1div.classList.remove("fa-toggle-on");
+			graphload1div.classList.add("fa-toggle-off");
+
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLoad2" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLoad2 = false;
+			document.getElementById("graphload2div").setAttribute("style", "color: green;");
+			graphload2div.classList.remove("fa-toggle-off");
+			graphload2div.classList.add("fa-toggle-on");
+
 		} else {
 			boolDisplayLoad2 = true;
+			document.getElementById("graphload2div").setAttribute("style", "color: red;");
+			graphload2div.classList.remove("fa-toggle-on");
+			graphload2div.classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
+	else if ( mqttmsg == "openWB/graph/1alllivevalues" ) {
+		if (initialread == 0) {
+			all1p = mqttpayload;
+			all1 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/2alllivevalues" ) {
+		if (initialread == 0) {
+			all2p = mqttpayload;
+			all2 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/3alllivevalues" ) {
+		if (initialread == 0) {
+			all3p = mqttpayload;
+			all3 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/4alllivevalues" ) {
+		if (initialread == 0) {
+			all4p = mqttpayload;
+			all4 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/5alllivevalues" ) {
+		if (initialread == 0) {
+			all5p = mqttpayload;
+			all5 = 1;
+		putgraphtogether();
+		}
+	}
+
 	else if ( mqttmsg == "openWB/graph/alllivevalues" ) {
-		if ( initialread == 0) {
+		if ( initialread == -10) {
 			var csvData = new Array();
 			var rawcsv = mqttpayload.split(/\r?\n|\r/);
 			for (var i = 0; i < rawcsv.length; i++) {
@@ -1477,6 +1688,43 @@ function stopclick() {
 function renewMQTTclick() {
 	        publish("1","openWB/set/RenewMQTT");
 		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");	
+}
+function putgraphtogether() {
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p;
+		var csvData = new Array();
+		var rawcsv = alldata.split(/\r?\n|\r/);
+		for (var i = 0; i < rawcsv.length; i++) {
+			  csvData.push(rawcsv[i].split(','));
+		}
+		// Retrived data from csv file content
+		var splittime = new Array();
+		getCol(csvData, 0).forEach(function(zeit){
+			splittime.push(zeit.substring(0, zeit.length -3));
+		});
+		atime = splittime;
+		//atime = getCol(csvData, 0);
+		abezug = getCol(csvData, 1);
+		alpa = getCol(csvData, 2);
+		apv = getCol(csvData, 3);
+		alp1 = getCol(csvData, 4);
+		alp2 = getCol(csvData, 5);
+		aspeicherl = getCol(csvData, 7);
+		aspeichersoc = getCol(csvData, 8);
+		asoc = getCol(csvData, 9);
+		asoc1 = getCol(csvData, 10);
+		ahausverbrauch = getCol(csvData, 11);
+		averbraucher1 = getCol(csvData, 12);
+		averbraucher2 = getCol(csvData, 13);
+		alp3 = getCol(csvData, 14);
+		alp4 = getCol(csvData, 15);
+		alp5 = getCol(csvData, 16);
+		alp6 = getCol(csvData, 17);
+		alp7 = getCol(csvData, 18);
+		alp8 = getCol(csvData, 19);
+		initialread +=1 ;
+		checkgraphload();
+	}
 }
 
 function getfile() {

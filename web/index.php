@@ -88,6 +88,33 @@ if ( $simplemodeold == 1 ) {
 	var hook2_aktiv = <?php echo $hook2_aktivold ?>;
 	var hook3_aktiv = <?php echo $hook3_aktivold ?>;
 	var activetheme = "<?php echo $themeCookie ?>";
+registerPageVisibility()
+	function registerPageVisibility() {
+		let hidden;
+	        let visibilityChange;
+	        if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
+		        hidden = 'hidden';
+		        visibilityChange = 'visibilitychange';
+		} else if (typeof document.msHidden !== 'undefined') {
+			hidden = 'msHidden';
+		        visibilityChange = 'msvisibilitychange';
+		} else if (typeof document.webkitHidden !== 'undefined') {
+		        hidden = 'webkitHidden';
+		        visibilityChange = 'webkitvisibilitychange';
+		}
+		window.document.addEventListener(visibilityChange, () => {
+	        if (!document[hidden]) {
+			initialread = 0;
+			all1 = 0;
+			all2 = 0;
+			all3 = 0;
+			all4 = 0;
+			all5 = 0;
+		}
+	});
+}
+
+
 </script>
 <input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 <input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
