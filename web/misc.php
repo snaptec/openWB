@@ -1321,7 +1321,12 @@ $(function() {
 		<option <?php if($livegraphold == 40) echo selected ?> value="40">40 Min</option>
 		<option <?php if($livegraphold == 50) echo selected ?> value="50">50 Min</option>
 		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
-
+		<option <?php if($livegraphold == 70) echo selected ?> value="70">70 Min</option>
+		<option <?php if($livegraphold == 80) echo selected ?> value="80">80 Min</option>
+		<option <?php if($livegraphold == 90) echo selected ?> value="90">90 Min</option>
+		<option <?php if($livegraphold == 100) echo selected ?> value="100">100 Min</option>
+		<option <?php if($livegraphold == 110) echo selected ?> value="110">110 Min</option>
+		<option <?php if($livegraphold == 120) echo selected ?> value="120">120 Min</option>
 	</select><br>
 </div>
 

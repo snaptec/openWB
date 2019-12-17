@@ -358,33 +358,13 @@ echo '
 
 </div>
 <script src="js/Chart.bundle.js"></script>
-<script src="js/livechart.js?version=4"></script>
+<script src="js/livechart.js?version=5"></script>
 
 <div class="row" id="thegraph" style="display: none;">
 	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
 		<canvas id="canvas"></canvas>
 	</div>
 
-	<div id="graphoptiondiv" style="display: none;">
-		<input type="button" value="Legende" label="Legende" onclick="showhidelegend('boolDisplayLegend')"/>
-		<input type="button" value="Lp2" label="Lp2" onclick="showhidedataset('boolDisplayLp2')"/>
-		<input type="button" value="Bezug" label="Bezug" onclick="showhidedataset('boolDisplayEvu')"/>
-		<input type="button" value="Pv" label="Pv" onclick="showhidedataset('boolDisplayPv')"/>
-		<input type="button" value="Speicherleistung" label="Speicherleistung" onclick="showhidedataset('boolDisplaySpeicher')"/>
-		<input type="button" value="Speicher SoC" label="Speicher Soc" onclick="showhidedataset('boolDisplaySpeicherSoc')"/>
-		<input type="button" value="Lp1 Soc" label="Lp1 Soc" onclick="showhidedataset('boolDisplayLp1Soc')"/>
-		<input type="button" value="Lp2 Soc" label="Lp2 Soc" onclick="showhidedataset('boolDisplayLp2Soc')"/>
-		<input type="button" value="Hausverbrauch" label="Hausverbrauch" onclick="showhidedataset('boolDisplayHouseConsumption')"/>
-		<input type="button" value="Verbraucher 1" label="Verbraucher 1" onclick="showhidedataset('boolDisplayLoad1')"/>
-		<input type="button" value="Verbraucher 2" label="Verbraucher 2" onclick="showhidedataset('boolDisplayLoad2')"/>
-		<input type="button" value="Lp Gesamt" label="Lp Gesamt" onclick="showhidedataset('boolDisplayLpAll')"/>
-		<input type="button" value="Lp3" label="Lp3" onclick="showhidedataset('boolDisplayLp3')"/>
-		<input type="button" value="Lp4" label="Lp4" onclick="showhidedataset('boolDisplayLp4')"/>
-		<input type="button" value="Lp5" label="Lp5" onclick="showhidedataset('boolDisplayLp5')"/>
-		<input type="button" value="Lp6" label="Lp6" onclick="showhidedataset('boolDisplayLp6')"/>
-		<input type="button" value="Lp7" label="Lp7" onclick="showhidedataset('boolDisplayLp7')"/>
-		<input type="button" value="Lp8" label="Lp8" onclick="showhidedataset('boolDisplayLp8')"/>
-	</div>
 </div>
 
 <div class="col-xs-12 text-center">
@@ -911,10 +891,7 @@ echo '
 		<div class="col-xs-1">
 		</div>
 		<div class="col-xs-4">
-			Beta Feature <br>
-			<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/>
-			<input type="button" value="GraphOptionen" label="GraphOptionen" onclick="graphoptionclick()"/>
-			<input type="button" value="GraphAnzeigen" label="GraphAnzeigen" onclick="showhidelegend('boolDisplayLiveGraph')"/>
+			<input type="button" value="GraphOptionen" label="GraphOptionen" onclick="on()"/>
 		</div>
 		<div class="col-xs-4 text-center">
 			<a href="https://openwb.de">www.openwb.de</a><br>
@@ -939,6 +916,119 @@ echo '
 <div id="plugstatlp6div"> </div>
 <div id="plugstatlp7div"> </div>
 <div id="plugstatlp8div"> </div>
+<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
+	<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
+		<div class="row"><div class="col-xs-12">
+			Graph Sichtbarkeit:
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				Optionen:
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/><br>
+			</div>
+		</div><hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Schließen" label="Schließen" onclick="off()"/>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function on() {
+	  document.getElementById("graphsettings").style.display = "block";
+					     }
+
+function off() {
+  document.getElementById("graphsettings").style.display = "none";
+  }
+</script>
 <script src="./themes/symbol/livesymbol.js"></script>
 
 <!-- load amcharts js for graph <?php if ($graphliveamold == 1) {

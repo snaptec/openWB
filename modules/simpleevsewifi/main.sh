@@ -8,8 +8,10 @@ watt=$(echo $output | jq '.list[] | .actualPower')
 lla1=$(echo $output | jq '.list[] | .currentP1')
 lla2=$(echo $output | jq '.list[] | .currentP2')
 lla3=$(echo $output | jq '.list[] | .currentP3')
+evsewifiplugstatelp1=$(echo $output | jq '.list[] | .vehicleState') 
 llkwh=$(echo $output | jq '.list[] | .meterReading')
 watt=$(echo "scale=0;$watt * 1000 /1" |bc)
+
 if [[ $watt =~ $re ]] ; then
 	echo $watt > /var/www/html/openWB/ramdisk/llaktuell
 fi
@@ -25,3 +27,14 @@ fi
 if [[ $llkwh =~ $rekwh ]] ; then
 	echo $llkwh > /var/www/html/openWB/ramdisk/llkwh
 fi
+if [[ $evsewifiplugstatelp1 > "1" ]]; then
+        echo 1 > /var/www/html/openWB/ramdisk/plugstat
+else
+        echo 0 > /var/www/html/openWB/ramdisk/plugstat
+fi
+if [[ $evsewifiplugstatelp1 > "2" ]] && [[ $ladestatuslp1 == "1" ]] && [[ $lp1enabled == "1" ]]; then
+        echo 1 > /var/www/html/openWB/ramdisk/chargestat
+else
+	echo 0 > /var/www/html/openWB/ramdisk/chargestat
+fi
+
