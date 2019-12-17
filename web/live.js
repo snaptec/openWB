@@ -1726,6 +1726,7 @@ function putgraphtogether() {
 		for (var i = 0; i < rawcsv.length; i++) {
 			  csvData.push(rawcsv[i].split(','));
 		}
+		csvData.pop();
 		// Retrived data from csv file content
 		var splittime = new Array();
 		getCol(csvData, 0).forEach(function(zeit){

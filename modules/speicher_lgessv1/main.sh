@@ -1,8 +1,5 @@
 #!/bin/bash
 #
-#
-## TODO: ess_url und ess_pass aus Webseite
-#
 ## ess_url: IP/URL des LG ESS V1.0
 #
 ## ess_pass: Passwort, um sich in den LG ESS V1.0 einzuloggen
@@ -65,7 +62,17 @@ if [ "$is_battery_discharging_" = "1" ]; then
 batconv_power='-'$batconv_power
 fi
 #
+## Daten für Langzeitlog holen
+#
+jahr=$(date +%Y)
+year_of_stat='"'year'"':'"'$jahr'"'
+json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/batt/year')
+speicherikwh=$(echo $json | jq '.loginfo[13].total_charge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+speicherekwh=$(echo $json | jq '.loginfo[13].total_discharge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+#
 ## Daten in Ramdisk schreiben
 #
+echo $speicherikwh > /var/www/html/openWB/ramdisk/speicherikwh
+echo $speicherekwh > /var/www/html/openWB/ramdisk/speicherekwh
 echo $bat_user_soc > /var/www/html/openWB/ramdisk/speichersoc
 echo $batconv_power > /var/www/html/openWB/ramdisk/speicherleistung
