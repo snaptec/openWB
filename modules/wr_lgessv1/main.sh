@@ -1,8 +1,5 @@
 #!/bin/bash
 #
-#
-## TODO: ess_url und ess_pass aus Webseite
-#
 ## ess_url: IP/URL des LG ESS V1.0
 #
 ## ess_pass: Passwort, um sich in den LG ESS V1.0 einzuloggen
@@ -67,7 +64,6 @@ pvkwh=$(echo $json | jq '.loginfo[13].total_generation' | sed 's/.*://' | tr -d 
 ekwh=$(echo $json | jq '.loginfo[13].total_Feed_in' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 #
 ## Daten in Ramdisk schreiben
-#echo $json
 #
 echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh

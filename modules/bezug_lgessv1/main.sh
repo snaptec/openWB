@@ -1,7 +1,4 @@
- #!/bin/bash
-#
-#
-## TODO: ess_url und ess_pass aus Webseite
+#!/bin/bash
 #
 ## ess_url: IP/URL des LG ESS V1.0
 #
@@ -74,6 +71,5 @@ loadkwh=$(echo $json | jq '.loginfo[13].total_consumption' | sed 's/.*://' | tr 
 ## Daten in Ramdisk schreiben
 #
 echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
-#echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo $grid_power > /var/www/html/openWB/ramdisk/wattbezug
 echo $grid_power
