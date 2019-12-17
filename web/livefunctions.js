@@ -415,7 +415,7 @@ $(document).ready(function(){
 
 	$('.minpv').click(function(){
 	    var clickBtnValue = $(this).val();
-		minpvclick();
+		minundpvclick();
 	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1',
 	    data =  {'action': clickBtnValue};
 	    $.post(ajaxurl, data, function (response) {
