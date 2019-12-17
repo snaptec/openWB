@@ -46,11 +46,17 @@ var all2 = 0;
 var all3 = 0;
 var all4 = 0;
 var all5 = 0;
+var all6 = 0;
+var all7 = 0;
+var all8 = 0;
 var all1p;
 var all2p;
 var all3p;
 var all4p;
 var all5p;
+var all6p;
+var all7p;
+var all8p;
 $('#lp2div').hide();
 $('#lp3div').hide();
 $('#lp4div').hide();
@@ -67,12 +73,14 @@ $('#slider7div').hide();
 $('#slider8div').hide();
 var thevalues = [
 ["openWB/graph/lastlivevalues", "#"],
-["openWB/graph/alllivevalues", "#"],
 ["openWB/graph/1alllivevalues", "#"],
 ["openWB/graph/2alllivevalues", "#"],
 ["openWB/graph/3alllivevalues", "#"],
 ["openWB/graph/4alllivevalues", "#"],
 ["openWB/graph/5alllivevalues", "#"],
+["openWB/graph/6alllivevalues", "#"],
+["openWB/graph/7alllivevalues", "#"],
+["openWB/graph/8alllivevalues", "#"],
 ["openWB/graph/boolDisplayHouseConsumption", "#"],
 ["openWB/graph/boolDisplayLoad1", "#"],
 ["openWB/graph/boolDisplayLoad2", "#"],
@@ -580,7 +588,27 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		putgraphtogether();
 		}
 	}
-
+	else if ( mqttmsg == "openWB/graph/6alllivevalues" ) {
+		if (initialread == 0) {
+			all6p = mqttpayload;
+			all6 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/7alllivevalues" ) {
+		if (initialread == 0) {
+			all7p = mqttpayload;
+			all7 = 1;
+		putgraphtogether();
+		}
+	}
+	else if ( mqttmsg == "openWB/graph/8alllivevalues" ) {
+		if (initialread == 0) {
+			all8p = mqttpayload;
+			all8 = 1;
+		putgraphtogether();
+		}
+	}
 	else if ( mqttmsg == "openWB/graph/alllivevalues" ) {
 		if ( initialread == -10) {
 			var csvData = new Array();
@@ -1690,8 +1718,8 @@ function renewMQTTclick() {
 		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");	
 }
 function putgraphtogether() {
-	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) ){
-		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p;
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
 		var csvData = new Array();
 		var rawcsv = alldata.split(/\r?\n|\r/);
 		for (var i = 0; i < rawcsv.length; i++) {
