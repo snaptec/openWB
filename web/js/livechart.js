@@ -216,6 +216,7 @@ var lineChartData = {
 		}
 	});
 initialread = 1;
+$('#loadlivegraph').hide();
 };			
 function checkgraphload(){
 	if ( graphloaded == 1) {
@@ -237,7 +238,7 @@ function checkgraphload(){
 	}
 };
  window.onload = function(){
-	    setTimeout(forcegraphload, 5000)
+	    setTimeout(forcegraphload, 12000)
  };
 function forcegraphload() {
 	if ( graphloaded == 0 ) {

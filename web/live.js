@@ -646,7 +646,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 	}
 	else if ( mqttmsg == "openWB/graph/lastlivevalues" ) {
-		if ( initialread != 0) {
+		if ( initialread > 0) {
 			var lines = mqttpayload.split("\n");
 			for (var i = 0; i < lines.length; i++) {
 				var ldate = lines[i].split(",")[0];     
@@ -1720,6 +1720,7 @@ function renewMQTTclick() {
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
+		alldata = alldata.replace(/^\s*[\n]/gm, '');
 		var csvData = new Array();
 		var rawcsv = alldata.split(/\r?\n|\r/);
 		for (var i = 0; i < rawcsv.length; i++) {
@@ -1750,7 +1751,7 @@ function putgraphtogether() {
 		alp6 = getCol(csvData, 17);
 		alp7 = getCol(csvData, 18);
 		alp8 = getCol(csvData, 19);
-		initialread +=1 ;
+		initialread = 1 ;
 		checkgraphload();
 	}
 }
