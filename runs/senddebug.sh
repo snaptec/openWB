@@ -1,6 +1,6 @@
 #!/bin/bash
 sed -i 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
-sleep 1
+sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
 

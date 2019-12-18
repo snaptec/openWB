@@ -1767,9 +1767,12 @@ $(function() {
     if(hook1_aktiv == '1') {
  $.ajax({
     url: "/openWB/ramdisk/hook1akt",
+    contentType: "text/plain",
     dataType: "text",
+    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
     complete: function(request){
-		if (request.responseText == 1) {
+	    var hook1akt = request.responseText;
+		if (hook1akt == 1) {
 			if ( activetheme == "symbol") {
 				var element = document.getElementById("hook1div");
 				element.classList.add("fa");
@@ -1803,6 +1806,7 @@ $(function() {
 
  $.ajax({
     url: "/openWB/ramdisk/hook2akt",
+    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
     complete: function(request){
 		if (request.responseText == 1) {
 			if ( activetheme == "symbol") {
