@@ -13,14 +13,14 @@ var lineChartData = {
 		yAxisID: 'y-axis-1',
 	} , {
 		label: 'Lp2',
-		borderColor: "rgba(50, 50, 55, 0.7)",
+		borderColor: "rgba(0, 0, 255, 0.7)",
 		backgroundColor: 'blue',
 		borderWidth: 1,
-		fill: false,
 		hidden: boolDisplayLp2,
+		fill: false,
 		data: alp2,
 		yAxisID: 'y-axis-1',
-	} , { 
+	} , {
 		label: 'Bezug',
 		borderColor: "rgba(255, 0, 0, 0.7)",
 		backgroundColor: "rgba(255, 10, 13, 0.3)",
@@ -117,7 +117,7 @@ var lineChartData = {
 		backgroundColor: 'blue',
 		fill: false,
 		borderWidth: 2,
-		data: alp2,
+		data: alp3,
 		yAxisID: 'y-axis-1',
 		hidden: boolDisplayLp3,
 	} , {
@@ -216,7 +216,6 @@ var lineChartData = {
 		}
 	});
 initialread = 1;
-console.log("graphloaded");
 $('#loadlivegraph').hide();
 };			
 function checkgraphload(){
@@ -238,16 +237,15 @@ function checkgraphload(){
 	}
 	}
 };
- window.onload = function(){
-	    setTimeout(forcegraphload, 12000)
- };
-function forcegraphload() {
-	if ( graphloaded == 0 ) {
-		loadgraph();
-		graphloaded = 1;
-
-	}
-};
+// window.onload = function(){
+//	    setTimeout(forcegraphload, 100)
+// };
+//function forcegraphload() {
+//	if ( graphloaded == 0 ) {
+//		loadgraph();
+//		graphloaded = 1;
+//	}
+//};
 function showhidedataset(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("1","openWB/graph/"+thedataset);

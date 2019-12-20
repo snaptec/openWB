@@ -669,7 +669,6 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				var lp7 = lines[i].split(",")[18];
 				var lp8 = lines[i].split(",")[19];
 			}
-				
 			myLine.data.labels.push(ldate.substring(0, ldate.length -3));
 			myLine.data.datasets[2].data.push(lbezug);
 			myLine.data.datasets[3].data.push(lpv);
