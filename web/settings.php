@@ -881,20 +881,23 @@ Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10
 		Bis wann morgens geladen werden soll<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc">Nacht SOC Sonntag bis Donnerstag:</label></b>
+		<b><label for="nachtsoc">Nacht SoC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
+
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
+		<b><label for="nachtsoc1">Nacht SoC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
+
 	</div><br>
 <div class="row" style="background-color:#00ada8">
+<b>Die SoC Grenzen gelten nicht für das morgens Laden</b><br>
 	<b><label for="mollp1moll">Montag morgens Laden Stromstärke in A:</label></b>
 	<select type="text" name="mollp1moll" id="mollp1moll">
 		<option <?php if($mollp1mollold == 6) echo selected ?> value="6">6</option>
@@ -1793,18 +1796,18 @@ $(function() {
 		Bis wann morgens geladen werden soll an Ladepunkt 2<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsocs1">Nacht SOC Sonntag bis Donnerstag:</label></b>
+		<b><label for="nachtsocs1">Nacht SoC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsocs1" id="nachtsocs1" value="<?php echo $nachtsocs1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc1s1">Nacht SOC Freitag bis Sonntag:</label></b>
+		<b><label for="nachtsoc1s1">Nacht SoC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1s1" id="nachtsoc1s1" value="<?php echo $nachtsoc1s1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>

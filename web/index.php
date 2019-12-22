@@ -113,7 +113,6 @@ registerPageVisibility()
 			all6 = 0;
 			all7 = 0;
 			all8 = 0;
-			console.log("graphrefreshtriggered");
 		}
 	});
 }
