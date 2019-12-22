@@ -237,15 +237,72 @@ function checkgraphload(){
 	}
 	}
 };
-// window.onload = function(){
-//	    setTimeout(forcegraphload, 100)
-// };
-//function forcegraphload() {
-//	if ( graphloaded == 0 ) {
-//		loadgraph();
-//		graphloaded = 1;
-//	}
-//};
+ window.onload = function(){
+	    setTimeout(forcegraphload, 15000)
+ };
+function forcegraphload() {
+	if ( graphloaded == 0 ) {
+	if (!( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false)){
+		showhidedataset('boolDisplayHouseConsumption');
+	}
+	if (!( boolDisplayLoad1 == true  ||  boolDisplayLoad1 == false)){
+		showhidedataset('boolDisplayLoad1');
+	}
+	if (!( boolDisplayLp1Soc == true  ||  boolDisplayLp1Soc == false)){
+		showhidedataset('boolDisplayLp1Soc');
+	}
+	if (!( boolDisplayLp2Soc == true  ||  boolDisplayLp2Soc == false)){
+		showhidedataset('boolDisplayLp2Soc');
+	}
+	if (!( boolDisplayLoad2 == true  ||  boolDisplayLoad2 == false)){
+		showhidedataset('boolDisplayLoad2');
+	}
+	if (!( boolDisplayLp1 == true  ||  boolDisplayLp1 == false)){
+		showhidedataset('boolDisplayLp1');
+	}
+	if (!( boolDisplayLp2 == true  ||  boolDisplayLp2 == false)){
+		showhidedataset('boolDisplayLp2');
+	}
+	if (!( boolDisplayLp3 == true  ||  boolDisplayLp3 == false)){
+		showhidedataset('boolDisplayLp3');
+	}
+	if (!( boolDisplayLp4 == true  ||  boolDisplayLp4 == false)){
+		showhidedataset('boolDisplayLp4');
+	}
+	if (!( boolDisplayLp5 == true  ||  boolDisplayLp5 == false)){
+		showhidedataset('boolDisplayLp5');
+	}
+	if (!( boolDisplayLp6 == true  ||  boolDisplayLp6 == false)){
+		showhidedataset('boolDisplayLp6');
+	}
+	if (!( boolDisplayLp7 == true  ||  boolDisplayLp7 == false)){
+		showhidedataset('boolDisplayLp7');
+	}
+	if (!( boolDisplayLp8 == true  ||  boolDisplayLp8 == false)){
+		showhidedataset('boolDisplayLp8');
+	}
+	if (!( boolDisplayLpAll == true  ||  boolDisplayLpAll == false)){
+		showhidedataset('boolDisplayLpAll');
+	}
+	if (!( boolDisplaySpeicherSoc == true  ||  boolDisplaySpeicherSoc == false)){
+		showhidedataset('boolDisplaySpeicherSoc');
+	}
+	if (!( boolDisplaySpeicher == true  ||  boolDisplaySpeicher == false)){
+		showhidedataset('boolDisplaySpeicher');
+	}
+	if (!( boolDisplayEvu == true  ||  boolDisplayEvu == false)){
+		showhidedataset('boolDisplayEvu');
+	}
+	if (!( boolDisplayPv == true  ||  boolDisplayPv == false)){
+		showhidedataset('boolDisplayPv');
+	}
+	if (!( boolDisplayLegend == true  ||  boolDisplayLegend == false)){
+		showhidedataset('boolDisplayLegend');
+	}
+
+		checkgraphload();
+	}
+};
 function showhidedataset(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("1","openWB/graph/"+thedataset);
