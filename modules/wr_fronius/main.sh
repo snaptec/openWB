@@ -31,6 +31,8 @@ if [[ $wrfronius2ip != "none" ]]; then
 	if [[ $pvgkwh =~ $re ]] ; then
 		if (( pvgkwh > 0 )); then
 			echo $pvgkwh > /var/www/html/openWB/ramdisk/pvkwh
+			pvkwhk=$(echo "scale=3; $pvgkwh / 1000" | bc)
+			echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 		fi
 	fi
 else
@@ -41,6 +43,8 @@ else
 	if [[ $pvkwh =~ $re ]] ; then
 		if (( pvkwh > 0 )); then
 			echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+			pvkwhk=$(echo "scale=3; $pvkwh / 1000" | bc)
+			echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 		fi
 	fi
 fi
