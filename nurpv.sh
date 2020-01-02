@@ -2,6 +2,12 @@
 #NUR PV Uberschussregelung lademodus 2
 nurpvlademodus(){
 . /var/www/html/openWB/openwb.conf
+maxll=($llalt $llalts1 $llalts2 $llaltlp4 $llaltlp5 $llaltlp6 $llaltlp7 $llaltlp8)
+maxllvar=0
+for v in "${maxll[@]}"; do
+	if (( v > maxllvar )); then maxllvar=$v; fi;
+done
+llalt=$maxllvar
 if [[ $lastmanagement == "0" ]]; then
 	if [[ $socmodul != "none" ]]; then
 		if (( soc < minnurpvsoclp1 )); then
@@ -68,6 +74,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		exit 0
 	fi
 fi
+
 if (( ladeleistung < 300 )); then
 	if (( llalt > minimalapv )); then
 		llneu=$minimalapv

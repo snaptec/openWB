@@ -2,6 +2,12 @@
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1
 minundpvlademodus(){
+	maxll=($llalt $llalts1 $llalts2 $llaltlp4 $llaltlp5 $llaltlp6 $llaltlp7 $llaltlp8)
+	maxllvar=0
+	for v in "${maxll[@]}"; do
+		if (( v > maxllvar )); then maxllvar=$v; fi;
+	done
+	llalt=$maxllvar
 	if (( speichersoc >= speichersocminpv )); then
 		if (( ladestatus == 0 )); then
 			runs/set-current.sh $minimalampv all

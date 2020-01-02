@@ -3,8 +3,7 @@
 	sudo mkdir /opt/smaemd/
 	sudo mkdir /etc/smaemd/
 	cd /opt/smaemd/
-	sudo git clone https://github.com/datenschuft/SMA-EM.git .
-	sudo git reset --hard 3586f3ca94ab8de17c709337615e896cb158f973
+	sudo git clone https://github.com/david-m-m/SMA-EM/tree/master .
 	sudo cp systemd-settings /etc/systemd/system/smaemd.service
 #fi
 sudo cp /var/www/html/openWB/web/files/smashm.conf /etc/smaemd/config

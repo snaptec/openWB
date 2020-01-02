@@ -59,6 +59,7 @@ lp5enabled=$(<ramdisk/lp5enabled)
 lp6enabled=$(<ramdisk/lp6enabled)
 lp7enabled=$(<ramdisk/lp7enabled)
 lp8enabled=$(<ramdisk/lp8enabled)
+version=$(<web/version)
 # EVSE DIN Plug State
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
@@ -356,10 +357,12 @@ if [[ $lastmanagement == "1" ]]; then
 		if ! [[ $soc1 =~ $re ]] ; then
 		 soc1="0"
 		fi
+		soc1vorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/soc1vorhanden
 	else
 		echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 		soc1=0
+		soc1vorhanden=0
 	fi
 	timeout 10 modules/$ladeleistungs1modul/main.sh || true
 	llkwhs1=$(</var/www/html/openWB/ramdisk/llkwhs1)
@@ -594,6 +597,8 @@ fi
 
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
+	socvorhanden=1
+	echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 	if (( stopsocnotpluggedlp1 == 1 )); then
 		if (( plugstat == 1 )); then
 			timeout 10 modules/$socmodul/main.sh || true
@@ -613,6 +618,8 @@ if [[ $socmodul != "none" ]]; then
 		fi
 	fi
 else
+	socvorhanden=0
+	echo 0 > /var/www/html/openWB/ramdisk/socvorhanden
 	soc=0
 fi
 hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
@@ -756,6 +763,11 @@ if (( ohook3aktiv != hook3aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook3Active=${hook3aktiv}"
 	echo $hook3aktiv > ramdisk/mqtthook3aktiv
 fi
+oversion=$(<ramdisk/mqttversion)
+if [[ $oversion != $version ]]; then
+	tempPubList="${tempPubList}\nopenWB/system/Version=${version}"
+	echo -n "$version" > ramdisk/mqttversion
+fi
 ominimalstromstaerke=$(<ramdisk/mqttminimalstromstaerke)
 if (( ominimalstromstaerke != minimalstromstaerke )); then
 	tempPubList="${tempPubList}\nopenWB/AMinimalAmpsConfigured=${minimalstromstaerke}"
@@ -812,6 +824,17 @@ if [[ "$olastmanagement" != "$lastmanagement" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/boolChargePointConfigured=${lastmanagement}"
 	echo $lastmanagement > ramdisk/mqttlastmanagement
 fi
+osoc1vorhanden=$(<ramdisk/mqttsoc1vorhanden)
+if [[ "$osoc1vorhanden" != "$soc1vorhanden" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/2/boolSocConfigured=${soc1vorhanden}"
+	echo $soc1vorhanden > ramdisk/mqttsoc1vorhanden
+fi
+osocvorhanden=$(<ramdisk/mqttsocvorhanden)
+if [[ "$osocvorhanden" != "$socvorhanden" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/1/boolSocConfigured=${socvorhanden}"
+	echo $socvorhanden > ramdisk/mqttsocvorhanden
+fi
+
 olastmanagements2=$(<ramdisk/mqttlastmanagements2)
 if [[ "$olastmanagements2" != "$lastmanagements2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/boolChargePointConfigured=${lastmanagements2}"

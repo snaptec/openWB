@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # Script to emulate VW WE Connect web site login and commands to VW car.
 # Author  : Rene Boer
-# Version : 2.7
-# Date    : 3 Dec 2019
+# Version : 2.8
+# Date    : 14 Dec 2019
 
 # Should work on python 2 and 3
 
 # Free for use & distribution
+# V2.8 Surpress certificate warnings when not verrified and not in debug mode
 # V2.7 Ignore certificate check on first Get to work a round an SSL error.
 # V2.6 Check for SPIN command to be authorized. Do not send command if not.
 # V2.5 The commands needing a SPIN are now working.
@@ -21,18 +22,13 @@
 # Thanks to birgersp for a number of cleanups and rewrites. See https://github.com/birgersp/carnet-client
 
 debug = False
+certverify = False
 
 import re
 import requests
 import json
 import sys
-
-# Added by Andreas Petersik, Dec 6th 2019:
-import codecs
-sys.stdout = codecs.getwriter('utf8')(sys.stdout)
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
-# End of modification
-
+import urllib3
 # import correct lib for python v3.x or fallback to v2.x
 try: 
     import urllib.parse as urlparse
@@ -116,7 +112,7 @@ def CarNetLogin(session, email, password):
     # Get initial CSRF from landing page to get login process started.
     # Python Session handles JSESSIONID cookie
     landing_page_url = base_url + '/portal/en_GB/web/guest/home'
-    landing_page_response = session.get(landing_page_url,verify=False)
+    landing_page_response = session.get(landing_page_url, verify=certverify)
     if landing_page_response.status_code != 200:
         return '', 'Failed getting to portal landing page.'
     csrf = extract_csrf(landing_page_response.text)
@@ -143,7 +139,7 @@ def CarNetLogin(session, email, password):
     auth_request_headers['Referer'] = landing_page_url
     auth_request_headers['X-CSRF-Token'] = csrf
     get_login_url = base_url + '/portal/en_GB/web/guest/home/-/csrftokenhandling/get-login-url'
-    login_page_response = session.post(get_login_url, headers=auth_request_headers)
+    login_page_response = session.post(get_login_url, headers=auth_request_headers, verify=certverify)
     if login_page_response.status_code != 200:
         return '', 'Failed to get login url.'
     login_url = json.loads(login_page_response.text).get('loginURL').get('path')
@@ -157,7 +153,7 @@ def CarNetLogin(session, email, password):
     # Get login form url we are told to use, it will give us a new location.
     # response header location (redirect URL) includes relayState for step 5
     # https://identity.vwgroup.io/oidc/v1/authorize......
-    login_url_response = session.get(login_url, allow_redirects=False, headers=auth_request_headers)
+    login_url_response = session.get(login_url, allow_redirects=False, headers=auth_request_headers, verify=certverify)
     if login_url_response.status_code != 302:
         return '', 'Failed to get authorization page.'
     login_form_url = login_url_response.headers.get('location')
@@ -170,7 +166,7 @@ def CarNetLogin(session, email, password):
     if debug: print ("Step 4 ===========")
     # Get login action url, relay state. hmac token 1 and login CSRF from form contents
     # https://identity.vwgroup.io/signin-service/v1/signin/<client_id>@relayState=<relay_state>
-    login_form_location_response = session.get(login_form_url, headers=auth_request_headers)
+    login_form_location_response = session.get(login_form_url, headers=auth_request_headers, verify=certverify)
     if login_form_location_response.status_code != 200:
         return '', 'Failed to get sign-in page.'
     # We get a SESSION set-cookie here!
@@ -199,7 +195,7 @@ def CarNetLogin(session, email, password):
         '_csrf': login_csrf,
     }
     login_action_url = auth_base_url + '/signin-service/v1/' + client_id + '/login/identifier'
-    login_action_url_response = session.post(login_action_url, data=post_data, headers=auth_request_headers, allow_redirects=True)
+    login_action_url_response = session.post(login_action_url, data=post_data, headers=auth_request_headers, allow_redirects=True, verify=certverify)
     # performs a 303 redirect to https://identity.vwgroup.io/signin-service/v1/<client_id>/login/authenticate?relayState=<relayState>&email=<email>
     # redirected GET returns form used below.
     if login_action_url_response.status_code != 200:
@@ -226,7 +222,7 @@ def CarNetLogin(session, email, password):
         'login': 'true'
     }
     login_action2_url = auth_base_url + '/signin-service/v1/' + client_id + '/login/authenticate'
-    login_post_response = session.post(login_action2_url, data=login_data, headers=auth_request_headers, allow_redirects=True)
+    login_post_response = session.post(login_action2_url, data=login_data, headers=auth_request_headers, allow_redirects=True, verify=certverify)
     # performs a 302 redirect to GET https://identity.vwgroup.io/oidc/v1/oauth/sso?clientId=<client_id>&relayState=<relay_state>&userId=<userID>&HMAC=<...>"
     # then a 302 redirect to GET https://identity.vwgroup.io/consent/v1/users/<userID>/<client_id>?scopes=openid%20profile%20birthdate%20nickname%20address%20email%20phone%20cars%20dealers%20mbb&relay_state=1bc582f3ff177afde55b590af92e17a006f9c532&callback=https://identity.vwgroup.io/oidc/v1/oauth/client/callback&hmac=<.....>
     # then a 302 redirect to https://identity.vwgroup.io/oidc/v1/oauth/client/callback/success?user_id=<userID>&client_id=<client_id>&scopes=openid%20profile%20birthdate%20nickname%20address%20email%20phone%20cars%20dealers%20mbb&consentedScopes=openid%20profile%20birthdate%20nickname%20address%20email%20phone%20cars%20dealers%20mbb&relay_state=<relayState>&hmac=<...>
@@ -251,7 +247,7 @@ def CarNetLogin(session, email, password):
     auth_request_headers['Referer'] = ref2_url
     portlet_data = {'_33_WAR_cored5portlet_code': portlet_code}
     final_login_url = base_url + '/portal/web/guest/complete-login?p_auth=' + state + '&p_p_id=33_WAR_cored5portlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_33_WAR_cored5portlet_javax.portlet.action=getLoginStatus'
-    complete_login_response = session.post(final_login_url, data=portlet_data, allow_redirects=False, headers=auth_request_headers)
+    complete_login_response = session.post(final_login_url, data=portlet_data, allow_redirects=False, headers=auth_request_headers, verify=certverify)
     if complete_login_response.status_code != 302:
         return '', 'Failed to post portlet page.'
 
@@ -259,7 +255,7 @@ def CarNetLogin(session, email, password):
     if debug: print ("Step 8 ===========")
     # Get base JSON url for commands 
     base_json_url = complete_login_response.headers.get('location')
-    base_json_response = session.get(base_json_url, headers=auth_request_headers)
+    base_json_response = session.get(base_json_url, headers=auth_request_headers, verify=certverify)
     csrf = extract_csrf(base_json_response.text)
     if base_json_url == '':
         return '', 'Failed to base json url.'
@@ -275,13 +271,13 @@ def CarNetLogin(session, email, password):
 
 def CarNetPost(session, url_base, command):
     print(command)
-    r = session.post(url_base + command, headers=request_headers)
+    r = session.post(url_base + command, headers=request_headers, verify=certverify)
     return r.text
 
 
 def CarNetPostAction(session, url_base, command, data):
     print(command)
-    r = session.post(url_base + command, json=data, headers=request_headers)
+    r = session.post(url_base + command, json=data, headers=request_headers, verify=certverify)
     return r.text
 
 def CarNetCheckSecurityLevel(session, url_base, data):
@@ -296,7 +292,7 @@ def CarNetCheckSecurityLevel(session, url_base, data):
     else:
         cc = 'en'
     url = portal_base_url + '/portal/group/' + cc + '/edit-profile/-/profile/check-security-level'
-    response = session.post(url, json=data, headers=request_headers)
+    response = session.post(url, json=data, headers=request_headers, verify=certverify)
     if response.status_code != 200:
         return false, 'Check security failed, HTTP response ' + response.status_code
     json_data = response.json()
@@ -589,7 +585,10 @@ if __name__ == '__main__':
         requests_log = logging.getLogger("urllib3")
         requests_log.setLevel(logging.DEBUG)
         requests_log.propagate = True
-
+    else:
+        if not certverify:
+           urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+			
     session = requests.Session()
     # Get list of browsers the site can support
     # print(CarNetPost(session, portal_base_url + '/portal/en_GB/web/guest/home', '/-/mainnavigation/get-supported-browsers'))

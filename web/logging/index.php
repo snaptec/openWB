@@ -97,8 +97,8 @@ echo '<img src="../img/loader.gif" alt="OpenWB loading...">'; } ?>
 
 	<?php if ($graphamold == 1) {
 	echo '
-<div style="border-left:solid transparent 30px; border-right:solid transparent 30px;">
-	<div style="height:800px;" id="chartdiv"></div>
+<div class="text-center" style="border-left:solid transparent 30px; border-right:solid transparent 30px;">
+	<div style="height:800px;" >Temporär deaktiviert<br>Wird noch ersetzt</div>
 </div>';
 				   } else {
 					   echo '
@@ -128,7 +128,7 @@ echo '<img src="../img/loader.gif" alt="OpenWB loading...">'; } ?>
 
 
 	<script>
-
+/*
 
 var graphinteractiveam = <?php echo $graphinteractiveamold ?>;
 
@@ -285,7 +285,7 @@ chart.cursor = new am4charts.XYCursor();
 
 // Add legend
 chart.legend = new am4charts.Legend();
-
+ */
 </script>
 
 

@@ -5,7 +5,7 @@ var lineChartData = {
 		
 		label: 'Lp1',
 		borderColor: "rgba(0, 0, 255, 0.7)",
-		backgroundColor: 'blue',
+		backgroundColor: "rgba(0, 0, 255, 0.7)",
 		borderWidth: 1,
 		hidden: boolDisplayLp1,
 		fill: false,
@@ -13,8 +13,8 @@ var lineChartData = {
 		yAxisID: 'y-axis-1',
 	} , {
 		label: 'Lp2',
-		borderColor: "rgba(0, 0, 255, 0.7)",
-		backgroundColor: 'blue',
+		borderColor: "rgba(50, 30, 105, 0.7)",
+		backgroundColor: "rgba(50, 30, 105, 0.7)",
 		borderWidth: 1,
 		hidden: boolDisplayLp2,
 		fill: false,
@@ -187,7 +187,12 @@ var lineChartData = {
 			},
 			stacked: false,
 			legend: {
-				display: boolDisplayLegend
+				display: boolDisplayLegend,
+				labels: {
+					filter: function(item,chart) {
+						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) ) { return false } else { return true}
+					}
+				}
 			},
 			title: {
 				display: false

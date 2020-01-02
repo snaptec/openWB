@@ -582,7 +582,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
+			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> Sollen Daten analysiert werden unbedingt die Funktion "Debug Daten senden" weiter unten auf dieser Seite nutzen!<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
