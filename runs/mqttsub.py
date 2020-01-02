@@ -34,6 +34,40 @@ def on_message(client, userdata, msg):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
         else:
             client.publish("openWB/system/LiveGraphData", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestDayGraph"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
+            sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/DayGraphData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData12", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestMonthGraph"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
+            sendcommand = ["/var/www/html/openWB/runs/sendmonthgraphdata.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/MonthGraphData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)

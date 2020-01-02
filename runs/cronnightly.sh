@@ -44,21 +44,7 @@ ll6=$(echo "$ll6 * 1000" | bc)
 ll7=$(echo "$ll7 * 1000" | bc)
 ll8=$(echo "$ll8 * 1000" | bc)
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8 >> $monthlyfile.csv
-echo $(date +%Y%m%d) >> $monthlyfile-date.csv
-echo $bezug >> $monthlyfile-bezug.csv
-echo $einspeisung >> $monthlyfile-einspeisung.csv
-echo $pv >> $monthlyfile-pv.csv
-echo $ll1 >> $monthlyfile-ll1.csv
-echo $ll2 >> $monthlyfile-ll2.csv
-echo $ll3 >> $monthlyfile-ll3.csv
-echo $llg >> $monthlyfile-llg.csv
-echo $speicheri >> $monthlyfile-speicheriwh.csv
-echo $speichere >> $monthlyfile-speicherewh.csv
-echo $verbraucher1iwh >> $monthlyfile-verbraucher1iwh.csv
-echo $verbraucher1ewh >> $monthlyfile-verbraucher1ewh.csv
-echo $verbraucher2iwh >> $monthlyfile-verbraucher2iwh.csv
-echo $verbraucher2ewh >> $monthlyfile-verbraucher2ewh.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh >> $monthlyfile.csv
 
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then

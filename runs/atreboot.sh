@@ -2330,8 +2330,8 @@ mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
-mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus
-mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus
+(sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus) &
+(sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 

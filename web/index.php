@@ -73,8 +73,8 @@
 	<!-- Graph refresher -->
 	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
 	<!-- Data refresher -->
-    <script src="live.js?vers=10"></script>
-    <script src="livefunctions.js?vers=6"></script>
+    <script src="live.js?vers=11"></script>
+    <script src="livefunctions.js?vers=7"></script>
 <?php include ("values.php"); 
 if ( $simplemodeold == 1 ) {
 	echo '<title>ChargeController</title>';

@@ -1870,7 +1870,7 @@ $(function() {
 		<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		VW Carnet Benutzername<br><br>
+		VW Carnet Benutzername. <br>Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="carnetpass">Passwort:</label></b>

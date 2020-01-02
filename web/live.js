@@ -57,6 +57,7 @@ var all5p;
 var all6p;
 var all7p;
 var all8p;
+var hidehaus;
 $('#lp2div').hide();
 $('#lp3div').hide();
 $('#lp4div').hide();
@@ -242,6 +243,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
+			hidehaus = 'foo';
 			document.getElementById("graphhausdiv").setAttribute("style", "color: green;");
 			graphhausdiv.classList.remove("fa-toggle-off");
 			graphhausdiv.classList.add("fa-toggle-on");
@@ -251,6 +253,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			document.getElementById("graphhausdiv").setAttribute("style", "color: red;");
 			graphhausdiv.classList.remove("fa-toggle-on");
 			graphhausdiv.classList.add("fa-toggle-off");
+			hidehaus = 'Hausverbrauch';
 		}
 		checkgraphload();
 	}
@@ -287,12 +290,14 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
+			hideevu = 'foo';
 			document.getElementById("graphevudiv").setAttribute("style", "color: green;");
 			graphevudiv.classList.remove("fa-toggle-off");
 			graphevudiv.classList.add("fa-toggle-on");
 
 		} else {
 			boolDisplayEvu = true;
+			hideevu = 'Bezug';
 			document.getElementById("graphevudiv").setAttribute("style", "color: red;");
 			graphevudiv.classList.remove("fa-toggle-on");
 			graphevudiv.classList.add("fa-toggle-off");
@@ -303,11 +308,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayPv" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
+			hidepv = 'foo';
 			document.getElementById("graphpvdiv").setAttribute("style", "color: green;");
 			graphpvdiv.classList.remove("fa-toggle-off");
 			graphpvdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayPv = true;
+			hidepv = 'PV';
 			document.getElementById("graphpvdiv").setAttribute("style", "color: red;");
 			graphpvdiv.classList.remove("fa-toggle-on");
 			graphpvdiv.classList.add("fa-toggle-off");
@@ -317,11 +324,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp1" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp1 = false;
+			hidelp1 = 'foo';
 			document.getElementById("graphlp1div").setAttribute("style", "color: green;");
 			graphlp1div.classList.remove("fa-toggle-off");
 			graphlp1div.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayLp1 = true;
+			hidelp1 = 'Lp1';
 			document.getElementById("graphlp1div").setAttribute("style", "color: red;");
 			graphlp1div.classList.remove("fa-toggle-on");
 			graphlp1div.classList.add("fa-toggle-off");
@@ -333,6 +342,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp2" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp2 = false;
+			hidelp2 = 'foo';
 			var element = document.getElementById("graphlp2div");
 			graphlp2div.classList.remove("fa-toggle-off");
 			graphlp2div.classList.add("fa-toggle-on");
@@ -340,6 +350,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp2div");
 			boolDisplayLp2 = true;
+			hidelp2 = 'Lp2';
 			graphlp2div.classList.remove("fa-toggle-on");
 			graphlp2div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -349,6 +360,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp3" ) {
 		if ( mqttpayload == 1) {
+			hidelp3 = 'foo';
 			boolDisplayLp3 = false;
 			var element = document.getElementById("graphlp3div");
 			graphlp3div.classList.remove("fa-toggle-off");
@@ -357,6 +369,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp3div");
 			boolDisplayLp3 = true;
+			hidelp3 = 'Lp3';
 			graphlp3div.classList.remove("fa-toggle-on");
 			graphlp3div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -366,6 +379,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp4" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp4 = false;
+			hidelp4 = 'foo';
 			var element = document.getElementById("graphlp4div");
 			graphlp4div.classList.remove("fa-toggle-off");
 			graphlp4div.classList.add("fa-toggle-on");
@@ -373,6 +387,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp4div");
 			boolDisplayLp4 = true;
+			hidelp4 = 'Lp4';
 			graphlp4div.classList.remove("fa-toggle-on");
 			graphlp4div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -382,6 +397,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp5" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp5 = false;
+			hidelp5 = 'foo';
 			var element = document.getElementById("graphlp5div");
 			graphlp5div.classList.remove("fa-toggle-off");
 			graphlp5div.classList.add("fa-toggle-on");
@@ -389,6 +405,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp5div");
 			boolDisplayLp5 = true;
+			hidelp5 = 'Lp5';
 			graphlp5div.classList.remove("fa-toggle-on");
 			graphlp5div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -398,6 +415,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp6" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp6 = false;
+			hidelp6 = 'foo';
 			var element = document.getElementById("graphlp6div");
 			graphlp6div.classList.remove("fa-toggle-off");
 			graphlp6div.classList.add("fa-toggle-on");
@@ -405,6 +423,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp6div");
 			boolDisplayLp6 = true;
+			hidelp6 = 'Lp6';
 			graphlp6div.classList.remove("fa-toggle-on");
 			graphlp6div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -414,6 +433,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp7" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp7 = false;
+			hidelp7 = 'foo';
 			var element = document.getElementById("graphlp7div");
 			graphlp7div.classList.remove("fa-toggle-off");
 			graphlp7div.classList.add("fa-toggle-on");
@@ -421,6 +441,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp7div");
 			boolDisplayLp7 = true;
+			hidelp7 = 'Lp7';
 			graphlp7div.classList.remove("fa-toggle-on");
 			graphlp7div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -430,6 +451,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp8" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp8 = false;
+			hidelp8 = 'foo';
 			var element = document.getElementById("graphlp8div");
 			graphlp8div.classList.remove("fa-toggle-off");
 			graphlp8div.classList.add("fa-toggle-on");
@@ -437,6 +459,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			var element = document.getElementById("graphlp8div");
 			boolDisplayLp8 = true;
+			hidelp8 = 'Lp8';
 			graphlp8div.classList.remove("fa-toggle-on");
 			graphlp8div.classList.add("fa-toggle-off");
 			element.setAttribute("style", "color: red;");
@@ -446,12 +469,14 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
+			hidelpa = 'foo';
 			var element = document.getElementById("graphlpalldiv");
 			graphlpalldiv.classList.remove("fa-toggle-off");
 			graphlpalldiv.classList.add("fa-toggle-on");
 			element.setAttribute("style", "color: green;");
 		} else {
 			boolDisplayLpAll = true;
+			hidelpa = 'LP Gesamt';
 			var element = document.getElementById("graphlpalldiv");
 			graphlpalldiv.classList.remove("fa-toggle-on");
 			graphlpalldiv.classList.add("fa-toggle-off");
@@ -463,10 +488,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
+			hidespeicher = 'foo';
 			document.getElementById("graphspeicherdiv").setAttribute("style", "color: green;");
 			graphspeicherdiv.classList.remove("fa-toggle-off");
 			graphspeicherdiv.classList.add("fa-toggle-on");
 		} else {
+			hidespeicher = 'Speicherleistung';
 			boolDisplaySpeicher = true;
 			document.getElementById("graphspeicherdiv").setAttribute("style", "color: red;");
 			graphspeicherdiv.classList.remove("fa-toggle-on");
@@ -477,11 +504,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
 		if ( mqttpayload == 1) {
+			hidespeichersoc = 'foo';
 			boolDisplaySpeicherSoc = false;
 			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: green;");
 			graphspeichersocdiv.classList.remove("fa-toggle-off");
 			graphspeichersocdiv.classList.add("fa-toggle-on");
 		} else {
+			hidespeichersoc = 'Speicher SoC';
 			boolDisplaySpeicherSoc = true;
 			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: red;");
 			graphspeichersocdiv.classList.remove("fa-toggle-on");
@@ -492,44 +521,54 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
 		if ( mqttpayload == 1) {
+			$('#socenabledlp1').show();
+			hidelp1soc = 'foo';
 			boolDisplayLp1Soc = false;
 			document.getElementById("graphlp1socdiv").setAttribute("style", "color: green;");
 			graphlp1socdiv.classList.remove("fa-toggle-off");
 			graphlp1socdiv.classList.add("fa-toggle-on");
+
 		} else {
+			hidelp1soc = 'LP1 SoC';
+			$('#socenabledlp1').hide();
 			boolDisplayLp1Soc = true;
 			document.getElementById("graphlp1socdiv").setAttribute("style", "color: red;");
 			graphlp1socdiv.classList.remove("fa-toggle-on");
 			graphlp1socdiv.classList.add("fa-toggle-off");
+
 
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
 		if ( mqttpayload == 1) {
+			hidelp2soc = 'foo';
+			$('#socenabledlp2').show();
 			boolDisplayLp2Soc = false;
 			document.getElementById("graphlp2socdiv").setAttribute("style", "color: green;");
 			graphlp2socdiv.classList.remove("fa-toggle-off");
 			graphlp2socdiv.classList.add("fa-toggle-on");
-
 		} else {
+			hidelp2soc = 'LP2 SoC';
+			$('#socenabledlp2').hide();
 			boolDisplayLp2Soc = true;
 			document.getElementById("graphlp2socdiv").setAttribute("style", "color: red;");
 			graphlp2socdiv.classList.remove("fa-toggle-on");
 			graphlp2socdiv.classList.add("fa-toggle-off");
-
 		}
 		checkgraphload();
 	}
 
 	else if ( mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
 		if ( mqttpayload == 1) {
+			hideload1 = 'foo';
 			boolDisplayLoad1 = false;
 			document.getElementById("graphload1div").setAttribute("style", "color: green;");
 			graphload1div.classList.remove("fa-toggle-off");
 			graphload1div.classList.add("fa-toggle-on");
 
 		} else {
+			hideload1 = 'Verbraucher 1';
 			boolDisplayLoad1 = true;
 			document.getElementById("graphload1div").setAttribute("style", "color: red;");
 			graphload1div.classList.remove("fa-toggle-on");
@@ -540,12 +579,14 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLoad2" ) {
 		if ( mqttpayload == 1) {
+			hideload2 = 'foo';
 			boolDisplayLoad2 = false;
 			document.getElementById("graphload2div").setAttribute("style", "color: green;");
 			graphload2div.classList.remove("fa-toggle-off");
 			graphload2div.classList.add("fa-toggle-on");
 
 		} else {
+			hideload2 = 'Verbraucher 2';
 			boolDisplayLoad2 = true;
 			document.getElementById("graphload2div").setAttribute("style", "color: red;");
 			graphload2div.classList.remove("fa-toggle-on");
@@ -1877,5 +1918,4 @@ if (document.getElementById("hook3div")) {
 }
 
 doInterval = setInterval(getfile, 5000);
-
 getfile();
