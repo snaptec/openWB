@@ -385,6 +385,7 @@ if [[ $lastmanagement == "1" ]]; then
 else
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 	ladeleistunglp2=0
+	soc1vorhanden=0
 fi
 #dritter ladepunkt
 if [[ $lastmanagements2 == "1" ]]; then

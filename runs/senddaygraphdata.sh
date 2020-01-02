@@ -13,4 +13,4 @@ mosquitto_pub -t openWB/system/DayGraphData10 -r -m "$(</var/www/html/openWB/web
 mosquitto_pub -t openWB/system/DayGraphData11 -r -m "$(</var/www/html/openWB/web/logging/data/daily/$1.csv tail -n +"250" | head -n "$((275 - 250))")" &
 mosquitto_pub -t openWB/system/DayGraphData12 -r -m "$(</var/www/html/openWB/web/logging/data/daily/$1.csv tail -n +"275" | head -n "$((300 - 275))")" &
 
-(sleep 10 && mosquitto_pub -t openWB/set/graph/RequestDayGraph -r -m "0")& 
+(sleep 3 && mosquitto_pub -t openWB/set/graph/RequestDayGraph -r -m "0")& 

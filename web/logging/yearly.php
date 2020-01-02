@@ -67,9 +67,8 @@ else
 		<br><h4> Yearly Graph</h4><br>
 <br>...in development
 	</div>
- <div style="height:600px;" id="chartdiv">
 </div><br><br><br><br><br><br>
-<form name="yearlydate" id="yearlydate" action="yearly.php" method="GET">
+<!-- <form name="yearlydate" id="yearlydate" action="yearly.php" method="GET">
 <div class="row col-xs-12">
 	<div class="col-xs-2">
 	</div>
@@ -92,10 +91,11 @@ else
 	</div>
 </div>
 </form>
-
+-->
 </body>
 
 <script>
+/*
 am4core.useTheme(am4themes_animated);
 // Create chart instance
 var chart = am4core.create("chartdiv", am4charts.XYChart);
@@ -204,6 +204,7 @@ series6.legendSettings.valueText = "{valueY.sum}Wh";
 
 
 chart.legend = new am4charts.Legend();
+ */
 </script>
 
 

@@ -30,4 +30,4 @@ mosquitto_pub -t openWB/system/MonthGraphData10 -r -m "$(</var/www/html/openWB/w
 mosquitto_pub -t openWB/system/MonthGraphData11 -r -m "$(</var/www/html/openWB/web/logging/data/monthly/$1.csv tail -n +"250" | head -n "$((275 - 250))")" &
 mosquitto_pub -t openWB/system/MonthGraphData12 -r -m "$(</var/www/html/openWB/web/logging/data/monthly/$1.csv tail -n +"275" | head -n "$((300 - 275))")" &
 
-(sleep 10 && mosquitto_pub -t openWB/set/graph/RequestMonthGraph -r -m "0")& 
+(sleep 3 && mosquitto_pub -t openWB/set/graph/RequestMonthGraph -r -m "0")& 
