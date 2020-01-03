@@ -11,8 +11,8 @@ $ajax = new Ajaxloader();
 	$text = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
 
    if($call == "loadfile"){
-    $result = $text;
-     echo json_encode(array("text"=> $result));
+	   $result = $text;
+	   echo json_encode(array("text"=> $result));
    }
   }
 

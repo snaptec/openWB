@@ -2,53 +2,55 @@
 
 
 <head>
+	<script type = "text/javascript" src = "../js/mqttws31.js" ></script>
 	<script src="../js/jquery-1.11.1.min.js"></script>
-	<script src="../js/main.js"></script>
+	<script src="./dailychart.js"></script>
+	<script src="../js/Chart.bundle.js"></script>
+	<script src="../js/chartjs-plugin-zoom.js"></script>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>OpenWB Logging</title>
+	<title>Logging</title>
 	<meta name="description" content="Control your charge" />
 	<meta name="author" content="Kevin Wieland" />
 	<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../img/favicons/manifest.json">
+	<link rel="manifest" href="../manifest.json">
 	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<meta http-equiv="refresh" content="600; URL=daily.php">
+	<meta http-equiv="refresh" content="1200; URL=daily.php">
 	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../css/owl.css">
 	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.1.0/css/font-awesome.min.css">
+	<!-- Font Awesome, all styles -->
+    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
 	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
 
 </head>
 
 
-<body>
 
+
+<body>
 
 		 <ul class="nav nav-tabs">
 			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.html">Live</a></li>
+			 <li><a href="index.php">Live</a></li>
 			 <li class="active"><a href="daily.php">Daily</a></li>
 			 <li><a href="monthly.php">Monthly</a></li>
 			 <li><a href="yearly.php">Yearly</a></li>
 		 </ul>
 
-
-	<div class="preloader">
-		<img src="../img/loader.gif" alt="Preloader image">
-	</div> 
-<section id="services">
-<div class="container">
-
+<!--	<div class="preloader">
+<img src="../img/loader.gif" alt="openWB loading...">
+	</div>
+-->
 
 <?php
 $today = date('Y-m-d');
@@ -64,24 +66,19 @@ else
 
 }
 $daybefore = date('Y-m-d',strtotime($daydate . "-1 days"));
-$nextday = date('Y-m-d',strtotime($daydate . "+1 days")); 
+$nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 ?>
-<div class="row col-xs-12">
+<div class="row">
 	<div class="text-center">
 		<br><h4> Daily Graph</h4><br>
 	</div>
 </div>
-<div class="row"> 
-	
-	<div class="col-xs-12">
-		<div class="imgwrapper">	
-			<img src="graph-daily.php?thedate=<?php echo $daydate ?>"
-			alt="" class="center-block img-responsive" />
-		</div>
-	</div>
+<div id="loadlivegraph" style="text-align: center; margin-top: 150px; margin-bottom: 100px;"> Graph lädt bitte warten...</div>	
+	<div id="dailygraphvis" style="height:600px;"><canvas id="canvas"></canvas></div>
 
-</div>
-<br><br>
+
+
+<br>
 <form name="dailydate" id="dailydate" action="daily.php" method="GET">
 <div class="row col-xs-12">
 	<div class="col-xs-2">
@@ -91,9 +88,9 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	 &emsp;
 <input id="date" name="date" type="date" min="2018-01-01" value="<?php print $daydate ?>" required="required" />
 &emsp;
-	 	
+
 		<a href="daily.php?date=<?php print $nextday ?>"><i class="fa fa-angle-right" style="font-size:48px;"></i></a>
-	</div>	
+	</div>
 	<div class="col-xs-2">
 	</div>
 </div>
@@ -103,18 +100,20 @@ $nextday = date('Y-m-d',strtotime($daydate . "+1 days"));
 	</div>
 	<div class="col-xs-4 block-center text-center .text-align:center">
 <button type="submit">Go</button>
-	 	
-	</div>	
+
+	</div>
 	<div class="col-xs-4">
 	</div>
 </div>
 
 
 
-</form>	
-
-
-</div>
-</section>
+</form>
+<br>
 </body>
+
+
+
+
+
 </html>

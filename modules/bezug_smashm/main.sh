@@ -2,14 +2,23 @@
 
 . /var/www/html/openWB/openwb.conf
 
-
-ikwh=$(cat /run/shm/em-$smashmbezugid-pregardcounter)
-ekwh=$(cat /run/shm/em-$smashmbezugid-psurpluscounter)
-bezuga1=$(cat /run/shm/em-$smashmbezugid-p1regard |sed 's/\..*$//')
-bezuga2=$(cat /run/shm/em-$smashmbezugid-p2regard |sed 's/\..*$//')
-bezuga3=$(cat /run/shm/em-$smashmbezugid-p3regard |sed 's/\..*$//')
-wattbezug=$(cat /run/shm/em-$smashmbezugid-pregard |sed 's/\..*$//')
-watteinspeisung=$(cat /run/shm/em-$smashmbezugid-psurplus |sed 's/\..*$//')
+if [ -f "/run/shm/em-"$smashmbezugid"-pconsumecounter" ]; then
+	ikwh=$(cat /run/shm/em-$smashmbezugid-pconsumecounter)
+	ekwh=$(cat /run/shm/em-$smashmbezugid-psupplycounter)
+	bezuga1=$(cat /run/shm/em-$smashmbezugid-p1consume |sed 's/\..*$//')
+	bezuga2=$(cat /run/shm/em-$smashmbezugid-p2consume |sed 's/\..*$//')
+	bezuga3=$(cat /run/shm/em-$smashmbezugid-p3soncume |sed 's/\..*$//')
+	wattbezug=$(cat /run/shm/em-$smashmbezugid-pconsume |sed 's/\..*$//')
+	watteinspeisung=$(cat /run/shm/em-$smashmbezugid-pregard |sed 's/\..*$//')
+else
+	ikwh=$(cat /run/shm/em-$smashmbezugid-pregardcounter)
+	ekwh=$(cat /run/shm/em-$smashmbezugid-psurpluscounter)
+	bezuga1=$(cat /run/shm/em-$smashmbezugid-p1regard |sed 's/\..*$//')
+	bezuga2=$(cat /run/shm/em-$smashmbezugid-p2regard |sed 's/\..*$//')
+	bezuga3=$(cat /run/shm/em-$smashmbezugid-p3regard |sed 's/\..*$//')
+	wattbezug=$(cat /run/shm/em-$smashmbezugid-pregard |sed 's/\..*$//')
+	watteinspeisung=$(cat /run/shm/em-$smashmbezugid-psurplus |sed 's/\..*$//')
+fi
 
 ikwh=$(echo "($ikwh*1000)" |bc)
 ekwh=$(echo "($ekwh*1000)" |bc)

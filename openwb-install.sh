@@ -1,53 +1,55 @@
 #/bin/bash
 
-# echo "update system"
-# apt-get update
+echo "update system"
+apt-get update
 
-# echo "check for vim"
-# if ! [ -x "$(command -v vim)" ]; then
-# 	apt-get -qq install -y vim
-# 	echo "... installed"
-# else
-# 	    echo "...ok"
-# fi
-# echo "check for timezone"
-# if  grep -Fxq "Europe/Berlin" /etc/timezone
-# then
-# 	echo "...ok"
-# else
-# 	echo 'Europe/Berlin' > /etc/timezone
-# 	dpkg-reconfigure -f noninteractive tzdata
-# 	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-# 	echo "...changed"
-# fi
+echo "check for vim"
+if ! [ -x "$(command -v vim)" ]; then
+	apt-get -qq install -y vim
+	echo "... installed"
+else
+	    echo "...ok"
+fi
+echo "check for timezone"
+if  grep -Fxq "Europe/Berlin" /etc/timezone
+then
+	echo "...ok"
+else
+	echo 'Europe/Berlin' > /etc/timezone
+	dpkg-reconfigure -f noninteractive tzdata
+	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+	echo "...changed"
+fi
 
-# echo "check for bc"
-# if ! [ -x "$(command -v bc)" ];then
-# 	apt-get -qq install bc
-# 	echo "...installed"
-# else
-# 	echo "...ok"
-# fi
+echo "check for bc"
+if ! [ -x "$(command -v bc)" ];then
+	apt-get -qq install bc
+	echo "...installed"
+else
+	echo "...ok"
+fi
 
-# echo "check for apache"
-# if ! [ -x "$(command -v apachectl)" ]; then
-# 	apt-get -qq install -y apache2
-#         sleep 2
-# 	apt-get -qq install -y php
-# 	sleep 1
-# 	apt-get -qq install -y php-gd
-# 	sleep 1
-# 	apt-get -qq install -y php7.0-xml
-# 	sleep 2 
-# 	apt-get -qq install -y libapache2-mod-php7.0
-# 	sleep 2
-# 	apt-get -qq install -y jq
-# 	sleep 2
-# 	apt-get -qq install -y raspberrypi-kernel-headers
-# 	echo "... installed"
-# else
-# 	echo "...ok"
-# fi
+echo "check for apache"
+if ! [ -x "$(command -v apachectl)" ]; then
+	apt-get -qq install -y apache2
+        sleep 2
+	apt-get -qq install -y php
+	sleep 1
+	apt-get -qq install -y php-gd
+	sleep 1
+	apt-get -qq install -y php7.0-xml
+	sleep 2
+        apt-get -qq install -y php-curl
+	sleep 1	
+	apt-get -qq install -y libapache2-mod-php7.0
+	sleep 2
+	apt-get -qq install -y jq
+	sleep 2
+	apt-get -qq install -y raspberrypi-kernel-headers
+	echo "... installed"
+else
+	echo "...ok"
+fi
 
 echo "check for i2c bus"
 if grep -Fxq "i2c-bcm2835" /etc/modules

@@ -5,28 +5,28 @@ import time
 
 leaftimer = open('/var/www/html/openWB/ramdisk/soctimer1', 'r')
 leaftimer = int(leaftimer.read())
-
-if ( leaftimer < 60 ):
+thecommand=str('python3 /var/www/html/openWB/modules/soc_leafs1/getsoc.py')
+thestring=str( sys.argv[1] + ' ' + sys.argv[2] + ' &') 
+if ( leaftimer < 181 ):
     leaftimer += 1
     f = open('/var/www/html/openWB/ramdisk/soctimer1', 'w')
     f.write(str(leaftimer))
     f.close()
+    if ( leaftimer == 10 ):
+        from subprocess import call
+        exit_code = call(thecommand + ' ' + thestring, shell=True)
+    if ( leaftimer == 60 ):
+        from subprocess import call
+        exit_code = call(thecommand + ' ' + thestring, shell=True)
+
 
 else:
-    from leaf import Leaf
-    leaf = Leaf(sys.argv[1], sys.argv[2])
-    #response = leaf.BatteryStatusCheckRequest()
-    #time.sleep(10)
-    #leaf.BatteryStatusCheckResultRequest(resultKey=response['resultKey'])
-    #time.sleep(10)
-    socit = leaf.BatteryStatusRecordsRequest()
-    justsoc = socit['BatteryStatusRecords']['BatteryStatus']['SOC']['Value']
-    f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
-    f.write(str(justsoc))
-    f.close()
     f = open('/var/www/html/openWB/ramdisk/soctimer1', 'w')
     f.write(str(0))
     f.close()
+    from subprocess import call
+    exit_code = call(thecommand + ' ' + thestring, shell=True)
+
 
     
     

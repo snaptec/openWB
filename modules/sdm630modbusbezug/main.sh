@@ -19,19 +19,22 @@ while read -r line; do
 	if (( $n == 0 )); then
 		evua1=$(echo "$line" |  cut -c2- )
 		evua1=${evua1%??}
-		LANG=C printf "%.3f\n" $evua1 > /var/www/html/openWB/ramdisk/bezuga1
+		echo "scale=3; $evua1/1" | bc -l > /var/www/html/openWB/ramdisk/bezuga1
+#		LANG=C printf "%.3f\n" $evua1 > /var/www/html/openWB/ramdisk/bezuga1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga1
 	fi
 	if (( $n == 1 )); then
 		evua2=$(echo "$line" |  cut -c2- )
 		evua2=${evua2%??}
-		LANG=C printf "%.3f\n" $evua2 > /var/www/html/openWB/ramdisk/bezuga2
+		echo "scale=3; $evua2/1" | bc -l > /var/www/html/openWB/ramdisk/bezuga2
+#		LANG=C printf "%.3f\n" $evua2 > /var/www/html/openWB/ramdisk/bezuga2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga2
 	fi
 	if (( $n == 2 )); then
 		evua3=$(echo "$line" |  cut -c2- )
 		evua3=${evua3%??}
-		LANG=C printf "%.3f\n" $evua3 > /var/www/html/openWB/ramdisk/bezuga3
+		echo "scale=3; $evua3/1" | bc -l > /var/www/html/openWB/ramdisk/bezuga3
+#		LANG=C printf "%.3f\n" $evua3 > /var/www/html/openWB/ramdisk/bezuga3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/bezuga3
 
 	fi
@@ -70,50 +73,62 @@ while read -r line; do
 	fi
 	if (( $n == 13 )); then
 		evupf1=$(echo "$line" |  cut -c2- )
-		evupf1=${evupf1%??} 
-		LANG=C printf "%.3f\n" $evupf1 > /var/www/html/openWB/ramdisk/evupf1
+		evupf1=${evupf1%??}
+		echo "scale=3; $evupf1/1" | bc -l > /var/www/html/openWB/ramdisk/evupf1
+
+#		LANG=C printf "%.3f\n" $evupf1 > /var/www/html/openWB/ramdisk/evupf1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf1
 
 	fi
 	if (( $n == 14 )); then
 		evupf2=$(echo "$line" |  cut -c2- )
 		evupf2=${evupf2%??} 
-		LANG=C printf "%.3f\n" $evupf2  > /var/www/html/openWB/ramdisk/evupf2
+		echo "scale=3; $evupf2/1" | bc -l > /var/www/html/openWB/ramdisk/evupf2
+
+#		LANG=C printf "%.3f\n" $evupf2  > /var/www/html/openWB/ramdisk/evupf2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf2
 
 	fi
 	if (( $n == 15 )); then
 		evupf3=$(echo "$line" |  cut -c2- )
 		evupf3=${evupf3%??} 
-		LANG=C printf "%.3f\n" $evupf3  > /var/www/html/openWB/ramdisk/evupf3
+		echo "scale=3; $evupf3/1" | bc -l > /var/www/html/openWB/ramdisk/evupf3
+
+#		LANG=C printf "%.3f\n" $evupf3  > /var/www/html/openWB/ramdisk/evupf3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evupf3
 
 	fi
 	if (( $n == 16 )); then
 		evuv1=$(echo "$line" |  cut -c2- )
 		evuv1=${evuv1%??}
-		LANG=C printf "%.1f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
+		echo "scale=3; $evuv1/1" | bc -l > /var/www/html/openWB/ramdisk/evuv1
+
+#		LANG=C printf "%.1f\n" $evuv1 > /var/www/html/openWB/ramdisk/evuv1
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv1
 
 	fi
 	if (( $n == 17 )); then
 		evuv2=$(echo "$line" |  cut -c2- )
 		evuv2=${evuv2%??}
-		LANG=C printf "%.1f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
+		echo "scale=3; $evuv2/1" | bc -l > /var/www/html/openWB/ramdisk/evuv2
+
+#		LANG=C printf "%.1f\n" $evuv2 > /var/www/html/openWB/ramdisk/evuv2
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv2
 
 	fi
 	if (( $n == 18 )); then
 		evuv3=$(echo "$line" |  cut -c2- )
 		evuv3=${evuv3%??}
-		LANG=C printf "%.1f\n" $evuv3 > /var/www/html/openWB/ramdisk/evuv3
+		echo "scale=3; $evuv3/1" | bc -l > /var/www/html/openWB/ramdisk/evuv3
+#		LANG=C printf "%.1f\n" $evuv3 > /var/www/html/openWB/ramdisk/evuv3
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuv3
 
 	fi
 	if (( $n == 19 )); then
 		evuhz=$(echo "$line" |  cut -c2- )
 		evuhz=${evuhz%??}
-	       	LANG=C printf "%.2f\n" $evuhz > /var/www/html/openWB/ramdisk/evuhz
+		echo "scale=3; $evuhz/1" | bc -l > /var/www/html/openWB/ramdisk/evuhz
+#	       	LANG=C printf "%.2f\n" $evuhz > /var/www/html/openWB/ramdisk/evuhz
 #		echo "$line" |  cut -c2- |sed 's/\..*$//' > /var/www/html/openWB/ramdisk/evuhz
 
 	fi
@@ -154,7 +169,8 @@ rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 if [[ $bezugkwh =~ $rekwh ]]; then 
 
 	bezugkwh=$(echo "(($bezugkwh)*1000)" | bc)
-	LANG=C printf "%.3f\n" $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
+#	LANG=C printf "%.3f\n" $bezugkwh > /var/www/html/openWB/ramdisk/bezugkwh
+	echo "scale=3; $bezugkwh/1" | bc -l > /var/www/html/openWB/ramdisk/bezugkwh
 fi
 ekwh11=${ekwh1%??}
 ekwh22=${ekwh2%??}

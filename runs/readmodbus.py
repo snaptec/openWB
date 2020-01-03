@@ -18,7 +18,7 @@ readreg = int(sys.argv[3])
 reganzahl = int(sys.argv[4])
 
 rq = client.read_holding_registers(readreg,reganzahl,unit=modbusid)
-print(rq.registers)
+print(rq.registers[0])
 
 
 

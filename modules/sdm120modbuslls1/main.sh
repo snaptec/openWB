@@ -97,67 +97,9 @@ if [[ $sdm120modbusllid1s1 != "none" ]] && [[ $sdm120modbusllid2s1 != "none" ]] 
 	fi
 
 else
-	if [[ $sdm120modbusll2ids1 != "none" ]] ; then
+	if [[ $sdm120modbusllid2s1 != "none" ]] ; then
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm3.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1)
-		while read -r line; do
-			if (( $n == 0 )); then
-				llv1=$(echo "$line" |  cut -c2- )
-				llv1=${llv1%??}
-				LANG=C printf "%.1f\n" $llv1 > /var/www/html/openWB/ramdisk/llvs11
-			fi
-			if (( $n == 1 )); then
-				lla1=$(echo "$line" |  cut -c2- )
-				lla1=${lla1%??}
-				LANG=C printf "%.3f\n" $lla1 > /var/www/html/openWB/ramdisk/llas11
-			fi
-			if (( $n == 2 )); then
-				wl1=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
-				fi
-			if (( $n == 3 )); then
-				llpf1=$(echo "$line" |  cut -c2- )
-				llpf1=${llpf1%??}
-				LANG=C printf "%.3f\n" $llpf1 > /var/www/html/openWB/ramdisk/llpfs11
-			fi
-			if (( $n == 4 )); then
-				llkwh=$(echo "$line" |  cut -c2- )
-				llkwh=${llkwh%???}
-			fi
-			if (( $n == 5 )); then
-				llv2=$(echo "$line" |  cut -c2- )
-				llv2=${llv2%??}
-				LANG=C printf "%.1f\n" $llv2 > /var/www/html/openWB/ramdisk/llvs12
-			fi
-			if (( $n == 6 )); then
-				lla2=$(echo "$line" |  cut -c2- )
-				lla2=${lla2%??}
-				LANG=C printf "%.3f\n" $lla2 > /var/www/html/openWB/ramdisk/llas12
-			fi
-			if (( $n == 7 )); then
-				wl2=$(echo "$line" |  cut -c2- |sed 's/\..*$//')
-			fi
-			if (( $n == 8 )); then
-				llpf2=$(echo "$line" |  cut -c2- )
-				llpf2=${llpf2%??}
-				LANG=C printf "%.3f\n" $llpf2 > /var/www/html/openWB/ramdisk/llpfs12
-			fi
-			if (( $n == 9 )); then
-				llkwh2=$(echo "$line" |  cut -c2- )
-				llkwh2=${llkwh2%???}
-			fi
-			n=$((n + 1))
-		    done <<< "$output"
-		if [[ $llkwh =~ $rekwh ]] && [[ $llkwh2 =~ $rekwh ]] ; then
-			lltotal=`echo "($llkwh+$llkwh2)" |bc`
-			LANG=C printf "%.3f\n" $lltotal > /var/www/html/openWB/ramdisk/llkwhs1
-		fi
-		if [[ $wl1 =~ $re ]] && [[ $wl2 =~ $re ]]; then
-		 	llaktuell=`echo "($wl1+$wl2)" |bc`
-			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells1
-		fi
-	else
-		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm3.py $sdm120lp2source $sdm120modbusllid1s1)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm2.py $sdm120lp2source $sdm120modbusllid1s1 $sdm120modbusllid2s1)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )
@@ -191,6 +133,10 @@ else
 		 	llaktuell=`echo "($wl1)" |bc`
 			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells1
 		fi
+	else
+		sudo python /var/www/html/openWB/modules/sdm120modbuslls1/readsdm1.py $sdm120lp2source $sdm120modbusllid1s1
+	
+
 	fi
 fi
 

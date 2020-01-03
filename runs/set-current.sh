@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #####
 #
 # File: set-current.sh
@@ -33,7 +32,14 @@
 # sets charging current on point "s1" to 9A
 
 . /var/www/html/openWB/openwb.conf
-
+lp1enabled=$(<ramdisk/lp1enabled)
+lp2enabled=$(<ramdisk/lp2enabled)
+lp3enabled=$(<ramdisk/lp3enabled)
+lp4enabled=$(<ramdisk/lp4enabled)
+lp5enabled=$(<ramdisk/lp5enabled)
+lp6enabled=$(<ramdisk/lp6enabled)
+lp7enabled=$(<ramdisk/lp7enabled)
+lp8enabled=$(<ramdisk/lp8enabled)
 #####
 #
 # functions
@@ -63,6 +69,37 @@ function setChargingCurrentModbus () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
+# function for setting the current - IP modbusevse
+# Parameters:
+# 1: current
+# 2: evseip
+# 3: modbusevseid
+function setChargingCurrentIpModbus () {
+	current=$1
+	evseip=$2
+	ipevseid=$3
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evseipwritemodbus.py $current $evseip $ipevseid
+}
+
+
+# function for openwb slave kit
+function setChargingCurrentSlaveeth () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evseslavewritemodbus.py $current
+}
+function setChargingCurrentMasterethframer () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evsemasterethframerwritemodbus.py $current
+}
+# function for openwb third kit
+function setChargingCurrentThirdeth () {
+	current=$1
+	# set desired charging current
+	sudo python /var/www/html/openWB/runs/evsethirdwritemodbus.py $current
+}
 
 # function for setting the current - WiFi
 # Parameters:
@@ -88,6 +125,11 @@ function setChargingCurrentWifi () {
 				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
 			fi
 		fi
+	fi
+}
+function setChargingCurrenttwcmanager () {
+	if [[ $evsecon == "twcmanager" ]]; then
+		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
 	fi
 }
 # function for setting the current - go-e charger
@@ -116,6 +158,49 @@ function setChargingCurrentgoe () {
 		fi
 	fi
 }
+# function for setting the current - keba charger
+# Parameters:
+# 1: current
+# 2: goeiplp1
+function setChargingCurrentkeba () {
+	if [[ $evsecon == "keba" ]]; then
+		kebacurr=$(( current * 1000 ))
+		if [[ $current -eq 0 ]]; then
+			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+		else
+			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+			echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+		fi
+	fi
+}
+
+
+function setChargingCurrentnrgkick () {
+	if [[ $evsecon == "nrgkick" ]]; then
+		if [[ $current -eq 0 ]]; then
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+		else
+			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
+			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
+			if [[ $state == "false" ]] ; then
+				 curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+			fi
+			oldcurrent=$(echo $output | jq -r '.Values.ChargingCurrent.Value')
+			if (( oldcurrent != $current )) ; then
+				curl --silent --connect-timeout $nrgkicktimeoutlp1 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": true }, "ChargingCurrent": { "Value": $current}, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
+ > /dev/null
+			fi
+		fi
+	fi
+}
+
+
+
 
 
 
@@ -136,6 +221,28 @@ function setChargingCurrent () {
 	if [[ $evsecon == "goe" ]]; then
 		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
+	if [[ $evsecon == "slaveeth" ]]; then
+		setChargingCurrentSlaveeth $current 
+	fi
+	if [[ $evsecon == "thirdeth" ]]; then
+		setChargingCurrentThirdeth $current 
+	fi
+
+	if [[ $evsecon == "masterethframer" ]]; then
+		setChargingCurrentMasterethframer $current 
+	fi
+	if [[ $evsecon == "nrgkick" ]]; then
+		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
+	fi
+	if [[ $evsecon == "keba" ]]; then
+		setChargingCurrentkeba $current $kebaiplp1
+	fi
+	if [[ $evsecon == "twcmanager" ]]; then
+		setChargingCurrenttwcmanager $current $twcmanagerlp1ip
+	fi
+	if [[ $evsecon == "ipevse" ]]; then
+		setChargingCurrentIpModbus $current $evseip $ipevseid
+	fi
 }
 
 #####
@@ -153,7 +260,7 @@ if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then
 	exit 1
 fi
 
-if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]]) ; then
+if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]] || [[ $2 == "lp4" ]] || [[ $2 == "lp5" ]] || [[ $2 == "lp6" ]] || [[ $2 == "lp7" ]] || [[ $2 == "lp8" ]]) ; then
 	if [[ $debug == "2" ]]; then
 		echo "ungültiger Wert für Ziel: $2" > /var/www/html/openWB/web/lade.log
 	fi
@@ -179,52 +286,93 @@ fi
 
 # Loadsharing LP 1 / 2
 if [[ $loadsharinglp12 == "1" ]]; then
-	lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
-	lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
-	lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
-	lla1=$(echo $lla1 | sed 's/\..*$//')
-	lla2=$(echo $lla2 | sed 's/\..*$//')
-	lla3=$(echo $lla3 | sed 's/\..*$//')
-	llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
-	llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
-	llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
-	llas11=$(echo $llas11 | sed 's/\..*$//')
-	llas12=$(echo $llas12 | sed 's/\..*$//')
-	llas13=$(echo $llas13 | sed 's/\..*$//')
-	lslpl1=$((lla1 + llas12))
-	lslpl2=$((lla2 + llas13))
-	lslpl3=$((lla3 + llas11))
-	if (( lslpl1 > "32" )) && (( lslpl2 > "32" )) && (( lslpl3 > "32" )); then
-		diff1=$((lslpl1 - 32 ))
-		diff2=$((lslpl2 - 32 ))
-		diff3=$((lslpl3 - 32 ))
-		lldiffmax=($diff1 $diff2 $diff3)
-		diffmax=0
-		for v in "${lldiffmax[@]}"; do
-					if (( v > diffmax )); then diffmax=$v; fi;
-				done
-		diffmax=$((diffmax + 2))
-		diffll=$((diffmax / 2))
-		current=$((current - diffll))
-		if [[ $debug == "2" ]]; then
-		echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+	if (( loadsharingalp12 == 16 )); then
+		agrenze=8
+		aagrenze=16
+		if (( current > 16 )); then
+			current=16
+			new2=all
+		fi
+	else
+		agrenze=16
+		aagrenze=32
+	fi
+	if (( current > agrenze )); then
+		lla1=$(cat /var/www/html/openWB/ramdisk/lla1)
+		lla2=$(cat /var/www/html/openWB/ramdisk/lla2)
+		lla3=$(cat /var/www/html/openWB/ramdisk/lla3)
+		lla1=$(echo $lla1 | sed 's/\..*$//')
+		lla2=$(echo $lla2 | sed 's/\..*$//')
+		lla3=$(echo $lla3 | sed 's/\..*$//')
+		llas11=$(cat /var/www/html/openWB/ramdisk/llas11)
+		llas12=$(cat /var/www/html/openWB/ramdisk/llas12)
+		llas13=$(cat /var/www/html/openWB/ramdisk/llas13)
+		llas11=$(echo $llas11 | sed 's/\..*$//')
+		llas12=$(echo $llas12 | sed 's/\..*$//')
+		llas13=$(echo $llas13 | sed 's/\..*$//')
+		lslpl1=$((lla1 + llas12))
+		lslpl2=$((lla2 + llas13))
+		lslpl3=$((lla3 + llas11))
+		#detect charging cars
+		if (( lla1 > 1 )); then
+			lp1c=1
+			if (( lla2 > 1 )); then
+				lp1c=2
+			fi
+		else
+			lp1c=0
+		fi
+		if (( llas11 > 1 )); then
+			lp2c=1
+			if (( llas12 > 1 )); then
+				lp2c=2
+			fi
+		else
+			lp2c=0
+		fi
+		chargingphases=$(( lp1c + lp2c ))
+		if (( chargingphases > 2 )); then
+			current=$agrenze
+		fi
+		if (( lslpl1 > aagrenze )) && (( lslpl2 > aagrenze )) && (( lslpl3 > aagrenze )); then
+			current=$(( agrenze - 1))
+			new2=all
+			if [[ $debug == "2" ]]; then
+			echo "setzeladung auf $current durch loadsharing LP12" >> /var/www/html/openWB/web/lade.log
+			fi
 		fi
 	fi
 fi
 
 
-
+if ! [ -z $new2 ]; then
+	points=$new2
+else
+	points=$2
+fi
 
 # set charging current - first charging point
-if [[ $2 == "all" ]] || [[ $2 == "m" ]]; then
-	setChargingCurrent
-	echo $current > /var/www/html/openWB/ramdisk/llsoll
-	echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
+if [[ $points == "all" ]] || [[ $points == "m" ]]; then
+		evseip=$evseiplp1
+		ipevseid=$evseidlp1
+
+	if (( lp1enabled == 0 )); then
+		oldcurrent=$current
+		current=0
+	fi
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsoll
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatus
+	if (( lp1enabled == 0 )); then
+		current=$oldcurrent
+	fi
+
+
 fi
 
 # set charging current - second charging point
 if [[ $lastmanagement == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "s1" ]]; then
 		evsecon=$evsecons1
 		dacregister=$dacregisters1
 		modbusevsesource=$evsesources1
@@ -233,18 +381,33 @@ if [[ $lastmanagement == "1" ]]; then
 		evsewifiiplp1=$evsewifiiplp2
 		goeiplp1=$goeiplp2
 		goetimeoutlp1=$goetimeoutlp2
+		kebaiplp1=$kebaiplp2
+		nrgkickiplp1=$nrgkickiplp2
+		nrgkicktimeoutlp1=$nrgkicktimeoutlp2
+		nrgkickmaclp1=$nrgkickmaclp2
+		nrgkickpwlp1=$nrgkickpwlp2
+		evseip=$evseiplp2
+		ipevseid=$evseidlp2
 
 		# dirty call (no parameters, all is set above...)
+		if (( lp2enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+
 		setChargingCurrent
 
 		echo $current > /var/www/html/openWB/ramdisk/llsolls1
 		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss1
+		if (( lp2enabled == 0 )); then
+			current=$oldcurrent
+		fi
 	fi
 fi
 
-# set charging current - second charging point
+# set charging current - third charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	if [[ $2 == "all" ]] || [[ $2 == "s2" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
 		evsecon=$evsecons2
 		dacregister=$dacregisters2
 		modbusevsesource=$evsesources2
@@ -253,11 +416,115 @@ if [[ $lastmanagements2 == "1" ]]; then
 		evsewifiiplp1=$evsewifiiplp3
 		goeiplp1=$goeiplp3
 		goetimeoutlp1=$goetimeoutlp3
+		evseip=$evseiplp3
+		ipevseid=$evseidlp3
 
+		if (( lp3enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
 		# dirty call (no parameters, all is set above...)
 		setChargingCurrent
-
 		echo $current > /var/www/html/openWB/ramdisk/llsolls2
 		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuss2
+		if (( lp3enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
+	fi
+fi
+if [[ $lastmanagementlp4 == "1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "lp4" ]]; then
+		evsecon=$evseconlp4
+		evseip=$evseiplp4
+		ipevseid=$evseidlp4
+		if (( lp4enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsolllp4
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp4
+		if (( lp4enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
+	fi
+fi
+if [[ $lastmanagementlp5 == "1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then 
+		evsecon=$evseconlp5
+		evseip=$evseiplp5
+		ipevseid=$evseidlp5
+		if (( lp5enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsolllp5
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp5
+		if (( lp5enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
+	fi
+fi
+if [[ $lastmanagementlp6 == "1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then 
+		evsecon=$evseconlp6
+		evseip=$evseiplp6
+		ipevseid=$evseidlp6
+		if (( lp6enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsolllp6
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp6
+		if (( lp6enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
+	fi
+fi
+if [[ $lastmanagementlp7 == "1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then 
+		evsecon=$evseconlp7
+		evseip=$evseiplp7
+		ipevseid=$evseidlp7
+		if (( lp7enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsolllp7
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp7
+		if (( lp7enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
+	fi
+fi
+if [[ $lastmanagementlp8 == "1" ]]; then
+	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then 
+		evsecon=$evseconlp8
+		evseip=$evseiplp8
+		ipevseid=$evseidlp8
+		if (( lp8enabled == 0 )); then
+			oldcurrent=$current
+			current=0
+		fi
+		# dirty call (no parameters, all is set above...)
+		setChargingCurrent
+		echo $current > /var/www/html/openWB/ramdisk/llsolllp8
+		echo $lstate > /var/www/html/openWB/ramdisk/ladestatuslp8
+		if (( lp8enabled == 0 )); then
+			current=$oldcurrent
+		fi
+
 	fi
 fi

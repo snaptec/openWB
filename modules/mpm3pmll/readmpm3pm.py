@@ -14,61 +14,136 @@ client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600,
 
 
 sdmid = int(sys.argv[2])
+if ( sdmid < 100 ):
+    resp = client.read_input_registers(0x0002,4, unit=sdmid)
+    value1 = resp.registers[0] 
+    value2 = resp.registers[1] 
+    all = format(value1, '04x') + format(value2, '04x')
+    ikwh = int(struct.unpack('>i', all.decode('hex'))[0]) 
+    #resp = client.read_input_registers(0x0002,2, unit=sdmid)
+    #ikwh = resp.registers[1]
+    ikwh = float(ikwh) /100
+    f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
+    f.write(str(ikwh))
+    f.close()
 
-resp = client.read_input_registers(0x0002,2, unit=sdmid)
-ikwh = resp.registers[1]
-ikwh = float(ikwh) /100
-f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
-f.write(str(ikwh))
-f.close()
+    resp = client.read_input_registers(0x0E,2, unit=sdmid)
+    lla1 = resp.registers[1]
+    lla1 = float(lla1) / 100
+    f = open('/var/www/html/openWB/ramdisk/lla1', 'w')
+    f.write(str(lla1))
+    f.close()
 
-resp = client.read_input_registers(0x0E,2, unit=sdmid)
-lla1 = resp.registers[1]
-lla1 = float(lla1) / 100
-f = open('/var/www/html/openWB/ramdisk/lla1', 'w')
-f.write(str(lla1))
-f.close()
+    resp = client.read_input_registers(0x10,2, unit=sdmid)
+    lla2 = resp.registers[1]
+    lla2 = float(lla2) / 100
+    f = open('/var/www/html/openWB/ramdisk/lla2', 'w')
+    f.write(str(lla2))
+    f.close()
 
-resp = client.read_input_registers(0x10,2, unit=sdmid)
-lla2 = resp.registers[1]
-lla2 = float(lla2) / 100
-f = open('/var/www/html/openWB/ramdisk/lla2', 'w')
-f.write(str(lla2))
-f.close()
+    resp = client.read_input_registers(0x12,2, unit=sdmid)
+    lla3 = resp.registers[1]
+    lla3 = float(lla3) / 100
+    f = open('/var/www/html/openWB/ramdisk/lla3', 'w')
+    f.write(str(lla3))
+    f.close()
 
-resp = client.read_input_registers(0x12,2, unit=sdmid)
-lla3 = resp.registers[1]
-lla3 = float(lla3) / 100
-f = open('/var/www/html/openWB/ramdisk/lla3', 'w')
-f.write(str(lla3))
-f.close()
+    resp = client.read_input_registers(0x26,2, unit=sdmid)
+    value1 = resp.registers[0] 
+    value2 = resp.registers[1] 
+    all = format(value1, '04x') + format(value2, '04x')
+    final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
+    if final < 15:
+        final = 0
+    f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+    f.write(str(final))
+    f.close()
 
-resp = client.read_input_registers(0x26,2, unit=sdmid)
-value1 = resp.registers[0] 
-value2 = resp.registers[1] 
-all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0]) / 100
-f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
-f.write(str(final))
-f.close()
+    resp = client.read_input_registers(0x08,4, unit=sdmid)
+    voltage = resp.registers[1]
+    voltage = float(voltage) / 10
+    f = open('/var/www/html/openWB/ramdisk/llv1', 'w')
+    f.write(str(voltage))
+    f.close()
 
-resp = client.read_input_registers(0x08,4, unit=sdmid)
-voltage = resp.registers[1]
-voltage = float(voltage) / 10
-f = open('/var/www/html/openWB/ramdisk/llv1', 'w')
-f.write(str(voltage))
-f.close()
+    resp = client.read_input_registers(0x0A,4, unit=sdmid)
+    voltage = resp.registers[1]
+    voltage = float(voltage) / 10
+    f = open('/var/www/html/openWB/ramdisk/llv2', 'w')
+    f.write(str(voltage))
+    f.close()
 
-resp = client.read_input_registers(0x0A,4, unit=sdmid)
-voltage = resp.registers[1]
-voltage = float(voltage) / 10
-f = open('/var/www/html/openWB/ramdisk/llv2', 'w')
-f.write(str(voltage))
-f.close()
+    resp = client.read_input_registers(0x0C,4, unit=sdmid)
+    voltage = resp.registers[1]
+    voltage = float(voltage) / 10
+    f = open('/var/www/html/openWB/ramdisk/llv3', 'w')
+    f.write(str(voltage))
+    f.close()
+    resp = client.read_input_registers(0x2c,4, unit=sdmid)
+    value1 = resp.registers[0] 
+    value2 = resp.registers[1] 
+    all = format(value1, '04x') + format(value2, '04x')
+    hz = int(struct.unpack('>i', all.decode('hex'))[0]) 
+    hz = round((float(hz) / 100), 2)
+    f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
+    f.write(str(hz))
+    f.close()
+else:
+    resp = client.read_input_registers(0x00,2, unit=sdmid)
+    voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    voltage = float("%.1f" % voltage)
+    f = open('/var/www/html/openWB/ramdisk/llv1', 'w')
+    f.write(str(voltage))
+    f.close()
+    resp = client.read_input_registers(0x06,2, unit=sdmid)
+    lla1 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+    lla1 = float("%.1f" % lla1)
+    f = open('/var/www/html/openWB/ramdisk/lla1', 'w')
+    f.write(str(lla1))
+    f.close()
+    resp = client.read_input_registers(0x08,2, unit=sdmid)
+    lla2 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+    lla2 = float("%.1f" % lla2)
+    f = open('/var/www/html/openWB/ramdisk/lla2', 'w')
+    f.write(str(lla2))
+    f.close()
+    resp = client.read_input_registers(0x0A,2, unit=sdmid)
+    lla3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    lla3 = float("%.1f" % lla3)
+    f = open('/var/www/html/openWB/ramdisk/lla3', 'w')
+    f.write(str(lla3))
+    f.close()
+    resp = client.read_input_registers(0x0C,2, unit=sdmid)
+    llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    llw1 = int(llw1)
+    resp = client.read_input_registers(0x0156,2, unit=sdmid)
+    llkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    llkwh = float("%.3f" % llkwh)
+    f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
+    f.write(str(llkwh))
+    f.close()
+    resp = client.read_input_registers(0x0E,2, unit=sdmid)
+    llw2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    llw2 = int(llw2)
+    resp = client.read_input_registers(0x10,2, unit=sdmid)
+    llw3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    llw3 = int(llw3)
 
-resp = client.read_input_registers(0x0C,4, unit=sdmid)
-voltage = resp.registers[1]
-voltage = float(voltage) / 10
-f = open('/var/www/html/openWB/ramdisk/llv3', 'w')
-f.write(str(voltage))
-f.close()
+    resp = client.read_input_registers(0x02,2, unit=sdmid)
+    voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    voltage = float("%.1f" % voltage)
+    f = open('/var/www/html/openWB/ramdisk/llv2', 'w')
+    f.write(str(voltage))
+    f.close() 
+    resp = client.read_input_registers(0x04,2, unit=sdmid)
+    voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    voltage = float("%.1f" % voltage)
+    f = open('/var/www/html/openWB/ramdisk/llv3', 'w')
+    f.write(str(voltage))
+    f.close()
+    llg= llw1 + llw2 + llw3
+    if llg < 10:
+        llg = 0
+    f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+    f.write(str(llg))
+    f.close()
