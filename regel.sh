@@ -3,7 +3,7 @@
 
 #####
 #
-# File: regel.sh
+# File: set-current.sh
 #
 # Copyright 2018 Kevin Wieland, David Meder-Marouelli
 #
