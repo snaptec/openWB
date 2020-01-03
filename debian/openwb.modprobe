@@ -1,7 +1,0 @@
-# modules required for running openWB
-
-i2c-dev
-i2c-bcm2708
-snd-bcm2835
-dtparam=i2c1=on
-dtparam=i2c_arm=on

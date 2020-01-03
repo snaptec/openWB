@@ -63,32 +63,32 @@ else
 	echo "dtparam=i2c_arm=on" >> /etc/modules
 fi
 
-# echo "check for i2c package"
-# if ! [ -x "$(command -v i2cdetect)" ]; then
-# 	apt-get -qq install -y i2c-tools
-# 	echo "... installed"
-# else
-# 	echo "...ok"
-# fi
+echo "check for i2c package"
+if ! [ -x "$(command -v i2cdetect)" ]; then
+	apt-get -qq install -y i2c-tools
+	echo "... installed"
+else
+	echo "...ok"
+fi
 
-# echo "check for git"
+echo "check for git"
 
-# if ! [ -x "$(command -v git)" ]; then
-# 	apt-get -qq install -y git
-# 	echo "... installed"
-# else
-# 	echo "...ok"
-# fi
+if ! [ -x "$(command -v git)" ]; then
+	apt-get -qq install -y git
+	echo "... installed"
+else
+	echo "...ok"
+fi
 
-# echo "check for initial git clone"
-# if [ ! -d /var/www/html/openWB/web ]; then
-# 	cd /var/www/html/
-# 	git clone https://github.com/snaptec/openWB.git --branch stable
-# 	chown -R pi:pi openWB 
-# 	echo "... git cloned"
-# else
-# 	echo "...ok"
-# fi
+echo "check for initial git clone"
+if [ ! -d /var/www/html/openWB/web ]; then
+	cd /var/www/html/
+	git clone https://github.com/snaptec/openWB.git --branch stable
+	chown -R pi:pi openWB 
+	echo "... git cloned"
+else
+	echo "...ok"
+fi
 
 echo "check for ramdisk" 
 if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab 
@@ -117,9 +117,9 @@ else
 fi
 
 echo "check for MCP4725"
-if [ ! -d /home/pi/Adafruit_ _MCP4725 ]; then
-#	apt-get install build-essential python-dev
-#	cd /home/pi
+if [ ! -d /home/pi/Adafruit_Python_MCP4725 ]; then
+	apt-get install build-essential python-dev
+	cd /home/pi
 	git clone https://github.com/adafruit/Adafruit_Python_MCP4725.git
 	cd Adafruit_Python_MCP4725
 	python setup.py install
@@ -129,13 +129,13 @@ else
 fi
 
 
-# echo "check for socat"
-# if ! [ -x "$(command -v socat)" ]; then
-# 	apt-get -qq install -y socat
-# 	echo "... installed"
-# else
-# 	echo "...ok"
-# fi
+echo "check for socat"
+if ! [ -x "$(command -v socat)" ]; then
+	apt-get -qq install -y socat
+	echo "... installed"
+else
+	echo "...ok"
+fi
 
 
 echo "disable cronjob logging"
@@ -146,8 +146,8 @@ else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
 sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-# sudo apt-get -qq install -y python-pip
-# sudo pip install  -U pymodbus
+sudo apt-get -qq install -y python-pip
+sudo pip install  -U pymodbus
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
 
 chmod 777 /var/www/html/openWB/openwb.conf
