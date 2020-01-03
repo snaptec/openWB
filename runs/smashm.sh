@@ -1,5 +1,7 @@
 #!/bin/bash
-#if [ ! -d /opt/smaemd ]; then
+if [  -d /opt/smaemd ]; then
+	sudo rm -r /opt/smaemd
+fi
 	sudo mkdir /opt/smaemd/
 	sudo mkdir /etc/smaemd/
 	cd /opt/smaemd/
