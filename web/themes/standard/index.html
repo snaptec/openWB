@@ -66,21 +66,11 @@
 	</div>
 <br>
 <!-- check which graphing method is enabled and display it 
+-->
 <?php if ($graphliveamold == 1) {
 	echo '
-		<div style="height:300px;" id="chartdiv"></div>
-';
-} else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
-				 alt="Graph lädt, bitte warten..." class="img-responsive">
-			<br></div>
-	</div>
-</div>';
-					} ?> -->
+
+
 <script src="js/Chart.bundle.js"></script>
 <script src="js/livechart.js?version=9"></script>
 
@@ -95,6 +85,21 @@ echo '
 
 	</div>
 </div>
+
+
+';
+} else {
+echo '
+<div class="row">
+	<div class="col-xs-12 text-center">
+		<div class="imgwrapper">
+			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
+				 alt="Graph lädt, bitte warten..." class="img-responsive">
+			<br></div>
+	</div>
+</div>';
+					} ?>
+
 <div class="row col-xs-12 text-center">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
 		Nachtladen LP 1 aktiv

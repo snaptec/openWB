@@ -1,10 +1,13 @@
 #!/bin/bash
 #if [ ! -d /opt/smaemd ]; then
-	sudo mkdir /opt/smaemd/
-	sudo mkdir /etc/smaemd/
-	cd /opt/smaemd/
-	sudo git clone https://github.com/david-m-m/SMA-EM/tree/master .
-	sudo cp systemd-settings /etc/systemd/system/smaemd.service
+if [  -d /opt/smaemd ]; then
+ 	sudo rm -r /opt/smaemd
+fi
+sudo mkdir /opt/smaemd/
+sudo mkdir /etc/smaemd/
+cd /opt/smaemd/
+sudo git clone https://github.com/david-m-m/SMA-EM/tree/master .
+sudo cp systemd-settings /etc/systemd/system/smaemd.service
 #fi
 sudo cp /var/www/html/openWB/web/files/smashm.conf /etc/smaemd/config
 sudo systemctl daemon-reload
