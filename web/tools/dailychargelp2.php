@@ -7,11 +7,11 @@ $ajax = new Ajaxloader();
    	$call = $_POST['dailychargelp2call'];
 	$daydate1 = date('Y-m-d');
 	$daydate = date("Ymd", strtotime($daydate1));
-	$ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';
-	$ll2 = file($ll2file, FILE_IGNORE_NEW_LINES);
 
-	$firstev = reset($ll2);
-	$lastev = end($ll2);
+	$csv = array_map('str_getcsv', file('/var/www/html/openWB/web/logging/data/daily/'.$daydate.'.csv'));
+	$firstev = $csv[0][5];
+	$lastev = end($csv)[5];
+
 	$dailyevlp2 = number_format((($lastev - $firstev) / 1000), 2);
 
 

@@ -8,7 +8,8 @@
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	var chartlegend = <?php echo $chartlegendmainold ?>;
+	//var chartlegend = <?php echo $chartlegendmainold ?>;
+
 
 </script>
 
@@ -133,13 +134,15 @@ echo '
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladendiv"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" id="socenabledlp1" style="background-color:#00ffed;font-size: 2vw;">
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+		<div id="socenabledlp1">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
 		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
 		} else {
 		echo '<span id="soclevel"></span>% SoC';
 		} ?>
+		</div>
 	</div>
 </div>
 <!-- show values for second charging point -->
@@ -154,13 +157,15 @@ echo '
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladenlp2div"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" id="socenabledlp2" style="background-color:#00ffed;font-size: 2vw;">
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+		<div id="socenabledlp2">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
 		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
 		} else {
 		echo '<span id="soc1level"></span>% SoC';
 		} ?>
+		</div>
 	</div>
 </div>
 <!-- show values for third charging point -->
@@ -318,6 +323,27 @@ echo '
 	</div>
 
 </div>
+	<div id="heutegeladendiv">
+	<hr>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h5>Heute geladen</h5>
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-4 text-center">
+			<span id="dailychargelp1div"></span> kWh
+		</div>
+		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
+			<span id="dailychargelp2div"></span> kWh
+		</div>
+		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
+			<span id="dailychargelp3div"></span> kWh
+		</div>
+	</div>
+
+
+	</div>
 <div class="row">
 	<hr>
 	<div class="row">
@@ -358,28 +384,7 @@ echo '
 			<span id="aktgeladens2div"></span> kWh
 		</div>
 	</div>
-	<div id="heutegeladendiv">
-	<hr>
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<h5>heute geladen</h5>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="dailychargelp1div"></span> kWh
-		</div>
-		<div id="ladepunkts1111111div" class="col-xs-4 text-center">
-			<span id="dailychargelp2div"></span> kWh
-		</div>
-		<div id="ladepunkts2222222div" class="col-xs-4 text-center">
-			<span id="dailychargelp3div"></span> kWh
-		</div>
-	</div>
 
-
-
-	</div>
 	<div class="row" id="sofortlmdiv2" style="font-size: 2vw;">
 		<div class="col-xs-4 text-center">
 			<div id="lademstatdiv">
