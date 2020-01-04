@@ -1331,7 +1331,7 @@ $(function() {
 </div>
 
 		<div class="row">
-	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
+	Wenn Interaktiver Graph auf der Haupseite deaktiviert: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>Empfehlung maximal 60 Minuten<br>Beim interaktiven Graph bis 120 Minuten<br>	</div>
 	<div class="row"><br>
 			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
@@ -1339,7 +1339,7 @@ $(function() {
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 
-	</div>
+	</div><!--
 	<div class="row">
 			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
 			<select type="text" name="chartlegendmain" id="chartlegendmain">
@@ -1347,7 +1347,7 @@ $(function() {
 				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
-	</div>
+	</div>-->
 	<div class="row">
 			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
 			<select type="text" name="grapham" id="grapham">
@@ -1356,7 +1356,7 @@ $(function() {
 			</select>
 			<br>
 	</div>
-<div id="nonintdaily">		<div class="row">
+<div id="nonintdaily">	<!--	<div class="row">
 			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
 			<select type="text" name="logdailywh" id="logdailywh">
 				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
@@ -1371,7 +1371,7 @@ $(function() {
 				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
 			</select>
 			<br>
-		</div>
+		</div> 
 </div>
 
 <div id="nonintdaily">	
@@ -1382,7 +1382,7 @@ $(function() {
 				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br><br>
-	</div>
+	</div>-->
 </div>
 <script>
 $(function() {

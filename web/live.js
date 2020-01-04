@@ -956,15 +956,15 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 	}
 
-	else if ( mqttmsg == "openWB/lp/1/kWhActualharged") {
-		$("#aktgeladenprog1div").html(mqttpayload);
+	else if ( mqttmsg == "openWB/lp/1/kWhActualCharged") {
+		$("#aktgeladendiv").html(mqttpayload);
 		document.getElementById("prog1").value= mqttpayload;
 	}
-	else if ( mqttmsg == "openWB/lp/2/kWhActualharged") {
+	else if ( mqttmsg == "openWB/lp/2/kWhActualCharged") {
 		$("#aktgeladens1div").html(mqttpayload);
 		document.getElementById("progs1").value= mqttpayload;
 	}
-	else if ( mqttmsg == "openWB/lp/3/kWhActualharged") {
+	else if ( mqttmsg == "openWB/lp/3/kWhActualCharged") {
 		$("#aktgeladens2div").html(mqttpayload);
 		document.getElementById("progs2").value= mqttpayload;
 	}

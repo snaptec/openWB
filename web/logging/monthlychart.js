@@ -305,6 +305,9 @@ function formdata(graphdata){
 	})
 	splittime.pop();
 	splittime.pop();
+	for (i = splittime.length; i < 28 ; i += 1) {
+		splittime.push("");
+	}
 	atime = splittime;
 	
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
