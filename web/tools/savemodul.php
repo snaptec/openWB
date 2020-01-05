@@ -1278,12 +1278,12 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/web/files/smashm.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "serials=") !== false) {
-		    	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
-			    	    }
-	    else {
-		    	    $result .= $line;
-			    	    }
+	if( (strpos($line, "serials=") !== false) and (strpos($line, "serials=") == 0) ) {
+			$result .= 'serials='.$_POST[smashmbezugid]."\n";
+	}
+	else {
+		$result .= $line;
+	}
 }
 file_put_contents('/var/www/html/openWB/web/files/smashm.conf', $result);
 
