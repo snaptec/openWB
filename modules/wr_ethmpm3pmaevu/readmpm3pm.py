@@ -27,6 +27,11 @@ f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(ikwh))
 f.close()
 
+ikwhk = float(ikwh) / 1000
+f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
+f.write(str(ikwhk))
+f.close()
+
 resp = client.read_input_registers(0x0E,2, unit=8)
 lla1 = resp.registers[1]
 lla1 = float(lla1) / 100
