@@ -393,8 +393,9 @@ $(function() {
 $(document).ready(function(){
 	$('.nurpv').click(function(){
 	    var clickBtnValue = $(this).val();
-	    var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1',
-	    data =  {'action': clickBtnValue};
+	    	nurpvclick();
+		var ajaxurl = 'tools/changelademodusd.php?pvuberschuss=1',
+       	    data =  {'action': clickBtnValue};
 	    $.post(ajaxurl, data, function (response) {
                 $('.actstat2 .btn').addClass("btn-green");
                 $('.actstat3 .btn').addClass("btn-red");
@@ -414,6 +415,7 @@ $(document).ready(function(){
 
 	$('.minpv').click(function(){
 	    var clickBtnValue = $(this).val();
+		minundpvclick();
 	    var ajaxurl = 'tools/changelademodusd.php?minundpv=1',
 	    data =  {'action': clickBtnValue};
 	    $.post(ajaxurl, data, function (response) {
@@ -433,6 +435,7 @@ $(document).ready(function(){
 
 	$('.stop').click(function(){
 	    var clickBtnValue = $(this).val();
+		stopclick();
 	    var ajaxurl = 'tools/changelademodusd.php?stop=1',
 	    data =  {'action': clickBtnValue};
 	    $.post(ajaxurl, data, function (response) {
@@ -453,6 +456,7 @@ $(document).ready(function(){
 	$('.sofort').click(function(){
 	//	publish("0","openWB/set/Lademodus");
 	    var clickBtnValue = $(this).val();
+		sofortclick();
 	    var ajaxurl = 'tools/changelademodusd.php?jetzt=1',
 	    data =  {'action': clickBtnValue};
 	    $.post(ajaxurl, data, function (response) {
@@ -473,6 +477,7 @@ $(document).ready(function(){
 	});
 	$('.standby').click(function(){
 		//publish("4","openWB/set/Lademodus");
+		standbyclick();
 	    var clickBtnValue = $(this).val();
 	    var ajaxurl = 'tools/changelademodusd.php?semistop=1',
 	    data =  {'action': clickBtnValue};

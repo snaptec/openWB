@@ -12,7 +12,7 @@
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="openWB">
-	<title>OpenWB</title>
+	<title>openWB</title>
 	<meta name="description" content="openWB" />
 	<meta name="keywords" content="openWB" />
 	<meta name="author" content="Kevin Wieland" />

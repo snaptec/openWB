@@ -484,6 +484,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
     <li><a href="./smarthome.php">Smart Home</a></li>
     <li><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./mqtt.php">MQTT</a></li>
 	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
@@ -511,7 +512,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 <div id="zielladenaktivlp1div">
 	<div class="row">
 		<b>Beta Feature</b><br>
-		Vorgehensweise zum testen: Lademodus auf Stop stellen. Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen.<br>
+		Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen.<br>
 		Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.<br>
 	</div>
 	<div class="row">
@@ -711,7 +712,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 
 </div>
 <div class="row" style="background-color:#febebe">
-	Gibt an mit wieviel Ampere Maximal geladen wird.<br><br>
+	Gibt an mit wieviel Ampere maximal geladen wird.<br><br>
 </div>
 
 <div class="row"><hr>
@@ -725,7 +726,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select></h5>
 </div>
 <div class="row" style="background-color:#33ffa8">
-	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Ist nur an Ladepunkt 1 aktiv!<br><br>
+	Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Je nach gekaufter Hardwareoption gültig für alle Ladepunkte!<br><br>
 </div>
 <div id="u1p3paus">
 	<br>
@@ -761,7 +762,7 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	</select>
 </div>
 <div class="row" style="background-color:#33ffa8">
-Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke wird wieder auf einphasige Ladung gewechselt.<br><br>
+Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht, wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke, wird wieder auf einphasige Ladung gewechselt.<br><br>
 </div>
 
 <div class="row" style="background-color:#33ffa8">
@@ -880,20 +881,23 @@ Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10
 		Bis wann morgens geladen werden soll<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc">Nacht SOC Sonntag bis Donnerstag:</label></b>
+		<b><label for="nachtsoc">Nacht SoC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.<br><br>
+
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc1">Nacht SOC Freitag bis Sonntag:</label></b>
+		<b><label for="nachtsoc1">Nacht SoC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br>Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv<br><br>
+
 	</div><br>
 <div class="row" style="background-color:#00ada8">
+<b>Die SoC Grenzen gelten nicht für das morgens Laden</b><br>
 	<b><label for="mollp1moll">Montag morgens Laden Stromstärke in A:</label></b>
 	<select type="text" name="mollp1moll" id="mollp1moll">
 		<option <?php if($mollp1mollold == 6) echo selected ?> value="6">6</option>
@@ -1792,18 +1796,18 @@ $(function() {
 		Bis wann morgens geladen werden soll an Ladepunkt 2<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsocs1">Nacht SOC Sonntag bis Donnerstag:</label></b>
+		<b><label for="nachtsocs1">Nacht SoC Sonntag bis Donnerstag:</label></b>
 		<input type="text" name="nachtsocs1" id="nachtsocs1" value="<?php echo $nachtsocs1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		<b><label for="nachtsoc1s1">Nacht SOC Freitag bis Sonntag:</label></b>
+		<b><label for="nachtsoc1s1">Nacht SoC Freitag bis Sonntag:</label></b>
 		<input type="text" name="nachtsoc1s1" id="nachtsoc1s1" value="<?php echo $nachtsoc1s1old ?>"><br>
 	</div>
 	<div class="row" style="background-color:#00ada8">
-		Gültiger Wert 1-99. Wenn SOC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SOC geladen in dem angegebenen Zeitfenster.<br><br>
+		Gültiger Wert 1-99. Wenn SoC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.<br><br>
 	</div><br>
 	<div class="row" style="background-color:#00ada8">
        		<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>
@@ -1913,7 +1917,8 @@ $(function() {
 		<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>"><br>
 	</div>
 	<div class="row">
-Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen das Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfuegung stellt.
+Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt. 
+
 	</div><br><br>
 
 <div class="row"><hr>

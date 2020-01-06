@@ -1048,8 +1048,8 @@ loadstatuslog();
 <body>
 	<div class="preloader">
 <?php if ( $simplemodeold == 1 ) {
-echo '	<img src="../img/loading.gif" alt="loading...">';} else {
-echo '<img src="../img/loader.gif" alt="openWB loading...">'; } ?>
+echo '	<img src="./img/loading.gif" alt="loading...">';} else {
+echo '<img src="./img/loader.gif" alt="openWB loading...">'; } ?>
 	</div>
 	<section id="services">
 		<div class="container">

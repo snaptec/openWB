@@ -814,6 +814,12 @@ foreach($lines as $line) {
 	if(strpos($line, "vartaspeicherip=") !== false) {
 		list(, $vartaspeicheripold) = explode("=", $line);
 	}
+	if(strpos($line, "lgessv1ip=") !== false) {
+		list(, $lgessv1ipold) = explode("=", $line);
+	}
+		if(strpos($line, "lgessv1pass=") !== false) {
+		list(, $lgessv1passold) = explode("=", $line);
+	}	
 	if(strpos($line, "lllaniplp2=") !== false) {
 		list(, $lllaniplp2old) = explode("=", $line);
 	}
@@ -1119,6 +1125,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
     <li><a href="./smarthome.php">Smart Home</a></li>
     <li class="active"><a href="./modulconfig.php">Modulkonfiguration</a></li>
 	<li><a href="./setTheme.php">Theme</a></li>
+	<li><a href="./mqtt.php">MQTT</a></li>
 	<li><a href="./misc.php">Misc</a></li>
   </ul><br><br>
  </div>
@@ -1149,6 +1156,7 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 		<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
 		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
+		<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo selected ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
 		<option <?php if($evseconold == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit </option>
 	</select>
 
@@ -1163,7 +1171,13 @@ $zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 <div id="openwb12">
 	<div class="row bg-success">
 	Keine Konfiguration erforderlich.<br>
-	Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.<br>
+	Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.<br>
+	</div>
+</div>
+<div id="openwb12mid">
+	<div class="row bg-success">
+	Keine Konfiguration erforderlich.<br>
+	Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.<br>
 	</div>
 </div>
 
@@ -1320,6 +1334,7 @@ function display_lp1() {
 	$('#evseconmastereth').hide();
 	$('#evseconkeba').hide();
 	$('#openwb12').hide();
+	$('#openwb12mid').hide();
 	$('#evsecontwcmanager').hide();
 	$('#evseconipevse').hide();
 	if($('#evsecon').val() == 'ipevse') {
@@ -1359,6 +1374,10 @@ function display_lp1() {
 	if($('#evsecon').val() == 'openwb12') {
 		$('#openwb12').show();
 	}
+	if($('#evsecon').val() == 'openwb12mid') {
+		$('#openwb12mid').show();
+	}
+
 	if($('#evsecon').val() == 'ipevse') {
 		$('#evseconipevse').show();
 	}
@@ -1554,7 +1573,7 @@ Keine Konfiguration erforderlich.<br>
 		<input type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>"><br>
 	</div>
 	<div class="row">
-		Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
 
 	</div>
 </div>
@@ -1851,7 +1870,7 @@ $(function() {
 		<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>"><br>
 	</div>
 	<div class="row bg-info">
-		VW Carnet Benutzername<br><br>
+		VW Carnet Benutzername. <br>Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden<br><br>
 	</div>
 	<div class="row bg-info">
 		<b><label for="carnetpass">Passwort:</label></b>
@@ -3317,8 +3336,13 @@ $(function() {
 		<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
 		<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
 		<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
-
+		<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 	</select>
+</div>
+<div id="wattbezuglgessv1">
+	<div class="row">
+		Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+	</div>
 </div>
 <div id="wattbezugethmpm3pm">
 	<div class="row">
@@ -3734,6 +3758,7 @@ function display_wattbezugmodul() {
 	$('#wattbezugvictrongx').hide();
 	$('#wattbezugsolarview').hide();
 	$('#wattbezugdiscovergy').hide();
+	$('#wattbezuglgessv1').hide();
 	// Auswahl PV-Modul generell erlauben
 	enable_pv_selector();
 	if($('#wattbezugmodul').val() == 'bezug_solarview') {
@@ -3817,6 +3842,9 @@ function display_wattbezugmodul() {
 	if($('#wattbezugmodul').val() == 'bezug_powerwall')   {
   		$('#wattbezugpowerwall').show();
 	}
+	if($('#wattbezugmodul').val() == 'bezug_lgessv1')   {
+  		$('#wattbezuglgessv1').show();
+	}
 }
 $(function() {
 	display_wattbezugmodul();
@@ -3853,12 +3881,18 @@ $(function() {
 		<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
 		<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
 		<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
+		<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 	</select>
 </div>
 
 
 <div id="pvnone">
 	<br>
+</div>
+<div id="pvlgessv1">
+	<div class="row">
+		Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+	</div>
 </div>
 <div id="pvyouless">
 	<div class="row" style="background-color:#febebe">
@@ -4073,7 +4107,7 @@ $(function() {
 		<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
-		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden.<br><br>
+		Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.<br><br>
 	</div>
 	<div class="row" style="background-color:#BEFEBE">
 		<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>
@@ -4251,6 +4285,7 @@ function display_pvwattmodul() {
 	$('#pvsolarview').hide();
 	$('#pvdiscovergy').hide();
 	$('#pvyouless').hide();
+	$('#pvlgessv1').hide();
 
 	if($('#pvwattmodul').val() == 'wr_youless120') {
 		$('#pvyouless').show();
@@ -4317,7 +4352,9 @@ function display_pvwattmodul() {
 	if($('#pvwattmodul').val() == 'wr_powerwall')   {
 		$('#pvpowerwall').show();
 	}
-
+    if($('#pvwattmodul').val() == 'wr_lgessv1')   {
+		$('#pvlgessv1').show();
+	}
 }
 $(function() {
 	display_pvwattmodul();
@@ -4349,9 +4386,28 @@ $(function() {
 		<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
 		<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
 		<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+		<option <?php if($speichermodulold == "speicher_lgessv1\n") echo selected ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 	</select>
 </div>
 
+
+
+<div id="divspeicherlgessv1">
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="lgessv1ip">LG ESS 1.0VI IP:</label></b>
+		<input type="text" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Gültige Werte IP. IP-Adresse des LG ESS 1.0VI<br><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		<b><label for="lgessv1pass">LG ESS 1.0VI Passwort:</label></b>
+		<input type="text" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>"><br>
+	</div>
+	<div class="row" style="background-color:#fcbe1e">
+		Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
+	</div>
+</div>	
 <div id="divspeichernone">
 	<br>
 </div>
@@ -4574,7 +4630,8 @@ function display_speichermodul() {
 	$('#divspeichervarta').hide();
 	$('#divspeicheralphaess').hide();
 	$('#divspeichervictron').hide();
-
+    $('#divspeicherlgessv1').hide();
+	
 	if($('#speichermodul').val() == 'speicher_alphaess') {
 		$('#divspeicheralphaess').show();
 	}
@@ -4624,6 +4681,9 @@ function display_speichermodul() {
 	if($('#speichermodul').val() == 'speicher_sunnyisland')   {
 		$('#divspeichersunnyisland').show();
    }
+   if($('#speichermodul').val() == 'speicher_lgessv1')   {
+		$('#divspeicherlgessv1').show();
+    }
 }
 $(function() {
 display_speichermodul();

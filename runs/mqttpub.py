@@ -5,17 +5,18 @@ import sys
 import time
 import fileinput
 import argparse
+import os
 
 def main():
 
-  parser = argparse.ArgumentParser(description='OpenWB MQTT Publisher')
+  parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
   parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
   parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
   parser.set_defaults(retain=False)
 
   args = parser.parse_args()
 
-  client = mqtt.Client()
+  client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
   client.connect("localhost")
 
   for line in sys.stdin:

@@ -33,25 +33,8 @@ ll5=$(echo "$ll5 * 1000" | bc)
 ll6=$(echo "$ll6 * 1000" | bc)
 ll7=$(echo "$ll7 * 1000" | bc)
 ll8=$(echo "$ll8 * 1000" | bc)
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8 >> $dailyfile.csv
-echo $(date +%H%M) >> $dailyfile-date.csv
-echo $bezug >> $dailyfile-bezug.csv
-echo $einspeisung >> $dailyfile-einspeisung.csv
-echo $pv >> $dailyfile-pv.csv
-echo $ll1 >> $dailyfile-ll1.csv
-echo $ll2 >> $dailyfile-ll2.csv
-echo $ll3 >> $dailyfile-ll3.csv
-echo $llg >> $dailyfile-llg.csv
-echo $soc >> $dailyfile-soc.csv
-echo $speicheri >> $dailyfile-speicheriwh.csv
-echo $speichere >> $dailyfile-speicherewh.csv
-echo $soc1 >> $dailyfile-soc1.csv
-echo $speichersoc >> $dailyfile-speichersoc.csv
-echo $verbraucher1 >> $dailyfile-verbraucher1.csv
-echo $verbraucher2 >> $dailyfile-verbraucher2.csv
-echo $verbraucher3 >> $dailyfile-verbraucher3.csv
-echo $verbrauchere1 >> $dailyfile-verbrauchere1.csv
-echo $verbrauchere2 >> $dailyfile-verbrauchere2.csv
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1 >> $dailyfile.csv
+
 
 if (( netzabschaltunghz == 1 )); then
 hz=$(</var/www/html/openWB/ramdisk/llhz)

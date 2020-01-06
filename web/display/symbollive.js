@@ -118,7 +118,7 @@ function refresharrows() {
 
 		
 	    var element = document.getElementById("speichersocstatdiv");
-		if (speichersoc > 0 && speichersoc < 25) {
+		if (speichersoc >= 0 && speichersoc < 25) {
 			element.classList.add("fa-battery-empty");
 			element.classList.remove("fa-battery-quarter");
 			element.classList.remove("fa-battery-half");

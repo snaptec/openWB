@@ -115,7 +115,7 @@ function getfile() {
         if (value > 0) {
             text = 'Ladung';
         } else if (value < 0) {
-            text = 'Entadung';
+            text = 'Entladung';
         }
         updateGauge(gaugeBatt, value, true, text, false);
     }

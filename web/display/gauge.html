@@ -242,8 +242,10 @@ echo '
 
 		</div>
 		<div class="col-xs-1">
+	       		<div id="socenabledlp1">
 				<span id="socstatlp1div" class="fas fa-2x"></span>
 				<br><span id="soclevel"></span>%</span>
+			</div>
 		</div>
 
 		<div class="col-xs-2">
@@ -262,8 +264,10 @@ echo '
 
 		</div>
 		<div class="col-xs-1">
-				<span id="socstatlp2div" class="fas fa-2x"></span>
-				<br><span id="soc1level"></span>%</span>
+	       <div id="socenabledlp2">
+			<span id="socstatlp2div" class="fas fa-2x"></span>
+			<br><span id="soc1level"></span>%</span>
+	       </div>
 		</div>
 </div>
 '; } else { echo '
@@ -285,8 +289,10 @@ echo '
 
 		</div>
 		<div class="col-xs-2">
-				<span id="socstatlp1div" class="fas fa-2x"></span>
-				<br><span id="soclevel"></span>% </span>
+		<div id="socenabledlp1">
+			<span id="socstatlp1div" class="fas fa-2x"></span>
+			<br><span id="soclevel"></span>% </span>
+		</div>
 		</div>
 		<div class="col-xs-3">
 
@@ -383,7 +389,7 @@ echo '
 				
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp1DirectChargeAmpsClick()"></span>
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  
 			</div>
 			<script>
 				var slider1 = document.getElementById("sofortlllp1s");
@@ -391,6 +397,7 @@ echo '
 				output1.innerHTML = slider1.value;
 				slider1.oninput = function() {
 					output1.innerHTML = this.value;
+					lp1DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -401,7 +408,7 @@ echo '
 				
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>  <span class="fa fa-save" style="cursor: pointer;" onclick="lp2DirectChargeAmpsClick()"></span>
+				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>  
 			</div>
 			<script>
 				var slider2 = document.getElementById("sofortlllp2s");
@@ -409,6 +416,7 @@ echo '
 				output2.innerHTML = slider2.value;
 				slider2.oninput = function() {
 					output2.innerHTML = this.value;
+					lp2DirectChargeAmpsClick();	
 				}
 			</script>
 		</div>
@@ -1649,5 +1657,5 @@ chart.legend.position = "absolute";
 
 <script src="/openWB/web/display/alllive.js"></script>
 <script src="./display/symbollive.js"></script>
-<script src="/openWB/web/live.js"></script>
+<script src="/openWB/web/live.js?vers=2"></script>
 </html>

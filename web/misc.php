@@ -49,6 +49,9 @@ foreach($lines as $line) {
 	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
 	}
+	if(strpos($line, "displayEinBeimAnstecken=") !== false) {
+		list(, $displayEinBeimAnsteckenOld) = explode("=", $line);
+	}
 	if(strpos($line, "displaytagesgraph=") !== false) {
 		list(, $displaytagesgraphold) = explode("=", $line);
 	}
@@ -564,6 +567,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<li><a href="./smarthome.php">Smart Home</a></li>
 			<li><a href="./modulconfig.php">Modulkonfiguration</a></li>
 			<li><a href="./setTheme.php">Theme</a></li>
+			<li><a href="./mqtt.php">MQTT</a></li>
 			<li class="active"><a href="./misc.php">Misc</a></li>
 		</ul><br><br>
 	</div>
@@ -578,7 +582,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> <br>
+			0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> Sollen Daten analysiert werden unbedingt die Funktion "Debug Daten senden" weiter unten auf dieser Seite nutzen!<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
@@ -594,10 +598,10 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 		<div class="row">
 			Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
 			Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
-			Sollten Probleme, oder Fehlermeldungen auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
+			Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
 			Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
-			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, "Stop", etc.. werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
-			Sehr Langsam führt zu einer Regelzeit von 60Sek.<br><br>
+			!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
+			Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60Sek.<br><br>
 		</div>
 		<div class="row">
 			<b><label for="ladetaster">Ladetaster:</label></b>
@@ -608,7 +612,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Wenn aktiviert sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
+			Wenn aktiviert, sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.<br> <br>
 		</div>
 		<div class="row">
 			<b><label for="bootmodus">Lademodus nach Start der openWB:</label></b>
@@ -634,7 +638,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Diese Option ist Standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit Zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet. <br>Die Erhöhung der Frequenz wird durchgeführt um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
+			Diese Option ist standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>Dies ist dann der Fall, wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet.  <br>Die Erhöhung der Frequenz wird durchgeführt, um die PV Anlagen abzuschalten.<br> Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.<br>
 		</div><br><br>
 		<div class="row">
 			<b><label for="cpunterbrechunglp1">CP Unterbrechung LP1:</label></b>
@@ -645,7 +649,7 @@ $pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			<br>
 		</div>
 		<div class="row">
-			Diese Option erforder die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br> Sie ist für Fahrzeuge die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren wenn es ohne die Option Probleme gibt<br>
+			Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.<br>
 		</div>
 
 <hr>
@@ -1270,10 +1274,13 @@ $(function() {
 		<b><label for="displaysleep">Display ausschalten nach x Sekunden:</label></b>
 	       	<input type="text" name="displaysleep" id="displaysleep" value="<?php echo $displaysleepold ?>"><br><br>
 	</div>
-
-
-
-
+	<div class="row">
+		<b><label for="displayEinBeimAnstecken">Display beim Einstecken des Fahrzeugs einschalten<br/><small>(f&uuml;r oben konfigurierte Dauer):</small></label></b>
+			<select type="text" name="displayEinBeimAnstecken" id="displayEinBeimAnstecken">
+ 			<option <?php if($displayEinBeimAnsteckenOld == 0) echo selected ?> value="0">Nein</option>
+  			<option <?php if($displayEinBeimAnsteckenOld == 1) echo selected ?> value="1">Ja</option>
+		</select><br>
+	</div>
 
 </div>
 
@@ -1314,12 +1321,17 @@ $(function() {
 		<option <?php if($livegraphold == 40) echo selected ?> value="40">40 Min</option>
 		<option <?php if($livegraphold == 50) echo selected ?> value="50">50 Min</option>
 		<option <?php if($livegraphold == 60) echo selected ?> value="60">60 Min</option>
-
+		<option <?php if($livegraphold == 70) echo selected ?> value="70">70 Min</option>
+		<option <?php if($livegraphold == 80) echo selected ?> value="80">80 Min</option>
+		<option <?php if($livegraphold == 90) echo selected ?> value="90">90 Min</option>
+		<option <?php if($livegraphold == 100) echo selected ?> value="100">100 Min</option>
+		<option <?php if($livegraphold == 110) echo selected ?> value="110">110 Min</option>
+		<option <?php if($livegraphold == 120) echo selected ?> value="120">120 Min</option>
 	</select><br>
 </div>
 
 		<div class="row">
-	Hinweis: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>	</div>
+	Wenn Interaktiver Graph auf der Haupseite deaktiviert: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>Empfehlung maximal 60 Minuten<br>Beim interaktiven Graph bis 120 Minuten<br>	</div>
 	<div class="row"><br>
 			<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
 			<select type="text" name="graphliveam" id="graphliveam">
@@ -1327,7 +1339,7 @@ $(function() {
 				<option <?php if($graphliveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 
-	</div>
+	</div><!--
 	<div class="row">
 			<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
 			<select type="text" name="chartlegendmain" id="chartlegendmain">
@@ -1335,7 +1347,7 @@ $(function() {
 				<option <?php if($chartlegendmainold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br>
-	</div>
+	</div>-->
 	<div class="row">
 			<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
 			<select type="text" name="grapham" id="grapham">
@@ -1344,7 +1356,7 @@ $(function() {
 			</select>
 			<br>
 	</div>
-<div id="nonintdaily">		<div class="row">
+<div id="nonintdaily">	<!--	<div class="row">
 			<b><label for="logdailywh">Anzeige Daily Graph in Watt oder Wh:</label></b>
 			<select type="text" name="logdailywh" id="logdailywh">
 				<option <?php if($logdailywhold == 0) echo selected ?> value="0">Watt</option>
@@ -1359,7 +1371,7 @@ $(function() {
 				<option <?php if($logeinspeisungnegold == 1) echo selected ?> value="1">Negativ</option>
 			</select>
 			<br>
-		</div>
+		</div> 
 </div>
 
 <div id="nonintdaily">	
@@ -1370,7 +1382,7 @@ $(function() {
 				<option <?php if($graphinteractiveamold == 1) echo selected ?> value="1">Ein</option>
 			</select>
 			<br><br>
-	</div>
+	</div>-->
 </div>
 <script>
 $(function() {
@@ -1442,7 +1454,7 @@ $(function() {
 		<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-primary btn-red">REBOOT</button>
 	</div>
 	<div class="row">
-		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen / Features sind dann ggf nicht mehr verfügbar<br><br>
+		Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen/Features sind dann ggf. nicht mehr verfügbar.<br><br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-primary btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
@@ -1454,7 +1466,7 @@ $(function() {
 	<h3>Debug Daten senden</h3>
 </div>
 	<div class="row">
-		Beim Debug Daten senden wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
+		Beim Senden von Debug Daten wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
 		Zusätzlich wird die Config mitgesendet. Allerdings werden sämtliche SoC Modul Einstellungen herausgefiltert, um die ggf. hinterlegten Benutzernamen/Passwörter NICHT zu übertragen.<br>
 	</div>
 <div class="row">

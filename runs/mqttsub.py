@@ -28,108 +28,156 @@ def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
     client.subscribe("openWB/set/#")
 # handle each set topic 
-def on_message(client, userdata, msg): 
-    if (msg.topic == "openWB/set/Lademodus"):
+def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
+        if (int(msg.payload) == 1):
+            subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
+        else:
+            client.publish("openWB/system/LiveGraphData", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestDayGraph"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
+            sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/DayGraphData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/DayGraphData12", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestMonthGraph"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
+            sendcommand = ["/var/www/html/openWB/runs/sendmonthgraphdata.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/MonthGraphData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/RenewMQTT"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
+            #time.sleep(0.5)
+            #subprocess.Popen("/var/www/html/openWB/runs/renewmqtt.sh")
+            f = open('/var/www/html/openWB/ramdisk/renewmqtt', 'w')
+            f.write("1")
+            f.close()
+    if (msg.topic == "openWB/set/ChargeMode"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=4):
             f = open('/var/www/html/openWB/ramdisk/lademodus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            client.publish("openWB/global/ChargeMode", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp1enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp1/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/1/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp2/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp2enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp2/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/2/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp3/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp3enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp3/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/3/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp4/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp4enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp4/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/4/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp5/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp5enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp5/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/5/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp6/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp6enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp6/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/6/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp7/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp7enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp7/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/7/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp8/ChargePointEnabled"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             f = open('/var/www/html/openWB/ramdisk/lp8enabled', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp1sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp1/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/1/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp2/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp2sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp2/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/2/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp3/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp3sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp3/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/3/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp4/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp4sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp4/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/4/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp5/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp5sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp5/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/5/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp8/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp8sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp8/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/8/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp6/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp6sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp6/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/6/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp7/DirectChargeAmps"):
         if (int(msg.payload) >= 6 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/lp7sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/lp7/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/lp/7/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/boolResetDirectCharge"):
         if (int(msg.payload) == 1):
             f = open('/var/www/html/openWB/ramdisk/aktgeladen', 'w')
@@ -292,7 +340,6 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/lp2/DirectChargeSoc"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("sofortsoclp2=",msg.payload.decode("utf-8"))
-
 
 
 
