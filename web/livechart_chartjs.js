@@ -1,8 +1,8 @@
+// defines live graph and functions for use with Chart.js
 function loadgraph() {
-var lineChartData = {
+	var lineChartData = {
 	labels: atime,
 	datasets: [{
-		
 		label: 'Lp1',
 		borderColor: "rgba(0, 0, 255, 0.7)",
 		backgroundColor: "rgba(0, 0, 255, 0.7)",
@@ -199,7 +199,7 @@ var lineChartData = {
 			},
 			scales: {
 				yAxes: [{
-					type: 'linear', 
+					type: 'linear',
 					display: true,
 					position: 'left',
 					id: 'y-axis-1',
@@ -220,9 +220,10 @@ var lineChartData = {
 			}
 		}
 	});
-initialread = 1;
-$('#loadlivegraph').hide();
-};			
+	initialread = 1;
+	$('#loadlivegraph').hide();
+};  // end loadgraph
+
 function checkgraphload(){
 	if ( graphloaded == 1) {
        		myLine.destroy();
@@ -241,10 +242,12 @@ function checkgraphload(){
 	 	}
 	}
 	}
-};
+};  // end checkgraphload
+
  window.onload = function(){
 	    setTimeout(forcegraphload, 15000)
  };
+
 function forcegraphload() {
 	if ( graphloaded == 0 ) {
 	if (!( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false)){
@@ -307,7 +310,8 @@ function forcegraphload() {
 
 		checkgraphload();
 	}
-};
+};  // end forcegraphload
+
 function showhidedataset(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("1","openWB/graph/"+thedataset);
@@ -317,6 +321,7 @@ function showhidedataset(thedataset) {
 		publish("1","openWB/graph/"+thedataset);
 	}
 }
+
 function showhidelegend(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("0","openWB/graph/"+thedataset);
@@ -326,6 +331,7 @@ function showhidelegend(thedataset) {
 		publish("0","openWB/graph/"+thedataset);
 	}
 }
+
 function showhide(thedataset) {
 	if ( window[thedataset] == 0 ) {
 		publish("1","openWB/graph/"+thedataset);
@@ -335,4 +341,3 @@ function showhide(thedataset) {
 		publish("1","openWB/graph/"+thedataset);
 	}
 }
-
