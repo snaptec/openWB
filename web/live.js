@@ -217,6 +217,7 @@ function getCol(matrix, col){
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
+
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var wattbezug = mqttpayload;
@@ -519,46 +520,52 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
 		if ( mqttpayload == 1) {
 			$('#socenabledlp1').show();
-			hidelp1soc = 'foo';
-			boolDisplayLp1Soc = false;
-			document.getElementById("graphlp1socdiv").setAttribute("style", "color: green;");
-			graphlp1socdiv.classList.remove("fa-toggle-off");
-			graphlp1socdiv.classList.add("fa-toggle-on");
-
+			if ( chartjsSelected == 1 ) {
+				hidelp1soc = 'foo';
+				boolDisplayLp1Soc = false;
+				document.getElementById("graphlp1socdiv").setAttribute("style", "color: green;");
+				graphlp1socdiv.classList.remove("fa-toggle-off");
+				graphlp1socdiv.classList.add("fa-toggle-on");
+				checkgraphload();
+			}
 		} else {
-			hidelp1soc = 'LP1 SoC';
 			$('#socenabledlp1').hide();
-			boolDisplayLp1Soc = true;
-			document.getElementById("graphlp1socdiv").setAttribute("style", "color: red;");
-			graphlp1socdiv.classList.remove("fa-toggle-on");
-			graphlp1socdiv.classList.add("fa-toggle-off");
-
-
+			if ( chartjsSelected == 1 ) {
+				hidelp1soc = 'LP1 SoC';
+				boolDisplayLp1Soc = true;
+				document.getElementById("graphlp1socdiv").setAttribute("style", "color: red;");
+				graphlp1socdiv.classList.remove("fa-toggle-on");
+				graphlp1socdiv.classList.add("fa-toggle-off");
+				checkgraphload();
+			}
 		}
-		checkgraphload();
 	}
-	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
+	else if ( mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
 		if ( mqttpayload == 1) {
-			hidelp2soc = 'foo';
 			$('#socenabledlp2').show();
-			boolDisplayLp2Soc = false;
-			document.getElementById("graphlp2socdiv").setAttribute("style", "color: green;");
-			graphlp2socdiv.classList.remove("fa-toggle-off");
-			graphlp2socdiv.classList.add("fa-toggle-on");
+			if ( chartjsSelected == 1 ) {
+				hidelp2soc = 'foo';
+				boolDisplayLp1Soc = false;
+				document.getElementById("graphlp2socdiv").setAttribute("style", "color: green;");
+				graphlp2socdiv.classList.remove("fa-toggle-off");
+				graphlp2socdiv.classList.add("fa-toggle-on");
+				checkgraphload();
+			}
 		} else {
-			hidelp2soc = 'LP2 SoC';
 			$('#socenabledlp2').hide();
-			boolDisplayLp2Soc = true;
-			document.getElementById("graphlp2socdiv").setAttribute("style", "color: red;");
-			graphlp2socdiv.classList.remove("fa-toggle-on");
-			graphlp2socdiv.classList.add("fa-toggle-off");
+			if ( chartjsSelected == 1 ) {
+				hidelp2soc = 'LP2 SoC';
+				boolDisplayLp2Soc = true;
+				document.getElementById("graphlp2socdiv").setAttribute("style", "color: red;");
+				graphlp2socdiv.classList.remove("fa-toggle-on");
+				graphlp2socdiv.classList.add("fa-toggle-off");
+				checkgraphload();
+			}
 		}
-		checkgraphload();
 	}
-
 	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
 		if ( mqttpayload == 1) {
 			hideload1 = 'foo';
@@ -730,14 +737,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			myLine.data.datasets[16].data.push(lp7);
 			myLine.data.datasets[17].data.push(lp8);
 
-
 			myLine.data.labels.splice(0, 1);
 			myLine.data.datasets.forEach(function(dataset) {
 				dataset.data.splice(0, 1);
 			});
 			window.myLine.update();
 		}
-
 	}
 
 	else if ( mqttmsg == "openWB/lp/1/boolChargePointConfigured" ) {
@@ -1500,9 +1505,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			}
 		}
 	}
-
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
-		     if(mqttpayload == 0){
+		if(mqttpayload == 0){
 			$('.actstat .btn').addClass("btn-green");
 			$('.actstat1 .btn').addClass("btn-red");
 			$('.actstat2 .btn').addClass("btn-red");
@@ -1512,9 +1516,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat4 .btn').removeClass("btn-green");
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
-		   	loaddivs();
-		     }
-		    if(mqttpayload == 1){
+		}
+		if(mqttpayload == 1){
 			$('.actstat1 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
 			$('.actstat2 .btn').addClass("btn-red");
@@ -1524,9 +1527,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat2 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-		   	loaddivs();
-		    }
-		    if(mqttpayload == 2){
+		}
+		if(mqttpayload == 2){
 			$('.actstat2 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
 			$('.actstat1 .btn').addClass("btn-red");
@@ -1536,22 +1538,19 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-		   	loaddivs();
-		    }
-		    if(mqttpayload == 3){
+		}
+		if(mqttpayload == 3){
 			$('.actstat2 .btn').addClass("btn-red");
 			$('.actstat3 .btn').addClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
-
 			$('.actstat .btn').addClass("btn-red");
 			$('.actstat1 .btn').addClass("btn-red");
 			$('.actstat .btn').removeClass("btn-green");
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
-		   	loaddivs();
-		    }
-		    if(mqttpayload == 4){
+		}
+		if(mqttpayload == 4){
 			$('.actstat2 .btn').addClass("btn-red");
 			$('.actstat3 .btn').addClass("btn-red");
 			$('.actstat .btn').addClass("btn-red");
@@ -1562,19 +1561,17 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-green");
 			$('.actstat4 .btn').removeClass("btn-red");
-		   	loaddivs();
-		    }
+		}
+		loaddivs();
 	}
 	else if ( mqttmsg == "openWB/lp/1/ADirectModeAmps" ) {
 		document.getElementById("sofortlllp1s").value = mqttpayload;
 		document.getElementById("sofortlllp1l").innerHTML = mqttpayload;
 	}
-
 	else if ( mqttmsg == "openWB/lp/2/ADirectModeAmps" ) {
 		document.getElementById("sofortlllp2s").value = mqttpayload;
 		document.getElementById("sofortlllp2l").innerHTML = mqttpayload;
 	}
-
 	else if ( mqttmsg == "openWB/lp/3/ADirectModeAmps" ) {
 		document.getElementById("sofortlllp3s").value = mqttpayload;
 		document.getElementById("sofortlllp3l").innerHTML = mqttpayload;
@@ -1607,14 +1604,16 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		});
 	}
 }
+
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
 	client.connect(options);
-};
+}
+
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
 		handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
-};
+}
 var retries = 0;
 
 //Connect Options
@@ -1631,7 +1630,7 @@ var options = {
 	onFailure: function (message) {
 		client.connect(options);
 	}
-	};
+}
 
 //Creates a new Messaging.Message Object and sends it
 var publish = function (payload, topic) {
@@ -1642,8 +1641,8 @@ var publish = function (payload, topic) {
 	client.send(message);
 }
 
-
 client.connect(options);
+
 function graphoptionclick() {
 	if ( document.getElementById("graphoptiondiv").style.display === "none") {
 		document.getElementById("graphoptiondiv").style.display = "block";
@@ -1651,13 +1650,14 @@ function graphoptionclick() {
 		document.getElementById("graphoptiondiv").style.display = "none";
 	}
 }
+
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {
 	publish("1","openWB/set/lp1/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp1/ChargePointEnabled");
 	}
-};
+}
 
 function lp2enabledclick() {
 	if ( lp2enabled == 0 ) {
@@ -1665,98 +1665,119 @@ function lp2enabledclick() {
 	} else {
 	publish("0","openWB/set/lp2/ChargePointEnabled");
 	}
-};
+}
+
 function lp3enabledclick() {
 	if ( lp3enabled == 0 ) {
 	publish("1","openWB/set/lp3/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp3/ChargePointEnabled");
 	}
-};
+}
+
 function lp4enabledclick() {
 	if ( lp4enabled == 0 ) {
 	publish("1","openWB/set/lp4/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp4/ChargePointEnabled");
 	}
-};
+}
+
 function lp5enabledclick() {
 	if ( lp5enabled == 0 ) {
 	publish("1","openWB/set/lp5/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp5/ChargePointEnabled");
 	}
-};
+}
+
 function lp6enabledclick() {
 	if ( lp6enabled == 0 ) {
 	publish("1","openWB/set/lp6/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp6/ChargePointEnabled");
 	}
-};
+}
+
 function lp7enabledclick() {
 	if ( lp7enabled == 0 ) {
 	publish("1","openWB/set/lp7/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp7/ChargePointEnabled");
 	}
-};
+}
+
 function lp8enabledclick() {
 	if ( lp8enabled == 0 ) {
 	publish("1","openWB/set/lp8/ChargePointEnabled");
 	} else {
 	publish("0","openWB/set/lp8/ChargePointEnabled");
 	}
-};
+}
+
 function lp1DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");
-};
+}
+
 function lp2DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/set/lp2/DirectChargeAmps");
-};
+}
+
 function lp3DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/set/lp3/DirectChargeAmps");
-};
+}
+
 function lp4DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/set/lp4/DirectChargeAmps");
-};
+}
+
 function lp5DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/set/lp5/DirectChargeAmps");
-};
+}
+
 function lp6DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/set/lp6/DirectChargeAmps");
-};
+}
+
 function lp7DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/set/lp7/DirectChargeAmps");
-};
+}
+
 function lp8DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
-};
+}
+
 function sofortclick() {
 	        publish("0","openWB/set/ChargeMode");
 	        publish("0","openWB/global/ChargeMode");
-};
+}
+
 function minundpvclick() {
 	        publish("1","openWB/set/ChargeMode");
 	        publish("1","openWB/global/ChargeMode");
 
-};
+}
+
 function nurpvclick() {
 	        publish("2","openWB/set/ChargeMode");
 	        publish("2","openWB/global/ChargeMode");
-};
+}
+
 function standbyclick() {
 	        publish("4","openWB/set/ChargeMode");
 	        publish("4","openWB/global/ChargeMode");
-};
+}
+
 function stopclick() {
 	        publish("3","openWB/set/ChargeMode");
 	        publish("3","openWB/global/ChargeMode");
-};
+}
+
 function renewMQTTclick() {
 	        publish("1","openWB/set/RenewMQTT");
 		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");
 }
+
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
@@ -1798,124 +1819,114 @@ function putgraphtogether() {
 }
 
 function getfile() {
-
-
-
-if (document.getElementById("hook1div")) {
-
-$(function() {
-    if(hook1_aktiv == '1') {
- $.ajax({
-    url: "/openWB/ramdisk/hook1akt",
-    contentType: "text/plain",
-    dataType: "text",
-    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
-    complete: function(request){
-	    var hook1akt = request.responseText;
-		if (hook1akt == 1) {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook1div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: green;");
-			    } else {
-				var element = document.getElementById("hook1div");
-				element.setAttribute("style", "background-color: green;");
-			    }
-		    } else {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook1div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: red;");
-			    } else {
-				var element = document.getElementById("hook1div");
-				element.setAttribute("style", "background-color: red;");
-			}
+	if (document.getElementById("hook1div")) {
+		$(function() {
+	    	if(hook1_aktiv == '1') {
+	 			$.ajax({
+	    			url: "/openWB/ramdisk/hook1akt",
+				    contentType: "text/plain",
+				    dataType: "text",
+				    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+				    complete: function(request){
+					    var hook1akt = request.responseText;
+						if (hook1akt == 1) {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook1div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: green;");
+							} else {
+								var element = document.getElementById("hook1div");
+								element.setAttribute("style", "background-color: green;");
+							}
+						} else {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook1div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: red;");
+							} else {
+								var element = document.getElementById("hook1div");
+								element.setAttribute("style", "background-color: red;");
+							}
+						}
+				    }
+	  			});
+			} else {
+	        	$('#hook1div').hide();
+	    	}
+		});
+	}
+	if (document.getElementById("hook2div")) {
+		$(function() {
+		    if(hook2_aktiv == '1') {
+		 		$.ajax({
+		    		url: "/openWB/ramdisk/hook2akt",
+		    		beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
+		    		complete: function(request){
+						if (request.responseText == 1) {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook2div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: green;");
+					    	} else {
+								var element = document.getElementById("hook2div");
+								element.setAttribute("style", "background-color: green;");
+					    	}
+				    	} else {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook1div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: red;");
+					    	} else {
+								var element = document.getElementById("hook2div");
+								element.setAttribute("style", "background-color: red;");
+							}
+				    	}
+		    		}
+		  		});
+		   	} else {
+		     	$('#hook2div').hide();
 		    }
-    }
-  });
-} else {
-        $('#hook1div').hide();
-    }
-});
-}
-if (document.getElementById("hook2div")) {
-$(function() {
-    if(hook2_aktiv == '1') {
-
- $.ajax({
-    url: "/openWB/ramdisk/hook2akt",
-    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
-    complete: function(request){
-		if (request.responseText == 1) {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook2div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: green;");
-			    } else {
-				var element = document.getElementById("hook2div");
-				element.setAttribute("style", "background-color: green;");
-			    }
-		    } else {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook1div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: red;");
-			    } else {
-
-				var element = document.getElementById("hook2div");
-				element.setAttribute("style", "background-color: red;");
-			}
-		    }
-    }
-  });
-   } else {
-        $('#hook2div').hide();
-    }
-});
-}
-if (document.getElementById("hook3div")) {
-
-    $(function() {
-    if(hook3_aktiv == '1') {
-
- $.ajax({
-    url: "/openWB/ramdisk/hook3akt",
-    complete: function(request){
-		if (request.responseText == 1) {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook3div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: green;");
-			    } else {
-
-				var element = document.getElementById("hook3div");
-				element.setAttribute("style", "background-color: green;");
-			    }
-		    } else {
-			if ( activetheme == "symbol") {
-				var element = document.getElementById("hook3div");
-				element.classList.add("fa");
-				element.classList.add("fa-plug");
-				element.setAttribute("style", "color: red;");
-			    } else {
-
-				var element = document.getElementById("hook3div");
-				element.setAttribute("style", "background-color: red;");
-			}
-		    }
-    }
-  });
-  } else {
-        $('#hook3div').hide();
-    }
-});
-}
-}
+		});
+	}
+	if (document.getElementById("hook3div")) {
+	    $(function() {
+	    	if(hook3_aktiv == '1') {
+	 			$.ajax({
+	    			url: "/openWB/ramdisk/hook3akt",
+	    			complete: function(request){
+						if (request.responseText == 1) {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook3div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: green;");
+				    		} else {
+								var element = document.getElementById("hook3div");
+								element.setAttribute("style", "background-color: green;");
+				    		}
+			    		} else {
+							if ( activetheme == "symbol") {
+								var element = document.getElementById("hook3div");
+								element.classList.add("fa");
+								element.classList.add("fa-plug");
+								element.setAttribute("style", "color: red;");
+				    		} else {
+								var element = document.getElementById("hook3div");
+								element.setAttribute("style", "background-color: red;");
+							}
+			    		}
+	    			}
+	  			});
+	  		} else {
+	        	$('#hook3div').hide();
+	    	}
+		});
+	}
+}  // end getfile
 
 doInterval = setInterval(getfile, 5000);
 getfile();
