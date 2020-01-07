@@ -240,7 +240,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	    }
 	    $("#bezugdiv").html(wattbezug);
 	 }
-	else if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
 			hidehaus = 'foo';
@@ -257,7 +257,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLegend" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLegend" ) {
 		if ( mqttpayload == 0) {
 			boolDisplayLegend = false;
 			document.getElementById("graphlegenddiv").setAttribute("style", "color: red;");
@@ -272,7 +272,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLiveGraph" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLiveGraph" ) {
 		if ( mqttpayload == 0) {
 			$('#thegraph').hide();
 			boolDisplayLiveGraph = false;
@@ -287,7 +287,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			graphgraphdiv.classList.add("fa-toggle-on");
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayEvu" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
 			hideevu = 'foo';
@@ -305,7 +305,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayPv" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayPv" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
 			hidepv = 'foo';
@@ -321,7 +321,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp1" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp1" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp1 = false;
 			hidelp1 = 'foo';
@@ -339,7 +339,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp2" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp2" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp2 = false;
 			hidelp2 = 'foo';
@@ -358,7 +358,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp3" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp3" ) {
 		if ( mqttpayload == 1) {
 			hidelp3 = 'foo';
 			boolDisplayLp3 = false;
@@ -376,7 +376,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp4" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp4" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp4 = false;
 			hidelp4 = 'foo';
@@ -394,7 +394,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp5" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp5" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp5 = false;
 			hidelp5 = 'foo';
@@ -412,7 +412,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp6" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp6" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp6 = false;
 			hidelp6 = 'foo';
@@ -430,7 +430,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp7" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp7" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp7 = false;
 			hidelp7 = 'foo';
@@ -448,7 +448,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp8" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp8" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLp8 = false;
 			hidelp8 = 'foo';
@@ -466,7 +466,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
 			hidelpa = 'foo';
@@ -485,7 +485,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
 			hidespeicher = 'foo';
@@ -502,7 +502,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
 		if ( mqttpayload == 1) {
 			hidespeichersoc = 'foo';
 			boolDisplaySpeicherSoc = false;
@@ -519,7 +519,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp1Soc" ) {
 		if ( mqttpayload == 1) {
 			$('#socenabledlp1').show();
 			hidelp1soc = 'foo';
@@ -540,7 +540,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLp2Soc" ) {
 		if ( mqttpayload == 1) {
 			hidelp2soc = 'foo';
 			$('#socenabledlp2').show();
@@ -559,7 +559,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		checkgraphload();
 	}
 
-	else if ( mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLoad1" ) {
 		if ( mqttpayload == 1) {
 			hideload1 = 'foo';
 			boolDisplayLoad1 = false;
@@ -577,7 +577,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/boolDisplayLoad2" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/boolDisplayLoad2" ) {
 		if ( mqttpayload == 1) {
 			hideload2 = 'foo';
 			boolDisplayLoad2 = false;
@@ -594,63 +594,63 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		checkgraphload();
 	}
-	else if ( mqttmsg == "openWB/graph/1alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/1alllivevalues" ) {
 		if (initialread == 0) {
 			all1p = mqttpayload;
 			all1 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/2alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/2alllivevalues" ) {
 		if (initialread == 0) {
 			all2p = mqttpayload;
 			all2 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/3alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/3alllivevalues" ) {
 		if (initialread == 0) {
 			all3p = mqttpayload;
 			all3 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/4alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/4alllivevalues" ) {
 		if (initialread == 0) {
 			all4p = mqttpayload;
 			all4 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/5alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/5alllivevalues" ) {
 		if (initialread == 0) {
 			all5p = mqttpayload;
 			all5 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/6alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/6alllivevalues" ) {
 		if (initialread == 0) {
 			all6p = mqttpayload;
 			all6 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/7alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/7alllivevalues" ) {
 		if (initialread == 0) {
 			all7p = mqttpayload;
 			all7 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/8alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/8alllivevalues" ) {
 		if (initialread == 0) {
 			all8p = mqttpayload;
 			all8 = 1;
 		putgraphtogether();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/alllivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/alllivevalues" ) {
 		if ( initialread == -10) {
 			var csvData = new Array();
 			var rawcsv = mqttpayload.split(/\r?\n|\r/);
@@ -686,11 +686,11 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			checkgraphload();
 		}
 	}
-	else if ( mqttmsg == "openWB/graph/lastlivevalues" ) {
+	else if ( chartjsSelected == 1 && mqttmsg == "openWB/graph/lastlivevalues" ) {
 		if ( initialread > 0) {
 			var lines = mqttpayload.split("\n");
 			for (var i = 0; i < lines.length; i++) {
-				var ldate = lines[i].split(",")[0];     
+				var ldate = lines[i].split(",")[0];
 				var lbezug = lines[i].split(",")[1];
 				var lpv = lines[i].split(",")[3];
 				var llp2 = lines[i].split(",")[5];
@@ -823,7 +823,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/housebattery/W" ) {
 		var speicherwatt = mqttpayload;
 		intspeicherw = parseInt(speicherwatt, 10);
-		intspeicherarrow = intspeicherw;	
+		intspeicherarrow = intspeicherw;
 		if (intspeicherw > 0) {
 			if (intspeicherw > 999) {
 				intspeicherw = (intspeicherw / 1000).toFixed(2);
@@ -853,7 +853,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/1/ChargePointEnabled" ) {
 		var lp1enabledelement = document.getElementById("lp1enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp1enabledelement.classList.remove("fa-check");
 			lp1enabledelement.classList.add("fa-times");
@@ -866,7 +866,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/2/ChargePointEnabled" ) {
 		var lp2enabledelement = document.getElementById("lp2enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp2enabledelement.classList.remove("fa-check");
 			lp2enabledelement.classList.add("fa-times");
@@ -879,7 +879,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/3/ChargePointEnabled" ) {
 		var lp3enabledelement = document.getElementById("lp3enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp3enabledelement.classList.remove("fa-check");
 			lp3enabledelement.classList.add("fa-times");
@@ -892,7 +892,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/4/ChargePointEnabled" ) {
 		var lp4enabledelement = document.getElementById("lp4enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp4enabledelement.classList.remove("fa-check");
 			lp4enabledelement.classList.add("fa-times");
@@ -905,7 +905,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/5/ChargePointEnabled" ) {
 		var lp5enabledelement = document.getElementById("lp5enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp5enabledelement.classList.remove("fa-check");
 			lp5enabledelement.classList.add("fa-times");
@@ -918,7 +918,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/6/ChargePointEnabled" ) {
 		var lp6enabledelement = document.getElementById("lp6enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp6enabledelement.classList.remove("fa-check");
 			lp6enabledelement.classList.add("fa-times");
@@ -931,7 +931,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/7/ChargePointEnabled" ) {
 		var lp7enabledelement = document.getElementById("lp7enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp7enabledelement.classList.remove("fa-check");
 			lp7enabledelement.classList.add("fa-times");
@@ -944,7 +944,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/8/ChargePointEnabled" ) {
 		var lp8enabledelement = document.getElementById("lp8enableddiv");
-	
+
 		if ( mqttpayload == 0 ) {
 			lp8enabledelement.classList.remove("fa-check");
 			lp8enabledelement.classList.add("fa-times");
@@ -1155,7 +1155,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp3').length > 0) {
-			var element = document.getElementById("socstatlp3");	
+			var element = document.getElementById("socstatlp3");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1196,7 +1196,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp4').length > 0) {
-			var element = document.getElementById("socstatlp4");	
+			var element = document.getElementById("socstatlp4");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1237,7 +1237,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp5').length > 0) {
-			var element = document.getElementById("socstatlp5");	
+			var element = document.getElementById("socstatlp5");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1278,7 +1278,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp6').length > 0) {
-			var element = document.getElementById("socstatlp6");	
+			var element = document.getElementById("socstatlp6");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1320,7 +1320,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp7').length > 0) {
-			var element = document.getElementById("socstatlp7");	
+			var element = document.getElementById("socstatlp7");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1361,7 +1361,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp8').length > 0) {
-			var element = document.getElementById("socstatlp8");	
+			var element = document.getElementById("socstatlp8");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1380,7 +1380,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp1').length > 0) {
-			var element = document.getElementById("socstatlp1");	
+			var element = document.getElementById("socstatlp1");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1400,7 +1400,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		}
 		if ($('#socstatlp2').length > 0) {
-			var element = document.getElementById("socstatlp2");	
+			var element = document.getElementById("socstatlp2");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1422,7 +1422,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/1/ChargeStatus" ) {
 		if ($('#stationlp1').length > 0) {
-			var element = document.getElementById("stationlp1");    
+			var element = document.getElementById("stationlp1");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1432,7 +1432,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/2/ChargeStatus" ) {
 		if ($('#stationlp2').length > 0) {
-			var element = document.getElementById("stationlp2");    
+			var element = document.getElementById("stationlp2");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1442,7 +1442,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/3/ChargeStatus" ) {
 		if ($('#stationlp3').length > 0) {
-			var element = document.getElementById("stationlp3");    
+			var element = document.getElementById("stationlp3");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1452,7 +1452,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/4/ChargeStatus" ) {
 		if ($('#stationlp4').length > 0) {
-			var element = document.getElementById("stationlp4");    
+			var element = document.getElementById("stationlp4");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1462,7 +1462,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/5/ChargeStatus" ) {
 		if ($('#stationlp5').length > 0) {
-			var element = document.getElementById("stationlp5");    
+			var element = document.getElementById("stationlp5");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1472,7 +1472,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/6/ChargeStatus" ) {
 		if ($('#stationlp6').length > 0) {
-			var element = document.getElementById("stationlp6");    
+			var element = document.getElementById("stationlp6");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1482,7 +1482,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/7/ChargeStatus" ) {
 		if ($('#stationlp7').length > 0) {
-			var element = document.getElementById("stationlp7");    
+			var element = document.getElementById("stationlp7");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1492,7 +1492,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/lp/8/ChargeStatus" ) {
 		if ($('#stationlp8').length > 0) {
-			var element = document.getElementById("stationlp8");    
+			var element = document.getElementById("stationlp8");
 			if (mqttpayload == 1) {
 				element.setAttribute("style", "color: #00FF00;");
 			} else {
@@ -1605,7 +1605,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$(thevar[1]).html(mqttpayload);
 			}
 		});
-	} 
+	}
 }
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
@@ -1633,7 +1633,7 @@ var options = {
 	}
 	};
 
-//Creates a new Messaging.Message Object and sends it 
+//Creates a new Messaging.Message Object and sends it
 var publish = function (payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
@@ -1755,7 +1755,7 @@ function stopclick() {
 };
 function renewMQTTclick() {
 	        publish("1","openWB/set/RenewMQTT");
-		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");	
+		alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");
 }
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){

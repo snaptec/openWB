@@ -12,6 +12,15 @@
 			setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
 		}
 	?>
+	<?php include ("values.php");
+		if ( $simplemodeold == 1 ) {
+			echo '<title>ChargeController</title>';
+		}else{
+			echo'<title>openWB</title>';}
+	?>
+	<script>
+		var chartjsSelected = <?php echo $graphliveamold ?>;
+	</script>
 	<!-- load amCharts libraries -->
 	<script src="js/core.js"></script>
 	<script src="js/charts.js"></script>
@@ -32,7 +41,6 @@
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="openWB">
-
 
 	<meta name="description" content="openWB" />
 	<meta name="keywords" content="openWB" />
@@ -79,14 +87,8 @@
 	<!-- Data refresher -->
     <script src="live.js?vers=12"></script>
     <script src="livefunctions.js?vers=7"></script>
-<?php include ("values.php");
-if ( $simplemodeold == 1 ) {
-	echo '<title>ChargeController</title>';
-}else{
-	echo'<title>openWB</title>';}
-?>
-
 </head>
+
 <script>
 	var hook1_aktiv = <?php echo $hook1_aktivold ?>;
 	var hook2_aktiv = <?php echo $hook2_aktivold ?>;
