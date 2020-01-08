@@ -7,6 +7,7 @@
 
 var doInterval;
 var do2Interval;
+var myline;
 var pvwattarrow;
 var llaktuellarrow;
 var llaktuelllp2arrow;
@@ -844,6 +845,7 @@ var publish = function (payload, topic) {
 }
 
 client.connect(options);
+
 function graphoptionclick() {
 	if ( document.getElementById("graphoptiondiv").style.display === "none") {
 		document.getElementById("graphoptiondiv").style.display = "block";
@@ -854,65 +856,65 @@ function graphoptionclick() {
 
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {
-	publish("1","openWB/set/lp1/ChargePointEnabled");
+		publish("1","openWB/set/lp1/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp1/ChargePointEnabled");
+		publish("0","openWB/set/lp1/ChargePointEnabled");
 	}
 }
 
 function lp2enabledclick() {
 	if ( lp2enabled == 0 ) {
-	publish("1","openWB/set/lp2/ChargePointEnabled");
+		publish("1","openWB/set/lp2/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp2/ChargePointEnabled");
+		publish("0","openWB/set/lp2/ChargePointEnabled");
 	}
 }
 
 function lp3enabledclick() {
 	if ( lp3enabled == 0 ) {
-	publish("1","openWB/set/lp3/ChargePointEnabled");
+		publish("1","openWB/set/lp3/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp3/ChargePointEnabled");
+		publish("0","openWB/set/lp3/ChargePointEnabled");
 	}
 }
 
 function lp4enabledclick() {
 	if ( lp4enabled == 0 ) {
-	publish("1","openWB/set/lp4/ChargePointEnabled");
+		publish("1","openWB/set/lp4/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp4/ChargePointEnabled");
+		publish("0","openWB/set/lp4/ChargePointEnabled");
 	}
 }
 
 function lp5enabledclick() {
 	if ( lp5enabled == 0 ) {
-	publish("1","openWB/set/lp5/ChargePointEnabled");
+		publish("1","openWB/set/lp5/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp5/ChargePointEnabled");
+		publish("0","openWB/set/lp5/ChargePointEnabled");
 	}
 }
 
 function lp6enabledclick() {
 	if ( lp6enabled == 0 ) {
-	publish("1","openWB/set/lp6/ChargePointEnabled");
+		publish("1","openWB/set/lp6/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp6/ChargePointEnabled");
+		publish("0","openWB/set/lp6/ChargePointEnabled");
 	}
 }
 
 function lp7enabledclick() {
 	if ( lp7enabled == 0 ) {
-	publish("1","openWB/set/lp7/ChargePointEnabled");
+		publish("1","openWB/set/lp7/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp7/ChargePointEnabled");
+		publish("0","openWB/set/lp7/ChargePointEnabled");
 	}
 }
 
 function lp8enabledclick() {
 	if ( lp8enabled == 0 ) {
-	publish("1","openWB/set/lp8/ChargePointEnabled");
+		publish("1","openWB/set/lp8/ChargePointEnabled");
 	} else {
-	publish("0","openWB/set/lp8/ChargePointEnabled");
+		publish("0","openWB/set/lp8/ChargePointEnabled");
 	}
 }
 

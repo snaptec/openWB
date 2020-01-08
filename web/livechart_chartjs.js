@@ -169,7 +169,7 @@ function loadgraph() {
 
 	var ctx = document.getElementById('canvas').getContext('2d');
 
-	window.myLine = Chart.Line(ctx, {
+	myLine = new Chart.Line(ctx, {
 		data: lineChartData,
 		options: {
 			tooltips: {
