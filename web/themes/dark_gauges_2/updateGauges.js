@@ -1,3 +1,5 @@
+var gaugeDataIntervall, dailyYieldLabelIntervall;
+
 function updateGaugeValue(gauge, value, text, setText, isSymmetric, autoRescale) {
     // gauge: zu erneuernde Gauge
     // value: neuer Wert
@@ -18,7 +20,7 @@ function updateGaugeValue(gauge, value, text, setText, isSymmetric, autoRescale)
         needsScaling = true;
         if (!autoRescale) {
             // neues Maximum der Gauge als Cookie speichern
-            gauge_identifier = 'dark_gauges_1_' + gauge.id;
+            gauge_identifier = 'dark_gauges_2_' + gauge.id;
             $.ajax({
                 type: "GET",
                 url: "./setGaugeScaleCookie.php",
@@ -125,7 +127,7 @@ function getGaugeDataNeedle() {
                   // nie mehr als das Maximum, sonst passt die ProgressBar nicht
                   pvLeistung = progressBarWR1.max
               };
-              // über den Umweg toString und parseFloat werden eventuelle unbedeutende 
+              // über den Umweg toString und parseFloat werden eventuelle unbedeutende
               // Nullen am Ende gelöscht: 1.30 = 1.3, 1.00 = 1 etc.
               anzeigeText = parseFloat(pvLeistung.toString()) + 'kW'
           };
@@ -226,12 +228,11 @@ function getGaugeDataNeedle() {
       });
 }
 
-var gaugeDataIntervall, dailyYieldLabelIntervall;
-
 $(window).load(function() {
-    // sobal die Seite vollständig geladen ist, alle Gauges
-    // regelmäßig aktualisieren
-    // benötigt eingebundene handleIntervalls.js
-    gaugeDataIntervall = mySetInterval(getGaugeDataNeedle, 5000);  // alle 5 Sekunden Needle erneuern
-    dailyYieldLabelIntervall = mySetInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
+    // sobal die Seite vollständig geladen ist, alle Gauges füllen
+    getGaugeDataNeedle();
+    getValueDailyYieldLabel();
+    // und dann regelmäßig aktualisieren
+    gaugeDataIntervall = setInterval(getGaugeDataNeedle, 5000);  // alle 5 Sekunden Needle erneuern
+    dailyYieldLabelIntervall = setInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
 });
