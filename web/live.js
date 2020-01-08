@@ -116,9 +116,9 @@ var thevalues = [
 ["openWB/lp/1/kWhDailyCharged", "#dailychargelp1div"],
 ["openWB/lp/2/kWhDailyCharged", "#dailychargelp2div"],
 ["openWB/lp/3/kWhDailyCharged", "#dailychargelp3div"],
-["openWB/lp/1/kWhActualCharged", "#aktgeladendiv"],
-["openWB/lp/2/kWhActualCharged", "#aktgeladens1div"],
-["openWB/lp/3/kWhActualCharged", "#aktgeladens2div"],
+["openWB/lp/1/kWhActualCharged", "#aktgeladen1div"],
+["openWB/lp/2/kWhActualCharged", "#aktgeladen2div"],
+["openWB/lp/3/kWhActualCharged", "#aktgeladen3div"],
 ["openWB/pv/W", "#"],
 ["openWB/lp/1/W", "#"],
 ["openWB/lp/2/W", "#"],
@@ -145,7 +145,7 @@ var thevalues = [
 ["openWB/lp/7/boolChargeStat", "#"],
 ["openWB/lp/8/boolChargeStat", "#"],
 
-["openWB/lp/1/AConfigured", "#llsolldiv"],
+["openWB/lp/1/AConfigured", "#llsolllp1div"],
 ["openWB/lp/2/AConfigured", "#llsolllp2div"],
 ["openWB/lp/3/AConfigured", "#llsolllp3div"],
 ["openWB/lp/8/AConfigured", "#llsolllp8div"],
@@ -168,7 +168,7 @@ var thevalues = [
 ["openWB/lp/6/ChargeStatus", "#"],
 ["openWB/lp/7/ChargeStatus", "#"],
 ["openWB/lp/8/ChargeStatus", "#"],
-["openWB/lp/1/kWhChargedSincePlugged", "#pluggedladungbishergeladendiv"],
+["openWB/lp/1/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp1div"],
 ["openWB/lp/2/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp2div"],
 ["openWB/lp/3/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp3div"],
 ["openWB/lp/4/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp4div"],
@@ -224,6 +224,7 @@ function getCol(matrix, col){
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
+
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var wattbezug = mqttpayload;
