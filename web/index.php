@@ -21,10 +21,6 @@
 	<script>
 		var chartjsSelected = <?php echo $graphliveamold ?>;
 	</script>
-	<!-- load amCharts libraries -->
-	<script src="js/core.js"></script>
-	<script src="js/charts.js"></script>
-	<script src="js/animated.js"></script>
 	<!-- load Chart.js library -->
 	<script src="js/Chart.bundle.js"></script>
 	<!-- load respective Chart.js definition since function declarations are used by global live.js-->

@@ -70,7 +70,7 @@
 		<!-- will be refreshed using MQTT (in live.js)-->
 		<div class="row" id="thegraph">
 			<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-				<div id="loadlivegraph" style="text-align: center; margin-top: 150px;"> Graph lädt bitte warten...</div>
+				<div id="loadlivegraph" style="text-align: center; margin-top: 150px;"> Graph lädt, bitte warten...</div>
 				<canvas id="canvas"></canvas>
 			</div>
 			<div id="graphoptiondiv" style="display: none;"><br><br></div>
@@ -78,13 +78,13 @@
 	';
 } else {
 	echo '
-	    <!-- old amchart as graph selected -->
+	    <!-- php as graph selected -->
 		<!-- Graph refresher -->
 		<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<div class="imgwrapper">
-					<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_amcharts.php" alt="Graph lädt, bitte warten..." class="img-responsive">
+					<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php" alt="Graph lädt, bitte warten..." class="img-responsive">
 					<br>
 				</div>
 			</div>
@@ -114,12 +114,12 @@
 
 </div>
 <!-- show first charging Point -->
-<div class="row">
+<div class="row" id="lp1lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lldiv"></span>, <span id="llsolldiv"></span> A Soll
+		<span id="lllp1div"></span>, <span id="llsolldiv"></span> A Soll
 	</div>
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladendiv"></span> kWh
@@ -128,9 +128,9 @@
 		<div id="socenabledlp1">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
-		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp1"></span>% SoC </span>';
 		} else {
-		echo '<span id="soclevel"></span>% SoC';
+		echo '<span id="soclp1"></span>% SoC';
 		} ?>
 		</div>
 	</div>
@@ -140,7 +140,6 @@
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
 	</div>
-
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lllp2div"></span>,  <span id="llsolllp2div"></span> A Soll
 	</div>
@@ -151,9 +150,9 @@
 		<div id="socenabledlp2">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
-		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp2"></span>% SoC </span>';
 		} else {
-		echo '<span id="soc1level"></span>% SoC';
+		echo '<span id="soclp2"></span>% SoC';
 		} ?>
 		</div>
 	</div>
@@ -365,13 +364,13 @@
 	</div>
 	<div class="row" style="font-size: 2vw">
 		<div class="col-xs-4 text-center">
-			<span id="aktgeladendiv"></span> kWh
+			<span id="aktgeladen1div"></span> kWh
 		</div>
 		<div id="ladepunkts1111div" class="col-xs-4 text-center">
-			<span id="aktgeladens1div"></span> kWh
+			<span id="aktgeladen2div"></span> kWh
 		</div>
 		<div id="ladepunkts2222div" class="col-xs-4 text-center">
-			<span id="aktgeladens2div"></span> kWh
+			<span id="aktgeladen3div"></span> kWh
 		</div>
 	</div>
 
@@ -383,12 +382,12 @@
 		</div>
 		<div id="ladepunkts11111div" class="col-xs-4 text-center">
 			<div id="lademstats1div">
-				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 			</div>
 		</div>
 		<div id="ladepunkts22222div" class="col-xs-4 text-center">
 			<div id="lademstats2div">
-				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 			</div>
 		</div>
 	</div>

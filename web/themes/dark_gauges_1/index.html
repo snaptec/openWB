@@ -12,7 +12,6 @@
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	var chartlegend = <?php echo $chartlegendmainold ?>;
 	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
 	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
@@ -253,10 +252,13 @@
 ';
 } else {
 echo '
+<!-- php as graph selected -->
+<!-- Graph refresher -->
+<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
 <div class="row">
 	<div class="col-xs-12 text-center">
 		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
+			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php"
 				 alt="Graph lädt, bitte warten..." class="img-responsive">
 			<br></div>
 	</div>
@@ -794,9 +796,6 @@ echo '
 
 <br><br><br><br>
 </div>
-
-<!-- load amcharts js for graph -->
-<script src="/openWB/web/themes/standard/livegraph.js"></script>
 
 <!-- after pageload update all gauges -->
 <script type="text/javascript">
