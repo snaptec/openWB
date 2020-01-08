@@ -222,7 +222,7 @@ function loadgraph() {
 	});
 
 	initialread = 1;
-	$('#loadlivegraph').hide();
+	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
 
 function checkgraphload(){
