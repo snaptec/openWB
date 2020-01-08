@@ -169,7 +169,7 @@ function loadgraph() {
 
 	var ctx = document.getElementById('canvas').getContext('2d');
 
-	myLine = new Chart.Line(ctx, {
+	window.myLine = new Chart.Line(ctx, {
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -183,12 +183,14 @@ function loadgraph() {
 			responsive: true,
 			maintainAspectRatio: false,
 			hover: {
-				mode: 'null',
+				mode: 'null'
 			},
 			stacked: false,
 			legend: {
 				display: boolDisplayLegend,
 				labels: {
+					// middle grey, opacy = 100% (visible)
+					fontColor: "rgba(153, 153, 153, 1)",
 					filter: function(item,chart) {
 						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) ) { return false } else { return true}
 					}
@@ -198,25 +200,59 @@ function loadgraph() {
 				display: false
 			},
 			scales: {
-				yAxes: [{
-					type: 'linear',
-					display: true,
-					position: 'left',
-					id: 'y-axis-1',
-					} , {
-					type: 'linear',
-					display: true,
-					gridLines: {
-					color: "rgba(0, 0, 0, 0)",
-					},
-					ticks: {
-						min: 1,
-						suggestedMax: 100
-					},
-					position: 'right',
-					id: 'y-axis-2',
+				xAxes: [
+					{
+         				ticks: {
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+         				}
+      				}],
+				yAxes: [
+					{
+						// horizontal line for values displayed on the left side (power)
+						position: 'left',
+						id: 'y-axis-1',
+						type: 'linear',
+						display: true,
+						scaleLabel: {
+		        			display: true,
+		        			labelString: 'Leistung [W]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+		      			},
+						gridLines: {
+							// light grey, opacy = 100% (visible)
+							color: "rgba(204, 204, 204, 1)",
+						},
+						ticks: {
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						}
+
+					},{
+						// horizontal line for values displayed on the right side (SoC)
+						position: 'right',
+						id: 'y-axis-2',
+						type: 'linear',
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'SoC [%]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							// black, opacy = 0% (invisible)
+							color: "rgba(0, 0, 0, 0)",
+						},
+						ticks: {
+							min: 1,
+							suggestedMax: 100,
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						}
 					}
-				],
+				]
 			}
 		}
 	});

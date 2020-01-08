@@ -7,7 +7,6 @@
 
 var doInterval;
 var do2Interval;
-var myline;
 var pvwattarrow;
 var llaktuellarrow;
 var llaktuelllp2arrow;
