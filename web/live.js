@@ -667,10 +667,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		console.log('mqttmsg-boolPlugStat: '+index+'   load='+mqttpayload);
 		if ( $('#plugstatlp'+index+'div').length > 0 ) {
 			if ( mqttpayload == 1 ) {
-				document.getElementById("plugstatlp"+index+"div").classList.add("fa");
 				document.getElementById("plugstatlp"+index+"div").classList.add("fa-plug");
 			} else {
-				document.getElementById("plugstatlp"+index+"div").classList.remove("fa");
 				document.getElementById("plugstatlp"+index+"div").classList.remove("fa-plug");
 			}
 		}

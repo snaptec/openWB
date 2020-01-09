@@ -69,7 +69,9 @@
 		<!-- will be refreshed using MQTT (in live.js)-->
 		<div class="row" id="thegraph">
 			<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-				<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;"> Graph lädt, bitte warten...</div>
+				<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;">
+					Graph lädt, bitte warten...
+				</div>
 				<canvas id="canvas"></canvas>
 			</div>
 			<div id="graphoptiondiv" style="display: none;"><br><br></div>
@@ -87,7 +89,8 @@
 					<br>
 				</div>
 			</div>
-		</div>';
+		</div>
+	';
 } ?>
 
 <div class="row col-xs-12 text-center">
@@ -105,17 +108,15 @@
 	</div>
 </div>
 
-<!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
-	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Zielladen LP 1 aktiv
-	</div>
-
 </div>
 <!-- show first charging Point -->
 <div class="row" id="lp1lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
+		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()">
+			<?php echo $lp1nameold ?>
+		</span>
+		<span class="fa" id="zielladenaktivlp1div"></span>
+		<span class="fa" id="plugstatlp1div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lllp1div"></span>, <span id="llsolllp1div"></span> A Soll
