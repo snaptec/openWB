@@ -98,10 +98,11 @@
 </div>
 
 <div class="row col-xs-12 text-center" style="height: 100px;">
-		<div class="col-xs-3">
-
-			<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
-		</div>
+	<div class="col-xs-3">
+		<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span>
+		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		<span class="fa-2x" id="zielladenaktivlp1div"></span>
+	</div>
 
 		<div class="col-xs-4">
 				<div id="speedlp1">
@@ -341,17 +342,6 @@ echo '
 
 </div>
 
-<!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
-	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Zielladen LP 1 aktiv
-	</div>
-
-</div>
-
-
-
-
 <hr>
 <div class="row">
 
@@ -361,7 +351,9 @@ echo '
 
 <div class="row" id="thegraph" style="display: none;">
 	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-		<div id="loadlivegraph" style="text-align: center; margin-top: 150px;"> Graph lädt bitte warten...</div>
+		<div id="loadlivegraph" style="text-align: center; margin-top: 150px;">
+			Graph lädt, bitte warten...
+		</div>
 		<canvas id="canvas"></canvas>
 	</div>
 
