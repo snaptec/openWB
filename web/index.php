@@ -21,13 +21,6 @@
 	<script>
 		var chartjsSelected = <?php echo $graphliveamold ?>;
 	</script>
-	<!-- load Chart.js library -->
-	<script src="js/Chart.bundle.js"></script>
-	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
-	<script src="livechart_chartjs.js?version=9"></script>
-
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script type = "text/javascript" src = "js/mqttws31.js" ></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
          <meta name="apple-mobile-web-app-capable" content="yes">
@@ -80,9 +73,6 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
-	<!-- Data refresher -->
-    <script src="live.js?vers=12"></script>
-    <script src="livefunctions.js?vers=7"></script>
 </head>
 
 <script>
@@ -175,12 +165,25 @@ registerPageVisibility()
 		<a href="#" class="close-link"><i class="arrow_up"></i></a>
 	</div>
 	<!-- Scripts -->
+	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/owl.carousel.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/wow.min.js"></script>
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
+
+	<!-- load Chart.js library -->
+	<script src="js/Chart.bundle.js"></script>
+
+	<!-- load mqtt library -->
+	<script src = "js/mqttws31.js" ></script>
+
+	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
+	<script src="livechart_chartjs.js?version=9"></script>
+	<!-- Data refresher -->
+	<script src="live.js?vers=12"></script>
+	<script src="livefunctions.js?vers=7"></script>
 </body>
 
 </html>
