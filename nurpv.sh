@@ -150,15 +150,11 @@ else
 			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
 
 		else
-<<<<<<< HEAD
-			llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
-=======
 			if (( llalt == minimalapv )); then
 				llneu=$(( llalt + 1 ))
 			else
 				llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
 			fi
->>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 		fi
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
@@ -212,12 +208,8 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-<<<<<<< HEAD
-			llneu=$(( llalt + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
-=======
-			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
->>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 
+			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
 			fi
@@ -256,32 +248,22 @@ else
 			else
 				if (( minimalapv == minimalalp2pv )); then
 					runs/set-current.sh $llneu all
-<<<<<<< HEAD
-					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung reduziert mit $llneu Ampere" >> ramdisk/ladestatus.log
-=======
+
 					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
->>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung auf $llneu reduziert"
 					fi
 				else
 					runs/set-current.sh $llneu m
-<<<<<<< HEAD
-					echo "$date LP1, Lademodus NurPV. Ladung reduziert auf $llneu Ampere" >> ramdisk/ladestatus.log
-=======
+
 					echo "$date LP1, Lademodus NurPV. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
->>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if (( llneu < minimalalp2pv )); then
 						llneulp2=$minimalalp2pv
 					else
 						llneulp2=$llneu
 					fi		
 					runs/set-current.sh $llneulp2 s1
-<<<<<<< HEAD
-					echo "$date LP2, Lademodus NurPV. Ladung reduziert auf $llneulp2 Ampere" >> ramdisk/ladestatus.log
-=======
 					echo "$date LP2, Lademodus NurPV. Ladung geändert auf $llneulp2 Ampere" >> ramdisk/ladestatus.log
->>>>>>> 83141e48aa793850516ec3f75ed2549a2dda7fdc
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung auf $llneu bzw. $llneulp2 reduziert"
 					fi
