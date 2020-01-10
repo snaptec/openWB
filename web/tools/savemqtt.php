@@ -74,14 +74,20 @@ foreach($files as $currentFile)
 {
 	if (strpos($currentFile, $bridgeFileName) !== false)
 	{
+		//// print "Deleting: $currentFile <br/>";
 		file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
 	}
 }
 
 if ($_POST['action'] === 'deleteBridge')
 {
-	header("Location: ../mqtt.php");
-	
+	echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom trennen";
+	exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
+?>
+<script type="text/javascript">
+	setTimeout(function() { window.location = "../mqtt.php"; }, 8000);
+</script>
+<?php
 	return;
 }
 
@@ -319,7 +325,7 @@ EOS
 fclose($configFile);
 
 echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom trennen";
-exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log");
+exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 
 ?>
 
