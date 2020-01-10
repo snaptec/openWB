@@ -969,6 +969,7 @@ function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
 		alldata = alldata.replace(/^\s*[\n]/gm, '');
+		alldata = alldata.replace(/^\s*-[\n]/gm, '');
 		var csvData = new Array();
 		var rawcsv = alldata.split(/\r?\n|\r/);
 		for (var i = 0; i < rawcsv.length; i++) {
