@@ -1,57 +1,298 @@
-<!-- dark theme for openWB -->
-<!-- 2019 Michael Ortenstein -->
+<!-- dark_gauges_2                     -->
+<!-- dark theme with gauges for openWB -->
+<!-- separate gauges for two inverter  -->
+<!-- 2019/20 Michael Ortenstein        -->
+<script src="js/RGraph.common.core.js"></script>
+<script src="js/RGraph.common.dynamic.js"></script>
+<script src="js/RGraph.common.effects.js"></script>
+<script src="js/RGraph.gauge.js"></script>
+<script src="js/RGraph.vprogress.js"></script>
+<script src="themes/dark_gauges_2/updateGauges.js"></script>
 
 <script>
 	var lastmanagements2 = <?php echo $lastmanagements2old ?>;
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
+	var speichervorhanden = <?php echo $speichervorhanden ?>;
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
-	var speichervorhanden = <?php echo $speichervorhanden ?>;
+	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
+	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
 
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<h3> openWB Charge Controller </h3>
-	</div>
-</div>
+<?php
+	// Check ob Gauge-Skala-Cookies existiert - dann Werte übernehmen, sonst Standard setzen
+	if((isset($_COOKIE['dark_gauges_2_pvData']) === true)) {
+		$pvDataScaleMax = $_COOKIE['dark_gauges_2_pvData'];
+	} else {
+		$pvDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['dark_gauges_2_battData']) === true)) {
+		$battDataScaleMax = $_COOKIE['dark_gauges_2_battData'];
+	} else {
+		$battDataScaleMax = 1000;
+	}
+
+	if((isset($_COOKIE['dark_gauges_2_evuData']) === true)) {
+		$evuDataScaleMax = $_COOKIE['dark_gauges_2_evuData'];
+	} else {
+		$evuDataScaleMax = 1000;
+	}
+?>
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<div class="col-xs-6 text-center pvInfo" style="background-color:#BEFEBE">
-			PV: <span id="pvdiv"></span>
+		<h3>openWB Charge Controller</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="col-xs-3 text-center">
+			<div style="font-size: 2vw">Photovoltaik</div>
+			<canvas id="pvData" width="320" height="220">
+				Sorry, no canvas support
+			</canvas>
 		</div>
-		<div id="evudiv" class="col-xs-6 text-center pvInfo" style="background-color:#FEBEBE" >
-			EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span>
+		<div class="col-xs-3 text-center">
+			<div style="font-size: 2vw">Speicher</div>
+			<canvas id="battData" width="250" height="220">
+				Sorry, no canvas support
+			</canvas>
+		</div>
+		<div class="col-xs-3 text-center">
+			<div style="font-size: 2vw">Energienetz</div>
+			<canvas id="evuData" width="250" height="220">
+				Sorry, no canvas support
+			</canvas>
+		</div>
+		<div class="col-xs-3 text-center">
+			<div style="font-size: 2vw">Hausverbrauch</div>
+			<canvas id="homeData" width="250" height="220">
+				Sorry, no canvas support
+			</canvas>
 		</div>
 	</div>
 </div>
 
-<div id="hausverbrauch">
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<div class="col-xs-12 text-center pvInfo" style="background-color:#FEFEDF">
-				Hausverbrauch: <span id="hausverbrauchdiv"></span>
-			</div>
-		</div>
-	</div>
-</div>
+<script>
+    gaugePV = new RGraph.Gauge({
+        id: 'pvData',
+        min: 0,
+        max: <?php echo $pvDataScaleMax?>,
+        value: 0,
+        options: {
+			centerx: 145,
+			radius: 102,
+			titleTop: 'kW',
+			labelsCount: 2,
+			labelsSpecific: ['0', '<?php echo $pvDataScaleMax/2000?>', '<?php echo $pvDataScaleMax/1000?>'],
+			tickmarksLarge: 4,
+			tickmarksSmall: 20,
+			marginTop: 5,
+			shadow: true,
+			shadowColor: '#E9E9E9',
+			shadowBlur: 6,
+			backgroundColor: 'Gradient(white:#BEFEBE)',
+			borderWidth: 1,
+            borderInner: '#739B73',
+			centerpinColor: '#8E8E8B',
+            labelsValue: true,
+            labelsValueBounding: false,
+			labelsValueUnitsPost: ' W',
+			labelsValueBold: true,
+            labelsValueItalic: true,
+			labelsValueSize: 17,
+			titleBottomPos: 0.61,
+			titleBottomBold: true,
+			titleBottomSize: 11,
+            adjustable: false,
+            textAccessible: false,
+			colorsRanges: [[0, <?php echo $pvDataScaleMax?>, 'green', 3]],
+			anglesStart: RGraph.PI - 0.55,
+            anglesEnd: RGraph.TWOPI + 0.55
+        }
+    }).draw();
+	gaugePV.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
 
-<div id="speicherstatdiv">
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
-				Speicher:
-			</div>
-			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
-				<span id="speicherleistungdiv"></span>
-			</div>
-			<div class="col-xs-4 text-center pvInfo" style="background-color:#FCBE1E">
-				<span id="speichersocdiv"></span> % SoC
-			</div>
-		</div>
-	</div>
-</div>
+	progressBarWR1 = new RGraph.VProgress({
+		// für Wechselrichter 1
+        id: 'pvData',
+        min: 0,
+        max: 11,
+        value: 0,
+        options: {
+			title: 'Garage',
+			backgroundColor: 'black',
+			colors: ['Gradient(#BEFEBE:white)'],
+			marginLeft: 27,
+            marginRight: 286,
+            textSize: 8,
+			textBold: true,
+			textColor: '#E9E9E9',
+			labelsPosition: 'left',
+			labelsCount: 5,
+			labelsBold: false,
+            tickmarksOuterCount: 5
+        }
+    }).draw();
+
+	progressBarWR2 = new RGraph.VProgress({
+		// für Wechselrichter 2
+        id: 'pvData',
+        min: 0,
+        max: 11,
+        value: 0,
+        options: {
+			title: 'Wohnhaus',
+			backgroundColor: 'black',
+			colors: ['Gradient(#BEFEBE:white)'],
+			marginLeft: 255,
+            marginRight: 58,
+            textSize: 8,
+			textBold: true,
+			textColor: '#E9E9E9',
+			labelsCount: 5,
+			labelsBold: false,
+            tickmarksOuterCount: 5
+        }
+    }).draw();
+
+	gaugeBatt = new RGraph.Gauge({
+        id: 'battData',
+        min: <?php echo $battDataScaleMax*-1?>,
+        max: <?php echo $battDataScaleMax?>,
+        value: 0,
+		options: {
+			centerx: 110,
+			radius: 102,
+			titleTop: 'kW',
+			labelsCount: 2,
+			labelsSpecific: ['<?php echo $battDataScaleMax/-1000?>', '0', '<?php echo $battDataScaleMax/1000?>'],
+			tickmarksLarge: 4,
+			tickmarksSmall: 20,
+			marginTop: 5,
+			shadow: true,
+			shadowColor: '#E9E9E9',
+			shadowBlur: 6,
+			backgroundColor: 'Gradient(white:#FCBE1E)',
+			borderWidth: 1,
+            borderInner: '#BA8C16',
+			centerpinColor: '#8E8E8B',
+            labelsValue: true,
+            labelsValueBounding: false,
+			labelsValueUnitsPost: ' W',
+			labelsValueBold: true,
+            labelsValueItalic: true,
+			labelsValueSize: 17,
+			titleBottomPos: 0.61,
+			titleBottomBold: true,
+			titleBottomSize: 11,
+            adjustable: false,
+            textAccessible: false,
+			colorsRanges: [[<?php echo $battDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $battDataScaleMax?>, 'green', 3]],
+			anglesStart: RGraph.PI - 0.55,
+            anglesEnd: RGraph.TWOPI + 0.55
+        }
+    }).draw();
+	gaugeBatt.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+
+	progressBarSoC = new RGraph.VProgress({
+        id: 'battData',
+        min: 0,
+        max: 100,
+        value: 0,
+        options: {
+			title: 'SoC',
+			backgroundColor: 'black',
+			colors: ['Gradient(red:yellow:green)'],
+			marginLeft: 217,
+            marginRight: 22,
+            textSize: 8,
+			textBold: true,
+			textColor: '#E9E9E9',
+			labelsCount: 5,
+			labelsBold: false,
+            tickmarksOuterCount: 5
+        }
+    }).draw();
+
+	gaugeEVU = new RGraph.Gauge({
+        id: 'evuData',
+        min: <?php echo $evuDataScaleMax*-1?>,
+        max: <?php echo $evuDataScaleMax?>,
+        value: 0,
+		options: {
+			radius: 102,
+			titleTop: 'kW',
+			labelsCount: 2,
+			labelsSpecific: ['<?php echo $evuDataScaleMax/-1000?>', '0', '<?php echo $evuDataScaleMax/1000?>'],
+			tickmarksLarge: 4,
+			tickmarksSmall: 20,
+			marginTop: 5,
+			shadow: true,
+			shadowColor: '#E9E9E9',
+			shadowBlur: 6,
+			backgroundColor: 'Gradient(white:#FEBEBE)',
+			borderWidth: 1,
+            borderInner: '#A07676',
+			centerpinColor: '#8E8E8B',
+            labelsValue: true,
+            labelsValueBounding: false,
+			labelsValueUnitsPost: ' W',
+			labelsValueBold: true,
+            labelsValueItalic: true,
+			labelsValueSize: 17,
+			titleBottomPos: 0.61,
+			titleBottomBold: true,
+			titleBottomSize: 11,
+            adjustable: false,
+            textAccessible: false,
+			colorsRanges: [[<?php echo $evuDataScaleMax*-1?>, 0, 'red', 3], [0, <?php echo $evuDataScaleMax?>, 'green', 3]],
+			anglesStart: RGraph.PI - 0.55,
+            anglesEnd: RGraph.TWOPI + 0.55
+        }
+    }).draw();
+	gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+
+	gaugeHome = new RGraph.Gauge({
+        id: 'homeData',
+        min: 0,
+        max: 1000,
+        value: 0,
+		options: {
+			radius: 102,
+			titleTop: 'kW',
+			labelsCount: 2,
+			labelsSpecific: ['0', '0.5', '1'],
+			tickmarksLarge: 4,
+			tickmarksSmall: 20,
+			marginTop: 5,
+			shadow: true,
+			shadowColor: '#E9E9E9',
+			shadowBlur: 6,
+			backgroundColor: 'Gradient(white:#B5F1FF)',
+			borderWidth: 1,
+			borderInner: '#6E939B',
+			centerpinColor: '#8E8E8B',
+			labelsValue: true,
+            labelsValueBounding: false,
+			labelsValueUnitsPost: ' W',
+			labelsValueBold: true,
+            labelsValueItalic: true,
+			labelsValueSize: 17,
+            adjustable: false,
+            textAccessible: false,
+			colorsRanges: [[0, 1000, 'green', 3]],
+			colorsRedWidth: 0,
+            colorsYellowWidth: 0,
+			anglesStart: RGraph.PI - 0.55,
+            anglesEnd: RGraph.TWOPI + 0.55
+        }
+    }).draw();
+	gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+</script>
 
 <?php if ($graphliveamold == 1) {
 	echo '

@@ -1,5 +1,6 @@
+<!-- dark_gauges_1                     -->
 <!-- dark theme with gauges for openWB -->
-<!-- 2019 Michael Ortenstein -->
+<!-- 2019/20 Michael Ortenstein        -->
 <script src="js/RGraph.common.core.js"></script>
 <script src="js/RGraph.common.dynamic.js"></script>
 <script src="js/RGraph.common.effects.js"></script>
@@ -12,7 +13,8 @@
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	var chartlegend = <?php echo $chartlegendmainold ?>;
+	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
+	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	// Standardwert Zähler zur Anpassung Gauge-Skala, je 5 Sekunden Gauge-Update-Zyklus
 	var defaultScaleCounter = 8640;  // ca. 12 Stunden
 </script>
@@ -40,7 +42,7 @@
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<h3> OpenWB Lade Controller </h3>
+		<h3>openWB Charge Controller</h3>
 	</div>
 </div>
 
@@ -100,11 +102,12 @@
 			labelsValueBold: true,
             labelsValueItalic: true,
 			labelsValueSize: 17,
+			titleBottomPos: 0.61,
+			titleBottomBold: true,
+			titleBottomSize: 11,
             adjustable: false,
             textAccessible: false,
 			colorsRanges: [[0, <?php echo $pvDataScaleMax?>, 'green', 3]],
-			colorsRedWidth: 0,
-            colorsYellowWidth: 0,
 			anglesStart: RGraph.PI - 0.55,
             anglesEnd: RGraph.TWOPI + 0.55
         }
@@ -248,21 +251,32 @@
 
 </script>
 
-<!-- enable selected graphing method -->
 <?php if ($graphliveamold == 1) {
 	echo '
-		<div style="height:300px;" id="chartdiv"></div>
-';
+		<!-- interactive chart.js as graph selected -->
+		<!-- will be refreshed using MQTT (in live.js)-->
+		<div class="row" id="thegraph">
+			<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+				<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;"> Graph lädt, bitte warten...</div>
+				<canvas id="canvas"></canvas>
+			</div>
+			<div id="graphoptiondiv" style="display: none;"><br><br></div>
+		</div>
+	';
 } else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
-				 alt="Graph lädt, bitte warten..." class="img-responsive">
-			<br></div>
-	</div>
-</div>';
+	echo '
+	    <!-- php as graph selected -->
+		<!-- Graph refresher -->
+		<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<div class="imgwrapper">
+					<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php" alt="Graph lädt, bitte warten..." class="img-responsive">
+					<br>
+				</div>
+			</div>
+		</div>
+	';
 } ?>
 
 <div class="row col-xs-12 text-center">
@@ -274,11 +288,10 @@ echo '
 	</div>
 	<div class="col-xs-4 text-center">
 	</div>
-	<div class="row">
-		<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
-		</div>
+</div>
+<div class="row">
+	<div id="lastregelungaktivdiv" class="col-xs-12 text-center" style="color:#990000;font-size: 1vw">
 	</div>
-
 </div>
 
 <!-- show zielladen if its active in settings -->
@@ -289,52 +302,142 @@ echo '
 
 </div>
 <!-- show first charging Point -->
-<div class="row">
+<div class="row" id="lp1lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
+		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lldiv"></span>, <span id="llsolldiv"></span>A Soll
+		<span id="lllp1div"></span>, <span id="llsolllp1div"></span> A Soll
 	</div>
-	<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp1div"></span> kWh
+	</div>
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+		<div id="socenabledlp1">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
-		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp1"></span>% SoC </span>';
 		} else {
-		echo '<span id="soclevel"></span>% SoC';
+		echo '<span id="soclp1"></span>% SoC';
 		} ?>
+		</div>
 	</div>
 </div>
 <!-- show values for second charging point -->
 <div class="row" id="lp2lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
+		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
 	</div>
-
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lllp2div"></span>,  <span id="llsolllp2div"></span>A Soll
+		<span id="lllp2div"></span>,  <span id="llsolllp2div"></span> A Soll
 	</div>
-	<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp2div"></span> kWh
+	</div>
+	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
+		<div id="socenabledlp2">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
-		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp2"></span>% SoC </span>';
 		} else {
-		echo '<span id="soc1level"></span>% SoC';
+		echo '<span id="soclp2"></span>% SoC';
 		} ?>
+		</div>
 	</div>
 </div>
 <!-- show values for third charging point -->
-<div class="row" id="lp3lldiv">
+<div class="row" id="lp3lldiv" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<?php echo $lp3nameold ?>
+		<span id="lp3enableddiv" class="fa" style="cursor: pointer;" onclick="lp3enabledclick()"><?php echo $lp3nameold ?>
 	</div>
 
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lllp3div"></span>, <span id="llsolllp3div"></span>A Soll<br></span>
+		<span id="lllp3div"></span>, <span id="llsolllp3div"></span> A Soll<br></span>
 	</div>
-	<div class="col-xs-4 text-center text-primary" style="font-size: 2vw">
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp3div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
 	</div>
 </div>
+<div class="row" id="lp4div" style="display: none;">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lp4enableddiv" class="fa" style="cursor: pointer;" onclick="lp4enabledclick()"></span><span id="lp4name"></span><span id="plugstatlp4div"></span>
+
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp4div"></span>, <span id="llsolllp4div"></span> A Soll<br></span>
+	</div>
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp4div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+<div class="row" id="lp5div" style="display: none;">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lp5enableddiv" class="fa" style="cursor: pointer;" onclick="lp5enabledclick()"></span><span id="lp5name"></span><span id="plugstatlp5div"></span>
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp5div"></span>, <span id="llsolllp5div"></span> A Soll<br></span>
+	</div>
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp5div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+<div class="row" id="lp6div" style="display: none;">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lp6enableddiv" class="fa" style="cursor: pointer;" onclick="lp6enabledclick()"></span><span id="lp6name"></span><span id="plugstatlp6div"></span>
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp6div"></span>, <span id="llsolllp6div"></span> A Soll<br></span>
+	</div>
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp6div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+<div class="row" id="lp7div" style="display: none;">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lp7enableddiv" class="fa" style="cursor: pointer;" onclick="lp7enabledclick()"></span><span id="lp7name"></span><span id="plugstatlp7div"></span>
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp7div"></span>, <span id="llsolllp7div"></span> A Soll<br></span>
+	</div>
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp7div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+<div class="row" id="lp8div" style="display: none;">
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lp8enableddiv" class="fa" style="cursor: pointer;" onclick="lp8enabledclick()"></span><span id="lp8name"></span><span id="plugstatlp8div"></span>
+	</div>
+
+	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
+		<span id="lllp8div"></span>, <span id="llsolllp8div"></span> A Soll<br></span>
+	</div>
+	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
+		<span id="pluggedladungbishergeladenlp8div"></span> kWh
+	</div>
+
+	<div class="col-xs-2 text-center text-primary" style="font-size: 2vw">
+	</div>
+</div>
+
 <div class="row" id="gesamtlldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 	</div>
@@ -357,85 +460,46 @@ echo '
 <div class="row">
 	<div class="col-xs-6 text-center">
 		<div class="actstat">
-                        <input type="submit" class="sofort btn btn-lg btn-block" style="font-size: 2vw" name="sofort" value="Sofort Laden">
+                        <input type="submit" class="sofort btn btn-lg btn-block" style="font-size: 2vw; cursor: pointer;" onclick="sofortclick()" name="sofort" value="Sofort Laden">
 
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat1">
-                        <input type="submit" class="minpv btn btn-lg btn-block" style="font-size: 2vw" name="minpv" value="Min + PV">
+                        <input type="submit" class="minpv btn btn-lg btn-block" style="font-size: 2vw; cursor: pointer;" onclick="minundpvclick()" name="minpv" value="Min + PV">
 		</div>
 	</div>
 </div>
-<div class="row" style="font-size: 2vw">
+<div class="row" style="font-size: 2vw;">
 	<div class="col-xs-3 text-center">
 		<div class="actstat4">
-	        	<input type="submit" class="standby btn btn-lg btn-block" style="font-size: 2vw" name="standby" value="Standby">
+	        	<input type="submit" class="standby btn btn-lg btn-block" style="font-size: 2vw; cursor: pointer;" onclick="standbyclick()" name="standby" value="Standby">
 		</div>
 	</div>
 	<div class="col-xs-3 text-center">
 		<div class="actstat3">
-                        <input type="submit" class="stop btn btn-lg btn-block" style="font-size: 2vw" name="stop" value="Stop">
+                        <input type="submit" class="stop btn btn-lg btn-block" style="font-size: 2vw; cursor: pointer;" onclick="stopclick()" value="Stop">
 		</div>
 	</div>
 	<div class="col-xs-6 text-center">
 		<div class="actstat2">
-                        <input type="submit" class="nurpv btn btn-lg btn-block" style="font-size: 2vw" name="nurpv" value="Nur PV">
+                        <input type="submit" class="nurpv btn btn-lg btn-block" style="font-size: 2vw; cursor: pointer;" onclick="nurpvclick()" name="nurpv" value="Nur PV">
 		</div>
 	</div>
 </div>
 <div class="row" id="speicherpvuidiv">
 	<div class="col-xs-6"></div>
 	<div class="col-xs-3 pull-right">
-		<?php
-			if ($speicherpveinbeziehenold == 0) {
-				echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="color: black; font-weight: bolder"><i class="fa fa-car-battery" style="font-size: 2vw; vertical-align: middle"> </i> Speichervorrang</a>';
-			} else {
-				echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="color: black; font-weight: bolder"><i class="fa fa-car" style="font-size: 2vw; vertical-align: middle"> </i> EV-Vorrang</a>';
-			}
-		?>
+	<?php
+		if ($speicherpveinbeziehenold == 0) {
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">Speichervorrang</a>';
+		} else {
+			echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw">EV Vorrang</a>';
+		}
+	?>
 	</div>
+
 </div>
-<div class="row">
-	<hr>
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<h5>Aktuelle / Letzte Ladung</h5>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			LP1 <?php echo $lp1nameold ?>
-		</div>
-		<div  id="ladepunkts11div" class="col-xs-4 text-center">
-			LP2 <?php echo $lp2nameold ?>
-		</div>
-		<div id="ladepunkts22div" class="col-xs-4 text-center">
-			LP3 <?php echo $lp3nameold ?>
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="gelrlp1div"></span>km
-		</div>
-		<div id="ladepunkts111div" class="col-xs-4 text-center">
-			<span id="gelrlp2div"></span>km
-		</div>
-		<div id="ladepunkts222div" class="col-xs-4 text-center">
-			<span id="gelrlp3div"></span>km
-		</div>
-	</div>
-	<div class="row" style="font-size: 2vw">
-		<div class="col-xs-4 text-center">
-			<span id="aktgeladendiv"></span>kWh
-		</div>
-		<div id="ladepunkts1111div" class="col-xs-4 text-center">
-			<span id="aktgeladens1div"></span>kWh
-		</div>
-		<div id="ladepunkts2222div" class="col-xs-4 text-center">
-			<span id="aktgeladens2div"></span>kWh
-		</div>
-	</div>
 	<div id="heutegeladendiv">
 	<hr>
 	<div class="row">
@@ -454,8 +518,51 @@ echo '
 			<span id="dailychargelp3div"></span> kWh
 		</div>
 	</div>
+
+
 	</div>
-	<div class="row" id="sofortlmdiv2" style="font-size: 2vw">
+<div class="row">
+	<hr>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h5>aktuelle / letzte Ladung</h5>
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-4 text-center" style="font-size: 2vw">
+			LP1 <?php echo $lp1nameold ?>
+		</div>
+		<div  id="ladepunkts11div" class="col-xs-4 text-center">
+			LP2 <?php echo $lp2nameold ?>
+		</div>
+		<div id="ladepunkts22div" class="col-xs-4 text-center">
+			LP3 <?php echo $lp3nameold ?>
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-4 text-center">
+			<span id="gelrlp1div"></span> km
+		</div>
+		<div id="ladepunkts111div" class="col-xs-4 text-center">
+			<span id="gelrlp2div"></span> km
+		</div>
+		<div id="ladepunkts222div" class="col-xs-4 text-center">
+			<span id="gelrlp3div"></span> km
+		</div>
+	</div>
+	<div class="row" style="font-size: 2vw">
+		<div class="col-xs-4 text-center">
+			<span id="aktgeladen1div"></span> kWh
+		</div>
+		<div id="ladepunkts1111div" class="col-xs-4 text-center">
+			<span id="aktgeladen2div"></span> kWh
+		</div>
+		<div id="ladepunkts2222div" class="col-xs-4 text-center">
+			<span id="aktgeladen3div"></span> kWh
+		</div>
+	</div>
+
+	<div class="row" id="sofortlmdiv2" style="font-size: 2vw;">
 		<div class="col-xs-4 text-center">
 			<div id="lademstatdiv">
 				<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
@@ -463,12 +570,12 @@ echo '
 		</div>
 		<div id="ladepunkts11111div" class="col-xs-4 text-center">
 			<div id="lademstats1div">
-				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 			</div>
 		</div>
 		<div id="ladepunkts22222div" class="col-xs-4 text-center">
 			<div id="lademstats2div">
-				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 			</div>
 		</div>
 	</div>
@@ -498,7 +605,7 @@ echo '
 	<form name="sofortll" action="./tools/sofortll.php" method="POST">
 		<div class="row">
 			<div class="col-xs-12 text-center">
-				<div class="col-xs-4 text-center" style="font-size: 2vw">
+				<div class="col-xs-4 text-center" style="font-size: 2vw;">
 					<label for="msmoduslp1"></label>
 
 					<select type="text" name="msmoduslp1" id="msmoduslp1">
@@ -565,7 +672,7 @@ echo '
 				</div>
 
 				<span id="ladepunkts111111div">
-			<div class="col-xs-4 text-center" style="font-size: 2vw">
+			<div class="col-xs-4 text-center" style="font-size: 2vw;">
 						<label for="msmoduslp2"></label>
 
 						<select type="text" name="msmoduslp2" id="msmoduslp2">
@@ -642,7 +749,7 @@ echo '
 
 
 			<span id="ladepunkts222222div">
-					<div class="col-xs-4 text-center" style="font-size: 2vw">
+					<div class="col-xs-4 text-center" style="font-size: 2vw;">
 
 						<label for="lademstats2"></label>
 
@@ -689,70 +796,161 @@ echo '
 </div>
 <div class="row">
 	<div class="col-xs-12 text-center">
+
 		<div class="col-xs-12 text-center">
 			<div class="col-xs-12 tex-center"><hr>
 				<h5>Sofortladen Stromstärke</h5><br><br>
 
 			</div>
+		</div>
+		<div id="slider1div" class="col-xs-12 text-center">
 			<div class="col-xs-8 text-center">
-				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp1s" id="sofortlllp1s">
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>
 			</div>
 			<script>
-				var slider = document.getElementById("sofortll");
-				var output = document.getElementById("sofortlll");
-				output.innerHTML = slider.value;
-				slider.oninput = function() {
-					output.innerHTML = this.value;
+				var slider1 = document.getElementById("sofortlllp1s");
+				var output1 = document.getElementById("sofortlllp1l");
+				output1.innerHTML = slider1.value;
+				slider1.oninput = function() {
+					output1.innerHTML = this.value;
+					lp1DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
-		<div id="ladepunkts1ndiv">
-			<br>
-		</div>
-		<div id="ladepunkts1div">
-			<br>
-			<div class="col-xs-12 text-center">
-				<div class="col-xs-8 text-center">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
-				</div>
-				<div class="col-xs-4 text-center">
-					<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
-				</div>
-				<script>
-					var sliders1 = document.getElementById("sofortlls1");
-					var outputs1 = document.getElementById("sofortllls1");
-					outputs1.innerHTML = sliders1.value;
-					sliders1.oninput = function() {
-						outputs1.innerHTML = this.value;
-					}
-				</script>
+		<div id="slider2div" class="col-xs-12 text-center">
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
+
 			</div>
-		</div>
-		<div id="ladepunkts2ndiv">
-			<br>
-		</div>
-		<div id="ladepunkts2div">
-			<br>
-			<div class="col-xs-12 text-center">
-				<div class="col-xs-8 text-center">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
-				</div>
-				<div class="col-xs-4 text-center">
-					<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
-				</div>
-				<script>
-					var sliders2 = document.getElementById("sofortlls2");
-					var outputs2 = document.getElementById("sofortllls2");
-					outputs2.innerHTML = sliders2.value;
-					sliders2.oninput = function() {
-						outputs2.innerHTML = this.value;
-					}
-				</script>
-				<br>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>
 			</div>
+			<script>
+				var slider2 = document.getElementById("sofortlllp2s");
+				var output2 = document.getElementById("sofortlllp2l");
+				output2.innerHTML = slider2.value;
+				slider2.oninput = function() {
+					output2.innerHTML = this.value;
+					lp2DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+		<div id="slider3div" class="col-xs-12 text-center">
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp3">LP 3: <span id="sofortlllp3l"></span>A</label>
+			</div>
+			<script>
+				var slider3 = document.getElementById("sofortlllp3s");
+				var output3 = document.getElementById("sofortlllp3l");
+				output3.innerHTML = slider3.value;
+				slider3.oninput = function() {
+					output3.innerHTML = this.value;
+					lp3DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+		<div id="slider4div" class="col-xs-12 text-center" style="display: none;">
+
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label>
+			</div>
+			<script>
+				var slider4 = document.getElementById("sofortlllp4s");
+				var output4 = document.getElementById("sofortlllp4l");
+				output4.innerHTML = slider4.value;
+				slider4.oninput = function() {
+					output4.innerHTML = this.value;
+					lp4DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+		<div id="slider5div" class="col-xs-12 text-center" style="display: none;">
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label>
+			</div>
+			<script>
+				var slider5 = document.getElementById("sofortlllp5s");
+				var output5 = document.getElementById("sofortlllp5l");
+				output5.innerHTML = slider5.value;
+				slider5.oninput = function() {
+					output5.innerHTML = this.value;
+					lp5DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+
+		<div id="slider6div" class="col-xs-12 text-center" style="display: none;">
+
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp6">LP 6: <span id="sofortlllp6l"></span>A</label>
+			</div>
+			<script>
+				var slider6 = document.getElementById("sofortlllp6s");
+				var output6 = document.getElementById("sofortlllp6l");
+				output6.innerHTML = slider6.value;
+				slider6.oninput = function() {
+					output6.innerHTML = this.value;
+					lp6DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+		<div id="slider7div" class="col-xs-12 text-center" style="display: none;">
+
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label>
+			</div>
+			<script>
+				var slider7 = document.getElementById("sofortlllp7s");
+				var output7 = document.getElementById("sofortlllp7l");
+				output7.innerHTML = slider7.value;
+				slider7.oninput = function() {
+					output7.innerHTML = this.value;
+					lp7DirectChargeAmpsClick();
+				}
+			</script>
+		</div>
+		<div id="slider8div" class="col-xs-12 text-center" style="display: none;">
+
+			<div class="col-xs-8 text-center">
+				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s">
+
+			</div>
+			<div class="col-xs-4 text-center">
+				<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label>
+			</div>
+			<script>
+				var slider8 = document.getElementById("sofortlllp8s");
+				var output8 = document.getElementById("sofortlllp8l");
+				output8.innerHTML = slider8.value;
+				slider8.oninput = function() {
+					output8.innerHTML = this.value;
+					lp8DirectChargeAmpsClick();
+				}
+			</script>
 		</div>
 		<div class="col-xs-12 text-center"><br><br>
 			<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>
@@ -766,7 +964,7 @@ echo '
 </div>
 </div>
 
-<div class="row">
+	<div class="row">
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
 			<a href="ladelog.php" class="btn btn-lg btn-blue" >Ladelog</a>
 		</div>
@@ -778,31 +976,140 @@ echo '
 			</div
 	</div>
 	<div class="row">
-		<div class="col-xs-4 text-center">
-			<div></div>
-			<div>
-				Theme 2019 by M.Ortenstein
-			</div>
+		<div class="col-xs-1">
 		</div>
+		<div class="col-xs-3">
+			<input type="button" value="GraphOptionen" label="GraphOptionen" onclick="on()"/>
+
+
+		</div>
+
 		<div class="col-xs-4 text-center">
 			<a href="https://openwb.de">www.openwb.de</a><br>
 			<a href="hilfe.php">Hilfe</a>
 		</div>
-		<div class="col-xs-4 text-right">
+		<div class="col-xs-3 text-right">
 			<a href="settings.php">Einstellungen</a><br>
 			Ver <?php echo $owbversion ?>
 		</div>
+		<div class="col-xs-1">
+		</div>
 	</div>
 
-<br><br><br><br>
+
+	<br><br><br><br>
 </div>
 
-<!-- load amcharts js for graph -->
-<script src="/openWB/web/themes/standard/livegraph.js"></script>
 
-<!-- after pageload update all gauges -->
-<script type="text/javascript">
-	$(function() {
-		getfile();
-	});
+<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
+	<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
+		<div class="row"><div class="col-xs-12">
+			Graph Sichtbarkeit:
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				Optionen:
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/><br>
+			</div>
+		</div><hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Schließen" label="Schließen" onclick="off()"/>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function on() {
+	  document.getElementById("graphsettings").style.display = "block";
+					     }
+
+function off() {
+  document.getElementById("graphsettings").style.display = "none";
+  }
 </script>

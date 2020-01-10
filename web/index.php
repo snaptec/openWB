@@ -12,13 +12,17 @@
 			setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
 		}
 	?>
-	<script src="js/core.js"></script>
-	<script src="js/charts.js"></script>
-	<script src="js/animated.js"></script>
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script type = "text/javascript" src = "js/mqttws31.js" ></script>
+	<?php include ("values.php");
+		if ( $simplemodeold == 1 ) {
+			echo '<title>ChargeController</title>';
+		}else{
+			echo'<title>openWB</title>';}
+	?>
+	<script>
+		var chartjsSelected = <?php echo $graphliveamold ?>;
+	</script>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1,user-scalable=0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
          <meta name="apple-mobile-web-app-capable" content="yes">
          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
          <meta name="apple-mobile-web-app-title" content="openWB">
@@ -26,7 +30,6 @@
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="openWB">
-	
 
 	<meta name="description" content="openWB" />
 	<meta name="keywords" content="openWB" />
@@ -70,19 +73,8 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
-	<!-- Graph refresher -->
-	<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
-	<!-- Data refresher -->
-    <script src="live.js?vers=12"></script>
-    <script src="livefunctions.js?vers=7"></script>
-<?php include ("values.php"); 
-if ( $simplemodeold == 1 ) {
-	echo '<title>ChargeController</title>';
-}else{
-	echo'<title>openWB</title>';}
-?>
-
 </head>
+
 <script>
 	var hook1_aktiv = <?php echo $hook1_aktivold ?>;
 	var hook2_aktiv = <?php echo $hook2_aktivold ?>;
@@ -150,12 +142,12 @@ registerPageVisibility()
 		echo '<img src="img/loader.gif" alt="Preloader image">
 				';} ?>
 	</div>
-		
+
 <?php
 	if ($_COOKIE['openWBTheme'] == 'desktop') {
 		echo '<div style="margin-left: 10px; margin-right: 10px;">';
 	} else {
-		echo '<div class="container">'; 
+		echo '<div class="container">';
 	}
 	if ( $simplemodeold == 1 ) {
 		include 'simplemode.html';
@@ -173,12 +165,25 @@ registerPageVisibility()
 		<a href="#" class="close-link"><i class="arrow_up"></i></a>
 	</div>
 	<!-- Scripts -->
+	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/owl.carousel.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/wow.min.js"></script>
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
+
+	<!-- load Chart.js library -->
+	<script src="js/Chart.bundle.js"></script>
+
+	<!-- load mqtt library -->
+	<script src = "js/mqttws31.js" ></script>
+
+	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
+	<script src="livechart_chartjs.js?version=9"></script>
+	<!-- Data refresher -->
+	<script src="live.js?vers=12"></script>
+	<script src="livefunctions.js?vers=7"></script>
 </body>
 
 </html>

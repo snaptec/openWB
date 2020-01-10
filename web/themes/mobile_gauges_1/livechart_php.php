@@ -4,8 +4,6 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
-$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
 $soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
 $evufile = '/var/www/html/openWB/ramdisk/evu-live.graph';
 $pvfile = '/var/www/html/openWB/ramdisk/pv-live.graph';
@@ -13,9 +11,6 @@ $evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
 $timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
 $socfile = '/var/www/html/openWB/ramdisk/soc-live.graph';
 $ev1file = '/var/www/html/openWB/ramdisk/ev1-live.graph';
-$verbraucher1_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1_name');
-$verbraucher2_name = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2_name');
-
 
 if ($speichervorhanden == 1) {
 	$speicherfile = '/var/www/html/openWB/ramdisk/speicher-live.graph';
@@ -24,14 +19,6 @@ if ($speichervorhanden == 1) {
 if ($soc1vorhanden == 1) {
 	$soc1file = '/var/www/html/openWB/ramdisk/soc1-live.graph';
 	$ev2file = '/var/www/html/openWB/ramdisk/ev2-live.graph';
-}
-if ($verbraucher1vorhanden == 1) {
-	$verbraucher1file = '/var/www/html/openWB/ramdisk/verbraucher1-live.graph';
-	$VER1 = file($verbraucher1file, FILE_IGNORE_NEW_LINES);
-}
-if ($verbraucher2vorhanden == 1) {
-	$verbraucher2file = '/var/www/html/openWB/ramdisk/verbraucher2-live.graph';
-	$VER2 = file($verbraucher2file, FILE_IGNORE_NEW_LINES);
 }
 $EV = file($evfile, FILE_IGNORE_NEW_LINES);
 $EV1 = file($ev1file, FILE_IGNORE_NEW_LINES);
@@ -61,18 +48,6 @@ if ($soc1vorhanden == 1) {
 	$myData->addPoints($SOC1, "SoC LP2");
 	$myData->addPoints($EV2,"EV2");
 }
-if ($verbraucher1vorhanden == 1) {
-	$myData->addPoints($VER1,$verbraucher1_name);
-	$myData->setSerieOnAxis($verbraucher1_name,0);
-	$myData->setPalette($verbraucher1_name,array("R"=>255,"G"=>202,"B"=>0));
-
-}
-if ($verbraucher2vorhanden == 1) {
-	$myData->addPoints($VER2,$verbraucher2_name);
-	$myData->setSerieOnAxis($verbraucher2_name,0);
-	$myData->setPalette($verbraucher2_name,array("R"=>255,"G"=>0,"B"=>230));
-
-}
 $highest1 = max($EVU);
 $highest = max($EV);
 $highest2 = max($PV);
@@ -98,7 +73,7 @@ if ($speichervorhanden == 1) {
 	$myData->setPalette("Speicher SoC",array("R"=>229,"G"=>59,"B"=>59));
 }
 if ($soc1vorhanden == 1) {
-	$myData->setSerieOnAxis("EV2",0);
+	$myData->setSerieOnAxis("EV1",0);
 	$myData->setPalette("EV2",array("R"=>51,"G"=>122,"B"=>83));
 	$myData->setSerieOnAxis("SoC LP2",1);
 	$myData->setPalette("SoC LP2",array("R"=>0,"G"=>155,"B"=>237));
@@ -154,8 +129,8 @@ $myImage->setFontProperties(array(
     "FontSize" => 18));
 $myImage->setGraphArea(70,25,1070,175);
 // set background gradient
-//$Settings = array("StartR" => 221, "StartG" => 221, "StartB" => 221, "EndR" => 120, "EndG" => 120, "EndB" => 120, "Alpha" => 50);
-//$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
+$Settings = array("StartR" => 221, "StartG" => 221, "StartB" => 221, "EndR" => 120, "EndG" => 120, "EndB" => 120, "Alpha" => 50);
+$myImage->drawGradientArea(0, 0, $width, $height, DIRECTION_VERTICAL, $Settings);
 
 $myImage->drawScale($ScaleSettings);
 $myImage->drawLegend(240,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));

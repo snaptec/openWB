@@ -9,8 +9,6 @@
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	var chartlegend = <?php echo $chartlegendmainold ?>;
-
 </script>
 
 
@@ -30,7 +28,7 @@
 			<span id="pvdiv"></span>
 		</div>
 		<div class="col-xs-4">
-			
+
 		</div>
 </div>
 <div class="row col-xs-12 text-center" style="height: 100px;">
@@ -56,9 +54,9 @@
  				</div>
 				<span id="bezugdiv"></span>
 		</div>
-	
+
 		<div class="col-xs-2">
-			<i class="fas fa-2x fa-home"></i><br><span id="hausverbrauchdiv">	
+			<i class="fas fa-2x fa-home"></i><br><span id="hausverbrauchdiv">
 
 		</div>
 		<div id="speicherstatdiv">
@@ -99,16 +97,17 @@
 </div>
 
 <div class="row col-xs-12 text-center" style="height: 100px;">
-		<div class="col-xs-3">
-
-			<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span><span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
-		</div>
+	<div class="col-xs-3">
+		<span id="lp1enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp1enabledclick()"></span>
+		<span id="stationlp1" class="fas fa-2x fa-charging-station"></span>
+		<span class="fa-2x" id="zielladenaktivlp1div"></span>
+	</div>
 
 		<div class="col-xs-4">
 				<div id="speedlp1">
 					<div id="arrowlp1"></div>
  				</div>
-			<span id="lldiv"></span> <span id="pluggedladungbishergeladendiv"></span> kWh
+			<span id="lllp1div"></span> <span id="pluggedladungbishergeladenlp1div"></span> kWh
 		</div>
 
 		<div class="col-xs-2">
@@ -117,7 +116,7 @@
 		</div>
 		<div class="col-xs-2" id="socenabledlp1" style="display:none;">
 				<span id="socstatlp1div" class="fas fa-2x"></span>
-				<br><span id="soclevel"></span>% SoC </span>
+				<br><span id="soclp1"></span>% SoC </span>
 		</div>
 		<div class="col-xs-1">
 
@@ -128,7 +127,7 @@
 <!-- show values for second charging point -->
 <div id="lp2lldiv" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp2enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp2enabledclick()"></span><span id="stationlp2" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp2enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp2enabledclick()"></span><span id="stationlp2" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -144,7 +143,7 @@
 		</div>
 		<div class="col-xs-2" id="socenabledlp2" style="display:none;">
 				<span id="socstatlp2div" class="fas fa-2x"></span>
-				<br><span id="soc1level"></span>% SoC </span>
+				<br><span id="soclp2"></span>% SoC </span>
 		</div>
 		<div class="col-xs-1">
 
@@ -154,7 +153,7 @@
 <!-- show values for third charging point -->
 <div class="row col-xs-12 text-center" id="lp3div" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp3enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp3enabledclick()"></span><span id="stationlp3" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp3enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp3enabledclick()"></span><span id="stationlp3" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -176,7 +175,7 @@
 <!-- show values for fourth charging point -->
 <div id="lp4div" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp4enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp4enabledclick()"></span><span id="stationlp4" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp4enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp4enabledclick()"></span><span id="stationlp4" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -199,7 +198,7 @@
 </div>
 <div id="lp5div" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp5enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp5enabledclick()"></span><span id="stationlp5" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp5enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp5enabledclick()"></span><span id="stationlp5" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -222,7 +221,7 @@
 </div>
 <div id="lp6div" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp6enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp6enabledclick()"></span><span id="stationlp6" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp6enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp6enabledclick()"></span><span id="stationlp6" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -245,7 +244,7 @@
 </div>
 <div id="lp7div" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp7enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp7enabledclick()"></span><span id="stationlp7" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp7enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp7enabledclick()"></span><span id="stationlp7" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -268,7 +267,7 @@
 </div>
 <div id="lp8div" class="row col-xs-12 text-center" style="height: 100px; display: none;">
 		<div class="col-xs-3">
-		<span id="lp8enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp8enabledclick()"></span><span id="stationlp8" class="fas fa-2x fa-charging-station"></span>	
+		<span id="lp8enableddiv" class="fa fa-2x" style="cursor: pointer;" onclick="lp8enabledclick()"></span><span id="stationlp8" class="fas fa-2x fa-charging-station"></span>
 		</div>
 
 		<div class="col-xs-4">
@@ -305,7 +304,7 @@
 			<span id="hook3div" class="fas fa-2x"></span>
 
 		</div>
-		
+
 </div>
 -->
 <!-- check which graphing method is enabled and display it -->
@@ -342,27 +341,15 @@ echo '
 
 </div>
 
-<!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
-	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Zielladen LP 1 aktiv
-	</div>
-
-</div>
-
-
-
-
 <hr>
 <div class="row">
 
 </div>
-<script src="js/Chart.bundle.js"></script>
-<script src="js/livechart.js?version=9"></script>
-
 <div class="row" id="thegraph" style="display: none;">
 	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-		<div id="loadlivegraph" style="text-align: center; margin-top: 150px;"> Graph lädt bitte warten...</div>
+		<div id="loadlivegraph" style="text-align: center; margin-top: 150px;">
+			Graph lädt, bitte warten...
+		</div>
 		<canvas id="canvas"></canvas>
 	</div>
 
@@ -447,13 +434,13 @@ echo '
 	</div>
 	<div class="row" style="font-size: 2vw">
 		<div class="col-xs-4 text-center">
-			<span id="aktgeladendiv"></span>kWh
+			<span id="aktgeladen1div"></span>kWh
 		</div>
 		<div id="ladepunkts1111div" class="col-xs-4 text-center">
-			<span id="aktgeladens1div"></span>kWh
+			<span id="aktgeladen2div"></span>kWh
 		</div>
 		<div id="ladepunkts2222div" class="col-xs-4 text-center">
-			<span id="aktgeladens2div"></span>kWh
+			<span id="aktgeladen3div"></span>kWh
 		</div>
 	</div>
 	<div id="heutegeladendiv">
@@ -484,12 +471,12 @@ echo '
 		</div>
 		<div id="ladepunkts11111div" class="col-xs-4 text-center">
 			<div id="lademstats1div">
-				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 			</div>
 		</div>
 		<div id="ladepunkts22222div" class="col-xs-4 text-center">
 			<div id="lademstats2div">
-				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 			</div>
 		</div>
 	</div>
@@ -719,10 +706,10 @@ echo '
 		<div id="slider1div" class="col-xs-12 text-center">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp1s" id="sofortlllp1s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>  
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>
 			</div>
 			<script>
 				var slider1 = document.getElementById("sofortlllp1s");
@@ -730,17 +717,17 @@ echo '
 				output1.innerHTML = slider1.value;
 				slider1.oninput = function() {
 					output1.innerHTML = this.value;
-					lp1DirectChargeAmpsClick();	
+					lp1DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
 		<div id="slider2div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label> 
+				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>
 			</div>
 			<script>
 				var slider2 = document.getElementById("sofortlllp2s");
@@ -748,17 +735,17 @@ echo '
 				output2.innerHTML = slider2.value;
 				slider2.oninput = function() {
 					output2.innerHTML = this.value;
-					lp2DirectChargeAmpsClick();	
+					lp2DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
 		<div id="slider3div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp3">LP 3: <span id="sofortlllp3l"></span>A</label> 
+				<label for="sofortlllp3">LP 3: <span id="sofortlllp3l"></span>A</label>
 			</div>
 			<script>
 				var slider3 = document.getElementById("sofortlllp3s");
@@ -774,10 +761,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label>  
+				<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label>
 			</div>
 			<script>
 				var slider4 = document.getElementById("sofortlllp4s");
@@ -785,17 +772,17 @@ echo '
 				output4.innerHTML = slider4.value;
 				slider4.oninput = function() {
 					output4.innerHTML = this.value;
-					lp4DirectChargeAmpsClick();	
+					lp4DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
 		<div id="slider5div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label>  
+				<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label>
 			</div>
 			<script>
 				var slider5 = document.getElementById("sofortlllp5s");
@@ -803,7 +790,7 @@ echo '
 				output5.innerHTML = slider5.value;
 				slider5.oninput = function() {
 					output5.innerHTML = this.value;
-					lp5DirectChargeAmpsClick();	
+					lp5DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -812,10 +799,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp6">LP 6: <span id="sofortlllp6l"></span>A</label> 
+				<label for="sofortlllp6">LP 6: <span id="sofortlllp6l"></span>A</label>
 			</div>
 			<script>
 				var slider6 = document.getElementById("sofortlllp6s");
@@ -823,7 +810,7 @@ echo '
 				output6.innerHTML = slider6.value;
 				slider6.oninput = function() {
 					output6.innerHTML = this.value;
-					lp6DirectChargeAmpsClick();	
+					lp6DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -831,10 +818,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label> 
+				<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label>
 			</div>
 			<script>
 				var slider7 = document.getElementById("sofortlllp7s");
@@ -842,7 +829,7 @@ echo '
 				output7.innerHTML = slider7.value;
 				slider7.oninput = function() {
 					output7.innerHTML = this.value;
-					lp7DirectChargeAmpsClick();	
+					lp7DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -850,10 +837,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label> 
+				<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label>
 			</div>
 			<script>
 				var slider8 = document.getElementById("sofortlllp8s");
@@ -861,7 +848,7 @@ echo '
 				output8.innerHTML = slider8.value;
 				slider8.oninput = function() {
 					output8.innerHTML = this.value;
-					lp8DirectChargeAmpsClick();	
+					lp8DirectChargeAmpsClick();
 				}
 			</script>
 		</div>
@@ -1031,10 +1018,3 @@ function off() {
   }
 </script>
 <script src="./themes/symbol/livesymbol.js"></script>
-
-<!-- load amcharts js for graph <?php if ($graphliveamold == 1) {
-	echo '
-
-	<script src="/openWB/web/themes/standard/livegraph.js"></script>';} ?>
--->
-

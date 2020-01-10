@@ -20,7 +20,7 @@ function updateGaugeValue(gauge, value, text, setText, isSymmetric, autoRescale)
         needsScaling = true;
         if (!autoRescale) {
             // neues Maximum der Gauge als Cookie speichern
-            gauge_identifier = 'dark_gauges_1_' + gauge.id;
+            gauge_identifier = 'dark_gauges_2_' + gauge.id;
             $.ajax({
                 type: "GET",
                 url: "./setGaugeScaleCookie.php",
@@ -106,6 +106,64 @@ function getGaugeDataNeedle() {
                 // Gauge mit Rückgabewert erneuern, kein Text, asymmetrische Gauge 0-Max, kein AutoRescale
                 updateGaugeValue(gaugePV, anzeigeWert, '', false, false, false);
             }
+    });
+
+    $.ajax({
+      // ProgressBar für Wechselrichter 1 anpassen
+      url: "/openWB/ramdisk/pvwatt1",
+      complete: function(request){
+          // ProgressBar mit Rückgabewert erneuern
+          // wird in Watt ohne Nachkommastellen übergeben
+          var pvLeistung = parseInt(request.responseText,10) / -1;  // * -1 weil zur Regelung negativ
+          var anzeigeText='';
+          if (pvLeistung < 1000) {
+              // Anzeige in Watt ohne Nachkommastellen
+              anzeigeText = pvLeistung + 'W'
+          };
+          // Umrechnung in kW, wird für Wertübergabe an ProgressBar sowieso benötigt
+          pvLeistung = (pvLeistung / 1000).toFixed(2);
+          if (pvLeistung >= 1) {
+              if (pvLeistung > progressBarWR1.max) {
+                  // nie mehr als das Maximum, sonst passt die ProgressBar nicht
+                  pvLeistung = progressBarWR1.max
+              };
+              // über den Umweg toString und parseFloat werden eventuelle unbedeutende
+              // Nullen am Ende gelöscht: 1.30 = 1.3, 1.00 = 1 etc.
+              anzeigeText = parseFloat(pvLeistung.toString()) + 'kW'
+          };
+          progressBarWR1.value = pvLeistung;
+          progressBarWR1.set('title', 'Garage: ' + anzeigeText);
+          progressBarWR1.grow();
+      }
+    });
+
+    $.ajax({
+      // ProgressBar für Wechselrichter 2 anpassen
+      url: "/openWB/ramdisk/pvwatt2",
+      complete: function(request){
+          // ProgressBar mit Rückgabewert erneuern
+          // wird in Watt ohne Nachkommastellen übergeben
+          var pvLeistung = parseInt(request.responseText,10) / -1;  // * -1 weil zur Regelung negativ
+          var anzeigeText='';
+          if (pvLeistung < 1000) {
+              // Anzeige in Watt ohne Nachkommastellen
+              anzeigeText = pvLeistung + 'W'
+          };
+          // Umrechnung in kW, wird für Wertübergabe an ProgressBar sowieso benötigt
+          pvLeistung = (pvLeistung / 1000).toFixed(2);
+          if (pvLeistung >= 1) {
+              if (pvLeistung > progressBarWR2.max) {
+                  // nie mehr als das Maximum, sonst passt die ProgressBar nicht
+                  pvLeistung = progressBarWR2.max
+              };
+              // über den Umweg toString und parseFloat werden eventuelle unbedeutende
+              // Nullen am Ende gelöscht: 1.30 = 1.3, 1.00 = 1 etc.
+              anzeigeText = parseFloat(pvLeistung.toString()) + 'kW'
+          };
+          progressBarWR2.value = pvLeistung;
+          progressBarWR2.set('title', 'Wohnhaus: ' + anzeigeText);
+          progressBarWR2.grow();
+      }
     });
 
     $.ajax({

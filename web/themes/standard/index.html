@@ -8,15 +8,11 @@
 	var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 	var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	//var chartlegend = <?php echo $chartlegendmainold ?>;
-
-
 </script>
-
 
 <div class="row">
 	<div class="col-xs-12 text-center">
-		<h3>openWB Charge Controller </h3>
+		<h3>openWB Charge Controller</h3>
 	</div>
 </div>
 
@@ -66,40 +62,36 @@
 		</div>
 	</div>
 <br>
-<!-- check which graphing method is enabled and display it 
--->
+
 <?php if ($graphliveamold == 1) {
 	echo '
-
-
-<script src="js/Chart.bundle.js"></script>
-<script src="js/livechart.js?version=9"></script>
-
-<div class="row" id="thegraph">
-	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-		<div id="loadlivegraph" style="text-align: center; margin-top: 150px;"> Graph lädt bitte warten...</div>
-		<canvas id="canvas"></canvas>
-	</div>
-
-	<div id="graphoptiondiv" style="display: none;"><br><br>
-
-
-	</div>
-</div>
-
-
-';
+		<!-- interactive chart.js as graph selected -->
+		<!-- will be refreshed using MQTT (in live.js)-->
+		<div class="row" id="thegraph">
+			<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+				<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;">
+					Graph lädt, bitte warten...
+				</div>
+				<canvas id="canvas"></canvas>
+			</div>
+			<div id="graphoptiondiv" style="display: none;"><br><br></div>
+		</div>
+	';
 } else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/graph-live.php"
-				 alt="Graph lädt, bitte warten..." class="img-responsive">
-			<br></div>
-	</div>
-</div>';
-					} ?>
+	echo '
+	    <!-- php as graph selected -->
+		<!-- Graph refresher -->
+		<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<div class="imgwrapper">
+					<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php" alt="Graph lädt, bitte warten..." class="img-responsive">
+					<br>
+				</div>
+			</div>
+		</div>
+	';
+} ?>
 
 <div class="row col-xs-12 text-center">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
@@ -116,31 +108,29 @@ echo '
 	</div>
 </div>
 
-<!-- show zielladen if its active in settings -->
-<div class="row col-xs-12 text-center" id="zielladenaktivlp1div">
-	<div class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
-		Zielladen LP 1 aktiv
-	</div>
-
 </div>
 <!-- show first charging Point -->
-<div class="row">
+<div class="row" id="lp1lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
+		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()">
+			<?php echo $lp1nameold ?>
+		</span>
+		<span class="fa" id="zielladenaktivlp1div"></span>
+		<span class="fa" id="plugstatlp1div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lldiv"></span>, <span id="llsolldiv"></span> A Soll
+		<span id="lllp1div"></span>, <span id="llsolllp1div"></span> A Soll
 	</div>
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
-		<span id="pluggedladungbishergeladendiv"></span> kWh
+		<span id="pluggedladungbishergeladenlp1div"></span> kWh
 	</div>
 	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
 		<div id="socenabledlp1">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
-		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp1"></span>% SoC </span>';
 		} else {
-		echo '<span id="soclevel"></span>% SoC';
+		echo '<span id="soclp1"></span>% SoC';
 		} ?>
 		</div>
 	</div>
@@ -150,7 +140,6 @@ echo '
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
 	</div>
-
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lllp2div"></span>,  <span id="llsolllp2div"></span> A Soll
 	</div>
@@ -161,9 +150,9 @@ echo '
 		<div id="socenabledlp2">
 		<!-- if soc date of file is to old display it in grey -->
 		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
-		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
+		echo '<span style="color: grey"><span id="soclp2"></span>% SoC </span>';
 		} else {
-		echo '<span id="soc1level"></span>% SoC';
+		echo '<span id="soclp2"></span>% SoC';
 		} ?>
 		</div>
 	</div>
@@ -375,13 +364,13 @@ echo '
 	</div>
 	<div class="row" style="font-size: 2vw">
 		<div class="col-xs-4 text-center">
-			<span id="aktgeladendiv"></span> kWh
+			<span id="aktgeladen1div"></span> kWh
 		</div>
 		<div id="ladepunkts1111div" class="col-xs-4 text-center">
-			<span id="aktgeladens1div"></span> kWh
+			<span id="aktgeladen2div"></span> kWh
 		</div>
 		<div id="ladepunkts2222div" class="col-xs-4 text-center">
-			<span id="aktgeladens2div"></span> kWh
+			<span id="aktgeladen3div"></span> kWh
 		</div>
 	</div>
 
@@ -393,12 +382,12 @@ echo '
 		</div>
 		<div id="ladepunkts11111div" class="col-xs-4 text-center">
 			<div id="lademstats1div">
-				<progress id="progs1" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 			</div>
 		</div>
 		<div id="ladepunkts22222div" class="col-xs-4 text-center">
 			<div id="lademstats2div">
-				<progress id="progs2" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 			</div>
 		</div>
 	</div>
@@ -629,10 +618,10 @@ echo '
 		<div id="slider1div" class="col-xs-12 text-center">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp1s" id="sofortlllp1s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label> 
+				<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>
 			</div>
 			<script>
 				var slider1 = document.getElementById("sofortlllp1s");
@@ -647,7 +636,7 @@ echo '
 		<div id="slider2div" class="col-xs-12 text-center">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
 				<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>
@@ -665,7 +654,7 @@ echo '
 		<div id="slider3div" class="col-xs-12 text-center">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
 				<label for="sofortlllp3">LP 3: <span id="sofortlllp3l"></span>A</label>
@@ -684,10 +673,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label> 
+				<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label>
 			</div>
 			<script>
 				var slider4 = document.getElementById("sofortlllp4s");
@@ -702,10 +691,10 @@ echo '
 		<div id="slider5div" class="col-xs-12 text-center" style="display: none;">
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label> 
+				<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label>
 			</div>
 			<script>
 				var slider5 = document.getElementById("sofortlllp5s");
@@ -722,7 +711,7 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
 				<label for="sofortlllp6">LP 6: <span id="sofortlllp6l"></span>A</label>
@@ -741,10 +730,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label> 
+				<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label>
 			</div>
 			<script>
 				var slider7 = document.getElementById("sofortlllp7s");
@@ -760,10 +749,10 @@ echo '
 
 			<div class="col-xs-8 text-center">
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s">
-				
+
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label> 
+				<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label>
 			</div>
 			<script>
 				var slider8 = document.getElementById("sofortlllp8s");
@@ -936,9 +925,3 @@ function off() {
   document.getElementById("graphsettings").style.display = "none";
   }
 </script>
-<!-- load amcharts js for graph
-<?php if ($graphliveamold == 1) {
-	echo '
-
-	<script src="/openWB/web/themes/standard/livegraph.js"></script>';} ?>
-	-->
