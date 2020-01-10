@@ -19,7 +19,7 @@ function refresharrows() {
 			lp2arrow.classList.add("arrowrightblue");
 		}
 		var e2lement = document.getElementById("socstatlp2div");
-		if (lp2soc > 0 && lp2soc < 25) {
+		if (lp2soc >= 0 && lp2soc < 25) {
 			e2lement.classList.add("fa-battery-empty");
 			e2lement.classList.remove("fa-battery-quarter");
 			e2lement.classList.remove("fa-battery-half");
@@ -154,7 +154,7 @@ function refresharrows() {
 			element.classList.add("fa-battery-full");
 		}
 		var element = document.getElementById("socstatlp1div");
-		if (lp1soc > 0 && lp1soc < 25) {
+		if (lp1soc >= 0 && lp1soc < 25) {
 			element.classList.add("fa-battery-empty");
 			element.classList.remove("fa-battery-quarter");
 			element.classList.remove("fa-battery-half");
