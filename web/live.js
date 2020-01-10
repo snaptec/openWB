@@ -7,18 +7,6 @@
 
 var doInterval;
 var do2Interval;
-var pvwattarrow;
-var llaktuellarrow;
-var llaktuelllp2arrow;
-var llaktuelllp3arrow;
-var llaktuelllp4arrow;
-var llaktuelllp5arrow;
-var llaktuelllp6arrow;
-var llaktuelllp7arrow;
-var llaktuelllp8arrow;
-var llaktuellgarrow;
-var intbezugarrow;
-var intspeicherarrow;
 var speichersoc;
 var lp1soc;
 var lp2soc;

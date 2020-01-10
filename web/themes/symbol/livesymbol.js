@@ -1,5 +1,19 @@
 var do3Interval;
-
+var pvwattarrow;
+var llaktuellarrow = 0;
+var llaktuelllp2arrow;
+var llaktuelllp3arrow;
+var llaktuelllp4arrow;
+var llaktuelllp5arrow;
+var llaktuelllp6arrow;
+var llaktuelllp7arrow;
+var llaktuelllp8arrow;
+var llaktuellgarrow;
+var intbezugarrow;
+var intspeicherarrow;
+var speichersoc;
+var lp1soc;
+var lp2soc;
 function refresharrows() {
 		var lp1arrow = document.getElementById("arrowlp1");
 		var lp1speed = document.getElementById("speedlp1");
@@ -202,14 +216,7 @@ function refresharrows() {
 
 
 
-$('#plugstatlp1div').hide();
-$('#plugstatlp2div').hide();
-$('#plugstatlp3div').hide();
-$('#plugstatlp4div').hide();
-$('#plugstatlp5div').hide();
-$('#plugstatlp6div').hide();
-$('#plugstatlp7div').hide();
-$('#plugstatlp8div').hide();
+
 
 }
 do3Interval = setInterval(refresharrows, 500);
