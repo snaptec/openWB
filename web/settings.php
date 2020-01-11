@@ -161,6 +161,21 @@ foreach($lines as $line) {
 	if(strpos($line, "lastmanagement=") !== false) {
 		list(, $lastmanagementold) = explode("=", $line);
 	}
+	if(strpos($line, "lastmanagementlp4=") !== false) {
+		list(, $lastmanagementlp4old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp5=") !== false) {
+		list(, $lastmanagementlp5old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp6=") !== false) {
+		list(, $lastmanagementlp6old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp7=") !== false) {
+		list(, $lastmanagementlp7old) = explode("=", $line);
+	}
+	if(strpos($line, "lastmanagementlp8=") !== false) {
+		list(, $lastmanagementlp8old) = explode("=", $line);
+	}
 	if(strpos($line, "durchslp1=") !== false) {
 		list(, $durchslp1old) = explode("=", $line);
 	}
@@ -455,7 +470,30 @@ foreach($lines as $line) {
 	if(strpos($line, "u1p3pnl=") !== false) {
 		list(, $u1p3pnlold) = explode("=", $line, 2);
 	}
-
+	if(strpos($line, "stopchargeafterdisclp1=") !== false) {
+		list(, $stopchargeafterdisclp1old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp2=") !== false) {
+		list(, $stopchargeafterdisclp2old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp3=") !== false) {
+		list(, $stopchargeafterdisclp3old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp4=") !== false) {
+		list(, $stopchargeafterdisclp4old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp5=") !== false) {
+		list(, $stopchargeafterdisclp5old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp6=") !== false) {
+		list(, $stopchargeafterdisclp6old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp7=") !== false) {
+		list(, $stopchargeafterdisclp7old) = explode("=", $line, 2);
+	}
+	if(strpos($line, "stopchargeafterdisclp8=") !== false) {
+		list(, $stopchargeafterdisclp8old) = explode("=", $line, 2);
+	}
 }
 $speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 $bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -501,6 +539,114 @@ $zielladenuhrzeitlp1old = str_replace( "'", "", $zielladenuhrzeitlp1old);
 	<div class="row">
 	Gültige Werte z.B. 36124 <br> Dient zur Ermittlung des GSI Index. Weitere Infos unter: <a href="https://www.corrently.de/hintergrund/gruenstromindex">Hier</a><br>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.<br><br>
 	</div><hr>
+<div class="row">
+	<b><label for="stopchargeafterdisclp1">Ladepunkt 1 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp1" id="stopchargeafterdisclp1">
+		<option <?php if($stopchargeafterdisclp1old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp1old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp2aktdiv">
+	<b><label for="stopchargeafterdisclp2">Ladepunkt 2 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp2" id="stopchargeafterdisclp2">
+		<option <?php if($stopchargeafterdisclp2old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp2old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp3aktdiv">
+	<b><label for="stopchargeafterdisclp3">Ladepunkt 3 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp3" id="stopchargeafterdisclp3">
+		<option <?php if($stopchargeafterdisclp3old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp3old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp4aktdiv">
+	<b><label for="stopchargeafterdisclp4">Ladepunkt 4 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp4" id="stopchargeafterdisclp4">
+		<option <?php if($stopchargeafterdisclp4old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp4old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp5aktdiv">
+	<b><label for="stopchargeafterdisclp5">Ladepunkt 5 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp5" id="stopchargeafterdisclp5">
+		<option <?php if($stopchargeafterdisclp5old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp5old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp6aktdiv">
+	<b><label for="stopchargeafterdisclp6">Ladepunkt 6 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp6" id="stopchargeafterdisclp6">
+		<option <?php if($stopchargeafterdisclp6old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp6old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp7aktdiv">
+	<b><label for="stopchargeafterdisclp7">Ladepunkt 7 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp7" id="stopchargeafterdisclp7">
+		<option <?php if($stopchargeafterdisclp7old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp7old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<div class="row" id="lp8aktdiv">
+	<b><label for="stopchargeafterdisclp8">Ladepunkt 8 sperren nach Abstecken:</label></b>
+	<select type="text" name="stopchargeafterdisclp8" id="stopchargeafterdisclp8">
+		<option <?php if($stopchargeafterdisclp8old == 0) echo selected ?> value="0">Nein</option>
+		<option <?php if($stopchargeafterdisclp8old == 1) echo selected ?> value="1">Ja</option>
+	</select>
+</div>
+<script>
+$(function() {
+	var lp2akt = <?php echo $lastmanagementold ?>;
+	var lp3akt = <?php echo $lastmanagements2old ?>;
+	var lp4akt = <?php echo $lastmanagementlp4old ?>;
+	var lp5akt = <?php echo $lastmanagementlp5old ?>;
+	var lp6akt = <?php echo $lastmanagementlp6old ?>;
+	var lp7akt = <?php echo $lastmanagementlp7old ?>;
+	var lp8akt = <?php echo $lastmanagementlp8old ?>;
+
+      if(lp2akt == '0') {
+		$('#lp2aktdiv').hide();
+      } else {
+	       	$('#lp2aktdiv').show();
+      }
+      if(lp3akt == '0') {
+		$('#lp3aktdiv').hide();
+      } else {
+	       	$('#lp3aktdiv').show();
+      }
+      if(lp4akt == '0') {
+		$('#lp4aktdiv').hide();
+      } else {
+	       	$('#lp4aktdiv').show();
+      }
+      if(lp5akt == '0') {
+		$('#lp5aktdiv').hide();
+      } else {
+	       	$('#lp5aktdiv').show();
+      }
+      if(lp6akt == '0') {
+		$('#lp6aktdiv').hide();
+      } else {
+	       	$('#lp6aktdiv').show();
+      }
+      if(lp7akt == '0') {
+		$('#lp7aktdiv').hide();
+      } else {
+	       	$('#lp7aktdiv').show();
+      }
+      if(lp8akt == '0') {
+		$('#lp8aktdiv').hide();
+      } else {
+	       	$('#lp8aktdiv').show();
+      }
+});
+</script>
+<div class="row">
+	Nachdem der Stecker gezogen wird, wird der entsprechende Ladepunkt gesperrt. Ein manuelles aktivieren des Ladepunktes ist erforderlich. Nach aktivieren bleibt der Ladepunkt solange aktiv bis ein Stecker eingesteckt und wieder abgezogen wird. Ist unabhängig davon ob geladen wird.<br><br>
+</div>
+<hr>
+
 <div class="row">
 	<b><h5><label for="Zielladen">Zielladen Ladepunkt 1:(BETA)</label></b>
 	<select type="text" name="zielladenaktivlp1" id="zielladenaktivlp1">

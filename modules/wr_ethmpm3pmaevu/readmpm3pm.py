@@ -26,6 +26,10 @@ ikwh = float(ikwh) * 10
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(ikwh))
 f.close()
+pvkwhk= ikwh / 1000
+f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')
+f.write(str(pvkwhk))
+f.close()
 
 ikwhk = float(ikwh) / 1000
 f = open('/var/www/html/openWB/ramdisk/pvkwhk', 'w')

@@ -7,18 +7,6 @@
 
 var doInterval;
 var do2Interval;
-var pvwattarrow;
-var llaktuellarrow;
-var llaktuelllp2arrow;
-var llaktuelllp3arrow;
-var llaktuelllp4arrow;
-var llaktuelllp5arrow;
-var llaktuelllp6arrow;
-var llaktuelllp7arrow;
-var llaktuelllp8arrow;
-var llaktuellgarrow;
-var intbezugarrow;
-var intspeicherarrow;
 var speichersoc;
 var lp1soc;
 var lp2soc;
@@ -981,6 +969,7 @@ function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
 		alldata = alldata.replace(/^\s*[\n]/gm, '');
+		alldata = alldata.replace(/^\s*-[\n]/gm, '');
 		var csvData = new Array();
 		var rawcsv = alldata.split(/\r?\n|\r/);
 		for (var i = 0; i < rawcsv.length; i++) {

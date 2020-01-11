@@ -168,6 +168,14 @@ touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp1
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp2
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp3
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp4
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp5
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp6
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp7
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp8
 
 # Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
@@ -2233,6 +2241,19 @@ then
 	echo "lademstatlp8=0" >> /var/www/html/openWB/openwb.conf
 
 fi
+if ! grep -Fq "stopchargeafterdisclp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "stopchargeafterdisclp1=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp2=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp3=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp4=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp5=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp6=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp7=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp8=0" >> /var/www/html/openWB/openwb.conf
+fi
+
+
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
