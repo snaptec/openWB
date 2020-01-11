@@ -533,7 +533,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			myLine.data.datasets.forEach(function(dataset) {
 				dataset.data.splice(0, 1);
 			});
-			window.myLine.update();
+			myLine.update();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i ) ) {
@@ -541,13 +541,18 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
+		// console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
  		if ( mqttpayload == 0 ) {
 			$('#lp'+index+'div').hide();
 			$('#slider'+index+'div').hide();
 		} else {
  			$('#lp'+index+'div').show();
 			$('#slider'+index+'div').show();
+			// until functionality is still in livefunctions.js
+			// only process LP1 here
+			if ( index == 1 ) {
+				$('#lp'+index+'lldiv').show();
+			}
 		}
 	}
 	else if ( mqttmsg == "openWB/housebattery/W" ) {
@@ -1007,6 +1012,11 @@ function putgraphtogether() {
 }  // end putgraphtogether
 
 function getfile() {
+	if ( hook1_aktiv == '1' || hook2_aktiv == '1' || hook3_aktiv == '1' ) {
+		if ( document.getElementById("webhooksdiv") ) {
+			$('#webhooksdiv').show();
+		}
+	}
 	if (document.getElementById("hook1div")) {
 		$(function() {
 		    if(hook1_aktiv == '1') {
