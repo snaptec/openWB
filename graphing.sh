@@ -71,15 +71,13 @@ all5livevalues="$(< ramdisk/all-live.graph tail -n +"400" | head -n "$((500 - 40
 all6livevalues="$(< ramdisk/all-live.graph tail -n +"500" | head -n "$((600 - 500))")"
 all7livevalues="$(< ramdisk/all-live.graph tail -n +"600" | head -n "$((700 - 600))")"
 all8livevalues="$(< ramdisk/all-live.graph tail -n +"700" | head -n "$((800 - 700))")"
-
-mosquitto_pub -t openWB/graph/2alllivevalues -r -m $([ ${#all2livevalues} -ge 10 ] && echo "$all2livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/3alllivevalues -r -m $([ ${#all3livevalues} -ge 10 ] && echo "$all3livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/4alllivevalues -r -m $([ ${#all4livevalues} -ge 10 ] && echo "$all4livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/5alllivevalues -r -m $([ ${#all5livevalues} -ge 10 ] && echo "$all5livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/6alllivevalues -r -m $([ ${#all6livevalues} -ge 10 ] && echo "$all6livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/7alllivevalues -r -m $([ ${#all7livevalues} -ge 10 ] && echo "$all7livevalues" || echo "-") &
-mosquitto_pub -t openWB/graph/8alllivevalues -r -m $([ ${#all8livevalues} -ge 10 ] && echo "$all8livevalues" || echo "-") &
-
+mosquitto_pub -t openWB/graph/2alllivevalues -r -m "$([ ${#all2livevalues} -ge 10 ] && echo "$all2livevalues" || echo "-")" & 
+mosquitto_pub -t openWB/graph/3alllivevalues -r -m "$([ ${#all3livevalues} -ge 10 ] && echo "$all3livevalues" || echo "-")" &
+mosquitto_pub -t openWB/graph/4alllivevalues -r -m "$([ ${#all4livevalues} -ge 10 ] && echo "$all4livevalues" || echo "-")" &
+mosquitto_pub -t openWB/graph/5alllivevalues -r -m "$([ ${#all5livevalues} -ge 10 ] && echo "$all5livevalues" || echo "-")" &
+mosquitto_pub -t openWB/graph/6alllivevalues -r -m "$([ ${#all6livevalues} -ge 10 ] && echo "$all6livevalues" || echo "-")" &
+mosquitto_pub -t openWB/graph/7alllivevalues -r -m "$([ ${#all7livevalues} -ge 10 ] && echo "$all7livevalues" || echo "-")" &
+mosquitto_pub -t openWB/graph/8alllivevalues -r -m "$([ ${#all8livevalues} -ge 10 ] && echo "$all8livevalues" || echo "-")" &
 
 
 #Long Time Graphing
