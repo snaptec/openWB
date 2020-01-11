@@ -332,7 +332,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			window['graphlp'+index+'div'].classList.add('fa-toggle-on');
 		} else {
 			window['boolDisplayLp'+index] = true;
-			window['hidelp'+index] = 'Lp1';
+			window['hidelp'+index] = 'Lp' + index;
 			document.getElementById("graphlp"+index+"div").setAttribute("style", "color: red;");
 			window['graphlp'+index+'div'].classList.remove('fa-toggle-on');
 			window['graphlp'+index+'div'].classList.add('fa-toggle-off');
@@ -429,7 +429,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			window['graphload'+index+'div'].classList.remove('fa-toggle-off');
 			window['graphload'+index+'div'].classList.add('fa-toggle-on');
 		} else {
-			window['hideload'+index] = 'Verbraucher 1';
+			window['hideload'+index] = 'Verbraucher ' + index;
 			window['boolDisplayLoad'+index] = true;
 			document.getElementById("graphload"+index+"div").setAttribute("style", "color: red;");
 			window['graphload'+index+'div'].classList.remove('fa-toggle-on');

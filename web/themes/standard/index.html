@@ -124,14 +124,14 @@
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladenlp1div"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
-		<div id="socenabledlp1">
-		<!-- if soc date of file is to old display it in grey -->
-		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
-		echo '<span style="color: grey"><span id="soclp1"></span>% SoC </span>';
-		} else {
-		echo '<span id="soclp1"></span>% SoC';
-		} ?>
+	<div class="col-xs-2 text-center"> 
+		<div id="socenabledlp1" style="background-color:#00ffed;font-size: 2vw;">
+			<!-- if soc date of file is to old display it in grey -->
+			<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
+			echo '<span style="color: grey"><span id="soclp1"></span>% SoC </span>';
+			} else {
+			echo '<span id="soclp1"></span>% SoC';
+			} ?>
 		</div>
 	</div>
 </div>
@@ -146,14 +146,14 @@
 	<div class="col-xs-2 text-center bg-primary" style="font-size: 2vw">
 		<span id="pluggedladungbishergeladenlp2div"></span> kWh
 	</div>
-	<div class="col-xs-2 text-center" style="background-color:#00ffed;font-size: 2vw;">
-		<div id="socenabledlp2">
-		<!-- if soc date of file is to old display it in grey -->
-		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
-		echo '<span style="color: grey"><span id="soclp2"></span>% SoC </span>';
-		} else {
-		echo '<span id="soclp2"></span>% SoC';
-		} ?>
+	<div class="col-xs-2 text-center">
+		<div id="socenabledlp2" style="background-color:#00ffed;font-size: 2vw;">
+			<!-- if soc date of file is to old display it in grey -->
+			<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
+			echo '<span style="color: grey"><span id="soclp2"></span>% SoC </span>';
+			} else {
+			echo '<span id="soclp2"></span>% SoC';
+			} ?>
 		</div>
 	</div>
 </div>

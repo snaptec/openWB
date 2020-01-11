@@ -182,7 +182,7 @@ registerPageVisibility()
 	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
 	<script src="livechart_chartjs.js?version=9"></script>
 	<!-- Data refresher -->
-	<script src="live.js?vers=12"></script>
+	<script src="live.js?vers=13"></script>
 	<script src="livefunctions.js?vers=7"></script>
 </body>
 
