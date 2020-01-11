@@ -1,6 +1,8 @@
 <html>
 	<?php include ("display/gaugevalues.php"); ?>
-<script src="/openWB/web/display/gauge.min.js"></script>
+	<!-- load Chart.js library -->
+	<script src="js/Chart.bundle.js"></script>
+<script src="/openWB/web/livechart_chartjs.js"></script>
 	<script type = "text/javascript" src = "/openWB/web/js/mqttws31.js" ></script>
       <link rel="stylesheet" href="/openWB/web/display/arrow.css">
       <link rel="stylesheet" href="/openWB/web/display/pin.css">
@@ -56,7 +58,7 @@
 				<div id="speedlp1">
 					<div id="arrowlp1"></div>
  				</div>
-			<span id="lldiv"></span> <span id="pluggedladungbishergeladendiv"></span>kWh
+			<span id="lllp1div"></span> <span id="pluggedladungbishergeladenlp1div"></span>kWh
 		</div>
 
 		<div class="col-xs-1">
@@ -789,5 +791,134 @@ reldisp();
 <!-- <script src="./display/symbollive.js"></script> -->
 <script src="/openWB/web/live.js"></script>
 
-
+<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
+	<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
+		<div class="row"><div class="col-xs-12">
+			Graph Sichtbarkeit:
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
+			</div>
+		</div>
+		<div class="row col-xs-12" style="white-space: nowrap;">
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
+			</div>
+			<div class="col-xs-6">
+				<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				Optionen:
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/><br>
+			</div>
+		</div><hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="button" value="Schließen" label="Schließen" onclick="off()"/>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row col-xs-12 text-center" id="zielladenaktivlp1div" style="display: none;"></div>
+	<div class="row" id="sofortlmdiv2" style="font-size: 2vw; display: none">
+		<div class="col-xs-4 text-center">
+			<div id="lademstatdiv">
+				<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+			</div>
+		</div>
+		<div id="ladepunkts11111div" class="col-xs-4 text-center">
+			<div id="lademstats1div">
+				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+			</div>
+		</div>
+		<div id="ladepunkts22222div" class="col-xs-4 text-center">
+			<div id="lademstats2div">
+				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+			</div>
+		</div>
+	</div>
+<div class="row" id="thegraph">
+	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+		<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;">
+			Graph lädt, bitte warten...
+		</div>
+		<canvas id="canvas" style="display: none;"></canvas>
+	</div>
+<div id="graphoptiondiv" style="display: none;"><br><br></div>
+</div>
 </html>
