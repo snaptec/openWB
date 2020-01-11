@@ -322,7 +322,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolDisplayLP: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolDisplayLP: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['boolDisplayLp'+index] = false;
@@ -397,7 +397,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolDisplayLpSoc: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolDisplayLpSoc: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 1) {
 			$('#socenabledlp'+index).show();
 			window['boolDisplayLp'+index+'Soc'] = false;
@@ -420,7 +420,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolDisplayLoad: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolDisplayLoad: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['hideload'+index] = 'foo';
@@ -442,7 +442,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-alllivevalues: '+index);
+		//console.log('mqttmsg-alllivevalues: '+index);
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
@@ -541,7 +541,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
  		if ( mqttpayload == 0 ) {
 			$('#lp'+index+'div').hide();
 			$('#slider'+index+'div').hide();
@@ -586,7 +586,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-ChargePointEnabled: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-ChargePointEnabled: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 0 ) {
 			window['lp'+index+'enabled'] = 0;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-check");
@@ -602,7 +602,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-kWhActualCharged: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-kWhActualCharged: '+index+'   load='+mqttpayload);
 		$("#aktgeladen"+index+"div").html(mqttpayload);
 		document.getElementById("prog"+index).value= mqttpayload;
 	}
@@ -625,7 +625,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		llaktuell = parseInt(mqttpayload, 10);
 		llaktuellarrow = llaktuell;
 		if (mqttpayload > 999) {
@@ -652,7 +652,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolPlugStat: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolPlugStat: '+index+'   load='+mqttpayload);
 		if ( $('#plugstatlp'+index+'div').length > 0 ) {
 			if ( mqttpayload == 1 ) {
 				document.getElementById("plugstatlp"+index+"div").classList.add("fa-plug");
@@ -674,7 +674,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolChargeStat: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-boolChargeStat: '+index+'   load='+mqttpayload);
 		if ($('#plugstatlp'+index+'div').length > 0) {
 			if (mqttpayload == 1) {
 				document.getElementById("plugstatlp"+index+"div").setAttribute("style", "color: #00FF00;");
@@ -699,7 +699,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-SoC: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-SoC: '+index+'   load='+mqttpayload);
 		window['lp'+index+'soc'] = mqttpayload;
 		$("#soclp"+index).html(mqttpayload);
 	}
@@ -708,7 +708,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-ChargeStatus: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-ChargeStatus: '+index+'   load='+mqttpayload);
 		if ($('#stationlp'+index).length > 0) {
 			if (mqttpayload == 1) {
 				document.getElementById("stationlp"+index).setAttribute("style", "color: #00FF00;");
@@ -781,7 +781,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-ADirectModeAmps: '+index+'   load='+mqttpayload);
+		//console.log('mqttmsg-ADirectModeAmps: '+index+'   load='+mqttpayload);
 		document.getElementById("sofortlllp"+index+"s").value = mqttpayload;
 		document.getElementById("sofortlllp"+index+"l").innerHTML = mqttpayload;
 	}
