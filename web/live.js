@@ -1013,7 +1013,9 @@ function putgraphtogether() {
 
 function getfile() {
 	if ( hook1_aktiv == '1' || hook2_aktiv == '1' || hook3_aktiv == '1' ) {
-		$('#webhooksdiv').show();
+		if ( document.getElementById("webhooksdiv") ) {
+			$('#webhooksdiv').show();
+		}
 	}
 	if (document.getElementById("hook1div")) {
 		$(function() {
