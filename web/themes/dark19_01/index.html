@@ -237,20 +237,18 @@
 		echo '    <div id="ladepunkts'.($i-1).($i-1).($i-1).'div" class="col-xs-2">'."\n";
 		echo '        <span id="gelrlp'.$i.'div"></span> km'."\n";
 		echo '    </div>'."\n";
-		echo '    <div id="ladepunkts'.($i-1).($i-1).($i-1).($i-1).($i-1).'div" class="col-xs-2">'."\n";
+		echo '    <div id="sofortladenLadezielProgressDiv" class="col-xs-2 Progress">'."\n";
+
 		// if needed due to inconsistent id naming
 		if ( $i < 2 ) {
-			echo '        <div id="lademstatdiv" class="Progress">'."\n";
-			echo '            <progress id="prog'.$i.'" value= "0" max='.intval($lademkwhold).' class="Progress-main">'."\n";
+			echo '        <progress id="prog'.$i.'" value= "0" max='.intval($lademkwhold).' class="Progress-main">'."\n";
 		} else {
-			echo '        <div id="lademstats'.$i.'div" class="Progress">'."\n";
-			echo '            <progress id="prog'.$i.'" value= "0" max='.intval(${'lademkwhs'.$i.'old'}).' class="Progress-main">'."\n";
+			echo '        <progress id="prog'.$i.'" value= "0" max='.intval(${'lademkwhs'.$i.'old'}).' class="Progress-main">'."\n";
 		}
-		echo '                <div class="Progress-bar">'."\n";
-		echo '                    <span class="Progress-value" style="width: 80%;">&nbsp;</span>'."\n";
-		echo '        		</div>'."\n";
-		echo '            </progress>'."\n";
-		echo '        </div>'."\n";
+		echo '            <div class="Progress-bar">'."\n";
+		echo '                <span class="Progress-value" style="width: 80%;">&nbsp;</span>'."\n";
+		echo '            </div>'."\n";
+		echo '        </progress>'."\n";
 		echo '    </div>'."\n";
 		echo '    <div id="ladepunkts'.($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).'div" class="col-xs-3">'."\n";
 		// if needed due to inconsistent id naming

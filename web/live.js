@@ -214,6 +214,13 @@ var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+//	console.log('new mqttmsg...');
+//	console.log('mqttmsg: '+mqttmsg+'--endmessage');
+//	console.log('load='+mqttpayload+'--endload');
+//	console.log('topic='+mqtttopic+'--endtopic');
+//	console.log('topic='+htmldiv+'--endhtmldiv');
+//	console.log('');
+
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var wattbezug = mqttpayload;
 	    intbezug = parseInt(wattbezug, 10);
@@ -723,7 +730,10 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 	}
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
+		// console.log('mqttmsg-ChargeMode:   load='+mqttpayload);
  		if(mqttpayload == 0){
+			// mode sofort
+			// set buttons
 			$('.actstat .btn').addClass("btn-green");
 			$('.actstat1 .btn').addClass("btn-red");
 			$('.actstat2 .btn').addClass("btn-red");
@@ -733,8 +743,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat4 .btn').removeClass("btn-green");
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
+			// show Sofortladen Ladeziel Progress
+			$('#sofortladenLadezielProgressDiv').show();
 		}
 		if(mqttpayload == 1){
+			// mode min+pv
+			// set buttons
 			$('.actstat1 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
 			$('.actstat2 .btn').addClass("btn-red");
@@ -744,8 +758,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat2 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
+			// hide Sofortladen Ladeziel Progress
+			$('#sofortladenLadezielProgressDiv').hide();
+
 		}
 		if(mqttpayload == 2){
+			// mode nurpv
+			// set buttons
 			$('.actstat2 .btn').addClass("btn-green");
 			$('.actstat .btn').addClass("btn-red");
 			$('.actstat1 .btn').addClass("btn-red");
@@ -755,8 +774,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
+			// hide Sofortladen Ladeziel Progress
+			$('#sofortladenLadezielProgressDiv').hide();
 		}
 		if(mqttpayload == 3){
+			// mode stop
+			// set buttons
 			$('.actstat2 .btn').addClass("btn-red");
 			$('.actstat3 .btn').addClass("btn-green");
 			$('.actstat2 .btn').removeClass("btn-green");
@@ -766,8 +789,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-red");
 			$('.actstat4 .btn').removeClass("btn-green");
+			// hide Sofortladen Ladeziel Progress
+			$('#sofortladenLadezielProgressDiv').hide();
 		}
 		if(mqttpayload == 4){
+			// mode standby
+			// set buttons
 			$('.actstat2 .btn').addClass("btn-red");
 			$('.actstat3 .btn').addClass("btn-red");
 			$('.actstat .btn').addClass("btn-red");
@@ -778,6 +805,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			$('.actstat1 .btn').removeClass("btn-green");
 			$('.actstat4 .btn').addClass("btn-green");
 			$('.actstat4 .btn').removeClass("btn-red");
+			// hide Sofortladen Ladeziel Progress
+			$('#sofortladenLadezielProgressDiv').hide();
 		}
 		loaddivs();
 	}
