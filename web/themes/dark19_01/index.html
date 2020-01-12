@@ -288,179 +288,172 @@
 				<?php echo $lp3nameold ?>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12 regularTextStyle">
-				<div class="col-xs-4">
-					<label for="msmoduslp1"></label>
-					<select type="text" name="msmoduslp1" id="msmoduslp1" style="background-color: #ea5400;">
-						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Keine</option>
-						<option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
-						<option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
-					</select>
-					<span id="msmodusmlp1">
-						<br><br>
-						<label for="lademlp1">Lademenge</label>
-						<select type="text" name="lademlp1" id="lademlp1" style="background-color: #ea5400;">
-						<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
-							<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
-							<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
-							<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
-							<option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
-							<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
-							<option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
-							<option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
-							<option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
-							<option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
-							<option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
-							<option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
-						</select> kWh
-							<br><br>
-						<button onclick="rslp1()" style="background-color: #ea5400;">Reset</button>
-					</span>
-					<span id="msmodusslp1"><br><br>
-						<label for="sofortsoclp1">SoC</label>
-						<select type="text" name="sofortsoclp1" id="sofortsoclp1" style="background-color: #ea5400;">
-						<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
-							<option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
-							<option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
-							<option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
-							<option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
-							<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
-							<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
-						</select> %
-					</span>
-					<span id="msmodusnlp1">
-						<br><br>
-					</span>
+		<div class="row regularTextStyle">
+			<div class="col-xs-4">
+				<label for="msmoduslp1"></label>
+				<select type="text" name="msmoduslp1" id="msmoduslp1" style="background-color: #ea5400;">
+					<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Keine</option>
+					<option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
+					<option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
+				</select>
+				<div id="msmodusmlp1">
+					<br>
+					<label for="lademlp1">Lademenge</label>
+					<select type="text" name="lademlp1" id="lademlp1" style="background-color: #ea5400;">
+					<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
+						<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
+						<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
+						<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
+						<option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
+						<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
+						<option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
+						<option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
+						<option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
+						<option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
+						<option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
+						<option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
+						<option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
+						<option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
+						<option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
+						<option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
+						<option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
+						<option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
+						<option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
+						<option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
+						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
+					</select> kWh
+					<br><br>
+					<button onclick="rslp1()" style="background-color: #ea5400;">Reset</button>
 				</div>
-				<span id="ladepunkts111111div">
-					<div class="col-xs-4 text-center" style="regularTextStyle;">
-						<label for="msmoduslp2"></label>
-						<select type="text" name="msmoduslp2" id="msmoduslp2" style="background-color: #ea5400;">
-							<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Keine</option>
-							<option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
-							<option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
-						</select>
-						<span id="msmodusnlp2">
-							<br><br>
-						</span>
-						<span id="msmodusmlp2">
-							<br><br>
-							<label for="lademlp2">Lademenge</label>
-							<select type="text" name="lademlp2" id="lademlp2" style="background-color: #ea5400;">
-								<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
-								<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
-								<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
-								<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
-								<option <?php if($lademkwhs1old == 8) echo 'selected' ?> value="8">8</option>
-								<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
-								<option <?php if($lademkwhs1old == 12) echo 'selected' ?> value="12">12</option>
-								<option <?php if($lademkwhs1old == 14) echo 'selected' ?> value="14">14</option>
-								<option <?php if($lademkwhs1old == 16) echo 'selected' ?> value="16">16</option>
-								<option <?php if($lademkwhs1old == 18) echo 'selected' ?> value="18">18</option>
-								<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
-								<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>
-								<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
-								<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
-								<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
-								<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
-								<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
-								<option <?php if($lademkwhs1old == 55) echo 'selected' ?> value="55">55</option>
-								<option <?php if($lademkwhs1old == 60) echo 'selected' ?> value="60">60</option>
-								<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
-								<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
-							</select> kWh
-							<br><br>
-							<button onclick="rslp2()" style="background-color: #ea5400;">Reset</button>
-						</span>
-						<span id="msmodusslp2"><br><br>
-							<label for="sofortsoclp1">SoC</label>
-							<select type="text" name="sofortsoclp2" id="sofortsoclp2" style="background-color: #ea5400;">
-								<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
-								<option <?php if($sofortsoclp2old == 15) echo 'selected' ?> value="15">15</option>
-								<option <?php if($sofortsoclp2old == 20) echo 'selected' ?> value="20">20</option>
-								<option <?php if($sofortsoclp2old == 30) echo 'selected' ?> value="30">30</option>
-								<option <?php if($sofortsoclp2old == 40) echo 'selected' ?> value="40">40</option>
-								<option <?php if($sofortsoclp2old == 45) echo 'selected' ?> value="45">45</option>
-								<option <?php if($sofortsoclp2old == 50) echo 'selected' ?> value="50">50</option>
-								<option <?php if($sofortsoclp2old == 55) echo 'selected' ?> value="55">55</option>
-								<option <?php if($sofortsoclp2old == 60) echo 'selected' ?> value="60">60</option>
-								<option <?php if($sofortsoclp2old == 65) echo 'selected' ?> value="65">65</option>
-								<option <?php if($sofortsoclp2old == 70) echo 'selected' ?> value="70">70</option>
-								<option <?php if($sofortsoclp2old == 75) echo 'selected' ?> value="75">75</option>
-								<option <?php if($sofortsoclp2old == 80) echo 'selected' ?> value="80">80</option>
-								<option <?php if($sofortsoclp2old == 85) echo 'selected' ?> value="85">85</option>
-								<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
-								<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
-							</select> %
-						</span>
-					</div>
-					<span id="ladepunkts222222div">
-						<div class="col-xs-4 text-center" style="regularTextStyle;">
-							<label for="lademstats2"></label>
-							<select type="text" name="lademlp3check" id="lademlp3check" style="background-color: #ea5400;">
-								<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Keine</option>
-								<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
-							</select>
-							<span id="msmodusnlp3"></span>
-							<span id="msmodusmlp3">
-								<br><br>
-								<label for="lademlp3">Lademenge</label>
-								<select type="text" name="lademlp3" id="lademlp3" style="background-color: #ea5400;">
-									<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
-									<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
-									<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
-									<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
-									<option <?php if($lademkwhs2old == 8) echo 'selected' ?> value="8">8</option>
-									<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
-									<option <?php if($lademkwhs2old == 12) echo 'selected' ?> value="12">12</option>
-									<option <?php if($lademkwhs2old == 14) echo 'selected' ?> value="14">14</option>
-									<option <?php if($lademkwhs2old == 16) echo 'selected' ?> value="16">16</option>
-									<option <?php if($lademkwhs2old == 18) echo 'selected' ?> value="18">18</option>
-									<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
-									<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
-									<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
-									<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
-									<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
-									<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>
-									<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
-									<option <?php if($lademkwhs2old == 55) echo 'selected' ?> value="55">55</option>
-									<option <?php if($lademkwhs2old == 60) echo 'selected' ?> value="60">60</option>
-									<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
-									<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
-								</select> kWh
-								<br><br>
-								<button onclick="rslp3()" style="background-color: #ea5400;">Reset</button>
-							</span>
-						</div>
-					</span>
+				<div id="msmodusslp1">
+					<br><br>
+					<label for="sofortsoclp1">SoC</label>
+					<select type="text" name="sofortsoclp1" id="sofortsoclp1" style="background-color: #ea5400;">
+					<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
+						<option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
+						<option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
+						<option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
+						<option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
+						<option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
+						<option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
+						<option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
+						<option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
+						<option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
+						<option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
+						<option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
+						<option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
+						<option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
+						<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
+						<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
+					</select> %
+				</div>
+				<span id="msmodusnlp1">
+					<br><br>
 				</span>
+			</div>
+
+			<div id="ladepunkts111111div" class="col-xs-4">
+				<label for="msmoduslp2"></label>
+				<select type="text" name="msmoduslp2" id="msmoduslp2" style="background-color: #ea5400;">
+					<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Keine</option>
+					<option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+					<option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
+				</select>
+				<div id="msmodusnlp2">
+					<br><br>
+				</div>
+				<div id="msmodusmlp2">
+					<br>
+					<label for="lademlp2">Lademenge</label>
+					<select type="text" name="lademlp2" id="lademlp2" style="background-color: #ea5400;">
+						<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
+						<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
+						<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
+						<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
+						<option <?php if($lademkwhs1old == 8) echo 'selected' ?> value="8">8</option>
+						<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
+						<option <?php if($lademkwhs1old == 12) echo 'selected' ?> value="12">12</option>
+						<option <?php if($lademkwhs1old == 14) echo 'selected' ?> value="14">14</option>
+						<option <?php if($lademkwhs1old == 16) echo 'selected' ?> value="16">16</option>
+						<option <?php if($lademkwhs1old == 18) echo 'selected' ?> value="18">18</option>
+						<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
+						<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>								<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
+						<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
+						<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
+						<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
+						<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
+						<option <?php if($lademkwhs1old == 55) echo 'selected' ?> value="55">55</option>
+						<option <?php if($lademkwhs1old == 60) echo 'selected' ?> value="60">60</option>
+						<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
+						<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
+					</select> kWh
+					<br><br>
+					<button onclick="rslp2()" style="background-color: #ea5400;">Reset</button>
+				</div>
+				<div id="msmodusslp2"><br><br>
+					<label for="sofortsoclp1">SoC</label>
+					<select type="text" name="sofortsoclp2" id="sofortsoclp2" style="background-color: #ea5400;">
+						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
+						<option <?php if($sofortsoclp2old == 15) echo 'selected' ?> value="15">15</option>
+						<option <?php if($sofortsoclp2old == 20) echo 'selected' ?> value="20">20</option>
+						<option <?php if($sofortsoclp2old == 30) echo 'selected' ?> value="30">30</option>
+						<option <?php if($sofortsoclp2old == 40) echo 'selected' ?> value="40">40</option>
+						<option <?php if($sofortsoclp2old == 45) echo 'selected' ?> value="45">45</option>
+						<option <?php if($sofortsoclp2old == 50) echo 'selected' ?> value="50">50</option>
+						<option <?php if($sofortsoclp2old == 55) echo 'selected' ?> value="55">55</option>
+						<option <?php if($sofortsoclp2old == 60) echo 'selected' ?> value="60">60</option>
+						<option <?php if($sofortsoclp2old == 65) echo 'selected' ?> value="65">65</option>
+						<option <?php if($sofortsoclp2old == 70) echo 'selected' ?> value="70">70</option>
+						<option <?php if($sofortsoclp2old == 75) echo 'selected' ?> value="75">75</option>
+						<option <?php if($sofortsoclp2old == 80) echo 'selected' ?> value="80">80</option>
+						<option <?php if($sofortsoclp2old == 85) echo 'selected' ?> value="85">85</option>
+						<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>								<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
+					</select> %
+				</div>
+			</div>
+
+			<div id="ladepunkts222222div">
+				<div class="col-xs-4 text-center" style="regularTextStyle;">
+					<label for="lademstats2"></label>
+					<select type="text" name="lademlp3check" id="lademlp3check" style="background-color: #ea5400;">
+						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Keine</option>
+						<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+					</select>
+					<span id="msmodusnlp3"></span>
+					<div id="msmodusmlp3">
+						<br>
+						<label for="lademlp3">Lademenge</label>
+						<select type="text" name="lademlp3" id="lademlp3" style="background-color: #ea5400;">
+							<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
+							<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
+							<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
+							<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
+							<option <?php if($lademkwhs2old == 8) echo 'selected' ?> value="8">8</option>
+							<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
+							<option <?php if($lademkwhs2old == 12) echo 'selected' ?> value="12">12</option>
+							<option <?php if($lademkwhs2old == 14) echo 'selected' ?> value="14">14</option>
+							<option <?php if($lademkwhs2old == 16) echo 'selected' ?> value="16">16</option>
+							<option <?php if($lademkwhs2old == 18) echo 'selected' ?> value="18">18</option>
+							<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
+							<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
+							<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
+							<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
+							<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
+							<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>								<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
+							<option <?php if($lademkwhs2old == 55) echo 'selected' ?> value="55">55</option>
+							<option <?php if($lademkwhs2old == 60) echo 'selected' ?> value="60">60</option>
+							<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
+							<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
+						</select> kWh
+						<br><br>
+						<button onclick="rslp3()" style="background-color: #ea5400;">Reset</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 text-center">
-				<div class="col-xs-12 tex-center"><hr>
+				<hr>
 					<h3>Sofortladen Stromstärke</h3>
-				</div>
-			</div>
 		</div>
 		<div class="row" id="slider1div">
 			<div class="col-xs-8">
@@ -618,13 +611,14 @@
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<br><br>
-				<button type="submit" class="btn btn-primary btn-lg btn-block btn-grey">Save</button>
+				<button type="submit" class="btn btn-lg btn-block btn-grey myButtonStyle">Save</button>
 			</div>
 			<br>
 		</div>
 	</form>
 	<hr>
 </div>
+
 <!-- a few buttons at end of page for options -->
 <div class="row">
 	<div class="col-xs-4">
@@ -648,13 +642,14 @@
 		<a href="settings.php" class="btn btn-blue btn-block myButtonStyle">Einstellungen</a>
 	</div>
 </div>
-<div class="row text-center">
-	<a href="https://openwb.de">www.openwb.de</a>
-</div>
-<div class="row text-center">
+
+<div class="row versionTextStyle">
 	Ver <?php echo $owbversion ?>
 </div>
 
+<div class="row regularTextStyle">
+	<a href="https://openwb.de">www.openwb.de</a>
+</div>
 
 	<br><br><br><br>
 

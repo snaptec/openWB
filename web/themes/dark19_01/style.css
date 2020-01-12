@@ -113,6 +113,12 @@ h3 {
       text-align: center;
 }
 
+.versionTextStyle {
+      font-size: 0.85rem;
+      color: white;
+      text-align: center;
+}
+
 .pvInfoStyle {
       font-size: 1.0rem;
       font-weight: bolder;
@@ -174,6 +180,10 @@ h3 {
           font-size: 1.22rem;
     }
 
+    .versionTextStyle {
+          font-size: 1.0rem;
+    }
+
     .pvInfoStyle {
           font-size: 1.3rem;
     }
@@ -210,6 +220,10 @@ h3 {
           font-size: 2.0rem;
     }
 
+    .versionTextStyle {
+          font-size: 1.4rem;
+    }
+
     .pvInfoStyle {
           font-size: 2.5rem;
     }
@@ -243,6 +257,10 @@ h3 {
 
     .regularTextStyle {
           font-size: 2.7rem;
+    }
+
+    .versionTextStyle {
+          font-size: 1.8rem;
     }
 
     .pvInfoStyle {
