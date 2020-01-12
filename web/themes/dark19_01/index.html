@@ -113,7 +113,7 @@
 		echo '    <div class="col-xs-2">'."\n";
 		echo '        <span id="pluggedladungbishergeladenlp'.$i.'div"></span> kWh'."\n";
 		echo '    </div>'."\n";
-		echo '    <div id="socenabledlp'.$i.'" class="col-xs-2 chargePointSocInfoStyle">'."\n";
+		echo '    <div id="socenabledlp'.$i.'" class="col-xs-2 chargePointSocInfoStyle" style="display: none;">'."\n";
 		echo '        <!-- if soc date of file is too old display it in grey -->'."\n";
 		if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
 			echo '        <span style="color: grey;"><span id="soclp'.$i.'"></span>% </span>'."\n";
