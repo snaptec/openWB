@@ -100,11 +100,10 @@
 	// generate html code dynamically for all charging points
 	for($i=1; $i <= 8; $i++) {
 		echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-		echo '<div class="row chargePointInfoStyle" id="lp'.$i.'lldiv"  style="display: none;">'."\n";
+		echo '<div class="row chargePointInfoStyle" id="lp'.$i.'div"  style="display: none;">'."\n";
 		echo '    <div class="col-xs-4">'."\n";
-		echo '        <span id="lp'.$i.'enableddiv" class="fa" style="cursor: pointer;" onclick="lp'.$i.'enabledclick()">'."\n";
-		echo '            '.${'lp'.$i.'nameold'};  // echoes the content of the variable named within {}
-		echo '        </span>'."\n";
+		echo '        <span id="lp'.$i.'enableddiv" class="fa" style="cursor: pointer;" onclick="lp'.$i.'enabledclick()"></span>'."\n";
+		echo '    	  <span id="lp'.$i.'name"></span>'."\n";
 		echo '        <span class="fa" id="zielladenaktivlp'.$i.'div"></span>'."\n";
 		echo '        <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
 		echo '    </div>'."\n";

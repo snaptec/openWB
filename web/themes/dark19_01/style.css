@@ -203,7 +203,7 @@ h3 {
 
 
 /** dann Tablett Landscape und Porttrait **/
-@media only screen and (min-width: 480px) and (max-width: 799px) {
+@media only screen and (min-width: 480px) and (max-width: 999px) {
     h1 {
         font-size: 4.0rem;
     }
@@ -242,7 +242,7 @@ h3 {
 }
 
 /** dann Desktop Browserfenster **/
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 1000px) {
     h1 {
         font-size: 5rem;
     }
