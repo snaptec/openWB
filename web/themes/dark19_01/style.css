@@ -5,40 +5,193 @@ Stylesheet zum openWB Dark19_01-Theme
 */
 
 body {
-  color: white;
-  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
-  /* Old browsers */
-  background: rgb(125,126,125);
-  /* FF3.6-15 */
-  background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-  /* IE6-9 */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+      color: white;
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+      /* Old browsers */
+      background: rgb(125,126,125);
+      /* FF3.6-15 */
+      background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* IE6-9 */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+}
+
+/** zuerst sehr kleine Handy und Tablett Porträt **/
+h1 {
+    font-size: 2rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.05rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
 }
 
 h3 {
-  font-weight: bolder;
-  color: white;
+    font-size: 1.05rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
 }
 
-h5 {
-  font-weight: bolder;
-  color: white;
+.regularTextStyle {
+      font-size: 1.0rem;
+      color: white;
+      text-align: center;
 }
 
-.pvInfo {
-  font-size: 2vw;
-  font-weight: bolder;
-  color: black;
+.pvInfoStyle {
+      font-size: 1.0rem;
+      font-weight: bolder;
+      color: black;
+      text-align: center;
 }
 
-.myGraph {
-  width: 100%;
-  /* Images default to being inline, inline items cannot have a width, so change to block: */
-  display: block;
-  /* The following may be needed if there's still a wierd looking 2-3px gap at the bottom of the image in some browsers: */
-  vertical-align: bottom;
+.extDeviceInfoStyle {
+      font-size: 1.0rem;
+      font-weight: bolder;
+      color: white;
+      background-color: red;
+      text-align: center;
+}
+
+.chargePointInfoStyle, .chargePointSocInfoStyle {
+      font-size: 1.0rem;
+      color: white;
+      background-color: #327eb8;
+      text-align: center;
+}
+
+.chargePointSocInfoStyle {
+      /* inherits from chargePointInfo and modifies*/
+      color: black;
+      background-color: #00ffed;
+}
+
+.myButtonStyle {
+          font-size: 1.2rem;
+          padding: 0.4rem;
+          cursor: pointer;
+}
+
+.myPhpGraphStyle {
+      width: 100%;
+      /* Images default to being inline, inline items cannot have a width, so change to block: */
+      display: block;
+      /* The following may be needed if there's still a wierd looking 2-3px gap at the bottom
+       * of the image in some browsers: */
+      vertical-align: bottom;
+}
+
+/** dann normale Handy und Tablett Porträt **/
+@media only screen and (min-width: 321px) and (max-width: 479px) {
+    h1 {
+        font-size: 2.1rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    .regularTextStyle {
+          font-size: 1.05rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 1.3rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 1.05rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 1.3rem;
+    }
+
+    .myButtonStyle {
+          font-size: 1.6rem;
+    }
+}}
+
+
+/** dann Tablett Landscape **/
+@media only screen and (min-width: 480px) and (max-width: 799px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 20rem;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+    }
+
+    .regularTextStyle {
+          font-size: 1.05rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 1.05rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 1.05rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 1.3rem;
+    }
+
+    .myButtonStyle {
+          font-size: 1.3rem;
+    }
+}
+
+/** dann Desktop Browserfenster **/
+@media only screen and (min-width: 800px) {
+    h1 {
+        font-size: 5rem;
+    }
+
+    h2 {
+        font-size: 3rem;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+    }
+
+    .regularTextStyle {
+          font-size: 1.05rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 3.6rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 2.5rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 2.7rem;
+    }
+
+    .myButtonStyle {
+          font-size: 3rem;
+    }
 }
