@@ -408,7 +408,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			$('#socenabledlp'+index).hide();
 			window['boolDisplayLp'+index+'Soc'] = true;
-			window['hidelp'+index+'soc'] = 'LP1 SoC';
+			window['hidelp'+index+'soc'] = 'LP'+index+' SoC';
 			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: red;");
 			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-on');
 			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-off');
