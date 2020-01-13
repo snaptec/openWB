@@ -76,9 +76,8 @@ emparts=decode_speedwire(sock.recv(608))
 # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
 # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
 # cos phi is always positive, no matter what quadrant
-ikwh=emparts['pconsumecounter']*1000
-ekwh=emparts['psupplycounter']*1000
-
+ikwh=int(emparts['pconsumecounter']*1000)
+ekwh=int(emparts['psupplycounter']*1000)
 bezuga1=emparts['i1']
 bezuga2=emparts['i2']
 bezuga3=emparts['i3']
@@ -88,9 +87,9 @@ bezugv3=emparts['u3']
 iw=emparts['pconsume']
 ew=emparts['psupply']
 if ( iw > 5 ):
-    watt=ew*-1
+    watt=int(ew*-1)
 else:
-    watt=iw
+    watt=int(iw)
 f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
 f.write(str(bezugv1))
 f.close()

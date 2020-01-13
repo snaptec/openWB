@@ -603,10 +603,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			window['lp'+index+'enabled'] = 0;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-check");
 			document.getElementById("lp"+index+"enableddiv").classList.add("fa-times");
+			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: red;");
 		} else {
 			window['lp'+index+'enabled'] = 1;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-times");
 			document.getElementById("lp"+index+"enableddiv").classList.add("fa-check");
+			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: lightgreen;");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i ) ) {
