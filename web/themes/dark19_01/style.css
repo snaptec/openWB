@@ -5,40 +5,277 @@ Stylesheet zum openWB Dark19_01-Theme
 */
 
 body {
-  color: white;
-  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
-  /* Old browsers */
-  background: rgb(125,126,125);
-  /* FF3.6-15 */
-  background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-  /* IE6-9 */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+      color: white;
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+      /* Old browsers */
+      background: rgb(125,126,125);
+      /* FF3.6-15 */
+      background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* IE6-9 */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+}
+
+@keyframes alertPulsation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes alertPulsation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes alertPulsation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes alertPulsation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+.animate-alertPulsation {
+   -webkit-animation: alertPulsation 1s infinite;
+   -moz-animation: alertPulsation 1s infinite;
+   -o-animation: alertPulsation 1s infinite;
+   animation: alertPulsation 1s infinite;
+}
+
+/* progress-bar styles for all browsers*/
+.Progress-main {
+    background-color: red;
+    display: block;
+    width: 100%;
+    height: 0.3em;
+    margin-top: 0.75em;
+}
+
+.Progress-main::-moz-progress-bar {
+    background: #17BAB3;
+}
+
+.Progress-main::-webkit-progress-bar {
+    background: #F2F2F2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+}
+
+.Progress-main::-webkit-progress-value {
+    background: #17BAB3;
+}
+
+.Progress-main::-ms-fill {
+    background: #17BAB3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+}
+
+.Progress-bar {
+    margin-top: 0.95em;
+    background-color: #F2F2F2;
+    height: 0.3em;
+}
+
+.Progress-value {
+    background-color: #17BAB3;
+    display: block;
+    height: 0.3em;
+}
+
+/** zuerst sehr kleine Handy und Tablett Porträt **/
+h1 {
+    font-size: 2rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.05rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
 }
 
 h3 {
-  font-weight: bolder;
-  color: white;
+    font-size: 1.05rem;
+    font-weight: bolder;
+    color: white;
+    text-align: center;
 }
 
-h5 {
-  font-weight: bolder;
-  color: white;
+.regularTextStyle {
+      font-size: 1.0rem;
+      color: white;
+      text-align: center;
 }
 
-.pvInfo {
-  font-size: 2vw;
-  font-weight: bolder;
-  color: black;
+.versionTextStyle {
+      font-size: 0.85rem;
+      color: white;
+      text-align: center;
 }
 
-.myGraph {
-  width: 100%;
-  /* Images default to being inline, inline items cannot have a width, so change to block: */
-  display: block;
-  /* The following may be needed if there's still a wierd looking 2-3px gap at the bottom of the image in some browsers: */
-  vertical-align: bottom;
+.pvInfoStyle {
+      font-size: 1.0rem;
+      font-weight: bolder;
+      color: black;
+      text-align: center;
+}
+
+.extDeviceInfoStyle {
+      font-size: 1.0rem;
+      font-weight: bolder;
+      color: white;
+      background-color: red;
+      text-align: center;
+}
+
+.chargePointInfoStyle, .chargePointSocInfoStyle {
+      font-size: 1.0rem;
+      color: white;
+      background-color: #327eb8;
+      text-align: center;
+}
+
+.chargePointSocInfoStyle {
+      /* inherits from chargePointInfo and modifies*/
+      color: black;
+      background-color: #00ffed;
+}
+
+.myButtonStyle {
+          font-size: 1.2rem;
+          padding: 0.4rem;
+          cursor: pointer;
+}
+
+.myPhpGraphStyle {
+      width: 100%;
+      /* Images default to being inline, inline items cannot have a width, so change to block: */
+      display: block;
+      /* The following may be needed if there's still a wierd looking 2-3px gap at the bottom
+       * of the image in some browsers: */
+      vertical-align: bottom;
+}
+
+/** dann normale Handy und kleine Tablett Porträt **/
+@media only screen and (min-width: 321px) and (max-width: 479px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .regularTextStyle {
+          font-size: 1.22rem;
+    }
+
+    .versionTextStyle {
+          font-size: 1.0rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 1.3rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 1.2rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 1.1rem;
+    }
+
+    .myButtonStyle {
+          font-size: 1.3rem;
+    }
+}
+
+
+/** dann Tablett Landscape und Porttrait **/
+@media only screen and (min-width: 480px) and (max-width: 999px) {
+    h1 {
+        font-size: 4.0rem;
+    }
+
+    h2 {
+        font-size: 3.0rem;
+    }
+
+    h3 {
+        font-size: 2.0rem;
+    }
+
+    .regularTextStyle {
+          font-size: 2.0rem;
+    }
+
+    .versionTextStyle {
+          font-size: 1.4rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 2.5rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 2.0rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 2.1rem;
+    }
+
+    .myButtonStyle {
+          font-size: 2.5rem;
+    }
+}
+
+/** dann Desktop Browserfenster **/
+@media only screen and (min-width: 1000px) {
+    h1 {
+        font-size: 5rem;
+    }
+
+    h2 {
+        font-size: 3.8rem;
+    }
+
+    h3 {
+        font-size: 2.7rem;
+    }
+
+    .regularTextStyle {
+          font-size: 2.7rem;
+    }
+
+    .versionTextStyle {
+          font-size: 1.8rem;
+    }
+
+    .pvInfoStyle {
+          font-size: 3.35rem;
+    }
+
+    .extDeviceInfoStyle {
+          font-size: 2.5rem;
+    }
+
+    .chargePointInfoStyle, .chargePointSocInfoStyle {
+          font-size: 2.7rem;
+    }
+
+    .myButtonStyle {
+          font-size: 3.6rem;
+    }
 }
