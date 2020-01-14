@@ -84,6 +84,7 @@
 	</div>
 </div>
 
+<!-- chargepoint info header -->
 <div class="row chargePointInfoStyle" style="font-weight: bolder;">
 	<div class="col-xs-4">
 		Ladepunkt
@@ -98,6 +99,7 @@
 		Kfz-SoC
 	</div>
 </div>
+<!-- chargepoint info data -->
 <?php
 	// generate html code dynamically for all charging points
 	for($i=1; $i <= 8; $i++) {
@@ -189,42 +191,31 @@
 	</div>
 </div>
 
-<div id="heutegeladendiv">
-	<hr>
-	<div class="row">
-		<div class="col-xs-12">
-			<h3>Heute geladen</h3>
-		</div>
-	</div>
-	<?php
-		// generate html code dynamically for all charging points
-		for($i=1; $i <= 3; $i++) {
-			echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-			echo '<div class="row">'."\n";
-			echo '    <div  class="col-xs-3">'."\n";
-			echo '    </div>'."\n";
-			echo '    <div class="row regularTextStyle" id="ladepunkts'.($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).'div">'."\n";
-			echo '        <div  class="col-xs-3">'."\n";
-			echo '            '.${'lp'.$i.'nameold'};  // echoes the content of the variable named within {}
-			echo '        </div>'."\n";
-			echo '        <div class="col-xs-3">'."\n";
-			echo '            <span id="dailychargelp'.$i.'div"></span> kWh'."\n";
-			echo '        </div>'."\n";
-			echo '    </div>'."\n";
-			echo '    <div  class="col-xs-3">'."\n";
-			echo '    </div>'."\n";
-			echo '</div>'."\n";
-		}
-	?>
-</div>
-
 <hr>
 <div class="row">
 	<div class="col-xs-12">
 		<h3>letztes zusammenhängendes Ladesegment</h3>
 	</div>
 </div>
-
+<!-- chargepoint info header -->
+<div class="row chargePointInfoStyle" style="font-weight: bolder;">
+	<div class="col-xs-3">
+		Ladepunkt
+	</div>
+	<div class="col-xs-2">
+		geladen
+	</div>
+	<div class="col-xs-2">
+		Reichweite
+	</div>
+	<div class="col-xs-2">
+		Fortschritt
+	</div>
+	<div class="col-xs-3">
+		Restzeit
+	</div>
+</div>
+<!-- chargepoint info data -->
 <?php
 	// generate html code dynamically for all charging points
 	for($i=1; $i <= 3; $i++) {
@@ -240,7 +231,6 @@
 		echo '        <span id="gelrlp'.$i.'div"></span> km'."\n";
 		echo '    </div>'."\n";
 		echo '    <div id="sofortladenLadezielProgressDiv" class="col-xs-2 Progress">'."\n";
-
 		// if needed due to inconsistent id naming
 		if ( $i < 2 ) {
 			echo '        <progress id="prog'.$i.'" value= "0" max='.intval($lademkwhold).' class="Progress-main">'."\n";
