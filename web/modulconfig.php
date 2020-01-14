@@ -3582,7 +3582,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen. Danach einen Reboot durchführen.<br><br>
+		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen<br><br><br>
 	</div>
 </div>
 <div id="wattbezugsmartfox">
