@@ -62,7 +62,7 @@ background-color: black;
 
 			<canvas id="lp1" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
 			<div id="lp1t" style="font-size: 15px; height: 200px; top: 100px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">0%</div>
-			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><?php echo $lp1nameold ?> <span id="plugstatlp1div"></span>
+			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><span class="nameLp1"></span> <span id="plugstatlp1div"></span>
 </div>
 			<canvas id="lp1s" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
 			<div id="lp1st" style="height: 100px; top: 60px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;">0%</div>
@@ -71,7 +71,7 @@ background-color: black;
 		<div id="lp2lldiv">
 			<canvas id="lp2" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
 			<div id="lp2t" style="font-size: 15px; height: 200px; top: 100px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"></div>
-			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><?php echo $lp2nameold ?> <span id="plugstatlp2div"></div>
+			<div style="font-size: 15px; height: 200px; top: 75px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"><span class="nameLp2"></span> <span id="plugstatlp2div"></div>
 			<canvas id="lp2s" style="height: auto !important; width: 100% !important; position: absolute;"></canvas>
 			<div id="lp2st" style="height: 100px; top: 60px; left: 0px; text-align:center; position: absolute; width: 100%; color: white;"></div>
 		</div>
@@ -559,7 +559,7 @@ doInterval = setInterval(getfile, 5000);
 	</div>
 	<div class="row" style="color: white">
 		<div class="col-xs-1 text-center">
-			LP1 <?php echo $lp1nameold ?>
+			LP1 <span class="nameLp1"></span>
 		</div>
 		<div class="col-xs-1 text-center">
 			<span id="gelrlp1div"></span>km
@@ -574,7 +574,7 @@ doInterval = setInterval(getfile, 5000);
 	</div>
 	<div class="row"  style="color: white">
 		<div  id="ladepunkts11div" class="col-xs-1 text-center">
-			LP2 <?php echo $lp2nameold ?>
+			LP2 <span class="nameLp2"></span>
 		</div>
 		<div id="ladepunkts111div" class="col-xs-1 text-center">
 			<span id="gelrlp2div"></span>km
@@ -589,7 +589,7 @@ doInterval = setInterval(getfile, 5000);
 	</div>
 	<div class="row" style="color: white" >
 		<div id="ladepunkts22div" class="col-xs-1 text-center">
-			LP3 <?php echo $lp3nameold ?>
+			LP3 <span class="nameLp3"></span>
 		</div>
 		<div id="ladepunkts222div" class="col-xs-1 text-center">
 			<span id="gelrlp3div"></span>km
@@ -847,7 +847,7 @@ doInterval = setInterval(getfile, 5000);
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
 			</div>
 			<div class="col-xs-1 text-center">
-				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+				<label for="sofortll"><span class="nameLp1"></span>: <span id="sofortlll"></span>A</label>
 			</div>
 			<script>
 				var slider = document.getElementById("sofortll");
@@ -866,7 +866,7 @@ doInterval = setInterval(getfile, 5000);
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
 				</div>
 				<div class="col-xs-1 text-center">
-					<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
+					<label for="sofortlls1"><span class="nameLp2"></span>: <span id="sofortllls1"></span>A</label>
 				</div>
 			<div class="col-xs-1 text-center"></div>
 				<script>
@@ -888,7 +888,7 @@ doInterval = setInterval(getfile, 5000);
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
 				</div>
 				<div class="col-xs-4 text-center">
-					<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
+					<label for="sofortlls2"><span class="nameLp3"></span>: <span id="sofortllls2"></span>A</label>
 				</div>
 				<script>
 					var sliders2 = document.getElementById("sofortlls2");

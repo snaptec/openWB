@@ -73,6 +73,14 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
+	<!-- important Scripts to be loaded first-->
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/wow.min.js"></script>
+	<script src="js/typewriter.js"></script>
+	<script src="js/jquery.onepagenav.js"></script>
+	<script src="js/main.js"></script>
 </head>
 
 <script>
@@ -164,14 +172,6 @@ registerPageVisibility()
 		</ul>
 		<a href="#" class="close-link"><i class="arrow_up"></i></a>
 	</div>
-	<!-- Scripts -->
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/wow.min.js"></script>
-	<script src="js/typewriter.js"></script>
-	<script src="js/jquery.onepagenav.js"></script>
-	<script src="js/main.js"></script>
 
 	<!-- load Chart.js library -->
 	<script src="js/Chart.bundle.js"></script>

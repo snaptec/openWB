@@ -615,10 +615,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/kWhactualcharged"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-kWhActualCharged: '+index+'   load='+mqttpayload);
-		$("#aktgeladen"+index+"div").html(mqttpayload);
-		document.getElementById("prog"+index).value= mqttpayload;
+		if ( document.getElementById("prog"+index) ) {
+			// only if target element exists
+			index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+			//console.log('mqttmsg-kWhActualCharged: '+index+'   load='+mqttpayload);
+			$("#aktgeladen"+index+"div").html(mqttpayload);
+			document.getElementById("prog"+index).value= mqttpayload;
+		}
 	}
 	else if ( mqttmsg == "openWB/pv/W") {
 		pvwatt = parseInt(mqttpayload, 10);
@@ -844,6 +847,17 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		//console.log('mqttmsg-ADirectModeAmps: '+index+'   load='+mqttpayload);
 		document.getElementById("sofortlllp"+index+"s").value = mqttpayload;
 		document.getElementById("sofortlllp"+index+"l").innerHTML = mqttpayload;
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/strChargePointName$/i ) ) {
+		// matches to all messages containing "openwb/lp/#/strchargepointname"
+		// where # is an integer > 0
+		// search is case insensitive
+		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		// fill span-tags from class=strChargePointName with respective payload-string
+		var ele = document.getElementsByClassName("nameLp"+index);
+    	for(var i=0; i<ele.length; i++) {
+      		ele[i].textContent = mqttpayload;
+    	}
 	}
 	else {
 		thevalues.forEach(function(thevar){
