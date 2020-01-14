@@ -214,12 +214,12 @@ var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
-//	console.log('new mqttmsg...');
-//	console.log('mqttmsg: '+mqttmsg+'--endmessage');
-//	console.log('load='+mqttpayload+'--endload');
-//	console.log('topic='+mqtttopic+'--endtopic');
-//	console.log('topic='+htmldiv+'--endhtmldiv');
-//	console.log('');
+//console.log('new mqttmsg...');
+//console.log('mqttmsg: '+mqttmsg+'--endmessage');
+//console.log('load='+mqttpayload+'--endload');
+//console.log('topic='+mqtttopic+'--endtopic');
+//console.log('topic='+htmldiv+'--endhtmldiv');
+//console.log('');
 
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var wattbezug = mqttpayload;
@@ -622,17 +622,28 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/pv/W") {
 		pvwatt = parseInt(mqttpayload, 10);
+		if ( pvwatt > 0 ) {
+			// if pv-power is positive, adjust to 0
+			// since pv cannot consume power
+			pvwatt = 0;
+		}
+		// convert raw number for display
 		if ( pvwatt <= 0){
+			// production is negative for calculations so adjust for display
 			pvwatt = pvwatt * -1;
 			pvwattarrow = pvwatt;
+			// adjust and add unit
 			if (pvwatt > 999) {
-				pvwatt = (pvwatt / 1000).toFixed(2);
-				pvwatt = pvwatt + " kW Erzeugung";
+				pvwattStr = (pvwatt / 1000).toFixed(2) + " kW";
 			} else {
-				pvwatt = pvwatt + " W Erzeugung";
+				pvwattStr = pvwatt + " W";
+			}
+			// only if production
+			if (pvwatt > 0) {
+				pvwattStr += " Erzeugung";
 			}
 		}
-		$("#pvdiv").html(pvwatt);
+		$("#pvdiv").html(pvwattStr);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/w$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/w"
@@ -728,6 +739,19 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				document.getElementById("stationlp"+index).setAttribute("style", "color: #00FF00;");
 			} else {
 				document.getElementById("stationlp"+index).setAttribute("style", "color: blue;");
+			}
+		}
+	}
+	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
+		if ( document.getElementById("lastregelungaktivdiv") ) {
+			// if the div for info text "Lastregelung" is present in theme
+			$('#lastregelungaktivdiv').html(mqttpayload);
+			if ( mqttpayload.length >= 5 ) {
+				// if there is info-text in payload for topic, show the div
+				$('#lastregelungaktivdiv').show();
+			} else {
+				// if there is no text, hide the div
+				$('#lastregelungaktivdiv').hide();
 			}
 		}
 	}
