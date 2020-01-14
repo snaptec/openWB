@@ -86,7 +86,7 @@ bezugv2=emparts['u2']
 bezugv3=emparts['u3']
 iw=emparts['pconsume']
 ew=emparts['psupply']
-if ( iw > 5 ):
+if ( iw < 5 ):
     watt=int(ew*-1)
 else:
     watt=int(iw)
