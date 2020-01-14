@@ -620,17 +620,28 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/pv/W") {
 		pvwatt = parseInt(mqttpayload, 10);
+		if ( pvwatt > 0 ) {
+			// if pv-power is positive, adjust to 0
+			// since pv cannot consume power
+			pvwatt = 0;
+		}
+		// convert raw number for display
 		if ( pvwatt <= 0){
+			// production is negative for calculations so adjust for display
 			pvwatt = pvwatt * -1;
 			pvwattarrow = pvwatt;
+			// adjust and add unit
 			if (pvwatt > 999) {
-				pvwatt = (pvwatt / 1000).toFixed(2);
-				pvwatt = pvwatt + " kW Erzeugung";
+				pvwattStr = (pvwatt / 1000).toFixed(2) + " kW";
 			} else {
-				pvwatt = pvwatt + " W Erzeugung";
+				pvwattStr = pvwatt + " W";
+			}
+			// only if production
+			if (pvwatt > 0) {
+				pvwattStr += " Erzeugung";
 			}
 		}
-		$("#pvdiv").html(pvwatt);
+		$("#pvdiv").html(pvwattStr);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/w$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/w"
