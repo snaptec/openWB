@@ -415,7 +415,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			$('#socenabledlp'+index).hide();
 			window['boolDisplayLp'+index+'Soc'] = true;
-			window['hidelp'+index+'soc'] = 'LP1 SoC';
+			window['hidelp'+index+'soc'] = 'LP'+index+' SoC';
 			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: red;");
 			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-on');
 			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-off');
@@ -603,10 +603,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			window['lp'+index+'enabled'] = 0;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-check");
 			document.getElementById("lp"+index+"enableddiv").classList.add("fa-times");
+			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: red;");
 		} else {
 			window['lp'+index+'enabled'] = 1;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-times");
 			document.getElementById("lp"+index+"enableddiv").classList.add("fa-check");
+			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: lightgreen;");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i ) ) {
