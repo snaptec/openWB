@@ -24,6 +24,4 @@ if ( $simplemodeold == 1 ) {
 	// theme set by cookie
 	include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 }
-
-echo '<div></div>';
 ?>
