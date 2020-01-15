@@ -107,7 +107,7 @@
 		echo '<div class="row chargePointInfoStyle" id="lp'.$i.'div"  style="display: none;">'."\n";
 		echo '    <div class="col-xs-4">'."\n";
 		echo '        <span id="lp'.$i.'enableddiv" class="fa" style="cursor: pointer;" onclick="lp'.$i.'enabledclick()"></span>'."\n";
-		echo '    	  <span id="lp'.$i.'name"></span>'."\n";
+		echo '    	  <span class="nameLp'.$i.'"></span>'."\n";
 		echo '        <span class="fa" id="zielladenaktivlp'.$i.'div"></span>'."\n";
 		echo '        <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
 		echo '    </div>'."\n";
@@ -216,7 +216,7 @@
 		echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 		echo '<div class="row regularTextStyle">'."\n";
 		echo '    <div id="ladepunkts'.($i-1).($i-1).'div" class="col-xs-3">'."\n";
-		echo '        '.${'lp'.$i.'nameold'};  // echoes the content of the variable named within {}
+		echo '        <span class="nameLp'.$i.'"></span>'."\n";
 		echo '    </div>'."\n";
 		echo '    <div id="ladepunkts'.($i-1).($i-1).($i-1).($i-1).'div" class="col-xs-2">'."\n";
 		echo '        <span id="aktgeladen'.$i.'div"></span> kWh'."\n";
@@ -228,129 +228,119 @@
 	}
 ?>
 
-<hr>
-
 <!-- show options for sofortladen -->
 <div id="sofortlmdiv">
-	<form name="sofortll" action="./tools/sofortll.php" method="POST">
+	<hr>
 
-		<!-- options section header -->
-		<div class="row">
-			<div class="col-xs-12">
-				<h3>Sofortladen Ladeziel-Einstellungen</h3>
-			</div>
+	<!-- options section header -->
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Sofortladen Ladeziel-Einstellungen</h3>
+		</div>
+	</div>
+	<div class="row smallTextStyle">
+
+		<div class="col-xs-12 regularTextStyle animate-alertPulsation" style="color:#990000; background-color:white;">
+			BETA -> keine Änderungen in diesem Theme möglich bis MQTT umgesetzt ist <-
 		</div>
 
-		<!-- options header -->
-		<div class="row chargePointInfoStyle" style="font-weight: bolder;">
-			<div class="col-xs-3">
-				Ladepunkt
-			</div>
-			<div class="col-xs-2">
-				Ziel
-			</div>
-			<div class="col-xs-3">
-				Parameter
-			</div>
-			<div class="col-xs-2">
-				Fortschritt
-			</div>
-			<div class="col-xs-2">
-				Restzeit
-			</div>
+		<!-- for use once theme is ready and send settings by mqtt is ready
+		<div class="col-xs-12">
+			Erfordert 'save' nach Änderung!
 		</div>
+		-->
+	</div>
 
-		<!-- options content -->
-		<div class="row regularTextStyle">
-			<div class="col-xs-3">
-				<?php echo $lp1nameold ?>
-			</div>
-			<div class="col-xs-2">
-				<select type="text" name="msmoduslp1" id="msmoduslp1" class="dropdownStyle">
-					<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Keine</option>
-					<option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
-					<option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
-				</select>
-			</div>
-			<div class="col-xs-3">
-				<div id="msmodusmlp1">
-					<select type="text" name="lademlp1" id="lademlp1" class="dropdownStyle">
-					<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
-						<option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
-						<option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
-						<option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
-						<option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
-						<option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
-						<option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
-						<option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
-						<option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
-						<option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
-						<option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
-						<option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
-						<option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
-						<option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
-						<option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
-						<option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
-						<option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
-						<option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
-						<option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
-						<option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
-						<option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
-					</select> kWh
-				</div>
-				<div id="msmodusslp1">
-					<select type="text" name="sofortsoclp1" id="sofortsoclp1" style="background-color: #ea5400;">
-					<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
-						<option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
-						<option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
-						<option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
-						<option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
-						<option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
-						<option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
-						<option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
-						<option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
-						<option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
-						<option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
-						<option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
-						<option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
-						<option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
-						<option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
-						<option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
-					</select> %
-				</div>
-			</div>
-			<?php
-				$i=1;
-				echo '    <div id="sofortladenLadezielProgressDiv" class="col-xs-2 Progress">'."\n";
-
-				// if needed due to inconsistent id naming
-				if ( $i < 2 ) {
-					echo '        <progress id="prog'.$i.'" value= "0" max='.intval($lademkwhold).' class="Progress-main">'."\n";
-				} else {
-					echo '        <progress id="prog'.$i.'" value= "0" max='.intval(${'lademkwhs'.$i.'old'}).' class="Progress-main">'."\n";
-				}
-				echo '            <div class="Progress-bar">'."\n";
-				echo '                <span class="Progress-value" style="width: 80%;">&nbsp;</span>'."\n";
-				echo '            </div>'."\n";
-				echo '        </progress>'."\n";
-				echo '    </div>'."\n";
-				echo '    <div id="ladepunkts'.($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).($i-1).'div" class="col-xs-2">'."\n";
-				// if needed due to inconsistent id naming
-				if ( $i < 2 ) {
-					echo '        <div id="lademstatdiv">'."\n";
-				} else {
-					echo '        <div id="lademstats'.$i.'div'.$i.'">'."\n";
-				}
-				echo '            <span id="restzeitlp'.$i.'div"></span>'."\n";
-				echo '        </div>'."\n";
-				echo '    </div>'."\n";
-			?>
+	<!-- options header -->
+	<div class="row chargePointInfoStyle" style="font-weight: bolder;">
+		<div class="col-xs-3">
+			Ladepunkt
 		</div>
-		<hr>
+		<div class="col-xs-2">
+			Ziel
+		</div>
+		<div class="col-xs-3">
+			Parameter
+		</div>
+		<div class="col-xs-2">
+			Fortschritt
+		</div>
+		<div class="col-xs-2">
+			Restzeit
+		</div>
+	</div>
+
+	<!-- chargepoint options -->
+	<?php
+		// generate html code dynamically for all charging points
+		for($i=1; $i <= 3; $i++) {
+			echo '<!-- options for charging Point '.$i.', each line initially not visible -->'."\n";
+			echo '    <div id="directChargeSubModeLp'.$i.'div" class="row regularTextStyle" style="visibility: hidden">'."\n";
+			echo '        <div class="col-xs-3">'."\n";
+			echo '            <span class="nameLp'.$i.'"></span>'."\n";
+			echo '        </div>'."\n";
+			echo '        <div class="col-xs-2">'."\n";
+			echo '            <select type="text" name="directChargeSubModeLp'.$i.'" id="directChargeSubModeLp'.$i.'" class="dropdownStyle">'."\n";
+			// build option-tags from array of options and set selected to proper tag
+			$options = array("Keine", "Lademenge", "SoC");
+			foreach ($options as $key => $value) {
+				$echoString = '                <option ';
+				if(${'msmoduslp'.$i.'old'} == $key) $echoString .= 'selected';  // adds keyword to selected option
+				$echoString .=  ' value="'.$key.'">'.$value.'</option>'."\n";
+				echo $echoString;
+			}
+			echo '            </select>'."\n";
+			echo '        </div>'."\n\n";
+			echo '        <!-- parameters for charging Point '.$i.' options, initially hidden-->'."\n";
+			echo '        <div class="col-xs-3">'."\n";
+			echo '            <div id="directChargeSubModeKwhToChargeLp'.$i.'div" style="display: none;">'."\n";
+			echo '                <select type="text" name="directChargeSubModeKwhToChargeLp'.$i.'" id="directChargeSubModeKwhToChargeLp'.$i.'" class="dropdownStyle">'."\n";
+			// build option-tags from array of options and set selected to proper tag
+			$options = array(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70);
+			foreach ($options as $value) {
+				echo '                    <option value="'.$value.'">'.$value.'</option>'."\n";
+			}
+			echo '                </select> kWh'."\n";
+			echo '            </div>'."\n";
+			echo '            <div id="directChargeSubModePercentToChargeLp'.$i.'div" style="display: none;">'."\n";
+			echo '                <select type="text" name="directChargeSubModePercentToChargeLp'.$i.'" id="directChargeSubModePercentToChargeLp'.$i.'" class="dropdownStyle">'."\n";				// build option-tags from array of options and set selected to proper tag
+			$options = array(10, 15, 20, 30, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95);
+			foreach ($options as $value) {
+				echo '                    <option value="'.$value.'">'.$value.'</option>'."\n";
+			}
+			echo '                </select> %'."\n";
+			echo '            </div>'."\n";
+			echo '        </div>'."\n\n";
+
+			echo '        <!-- charging achievments for charging Point '.$i.', initially hidden -->'."\n";
+			echo '        <div id="directChargeSubModeProgressLp'.$i.'div" class="col-xs-2 Progress" style="display: none;">'."\n";
+			echo '            <progress id="directChargeSubModeProgressLp'.$i.'" value="0" max="0" class="Progress-main">'."\n";
+			echo '               <div class="Progress-bar">'."\n";
+			echo '                   <span class="Progress-value" style="width: 80%;">&nbsp;</span>'."\n";
+			echo '               </div>'."\n";
+			echo '            </progress>'."\n";
+			echo '        </div>'."\n";
+			echo '        <div id="directChargeSubModeTimeRemainingLp'.$i.'div" class="col-xs-2" style="display: none;">'."\n";
+			echo '            <span id="directChargeSubModeTimeRemainingLp'.$i.'"></span>'."\n";
+			echo '        </div>'."\n";
+			echo '    </div>'."\n\n";
+		}
+	?>
+	<hr>
 
 		<!-- options section header -->
 		<div class="row">
 			<h3>Sofortladen Stromstärke</h3>
+		</div>
+		<div class="row smallTextStyle">
+			<!-- for use once theme is ready and send settings by mqtt is ready
+			<div class="col-xs-12">
+				Erfordert 'save' nach Änderung!
+			</div>
+			-->
+			<div class="col-xs-12 regularTextStyle animate-alertPulsation" style="color:#990000; background-color:white;">
+				BETA -> keine Änderungen in diesem Theme möglich bis MQTT umgesetzt ist <-
+			</div>
 		</div>
 
 		<!-- options content -->
@@ -509,12 +499,13 @@
 		</div>
 
 		<!-- submit button -->
+		<!-- disabled until mqtt is working
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<button type="submit" class="btn btn-block btn-grey myButtonStyle">Save</button>
 			</div>
 		</div>
-	</form>
+		-->
 	<hr>
 </div>
 
