@@ -328,7 +328,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/graph/booldisplaylp#"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-boolDisplayLP: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
@@ -403,7 +403,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/graph/booldisplaylp#soc"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-boolDisplayLpSoc: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 1) {
 			$('#socenabledlp'+index).show();
@@ -426,7 +426,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/graph/booldisplayload#"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-boolDisplayLoad: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
@@ -448,7 +448,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/graph/#alllivevalues"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-alllivevalues: '+index);
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
@@ -547,7 +547,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/boolchargepointconfigured"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
  		if ( mqttpayload == 0 ) {
 			$('#lp'+index+'div').hide();
@@ -597,7 +597,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/boolchargepointenabled"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-ChargePointEnabled: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 0 ) {
 			window['lp'+index+'enabled'] = 0;
@@ -617,7 +617,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		if ( document.getElementById("prog"+index) ) {
 			// only if target element exists
-			index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+			var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 			//console.log('mqttmsg-kWhActualCharged: '+index+'   load='+mqttpayload);
 			$("#aktgeladen"+index+"div").html(mqttpayload);
 			document.getElementById("prog"+index).value= mqttpayload;
@@ -652,7 +652,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/w"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		llaktuell = parseInt(mqttpayload, 10);
 		llaktuellarrow = llaktuell;
@@ -679,7 +679,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/boolplugstat"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-boolPlugStat: '+index+'   load='+mqttpayload);
 		if ( $('#plugstatlp'+index+'div').length > 0 ) {
 			if ( mqttpayload == 1 ) {
@@ -701,7 +701,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/boolchargestat"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-boolChargeStat: '+index+'   load='+mqttpayload);
 		if ($('#plugstatlp'+index+'div').length > 0) {
 			if (mqttpayload == 1) {
@@ -726,7 +726,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/%soc"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-SoC: '+index+'   load='+mqttpayload);
 		window['lp'+index+'soc'] = mqttpayload;
 		$("#soclp"+index).html(mqttpayload);
@@ -735,7 +735,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/chargestatus"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-ChargeStatus: '+index+'   load='+mqttpayload);
 		if ($('#stationlp'+index).length > 0) {
 			if (mqttpayload == 1) {
@@ -843,7 +843,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/adirectmodeamps"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		//console.log('mqttmsg-ADirectModeAmps: '+index+'   load='+mqttpayload);
 		document.getElementById("sofortlllp"+index+"s").value = mqttpayload;
 		document.getElementById("sofortlllp"+index+"l").innerHTML = mqttpayload;
@@ -852,7 +852,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/strchargepointname"
 		// where # is an integer > 0
 		// search is case insensitive
-		index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// fill span-tags from class=strChargePointName with respective payload-string
 		var ele = document.getElementsByClassName("nameLp"+index);
     	for(var i=0; i<ele.length; i++) {
