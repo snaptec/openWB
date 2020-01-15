@@ -854,9 +854,9 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// fill span-tags from class=strChargePointName with respective payload-string
-		var ele = document.getElementsByClassName("nameLp"+index);
-    	for(var i=0; i<ele.length; i++) {
-      		ele[i].textContent = mqttpayload;
+		var myElem = document.getElementsByClassName("nameLp"+index);
+    	for(var i=0; i<myElem.length; i++) {
+      		myElem[i].textContent = mqttpayload;
     	}
 	}
 	else {
