@@ -107,6 +107,12 @@ h3 {
     text-align: center;
 }
 
+.smallTextStyle {
+      font-size: 1.0rem;
+      color: red;
+      text-align: center;
+}
+
 .regularTextStyle {
       font-size: 1.0rem;
       color: white;
@@ -182,6 +188,10 @@ h3 {
         font-size: 1.3rem;
     }
 
+    .smallTextStyle {
+          font-size: 1.1rem;
+    }
+
     .regularTextStyle {
           font-size: 1.22rem;
     }
@@ -226,6 +236,10 @@ h3 {
         font-size: 2.0rem;
     }
 
+    .smallTextStyle {
+          font-size: 1.5rem;
+    }
+
     .regularTextStyle {
           font-size: 2.0rem;
     }
@@ -267,6 +281,10 @@ h3 {
 
     h3 {
         font-size: 2.7rem;
+    }
+
+    .smallTextStyle {
+          font-size: 1.8rem;
     }
 
     .regularTextStyle {

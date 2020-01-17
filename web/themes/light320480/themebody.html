@@ -13,22 +13,17 @@
 	</div>
 	</div>
 
-	<!-- enable selected graphing method -->
-	<?php if ($graphliveamold == 1) {
-		echo '
-			<div style="height:300px;" id="chartdiv"></div>
-	';
-	} else {
-	echo '
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<div class="imgwrapper">
-				<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php"
-					 alt="Graph lädt, bitte warten..." class="img-responsive">
-				<br></div>
+	<!-- interactive chart.js as graph selected -->
+	<!-- will be refreshed using MQTT (in live.js)-->
+	<div class="row" id="thegraph">
+		<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+			<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;">
+				Graph lädt, bitte warten...
+			</div>
+			<canvas id="canvas"></canvas>
 		</div>
-	</div>';
-	} ?>
+		<div id="graphoptiondiv" style="display: none;"><br><br></div>
+	</div>
 
 	<div class="row">
 		<div class="col-xs-8 text-center bg-primary" style="font-size: 3vw">

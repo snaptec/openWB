@@ -12,7 +12,6 @@
 	var lastmanagement = <?php echo $lastmanagementold ?>;
 	var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 	var speichervorhanden = <?php echo $speichervorhanden ?>;
-	var chartlegend = <?php echo $chartlegendmainold ?>;
 	var defaultScaleCounter = 20;  // Standardwert Zähler zur Anpassung Gauge-Skala
 </script>
 
@@ -58,7 +57,10 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="col-xs-6 text-center">
-			<div style="font-size: 2vw"><?php echo $lp1nameold ?><span id="plugstatlp1div"></span></div>
+			<div style="font-size: 2vw">
+				<span class="nameLp1"></span>
+				<span id="plugstatlp1div"></span>
+			</div>
 			<canvas id="lp1Data" width="150" height="140">
 				Sorry, no canvas support
 			</canvas>
@@ -68,7 +70,10 @@
 	<?php if ($lastmanagementold == 1) {
 	echo '
 		<div class="col-xs-6 text-center">
-			<div style="font-size: 2vw">'; echo $lp2nameold; echo '<span id="plugstatlp2div"></div>
+			<div style="font-size: 2vw">
+			 	<span class="nameLp2"></span>
+				<span id="plugstatlp2div"></span>
+			</div>
 			<canvas id="lp2Data" width="150" height="140">
 				Sorry, no canvas support
 			</canvas>
@@ -421,22 +426,17 @@ echo '
 
 </script>
 
-<!-- enable selected graphing method -->
-<?php if ($graphliveamold == 1) {
-	echo '
-		<div style="height:300px;" id="chartdiv"></div>
-';
-} else {
-echo '
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<div class="imgwrapper">
-			<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php"
-				 alt="Graph lädt, bitte warten..." class="img-responsive">
-			<br></div>
+<!-- interactive chart.js as graph selected -->
+<!-- will be refreshed using MQTT (in live.js)-->
+<div class="row" id="thegraph">
+	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+		<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;">
+			Graph lädt, bitte warten...
+		</div>
+		<canvas id="canvas"></canvas>
 	</div>
-</div>';
-} ?>
+	<div id="graphoptiondiv" style="display: none;"><br><br></div>
+</div>
 
 <div class="row col-xs-12 text-center">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
@@ -518,13 +518,13 @@ echo '
 	</div>
 	<div class="row" style="font-size: 2vw">
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			LP1 <?php echo $lp1nameold ?>
+			LP1 <span class="nameLp1"></span>
 		</div>
 		<div  id="ladepunkts11div" class="col-xs-4 text-center">
-			LP2 <?php echo $lp2nameold ?>
+			LP2 <span class="nameLp2"></span>
 		</div>
 		<div id="ladepunkts22div" class="col-xs-4 text-center">
-			LP3 <?php echo $lp3nameold ?>
+			LP3 <span class="nameLp3"></span>
 		</div>
 	</div>
 	<div class="row" style="font-size: 2vw">
@@ -811,7 +811,7 @@ echo '
 				<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortll" id="sofortll" value=<?php echo $sofortllold ?>>
 			</div>
 			<div class="col-xs-4 text-center">
-				<label for="sofortll"><?php echo $lp1nameold ?>: <span id="sofortlll"></span>A</label>
+				<label for="sofortll"><span class="nameLp1"></span>: <span id="sofortlll"></span>A</label>
 			</div>
 			<script>
 				var slider = document.getElementById("sofortll");
@@ -832,7 +832,7 @@ echo '
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls1" id="sofortlls1" value=<?php echo $sofortlls1old ?>>
 				</div>
 				<div class="col-xs-4 text-center">
-					<label for="sofortlls1"><?php echo $lp2nameold ?>: <span id="sofortllls1"></span>A</label>
+					<label for="sofortlls1"><span class="nameLp2"></span>: <span id="sofortllls1"></span>A</label>
 				</div>
 				<script>
 					var sliders1 = document.getElementById("sofortlls1");
@@ -854,7 +854,7 @@ echo '
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlls2" id="sofortlls2" value=<?php echo $sofortlls2old ?>>
 				</div>
 				<div class="col-xs-4 text-center">
-					<label for="sofortlls2"><?php echo $lp3nameold ?>: <span id="sofortllls2"></span>A</label>
+					<label for="sofortlls2"><span class="nameLp3"></span>: <span id="sofortllls2"></span>A</label>
 				</div>
 				<script>
 					var sliders2 = document.getElementById("sofortlls2");
@@ -910,6 +910,3 @@ echo '
 
 <br><br><br><br>
 </div>
-
-<!-- load amcharts js for graph -->
-<script src="/openWB/web/themes/standard/livegraph.js"></script>

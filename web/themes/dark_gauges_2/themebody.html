@@ -294,33 +294,19 @@
 	gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
 </script>
 
-<?php if ($graphliveamold == 1) {
-	echo '
-		<!-- interactive chart.js as graph selected -->
-		<!-- will be refreshed using MQTT (in live.js)-->
-		<div class="row" id="thegraph">
-			<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
-				<div id="waitforgraphloadingdiv" style="text-align: center; margin-top: 150px;"> Graph lädt, bitte warten...</div>
-				<canvas id="canvas"></canvas>
-			</div>
-			<div id="graphoptiondiv" style="display: none;"><br><br></div>
+<!-- interactive chart.js -->
+<!-- will be refreshed using MQTT (in live.js)-->
+<div class="row" id="thegraph">
+	<div class="col-xs-12" style="height: 350px; width: 92%; text-align: center; margin-left: 4%;">
+		<div id="waitforgraphloadingdiv">
+			Graph lädt, bitte warten...
 		</div>
-	';
-} else {
-	echo '
-	    <!-- php as graph selected -->
-		<!-- Graph refresher -->
-		<script type = "text/javascript" src = "refreshEmbeddedGraph.js" ></script>
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<div class="imgwrapper">
-					<img id="livegraph" src="./themes/'; echo $_COOKIE['openWBTheme']; echo '/livechart_php.php" alt="Graph lädt, bitte warten..." class="img-responsive">
-					<br>
-				</div>
-			</div>
-		</div>
-	';
-} ?>
+		<canvas id="canvas"></canvas>
+	</div>
+	<div id="graphoptiondiv" style="display: none;">
+		<br><br>
+	</div>
+</div>
 
 <div class="row col-xs-12 text-center">
 	<div id="nachtladenstatediv" class="col-xs-4 text-center" style="background-color:#00ada8;font-size: 2vw">
@@ -347,7 +333,7 @@
 <!-- show first charging Point -->
 <div class="row" id="lp1lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><?php echo $lp1nameold ?><span id="plugstatlp1div"></span>
+		<span id="lp1enableddiv" class="fa" style="cursor: pointer;" onclick="lp1enabledclick()"></span><span class="nameLp1"></span><span id="plugstatlp1div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lllp1div"></span>, <span id="llsolllp1div"></span> A Soll
@@ -369,7 +355,7 @@
 <!-- show values for second charging point -->
 <div class="row" id="lp2lldiv">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><?php echo $lp2nameold ?><span id="plugstatlp2div"></span>
+		<span id="lp2enableddiv" class="fa" style="cursor: pointer;" onclick="lp2enabledclick()"></span><span class="nameLp2"></span><span id="plugstatlp2div"></span>
 	</div>
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
 		<span id="lllp2div"></span>,  <span id="llsolllp2div"></span> A Soll
@@ -391,7 +377,7 @@
 <!-- show values for third charging point -->
 <div class="row" id="lp3lldiv" style="display: none;">
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
-		<span id="lp3enableddiv" class="fa" style="cursor: pointer;" onclick="lp3enabledclick()"><?php echo $lp3nameold ?>
+		<span id="lp3enableddiv" class="fa" style="cursor: pointer;" onclick="lp3enabledclick()"><span class="nameLp3"></span>
 	</div>
 
 	<div class="col-xs-4 text-center bg-primary" style="font-size: 2vw">
@@ -573,13 +559,13 @@
 	</div>
 	<div class="row" style="font-size: 2vw">
 		<div class="col-xs-4 text-center" style="font-size: 2vw">
-			LP1 <?php echo $lp1nameold ?>
+			LP1 <span class="nameLp1"></span>
 		</div>
 		<div  id="ladepunkts11div" class="col-xs-4 text-center">
-			LP2 <?php echo $lp2nameold ?>
+			LP2 <span class="nameLp2"></span>
 		</div>
 		<div id="ladepunkts22div" class="col-xs-4 text-center">
-			LP3 <?php echo $lp3nameold ?>
+			LP3 <span class="nameLp3"></span>
 		</div>
 	</div>
 	<div class="row" style="font-size: 2vw">

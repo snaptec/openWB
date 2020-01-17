@@ -69,28 +69,33 @@
 				<br>
 				<select onchange="$('#themePreview').attr('src', './themes/'+this.options[this.selectedIndex].value+'/preview.png');" id="themeSelector">
 		        	<?php
-						function dir_list($d){
-							// gibt alle Verzeichnisse (=Themes) im Theme-Ordner zurück
-   							foreach(array_diff(scandir($d),array('.','..')) as $f)if(is_dir($d.'/'.$f))$l[]=$f;
-   							return $l;
+						function dir_list($rootDir){
+							// returns all directories as theme names from themes folder except for folder called hidden,
+   							foreach( array_diff(scandir($rootDir),array('.','..')) as $subDir ) {
+								if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "hidden") !== 0 ) {
+									$dirList[]=$subDir;
+								}
+							}
+							return $dirList;
 						}
-		        	// alle Themes lesen
-		        	$allThemes = dir_list('./themes');
-		        	// und Themes ins Dropdwon
-		        	foreach($allThemes as $theme){
-		        		?>
-		        		<option value=<?php echo $theme;?>><?php echo $theme;?></option>
-		        		<?php
+		        		// call function to read all directories
+		        		$allThemes = dir_list('./themes');
+		        		// and put result in dropdown, standard always first
+						echo '<option value="standard">standard</option>'."\n";
+		        		foreach( $allThemes as $theme ) {
+							if ( strcasecmp($theme, "standard") !== 0 ) {
+								echo '                    <option value="'.$theme.'">'.$theme.'</option>'."\n";
+							}
 		        		}
-		        		?>
+		        	?>
 		    	</select>
 			</div>
 			<br>
 
   			<div class="col-sm-4">
     			<div class="thumbnail" style="min-height: 150px">
-					<!-- immer zunächst das erste Theme des Dropdown-Selectors als Preview anzeigen -->
-      				<img id="themePreview" src="./themes/<?php echo $allThemes[0]?>/preview.png" alt="Theme Vorschau"/>
+					<!-- display standard theme initially -->
+      				<img id="themePreview" src="./themes/standard/preview.png" alt="Theme Vorschau"/>
     			</div>
   			</div>
 		</div>
