@@ -745,7 +745,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
 		if ( index >= 2 && mqttpayload == 1 ) {
 			// if more than 1 charge point configured, show sum of power of all charge points
 			$('#powerAllLpdiv').show();
