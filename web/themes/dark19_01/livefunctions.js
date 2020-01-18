@@ -204,20 +204,18 @@ $(function() {
 $(function() {
     if(($('#lademodus').val() == '0' && $('#nlakt_sofort').val() == '1') || ($('#lademodus').val() == '1' && $('#nlakt_minpv').val() == '1') || ($('#lademodus').val() == '2' && $('#nlakt_nurpv').val() == '1') || ($('#lademodus').val() == '4' && $('#nlakt_standby').val() == '1')  ) {
         if($('#nachtladenstate').val() == '1') {
-            $('#nachtladenstatediv').show();
+            document.getElementById("nachtladenaktivlp1div").classList.add("fa-moon");
         } else {
-            $('#nachtladenstatediv').hide();
+            document.getElementById("nachtladenaktivlp1div").classList.remove("fa-moon");
         }
         if($('#nachtladenstates1').val() == '1') {
-            $('#nachtladenstates1div').show();
+            document.getElementById("nachtladenaktivlp2div").classList.add("fa-moon");
         } else {
-            $('#nachtladenstates1div').hide();
+            document.getElementById("nachtladenaktivlp2div").classList.remove("fa-moon");
         }
     } else {
-        $('#nachtladenstatediv').hide();
-        $('#nachtladenstates1div').hide();
-
-
+        document.getElementById("nachtladenaktivlp1div").classList.remove("fa-moon");
+        document.getElementById("nachtladenaktivlp2div").classList.remove("fa-moon");
     }
 
 });

@@ -172,9 +172,6 @@ function loadgraph() {
 	window.myLine = new Chart.Line(ctx, {
 		data: lineChartData,
 		options: {
-			chartArea: {
-        		backgroundColor: 'rgba(251, 85, 85, 0.4)'
-    		},
 			tooltips: {
 				enabled: false
 			},
