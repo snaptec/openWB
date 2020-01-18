@@ -61,10 +61,10 @@ foreach($lines as $line) {
 		list(, $myrenault_passlp2old) = explode("=", $line);
 	}
 	if(strpos($line, "myrenault_locationlp2=") !== false) {
-		list(, $myrenault_countrylp2old) = explode("=", $line);
+		list(, $myrenault_locationlp2old) = explode("=", $line);
 	}
-	if(strpos($line, "myrenault_lp2=") !== false) {
-		list(, $myrenault_lp2old) = explode("=", $line);
+	if(strpos($line, "myrenault_countrylp2=") !== false) {
+		list(, $myrenault_countrylp2old) = explode("=", $line);
 	}
 
 	if(strpos($line, "myrenault_userlp1=") !== false) {
@@ -74,10 +74,10 @@ foreach($lines as $line) {
 		list(, $myrenault_passlp1old) = explode("=", $line);
 	}
 	if(strpos($line, "myrenault_locationlp1=") !== false) {
-		list(, $myrenault_countrylp1old) = explode("=", $line);
+		list(, $myrenault_locationlp1old) = explode("=", $line);
 	}
-	if(strpos($line, "myrenault_lp1=") !== false) {
-		list(, $myrenault_lp1old) = explode("=", $line);
+	if(strpos($line, "myrenault_countrylp1=") !== false) {
+		list(, $myrenault_countrylp1old) = explode("=", $line);
 	}
 	if(strpos($line, "wryoulessip=") !== false) {
 		list(, $wryoulessipold) = explode("=", $line);
