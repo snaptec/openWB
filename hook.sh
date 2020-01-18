@@ -135,11 +135,11 @@ if (( verbraucher1_aktiv == "1")); then
 	echo "1" > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
 	if [[ $verbraucher1_typ == "http" ]]; then
 		verbraucher1_watt=$(curl --connect-timeout 3 -s $verbraucher1_urlw )
-		if [[ "$verbraucher1_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
+		if ! [[ "$verbraucher1_watt" =~ '^[+-]?[0-9]+([.][0-9]+)?$' ]]; then
 	   		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
 		fi
 		verbraucher1_wh=$(curl --connect-timeout 3 -s $verbraucher1_urlh &)
-		if [[ "$verbraucher1_wh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
+		if ! [[ "$verbraucher1_wh" =~ '^[+-]?[0-9]+([.][0-9]+)?$' ]]; then
 			echo $verbraucher1_wh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 		fi
 

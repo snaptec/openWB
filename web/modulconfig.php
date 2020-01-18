@@ -54,6 +54,31 @@ function checkmodification(){
 
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
+	if(strpos($line, "myrenault_userlp2=") !== false) {
+		list(, $myrenault_userlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_passlp2=") !== false) {
+		list(, $myrenault_passlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_locationlp2=") !== false) {
+		list(, $myrenault_locationlp2old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_countrylp2=") !== false) {
+		list(, $myrenault_countrylp2old) = explode("=", $line);
+	}
+
+	if(strpos($line, "myrenault_userlp1=") !== false) {
+		list(, $myrenault_userlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_passlp1=") !== false) {
+		list(, $myrenault_passlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_locationlp1=") !== false) {
+		list(, $myrenault_locationlp1old) = explode("=", $line);
+	}
+	if(strpos($line, "myrenault_countrylp1=") !== false) {
+		list(, $myrenault_countrylp1old) = explode("=", $line);
+	}
 	if(strpos($line, "wryoulessip=") !== false) {
 		list(, $wryoulessipold) = explode("=", $line);
 	}
@@ -1647,7 +1672,8 @@ $(function() {
 		<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">SoC HTTP</option>
 		<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
 		<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
-		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe</option>
+		<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe alt</option>
+		<option <?php if($socmodulold == "soc_myrenault\n") echo selected ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
 		<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
 		<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
 		<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
@@ -1801,6 +1827,38 @@ $(function() {
 
 
 </div>
+<div id="socmyrenault">
+	<div class="row bg-info">
+		<b><label for="myrenault_userlp1">Benutzername:</label></b>
+		<input type="text" name="myrenault_userlp1" id="myrenault_userlp1" value="<?php echo $myrenault_userlp1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_passlp1">Passwort:</label></b>
+		<input type="password" name="myrenault_passlp1" id="myrenault_passlp1" value="<?php echo $myrenault_passlp1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_locationlp1">Standort:</label></b>
+		<input type="text" name="myrenault_locationlp1" id="myrenault_locationlp1" value="<?php echo $myrenault_locationlp1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Standort, z.B. de_DE<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_countrylp1">Land:</label></b>
+		<input type="text" name="myrenault_countrylp1" id="myrenault_countrylp1" value="<?php echo $myrenault_countrylp1old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Land, z.B. CH, AT, DE<br><br>
+	</div>
+
+
+</div>
 <div id="socevnotify">
 	<div class="row bg-info">
 		<b><label for="evnotifyakey">Akey:</label></b>
@@ -1900,8 +1958,13 @@ function display_socmodul() {
 	$('#soccarnet').hide();
 	$('#socmzerong').hide();
 	$('#socmaudi').hide();
+	$('#socmyrenault').hide();
+
    	if($('#socmodul').val() == 'soc_audi')   {
 		$('#socmaudi').show();
+	}
+   	if($('#socmodul').val() == 'soc_myrenault')   {
+		$('#socmyrenault').show();
 	}
 
 	if($('#socmodul').val() == 'none') {
@@ -2303,7 +2366,8 @@ Keine Konfiguration erforderlich.<br>
 		<option <?php if($socmodul1old == "soc_leafs1\n") echo selected ?> value="soc_leafs1">SoC Nissan Leaf</option>
 		<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
 		<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
-		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe</option>
+		<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe alt</option>
+		<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo selected ?> value="soc_myrenaultlp2">SoC MyRenault</option>
 		<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
 		<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
 		<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
@@ -2437,7 +2501,37 @@ Keine Konfiguration erforderlich.<br>
 	</div>
 
 </div>
+<div id="socmyrenaultlp2">
+	<div class="row bg-info">
+		<b><label for="myrenault_userlp2">Benutzername:</label></b>
+		<input type="text" name="myrenault_userlp2" id="myrenault_userlp2" value="<?php echo $myrenault_userlp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Benutzername<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_passlp2">Passwort:</label></b>
+		<input type="password" name="myrenault_passlp2" id="myrenault_passlp2" value="<?php echo $myrenault_passlp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Passwort<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_locationlp2">Standort:</label></b>
+		<input type="text" name="myrenault_locationlp2" id="myrenault_locationlp2" value="<?php echo $myrenault_locationlp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Standort, z.B. de_DE<br><br>
+	</div>
+	<div class="row bg-info">
+		<b><label for="myrenault_countrylp2">Land:</label></b>
+		<input type="text" name="myrenault_countrylp2" id="myrenault_countrylp2" value="<?php echo $myrenault_countrylp2old ?>"><br>
+	</div>
+	<div class="row bg-info">
+		MyRenault Land, z.B. CH, AT, DE<br><br>
+	</div>
 
+</div>
 <div id="socevnotifylp2">
 	<div class="row bg-info">
 		<b><label for="evnotifyakeylp2">Akey:</label></b>
@@ -2569,6 +2663,7 @@ function display_socmodul1() {
 	$('#socevnotifylp2').hide();
 	$('#soczoelp2').hide();
 	$('#socmteslalp2').hide();
+	$('#socmyrenaultlp2').hide();
 	$('#soccarnetlp2').hide();
 	$('#socmzeronglp2').hide();
 
@@ -2581,6 +2676,10 @@ function display_socmodul1() {
 	if($('#socmodul1').val() == 'soc_leafs1') {
 		$('#socleaf1').show();
 	}
+	if($('#socmodul1').val() == 'soc_myrenaultlp2') {
+		$('#socmyrenaultlp2').show();
+	}
+
 	if($('#socmodul1').val() == 'soc_i3s1') {
 		$('#soci31').show();
 	}
@@ -3582,7 +3681,7 @@ EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
 		<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
 	</div>
 	<div class="row" style="background-color:#febebe">
-		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. <br>Bei Eintragung oder Änderung der Seriennummer nach dem Speichern unter Misc "SMA Support" ausführen. Danach einen Reboot durchführen.<br><br>
+		Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen<br><br><br>
 	</div>
 </div>
 <div id="wattbezugsmartfox">
