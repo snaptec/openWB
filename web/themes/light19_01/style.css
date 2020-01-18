@@ -1,23 +1,8 @@
 /*!
-Stylesheet zum openWB Dark19_01-Theme
+Stylesheet zum openWB light19_01-Theme
 
 2019-2020 Michael Ortenstein
 */
-
-body {
-      color: white;
-      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
-      /* Old browsers */
-      background: rgb(125,126,125);
-      /* FF3.6-15 */
-      background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
-      /* Chrome10-25,Safari5.1-6 */
-      background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-      /* IE6-9 */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
-}
 
 @keyframes alertPulsation {
   0%   { opacity:1; }
@@ -48,7 +33,6 @@ body {
 
 /* progress-bar styles for all browsers */
 .Progress-main {
-    background-color: red;
     display: block;
     width: 100%;
     height: 0.3em;
@@ -112,13 +96,6 @@ body {
     padding-left: 0;
 }
 
-.gradient {
-    background: -webkit-linear-gradient(black, #f2f2f2, black);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
-}
-
 .cursor-pointer{
   cursor: pointer;
 }
@@ -128,61 +105,58 @@ body {
 h1 {
     font-size: 1.4rem;
     font-weight: bolder;
+    background: -webkit-linear-gradient(#eee, #333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
-}
+    text-shadow: 2px 2px 2px rgba(99,99,99,0.69);}
 
 h2 {
     font-size: 0.9rem;
     font-weight: bolder;
-    color: white;
     text-align: center;
 }
 
 h3 {
     font-size: 0.7rem;
     font-weight: bolder;
-    color: white;
     text-align: center;
 }
 
 .smallTextStyle {
-      font-size: 1.0rem;
-      color: red;
-      text-align: center;
+    font-size: 1.0rem;
+    color: red;
+    text-align: center;
 }
 
 .regularTextStyle {
-      font-size: 0.7rem;
-      color: white;
-      text-align: center;
+    font-size: 0.7rem;
+    text-align: center;
 }
 
 .versionTextStyle {
-      font-size: 0.5rem;
-      color: white;
-      text-align: center;
+    font-size: 0.5rem;
+    text-align: center;
 }
 
 .pvInfoStyle {
-      font-size: 0.8rem;
-      font-weight: bolder;
-      color: black;
-      text-align: center;
+    font-size: 0.8rem;
+    font-weight: bolder;
+    text-align: center;
 }
 
 .extDeviceInfoStyle {
-      font-size: 0.8rem;
-      font-weight: bolder;
-      color: white;
-      background-color: red;
-      text-align: center;
+    font-size: 0.8rem;
+    font-weight: bolder;
+    background-color: red;
+    text-align: center;
 }
 
 .chargePointInfoStyle {
-      font-size: 0.65rem;
-      color: white;
-      background-color: #327eb8;
-      text-align: center;
+    font-size: 0.65rem;
+    color: gainsboro;
+    background-color: #327eb8;
+    text-align: center;
 }
 
 .myButtonStyle {
