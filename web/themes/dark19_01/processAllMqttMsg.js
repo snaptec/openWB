@@ -745,7 +745,11 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		// console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
+		console.log('mqttmsg-boolChargePointConfigured: '+index+'   load='+mqttpayload);
+		if ( index >= 2 && mqttpayload == 1 ) {
+			// if more than 1 charge point configured, show sum of power of all charge points
+			$('#powerAllLpdiv').show();
+		}
  		if ( mqttpayload == 0 ) {
 			$('#lp'+index+'div').hide();
 			$('#slider'+index+'div').hide();
@@ -832,7 +836,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		$("#gelrlp"+index+"div").html(mqttpayload+" km");
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
@@ -901,7 +904,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// matches to all messages containing "openwb/lp/#/%soc"
 		// where # is an integer > 0
 		// search is case insensitive
-		console.log ('SOC: '+mqttpayload);
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		window['lp'+index+'soc'] = mqttpayload;
 		$("#socLp"+index).html(mqttpayload+' %');
@@ -967,10 +969,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		if ( index >= 2 ) {
-			// if more than 1 charge point configured, show sum of power of all charge points
-			$('#powerAllLpdiv').show();
-		}
 		// fill span-tags from class=strChargePointName with respective payload-string
 		// and set the div visibility from hidden to visible
 		var ele = document.getElementsByClassName("nameLp"+index);
