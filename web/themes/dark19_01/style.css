@@ -119,6 +119,10 @@ body {
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
 h1 {

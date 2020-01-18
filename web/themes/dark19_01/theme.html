@@ -132,7 +132,7 @@
 				PV: <span id="pvdiv"></span>
 			</div>
 			<div id="evudiv" class="col-sm-6 pvInfoStyle" style="background-color:#febebe;" >
-				EVU: <span id="bezugdiv"></span><span id="evuglaettungdiv"> ( <span id="bezugglattdiv"></span>)</span>
+				EVU: <span id="bezugdiv"></span>
 			</div>
 		</div>
 
@@ -182,22 +182,18 @@
 		</div>
 
 		<!-- chargepoint info header -->
-		<div class="row justify-content-center">
-			<div class="col-sm-12 chargePointInfoStyle" style="font-weight: bolder;">
-				<div class="row justify-content-center">
-					<div class="col-4">
-						Ladepunkt
-					</div>
-					<div class="col-3">
-						ist / soll
-					</div>
-					<div class="col-3">
-						geladen
-					</div>
-					<div class="col-2">
-						SoC
-					</div>
-				</div>
+		<div class="row no-gutter justify-content-center chargePointInfoStyle" style="font-weight: bolder;">
+			<div class="col-4">
+				Ladepunkt
+			</div>
+			<div class="col-3">
+				ist / soll
+			</div>
+			<div class="col-3">
+				geladen
+			</div>
+			<div class="col-2">
+				SoC
 			</div>
 		</div>
 
@@ -206,45 +202,37 @@
 			// generate html code dynamically for all charging points
 			for($i=1; $i <= 8; $i++) {
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-				echo '        <div class="row justify-content-center" id="lp'.$i.'div"  style="display: none;">'."\n";
-				echo '            <div class="col-sm-12 chargePointInfoStyle">'."\n";
-				echo '                <div class="row no-gutter justify-content-center">'."\n";
-				echo '                    <div class="col-4">'."\n";
-				echo '                        <span id="lp'.$i.'enableddiv" class="fa" style="cursor: pointer;" onclick="lp'.$i.'enabledclick()"></span>'."\n";
-				echo '                        <span class="nameLp'.$i.'"></span>'."\n";
-				echo '                        <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
-				echo '                        <span class="fa" id="zielladenaktivlp'.$i.'div"></span>'."\n";
-				echo '                        <span class="fa" id="nachtladenaktivlp'.$i.'div"></span>'."\n";
-				echo '                    </div>'."\n";
-				echo '                    <div class="col-3">'."\n";
-				echo '                        <span id="actualPowerLp'.$i.'div"></span><span id="targetCurrentLp'.$i.'div"></span>'."\n";
-				echo '                    </div>'."\n";
-				echo '                    <div class="col-3 text-center">'."\n";
-				echo '                        <span id="energyChargedLp'.$i.'div"></span>'."\n";
-				echo '                    </div>'."\n";
-				// standard: soc not configured for charging point
-				echo '                    <div id="socNotConfiguredLp'.$i.'div" class="col-2">'."\n";
-				echo '                      --'."\n";
-				echo '                    </div>'."\n";
-				echo '                    <div id="socConfiguredLp'.$i.'div" class="col-2" style="display: none;">'."\n";
-				// if soc date of file is too old display it in grey
-				if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
-					echo '                        <span id="socLp'.$i.' style="color: grey;""></span>'."\n";
-				} else {
-					echo '                        <span id="socLp'.$i.'"></span>'."\n";
-				}
-				echo '                    </div>'."\n";
-				echo '                </div>'."\n";
+				echo '        <div id="lp'.$i.'div" class="row no-gutter justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
+				echo '            <div class="col-4">'."\n";
+				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
+				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
+				echo '                    <span class="nameLp'.$i.'"></span>'."\n";
+				echo '                </span>'."\n";
+				echo '                <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa" id="zielladenaktivlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa" id="nachtladenaktivlp'.$i.'div"></span>'."\n";
 				echo '            </div>'."\n";
-
+				echo '            <div class="col-3">'."\n";
+				echo '                <span id="actualPowerLp'.$i.'div"></span><span id="targetCurrentLp'.$i.'div"></span>'."\n";
+				echo '            </div>'."\n";
+				echo '            <div class="col-3 text-center">'."\n";
+				echo '                <span id="energyChargedLp'.$i.'div"></span>'."\n";
+				echo '            </div>'."\n";
+				// standard: soc not configured for charging point
+				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2">'."\n";
+				echo '                --'."\n";
+				echo '            </div>'."\n";
+				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2" style="display: none;">'."\n";
+				echo '                <span id="socLp'.$i.'"></span>'."\n";
+				echo '            </div>'."\n";
 				echo '        </div>'."\n\n";
 				echo '        ';
 			}
 		?>
 
-		<div class="row justify-content-center">
+		<div id="powerAllLpdiv" class="row justify-content-center" style="display: none;">
 			<div class="col-sm-5 chargePointInfoStyle">
-				Gesamt-Ladeleistung: <span id="powerAllLpdiv"></span>
+				Gesamt-Ladeleistung: <span id="powerAllLpspan"></span>
 			</div>
 		</div>
 
@@ -290,7 +278,7 @@
 
 		<div class="row" id="speicherpvuidiv">
 			<div class="col-sm-6"></div>
-			<div class="col-sm-3 pull-right">
+			<div class="col-sm-3 float-right">
 				<?php
 					if ($speicherpveinbeziehenold == 0) {
 						echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw;">Speichervorrang</a>';
@@ -324,25 +312,25 @@
 
 		<div class="row justify-content-center regularTextStyle">
 			<div class="col-4">
-				<span id="gelrlp1div"></span> km
+				<span id="gelrlp1div"></span>
 			</div>
 			<div id="ladepunkts111div" class="col-4">
-				<span id="gelrlp2div"></span> km
+				<span id="gelrlp2div"></span>
 			</div>
 			<div id="ladepunkts222div" class="col-4">
-				<span id="gelrlp3div"></span> km
+				<span id="gelrlp3div"></span>
 			</div>
 		</div>
 
 		<div class="row justify-content-center regularTextStyle">
 			<div class="col-4">
-				<span id="aktgeladen1div"></span> kWh
+				<span id="aktgeladen1div"></span>
 			</div>
 			<div id="ladepunkts1111div" class="col-4">
-				<span id="aktgeladen2div"></span> kWh
+				<span id="aktgeladen2div"></span>
 			</div>
 			<div id="ladepunkts2222div" class="col-4">
-				<span id="aktgeladen3div"></span> kWh
+				<span id="aktgeladen3div"></span>
 			</div>
 		</div>
 
@@ -390,7 +378,7 @@
 		            <h3>Sofortladen Ladeziel-Einstellungen</h3>
 		    </div>
 
-	        <div class="row">
+	        <div class="row justify-content-center">
                 <div class="col-4 regularTextStyle">
                     <label for="msmoduslp1"></label>
                     <select type="text" name="msmoduslp1" id="msmoduslp1">
@@ -762,15 +750,15 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center versionTextStyle">
-			<div class="col">
+		<div class="row justify-content-center">
+			<div class="col-3 versionTextStyle">
 				Ver <?php echo $owbversion ?>
 			</div>
-		</div>
-
-		<div class="row justify-content-center regularTextStyle">
-			<div class="col">
+			<div class="col-4 regularTextStyle">
 				<a href="https://openwb.de">www.openwb.de</a>
+			</div>
+			<div class="col-3 versionTextStyle">
+				Theme 2020 by M.Ortenstein
 			</div>
 		</div>
 
