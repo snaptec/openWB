@@ -174,6 +174,7 @@ var thevalues = [
 	["openWB/lp/8/ChargeStatus", "#"],
 	["openWB/global/ChargeMode", "#"],
 	["openWB/global/WAllChargePoints", "#"],
+	["openWB/housebattery/boolHouseBatteryConfigured", "#"],
 	["openWB/housebattery/W", "#"],
 	["openWB/housebattery/%Soc", "#"],
 	["openWB/global/strLastmanagementActive", "#"],
@@ -683,6 +684,12 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var speichersoc = ", " + mqttpayload;
 		speichersoc += " % SoC"
 		$("#speichersocdiv").html(speichersoc);
+	}
+	else if ( mqttmsg == "openWB/housebattery/boolHouseBatteryConfigured" ) {
+		if ( mqttpayload == 1 ) {
+			// if housebattery is configured, show div
+			$('#speicherdiv').show();
+		}
 	}
 }
 
