@@ -276,14 +276,14 @@
 			</div>
 		</div>
 
-		<div class="row" id="speicherpvuidiv">
-			<div class="col-sm-6"></div>
-			<div class="col-sm-3 float-right">
+
+		<div id="speicherpvuidiv" class="row no-gutters justify-content-center">
+			<div class="col-sm-4 py-1">
 				<?php
 					if ($speicherpveinbeziehenold == 0) {
-						echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green" style="font-size: 1vw;">Speichervorrang</a>';
+						echo '<a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green myButtonStyle">Speichervorrang</a>';
 					} else {
-						echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green" style="font-size: 1vw;">EV Vorrang</a>';
+						echo '<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green myButtonStyle">EV Vorrang</a>';
 					}
 				?>
 			</div>
