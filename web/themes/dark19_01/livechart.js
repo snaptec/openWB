@@ -189,8 +189,7 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				labels: {
-					// middle grey, opacy = 100% (visible)
-					fontColor: "rgba(153, 153, 153, 1)",
+					fontColor: "rgba(255, 255, 255, 0.82)",
 					filter: function(item,chart) {
 						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) ) { return false } else { return true}
 					}
@@ -203,8 +202,7 @@ function loadgraph() {
 				xAxes: [
 					{
          				ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: "rgba(255, 255, 255, 0.82)"
          				}
       				}],
 				yAxes: [
@@ -217,16 +215,13 @@ function loadgraph() {
 						scaleLabel: {
 		        			display: true,
 		        			labelString: 'Leistung [W]',
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: "rgba(255, 255, 255, 0.82)"
 		      			},
 						gridLines: {
-							// light grey, opacy = 100% (visible)
-							color: "rgba(204, 204, 204, 1)",
+							color: "rgba(255, 255, 255, 0.82)"
 						},
 						ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: "rgba(255, 255, 255, 0.82)"
 						}
 
 					},{
@@ -238,8 +233,7 @@ function loadgraph() {
 						scaleLabel: {
 							display: true,
 							labelString: 'SoC [%]',
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: "rgba(255, 255, 255, 0.82)"
 						},
 						gridLines: {
 							// black, opacy = 0% (invisible)
@@ -248,8 +242,7 @@ function loadgraph() {
 						ticks: {
 							min: 1,
 							suggestedMax: 100,
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: "rgba(255, 255, 255, 0.82)"
 						}
 					}
 				]

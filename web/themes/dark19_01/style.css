@@ -134,14 +134,14 @@ h1 {
 h2 {
     font-size: 0.9rem;
     font-weight: bolder;
-    color: white;
+    color: rgba(255, 255, 255, 0.82);
     text-align: center;
 }
 
 h3 {
     font-size: 0.7rem;
     font-weight: bolder;
-    color: white;
+    color: rgba(255, 255, 255, 0.82);
     text-align: center;
 }
 
@@ -153,13 +153,13 @@ h3 {
 
 .regularTextStyle {
       font-size: 0.7rem;
-      color: white;
+      color: rgba(255, 255, 255, 0.82);
       text-align: center;
 }
 
 .versionTextStyle {
       font-size: 0.5rem;
-      color: white;
+      color: rgba(255, 255, 255, 0.82);
       text-align: center;
 }
 
@@ -173,14 +173,14 @@ h3 {
 .extDeviceInfoStyle {
       font-size: 0.8rem;
       font-weight: bolder;
-      color: white;
+      color: rgba(255, 255, 255, 0.82);
       background-color: red;
       text-align: center;
 }
 
 .chargePointInfoStyle {
       font-size: 0.65rem;
-      color: white;
+      color: rgba(255, 255, 255, 0.82);
       background-color: #327eb8;
       text-align: center;
 }
