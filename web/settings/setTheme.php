@@ -43,7 +43,7 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div>
 				<div class="row justify-content-center">
-					<div class="col-xl-2 col-md-4 justify-content-center">
+					<div class="col-xl-3 col-md-4 justify-content-center">
 						<b class="regularTextStyle">verfügbare Themes:</b>
 						<br>
 						<select onchange="$('#themePreview').attr('src', 'themes/'+this.options[this.selectedIndex].value+'/preview.png');" id="themeSelector">
@@ -78,15 +78,16 @@
 
 				<br>
 			</div>
+
 			<div class="row justify-content-center">
-				<button onclick="setThemeClicked()" class="btn btn-lg btn-green">save</button>
+				<button onclick="setThemeClicked()" class="btn btn-lg btn-green">Einstellungen speichern</button>
 			</div>
 
-		</div>
+		</div>  <!-- end container -->
 
-		<footer class="footer bg-dark text-white-50 font-small">
-	      <div class="container">
-			  Sie befinden sich hier: Einstellungen
+		<footer class="footer bg-dark text-light font-small">
+	      <div class="container text-center">
+			  <small>Sie befinden sich hier: Einstellungen/Theme</small>
 	      </div>
 	    </footer>
 

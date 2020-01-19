@@ -1,87 +1,32 @@
 /*!
 Stylesheet zu openWB settings
 
-2019-2020 Michael Ortenstein
+2020 Michael Ortenstein
 */
 
+html {
+    font-size: 0.7rem;
+}
+
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 50px;
+    margin-bottom: 50px;  /* margin bottom by footer height */
 }
 
 body > .container {
-  padding: 50px 15px 0;
+    padding: 50px 15px 0;
 }
 
 .footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 50px;
-  line-height: 50px; /* Vertically center the text there */
-}
-
-/* Extra small devices (portrait phones, less than 576px) */
-/* No media query since this is the default in Bootstrap */
-h1 {
-    font-size: 1.4rem;
-    font-weight: bolder;
-    background: -webkit-linear-gradient(#eee, #333);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    text-shadow: 2px 2px 2px rgba(99,99,99,0.69);}
-
-h2 {
-    font-size: 0.9rem;
-    font-weight: bolder;
-    text-align: center;
-}
-
-h3 {
-    font-size: 0.7rem;
-    font-weight: bolder;
-    text-align: center;
-}
-
-.smallTextStyle {
-    font-size: 1.0rem;
-    color: red;
-    text-align: center;
-}
-
-.versionTextStyle {
-    font-size: 0.5rem;
-    text-align: center;
-}
-
-.regularTextStyle {
-    font-size: 0.8rem;
-    font-weight: bolder;
-}
-
-.extDeviceInfoStyle {
-    font-size: 0.8rem;
-    font-weight: bolder;
-    background-color: red;
-    text-align: center;
-}
-
-.chargePointInfoStyle {
-    font-size: 0.65rem;
-    color: gainsboro;
-    background-color: #327eb8;
-    text-align: center;
-}
-
-.myButtonStyle {
-    font-size: 0.9rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px; /* fixed height of footer */
+    line-height: 50px; /* vertically center the text there */
 }
 
 .btn-blue {
@@ -137,156 +82,28 @@ h3 {
 
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
-    h1 {
-        font-size: 1.7rem;
-    }
-
-    h2 {
-        font-size: 1.1rem;
-    }
-
-    h3 {
-        font-size: 0.9rem;
-    }
-
-    .smallTextStyle {
-          font-size: 1.1rem;
-    }
-
-    .regularTextStyle {
-          font-size: 0.75rem;
-    }
-
-    .versionTextStyle {
-          font-size: 0.5rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
-          font-size: 0.95rem;
-    }
-
-    .chargePointInfoStyle {
-          font-size: 0.75rem;
-    }
-
-    .myButtonStyle {
-          font-size: 1.0rem;
+    html {
+        font-size: 0.8rem;
     }
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
-    h1 {
-        font-size: 2.0rem;
-    }
-
-    h2 {
-        font-size: 1.4rem;
-    }
-
-    h3 {
-        font-size: 1.1rem;
-    }
-
-    .smallTextStyle {
-          font-size: 1.5rem;
-    }
-
-    .regularTextStyle {
-          font-size: 1.0rem;
-    }
-
-    .versionTextStyle {
-          font-size: 0.6rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
-          font-size: 1.3rem;
-    }
-
-    .chargePointInfoStyle {
-          font-size: 1.0rem;
-    }
-
-    .myButtonStyle {
-          font-size: 1.2rem;
+    html {
+        font-size: 0.9rem;
     }
 }
 
 /* Large devices (desktops, 992px and up) */
 @media screen and (min-width: 992px) {
-    h1 {
-        font-size: 2.6rem;
-    }
-
-    h2 {
-        font-size: 2.0rem;
-    }
-
-    h3 {
-        font-size: 1.6rem;
-    }
-
-    .smallTextStyle {
-          font-size: 1.8rem;
-    }
-
-    .regularTextStyle {
-          font-size: 1.4rem;
-    }
-
-    .versionTextStyle {
-          font-size: 0.7rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
-          font-size: 1.6rem;
-    }
-
-    .chargePointInfoStyle {
-          font-size: 1.4rem;
-    }
-
-    .myButtonStyle {
-          font-size: 1.6rem;
+    html {
+        font-size: 1.0rem;
     }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    h1 {
-        font-size: 3rem;
-    }
-
-    h2 {
-        font-size: 2.4rem;
-    }
-
-    h3 {
-        font-size: 1.95rem;
-    }
-
-    .smallTextStyle {
-          font-size: 1.8rem;
-    }
-
-    .regularTextStyle {
-          font-size: 1.8rem;
-    }
-
-    .versionTextStyle {
-          font-size: 0.8rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
-          font-size: 1.8rem;
-    }
-
-    .chargePointInfoStyle {
-          font-size: 1.8rem;
-    }
-
-    .myButtonStyle {
-          font-size: 2.0rem;
+    html {
+        font-size: 1.1rem;
     }
 }
