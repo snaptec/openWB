@@ -4656,7 +4656,7 @@
 					</script>
 
 					<br><br>
-					<button type="submit" class="btn btn-primary btn-green" onclick="enable_pv_selector()">Save</button>
+					<button type="submit" class="btn btn-green" onclick="enable_pv_selector()">Save</button>
 				</form>
 
 				<div class="row justify-content-center">

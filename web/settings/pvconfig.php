@@ -36,6 +36,7 @@
 
 	<body>
 		<?php
+
 			include '/var/www/html/openWB/web/settings/navbar.html';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
@@ -524,7 +525,7 @@
 					</script>
 					<br>
 
-					<button type="submit" class="btn btn-primary btn-green">Save</button>
+					<button type="submit" class="btn btn-green">Save</button>
 				</form>
 
 				<div class="row justify-content-center">
@@ -545,7 +546,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/PV Ladeeinstellungen</small>
+			  <small>Sie befinden sich hier: Einstellungen/PV-Ladeeinstellungen</small>
 		  </div>
 		</footer>
 

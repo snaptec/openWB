@@ -759,7 +759,7 @@
 						});
 					</script>
 
-					<button type="submit" class="btn btn-primary btn-green">Save</button>
+					<button type="submit" class="btn btn-green">Save</button>
 	 			</form>
 
 				<div class="row justify-content-center">
