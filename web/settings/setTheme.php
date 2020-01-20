@@ -10,9 +10,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>OpenWB</title>
-		<meta name="description" content="Control your charge" />
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
-		<meta name="author" content="Michael Ortenstein" />
+		<meta name="description" content="Control your charge">
+		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design">
+		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
@@ -47,6 +47,7 @@
 						<b class="regularTextStyle">verfügbare Themes:</b>
 						<br>
 						<select onchange="$('#themePreview').attr('src', 'themes/'+this.options[this.selectedIndex].value+'/preview.png');" id="themeSelector">
+							<option value="standard">Standard-Theme</option>
 							<?php
 
 								function dir_list($rootDir){
@@ -71,7 +72,7 @@
 						</select>
 					</div>
 					<div class="col-xl-4 col-md-4 justify-content-center">
-						<!-- display standard theme initially -->
+						<!-- display standard theme = first entry initially -->
 						<img id="themePreview" class="img-fluid" src="themes/standard/preview.png" alt="Theme Vorschau"/>
 					</div>
 				</div>
