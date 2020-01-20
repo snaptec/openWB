@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ledsteuerung() { 
-. /var/www/html/openWB/openwb.conf
 ledstatus=$(<ramdisk/ledstatus)
 lademodus=$(<ramdisk/lademodus)
 ladestatus=$(<ramdisk/ladestatus)
