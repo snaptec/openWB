@@ -614,6 +614,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		switch (mqttpayload) {
 			case "0":
 				// mode sofort
+				$('#targetChargingProgressDiv').show();
 				$('#sofortBtn').addClass("btn-green").removeClass("btn-red");
 				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
@@ -622,6 +623,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				break;
 			case "1":
 				// mode min+pv
+				$('#targetChargingProgressDiv').hide();
 				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
 				$('#minUndPvBtn').addClass("btn-green").removeClass("btn-red");
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
@@ -630,6 +632,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				break;
 			case "2":
 				// mode pv
+				$('#targetChargingProgressDiv').hide();
 				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
 				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#pvBtn').addClass("btn-green").removeClass("btn-red");
@@ -638,6 +641,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				break;
 			case "3":
 				// mode stop
+				$('#targetChargingProgressDiv').hide();
 				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
 				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
@@ -646,6 +650,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				break;
 			case "4":
 				// mode standby
+				$('#targetChargingProgressDiv').hide();
 				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
 				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");

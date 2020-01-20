@@ -3,7 +3,7 @@
 
 <head>
 	<!-- dark19_01 theme for openWB -->
-	<!-- 2019-2020 Michael Ortenstein -->
+	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
 	<?php include ("values.php");?>
@@ -17,9 +17,9 @@
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="openWB">
 
-	<meta name="description" content="openWB" />
-	<meta name="keywords" content="openWB" />
-	<meta name="author" content="Michael Ortenstein" />
+	<meta name="description" content="openWB">
+	<meta name="keywords" content="openWB">
+	<meta name="author" content="Michael Ortenstein">
 	<link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-icon-76x76.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-icon-114x114.png">
@@ -333,41 +333,44 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center regularTextStyle">
-			<div class="col-4">
-				<div id="lademstatdiv">
-					<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+		<div id="targetChargingProgressDiv" style="display: none;">
+			<div class="row justify-content-center regularTextStyle">
+				<div class="col-4">
+					<div id="lademstatdiv">
+						<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+					</div>
+				</div>
+				<div id="ladepunkts11111div" class="col-4">
+					<div id="lademstats1div">
+						<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+					</div>
+				</div>
+				<div id="ladepunkts22222div" class="col-4">
+					<div id="lademstats2div">
+						<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+					</div>
 				</div>
 			</div>
-			<div id="ladepunkts11111div" class="col-4">
-				<div id="lademstats1div">
-					<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+
+			<div class="row justify-content-center regularTextStyle">
+				<div class="col-4">
+					<div id="lademstat1div">
+						Restzeit <span id="restzeitlp1div"></span>
+					</div>
 				</div>
-			</div>
-			<div id="ladepunkts22222div" class="col-4">
-				<div id="lademstats2div">
-					<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<div id="ladepunkts1111111div" class="col-4">
+					<div id="lademstats1div1">
+						Restzeit <span id="restzeitlp2div"></span>
+					</div>
+				</div>
+				<div id="ladepunkts2222222div" class="col-4">
+					<div id="lademstats2div1">
+						Restzeit <span id="restzeitlp3div"></span>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row justify-content-center regularTextStyle">
-			<div class="col-4">
-				<div id="lademstat1div">
-					Restzeit <span id="restzeitlp1div"></span>
-				</div>
-			</div>
-			<div id="ladepunkts1111111div" class="col-4">
-				<div id="lademstats1div1">
-					Restzeit <span id="restzeitlp2div"></span>
-				</div>
-			</div>
-			<div id="ladepunkts2222222div" class="col-4">
-				<div id="lademstats2div1">
-					Restzeit <span id="restzeitlp3div"></span>
-				</div>
-			</div>
-		</div>
 
 		<!-- depending on charge mode show options -->
 	    <form id="sofortlmdiv" name="sofortll" action="./tools/sofortll.php" method="POST">
