@@ -2,6 +2,7 @@
 (sleep 300; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
+echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 sleep 10
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
@@ -2366,4 +2367,4 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
-sed -i 's/serials.*/serials='$smashmbezugid'/' /var/www/html/openWB/web/files/smashm.conf
+echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
