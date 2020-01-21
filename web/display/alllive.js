@@ -420,12 +420,12 @@ $.ajax({
 //	console.log(data);
 //	}
 //	});
-$.ajax({
-   url: "/openWB/ramdisk/lastregelungaktiv",
-    complete: function(request){
-      $("#lastregelungaktivdiv").html(request.responseText);
-        }
-        });
+//$.ajax({
+//   url: "/openWB/ramdisk/lastregelungaktiv",
+//    complete: function(request){
+//      $("#lastregelungaktivdiv").html(request.responseText);
+//        }
+//        });
 $(function() {
     if($('#speicherstat').val() == 'none') {
         $('#speicherstat2div').hide();

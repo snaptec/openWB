@@ -314,9 +314,11 @@ function rsziellp1() {
 }
 $(function() {
     if($('#zielladenaktivlp1').val() == '1') {
-        $('#zielladenaktivlp1div').show();
+        document.getElementById("zielladenaktivlp1div").classList.add("fa");
+        document.getElementById("zielladenaktivlp1div").classList.add("fa-flag-checkered");
     } else {
-        $('#zielladenaktivlp1div').hide();
+        document.getElementById("zielladenaktivlp1div").classList.remove("fa");
+        document.getElementById("zielladenaktivlp1div").classList.remove("fa-flag-checkered");
     }
 
 });
@@ -497,5 +499,3 @@ $(document).ready(function(){
 	    });
 	});
 });
-
-

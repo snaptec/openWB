@@ -46,6 +46,39 @@ foreach($lines as $line) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "myrenault_userlp2=") !== false) {
+	    $result .= 'myrenault_userlp2='.$_POST[myrenault_userlp2]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_passlp2=") !== false) {
+	    $result .= 'myrenault_passlp2='.$_POST[myrenault_passlp2]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_countrylp2=") !== false) {
+	    $result .= 'myrenault_countrylp2='.$_POST[myrenault_countrylp2]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_locationlp2=") !== false) {
+	    $result .= 'myrenault_locationlp2='.$_POST[myrenault_locationlp2]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_userlp1=") !== false) {
+	    $result .= 'myrenault_userlp1='.$_POST[myrenault_userlp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_passlp1=") !== false) {
+	    $result .= 'myrenault_passlp1='.$_POST[myrenault_passlp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_countrylp1=") !== false) {
+	    $result .= 'myrenault_countrylp1='.$_POST[myrenault_countrylp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "myrenault_locationlp1=") !== false) {
+	    $result .= 'myrenault_locationlp1='.$_POST[myrenault_locationlp1]."\n";
+	    $writeit = '1';
+	    }
+
 	    if(strpos($line, "evseiplp3=") !== false) {
 	    $result .= 'evseiplp3='.$_POST[evseiplp3]."\n";
 	    $writeit = '1';
@@ -1278,12 +1311,12 @@ file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 $result = '';
 $lines = file('/var/www/html/openWB/web/files/smashm.conf');
 foreach($lines as $line) {
-	    if(strpos($line, "serials=") !== false) {
-		    	    $result .= 'serials='.$_POST[smashmbezugid]."\n";
-			    	    }
-	    else {
-		    	    $result .= $line;
-			    	    }
+	if( (strpos($line, "serials=") !== false) and (strpos($line, "serials=") == 0) ) {
+			$result .= 'serials='.$_POST[smashmbezugid]."\n";
+	}
+	else {
+		$result .= $line;
+	}
 }
 file_put_contents('/var/www/html/openWB/web/files/smashm.conf', $result);
 

@@ -34,6 +34,12 @@ if (( plugstat == 1 )); then
 		echo $llkwh > ramdisk/pluggedladunglp1startkwh
 		echo 1 > ramdisk/pluggedladungaktlp1
 	fi
+	if (( stopchargeafterdisclp1 == 1 )); then
+		boolstopchargeafterdisclp1=$(<ramdisk/boolstopchargeafterdisclp1)
+		if (( boolstopchargeafterdisclp1 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp1
+		fi
+	fi
 	pluggedladunglp1startkwh=$(<ramdisk/pluggedladunglp1startkwh)
 	pluggedladungbishergeladen=$(echo "scale=2;($llkwh - $pluggedladunglp1startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladen > ramdisk/pluggedladungbishergeladen
@@ -45,6 +51,13 @@ else
 		echo $pluggedtimer1 > ramdisk/pluggedtimer1
 	else
 		echo 0 > ramdisk/pluggedladungaktlp1
+	fi
+	if (( stopchargeafterdisclp1 == 1 )); then
+		boolstopchargeafterdisclp1=$(<ramdisk/boolstopchargeafterdisclp1)
+		if (( boolstopchargeafterdisclp1 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp1
+			mosquitto_pub -r -t "openWB/set/lp1/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 
@@ -145,6 +158,12 @@ if (( plugstatlp2 == 1 )); then
 	pluggedladungbishergeladenlp2=$(echo "scale=2;($llkwhs1 - $pluggedladunglp2startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp2 > ramdisk/pluggedladungbishergeladenlp2
 	echo 0 > ramdisk/pluggedtimer2
+	if (( stopchargeafterdisclp2 == 1 )); then
+		boolstopchargeafterdisclp2=$(<ramdisk/boolstopchargeafterdisclp2)
+		if (( boolstopchargeafterdisclp2 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp2
+		fi
+	fi
 else
 	pluggedtimer2=$(<ramdisk/pluggedtimer2)
 	if (( pluggedtimer2 < 3 )); then
@@ -153,6 +172,14 @@ else
 	else
 		echo 0 > ramdisk/pluggedladungaktlp2
 	fi
+	if (( stopchargeafterdisclp2 == 1 )); then
+		boolstopchargeafterdisclp2=$(<ramdisk/boolstopchargeafterdisclp2)
+		if (( boolstopchargeafterdisclp2 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp2
+			mosquitto_pub -r -t "openWB/set/lp2/ChargePointEnabled" -m "0"
+		fi
+	fi
+
 fi
 
 
@@ -255,6 +282,12 @@ if (( plugstatlp3 == 1 )); then
 	pluggedladungbishergeladenlp3=$(echo "scale=2;($llkwhs2 - $pluggedladunglp3startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp3 > ramdisk/pluggedladungbishergeladenlp3
 	echo 0 > ramdisk/pluggedtimer3
+	if (( stopchargeafterdisclp3 == 1 )); then
+		boolstopchargeafterdisclp3=$(<ramdisk/boolstopchargeafterdisclp3)
+		if (( boolstopchargeafterdisclp3 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp3
+		fi
+	fi
 else
 	pluggedtimer3=$(<ramdisk/pluggedtimer3)
 	if (( pluggedtimer3 < 3 )); then
@@ -262,6 +295,13 @@ else
 		echo $pluggedtimer3 > ramdisk/pluggedtimer3
 	else
 		echo 0 > ramdisk/pluggedladungaktlp3
+	fi
+	if (( stopchargeafterdisclp3 == 1 )); then
+		boolstopchargeafterdisclp3=$(<ramdisk/boolstopchargeafterdisclp3)
+		if (( boolstopchargeafterdisclp3 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp3
+			mosquitto_pub -r -t "openWB/set/lp3/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 
@@ -362,6 +402,12 @@ if (( plugstatlp4 == 1 )); then
 	pluggedladungbishergeladenlp4=$(echo "scale=2;($llkwhlp4 - $pluggedladunglp4startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp4 > ramdisk/pluggedladungbishergeladenlp4
 	echo 0 > ramdisk/pluggedtimerlp4
+	if (( stopchargeafterdisclp4 == 1 )); then
+		boolstopchargeafterdisclp4=$(<ramdisk/boolstopchargeafterdisclp4)
+		if (( boolstopchargeafterdisclp4 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp4
+		fi
+	fi
 else
 	pluggedtimerlp4=$(<ramdisk/pluggedtimerlp4)
 	if (( pluggedtimerlp4 < 6 )); then
@@ -369,6 +415,13 @@ else
 		echo $pluggedtimerlp4 > ramdisk/pluggedtimerlp4
 	else
 		echo 0 > ramdisk/pluggedladungaktlp4
+	fi
+	if (( stopchargeafterdisclp4 == 1 )); then
+		boolstopchargeafterdisclp4=$(<ramdisk/boolstopchargeafterdisclp4)
+		if (( boolstopchargeafterdisclp4 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp4
+			mosquitto_pub -r -t "openWB/set/lp4/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 
@@ -470,6 +523,12 @@ if (( plugstatlp5 == 1 )); then
 	pluggedladungbishergeladenlp5=$(echo "scale=2;($llkwhlp5 - $pluggedladunglp5startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp5 > ramdisk/pluggedladungbishergeladenlp5
 	echo 0 > ramdisk/pluggedtimerlp5
+	if (( stopchargeafterdisclp5 == 1 )); then
+		boolstopchargeafterdisclp5=$(<ramdisk/boolstopchargeafterdisclp5)
+		if (( boolstopchargeafterdisclp5 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp5
+		fi
+	fi
 else
 	pluggedtimerlp5=$(<ramdisk/pluggedtimerlp5)
 	if (( pluggedtimerlp5 < 6 )); then
@@ -477,6 +536,13 @@ else
 		echo $pluggedtimerlp5 > ramdisk/pluggedtimerlp5
 	else
 		echo 0 > ramdisk/pluggedladungaktlp5
+	fi
+	if (( stopchargeafterdisclp5 == 1 )); then
+		boolstopchargeafterdisclp5=$(<ramdisk/boolstopchargeafterdisclp5)
+		if (( boolstopchargeafterdisclp5 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp5
+			mosquitto_pub -r -t "openWB/set/lp5/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 if (( ladeleistunglp5 > 60 )); then
@@ -576,6 +642,12 @@ if (( plugstatlp6 == 1 )); then
 	pluggedladungbishergeladenlp6=$(echo "scale=2;($llkwhlp6 - $pluggedladunglp6startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp6 > ramdisk/pluggedladungbishergeladenlp6
 	echo 0 > ramdisk/pluggedtimerlp6
+	if (( stopchargeafterdisclp6 == 1 )); then
+		boolstopchargeafterdisclp6=$(<ramdisk/boolstopchargeafterdisclp6)
+		if (( boolstopchargeafterdisclp6 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp6
+		fi
+	fi
 else
 	pluggedtimerlp6=$(<ramdisk/pluggedtimerlp6)
 	if (( pluggedtimerlp6 < 6 )); then
@@ -583,6 +655,13 @@ else
 		echo $pluggedtimerlp6 > ramdisk/pluggedtimerlp6
 	else
 		echo 0 > ramdisk/pluggedladungaktlp6
+	fi
+	if (( stopchargeafterdisclp6 == 1 )); then
+		boolstopchargeafterdisclp6=$(<ramdisk/boolstopchargeafterdisclp6)
+		if (( boolstopchargeafterdisclp6 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp6
+			mosquitto_pub -r -t "openWB/set/lp6/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 if (( ladeleistunglp6 > 100 )); then
@@ -682,6 +761,12 @@ if (( plugstatlp7 == 1 )); then
 	pluggedladungbishergeladenlp7=$(echo "scale=2;($llkwhlp7 - $pluggedladunglp7startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp7 > ramdisk/pluggedladungbishergeladenlp7
 	echo 0 > ramdisk/pluggedtimerlp7
+	if (( stopchargeafterdisclp7 == 1 )); then
+		boolstopchargeafterdisclp7=$(<ramdisk/boolstopchargeafterdisclp7)
+		if (( boolstopchargeafterdisclp7 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp7
+		fi
+	fi
 else
 	pluggedtimerlp7=$(<ramdisk/pluggedtimerlp7)
 	if (( pluggedtimerlp7 < 6 )); then
@@ -689,6 +774,13 @@ else
 		echo $pluggedtimerlp7 > ramdisk/pluggedtimerlp7
 	else
 		echo 0 > ramdisk/pluggedladungaktlp7
+	fi
+	if (( stopchargeafterdisclp7 == 1 )); then
+		boolstopchargeafterdisclp7=$(<ramdisk/boolstopchargeafterdisclp7)
+		if (( boolstopchargeafterdisclp7 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp7
+			mosquitto_pub -r -t "openWB/set/lp7/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 if (( ladeleistunglp7 > 100 )); then
@@ -788,6 +880,12 @@ if (( plugstatlp8 == 1 )); then
 	pluggedladungbishergeladenlp8=$(echo "scale=2;($llkwhlp8 - $pluggedladunglp8startkwh)/1" |bc | sed 's/^\./0./')
 	echo $pluggedladungbishergeladenlp8 > ramdisk/pluggedladungbishergeladenlp8
 	echo 0 > ramdisk/pluggedtimerlp8
+	if (( stopchargeafterdisclp8 == 1 )); then
+		boolstopchargeafterdisclp8=$(<ramdisk/boolstopchargeafterdisclp8)
+		if (( boolstopchargeafterdisclp8 == 0 )); then
+			echo 1 > ramdisk/boolstopchargeafterdisclp8
+		fi
+	fi
 else
 	pluggedtimerlp8=$(<ramdisk/pluggedtimerlp8)
 	if (( pluggedtimerlp8 < 6 )); then
@@ -795,6 +893,13 @@ else
 		echo $pluggedtimerlp8 > ramdisk/pluggedtimerlp8
 	else
 		echo 0 > ramdisk/pluggedladungaktlp8
+	fi
+	if (( stopchargeafterdisclp8 == 1 )); then
+		boolstopchargeafterdisclp8=$(<ramdisk/boolstopchargeafterdisclp8)
+		if (( boolstopchargeafterdisclp8 == 1 )); then
+			echo 0 > ramdisk/boolstopchargeafterdisclp8
+			mosquitto_pub -r -t "openWB/set/lp8/ChargePointEnabled" -m "0"
+		fi
 	fi
 fi
 if (( ladeleistunglp8 > 100 )); then

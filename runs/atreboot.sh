@@ -168,6 +168,14 @@ touch /var/www/html/openWB/ramdisk/ladestatus
 touch /var/www/html/openWB/ramdisk/lademodus
 touch /var/www/html/openWB/ramdisk/llaktuell
 touch /var/www/html/openWB/ramdisk/llaktuells1
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp1
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp2
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp3
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp4
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp5
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp6
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp7
+echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp8
 
 # Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
@@ -2233,6 +2241,28 @@ then
 	echo "lademstatlp8=0" >> /var/www/html/openWB/openwb.conf
 
 fi
+if ! grep -Fq "stopchargeafterdisclp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "stopchargeafterdisclp1=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp2=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp3=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp4=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp5=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp6=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp7=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargeafterdisclp8=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "myrenault_userlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "myrenault_userlp1=Benutzername" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_passlp1=Passwort" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_locationlp1=de_DE" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_countrylp1=DE" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_userlp2=Benutzername" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_passlp2=Passwort" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_locationlp2=de_DE" >> /var/www/html/openWB/openwb.conf
+	echo "myrenault_countrylp2=DE" >> /var/www/html/openWB/openwb.conf
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
@@ -2330,6 +2360,7 @@ mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
+mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 (sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus) &
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
