@@ -1468,7 +1468,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Misc</small>
+			  <small>Sie befinden sich hier: Misc</small>
 		  </div>
 		</footer>
 
