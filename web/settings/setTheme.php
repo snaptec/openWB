@@ -24,64 +24,65 @@
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
 
+		<!-- important scripts to be loaded -->
+		<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- Owl Carousel -->
+	    <link rel="stylesheet" href="css/owlcarousel-2.3.4/owl.carousel.min.css">
+	    <link rel="stylesheet" href="css/owlcarousel-2.3.4/owl.theme.default.min.css">
+		<script type="text/javascript" src="js/owlcarousel-2.3.4/owl.carousel.min.js"></script>
+
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
-
-		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.4.1.min.js"></script>
-		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	</head>
 
 	<body>
 
 		<?php include '/var/www/html/openWB/web/settings/navbar.html';?>
+		<?php
+			// support function for dynmic built of carousel content
+			function dir_list($rootDir){
+				// returns all directories as theme names from themes folder
+				// except for themes hidden and standard
+				$dirList[] = "standard";  // standard always first
+				foreach( array_diff(scandir($rootDir),array('.','..')) as $subDir ) {
+					if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "hidden") !== 0 && strcasecmp($subDir, "standard") !== 0) {
+						$dirList[] = $subDir;
+					}
+				}
+				return $dirList;
+			}
+			// call function to read all directories to $allThemes
+			$allThemes = dir_list('/var/www/html/openWB/web/themes');
+		?>
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div>
-				<div class="row justify-content-center">
-					<div class="col-xl-3 col-md-4 justify-content-center">
-						<b class="regularTextStyle">verfügbare Themes:</b>
-						<br>
-						<select onchange="$('#themePreview').attr('src', 'themes/'+this.options[this.selectedIndex].value+'/preview.png');" id="themeSelector">
-							<option value="standard">Standard-Theme</option>
-							<?php
 
-								function dir_list($rootDir){
-									// returns all directories as theme names from themes folder except for folder called hidden,
-									foreach( array_diff(scandir($rootDir),array('.','..')) as $subDir ) {
-										if ( is_dir($rootDir.'/'.$subDir) && strcasecmp($subDir, "hidden") !== 0 ) {
-											$dirList[]=$subDir;
-										}
-									}
-									return $dirList;
-								}
-
-								// call function to read all directories
-								$allThemes = dir_list('/var/www/html/openWB/web/themes');
-								// and put result in dropdown, standard always first
-								foreach( $allThemes as $theme ) {
-									if ( strcasecmp($theme, "standard") !== 0 ) {
-										echo '                    <option value="'.$theme.'">'.$theme.'</option>'."\n";
-									}
-								}
-							?>
-						</select>
-					</div>
-					<div class="col-xl-4 col-md-4 justify-content-center">
-						<!-- display standard theme = first entry initially -->
-						<img id="themePreview" class="img-fluid" src="themes/standard/preview.png" alt="Theme Vorschau"/>
-					</div>
-				</div>
-
-				<br>
+			<div class="row">
+				<div id="themeName" class="col text-center"></div>
 			</div>
 
 			<div class="row justify-content-center">
-				<button onclick="setThemeClicked()" class="btn btn-lg btn-green">Einstellungen speichern</button>
+				<div class="col-sm-10">
+					<div class="owl-carousel owl-theme">
+						<?php
+							foreach( $allThemes as $themeName ) {
+								echo '                        <div><img src="themes/'.$themeName.'/preview.png" title="'.$themeName.'"></div>'."\n";
+							}
+						?>
+					</div>
+				</div>
+			</div>
+
+			<br>
+
+			<div class="row justify-content-center">
+				<button onclick="saveTheme()" class="btn btn-lg btn-green">Theme übernehmen</button>
 			</div>
 
 		</div>  <!-- end container -->
@@ -92,20 +93,37 @@
 	      </div>
 	    </footer>
 
-		<script language="javascript">
-	    	function setThemeClicked() {
-				var selector = document.getElementById("themeSelector");
-				var selectedTheme = selector.options[selector.selectedIndex].value;
-	        	$.ajax({
-	            	type: "GET",
-	            	url: "setThemeCookie.php" ,
-	            	data: { theme: selectedTheme },
-	            	success : function() {
-	            		window.location.href = "index.php";
-					}
-	        	});
+		<script type="text/javascript">
+	    	function saveTheme() {
+				var selectedTheme = $('#themeName').text();  // get theme name from div
+				$.ajax({
+				    type: "GET",
+				    url: "setThemeCookie.php" ,
+				    data: { theme: selectedTheme },
+				    success : function() {
+				        window.location.href = "index.php";
+				    }
+				});
 	    	}
 	    </script>
+
+		<script type="text/javascript">
+			themeCarousel = $('.owl-carousel').owlCarousel({
+				loop: true,
+				margin: 5,
+				nav: true,
+				items: 1,
+				onInitialized: updateThemeName,
+				onTranslated: updateThemeName
+			});
+
+			function updateThemeName(event) {
+				// set theme name in div to img title
+				var activeImg = $('.owl-carousel').find('.active').find('img');
+				var title = activeImg.attr('title');
+				if(title) $('#themeName').html('<h1>'+title+'</h1>');
+			}
+		</script>
 
 	</body>
 </html>
