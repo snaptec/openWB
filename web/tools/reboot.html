@@ -1,8 +1,24 @@
 <html>
+	<script src="/openWB/web/js/jquery-3.4.1.min.js"></script>
 	<head>
-		<meta http-equiv="refresh" content="1;url=./restart.php" />
 	</head>
 	<body>
 		<h3>Reboot initialisiert...Bitte warten</h3>
+		<h4>Weiterleitung nach Reboot...</h4>
 	</body>
+	<script>
+console.log("start");
+loaddivs();
+function loaddivs(){
+    $.ajax({
+        url:"./restart.php",
+        success:function(request){
+		console.log("reboot requested");
+	} 
+    });
+};
+setTimeout(function() { window.location.href = "../index.php"; }, 50000);
+</script>
 </html>
+
+
