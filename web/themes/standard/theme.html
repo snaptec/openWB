@@ -202,7 +202,7 @@
 			// generate html code dynamically for all charging points
 			for($i=1; $i <= 8; $i++) {
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-				echo '        <div id="lp'.$i.'div" class="row no-gutter justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
+				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
 				echo '            <div class="col-4">'."\n";
 				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
 				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
