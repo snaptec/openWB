@@ -52,7 +52,7 @@
 				<div class="form col-md-10">
 
 					<div class="form-group px-3 pb-3" style="border:1px solid black">  <!-- group charge point 1 -->
-						<h1>LP 1</h1>
+						<h1>LP 1 (<span id ="nameLp1">Name LP1</span>)</h1>
 						<div class="row vaRow">  <!-- row monday = _1 -->
 							<div class="col-2">
 					            Montag
@@ -69,9 +69,9 @@
 									</div>
 									<div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_1">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 									</div>
@@ -89,9 +89,9 @@
 									</div>
 									<div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_1">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 	    							</div>
@@ -115,9 +115,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_2">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -135,9 +135,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_2">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -162,9 +162,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_3">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -182,9 +182,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_3">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -209,9 +209,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_4">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -229,9 +229,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_4">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -256,9 +256,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_5">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -276,9 +276,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_5">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -303,9 +303,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_6">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -323,9 +323,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_6">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -350,9 +350,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="lockTimeLp1_7">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
@@ -370,9 +370,9 @@
 						            </div>
 						            <div class="col-sm-6 my-1">
 										<div class="input-group clockpicker" id="unlockTimeLp1_7">
-											<input type="text" class="form-control" readonly>
+											<input type="text" class="form-control" readonly value="--">
 											<div class="input-group-append">
-												<span class="input-group-text far fa-clock vaRow"></span>
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
 										</div>
 						            </div>
