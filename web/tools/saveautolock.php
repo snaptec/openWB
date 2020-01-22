@@ -1,7 +1,10 @@
 <?php
 
-	// read config-lines in array
-	$settingsFile = file('/var/www/html/openWB/openwb.conf');
+	// writes settings from autolock-page via POST-request to config file
+	// author: M. Ortenstein
+
+	// first read config-lines in array
+	$settingsFile = file('/var/www/html/openWB/web/tools/debugfilewithlotofstuff.txt');
 	// prepare key/value array
 	$settingsArray = [];
 
@@ -14,8 +17,8 @@
 		$splitLine[1] = trim($splitLine[1]);
 		// push key/value pair to new array
 		$settingsArray[$splitLine[0]] = $splitLine[1];
-		// now values can be accessed by $settingsArray[$key] = $value;
 	}
+	// now values can be accessed by $settingsArray[$key] = $value;
 
 	// due to naming convention in calling file
 	// values will be parsed as arrays
@@ -41,6 +44,5 @@
 		fwrite($fh, $key.' = '.$value."\n");
 	}
 	fclose($fh);
-
 
 ?>

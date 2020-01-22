@@ -44,6 +44,44 @@
 	</head>
 
 	<body>
+		<?php
+
+			/**
+			 * Simple helper to debug to the console
+			 *
+			 * @param  Array, String $data
+			 * @return String
+			 */
+			function debug_to_console( $data ) {
+				$output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+
+				echo $output;
+			}
+
+
+			// read settings for input elements from config file
+			// first read config-lines in array
+			$settingsFile = file('/var/www/html/openWB/web/tools/debugfilewithlotofstuff.txt');
+			// prepare key/value array
+			$settingsArray = [];
+
+			// convert lines to key/value array for faster manipulation
+			foreach($settingsFile as $line) {
+				// split line at char '='
+				$splitLine = explode('=', $line);
+				// trim parts
+				$splitLine[0] = trim($splitLine[0]);
+				// check if key is for an element used on this page
+				// so check for 'lockBox' and 'lockTime' as part of identifier
+				if ( strpos($splitLine[0], 'lockBoxLp') !== false || strpos($splitLine[0], 'lockTimeLp') !== false ) {
+					$splitLine[1] = trim($splitLine[1]);
+					// push key/value pair to new array
+					$settingsArray[$splitLine[0]] = $splitLine[1];
+				}
+			}
+			// now values can be accessed by $settingsArray[$key] = $value;
+			unset($settingsFile);  // no longer needed
+		?>
 
 		<?php include '/var/www/html/openWB/web/settings/navbar.html';?>
 
@@ -62,7 +100,7 @@
 								<div class="form-row align-items-center">
 									<div class="col-auto my-1">
 										<div class="form-check">
-											<input type="hidden" name="lockBoxLp[1][1]" value="off">
+											<input type="hidden" name="lockBoxLp[1][1]" value="<?php echo $settingsArray['lockBoxLp1_1']?>">
 											<input class="form-check-input" type="checkbox" id="lockBoxLp1_1" name="lockBoxLp[1][1]">
 											<label class="form-check-label pl-10" for="lockBoxLp1_1">
 										  		sperren
@@ -461,6 +499,7 @@
 
 	    	function saveSettings() {
 	    	}
+
 	    </script>
 
 	</body>
