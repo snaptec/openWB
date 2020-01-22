@@ -37,11 +37,6 @@
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
-		<!-- Tempus Dominus TimePicker -->
-		<script type="text/javascript" src="js/moment.js"></script>
-		<script type="text/javascript" src="js/tempusdominus-5.1.3/tempusdominus-bootstrap-4.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/tempusdominus-5.1.3/tempusdominus-bootstrap-4.min.css">
-
 		<!-- clockpicker -->
 		<script type="text/javascript" src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/clockpicker/bootstrap-clockpicker.min.css">
@@ -66,8 +61,8 @@
 								<div class="form-row align-items-center">
 									<div class="col-auto my-1">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="lockLp1_1">
-											<label class="form-check-label pl-10" for="lockLp1_1">
+											<input class="form-check-input" type="checkbox" id="lockBoxLp1_1">
+											<label class="form-check-label pl-10" for="lockBoxLp1_1">
 										  		sperren
 											</label>
 										</div>
@@ -86,8 +81,8 @@
 								<div class="form-row align-items-center">
 									<div class="col-auto my-1">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="unlockLp1_1">
-											<label class="form-check-label" for="unlockLp1_1">
+											<input class="form-check-input" type="checkbox" id="unlockBoxLp1_1">
+											<label class="form-check-label" for="unlockBoxLp1_1">
 										  		entsperren
 											</label>
 										</div>
@@ -112,8 +107,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_2">
-						                    <label class="form-check-label" for="lockLp1_2">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_2">
+						                    <label class="form-check-label" for="lockBoxLp1_2">
 						                        sperren
 						                    </label>
 						                </div>
@@ -132,8 +127,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_2">
-						                    <label class="form-check-label" for="unlockLp1_2">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_2">
+						                    <label class="form-check-label" for="unlockBoxLp1_2">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -159,8 +154,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_3">
-						                    <label class="form-check-label" for="lockLp1_3">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_3">
+						                    <label class="form-check-label" for="lockBoxLp1_3">
 						                        sperren
 						                    </label>
 						                </div>
@@ -179,8 +174,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_3">
-						                    <label class="form-check-label" for="unlockLp1_3">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_3">
+						                    <label class="form-check-label" for="unlockBoxLp1_3">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -206,8 +201,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_4">
-						                    <label class="form-check-label" for="lockLp1_4">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_4">
+						                    <label class="form-check-label" for="lockBoxLp1_4">
 						                        sperren
 						                    </label>
 						                </div>
@@ -226,8 +221,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_4">
-						                    <label class="form-check-label" for="unlockLp1_4">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_4">
+						                    <label class="form-check-label" for="unlockBoxLp1_4">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -253,8 +248,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_5">
-						                    <label class="form-check-label" for="lockLp1_5">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_5">
+						                    <label class="form-check-label" for="lockBoxLp1_5">
 						                        sperren
 						                    </label>
 						                </div>
@@ -273,8 +268,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_5">
-						                    <label class="form-check-label" for="unlockLp1_5">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_5">
+						                    <label class="form-check-label" for="unlockBoxLp1_5">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -300,8 +295,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_6">
-						                    <label class="form-check-label" for="lockLp1_6">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_6">
+						                    <label class="form-check-label" for="lockBoxLp1_6">
 						                        sperren
 						                    </label>
 						                </div>
@@ -320,8 +315,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_6">
-						                    <label class="form-check-label" for="unlockLp1_6">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_6">
+						                    <label class="form-check-label" for="unlockBoxLp1_6">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -347,8 +342,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockLp1_7">
-						                    <label class="form-check-label" for="lockLp1_7">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_7">
+						                    <label class="form-check-label" for="lockBoxLp1_7">
 						                        sperren
 						                    </label>
 						                </div>
@@ -367,8 +362,8 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockLp1_7">
-						                    <label class="form-check-label" for="unlockLp1_7">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_7">
+						                    <label class="form-check-label" for="unlockBoxLp1_7">
 						                        entsperren
 						                    </label>
 						                </div>
@@ -408,27 +403,43 @@
 	    </footer>
 
 		<script type="text/javascript">
+			function addClockpicker(targetId) {
+				// add a clickpicker to input targetID (eg #unlockTimeLp1_7)
+				// and set input field to 00:00
+				$(targetId).clockpicker({
+					placement: 'bottom',  // clock popover placement
+					align: 'left',  // popover arrow align
+					donetext: '',  // done button text
+					autoclose: true,  // auto close when minute is selected
+					vibrate: true  // vibrate the device when dragging clock hand
+				});
+				document.querySelector(targetId+" input[type='text']").value = "00:00";
+			}
 
-			$(function () {
-				// loop through all clockpicker classes
-				// find the ids and set datepicker options
-				$('.clockpicker').each(function(){
-					console.log('found: '+this.id);
-					$('#'+this.id).clockpicker({
-						placement: 'bottom',// clock popover placement
-						align: 'left',      // popover arrow align
-						donetext: '',    // done button text
-						autoclose: true,   // auto close when minute is selected
-						vibrate: true        // vibrate the device when dragging clock hand
-					});
-				})
-			});
+			function removeClockpicker(targetId) {
+				// remove a clickpicker in input targetID (eg #unlockTimeLp1_7)
+				// and set input value to --
+				if ( $(targetId).length ) {
+					// if clockpicker exists
+					$(targetId).clockpicker('remove');
+				}
+				document.querySelector(targetId+" input[type='text']").value = "--";
+			}
 
 			$(function() {
 				// if a checkbox is checked/unchecked
-				// toggle respective time picker
+				// add/remove respective clockpicker
+				// and empty input field if removed
 			    $('input:checkbox').change(function() {
-			      $('#console-event').html('Toggle: ' + $(this).prop('checked'))
+					var boxIsChecked = $(this).prop('checked') == true;
+					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+					if ( boxIsChecked ) {
+						// activate clockpicker
+						addClockpicker(clockPickerId);
+					} else {
+						// remove clockpicker
+						removeClockpicker(clockPickerId);
+					}
 			    })
 			  })
 
