@@ -49,7 +49,8 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
-				<div class="form col-md-10">
+
+				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
 
 					<div class="form-group px-3 pb-3" style="border:1px solid black">  <!-- group charge point 1 -->
 						<h1>LP 1 (<span id ="nameLp1">Name LP1</span>)</h1>
@@ -61,15 +62,16 @@
 								<div class="form-row align-items-center">
 									<div class="col-auto my-1">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="lockBoxLp1_1">
+											<input type="hidden" name="lockBoxLp[1][1]" value="off">
+											<input class="form-check-input" type="checkbox" id="lockBoxLp1_1" name="lockBoxLp[1][1]">
 											<label class="form-check-label pl-10" for="lockBoxLp1_1">
 										  		sperren
 											</label>
 										</div>
 									</div>
 									<div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_1">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_1" name="lockTimeLp[1][1]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -81,15 +83,16 @@
 								<div class="form-row align-items-center">
 									<div class="col-auto my-1">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="unlockBoxLp1_1">
+											<input type="hidden" name="unlockBoxLp[1][1]" value="off">
+											<input class="form-check-input" type="checkbox" id="unlockBoxLp1_1" name="unlockBoxLp[1][1]">
 											<label class="form-check-label" for="unlockBoxLp1_1">
 										  		entsperren
 											</label>
 										</div>
 									</div>
 									<div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_1">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group" >
+											<input class="form-control" readonly id="unlockTimeLp1_1" name="unlockTimeLp[1][1]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -107,15 +110,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_2">
+											<input type="hidden" name="lockBoxLp[1][2]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_2" name="lockBoxLp[1][2]">
 						                    <label class="form-check-label" for="lockBoxLp1_2">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_2">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_2" name="lockTimeLp[1][2]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -127,15 +131,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_2">
+											<input type="hidden" name="unlockBoxLp[1][2]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_2" name="unlockBoxLp[1][2]">
 						                    <label class="form-check-label" for="unlockBoxLp1_2">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_2">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_2" name="unlockTimeLp[1][2]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -154,15 +159,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_3">
+											<input type="hidden" name="lockBoxLp[1][3]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_3" name="lockBoxLp[1][3]">
 						                    <label class="form-check-label" for="lockBoxLp1_3">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_3">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_3" name="lockTimeLp[1][3]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -174,15 +180,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_3">
+											<input type="hidden" name="unlockBoxLp[1][3]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_3" name="unlockBoxLp[1][3]">
 						                    <label class="form-check-label" for="unlockBoxLp1_3">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_3">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_3" name="unlockTimeLp[1][3]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -201,15 +208,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_4">
+											<input type="hidden" name="lockBoxLp[1][4]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_4" name="lockBoxLp[1][4]">
 						                    <label class="form-check-label" for="lockBoxLp1_4">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_4">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_4" name="lockTimeLp[1][4]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -221,15 +229,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_4">
+											<input type="hidden" name="unlockBoxLp[1][4]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_4" name="unlockBoxLp[1][4]">
 						                    <label class="form-check-label" for="unlockBoxLp1_4">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_4">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_4" name="unlockTimeLp[1][4]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -248,15 +257,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_5">
+											<input type="hidden" name="lockBoxLp[1][5]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_5" name="lockBoxLp[1][5]">
 						                    <label class="form-check-label" for="lockBoxLp1_5">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_5">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_5" name="lockTimeLp[1][5]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -268,15 +278,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_5">
+											<input type="hidden" name="unlockBoxLp[1][5]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_5" name="unlockBoxLp[1][5]">
 						                    <label class="form-check-label" for="unlockBoxLp1_5">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_5">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_5" name="unlockTimeLp[1][5]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -295,15 +306,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_6">
+											<input type="hidden" name="lockBoxLp[1][6]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_6" name="lockBoxLp[1][6]">
 						                    <label class="form-check-label" for="lockBoxLp1_6">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_6">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_6" name="lockTimeLp[1][6]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -315,15 +327,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_6">
+											<input type="hidden" name="unlockBoxLp[1][6]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_6" name="unlockBoxLp[1][6]">
 						                    <label class="form-check-label" for="unlockBoxLp1_6">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_6">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_6" name="unlockTimeLp[1][6]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -342,15 +355,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_7">
+											<input type="hidden" name="lockBoxLp[1][7]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_7" name="lockBoxLp[1][7]">
 						                    <label class="form-check-label" for="lockBoxLp1_7">
 						                        sperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_7">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="lockTimeLp1_7" name="lockTimeLp[1][7]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -362,15 +376,16 @@
 						        <div class="form-row align-items-center">
 						            <div class="col-auto my-1">
 						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_7">
+											<input type="hidden" name="unlockBoxLp[1][7]" value="off">
+						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_7" name="unlockBoxLp[1][7]">
 						                    <label class="form-check-label" for="unlockBoxLp1_7">
 						                        entsperren
 						                    </label>
 						                </div>
 						            </div>
 						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_7">
-											<input type="text" class="form-control" readonly value="--">
+										<div class="input-group">
+											<input class="form-control" readonly id="unlockTimeLp1_7" name="unlockTimeLp[1][7]" placeholder="--">
 											<div class="input-group-append">
 												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
 											</div>
@@ -385,14 +400,14 @@
 
 
 
+					<div class="row justify-content-center">
+						<button type="submit" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
+					</div>
 
-				</div>  <!-- end form -->
+				</form>  <!-- end form -->
 			</div>
 			<br>
 
-			<div class="row justify-content-center">
-				<button onclick="saveSettings()" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
-			</div>
 
 		</div>  <!-- end container -->
 
@@ -411,9 +426,10 @@
 					align: 'left',  // popover arrow align
 					donetext: '',  // done button text
 					autoclose: true,  // auto close when minute is selected
-					vibrate: true  // vibrate the device when dragging clock hand
+					vibrate: true,  // vibrate the device when dragging clock hand
+					default: '00:00'
 				});
-				document.querySelector(targetId+" input[type='text']").value = "00:00";
+				//document.querySelector(targetId+" input[type='text']").value = "00:00";
 			}
 
 			function removeClockpicker(targetId) {
@@ -422,8 +438,8 @@
 				if ( $(targetId).length ) {
 					// if clockpicker exists
 					$(targetId).clockpicker('remove');
+					document.querySelector(targetId).value = "";
 				}
-				document.querySelector(targetId+" input[type='text']").value = "--";
 			}
 
 			$(function() {
