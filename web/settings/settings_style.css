@@ -114,3 +114,9 @@ body > .container {
     object-fit: scale-down;
     max-width: initial;
 }
+
+.vaRow {
+    /* vertical alignment of content in rows */
+  display: flex;
+  align-items: center;
+}
