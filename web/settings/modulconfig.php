@@ -276,13 +276,13 @@
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-				if(strpos($line, "wakeupzoelp1=") !== false) {
-					list(, $wakeupzoelp1old) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupzoelp2=") !== false) {
-					list(, $wakeupzoelp2old) = explode("=", $line);
-				}
 
+				if(strpos($line, "wakeupmyrenaultlp1=") !== false) {
+					list(, $wakeupmyrenaultlp1old) = explode("=", $line);
+				}
+				if(strpos($line, "wakeupmyrenaultlp2=") !== false) {
+					list(, $wakeupmyrenaultlp2old) = explode("=", $line);
+				}
 				if(strpos($line, "pvbezugeinspeisung=") !== false) {
 					list(, $pvbezugeinspeisungold) = explode("=", $line);
 				}
@@ -1817,6 +1817,14 @@
 						<div class="row bg-info">
 							MyRenault Land, z.B. CH, AT, DE<br><br>
 						</div>
+						<b><label for="wakeupmyrenaultlp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+						<select type="text" name="wakeupmyrenaultlp1" id="wakeupmyrenaultlp1">
+							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo selected ?> value="0">Nein</option>
+							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo selected ?> value="1">Ja</option>
+						</select>
+						<div class="row bg-info">
+							Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+						</div>
 					</div>
 					<div id="socevnotify">
 						<div class="row bg-info">
@@ -2453,6 +2461,14 @@
 							</div>
 							<div class="row bg-info">
 								MyRenault Land, z.B. CH, AT, DE<br><br>
+							</div>
+							<b><label for="wakeupmyrenaultlp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+							<select type="text" name="wakeupmyrenaultlp2" id="wakeupmyrenaultlp2">
+								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo selected ?> value="0">Nein</option>
+								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo selected ?> value="1">Ja</option>
+							</select>
+							<div class="row bg-info">
+								Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
 							</div>
 						</div>
 						<div id="socevnotifylp2">

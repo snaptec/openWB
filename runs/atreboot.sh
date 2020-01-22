@@ -1744,6 +1744,14 @@ if ! grep -Fq "wakeupzoelp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "wakeupzoelp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wakeupmyrenaultlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wakeupmyrenaultlp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp2=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
 then
 	echo "plz=36124" >> /var/www/html/openWB/openwb.conf
