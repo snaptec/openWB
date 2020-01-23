@@ -37,12 +37,26 @@
 	}  // end foreach
 
 	// write config to file
-	$myFile = "/var/www/html/openWB/web/tools/debugfilewithlotofstuff.txt";
-	$fh = fopen($myFile, 'w') or die("Fehler beim Schreiben der openWB Konfigurationsdatei!");
-	$settingsFile = [];  // empty the file array
-	foreach($settingsArray as $key => $value) {
-		fwrite($fh, $key.' = '.$value."\n");
-	}
-	fclose($fh);
 
+	try {
+		$myFile = "/var/www/html/openWB/web/tools/debugfilewithlotofstuff.txt";
+
+  		if ( !file_exists($myFile) ) {
+  			throw new Exception('Konfigurationsdatei nicht gefunden.');
+  		}
+  		$fp = fopen($myFile, "w");
+		if ( !$fp ) {
+			throw new Exception('Konfigurationsdatei konnte nicht geöffnet werden.');
+  		}
+		$settingsFile = [];  // empty the file array
+		foreach($settingsArray as $key => $value) {
+			fwrite($fp, $key.' = '.$value."\n");
+		}
+  		fclose($fp);
+  		// send success write to config
+	} catch ( Exception $e ) {
+  		echo "<script type='text/javascript'>alert('$e');</script>";
+    }
+	echo "<script>window.location.href='../index.php';</script>";
+	
 ?>
