@@ -52,6 +52,8 @@ function checkDisableLp {
         # and disable charge point
         echo "0" > $lpFilename
         echo "${date} ${time} auto-disabled charge point #${chargePoint}"
+    else
+        echo "${date} ${time} no auto-disable charge point #${chargePoint}, still charging with ${!powerVarName} W"
     fi
 }
 
@@ -68,6 +70,7 @@ do
         # if the charge point is enabled, check for auto disabling
         waitFlag=$(<$flagFilename)  # read ramdisk value for lp autolock wait flag
         if [ "$waitFlag" = "1" ]; then
+            echo "${date} ${time} wait flag found for charge point #${chargePoint}"
             # charge point busy, locktime passed and waiting for end of charge to disable charge point
             if [ $time = "$unlockTime" ]; then
                 # auto unlock time is now, so delete possible wait-to-lock-flag
@@ -82,6 +85,7 @@ do
             if [ $time = "$lockTime" ]; then
                 # auto lock time is now, so set flag to wait for charge point ending ongoing charging process
                 echo "1" > $flagFilename
+                echo "${date} ${time} set wait flag for charge point #${chargePoint}"
                 # check if charge point still busy to deactivate
                 checkDisableLp
             fi
