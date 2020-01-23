@@ -172,6 +172,9 @@ if (( verbraucher1_aktiv == "1")); then
 			if [[ "$verbraucher1_totalwh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
 				echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 			fi
+		else
+			verbraucher1_whf=$(echo "scale=0;($verbraucher1_wh * 1000)  / 1" | bc)
+			echo $verbraucher1_whf > /var/www/html/openWB/ramdisk/verbraucher1_wh
 		fi
 	fi
 else
@@ -217,6 +220,9 @@ if (( verbraucher2_aktiv == "1")); then
 			if [[ "$verbraucher2_totalwh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
 				echo $verbraucher2_totalwh > /var/www/html/openWB/ramdisk/verbraucher2_wh
 			fi
+		else
+			verbraucher2_whf=$(echo "scale=0;($verbraucher2_wh * 1000)  / 1" | bc)
+			echo $verbraucher2_whf > /var/www/html/openWB/ramdisk/verbraucher2_wh
 		fi
 		echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 	fi
