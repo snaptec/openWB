@@ -62,7 +62,7 @@
 			$dayOfWeek;  // Mo = 1, ..., So = 7
 
 			// first read config-lines in array
-			$settingsFile = file('/var/www/html/openWB/web/tools/debugfilewithlotofstuff.txt');
+			$settingsFile = file('/var/www/html/openWB/openwb.conf');
 			// prepare key/value array
 			$settingsArray = [];
 
@@ -78,17 +78,27 @@
 			}
 			// now values can be accessed by $settingsArray[$key] = $value;
 
-
 			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
 			// due to inconsitent variable naming need individual lines
 			$isConfiguredLp[1] = true;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
 			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
-			for ($i=4; $i<=8; $i++) {
-				$isConfiguredLp[$i] = ($settingsArray['lastmanagementlp'.$i] == 1) ? 1 : 0;
+			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
+				$isConfiguredLp[$lp] = ($settingsArray['lastmanagementlp'.$lp] == 1) ? 1 : 0;
 			}
 
-		 	include '/var/www/html/openWB/web/settings/navbar.html';
+			// just to make sure... reset all elements for non-configured lp
+			for ($lp=1; $lp<=$maxQuantityLp; $lp++) {
+				if ( !$isConfiguredLp[$lp] ) {
+					for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
+						// all days...
+						$settingsArray['lockBoxLp'.$lp.'_'.$dayOfWeek] = 'off';
+						$settingsArray['lockTimeLp'.$lp.'_'.$dayOfWeek] = '';
+						$settingsArray['unlockBoxLp'.$lp.'_'.$dayOfWeek] = 'off';
+						$settingsArray['lockTimeLp'.$lp.'_'.$dayOfWeek] = '';
+					}
+				}
+			}
 
 			function getDayOfWeekString($dayOfWeek) {
 				// returns name of the weekday
@@ -112,65 +122,53 @@
 				}
 			}
 
-
-
-			/**
-			 * Simple helper to debug to the console
-			 *
-			 * @param  Array, String $data
-			 * @return String
-			 */
-			function debug_to_console( $data ) {
-			    $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
-
-			    echo $output;
-			}
-
-
-
-
-
 			function buildElementProperties($elemType) {
 				// builds name, id and value strings for element
-				global $lp, $dayOfWeek, $elemName, $elemId, $elemValue;
+				global $lp, $dayOfWeek, $elemName, $elemId, $elemValue, $settingsArray;
 
 				$elemId = $elemType.$lp.'_'.$dayOfWeek;
 				$elemName = $elemType.'['.$lp.']['.$dayOfWeek.']';
-				$elemValue = $settingsArray[$elemName];
+				$elemValue = $settingsArray[$elemId];
 			}
 
 			function echoCheckboxDiv($elemType, $label) {
 				// echoes the div to render checkbox to lock lp
 				global $elemName, $elemId, $elemValue;
 				buildElementProperties($elemType);
-echo <<<LOCKBOX
-									<div class="col-auto my-1">
-										<div class="form-check">
-											<input type="hidden" name="{$elemName}" value="{$elemValue}">
-											<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}">
-											<label class="form-check-label pl-10" for="{$elemId}">
-												{$label}
-											</label>
-										</div>
-									</div>
+				// translate boolean to proper html
+				if ( $elemValue == 'on' ) {
+					$elemValue = " checked='checked'";
+				} else {
+					$elemValue = '';
+				}
+				echo <<<ECHOCHECKBOX
+													<div class="col-auto my-1">
+														<div class="form-check">
+															<input type="hidden" name="{$elemName}">
+															<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+															<label class="form-check-label pl-10" for="{$elemId}">
+																{$label}
+															</label>
+														</div>
+													</div>
 
-LOCKBOX;
+ECHOCHECKBOX;
 			}
 
 			function echoTimepickerDiv($elemType) {
 				// echoes the div to render locktime timepicker for lp
 				global $elemName, $elemId, $elemValue;
 				buildElementProperties($elemType);
-echo <<<LOCKTIME
-									<div class="col-sm-6 my-1">
-										<div class="input-group">
-											<input class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-									</div>\n
-LOCKTIME;
+				echo <<<ECHOCLOCKPICKER
+													<div class="col-sm-6 my-1">
+														<div class="input-group">
+															<input class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
+															<div class="input-group-append">
+																<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+															</div>
+														</div>
+													</div>\n
+ECHOCLOCKPICKER;
 			}
 
 			function echoDayRow() {
@@ -178,78 +176,81 @@ LOCKTIME;
 				global $dayOfWeek;
 				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
 
-echo <<<DAYROWHEAD
-						<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
-							<div class="col-2">
-					            {$dayOfWeekString}
-					        </div>
-							<div class="col-5">
-								<div class="form-row align-items-center">\n
-DAYROWHEAD;
+				echo <<<ECHODAYROWHEAD
+										<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
+											<div class="col-2">
+									            {$dayOfWeekString}
+									        </div>
+											<div class="col-5">
+												<div class="form-row align-items-center">\n
+ECHODAYROWHEAD;
 
-echoCheckboxDiv('lockBoxLp', 'sperren');
-echoTimepickerDiv('lockTimeLp');
+				echoCheckboxDiv('lockBoxLp', 'sperren');
+				echoTimepickerDiv('lockTimeLp');
 
-echo <<<DAYROWMIDDLE
-								</div>
-					        </div>
-							<div class="col-5">
-								<div class="form-row align-items-center">\n
-DAYROWMIDDLE;
+				echo <<<ECHODAYROWMIDDLE
+												</div>
+									        </div>
+											<div class="col-5">
+												<div class="form-row align-items-center">\n
+ECHODAYROWMIDDLE;
 
-echoCheckboxDiv('unlockBoxLp', 'entsperren');
-echoTimepickerDiv('unlockTimeLp');
+				echoCheckboxDiv('unlockBoxLp', 'entsperren');
+				echoTimepickerDiv('unlockTimeLp');
 
-echo <<<DAYROWTAIL
-								</div>
-					        </div>
-						</div>  <!-- end row {$dayOfWeekString} -->\n
-DAYROWTAIL;
+				echo <<<ECHODAYROWTAIL
+												</div>
+									        </div>
+										</div>  <!-- end row {$dayOfWeekString} -->\n
+ECHODAYROWTAIL;
 
-if ( $dayOfWeek < 7 ) {
-	echo '						<hr class="d-sm-none">'."\n";
-}
-}  // end echoDayRow
+				if ( $dayOfWeek < 7 ) {
+					echo '						<hr class="d-sm-none">'."\n";
+				}
+			}  // end echoDayRow
 
 		?>
 
+<!-- begin of html body -->
 
-
+		<?php include '/var/www/html/openWB/web/settings/navbar.html'; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
 
 				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
 
-<?php
+				<?php
 
-for ($lp=1; $lp<=8; $lp++) {
-	// build form-groups for all lp
-	if ( $isConfiguredLp[$lp] ) {
-		$visibility = '';
-	} else {
-		$visibility = ' display: none;';
-	}
-echo <<<FORMGROUPHEAD
-					<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}">  <!-- group charge point {$lp} -->
-						<h1>LP {$lp} ({$settingsArray['lp'.$lp.'name']})</h1>\n
-FORMGROUPHEAD;
+					for ($lp=1; $lp<=$maxQuantityLp; $lp++) {
+						// build form-groups for all lp
+						if ( $isConfiguredLp[$lp] ) {
+							// if lp is configured: display form-group
+							$visibility = '';
+						} else {
+							// if lp is not configured: hide form-group
+							$visibility = ' display: none;';
+						}
+						echo <<<ECHOFORMGROUPHEAD
+							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+								<h1>LP {$lp} ({$settingsArray['lp'.$lp.'name']})</h1>\n
+ECHOFORMGROUPHEAD;
 
-for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
-	// build form-rows for all weekdays
-	echoDayRow();
-}  // end all days
+						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
+								// build form-rows for all weekdays
+								echoDayRow();
+						}  // end all days
 
-echo <<<FORMGROUPTAIL
-					<div class="row justify-content-center">
-						<button type="button" class="btn btn-sm btn-red mt-2" onclick="resetLpData({$lp});">alles zurücksetzen</button>
-					</div>
+						echo <<<ECHOFORMGROUPTAIL
+											<div class="row justify-content-center">
+												<button type="button" class="btn btn-sm btn-red mt-2" onclick="resetLpData({$lp});">alles zurücksetzen</button>
+											</div>
 
-					</div>  <!-- end form-group charge point {$lp} -->
-FORMGROUPTAIL;
-}  // end all lp
+											</div>  <!-- end form-group charge point {$lp} -->
+ECHOFORMGROUPTAIL;
+					}  // end all lp
 
-?>
+				?>
 
 					<div class="row justify-content-center">
 						<button type="submit" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
@@ -278,9 +279,8 @@ FORMGROUPTAIL;
 					donetext: '',  // done button text
 					autoclose: true,  // auto close when minute is selected
 					vibrate: true,  // vibrate the device when dragging clock hand
-					default: '00:00'
+					default: "00:00"
 				});
-				$(targetId).attr('value', '00:00');
 			}
 
 			function removeClockpicker(targetId) {
@@ -289,36 +289,57 @@ FORMGROUPTAIL;
 				if ( $(targetId).length ) {
 					// if clockpicker exists
 					$(targetId).clockpicker('remove');
-					$(targetId).attr('value', '');
+					$(targetId).val('');
 				}
 			}
 
-			$(function() {
-				// if a checkbox is checked/unchecked
-				// add/remove respective clockpicker
-				// and empty input field if removed
-			    $('input:checkbox').change(function() {
-					var boxIsChecked = $(this).prop('checked') == true;
-					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
-					if ( boxIsChecked ) {
-						// activate clockpicker
-						addClockpicker(clockPickerId);
-					} else {
-						// remove clockpicker
-						removeClockpicker(clockPickerId);
-					}
-			    })
-			  })
-
-			  function resetLpData(chargePoint) {
-				  for (day=1; day<=7; day++) {
-					  // reset all days
-					  $('#lockBoxLp'+chargePoint+'_'+day).prop('checked', false);
-					  removeClockpicker('#lockTimeLp'+chargePoint+'_'+day);
-					  $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked', false);
-					  removeClockpicker('#unlockTimeLp'+chargePoint+'_'+day);
-				  }
+			 function resetLpData(chargePoint) {
+				 for (day=1; day<=7; day++) {
+					 // reset all days
+					 $('#lockBoxLp'+chargePoint+'_'+day).prop('checked', false);
+					 removeClockpicker('#lockTimeLp'+chargePoint+'_'+day);
+					 $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked', false);
+					 removeClockpicker('#unlockTimeLp'+chargePoint+'_'+day);
+				 }
 			 }
+
+			 $(document).ready(function(){
+
+				 $(function() {
+	 				// if a checkbox is checked/unchecked
+	 				// add/remove respective clockpicker
+	 				// and empty input field if removed
+	 			    $('input:checkbox').change(function() {
+	 					var boxIsChecked = $(this).prop('checked') == true;
+	 					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+	 					if ( boxIsChecked ) {
+	 						// activate clockpicker
+							if ( $(clockPickerId).val() == '' ) {
+								// replace empty field (placeholder = --) with initial time
+								$(clockPickerId).val('00:00');
+							}
+	 						addClockpicker(clockPickerId);
+	 					} else {
+	 						// remove clockpicker
+	 						removeClockpicker(clockPickerId);
+	 					}
+	 			    })
+	 			 })
+
+				 // initially add all clockpickers to visible form-groups
+				 for (chargePoint=1; chargePoint<=8; chargePoint++) {
+					 if ( $('#lp'+chargePoint).is(':visible') ) {
+						 for (day=1; day<=7; day++) {
+							 if ( $('#lockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
+								 addClockpicker('#lockTimeLp'+chargePoint+'_'+day)
+							 }
+							 if ( $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
+								 addClockpicker('#unlockTimeLp'+chargePoint+'_'+day)
+							 }
+						 }
+					 }
+				 }
+			});
 
 	    </script>
 
