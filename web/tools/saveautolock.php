@@ -30,7 +30,8 @@
 		// values will be parsed as arrays
 		// rebuild key names and put respective key/value pair in $settingsArray
 		foreach($_POST as $key => $chargePoint) {
-			// will process keys lockBoxLp, unlockBoxLp, lockTimeLp and unlockTimeLp
+			// will process keys waitUntilFinishedBoxLp, lockBoxLp, unlockBoxLp, lockTimeLp and unlockTimeLp
+
 			foreach($chargePoint as $numberOfLp => $dayOfWeek) {
 				// process all lp
 				foreach($dayOfWeek as $numberOfDay => $value) {
@@ -43,19 +44,19 @@
 		}  // end foreach
 
 		// write config to file
-  		$fp = fopen($myConfigFile, "w");
-		if ( !$fp ) {
-			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
-  		}
-		foreach($settingsArray as $key => $value) {
-			fwrite($fp, $key.'='.$value."\n");
-		}
+  		//$fp = fopen($myConfigFile, "w");
+		//if ( !$fp ) {
+	//		throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
+  	//	}
+	//	foreach($settingsArray as $key => $value) {
+	//		fwrite($fp, $key.'='.$value."\n");
+	//	}
   		// send success write to config
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
   		echo "<script type='text/javascript'>alert('$msg');</script>";
     } finally {
-		fclose($fp);
+	//	fclose($fp);
 		echo "<script>window.location.href='../index.php';</script>";
 	}
 

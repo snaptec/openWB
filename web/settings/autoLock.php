@@ -90,6 +90,7 @@
 			// just to make sure... reset all elements for non-configured lp
 			for ($lp=1; $lp<=$maxQuantityLp; $lp++) {
 				if ( !$isConfiguredLp[$lp] ) {
+					$settingsArray['waitUntilFinishedBoxLp'.$lp] = 'off';
 					for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
 						// all days...
 						$settingsArray['lockBoxLp'.$lp.'_'.$dayOfWeek] = 'off';
@@ -231,23 +232,49 @@ ECHODAYROWTAIL;
 							// if lp is not configured: hide form-group
 							$visibility = ' display: none;';
 						}
+						// remove special characters except space and underscore... maybe dangerous
+						$nameLp = preg_replace('/[^A-Za-z0-9_ ]/', '', $settingsArray['lp'.$lp.'name']);
+
 						echo <<<ECHOFORMGROUPHEAD
 							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
-								<h1>LP {$lp} ({$settingsArray['lp'.$lp.'name']})</h1>\n
+								<h1>LP {$lp} ({$nameLp})</h1>\n
 ECHOFORMGROUPHEAD;
 
 						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
-								// build form-rows for all weekdays
-								echoDayRow();
+							// build form-rows for all weekdays
+							echoDayRow();
 						}  // end all days
 
-						echo <<<ECHOFORMGROUPTAIL
-											<div class="row justify-content-center">
-												<button type="button" class="btn btn-sm btn-red mt-2" onclick="resetLpData({$lp});">alles zurücksetzen</button>
+						echo <<<ECHOFORMGROUPTAILBEGINN
+											<div class="row justify-content-center mt-2">
+												<button type="button" class="btn btn-sm btn-red" onclick="resetLpData({$lp});">alles zurücksetzen</button>
+											</div>
+ECHOFORMGROUPTAILBEGINN;
+
+						$elemId = 'waitUntilFinishedBoxLp'.$lp;
+						$elemName = 'waitUntilFinishedBoxLp'.'['.$lp.']';
+						$elemValue = $settingsArray[$elemId];
+						// translate boolean to proper html
+						if ( $elemValue == 'on' ) {
+							$elemValue = " checked='checked'";
+						} else {
+							$elemValue = '';
+						}
+
+						echo <<<ECHOFORMGROUPTAILEND
+											<div class="row justify-content-center mt-2">
+												<div class="form-check">
+													<input type="hidden" name="{$elemName}">
+													<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+													<label class="form-check-label pl-10" for="{$elemName}">
+														vor Sperrung auf Ende laufender Ladevorgang warten
+													</label>
+												</div>
 											</div>
 
 											</div>  <!-- end form-group charge point {$lp} -->
-ECHOFORMGROUPTAIL;
+ECHOFORMGROUPTAILEND;
+
 					}  // end all lp
 
 				?>
