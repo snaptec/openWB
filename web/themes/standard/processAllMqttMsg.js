@@ -4,7 +4,8 @@
  * @author Kevin Wieland
  * @author Michael Ortenstein
  */
-
+var awattartime = new Array();
+var graphawattarprice;
 var doInterval;
 var do2Interval;
 var speichersoc;
@@ -68,6 +69,8 @@ $('#slider6div').hide();
 $('#slider7div').hide();
 $('#slider8div').hide();
 var thevalues = [
+	["openWB/global/awattar/MaxPriceForCharging", "#"],
+	["openWB/global/awattar/pricelist", "#"],
 	["openWB/graph/lastlivevalues", "#"],
 	["openWB/graph/1alllivevalues", "#"],
 	["openWB/graph/2alllivevalues", "#"],
@@ -609,6 +612,23 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			}
 		}
 	}
+	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
+		// read awattar values and trigger graph creation
+		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf 
+		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh) 
+		var csvaData = new Array();
+		var rawacsv = mqttpayload.split(/\r?\n|\r/);
+		for (var i = 0; i < rawacsv.length; i++) {
+			  csvaData.push(rawacsv[i].split(','));
+		}
+		awattartime = getCol(csvaData, 0);
+		graphawattarprice = getCol(csvaData, 1);
+		loadawattargraph();
+	}
+	else if ( mqttmsg == "openWB/global/awattar/MaxPriceForCharging" ) {
+		document.getElementById("awattar1s").value = mqttpayload;
+		document.getElementById("awattar1l").innerHTML = mqttpayload;
+	}
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
 		// set button colors depending on charge mode
 		switch (mqttpayload) {
@@ -1105,7 +1125,9 @@ function lp8enabledclick() {
 		publish("0","openWB/set/lp8/ChargePointEnabled");
 	}
 }
-
+function AwattarMaxPriceClick() {
+	publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
+}
 function lp1DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");
 }

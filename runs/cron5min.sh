@@ -71,6 +71,9 @@ else
 	fi
 fi
 fi
+if (( awattaraktiv == 1 )); then
+	/var/www/html/openWB/runs/awattargetprices.sh
+fi
 
 
 

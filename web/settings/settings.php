@@ -50,6 +50,9 @@
 				if(strpos($line, "mollp1moll=") !== false) {
 					list(, $mollp1mollold) = explode("=", $line);
 				}
+				if(strpos($line, "awattaraktiv=") !== false) {
+					list(, $awattaraktivold) = explode("=", $line);
+				}
 				if(strpos($line, "mollp1diab=") !== false) {
 					list(, $mollp1diabold) = explode("=", $line);
 				}
@@ -521,6 +524,17 @@
 						<p>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.</p>
 						<br>
 					</div><hr>
+					<div class="row ">
+						<b><label for="awattaraktiv">Awattar aktivieren:</label></b>
+						<select type="text" name="awattaraktiv" id="awattaraktiv">
+							<option <?php if($awattaraktivold == 0) echo selected ?> value="0">Nein</option>
+							<option <?php if($awattaraktivold == 1) echo selected ?> value="1">Ja</option>
+						</select>
+					</div>
+					<div class="row">
+						<p>Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler <br> Die Awattar Funktion ist nur im SofortLaden Modus aktiv!</p><br>
+					</div><hr>
+
 					<div class="row">
 						<b><label for="stopchargeafterdisclp1">Ladepunkt 1 sperren nach Abstecken:</label></b>
 						<select type="text" name="stopchargeafterdisclp1" id="stopchargeafterdisclp1">
