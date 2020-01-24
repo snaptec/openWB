@@ -45,6 +45,8 @@ source rfidtag.sh
 source leds.sh
 date=$(date)
 re='^-?[0-9]+$'
+#autolock ausführen
+./processautolock.sh &
 #ladelog ausfuehren
 ./ladelog.sh &
 #doppelte Ausfuehrungsgeschwindigkeit
@@ -277,7 +279,7 @@ prenachtlademodus
 ########################
 # Sofort Laden
 if (( lademodus == 0 )); then
-	sofortlademodus	
+	sofortlademodus
 fi
 
 #######################

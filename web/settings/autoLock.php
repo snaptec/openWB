@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
+
 	<!-- Einstellungen für automatisches Sperren/Entsperren
-		 der LP: ein Vorgang pro Tag -->
+		 der LP: ein Vorgang pro Tag
+	 	 Autor: M. Ortenstein -->
 	<head>
 		<base href="/openWB/web/">
 
@@ -44,355 +46,220 @@
 	</head>
 
 	<body>
+		<?php
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.html';?>
+			/**
+			 * read settings for input elements from config file
+			 * and put them in associative array
+			 */
+
+			// some global vars
+			$maxQuantityLp = 8;  // max configured lp
+			$elemName = '';
+			$elemId = '';
+			$elemValue = '';
+			$lp;
+			$dayOfWeek;  // Mo = 1, ..., So = 7
+
+			// first read config-lines in array
+			$settingsFile = file('/var/www/html/openWB/openwb.conf');
+			// prepare key/value array
+			$settingsArray = [];
+
+			// convert lines to key/value array for faster manipulation
+			foreach($settingsFile as $line) {
+				// split line at char '='
+				$splitLine = explode('=', $line);
+				// trim parts
+				$splitLine[0] = trim($splitLine[0]);
+				$splitLine[1] = trim($splitLine[1]);
+				// push key/value pair to new array
+				$settingsArray[$splitLine[0]] = $splitLine[1];
+			}
+			// now values can be accessed by $settingsArray[$key] = $value;
+
+			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
+			// due to inconsitent variable naming need individual lines
+			$isConfiguredLp[1] = true;  // lp1 always configured
+			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
+			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
+			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
+				$isConfiguredLp[$lp] = ($settingsArray['lastmanagementlp'.$lp] == 1) ? 1 : 0;
+			}
+
+			// just to make sure... reset all elements for non-configured lp
+			for ($lp=1; $lp<=$maxQuantityLp; $lp++) {
+				if ( !$isConfiguredLp[$lp] ) {
+					for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
+						// all days...
+						$settingsArray['lockBoxLp'.$lp.'_'.$dayOfWeek] = 'off';
+						$settingsArray['lockTimeLp'.$lp.'_'.$dayOfWeek] = '';
+						$settingsArray['unlockBoxLp'.$lp.'_'.$dayOfWeek] = 'off';
+						$settingsArray['lockTimeLp'.$lp.'_'.$dayOfWeek] = '';
+					}
+				}
+			}
+
+			function getDayOfWeekString($dayOfWeek) {
+				// returns name of the weekday
+				switch ($dayOfWeek) {
+					case 1:
+						return 'Montag';
+					case 2:
+						return 'Dienstag';
+					case 3:
+						return 'Mittwoch';
+					case 4:
+						return 'Donnerstag';
+					case 5:
+						return 'Freitag';
+					case 6:
+						return 'Samstag';
+					case 7:
+						return 'Sonntag';
+					default:
+						return 'Wochentag?';
+				}
+			}
+
+			function buildElementProperties($elemType) {
+				// builds name, id and value strings for element
+				global $lp, $dayOfWeek, $elemName, $elemId, $elemValue, $settingsArray;
+
+				$elemId = $elemType.$lp.'_'.$dayOfWeek;
+				$elemName = $elemType.'['.$lp.']['.$dayOfWeek.']';
+				$elemValue = $settingsArray[$elemId];
+			}
+
+			function echoCheckboxDiv($elemType, $label) {
+				// echoes the div to render checkbox to lock lp
+				global $elemName, $elemId, $elemValue;
+				buildElementProperties($elemType);
+				// translate boolean to proper html
+				if ( $elemValue == 'on' ) {
+					$elemValue = " checked='checked'";
+				} else {
+					$elemValue = '';
+				}
+				echo <<<ECHOCHECKBOX
+													<div class="col-auto my-1">
+														<div class="form-check">
+															<input type="hidden" name="{$elemName}">
+															<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+															<label class="form-check-label pl-10" for="{$elemId}">
+																{$label}
+															</label>
+														</div>
+													</div>
+
+ECHOCHECKBOX;
+			}
+
+			function echoTimepickerDiv($elemType) {
+				// echoes the div to render locktime timepicker for lp
+				global $elemName, $elemId, $elemValue;
+				buildElementProperties($elemType);
+				echo <<<ECHOCLOCKPICKER
+													<div class="col-sm-6 my-1">
+														<div class="input-group">
+															<input class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
+															<div class="input-group-append">
+																<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+															</div>
+														</div>
+													</div>\n
+ECHOCLOCKPICKER;
+			}
+
+			function echoDayRow() {
+				// echoes all elements for one day-row in form
+				global $dayOfWeek;
+				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
+
+				echo <<<ECHODAYROWHEAD
+										<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
+											<div class="col-2">
+									            {$dayOfWeekString}
+									        </div>
+											<div class="col-5">
+												<div class="form-row align-items-center">\n
+ECHODAYROWHEAD;
+
+				echoCheckboxDiv('lockBoxLp', 'sperren');
+				echoTimepickerDiv('lockTimeLp');
+
+				echo <<<ECHODAYROWMIDDLE
+												</div>
+									        </div>
+											<div class="col-5">
+												<div class="form-row align-items-center">\n
+ECHODAYROWMIDDLE;
+
+				echoCheckboxDiv('unlockBoxLp', 'entsperren');
+				echoTimepickerDiv('unlockTimeLp');
+
+				echo <<<ECHODAYROWTAIL
+												</div>
+									        </div>
+										</div>  <!-- end row {$dayOfWeekString} -->\n
+ECHODAYROWTAIL;
+
+				if ( $dayOfWeek < 7 ) {
+					echo '						<hr class="d-sm-none">'."\n";
+				}
+			}  // end echoDayRow
+
+		?>
+
+<!-- begin of html body -->
+
+		<?php include '/var/www/html/openWB/web/settings/navbar.html'; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
-				<div class="form col-md-10">
 
-					<div class="form-group px-3 pb-3" style="border:1px solid black">  <!-- group charge point 1 -->
-						<h1>LP 1 (<span id ="nameLp1">Name LP1</span>)</h1>
-						<div class="row vaRow">  <!-- row monday = _1 -->
-							<div class="col-2">
-					            Montag
-					        </div>
-							<div class="col-5">
-								<div class="form-row align-items-center">
-									<div class="col-auto my-1">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="lockBoxLp1_1">
-											<label class="form-check-label pl-10" for="lockBoxLp1_1">
-										  		sperren
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_1">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-					        </div>
-							<div class="col-5">
-								<div class="form-row align-items-center">
-									<div class="col-auto my-1">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="unlockBoxLp1_1">
-											<label class="form-check-label" for="unlockBoxLp1_1">
-										  		entsperren
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_1">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-	    							</div>
-								</div>
-					        </div>
-						</div>  <!-- end row monday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row tuesday = _2 -->
-						    <div class="col-2">
-						        Dienstag
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_2">
-						                    <label class="form-check-label" for="lockBoxLp1_2">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_2">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_2">
-						                    <label class="form-check-label" for="unlockBoxLp1_2">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_2">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
+				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
 
-						        </div>
-						    </div>
-						</div>  <!-- end row tuesday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row wednesday = _3 -->
-						    <div class="col-2">
-						        Mittwoch
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_3">
-						                    <label class="form-check-label" for="lockBoxLp1_3">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_3">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_3">
-						                    <label class="form-check-label" for="unlockBoxLp1_3">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_3">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
+				<?php
 
-						        </div>
-						    </div>
-						</div>  <!-- end row wednesday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row thursday = _4 -->
-						    <div class="col-2">
-						        Donnerstag
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_4">
-						                    <label class="form-check-label" for="lockBoxLp1_4">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_4">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+					for ($lp=1; $lp<=$maxQuantityLp; $lp++) {
+						// build form-groups for all lp
+						if ( $isConfiguredLp[$lp] ) {
+							// if lp is configured: display form-group
+							$visibility = '';
+						} else {
+							// if lp is not configured: hide form-group
+							$visibility = ' display: none;';
+						}
+						echo <<<ECHOFORMGROUPHEAD
+							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+								<h1>LP {$lp} ({$settingsArray['lp'.$lp.'name']})</h1>\n
+ECHOFORMGROUPHEAD;
+
+						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
+								// build form-rows for all weekdays
+								echoDayRow();
+						}  // end all days
+
+						echo <<<ECHOFORMGROUPTAIL
+											<div class="row justify-content-center">
+												<button type="button" class="btn btn-sm btn-red mt-2" onclick="resetLpData({$lp});">alles zurücksetzen</button>
 											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_4">
-						                    <label class="form-check-label" for="unlockBoxLp1_4">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_4">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
 
-						        </div>
-						    </div>
-						</div>  <!-- end row thursday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row friday = _5 -->
-						    <div class="col-2">
-						        Freitag
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_5">
-						                    <label class="form-check-label" for="lockBoxLp1_5">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_5">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_5">
-						                    <label class="form-check-label" for="unlockBoxLp1_5">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_5">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
+											</div>  <!-- end form-group charge point {$lp} -->
+ECHOFORMGROUPTAIL;
+					}  // end all lp
 
-						        </div>
-						    </div>
-						</div>  <!-- end row friday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row saturday = _6 -->
-						    <div class="col-2">
-						        Samstag
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_6">
-						                    <label class="form-check-label" for="lockBoxLp1_6">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_6">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_6">
-						                    <label class="form-check-label" for="unlockBoxLp1_6">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_6">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
+				?>
 
-						        </div>
-						    </div>
-						</div>  <!-- end row saturday -->
-						<hr class="d-sm-none">
-						<div class="row vaRow">  <!-- row sunday = _7 -->
-						    <div class="col-2">
-						        Sonntag
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="lockBoxLp1_7">
-						                    <label class="form-check-label" for="lockBoxLp1_7">
-						                        sperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="lockTimeLp1_7">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
-						        </div>
-						    </div>
-						    <div class="col-5">
-						        <div class="form-row align-items-center">
-						            <div class="col-auto my-1">
-						                <div class="form-check">
-						                    <input class="form-check-input" type="checkbox" id="unlockBoxLp1_7">
-						                    <label class="form-check-label" for="unlockBoxLp1_7">
-						                        entsperren
-						                    </label>
-						                </div>
-						            </div>
-						            <div class="col-sm-6 my-1">
-										<div class="input-group clockpicker" id="unlockTimeLp1_7">
-											<input type="text" class="form-control" readonly value="--">
-											<div class="input-group-append">
-												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-											</div>
-										</div>
-						            </div>
+					<div class="row justify-content-center">
+						<button type="submit" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
+					</div>
 
-						        </div>
-						    </div>
-						</div>  <!-- end row sunday -->
-					</div>  <!-- end form-group charge point 1 -->
-
-
-
-
-
-				</div>  <!-- end form -->
+				</form>  <!-- end form -->
 			</div>
 			<br>
 
-			<div class="row justify-content-center">
-				<button onclick="saveSettings()" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
-			</div>
 
 		</div>  <!-- end container -->
 
@@ -404,47 +271,76 @@
 
 		<script type="text/javascript">
 			function addClockpicker(targetId) {
-				// add a clickpicker to input targetID (eg #unlockTimeLp1_7)
+				// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
 				// and set input field to 00:00
 				$(targetId).clockpicker({
 					placement: 'bottom',  // clock popover placement
 					align: 'left',  // popover arrow align
 					donetext: '',  // done button text
 					autoclose: true,  // auto close when minute is selected
-					vibrate: true  // vibrate the device when dragging clock hand
+					vibrate: true,  // vibrate the device when dragging clock hand
+					default: "00:00"
 				});
-				document.querySelector(targetId+" input[type='text']").value = "00:00";
 			}
 
 			function removeClockpicker(targetId) {
-				// remove a clickpicker in input targetID (eg #unlockTimeLp1_7)
+				// remove a clockpicker in input targetId (eg #unlockTimeLp1_7)
 				// and set input value to --
 				if ( $(targetId).length ) {
 					// if clockpicker exists
 					$(targetId).clockpicker('remove');
+					$(targetId).val('');
 				}
-				document.querySelector(targetId+" input[type='text']").value = "--";
 			}
 
-			$(function() {
-				// if a checkbox is checked/unchecked
-				// add/remove respective clockpicker
-				// and empty input field if removed
-			    $('input:checkbox').change(function() {
-					var boxIsChecked = $(this).prop('checked') == true;
-					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
-					if ( boxIsChecked ) {
-						// activate clockpicker
-						addClockpicker(clockPickerId);
-					} else {
-						// remove clockpicker
-						removeClockpicker(clockPickerId);
-					}
-			    })
-			  })
+			 function resetLpData(chargePoint) {
+				 for (day=1; day<=7; day++) {
+					 // reset all days
+					 $('#lockBoxLp'+chargePoint+'_'+day).prop('checked', false);
+					 removeClockpicker('#lockTimeLp'+chargePoint+'_'+day);
+					 $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked', false);
+					 removeClockpicker('#unlockTimeLp'+chargePoint+'_'+day);
+				 }
+			 }
 
-	    	function saveSettings() {
-	    	}
+			 $(document).ready(function(){
+
+				 $(function() {
+	 				// if a checkbox is checked/unchecked
+	 				// add/remove respective clockpicker
+	 				// and empty input field if removed
+	 			    $('input:checkbox').change(function() {
+	 					var boxIsChecked = $(this).prop('checked') == true;
+	 					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+	 					if ( boxIsChecked ) {
+	 						// activate clockpicker
+							if ( $(clockPickerId).val() == '' ) {
+								// replace empty field (placeholder = --) with initial time
+								$(clockPickerId).val('00:00');
+							}
+	 						addClockpicker(clockPickerId);
+	 					} else {
+	 						// remove clockpicker
+	 						removeClockpicker(clockPickerId);
+	 					}
+	 			    })
+	 			 })
+
+				 // initially add all clockpickers to visible form-groups
+				 for (chargePoint=1; chargePoint<=8; chargePoint++) {
+					 if ( $('#lp'+chargePoint).is(':visible') ) {
+						 for (day=1; day<=7; day++) {
+							 if ( $('#lockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
+								 addClockpicker('#lockTimeLp'+chargePoint+'_'+day)
+							 }
+							 if ( $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
+								 addClockpicker('#unlockTimeLp'+chargePoint+'_'+day)
+							 }
+						 }
+					 }
+				 }
+			});
+
 	    </script>
 
 	</body>
