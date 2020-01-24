@@ -1,5 +1,5 @@
 #!/bin/bash
-
+. /var/www/html/openWB/openwb.conf
 dailyfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d)"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
@@ -70,6 +70,9 @@ else
 		fi
 	fi
 fi
+fi
+if (( awattaraktiv == 1 )); then
+	/var/www/html/openWB/runs/awattargetprices.sh
 fi
 
 

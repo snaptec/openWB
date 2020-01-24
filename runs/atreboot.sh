@@ -1,7 +1,8 @@
 #!/bin/bash
-(sleep 300; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
+(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
+echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 sleep 10
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
@@ -12,7 +13,12 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > ramdisk/awattarprice
+echo 1 > ramdisk/mqttawattarprice
+echo 0 > ramdisk/awattarmaxprice
+echo 0 > ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
+echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp2enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp3enabled
@@ -1750,6 +1756,18 @@ if ! grep -Fq "wakeupzoelp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "wakeupzoelp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wakeupmyrenaultlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wakeupmyrenaultlp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "awattaraktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "awattaraktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
 then
 	echo "plz=36124" >> /var/www/html/openWB/openwb.conf
@@ -2373,4 +2391,4 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
-sed -i 's/serials.*/serials='$smashmbezugid'/' /var/www/html/openWB/web/files/smashm.conf
+echo 0 > /var/www/html/openWB/ramdisk/bootinprogress

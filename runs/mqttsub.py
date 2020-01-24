@@ -340,7 +340,11 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/lp2/DirectChargeSoc"):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("sofortsoclp2=",msg.payload.decode("utf-8"))
-
+    if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=50):
+            f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
 
     file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')

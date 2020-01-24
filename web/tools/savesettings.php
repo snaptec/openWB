@@ -5,7 +5,11 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	$writeit = '0';
-   	if(strpos($line, "pvbezugeinspeisung=") !== false) {
+   	if(strpos($line, "awattaraktiv=") !== false) {
+	    $result .= 'awattaraktiv='.$_POST[awattaraktiv]."\n";
+	    $writeit = '1';
+	}
+	if(strpos($line, "pvbezugeinspeisung=") !== false) {
 	    $result .= 'pvbezugeinspeisung='.$_POST[pvbezugeinspeisung]."\n";
 	    $writeit = '1';
 	}

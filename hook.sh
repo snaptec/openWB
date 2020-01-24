@@ -161,10 +161,8 @@ if (( verbraucher1_aktiv == "1")); then
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
 		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
 		verbraucher1_watt=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Power')
-		if [ ! -z "$verbraucher1_watt" ]; then
-			if [[ "$verbraucher1_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
-				echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
-			fi
+		if [[ "$verbraucher1_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
+			echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
 		fi
 		verbraucher1_wh=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Total')
 		verbraucher1_totalwh=$(echo "scale=0;(($verbraucher1_wh * 1000) + $verbraucher1_tempwh)  / 1" | bc)
@@ -172,6 +170,9 @@ if (( verbraucher1_aktiv == "1")); then
 			if [[ "$verbraucher1_totalwh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
 				echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 			fi
+		else
+			verbraucher1_whf=$(echo "scale=0;($verbraucher1_wh * 1000)  / 1" | bc)
+			echo $verbraucher1_whf > /var/www/html/openWB/ramdisk/verbraucher1_wh
 		fi
 	fi
 else
@@ -206,10 +207,8 @@ if (( verbraucher2_aktiv == "1")); then
 	if [[ $verbraucher2_typ == "tasmota" ]]; then
 		verbraucher2_out=$(curl --connect-timeout 3 -s $verbraucher2_ip/cm?cmnd=Status%208 )
 		verbraucher2_watt=$(echo $verbraucher2_out | jq '.StatusSNS.ENERGY.Power')
-		if [ ! -z "$verbraucher2_watt" ]; then
-			if [[ "$verbraucher2_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
-				echo $verbraucher2_watt > /var/www/html/openWB/ramdisk/verbraucher2_watt
-			fi
+		if [[ "$verbraucher2_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
+			echo $verbraucher2_watt > /var/www/html/openWB/ramdisk/verbraucher2_watt
 		fi
 		verbraucher2_wh=$(echo $verbraucher2_out | jq '.StatusSNS.ENERGY.Total')
 		verbraucher2_totalwh=$(echo "scale=0;(($verbraucher2_wh * 1000) + $verbraucher2_tempwh)  / 1" | bc)
@@ -217,6 +216,9 @@ if (( verbraucher2_aktiv == "1")); then
 			if [[ "$verbraucher2_totalwh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
 				echo $verbraucher2_totalwh > /var/www/html/openWB/ramdisk/verbraucher2_wh
 			fi
+		else
+			verbraucher2_whf=$(echo "scale=0;($verbraucher2_wh * 1000)  / 1" | bc)
+			echo $verbraucher2_whf > /var/www/html/openWB/ramdisk/verbraucher2_wh
 		fi
 		echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
 	fi

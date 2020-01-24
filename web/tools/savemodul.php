@@ -390,6 +390,14 @@ foreach($lines as $line) {
 	    $result .= 'wakeupzoelp2='.$_POST[wakeupzoelp2]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "wakeupmyrenaultlp1=") !== false) {
+	    $result .= 'wakeupmyrenaultlp1='.$_POST[wakeupmyrenaultlp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "wakeupmyrenaultlp2=") !== false) {
+	    $result .= 'wakeupmyrenaultlp2='.$_POST[wakeupmyrenaultlp2]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "wrsmawebbox=") !== false) {
 	    $result .= 'wrsmawebbox='.$_POST[wrsmawebbox]."\n";
 	    $writeit = '1';
