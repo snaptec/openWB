@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 #####
 #
@@ -39,21 +39,22 @@ powerLp7=$(<ramdisk/llaktuelllp7)
 powerLp8=$(<ramdisk/llaktuelllp8)
 
 # some stuff
-date=$(date +'%Y-%m-%d')
 time=$(date +%H:%M)
 dayOfWeek=$(date +%u)  # 1 = Montag
 
 function checkDisableLp {
     powerVarName="powerLp${chargePoint}"
+    now=$(date +'%Y-%m-%d %H:%M:%S');
     if [ "${!powerVarName}" -lt "200" ]; then
         # charge point stopped charging ... less than 200 W
         # delete possible wait-to-lock-flag
         echo "0" > $flagFilename
         # and disable charge point
-        echo "0" > $lpFilename
-        echo "${date} ${time} auto-disabled charge point #${chargePoint}"
+        mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
+        mosquitto_pub -r -t $mqttTopic -m 0
+        echo "${now} auto-disabled charge point #${chargePoint}"
     else
-        echo "${date} ${time} no auto-disable charge point #${chargePoint}, still charging with ${!powerVarName} W"
+        echo "${now} no auto-disable charge point #${chargePoint}, still charging: ${!powerVarName} W"
     fi
 }
 
@@ -63,14 +64,37 @@ do
     flagFilename="/var/www/html/openWB/ramdisk/waitautolocklp${chargePoint}"  # name of variable for lp wait-to-lock
     unlocktimeSettingName="unlockTimeLp${chargePoint}_${dayOfWeek}"  # name variable of unlock time for today
     locktimeSettingName="lockTimeLp${chargePoint}_${dayOfWeek}"  # name of variable of lock time for today
-    unlockTime="${!unlocktimeSettingName}"  # get the unlock time from setting
-    lockTime="${!locktimeSettingName}"  # get the lock time from setting
+    waitUntilFinishedName="waitUntilFinishedBoxLp${chargePoint}"  # name variable of checkbox value
+
+    if [ -z "${!unlocktimeSettingName}" ]; then
+        # variable is not defined in settings (or empty)
+        unlockTime=""  # so set the unlock time to empty string
+    else
+        unlockTime="${!unlocktimeSettingName}"  # get the unlock time from setting
+    fi
+
+    if [ -z "${!locktimeSettingName}" ]; then
+        # variable is not defined in settings (or empty)
+        lockTime=""  # so set the lock time to empty string
+    else
+        lockTime="${!locktimeSettingName}"  # get the lock time from setting
+    fi
+
+    if [ -z "${!waitUntilFinishedName}" ]; then
+        # variable is not defined in settings (or empty)
+        waitUntilFinished="off"  # so set the value to 'dont wait'
+    else
+        waitUntilFinished="${!waitUntilFinishedName}"  # get the checkbox-value from setting
+    fi
+
+    # now process the settings...
     lpenabled=$(<$lpFilename)  # read ramdisk value for lp enabled
+    now=$(date +'%Y-%m-%d %H:%M:%S');
     if [ "$lpenabled" = "1" ]; then
         # if the charge point is enabled, check for auto disabling
         waitFlag=$(<$flagFilename)  # read ramdisk value for lp autolock wait flag
         if [ "$waitFlag" = "1" ]; then
-            echo "${date} ${time} wait flag found for charge point #${chargePoint}"
+            echo "${now} wait flag found for charge point #${chargePoint}"
             # charge point busy, locktime passed and waiting for end of charge to disable charge point
             if [ $time = "$unlockTime" ]; then
                 # auto unlock time is now, so delete possible wait-to-lock-flag
@@ -83,21 +107,28 @@ do
         else
             # not waiting for disabling, so check if autolock time arrived
             if [ $time = "$lockTime" ]; then
-                # auto lock time is now, so set flag to wait for charge point ending ongoing charging process
-                echo "1" > $flagFilename
-                echo "${date} ${time} set wait flag for charge point #${chargePoint}"
-                # check if charge point still busy to deactivate
-                checkDisableLp
+                # auto lock time is now
+                if [ $waitUntilFinished = "on" ]; then
+                    # but if charging is ongoing, wait until finished
+                    # so set flag to wait for charge point ending ongoing charging process
+                    echo "1" > $flagFilename
+                    echo "${now} set wait flag for charge point #${chargePoint}"
+                    # check if charge point still busy to deactivate
+                    checkDisableLp
+                else
+                    # disable charge point immediately
+                    mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
+                    mosquitto_pub -r -t $mqttTopic -m 0
+                    echo "${now} auto-disabled charge point #${chargePoint} without wait"
+                fi
             fi
         fi
     else
         if [ $time = "$unlockTime" ]; then
             # charge point disabled and auto unlock time is now, so enable charge point
-            echo "1" > $lpFilename
-            echo "${date} ${time} auto-enabled charge point #${chargePoint}"
+            mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
+            mosquitto_pub -r -t $mqttTopic -m 1
+            echo "${now} auto-enabled charge point #${chargePoint}"
         fi
     fi
 done
-
-a="99"
-b="200"

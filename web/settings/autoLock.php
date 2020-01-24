@@ -267,12 +267,12 @@ ECHOFORMGROUPTAILBEGINN;
 													<input type="hidden" name="{$elemName}">
 													<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
 													<label class="form-check-label pl-10" for="{$elemName}">
-														vor Sperrung auf Ende laufender Ladevorgang warten
+														sperren erst nach Ende lfd. Ladevorgang
 													</label>
 												</div>
 											</div>
 
-											</div>  <!-- end form-group charge point {$lp} -->
+										</div>  <!-- end form-group charge point {$lp} -->
 ECHOFORMGROUPTAILEND;
 
 					}  // end all lp
