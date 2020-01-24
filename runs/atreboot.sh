@@ -13,10 +13,10 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-echo 0 > ramdisk/awattarprice
-echo 1 > ramdisk/mqttawattarprice
-echo 0 > ramdisk/awattarmaxprice
-echo 0 > ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/awattarprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
+echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
