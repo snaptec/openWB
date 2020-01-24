@@ -50,7 +50,11 @@ echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iw
 if [[ $verbraucher1_typ == "tasmota" ]]; then
 	verbraucher1_oldwh=$(curl -s http://$verbraucher1_ip/cm?cmnd=Status%208 | jq '.StatusSNS.ENERGY.Total')
 	if [[ $? == "0" ]]; then
-		verbraucher1_writewh=$(echo "scale=0;(($verbraucher1_oldwh * 1000) + $verbraucher1_tempwh) / 1" | bc)
+		if [ -z "$verbraucher1_tempwh" ]; then
+			verbraucher1_writewh=$(echo "scale=0;($verbraucher1_oldwh * 1000) / 1" | bc)
+		else
+			verbraucher1_writewh=$(echo "scale=0;(($verbraucher1_oldwh * 1000) + $verbraucher1_tempwh) / 1" | bc)
+		fi
 		sed -i "s/verbraucher1_tempwh=.*/verbraucher1_tempwh=$verbraucher1_writewh/" /var/www/html/openWB/openwb.conf
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset1%200
 		curl -s http://$verbraucher1_ip/cm?cmnd=EnergyReset2%200
