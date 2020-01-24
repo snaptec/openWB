@@ -30,17 +30,24 @@
 		// values will be parsed as arrays
 		// rebuild key names and put respective key/value pair in $settingsArray
 		foreach($_POST as $key => $chargePoint) {
-			// will process keys lockBoxLp, unlockBoxLp, lockTimeLp and unlockTimeLp
-			foreach($chargePoint as $numberOfLp => $dayOfWeek) {
+			// will process keys waitUntilFinishedBoxLp, lockBoxLp, unlockBoxLp, lockTimeLp and unlockTimeLp
+			foreach($chargePoint as $numberOfLp => $value) {
 				// process all lp
-				foreach($dayOfWeek as $numberOfDay => $value) {
-					// process days of week
-					$elem = $key.$numberOfLp.'_'.$numberOfDay;  // format is like lockBoxLp1_1
-					// put value in settingsArray or update existing value
+				if ( is_array($value) ) {
+					// POST variable is 2d and contains values for all days of the week
+					foreach($value as $numberOfDay => $elemValue) {
+						// process days of week
+						$elem = $key.$numberOfLp.'_'.$numberOfDay;  // format is like lockBoxLp1_1
+						// put value in settingsArray or update existing value
+						$settingsArray[$elem] = $elemValue;
+					}  // end foreach day
+				} else {
+					// value is no array so put it in settingsArray or update existing value
+					$elem = $key.$numberOfLp;  // format is like waitUntilFinishedBoxLp1
 					$settingsArray[$elem] = $value;
-				}  // end foreach
-			}  // end foreach
-		}  // end foreach
+				}
+			}  // end foreach lp
+		}  // end foreach POST value
 
 		// write config to file
   		$fp = fopen($myConfigFile, "w");
@@ -56,7 +63,7 @@
   		echo "<script type='text/javascript'>alert('$msg');</script>";
     } finally {
 		fclose($fp);
-		echo "<script>window.location.href='../index.php';</script>";
+	 	echo "<script>window.location.href='../index.php';</script>";
 	}
 
 ?>
