@@ -1,5 +1,5 @@
 #!/bin/bash
-
+. /var/www/html/openWB/openwb.conf
 dailyfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d)"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
