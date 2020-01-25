@@ -70,7 +70,14 @@ if (( updateinprogress == "1" )); then
 	exit 0
 fi
 #autolock ausführen
-./processautolock.sh &
+autolocktimer=$(<ramdisk/autolocktimer)
+if (( autolocktimer < 5 )); then
+	autolocktimer=$((autolocktimer+1))
+	echo $autolocktimer > ramdisk/autolocktimer
+else
+	./processautolock.sh &
+	echo 0 > ramdisk/autolocktimer
+fi
 #ladelog ausfuehren
 ./ladelog.sh &
 graphtimer=$(<ramdisk/graphtimer)

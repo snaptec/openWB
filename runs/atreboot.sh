@@ -13,6 +13,7 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
