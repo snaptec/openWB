@@ -319,8 +319,6 @@ ECHOFORMGROUPTAIL;
 					timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
 					$(clockpickerId).val(timeStr);  // set value to calculated new time
 				}
-				console.log("added Clockpicker, finally set Clockpicker ID="+clockpickerId+" to value :"+$(clockpickerId).val());
-
 				$(clockpickerId).clockpicker({
 					placement: "bottom",  // clock popover placement
 					align: "left",  // popover arrow align
@@ -328,9 +326,6 @@ ECHOFORMGROUPTAIL;
 					autoclose: true,  // auto close when minute is selected
 					vibrate: true,  // vibrate the device when dragging clock hand
 					default: "00:00",
-					afterHide: function() {
-                            console.log("after hide");
-                        }
 				});
 			}  // end add clockpicker
 
@@ -358,8 +353,6 @@ ECHOFORMGROUPTAIL;
 							if ( $(clockpickerId).val() == "" ) {
 								// replace empty field (placeholder = --) with initial time
 								$(clockpickerId).val("00:00");
-								console.log("Change Checkbox, set Clockpicker ID="+clockpickerId+" to value :"+$(clockpickerId).val());
-
 							}
 	 						addClockpicker(clockpickerId);
 	 					} else {
@@ -372,29 +365,23 @@ ECHOFORMGROUPTAIL;
 						// if clockpicker input is clickedstore the old clockpicker time of clicked clockpicker in global var
 						//  before changing it so it can be reset if lock/unlock time is accidently chosen to be identical
 						window.oldClockpickerTime = $(this).val();
-						console.log(">>"+window.oldClockpickerTime+"<<");
 					});
 
 					$("input:text").change(function() {
 						// if clockpicker input is equal to second time of the days, reset to old value
 						// create clockpicker id of the second clockpicker for the lp and day
 						var clockpickerId = "#"+this.id;
-						console.log("original: "+clockpickerId+" = "+$(clockpickerId).val());
 						if ( clockpickerId.includes("unlock") ) {
 							var secondClockpickerId = clockpickerId.replace("unlock", "lock");
 						} else {
 							var secondClockpickerId = clockpickerId.replace("lock", "unlock");
 						}
-
-						console.log("ndere: "+secondClockpickerId+" = "+$(secondClockpickerId).val());
-
 						if ( window.oldClockpickerTime != "" && $(clockpickerId).val() == $(secondClockpickerId).val() ) {
 							// both clockpickers with same times for the day
 							$(clockpickerId).val(window.oldClockpickerTime);  // so reset to last value
 							$("#myModal").modal('show');
 							//alert("Beide Schaltzeiten müssen sich unterscheiden! Der alte Wert wurde wiederhergestellt.");
 						}
-
 					});
 
 					$(".resetForm").click(function() {
