@@ -1,9 +1,11 @@
 <?php
+	// check if update.sh is still running
+	$updateinprogress = file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress');
 	// check if atreboot.sh is still running
 	$bootinprogress = file_get_contents('/var/www/html/openWB/ramdisk/bootinprogress');
 	// if yes, show placeholder. If not, show theme
-	if ( $bootinprogress == 1 ) {
-		//atreboot.sh still in progress, wait 5 seconds and retry
+	if ( $bootinprogress == 1 or $updateinprogress == 1) {
+		//atreboot.sh or update.sh still in progress, wait 5 seconds and retry
 		header( "refresh:5;url=index.php" );
 		echo '<html>
 			<center>
