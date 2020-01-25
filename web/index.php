@@ -10,8 +10,8 @@
 		echo '<html>
 			<center>
 				<h4>openWB ist noch nicht bereit</h4><br>
-				bitte warten...<br><br>
-				Die Seite aktualisiert sich automatisch neu
+				Der Vorgang kann länger dauern, bitte warten...<br><br>
+ 				Die Seite aktualisiert sich automatisch neu
 			</center>
 		      </html>';
 	} else {
