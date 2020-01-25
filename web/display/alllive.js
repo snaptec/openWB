@@ -123,22 +123,9 @@ $.ajax({
         }
         });
 
-  $.ajax({
-    url: "/openWB/ramdisk/plugstats1",
-    complete: function(request){
-		if (request.responseText == 1) {
-			var element = document.getElementById("plugstatlp2div");
-			element.classList.add("fa");
-			element.classList.add("fa-plug");
-	
-		    } else {
-			var element = document.getElementById("plugstatlp2div");
-			element.classList.remove("fa");
-			element.classList.remove("fa-plug");
-			}
-    }
-  });
-  $.ajax({
+
+if ( document.getElementById("plugstatlp1div") ) { 
+$.ajax({
     url: "/openWB/ramdisk/plugstat",
     complete: function(request){
 		if (request.responseText == 1) {
@@ -166,6 +153,9 @@ $.ajax({
 			}
     }
   });
+}
+if ( document.getElementById("plugstatlp2div") ) { 
+
   $.ajax({
     url: "/openWB/ramdisk/chargestats1",
     complete: function(request){
@@ -179,6 +169,23 @@ $.ajax({
 			}
     }
   });
+$.ajax({
+    url: "/openWB/ramdisk/plugstats1",
+    complete: function(request){
+		if (request.responseText == 1) {
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.add("fa");
+			element.classList.add("fa-plug");
+	
+		    } else {
+			var element = document.getElementById("plugstatlp2div");
+			element.classList.remove("fa");
+			element.classList.remove("fa-plug");
+			}
+    }
+  });
+ }
+
   $.ajax({
     url: "/openWB/ramdisk/reloaddisplay",
     complete: function(request){
@@ -192,6 +199,7 @@ $.ajax({
 		}    
     }
   });
+
 $.ajax({
     url: "/openWB/ramdisk/llsoll",
     complete: function(request){

@@ -280,8 +280,6 @@ touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/ladestatus.log
-touch /var/www/html/openWB/ramdisk/gsiforecast.csv
-chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 # bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -2345,7 +2343,6 @@ fi
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
-/var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
