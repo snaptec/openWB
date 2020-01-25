@@ -511,20 +511,6 @@
 			<div class="col-sm-12">
 				<form action="./tools/savemain.php" method="POST">
 					<div class="row ">
-						<b><label for="plz">Postleitzahl:</label></b>
-						<input type="text" name="plz" id="plz" value="<?php echo $plzold ?>"><br>
-					</div>
-					<div class="row">
-						<p>Gültige Werte z.B. 36124</p><br>
-						<p>Dient zur Ermittlung des GSI Index. Weitere Infos unter:
-							<span>
-								<a href="https://www.corrently.de/hintergrund/gruenstromindex">Hier</a>
-							</span>
-						</p><br>
-						<p>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.</p>
-						<br>
-					</div><hr>
-					<div class="row ">
 						<b><label for="awattaraktiv">Awattar aktivieren:</label></b>
 						<select type="text" name="awattaraktiv" id="awattaraktiv">
 							<option <?php if($awattaraktivold == 0) echo selected ?> value="0">Nein</option>
