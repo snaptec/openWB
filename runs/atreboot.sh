@@ -37,7 +37,6 @@ echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp7
 echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp8
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
-echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
@@ -2392,3 +2391,4 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
