@@ -7,6 +7,10 @@ import json
 import urllib
 import urllib2 
 
+#handler=urllib2.HTTPSHandler(debuglevel=1) 
+#opener = urllib2.build_opener(handler) 
+#urllib2.install_opener(opener)
+
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault lp2", named_tuple) 
 loginID=str(sys.argv[1])
