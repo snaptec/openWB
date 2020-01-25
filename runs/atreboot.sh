@@ -2,8 +2,7 @@
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
-echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
-sleep 10
+sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -13,6 +12,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
