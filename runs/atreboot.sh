@@ -2,8 +2,7 @@
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
-echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
-sleep 10
+sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -13,10 +12,12 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
-echo 0 > ramdisk/awattarprice
-echo 1 > ramdisk/mqttawattarprice
-echo 0 > ramdisk/awattarmaxprice
-echo 0 > ramdisk/mqttawattarmaxprice
+echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
+echo 0 > /var/www/html/openWB/ramdisk/awattarprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
+echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -37,7 +38,6 @@ echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp7
 echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp8
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
-echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
@@ -280,8 +280,6 @@ touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/ladestatus.log
-touch /var/www/html/openWB/ramdisk/gsiforecast.csv
-chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 # bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -2345,7 +2343,6 @@ fi
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
-/var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
@@ -2392,3 +2389,4 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/updateinprogress

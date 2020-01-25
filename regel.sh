@@ -45,10 +45,7 @@ source rfidtag.sh
 source leds.sh
 date=$(date)
 re='^-?[0-9]+$'
-#autolock ausführen
-./processautolock.sh &
-#ladelog ausfuehren
-./ladelog.sh &
+
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then
@@ -72,7 +69,17 @@ if (( updateinprogress == "1" )); then
 	echo "Update in progress"
 	exit 0
 fi
-
+#autolock ausführen
+autolocktimer=$(<ramdisk/autolocktimer)
+if (( autolocktimer < 5 )); then
+	autolocktimer=$((autolocktimer+1))
+	echo $autolocktimer > ramdisk/autolocktimer
+else
+	./processautolock.sh &
+	echo 0 > ramdisk/autolocktimer
+fi
+#ladelog ausfuehren
+./ladelog.sh &
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))

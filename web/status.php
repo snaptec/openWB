@@ -1671,9 +1671,6 @@ echo '<img src="./img/loader.gif" alt="openWB loading...">'; } ?>
  			<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
 			<br><br>
 	<div class="row">
-		<div style="height:300px;" id="gsidiv"></div>
-	</div>
-	<div class="row">
 		Ladestatus Änderungen:
 	</div>
 	<div style="white-space: pre-line;" id="ladestatuslogdiv"></div>
@@ -1693,7 +1690,6 @@ echo '<img src="./img/loader.gif" alt="openWB loading...">'; } ?>
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
 	<script src="js/main.js"></script>
-	<script src="gsigraph.js"></script>
 
 	<script>
 		$(function() {

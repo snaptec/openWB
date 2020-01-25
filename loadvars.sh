@@ -282,6 +282,10 @@ fi
 
 # Werte für die Berechnung ermitteln
 lademodus=$(</var/www/html/openWB/ramdisk/lademodus)
+if [ -z "$lademodus" ] ; then
+	mosquitto_pub -r -t "openWB/set/ChargeMode" -m "$bootmodus"
+	lademodus=$bootmodus
+fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
