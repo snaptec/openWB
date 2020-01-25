@@ -190,8 +190,8 @@ ECHOCLOCKPICKER;
 												<div class="form-row align-items-center">\n
 ECHODAYROWHEAD;
 
-				echoCheckboxDiv('lockBoxLp', 'sperren');
-				echoClockpickerDiv('lockTimeLp');
+				echoCheckboxDiv("lockBoxLp", "sperren");
+				echoClockpickerDiv("lockTimeLp");
 
 				echo <<<ECHODAYROWMIDDLE
 												</div>
@@ -200,8 +200,8 @@ ECHODAYROWHEAD;
 												<div class="form-row align-items-center">\n
 ECHODAYROWMIDDLE;
 
-				echoCheckboxDiv('unlockBoxLp', 'entsperren');
-				echoClockpickerDiv('unlockTimeLp');
+				echoCheckboxDiv("unlockBoxLp", "entsperren");
+				echoClockpickerDiv("unlockTimeLp");
 
 				echo <<<ECHODAYROWTAIL
 												</div>
@@ -218,7 +218,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.html'; ?>
+		<?php include "/var/www/html/openWB/web/settings/navbar.html"; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
@@ -306,7 +306,7 @@ ECHOFORMGROUPTAIL;
 			function addClockpicker(clockpickerId) {
 				// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
 				// create clockpicker id of the second clockpicker for the lp and day
-				if ( clockpickerId.includes('unlock') ) {
+				if ( clockpickerId.includes("unlock") ) {
 					var secondClockpickerId = clockpickerId.replace("unlock", "lock");
 				} else {
 					var secondClockpickerId = clockpickerId.replace("lock", "unlock");
@@ -316,26 +316,31 @@ ECHOFORMGROUPTAIL;
 					var timeParts = $(secondClockpickerId).val().split(":");
 					var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
 					newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
-					timeStr = (newTime.getHours() < 10 ? '0' : '') + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes(); // convert with leading zeros
+					timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
 					$(clockpickerId).val(timeStr);  // set value to calculated new time
 				}
+				console.log("added Clockpicker, finally set Clockpicker ID="+clockpickerId+" to value :"+$(clockpickerId).val());
+
 				$(clockpickerId).clockpicker({
-					placement: 'bottom',  // clock popover placement
-					align: 'left',  // popover arrow align
-					donetext: '',  // done button text
+					placement: "bottom",  // clock popover placement
+					align: "left",  // popover arrow align
+					donetext: "",  // done button text
 					autoclose: true,  // auto close when minute is selected
 					vibrate: true,  // vibrate the device when dragging clock hand
-					default: "00:00"
+					default: "00:00",
+					afterHide: function() {
+                            console.log("after hide");
+                        }
 				});
 			}  // end add clockpicker
 
 			function removeClockpicker(targetId) {
 				// remove a clockpicker in input targetId (eg #unlockTimeLp1_7)
 				// and set input value to --
-				if ( $(targetId).val() != '' ) {
+				if ( $(targetId).val() != "" ) {
 					// if clockpicker exists
-					$(targetId).clockpicker('remove');
-					$(targetId).val('');
+					$(targetId).clockpicker("remove");
+					$(targetId).val("");
 				}
 			}
 
@@ -343,46 +348,65 @@ ECHOFORMGROUPTAIL;
 
 				$(function() {
 
-	 			    $('.lockUnlockCheckbox').change(function() {
+	 			    $(".lockUnlockCheckbox").change(function() {
 						// if a checkbox for enabling lock or unlock time is checked/unchecked
 						// add/remove respective clockpicker and empty input field if removed
-	 					var boxIsChecked = $(this).prop('checked') == true;
-	 					var clockPickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+	 					var boxIsChecked = $(this).prop("checked") == true;
+	 					var clockpickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
 						if ( boxIsChecked ) {
 	 						// activate clockpicker
-							if ( $(clockPickerId).val() == '' ) {
+							if ( $(clockpickerId).val() == "" ) {
 								// replace empty field (placeholder = --) with initial time
-								$(clockPickerId).val('00:00');
+								$(clockpickerId).val("00:00");
+								console.log("Change Checkbox, set Clockpicker ID="+clockpickerId+" to value :"+$(clockpickerId).val());
+
 							}
-	 						addClockpicker(clockPickerId);
+	 						addClockpicker(clockpickerId);
 	 					} else {
 	 						// remove clockpicker
-	 						removeClockpicker(clockPickerId);
+	 						removeClockpicker(clockpickerId);
 	 					}
 	 			    });
 
-					$('input:text').click(function() {
+					$("input:text").click(function() {
 						// if clockpicker input is clickedstore the old clockpicker time of clicked clockpicker in global var
 						//  before changing it so it can be reset if lock/unlock time is accidently chosen to be identical
 						window.oldClockpickerTime = $(this).val();
+						console.log(">>"+window.oldClockpickerTime+"<<");
 					});
 
-					$('input:text').change(function() {
-						// if clockpicker input is changed add/remove respective clockpicker and empty input field if removed
-						console.log(this.id);
+					$("input:text").change(function() {
+						// if clockpicker input is equal to second time of the days, reset to old value
+						// create clockpicker id of the second clockpicker for the lp and day
+						var clockpickerId = "#"+this.id;
+						console.log("original: "+clockpickerId+" = "+$(clockpickerId).val());
+						if ( clockpickerId.includes("unlock") ) {
+							var secondClockpickerId = clockpickerId.replace("unlock", "lock");
+						} else {
+							var secondClockpickerId = clockpickerId.replace("lock", "unlock");
+						}
+
+						console.log("ndere: "+secondClockpickerId+" = "+$(secondClockpickerId).val());
+
+						if ( window.oldClockpickerTime != "" && $(clockpickerId).val() == $(secondClockpickerId).val() ) {
+							// both clockpickers with same times for the day
+							$(clockpickerId).val(window.oldClockpickerTime);  // so reset to last value
+							$("#myModal").modal('show');
+							//alert("Beide Schaltzeiten müssen sich unterscheiden! Der alte Wert wurde wiederhergestellt.");
+						}
 
 					});
 
-					$('.resetForm').click(function() {
+					$(".resetForm").click(function() {
 						// reset all inputs for lp
 						var chargePoint = this.id.match(/\d+/g)[0];  // extract lp-# from button id
 						for (day=1; day<=7; day++) {
 							// reset all days
-							$('#lockBoxLp'+chargePoint+'_'+day).prop('checked', false);
-							removeClockpicker('#lockTimeLp'+chargePoint+'_'+day);
-							$('#unlockBoxLp'+chargePoint+'_'+day).prop('checked', false);
-							removeClockpicker('#unlockTimeLp'+chargePoint+'_'+day);
-							$('#waitUntilFinishedBoxLp'+chargePoint).prop('checked', false);
+							$("#lockBoxLp"+chargePoint+"_"+day).prop("checked", false);
+							removeClockpicker("#lockTimeLp"+chargePoint+"_"+day);
+							$("#unlockBoxLp"+chargePoint+"_"+day).prop("checked", false);
+							removeClockpicker("#unlockTimeLp"+chargePoint+"_"+day);
+							$("#waitUntilFinishedBoxLp"+chargePoint).prop("checked", false);
 						}
 					});
 
@@ -390,13 +414,13 @@ ECHOFORMGROUPTAIL;
 
 				// initially add all clockpickers to visible form-groups
 			 	for (chargePoint=1; chargePoint<=8; chargePoint++) {
-					if ( $('#lp'+chargePoint).is(':visible') ) {
+					if ( $("#lp"+chargePoint).is(":visible") ) {
 						for (day=1; day<=7; day++) {
-							if ( $('#lockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
-								addClockpicker('#lockTimeLp'+chargePoint+'_'+day)
+							if ( $("#lockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
+								addClockpicker("#lockTimeLp"+chargePoint+"_"+day)
 							}
-							if ( $('#unlockBoxLp'+chargePoint+'_'+day).prop('checked') == true ) {
-								addClockpicker('#unlockTimeLp'+chargePoint+'_'+day)
+							if ( $("#unlockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
+								addClockpicker("#unlockTimeLp"+chargePoint+"_"+day)
 							}
 						}
 					}
@@ -407,5 +431,31 @@ ECHOFORMGROUPTAIL;
 
 	    </script>
 
+		<!-- modal alert window -->
+		<div class="modal" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!-- modal header -->
+					<div class="modal-header">
+						<h4 class="modal-title">Warnung</h4>
+					</div>
+
+					<!-- modal body -->
+					<div class="modal-body">
+						Beide Schaltzeiten müssen sich unterscheiden!<br>
+						Der alte Wert wurde wiederhergestellt.
+					</div>
+
+					<!-- modal footer -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
 	</body>
+
 </html>
