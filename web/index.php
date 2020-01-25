@@ -34,6 +34,7 @@
 			if ( !(isset($_COOKIE['openWBTheme'] ) === true)) {
 				setcookie('openWBTheme', 'standard', time()+(60*60*24*365*2));
 				$_COOKIE['openWBTheme'] = 'standard';
+				$themeCookie = 'standard';
 			} else {
 				$themeCookie = $_COOKIE['openWBTheme'];
 				setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
@@ -43,6 +44,7 @@
 			if ( is_dir('themes/'.$_COOKIE['openWBTheme']) == 0 ) {
 				setcookie('openWBTheme', 'standard', time()+(60*60*24*365*2));
 				$_COOKIE['openWBTheme'] = 'standard';
+				$themeCookie = 'standard';
 			}
 			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
