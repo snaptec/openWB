@@ -161,19 +161,10 @@ if (( verbraucher1_aktiv == "1")); then
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
 		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
 		verbraucher1_watt=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Power')
-		if [[ "$verbraucher1_watt" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
 			echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
-		fi
 		verbraucher1_wh=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Total')
 		verbraucher1_totalwh=$(echo "scale=0;(($verbraucher1_wh * 1000) + $verbraucher1_tempwh)  / 1" | bc)
-		if [ ! -z "$verbraucher1_totalwh" ]; then
-			if [[ "$verbraucher1_totalwh" =~ "^[-+]?[0-9]+\.?[0-9]*$" ]]; then
-				echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
-			fi
-		else
-			verbraucher1_whf=$(echo "scale=0;($verbraucher1_wh * 1000)  / 1" | bc)
-			echo $verbraucher1_whf > /var/www/html/openWB/ramdisk/verbraucher1_wh
-		fi
+		echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 	fi
 else
 	verbraucher1_watt=0
