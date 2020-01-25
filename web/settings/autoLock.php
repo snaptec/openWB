@@ -379,8 +379,7 @@ ECHOFORMGROUPTAIL;
 						if ( window.oldClockpickerTime != "" && $(clockpickerId).val() == $(secondClockpickerId).val() ) {
 							// both clockpickers with same times for the day
 							$(clockpickerId).val(window.oldClockpickerTime);  // so reset to last value
-							$("#myModal").modal('show');
-							//alert("Beide Schaltzeiten müssen sich unterscheiden! Der alte Wert wurde wiederhergestellt.");
+							$("#alertModal").modal('show');
 						}
 					});
 
@@ -419,7 +418,7 @@ ECHOFORMGROUPTAIL;
 	    </script>
 
 		<!-- modal alert window -->
-		<div class="modal" id="myModal">
+		<div class="modal" id="alertModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 
