@@ -52,11 +52,8 @@ dayOfWeek=$(date +%u)  # 1 = Montag
 now=$(date +'%Y-%m-%d %H:%M:%S');  # timestamp just for logging
 second=$(date +%S)
 
-echo "${now} processing regel.sh"
-
 if [ "$second" -lt "20" ]; then
 	# once a minute at new minute check if (un)lock-time is up
-    echo "${now} processing if-then once a minute"
 
 	for chargePoint in {1..8}
 	do
@@ -78,7 +75,6 @@ if [ "$second" -lt "20" ]; then
     	    lpenabled=$(<$lpFilename)  # read ramdisk value for lp enabled
     	    now=$(date +'%Y-%m-%d %H:%M:%S');  # timestamp just for logging
     	    if [ "$lpenabled" = "1" ]; then
-    			echo "${now} LP${chargePoint} is enabled"
     			# if the charge point is enabled, check for auto disabling
     			if [ $timeOfDay = "$lockTime" ]; then
     				echo "${now} autolock time for LP${chargePoint} is up"
