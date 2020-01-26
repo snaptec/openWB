@@ -2295,7 +2295,21 @@ else
 	python3 /var/www/html/openWB/runs/mqttsub.py &
 fi
 
-
+crontab -l -u pi > /var/www/html/openWB/ramdisk/tmpcrontab
+if grep -Fq "lade.log" /var/www/html/openWB/ramdisk/tmpcrontab
+then
+	echo "crontab modified"
+	sed -i '/lade.log/d' /var/www/html/openWB/ramdisk/tmpcrontab
+	echo "* * * * * /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1" >> /var/www/html/openWB/ramdisk/tmpcrontab
+	cat /var/www/html/openWB/ramdisk/tmpcrontab | crontab -u pi -
+fi
+sudo crontab -l > /var/www/html/openWB/ramdisk/tmprootcrontab
+if grep -Fq "atreboot.sh" /var/www/html/openWB/ramdisk/tmprootcrontab
+then
+echo "executed"
+sed -i '/atreboot.sh/d' /var/www/html/openWB/ramdisk/tmprootcrontab
+cat /var/www/html/openWB/ramdisk/tmprootcrontab | sudo crontab -
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
