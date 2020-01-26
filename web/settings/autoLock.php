@@ -275,7 +275,7 @@ ECHOFORMGROUPHEAD;
 
 						echo <<<ECHOFORMGROUPTAIL
 											<div class="row justify-content-center mt-2">
-												<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">alles zurücksetzen</button>
+												<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
 											</div>
 										</div>  <!-- end form-group charge point {$lp} -->
 
@@ -316,7 +316,16 @@ ECHOFORMGROUPTAIL;
 					var timeParts = $(secondClockpickerId).val().split(":");
 					var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
 					newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
-					timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
+					var timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
+					$(clockpickerId).val(timeStr);  // set value to calculated new time
+				} else {
+					// get current time rounded to next 5 minute
+					var step = 1000 * 60 * 5;  // 5 minutes in milliseconds
+					var now = new Date();  // get date/time
+					now.setSeconds(0);  // remove seconds
+					now.setMilliseconds(0);  // and milliseconds
+					var roundedDate = new Date(Math.ceil(now / step) * step);  // round up to next full 5 minutes
+					var timeStr = (roundedDate.getHours() < 10 ? "0" : "") + roundedDate.getHours() + ":" + (roundedDate.getMinutes() < 10 ? "0" : "") + roundedDate.getMinutes(); // convert with leading zeros
 					$(clockpickerId).val(timeStr);  // set value to calculated new time
 				}
 				$(clockpickerId).clockpicker({
@@ -379,8 +388,7 @@ ECHOFORMGROUPTAIL;
 						if ( window.oldClockpickerTime != "" && $(clockpickerId).val() == $(secondClockpickerId).val() ) {
 							// both clockpickers with same times for the day
 							$(clockpickerId).val(window.oldClockpickerTime);  // so reset to last value
-							$("#myModal").modal('show');
-							//alert("Beide Schaltzeiten müssen sich unterscheiden! Der alte Wert wurde wiederhergestellt.");
+							$("#alertModal").modal('show');
 						}
 					});
 
@@ -419,24 +427,24 @@ ECHOFORMGROUPTAIL;
 	    </script>
 
 		<!-- modal alert window -->
-		<div class="modal" id="myModal">
+		<div class="modal fade" id="alertModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 
 					<!-- modal header -->
-					<div class="modal-header">
-						<h4 class="modal-title">Warnung</h4>
+					<div class="modal-header btn-blue">
+						<h4 class="modal-title">Info</h4>
 					</div>
 
 					<!-- modal body -->
-					<div class="modal-body">
-						Beide Schaltzeiten müssen sich unterscheiden!<br>
-						Der alte Wert wurde wiederhergestellt.
+					<div class="modal-body text-center">
+						Beide Schaltzeiten müssen sich unterscheiden,<br>
+						ursprüngliche Zeit wurde wiederhergestellt.
 					</div>
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-lg btn-green" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>
