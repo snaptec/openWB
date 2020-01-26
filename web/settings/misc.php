@@ -38,7 +38,7 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.html';
+			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -1422,17 +1422,6 @@
 					<br><br>
 				</div>
 
-				<div class="row justify-content-center py-1">
-					<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-red">REBOOT</button>
-				</div>
-
-				<div class="row justify-content-center py-1">
-					<div class="col text-center">
-						Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen/Features sind dann ggf. nicht mehr verfügbar.<br><br>
-						<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
-					</div>
-				</div>
-
 				<hr>
 				<br>
 				<div class="row">
@@ -1468,7 +1457,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Misc</small>
+			  <small>Sie befinden sich hier: Verschiedenes</small>
 		  </div>
 		</footer>
 

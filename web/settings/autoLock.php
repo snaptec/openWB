@@ -218,7 +218,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.html"; ?>
+		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
