@@ -427,24 +427,24 @@ ECHOFORMGROUPTAIL;
 	    </script>
 
 		<!-- modal alert window -->
-		<div class="modal" id="alertModal">
+		<div class="modal fade" id="alertModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 
 					<!-- modal header -->
-					<div class="modal-header">
-						<h4 class="modal-title">Warnung</h4>
+					<div class="modal-header btn-blue">
+						<h4 class="modal-title">Info</h4>
 					</div>
 
 					<!-- modal body -->
-					<div class="modal-body">
-						Beide Schaltzeiten müssen sich unterscheiden!<br>
-						Der alte Wert wurde wiederhergestellt.
+					<div class="modal-body text-center">
+						Beide Schaltzeiten müssen sich unterscheiden,<br>
+						ursprüngliche Zeit wurde wiederhergestellt.
 					</div>
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-lg btn-green" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>
