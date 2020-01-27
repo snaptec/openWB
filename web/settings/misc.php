@@ -559,10 +559,6 @@
 			$pushoveruserold = str_replace( "'", "", $pushoveruserold);
 			$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
-			$vstable = file_get_contents('/var/www/html/openWB/ramdisk/vstable');
-			$vbeta = file_get_contents('/var/www/html/openWB/ramdisk/vbeta');
-			$vnightly = file_get_contents('/var/www/html/openWB/ramdisk/vnightly');
-			$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
