@@ -77,7 +77,7 @@ while True:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
     # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
     # cos phi is always positive, no matter what quadrant
-    if ( emparts['serial'] == smaserials ):
+    if ( str(emparts['serial']) == smaserials ):
         ikwh=int(emparts['pconsumecounter']*1000)
         ekwh=int(emparts['psupplycounter']*1000)
         bezuga1=emparts['i1']
