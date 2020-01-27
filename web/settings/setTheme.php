@@ -43,7 +43,7 @@
 
 	<body>
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.html';?>
+		<?php include '/var/www/html/openWB/web/settings/navbar.php';?>
 		<?php
 			// support function for dynmic built of carousel content
 			function dir_list($rootDir){
