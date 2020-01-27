@@ -218,7 +218,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.html"; ?>
+		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
@@ -286,7 +286,7 @@ ECHOFORMGROUPTAIL;
 				?>
 
 					<div class="row justify-content-center">
-						<button type="submit" class="btn btn-lg btn-green">Einstellungen übernehmen</button>
+						<button type="submit" class="btn btn-green">Einstellungen übernehmen</button>
 					</div>
 
 				</form>  <!-- end form -->
@@ -303,55 +303,55 @@ ECHOFORMGROUPTAIL;
 	    </footer>
 
 		<script type="text/javascript">
-			function addClockpicker(clockpickerId) {
-				// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
-				// create clockpicker id of the second clockpicker for the lp and day
-				if ( clockpickerId.includes("unlock") ) {
-					var secondClockpickerId = clockpickerId.replace("unlock", "lock");
-				} else {
-					var secondClockpickerId = clockpickerId.replace("lock", "unlock");
-				}
-				if ( $(secondClockpickerId).val() != "" ) {
-					// other clockpicker is present, make sure both times for the day differ
-					var timeParts = $(secondClockpickerId).val().split(":");
-					var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
-					newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
-					var timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
-					$(clockpickerId).val(timeStr);  // set value to calculated new time
-				} else {
-					// get current time rounded to next 5 minute
-					var step = 1000 * 60 * 5;  // 5 minutes in milliseconds
-					var now = new Date();  // get date/time
-					now.setSeconds(0);  // remove seconds
-					now.setMilliseconds(0);  // and milliseconds
-					var roundedDate = new Date(Math.ceil(now / step) * step);  // round up to next full 5 minutes
-					var timeStr = (roundedDate.getHours() < 10 ? "0" : "") + roundedDate.getHours() + ":" + (roundedDate.getMinutes() < 10 ? "0" : "") + roundedDate.getMinutes(); // convert with leading zeros
-					$(clockpickerId).val(timeStr);  // set value to calculated new time
-				}
-				$(clockpickerId).clockpicker({
-					placement: "bottom",  // clock popover placement
-					align: "left",  // popover arrow align
-					donetext: "",  // done button text
-					autoclose: true,  // auto close when minute is selected
-					vibrate: true,  // vibrate the device when dragging clock hand
-					default: "00:00",
-				});
-			}  // end add clockpicker
-
-			function removeClockpicker(targetId) {
-				// remove a clockpicker in input targetId (eg #unlockTimeLp1_7)
-				// and set input value to --
-				if ( $(targetId).val() != "" ) {
-					// if clockpicker exists
-					$(targetId).clockpicker("remove");
-					$(targetId).val("");
-				}
-			}
 
 			$(document).ready(function(){
 
-				$(function() {
+				function addClockpicker(clockpickerId) {
+					// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
+					// create clockpicker id of the second clockpicker for the lp and day
+					if ( clockpickerId.includes("unlock") ) {
+						var secondClockpickerId = clockpickerId.replace("unlock", "lock");
+					} else {
+						var secondClockpickerId = clockpickerId.replace("lock", "unlock");
+					}
+					if ( $(secondClockpickerId).val() != "" ) {
+						// other clockpicker is present, make sure both times for the day differ
+						var timeParts = $(secondClockpickerId).val().split(":");
+						var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
+						newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
+						var timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
+						$(clockpickerId).val(timeStr);  // set value to calculated new time
+					} else {
+						// get current time rounded to next 5 minute
+						var step = 1000 * 60 * 5;  // 5 minutes in milliseconds
+						var now = new Date();  // get date/time
+						now.setSeconds(0);  // remove seconds
+						now.setMilliseconds(0);  // and milliseconds
+						var roundedDate = new Date(Math.ceil(now / step) * step);  // round up to next full 5 minutes
+						var timeStr = (roundedDate.getHours() < 10 ? "0" : "") + roundedDate.getHours() + ":" + (roundedDate.getMinutes() < 10 ? "0" : "") + roundedDate.getMinutes(); // convert with leading zeros
+						$(clockpickerId).val(timeStr);  // set value to calculated new time
+					}
+					$(clockpickerId).clockpicker({
+						placement: "bottom",  // clock popover placement
+						align: "left",  // popover arrow align
+						donetext: "",  // done button text
+						autoclose: true,  // auto close when minute is selected
+						vibrate: true,  // vibrate the device when dragging clock hand
+						default: "00:00",
+					});
+				}  // end add clockpicker
 
+				function removeClockpicker(targetId) {
+					// remove a clockpicker in input targetId (eg #unlockTimeLp1_7)
+					// and set input value to --
+					if ( $(targetId).val() != "" ) {
+						// if clockpicker exists
+						$(targetId).clockpicker("remove");
+						$(targetId).val("");
+					}
+				}
+
+				$(function() {
 	 			    $(".lockUnlockCheckbox").change(function() {
 						// if a checkbox for enabling lock or unlock time is checked/unchecked
 						// add/remove respective clockpicker and empty input field if removed
@@ -405,7 +405,7 @@ ECHOFORMGROUPTAIL;
 						}
 					});
 
-	 			})
+	 			});  // end $(function()...
 
 				// initially add all clockpickers to visible form-groups
 			 	for (chargePoint=1; chargePoint<=8; chargePoint++) {
@@ -444,7 +444,7 @@ ECHOFORMGROUPTAIL;
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-lg btn-green" data-dismiss="modal">OK</button>
+						<button type="button" class="btn btn-green" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>
