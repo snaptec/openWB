@@ -1,7 +1,7 @@
 <?php
 
-    // receives chosen debug mode from settings page via POST-request,
-	// writes value to config file and returns to theme
+    // receives chosen releasetrain from update-page via POST-request,
+	// writes value to config file and start update
 	// author: M. Ortenstein
 
 	$myConfigFile = '/var/www/html/openWB/openwb.conf';
@@ -28,7 +28,7 @@
 		// now values can be accessed by $settingsArray[$key] = $value;
 
         // update chosen setting in array
-        $settingsArray["debug"] = $_POST["debugmodeRadioBtn"];
+        $settingsArray["releasetrain"] = $_POST["releasetrainRadioBtn"];
 
 		// write config to file
   		$fp = fopen($myConfigFile, "w");
@@ -42,9 +42,10 @@
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
   		echo "<script type='text/javascript'>alert('$msg');</script>";
+        // return to theme on error
+        echo "<script>window.location.href='../index.php';</script>";
     }
-
-    // return to theme
-    echo "<script>window.location.href='../index.php';</script>";
+    // if successfully saved to config, start update
+    echo "<script>window.location.href='./update.php';</script>";
 
 ?>

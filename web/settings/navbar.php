@@ -43,10 +43,12 @@
                         System
                     </a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
                         <a class="dropdown-item" href="./settings/update.php">Update</a>
                         <a class="dropdown-item" data-toggle="modal" data-target="#downgradeConfirmationModal">Downgrade</a>
                         <a class="dropdown-item" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
-                        <!-- href="./settings/reboot.php">Reboot</a> -->
+                        <a class="dropdown-item" href="./settings/debugging.php">Debugging</a>
                     </div>
                 </li>
 
@@ -55,9 +57,66 @@
     </nav>
 </header>
 
+<!-- modal backup-confirmation window -->
+<div class="modal fade" id="backupConfirmationModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <!-- modal header -->
+            <div class="modal-header btn-blue">
+                <h4 class="modal-title text-light">Info</h4>
+            </div>
+
+            <!-- modal body -->
+            <div class="modal-body text-center">
+                Das Erstellen des Backups kann einige Zeit in Anspruch nehmen.<br>
+                Fortfahren?
+            </div>
+
+            <!-- modal footer -->
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/bckredirect.html'">Backup</button>
+                <button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- modal restore-confirmation window -->
+<div class="modal fade" id="restoreConfirmationModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <!-- modal header -->
+            <div class="modal-header btn-red">
+                <h4 class="modal-title text-light">Achtung</h4>
+            </div>
+
+            <!-- modal body -->
+            <div class="modal-body text-center">
+                        Soll wirklich ein gespeichertes Backup wiederhergestellt werden?
+                        <br>
+                        Die Wiederherstellung kann einige Zeit in Anspruch nehmen. Aktuelle Einstellungen werden mit dem Backup überschrieben!<br>
+                        <br>
+                        <b>
+                            <span class="text-danger">Fahrzeuge sind vor der Wiederherstellung abzustecken!</span>
+                        </b>
+            </div>
+
+            <!-- modal footer -->
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/upload.html'">Wiederherstellen</button>
+                <button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- modal reboot-confirmation window -->
-<div class="modal fade" id="rebootConfirmationModal">
-    <div class="modal-dialog">
+<div class="modal fade" id="rebootConfirmationModal" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <!-- modal header -->
@@ -72,17 +131,17 @@
 
             <!-- modal footer -->
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-lg btn-green" data-dismiss="modal" onclick="window.location.href='./tools/reboot.html'">Reboot</button>
-                <button type="button" class="btn btn-lg btn-red" data-dismiss="modal">Abbruch</button>
+                <button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/reboot.html'">Reboot</button>
+                <button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
             </div>
 
         </div>
     </div>
 </div>
 
-<!-- modal reboot-confirmation window -->
-<div class="modal fade" id="downgradeConfirmationModal">
-    <div class="modal-dialog">
+<!-- modal downgrade-confirmation window -->
+<div class="modal fade" id="downgradeConfirmationModal" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <!-- modal header -->
@@ -109,8 +168,8 @@
 
             <!-- modal footer -->
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-lg btn-green" data-dismiss="modal" onclick="window.location.href='./tools/updateredirect15.html'">Downgrade</button>
-                <button type="button" class="btn btn-lg btn-red" data-dismiss="modal">Abbruch</button>
+                <button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/updateredirect15.html'">Downgrade</button>
+                <button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
             </div>
 
         </div>
