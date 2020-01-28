@@ -105,6 +105,8 @@ echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp5
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp6
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp7
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp8
+echo 1 > /var/www/html/openWB/ramdisk/mqttlademkwhs1
+echo 1 > /var/www/html/openWB/ramdisk/mqttlademkwhs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastladestatus
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
