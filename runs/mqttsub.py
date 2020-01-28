@@ -419,7 +419,46 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
             f.write(str(pvwatt))
             f.close()
-
+    if (msg.topic == "openWB/set/lp/1/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/2/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/3/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp3', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/4/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp4', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/5/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp5', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/6/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp6', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/7/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp7', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/8/AutolockStatus"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
 
 
