@@ -11,11 +11,11 @@ chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 cp modules/soc_i3/auth.json /tmp/auth.json
 cp modules/soc_i3s1/auth.json /tmp/auth.json.1
 cp openwb.conf /tmp/openwb.conf
-mkdir /tmp/data
-mkdir /tmp/data/daily
-for i in /var/www/html/openWB/web/logging/data/daily/*; do cp "$i" /tmp/data/daily/; done
-mkdir /tmp/data/monthly
-for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
+#mkdir /tmp/data
+#mkdir /tmp/data/daily
+#for i in /var/www/html/openWB/web/logging/data/daily/*; do cp "$i" /tmp/data/daily/; done
+#mkdir /tmp/data/monthly
+#for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
 sudo git fetch origin
 sudo git reset --hard origin/$releasetrain
 cd /var/www/html/
@@ -30,8 +30,8 @@ sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
-for i in /tmp/data/monthly/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
-for i in /tmp/data/daily/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
+#for i in /tmp/data/monthly/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
+#for i in /tmp/data/daily/*; do cp "$i" /var/www/html/openWB/web/logging/data/monthly/; done
 sleep 2
 if ! grep -Fq "wr_http_w_url=" /var/www/html/openWB/openwb.conf
 then
