@@ -28,14 +28,6 @@ echo 1 > /var/www/html/openWB/ramdisk/lp5enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp6enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp1
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp2
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp3
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp4
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp5
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp6
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp7
-echo 0 > /var/www/html/openWB/ramdisk/waitautolocklp8
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
