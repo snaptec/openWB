@@ -1123,6 +1123,7 @@ function graphoptionclick() {
 }
 
 function lp1enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp1enabled == 0 ) {
 		publish("1","openWB/set/lp1/ChargePointEnabled");
 	} else {
@@ -1131,6 +1132,7 @@ function lp1enabledclick() {
 }
 
 function lp2enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp2enabled == 0 ) {
 		publish("1","openWB/set/lp2/ChargePointEnabled");
 	} else {
@@ -1139,6 +1141,7 @@ function lp2enabledclick() {
 }
 
 function lp3enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp3enabled == 0 ) {
 		publish("1","openWB/set/lp3/ChargePointEnabled");
 	} else {
@@ -1147,6 +1150,7 @@ function lp3enabledclick() {
 }
 
 function lp4enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp4enabled == 0 ) {
 		publish("1","openWB/set/lp4/ChargePointEnabled");
 	} else {
@@ -1155,6 +1159,7 @@ function lp4enabledclick() {
 }
 
 function lp5enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp5enabled == 0 ) {
 		publish("1","openWB/set/lp5/ChargePointEnabled");
 	} else {
@@ -1163,6 +1168,7 @@ function lp5enabledclick() {
 }
 
 function lp6enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp6enabled == 0 ) {
 		publish("1","openWB/set/lp6/ChargePointEnabled");
 	} else {
@@ -1171,6 +1177,7 @@ function lp6enabledclick() {
 }
 
 function lp7enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp7enabled == 0 ) {
 		publish("1","openWB/set/lp7/ChargePointEnabled");
 	} else {
@@ -1179,6 +1186,7 @@ function lp7enabledclick() {
 }
 
 function lp8enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp8enabled == 0 ) {
 		publish("1","openWB/set/lp8/ChargePointEnabled");
 	} else {
