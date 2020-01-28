@@ -149,7 +149,22 @@ mqttvar["lp/5/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp5
 mqttvar["lp/6/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp6
 mqttvar["lp/7/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp7
 mqttvar["lp/8/kWhChargedSincePlugged"]=pluggedladungbishergeladenlp8
-
+mqttvar["lp/1/WaitingForAutolock"]=waitautolocklp1
+mqttvar["lp/2/WaitingForAutolock"]=waitautolocklp2
+mqttvar["lp/3/WaitingForAutolock"]=waitautolocklp3
+mqttvar["lp/4/WaitingForAutolock"]=waitautolocklp4
+mqttvar["lp/5/WaitingForAutolock"]=waitautolocklp5
+mqttvar["lp/6/WaitingForAutolock"]=waitautolocklp6
+mqttvar["lp/7/WaitingForAutolock"]=waitautolocklp7
+mqttvar["lp/8/WaitingForAutolock"]=waitautolocklp8
+mqttvar["lp/1/AutolockConfigured"]=autolockconfiguredlp1
+mqttvar["lp/2/AutolockConfigured"]=autolockconfiguredlp2
+mqttvar["lp/3/AutolockConfigured"]=autolockconfiguredlp3
+mqttvar["lp/4/AutolockConfigured"]=autolockconfiguredlp4
+mqttvar["lp/5/AutolockConfigured"]=autolockconfiguredlp5
+mqttvar["lp/6/AutolockConfigured"]=autolockconfiguredlp6
+mqttvar["lp/7/AutolockConfigured"]=autolockconfiguredlp7
+mqttvar["lp/8/AutolockConfigured"]=autolockconfiguredlp8
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
