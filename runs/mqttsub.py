@@ -345,6 +345,82 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/HouseBattery/W"):
+        if (float(msg.payload) >= -30000 and float(msg.payload) <= 30000):
+            f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/HouseBattery/WhImported"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
+            f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/HouseBattery/WhExported"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
+            f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/HouseBattery/%Soc"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
+            f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/W"):
+        if (float(msg.payload) >= -100000 and float(msg.payload) <= 100000):
+            f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/APhase1"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/APhase2"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/APhase3"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/WhImported"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/WhExported"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/1/%Soc"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
+            f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/2/%Soc"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
+            f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/pv/WhCounter"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/pv/W"):
+        if (float(msg.payload) >= -10000000 and float(msg.payload) <= 100000000):
+            if (float(msg.payload) > 1):
+                pvwatt=int(msg.payload.decode("utf-8")) * -1
+            else:
+                pvwatt=int(msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
+            f.write(str(pvwatt))
+            f.close()
+
+
 
 
     file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
