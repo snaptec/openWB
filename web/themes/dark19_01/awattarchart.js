@@ -6,7 +6,7 @@ function loadawattargraph() {
 				label: 'Awattar Preis Cent/kWh',
 				borderColor: "rgba(255, 155, 155, 0.9)",
 				backgroundColor: "rgba(0, 0, 255, 0.7)",
-				borderWidth: 1,
+				borderWidth: 2,
 				fill: false,
 				data: graphawattarprice,
 				yAxisID: 'y-axis-1',
@@ -23,7 +23,7 @@ function loadawattargraph() {
 				},
 				elements: {
 					point: {
-						radius: 1
+						radius: 3
 					}
 				},
 				responsive: true,
@@ -41,6 +41,11 @@ function loadawattargraph() {
 				scales: {
 					xAxes: [
 						{
+						gridLines: {
+								// light grey, opacy = 100% (visible)
+								color: "rgba(204, 204, 204, 1)",
+							},
+
 						ticks: {
 								// middle grey, opacy = 100% (visible)
 								fontColor: "rgba(153, 153, 153, 1)"
