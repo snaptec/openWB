@@ -842,8 +842,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var element = "#lp"+index+"AutolockConfiguredSpan";  // element to manipulate
-		console.log('mqttmsg lp: '+index+'   load='+mqttpayload);
-
 		switch ( mqttpayload ) {
 			case "0":
 				// remove animation from span and set standard colored key icon
