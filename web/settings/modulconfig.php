@@ -836,8 +836,11 @@
 				if(strpos($line, "lgessv1ip=") !== false) {
 					list(, $lgessv1ipold) = explode("=", $line);
 				}
-					if(strpos($line, "lgessv1pass=") !== false) {
+				if(strpos($line, "lgessv1pass=") !== false) {
 					list(, $lgessv1passold) = explode("=", $line);
+				}
+				if(strpos($line, "ess_api_ver=") !== false) {
+					list(, $ess_api_ver_old) = explode("=", $line);
 				}
 				if(strpos($line, "lllaniplp2=") !== false) {
 					list(, $lllaniplp2old) = explode("=", $line);
@@ -4449,6 +4452,14 @@
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
+						</div>
+						<div class="row" style="background-color:#fcbe1e">
+							<b>Bitte die API-Version wählen:</b><br />
+							<select type="text" name="ess_api_ver" id="ess_api_ver">
+								<option <?php if($ess_api_ver_old == "10.2019\n") echo selected ?> value="10.2019">API-Version Oktober 2019</option>
+								<option <?php if($ess_api_ver_old == "01.2020\n") echo selected ?> value="01.2020">API-Version Januar 2020</option>
+							</select><br />
+							Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version<br />
 						</div>
 					</div>
 					<div id="divspeichernone">
