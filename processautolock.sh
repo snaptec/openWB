@@ -96,8 +96,6 @@ function checkDisableLp {
         mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
         mosquitto_pub -r -t $mqttTopic -m 0
         #echo "${now} autolock charge point #${chargePoint}"
-    else
-        #echo "${now} no autolock charge point #${chargePoint}, still charging: ${!powerVarName} W"
     fi
 }
 
