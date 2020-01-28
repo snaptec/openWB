@@ -14,6 +14,14 @@
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #
+## Flag für unterschiedliche API-Versionen der Firmware
+#
+if [ "$ess_api_ver" == "10.2019" ]; then
+	arr_pos="13"
+else 
+	arr_pos="0"
+fi
+#
 ## Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
 #  z.b. wenn das System neu gestartet wurde, dann wird ein Dummykey an-
 #  gelegt
@@ -65,8 +73,8 @@ fi
 jahr=$(date +%Y)
 year_of_stat='"'year'"':'"'$jahr'"'
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/load/year')
-ikwh=$(echo $json | jq '.loginfo[13].total_purchase' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
-loadkwh=$(echo $json | jq '.loginfo[13].total_consumption' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
+ikwh=$(echo $json | jq '.loginfo['$arr_pos'].total_purchase' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')i
+loadkwh=$(echo $json | jq '.loginfo['$arr_pos'].total_consumption' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 #
 ## Daten in Ramdisk schreiben
 #

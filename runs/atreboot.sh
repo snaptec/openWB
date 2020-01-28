@@ -2227,6 +2227,10 @@ if ! grep -Fq "lgessv1pass=" /var/www/html/openWB/openwb.conf
 then
 	echo "lgessv1pass=regnum_as_default_password" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "ess_api_ver=" /var/www/html/openWB/openwb.conf
+then
+	echo "ess_api_ver=01.2020" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mpmlp4ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "mpmlp4ip=192.168.193.54" >> /var/www/html/openWB/openwb.conf
