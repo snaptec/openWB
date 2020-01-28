@@ -15,6 +15,6 @@ foreach($lines as $line) {
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
-header("Location: ./web/tools/updateredirect.html");
+header("Location: ./updateredirect.html");
 
 ?>
