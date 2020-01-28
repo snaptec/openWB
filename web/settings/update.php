@@ -101,7 +101,7 @@
 					<h1>Versionsauswahl</h1>
 				</div>
 			</div>
-			<form class="form" action="" method="POST">
+			<form class="form" action="tools/savedoupdate.php" method="POST">
 				<div class="row">
 					<div class="col-3">
 						<div class="form-check mb-2">
