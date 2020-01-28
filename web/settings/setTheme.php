@@ -82,7 +82,7 @@
 			<br>
 
 			<div class="row justify-content-center">
-				<button onclick="saveTheme()" class="btn btn-lg btn-green">Theme übernehmen</button>
+				<button onclick="saveTheme()" class="btn btn-green">Theme übernehmen</button>
 			</div>
 
 		</div>  <!-- end container -->

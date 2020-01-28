@@ -77,7 +77,6 @@ if [ "$second" -lt "10" ]; then
     	    if [ "$lpenabled" = "1" ]; then
     			# if the charge point is enabled, check for auto disabling
     			if [ $timeOfDay = "$lockTime" ]; then
-    				#echo "${now} autolock time for LP${chargePoint} is up"
     				# auto lock time is now, set flag
     				echo "1" > $flagFilename
     			fi
@@ -95,7 +94,6 @@ function checkDisableLp {
         # and disable charge point
         mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
         mosquitto_pub -r -t $mqttTopic -m 0
-        #echo "${now} autolock charge point #${chargePoint}"
     fi
 }
 
@@ -130,10 +128,8 @@ do
         waitFlag=$(<$flagFilename)  # read ramdisk value for autolock wait flag
         if [ "$waitFlag" = "1" ]; then
             # charge point waiting for lock
-            #echo "${now} charge point #${chargePoint} waiting for autolock"
             if [ $timeOfDay = "$unlockTime" ]; then
                 # but auto unlock time is now, so delete possible wait-to-lock-flag
-                #echo "${now} unlock time for charge point #${chargePoint}: disable wait for autolock"
                 echo "0" > $flagFilename
             else
                 # unlock time not now and waiting for auto lock
@@ -145,7 +141,6 @@ do
             # unlock time is now, so enable charge point
             mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
             mosquitto_pub -r -t $mqttTopic -m 1
-            #echo "${now} auto unlock charge point #${chargePoint}"
         fi
     fi
 done
