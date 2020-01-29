@@ -21,13 +21,13 @@ def replaceAll(changeval,newval):
         inaction=0
 
 mqtt_broker_ip = "localhost"
-client = mqtt.Client() 
+client = mqtt.Client()
 
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
     client.subscribe("openWB/set/#")
-# handle each set topic 
+# handle each set topic
 def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
@@ -420,42 +420,43 @@ def on_message(client, userdata, msg):
             f.write(str(pvwatt))
             f.close()
     if (msg.topic == "openWB/set/lp/1/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            client.publish("openWB/lp/1/AutolockStatus", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp/2/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp2', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/3/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp3', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/4/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp4', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/5/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp5', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/6/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp6', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/7/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp7', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/lp/8/AutolockStatus"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
@@ -464,7 +465,7 @@ def on_message(client, userdata, msg):
 
     file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
     sys.stdout = file
-    print("Topic: ", msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8"))) 
+    print("Topic: ", msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
     file.close()
 
 client.on_connect = on_connect
@@ -473,4 +474,3 @@ client.on_message = on_message
 client.connect(mqtt_broker_ip, 1883)
 client.loop_forever()
 client.disconnect()
-
