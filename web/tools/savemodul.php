@@ -815,6 +815,10 @@ foreach($lines as $line) {
 	    $result .= 'speichermodul='.$_POST[speichermodul]."\n";
 	 $writeit = '1';
    }
+        if(strpos($line, "ess_api_ver=") !== false) {
+	    $result .= 'ess_api_ver='.$_POST[ess_api_ver]."\n";
+	 $writeit = '1';
+   }
 	    if(strpos($line, "soc_tesla_username=") !== false) {
 	    $result .= 'soc_tesla_username='.$_POST[teslasocuser]."\n";
 	 $writeit = '1';
