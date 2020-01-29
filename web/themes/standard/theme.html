@@ -2,7 +2,7 @@
 <html lang="de">
 
 <head>
-	<!-- dark19_01 theme for openWB -->
+	<!-- standard theme for openWB -->
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
@@ -206,6 +206,7 @@
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
 				echo '            <div class="col-4">'."\n";
 				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
+				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
 				echo '                    <span class="nameLp'.$i.'"></span>'."\n";
 				echo '                </span>'."\n";
@@ -375,7 +376,7 @@
 
 		<!-- depending on charge mode show options -->
 	    <form id="sofortlmdiv" name="sofortll" action="./tools/sofortll.php" method="POST">
-		<div id="awattardiv" style="display: none;">
+		    <div id="awattardiv" style="display: none;">
 			<hr color="white">
 			<div class="row justify-content-center">
 				<h3>Awattar</h3>
