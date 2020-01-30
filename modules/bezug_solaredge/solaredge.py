@@ -10,9 +10,9 @@ import binascii
 ipaddress = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
+slaveid = int(sys.argv[2])
 
-
-resp= client.read_holding_registers(40206,1,unit=1)
+resp= client.read_holding_registers(40206,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
@@ -20,25 +20,25 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(final))
 f.close()
 
-resp= client.read_holding_registers(40194,2,unit=1)
+resp= client.read_holding_registers(40194,2,unit=slaveid)
 multipli = resp.registers[0]
 multiplint = format(multipli, '04x')
 fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
-resp= client.read_holding_registers(40191,1,unit=1)
+resp= client.read_holding_registers(40191,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finala1 = int(struct.unpack('>h', all.decode('hex'))[0]) 
-resp= client.read_holding_registers(40192,1,unit=1)
+resp= client.read_holding_registers(40192,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finala2 = int(struct.unpack('>h', all.decode('hex'))[0]) 
-resp= client.read_holding_registers(40193,1,unit=1)
+resp= client.read_holding_registers(40193,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finala3 = int(struct.unpack('>h', all.decode('hex'))[0]) 
 
 
-resp= client.read_holding_registers(40194,2,unit=1)
+resp= client.read_holding_registers(40194,2,unit=slaveid)
 mult2ipli = resp.registers[0]
 mult2iplint = format(mult2ipli, '04x')
 fmult2iplint = int(struct.unpack('>h', mult2iplint.decode('hex'))[0])
@@ -97,15 +97,15 @@ f.close()
 
 #voltage
 
-resp= client.read_holding_registers(40196,1,unit=1)
+resp= client.read_holding_registers(40196,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale1 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
-resp= client.read_holding_registers(40197,1,unit=1)
+resp= client.read_holding_registers(40197,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale2 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
-resp= client.read_holding_registers(40198,1,unit=1)
+resp= client.read_holding_registers(40198,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale3 = int(struct.unpack('>h', all.decode('hex'))[0])  / 100
@@ -121,17 +121,17 @@ f.write(str(finale3))
 f.close()
 
  #watt pro phase
-resp= client.read_holding_registers(40207,1,unit=1)
+resp= client.read_holding_registers(40207,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale1 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
 
 
-resp= client.read_holding_registers(40208,1,unit=1)
+resp= client.read_holding_registers(40208,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale2 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-resp= client.read_holding_registers(40209,1,unit=1)
+resp= client.read_holding_registers(40209,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finale3 = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
@@ -153,13 +153,13 @@ f.close()
 #hz
         
 
-resp= client.read_holding_registers(40204,1,unit=1)
+resp= client.read_holding_registers(40204,1,unit=slaveid)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 finalhz = int(struct.unpack('>h', all.decode('hex'))[0]) 
 
 
-resp= client.read_holding_registers(40205,1,unit=1)
+resp= client.read_holding_registers(40205,1,unit=slaveid)
 multipli = resp.registers[0]
 multiplint = format(multipli, '04x')
 fmuliplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
@@ -228,7 +228,7 @@ f.close()
 #f.close()
 
 
-resp= client.read_holding_registers(40234,2,unit=1)
+resp= client.read_holding_registers(40234,2,unit=slaveid)
 value1 = resp.registers[0] 
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')
@@ -237,7 +237,7 @@ f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(final))
 f.close()
 
-resp= client.read_holding_registers(40226,2,unit=1)
+resp= client.read_holding_registers(40226,2,unit=slaveid)
 value1 = resp.registers[0]
 value2 = resp.registers[1] 
 all = format(value1, '04x') + format(value2, '04x')

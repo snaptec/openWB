@@ -3,7 +3,10 @@
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
-    if(strpos($line, "minimalstromstaerke=") !== false) {
+     if(strpos($line, "awattaraktiv=") !== false) {
+        list(, $awattaraktivold) = explode("=", $line);
+    }   
+	if(strpos($line, "minimalstromstaerke=") !== false) {
         list(, $minimalstromstaerkeold) = explode("=", $line);
     }
     if(strpos($line, "simplemode=") !== false) {
@@ -128,6 +131,9 @@ foreach($lines as $line) {
     }
     if(strpos($line, "displayconfigured=") !== false) {
 	    list(, $displayconfiguredold) = explode("=", $line, 2);
+    }
+    if(strpos($line, "displaytheme=") !== false) {
+	    list(, $displaythemeold) = explode("=", $line, 2);
     }
 	if(strpos($line, "displaypinaktiv=") !== false) {
 		list(, $displaypinaktivold) = explode("=", $line);

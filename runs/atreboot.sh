@@ -1,8 +1,8 @@
 #!/bin/bash
-(sleep 300; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}')) &
+(sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/openwb.conf
-sleep 10
+sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo chmod 777 /var/www/html/openWB/openwb.conf
@@ -12,6 +12,12 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
+echo 0 > /var/www/html/openWB/ramdisk/awattarprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
+echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -24,7 +30,6 @@ echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
-echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
 echo 0 > /var/www/html/openWB/ramdisk/hausverbrauch
 echo 0 > /var/www/html/openWB/ramdisk/blockall
@@ -92,6 +97,8 @@ echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp5
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp6
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp7
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp8
+echo 1 > /var/www/html/openWB/ramdisk/mqttlademkwhs1
+echo 1 > /var/www/html/openWB/ramdisk/mqttlademkwhs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastladestatus
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
@@ -103,6 +110,38 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp1
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp2
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp3
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp4
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp5
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp6
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp7
+echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp8
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp1
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp2
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp3
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp4
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp5
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp6
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp7
+echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp8
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp3
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp4
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp5
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp6
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp7
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp8
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp3
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp4
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp5
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp6
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp7
+echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp8
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
@@ -267,8 +306,6 @@ touch /var/www/html/openWB/ramdisk/nachtladenstate
 touch /var/www/html/openWB/ramdisk/nachtladenstates1
 touch /var/www/html/openWB/ramdisk/zielladenkorrektura
 touch /var/www/html/openWB/ramdisk/ladestatus.log
-touch /var/www/html/openWB/ramdisk/gsiforecast.csv
-chmod 777 /var/www/html/openWB/ramdisk/gsiforecast.csv
 
 # temporäre Zwischenspeicher für z. B. Kostal Plenticore, da
 # bei Anschluss von Speicher und Energiemanager direkt am WR
@@ -1743,6 +1780,18 @@ if ! grep -Fq "wakeupzoelp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "wakeupzoelp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wakeupmyrenaultlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp1=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wakeupmyrenaultlp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "wakeupmyrenaultlp2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "awattaraktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "awattaraktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "plz=" /var/www/html/openWB/openwb.conf
 then
 	echo "plz=36124" >> /var/www/html/openWB/openwb.conf
@@ -2170,6 +2219,10 @@ if ! grep -Fq "lgessv1pass=" /var/www/html/openWB/openwb.conf
 then
 	echo "lgessv1pass=regnum_as_default_password" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "ess_api_ver=" /var/www/html/openWB/openwb.conf
+then
+	echo "ess_api_ver=01.2020" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mpmlp4ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "mpmlp4ip=192.168.193.54" >> /var/www/html/openWB/openwb.conf
@@ -2272,7 +2325,21 @@ else
 	python3 /var/www/html/openWB/runs/mqttsub.py &
 fi
 
-
+crontab -l -u pi > /var/www/html/openWB/ramdisk/tmpcrontab
+if grep -Fq "lade.log" /var/www/html/openWB/ramdisk/tmpcrontab
+then
+	echo "crontab modified"
+	sed -i '/lade.log/d' /var/www/html/openWB/ramdisk/tmpcrontab
+	echo "* * * * * /var/www/html/openWB/regel.sh >> /var/log/openWB.log 2>&1" >> /var/www/html/openWB/ramdisk/tmpcrontab
+	cat /var/www/html/openWB/ramdisk/tmpcrontab | crontab -u pi -
+fi
+sudo crontab -l > /var/www/html/openWB/ramdisk/tmprootcrontab
+if grep -Fq "atreboot.sh" /var/www/html/openWB/ramdisk/tmprootcrontab
+then
+echo "executed"
+sed -i '/atreboot.sh/d' /var/www/html/openWB/ramdisk/tmprootcrontab
+cat /var/www/html/openWB/ramdisk/tmprootcrontab | sudo crontab -
+fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
@@ -2320,7 +2387,6 @@ fi
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
-/var/www/html/openWB/runs/gsiabfrage.sh &
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
@@ -2366,4 +2432,5 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
-sed -i 's/serials.*/serials='$smashmbezugid'/' /var/www/html/openWB/web/files/smashm.conf
+echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/updateinprogress

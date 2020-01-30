@@ -45,8 +45,7 @@ source rfidtag.sh
 source leds.sh
 date=$(date)
 re='^-?[0-9]+$'
-#ladelog ausfuehren
-./ladelog.sh &
+
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then
@@ -71,6 +70,11 @@ if (( updateinprogress == "1" )); then
 	exit 0
 fi
 
+# process autolock
+./processautolock.sh &
+
+#ladelog ausfuehren
+./ladelog.sh &
 graphtimer=$(<ramdisk/graphtimer)
 if (( graphtimer < 4 )); then
 	graphtimer=$((graphtimer+1))
@@ -277,7 +281,7 @@ prenachtlademodus
 ########################
 # Sofort Laden
 if (( lademodus == 0 )); then
-	sofortlademodus	
+	sofortlademodus
 fi
 
 #######################

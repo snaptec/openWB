@@ -117,6 +117,7 @@
 		var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 		var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 		var speichervorhanden = <?php echo $speichervorhanden ?>;
+		var awattaraktiv = <?php echo $awattaraktivold?>;
 	</script>
 
 	<div class="container">
@@ -205,6 +206,7 @@
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
 				echo '            <div class="col-4">'."\n";
 				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
+				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
 				echo '                    <span class="nameLp'.$i.'"></span>'."\n";
 				echo '                </span>'."\n";
@@ -374,8 +376,35 @@
 
 		<!-- depending on charge mode show options -->
 	    <form id="sofortlmdiv" name="sofortll" action="./tools/sofortll.php" method="POST">
+		    <div id="awattardiv" style="display: none;">
 			<hr color="white">
-
+			<div class="row justify-content-center">
+				<h3>Awattar</h3>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-sm-12" style="height: 150px; text-align: center;">
+					<canvas id="awattarcanvas"></canvas>
+				</div>
+			</div>
+			<div class="row justify-content-center" id="sliderawattardiv">
+				<div class="col-7">
+					<input type="range" min="-1" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
+				</div>
+				<div class="col-2 regularTextStyle">
+					<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span>Cent/kWh</label>
+				</div>
+				<script>
+					var aslider1 = document.getElementById("awattar1s");
+					var aoutput1 = document.getElementById("awattar1l");
+					aoutput1.innerHTML = aslider1.value;
+					aslider1.oninput = function() {
+						aoutput1.innerHTML = this.value;
+						AwattarMaxPriceClick();
+					}
+				</script>
+			</div>
+			<hr color="white">
+		</div>
 			<div class="row justify-content-center">
 		            <h3>Sofortladen Ladeziel-Einstellungen</h3>
 		    </div>
@@ -897,7 +926,7 @@
 
 	<!-- load respective Chart.js definition -->
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js"></script>
-
+	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js"></script>
 	<!-- Data refresher -->
 	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js"></script>
 	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js"></script>

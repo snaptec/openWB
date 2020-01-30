@@ -88,7 +88,7 @@ decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big
 wh3 = str(decoder.decode_32bit_uint())
 
 whs = int(wh1) + int(wh2) + int(wh3)
-whs = whs / 100
+whs = whs * 10
 f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
 f.write(str(whs))
 f.close()
@@ -105,7 +105,7 @@ decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big
 whe3 = str(decoder.decode_32bit_uint())
 
 whes = int(whe1) + int(whe2) + int(whe3)
-whes = whes / 100
+whes = whes * 10
 f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
 f.write(str(whes))
 f.close()

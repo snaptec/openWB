@@ -38,7 +38,7 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.html';
+			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -559,27 +559,11 @@
 			$pushoveruserold = str_replace( "'", "", $pushoveruserold);
 			$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
-			$vstable = file_get_contents('/var/www/html/openWB/ramdisk/vstable');
-			$vbeta = file_get_contents('/var/www/html/openWB/ramdisk/vbeta');
-			$vnightly = file_get_contents('/var/www/html/openWB/ramdisk/vnightly');
-			$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savemisc.php" method="POST">
-					<div class="row">
-						<b><label for="debug">Debugmodus:</label></b>
-						<select type="text" name="debug" id="debug">
-							<option <?php if($debugold == 0) echo selected ?> value="0">0</option>
-							<option <?php if($debugold == 1) echo selected ?> value="1">1</option>
-							<option <?php if($debugold == 2) echo selected ?> value="2">2</option>
-						</select>
-						<br>
-					</div>
-					<div class="row">
-						0=Debug aus, 1=Schreibe Regelwerte in das Log, 2= Schreibe die Berechnungsgrundlage in das Log.<br>Das Debug Log ist <a href="../ramdisk/openWB.log">HIER</a> zu finden<br> Sollen Daten analysiert werden unbedingt die Funktion "Debug Daten senden" weiter unten auf dieser Seite nutzen!<br> <br>
-					</div>
 					<div class="row">
 						<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
 						<select type="text" name="dspeed" id="dspeed">
@@ -1339,7 +1323,6 @@
 								<br>
 							</div>
 					</div>
-
 						<div id="nonintdaily">
 							<div class="row">
 									<b><label for="graphinteractiveam">Animation im Graph:</label></b>
@@ -1372,103 +1355,18 @@
 						});
 					</script>
 
-					<div class="row">
-						<h3>Releasechannel</h3> <br>
-					</div>
-					<div class="row">
-						<b><label for="releasetrain">Releasechannel:</label></b>
-						<select type="text" name="releasetrain" id="releasetrain">
-							<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">stable</option>
-							<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">beta</option>
-							<option <?php if($releasetrainold == "master\n") echo selected ?> value="master">Nightly</option>
-						</select>
-						<br>
-					</div>
-					<div class="row">
-						Der Stablezweig ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, speichern und ein Update durchführen.<br><br>
-					</div>
-
 					<button type="submit" class="btn btn-green">Save</button>
 				</form>
 
 				<br>
-				<hr>
-
-				<div class="row">
-					Das Backup stellt im Falle eines Hardwaredefektes die Einstellungeni, Graphdaten und Ladelogfiles wieder her.<br> <br>
-				</div>
-
-				<div class="row justify-content-center py-1">
-					<button onclick="window.location.href='./tools/bckredirect.html'" class="btn btn-red">Backup erstellen</button>
-				</div>
-				<div class="row justify-content-center py-1">
-					<button onclick="window.location.href='./tools/upload.html'" class="btn btn-blue">Backup wiederherstellen</button>
-				</div>
-
-				<br><br>
-
-				<div class="row justify-content-center py-1">
-					<div class="col text-center">
-						Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu zehn Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen. Fahrzeug vor Update abstecken!<br><br>
-						<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
-					</div>
-				</div>
-
-				<div class="row">
-					Installierte Version: <?php echo $owbversion ?><br>
-					Aktuellste Stable: <?php echo $vstable ?><br>
-					Aktuellste Beta: <?php echo $vbeta ?><br>
-					Aktuellste Nightly: <?php echo $vnightly ?><br>
-					<br><br>
-				</div>
-
-				<div class="row justify-content-center py-1">
-					<button onclick="window.location.href='./tools/reboot.html'" class="btn btn-red">REBOOT</button>
-				</div>
-
-				<div class="row justify-content-center py-1">
-					<div class="col text-center">
-						Auf eine ALTE Version downgraden, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br>Einige Optionen/Features sind dann ggf. nicht mehr verfügbar.<br><br>
-						<button onclick="window.location.href='./tools/updateredirect15.html'" class="btn btn-red">DOWNGRADE openWB auf Version 1.5 stable</button>
-					</div>
-				</div>
-
-				<hr>
 				<br>
-				<div class="row">
-					<form action="./tools/savedebug.php" method="POST">
-						<h3>Debug Daten senden</h3>
-						<div class="row">
-							Beim Senden von Debug Daten wird automatisiert der Debugmodus aktiviert, Daten aufgezeichnet, versendet und anschließend der Debugmodus deaktiviert.<br>
-							Zusätzlich wird die Config mitgesendet. Allerdings werden sämtliche SoC Modul Einstellungen herausgefiltert, um die ggf. hinterlegten Benutzernamen/Passwörter NICHT zu übertragen.<br>
-						</div>
-						<div class="row">
-							<textarea rows="10" cols="100" name="debuguser" id="debuguser">Fehlerbeschreibung...</textarea><br>
-							<b><label for="debugmail">Email Adresse:</label></b>
-							<input type="text" name="debugemail" id="debugemail" value="Email für Rückfragen"><br>
-							<button type="submit" class="btn btn-green">Debug Daten senden</button>
-						</div>
-					</form>
-				</div>
-				<div class="row justify-content-center">
-					<div class="col text-center">
-						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick">
-							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
-							<input type="image" src="./img/btn_donate_SM.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-							<img alt="" border="0" src="./img/pixel.gif" width="1" height="1">
-						</form>
-					</div>
-				</div>
 			</div>
 			<br>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Misc</small>
+			  <small>Sie befinden sich hier: Verschiedenes</small>
 		  </div>
 		</footer>
 

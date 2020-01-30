@@ -38,7 +38,7 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.html';
+			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			$refreshDuration = 8;

@@ -282,6 +282,10 @@ fi
 
 # Werte für die Berechnung ermitteln
 lademodus=$(</var/www/html/openWB/ramdisk/lademodus)
+if [ -z "$lademodus" ] ; then
+	mosquitto_pub -r -t "openWB/set/ChargeMode" -m "$bootmodus"
+	lademodus=$bootmodus
+fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
@@ -1041,6 +1045,23 @@ ospeicherpvui=$(<ramdisk/mqttspeicherpvui)
 if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
+fi
+oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
+if [[ "$oawattaraktiv" != "$awattaraktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${awattaraktiv}"
+	echo $awattaraktiv > ramdisk/mqttawattaraktiv
+fi
+oawattarprice=$(<ramdisk/mqttawattarprice)
+awattarprice=$(<ramdisk/awattarprice)
+if [[ "$oawattarprice" != "$awattarprice" ]]; then
+	tempPubList="${tempPubList}\nopenWB/global/awattar/ActualPriceForCharging=${awattarprice}"
+	echo $awattarprice > ramdisk/mqttawattarprice
+fi
+oawattarmaxprice=$(<ramdisk/mqttawattarmaxprice)
+awattarmaxprice=$(<ramdisk/awattarmaxprice)
+if [[ "$oawattarmaxprice" != "$awattarmaxprice" ]]; then
+	tempPubList="${tempPubList}\nopenWB/global/awattar/MaxPriceForCharging=${awattarmaxprice}"
+	echo $awattarmaxprice > ramdisk/mqttawattarmaxprice
 fi
 tempPubList="${tempPubList}\nopenWB/system/Uptime=$(uptime)"
 tempPubList="${tempPubList}\nopenWB/system/Date=$(date)"

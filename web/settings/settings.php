@@ -37,7 +37,7 @@
 	<body>
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.html';
+			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -49,6 +49,9 @@
 				}
 				if(strpos($line, "mollp1moll=") !== false) {
 					list(, $mollp1mollold) = explode("=", $line);
+				}
+				if(strpos($line, "awattaraktiv=") !== false) {
+					list(, $awattaraktivold) = explode("=", $line);
 				}
 				if(strpos($line, "mollp1diab=") !== false) {
 					list(, $mollp1diabold) = explode("=", $line);
@@ -508,19 +511,16 @@
 			<div class="col-sm-12">
 				<form action="./tools/savemain.php" method="POST">
 					<div class="row ">
-						<b><label for="plz">Postleitzahl:</label></b>
-						<input type="text" name="plz" id="plz" value="<?php echo $plzold ?>"><br>
+						<b><label for="awattaraktiv">Awattar aktivieren:</label></b>
+						<select type="text" name="awattaraktiv" id="awattaraktiv">
+							<option <?php if($awattaraktivold == 0) echo selected ?> value="0">Nein</option>
+							<option <?php if($awattaraktivold == 1) echo selected ?> value="1">Ja</option>
+						</select>
 					</div>
 					<div class="row">
-						<p>Gültige Werte z.B. 36124</p><br>
-						<p>Dient zur Ermittlung des GSI Index. Weitere Infos unter:
-							<span>
-								<a href="https://www.corrently.de/hintergrund/gruenstromindex">Hier</a>
-							</span>
-						</p><br>
-						<p>Derzeit als optische Einbindung unter Status zu finden. Künftig Laden nach GSI möglich.</p>
-						<br>
+						<p>Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler <br> Die Awattar Funktion ist nur im SofortLaden Modus aktiv!</p><br>
 					</div><hr>
+
 					<div class="row">
 						<b><label for="stopchargeafterdisclp1">Ladepunkt 1 sperren nach Abstecken:</label></b>
 						<select type="text" name="stopchargeafterdisclp1" id="stopchargeafterdisclp1">

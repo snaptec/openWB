@@ -1,16 +1,50 @@
 <?php
-$result = '';
 
+    // receives chosen debug mode from settings page via POST-request,
+	// writes value to config file and returns to theme
+	// author: M. Ortenstein
 
-if (filter_var($_POST[debugemail], FILTER_VALIDATE_EMAIL)) {
-$result = $_POST[debuguser] . "\n" . $_POST[debugemail] . "\n";
-file_put_contents('/var/www/html/openWB/ramdisk/debuguser', $result);
-header("Location: ./debugredirect.html");
-} else {
-	echo " <h1>Keine gültige Email angegeben!</h1><br>Weiterleitung in 10 Sekunden...<br>";
-	header ("Refresh: 10; ../index.php");
-}	
+	$myConfigFile = '/var/www/html/openWB/openwb.conf';
+
+	try {
+		if ( !file_exists($myConfigFile) ) {
+			throw new Exception('Konfigurationsdatei nicht gefunden.');
+		}
+		// first read config-lines in array
+		$settingsFile = file($myConfigFile);
+		// prepare key/value array
+		$settingsArray = [];
+
+		// convert lines to key/value array for faster manipulation
+		foreach($settingsFile as $line) {
+			// split line at char '='
+			$splitLine = explode('=', $line);
+			// trim parts
+			$splitLine[0] = trim($splitLine[0]);
+			$splitLine[1] = trim($splitLine[1]);
+			// push key/value pair to new array
+			$settingsArray[$splitLine[0]] = $splitLine[1];
+		}
+		// now values can be accessed by $settingsArray[$key] = $value;
+
+        // update chosen setting in array
+        $settingsArray["debug"] = $_POST["debugmodeRadioBtn"];
+
+		// write config to file
+  		$fp = fopen($myConfigFile, "w");
+		if ( !$fp ) {
+			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
+  		}
+		foreach($settingsArray as $key => $value) {
+			fwrite($fp, $key.'='.$value."\n");
+		}
+        fclose($fp);
+	} catch ( Exception $e ) {
+		$msg = $e->getMessage();
+  		echo "<script type='text/javascript'>alert('$msg');</script>";
+    }
+
+    // return to theme
+    echo "<script>window.location.href='../index.php';</script>";
+
 ?>
-
-
-

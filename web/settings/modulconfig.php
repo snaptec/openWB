@@ -44,7 +44,7 @@
 	<body>
 
 		<?php
-			include '/var/www/html/openWB/web/settings/navbar.html';
+			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -276,13 +276,13 @@
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-				if(strpos($line, "wakeupzoelp1=") !== false) {
-					list(, $wakeupzoelp1old) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupzoelp2=") !== false) {
-					list(, $wakeupzoelp2old) = explode("=", $line);
-				}
 
+				if(strpos($line, "wakeupmyrenaultlp1=") !== false) {
+					list(, $wakeupmyrenaultlp1old) = explode("=", $line);
+				}
+				if(strpos($line, "wakeupmyrenaultlp2=") !== false) {
+					list(, $wakeupmyrenaultlp2old) = explode("=", $line);
+				}
 				if(strpos($line, "pvbezugeinspeisung=") !== false) {
 					list(, $pvbezugeinspeisungold) = explode("=", $line);
 				}
@@ -836,8 +836,11 @@
 				if(strpos($line, "lgessv1ip=") !== false) {
 					list(, $lgessv1ipold) = explode("=", $line);
 				}
-					if(strpos($line, "lgessv1pass=") !== false) {
+				if(strpos($line, "lgessv1pass=") !== false) {
 					list(, $lgessv1passold) = explode("=", $line);
+				}
+				if(strpos($line, "ess_api_ver=") !== false) {
+					list(, $ess_api_ver_old) = explode("=", $line);
 				}
 				if(strpos($line, "lllaniplp2=") !== false) {
 					list(, $lllaniplp2old) = explode("=", $line);
@@ -1649,6 +1652,7 @@
 							<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
 							<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
 							<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
+							<option <?php if($socmodulold == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1659,7 +1663,12 @@
 					<div class="row bg-info">
 						Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
 					</div>
-
+					<div id="socmqtt">
+							<div class="row">Keine Konfiguration erforderlich</div>
+							<div class="row">Per MQTT zu schreiben:</div>
+							<div class="row"><b>"openWB/set/lp/1/%Soc"</b></div>
+							<div class="row">Ladezustand in %, int, 0-100</div>		
+					</div>
 					<div id="socmnone">
 						<br>
 					</div>
@@ -1817,6 +1826,14 @@
 						<div class="row bg-info">
 							MyRenault Land, z.B. CH, AT, DE<br><br>
 						</div>
+						<b><label for="wakeupmyrenaultlp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+						<select type="text" name="wakeupmyrenaultlp1" id="wakeupmyrenaultlp1">
+							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo selected ?> value="0">Nein</option>
+							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo selected ?> value="1">Ja</option>
+						</select>
+						<div class="row bg-info">
+							Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+						</div>
 					</div>
 					<div id="socevnotify">
 						<div class="row bg-info">
@@ -1916,7 +1933,12 @@
 							$('#soccarnet').hide();
 							$('#socmzerong').hide();
 							$('#socmaudi').hide();
+							$('#socmqtt').hide();
+
 							$('#socmyrenault').hide();
+							if($('#socmodul').val() == 'soc_mqtt')   {
+								$('#socmqtt').show();
+							}
 
 						   	if($('#socmodul').val() == 'soc_audi')   {
 								$('#socmaudi').show();
@@ -2308,9 +2330,16 @@
 								<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
 								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
 								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
+								<option <?php if($socmodul1old == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
+
 							</select>
 						</div>
-
+						<div id="socmqtt1">
+							<div class="row">Keine Konfiguration erforderlich</div>
+							<div class="row">Per MQTT zu schreiben:</div>
+							<div class="row"><b>"openWB/set/lp/2/%Soc"</b></div>
+							<div class="row">Ladezustand in %, int, 0-100</div>		
+						</div>
 						<div id="socmnone1">
 							<br>
 						</div>
@@ -2454,6 +2483,14 @@
 							<div class="row bg-info">
 								MyRenault Land, z.B. CH, AT, DE<br><br>
 							</div>
+							<b><label for="wakeupmyrenaultlp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
+							<select type="text" name="wakeupmyrenaultlp2" id="wakeupmyrenaultlp2">
+								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo selected ?> value="0">Nein</option>
+								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo selected ?> value="1">Ja</option>
+							</select>
+							<div class="row bg-info">
+								Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+							</div>
 						</div>
 						<div id="socevnotifylp2">
 							<div class="row bg-info">
@@ -2573,6 +2610,7 @@
 
 						<script>
 							function display_socmodul1() {
+								$('#socmqtt1').hide();
 								$('#socmnone1').hide();
 								$('#socmhttp1').hide();
 								$('#socleaf1').hide();
@@ -2583,6 +2621,9 @@
 								$('#socmyrenaultlp2').hide();
 								$('#soccarnetlp2').hide();
 								$('#socmzeronglp2').hide();
+								if($('#socmodul1').val() == 'soc_mqtt') {
+									$('#socmqtt1').show();
+								}
 
 								if($('#socmodul1').val() == 'none') {
 									$('#socmnone1').hide();
@@ -3302,7 +3343,6 @@
 							});
 						});
 					</script>
-
 					<div class="row">
 						<hr>
 						<h3> Strombezugsmessmodul (EVU-Übergabepunkt)</h3>
@@ -3317,7 +3357,6 @@
 							<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
 							<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
 							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
-							<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
 							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo selected ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
@@ -3335,7 +3374,24 @@
 							<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
 							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
 						</select>
+					</div>
+					<div id="wattbezugmqtt">
+							<div class="row">Keine Konfiguration erforderlich</div>
+							<div class="row">Per MQTT zu schreiben:</div>
+							<div class="row"><b>"openWB/set/evu/W"</b></div>
+							<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
+							<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
+							<div class="row">Strom in Ampere für Phase 1, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
+							<div class="row">Strom in Ampere für Phase 2, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
+							<div class="row">Strom in Ampere für Phase 3, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
+							<div class="row">Bezogene Energie in Wh, float, nur positiv</div>	
+							<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
+							<div class="row">Eingespeiste Energie in Wh, float, nur positiv</div>			
 					</div>
 					<div id="wattbezuglgessv1">
 						<div class="row">
@@ -3570,7 +3626,7 @@
 							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen<br><br><br>
+							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen. Funktioniert auch mit Energy Meter statt Home Manager<br><br><br>
 						</div>
 					</div>
 					<div id="wattbezugsmartfox">
@@ -3743,6 +3799,8 @@
 							$('#wattbezugsolarview').hide();
 							$('#wattbezugdiscovergy').hide();
 							$('#wattbezuglgessv1').hide();
+							$('#wattbezugmqtt').hide();
+
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
@@ -3750,6 +3808,9 @@
 							}
 							if($('#wattbezugmodul').val() == 'bezug_discovergy') {
 								$('#wattbezugdiscovergy').show();
+							}
+							if($('#wattbezugmodul').val() == 'bezug_mqtt') {
+								$('#wattbezugmqtt').show();
 							}
 
 							if($('#wattbezugmodul').val() == 'bezug_victrongx') {
@@ -3866,11 +3927,20 @@
 							<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
 							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
 						</select>
 					</div>
 
 					<div id="pvnone">
 						<br>
+					</div>
+					<div id="pvmqtt">
+							<div class="row">Keine Konfiguration erforderlich</div>
+							<div class="row">Per MQTT zu schreiben:</div>
+							<div class="row"><b>"openWB/set/pv/W"</b></div>
+							<div class="row">PVleistung in Watt, int, negativ</div>
+							<div class="row"><b>"openWB/set/pv/WhCounter"</b></div>
+							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>	
 					</div>
 					<div id="pvlgessv1">
 						<div class="row">
@@ -4257,6 +4327,11 @@
 							$('#pvdiscovergy').hide();
 							$('#pvyouless').hide();
 							$('#pvlgessv1').hide();
+							$('#pvmqtt').hide();
+
+							if($('#pvwattmodul').val() == 'wr_mqtt') {
+								$('#pvmqtt').show();
+							}
 
 							if($('#pvwattmodul').val() == 'wr_youless120') {
 								$('#pvyouless').show();
@@ -4358,6 +4433,7 @@
 							<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
 							<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo selected ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($speichermodulold == "speicher_mqtt\n") echo selected ?> value="speicher_mqtt">MQTT</option>
 						</select>
 					</div>
 
@@ -4376,6 +4452,14 @@
 						<div class="row" style="background-color:#fcbe1e">
 							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
 						</div>
+						<div class="row" style="background-color:#fcbe1e">
+							<b>Bitte die API-Version wählen:</b><br />
+							<select type="text" name="ess_api_ver" id="ess_api_ver">
+								<option <?php if($ess_api_ver_old == "10.2019\n") echo selected ?> value="10.2019">API-Version Oktober 2019</option>
+								<option <?php if($ess_api_ver_old == "01.2020\n") echo selected ?> value="01.2020">API-Version Januar 2020</option>
+							</select><br />
+							Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version<br />
+						</div>
 					</div>
 					<div id="divspeichernone">
 						<br>
@@ -4385,6 +4469,19 @@
 							Keine Konfiguration erforderlich<br><br>
 						</div>
 					</div>
+					<div id="divspeichermqtt">
+							<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
+							<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
+							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+							<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
+							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+							<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>	
+							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+							<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>	
+							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+							<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>			
+					</div>
+
 					<div id="divspeichervictron">
 							<div class="row" style="background-color:#fcbe1e">
 							Konfiguration im Bezug Victron Modul<br><br>
@@ -4575,7 +4672,8 @@
 					</div>
 
 					<script>
-						function display_speichermodul() {
+			function display_speichermodul() {
+							$('#divspeichermqtt').hide();
 							$('#divspeichernone').hide();
 							$('#divspeicherhttp').hide();
 							$('#divspeichermpm3pm').hide();
@@ -4597,6 +4695,10 @@
 							if($('#speichermodul').val() == 'speicher_alphaess') {
 								$('#divspeicheralphaess').show();
 							}
+							if($('#speichermodul').val() == 'speicher_mqtt') {
+								$('#divspeichermqtt').show();
+							}
+
 							if($('#speichermodul').val() == 'speicher_victron') {
 								$('#divspeichervictron').show();
 							}

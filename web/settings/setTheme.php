@@ -43,7 +43,7 @@
 
 	<body>
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.html';?>
+		<?php include '/var/www/html/openWB/web/settings/navbar.php';?>
 		<?php
 			// support function for dynmic built of carousel content
 			function dir_list($rootDir){
@@ -82,14 +82,14 @@
 			<br>
 
 			<div class="row justify-content-center">
-				<button onclick="saveTheme()" class="btn btn-lg btn-green">Theme übernehmen</button>
+				<button onclick="saveTheme()" class="btn btn-green">Theme übernehmen</button>
 			</div>
 
 		</div>  <!-- end container -->
 
 		<footer class="footer bg-dark text-light font-small">
 	      <div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Theme</small>
+			  <small>Sie befinden sich hier: Theme</small>
 	      </div>
 	    </footer>
 
