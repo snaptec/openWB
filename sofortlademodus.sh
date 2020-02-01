@@ -986,11 +986,9 @@ else
 			if (( v > maxdiff )); then maxdiff=$v; fi;
 		done
 		maxdiff=$((maxdiff + 1 ))
-		echo $maxdiff
 		if (( activechargepoints > 1 )); then
 			maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
 		fi
-		echo $maxdiff
 		echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 		llneu=$((llalt - maxdiff))
 		llneus1=$((llalts1 - maxdiff))
