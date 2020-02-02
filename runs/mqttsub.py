@@ -5,6 +5,7 @@ import sys
 import subprocess
 import time
 import fileinput
+from datetime import datetime
 global inaction
 inaction=0
 
@@ -462,10 +463,11 @@ def on_message(client, userdata, msg):
             f.close()
 
 
-
+    theTime = datetime.now()
+    timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
     file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
     sys.stdout = file
-    print("Topic: ", msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
+    print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
     file.close()
 
 client.on_connect = on_connect
