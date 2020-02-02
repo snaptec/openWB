@@ -78,13 +78,12 @@ if [ "$second" -lt "10" ]; then
 
     	    # now process the settings...
     	    lpenabled=$(<$lpFilename)  # read ramdisk value for lp enabled
-    	    if [ "$lpenabled" = "1" ]; then
-    			# if the charge point is enabled, check for auto disabling
-    			if [ $timeOfDay = "$lockTime" ]; then
-    				# auto lock time is now, set flag "waiting for autolock"
-					mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
-		            mosquitto_pub -r -t $mqttTopic -m 1
-    			fi
+			statusFlag=$(<$statusFlagFilename)  # read flag from ramdisk
+    	    if [ "$lpenabled" = "1" ] && [ $timeOfDay = "$lockTime" ] && [ $statusFlag != "1" ]; then
+    			# if the charge point is enabled and auto lock time is now
+				# and flag not already set, set flag "waiting for autolock"
+				mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
+	            mosquitto_pub -r -t $mqttTopic -m 1
     		fi
         fi
 	done
@@ -130,6 +129,7 @@ do
 				break  # exit loop
 			fi
 		done
+
 		configuredFlagFilename="/var/www/html/openWB/ramdisk/autolockconfiguredlp${chargePoint}"  # name of file for flag: autolock configured
 		if $isAutolockConfigured ; then
 			echo "1" > $configuredFlagFilename  # set flag in ramdisk
@@ -140,7 +140,6 @@ do
 			mosquitto_pub -r -t $mqttTopic -m 0
 		fi
 
-        statusFlagFilename="/var/www/html/openWB/ramdisk/autolockstatuslp${chargePoint}"  # name autolock status file
 		locktimeSettingName="lockTimeLp${chargePoint}_${dayOfWeek}"  # name variable: unlock time for today
 		unlocktimeSettingName="unlockTimeLp${chargePoint}_${dayOfWeek}"  # name variable: unlock time for today
 		waitUntilFinishedName="waitUntilFinishedBoxLp${chargePoint}"  # name checkbox-value-variable: wait autolock until finished charging yes/no
@@ -164,18 +163,22 @@ do
         if [ "$statusFlag" = "1" ]; then
             # charge point waiting for lock
             if [ $timeOfDay = "$unlockTime" ]; then
-                # but auto unlock time is now, so set flag "standby"
-                echo "0" > $statusFlagFilename
+                # but auto unlock time is now
+				# set flag back to "standby"
+				mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
+				mosquitto_pub -r -t $mqttTopic -m 0
             else
-                # unlock time not now and waiting for auto lock
-                # check if charge point still busy to lock
-                checkDisableLp
+				if [ $statusFlag != "2" ]; then
+					# charge point waiting for auto lock
+					# check if charge point still busy to lock
+					checkDisableLp
+				fi
             fi
-        fi
-        if [ $timeOfDay = "$unlockTime" ]; then
-            # unlock time is now, so enable charge point
-            mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
-            mosquitto_pub -r -t $mqttTopic -m 1
+		elif [ $timeOfDay = "$unlockTime" ] && [ $statusFlag != "3" ]; then
+			# charge point not waiting for lock and not already unlocked
+			# but unlock time is now, so enable charge point
+			mqttTopic="openWB/set/lp$chargePoint/ChargePointEnabled"
+			mosquitto_pub -r -t $mqttTopic -m 1
 			# and set flag "auto-unlock performed"
 			mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
 			mosquitto_pub -r -t $mqttTopic -m 3
