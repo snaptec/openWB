@@ -105,8 +105,6 @@ var thevalues = [
 	["openWB/pv/W", "#"],
 	["openWB/lp/1/%Soc", "#"],
 	["openWB/lp/2/%Soc", "#"],
-	["openWB/lp/1/%Soc", "#"],
-	["openWB/lp/2/%Soc", "#"],
 	// heute geladene kWh ... nicht benutzt im Theme
 	["openWB/lp/1/kWhDailyCharged", "#"],
 	["openWB/lp/2/kWhDailyCharged", "#"],
@@ -1275,120 +1273,31 @@ function putgraphtogether() {
 	}
 }  // end putgraphtogether
 
-function getfile() {
-	if ( hook1_aktiv == '1' || hook2_aktiv == '1' || hook3_aktiv == '1' ) {
-		if ( document.getElementById("webhooksdiv") ) {
-			$('#webhooksdiv').show();
-		}
-	}
-	if (document.getElementById("hook1div")) {
-		$(function() {
-		    if(hook1_aktiv == '1') {
-		 		$.ajax({
-		    		url: "/openWB/ramdisk/hook1akt",
-				    contentType: "text/plain",
-				    dataType: "text",
-				    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
-				    complete: function(request){
-					    var hook1akt = request.responseText;
-						if (hook1akt == 1) {
-							if ( activetheme == "symbol") {
-								var element = document.getElementById("hook1div");
-								element.classList.add("fa");
-								element.classList.add("fa-plug");
-								element.setAttribute("style", "color: green;");
-						    } else {
-								var element = document.getElementById("hook1div");
-								element.setAttribute("style", "background-color: green;");
-						    }
-					    } else {
-						if ( activetheme == "symbol") {
-							var element = document.getElementById("hook1div");
-							element.classList.add("fa");
-							element.classList.add("fa-plug");
-							element.setAttribute("style", "color: red;");
-						    } else {
-							var element = document.getElementById("hook1div");
-							element.setAttribute("style", "background-color: red;");
-							}
-					    }
-		    		}
-		  		});
-			} else {
-	        	$('#hook1div').hide();
-	    	}
-		});
-	}
-	if (document.getElementById("hook2div")) {
-		$(function() {
-	    	if(hook2_aktiv == '1') {
-	 			$.ajax({
-				    url: "/openWB/ramdisk/hook2akt",
-				    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
-				    complete: function(request){
-						if (request.responseText == 1) {
-							if ( activetheme == "symbol") {
-								var element = document.getElementById("hook2div");
-								element.classList.add("fa");
-								element.classList.add("fa-plug");
-								element.setAttribute("style", "color: green;");
-							} else {
-								var element = document.getElementById("hook2div");
-								element.setAttribute("style", "background-color: green;");
-							}
-						} else {
-							if ( activetheme == "symbol") {
-								var element = document.getElementById("hook1div");
-								element.classList.add("fa");
-								element.classList.add("fa-plug");
-								element.setAttribute("style", "color: red;");
-							} else {
-								var element = document.getElementById("hook2div");
-								element.setAttribute("style", "background-color: red;");
-							}
-						}
-				    }
-				});
-			} else {
-				$('#hook2div').hide();
-			}
-		});
-	}
-	if (document.getElementById("hook3div")) {
-    	$(function() {
-    		if(hook3_aktiv == '1') {
- 				$.ajax({
-				    url: "/openWB/ramdisk/hook3akt",
-				    complete: function(request){
-						if (request.responseText == 1) {
-							if ( activetheme == "symbol") {
-								var element = document.getElementById("hook3div");
-								element.classList.add("fa");
-								element.classList.add("fa-plug");
-								element.setAttribute("style", "color: green;");
-							} else {
-								var element = document.getElementById("hook3div");
-								element.setAttribute("style", "background-color: green;");
-							}
-						} else {
-							if ( activetheme == "symbol") {
-								var element = document.getElementById("hook3div");
-								element.classList.add("fa");
-								element.classList.add("fa-plug");
-								element.setAttribute("style", "color: red;");
-							} else {
-								var element = document.getElementById("hook3div");
-								element.setAttribute("style", "background-color: red;");
-							}
-						}
-				    }
-				});
-			} else {
-				$('#hook3div').hide();
-			}
-		});
-	}
-}  // end getfile
+function getHookStatus(dataURL) {
+	// read dataURL filecontent and return it
+	return $.get(dataURL);
+}
 
-doInterval = setInterval(getfile, 5000);
-getfile();
+function displayHookStatus(hookNumber) {
+	var element = "#hook"+hookNumber+"div";
+	getHookStatus("/openWB/ramdisk/hook"+hookNumber+"akt").done(function(result) {
+		if ( result == 1 ) {
+			$(element).removeClass("bg-danger");
+			$(element).addClass("bg-success");
+		} else {
+			$(element).removeClass("bg-success");
+			$(element).addClass("bg-danger");
+		}
+	});
+}
+
+function processAllHooks() {
+	for (numberOfHook=1; numberOfHook<=3; numberOfHook++) {
+		displayHookStatus(numberOfHook);
+	}
+}
+
+$(document).ready(function(){
+	doInterval = setInterval(processAllHooks, 5000);
+	processAllHooks();
+});
