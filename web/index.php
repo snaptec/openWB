@@ -46,7 +46,7 @@
 				$_COOKIE['openWBTheme'] = 'standard';
 				$themeCookie = 'standard';
 			}
-			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.php';
 		}
 	}
 
