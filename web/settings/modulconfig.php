@@ -836,8 +836,11 @@
 				if(strpos($line, "lgessv1ip=") !== false) {
 					list(, $lgessv1ipold) = explode("=", $line);
 				}
-					if(strpos($line, "lgessv1pass=") !== false) {
+				if(strpos($line, "lgessv1pass=") !== false) {
 					list(, $lgessv1passold) = explode("=", $line);
+				}
+				if(strpos($line, "ess_api_ver=") !== false) {
+					list(, $ess_api_ver_old) = explode("=", $line);
 				}
 				if(strpos($line, "lllaniplp2=") !== false) {
 					list(, $lllaniplp2old) = explode("=", $line);
@@ -3354,7 +3357,6 @@
 							<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
 							<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
 							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
-							<option <?php if($wattbezugmodulold == "smaemd_bezug\n") echo selected ?> value="smaemd_bezug">SMA Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
 							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo selected ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
@@ -3624,7 +3626,7 @@
 							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen<br><br><br>
+							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen. Funktioniert auch mit Energy Meter statt Home Manager<br><br><br>
 						</div>
 					</div>
 					<div id="wattbezugsmartfox">
@@ -4449,6 +4451,14 @@
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
+						</div>
+						<div class="row" style="background-color:#fcbe1e">
+							<b>Bitte die API-Version wählen:</b><br />
+							<select type="text" name="ess_api_ver" id="ess_api_ver">
+								<option <?php if($ess_api_ver_old == "10.2019\n") echo selected ?> value="10.2019">API-Version Oktober 2019</option>
+								<option <?php if($ess_api_ver_old == "01.2020\n") echo selected ?> value="01.2020">API-Version Januar 2020</option>
+							</select><br />
+							Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version<br />
 						</div>
 					</div>
 					<div id="divspeichernone">

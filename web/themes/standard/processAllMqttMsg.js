@@ -213,6 +213,22 @@ var thevalues = [
 	["openWB/lp/6/strChargePointName", "#lp6name"],
 	["openWB/lp/7/strChargePointName", "#lp7name"],
 	["openWB/lp/8/strChargePointName", "#lp8name"],
+	["openWB/lp/1/AutolockConfigured", "#"],
+	["openWB/lp/2/AutolockConfigured", "#"],
+	["openWB/lp/3/AutolockConfigured", "#"],
+	["openWB/lp/4/AutolockConfigured", "#"],
+	["openWB/lp/5/AutolockConfigured", "#"],
+	["openWB/lp/6/AutolockConfigured", "#"],
+	["openWB/lp/7/AutolockConfigured", "#"],
+	["openWB/lp/8/AutolockConfigured", "#"],
+	["openWB/lp/1/AutolockStatus", "#"],
+	["openWB/lp/2/AutolockStatus", "#"],
+	["openWB/lp/3/AutolockStatus", "#"],
+	["openWB/lp/4/AutolockStatus", "#"],
+	["openWB/lp/5/AutolockStatus", "#"],
+	["openWB/lp/6/AutolockStatus", "#"],
+	["openWB/lp/7/AutolockStatus", "#"],
+	["openWB/lp/8/AutolockStatus", "#"],
 	["openWB/lp/1/ADirectModeAmps", "#"],
 	["openWB/lp/2/ADirectModeAmps", "#"],
 	["openWB/lp/3/ADirectModeAmps", "#"],
@@ -614,8 +630,8 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
 		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf 
-		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh) 
+		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
+		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = new Array();
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
@@ -803,6 +819,54 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-times");
 			document.getElementById("lp"+index+"enableddiv").classList.add("fa-check");
 			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: lightgreen;");
+		}
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
+		// matches to all messages containing "openwb/lp/#/autolockconfigured"
+		// where # is an integer > 0
+		// search is case insensitive
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		if ( mqttpayload == 0 ) {
+			// hide icon
+			$("#lp"+index+"AutolockConfiguredSpan").hide();
+		} else {
+			// show icon
+			$("#lp"+index+"AutolockConfiguredSpan").show();
+		}
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockstatus$/i ) ) {
+		// matches to all messages containing "openwb/lp/#/waitingforautolock"
+		// where # is an integer > 0
+		// search is case insensitive
+		// values used for AutolockStatus flag:
+		// 0 = standby
+		// 1 = waiting for autolock
+		// 2 = autolock performed
+		// 3 = auto-unlock performed
+
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var element = "#lp"+index+"AutolockConfiguredSpan";  // element to manipulate
+		switch ( mqttpayload ) {
+			case "0":
+				// remove animation from span and set standard colored key icon
+				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation text-danger text-success");
+				$(element).addClass("fa-key");
+				break;
+			case "1":
+				// add animation to standard icon
+				$(element).removeClass("fa-lock fa-lock-open text-danger text-success");
+				$(element).addClass("fa-key animate-alertPulsation");
+				break;
+			case "2":
+				// add red locked icon
+				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation text-success");
+				$(element).addClass("fa-lock text-danger");
+				break;
+			case "3":
+				// add green unlock icon
+				$(element).removeClass("fa-lock fa-key animate-alertPulsation text-danger");
+				$(element).addClass("fa-lock-open text-success");
+				break;
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargeatnight$/i ) ) {
@@ -1063,6 +1127,7 @@ function graphoptionclick() {
 }
 
 function lp1enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp1enabled == 0 ) {
 		publish("1","openWB/set/lp1/ChargePointEnabled");
 	} else {
@@ -1071,6 +1136,7 @@ function lp1enabledclick() {
 }
 
 function lp2enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp2enabled == 0 ) {
 		publish("1","openWB/set/lp2/ChargePointEnabled");
 	} else {
@@ -1079,6 +1145,7 @@ function lp2enabledclick() {
 }
 
 function lp3enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp3enabled == 0 ) {
 		publish("1","openWB/set/lp3/ChargePointEnabled");
 	} else {
@@ -1087,6 +1154,7 @@ function lp3enabledclick() {
 }
 
 function lp4enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp4enabled == 0 ) {
 		publish("1","openWB/set/lp4/ChargePointEnabled");
 	} else {
@@ -1095,6 +1163,7 @@ function lp4enabledclick() {
 }
 
 function lp5enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp5enabled == 0 ) {
 		publish("1","openWB/set/lp5/ChargePointEnabled");
 	} else {
@@ -1103,6 +1172,7 @@ function lp5enabledclick() {
 }
 
 function lp6enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp6enabled == 0 ) {
 		publish("1","openWB/set/lp6/ChargePointEnabled");
 	} else {
@@ -1111,6 +1181,7 @@ function lp6enabledclick() {
 }
 
 function lp7enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp7enabled == 0 ) {
 		publish("1","openWB/set/lp7/ChargePointEnabled");
 	} else {
@@ -1119,6 +1190,7 @@ function lp7enabledclick() {
 }
 
 function lp8enabledclick() {
+	publish("0","openWB/set/lp/1/AutolockStatus");
 	if ( lp8enabled == 0 ) {
 		publish("1","openWB/set/lp8/ChargePointEnabled");
 	} else {

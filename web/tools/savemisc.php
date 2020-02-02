@@ -1,5 +1,4 @@
 <?php
-if(isset($_POST['debug'])) {
 $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
@@ -14,6 +13,10 @@ foreach($lines as $line) {
 	    }
 	    if(strpos($line, "cpunterbrechunglp1=") !== false) {
 	    $result .= 'cpunterbrechunglp1='.$_POST[cpunterbrechunglp1]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "cpunterbrechunglp2=") !== false) {
+	    $result .= 'cpunterbrechunglp2='.$_POST[cpunterbrechunglp2]."\n";
 	    $writeit = '1';
 	    }
 	    if(strpos($line, "livegraph=") !== false) {
@@ -296,7 +299,7 @@ foreach($lines as $line) {
 	    }
 }
 file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-}
+
 file_put_contents('/var/www/html/openWB/ramdisk/reloaddisplay', "1");
 file_put_contents('/var/www/html/openWB/ramdisk/execdisplay', "1");
 header("Location: ../index.php");

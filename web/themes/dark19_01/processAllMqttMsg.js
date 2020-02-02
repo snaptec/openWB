@@ -639,6 +639,10 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		graphawattarprice = getCol(csvaData, 1);
 		loadawattargraph();
 	}
+	else if ( mqttmsg == "openWB/global/awattar/MaxPriceForCharging" ) {
+		document.getElementById("awattar1s").value = mqttpayload;
+		document.getElementById("awattar1l").innerHTML = mqttpayload;
+	}
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
 		// set button colors depending on charge mode
 		switch (mqttpayload) {
@@ -1192,7 +1196,7 @@ function lp8enabledclick() {
 	}
 }
 function AwattarMaxPriceClick() {
- 	publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
+	publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
 }
 function lp1DirectChargeAmpsClick() {
 	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");

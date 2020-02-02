@@ -85,7 +85,7 @@ if ($_POST['action'] === 'deleteBridge')
 	exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 ?>
 <script type="text/javascript">
-	setTimeout(function() { window.location = "../mqtt.php"; }, 8000);
+	setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
 </script>
 <?php
 	return;
@@ -330,5 +330,5 @@ exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/
 ?>
 
 <script type="text/javascript">
-	setTimeout(function() { window.location = "../mqtt.php"; }, 8000);
+	setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
 </script>
