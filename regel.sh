@@ -173,7 +173,7 @@ hook
 graphing
 
 if (( cpunterbrechunglp1 == 1 )); then
-       if (( plugstat == 1 )); then
+	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
                if (( llalt > 5 )); then
                        if (( ladeleistung < 200 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
@@ -188,6 +188,24 @@ if (( cpunterbrechunglp1 == 1 )); then
                fi
        else
                echo 0 > ramdisk/cpulp1waraktiv
+       fi
+fi
+if (( cpunterbrechunglp2 == 1 )); then
+	if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
+               if (( llalts1 > 5 )); then
+                       if (( ladeleistunglp2 < 200 )); then
+                               cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
+                               if (( cpulp2waraktiv == 0 )); then
+				       echo "CP Unterbrechung an LP2 durchgeführt"
+                                       sudo python runs/cpulp2.py
+                                       echo 1 > ramdisk/cpulp2waraktiv
+                               fi
+                       else
+                               echo 0 > ramdisk/cpulp2waraktiv
+                       fi
+               fi
+       else
+               echo 0 > ramdisk/cpulp2waraktiv
        fi
 fi
 if [[ $dspeed == "3" ]]; then

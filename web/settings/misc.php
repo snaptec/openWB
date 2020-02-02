@@ -48,6 +48,9 @@
 				if(strpos($line, "cpunterbrechunglp1=") !== false) {
 					list(, $cpunterbrechunglp1old) = explode("=", $line);
 				}
+				if(strpos($line, "cpunterbrechunglp2=") !== false) {
+					list(, $cpunterbrechunglp2old) = explode("=", $line);
+				}
 				if(strpos($line, "displayaktiv=") !== false) {
 					list(, $displayaktivold) = explode("=", $line);
 				}
@@ -621,9 +624,17 @@
 					</div><br><br>
 					<div class="row">
 						<b><label for="cpunterbrechunglp1">CP Unterbrechung LP1:</label></b>
-						<select type="text" name="cpunterbrechunglp1" id="cpunterbrechunglp1netzabschaltunghz">
+						<select type="text" name="cpunterbrechunglp1" id="cpunterbrechunglp1">
 							<option <?php if($cpunterbrechunglp1old == 0) echo selected ?> value="0">Deaktiviert</option>
 							<option <?php if($cpunterbrechunglp1old == 1) echo selected ?> value="1">Aktiviert</option>
+						</select>
+						<br>
+					</div>
+					<div class="row">
+						<b><label for="cpunterbrechunglp2">CP Unterbrechung LP2:</label></b>
+						<select type="text" name="cpunterbrechunglp2" id="cpunterbrechunglp2">
+							<option <?php if($cpunterbrechunglp2old == 0) echo selected ?> value="0">Deaktiviert</option>
+							<option <?php if($cpunterbrechunglp2old == 1) echo selected ?> value="1">Aktiviert</option>
 						</select>
 						<br>
 					</div>

@@ -2055,6 +2055,10 @@ if ! grep -Fq "cpunterbrechunglp1=" /var/www/html/openWB/openwb.conf
 then
 	echo "cpunterbrechunglp1=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "cpunterbrechunglp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "cpunterbrechunglp2=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_zerong_username=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_zerong_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
