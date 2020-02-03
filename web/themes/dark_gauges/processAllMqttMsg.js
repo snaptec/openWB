@@ -1348,16 +1348,15 @@ function getValueDailyYieldLabel() {
 				if ( request.responseText > 0 ) {
 					anzeigeText = request.responseText + ' kWh';
 				}
+				console.log(anzeigeText);
                 // Text setzen
-                gaugePV.set('titleBottom', anzeigeText);
+                gaugePV.set('titleBottom', anzeigeText).grow();
                 // Neuzeichnen erfolgt bei regelmäßiger Werte-Aktualisierung
             }
     });
 }
 
-$(document).ready(function(){
-	doInterval = setInterval(processAllHooks, 5000);
-	processAllHooks();
-	dailyYieldLabelIntervall = setInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
-	getValueDailyYieldLabel();
-});
+doInterval = setInterval(processAllHooks, 5000);
+processAllHooks();
+dailyYieldLabelIntervall = setInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
+getValueDailyYieldLabel();

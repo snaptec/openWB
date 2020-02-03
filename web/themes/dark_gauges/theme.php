@@ -1231,8 +1231,8 @@ EXTDEVICEDIVEND;
 		</script>
 
 		<!-- Data refresher -->
-		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/processAllMqttMsg.js"></script>
-		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/livefunctions.js"></script>
+		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/processAllMqttMsg.js?ver=1.0"></script>
+		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/livefunctions.js?ver=1.0"></script>
 	});  <!-- end $(document).ready -->
 
 </body>
