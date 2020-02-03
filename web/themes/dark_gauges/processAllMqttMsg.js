@@ -1348,7 +1348,6 @@ function getValueDailyYieldLabel() {
 				if ( request.responseText > 0 ) {
 					anzeigeText = request.responseText + ' kWh';
 				}
-				console.log(anzeigeText);
                 // Text setzen
                 gaugePV.set('titleBottom', anzeigeText).grow();
                 // Neuzeichnen erfolgt bei regelmäßiger Werte-Aktualisierung
