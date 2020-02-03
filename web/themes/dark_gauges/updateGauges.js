@@ -170,11 +170,11 @@ function getGaugeDataNeedle() {
       });
 }
 
-$(window).load(function() {
+$(window).on('load', function () {
     // sobal die Seite vollständig geladen ist, alle Gauges füllen
     getGaugeDataNeedle();
     getValueDailyYieldLabel();
     // und dann regelmäßig aktualisieren
     gaugeDataIntervall = setInterval(getGaugeDataNeedle, 5000);  // alle 5 Sekunden Needle erneuern
     dailyYieldLabelIntervall = setInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
-});
+ });
