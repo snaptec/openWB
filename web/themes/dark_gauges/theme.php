@@ -1233,9 +1233,7 @@ EXTDEVICEDIVEND;
 		<!-- Data refresher -->
 		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/processAllMqttMsg.js"></script>
 		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/livefunctions.js"></script>
-		<script src="themes/<?php echo $_COOKIE['openWBTheme'];?>/updateGauges.js"></script>
-
-	});
+	});  <!-- end $(document).ready -->
 
 </body>
 

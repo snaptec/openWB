@@ -569,26 +569,16 @@ function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/evu
 	// called by handlevar
 	if ( mqttmsg == "openWB/evu/W" ) {
-	    var wattbezug = mqttpayload;
-	    intbezug = parseInt(wattbezug, 10);
-		intbezugarrow = intbezug;
-		    if (intbezug > 0) {
-		    if (intbezug > 999) {
-			    intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + " kW Bezug";
-		    } else {
-			wattbezug = intbezug + " W Bezug";
-			}
-	    } else {
-	    	    intbezug = intbezug * -1;
-			if (intbezug > 999) {
-			    intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + " kW Einspeisung";
-		    } else {
-			wattbezug = intbezug + " W Einspeisung";
-			}
-	    }
-	    $("#bezugdiv").html(wattbezug);
+		// zur Regelung: Einspeisung = negativ, Bezug = positiv
+		// Vorzeichen zur Darstellung umdrehen
+		var anzeigeWert = parseInt(mqttpayload,10) * -1;
+		var anzeigeText = 'Einspeisung';
+		if (anzeigeWert < 0) anzeigeText = 'Bezug';
+		// Text und Farbe des Labels anpassen je nach Einspeisung/Bezug
+		// Neuzeichnung erfolgt bei Update der Werte
+		// updateGaugeBottomText(gaugeEVU, anzeigeText, true, true);
+		// Gauge mit Rückgabewert und Text erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+		updateGaugeValue(gaugeEVU, anzeigeWert, anzeigeText, true, true, false);
 	 }
 }
 
@@ -596,35 +586,14 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	if ( mqttmsg == "openWB/global/WHouseConsumption" ) {
-		if (mqttpayload > 999) {
-			mqttpayload = (mqttpayload / 1000).toFixed(2);
-		    	mqttpayload = mqttpayload + " kW";
-		} else {
-			mqttpayload = mqttpayload + " W";
+		var anzeigeWert = parseInt(mqttpayload,10);
+		if (anzeigeWert < 0) {
+			// beim Hausverbrauch bleibt Gauge im positiven Bereich
+			// negative Werte werden = 0 gesetzt
+			anzeigeWert = 0;
 		}
-		$("#hausverbrauchdiv").html(mqttpayload);
-	}
-	else if ( mqttmsg == "openWB/global/WAllChargePoints") {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toFixed(2) + " kW";
-		} else {
-			powerAllLp += " W";
-		}
-		$("#powerAllLpspan").html(powerAllLp);
-	}
-	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
-		if ( document.getElementById("lastregelungaktivdiv") ) {
-			// if the div for info text "Lastregelung" is present in theme
-			$('#lastregelungaktivdiv').html(mqttpayload);
-			if ( mqttpayload.length >= 5 ) {
-				// if there is info-text in payload for topic, show the div
-				$('#lastregelungaktivdiv').show();
-			} else {
-				// if there is no text, hide the div
-				$('#lastregelungaktivdiv').hide();
-			}
-		}
+		// Gauge mit Rückgabewert erneuern, kein Text, asymmetrische Gauge 0-Max, AutoRescale
+		updateGaugeValue(gaugeHome, anzeigeWert, '', false, false, true);
 	}
 	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
 		// read awattar values and trigger graph creation
@@ -699,30 +668,22 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/housebattery
 	// called by handlevar
 	if ( mqttmsg == "openWB/housebattery/W" ) {
-		var speicherwatt = mqttpayload;
-		var intspeicherw = parseInt(speicherwatt, 10);
-		if (intspeicherw > 0) {
-			if ( intspeicherw > 999 ) {
-				intspeicherw = (intspeicherw / 1000).toFixed(2);
-				speicherwatt = intspeicherw + " kW Ladung";
-			} else {
-				speicherwatt = intspeicherw + " W Ladung";
-			}
-		} else {
-	    		intspeicherw = intspeicherw * -1;
-			if (intspeicherw > 999) {
-				intspeicherw = (intspeicherw / 1000).toFixed(2);
-				speicherwatt = intspeicherw + " kW Entladung";
-			} else {
-				speicherwatt = intspeicherw + " W Entladung";
-			}
-		}
-		$("#speicherleistungdiv").html(speicherwatt);
+		// Entladung = negativ, Ladung = positiv
+		var anzeigeWert = parseInt(mqttpayload, 10);
+		var anzeigeText = 'Ladung';
+		if (anzeigeWert < 0) anzeigeText = 'Entadung';
+		// Text und Farbe des Labels anpassen je nach Ladung/Entadung
+		// Neuzeichnung erfolgt bei Update der Werte
+		// updateGaugeBottomText(gaugeBatt, anzeigeText, true, true);
+		// Gauge mit Rückgabewert und Text erneuern, symmetrische Gauge Min-Max, kein AutoRescale
+		updateGaugeValue(gaugeBatt, anzeigeWert, anzeigeText, true, true, false);
 	}
+
 	else if ( mqttmsg == "openWB/housebattery/%Soc" ) {
-		var speichersoc = ", " + mqttpayload;
-		speichersoc += " % SoC"
-		$("#speichersocdiv").html(speichersoc);
+		// ProgressBar mit Rückgabewert erneuern
+		progressBarSoC.value = parseInt(mqttpayload, 10);
+		progressBarSoC.set('title', 'SoC: '+mqttpayload+'%');
+		progressBarSoC.grow();
 	}
 	else if ( mqttmsg == "openWB/housebattery/boolHouseBatteryConfigured" ) {
 		if ( mqttpayload == 1 ) {
@@ -741,28 +702,27 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/pv
 	// called by handlevar
 	if ( mqttmsg == "openWB/pv/W") {
-		var pvwatt = parseInt(mqttpayload, 10);
-		if ( pvwatt > 0 ) {
+		var pvPower = parseInt(mqttpayload, 10);
+		if ( pvPower > 0 ) {
 			// if pv-power is positive, adjust to 0
 			// since pv cannot consume power
-			pvwatt = 0;
+			pvPower = 0;
 		}
 		// convert raw number for display
-		if ( pvwatt <= 0){
+		if ( pvPower <= 0){
 			// production is negative for calculations so adjust for display
-			pvwatt = pvwatt * -1;
+			pvPower = pvPower * -1;
 			// adjust and add unit
-			if (pvwatt > 999) {
-				var pvwattStr = (pvwatt / 1000).toFixed(2) + " kW";
+			if (pvPower > 999) {
+				var pvPowerStr = (pvPower / 1000).toFixed(2) + " kW";
 			} else {
-				var pvwattStr = pvwatt + " W";
+				var pvPowerStr = pvPower + " W";
 			}
 			// only if production
-			if (pvwatt > 0) {
-				pvwattStr += " Erzeugung";
+			if (pvPower > 0) {
+				pvPowerStr += " Erzeugung";
 			}
 		}
-		$("#pvdiv").html(pvwattStr);
 	}
 }
 
@@ -1301,7 +1261,104 @@ function processAllHooks() {
 	}
 }
 
+function updateGaugeValue(gauge, value, text, setText, isSymmetric, autoRescale) {
+    // gauge: zu erneuernde Gauge
+    // value: neuer Wert
+    // text: ggf. neuer Text
+    // setText: Text und Farbe des Labels anpassen
+    // isSymmetric: symmetrische Gauge oder nicht (min-max or 0-max)
+    // autoRescale: Skala passt sich nach defaultScaleCounter-Aufrufen selbst nach unten an
+    if(isNaN(value)){
+        // es wurde keine Zahl als Wert übergeben
+	     return;  // gleich wieder zurück
+    }
+    var needsScaling = false;
+    var newGaugeMax = Math.ceil((Math.abs(value) / 1000)) * 1000;
+    if (gauge.max < newGaugeMax) {
+        // benötigtes Maximum ist größer als Skala
+        gauge.max = newGaugeMax;  // Skala positiv anpassen
+        gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+        needsScaling = true;
+        if (!autoRescale) {
+            // neues Maximum der Gauge als Cookie speichern
+            gauge_identifier = 'dark_gauges_1_' + gauge.id;
+            $.ajax({
+                type: "GET",
+                url: "./setGaugeScaleCookie.php",
+                data: {
+                    name: gauge_identifier,
+                    value: newGaugeMax
+                }
+            });
+        }
+    } else if (gauge.max > newGaugeMax) {
+        // Skala ist aktuell eigentlich zu groß
+        if (autoRescale) {
+            // und Anpassung soll automatisch erfolgen
+            gauge.scaleCounter -= 1; // dann Counter reduzieren
+            if (gauge.scaleCounter == 0) {
+                // wenn Zeit rum
+                gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+                gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / 2000) * 1000);  // Skala anpassen
+                needsScaling = true;
+            }
+        }
+    } else {
+        // Skala soll bleiben, keine automatische Anpassung
+        if (gauge.scaleCounter < defaultScaleCounter) {
+            // aber Zähler zum Wechsel ist schon angelaufen
+            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+        }
+    }
+    if (needsScaling) {
+        // wenn Skala angepasst werden muss
+        if (isSymmetric) {
+            // bei symmetrischer Gauge die negative Skala angleichen
+            gauge.min = gauge.max *-1;
+        }
+        // farbigen Rand anpassen
+        gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
+        // Labels in kW
+        gauge.set('labelsSpecific', [(gauge.min/1000), ((gauge.max-Math.abs(gauge.min))/2000), (gauge.max/1000)]);
+    }
+    // neuen Wert für Gauge setzen, ggf. Text im Label ändern
+    gauge.value = value;
+    if (setText) {
+        gauge.set('titleBottom', text);
+        // Farben der Schrift ggf. anpassen
+        if (value < 0) {
+            gauge.set('titleBottomColor', 'red');
+        } else {
+            gauge.set('titleBottomColor', 'green');
+        }
+    }
+    // und Anzeige erneuern
+    gauge.grow();
+}
+
+function getValueDailyYieldLabel() {
+    // regelmäßig Werte für Tagesertrag-Label vom Server holen
+    $.ajax({
+        // Tagesertrag PV für Gauge für PV-Leistung lesen
+        url:
+            "/openWB/ramdisk/daily_pvkwhk",
+        complete:
+            function(request){
+				var anzeigeText = "";
+				if ( request.responseText > 0 ) {
+					anzeigeText = request.responseText + ' kWh';
+					console.log(anzeigeText);
+				}
+                // Text setzen
+                gaugePV.set('titleBottom', anzeigeText);
+                // Neuzeichnen erfolgt bei regelmäßiger Werte-Aktualisierung
+            }
+    });
+}
+
 $(document).ready(function(){
 	doInterval = setInterval(processAllHooks, 5000);
 	processAllHooks();
+	dailyYieldLabelIntervall = setInterval(getValueDailyYieldLabel, 20000);  // alle 20 Sekunden Label mit Tagesertrag erneuern
+	getValueDailyYieldLabel();
 });
