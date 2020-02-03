@@ -1002,10 +1002,16 @@ EXTDEVICEDIVEND;
 						titleTopSize: 11, titleBottomSize: 8, labelsValueSize: 10, labelsSize: 11
 					}
 				},
-				{maxWidth: 991, width: 160, height: 160,
+				{maxWidth: 870, width: 160, height: 160,
 					options: {
 						radius: 75, marginTop: 35, shadowBlur: 4, titleTopPos: 0.31,
 						titleTopSize: 9, titleBottomSize: 7, labelsValueSize: 10, labelsSize: 9
+					}
+				},
+				{maxWidth: 991, width: 180, height: 180,
+					options: {
+						radius: 85, marginTop: 35, shadowBlur: 4, titleTopPos: 0.38,
+						titleTopSize: 10, titleBottomSize: 8, labelsValueSize: 11, labelsSize: 9
 					}
 				},
 				{maxWidth: 1199, width: 200, height: 200,
@@ -1029,17 +1035,22 @@ EXTDEVICEDIVEND;
 				},
 				{maxWidth: 575, width: 4, height: 155, shadowBlur: 4,
 					options: {
-						textSize: 5, marginTop: 27, marginBottom: 15
+						textSize: 5, marginTop: 27, marginBottom: 17
 					}
 				},
 				{maxWidth: 767, width: 6, height: 220,
 					options: {
-						textSize: 7, marginTop: 34, marginBottom: 34
+						textSize: 7, marginTop: 34, marginBottom: 30
 					}
 				},
-				{maxWidth: 991, width: 5, height: 160,
+				{maxWidth: 870, width: 5, height: 160,
 					options: {
-						textSize: 5, marginTop: 27, marginBottom: 12,
+						textSize: 5, marginTop: 27, marginBottom: 10,
+					}
+				},
+				{maxWidth: 991, width: 5, height: 180,
+					options: {
+						textSize: 6, marginTop: 32, marginBottom: 10,
 					}
 				},
 				{maxWidth: 1199, width: 6, height: 200,
