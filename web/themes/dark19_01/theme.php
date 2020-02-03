@@ -2,7 +2,7 @@
 <html lang="de">
 
 <head>
-	<!-- standard theme for openWB -->
+	<!-- dark19_01 theme for openWB -->
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
@@ -147,19 +147,33 @@
 				Speicher: <span id="speicherleistungdiv"></span><span id="speichersocdiv"></span>
 			</div>
 		</div>
-
-		<div id="webhooksdiv" class="row extDeviceInfoStyle" style="display: none;">
-			<div class="col-3"> Extern:
+		<?php
+			if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
+				// if hooks for external devices are configured, show div
+echo <<<EXTDEVICEDIVBEGIN
+		<div id="webhooksdiv" class="row extDeviceInfoStyle bg-danger">
+			<div class="col-3">
+				Extern:
 			</div>
-			<?php
-				// generate code for all hooks
-				for($i=1; $i <= 3; $i++) {
-					echo '            <div id="hook'.$i.'div" class="col-3" >'."\n";
-					echo '               Gerät '.$i."\n";
-					echo '            </div>'."\n";
-				}
-			?>
+
+EXTDEVICEDIVBEGIN;
+			// generate code for all configured hooks
+			for($i=1; $i <= 3; $i++) {
+				if (${"hook".$i."_aktivold"} == 1) {
+					$divId = "hook".$i."div";
+echo <<<EXTDEVICEDIVMIDDLE
+			<div id="$divId" class="col-3">
+				Gerät$i
+			</div>
+
+EXTDEVICEDIVMIDDLE;
+				}  // end if
+			}  // end for
+echo <<<EXTDEVICEDIVEND
 		</div>
+EXTDEVICEDIVEND;
+			}  // end if hook configured
+		?>
 
 		<br>
 

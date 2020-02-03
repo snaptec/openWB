@@ -34,35 +34,14 @@ if(isset($_GET["lademodus"])) {
 }
 if(isset($_GET["sofortlllp1"])) {
 	if($_GET["sofortlllp1"] >= $minimalstromstaerkeold && $_GET["sofortlllp1"] <= $maximalstromstaerkeold) {
-		$result = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
-		foreach($lines as $line) {
-			if(strpos($line, "sofortll=") !== false) {
-			    $result .= 'sofortll='.$_GET[sofortlllp1]."\n";
-			}
-			else {
-			    $result .= $line;
-			}
-		}
-		file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-
+		file_put_contents('/var/www/html/openWB/ramdisk/lp1sofortll', $_GET['sofortlllp1']);
 	}
 }
 if(isset($_GET["sofortlllp2"])) {
 
 	if($_GET["sofortlllp2"] >= $minimalstromstaerkeold && $_GET["sofortlllp2"] <= $maximalstromstaerkeold) {
 
-		$result = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
-		foreach($lines as $line) {
-			if(strpos($line, "sofortlls1=") !== false) {
-			    $result .= 'sofortlls1='.$_GET[sofortlllp2]."\n";
-			}
-			else {
-			    $result .= $line;
-			}
-		}
-		file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+		file_put_contents('/var/www/html/openWB/ramdisk/lp2sofortll', $_GET['sofortlllp2']);
 
 	}
 }
@@ -70,17 +49,7 @@ if(isset($_GET["sofortlllp3"])) {
 
 	if($_GET["sofortlllp3"] >= $minimalstromstaerkeold && $_GET["sofortlllp3"] <= $maximalstromstaerkeold) {
 
-		$result = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
-		foreach($lines as $line) {
-			if(strpos($line, "sofortlls2=") !== false) {
-			    $result .= 'sofortlls2='.$_GET[sofortlllp3]."\n";
-			}
-			else {
-			    $result .= $line;
-			}
-		}
-		file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+		file_put_contents('/var/www/html/openWB/ramdisk/lp3sofortll', $_GET['sofortlllp3']);
 
 	}
 }
