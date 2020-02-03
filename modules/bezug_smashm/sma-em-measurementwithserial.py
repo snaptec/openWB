@@ -51,6 +51,9 @@ smaserials = str(sys.argv[1])
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
+
+basepath = '/var/www/html/openWB/ramdisk/'
+valuemap = { 'frequency': 'evuhz' }
 #try:
 #    smaemserials=parser.get('SMA-EM', 'serials')
 #    ipbind=parser.get('DAEMON', 'ipbind')
@@ -119,6 +122,18 @@ while True:
         f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
         f.write(str(ikwh))
         f.close()
+        for phase in [1,2,3]:
+           with open(basepath + 'bezugw%i' % phase, 'w') as f:
+              power = emparts['p%iconsume' % phase]
+              if power < 5:
+                power = -emparts['p%isupply' % phase]
+              f.write(str(power))
+           with open(basepath + 'llpf%i' % phase, 'w') as f:
+              f.write(str(emparts['cosphi%i' % phase]))
+        for key, filename in valuemap.items():
+           if key in emparts:
+              with open(basepath + filename, 'w') as f:
+                 f.write(str(emparts[key]))
         sys.exit(0)
 
 
