@@ -1030,37 +1030,37 @@ EXTDEVICEDIVEND;
 			responsiveProgressbarSettings = [
 				{maxWidth: 400, width: 4, height: 140, shadowBlur: 4,
 					options: {
-						textSize: 5, marginTop: 27, marginBottom: 15
+						textSize: 5, marginTop: 25, marginBottom: 15
 					}
 				},
 				{maxWidth: 575, width: 4, height: 155, shadowBlur: 4,
 					options: {
-						textSize: 5, marginTop: 27, marginBottom: 17
+						textSize: 5, marginTop: 25, marginBottom: 17
 					}
 				},
 				{maxWidth: 767, width: 6, height: 220,
 					options: {
-						textSize: 7, marginTop: 34, marginBottom: 30
+						textSize: 7, marginTop: 28, marginBottom: 30
 					}
 				},
 				{maxWidth: 870, width: 5, height: 160,
 					options: {
-						textSize: 5, marginTop: 27, marginBottom: 10,
+						textSize: 5, marginTop: 22, marginBottom: 10,
 					}
 				},
 				{maxWidth: 991, width: 5, height: 180,
 					options: {
-						textSize: 6, marginTop: 32, marginBottom: 10,
+						textSize: 6, marginTop: 25, marginBottom: 10,
 					}
 				},
 				{maxWidth: 1199, width: 6, height: 200,
 					options: {
-						textSize: 7, marginTop: 40, marginBottom: 15
+						textSize: 7, marginTop: 30, marginBottom: 15
 					}
 				},
 				{maxWidth: null, width: 8, height: 220,
 					options: {
-						textSize: 8, marginTop: 35, marginBottom: 20
+						textSize: 8, marginTop: 30, marginBottom: 20
 					}
 				}
 			];
