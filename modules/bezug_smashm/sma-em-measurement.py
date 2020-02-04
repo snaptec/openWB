@@ -95,14 +95,14 @@ while True:
         # Special treatment for positive / negative power
         watt=int(emparts['pconsume'])
         if watt < 5:
-            watt=-emparts['psupply']
+            watt=-int(emparts['psupply'])
         writeToFile(basepath + 'wattbezug', watt)
         writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
         writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
         for phase in [1,2,3]:
-            power = emparts['p%iconsume' % phase]
+            power = int(emparts['p%iconsume' % phase])
             if power < 5:
-                power = -emparts['p%isupply' % phase]
+                power = -int(emparts['p%isupply' % phase])
             writeToFile(basepath + 'bezugw%i' % phase, power)
         for key, filename in phasemapping.items():
             for phase in [1,2,3]:
