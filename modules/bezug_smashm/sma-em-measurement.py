@@ -23,6 +23,7 @@
  * 2019-08-13 datenschuft run without config
  * 2020-01-04 datenschuft changes to tun with speedwiredecoder
  * 2020-01-13 Kevin Wieland changes to run with openWB
+ * 2020-02-03 theHolgi added phase-wise load and power factor
  *
  */
 """
@@ -40,6 +41,11 @@ def abortprogram(signal,frame):
     print('STRG + C = end program')
     sys.exit(0)
 
+def writeToFile(filename, content):
+    """Write content to file"""
+    with open(filename, 'w') as f:
+        f.write(str(content))
+
 # abort-signal
 signal.signal(signal.SIGINT, abortprogram)
 
@@ -47,10 +53,18 @@ signal.signal(signal.SIGINT, abortprogram)
 #read configuration
 #parser = ConfigParser()
 #default values
-smaserials = ""
+smaserials = sys.argv[1] if len(sys.argv) > 0 else None
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
+
+basepath = '/var/www/html/openWB/ramdisk/'
+#                 emparts:    filename
+mapping      = { 'frequency': 'evuhz' }
+phasemapping = { 'i%i':      'bezuga%i',
+                 'u%i':      'evuv%i',
+                 'cosphi%i': 'evupf%i'
+               }
 #try:
 #    smaemserials=parser.get('SMA-EM', 'serials')
 #    ipbind=parser.get('DAEMON', 'ipbind')
@@ -69,78 +83,32 @@ except BaseException:
     print('could not connect to mulicast group or bind to given interface')
     sys.exit(1)
 # processing received messages
-emparts = {}
-emparts=decode_speedwire(sock.recv(608))
-# Output...
-# don't know what P,Q and S means:
-# http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
-# thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
-# cos phi is always positive, no matter what quadrant
-ikwh=int(emparts['pconsumecounter']*1000)
-ekwh=int(emparts['psupplycounter']*1000)
-bezuga1=emparts['i1']
-bezuga2=emparts['i2']
-bezuga3=emparts['i3']
-bezugv1=emparts['u1']
-bezugv2=emparts['u2']
-bezugv3=emparts['u3']
-iw=emparts['pconsume']
-ew=emparts['psupply']
-if ( iw < 5 ):
-    watt=int(ew*-1)
-else:
-    watt=int(iw)
-f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
-f.write(str(bezugv1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
-f.write(str(bezugv2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
-f.write(str(bezugv3))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(bezuga1))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(bezuga2))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(bezuga3))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
-f.write(str(watt))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
-f.write(str(ekwh))
-f.close()
-f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
-f.write(str(ikwh))
-f.close()
-
-
-
-#print ('SMA-EM Serial:{}'.format(emparts['serial']))
-#print ('----sum----')
-#print ('P: consume:{}W {}kWh supply:{}W {}kWh'.format(emparts['pconsume'],emparts['pconsumecounter'],emparts['psupply'],emparts['psupplycounter']))
-#print ('S: consume:{}VA {}kVAh supply:{}VA {}VAh'.format(emparts['sconsume'],emparts['sconsumecounter'],emparts['ssupply'],emparts['ssupplycounter']))
-#print ('Q: cap {}var {}kvarh ind {}var {}kvarh'.format(emparts['qconsume'],emparts['qconsumecounter'],emparts['qsupply'],emparts['qsupplycounter']))
-#print ('cos phi:{}°'.format(emparts['cosphi']))
-#if emparts['speedwire-version']=="2.3.4.R|020304":
-#    print ('frequency:{}Hz'.format(emparts['frequency']))
-#print ('----L1----')
-#print ('P: consume:{}W {}kWh supply:{}W {}kWh'.format(emparts['p1consume'],emparts['p1consumecounter'],emparts['p1supply'],emparts['p1supplycounter']))
-#print ('S: consume:{}VA {}kVAh supply:{}VA {}kVAh'.format(emparts['s1consume'],emparts['s1consumecounter'],emparts['s1supply'],emparts['s1supplycounter']))
-#print ('Q: cap {}var {}kvarh ind {}var {}kvarh'.format(emparts['q1consume'],emparts['q1consumecounter'],emparts['q1supply'],emparts['q1supplycounter']))
-#print ('U: {}V I:{}A cos phi:{}°'.format(emparts['u1'],emparts['i1'],emparts['cosphi1']))
-#print ('----L2----')
-#print ('P: consume:{}W {}kWh supply:{}W {}kWh'.format(emparts['p2consume'],emparts['p2consumecounter'],emparts['p2supply'],emparts['p2supplycounter']))
-#print ('S: consume:{}VA {}kVAh supply:{}VA {}kVAh'.format(emparts['s2consume'],emparts['s2consumecounter'],emparts['s2supply'],emparts['s2supplycounter']))
-#print ('Q: cap {}var {}kvarh ind {}var {}kvarh'.format(emparts['q2consume'],emparts['q2consumecounter'],emparts['q2supply'],emparts['q2supplycounter']))
-#print ('U: {}V I:{}A cos phi:{}°'.format(emparts['u2'],emparts['i2'],emparts['cosphi2']))
-#print ('----L3----')
-#print ('P: consume:{}W {}kWh supply:{}W {}kWh'.format(emparts['p3consume'],emparts['p3consumecounter'],emparts['p3supply'],emparts['p3supplycounter']))
-#print ('S: consume:{}VA {}kVAh supply:{}VA {}kVAh'.format(emparts['s3consume'],emparts['s3consumecounter'],emparts['s3supply'],emparts['s3supplycounter']))
-#print ('Q: cap {}var {}kvarh ind {}var {}kvarh'.format(emparts['q3consume'],emparts['q3consumecounter'],emparts['q3supply'],emparts['q3supplycounter']))
-#print ('U: {}V I:{}A cos phi:{}°'.format(emparts['u3'],emparts['i3'],emparts['cosphi3']))
-#print ('Version: {}'.format(emparts['speedwire-version']))
+while True:
+    emparts = {}
+    emparts=decode_speedwire(sock.recv(608))
+    # Output...
+    # don't know what P,Q and S means:
+    # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
+    # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
+    # cos phi is always positive, no matter what quadrant
+    if smaserials is None or smaserials == 'none' or str(emparts['serial']) == smaserials:
+        # Special treatment for positive / negative power
+        watt=int(emparts['pconsume'])
+        if watt < 5:
+            watt=-emparts['psupply']
+        writeToFile(basepath + 'wattbezug', watt)
+        writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
+        writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
+        for phase in [1,2,3]:
+            power = emparts['p%iconsume' % phase]
+            if power < 5:
+                power = -emparts['p%isupply' % phase]
+            writeToFile(basepath + 'bezugw%i' % phase, power)
+        for key, filename in phasemapping.items():
+            for phase in [1,2,3]:
+                if key % phase in emparts:
+                    writeToFile(basepath + filename % phase, emparts[key % phase])
+        for key, filename in mapping.items():
+            if key in emparts:
+                writeToFile(basepath + filename, emparts[key])
+        sys.exit(0)
