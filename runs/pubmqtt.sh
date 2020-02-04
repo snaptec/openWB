@@ -165,6 +165,7 @@ mqttvar["lp/5/AutolockConfigured"]=autolockconfiguredlp5
 mqttvar["lp/6/AutolockConfigured"]=autolockconfiguredlp6
 mqttvar["lp/7/AutolockConfigured"]=autolockconfiguredlp7
 mqttvar["lp/8/AutolockConfigured"]=autolockconfiguredlp8
+mqttvar["pv/DailyYieldKwh"]=daily_pvkwhk
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
