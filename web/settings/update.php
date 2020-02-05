@@ -55,7 +55,7 @@
 			}
 
 		?>
-		
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col">
@@ -210,7 +210,7 @@
 						$("#availNightlyVersionSpan").text(result);
 						$("#availNightlyVersionSpan").data("version", result);
 					});
-				$.get('/openWB/web/version.txt')
+				$.get('/openWB/web/version')
 					.done(function(result) {
 						$("#installedVersionSpan").text(result);
 						$("#installedVersionSpan").data("version", result);
