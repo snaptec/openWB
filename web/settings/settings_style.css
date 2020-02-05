@@ -80,6 +80,16 @@ body > .container {
   -webkit-font-smoothing: antialiased;
 }
 
+/* very Small devices (up to 575.98px) */
+@media screen and (max-width: 575.98px) {
+    .navbar-collapse a {
+        font-size: 1.8em;
+    }
+    .navbar-brand {
+        font-size: 2.0em;
+    }
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
     html {

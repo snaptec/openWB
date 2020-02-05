@@ -40,12 +40,6 @@
 
 			include '/var/www/html/openWB/web/settings/navbar.php';
 
-			// read actual version # from releasetrains
-			$stableVersion = trim(file_get_contents('/var/www/html/openWB/ramdisk/vstable'));
-			$betaVersion = trim(file_get_contents('/var/www/html/openWB/ramdisk/vbeta'));
-			$nightlyVersion = trim(file_get_contents('/var/www/html/openWB/ramdisk/vnightly'));
-			$installedVersion = trim(file_get_contents('/var/www/html/openWB/web/version'));
-
 			// read selected releasetrain from config file
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -70,15 +64,25 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<b>installierte Version: <?php echo $installedVersion ?><br></b>
-					<div id="availStableVersionDiv" data-version="<?php echo $stableVersion?>">
-						verfügbare Stable: <?php echo $stableVersion ?><br>
+					<div>
+						<b>installierte Version:
+							<span id="installedVersionSpan" data-version=""></span>
+						</b><br>
 					</div>
-					<div id="availBetaVersionDiv" data-version="<?php echo $betaVersion?>">
-						verfügbare Beta: <?php echo $betaVersion ?><br>
+					<div>
+						verfügbare Stable:
+						<span id="availStableVersionSpan" data-version="">nicht verfügbar</span>
+						<br>
 					</div>
-					<div id="availNightlyVersionDiv" data-version="<?php echo $nightlyVersion?>">
-						verfügbare Nightly: <?php echo $nightlyVersion ?><br>
+					<div>
+						verfügbare Beta:
+						<span id="availBetaVersionSpan" data-version="">nicht verfügbar</span>
+						<br>
+					</div>
+					<div>
+						verfügbare Nightly:
+						<span id="availNightlyVersionSpan" data-version="">nicht verfügbar</span>
+						<br>
 					</div>
 				</div>
 			</div>
@@ -161,18 +165,19 @@
 
 		            <!-- modal body -->
 		            <div class="modal-body text-center">
-		                        Aktuelle Version: <?php echo $installedVersion; ?><br>
-		                        <br>
-		                        Soll wirklich ein Update der openWB auf<br>
-		                        <b>die verfügbare Version <span id="selectedVersionSpan"></span></b><br>
-		                        erfolgen?<br>
-		                        <br>
-		                        Das Update kann einige Zeit in Anspruch nehmen. Alle Einstellungen bleiben erhalten.
-		                        <br>
-		                        <b>
-		                            Es wird empfohlen, zur Sicherheit zuvor ein Backup zu erstellen.<br>
-		                            <span class="text-danger">Fahrzeuge sind vor dem Update abzustecken!</span>
-		                        </b>
+                        Aktuelle Version: <span id="modalInstalledVersionSpan"></span>
+						<br>
+                        <br>
+                        Soll wirklich ein Update der openWB auf<br>
+                        <b>die verfügbare Version <span id="selectedVersionSpan"></span></b><br>
+                        erfolgen?<br>
+                        <br>
+                        Das Update kann einige Zeit in Anspruch nehmen. Alle Einstellungen bleiben erhalten.
+                        <br>
+                        <b>
+                            Es wird empfohlen, zur Sicherheit zuvor ein Backup zu erstellen.<br>
+                            <span class="text-danger">Fahrzeuge sind vor dem Update abzustecken!</span>
+                        </b>
 		            </div>
 
 		            <!-- modal footer -->
@@ -189,27 +194,50 @@
 
 			$(document).ready(function(){
 
-				// submit form if button in modal window is clicked
-				$(document).on('click', '#updateBtn', function() {
-					$('#releasetrainForm').submit();
-				});
+				// get available versions from github and fill divs
+				$.get('https://raw.githubusercontent.com/snaptec/openWB/stable/web/version')
+					.done(function(result) {
+						$("#availStableVersionSpan").text(result);
+						$("#availStableVersionSpan").data("version", result);
+					});
+				$.get('https://raw.githubusercontent.com/snaptec/openWB/beta/web/version')
+					.done(function(result) {
+						$("#availBetaVersionSpan").text(result);
+						$("#availBetaVersionSpan").data("version", result);
+					});
+				$.get('https://raw.githubusercontent.com/snaptec/openWB/master/web/version')
+					.done(function(result) {
+						$("#availNightlyVersionSpan").text(result);
+						$("#availNightlyVersionSpan").data("version", result);
+					});
+				$.get('/openWB/web/version')
+					.done(function(result) {
+						$("#installedVersionSpan").text(result);
+						$("#installedVersionSpan").data("version", result);
+						$("#modalInstalledVersionSpan").text(result);
+					});
 
 				// fill modal text with selected Version string
-				$("#updateConfirmationModal").on('show.bs.modal', function(){
+				$(document).on('click', "[name = 'releasetrainRadioBtn']", function() {
 					// get checked choice
 					var choice = $("input[type=radio]:checked").attr("value");
 					// and set text
 					switch (choice) {
 						case "stable":
-							$("#selectedVersionSpan").text( $("#availStableVersionDiv").data("version") );
+							$("#selectedVersionSpan").text( $("#availStableVersionSpan").data("version") );
 							break;
 						case "beta":
-							$("#selectedVersionSpan").text( $("#availBetaVersionDiv").data("version") );
+							$("#selectedVersionSpan").text( $("#availBetaVersionSpan").data("version") );
 							break;
 						case "master":
-							$("#selectedVersionSpan").text( $("#availNightlyVersionDiv").data("version") );
+							$("#selectedVersionSpan").text( $("#availNightlyVersionSpan").data("version") );
 							break;
 					}
+				});
+
+				// submit form if button in modal window is clicked
+				$(document).on('click', '#updateBtn', function() {
+					$('#releasetrainForm').submit();
 				});
 
 			});
