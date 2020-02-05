@@ -1,8 +1,6 @@
 #!/bin/bash
 . /var/www/html/openWB/openwb.conf
 echo "Start cron nightly @ $(date)"
-#gsi daten abfragen
-/var/www/html/openWB/runs/gsiabfrage.sh &
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay

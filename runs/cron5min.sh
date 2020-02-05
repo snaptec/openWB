@@ -35,7 +35,7 @@ ll7=$(echo "$ll7 * 1000" | bc)
 ll8=$(echo "$ll8 * 1000" | bc)
 echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1 >> $dailyfile.csv
 
-
+netzabschaltunghz=0
 if (( netzabschaltunghz == 1 )); then
 hz=$(</var/www/html/openWB/ramdisk/llhz)
 hz=$(echo "$hz * 100" | bc | sed 's/\..*$//')
