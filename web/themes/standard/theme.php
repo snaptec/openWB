@@ -137,41 +137,42 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
-				Hausverbrauch: <span id="hausverbrauchdiv"></span>
+		<?php
+			if ( $hausverbrauchstatold == 1 ) {
+echo <<<HAUSVERBRAUCHDIV
+			<div class="row justify-content-center">
+				<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
+					Hausverbrauch: <span id="hausverbrauchdiv"></span>
+				</div>
 			</div>
-		</div>
-		<div id="speicherdiv" class="row justify-content-center" style="display: none;">
+HAUSVERBRAUCHDIV;
+			}
+			// if speichermodul is not "none", show the info
+			if ( strcmp(trim($speicherstatold),"none") != 0 ) {
+echo <<<SPEICHERDIV
+		<div id="speicherdiv" class="row justify-content-center">
 			<div class="col-sm-12 pvInfoStyle" style="background-color:#fcbe1e;">
 				Speicher: <span id="speicherleistungdiv"></span><span id="speichersocdiv"></span>
 			</div>
 		</div>
-		<?php
+SPEICHERDIV;
+			}  // end if speichervorhanden
+
 			if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
-				// if hooks for external devices are configured, show div
-echo <<<EXTDEVICEDIVBEGIN
-		<div id="webhooksdiv" class="row extDeviceInfoStyle bg-danger">
-			<div class="col-3">
-				Extern:
-			</div>
-
-EXTDEVICEDIVBEGIN;
-			// generate code for all configured hooks
-			for($i=1; $i <= 3; $i++) {
-				if (${"hook".$i."_aktivold"} == 1) {
-					$divId = "hook".$i."div";
+			// if hooks for external devices are configured, show div
+				echo '<div id="webhooksdiv" class="row justify-content-center extDeviceInfoStyle bg-light">';
+				// generate code for all configured hooks
+				for($i=1; $i <= 3; $i++) {
+					if (${"hook".$i."_aktivold"} == 1) {
+						$divId = "hook".$i."div";
 echo <<<EXTDEVICEDIVMIDDLE
-			<div id="$divId" class="col-3">
-				Gerät$i
+			<div id="$divId" class="col-3 m-1">
+				ext. Gerät $i
 			</div>
-
 EXTDEVICEDIVMIDDLE;
-				}  // end if
-			}  // end for
-echo <<<EXTDEVICEDIVEND
-		</div>
-EXTDEVICEDIVEND;
+					}  // end if
+				}  // end for
+		echo '</div>';
 			}  // end if hook configured
 		?>
 
