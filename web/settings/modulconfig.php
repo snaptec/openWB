@@ -4188,14 +4188,14 @@
 							<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+							Gültige Werte IP. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.<br><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
 							<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung reicht die Angabe eines Wechselrichters. Sind Symo und Symo Hybrid im Einsatz müssen diese beide angegeben werden. Ist kein zweiter Wechselrichter vorhanden hier - none - eintragen.<br><br>
+							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.<br><br>
 						</div>
 					</div>
 					<div id="pvmpm3pm">
