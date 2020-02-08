@@ -940,11 +940,11 @@ EXTDEVICEDIVMIDDLE;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js"></script>
-	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js"></script>
-	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js?ver=1.0"></script>
 </body>
 
 </html>
