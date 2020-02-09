@@ -3,7 +3,7 @@
 # Auslesen eine Fronius Symo WR über die integrierte API des WR. Rückgabewert ist die aktuelle Wirkleistung in [W].
 . /var/www/html/openWB/openwb.conf
 
-pvwatttmp=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope?System")
+pvwatttmp=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
 pvwatt=$(echo $pvwatttmp | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')
 
 # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
@@ -15,7 +15,7 @@ fi
 pvkwh=$(echo $pvwatttmp | jq '.Body.Data.Site.E_Total')
 
 if [[ $wrfronius2ip != "none" ]]; then
-	pv2watttmp=$(curl --connect-timeout 3 -s "$wrfronius2ip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope?System")
+	pv2watttmp=$(curl --connect-timeout 3 -s "$wrfronius2ip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
 	pv2watt=$(echo $pv2watttmp | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')
 	# Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0
 	re='^-?[0-9]+$'
