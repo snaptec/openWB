@@ -16,13 +16,16 @@
 
 		// convert lines to key/value array for faster manipulation
 		foreach($settingsFile as $line) {
-			// split line at char '='
-			$splitLine = explode('=', $line, 2);
-			// trim parts
-			$splitLine[0] = trim($splitLine[0]);
-			$splitLine[1] = trim($splitLine[1]);
-			// push key/value pair to new array
-			$settingsArray[$splitLine[0]] = $splitLine[1];
+			// check for comment-lines in older config files and don't process them
+			if ( strlen(trim($line)) > 3 && $line[0] != "#" ) {
+				// split line at char '='
+				$splitLine = explode('=', $line, 2);
+				// trim parts
+				$splitLine[0] = trim($splitLine[0]);
+				$splitLine[1] = trim($splitLine[1]);
+				// push key/value pair to new array
+				$settingsArray[$splitLine[0]] = $splitLine[1];
+			}
 		}
 		// now values can be accessed by $settingsArray[$key] = $value;
 
