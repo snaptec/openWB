@@ -1592,6 +1592,8 @@
 
 							if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
 								$('#mpm3pmlllp1div').show();
+								$('#rs485lanlp1').hide();
+
 							}
 							if($('#ladeleistungmodul').val() == 'none') {
 								$('#llmnone').show();
@@ -2574,15 +2576,15 @@
 								$('#sdm120s1div').hide();
 								$('#swifis1div').hide();
 								$('#mpm3pmlls1div').hide();
-								$('#rs485laniplp2').hide();
+								$('#rs485lanlp2').hide();
 								$('#mpm3pmlllp2div').hide();
 								if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
 									$('#sdm630s1div').show();
-									$('#rs485laniplp2').show();
+									$('#rs485lanlp2').show();
 								}
 								if($('#ladeleistungs1modul').val() == 'sdm120modbuslls1') {
 									$('#sdm120s1div').show();
-									$('#rs485laniplp2').show();
+									$('#rs485lanlp2').show();
 								}
 								if($('#ladeleistungs1modul').val() == 'simpleevsewifis1') {
 									$('#swifis1div').show();
@@ -2591,12 +2593,13 @@
 									$('#swifis1div').show();
 							    }
 							    if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
-									$('#mpm3pmlllp2div').show();
+								    $('#mpm3pmlllp2div').show();
+									$('#rs485lanlp2').hide();
 								}
 
 								if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 									$('#mpm3pmlls1div').show();
-									$('#rs485laniplp2').show();
+									$('#rs485lanlp2').show();
 								}
 							}
 
@@ -3440,12 +3443,9 @@
 						</div>
 					</div>
 					<div id="wattbezugkostalpiko">
+
 						<div class="row" style="background-color:#febebe">
-							<b><label for="wrkostalpikoip">WR Kostal Piko IP:</label></b>
-							<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>"><br>
-						</div>
-						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. IP Adresse Kostal Wechselrichter. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby. <br> Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>Ein extra PV-Modul muss nicht mehr ausgewählt werden.<br><br>
+							IP Adresse wird im PV Modul konfiguriert. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby. <br> Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>Ein extra PV-Modul muss nicht mehr ausgewählt werden.<br><br>
 						</div>
 					</div>
 					<div id="wattbezugplentihaus">
@@ -3475,13 +3475,7 @@
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
 						</div>
-						<div class="row" style="background-color:#febebe">
-							<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
-							<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
-						</div>
-						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
-						</div>
+
 						<input type='hidden' value='0' name='mpm3pmevuhaus'>
 						<input id="mpm3pmevuhaus" name="mpm3pmevuhaus" value="1" type="checkbox" <?php if ( $mpm3pmevuhausold == 1){ echo "checked"; } ?> >
 						<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label><br>
@@ -3686,12 +3680,9 @@
 						</div>
 					</div>
 					<div id="wattbezugsolarlog">
+
 						<div class="row" style="background-color:#febebe">
-							<b><label for="bezug_solarlog_ip">IP Adresse des SolarLog</label></b>
-							<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
-						</div>
-						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. Ein extra PV-Modul ist dann nicht mehr nötig.<br>
+							Die zugehörige IP Adresse ist im PV Modul einzustellen.<br>
 						</div>
 						<div class="row">
 							<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
@@ -4188,14 +4179,14 @@
 							<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse Fronius Webinterface.<br><br>
+							Gültige Werte IP. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.<br><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
 							<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung reicht die Angabe eines Wechselrichters. Sind Symo und Symo Hybrid im Einsatz müssen diese beide angegeben werden. Ist kein zweiter Wechselrichter vorhanden hier - none - eintragen.<br><br>
+							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.<br><br>
 						</div>
 					</div>
 					<div id="pvmpm3pm">
