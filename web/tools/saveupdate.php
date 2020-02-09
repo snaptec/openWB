@@ -14,7 +14,7 @@
 		$settingsFile = file($myConfigFile);
 		// prepare key/value array
 		$settingsArray = [];
-		
+
 		// convert lines to key/value array for faster manipulation
 		foreach($settingsFile as $line) {
 			// check for comment-lines in older config files and don't process them
@@ -49,6 +49,6 @@
         echo "<script>window.location.href='../index.php';</script>";
     }
     // if successfully saved to config, start update
-    //echo "<script>window.location.href='./update.php';</script>";
+    echo "<script>window.location.href='./update.php';</script>";
 
 ?>
