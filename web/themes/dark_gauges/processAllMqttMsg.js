@@ -54,20 +54,7 @@ var all6p;
 var all7p;
 var all8p;
 var hidehaus;
-$('#lp2div').hide();
-$('#lp3div').hide();
-$('#lp4div').hide();
-$('#lp5div').hide();
-$('#lp6div').hide();
-$('#lp7div').hide();
-$('#lp8div').hide();
-$('#slider2div').hide();
-$('#slider3div').hide();
-$('#slider4div').hide();
-$('#slider5div').hide();
-$('#slider6div').hide();
-$('#slider7div').hide();
-$('#slider8div').hide();
+// thevalues declare all mqtttopics to be subsribed
 var thevalues = [
 	["openWB/global/awattar/MaxPriceForCharging", "#"],
 	["openWB/global/awattar/pricelist", "#"],
@@ -100,7 +87,7 @@ var thevalues = [
 	["openWB/graph/boolDisplayLegend", "#"],
 	["openWB/graph/boolDisplayLiveGraph", "#"],
 	["openWB/graph/boolDisplayPv", "#"],
-	["openWB/evu/W", "#bezugdiv"],
+	["openWB/evu/W", "#"],
 	["openWB/global/WHouseConsumption", "#"],
 	["openWB/pv/W", "#"],
 	["openWB/lp/1/%Soc", "#"],
@@ -164,7 +151,7 @@ var thevalues = [
 	["openWB/lp/2/kmCharged", "#"],
 	["openWB/lp/3/kmCharged", "#"],
 	// geglätteter Wert erst einmal nicht angezeigt
-	["openWB/evu/WAverage", "#bezugglattdiv"],
+	["openWB/evu/WAverage", "#"],
 	["openWB/lp/1/ChargeStatus", "#"],
 	["openWB/lp/2/ChargeStatus", "#"],
 	["openWB/lp/3/ChargeStatus", "#"],
@@ -195,22 +182,22 @@ var thevalues = [
 	["openWB/lp/6/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/7/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/8/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/1/ChargePointEnabled", "#lp1enabled"],
-	["openWB/lp/2/ChargePointEnabled", "#lp2enabled"],
-	["openWB/lp/3/ChargePointEnabled", "#lp3enabled"],
-	["openWB/lp/4/ChargePointEnabled", "#lp4enabled"],
-	["openWB/lp/5/ChargePointEnabled", "#lp5enabled"],
-	["openWB/lp/6/ChargePointEnabled", "#lp6enabled"],
-	["openWB/lp/7/ChargePointEnabled", "#lp7enabled"],
-	["openWB/lp/8/ChargePointEnabled", "#lp8enabled"],
-	["openWB/lp/1/strChargePointName", "#lp1name"],
-	["openWB/lp/2/strChargePointName", "#lp2name"],
-	["openWB/lp/3/strChargePointName", "#lp3name"],
-	["openWB/lp/4/strChargePointName", "#lp4name"],
-	["openWB/lp/5/strChargePointName", "#lp5name"],
-	["openWB/lp/6/strChargePointName", "#lp6name"],
-	["openWB/lp/7/strChargePointName", "#lp7name"],
-	["openWB/lp/8/strChargePointName", "#lp8name"],
+	["openWB/lp/1/ChargePointEnabled", "#"],
+	["openWB/lp/2/ChargePointEnabled", "#"],
+	["openWB/lp/3/ChargePointEnabled", "#"],
+	["openWB/lp/4/ChargePointEnabled", "#"],
+	["openWB/lp/5/ChargePointEnabled", "#"],
+	["openWB/lp/6/ChargePointEnabled", "#"],
+	["openWB/lp/7/ChargePointEnabled", "#"],
+	["openWB/lp/8/ChargePointEnabled", "#"],
+	["openWB/lp/1/strChargePointName", "#"],
+	["openWB/lp/2/strChargePointName", "#"],
+	["openWB/lp/3/strChargePointName", "#"],
+	["openWB/lp/4/strChargePointName", "#"],
+	["openWB/lp/5/strChargePointName", "#"],
+	["openWB/lp/6/strChargePointName", "#"],
+	["openWB/lp/7/strChargePointName", "#"],
+	["openWB/lp/8/strChargePointName", "#"],
 	["openWB/lp/1/AutolockConfigured", "#"],
 	["openWB/lp/2/AutolockConfigured", "#"],
 	["openWB/lp/3/AutolockConfigured", "#"],
@@ -267,15 +254,14 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
 			hidehaus = 'foo';
-			document.getElementById("graphhausdiv").setAttribute("style", "color: green;");
-			graphhausdiv.classList.remove("fa-toggle-off");
-			graphhausdiv.classList.add("fa-toggle-on");
-
+			$("graphhausdiv").removeClass("fa-toggle-off");
+			$("graphhausdiv").addClass("fa-toggle-on");
+			$("graphhausdiv").attr("style", "color: green;");
 		} else {
 			boolDisplayHouseConsumption = true;
-			document.getElementById("graphhausdiv").setAttribute("style", "color: red;");
-			graphhausdiv.classList.remove("fa-toggle-on");
-			graphhausdiv.classList.add("fa-toggle-off");
+			$("graphhausdiv").removeClass("fa-toggle-on");
+			$("graphhausdiv").addClass("fa-toggle-off");
+			$("graphhausdiv").attr("style", "color: red;");
 			hidehaus = 'Hausverbrauch';
 		}
 		checkgraphload();
@@ -744,15 +730,11 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		if ( index >= 2 && mqttpayload == 1 ) {
-			// if more than 1 charge point configured, show sum of power of all charge points
-			$('#powerAllLpdiv').show();
-		}
  		if ( mqttpayload == 0 ) {
 			$('#lp'+index+'div').hide();
 			$('#slider'+index+'div').hide();
 		} else {
- 			$('#lp'+index+'div').show();
+			$('#lp'+index+'div').show();
 			$('#slider'+index+'div').show();
 			// until functionality is still in livefunctions.js
 			// only process LP1 here
@@ -766,17 +748,15 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-ChargePointEnabled: '+index+'   load='+mqttpayload);
+		var element = "#lp"+index+"enableddiv";
 		if ( mqttpayload == 0 ) {
 			window['lp'+index+'enabled'] = 0;
-			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-check");
-			document.getElementById("lp"+index+"enableddiv").classList.add("fa-times");
-			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: red;");
+			$(element).removeClass("fa-check text-success");
+			$(element).addClass("fa-times text-danger");
 		} else {
 			window['lp'+index+'enabled'] = 1;
-			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-times");
-			document.getElementById("lp"+index+"enableddiv").classList.add("fa-check");
-			document.getElementById("lp"+index+"enableddiv").setAttribute("style", "color: lightgreen;");
+			$(element).removeClass("fa-times text-danger");
+			$(element).addClass("fa-check text-success");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
