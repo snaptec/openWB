@@ -169,6 +169,7 @@ echo <<<EXTDEVICEDIVMIDDLE
 			<div id="$divId" class="col-3 m-1">
 				ext. Gerät $i
 			</div>
+
 EXTDEVICEDIVMIDDLE;
 					}  // end if
 				}  // end for
@@ -780,7 +781,7 @@ EXTDEVICEDIVMIDDLE;
 		</div>
 		<div class="row no-gutters justify-content-center">
 			<div class="col-sm-3 order-last order-sm-first py-1">
-				<a href="hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
+				<a href="./hilfe/hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp

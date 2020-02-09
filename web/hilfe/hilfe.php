@@ -40,7 +40,7 @@
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
-
+			
 			<div id="ersteSchritteDiv">
 				<?php include '/var/www/html/openWB/web/hilfe/hilfe_erste_schritte.php';?>
 			</div>
