@@ -5,7 +5,7 @@
 		<base href="/openWB/web/">
 
 		<meta charset="UTF-8">
-		<title>openWB update</title>
+		<title>openWB Update</title>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
