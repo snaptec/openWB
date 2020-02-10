@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB help</title>
+		<title>openWB Hilfe</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
@@ -40,7 +40,7 @@
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
-			
+
 			<div id="ersteSchritteDiv">
 				<?php include '/var/www/html/openWB/web/hilfe/hilfe_erste_schritte.php';?>
 			</div>

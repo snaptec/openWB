@@ -807,7 +807,7 @@ EXTDEVICEDIVMIDDLE;
 				&nbsp
 			</div>
 			<div class="col-sm-3 py-1">
-				<a href="status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
+				<a href="./status/status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
 			</div>
 		</div>
 		<div class="row no-gutters justify-content-center">
