@@ -365,6 +365,10 @@ fi
 if [ $anzahlphasen -eq 0 ]; then
 	anzahlphasen=1
 fi
+if [ "$anzahlphasen" -ge "24" ]; then
+	anzahlphasen=1
+	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+fi
 ########################
 # Berechnung für PV Regelung
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
