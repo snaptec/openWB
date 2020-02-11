@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<title>openWB Update</title>
+		<title>openWB Einstellungen</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -187,8 +187,8 @@
 					var elemSpan = "#avail"+releasetrain+"VersionSpan";
 					var elemSpinner = "#avail"+releasetrain+"VersionSpinner";
 					var elemRadioBtn = "#radioBtn"+releasetrain;
-
-					getVersion(url, function() {
+					var getURL = url + "?" + $.now();  // add timestamp to request to avoid cache
+					getVersion(getURL, function() {
 						$(elemSpan).text("rufe ab...");
 					})
 						.done(function(result) {
