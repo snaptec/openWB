@@ -137,41 +137,43 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
-				Hausverbrauch: <span id="hausverbrauchdiv"></span>
+		<?php
+			if ( $hausverbrauchstatold == 1 ) {
+echo <<<HAUSVERBRAUCHDIV
+			<div class="row justify-content-center">
+				<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
+					Hausverbrauch: <span id="hausverbrauchdiv"></span>
+				</div>
 			</div>
-		</div>
-		<div id="speicherdiv" class="row justify-content-center" style="display: none;">
+HAUSVERBRAUCHDIV;
+			}
+			// if speichermodul is not "none", show the info
+			if ( strcmp(trim($speicherstatold),"none") != 0 ) {
+echo <<<SPEICHERDIV
+		<div id="speicherdiv" class="row justify-content-center">
 			<div class="col-sm-12 pvInfoStyle" style="background-color:#fcbe1e;">
 				Speicher: <span id="speicherleistungdiv"></span><span id="speichersocdiv"></span>
 			</div>
 		</div>
-		<?php
-			if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
-				// if hooks for external devices are configured, show div
-echo <<<EXTDEVICEDIVBEGIN
-		<div id="webhooksdiv" class="row extDeviceInfoStyle bg-danger">
-			<div class="col-3">
-				Extern:
-			</div>
+SPEICHERDIV;
+			}  // end if speichervorhanden
 
-EXTDEVICEDIVBEGIN;
-			// generate code for all configured hooks
-			for($i=1; $i <= 3; $i++) {
-				if (${"hook".$i."_aktivold"} == 1) {
-					$divId = "hook".$i."div";
+			if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
+			// if hooks for external devices are configured, show div
+				echo '<div id="webhooksdiv" class="row justify-content-center extDeviceInfoStyle bg-light">';
+				// generate code for all configured hooks
+				for($i=1; $i <= 3; $i++) {
+					if (${"hook".$i."_aktivold"} == 1) {
+						$divId = "hook".$i."div";
 echo <<<EXTDEVICEDIVMIDDLE
-			<div id="$divId" class="col-3">
-				Gerät$i
+			<div id="$divId" class="col-3 m-1">
+				ext. Gerät $i
 			</div>
 
 EXTDEVICEDIVMIDDLE;
-				}  // end if
-			}  // end for
-echo <<<EXTDEVICEDIVEND
-		</div>
-EXTDEVICEDIVEND;
+					}  // end if
+				}  // end for
+		echo '</div>';
 			}  // end if hook configured
 		?>
 
@@ -774,12 +776,12 @@ EXTDEVICEDIVEND;
 				&nbsp
 			</div>
 			<div class="col-sm-3 py-1">
-				<a href="status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
+				<a href="./status/status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
 			</div>
 		</div>
 		<div class="row no-gutters justify-content-center">
 			<div class="col-sm-3 order-last order-sm-first py-1">
-				<a href="hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
+				<a href="./hilfe/hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp
@@ -939,11 +941,11 @@ EXTDEVICEDIVEND;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js"></script>
-	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js"></script>
-	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js?ver=1.0"></script>
 </body>
 
 </html>

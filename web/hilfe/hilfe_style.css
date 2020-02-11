@@ -118,13 +118,6 @@ body > .container {
     }
 }
 
-.owl-carousel .owl-item img {
-    width: 100%;
-    height: 30vh;
-    object-fit: scale-down;
-    max-width: initial;
-}
-
 .vaRow {
     /* vertical alignment of content in rows */
   display: flex;

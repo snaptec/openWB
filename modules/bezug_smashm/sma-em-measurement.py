@@ -53,17 +53,17 @@ signal.signal(signal.SIGINT, abortprogram)
 #read configuration
 #parser = ConfigParser()
 #default values
-smaserials = sys.argv[1] if len(sys.argv) > 0 else None
+smaserials = sys.argv[1] if len(sys.argv) > 1 else None
 ipbind = '0.0.0.0'
 MCAST_GRP = '239.12.255.254'
 MCAST_PORT = 9522
 
 basepath = '/var/www/html/openWB/ramdisk/'
-#                 emparts:    filename
-mapping      = { 'frequency': 'evuhz' }
-phasemapping = { 'i%i':      'bezuga%i',
-                 'u%i':      'evuv%i',
-                 'cosphi%i': 'evupf%i'
+#                filename:  channel
+mapping      = { 'evuhu':   'frequency' }
+phasemapping = { 'bezuga%i': { 'from': 'i%i', 'sign': True },
+                 'evuv%i':   { 'from': 'u%i'   },
+                 'evupf%i':  { 'from': 'cosphi%i' }
                }
 #try:
 #    smaemserials=parser.get('SMA-EM', 'serials')
@@ -91,11 +91,14 @@ while True:
     # http://en.wikipedia.org/wiki/AC_power or http://de.wikipedia.org/wiki/Scheinleistung
     # thd = Total_Harmonic_Distortion http://de.wikipedia.org/wiki/Total_Harmonic_Distortion
     # cos phi is always positive, no matter what quadrant
+    positive = [ 1,1,1,1 ]
     if smaserials is None or smaserials == 'none' or str(emparts['serial']) == smaserials:
         # Special treatment for positive / negative power
+        
         watt=int(emparts['pconsume'])
         if watt < 5:
             watt=-int(emparts['psupply'])
+            positive[0] = -1
         writeToFile(basepath + 'wattbezug', watt)
         writeToFile(basepath + 'einspeisungkwh', emparts['psupplycounter'] * 1000)
         writeToFile(basepath + 'bezugkwh', emparts['pconsumecounter'] * 1000)
@@ -103,12 +106,16 @@ while True:
             power = int(emparts['p%iconsume' % phase])
             if power < 5:
                 power = -int(emparts['p%isupply' % phase])
+                positive[phase] = -1
             writeToFile(basepath + 'bezugw%i' % phase, power)
-        for key, filename in phasemapping.items():
+        for filename, mapping in phasemapping.items():
             for phase in [1,2,3]:
-                if key % phase in emparts:
-                    writeToFile(basepath + filename % phase, emparts[key % phase])
-        for key, filename in mapping.items():
+                if mapping['from'] % phase in emparts:
+                    value = emparts[mapping['from'] % phase]
+                    if 'sign' in mapping and mapping['sign']:
+                       value *= positive[phase]
+                    writeToFile(basepath + filename % phase, value)
+        for filename, key in mapping.items():
             if key in emparts:
                 writeToFile(basepath + filename, emparts[key])
         sys.exit(0)

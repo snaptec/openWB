@@ -36,7 +36,7 @@ if [[ $meter_location != "1" ]]; then
 # ... ansonsten, wenn das SmartMeter im Verbrauchszweig sitzt, kombiniere dessen Werte mit denen des Wechselrichters.
 else
     # Lese die aktuelle PV-Leistung des Wechselrichters ein.
-    response_fi=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope?System")
+    response_fi=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
     pvwatt=$(echo $response_fi | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')
     # Wenn WR aus bzw. im Standby (keine Antwort), ersetze leeren Wert durch eine 0.
     re='^-?[0-9]+$'

@@ -115,12 +115,6 @@ if [[ $lastmanagement == "0" ]]; then
  						fi
 						exit 0
 					fi
-					if (( llalt == sofortll )); then
-						if [[ $debug == "1" ]]; then
-       		        	     			echo "Sofort ladung erreicht bei $sofortll A"
-     						fi
-						exit 0
-					fi
 					if (( llalt > maximalstromstaerke )); then
 						llneu=$((llalt - 1 ))
 						runs/set-current.sh "$llneu" m
@@ -128,6 +122,12 @@ if [[ $lastmanagement == "0" ]]; then
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
 						fi
+						exit 0
+					fi
+					if (( llalt == sofortll )); then
+						if [[ $debug == "1" ]]; then
+       		        	     			echo "Sofort ladung erreicht bei $sofortll A"
+     						fi
 						exit 0
 					fi
 					if (( llalt < sofortll)); then
@@ -146,6 +146,15 @@ if [[ $lastmanagement == "0" ]]; then
 						if (( llneu < sofortll )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
+						if (( llalt > maximalstromstaerke )); then
+							llneu=$((llalt - 1 ))
+							runs/set-current.sh "$llneu" m
+							echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+							if [[ $debug == "1" ]]; then
+								echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
+							fi
+							exit 0
+						fi
 						runs/set-current.sh "$llneu" m
 						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere, Lastmanagement aktiv" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
@@ -155,6 +164,15 @@ if [[ $lastmanagement == "0" ]]; then
 					fi
 					if (( llalt > sofortll)); then
 						llneu=$sofortll
+						if (( llalt > maximalstromstaerke )); then
+							llneu=$((llalt - 1 ))
+							runs/set-current.sh "$llneu" m
+							echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+							if [[ $debug == "1" ]]; then
+								echo "Sofort ladung auf $llneu reduziert, über eingestellter max A $maximalstromstaerke"
+							fi
+							exit 0
+						fi
 						runs/set-current.sh "$llneu" m
 						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then

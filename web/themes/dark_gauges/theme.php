@@ -113,6 +113,7 @@
 
 <body>
 	<script>
+
 		var hook1_aktiv = <?php echo $hook1_aktivold ?>;
 		var hook2_aktiv = <?php echo $hook2_aktivold ?>;
 		var hook3_aktiv = <?php echo $hook3_aktivold ?>;
@@ -122,8 +123,8 @@
 		var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 		var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 		var speichervorhanden = <?php echo $speichervorhanden ?>;
-		var defaultScaleCounter = 8640;  // ca. 12 Stunden
 		var awattaraktiv = <?php echo $awattaraktivold?>;
+		var defaultScaleCounter = 8640;  // ca. 12 Stunden
 	</script>
 
 	<?php
@@ -187,31 +188,24 @@
 
 		<?php
 			if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
-				// if hooks for external devices are configured, show div
-echo <<<EXTDEVICEDIVBEGIN
-		<div id="webhooksdiv" class="row extDeviceInfoStyle bg-danger">
-			<div class="col-3">
-				Extern:
-			</div>
-
-EXTDEVICEDIVBEGIN;
-			// generate code for all configured hooks
-			for($i=1; $i <= 3; $i++) {
-				if (${"hook".$i."_aktivold"} == 1) {
-					$divId = "hook".$i."div";
+			// if hooks for external devices are configured, show div
+				echo '<div id="webhooksdiv" class="row justify-content-center extDeviceInfoStyle bg-secondary">';
+				// generate code for all configured hooks
+				for($i=1; $i <= 3; $i++) {
+					if (${"hook".$i."_aktivold"} == 1) {
+						$divId = "hook".$i."div";
 echo <<<EXTDEVICEDIVMIDDLE
-			<div id="$divId" class="col-3">
-				Gerät$i
+			<div id="$divId" class="col-3 m-1">
+				ext. Gerät $i
 			</div>
 
 EXTDEVICEDIVMIDDLE;
-				}  // end if
-			}  // end for
-echo <<<EXTDEVICEDIVEND
-		</div>
-EXTDEVICEDIVEND;
+					}  // end if
+				}  // end for
+		echo '</div>';
 			}  // end if hook configured
 		?>
+
 		<br>
 
 		<!-- interactive chart.js -->
@@ -253,6 +247,8 @@ EXTDEVICEDIVEND;
 		<?php
 			// generate html code dynamically for all charging points
 			for($i=1; $i <= 8; $i++) {
+				$name='"$isConfiguredLp'.$i.'"';
+				echo '<!-- name: '.$name.' LP'.$i.' conf='.${"isConfiguredLp$i"}.'-->';
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
 				echo '            <div class="col-4">'."\n";
@@ -811,12 +807,12 @@ EXTDEVICEDIVEND;
 				&nbsp
 			</div>
 			<div class="col-sm-3 py-1">
-				<a href="status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
+				<a href="./status/status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Status</button></a>
 			</div>
 		</div>
 		<div class="row no-gutters justify-content-center">
 			<div class="col-sm-3 order-last order-sm-first py-1">
-				<a href="hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
+				<a href="./hilfe/hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Hilfe</button></a>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp

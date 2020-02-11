@@ -109,6 +109,7 @@ do
 	statusFlagFilename="/var/www/html/openWB/ramdisk/autolockstatuslp${chargePoint}"  # name autolock status file
     if [ "${!variableConfiguredLpName}" = "1" ]; then
         # charge point is configured, so process it
+		statusFlag=$(<$statusFlagFilename)  # read ramdisk value for autolock wait flag
 
 		# check all settings if any time is configured for lp to set flag for icon in theme
 		isAutolockConfigured=false
@@ -135,9 +136,11 @@ do
 			echo "1" > $configuredFlagFilename  # set flag in ramdisk
 		else
 			echo "0" > $configuredFlagFilename  # set flag in ramdisk
-			# and set flag "standby"
-			mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
-			mosquitto_pub -r -t $mqttTopic -m 0
+			if [ "$statusFlag" != "0" ]; then			
+				# and set flag "standby" id not already set
+				mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
+				mosquitto_pub -r -t $mqttTopic -m 0
+			fi
 		fi
 
 		locktimeSettingName="lockTimeLp${chargePoint}_${dayOfWeek}"  # name variable: unlock time for today
@@ -159,7 +162,6 @@ do
         fi
 
         # now process the settings...
-        statusFlag=$(<$statusFlagFilename)  # read ramdisk value for autolock wait flag
         if [ "$statusFlag" = "1" ]; then
             # charge point waiting for lock
             if [ $timeOfDay = "$unlockTime" ]; then
