@@ -6,10 +6,8 @@
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
-		<meta name="description" content="Control your charge" />
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>openWB Update</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -59,33 +57,59 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col">
-					<h1>Versionsübersicht</h1>
+					<h1>Versionsauswahl</h1>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
 					<div>
-						<b>installierte Version:
-							<span id="installedVersionSpan" data-version=""></span>
-						</b><br>
-					</div>
-					<div>
-						verfügbare Stable:
-						<span id="availStableVersionSpan" data-version="">nicht verfügbar</span>
-						<br>
-					</div>
-					<div>
-						verfügbare Beta:
-						<span id="availBetaVersionSpan" data-version="">nicht verfügbar</span>
-						<br>
-					</div>
-					<div>
-						verfügbare Nightly:
-						<span id="availNightlyVersionSpan" data-version="">nicht verfügbar</span>
-						<br>
+						<b>installierte Version: <span id="installedVersionSpan" data-version=""></span></b>
 					</div>
 				</div>
 			</div>
+			<br>
+			<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
+				<div class="form-row align-items-center">
+					<div class="col">
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
+								<label class="form-check-label vaRow" for="stableRadioBtn">
+									Stable:
+									<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
+									<br>
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
+								<label class="form-check-label vaRow" for="betaRadioBtn">
+									Beta:
+									<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
+									<br>
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
+								<label class="form-check-label vaRow" for="nightlyRadioBtn">
+									Nightly:
+									<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
+									<br>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-row ">
+					<div class="col-auto">
+						<button type="button" class="btn btn-green" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
+					</div>
+				</div>
+				<br>
+			</form>
 
 			<div class="row">
 				<div class="col">
@@ -95,7 +119,7 @@
 			<div class="row">
 				<div class="col">
 						<b>Stable</b><br>
-						Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen und als fehlerfrei bewertet.
+						Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.
 					<br>
 						<b>Beta</b><br>
 						Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.
@@ -104,46 +128,6 @@
 						Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="col">
-					<h1>Versionsauswahl</h1>
-				</div>
-			</div>
-			<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
-				<div class="form-row align-items-center">
-					<div class="col-auto">
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="stableRadioBtn" value="stable" <?php if($releasetrain == "stable") echo checked?>>
-								<label class="form-check-label" for="stableRadioBtn">
-								    Stable
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="betaRadioBtn" value="beta" <?php if($releasetrain == "beta") echo checked?>>
-								<label class="form-check-label" for="betaRadioBtn">
-									Beta
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="nightlyRadioBtn" value="master" <?php if($releasetrain == "master") echo checked?>>
-								<label class="form-check-label" for="nightlyRadioBtn">
-									Nightly
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="col-auto">
-						<button type="button" class="btn btn-green" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
-					</div>
-				</div>
-				<br>
-			</form>
 
 		</div>  <!-- container -->
 
@@ -194,33 +178,75 @@
 
 			$(document).ready(function(){
 
-				// get available versions from github and fill divs
-				$.get('https://raw.githubusercontent.com/snaptec/openWB/stable/web/version')
-					.done(function(result) {
-						$("#availStableVersionSpan").text(result);
-						$("#availStableVersionSpan").data("version", result);
-					});
-				$.get('https://raw.githubusercontent.com/snaptec/openWB/beta/web/version')
-					.done(function(result) {
-						$("#availBetaVersionSpan").text(result);
-						$("#availBetaVersionSpan").data("version", result);
-					});
-				$.get('https://raw.githubusercontent.com/snaptec/openWB/master/web/version')
-					.done(function(result) {
-						$("#availNightlyVersionSpan").text(result);
-						$("#availNightlyVersionSpan").data("version", result);
-					});
-				$.get('/openWB/web/version')
+				function getVersion(dataURL) {
+					// read dataURL filecontent = releasetrain version and return it
+					return $.get(dataURL);
+				}
+
+				function displayVersion(releasetrain, url) {
+					var elemSpan = "#avail"+releasetrain+"VersionSpan";
+					var elemSpinner = "#avail"+releasetrain+"VersionSpinner";
+					var elemRadioBtn = "#radioBtn"+releasetrain;
+
+					getVersion(url, function() {
+						$(elemSpan).text("rufe ab...");
+					})
+						.done(function(result) {
+							$(elemSpan).text(result);
+							$(elemSpan).data("version", result);
+							$(elemSpinner).hide();
+							$(elemRadioBtn).removeAttr("disabled");
+						})
+						.fail(function() {
+							$(elemSpan).text("derzeit nicht verfügbar");
+							$(elemSpan).addClass("text-danger");
+							$(elemSpinner).hide();
+						});
+				}
+
+				$(function getAllVersions() {
+					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable/web/version');
+					displayVersion("Beta", 'https://raw.githubusercontent.com/snaptec/openWB/beta/web/version');
+					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
+				});
+
+				$.get("/openWB/web/version")
 					.done(function(result) {
 						$("#installedVersionSpan").text(result);
 						$("#installedVersionSpan").data("version", result);
 						$("#modalInstalledVersionSpan").text(result);
 					});
 
-				// fill modal text with selected Version string
-				$(document).on('click', "[name = 'releasetrainRadioBtn']", function() {
-					// get checked choice
-					var choice = $("input[type=radio]:checked").attr("value");
+				$(document).ajaxStop(function(){
+					// after all ajax requests are finished, set checkbox and enable update button
+					var releasetrains = [];
+					$(".form-check-input:enabled").each(function(){
+						// all enabled checkbox values
+					    releasetrains.push( $(this).val() );
+					});
+					if ( releasetrains.length > 0 ) {
+						// if there are any enabled checkBoxes ( equals available updates )
+						if ( releasetrains.includes("<?php echo $releasetrain?>") ) {
+							// check the box matching config file releasetrain
+							$("input[value='<?php echo $releasetrain?>']").prop('checked', true);
+						} else if ( releasetrains.includes("stable") ) {
+							// version from config file not availabe so select stable
+							$("input[value='stable']").prop('checked', true);
+						} else if ( releasetrains.includes("beta") ) {
+							// stable not availabe so select beta
+							$("input[value='beta']").prop('checked', true);
+						} else if ( releasetrains.includes("master") ) {
+							// version from config file not availabe so check if stable can be selected
+							$("input[value='master']").prop('checked', true);
+						}
+						$("#updateBtn").removeAttr("disabled");
+					}
+					// get the checkbox matching the config file entry
+				});
+
+			    $('#updateConfirmationModal').on('show.bs.modal', function() {
+					// before the modal shows, fill in selected version
+					var choice = $(".form-check-input:checked").attr("value");
 					// and set text
 					switch (choice) {
 						case "stable":
@@ -233,14 +259,15 @@
 							$("#selectedVersionSpan").text( $("#availNightlyVersionSpan").data("version") );
 							break;
 					}
-				});
+			    }) ;
 
 				// submit form if button in modal window is clicked
-				$(document).on('click', '#updateBtn', function() {
+				$(document).on("click", '#updateBtn', function() {
 					$('#releasetrainForm').submit();
 				});
 
 			});
+
 
 		</script>
 
