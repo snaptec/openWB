@@ -131,6 +131,7 @@ registerPageVisibility()
 	<div class="preloader">
 	<?php
 		echo '<img src="img/loading.gif" alt="Preloader image">';
+	?>
 	</div>
 
 <?php
