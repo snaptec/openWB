@@ -10,9 +10,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<title>OpenWB</title>
-		<meta name="description" content="Control your charge">
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design">
+		<title>openWB Einstellungen</title>
 		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -306,30 +304,33 @@ ECHOFORMGROUPTAIL;
 
 			$(document).ready(function(){
 
-				function addClockpicker(clockpickerId) {
-					// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
-					// create clockpicker id of the second clockpicker for the lp and day
-					if ( clockpickerId.includes("unlock") ) {
-						var secondClockpickerId = clockpickerId.replace("unlock", "lock");
-					} else {
-						var secondClockpickerId = clockpickerId.replace("lock", "unlock");
-					}
-					if ( $(secondClockpickerId).val() != "" ) {
-						// other clockpicker is present, make sure both times for the day differ
-						var timeParts = $(secondClockpickerId).val().split(":");
-						var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
-						newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
-						var timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
-						$(clockpickerId).val(timeStr);  // set value to calculated new time
-					} else {
-						// get current time rounded to next 5 minute
-						var step = 1000 * 60 * 5;  // 5 minutes in milliseconds
-						var now = new Date();  // get date/time
-						now.setSeconds(0);  // remove seconds
-						now.setMilliseconds(0);  // and milliseconds
-						var roundedDate = new Date(Math.ceil(now / step) * step);  // round up to next full 5 minutes
-						var timeStr = (roundedDate.getHours() < 10 ? "0" : "") + roundedDate.getHours() + ":" + (roundedDate.getMinutes() < 10 ? "0" : "") + roundedDate.getMinutes(); // convert with leading zeros
-						$(clockpickerId).val(timeStr);  // set value to calculated new time
+				function addClockpicker(clockpickerId, initialSetup) {
+					if ( !initialSetup ) {
+						// make sure both times lock/unlock differ, not necessary at initial setup from config
+						// add a clockpicker to input targetId (eg #unlockTimeLp1_7)
+						// first create clockpicker id of the second clockpicker for the lp and day
+						if ( clockpickerId.includes("unlock") ) {
+							var secondClockpickerId = clockpickerId.replace("unlock", "lock");
+						} else {
+							var secondClockpickerId = clockpickerId.replace("lock", "unlock");
+						}
+						if ( $(secondClockpickerId).val() != "" ) {
+							// other clockpicker is present, make sure both times for the day differ
+							var timeParts = $(secondClockpickerId).val().split(":");
+							var newTime = new Date(0, 0, 0, timeParts[0], timeParts[1]);  // date doesn't matter, time = the second clockpicker
+							newTime.setMinutes(newTime.getMinutes() + 5);  // add 5 minutes
+							var timeStr = (newTime.getHours() < 10 ? "0" : "") + newTime.getHours() + ":" + (newTime.getMinutes() < 10 ? "0" : "") + newTime.getMinutes(); // convert with leading zeros
+							$(clockpickerId).val(timeStr);  // set value to calculated new time
+						} else {
+							// get current time rounded to next 5 minute
+							var step = 1000 * 60 * 5;  // 5 minutes in milliseconds
+							var now = new Date();  // get date/time
+							now.setSeconds(0);  // remove seconds
+							now.setMilliseconds(0);  // and milliseconds
+							var roundedDate = new Date(Math.ceil(now / step) * step);  // round up to next full 5 minutes
+							var timeStr = (roundedDate.getHours() < 10 ? "0" : "") + roundedDate.getHours() + ":" + (roundedDate.getMinutes() < 10 ? "0" : "") + roundedDate.getMinutes(); // convert with leading zeros
+							$(clockpickerId).val(timeStr);  // set value to calculated new time
+						}
 					}
 					$(clockpickerId).clockpicker({
 						placement: "bottom",  // clock popover placement
@@ -363,7 +364,7 @@ ECHOFORMGROUPTAIL;
 								// replace empty field (placeholder = --) with initial time
 								$(clockpickerId).val("00:00");
 							}
-	 						addClockpicker(clockpickerId);
+	 						addClockpicker(clockpickerId, false);
 	 					} else {
 	 						// remove clockpicker
 	 						removeClockpicker(clockpickerId);
@@ -394,6 +395,7 @@ ECHOFORMGROUPTAIL;
 
 					$(".resetForm").click(function() {
 						// reset all inputs for lp
+						$('input:checkbox').removeAttr('checked');
 						var chargePoint = this.id.match(/\d+/g)[0];  // extract lp-# from button id
 						for (day=1; day<=7; day++) {
 							// reset all days
@@ -412,10 +414,10 @@ ECHOFORMGROUPTAIL;
 					if ( $("#lp"+chargePoint).is(":visible") ) {
 						for (day=1; day<=7; day++) {
 							if ( $("#lockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
-								addClockpicker("#lockTimeLp"+chargePoint+"_"+day)
+								addClockpicker("#lockTimeLp"+chargePoint+"_"+day, true);
 							}
 							if ( $("#unlockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
-								addClockpicker("#unlockTimeLp"+chargePoint+"_"+day)
+								addClockpicker("#unlockTimeLp"+chargePoint+"_"+day, true);
 							}
 						}
 					}
