@@ -339,7 +339,6 @@ function formdata(graphdata){
 			ahausverbrauch.push('0');
 		}
 	}
-	console.log(overalllp1wh);
 	overallhausverbrauch = (overallhausverbrauch).toFixed(2);
 	loadgraph();
 }
@@ -607,7 +606,6 @@ var lineChartData = {
 	      				label: function(t, d) {
 		               			if ( t.datasetIndex == 6 ) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp1wh[t.index] + " kWh";
-							console.log([t.index]);
 						} else if ( t.datasetIndex == 7) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp2wh[t.index] + " kWh";
 						} else {
