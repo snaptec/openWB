@@ -147,10 +147,10 @@
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
-	<script src="livechart_chartjs.js?version=9"></script>
+	<script src="themes/<?php echo $_COOKIE['openWBTheme']?>/livechart_chartjs.js?version=9"></script>
 	<!-- Data refresher -->
-	<script src="live.js?vers=14"></script>
-	<script src="livefunctions.js?vers=7"></script>
+	<script src="themes/<?php echo $_COOKIE['openWBTheme']?>/live.js?vers=14"></script>
+	<script src="themes/<?php echo $_COOKIE['openWBTheme']?>/livefunctions.js?vers=7"></script>
 </body>
 
 </html>

@@ -158,12 +158,12 @@ registerPageVisibility()
 
 	<!-- load mqtt library -->
 	<script src = "js/mqttws31.js" ></script>
-	
+
 	<!-- load respective Chart.js definition since function declarations are used by global live.js-->
-	<script src="livechart_chartjs.js?version=9"></script>
+	<script src="themes/hidden/livechart_chartjs.js?version=9"></script>
 	<!-- Data refresher -->
-	<script src="live.js?vers=14"></script>
-	<script src="livefunctions.js?vers=7"></script>
+	<script src="themes/hidden/live.js?vers=14"></script>
+	<script src="themes/hidden/livefunctions.js?vers=7"></script>
 </body>
 
 </html>
