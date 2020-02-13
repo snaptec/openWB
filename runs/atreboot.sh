@@ -2321,6 +2321,10 @@ then
 	echo "myrenault_locationlp2=de_DE" >> /var/www/html/openWB/openwb.conf
 	echo "myrenault_countrylp2=DE" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
