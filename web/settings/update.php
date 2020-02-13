@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<title>openWB Update</title>
+		<title>openWB Einstellungen</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -83,6 +83,16 @@
 						</div>
 						<div class="form-group">
 							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
+								<label class="form-check-label vaRow" for="stableoldRadioBtn">
+									Stableold:
+									<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
+									<br>
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check">
 								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
 								<label class="form-check-label vaRow" for="betaRadioBtn">
 									Beta:
@@ -120,6 +130,9 @@
 				<div class="col">
 						<b>Stable</b><br>
 						Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.
+					<br>
+						<b>Stable old</b><br>
+						Ist das letzte (ältere) Release. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.
 					<br>
 						<b>Beta</b><br>
 						Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.
@@ -187,8 +200,8 @@
 					var elemSpan = "#avail"+releasetrain+"VersionSpan";
 					var elemSpinner = "#avail"+releasetrain+"VersionSpinner";
 					var elemRadioBtn = "#radioBtn"+releasetrain;
-
-					getVersion(url, function() {
+					var getURL = url + "?" + $.now();  // add timestamp to request to avoid cache
+					getVersion(getURL, function() {
 						$(elemSpan).text("rufe ab...");
 					})
 						.done(function(result) {
@@ -205,7 +218,8 @@
 				}
 
 				$(function getAllVersions() {
-					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable/web/version');
+					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable17/web/version');
+					displayVersion("Stableold", 'https://raw.githubusercontent.com/snaptec/openWB/stable/web/version');
 					displayVersion("Beta", 'https://raw.githubusercontent.com/snaptec/openWB/beta/web/version');
 					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
 				});
@@ -229,9 +243,13 @@
 						if ( releasetrains.includes("<?php echo $releasetrain?>") ) {
 							// check the box matching config file releasetrain
 							$("input[value='<?php echo $releasetrain?>']").prop('checked', true);
+						} else if ( releasetrains.includes("stable17") ) {
+							// version from config file not availabe so select stable
+							$("input[value='stable17']").prop('checked', true);
 						} else if ( releasetrains.includes("stable") ) {
 							// version from config file not availabe so select stable
 							$("input[value='stable']").prop('checked', true);
+
 						} else if ( releasetrains.includes("beta") ) {
 							// stable not availabe so select beta
 							$("input[value='beta']").prop('checked', true);
@@ -251,6 +269,9 @@
 					switch (choice) {
 						case "stable":
 							$("#selectedVersionSpan").text( $("#availStableVersionSpan").data("version") );
+							break;
+						case "stableold":
+							$("#selectedVersionSpan").text( $("#availStableoldVersionSpan").data("version") );
 							break;
 						case "beta":
 							$("#selectedVersionSpan").text( $("#availBetaVersionSpan").data("version") );

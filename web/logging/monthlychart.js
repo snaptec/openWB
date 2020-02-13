@@ -91,6 +91,8 @@ var all9p;
 var all10p; 
 var all11p; 
 var all12p;
+var overalllp1wh = new Array();
+var overalllp2wh = new Array();
 
 var apv = new Array();
 var aspeicheri = new Array();
@@ -359,8 +361,15 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 			if ( isNaN(fincsvvar)) {
 				fincsvvar=0 }
 			pushdataset.push(parseFloat((fincsvvar/1000).toFixed(2)));
+			if ( csvrow == 4 || csvrow == 5) {
+				window[overall+"wh"].push(csvvar/1000);
+			}
 	 	} else {
 		 	firstcsvvar = csvvar;
+			if ( csvrow == 4 || csvrow == 5 ) {
+				window[overall+"wh"].push(csvvar/1000);
+			}
+			
 	 	}
 		oldfincsvvar=fincsvvar;
 		counter++;
@@ -592,7 +601,20 @@ var lineChartData = {
 		options: {
 			tooltips: {
 				enabled: true,
-				mode: 'index'
+				mode: 'index',
+				      callbacks: {
+	      				label: function(t, d) {
+		               			if ( t.datasetIndex == 6 ) {
+							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp1wh[t.index] + " kWh";
+						} else if ( t.datasetIndex == 7) {
+							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp2wh[t.index] + " kWh";
+						} else {
+							var xLabel = d.datasets[t.datasetIndex].label;
+						}
+		               			var yLabel = t.yLabel;
+		               			return xLabel + ', Wert: ' + yLabel + 'kWh';
+	      				}
+				}
 			},
 			elements: {
 				point: {

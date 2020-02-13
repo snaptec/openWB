@@ -1,5 +1,6 @@
 #!/bin/bash
-
+mosquitto_pub -t openWB/set/ChargeMode -r -m "3"
+sleep 15
 cd /var/www/html/openWB
 . /var/www/html/openWB/openwb.conf
 echo 1 > /var/www/html/openWB/ramdisk/updateinprogress
@@ -17,7 +18,14 @@ cp openwb.conf /tmp/openwb.conf
 #mkdir /tmp/data/monthly
 #for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
 sudo git fetch origin
-sudo git reset --hard origin/$releasetrain
+if [[ "$releasetrain" == "stable"]]; then
+	train=stable17
+elif [[ "$releasetrain" == "stableold"]]; then
+	train=stable
+else
+	train=$releasetrain
+fi
+sudo git reset --hard origin/$train
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
