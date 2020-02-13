@@ -9,5 +9,5 @@ if(isset($_POST["testlp3"])) {
 file_put_contents('/var/www/html/openWB/ramdisk/evsedintestlp3', ausstehend);
 }
 
-header("Location: ../status.php");
+header("Location: ../status/status.php");
 ?>
