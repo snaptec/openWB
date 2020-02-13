@@ -228,6 +228,30 @@ fi
 if (( ledsakt == 1 )); then
 	ledsteuerung
 fi
+#Prüft ob der RSE (Rundsteuerempfängerkontakt) geschlossen ist, wenn ja wird die Ladung pausiert.
+if (( rseenabled == 1 )); then
+	rsestatus=$(<ramdisk/rsestatus)
+	rseaktiv=$(<ramdisk/rseaktiv)
+	if (( rsestatus == 1 )); then
+		echo "RSE Kontakt aktiv, pausiere Ladung" > ramdisk/lastregelungaktiv
+		if (( rseaktiv == 0 )); then
+			echo "$date RSE Kontakt aktiviert, ändere Lademodus auf Stop" >> ramdisk/ladestatus.log
+			echo $lademodus > ramdisk/rseoldlademodus
+			echo 3 > ramdisk/lademodus
+			mosquitto_pub -r -t openWB/global/ChargeMode -m "3"
+			echo 1 > ramdisk/rseaktiv
+		fi
+	else
+		if (( rseaktiv == 1 )); then
+			echo "$date RSE Kontakt deaktiviert, setze auf alten Lademodus zurück" >> ramdisk/ladestatus.log
+			rselademodus=$(<ramdisk/rseoldlademodus)
+			echo $rselademodus > ramdisk/lademodus
+			mosquitto_pub -r -t openWB/global/ChargeMode -m "$rselademodus"
+			echo 0 > ramdisk/rseaktiv
+		fi
+	fi
+fi
+
 #evse modbus check
 evsemodbustimer=$(<ramdisk/evsemodbustimer)
 if (( evsemodbustimer < 30 )); then

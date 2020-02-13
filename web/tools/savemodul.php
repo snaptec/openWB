@@ -42,6 +42,10 @@ foreach($lines as $line) {
 	    $result .= 'wattbezugmodul='.$_POST[wattbezugmodul]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "evukitversion=") !== false) {
+	    $result .= 'evukitversion='.$_POST[evukitversion]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "evseidlp3=") !== false) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
 	    $writeit = '1';
