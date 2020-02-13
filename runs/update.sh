@@ -18,9 +18,11 @@ cp openwb.conf /tmp/openwb.conf
 #mkdir /tmp/data/monthly
 #for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
 sudo git fetch origin
-if [[ "$releasetrain" == "stable"]]; then
+if [[ "$releasetrain" == "stable" ]]
+then
 	train=stable17
-elif [[ "$releasetrain" == "stableold"]]; then
+elif [[ "$releasetrain" == "stableold" ]]
+then
 	train=stable
 else
 	train=$releasetrain
