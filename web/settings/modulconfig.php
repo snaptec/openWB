@@ -3347,7 +3347,6 @@
 						});
 					</script>
 					<div class="row">
-						<hr>
 						<h3> Strombezugsmessmodul (EVU-Übergabepunkt)</h3>
 					</div>
 					<div class="row">
@@ -3890,7 +3889,7 @@
 						});
 					</script>
 
-					<div class="row"><hr>
+					<div class="row">
 						<h3> PV-Modul </h3>
 					</div>
 					<div class="row">
@@ -4401,7 +4400,7 @@
 						});
 					</script>
 
-					<div class="row"><hr>
+					<div class="row">
 						<h3> Speicher-Modul </h3>
 					</div>
 					<div class="row">

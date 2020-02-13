@@ -797,7 +797,6 @@
 
 					<div class="row">
 						<div class="col">
-							<hr>
 							<h4>Benachrichtigungen mit Pushover</h4>
 						</div>
 					</div>
