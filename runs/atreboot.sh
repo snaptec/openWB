@@ -476,8 +476,7 @@ echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
 echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
 echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
 echo 0 > /var/www/html/openWB/ramdisk/rsestatus
-echo 1 > /var/www/html/openWB/ramdisk/rseaktiv
-
+echo 0 > /var/www/html/openWB/ramdisk/rseaktiv
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
