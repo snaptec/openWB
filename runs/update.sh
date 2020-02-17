@@ -11,7 +11,7 @@ cp openwb.conf /tmp/openwb.conf
 #mkdir /tmp/data/monthly
 #cp web/logging/data/monthly/* /tmp/data/monthly
 sudo git fetch origin
-sudo git reset --hard origin/$releasetrain
+sudo git reset --hard origin/stable17
 cd /var/www/html/
 sudo chown -R pi:pi openWB 
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
