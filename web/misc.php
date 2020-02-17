@@ -1200,22 +1200,8 @@ $(function() {
 			</select>
 			<br><br>
 	</div>
-		<div class="row">
-	<h3>	Releasechannel</h3> <br>
-		</div>
-		<div class="row">
-			<b><label for="releasetrain">Releasechannel:</label></b>
-			<select type="text" name="releasetrain" id="releasetrain">
-				<option <?php if($releasetrainold == "stable17\n") echo selected ?>value="stable17">stable1.7</option>
-				<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">stable</option>
-				<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">beta</option>
-				<option <?php if($releasetrainold == "master\n") echo selected ?> value="master">Nightly</option>
-			</select>
-			<br>
-		</div>
-		<div class="row">
-			Der Stablezweig ist der empfohlene. Im Betazweig befinden sich die Änderungen für künftige Releases. Nightly ist der aktuelle Entwicklungszweig. Man kann grundsätzlich immer zwischen den Zweigen wechseln. Hierfür den gewünschten Zweig auswählen, speichern und ein Update durchführen.<br><br>
-		</div>
+
+		
 
 <br><br>
 		<button type="submit" class="btn btn-primary btn-green">Save</button>
@@ -1242,10 +1228,9 @@ $(function() {
 	<br><br>
 	Achtung! Die derzeit installierte Version ist die 1.6.<br>
 	Diese ist nicht die aktuellste!<br>
-	Bitte unter Releasetrain "Stable 1.7" auswählen und speichern.<br>
-	Danach ein Update durchführen.<br>
+	Durch einen Klick auf Update durchführen wird automatisch die Version 1.7 installiert.<br>
 	Das Update auf 1.7 kann durchaus länger dauern (bis zu 20 Minuten).<br>
-	Vorher angesteckte Fahrzeuge abstecken.<br>
+	Vorher angesteckte Fahrzeuge abstecken!<br>
 	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br>
 	</div>
 
