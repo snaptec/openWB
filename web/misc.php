@@ -1215,7 +1215,7 @@ $(function() {
 	</div>
 	<br><br><hr>
 	<div class="row">
-		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br> Der Update Prozess kann bis zu einer Minute dauern, je nach Internetverbindung!<br>Zur Sicherheit vorher ein Backup erstellen.<br><br>
+		Auf die neuste Version updaten, Einstellungen bleiben erhalten.<br><br>
 	</div>
 	<div class="row">
 		<button onclick="window.location.href='./tools/updateredirect.html'" class="btn btn-primary btn-green">UPDATE openWB</button>
@@ -1226,12 +1226,12 @@ $(function() {
 	Aktuellste Beta: <?php echo $vbeta ?><br> 
 	Aktuellste Nightly: <?php echo $vnightly ?><br> 
 	<br><br>
-	Achtung! Die derzeit installierte Version ist die 1.6.<br>
+	<p>Achtung! Die derzeit installierte Version ist die 1.6.<br>
 	Diese ist nicht die aktuellste!<br>
 	Durch einen Klick auf Update durchführen wird automatisch die Version 1.7 installiert.<br>
 	Das Update auf 1.7 kann durchaus länger dauern (bis zu 20 Minuten).<br>
 	Vorher angesteckte Fahrzeuge abstecken!<br>
-	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br>
+	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br></p>
 	</div>
 
 	<div class="row">
