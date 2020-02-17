@@ -1206,6 +1206,7 @@ $(function() {
 		<div class="row">
 			<b><label for="releasetrain">Releasechannel:</label></b>
 			<select type="text" name="releasetrain" id="releasetrain">
+				<option <?php if($releasetrainold == "stable17\n") echo selected ?>value="stable17">stable1.7</option>
 				<option <?php if($releasetrainold == "stable\n") echo selected ?>value="stable">stable</option>
 				<option <?php if($releasetrainold == "beta\n") echo selected ?> value="beta">beta</option>
 				<option <?php if($releasetrainold == "master\n") echo selected ?> value="master">Nightly</option>
@@ -1239,6 +1240,13 @@ $(function() {
 	Aktuellste Beta: <?php echo $vbeta ?><br> 
 	Aktuellste Nightly: <?php echo $vnightly ?><br> 
 	<br><br>
+	Achtung! Die derzeit installierte Version ist die 1.6.<br>
+	Diese ist nicht die aktuellste!<br>
+	Bitte unter Releasetrain "Stable 1.7" auswählen und speichern.<br>
+	Danach ein Update durchführen.<br>
+	Das Update auf 1.7 kann durchaus länger dauern (bis zu 20 Minuten).<br>
+	Vorher angesteckte Fahrzeuge abstecken.<br>
+	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br>
 	</div>
 
 	<div class="row">
