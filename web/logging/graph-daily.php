@@ -14,7 +14,7 @@ foreach($lines as $line) {
 		list(, $logeinspeisungneg) = explode("=", $line);
 	}
 }
-$daydate1 = $_GET[thedate];
+$daydate1 = $_GET['thedate'];
 $daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
 $ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';

@@ -4,7 +4,7 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$monthdate = $_GET[thedate];
+$monthdate = $_GET['thedate'];
 $monthdate = date("Ym", strtotime($monthdate));
 $bezugfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-bezug.csv';
 $einspeisungfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-einspeisung.csv';

@@ -54,8 +54,8 @@
 
 <?php
 $today = date('Y-m-d');
-if (isset($_GET[date])) {
-	$monthdate = $_GET[date];
+if (isset($_GET['date'])) {
+	$monthdate = $_GET['date'];
 	$_SESSION = $monthdate;
 }
 else

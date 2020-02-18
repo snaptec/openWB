@@ -14,8 +14,8 @@ foreach($lines as $line) {
 	}
 }
 $today = date('Y-m-d');
-if (isset($_GET[thedate])) {
-	$daydate1 = $_GET[thedate];
+if (isset($_GET['thedate'])) {
+	$daydate1 = $_GET['thedate'];
 
 }
 else

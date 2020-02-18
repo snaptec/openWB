@@ -50,8 +50,8 @@
 
 <?php
 $today = date('Y');
-if (isset($_GET[date])) {
-	$yeardate = $_GET[date];
+if (isset($_GET['date'])) {
+	$yeardate = $_GET['date'];
 	$_SESSION = $yeardate;
 }
 else
