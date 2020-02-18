@@ -4304,7 +4304,7 @@
 							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br><br>
 
 						</div>
 					</div>
