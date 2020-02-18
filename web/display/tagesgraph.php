@@ -217,7 +217,7 @@ valueAxis2.unitPosition = "right";
 valueAxis2.strictMinMax = true;
 valueAxis2.renderer.grid.template.disabled = true;
 valueAxis2.renderer.labels.template.fill = am4core.color("white");
-// Creaite series
+// Create series
 var series1 = chart.series.push(new am4charts.LineSeries());
 series1.dataFields.valueY = "col1";
 series1.dataFields.categoryX = "col0";

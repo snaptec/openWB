@@ -4,7 +4,7 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$monthdate = $_GET[thedate];
+$monthdate = $_GET['thedate'];
 //$monthdate = "2019";
 //$monthdate = date("Y", strtotime($monthdate));
 $ll1arf = array();

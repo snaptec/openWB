@@ -13,7 +13,7 @@ foreach($lines as $line) {
 	    } 
 	}
 	if (strpos($line, "zielladenuhrzeitlp1=") !== false) {
-	    $result .= 'zielladenuhrzeitlp1=\''.$_POST[zielladenuhrzeitlp1]."'\n";
+	    $result .= 'zielladenuhrzeitlp1=\''.$_POST['zielladenuhrzeitlp1']."'\n";
 	    	$writeit = '1';
 		} 
 

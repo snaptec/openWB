@@ -54,8 +54,8 @@
 
 <?php
 $today = date('Y-m-d');
-if (isset($_GET[date])) {
-	$daydate = $_GET[date];
+if (isset($_GET['date'])) {
+	$daydate = $_GET['date'];
 	$_SESSION = $daydate;
 
 }
