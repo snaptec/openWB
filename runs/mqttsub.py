@@ -386,6 +386,26 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/evu/VPhase1"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/VPhase2"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/VPhase3"):
+        if (float(msg.payload) >= -1000 and float(msg.payload) <= 1000):
+            f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/evu/HzFrequenz"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 80):
+            f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/evu/WhImported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
             f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')

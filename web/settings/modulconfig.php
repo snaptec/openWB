@@ -3388,15 +3388,24 @@
 							<div class="row"><b>"openWB/set/evu/W"</b></div>
 							<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
-							<div class="row">Strom in Ampere für Phase 1, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
-							<div class="row">Strom in Ampere für Phase 2, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
-							<div class="row">Strom in Ampere für Phase 3, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-							<div class="row">Bezogene Energie in Wh, float, nur positiv</div>	
+							<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
 							<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
-							<div class="row">Eingespeiste Energie in Wh, float, nur positiv</div>			
+							<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
+							<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
+							<div class="row">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/VPhase2"</b></div>
+							<div class="row">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/VPhase3"</b></div>
+							<div class="row">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/HzFrequenz"</b></div>
+							<div class="row">Netzfrequenz in Hz, float, Punkt als Trenner</div>
+
 					</div>
 					<div id="wattbezuglgessv1">
 						<div class="row">
@@ -4295,7 +4304,7 @@
 							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br><br>
 
 						</div>
 					</div>
