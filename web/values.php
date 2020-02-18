@@ -172,8 +172,8 @@ $verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbrau
 $settingspwold = str_replace("\n", '', $settingspwold);
 
 $owbversion = file_get_contents('/var/www/html/openWB/web/version');
-if (isset($_GET[theme])) {
-    $theme = $_GET[theme];
+if (isset($_GET['theme'])) {
+    $theme = $_GET['theme'];
     $_SESSION = $theme;
 
 }

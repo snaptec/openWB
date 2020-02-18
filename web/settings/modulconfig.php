@@ -1154,17 +1154,17 @@
 						<div class="col">
 							<b><label for="evsecon">Anbindung Ladepunkt 1:</label></b>
 					        <select type="text" name="evsecon" id="evsecon">
-								<option <?php if($evseconold == "modbusevse\n") echo selected ?> value="modbusevse">Modbusevse</option>
-								<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
-								<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
-								<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
-								<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
-								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
-								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo selected ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
-								<option <?php if($evseconold == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit </option>
+								<option <?php if($evseconold == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbusevse</option>
+								<option <?php if($evseconold == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evseconold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evseconold == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evseconold == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+								<option <?php if($evseconold == "masterethframer\n") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+								<option <?php if($evseconold == "twcmanager\n") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
+								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 							</select><br>
 						</div>
 					</div>
@@ -1404,16 +1404,16 @@
 						<div class="row">
 							<b><label for="ladeleistungmodul">Ladeleistungmodul:</label></b>
 							<select type="text" name="ladeleistungmodul" id="ladeleistungmodul">
-								<option <?php if($ladeleistungmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-								<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo selected ?> value="sdm630modbusll">SDM 630 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo selected ?> value="smaemd_ll">SMA Energy Meter</option>
-								<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
-								<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo selected ?> value="mpm3pmtripple">openWB Tripple</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo selected ?> value="mpm3pmlllp1">openWB Satellit</option>
+								<option <?php if($ladeleistungmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+								<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
+								<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
+								<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "httpll\n") echo "selected" ?> value="httpll">HTTP</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
 
 							</select>
 						</div>
@@ -1646,24 +1646,24 @@
 					<div class="row">
 						<b><label for="socmodul">SOC Modul:</label></b>
 						<select type="text" name="socmodul" id="socmodul">
-							<option <?php if($socmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">SoC HTTP</option>
-							<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
-							<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
-							<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe alt</option>
-							<option <?php if($socmodulold == "soc_myrenault\n") echo selected ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
-							<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
-							<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
-							<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
-							<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
-							<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
-							<option <?php if($socmodulold == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
+							<option <?php if($socmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($socmodulold == "soc_http\n") echo "selected" ?> value="soc_http">SoC HTTP</option>
+							<option <?php if($socmodulold == "soc_leaf\n") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
+							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW i3</option>
+							<option <?php if($socmodulold == "soc_zoe\n") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
+							<option <?php if($socmodulold == "soc_myrenault\n") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
+							<option <?php if($socmodulold == "soc_evnotify\n") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
+							<option <?php if($socmodulold == "soc_tesla\n") echo "selected" ?> value="soc_tesla">SoC Tesla</option>
+							<option <?php if($socmodulold == "soc_carnet\n") echo "selected" ?> value="soc_carnet">SoC VW Carnet</option>
+							<option <?php if($socmodulold == "soc_zerong\n") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
+							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
+							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
 					<select type="text" name="stopsocnotpluggedlp1" id="stopsocnotpluggedp1">
-						<option <?php if($stopsocnotpluggedlp1old == "0\n") echo selected ?> value="0">Nein</option>
-						<option <?php if($stopsocnotpluggedlp1old == "1\n") echo selected ?> value="1">Ja</option>
+						<option <?php if($stopsocnotpluggedlp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+						<option <?php if($stopsocnotpluggedlp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 					</select>
 					<div class="row bg-info">
 						Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
@@ -1795,8 +1795,8 @@
 						</div>
 						<b><label for="wakeupzoelp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
 						<select type="text" name="wakeupzoelp1" id="wakeupzoelp1">
-							<option <?php if($wakeupzoelp1old == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($wakeupzoelp1old == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($wakeupzoelp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($wakeupzoelp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
 							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
@@ -1833,8 +1833,8 @@
 						</div>
 						<b><label for="wakeupmyrenaultlp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
 						<select type="text" name="wakeupmyrenaultlp1" id="wakeupmyrenaultlp1">
-							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
 							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
@@ -1994,8 +1994,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagement">Zweiter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagement" id="lastmanagement">
-							<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementold == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementold == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 					<div id="lastmmaus">
@@ -2012,15 +2012,15 @@
 						<div class="row">
 							<b><label for="evsecons1">Anbindung der EVSE an Ladepunkt 2:</label></b>
 							<select type="text" name="evsecons1" id="evsecons1">
-								<option <?php if($evsecons1old == "slaveeth\n") echo selected ?> value="slaveeth">openWB Slave</option>
-								<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
-								<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
-								<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
-								<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo selected ?> value="openwb12s1">openWB series1/2 Duo</option>
-								<option <?php if($evsecons1old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evsecons1old == "slaveeth\n") echo "selected" ?> value="slaveeth">openWB Slave</option>
+								<option <?php if($evsecons1old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
+								<option <?php if($evsecons1old == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evsecons1old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evsecons1old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evsecons1old == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+								<option <?php if($evsecons1old == "keba\n") echo "selected" ?> value="keba">Keba</option>
+								<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo "selected" ?> value="openwb12s1">openWB series1/2 Duo</option>
+								<option <?php if($evsecons1old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
 							</select>
 						</div>
 						<div id="evseconipevselp2">
@@ -2214,13 +2214,13 @@
 							<div class="row"><br>
 								<b><label for="ladeleistungs1modul">Ladeleistungsmodul für Ladepunkt 2:</label></b>
 								<select type="text" name="ladeleistungs1modul" id="ladeleistungs1modul">
-									<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo selected ?> value="mpm3pmtripplelp2">openWB Tripple</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo selected ?> value="mpm3pmlllp2">openWB Satelit</option>
+									<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "goelp2\n") echo "selected" ?> value="goelp2">Go-e</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
 								</select>
 							</div>
 							<div class="row">
@@ -2325,17 +2325,17 @@
 						<div class="row">
 							<b><label for="socmodul1">SOC Modul für Ladepunkt 2:</label></b>
 							<select type="text" name="socmodul1" id="socmodul1">
-								<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-								<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">SoC HTTP</option>
-								<option <?php if($socmodul1old == "soc_leafs1\n") echo selected ?> value="soc_leafs1">SoC Nissan Leaf</option>
-								<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
-								<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
-								<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe alt</option>
-								<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo selected ?> value="soc_myrenaultlp2">SoC MyRenault</option>
-								<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
-								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
-								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
-								<option <?php if($socmodul1old == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
+								<option <?php if($socmodul1old == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+								<option <?php if($socmodul1old == "soc_http1\n") echo "selected" ?> value="soc_http1">SoC HTTP</option>
+								<option <?php if($socmodul1old == "soc_leafs1\n") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
+								<option <?php if($socmodul1old == "soc_i3s1\n") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
+								<option <?php if($socmodul1old == "soc_evnotifys1\n") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
+								<option <?php if($socmodul1old == "soc_zoelp2\n") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
+								<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
+								<option <?php if($socmodul1old == "soc_teslalp2\n") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
+								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
+								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
+								<option <?php if($socmodul1old == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 
 							</select>
 						</div>
@@ -2452,8 +2452,8 @@
 							</div>
 							<b><label for="wakeupzoelp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
 							<select type="text" name="wakeupzoelp2" id="wakeupzoelp2">
-								<option <?php if($wakeupzoelp2old == "0\n") echo selected ?> value="0">Nein</option>
-								<option <?php if($wakeupzoelp2old == "1\n") echo selected ?> value="1">Ja</option>
+								<option <?php if($wakeupzoelp2old == "0\n") echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wakeupzoelp2old == "1\n") echo "selected" ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
 								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
@@ -2490,8 +2490,8 @@
 							</div>
 							<b><label for="wakeupmyrenaultlp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
 							<select type="text" name="wakeupmyrenaultlp2" id="wakeupmyrenaultlp2">
-								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo selected ?> value="0">Nein</option>
-								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo selected ?> value="1">Ja</option>
+								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo "selected" ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
 								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
@@ -2701,8 +2701,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagements2">Dritter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagements2" id="lastmanagements2">
-							<option <?php if($lastmanagements2old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagements2old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagements2old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagements2old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 					<div class="row">
@@ -2722,12 +2722,12 @@
 						<div class="row">
 							<b><label for="evsecons2">Anbindung der EVSE an Ladepunkt 3:</label></b>
 							<select type="text" name="evsecons2" id="evsecons2">
-								<option <?php if($evsecons2old == "thirdeth\n") echo selected ?> value="thirdeth">openWB dritter Ladepunkte</option>
-								<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
-								<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evsecons2old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evsecons2old == "thirdeth\n") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkte</option>
+								<option <?php if($evsecons2old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
+								<option <?php if($evsecons2old == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evsecons2old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evsecons2old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evsecons2old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
 							</select>
 						</div>
 						<div id="evseconipevselp3">
@@ -2856,13 +2856,13 @@
 							<div class="row"><br>
 								<b><label for="ladeleistungs2modul">Ladeleistungsmodul für Ladepunkt 3:</label></b>
 								<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
-									<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-									<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo selected ?> value="mpm3pmtripplelp3">openWB Tripple</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo selected ?> value="mpm3pmlllp3">openWB Satellit</option>
+									<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
+									<option <?php if($ladeleistungs2modulold == "goelp3\n") echo "selected" ?> value="goelp3">Go-E</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
 								</select>
 							</div>
 							<div class="row">
@@ -3031,8 +3031,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagementlp4">Vierter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagementlp4" id="lastmanagementlp4">
-							<option <?php if($lastmanagementlp4old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp4old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementlp4old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementlp4old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3096,8 +3096,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagementlp5">Fünfter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagementlp5" id="lastmanagementlp5">
-							<option <?php if($lastmanagementlp5old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp5old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementlp5old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementlp5old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3160,8 +3160,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagementlp6">Sechster Ladepunkt:</label></b>
 						<select type="text" name="lastmanagementlp6" id="lastmanagementlp6">
-							<option <?php if($lastmanagementlp6old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp6old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementlp6old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementlp6old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3224,8 +3224,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagementlp7">Siebter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagementlp7" id="lastmanagementlp7">
-							<option <?php if($lastmanagementlp7old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp7old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementlp7old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementlp7old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3288,8 +3288,8 @@
 					<div class="row">
 						<b><h4><label for="lastmanagementlp8">Achter Ladepunkt:</label></b>
 						<select type="text" name="lastmanagementlp8" id="lastmanagementlp8">
-							<option <?php if($lastmanagementlp8old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp8old == 1) echo selected ?> value="1">An</option>
+							<option <?php if($lastmanagementlp8old == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($lastmanagementlp8old == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3355,31 +3355,31 @@
 					<div class="row">
 						<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
 						<select type="text" name="wattbezugmodul" id="wattbezugmodul">
-							<option <?php if($wattbezugmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo selected ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
-							<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">VZLogger</option>
-							<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">SDM 630</option>
-							<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
-							<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
-							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
-							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
-							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo selected ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
-							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
-							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
-							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo selected ?> value="bezug_e3dc">E3DC Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo selected ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
-							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
-							<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
-							<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
-							<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
-							<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
-							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
-							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
+							<option <?php if($wattbezugmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
+							<option <?php if($wattbezugmodulold == "vzlogger\n") echo "selected" ?> value="vzlogger">VZLogger</option>
+							<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+							<option <?php if($wattbezugmodulold == "bezug_http\n") echo "selected" ?> value="bezug_http">HTTP</option>
+							<option <?php if($wattbezugmodulold == "bezug_json\n") echo "selected" ?> value="bezug_json">Json</option>
+							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
+							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
+							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
+							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
+							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo "selected" ?> value="bezug_smartme">Smartme</option>
+							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
+							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
+							<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
+							<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+							<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo "selected" ?> value="bezug_solarview">Solarview</option>
+							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
+							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 						</select>
 					</div>
 					<div id="wattbezugmqtt">
@@ -3416,8 +3416,8 @@
 						<div class="row">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
 							<select type="text" name="evukitversion" id="evukitversion">
-								<option <?php if($evukitversionold == 0) echo selected ?> value="0">EVU Kit</option>
-								<option <?php if($evukitversionold == 1) echo selected ?> value="1">EVU Kit v2</option>
+								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit</option>
+								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit v2</option>
 							</select>
 						</div>
 					</div>
@@ -3702,8 +3702,8 @@
 						<div class="row">
 							<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
 							<select type="text" name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
-								<option <?php if($bezug_solarlog_speichervold == 0) echo selected ?> value="0">Nein</option>
-								<option <?php if($bezug_solarlog_speichervold == 1) echo selected ?> value="1">Ja</option>
+								<option <?php if($bezug_solarlog_speichervold == 0) echo "selected" ?> value="0">Nein</option>
+								<option <?php if($bezug_solarlog_speichervold == 1) echo "selected" ?> value="1">Ja</option>
 							</select>
 						</div>
 					</div>
@@ -3732,8 +3732,8 @@
 					<div class="row">
 						<b><h5><label for="evuglaettungakt">EVU Glättung:</label></b>
 						<select type="text" name="evuglaettungakt" id="evuglaettungakt">
-							<option <?php if($evuglaettungaktold == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($evuglaettungaktold == 1) echo selected ?> value="1">An</option>
+							<option <?php if($evuglaettungaktold == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($evuglaettungaktold == 1) echo "selected" ?> value="1">An</option>
 						</select></h4>
 					</div>
 
@@ -3911,29 +3911,29 @@
 					<div class="row">
 						<b><label for="pvwattmodul">PV-Modul:</label></b>
 						<select type="text" name="pvwattmodul" id="pvwattmodul">
-							<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo selected ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
-							<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo selected ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
-							<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">Fronius WR</option>
-							<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">SDM 630 Modbus</option>
-							<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">VZLogger</option>
-							<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">WR mit URL abfragen</option>
-							<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">SMA Energy Meter</option>
-							<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
-							<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">MPM3PM </option>
-							<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
-							<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
-							<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
-							<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
-							<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
-							<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
-							<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
-							<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
-							<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
-							<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
-							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
-							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
+							<option <?php if($pvwattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo "selected" ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
+							<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
+							<option <?php if($pvwattmodulold == "wr_fronius\n") echo "selected" ?> value="wr_fronius">Fronius WR</option>
+							<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
+							<option <?php if($pvwattmodulold == "vzloggerpv\n") echo "selected" ?> value="vzloggerpv">VZLogger</option>
+							<option <?php if($pvwattmodulold == "wr_http\n") echo "selected" ?> value="wr_http">WR mit URL abfragen</option>
+							<option <?php if($pvwattmodulold == "smaemd_pv\n") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
+							<option <?php if($pvwattmodulold == "wr_json\n") echo "selected" ?> value="wr_json">WR mit Json abfragen</option>
+							<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
+							<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
+							<option <?php if($pvwattmodulold == "wr_solaredge\n") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
+							<option <?php if($pvwattmodulold == "wr_smartme\n") echo "selected" ?> value="wr_smartme">SmartMe</option>
+							<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
+							<option <?php if($pvwattmodulold == "wr_plenticore\n") echo "selected" ?> value="wr_plenticore">Kostal Plenticore</option>
+							<option <?php if($pvwattmodulold == "wr_solarlog\n") echo "selected" ?> value="wr_solarlog">SolarLog</option>
+							<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo "selected" ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
+							<option <?php if($pvwattmodulold == "wr_powerwall\n") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
+							<option <?php if($pvwattmodulold == "wr_solarview\n") echo "selected" ?> value="wr_solarview">Solarview</option>
+							<option <?php if($pvwattmodulold == "wr_discovergy\n") echo "selected" ?> value="wr_discovergy">Discovergy</option>
+							<option <?php if($pvwattmodulold == "wr_youless120\n") echo "selected" ?> value="wr_youless120">Youless 120</option>
+							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
 						</select>
 					</div>
 
@@ -4125,8 +4125,8 @@
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
 							<select type="text" name="wrsmawebbox" id="wrsmawebbox">
-								<option <?php if($wrsmawebboxold == 0) echo selected ?> value="0">Nein</option>
-								<option <?php if($wrsmawebboxold == 1) echo selected ?> value="1">Ja</option>
+								<option <?php if($wrsmawebboxold == 0) echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wrsmawebboxold == 1) echo "selected" ?> value="1">Ja</option>
 							</select>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
@@ -4422,24 +4422,24 @@
 					<div class="row">
 						<b><label for="speicherodul">Speicher-Modul:</label></b>
 						<select type="text" name="speichermodul" id="speichermodul">
-							<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo selected ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
-							<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
-							<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
-							<option <?php if($speichermodulold == "speicher_bydhv\n") echo selected ?> value="speicher_bydhv">ByD HV</option>
-							<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
-							<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
-							<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher</option>
-							<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
-							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
-							<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
-							<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
-							<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
-							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo selected ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($speichermodulold == "speicher_mqtt\n") echo selected ?> value="speicher_mqtt">MQTT</option>
+							<option <?php if($speichermodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+							<option <?php if($speichermodulold == "speicher_http\n") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
+							<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
+							<option <?php if($speichermodulold == "speicher_bydhv\n") echo "selected" ?> value="speicher_bydhv">ByD HV</option>
+							<option <?php if($speichermodulold == "speicher_fronius\n") echo "selected" ?> value="speicher_fronius">Fronius Speicher</option>
+							<option <?php if($speichermodulold == "speicher_e3dc\n") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($speichermodulold == "speicher_solaredge\n") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+							<option <?php if($speichermodulold == "speicher_powerwall\n") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+							<option <?php if($speichermodulold == "speicher_varta\n") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
+							<option <?php if($speichermodulold == "speicher_alphaess\n") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+							<option <?php if($speichermodulold == "speicher_victron\n") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 						</select>
 					</div>
 
@@ -4461,8 +4461,8 @@
 						<div class="row" style="background-color:#fcbe1e">
 							<b>Bitte die API-Version wählen:</b><br />
 							<select type="text" name="ess_api_ver" id="ess_api_ver">
-								<option <?php if($ess_api_ver_old == "10.2019\n") echo selected ?> value="10.2019">API-Version Oktober 2019</option>
-								<option <?php if($ess_api_ver_old == "01.2020\n") echo selected ?> value="01.2020">API-Version Januar 2020</option>
+								<option <?php if($ess_api_ver_old == "10.2019\n") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
+								<option <?php if($ess_api_ver_old == "01.2020\n") echo "selected" ?> value="01.2020">API-Version Januar 2020</option>
 							</select><br />
 							Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version<br />
 						</div>
@@ -4530,8 +4530,8 @@
 						</div>
 						<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
 						<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
-							<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($sonnenecoalternativold == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($sonnenecoalternativold == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
 							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
@@ -4664,8 +4664,8 @@
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
 							<select type="text" name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
-								<option <?php if($mpm3pmspeicherpvold == "0\n") echo selected ?> value="0">Keine extra Berechnung</option>
-								<option <?php if($mpm3pmspeicherpvold == "1\n") echo selected ?> value="1">Subtrahieren der PV Leistung</option>
+								<option <?php if($mpm3pmspeicherpvold == "0\n") echo "selected" ?> value="0">Keine extra Berechnung</option>
+								<option <?php if($mpm3pmspeicherpvold == "1\n") echo "selected" ?> value="1">Subtrahieren der PV Leistung</option>
 							</select>
 						</div>
 						<div class="row" style="background-color:#fcbe1e"><br>

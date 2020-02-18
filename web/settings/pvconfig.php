@@ -206,17 +206,17 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minimalampv">Minimalstromstärke fuer den Min + PV Laden Modus:</label></b>
 						<select type="text" name="minimalampv" id="minimalampv">
-							<option <?php if($minimalampvold == 6) echo selected ?> value="6">6</option>
-							<option <?php if($minimalampvold == 7) echo selected ?> value="7">7</option>
-							<option <?php if($minimalampvold == 8) echo selected ?> value="8">8</option>
-							<option <?php if($minimalampvold == 9) echo selected ?> value="9">9</option>
-							<option <?php if($minimalampvold == 10) echo selected ?> value="10">10</option>
-							<option <?php if($minimalampvold == 11) echo selected ?> value="11">11</option>
-							<option <?php if($minimalampvold == 12) echo selected ?> value="12">12</option>
-							<option <?php if($minimalampvold == 13) echo selected ?> value="13">13</option>
-							<option <?php if($minimalampvold == 14) echo selected ?> value="14">14</option>
-							<option <?php if($minimalampvold == 15) echo selected ?> value="15">15</option>
-							<option <?php if($minimalampvold == 16) echo selected ?> value="16">16</option>
+							<option <?php if($minimalampvold == 6) echo "selected" ?> value="6">6</option>
+							<option <?php if($minimalampvold == 7) echo "selected" ?> value="7">7</option>
+							<option <?php if($minimalampvold == 8) echo "selected" ?> value="8">8</option>
+							<option <?php if($minimalampvold == 9) echo "selected" ?> value="9">9</option>
+							<option <?php if($minimalampvold == 10) echo "selected" ?> value="10">10</option>
+							<option <?php if($minimalampvold == 11) echo "selected" ?> value="11">11</option>
+							<option <?php if($minimalampvold == 12) echo "selected" ?> value="12">12</option>
+							<option <?php if($minimalampvold == 13) echo "selected" ?> value="13">13</option>
+							<option <?php if($minimalampvold == 14) echo "selected" ?> value="14">14</option>
+							<option <?php if($minimalampvold == 15) echo "selected" ?> value="15">15</option>
+							<option <?php if($minimalampvold == 16) echo "selected" ?> value="16">16</option>
 						</select><br>
 					</div>
 
@@ -226,29 +226,29 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minimalapv">Minimalstromstärke fuer den Nur PV Laden Modus LP1:</label></b>
 						<select type="text" name="minimalapv" id="minimalapv">
-							<option <?php if($minimalapvold == 6) echo selected ?> value="6">6</option>
-							<option <?php if($minimalapvold == 7) echo selected ?> value="7">7</option>
-							<option <?php if($minimalapvold == 8) echo selected ?> value="8">8</option>
-							<option <?php if($minimalapvold == 9) echo selected ?> value="9">9</option>
-							<option <?php if($minimalapvold == 10) echo selected ?> value="10">10</option>
-							<option <?php if($minimalapvold == 11) echo selected ?> value="11">11</option>
-							<option <?php if($minimalapvold == 12) echo selected ?> value="12">12</option>
-							<option <?php if($minimalapvold == 13) echo selected ?> value="13">13</option>
-							<option <?php if($minimalapvold == 14) echo selected ?> value="14">14</option>
-							<option <?php if($minimalapvold == 15) echo selected ?> value="15">15</option>
-							<option <?php if($minimalapvold == 16) echo selected ?> value="16">16</option>
+							<option <?php if($minimalapvold == 6) echo "selected" ?> value="6">6</option>
+							<option <?php if($minimalapvold == 7) echo "selected" ?> value="7">7</option>
+							<option <?php if($minimalapvold == 8) echo "selected" ?> value="8">8</option>
+							<option <?php if($minimalapvold == 9) echo "selected" ?> value="9">9</option>
+							<option <?php if($minimalapvold == 10) echo "selected" ?> value="10">10</option>
+							<option <?php if($minimalapvold == 11) echo "selected" ?> value="11">11</option>
+							<option <?php if($minimalapvold == 12) echo "selected" ?> value="12">12</option>
+							<option <?php if($minimalapvold == 13) echo "selected" ?> value="13">13</option>
+							<option <?php if($minimalapvold == 14) echo "selected" ?> value="14">14</option>
+							<option <?php if($minimalapvold == 15) echo "selected" ?> value="15">15</option>
+							<option <?php if($minimalapvold == 16) echo "selected" ?> value="16">16</option>
 						</select><br>
 					</div>
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minimalalp2pv">Minimalstromstärke fuer den Nur PV Laden Modus LP2:</label></b>
 						<select type="text" name="minimalalp2pv" id="minimalalp2pv">
-							<option <?php if($minimalalp2pvold == 6) echo selected ?> value="6">6</option>
-							<option <?php if($minimalalp2pvold == 7) echo selected ?> value="7">7</option>
-							<option <?php if($minimalalp2pvold == 8) echo selected ?> value="8">8</option>
-							<option <?php if($minimalalp2pvold == 9) echo selected ?> value="9">9</option>
-							<option <?php if($minimalalp2pvold == 10) echo selected ?> value="10">10</option>
-							<option <?php if($minimalalp2pvold == 11) echo selected ?> value="11">11</option>
-							<option <?php if($minimalalp2pvold == 12) echo selected ?> value="12">12</option>
+							<option <?php if($minimalalp2pvold == 6) echo "selected" ?> value="6">6</option>
+							<option <?php if($minimalalp2pvold == 7) echo "selected" ?> value="7">7</option>
+							<option <?php if($minimalalp2pvold == 8) echo "selected" ?> value="8">8</option>
+							<option <?php if($minimalalp2pvold == 9) echo "selected" ?> value="9">9</option>
+							<option <?php if($minimalalp2pvold == 10) echo "selected" ?> value="10">10</option>
+							<option <?php if($minimalalp2pvold == 11) echo "selected" ?> value="11">11</option>
+							<option <?php if($minimalalp2pvold == 12) echo "selected" ?> value="12">12</option>
 						</select><br>
 					</div>
 
@@ -260,28 +260,28 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="maximalstromstaerke">Maximalstromstärke in A:</label></b>
 						<select type="text" name="maximalstromstaerke" id="maximalstromstaerke">
-							<option <?php if($maximalstromstaerkeold == 11) echo selected ?> value="11">11</option>
-							<option <?php if($maximalstromstaerkeold == 12) echo selected ?> value="12">12</option>
-							<option <?php if($maximalstromstaerkeold == 13) echo selected ?> value="13">13</option>
-							<option <?php if($maximalstromstaerkeold == 14) echo selected ?> value="14">14</option>
-							<option <?php if($maximalstromstaerkeold == 15) echo selected ?> value="15">15</option>
-							<option <?php if($maximalstromstaerkeold == 16) echo selected ?> value="16">16</option>
-							<option <?php if($maximalstromstaerkeold == 17) echo selected ?> value="17">17</option>
-							<option <?php if($maximalstromstaerkeold == 18) echo selected ?> value="18">18</option>
-							<option <?php if($maximalstromstaerkeold == 19) echo selected ?> value="19">19</option>
-							<option <?php if($maximalstromstaerkeold == 20) echo selected ?> value="20">20</option>
-							<option <?php if($maximalstromstaerkeold == 21) echo selected ?> value="21">21</option>
-							<option <?php if($maximalstromstaerkeold == 22) echo selected ?> value="22">22</option>
-							<option <?php if($maximalstromstaerkeold == 23) echo selected ?> value="23">23</option>
-							<option <?php if($maximalstromstaerkeold == 24) echo selected ?> value="24">24</option>
-							<option <?php if($maximalstromstaerkeold == 25) echo selected ?> value="25">25</option>
-							<option <?php if($maximalstromstaerkeold == 26) echo selected ?> value="26">26</option>
-							<option <?php if($maximalstromstaerkeold == 27) echo selected ?> value="27">27</option>
-							<option <?php if($maximalstromstaerkeold == 28) echo selected ?> value="28">28</option>
-							<option <?php if($maximalstromstaerkeold == 29) echo selected ?> value="29">29</option>
-							<option <?php if($maximalstromstaerkeold == 30) echo selected ?> value="30">30</option>
-							<option <?php if($maximalstromstaerkeold == 31) echo selected ?> value="31">31</option>
-							<option <?php if($maximalstromstaerkeold == 32) echo selected ?> value="32">32</option>
+							<option <?php if($maximalstromstaerkeold == 11) echo "selected" ?> value="11">11</option>
+							<option <?php if($maximalstromstaerkeold == 12) echo "selected" ?> value="12">12</option>
+							<option <?php if($maximalstromstaerkeold == 13) echo "selected" ?> value="13">13</option>
+							<option <?php if($maximalstromstaerkeold == 14) echo "selected" ?> value="14">14</option>
+							<option <?php if($maximalstromstaerkeold == 15) echo "selected" ?> value="15">15</option>
+							<option <?php if($maximalstromstaerkeold == 16) echo "selected" ?> value="16">16</option>
+							<option <?php if($maximalstromstaerkeold == 17) echo "selected" ?> value="17">17</option>
+							<option <?php if($maximalstromstaerkeold == 18) echo "selected" ?> value="18">18</option>
+							<option <?php if($maximalstromstaerkeold == 19) echo "selected" ?> value="19">19</option>
+							<option <?php if($maximalstromstaerkeold == 20) echo "selected" ?> value="20">20</option>
+							<option <?php if($maximalstromstaerkeold == 21) echo "selected" ?> value="21">21</option>
+							<option <?php if($maximalstromstaerkeold == 22) echo "selected" ?> value="22">22</option>
+							<option <?php if($maximalstromstaerkeold == 23) echo "selected" ?> value="23">23</option>
+							<option <?php if($maximalstromstaerkeold == 24) echo "selected" ?> value="24">24</option>
+							<option <?php if($maximalstromstaerkeold == 25) echo "selected" ?> value="25">25</option>
+							<option <?php if($maximalstromstaerkeold == 26) echo "selected" ?> value="26">26</option>
+							<option <?php if($maximalstromstaerkeold == 27) echo "selected" ?> value="27">27</option>
+							<option <?php if($maximalstromstaerkeold == 28) echo "selected" ?> value="28">28</option>
+							<option <?php if($maximalstromstaerkeold == 29) echo "selected" ?> value="29">29</option>
+							<option <?php if($maximalstromstaerkeold == 30) echo "selected" ?> value="30">30</option>
+							<option <?php if($maximalstromstaerkeold == 31) echo "selected" ?> value="31">31</option>
+							<option <?php if($maximalstromstaerkeold == 32) echo "selected" ?> value="32">32</option>
 						</select><br>
 					</div>
 					<div class="row" style="background-color:#befebe">
@@ -293,23 +293,23 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minnurpvsoclp1">Minimal SoC fuer den Nur PV Laden Modus:</label></b>
 						<select type="text" name="minnurpvsoclp1" id="minnurpvsoclp1">
-							<option <?php if($minnurpvsoclp1old == 0) echo selected ?> value="0">0</option>
-							<option <?php if($minnurpvsoclp1old == 5) echo selected ?> value="5">5</option>
-							<option <?php if($minnurpvsoclp1old == 10) echo selected ?> value="10">10</option>
-							<option <?php if($minnurpvsoclp1old == 15) echo selected ?> value="15">15</option>
-							<option <?php if($minnurpvsoclp1old == 20) echo selected ?> value="20">20</option>
-							<option <?php if($minnurpvsoclp1old == 25) echo selected ?> value="25">25</option>
-							<option <?php if($minnurpvsoclp1old == 30) echo selected ?> value="30">30</option>
-							<option <?php if($minnurpvsoclp1old == 35) echo selected ?> value="35">35</option>
-							<option <?php if($minnurpvsoclp1old == 40) echo selected ?> value="40">40</option>
-							<option <?php if($minnurpvsoclp1old == 45) echo selected ?> value="45">45</option>
-							<option <?php if($minnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
-							<option <?php if($minnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
-							<option <?php if($minnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
-							<option <?php if($minnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
-							<option <?php if($minnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
-							<option <?php if($minnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
-							<option <?php if($minnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
+							<option <?php if($minnurpvsoclp1old == 0) echo "selected" ?> value="0">0</option>
+							<option <?php if($minnurpvsoclp1old == 5) echo "selected" ?> value="5">5</option>
+							<option <?php if($minnurpvsoclp1old == 10) echo "selected" ?> value="10">10</option>
+							<option <?php if($minnurpvsoclp1old == 15) echo "selected" ?> value="15">15</option>
+							<option <?php if($minnurpvsoclp1old == 20) echo "selected" ?> value="20">20</option>
+							<option <?php if($minnurpvsoclp1old == 25) echo "selected" ?> value="25">25</option>
+							<option <?php if($minnurpvsoclp1old == 30) echo "selected" ?> value="30">30</option>
+							<option <?php if($minnurpvsoclp1old == 35) echo "selected" ?> value="35">35</option>
+							<option <?php if($minnurpvsoclp1old == 40) echo "selected" ?> value="40">40</option>
+							<option <?php if($minnurpvsoclp1old == 45) echo "selected" ?> value="45">45</option>
+							<option <?php if($minnurpvsoclp1old == 50) echo "selected" ?> value="50">50</option>
+							<option <?php if($minnurpvsoclp1old == 55) echo "selected" ?> value="55">55</option>
+							<option <?php if($minnurpvsoclp1old == 60) echo "selected" ?> value="60">60</option>
+							<option <?php if($minnurpvsoclp1old == 65) echo "selected" ?> value="65">65</option>
+							<option <?php if($minnurpvsoclp1old == 70) echo "selected" ?> value="70">70</option>
+							<option <?php if($minnurpvsoclp1old == 75) echo "selected" ?> value="75">75</option>
+							<option <?php if($minnurpvsoclp1old == 80) echo "selected" ?> value="80">80</option>
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
@@ -320,17 +320,17 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="maxnnurpvsoclp1">Maximal SoC fuer den Nur PV Laden Modus:</label></b>
 						<select type="text" name="maxnurpvsoclp1" id="maxnurpvsoclp1">
-							<option <?php if($maxnurpvsoclp1old == 50) echo selected ?> value="50">50</option>
-							<option <?php if($maxnurpvsoclp1old == 55) echo selected ?> value="55">55</option>
-							<option <?php if($maxnurpvsoclp1old == 60) echo selected ?> value="60">60</option>
-							<option <?php if($maxnurpvsoclp1old == 65) echo selected ?> value="65">65</option>
-							<option <?php if($maxnurpvsoclp1old == 70) echo selected ?> value="70">70</option>
-							<option <?php if($maxnurpvsoclp1old == 75) echo selected ?> value="75">75</option>
-							<option <?php if($maxnurpvsoclp1old == 80) echo selected ?> value="80">80</option>
-							<option <?php if($maxnurpvsoclp1old == 85) echo selected ?> value="85">85</option>
-							<option <?php if($maxnurpvsoclp1old == 90) echo selected ?> value="90">90</option>
-							<option <?php if($maxnurpvsoclp1old == 95) echo selected ?> value="95">95</option>
-							<option <?php if($maxnurpvsoclp1old == 100) echo selected ?> value="100">100</option>
+							<option <?php if($maxnurpvsoclp1old == 50) echo "selected" ?> value="50">50</option>
+							<option <?php if($maxnurpvsoclp1old == 55) echo "selected" ?> value="55">55</option>
+							<option <?php if($maxnurpvsoclp1old == 60) echo "selected" ?> value="60">60</option>
+							<option <?php if($maxnurpvsoclp1old == 65) echo "selected" ?> value="65">65</option>
+							<option <?php if($maxnurpvsoclp1old == 70) echo "selected" ?> value="70">70</option>
+							<option <?php if($maxnurpvsoclp1old == 75) echo "selected" ?> value="75">75</option>
+							<option <?php if($maxnurpvsoclp1old == 80) echo "selected" ?> value="80">80</option>
+							<option <?php if($maxnurpvsoclp1old == 85) echo "selected" ?> value="85">85</option>
+							<option <?php if($maxnurpvsoclp1old == 90) echo "selected" ?> value="90">90</option>
+							<option <?php if($maxnurpvsoclp1old == 95) echo "selected" ?> value="95">95</option>
+							<option <?php if($maxnurpvsoclp1old == 100) echo "selected" ?> value="100">100</option>
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
@@ -341,33 +341,33 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
 						<select type="text" name="minnurpvsocll" id="minnurpvsocll">
-							<option <?php if($minnurpvsocllold == 6) echo selected ?> value="6">6</option>
-							<option <?php if($minnurpvsocllold == 7) echo selected ?> value="7">7</option>
-							<option <?php if($minnurpvsocllold == 8) echo selected ?> value="8">8</option>
-							<option <?php if($minnurpvsocllold == 9) echo selected ?> value="9">9</option>
-							<option <?php if($minnurpvsocllold == 10) echo selected ?> value="10">10</option>
-							<option <?php if($minnurpvsocllold == 11) echo selected ?> value="11">11</option>
-							<option <?php if($minnurpvsocllold == 12) echo selected ?> value="12">12</option>
-							<option <?php if($minnurpvsocllold == 13) echo selected ?> value="13">13</option>
-							<option <?php if($minnurpvsocllold == 14) echo selected ?> value="14">14</option>
-							<option <?php if($minnurpvsocllold == 15) echo selected ?> value="15">15</option>
-							<option <?php if($minnurpvsocllold == 16) echo selected ?> value="16">16</option>
-							<option <?php if($minnurpvsocllold == 17) echo selected ?> value="17">17</option>
-							<option <?php if($minnurpvsocllold == 18) echo selected ?> value="18">18</option>
-							<option <?php if($minnurpvsocllold == 19) echo selected ?> value="19">19</option>
-							<option <?php if($minnurpvsocllold == 20) echo selected ?> value="20">20</option>
-							<option <?php if($minnurpvsocllold == 21) echo selected ?> value="21">21</option>
-							<option <?php if($minnurpvsocllold == 22) echo selected ?> value="22">22</option>
-							<option <?php if($minnurpvsocllold == 23) echo selected ?> value="23">23</option>
-							<option <?php if($minnurpvsocllold == 24) echo selected ?> value="24">24</option>
-							<option <?php if($minnurpvsocllold == 25) echo selected ?> value="25">25</option>
-							<option <?php if($minnurpvsocllold == 26) echo selected ?> value="26">26</option>
-							<option <?php if($minnurpvsocllold == 27) echo selected ?> value="27">27</option>
-							<option <?php if($minnurpvsocllold == 28) echo selected ?> value="28">28</option>
-							<option <?php if($minnurpvsocllold == 29) echo selected ?> value="29">29</option>
-							<option <?php if($minnurpvsocllold == 30) echo selected ?> value="30">30</option>
-							<option <?php if($minnurpvsocllold == 31) echo selected ?> value="31">31</option>
-							<option <?php if($minnurpvsocllold == 32) echo selected ?> value="32">32</option>
+							<option <?php if($minnurpvsocllold == 6) echo "selected" ?> value="6">6</option>
+							<option <?php if($minnurpvsocllold == 7) echo "selected" ?> value="7">7</option>
+							<option <?php if($minnurpvsocllold == 8) echo "selected" ?> value="8">8</option>
+							<option <?php if($minnurpvsocllold == 9) echo "selected" ?> value="9">9</option>
+							<option <?php if($minnurpvsocllold == 10) echo "selected" ?> value="10">10</option>
+							<option <?php if($minnurpvsocllold == 11) echo "selected" ?> value="11">11</option>
+							<option <?php if($minnurpvsocllold == 12) echo "selected" ?> value="12">12</option>
+							<option <?php if($minnurpvsocllold == 13) echo "selected" ?> value="13">13</option>
+							<option <?php if($minnurpvsocllold == 14) echo "selected" ?> value="14">14</option>
+							<option <?php if($minnurpvsocllold == 15) echo "selected" ?> value="15">15</option>
+							<option <?php if($minnurpvsocllold == 16) echo "selected" ?> value="16">16</option>
+							<option <?php if($minnurpvsocllold == 17) echo "selected" ?> value="17">17</option>
+							<option <?php if($minnurpvsocllold == 18) echo "selected" ?> value="18">18</option>
+							<option <?php if($minnurpvsocllold == 19) echo "selected" ?> value="19">19</option>
+							<option <?php if($minnurpvsocllold == 20) echo "selected" ?> value="20">20</option>
+							<option <?php if($minnurpvsocllold == 21) echo "selected" ?> value="21">21</option>
+							<option <?php if($minnurpvsocllold == 22) echo "selected" ?> value="22">22</option>
+							<option <?php if($minnurpvsocllold == 23) echo "selected" ?> value="23">23</option>
+							<option <?php if($minnurpvsocllold == 24) echo "selected" ?> value="24">24</option>
+							<option <?php if($minnurpvsocllold == 25) echo "selected" ?> value="25">25</option>
+							<option <?php if($minnurpvsocllold == 26) echo "selected" ?> value="26">26</option>
+							<option <?php if($minnurpvsocllold == 27) echo "selected" ?> value="27">27</option>
+							<option <?php if($minnurpvsocllold == 28) echo "selected" ?> value="28">28</option>
+							<option <?php if($minnurpvsocllold == 29) echo "selected" ?> value="29">29</option>
+							<option <?php if($minnurpvsocllold == 30) echo "selected" ?> value="30">30</option>
+							<option <?php if($minnurpvsocllold == 31) echo "selected" ?> value="31">31</option>
+							<option <?php if($minnurpvsocllold == 32) echo "selected" ?> value="32">32</option>
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
@@ -380,9 +380,9 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="pvbezugeinspeisung">PV Lademodus:</label></b>
 					       	<select type="text" name="pvbezugeinspeisung" id="pvbezugeinspeisung">
-				 			<option <?php if($pvbezugeinspeisungold == 0) echo selected ?> value="0">Einspeisung</option>
-				  			<option <?php if($pvbezugeinspeisungold == 1) echo selected ?> value="1">Bezug</option>
-							<option <?php if($pvbezugeinspeisungold == 2) echo selected ?> value="2">Manueller Offset</option>
+				 			<option <?php if($pvbezugeinspeisungold == 0) echo "selected" ?> value="0">Einspeisung</option>
+				  			<option <?php if($pvbezugeinspeisungold == 1) echo "selected" ?> value="1">Bezug</option>
+							<option <?php if($pvbezugeinspeisungold == 2) echo "selected" ?> value="2">Manueller Offset</option>
 						</select><br>
 					</div>
 					<div class="row" style="background-color:#befebe">
@@ -408,13 +408,13 @@
 							<div class="row" style="background-color:#fcbe1e">
 								<b><label for="speicherpveinbeziehen">Speicherbeachtung PV Lademodus:</label></b>
 						       	<select type="text" name="speicherpveinbeziehen" id="speicherpveinbeziehen">
-						 			<option <?php if($speicherpveinbeziehenold == 0) echo selected ?> value="0">Speicher hat Vorrang</option>
-						  			<option <?php if($speicherpveinbeziehenold == 1) echo selected ?> value="1">EV hat Vorrang</option>
+						 			<option <?php if($speicherpveinbeziehenold == 0) echo "selected" ?> value="0">Speicher hat Vorrang</option>
+						  			<option <?php if($speicherpveinbeziehenold == 1) echo "selected" ?> value="1">EV hat Vorrang</option>
 								</select><br>
 								<b><label for="speicherpveinbeziehen">Auf der Hauptseite anzeigen:</label></b>
 								<select type="text" name="speicherpvui" id="speicherpvui">
-					 				<option <?php if($speicherpvuiold == 0) echo selected ?> value="0">Nein</option>
-					  				<option <?php if($speicherpvuiold == 1) echo selected ?> value="1">Ja</option>
+					 				<option <?php if($speicherpvuiold == 0) echo "selected" ?> value="0">Nein</option>
+					  				<option <?php if($speicherpvuiold == 1) echo "selected" ?> value="1">Ja</option>
 								</select><br>
 							</div>
 							<div class="row" style="background-color:#fcbe1e">
@@ -485,8 +485,8 @@
 					<div class="row" style="background-color:#befebe">
 						<b><label for="adaptpv">Adaptives Nur PV Laden:</label></b>
 						<select type="text" name="adaptpv" id="adaptpv">
-							<option <?php if($adaptpvold == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($adaptpvold == 1) echo selected ?> value="1">An</option>
+							<option <?php if($adaptpvold == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($adaptpvold == 1) echo "selected" ?> value="1">An</option>
 						</select><br>
 					</div>
 					<div class="row" style="background-color:#befebe">

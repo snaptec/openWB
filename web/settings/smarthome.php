@@ -189,8 +189,8 @@
 					<div class="row">
 						<b><label for="angesteckthooklp1">Webhook bei Anstecken an LP1:</label></b>
 						<select type="text" name="angesteckthooklp1" id="angesteckthooklp1">
-							<option <?php if($angesteckthooklp1old == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($angesteckthooklp1old == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($angesteckthooklp1old == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($angesteckthooklp1old == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -233,8 +233,8 @@
 					<div class="row">
 						<b><label for="hook1_aktiv">Externes Gerät 1:</label></b>
 						<select type="text" name="hook1_aktiv" id="hook1_aktiv">
-							<option <?php if($hook1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($hook1_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook1_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -327,8 +327,8 @@
 					<div class="row">
 						<b><label for="hook2_aktiv">Externes Gerät 2:</label></b>
 						<select type="text" name="hook2_aktiv" id="hook2_aktiv">
-							<option <?php if($hook2_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook2_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($hook2_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook2_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -413,8 +413,8 @@
 					<div class="row">
 						<b><label for="hook3_aktiv">Externes Gerät 3:</label></b>
 						<select type="text" name="hook3_aktiv" id="hook3_aktiv">
-							<option <?php if($hook3_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook3_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($hook3_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook3_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -499,8 +499,8 @@
 					<div class="row">
 						<b><label for="verbraucher1_aktiv">Verbraucher 1:</label></b>
 						<select type="text" name="verbraucher1_aktiv" id="verbraucher1_aktiv">
-							<option <?php if($verbraucher1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($verbraucher1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($verbraucher1_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($verbraucher1_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -514,11 +514,11 @@
 						<div class="row">
 							<b><label for="verbraucher1_typ">Anbindung Verbraucher 1:</label></b>
 							<select type="text" name="verbraucher1_typ" id="verbraucher1_typ">
-								<option <?php if($verbraucher1_typold == "http\n") echo selected ?> value="http">Http Abfrage</option>
-								<option <?php if($verbraucher1_typold == "mpm3pm\n") echo selected ?> value="mpm3pm">MPM3PM</option>
-								<option <?php if($verbraucher1_typold == "sdm120\n") echo selected ?> value="sdm120">SDM120</option>
-								<option <?php if($verbraucher1_typold == "sdm630\n") echo selected ?> value="sdm630">SDM630</option>
-								<option <?php if($verbraucher1_typold == "tasmota\n") echo selected ?> value="tasmota">Sonoff mit Tasmota FW</option>
+								<option <?php if($verbraucher1_typold == "http\n") echo "selected" ?> value="http">Http Abfrage</option>
+								<option <?php if($verbraucher1_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
+								<option <?php if($verbraucher1_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
+								<option <?php if($verbraucher1_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher1_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
 							</select><br><br>
 						</div>
 						<div class="row">
@@ -631,8 +631,8 @@
 					<div class="row">
 						<b><label for="verbraucher2_aktiv">Verbraucher 2:</label></b>
 						<select type="text" name="verbraucher2_aktiv" id="verbraucher2_aktiv">
-							<option <?php if($verbraucher2_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($verbraucher2_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+							<option <?php if($verbraucher2_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($verbraucher2_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
@@ -646,11 +646,11 @@
 						<div class="row">
 							<b><label for="verbraucher2_typ">Anbindung Verbraucher 2:</label></b>
 							<select type="text" name="verbraucher2_typ" id="verbraucher2_typ">
-								<option <?php if($verbraucher2_typold == "http\n") echo selected ?> value="http">Http Abfrage</option>
-								<option <?php if($verbraucher2_typold == "mpm3pm\n") echo selected ?> value="mpm3pm">MPM3PM</option>
-								<option <?php if($verbraucher2_typold == "sdm120\n") echo selected ?> value="sdm120">SDM120</option>
-								<option <?php if($verbraucher2_typold == "sdm630\n") echo selected ?> value="sdm630">SDM630</option>
-								<option <?php if($verbraucher2_typold == "tasmota\n") echo selected ?> value="tasmota">Sonoff mit Tasmota FW</option>
+								<option <?php if($verbraucher2_typold == "http\n") echo "selected" ?> value="http">Http Abfrage</option>
+								<option <?php if($verbraucher2_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
+								<option <?php if($verbraucher2_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
+								<option <?php if($verbraucher2_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher2_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
 							</select><br><br>
 						</div>
 						<div class="row">
