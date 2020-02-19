@@ -48,6 +48,9 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "pvkitversion=") !== false) {
+					list(, $pvkitversionold) = explode("=", $line);
+				}
 				if(strpos($line, "evukitversion=") !== false) {
 					list(, $evukitversionold) = explode("=", $line);
 				}
@@ -4003,7 +4006,11 @@
 					</div>
 					<div id="pvmpmevu">
 						<div class="row" style="background-color:#febebe">
-							Keine Einstellung nötig. Dies ist das richtige Modul wenn ein MPM3PM Zähler mit ID 8 am openWB EVU Kit mit angeschlossen ist.<br>
+							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
+							<select type="text" name="pvkitversion" id="pvkitversion">
+								<option <?php if($pvkitversionold == 0) echo selected ?> value="0">PV Kit</option>
+								<option <?php if($pvkitversionold == 1) echo selected ?> value="1">PV Kit v2</option>
+							</select>
 						</div>
 					</div>
 					<div id="pvplenti">

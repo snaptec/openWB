@@ -46,6 +46,10 @@ foreach($lines as $line) {
 	    $result .= 'evukitversion='.$_POST[evukitversion]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "pvkitversion=") !== false) {
+	    $result .= 'pvkitversion='.$_POST[pvkitversion]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "evseidlp3=") !== false) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
 	    $writeit = '1';
