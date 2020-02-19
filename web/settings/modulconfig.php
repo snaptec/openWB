@@ -3380,7 +3380,13 @@
 							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
+							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 						</select>
+					</div>
+					<div id="wattbezugsonneneco">
+						<div class="row">
+							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.<br><br>
+						</div>
 					</div>
 					<div id="wattbezugmqtt">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -3806,9 +3812,13 @@
 							$('#wattbezugdiscovergy').hide();
 							$('#wattbezuglgessv1').hide();
 							$('#wattbezugmqtt').hide();
+							$('#wattbezugsonneneco').hide();
 
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
+							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
+								$('#wattbezugsonneneco').show(); 
+							}
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
 								$('#wattbezugsolarview').show();
 							}
