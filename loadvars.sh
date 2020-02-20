@@ -595,6 +595,7 @@ else
 	wattbezug=$pvwatt
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	wattbezugint=$(echo "($wattbezugint+$hausbezugnone+$ladeleistung)" |bc)
+	wattbezug=$wattbezugint
 	echo "$wattbezugint" > /var/www/html/openWB/ramdisk/wattbezug
 	uberschuss=$((wattbezugint * -1))
 
