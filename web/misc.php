@@ -1226,12 +1226,12 @@ $(function() {
 	Aktuellste Beta: <?php echo $vbeta ?><br> 
 	Aktuellste Nightly: <?php echo $vnightly ?><br> 
 	<br><br>
-	<p>Achtung! Die derzeit installierte Version ist die 1.6.<br>
+	<h4><b>Achtung! Die derzeit installierte Version ist die 1.6.<br>
 	Diese ist nicht die aktuellste!<br>
 	Durch einen Klick auf Update durchführen wird automatisch die Version 1.7 installiert.<br>
 	Das Update auf 1.7 kann durchaus länger dauern (bis zu 20 Minuten).<br>
 	Vorher angesteckte Fahrzeuge abstecken!<br>
-	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br></p>
+	Nach dem Upgrade auf 1.7 ist ggf. das Löschen des Browser Caches sowie ein Neustart der openWB nötig.<br></b></h4>
 	</div>
 
 	<div class="row">
