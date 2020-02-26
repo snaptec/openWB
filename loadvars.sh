@@ -76,8 +76,8 @@ if [[ $evsecon == "modbusevse" ]]; then
 					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 				fi
 			fi
-				echo 1 > /var/www/html/openWB/ramdisk/plugstat
-				plugstat=1
+			echo 1 > /var/www/html/openWB/ramdisk/plugstat
+			plugstat=1
 		else
 			echo 0 > /var/www/html/openWB/ramdisk/plugstat
 			plugstat=0
@@ -113,9 +113,17 @@ if [[ $lastmanagement == "1" ]]; then
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 		if [[ $evseplugstatelp2 > "0" ]] && [[ $evseplugstatelp2 < "7" ]] ; then
 			if [[ $evseplugstatelp2 > "1" ]]; then
+				plugstat2=$(</var/www/html/openWB/ramdisk/plugstats1)
+				if [[ $plugstat2 == "0" ]] ; then
+					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
+						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
+					fi
+				fi
 				echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+				plugstat2=1
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+				plugstat2=0
 			fi
 			if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestats1
