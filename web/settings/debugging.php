@@ -3,7 +3,6 @@
 
 	<head>
 		<base href="/openWB/web/">
-
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,53 +20,43 @@
 		<meta name="msapplication-TileColor" content="#00a8ff">
 		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
-
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	</head>
 
 	<body>
-
 		<?php
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/navbar.php';
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
-			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
-			foreach($lines as $line) {
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugmode) = explode("=", $line);
-				}
+			// get settings
+			require_once '../tools/settingsClass.php';
+			$mySettings = new openWBSettings();
+			// if not set, set default value
+			if(is_null($mySettings->getSetting('debug'))){
+				$mySettings->addSetting('debug', 0);
+				$mySettings->saveConfigFile();
 			}
-			$debugmode = trim($debugmode);
-			if ( $debugmode == "" ) {
-				// if no debug mode set, set 0 = off
-				$debugmode="0";
-			}
-
 		?>
-
+		<pre><?php echo $mySettings->dumpSettings(); ?></pre>
 		<div role="main" class="container" style="margin-top:20px">
-
 			<div class="row">
 				<div class="col">
 					<h1>Debug-Modus</h1>
 				</div>
 			</div>
-			<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
+			<form class="form" id="debugmodeForm" action="./tools/savepostsettings.php" method="POST">
 				<div class="form-row">
 					<div class="col-auto">
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
+								<input class="form-check-input" type="radio" name="debug" id="mode0RadioBtn" value="0" <?php if($mySettings->getSetting('debug') == "0") echo 'checked'?>>
 								<label class="form-check-label" for="mode0RadioBtn">
 								    Mode 0 (aus)
 								</label>
@@ -75,7 +64,7 @@
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
+								<input class="form-check-input" type="radio" name="debug" id="mode1RadioBtn" value="1" <?php if($mySettings->getSetting('debug') == "1") echo 'checked'?>>
 								<label class="form-check-label" for="mode1RadioBtn">
 									Mode 1 (Regelwerte)
 								</label>
@@ -83,7 +72,7 @@
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
+								<input class="form-check-input" type="radio" name="debug" id="mode2RadioBtn" value="2" <?php if($mySettings->getSetting('debug') == "2") echo 'checked'?>>
 								<label class="form-check-label" for="mode2RadioBtn">
 									Mode 2 (Berechnungsgrundlage)
 								</label>
@@ -95,7 +84,6 @@
 					</div>
 				</div>
 			</form>
-
 			<div class="row">
 				<div class="col">
 					<h1>Debug-Meldung</h1>
@@ -129,9 +117,6 @@
     				</div>
 				</div>
 			</form>
-
-
-
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
