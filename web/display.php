@@ -90,12 +90,8 @@
 if ( $simplemodeold == 1 ) {
 	include 'display/simple.html';
 } else {
-	if ( $displayconfiguredold == 0 ) {
-		include 'display/welcome.html';
-	} else {
-		// das gewählte Theme einbinden
-		include 'display/gauge.html';
-	}
+	// das gewählte Theme einbinden
+	include 'display/gauge.html';
 }
 ?>
 	
