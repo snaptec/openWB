@@ -8,7 +8,8 @@ if (( sonnenecoalternativ == 2 )); then
 	echo $evubezug "evubezug" >> /var/www/html/openWB/ramdisk/openWB.log
 	evueinspeisung=$(curl --connect-timeout 5 -s "$sonnenecoip:7979/rest/devices/battery/M38")
 	echo $evueinspeisung "evueinspeisung" >> /var/www/html/openWB/ramdisk/openWB.log
-
+	evubezug=$(echo $evubezug | sed 's/\..*$//')
+	evueinspeisung=$(echo $evueinspeisung | sed 's/\..*$//')
 	wattbezug=$(echo "$evubezug - $evueinspeisung" | bc)
 	echo $wattbezug "wattbezug" >> /var/www/html/openWB/ramdisk/openWB.log
 
