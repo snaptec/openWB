@@ -10,6 +10,7 @@ if (( sonnenecoalternativ == 2 )); then
 	speicherladung=$(curl --connect-timeout 5 -s "$sonnenecoip:7979/rest/devices/battery/M02")
 	speicherwatt=$(echo "$speicherladung - $speicherentladung" | bc)
 	#wenn Batterie aus bzw. keine Antwort ersetze leeren Wert durch eine 0
+	echo $speicherwatt "speicherwatt" >> /var/www/html/openWB/ramdisk/openWB.log
 	if ! [[ $speicherwatt =~ $ra ]] ; then
 		speicherwatt="0"
 	fi
