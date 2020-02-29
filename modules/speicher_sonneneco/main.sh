@@ -8,6 +8,9 @@ speicherantwort=$(curl --connect-timeout 5 -s "$sonnenecoip:7979/rest/devices/ba
 speichersoc=$(echo $speicherantwort | jq '.M05' | sed 's/\..*$//')
 
 speicherentladung=$(echo $speicherantwort | jq '.M34' | sed 's/\..*$//')
+if (( speicherentladung > 65000 )); then
+	speicherentladung=0
+fi
 
 speicherladung=$(echo $speicherantwort | jq '.M35' |sed 's/\..*$//')
 
