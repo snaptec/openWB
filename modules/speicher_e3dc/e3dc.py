@@ -113,4 +113,5 @@ else:
     f.close()
     f = open('/var/www/html/openWB/ramdisk/speicherwh0', 'w')
     f.write(str(watt2))
+    f.close()
   
