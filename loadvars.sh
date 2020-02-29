@@ -319,7 +319,9 @@ if [[ $speichermodul != "none" ]] ; then
 	if [[ $speichermodul == "speicher_e3dc" ]] ; then
 		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 	fi
-
+	if [[ $speichermodul == "speicher_sonneneco" ]] ; then
+		pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+	fi
 else
 	speichervorhanden="0"
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
