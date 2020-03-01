@@ -404,7 +404,7 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 			<div class="row justify-content-center" id="sliderawattardiv">
 				<div class="col-7">
-					<input type="range" min="-1" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
+					<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
 				</div>
 				<div class="col-2 regularTextStyle">
 					<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span>Cent/kWh</label>

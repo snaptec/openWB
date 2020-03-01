@@ -48,7 +48,6 @@
                         <a class="dropdown-item" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
                         <a class="dropdown-item" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
                         <a class="dropdown-item" href="./settings/update.php">Update</a>
-                        <a class="dropdown-item" data-toggle="modal" data-target="#downgradeConfirmationModal">Downgrade</a>
                         <a class="dropdown-item" href="./settings/debugging.php">Debugging</a>
                     </div>
                 </li>
@@ -140,42 +139,7 @@
     </div>
 </div>
 
-<!-- modal downgrade-confirmation window -->
-<div class="modal fade" id="downgradeConfirmationModal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
 
-            <!-- modal header -->
-            <div class="modal-header btn-red">
-                <h4 class="modal-title text-light">Achtung</h4>
-            </div>
-
-            <!-- modal body -->
-            <div class="modal-body text-center">
-                        Aktuelle Version: <?php echo file_get_contents('/var/www/html/openWB/web/version'); ?><br>
-                        <br>
-                        Soll wirklich ein Downgrade der openWB auf<br>
-                        <b>Version 1.5 stable</b><br>
-                        erfolgen?<br>
-                        <br>
-                        Das Downgrade kann einige Zeit in Anspruch nehmen. Alle Einstellungen bleiben erhalten.
-                        Einige Optionen/Features der aktuellen Version sind nach erfolgreichem Downgrade ggf. nicht mehr verfügbar!<br>
-                        <br>
-                        <b>
-                            Es wird empfohlen, zur Sicherheit zuvor ein Backup zu erstellen.<br>
-                            <span class="text-danger">Fahrzeuge sind vor dem Downgrade abzustecken!</span>
-                        </b>
-            </div>
-
-            <!-- modal footer -->
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/updateredirect15.html'">Downgrade</button>
-                <button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 <script type="text/javascript">

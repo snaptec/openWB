@@ -475,6 +475,8 @@ echo 0 > /var/www/html/openWB/ramdisk/soc-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/speicherikwh
 echo 0 > /var/www/html/openWB/ramdisk/speicherekwh
 echo 28 > /var/www/html/openWB/ramdisk/evsemodbustimer
+echo 0 > /var/www/html/openWB/ramdisk/rsestatus
+echo 0 > /var/www/html/openWB/ramdisk/rseaktiv
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp1
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
@@ -521,6 +523,10 @@ if ! grep -Fq "ladetaster=" /var/www/html/openWB/openwb.conf
 then
 	  echo "ladetaster=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rseenabled=" /var/www/html/openWB/openwb.conf
+then
+	  echo "rseenabled=0" >> /var/www/html/openWB/openwb.conf
+fi
 . /var/www/html/openWB/openwb.conf
 if (( ladetaster == 1 )); then
 	if ! [ -x "$(command -v nmcli)" ]; then
@@ -529,6 +535,16 @@ if (( ladetaster == 1 )); then
 			echo "test" > /dev/null
 		else
 			sudo python /var/www/html/openWB/runs/ladetaster.py &
+		fi
+	fi
+fi
+if (( rseenabled == 1 )); then
+	if ! [ -x "$(command -v nmcli)" ]; then
+		if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/rse.py" > /dev/null
+		then
+			echo "test" > /dev/null
+		else
+			sudo python /var/www/html/openWB/runs/rse.py &
 		fi
 	fi
 fi
@@ -2320,6 +2336,14 @@ then
 	echo "myrenault_passlp2=Passwort" >> /var/www/html/openWB/openwb.conf
 	echo "myrenault_locationlp2=de_DE" >> /var/www/html/openWB/openwb.conf
 	echo "myrenault_countrylp2=DE" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null

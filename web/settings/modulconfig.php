@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Michael Ortenstein" />
@@ -48,6 +48,12 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "pvkitversion=") !== false) {
+					list(, $pvkitversionold) = explode("=", $line);
+				}
+				if(strpos($line, "evukitversion=") !== false) {
+					list(, $evukitversionold) = explode("=", $line);
+				}
 				if(strpos($line, "myrenault_userlp2=") !== false) {
 					list(, $myrenault_userlp2old) = explode("=", $line);
 				}
@@ -1212,7 +1218,7 @@
 						</div>
 						<div class="row bg-info">
 							<div class="col">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
 							</div>
 						</div>
 					</div>
@@ -1293,7 +1299,7 @@
 							<input type="text" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>"><br>
 						</div>
 						<div class="row bg-info">
-							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Eine zu große Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich, wenn der Go-echarger z.B. gerade unterwegs genutzt wird.<br><br>
+							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Eine zu große Wartezeit zieht einen Verzug der Regellogik von openWB mit sich, wenn der Go-echarger z.B. gerade unterwegs genutzt wird.<br><br>
 						</div>
 					</div>
 					<div id="evseconnrgkick">
@@ -1309,7 +1315,7 @@
 							<input type="text" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>"><br>
 						</div>
 						<div class="row bg-info">
-							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
 						</div>
 						<div class="row bg-info">
 							<b><label for="nrgkickmaclp1">NRGKick MAC Adresse:</label></b>
@@ -1796,7 +1802,7 @@
 							<option <?php if($wakeupzoelp1old == "1\n") echo selected ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
-							Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
 						</div>
 					</div>
 					<div id="socmyrenault">
@@ -1834,7 +1840,7 @@
 							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo selected ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
-							Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
 						</div>
 					</div>
 					<div id="socevnotify">
@@ -2009,7 +2015,7 @@
 						<div class="row">
 							<b><label for="evsecons1">Anbindung der EVSE an Ladepunkt 2:</label></b>
 							<select type="text" name="evsecons1" id="evsecons1">
-								<option <?php if($evsecons1old == "slaveeth\n") echo selected ?> value="slaveeth">OpenWB Slave</option>
+								<option <?php if($evsecons1old == "slaveeth\n") echo selected ?> value="slaveeth">openWB Slave</option>
 								<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
 								<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
 								<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
@@ -2055,7 +2061,7 @@
 								<input type="text" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>"><br>
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
 							</div>
 							<div class="row bg-info">
 								<b><label for="nrgkickmaclp2">NRGKick MAC Adresse:</label></b>
@@ -2134,7 +2140,7 @@
 								<input type="text" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo $evsewifitimeoutlp2old ?>"><br>
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
 							</div>
 						</div>
 						<div id="evsecongoes1">
@@ -2150,7 +2156,7 @@
 								<input type="text" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo $goetimeoutlp2old ?>"><br>
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
 							</div>
 						</div>
 
@@ -2453,7 +2459,7 @@
 								<option <?php if($wakeupzoelp2old == "1\n") echo selected ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
-								Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
 							</div>
 						</div>
 						<div id="socmyrenaultlp2">
@@ -2491,7 +2497,7 @@
 								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo selected ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
-								Erfordert einen OpenWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
 							</div>
 						</div>
 						<div id="socevnotifylp2">
@@ -2791,7 +2797,7 @@
 									<input type="text" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo $evsewifitimeoutlp3old ?>"><br>
 								</div>
 								<div class="row bg-info">
-									Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+									Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
 								</div>
 							</div>
 						<div id="evsecongoes2">
@@ -2807,7 +2813,7 @@
 								<input type="text" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo $goetimeoutlp3old ?>"><br>
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von OpenWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
 							</div>
 						</div>
 
@@ -3353,7 +3359,7 @@
 						<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
 						<select type="text" name="wattbezugmodul" id="wattbezugmodul">
 							<option <?php if($wattbezugmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo selected ?> value="bezug_ethmpm3pm">OpenWB EVU Kit</option>
+							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo selected ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
 							<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">VZLogger</option>
 							<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">SDM 630</option>
 							<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
@@ -3377,7 +3383,13 @@
 							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
+							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 						</select>
+					</div>
+					<div id="wattbezugsonneneco">
+						<div class="row">
+							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.<br><br>
+						</div>
 					</div>
 					<div id="wattbezugmqtt">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -3385,15 +3397,24 @@
 							<div class="row"><b>"openWB/set/evu/W"</b></div>
 							<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
-							<div class="row">Strom in Ampere für Phase 1, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
-							<div class="row">Strom in Ampere für Phase 2, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
-							<div class="row">Strom in Ampere für Phase 3, float, positiv Bezug, negativ Einspeisung</div>
+							<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 							<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-							<div class="row">Bezogene Energie in Wh, float, nur positiv</div>	
+							<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
 							<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
-							<div class="row">Eingespeiste Energie in Wh, float, nur positiv</div>			
+							<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
+							<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
+							<div class="row">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/VPhase2"</b></div>
+							<div class="row">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/VPhase3"</b></div>
+							<div class="row">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
+							<div class="row"><b>"openWB/set/evu/HzFrequenz"</b></div>
+							<div class="row">Netzfrequenz in Hz, float, Punkt als Trenner</div>
+
 					</div>
 					<div id="wattbezuglgessv1">
 						<div class="row">
@@ -3402,7 +3423,11 @@
 					</div>
 					<div id="wattbezugethmpm3pm">
 						<div class="row">
-							Keine Konfiguration erforderlich.<br><br>
+							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
+							<select type="text" name="evukitversion" id="evukitversion">
+								<option <?php if($evukitversionold == 0) echo selected ?> value="0">EVU Kit</option>
+								<option <?php if($evukitversionold == 1) echo selected ?> value="1">EVU Kit v2</option>
+							</select>
 						</div>
 					</div>
 					<div id="wattbezugsolarview">
@@ -3790,9 +3815,13 @@
 							$('#wattbezugdiscovergy').hide();
 							$('#wattbezuglgessv1').hide();
 							$('#wattbezugmqtt').hide();
+							$('#wattbezugsonneneco').hide();
 
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
+							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
+								$('#wattbezugsonneneco').show(); 
+							}
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
 								$('#wattbezugsolarview').show();
 							}
@@ -3987,7 +4016,11 @@
 					</div>
 					<div id="pvmpmevu">
 						<div class="row" style="background-color:#febebe">
-							Keine Einstellung nötig. Dies ist das richtige Modul wenn ein MPM3PM Zähler mit ID 8 am openWB EVU Kit mit angeschlossen ist.<br>
+							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
+							<select type="text" name="pvkitversion" id="pvkitversion">
+								<option <?php if($pvkitversionold == 0) echo selected ?> value="0">PV Kit</option>
+								<option <?php if($pvkitversionold == 1) echo selected ?> value="1">PV Kit v2</option>
+							</select>
 						</div>
 					</div>
 					<div id="pvplenti">
@@ -4288,7 +4321,7 @@
 							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br><br>
 
 						</div>
 					</div>
@@ -4510,12 +4543,13 @@
 							<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+							Gültige Werte IP. IP Adresse der Sonnen eco serie 5, für ECO 6 alternative Auslesung nutzen.<br><br>
 						</div>
 						<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
 						<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
 							<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
 							<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($sonnenecoalternativold == "2\n") echo selected ?> value="2">ECO 6</option>
 						</select>
 						<div class="row bg-info">
 							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
