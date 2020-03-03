@@ -9,16 +9,28 @@ if  [[ $e3dc2ip != "none" ]]; then
 else
 	#wenn keine Antwort ersetze leeren Wert durch eine 0
 	ra='^-?[0-9]+$'
-	importtemp=$(timeout 1 mosquitto_sub -t openWB/housebattery/WHImported_temp)
-	exporttemp=$(timeout 1 mosquitto_sub -t openWB/housebattery/WHExport_temp)
-	if ! [[ $importtemp =~ $ra ]] ; then
-		importtemp="0"
+	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
+	 importtemp=$(</var/www/html/openWB/ramdisk/speicherwatt0pos)
+	else
+	 importtemp=$(timeout 2 mosquitto_sub -t openWB/housebattery/WHImported_temp)
+	 	if ! [[ $importtemp =~ $ra ]] ; then
+		 importtemp="0"
+	 fi
+	 dtime=$(date +"%T")
+	 echo " $dtime e3dc read openWB/housebattery/WHImported_temp from mosquito $importtemp"
+	 	echo $importtemp > /var/www/html/openWB/ramdisk/speicherwatt0pos
 	fi
-	echo $importtemp > /var/www/html/openWB/ramdisk/speicherwatt0pos
-	if ! [[ $exporttemp =~ $ra ]] ; then
-		exporttemp="0"
+	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0neg ]]; then
+	 exporttemp=$(</var/www/html/openWB/ramdisk/speicherwatt0neg)
+	else
+	 exporttemp=$(timeout 2 mosquitto_sub -t openWB/housebattery/WHExport_temp)
+	 	if ! [[ $exporttemp =~ $ra ]] ; then
+		 exporttemp="0"
+	 fi
+	 	dtime=$(date +"%T")
+	 echo " $dtime e3dc read openWB/housebattery/WHExport_temp from mosquito $exporttemp"
+	 	echo $exporttemp > /var/www/html/openWB/ramdisk/speicherwatt0neg
 	fi
-	echo $exporttemp > /var/www/html/openWB/ramdisk/speicherwatt0neg
 	sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dc.py $e3dcip
 	importtemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0pos)
 	exporttemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0neg)
