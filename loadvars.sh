@@ -1074,9 +1074,35 @@ if [[ "$oawattarmaxprice" != "$awattarmaxprice" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/awattar/MaxPriceForCharging=${awattarmaxprice}"
 	echo $awattarmaxprice > ramdisk/mqttawattarmaxprice
 fi
+
+
+# publish last RFID scans as CSV with timestamp
+timestamp="$(date +%s)"
+
+orfidlp1=$(<ramdisk/mqttrfidlp1)
+arfidlp1=$(<ramdisk/rfidlp1)
+if [[ "$orfidlp1" != "$arfidlp1" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/1/lastRfId=${arfidlp1},${timestamp}"
+	echo $arfidlp1 > ramdisk/mqttrfidlp1
+fi
+
+orfidlp2=$(<ramdisk/mqttrfidlp2)
+arfidlp2=$(<ramdisk/rfidlp2)
+if [[ "$orfidlp2" != "$arfidlp2" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/2/lastRfId=${arfidlp2},${timestamp}"
+	echo $arfidlp2 > ramdisk/mqttrfidlp2
+fi
+
+orfidlast=$(<ramdisk/mqttrfidlasttag)
+arfidlast=$(<ramdisk/rfidlasttag)
+if [[ "$orfidlast" != "$arfidlast" ]]; then
+	tempPubList="${tempPubList}\nopenWB/system/lastRfId=${arfidlast},${timestamp}"
+	echo $arfidlast > ramdisk/mqttrfidlasttag
+fi
+
 tempPubList="${tempPubList}\nopenWB/system/Uptime=$(uptime)"
 tempPubList="${tempPubList}\nopenWB/system/Date=$(date)"
-tempPubList="${tempPubList}\nopenWB/system/Timestamp=$(date +%s)"
+tempPubList="${tempPubList}\nopenWB/system/Timestamp=${timestamp}"
 
 echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
 
