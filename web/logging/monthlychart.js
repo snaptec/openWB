@@ -327,6 +327,7 @@ function loadgraph() {
 			data: abezug,
 			hidden: boolDisplayEvu,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Einspeisung ' + overalleinspeisung + ' kWh',
 			borderColor: "rgba(0, 255, 105, 0.9)",
@@ -336,6 +337,7 @@ function loadgraph() {
 			data: aeinspeisung,
 			hidden: boolDisplayEvu,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'PV ' + overallpv + ' kWh',
 			borderColor: 'green',
@@ -345,6 +347,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: apv,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		}  , {
 			label: 'Speicher I ' + overallspeicheri + ' kWh',
 			borderColor: 'orange',
@@ -354,6 +357,7 @@ function loadgraph() {
 			data: aspeicheri,
 			hidden: boolDisplaySpeicheri,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Speicher E ' + overallspeichere + ' kWh',
 			borderColor: 'orange',
@@ -363,6 +367,7 @@ function loadgraph() {
 			data: aspeichere,
 			hidden: boolDisplaySpeichere,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Lp Gesamt ' + overalllpgesamt + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -372,6 +377,7 @@ function loadgraph() {
 			data: alpa,
 			hidden: boolDisplayLpAll,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Lp1 ' + overalllp1 + ' kWh',
 			borderColor: "rgba(0, 0, 255, 0.7)",
@@ -381,6 +387,7 @@ function loadgraph() {
 			fill: false,
 			data: alp1,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Lp2 ' + overalllp2 + ' kWh',
 			borderColor: "rgba(50, 30, 105, 0.7)",
@@ -390,6 +397,7 @@ function loadgraph() {
 			fill: false,
 			data: alp2,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Lp3 ' + overalllp3 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -399,6 +407,7 @@ function loadgraph() {
 			data: alp3,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp3,
+			lineTension: 0.2
 		} , {
 			label: 'Lp4 ' + overalllp4 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -408,6 +417,7 @@ function loadgraph() {
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp4,
+			lineTension: 0.2
 		} , {
 			label: 'Lp5 ' + overalllp5 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -417,6 +427,7 @@ function loadgraph() {
 			data: alp5,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp5,
+			lineTension: 0.2
 		} , {
 			label: 'Lp6 ' + overalllp6 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -426,6 +437,7 @@ function loadgraph() {
 			data: alp6,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp6,
+			lineTension: 0.2
 		} , {
 			label: 'Lp7 ' + overalllp7 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -435,6 +447,7 @@ function loadgraph() {
 			data: alp7,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp7,
+			lineTension: 0.2
 		} , {
 			label: 'Lp8 ' + overalllp8 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -444,6 +457,7 @@ function loadgraph() {
 			data: alp8,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8,
+			lineTension: 0.2
 		} , {
 			label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -453,6 +467,7 @@ function loadgraph() {
 			hidden: boolDisplayLoad1i,
 			data: averbraucher1i,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -462,6 +477,7 @@ function loadgraph() {
 			hidden: boolDisplayLoad1e,
 			data: averbraucher1e,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Verbraucher 2 I ' + overallload2i + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -471,6 +487,7 @@ function loadgraph() {
 			data: averbraucher2i,
 			hidden: boolDisplayLoad2i,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Verbraucher 2 E ' + overallload2e + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -480,6 +497,7 @@ function loadgraph() {
 			data: averbraucher2e,
 			hidden: boolDisplayLoad2e,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		} , {
 			label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -489,11 +507,12 @@ function loadgraph() {
 			data: ahausverbrauch,
 			hidden: boolDisplayHouseConsumption,
 			yAxisID: 'y-axis-1',
+			lineTension: 0.2
 		}]
 	};
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myLine = new Chart(ctx, {
-		type: 'bar',
+		type: 'line',
 		data: lineChartData,
 		options: {
 			tooltips: {
