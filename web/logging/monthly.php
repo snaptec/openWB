@@ -92,8 +92,8 @@
 			$(document).ready(function(){
 				// GET expects date format Y-m like 2020-10
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01.01.2018';  // no earlier date choosable
-				var earliestDate = new Date (EARLIESTDATE);
+				const EARLIESTDATE = '01.2018';  // no earlier date choosable
+				var earliestDate = new Date ('01.'+EARLIESTDATE);
 				earliestDate.setHours(0,0,0,0);  // make sure time is all 0
 				var url_string = window.location.href;
 				var url = new URL(url_string);
