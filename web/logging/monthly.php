@@ -1,111 +1,144 @@
 <html>
 
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Logging Monatsansicht</title>
+		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
+		<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="../manifest.json">
+		<link rel="shortcut icon" href="../img/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#00a8ff">
+		<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+		<meta http-equiv="refresh" content="600; URL=index.php">
 
-<head>
-	<script type = "text/javascript" src = "../js/mqttws31.js" ></script>
-	<script src="../js/jquery-1.11.1.min.js"></script>
-	<script src="./monthlychart.js"></script>
-	<script src="../js/Chart.bundle.js"></script>
-	<script src="../js/chartjs-plugin-zoom.js"></script>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Logging</title>
-	<meta name="description" content="Control your charge" />
-	<meta name="author" content="Kevin Wieland" />
-	<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
-	<link rel="icon" type="image/png" href="../img/favicons/favicon-32x32.png" sizes="32x32">
-	<link rel="icon" type="image/png" href="../img/favicons/favicon-16x16.png" sizes="16x16">
-	<link rel="manifest" href="../manifest.json">
-	<link rel="shortcut icon" href="../img/favicons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#00a8ff">
-	<meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
-	<meta name="theme-color" content="#ffffff">
-	<meta http-equiv="refresh" content="1200; URL=daily.php">
-	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../css/owl.css">
-	<link rel="stylesheet" type="text/css" href="../css/animate.css">
-	<!-- Font Awesome, all styles -->
-    <link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../fonts/eleganticons/et-icons.css">
-	<link rel="stylesheet" type="text/css" href="../css/cardio.css">
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="../css/normalize-8.0.1.css">
+		<!-- Bootstrap-Datepicker -->
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+		<!-- Font Awesome, all styles -->
+		<link href="../fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="logging_style.css">
 
-</head>
+		<!-- important scripts to be loaded -->
+		<script src="../js/jquery-3.4.1.min.js"></script>
+		<script src="../js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	</head>
 
+	<body>
 
+		<?php
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/navbar.php';
+		?>
 
+		<div role="main" class="container" style="margin-top:20px">
+			<div class="row">
+				<div class="col" style="text-align: center;">
+					<h4>Logging Monatsansicht</h4>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-6 col-sm-3">
+					<div class="input-group mb-3">
+						<input class="form-control datepicker" id="theDate" type="text" readonly>
+						<div class="input-group-append">
+							<span class="input-group-text far fa-calendar-alt fa-lg vaRow"></span>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<body>
+			<div class="row justify-content-center" id="thegraph">
+				<div class="col-sm-12">
+					<div id="waitforgraphloadingdiv" style="text-align: center;">
+						<br>Graph lädt, bitte warten...
+					</div>
+					<div id="canvasdiv">
+						<canvas id="canvas" style="height: 400px;"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
 
-		 <ul class="nav nav-tabs">
-			 <li><a href="../index.php">Zurück</a></li>
-			 <li><a href="index.php">Live</a></li>
-			 <li ><a href="daily.php">Daily</a></li>
-			 <li class="active"><a href="monthly.php">Monthly</a></li>
-			 <li><a href="yearly.php">Yearly</a></li>
-		 </ul>
+		<footer class="footer bg-dark text-light font-small">
+		  <div class="container text-center">
+			  <small>Sie befinden sich hier: Logging/Monthly</small>
+		  </div>
+		</footer>
 
-<!--	<div class="preloader">
-<img src="../img/loader.gif" alt="openWB loading...">
-	</div>
--->
+		<!-- load Chart.js library -->
+		<script src="../js/Chart.bundle.js"></script>
 
-<?php
-$today = date('Y-m-d');
-if (isset($_GET[date])) {
-	$monthdate = $_GET[date];
-	$_SESSION = $monthdate;
-}
-else
-{
-	$monthdate = $today;
-	$_SESSION = $monthdate;
-}
-?>
-<div class="row">
-	<div class="text-center">
-		<br><h4> Monthly Graph</h4><br>
-	</div>
-</div>
-<div id="loadlivegraph" style="text-align: center; margin-top: 150px; margin-bottom: 100px;"> Graph lädt bitte warten...</div>	
-	<div id="dailygraphvis" style="height:600px;"><canvas id="canvas"></canvas></div>
+		<!-- load Bootstrap-Datepicker library -->
+		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
 
+		<!-- load mqtt library -->
+		<script src = "../js/mqttws31.js" ></script>
 
+		<!-- get parsed date, setup datepicker and load respective Chart.js definition -->
+		<script>
+			$(document).ready(function(){
+				// GET expects date format Y-m like 2020-10
+				// get parsed date and format nicely for input field
+				const EARLIESTDATE = '01.2018';  // no earlier date choosable
+				var url_string = window.location.href;
+				var url = new URL(url_string);
+				var parsedDateString = url.searchParams.get('date');
+				var pattern = /^[0-9]{4}\-(0[1-9]|1[012])$/;
+				var reloadNeeded = false;
+				if ( parsedDateString == null || parsedDateString.match(pattern) == null ) {
+					// nothing parsed or format not valid, so set date to today
+					var parsedDate = new Date();
+				} else {
+					var earliestDate = new Date ('01'+EARLIESTDATE);
+					var parsedDate = new Date(parsedDateString);
+					if ( parsedDate < earliestDate ) {
+						// date parsed was too early so set to today
+						parsedDate = new Date();
+						reloadNeeded = true;
+					}
+				}
+				var mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); // January is 0!, string with leading zeros
+				if ( reloadNeeded ) {
+					// date parsed was too early so reload with today
+					window.location.href = "monthly.php?date=" + parsedDate.getFullYear() + '-' + mm;
+				}
+				var month = parsedDate.toLocaleDateString('de-DE', { month: 'long'});
+				var theDate = month + ' ' + parsedDate.getFullYear();
+				$('#theDate').val(theDate);  // set value of input field
+				// config the datepicker
+				$('.datepicker').datepicker({
+					format: 'MM yyyy',
+					language: 'de-DE',
+					startDate: EARLIESTDATE,
+					endDate: '0d',
+					startView: 'months',
+    				minViewMode: 'months',
+					todayBtn: true,
+					todayHighlight: true,
+					autoclose: true
+				})
+				.on('changeDate', function(e) {
+					// `e` here contains the extra attributes
+					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!, string with leading zeros
+					var dateToParse = e.date.getFullYear() + '-' + mm;
+					window.location.href = "monthly.php?date=" + dateToParse;
+				});
 
-<br>
-<form name="monthlydate" id="monthlydate" action="monthly.php" method="GET">
-<div class="row col-xs-12">
-	<div class="col-xs-2">
-	</div>
-	<div class="col-xs-8 block-center text-center .text-align:center">
-<?php $monthdate = date("Y-m", strtotime($monthdate)); ?>
-<input id="date" name="date" type="month" min="2018-01" value="<?php print $monthdate ?>" required="required" />
+				// load graph
+				$.getScript("monthlychart.js");
+			})
+		</script>
 
-	</div>
-	<div class="col-xs-2">
-	</div>
-</div>
-<div class="row"><br></div><br>
-<div class="row col-xs-12">
-	<div class="col-xs-4">
-	</div>
-	<div class="col-xs-4 block-center text-center .text-align:center"><button type="submit">Go</button>
-
-	</div>
-	<div class="col-xs-4">
-	</div>
-</div>
-
-
-
-</form>
-<br>
-</body>
-
-
-
-
+	</body>
 
 </html>

@@ -52,7 +52,7 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 		window[hidevar] = hidevalue;
 		window[boolvar] = 'true';
 	}
-	
+
 }
 function loadgraph() {
 
@@ -369,7 +369,7 @@ function loadgraph() {
 		}
 	});
 	initialread = 1;
-	$('#loadlivegraph').hide();
+	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
 function checkgraphload(){
 	if ( graphloaded == 1) {
@@ -388,4 +388,3 @@ function checkgraphload(){
 		}
 	}
 }
-
