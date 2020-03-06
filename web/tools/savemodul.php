@@ -1126,6 +1126,10 @@ foreach($lines as $line) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
 	    $writeit = '1';
 	   }
+	   if(strpos($line, "e3dcextprod=") !== false) {
+	    $result .= 'e3dcextprod='.$_POST[e3dcextprod]."\n";
+	    $writeit = '1';
+	   }
 	   if(strpos($line, "e3dc2ip=") !== false) {
 	    $result .= 'e3dc2ip='.$_POST[e3dc2ip]."\n";
 	    $writeit = '1';

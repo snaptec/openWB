@@ -1000,6 +1000,9 @@
 				if(strpos($line, "e3dcip=") !== false) {
 					list(, $e3dcipold) = explode("=", $line);
 				}
+				if(strpos($line, "e3dcextprod=") !== false) {
+					list(, $e3dcextprodold) = explode("=", $line);
+				}
 				if(strpos($line, "e3dc2ip=") !== false) {
 					list(, $e3dc2ipold) = explode("=", $line);
 				}
@@ -4593,6 +4596,11 @@
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
 						</div>
+						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
+						<select type="text" name="e3dcextprod" id="e3dcextprod">
+							<option <?php if($e3dcextprodold == "0\n") echo selected ?> value="0">Nein</option>
+							<option <?php if($e3dcextprodold == "1\n") echo selected ?> value="1">Ja</option>
+						</select>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
 							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>"><br>

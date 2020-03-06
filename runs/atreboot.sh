@@ -2349,6 +2349,11 @@ if ! grep -Fq "wrsunwayspw=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsunwayspw=passwort" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "e3dcextprod=" /var/www/html/openWB/openwb.conf
+then
+	echo "e3dcextprod=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "wrsunwaysip=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsunwaysip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
