@@ -640,6 +640,13 @@ else
 fi
 hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
+
+
+if [[ $speichermodul == "speicher_e3dc" ]] ; then
+
+	#berechnung hier
+
+fi
 #Uhrzeit
 date=$(date)
 H=$(date +%H)
