@@ -54,12 +54,12 @@ foreach($lines as $line) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
 	    $writeit = '1';
 	    }
-	    if(strpos($line, "wrsunwavesip=") !== false) {
-	    $result .= 'wrsunwavesip='.$_POST[wrsunwavesip]."\n";
+	    if(strpos($line, "wrsunwaysip=") !== false) {
+	    $result .= 'wrsunwaysip='.$_POST[wrsunwaysip]."\n";
 	    $writeit = '1';
 	    }
-	    if(strpos($line, "wrsunwavespw=") !== false) {
-	    $result .= 'wrsunwavespw='.$_POST[wrsunwavespw]."\n";
+	    if(strpos($line, "wrsunwayspw=") !== false) {
+	    $result .= 'wrsunwayspw='.$_POST[wrsunwayspw]."\n";
 	    $writeit = '1';
 	    }
 	    if(strpos($line, "myrenault_userlp2=") !== false) {

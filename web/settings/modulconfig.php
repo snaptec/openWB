@@ -48,11 +48,11 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "wrsunwavesip=") !== false) {
-					list(, $wrsunwavesipold) = explode("=", $line);
+				if(strpos($line, "wrsunwaysip=") !== false) {
+					list(, $wrsunwaysipold) = explode("=", $line);
 				}
-				if(strpos($line, "wrsunwavespw=") !== false) {
-					list(, $wrsunwavespwold) = explode("=", $line);
+				if(strpos($line, "wrsunwayspw=") !== false) {
+					list(, $wrsunwayspwold) = explode("=", $line);
 				}
 				if(strpos($line, "pvkitversion=") !== false) {
 					list(, $pvkitversionold) = explode("=", $line);
@@ -3953,7 +3953,7 @@
 							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
-							<option <?php if($pvwattmodulold == "wr_sunwaves\n") echo selected ?> value="wr_sunwaves">Sunwaves Wechselrichter</option>
+							<option <?php if($pvwattmodulold == "wr_sunways\n") echo selected ?> value="wr_sunways">Sunways</option>
 						</select>
 					</div>
 
@@ -3982,17 +3982,17 @@
 							Gültige Werte IP. <br>
 						</div>
 					</div>
-					<div id="pvsunwaves">
+					<div id="pvsunways">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="wrsunwavesip">IP Adresse des Sunwaves</label></b>
-							<input type="text" name="wrsunwavesip" id="wrsunwavesip" value="<?php echo htmlspecialchars($wrsunwavesipold) ?>"><br>
+							<b><label for="wrsunwaysip">IP Adresse des Sunways</label></b>
+							<input type="text" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo htmlspecialchars($wrsunwaysipold) ?>"><br>
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP. <br>
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="wrsunwavespw">Passwort des Sunwaves</label></b>
-							<input type="text" name="wrsunwavespw" id="wrsunwavespw" value="<?php echo htmlspecialchars($wrsunwavespwold) ?>"><br>
+							<b><label for="wrsunwayspw">Passwort des Sunways</label></b>
+							<input type="text" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars($wrsunwayspwold) ?>"><br>
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte Passwort. <br>
@@ -4376,10 +4376,10 @@
 							$('#pvyouless').hide();
 							$('#pvlgessv1').hide();
 							$('#pvmqtt').hide();
-							$('#pvsunwaves').hide();
+							$('#pvsunways').hide();
 
-							if($('#pvwattmodul').val() == 'wr_sunwaves') {
-								$('#pvsunwaves').show();
+							if($('#pvwattmodul').val() == 'wr_sunways') {
+								$('#pvsunways').show();
 							}
 
 							if($('#pvwattmodul').val() == 'wr_mqtt') {
