@@ -48,6 +48,12 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "wrsunwavesip=") !== false) {
+					list(, $wrsunwavesipold) = explode("=", $line);
+				}
+				if(strpos($line, "wrsunwavespw=") !== false) {
+					list(, $wrsunwavespwold) = explode("=", $line);
+				}
 				if(strpos($line, "pvkitversion=") !== false) {
 					list(, $pvkitversionold) = explode("=", $line);
 				}
@@ -3947,6 +3953,7 @@
 							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
+							<option <?php if($pvwattmodulold == "wr_sunwaves\n") echo selected ?> value="wr_sunwaves">Sunwaves Wechselrichter</option>
 						</select>
 					</div>
 
@@ -3975,6 +3982,24 @@
 							Gültige Werte IP. <br>
 						</div>
 					</div>
+					<div id="pvsunwaves">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwavesip">IP Adresse des Sunwaves</label></b>
+							<input type="text" name="wrsunwavesip" id="wrsunwavesip" value="<?php echo htmlspecialchars($wrsunwavesipold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. <br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwavespw">Passwort des Sunwaves</label></b>
+							<input type="text" name="wrsunwavespw" id="wrsunwavespw" value="<?php echo htmlspecialchars($wrsunwavespwold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte Passwort. <br>
+						</div>
+
+					</div>
+
 					<div id="pvsolarlog">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
@@ -4351,6 +4376,11 @@
 							$('#pvyouless').hide();
 							$('#pvlgessv1').hide();
 							$('#pvmqtt').hide();
+							$('#pvsunwaves').hide();
+
+							if($('#pvwattmodul').val() == 'wr_sunwaves') {
+								$('#pvsunwaves').show();
+							}
 
 							if($('#pvwattmodul').val() == 'wr_mqtt') {
 								$('#pvmqtt').show();
