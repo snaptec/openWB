@@ -48,18 +48,21 @@
 			<div class="row justify-content-center">
 				<div class="col-6 col-sm-3">
 					<div class="input-group mb-3">
+						<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Monat" id="prevmonth"></i>
 						<input class="form-control datepicker" id="theDate" type="text" readonly>
 						<div class="input-group-append">
 							<span class="input-group-text far fa-calendar-alt fa-lg vaRow"></span>
 						</div>
+						<i class="far fa-caret-square-right fa-lg vaRow ml-4" title="nächster Monat" id="nextmonth"></i>
 					</div>
 				</div>
 			</div>
 
-			<div class="row justify-content-center" id="thegraph">
-				<div class="col-sm-12">
+			<div class="row" id="thegraph">
+				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
-						<br>Graph lädt, bitte warten...
+						<br>Graph lädt, bitte warten...<br>
+						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
 					<div id="canvasdiv">
 						<canvas id="canvas" style="height: 400px;"></canvas>
@@ -70,7 +73,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Logging/Monthly</small>
+			  <small>Sie befinden sich hier: Logging/Monat</small>
 		  </div>
 		</footer>
 
@@ -89,7 +92,9 @@
 			$(document).ready(function(){
 				// GET expects date format Y-m like 2020-10
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01.2018';  // no earlier date choosable
+				const EARLIESTDATE = '01.01.2018';  // no earlier date choosable
+				var earliestDate = new Date (EARLIESTDATE);
+				earliestDate.setHours(0,0,0,0);  // make sure time is all 0
 				var url_string = window.location.href;
 				var url = new URL(url_string);
 				var parsedDateString = url.searchParams.get('date');
@@ -98,9 +103,12 @@
 				if ( parsedDateString == null || parsedDateString.match(pattern) == null ) {
 					// nothing parsed or format not valid, so set date to today
 					var parsedDate = new Date();
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					parsedDate.setDate(1);  // // make sure day is 1 for later comparisons
 				} else {
-					var earliestDate = new Date ('01'+EARLIESTDATE);
 					var parsedDate = new Date(parsedDateString);
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					parsedDate.setDate(1);  // // make sure day is 1 for later comparisons
 					if ( parsedDate < earliestDate ) {
 						// date parsed was too early so set to today
 						parsedDate = new Date();
@@ -130,8 +138,32 @@
 				.on('changeDate', function(e) {
 					// `e` here contains the extra attributes
 					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!, string with leading zeros
-					var dateToParse = e.date.getFullYear() + '-' + mm;
-					window.location.href = "monthly.php?date=" + dateToParse;
+					var dateToParseStr = e.date.getFullYear() + '-' + mm;
+					window.location.href = "monthly.php?date=" + dateToParseStr;
+				});
+
+				$('#prevmonth').click(function(e) {
+					// on click of prev month button
+					let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
+					dateToParse.setMonth(parsedDate.getMonth() - 1);  // and substract month
+					if ( dateToParse >= earliestDate ) {
+						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
+						window.location.href = "monthly.php?date=" + dateToParseStr;
+					}
+				});
+
+				$('#nextmonth').click(function(e) {
+					// on click of next month button
+					let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
+					dateToParse.setMonth(parsedDate.getMonth() + 1);  // and add month
+					let today = new Date();
+					today.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					if ( dateToParse <= today ) {
+						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
+						window.location.href = "monthly.php?date=" + dateToParseStr;
+					}
 				});
 
 				// load graph

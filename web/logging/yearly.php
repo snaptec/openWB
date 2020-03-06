@@ -56,8 +56,8 @@
 				</div>
 			</div>
 
-			<div class="row justify-content-center" id="thegraph">
-				<div class="col-sm-12">
+			<div class="row" id="thegraph">
+				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
 						<br>Feature noch nicht vollständig implementiert...
 					</div>
@@ -68,7 +68,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Logging/Yearly</small>
+			  <small>Sie befinden sich hier: Logging/Jahr</small>
 		  </div>
 		</footer>
 

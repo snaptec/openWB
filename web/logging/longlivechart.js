@@ -18,18 +18,21 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
+var alldata;
 
-		var alldata;
-		$.ajax({
-		url: "/openWB/ramdisk/all.graph",
-		    contentType: "text/plain",
-		    dataType: "text",
-		    beforeSend: function(xhr){  xhr.overrideMimeType( "text/plain; charset=x-user-defined" );},
-		    complete: function(request){
-			    alldata = request.responseText;
-			    loadgraph();
-		}
-		});
+$.ajax({
+	url: "/openWB/ramdisk/all.graph",
+	contentType: "text/plain",
+	dataType: "text",
+	beforeSend: function(xhr) {
+		xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+	},
+	complete: function(request){
+		alldata = request.responseText;
+		loadgraph();
+	}
+});
+
 function getCol(matrix, col){
 	var column = [];
 	for(var i=0; i<matrix.length; i++){
@@ -37,6 +40,7 @@ function getCol(matrix, col){
 	}
 	return column;
 }
+
 function visibility(datavar,hidevar,hidevalue,boolvar) {
 	var vis=0;
 	datavar.forEach(function(csvvar){
@@ -52,64 +56,63 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 		window[hidevar] = hidevalue;
 		window[boolvar] = 'true';
 	}
-
 }
+
 function loadgraph() {
+	alldata = alldata.replace(/^\s*[\n]/gm, '');
+	alldata = alldata.replace(/^\s*-[\n]/gm, '');
+	var csvData = new Array();
+	var rawcsv = alldata.split(/\r?\n|\r/);  // split line in array
+	for (var i = 0; i < rawcsv.length; i++) {
+		  csvData.push(rawcsv[i].split(','));
+	}
+	csvData.pop();
+	// Retrived data from csv file content
+	var splittime = new Array();
+	//getCol(csvData, 0).forEach(function(zeit){
+	//	splittime.push(zeit.substring(0, zeit.length -3));
+	//});
+	//atime = splittime;
+	atime = getCol(csvData, 0);
+	abezug = getCol(csvData, 1);
+	alpa = getCol(csvData, 2);
+	apv = getCol(csvData, 3);
+	alp1 = getCol(csvData, 4);
+	alp2 = getCol(csvData, 5);
+	alp3 = getCol(csvData, 6);
+	alp4 = getCol(csvData, 7);
+	alp5 = getCol(csvData, 8);
+	alp6 = getCol(csvData, 9);
+	alp7 = getCol(csvData, 10);
+	alp8 = getCol(csvData, 11);
+	aspeicherl = getCol(csvData, 12);
+	aspeichersoc = getCol(csvData, 13);
+	asoc = getCol(csvData, 14);
+	asoc1 = getCol(csvData, 15);
+	ahausverbrauch = getCol(csvData, 16);
+	averbraucher1 = getCol(csvData, 17);
+	averbraucher2 = getCol(csvData, 18);
+	visibility(abezug,'hidebezug','Bezug',boolDisplayEvu);
+	visibility(alpa,'hidelpa','LP Gesamd',boolDisplayEvu);
+	visibility(apv,'hidepv','Bezug',boolDisplayLpAll);
+	visibility(alp1,'hidelp1','Lp1',boolDisplayLp1);
+	visibility(alp2,'hidelp2','Lp2',boolDisplayLp2);
+	visibility(alp3,'hidelp3','Lp3',boolDisplayLp3);
+	visibility(alp4,'hidelp4','Lp4',boolDisplayLp4);
+	visibility(alp5,'hidelp5','Lp5',boolDisplayLp5);
+	visibility(alp6,'hidelp6','Lp6',boolDisplayLp6);
+	visibility(alp7,'hidelp7','Lp7',boolDisplayLp7);
+	visibility(alp8,'hidelp8','Lp8',boolDisplayLp8);
+	visibility(aspeicherl,'hidespeicher','Speicherleistung',boolDisplaySpeicher);
+	visibility(aspeichersoc,'hidespeichersoc','Speicher SoC',boolDisplaySpeicherSoc);
+	visibility(asoc,'hidelp1soc','LP1 SoC',boolDisplayLp1Soc);
+	visibility(asoc1,'hidelp2soc','LP2 SoC',boolDisplayLp2Soc);
+	visibility(ahausverbrauch,'hidehaus','Hausverbrauch',boolDisplayHouseConsumption);
+	visibility(averbraucher1,'hideload1','Verbraucher 1',boolDisplayLoad1);
+	visibility(averbraucher2,'hideload2','Verbraucher 2',boolDisplayLoad2);
 
-		alldata = alldata.replace(/^\s*[\n]/gm, '');
-		alldata = alldata.replace(/^\s*-[\n]/gm, '');
-		var csvData = new Array();
-		var rawcsv = alldata.split(/\r?\n|\r/);
-		for (var i = 0; i < rawcsv.length; i++) {
-			  csvData.push(rawcsv[i].split(','));
-		}
-		csvData.pop();
-		// Retrived data from csv file content
-		var splittime = new Array();
-		//getCol(csvData, 0).forEach(function(zeit){
-		//	splittime.push(zeit.substring(0, zeit.length -3));
-		//});
-		//atime = splittime;
-		atime = getCol(csvData, 0);
-		abezug = getCol(csvData, 1);
-		alpa = getCol(csvData, 2);
-		apv = getCol(csvData, 3);
-		alp1 = getCol(csvData, 4);
-		alp2 = getCol(csvData, 5);
-		alp3 = getCol(csvData, 6);
-		alp4 = getCol(csvData, 7);
-		alp5 = getCol(csvData, 8);
-		alp6 = getCol(csvData, 9);
-		alp7 = getCol(csvData, 10);
-		alp8 = getCol(csvData, 11);
-		aspeicherl = getCol(csvData, 12);
-		aspeichersoc = getCol(csvData, 13);
-		asoc = getCol(csvData, 14);
-		asoc1 = getCol(csvData, 15);
-		ahausverbrauch = getCol(csvData, 16);
-		averbraucher1 = getCol(csvData, 17);
-		averbraucher2 = getCol(csvData, 18);
-		visibility(abezug,'hidebezug','Bezug',boolDisplayEvu);
-		visibility(alpa,'hidelpa','LP Gesamd',boolDisplayEvu);
-		visibility(apv,'hidepv','Bezug',boolDisplayLpAll);
-		visibility(alp1,'hidelp1','Lp1',boolDisplayLp1);
-		visibility(alp2,'hidelp2','Lp2',boolDisplayLp2);
-		visibility(alp3,'hidelp3','Lp3',boolDisplayLp3);
-		visibility(alp4,'hidelp4','Lp4',boolDisplayLp4);
-		visibility(alp5,'hidelp5','Lp5',boolDisplayLp5);
-		visibility(alp6,'hidelp6','Lp6',boolDisplayLp6);
-		visibility(alp7,'hidelp7','Lp7',boolDisplayLp7);
-		visibility(alp8,'hidelp8','Lp8',boolDisplayLp8);
-		visibility(aspeicherl,'hidespeicher','Speicherleistung',boolDisplaySpeicher);
-		visibility(aspeichersoc,'hidespeichersoc','Speicher SoC',boolDisplaySpeicherSoc);
-		visibility(asoc,'hidelp1soc','LP1 SoC',boolDisplayLp1Soc);
-		visibility(asoc1,'hidelp2soc','LP2 SoC',boolDisplayLp2Soc);
-		visibility(ahausverbrauch,'hidehaus','Hausverbrauch',boolDisplayHouseConsumption);
-		visibility(averbraucher1,'hideload1','Verbraucher 1',boolDisplayLoad1);
-		visibility(averbraucher2,'hideload2','Verbraucher 2',boolDisplayLoad2);
-
-		initialread = 1 ;
-		//checkgraphload();
+	initialread = 1 ;
+	//checkgraphload();
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -277,10 +280,9 @@ function loadgraph() {
 			hidden: boolDisplayLp8,
 		}]
 	}
-
 	var ctx = document.getElementById('canvas').getContext('2d');
-
-	window.myLine = new Chart.Line(ctx, {
+	window.myLine = new Chart(ctx, {
+		type: 'line',
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -299,12 +301,16 @@ function loadgraph() {
 			stacked: false,
 			legend: {
 				display: true,
-				//display: boolDisplayLegend,
+				position: 'bottom',
 				labels: {
 					// middle grey, opacy = 100% (visible)
 					fontColor: "rgba(153, 153, 153, 1)",
 					filter: function(item,chart) {
-						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hidebezug) ) { return false } else { return true}
+						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hidebezug) ) {
+							return false
+						} else {
+							return true
+						}
 					}
 				}
 			},
@@ -312,65 +318,62 @@ function loadgraph() {
 				display: false
 			},
 			scales: {
-				xAxes: [
-					{
-         				ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-         				}
-      				}],
-				yAxes: [
-					{
-						// horizontal line for values displayed on the left side (power)
-						position: 'left',
-						id: 'y-axis-1',
-						type: 'linear',
-						display: true,
-						scaleLabel: {
-		        			display: true,
-		        			labelString: 'Leistung [W]',
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-		      			},
-						gridLines: {
-							// light grey, opacy = 100% (visible)
-							color: "rgba(204, 204, 204, 1)",
-						},
-						ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-						}
-
-					},{
-						// horizontal line for values displayed on the right side (SoC)
-						position: 'right',
-						id: 'y-axis-2',
-						type: 'linear',
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'SoC [%]',
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-						},
-						gridLines: {
-							// black, opacy = 0% (invisible)
-							color: "rgba(0, 0, 0, 0)",
-						},
-						ticks: {
-							min: 1,
-							suggestedMax: 100,
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-						}
+				xAxes: [{
+         			ticks: {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+         			}
+      			}],
+				yAxes: [{
+					// horizontal line for values displayed on the left side (power)
+					position: 'left',
+					id: 'y-axis-1',
+					type: 'linear',
+					display: true,
+					scaleLabel: {
+	        			display: true,
+	        			labelString: 'Leistung [W]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+	      			},
+					gridLines: {
+						// light grey, opacy = 100% (visible)
+						color: "rgba(204, 204, 204, 1)",
+					},
+					ticks: {
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
 					}
-				]
+				},{
+					// horizontal line for values displayed on the right side (SoC)
+					position: 'right',
+					id: 'y-axis-2',
+					type: 'linear',
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'SoC [%]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					},
+					gridLines: {
+						// black, opacy = 0% (invisible)
+						color: "rgba(0, 0, 0, 0)",
+					},
+					ticks: {
+						min: 1,
+						suggestedMax: 100,
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					}
+				}]
 			}
 		}
 	});
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+
 function checkgraphload(){
 	if ( graphloaded == 1) {
        	myLine.destroy();

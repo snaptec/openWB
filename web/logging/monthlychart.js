@@ -580,8 +580,8 @@ function loadgraph() {
 			var clickedElementindex = activePoint[0]._index;
 			var jumpToDate = myLine.data.labels[clickedElementindex];
 			window.location.href = "daily.php?date=" + jumpToDate;
-		 }
-	 });
+		}
+	});
 
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();

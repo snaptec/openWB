@@ -501,7 +501,7 @@ function loadgraph() {
 			hidden: boolDisplayLoad2,
 			yAxisID: 'y-axis-1'
 		}]
-	};
+	}
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myLine = new Chart(ctx, {
 		type: 'line',
@@ -546,6 +546,12 @@ function loadgraph() {
 					display: true,
 					position: 'left',
 					id: 'y-axis-1',
+					scaleLabel: {
+						display: true,
+						labelString: 'Leistung [W]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					}
 				} , {
 					type: 'linear',
 					display: true,
@@ -558,6 +564,12 @@ function loadgraph() {
 					},
 					position: 'right',
 					id: 'y-axis-2',
+					scaleLabel: {
+						display: true,
+						labelString: 'SoC [%]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					}
 				}]
 			}
 		}

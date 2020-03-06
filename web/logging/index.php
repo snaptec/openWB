@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<title>Live Langzeitansicht</title>
+		<title>Logging Langzeitansicht</title>
 		<meta name="author" content="Kevin Wieland, Michael Ortestein" />
 		<link rel="apple-touch-icon" sizes="57x57" href="../img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="../img/favicons/apple-touch-icon-60x60.png">
@@ -67,14 +67,15 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
 				<div class="col" style="text-align: center;">
-					<h4>Langzeit Live Logging</h4>
+					<h4>Logging Langzeitansicht</h4>
 				</div>
 			</div>
 
-			<div class="row justify-content-center" id="thegraph">
-				<div class="col-sm-12">
+			<div class="row" id="thegraph">
+				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
-						<br>Graph lädt, bitte warten...
+						<br>Graph lädt, bitte warten...<br>
+						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
 					<canvas id="canvas" style="height: 400px;"></canvas>
 				</div>
@@ -83,7 +84,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Logging/Live</small>
+			  <small>Sie befinden sich hier: Logging/Langzeit</small>
 		  </div>
 		</footer>
 

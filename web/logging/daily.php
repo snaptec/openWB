@@ -48,18 +48,21 @@
 			<div class="row justify-content-center">
 				<div class="col-6 col-sm-3">
 					<div class="input-group mb-3">
+						<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Tag" id="prevday"></i>
 						<input class="form-control datepicker" id="theDate" type="text" readonly>
 					  	<div class="input-group-append">
 					    	<span class="input-group-text far fa-calendar-alt fa-lg vaRow"></span>
 					  	</div>
+						<i class="far fa-caret-square-right fa-lg vaRow ml-4" title="nächster Tag" id="nextday"></i>
 					</div>
 				</div>
 			</div>
 
-			<div class="row justify-content-center" id="thegraph">
-				<div class="col-sm-12">
+			<div class="row" id="thegraph">
+				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
-						<br>Graph lädt, bitte warten...
+						<br>Graph lädt, bitte warten...<br>
+						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
 					<div id="canvasdiv">
 						<canvas id="canvas" style="height: 400px;"></canvas>
@@ -70,7 +73,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Logging/Daily</small>
+			  <small>Sie befinden sich hier: Logging/Tag</small>
 		  </div>
 		</footer>
 
@@ -90,6 +93,8 @@
 			$(document).ready(function(){
 				// GET expects date format Y-m-d like 2020-10-08
 				// get parsed date and format nicely for input field
+				var earliestDate = new Date (EARLIESTDATE);
+				earliestDate.setHours(0,0,0,0);  // make sure time is all 0
 				var url_string = window.location.href;
 				var url = new URL(url_string);
 				var parsedDateString = url.searchParams.get('date');
@@ -98,9 +103,10 @@
 				if ( parsedDateString == null || parsedDateString.match(pattern) == null ) {
 					// nothing parsed or format not valid, so set date to today
 					var parsedDate = new Date();
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
 				} else {
-					var earliestDate = new Date (EARLIESTDATE);
 					var parsedDate = new Date(parsedDateString);
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
 					if ( parsedDate < earliestDate ) {
 						// date parsed was too early so set to today
 						parsedDate = new Date();
@@ -130,10 +136,34 @@
 				})
 				.on('changeDate', function(e) {
 					// `e` here contains the extra attributes
-					var dd = String(e.date.getDate()).padStart(2, '0');
-					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!
-					var dateToParse = e.date.getFullYear() + '-' + mm + '-' + dd;
-					window.location.href = "daily.php?date=" + dateToParse;
+					let dd = String(e.date.getDate()).padStart(2, '0');
+					let mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!
+					let dateToParseStr = e.date.getFullYear() + '-' + mm + '-' + dd;
+					window.location.href = "daily.php?date=" + dateToParseStr;
+				});
+
+				$('#prevday').click(function(e) {
+					// on click of prev day button
+					if ( parsedDate > earliestDate ) {
+						parsedDate.setDate(parsedDate.getDate() - 1);  // substract 1 day from currently selected date
+						let dd = String(parsedDate.getDate()).padStart(2, '0');
+						let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
+						window.location.href = "daily.php?date=" + dateToParseStr;
+					}
+				});
+
+				$('#nextday').click(function(e) {
+					// on click of next day button
+					let today = new Date();
+					today.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					if ( parsedDate < today ) {
+						parsedDate.setDate(parsedDate.getDate() + 1);  // add 1 day from currently selected date
+						let dd = String(parsedDate.getDate()).padStart(2, '0');
+						let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
+						window.location.href = "daily.php?date=" + dateToParseStr;
+					}
 				});
 
 				// load graph

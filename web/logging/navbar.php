@@ -14,16 +14,16 @@
                     <a class="nav-link" data-select="" href="../index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-select="" href="index.php">Live</a>
+                    <a class="nav-link" data-select="" href="index.php">Langzeit</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-select="" href="daily.php">Daily</a>
+                    <a class="nav-link" data-select="" href="daily.php">Tag</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-select="" href="monthly.php">Monthly</a>
+                    <a class="nav-link" data-select="" href="monthly.php">Monat</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-select="" href="yearly.php">Yearly</a>
+                    <a class="nav-link" data-select="" href="yearly.php">Jahr</a>
                 </li>
             </ul>
         </div>
