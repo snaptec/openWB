@@ -309,7 +309,7 @@ function loadgraph() {
 			fill: true,
 			data: abezug,
 			hidden: boolDisplayEvu,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Einspeisung ' + overalleinspeisung + ' kWh',
 			borderColor: "rgba(0, 255, 105, 0.7)",
@@ -318,7 +318,7 @@ function loadgraph() {
 			fill: true,
 			data: aeinspeisung,
 			hidden: boolDisplayEvu,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV ' + overallpv + ' kWh',
 			borderColor: 'green',
@@ -327,7 +327,7 @@ function loadgraph() {
 			hidden: boolDisplayPv,
 			borderWidth: 1,
 			data: apv,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicher I ' + overallspeicheri + ' kWh',
 			borderColor: 'orange',
@@ -336,7 +336,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: aspeicheri,
 			hidden: boolDisplaySpeicher,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher E ' + overallspeichere + ' kWh',
 			borderColor: 'orange',
@@ -345,7 +345,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: aspeichere,
 			hidden: boolDisplaySpeicher,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
 			borderColor: 'orange',
@@ -355,7 +355,7 @@ function loadgraph() {
 			fill: false,
 			borderWidth: 1,
 			data: aspeichersoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Lp Gesamt ' + overalllpgesamt + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -364,7 +364,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alpa,
 			hidden: boolDisplayLpAll,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp1 ' + overalllp1 + ' kWh',
 			borderColor: "rgba(0, 0, 255, 0.7)",
@@ -373,7 +373,7 @@ function loadgraph() {
 			hidden: boolDisplayLp1,
 			fill: false,
 			data: alp1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'SoC Lp 1',
 			borderColor: "rgba(0, 0, 255, 0.5)",
@@ -382,9 +382,8 @@ function loadgraph() {
 			hidden: boolDisplayLp1Soc,
 			fill: false,
 			data: asoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
-
 			label: 'Lp2 ' + overalllp2 + ' kWh',
 			borderColor: "rgba(50, 30, 105, 0.7)",
 			backgroundColor: "rgba(50, 30, 105, 0.7)",
@@ -392,7 +391,7 @@ function loadgraph() {
 			hidden: boolDisplayLp2,
 			fill: false,
 			data: alp2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'SoC Lp 2',
 			borderColor: "rgba(50, 50, 55, 0.5)",
@@ -401,9 +400,8 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp2Soc,
 			data: asoc1,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
-
 			label: 'Lp3 ' + overalllp3 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
@@ -411,7 +409,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp3,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp3,
+			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4 ' + overalllp4 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -420,7 +418,7 @@ function loadgraph() {
 			data: alp4,
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp4,
+			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5 ' + overalllp5 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -429,7 +427,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp5,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp5,
+			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6 ' + overalllp6 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -438,7 +436,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp6,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp6,
+			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7 ' + overalllp7 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -447,7 +445,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp7,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp7,
+			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8 ' + overalllp8 + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -456,7 +454,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8,
+			hidden: boolDisplayLp8
 		} , {
 			label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -465,7 +463,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1i,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -474,7 +472,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1e,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2 I ' + overallload2i + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -483,7 +481,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: averbraucher2i,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2 E ' + overallload2e + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -492,7 +490,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: averbraucher2e,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -501,11 +499,12 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ahausverbrauch,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		}]
 	};
 	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myLine = Chart.Line(ctx, {
+	window.myLine = new Chart(ctx, {
+		type: 'line',
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -524,19 +523,24 @@ function loadgraph() {
 			stacked: false,
 			legend: {
 				display: boolDisplayLegend,
+				position: 'bottom',
 				labels: {
-				        filter: function(item, chart) {
-						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) { return false } else { return true }
-				                }
-				        }
+			        filter: function(item, chart) {
+						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
+							return false
+						} else {
+							return true
+						}
+					}
+				}
 			},
 			title: {
 				display: false
 			},
 			scales: {
 				xAxes: [{
-				        type: 'category',
-				}, ],
+					type: 'category',
+				}],
 				yAxes: [{
 					type: 'linear',
 					display: true,
@@ -554,21 +558,8 @@ function loadgraph() {
 					},
 					position: 'right',
 					id: 'y-axis-2',
-
-				}],
-			},
-			/*
-			pan: {
-			enabled: true,
-			mode: 'x',
-			},
-			zoom: {
-				enabled: true,
-				drag: true,
-				mode: 'x',
-
-			},
-			*/
+				}]
+			}
 		}
 	});
 	initialread = 1;

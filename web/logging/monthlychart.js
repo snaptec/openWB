@@ -492,7 +492,8 @@ function loadgraph() {
 		}]
 	};
 	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myLine = Chart.Line(ctx, {
+	window.myLine = new Chart(ctx, {
+		type: 'bar',
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -510,11 +511,6 @@ function loadgraph() {
 			   			var yLabel = t.yLabel;
 			   			return xLabel + ', Wert: ' + yLabel + 'kWh';
 					}
-				}
-			},
-			elements: {
-				point: {
-					radius: 4
 				}
 			},
 			responsive: true,
@@ -547,7 +543,13 @@ function loadgraph() {
 					type: 'linear',
 					display: true,
 					position: 'left',
-					id: 'y-axis-1'
+					id: 'y-axis-1',
+					scaleLabel: {
+						display: true,
+						labelString: 'Energie [kWh]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					}
 				}]
 			}
 		}
