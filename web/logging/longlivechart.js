@@ -435,14 +435,25 @@ function loadgraph() {
 	});
 	initialread = 1;
 
-	var startDate = new Date(atime[0]);
-	var endDate = new Date(atime[atime.length - 1]);
-	var dd = String(startDate.getDate()).padStart(2, '0');  // format with leading zeros
-	var mm = String(startDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var dayOfWeek = startDate.toLocaleDateString('de-DE', { weekday: 'short'});
-	var startDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + startDate.getFullYear();
+	let startDate = new Date(atime[0]);
+	let endDate = new Date(atime[atime.length - 1]);
+	let dd = String(startDate.getDate()).padStart(2, '0');  // format with leading zeros
+	let mm = String(startDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	let dayOfWeek = startDate.toLocaleDateString('de-DE', { weekday: 'short'});
+	let HH = String(startDate.getHours()).padStart(2, '0');
+	let MM = String(startDate.getMinutes()).padStart(2, '0');
+	let SS = String(startDate.getSeconds() + 1).padStart(2, '0');  // add a second to last timestamp
+	var startDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + startDate.getFullYear() + ' (' + HH + ':' + MM + ':' + SS + ')';
 
-	var displayedTimePeriodStr = startDateStr;
+	dd = String(endDate.getDate()).padStart(2, '0');  // format with leading zeros
+	mm = String(endDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	dayOfWeek = endDate.toLocaleDateString('de-DE', { weekday: 'short'});
+	HH = String(endDate.getHours()).padStart(2, '0');
+	MM = String(endDate.getMinutes()).padStart(2, '0');
+	SS = String(endDate.getSeconds() + 1).padStart(2, '0');  // add a second to last timestamp
+	var endDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + endDate.getFullYear() + ' (' + HH + ':' + MM + ':' + SS + ')';
+
+	var displayedTimePeriodStr = startDateStr + ' bis ' + endDateStr;
 
 	$('#displayedTimePeriodSpan').text(displayedTimePeriodStr);
 	$('#waitforgraphloadingdiv').hide();
