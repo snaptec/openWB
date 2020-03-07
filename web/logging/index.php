@@ -70,14 +70,20 @@
 					<h4>Logging Langzeitansicht</h4>
 				</div>
 			</div>
-
+			<div class="row">
+				<div class="col" style="text-align: center;">
+					<span id="displayedTimePeriodSpan"></span>
+				</div>
+			</div>
 			<div class="row" id="thegraph">
 				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
 						<br>Graph lädt, bitte warten...<br>
 						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
-					<canvas id="canvas" style="height: 400px;"></canvas>
+					<div id="canvasdiv">
+						<canvas id="canvas" style="height: 500px;"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
