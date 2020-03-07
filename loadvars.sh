@@ -643,7 +643,7 @@ echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 
 
 if [[ $speichermodul == "speicher_e3dc" ]] ; then
-
+var="var"
 	#berechnung hier
 
 fi
