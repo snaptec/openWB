@@ -21,13 +21,21 @@ def replaceAll(changeval,newval):
         time.sleep(0.1)
         inaction=0
 
+def getserial():
+    # Extract serial from cpuinfo file
+    with open('/proc/cpuinfo','r') as f:
+        for line in f:
+            if line[0:6] == 'Serial':
+                return line[10:26]
+        return "0000000000000000"
+
 mqtt_broker_ip = "localhost"
-client = mqtt.Client()
+client = mqtt.Client("openWB-mqttsub-" + getserial())
 
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
-    client.subscribe("openWB/set/#")
+    client.subscribe("openWB/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
