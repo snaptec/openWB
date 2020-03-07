@@ -67,6 +67,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			fi
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			exit 0
 		fi
 	else
