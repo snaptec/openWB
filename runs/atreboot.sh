@@ -78,8 +78,11 @@ echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22000
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
 echo 0 > /var/www/html/openWB/ramdisk/readtag
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlasttag
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
