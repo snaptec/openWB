@@ -642,11 +642,44 @@ hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 
 
-if [[ $speichermodul == "speicher_e3dc" ]] ; then
-var="var"
-	#berechnung hier
-
+if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_byd" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
+	ra='^-?[0-9]+$'
+	watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
+		importtemp=$(</var/www/html/openWB/ramdisk/speicherwatt0pos)
+	else
+		importtemp=$(timeout 4 mosquitto_sub -t openWB/housebattery/WHImported_temp)
+		if ! [[ $importtemp =~ $ra ]] ; then
+			importtemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/housebattery/WHImported_temp from mosquito $importtemp"
+		echo $importtemp > /var/www/html/openWB/ramdisk/speicherwatt0pos
+	fi
+	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0neg ]]; then
+		exporttemp=$(</var/www/html/openWB/ramdisk/speicherwatt0neg)
+	else
+		exporttemp=$(timeout 4 mosquitto_sub -t openWB/housebattery/WHExport_temp)
+		if ! [[ $exporttemp =~ $ra ]] ; then
+			exporttemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/housebattery/WHExport_temp from mosquito $exporttemp"
+		echo $exporttemp > /var/www/html/openWB/ramdisk/speicherwatt0neg
+	fi
+	sudo python /var/www/html/openWB/runs/simcount.py $watt2 speicher speicherikwh speicherekwh
+	importtemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0pos)
+	exporttemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0neg)
+	if [[ $importtemp !=  $importtemp1 ]]; then
+		mosquitto_pub -t openWB/housebattery/WHImported_temp -r -m "$importtemp1"
+	fi
+	if [[ $exporttemp !=  $exporttemp1 ]]; then
+		mosquitto_pub -t openWB/housebattery/WHExport_temp -r -m "$exporttemp1"
+	fi
+	# sim speicher end
 fi
+
+
 #Uhrzeit
 date=$(date)
 H=$(date +%H)
