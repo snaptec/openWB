@@ -31,7 +31,7 @@ else
 	 echo " $dtime e3dc read openWB/housebattery/WHExport_temp from mosquito $exporttemp"
 	 	echo $exporttemp > /var/www/html/openWB/ramdisk/speicherwatt0neg
 	fi
-	sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dc.py $e3dcip
+	sudo python /var/www/html/openWB/modules/speicher_e3dc/e3dc.py $e3dcip $e3dcextprod
 	importtemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0pos)
 	exporttemp1=$(</var/www/html/openWB/ramdisk/speicherwatt0neg)
 	if [[ $importtemp !=  $importtemp1 ]]; then
