@@ -77,7 +77,9 @@
 						<br>Graph lädt, bitte warten...<br>
 						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
-					<canvas id="canvas" style="height: 400px;"></canvas>
+					<div id="canvasdiv">
+						<canvas id="canvas" style="height: 400px;"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
