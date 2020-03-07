@@ -81,7 +81,6 @@ function loadgraph() {
 		// scan array for time-gaps in dataset and fill with zero values
 		var lastScannedTimestampStr = csvData[0][0];
 		const DATAFIELDS = csvData[0].length;
-		console.log(DATAFIELDS);
 		for (var index=0; index < csvData.length; index++) {
 			let currentTimestampStr = csvData[index][0];
 			let lastScannedTimestamp = new Date(lastScannedTimestampStr);
@@ -120,6 +119,7 @@ function loadgraph() {
 			lastScannedTimestampStr = currentTimestampStr;
 		}
 	}
+	console.log(csvData);
 	// Retrived data from csv file content
 	atime = getCol(csvData, 0);
 	abezug = getCol(csvData, 1);
