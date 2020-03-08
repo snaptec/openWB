@@ -12,7 +12,6 @@ if (( sonnenecoalternativ == 2 )); then
 	speicherentladung=$(echo $speicherentladung | sed 's/\..*$//')
 	speicherwatt=$(echo "$speicherladung - $speicherentladung" | bc)
 	#wenn Batterie aus bzw. keine Antwort ersetze leeren Wert durch eine 0
-	echo $speicherwatt "speicherwatt" >> /var/www/html/openWB/ramdisk/openWB.log
 	if ! [[ $speicherwatt =~ $ra ]] ; then
 		speicherwatt="0"
 	fi

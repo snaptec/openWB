@@ -48,6 +48,12 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "wrsunwaysip=") !== false) {
+					list(, $wrsunwaysipold) = explode("=", $line);
+				}
+				if(strpos($line, "wrsunwayspw=") !== false) {
+					list(, $wrsunwayspwold) = explode("=", $line);
+				}
 				if(strpos($line, "pvkitversion=") !== false) {
 					list(, $pvkitversionold) = explode("=", $line);
 				}
@@ -993,6 +999,9 @@
 				}
 				if(strpos($line, "e3dcip=") !== false) {
 					list(, $e3dcipold) = explode("=", $line);
+				}
+				if(strpos($line, "e3dcextprod=") !== false) {
+					list(, $e3dcextprodold) = explode("=", $line);
 				}
 				if(strpos($line, "e3dc2ip=") !== false) {
 					list(, $e3dc2ipold) = explode("=", $line);
@@ -3947,6 +3956,7 @@
 							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
+							<option <?php if($pvwattmodulold == "wr_sunways\n") echo selected ?> value="wr_sunways">Sunways</option>
 						</select>
 					</div>
 
@@ -3975,6 +3985,24 @@
 							Gültige Werte IP. <br>
 						</div>
 					</div>
+					<div id="pvsunways">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwaysip">IP Adresse des Sunways</label></b>
+							<input type="text" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo htmlspecialchars($wrsunwaysipold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. <br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwayspw">Passwort des Sunways</label></b>
+							<input type="text" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars($wrsunwayspwold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte Passwort. <br>
+						</div>
+
+					</div>
+
 					<div id="pvsolarlog">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
@@ -4351,6 +4379,11 @@
 							$('#pvyouless').hide();
 							$('#pvlgessv1').hide();
 							$('#pvmqtt').hide();
+							$('#pvsunways').hide();
+
+							if($('#pvwattmodul').val() == 'wr_sunways') {
+								$('#pvsunways').show();
+							}
 
 							if($('#pvwattmodul').val() == 'wr_mqtt') {
 								$('#pvmqtt').show();
@@ -4563,6 +4596,11 @@
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
 						</div>
+						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
+						<select type="text" name="e3dcextprod" id="e3dcextprod">
+							<option <?php if($e3dcextprodold == "0\n") echo selected ?> value="0">Nein</option>
+							<option <?php if($e3dcextprodold == "1\n") echo selected ?> value="1">Ja</option>
+						</select>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
 							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>"><br>

@@ -54,6 +54,14 @@ foreach($lines as $line) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "wrsunwaysip=") !== false) {
+	    $result .= 'wrsunwaysip='.$_POST[wrsunwaysip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "wrsunwayspw=") !== false) {
+	    $result .= 'wrsunwayspw='.$_POST[wrsunwayspw]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "myrenault_userlp2=") !== false) {
 	    $result .= 'myrenault_userlp2='.$_POST[myrenault_userlp2]."\n";
 	    $writeit = '1';
@@ -1116,6 +1124,10 @@ foreach($lines as $line) {
 	    }
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
+	    $writeit = '1';
+	   }
+	   if(strpos($line, "e3dcextprod=") !== false) {
+	    $result .= 'e3dcextprod='.$_POST[e3dcextprod]."\n";
 	    $writeit = '1';
 	   }
 	   if(strpos($line, "e3dc2ip=") !== false) {
