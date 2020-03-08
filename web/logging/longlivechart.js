@@ -419,7 +419,7 @@ function loadgraph() {
 							'minute': 'DD.MM.YY - HH:mm',
 						},
 						distribution: 'linear',
-						stepSize: 60  // ticks every 60 minutes
+						precision: 60  // ticks every 60 minutes
 					},
 					ticks: {
 						//source: 'data',
