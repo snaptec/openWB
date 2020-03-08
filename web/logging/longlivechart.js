@@ -1,3 +1,14 @@
+/**
+ * reads longtime logging data and displays graph
+ *
+ * @author: Kevin Wieland, Michael Ortenstein
+ *
+ * generally fills data-gaps in timeline with zero values,
+ * fills data-gap-columns indicated by "socValues" as their index with 50% so lines dont jump
+ */
+
+const socValues = [13, 14, 15];  // these columns represent SoC values
+
 var boolDisplayHouseConsumption;
 var boolDisplayLoad1;
 var boolDisplayLp1Soc;
@@ -48,7 +59,6 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 			vis=1;
 		}
 	});
-	//window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
 	if ( vis == 1 ){
 		window[hidevar] = 'foo';
 		window[boolvar] = 'flase';
@@ -58,21 +68,101 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 	}
 }
 
+function prepareNewDataset(length, dataArray) {
+	/**
+	 * builds an array(length) filled with zeros
+	 * to generally fill data-gaps in timeline with zero values,
+	 * fills data-gap-columns indicated by "socValues" as their index with 50% so lines dont jump
+	 * (but only if other SoC-values exist in dataArray)
+	 *
+	 * @author: Michael Ortenstein
+	 * @param {number} length The desired length of the new array
+	 * @param {array} dataArray The complete array of all csv values
+	 * @returns {newArray} The dataset to fill the gap
+	 */
+	var newArray = new Array(length).fill('0');
+	if ( socValues.length > 0 ) {
+		// there are columns marked as containing SoC values
+		socValues.forEach((column) => {
+			var dataColumn = getCol(dataArray, column);
+			// check how to cover the gaps so lines don't jump
+			console.log(dataColumn);
+			if ( dataColumn.every( value => value == '0' ) ) {
+				newArray[column] = '0';
+			} else if ( dataColumn.every( value => value == '' ) ) {
+				newArray[column] = '';
+			} else {
+				newArray[column] = '50';
+			}
+		});
+	}
+	return newArray;
+}
+
 function loadgraph() {
 	alldata = alldata.replace(/^\s*[\n]/gm, '');
 	alldata = alldata.replace(/^\s*-[\n]/gm, '');
 	var csvData = new Array();
 	var rawcsv = alldata.split(/\r?\n|\r/);  // split line in array
-	for (var i = 0; i < rawcsv.length; i++) {
-		  csvData.push(rawcsv[i].split(','));
+	rawcsv.forEach((dataset) => {
+		var datasetArray = dataset.split(',');
+		var datasetDateStr = datasetArray[0];
+		if ( datasetDateStr.length > 0 && new Date(datasetDateStr) !== "Invalid Date" && !isNaN(new Date(datasetDateStr)) ) {
+			// date string is not undefined or empty and date string is a date
+			csvData.push(datasetArray);
+		}
+	});
+
+	if ( csvData.length < 30 ) {
+		// is less than 30 datasets: don't draw graph
+		$('#displayedTimePeriodSpan').html('<br>Anzahl Messpunkte nicht ausreichend zur Darstellung.');
+		$('#waitforgraphloadingdiv').hide();
+		$('#canvasdiv').hide();
+		return;
+	} else {
+		// scan array for time-gaps in dataset and fill with zero values
+		var lastScannedTimestampStr = csvData[0][0];
+		const DATAFIELDS = csvData[0].length;
+		for (var index=1; index < csvData.length; index++) {
+			let currentTimestampStr = csvData[index][0];
+			let lastScannedTimestamp = new Date(lastScannedTimestampStr);
+			let currentTimestamp = new Date(currentTimestampStr);
+			let diffSeconds = Math.round((currentTimestamp - lastScannedTimestamp) / 1000); // seconds between datasets
+			if ( diffSeconds > 300 ) {
+				// gap between datasets > 300 seconds,
+				// add 2 datasets inbetween filled with zeros to flatten graph line
+				// since quantity of values may change with development of project
+				// build new dataset with zeros dynamically from length of dataset
+				let valueArrayLeft = prepareNewDataset(DATAFIELDS, csvData);
+				let valueArrayRight = prepareNewDataset(DATAFIELDS, csvData);
+
+				// build timestamp left gap
+				let dd = String(lastScannedTimestamp.getDate()).padStart(2, '0');  // format with leading zeros
+				let mm = String(lastScannedTimestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
+				let HH = String(lastScannedTimestamp.getHours()).padStart(2, '0');
+				let MM = String(lastScannedTimestamp.getMinutes()).padStart(2, '0');
+				let SS = String(lastScannedTimestamp.getSeconds() + 1).padStart(2, '0');  // add a second to last timestamp
+				// set timestamp
+				valueArrayLeft[0] = lastScannedTimestamp.getFullYear() + '/' + mm + '/' + dd + ' ' + HH + ':' + MM + ':' + SS;
+				// insert into csvData
+				csvData.splice(index++, 0, valueArrayLeft);
+				// build timestamp right gap
+				//
+				dd = String(currentTimestamp.getDate()).padStart(2, '0');  // format with leading zeros
+				mm = String(currentTimestamp.getMonth() + 1).padStart(2, '0'); //January is 0!
+				HH = String(currentTimestamp.getHours()).padStart(2, '0');
+				MM = String(currentTimestamp.getMinutes()).padStart(2, '0');
+				SS = String(currentTimestamp.getSeconds() - 1).padStart(2, '0');  // // substract a second from current timestamp
+				// set timestamp
+				valueArrayRight[0] = currentTimestamp.getFullYear() + '/' + mm + '/' + dd + ' ' + HH + ':' + MM + ':' + SS;
+				// insert into csvData
+				csvData.splice(index++, 0, valueArrayRight);
+			}
+			lastScannedTimestampStr = currentTimestampStr;
+		}
 	}
-	csvData.pop();
+	console.log(csvData);
 	// Retrived data from csv file content
-	var splittime = new Array();
-	//getCol(csvData, 0).forEach(function(zeit){
-	//	splittime.push(zeit.substring(0, zeit.length -3));
-	//});
-	//atime = splittime;
 	atime = getCol(csvData, 0);
 	abezug = getCol(csvData, 1);
 	alpa = getCol(csvData, 2);
@@ -111,8 +201,6 @@ function loadgraph() {
 	visibility(averbraucher1,'hideload1','Verbraucher 1',boolDisplayLoad1);
 	visibility(averbraucher2,'hideload2','Verbraucher 2',boolDisplayLoad2);
 
-	initialread = 1 ;
-	//checkgraphload();
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -123,7 +211,7 @@ function loadgraph() {
 			hidden: boolDisplayLp1,
 			fill: false,
 			data: alp1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp2',
 			borderColor: "rgba(50, 30, 105, 0.7)",
@@ -132,7 +220,7 @@ function loadgraph() {
 			hidden: boolDisplayLp2,
 			fill: false,
 			data: alp2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Bezug',
 			borderColor: "rgba(255, 0, 0, 0.7)",
@@ -141,7 +229,7 @@ function loadgraph() {
 			fill: true,
 			data: abezug,
 			hidden: boolDisplayEvu,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV',
 			borderColor: 'green',
@@ -150,7 +238,7 @@ function loadgraph() {
 			hidden: boolDisplayPv,
 			borderWidth: 1,
 			data: apv,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicherleistung',
 			borderColor: 'orange',
@@ -159,7 +247,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: aspeicherl,
 			hidden: boolDisplaySpeicher,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
 			borderColor: 'orange',
@@ -169,7 +257,7 @@ function loadgraph() {
 			fill: false,
 			borderWidth: 1,
 			data: aspeichersoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP1 SoC',
 			borderColor: "rgba(0, 0, 255, 0.5)",
@@ -178,7 +266,7 @@ function loadgraph() {
 			hidden: boolDisplayLp1Soc,
 			fill: false,
 			data: asoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP2 SoC',
 			borderColor: "rgba(50, 50, 55, 0.5)",
@@ -187,7 +275,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp2Soc,
 			data: asoc1,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Hausverbrauch',
 			borderColor: "rgba(150, 150, 150, 0.7)",
@@ -196,7 +284,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayHouseConsumption,
 			data: ahausverbrauch,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -205,7 +293,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -214,7 +302,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: averbraucher2,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'LP Gesamt',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -223,7 +311,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alpa,
 			hidden: boolDisplayLpAll,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp3',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -232,7 +320,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp3,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp3,
+			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -241,7 +329,7 @@ function loadgraph() {
 			data: alp4,
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp4,
+			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -250,7 +338,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp5,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp5,
+			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -259,7 +347,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp6,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp6,
+			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -268,7 +356,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp7,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp7,
+			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -277,11 +365,12 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8,
+			hidden: boolDisplayLp8
 		}]
 	}
-	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myLine = new Chart(ctx, {
+	var canvas = $('#canvas').get(0);
+    var ctx = canvas.getContext('2d');
+	var longlivechart = new Chart(ctx, {
 		type: 'line',
 		data: lineChartData,
 		options: {
@@ -291,7 +380,10 @@ function loadgraph() {
 			elements: {
 				point: {
 					radius: 0
-				}
+				},
+				line: {
+            		tension: 0
+        		}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -319,16 +411,28 @@ function loadgraph() {
 			},
 			scales: {
 				xAxes: [{
-         			ticks: {
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-         			}
+					type: 'time',
+					time: {
+						parser: 'YYYY/MM/DD HH:mm:ss',
+						unit: 'minute',
+						displayFormats: {
+							'minute': 'DD.MM.YY - HH:mm',
+						},
+						distribution: 'linear',
+						precision: 60
+					},
+					ticks: {
+						//source: 'data',
+						maxTicksLimit: 25,
+						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+					}
       			}],
 				yAxes: [{
 					// horizontal line for values displayed on the left side (power)
 					position: 'left',
 					id: 'y-axis-1',
 					type: 'linear',
+					avoidFirstLastClippingEnabled: true,
 					display: true,
 					scaleLabel: {
 	        			display: true,
@@ -371,23 +475,27 @@ function loadgraph() {
 		}
 	});
 	initialread = 1;
+
+	let startDate = new Date(atime[0]);
+	let endDate = new Date(atime[atime.length - 1]);
+	let dd = String(startDate.getDate()).padStart(2, '0');  // format with leading zeros
+	let mm = String(startDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	let dayOfWeek = startDate.toLocaleDateString('de-DE', { weekday: 'short'});
+	let HH = String(startDate.getHours()).padStart(2, '0');
+	let MM = String(startDate.getMinutes()).padStart(2, '0');
+	let SS = String(startDate.getSeconds() + 1).padStart(2, '0');  // add a second to last timestamp
+	var startDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + startDate.getFullYear() + ' (' + HH + ':' + MM + ':' + SS + ')';
+
+	dd = String(endDate.getDate()).padStart(2, '0');  // format with leading zeros
+	mm = String(endDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	dayOfWeek = endDate.toLocaleDateString('de-DE', { weekday: 'short'});
+	HH = String(endDate.getHours()).padStart(2, '0');
+	MM = String(endDate.getMinutes()).padStart(2, '0');
+	SS = String(endDate.getSeconds() + 1).padStart(2, '0');  // add a second to last timestamp
+	var endDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + endDate.getFullYear() + ' (' + HH + ':' + MM + ':' + SS + ')';
+
+	var displayedTimePeriodStr = startDateStr + ' bis ' + endDateStr;
+
+	$('#displayedTimePeriodSpan').text(displayedTimePeriodStr);
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
-
-function checkgraphload(){
-	if ( graphloaded == 1) {
-       	myLine.destroy();
-		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0 ) {
-					graphloaded += 1;
-				} else {
-		       		myLine.destroy();
-				}
-				loadgraph();
-	 		}
-		}
-	}
-}
