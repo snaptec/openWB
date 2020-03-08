@@ -117,6 +117,7 @@ function loadgraph() {
 		// is less than 30 datasets: don't draw graph
 		$('#displayedTimePeriodSpan').html('<br>Anzahl Messpunkte nicht ausreichend zur Darstellung.');
 		$('#waitforgraphloadingdiv').hide();
+		$('#canvasdiv').hide();
 		return;
 	} else {
 		// scan array for time-gaps in dataset and fill with zero values
