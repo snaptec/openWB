@@ -183,8 +183,8 @@ function loadgraph() {
 	averbraucher1 = getCol(csvData, 17);
 	averbraucher2 = getCol(csvData, 18);
 	visibility(abezug,'hidebezug','Bezug',boolDisplayEvu);
-	visibility(alpa,'hidelpa','LP Gesamd',boolDisplayEvu);
-	visibility(apv,'hidepv','Bezug',boolDisplayLpAll);
+	visibility(alpa,'hidelpa','LP Gesamt',boolDisplayLpAll);
+	visibility(apv,'hidepv','PV',boolDisplayPv);
 	visibility(alp1,'hidelp1','Lp1',boolDisplayLp1);
 	visibility(alp2,'hidelp2','Lp2',boolDisplayLp2);
 	visibility(alp3,'hidelp3','Lp3',boolDisplayLp3);
