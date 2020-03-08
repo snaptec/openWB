@@ -1,3 +1,14 @@
+/**
+ * reads longtime logging data and displays graph
+ *
+ * @author: Kevin Wieland, Michael Ortenstein
+ *
+ * generally fills data-gaps in timeline with zero values,
+ * fills data-gap-columns indicated by "socValues" as their index with 50% so lines dont jump
+ */
+
+const socValues = [13, 14, 15];  // these columns represent SoC values
+
 var boolDisplayHouseConsumption;
 var boolDisplayLoad1;
 var boolDisplayLp1Soc;
@@ -48,7 +59,6 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 			vis=1;
 		}
 	});
-	//window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
 	if ( vis == 1 ){
 		window[hidevar] = 'foo';
 		window[boolvar] = 'flase';
@@ -56,6 +66,37 @@ function visibility(datavar,hidevar,hidevalue,boolvar) {
 		window[hidevar] = hidevalue;
 		window[boolvar] = 'true';
 	}
+}
+
+function prepareNewDataset(length, dataArray) {
+	/**
+	 * builds an array(length) filled with zeros
+	 * to generally fill data-gaps in timeline with zero values,
+	 * fills data-gap-columns indicated by "socValues" as their index with 50% so lines dont jump
+	 * (but only if other SoC-values exist in dataArray)
+	 *
+	 * @author: Michael Ortenstein
+	 * @param {number} length The desired length of the new array
+	 * @param {array} dataArray The complete array of all csv values
+	 * @returns {newArray} The dataset to fill the gap
+	 */
+	var newArray = new Array(length).fill('0');
+	if ( socValues.length > 0 ) {
+		// there are columns marked as containing SoC values
+		socValues.forEach((column) => {
+			var dataColumn = getCol(dataArray, column);
+			// check how to cover the gaps so lines don't jump
+			console.log(dataColumn);
+			if ( dataColumn.every( value => value == '0' ) ) {
+				newArray[column] = '0';
+			} else if ( dataColumn.every( value => value == '' ) ) {
+				newArray[column] = '';
+			} else {
+				newArray[column] = '50';
+			}
+		});
+	}
+	return newArray;
 }
 
 function loadgraph() {
@@ -73,26 +114,27 @@ function loadgraph() {
 	});
 
 	if ( csvData.length < 30 ) {
-		// is less than 30 datasets: abort
+		// is less than 30 datasets: don't draw graph
 		$('#displayedTimePeriodSpan').html('<br>Anzahl Messpunkte nicht ausreichend zur Darstellung.');
 		$('#waitforgraphloadingdiv').hide();
+		$('#canvasdiv').hide();
 		return;
 	} else {
 		// scan array for time-gaps in dataset and fill with zero values
 		var lastScannedTimestampStr = csvData[0][0];
 		const DATAFIELDS = csvData[0].length;
-		for (var index=0; index < csvData.length; index++) {
+		for (var index=1; index < csvData.length; index++) {
 			let currentTimestampStr = csvData[index][0];
 			let lastScannedTimestamp = new Date(lastScannedTimestampStr);
 			let currentTimestamp = new Date(currentTimestampStr);
 			let diffSeconds = Math.round((currentTimestamp - lastScannedTimestamp) / 1000); // seconds between datasets
-			if ( diffSeconds > 60 ) {
-				// gap between datasets > 60 seconds,
+			if ( diffSeconds > 300 ) {
+				// gap between datasets > 300 seconds,
 				// add 2 datasets inbetween filled with zeros to flatten graph line
 				// since quantity of values may change with development of project
 				// build new dataset with zeros dynamically from length of dataset
-				let valueArrayLeft = new Array(DATAFIELDS).fill('0');
-				let valueArrayRight = new Array(DATAFIELDS).fill('0');
+				let valueArrayLeft = prepareNewDataset(DATAFIELDS, csvData);
+				let valueArrayRight = prepareNewDataset(DATAFIELDS, csvData);
 
 				// build timestamp left gap
 				let dd = String(lastScannedTimestamp.getDate()).padStart(2, '0');  // format with leading zeros
@@ -159,7 +201,6 @@ function loadgraph() {
 	visibility(averbraucher1,'hideload1','Verbraucher 1',boolDisplayLoad1);
 	visibility(averbraucher2,'hideload2','Verbraucher 2',boolDisplayLoad2);
 
-	//checkgraphload();
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -378,7 +419,7 @@ function loadgraph() {
 							'minute': 'DD.MM.YY - HH:mm',
 						},
 						distribution: 'linear',
-						stepSize: 60  // ticks every 60 minutes
+						precision: 60
 					},
 					ticks: {
 						//source: 'data',
@@ -458,21 +499,3 @@ function loadgraph() {
 	$('#displayedTimePeriodSpan').text(displayedTimePeriodStr);
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
-
-function checkgraphload(){
-	if ( graphloaded == 1) {
-       	myLine.destroy();
-		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0 ) {
-					graphloaded += 1;
-				} else {
-		       		myLine.destroy();
-				}
-				loadgraph();
-	 		}
-		}
-	}
-}
