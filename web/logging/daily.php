@@ -89,12 +89,10 @@
 
 		<!-- get parsed date, setup datepicker and load respective Chart.js definition -->
 		<script>
-			const EARLIESTDATE = '01.01.2018';  // no earlier date choosable
 			$(document).ready(function(){
 				// GET expects date format Y-m-d like 2020-10-08
 				// get parsed date and format nicely for input field
-				var earliestDate = new Date (EARLIESTDATE);
-				earliestDate.setHours(0,0,0,0);  // make sure time is all 0
+				var earliestDate = new Date('2018/01/01 00:00:00');
 				var url_string = window.location.href;
 				var url = new URL(url_string);
 				var parsedDateString = url.searchParams.get('date');
@@ -127,7 +125,7 @@
 				$('.datepicker').datepicker({
 					format: 'D, dd.mm.yyyy',
 					language: 'de-DE',
-					startDate: EARLIESTDATE,
+					startDate: '01.01.2018',
 					endDate: '0d',
 					daysOfWeekHighlighted: '0',
 					todayBtn: true,
