@@ -5,7 +5,8 @@ $result = '';
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	$writeit = '0';
-   	if(strpos($line, "awattaraktiv=") !== false) {
+
+	if(strpos($line, "awattaraktiv=") !== false) {
 	    $result .= 'awattaraktiv='.$_POST[awattaraktiv]."\n";
 	    $writeit = '1';
 	}

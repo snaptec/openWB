@@ -48,6 +48,15 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "wrsunwaysip=") !== false) {
+					list(, $wrsunwaysipold) = explode("=", $line);
+				}
+				if(strpos($line, "wrsunwayspw=") !== false) {
+					list(, $wrsunwayspwold) = explode("=", $line);
+				}
+				if(strpos($line, "pvkitversion=") !== false) {
+					list(, $pvkitversionold) = explode("=", $line);
+				}
 				if(strpos($line, "evukitversion=") !== false) {
 					list(, $evukitversionold) = explode("=", $line);
 				}
@@ -990,6 +999,9 @@
 				}
 				if(strpos($line, "e3dcip=") !== false) {
 					list(, $e3dcipold) = explode("=", $line);
+				}
+				if(strpos($line, "e3dcextprod=") !== false) {
+					list(, $e3dcextprodold) = explode("=", $line);
 				}
 				if(strpos($line, "e3dc2ip=") !== false) {
 					list(, $e3dc2ipold) = explode("=", $line);
@@ -3380,7 +3392,13 @@
 							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
+							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 						</select>
+					</div>
+					<div id="wattbezugsonneneco">
+						<div class="row">
+							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.<br><br>
+						</div>
 					</div>
 					<div id="wattbezugmqtt">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -3806,9 +3824,13 @@
 							$('#wattbezugdiscovergy').hide();
 							$('#wattbezuglgessv1').hide();
 							$('#wattbezugmqtt').hide();
+							$('#wattbezugsonneneco').hide();
 
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
+							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
+								$('#wattbezugsonneneco').show(); 
+							}
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
 								$('#wattbezugsolarview').show();
 							}
@@ -3934,6 +3956,7 @@
 							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
+							<option <?php if($pvwattmodulold == "wr_sunways\n") echo selected ?> value="wr_sunways">Sunways</option>
 						</select>
 					</div>
 
@@ -3962,6 +3985,24 @@
 							Gültige Werte IP. <br>
 						</div>
 					</div>
+					<div id="pvsunways">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwaysip">IP Adresse des Sunways</label></b>
+							<input type="text" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo htmlspecialchars($wrsunwaysipold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. <br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							<b><label for="wrsunwayspw">Passwort des Sunways</label></b>
+							<input type="text" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars($wrsunwayspwold) ?>"><br>
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte Passwort. <br>
+						</div>
+
+					</div>
+
 					<div id="pvsolarlog">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
@@ -4003,7 +4044,11 @@
 					</div>
 					<div id="pvmpmevu">
 						<div class="row" style="background-color:#febebe">
-							Keine Einstellung nötig. Dies ist das richtige Modul wenn ein MPM3PM Zähler mit ID 8 am openWB EVU Kit mit angeschlossen ist.<br>
+							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
+							<select type="text" name="pvkitversion" id="pvkitversion">
+								<option <?php if($pvkitversionold == 0) echo selected ?> value="0">PV Kit</option>
+								<option <?php if($pvkitversionold == 1) echo selected ?> value="1">PV Kit v2</option>
+							</select>
 						</div>
 					</div>
 					<div id="pvplenti">
@@ -4334,6 +4379,11 @@
 							$('#pvyouless').hide();
 							$('#pvlgessv1').hide();
 							$('#pvmqtt').hide();
+							$('#pvsunways').hide();
+
+							if($('#pvwattmodul').val() == 'wr_sunways') {
+								$('#pvsunways').show();
+							}
 
 							if($('#pvwattmodul').val() == 'wr_mqtt') {
 								$('#pvmqtt').show();
@@ -4526,12 +4576,13 @@
 							<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>"><br>
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse der Sonnen eco serie 5.<br><br>
+							Gültige Werte IP. IP Adresse der Sonnen eco serie 5, für ECO 6 alternative Auslesung nutzen.<br><br>
 						</div>
 						<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
 						<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
 							<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
 							<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($sonnenecoalternativold == "2\n") echo selected ?> value="2">ECO 6</option>
 						</select>
 						<div class="row bg-info">
 							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
@@ -4545,6 +4596,11 @@
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
 						</div>
+						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
+						<select type="text" name="e3dcextprod" id="e3dcextprod">
+							<option <?php if($e3dcextprodold == "0\n") echo selected ?> value="0">Nein</option>
+							<option <?php if($e3dcextprodold == "1\n") echo selected ?> value="1">Ja</option>
+						</select>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
 							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>"><br>

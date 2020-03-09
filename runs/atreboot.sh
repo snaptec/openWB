@@ -78,8 +78,11 @@ echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22000
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp22007
 echo 0 > /var/www/html/openWB/ramdisk/readtag
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
+echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlasttag
 echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
@@ -2340,6 +2343,27 @@ fi
 if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wrsunwayspw=" /var/www/html/openWB/openwb.conf
+then
+	echo "wrsunwayspw=passwort" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "e3dcextprod=" /var/www/html/openWB/openwb.conf
+then
+	echo "e3dcextprod=0" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "wrsunwaysip=" /var/www/html/openWB/openwb.conf
+then
+	echo "wrsunwaysip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lastmmaxw=" /var/www/html/openWB/openwb.conf
+then
+	echo "lastmmaxw=44000" >> /var/www/html/openWB/openwb.conf
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null

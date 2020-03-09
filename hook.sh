@@ -11,8 +11,10 @@ if (( hook1_aktiv == "1" )); then
 				if [ ! -e ramdisk/hook1aktiv ]; then
 					touch ramdisk/hook1aktiv
 					echo 1 > ramdisk/hook1akt
-					curl -s --connect-timeout 5 $hook1ein_url > /dev/null
+					curl -s --connect-timeout 5 $hook1ein_url > ramdisk/hookmsg
 					echo "$date WebHook 1 aktiviert" >> ramdisk/ladestatus.log
+					cat ramdisk/hookmsg >> ramdisk/ladestatus.log
+					rm ramdisk/hookmsg
 					if [[ $debug == "1" ]]; then
 						echo "Gerät 1 aktiviert"
 					fi
@@ -40,8 +42,10 @@ if (( hook1_aktiv == "1" )); then
 				else
 					rm ramdisk/hook1aktiv
 					echo 0 > ramdisk/hook1akt
-					curl -s --connect-timeout 5 $hook1aus_url > /dev/null
+					curl -s --connect-timeout 5 $hook1aus_url > ramdisk/hookmsg
 					echo "$date WebHook 1 deaktiviert" >> ramdisk/ladestatus.log
+					cat ramdisk/hookmsg >> ramdisk/ladestatus.log
+					rm ramdisk/hookmsg
 					if [[ $debug == "1" ]]; then
 						echo "Gerät 1 deaktiviert"
 					fi
@@ -151,6 +155,14 @@ if (( verbraucher1_aktiv == "1")); then
 			sudo python modules/verbraucher/mpm3pmremote.py 1 $verbraucher1_source $verbraucher1_id &
 		fi
 	fi
+	if [[ $verbraucher1_typ == "sdm630" ]]; then
+		if [[ $verbraucher1_source == *"dev"* ]]; then
+			sudo python modules/verbraucher/mpm3pmlocal.py 1 $verbraucher1_source $verbraucher1_id &
+		else
+			sudo python modules/verbraucher/mpm3pmremote.py 1 $verbraucher1_source $verbraucher1_id &
+		fi
+	fi
+
 	if [[ $verbraucher1_typ == "sdm120" ]]; then
 		if [[ $verbraucher1_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm120local.py 1 $verbraucher1_source $verbraucher1_id &
@@ -188,6 +200,14 @@ if (( verbraucher2_aktiv == "1")); then
 			sudo python modules/verbraucher/mpm3pmremote.py 2 $verbraucher2_source $verbraucher2_id &
 		fi
 	fi
+	if [[ $verbraucher2_typ == "sdm630" ]]; then
+		if [[ $verbraucher2_source == *"dev"* ]]; then
+			sudo python modules/verbraucher/mpm3pmlocal.py 2 $verbraucher2_source $verbraucher2_id &
+		else
+			sudo python modules/verbraucher/mpm3pmremote.py 2 $verbraucher2_source $verbraucher2_id &
+		fi
+	fi
+
 	if [[ $verbraucher2_typ == "sdm120" ]]; then
 		if [[ $verbraucher2_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm120local.py 2 $verbraucher2_source $verbraucher2_id &

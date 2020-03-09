@@ -46,8 +46,20 @@ foreach($lines as $line) {
 	    $result .= 'evukitversion='.$_POST[evukitversion]."\n";
 	    $writeit = '1';
 	    }
+	    if(strpos($line, "pvkitversion=") !== false) {
+	    $result .= 'pvkitversion='.$_POST[pvkitversion]."\n";
+	    $writeit = '1';
+	    }
 	    if(strpos($line, "evseidlp3=") !== false) {
 	    $result .= 'evseidlp3='.$_POST[evseidlp3]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "wrsunwaysip=") !== false) {
+	    $result .= 'wrsunwaysip='.$_POST[wrsunwaysip]."\n";
+	    $writeit = '1';
+	    }
+	    if(strpos($line, "wrsunwayspw=") !== false) {
+	    $result .= 'wrsunwayspw='.$_POST[wrsunwayspw]."\n";
 	    $writeit = '1';
 	    }
 	    if(strpos($line, "myrenault_userlp2=") !== false) {
@@ -1112,6 +1124,10 @@ foreach($lines as $line) {
 	    }
 	   if(strpos($line, "e3dcip=") !== false) {
 	    $result .= 'e3dcip='.$_POST[e3dcip]."\n";
+	    $writeit = '1';
+	   }
+	   if(strpos($line, "e3dcextprod=") !== false) {
+	    $result .= 'e3dcextprod='.$_POST[e3dcextprod]."\n";
 	    $writeit = '1';
 	   }
 	   if(strpos($line, "e3dc2ip=") !== false) {

@@ -342,7 +342,7 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) >= 1 and int(msg.payload) <=100):
             replaceAll("sofortsoclp2=",msg.payload.decode("utf-8"))
     if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
-        if (float(msg.payload) >= 0 and float(msg.payload) <=50):
+        if (float(msg.payload) >= -8 and float(msg.payload) <=50):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()

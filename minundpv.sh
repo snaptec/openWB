@@ -35,7 +35,22 @@ minundpvlademodus(){
 					llneu=$llalt
 				fi
 				if (( uberschuss > schaltschwelle )); then
-					llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+					if [[ $pvbezugeinspeisung == "0" ]]; then
+						llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+
+					else
+						if (( llalt == minimalampv )); then
+							llneu=$(( llalt + 1 ))
+						else
+							llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+						fi
+					fi
+					if (( llneu > maximalstromstaerke )); then
+						llneu=$maximalstromstaerke
+					fi
+					if (( llalt < minimalampv )); then
+						llneu=$minimalampv
+					fi
 				fi
 			fi
 		fi

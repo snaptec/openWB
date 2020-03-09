@@ -10,6 +10,9 @@
 watttmp=$(curl --connect-timeout 15 -s $vzloggerpvip)
 watt=$(echo $watttmp | jq . | sed ''$vzloggerpvline'!d' | tr -d ' ' )
 watt=$(echo "${watt}" | cut -f1 -d".")
+if (( watt > 0 )); then
+	watt=$((watt * -1 ))
+fi
 echo $watt
 #zur weiteren verwendung im webinterface
 echo $watt > /var/www/html/openWB/ramdisk/pvwatt

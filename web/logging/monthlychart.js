@@ -67,30 +67,8 @@ var boolDisplayPv;
 var boolDisplayLegend = true;
 var boolDisplayLiveGraph;
 var datasend = 0;
-var all1 = 0;
-var all2 = 0;
-var all3 = 0;
-var all4 = 0;
-var all5 = 0;
-var all6 = 0;
-var all7 = 0;
-var all8 = 0;
-var all9 = 0;
-var all10 = 0;
-var all11 = 0;
-var all12 = 0;
-var all1p; 
-var all2p; 
-var all3p; 
-var all4p; 
-var all5p; 
-var all6p; 
-var all7p; 
-var all8p;
-var all9p; 
-var all10p; 
-var all11p; 
-var all12p;
+var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
+var graphDataSegments = new Array(12).fill('');  // all data segments
 var overalllp1wh = new Array();
 var overalllp2wh = new Array();
 
@@ -107,122 +85,46 @@ var averbraucher1e = new Array();
 var ahausverbrauch = new Array();
 var alpa = new Array();
 var thevalues = [
-["openWB/system/MonthGraphData1", "#"],
-["openWB/system/MonthGraphData2", "#"],
-["openWB/system/MonthGraphData3", "#"],
-["openWB/system/MonthGraphData4", "#"],
-["openWB/system/MonthGraphData5", "#"],
-["openWB/system/MonthGraphData6", "#"],
-["openWB/system/MonthGraphData7", "#"],
-["openWB/system/MonthGraphData8", "#"],
-["openWB/system/MonthGraphData9", "#"],
-["openWB/system/MonthGraphData10", "#"],
-["openWB/system/MonthGraphData11", "#"],
-["openWB/system/MonthGraphData12", "#"],
+	["openWB/system/MonthGraphData1", "#"],
+	["openWB/system/MonthGraphData2", "#"],
+	["openWB/system/MonthGraphData3", "#"],
+	["openWB/system/MonthGraphData4", "#"],
+	["openWB/system/MonthGraphData5", "#"],
+	["openWB/system/MonthGraphData6", "#"],
+	["openWB/system/MonthGraphData7", "#"],
+	["openWB/system/MonthGraphData8", "#"],
+	["openWB/system/MonthGraphData9", "#"],
+	["openWB/system/MonthGraphData10", "#"],
+	["openWB/system/MonthGraphData11", "#"],
+	["openWB/system/MonthGraphData12", "#"],
 ]
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
-	if ( mqttmsg == "openWB/system/MonthGraphData1" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all1p = mqttpayload;
-			all1 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData1" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all1p = mqttpayload;
-			all1 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData2" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all2p = mqttpayload;
-			all2 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData3" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all3p = mqttpayload;
-			all3 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData4" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all4p = mqttpayload;
-			all4 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData5" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all5p = mqttpayload;
-			all5 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData6" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all6p = mqttpayload;
-			all6 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData7" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all7p = mqttpayload;
-			all7 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData8" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all8p = mqttpayload;
-			all8 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData9" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all9p = mqttpayload;
-			all9 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData10" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all10p = mqttpayload;
-			all10 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData11" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all11p = mqttpayload;
-			all11 = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/system/MonthGraphData12" ) {
-		if (initialread == 0 && (mqttpayload != "empty")) {
-			all12p = mqttpayload;
-			all12 = 1;
-		putgraphtogether();
+	if ( mqttmsg.match( /^openwb\/system\/monthgraphdata[1-9][0-9]*$/i ) ) {
+		// matches to all messages containing "openwb/graph/monthgraphdata#"
+		// where # is an integer > 0
+		// search is case insensitive
+		var index = mqttmsg.match(/\d+/)[0];  // extract first match = number from mqttmsg
+		if ( index < 13 && initialread == 0 && (mqttpayload != "empty")) {
+			index -= 1;  // adjust to array starting at index 0
+			graphDataSegments[index] = mqttpayload;
+			allValuesPresent[index] = 1;
+			putgraphtogether();
 		}
 	}
 }
+
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
 	client.connect(options);
-};
+}
+
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-		handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
-};
+	handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
+}
+
 var retries = 0;
 
 //Connect Options
@@ -234,15 +136,15 @@ var options = {
 		thevalues.forEach(function(thevar) {
 			client.subscribe(thevar[0], {qos: 0});
 		});
-		requestdaygraph();
+		requestmonthgraph();
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
 		client.connect(options);
 	}
-	};
+};
 
-//Creates a new Messaging.Message Object and sends it 
+//Creates a new Messaging.Message Object and sends it
 var publish = function (payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
@@ -251,10 +153,7 @@ var publish = function (payload, topic) {
 	client.send(message);
 }
 
-
 client.connect(options);
-
-
 
 var url_string = window.location.href
 var url = new URL(url_string);
@@ -268,50 +167,51 @@ if ( graphdate == null) {
 } else {
 	graphdate = graphdate.replace('-','');
 }
-function requestdaygraph() {
-	        publish(graphdate, "openWB/set/graph/RequestMonthGraph");
+function requestmonthgraph() {
+	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
 }
 
 function putgraphtogether() {
-	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (all9 == 1) && (all10 == 1) && (all11 == 1) && (all12 == 1) ){
-		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p + "\n" + all9p + "\n" + all10p + "\n" + all11p + "\n" + all12p;
-		graphdata = alldata.replace(/^\s*[\n]/gm, '');
-		initialread = 1 ;
-		//checkgraphload();
-		if ( graphdata.length < 5 ) {
-			$("#loadlivegraph").html("Keine Daten für diesen Zeitraum verfügbar");
-			$("#dailygraphvis").hide();
+	if ( !allValuesPresent.includes(0) ) {
+		graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
+		initialread = 1;
+		// test if graphdata starts with a date followed by comma like 20191201,
+		if ( !(/^\d{8},/.test(graphdata)) ) {
+			$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
+			$('#canvasdiv').hide();
 		} else {
-		formdata(graphdata);
-		$("#loadlivegraph").hide();
+			formdata(graphdata);
+			$('#waitforgraphloadingdiv').hide();
 		}
 	}
 }
+
 function getCol(matrix, col){
 	var column = [];
 	for(var i=0; i<matrix.length; i++){
-               column.push(matrix[i][col]);
-        }
-        return column;
+    	column.push(matrix[i][col]);
+    }
+    return column;
 }
+
 function formdata(graphdata){
 	graphdata = graphdata.replace(/^\s*[\n]/gm, '');
 	var csvData = new Array();
 	var rawcsv = graphdata.split(/\r?\n|\r/);
-	for (var i = 0; i < rawcsv.length; i++) {
-		csvData.push(rawcsv[i].split(',')); 
-        } 
+	rawcsv.forEach((dataset) => {
+		csvData.push(dataset.split(','));
+	});
 	var splittime = new Array();
 	getCol(csvData, 0).forEach(function(zeit){
 		splittime.push(zeit.substring(0, zeit.length-4)+'-'+zeit.substring(4, zeit.length-2)+'-'+zeit.substring(6));
-	})
+	});
 	splittime.pop();
 	splittime.pop();
 	for (i = splittime.length; i < 28 ; i += 1) {
 		splittime.push("");
 	}
 	atime = splittime;
-	
+
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
 	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
@@ -330,6 +230,7 @@ function formdata(graphdata){
 	convertdata(csvData,'9',averbraucher1e,'hideload1e','Verbraucher 1 E','overallload1e','boolDisplayLoad1e');
 	convertdata(csvData,'10',averbraucher2i,'hideload2i','Verbraucher 2 I','overallload2i','boolDisplayLoad2i');
 	convertdata(csvData,'11',averbraucher2e,'hideload2e','Verbraucher 2 E','overallload2e','boolDisplayLoad2e');
+
 	for (i = 0; i < abezug.length; i += 1) {
 		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
 		if ( hausverbrauch >= 0) {
@@ -369,7 +270,6 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 			if ( csvrow == 4 || csvrow == 5 ) {
 				window[overall+"wh"].push(csvvar/1000);
 			}
-			
 	 	}
 		oldfincsvvar=fincsvvar;
 		counter++;
@@ -387,6 +287,7 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 	}
 	pushdataset.pop();
 }
+
 function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	var counter = 0;
 	var oldcsvvar;
@@ -409,216 +310,226 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	//window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
 	if ( vis == 1 ){
 		window[hidevar] = 'foo';
-
 	} else {
 		window[hidevar] = hidevalue;
-
-
 	}
-	
 }
 
-
 function loadgraph() {
-var lineChartData = {
-	labels: atime,
-	datasets: [{
-		label: 'Bezug ' + overallbezug + ' kWh',
-		borderColor: "rgba(255, 0, 0, 0.7)",
-		backgroundColor: "rgba(255, 10, 13, 0.3)",
-		borderWidth: 1,
-		fill: true,
-		data: abezug,
-		hidden: boolDisplayEvu,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Einspeisung ' + overalleinspeisung + ' kWh',
-		borderColor: "rgba(0, 255, 105, 0.9)",
-		backgroundColor: "rgba(0, 255, 255, 0.3)",
-		borderWidth: 2,
-		fill: true,
-		data: aeinspeisung,
-		hidden: boolDisplayEvu,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'PV ' + overallpv + ' kWh',
-		borderColor: 'green',
-		backgroundColor: "rgba(10, 255, 13, 0.3)",
-		fill: true,
-		hidden: boolDisplayPv,
-		borderWidth: 1,
-		data: apv,
-		yAxisID: 'y-axis-1',
-	}  , {
-		label: 'Speicher I ' + overallspeicheri + ' kWh',
-		borderColor: 'orange',
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: true,
-		borderWidth: 1,
-		data: aspeicheri,
-		hidden: boolDisplaySpeicheri,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Speicher E ' + overallspeichere + ' kWh',
-		borderColor: 'orange',
-		backgroundColor: "rgba(255, 155, 13, 0.3)",
-		fill: true,
-		borderWidth: 1,
-		data: aspeichere,
-		hidden: boolDisplaySpeichere,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Lp Gesamt ' + overalllpgesamt + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.1)",
-		backgroundColor: "rgba(0, 0, 255, 0.1)",
-		fill: true,
-		borderWidth: 2,
-		data: alpa,
-		hidden: boolDisplayLpAll,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Lp1 ' + overalllp1 + ' kWh',
-		borderColor: "rgba(0, 0, 255, 0.7)",
-		backgroundColor: "rgba(0, 0, 255, 0.7)",
-		borderWidth: 1,
-		hidden: boolDisplayLp1,
-		fill: false,
-		data: alp1,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Lp2 ' + overalllp2 + ' kWh',
-		borderColor: "rgba(50, 30, 105, 0.7)",
-		backgroundColor: "rgba(50, 30, 105, 0.7)",
-		borderWidth: 1,
-		hidden: boolDisplayLp2,
-		fill: false,
-		data: alp2,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Lp3 ' + overalllp3 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		borderWidth: 2,
-		data: alp3,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp3,
-	} , {
-		label: 'Lp4 ' + overalllp4 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		data: alp4,
-		borderWidth: 2,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp4,
-	} , {
-		label: 'Lp5 ' + overalllp5 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		borderWidth: 2,
-		data: alp5,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp5,
-	} , {
-		label: 'Lp6 ' + overalllp6 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		borderWidth: 2,
-		data: alp6,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp6,
-	} , {
-		label: 'Lp7 ' + overalllp7 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		borderWidth: 2,
-		data: alp7,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp7,
-	} , {
-		label: 'Lp8 ' + overalllp8 + ' kWh',
-		borderColor: "rgba(50, 50, 55, 0.7)",
-		backgroundColor: 'blue',
-		fill: false,
-		borderWidth: 2,
-		data: alp8,
-		yAxisID: 'y-axis-1',
-		hidden: boolDisplayLp8,
-	} , {
-		label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
-		borderColor: "rgba(0, 150, 150, 0.7)",
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: false,
-		borderWidth: 2,
-		hidden: boolDisplayLoad1i,
-		data: averbraucher1i,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
-		borderColor: "rgba(0, 150, 150, 0.7)",
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: false,
-		borderWidth: 2,
-		hidden: boolDisplayLoad1e,
-		data: averbraucher1e,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Verbraucher 2 I ' + overallload2i + ' kWh',
-		borderColor: "rgba(150, 150, 0, 0.7)",
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: false,
-		borderWidth: 2,
-		data: averbraucher2i,
-		hidden: boolDisplayLoad2i,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Verbraucher 2 E ' + overallload2e + ' kWh',
-		borderColor: "rgba(150, 150, 0, 0.7)",
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: false,
-		borderWidth: 2,
-		data: averbraucher2e,
-		hidden: boolDisplayLoad2e,
-		yAxisID: 'y-axis-1',
-	} , {
-		label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
-		borderColor: "rgba(150, 150, 0, 0.7)",
-		backgroundColor: "rgba(200, 255, 13, 0.3)",
-		fill: false,
-		borderWidth: 2,
-		data: ahausverbrauch,
-		hidden: boolDisplayHouseConsumption,
-		yAxisID: 'y-axis-1',
-	}]
-};
+	var lineChartData = {
+		labels: atime,
+		datasets: [{
+			label: 'Bezug ' + overallbezug + ' kWh',
+			borderColor: "rgba(255, 0, 0, 0.7)",
+			backgroundColor: "rgba(255, 10, 13, 0.3)",
+			borderWidth: 1,
+			fill: true,
+			data: abezug,
+			hidden: boolDisplayEvu,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Einspeisung ' + overalleinspeisung + ' kWh',
+			borderColor: "rgba(0, 255, 105, 0.9)",
+			backgroundColor: "rgba(0, 255, 255, 0.3)",
+			borderWidth: 2,
+			fill: true,
+			data: aeinspeisung,
+			hidden: boolDisplayEvu,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'PV ' + overallpv + ' kWh',
+			borderColor: 'green',
+			backgroundColor: "rgba(10, 255, 13, 0.3)",
+			fill: true,
+			hidden: boolDisplayPv,
+			borderWidth: 1,
+			data: apv,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		}  , {
+			label: 'Speicher I ' + overallspeicheri + ' kWh',
+			borderColor: 'orange',
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: true,
+			borderWidth: 1,
+			data: aspeicheri,
+			hidden: boolDisplaySpeicheri,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Speicher E ' + overallspeichere + ' kWh',
+			borderColor: 'orange',
+			backgroundColor: "rgba(255, 155, 13, 0.3)",
+			fill: true,
+			borderWidth: 1,
+			data: aspeichere,
+			hidden: boolDisplaySpeichere,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp Gesamt ' + overalllpgesamt + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.1)",
+			backgroundColor: "rgba(0, 0, 255, 0.1)",
+			fill: true,
+			borderWidth: 2,
+			data: alpa,
+			hidden: boolDisplayLpAll,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp1 ' + overalllp1 + ' kWh',
+			borderColor: "rgba(0, 0, 255, 0.7)",
+			backgroundColor: "rgba(0, 0, 255, 0.7)",
+			borderWidth: 1,
+			hidden: boolDisplayLp1,
+			fill: false,
+			data: alp1,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp2 ' + overalllp2 + ' kWh',
+			borderColor: "rgba(50, 30, 105, 0.7)",
+			backgroundColor: "rgba(50, 30, 105, 0.7)",
+			borderWidth: 1,
+			hidden: boolDisplayLp2,
+			fill: false,
+			data: alp2,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp3 ' + overalllp3 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: alp3,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp3,
+			lineTension: 0.2
+		} , {
+			label: 'Lp4 ' + overalllp4 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			data: alp4,
+			borderWidth: 2,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp4,
+			lineTension: 0.2
+		} , {
+			label: 'Lp5 ' + overalllp5 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: alp5,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp5,
+			lineTension: 0.2
+		} , {
+			label: 'Lp6 ' + overalllp6 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: alp6,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp6,
+			lineTension: 0.2
+		} , {
+			label: 'Lp7 ' + overalllp7 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: alp7,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp7,
+			lineTension: 0.2
+		} , {
+			label: 'Lp8 ' + overalllp8 + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: alp8,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayLp8,
+			lineTension: 0.2
+		} , {
+			label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
+			borderColor: "rgba(0, 150, 150, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			hidden: boolDisplayLoad1i,
+			data: averbraucher1i,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
+			borderColor: "rgba(0, 150, 150, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			hidden: boolDisplayLoad1e,
+			data: averbraucher1e,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Verbraucher 2 I ' + overallload2i + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: averbraucher2i,
+			hidden: boolDisplayLoad2i,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Verbraucher 2 E ' + overallload2e + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: averbraucher2e,
+			hidden: boolDisplayLoad2e,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: ahausverbrauch,
+			hidden: boolDisplayHouseConsumption,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		}]
+	};
 	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myLine = Chart.Line(ctx, {
+	window.myLine = new Chart(ctx, {
+		type: 'line',
 		data: lineChartData,
 		options: {
 			tooltips: {
 				enabled: true,
 				mode: 'index',
-				      callbacks: {
-	      				label: function(t, d) {
-		               			if ( t.datasetIndex == 6 ) {
+				callbacks: {
+					label: function(t, d) {
+			   			if ( t.datasetIndex == 6 ) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp1wh[t.index] + " kWh";
 						} else if ( t.datasetIndex == 7) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp2wh[t.index] + " kWh";
 						} else {
 							var xLabel = d.datasets[t.datasetIndex].label;
 						}
-		               			var yLabel = t.yLabel;
-		               			return xLabel + ', Wert: ' + yLabel + 'kWh';
-	      				}
-				}
-			},
-			elements: {
-				point: {
-					radius: 4
+			   			var yLabel = t.yLabel;
+			   			return xLabel + ', Wert: ' + yLabel + 'kWh';
+					}
 				}
 			},
 			responsive: true,
@@ -629,78 +540,72 @@ var lineChartData = {
 			stacked: false,
 			legend: {
 				display: boolDisplayLegend,
+				position: 'bottom',
 				labels: {
-				        filter: function(item, chart) {
-						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidelp1)|| item.text.includes(hidespeicheri)|| item.text.includes(hidespeichere) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) { return false } else { return true }	
-				                }
-				        }
+			        filter: function(item, chart) {
+						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidelp1)|| item.text.includes(hidespeicheri)|| item.text.includes(hidespeichere) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
+							return false
+						} else {
+							return true
+						}
+					}
+				}
 			},
 			title: {
 				display: false
 			},
 			scales: {
 				xAxes: [{
-				        type: 'category',
-				}, ],
+					type: 'category'
+				}],
 				yAxes: [{
 					type: 'linear',
 					display: true,
 					position: 'left',
 					id: 'y-axis-1',
-				 
-					  }],
-			
-			
-			},
-			/*
-			pan: {
-			enabled: true,
-			mode: 'x',
-			},
-			zoom: {
-				enabled: true,
-				drag: true,
-				mode: 'x',
-
-			},
-			*/
+					scaleLabel: {
+						display: true,
+						labelString: 'Energie [kWh]',
+						// middle grey, opacy = 100% (visible)
+						fontColor: "rgba(153, 153, 153, 1)"
+					}
+				}]
+			}
 		}
 	});
-document.getElementById("canvas").onclick = function(evt) {
-	var activePoint = myLine.getElementAtEvent(event);
-	if (activePoint.length > 0) {
-		var clickedDatasetIndex = activePoint[0]._datasetIndex;
-	        var clickedElementindex = activePoint[0]._index;
-	        var label = myLine.data.labels[clickedElementindex];
-	        var value = myLine.data.datasets[clickedDatasetIndex].data[clickedElementindex];     
-	        var newloc = "/openWB/web/logging/daily.php?date=" + label;            
-		window.location.href = newloc;
-	 }
-};
+	$('#canvas').click (function(evt) {
+		// on click of datapoint, jump to day view
+		var activePoint = myLine.getElementAtEvent(event);
+		if (activePoint.length > 0) {
+			var clickedElementindex = activePoint[0]._index;
+			var jumpToDate = myLine.data.labels[clickedElementindex];
+			window.location.href = "daily.php?date=" + jumpToDate;
+		}
+	});
 
+	initialread = 1;
+	$('#waitforgraphloadingdiv').hide();
+}
 
-initialread = 1;
-$('#loadlivegraph').hide();
-};			
 function checkgraphload(){
 	if ( graphloaded == 1) {
-       		myLine.destroy();
+       	myLine.destroy();
 		loadgraph();
 	} else {
+		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
+			if ( initialread != 0 ) {
+				if ( graphloaded == 0) {
+					loadgraph();
+					graphloaded += 1;
+				} else {
+			       	myLine.destroy();
+					loadgraph();
+				}
+		 	}
+		}
+	}
+}
 
-	if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-		if ( initialread != 0 ) {
-			if ( graphloaded == 0) {
-				loadgraph();
-				graphloaded += 1;
-			} else {
-		       		myLine.destroy();
-				loadgraph();
-			}
-	 	}
-	}
-	}
-};
 function showhidedataset(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("1","openWB/graph/"+thedataset);
@@ -710,6 +615,7 @@ function showhidedataset(thedataset) {
 		publish("1","openWB/graph/"+thedataset);
 	}
 }
+
 function showhidelegend(thedataset) {
 	if ( window[thedataset] == true ) {
 		publish("0","openWB/graph/"+thedataset);
@@ -719,6 +625,7 @@ function showhidelegend(thedataset) {
 		publish("0","openWB/graph/"+thedataset);
 	}
 }
+
 function showhide(thedataset) {
 	if ( window[thedataset] == 0 ) {
 		publish("1","openWB/graph/"+thedataset);
@@ -728,4 +635,3 @@ function showhide(thedataset) {
 		publish("1","openWB/graph/"+thedataset);
 	}
 }
-
