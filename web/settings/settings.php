@@ -41,6 +41,9 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+			
+	
+
 				if(strpos($line, "mollp1moab=") !== false) {
 					list(, $mollp1moabold) = explode("=", $line);
 				}
@@ -2058,6 +2061,18 @@
 							Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.<br><br>
 						</div>
 					</div>
+					<div class="row" style="background-color:#ffffcc">
+						<div class="col">
+							<b><label for="lastmmaxw">Lastmanagement maximaler Bezug:</label></b>
+							<input type="text" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>"><br>
+						</div>
+					</div>
+					<div class="row" style="background-color:#ffffcc">
+						<div class="col">
+							Gültige Werte 2000-200000. Definiert die maximal erlaubten bezogenen Watt des Hausanschlusses im Sofort Laden Modus, sofern die Bezugsleistung bekannt ist.<br><br>
+						</div>
+					</div>
+
 
 					<div class="row"><hr>
 						<div class="col">
