@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<title>Autolock</title>
+	</head>
+	<body>
 <?php
 
 	// writes settings from autolock-page via POST-request to config file
@@ -53,20 +59,21 @@
 		}  // end foreach POST value
 
 		// write config to file
-  		$fp = fopen($myConfigFile, "w");
+		$fp = fopen($myConfigFile, "w");
 		if ( !$fp ) {
 			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
-  		}
+		}
 		foreach($settingsArray as $key => $value) {
 			fwrite($fp, $key.'='.$value."\n");
 		}
-  		// send success write to config
+		// send success write to config
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
-  		echo "<script type='text/javascript'>alert('$msg');</script>";
-    } finally {
+		echo "<script>alert('$msg');</script>";
+	} finally {
 		fclose($fp);
-	 	echo "<script>window.location.href='../index.php';</script>";
+		echo "<script>window.location.href='../index.php';</script>";
 	}
-
 ?>
+	</body>
+</html>
