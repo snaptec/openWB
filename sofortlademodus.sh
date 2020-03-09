@@ -236,7 +236,6 @@ else
 		maxdiffw=$(( lastmmaxw - wattbezug ))
 		maxdiffwa=$(( maxdiffw / 230 ))
 		maxdiffwa=$(( maxdiffwa - 2 ))
-		echo "--maxdiffw $maxdiffw maxdiffwa $maxdiffwa"
 
 		if (( maxdiffwa > maxdiff )); then
 			maxdiff=$maxdiff
@@ -1037,10 +1036,8 @@ else
 				maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
 			fi
 			echo "Lastmanagement aktiv (Leistung), Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-			echo "---- wattzuviel $wattzuviel - amperezuviel $amperezuviel - maxdiff $maxdiff"
 
 		fi
-		echo "-- llalt $llalt - llalts1 $llalts1"
 		llneu=$((llalt - maxdiff))
 		llneus1=$((llalts1 - maxdiff))
 		if [[ $lastmanagements2 == "1" ]]; then
