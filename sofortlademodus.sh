@@ -33,6 +33,9 @@ if (( awattaraktiv == 1 )); then
 
 	fi
 fi
+if (( lastmmaxw < 10 ));then
+	lastmmaxw=40000
+fi
 aktgeladen=$(<ramdisk/aktgeladen)
 #mit einem Ladepunkt
 if [[ $lastmanagement == "0" ]]; then
@@ -220,7 +223,7 @@ else
 	if (( ladeleistunglp8 > 100)); then activechargepoints=$((activechargepoints + 1)); fi
 	#mit mehr als einem ladepunkt
 	aktgeladens1=$(<ramdisk/aktgeladens1)
-	if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
+	if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )) && (( wattbezug < lastmmaxw )); then
 		evudiff1=$((lastmaxap1 - evua1 ))
 		evudiff2=$((lastmaxap2 - evua2 ))
 		evudiff3=$((lastmaxap3 - evua3 ))
@@ -230,9 +233,25 @@ else
 			if (( v < maxdiff )); then maxdiff=$v; fi;
 		done
 		maxdiff=$((maxdiff - 1 ))
+		maxdiffw=$(( lastmmaxw - wattbezug ))
+		maxdiffwa=$(( maxdiffw / 230 ))
+		maxdiffwa=$(( maxdiffwa - 2 ))
+
+		if (( maxdiffwa > maxdiff )); then
+			maxdiff=$maxdiff
+			echo "Ampere beschränkt"
+		else
+			maxdiff=$maxdiffwa
+			echo "Leistung beschränkt"
+		fi
+		if (( maxdiff < 0 )); then
+			maxdiff=0
+		fi
+
 		if (( activechargepoints > 1 )); then
 			maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
 		fi
+
 		#Ladepunkt 1
 		if (( sofortsocstatlp1 == "1" )); then
 			if (( soc > sofortsoclp1 )); then
@@ -995,19 +1014,30 @@ else
 
 	exit 0
 	else
-		evudiff1=$((evua1 - lastmaxap1 ))
-		evudiff2=$((evua2 - lastmaxap2 ))
-		evudiff3=$((evua3 - lastmaxap3 ))
-		evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-		maxdiff=0
-		for v in "${evudiffmax[@]}"; do
-			if (( v > maxdiff )); then maxdiff=$v; fi;
-		done
-		maxdiff=$((maxdiff + 1 ))
-		if (( activechargepoints > 1 )); then
-			maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
+		if (( wattbezug < lastmmaxw )); then
+			evudiff1=$((evua1 - lastmaxap1 ))
+			evudiff2=$((evua2 - lastmaxap2 ))
+			evudiff3=$((evua3 - lastmaxap3 ))
+			evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+			maxdiff=0
+			for v in "${evudiffmax[@]}"; do
+				if (( v > maxdiff )); then maxdiff=$v; fi;
+			done
+			maxdiff=$((maxdiff + 1 ))
+			if (( activechargepoints > 1 )); then
+				maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
+			fi
+			echo "Lastmanagement aktiv (Ampere), Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+		else
+			wattzuviel=$((wattbezug - lastmmaxw))
+			amperezuviel=$(( wattzuviel / 230 ))
+			maxdiff=$((amperezuviel + 2 ))
+			if (( activechargepoints > 1 )); then
+				maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
+			fi
+			echo "Lastmanagement aktiv (Leistung), Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+
 		fi
-		echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 		llneu=$((llalt - maxdiff))
 		llneus1=$((llalts1 - maxdiff))
 		if [[ $lastmanagements2 == "1" ]]; then
@@ -1095,8 +1125,8 @@ else
 			fi
 		fi
 		if (( sofortsoctatlp2 == 0)) && (( lademstats1 == 0));then
-			runs/set-current.sh "$llneu" s1
-			echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+			runs/set-current.sh "$llneus1" s1
+			echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 		fi
 		if [[ $lastmanagements2 == "1" ]]; then
 			aktgeladens2=$(<ramdisk/aktgeladens2)

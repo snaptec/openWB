@@ -1,5 +1,6 @@
 <?php
 if(isset($_POST['minimalstromstaerke'])) {
+
 	$result = '';
 	$lines = file('/var/www/html/openWB/openwb.conf');
 	foreach($lines as $line) {
