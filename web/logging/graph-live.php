@@ -82,7 +82,6 @@ if ($speichervorhanden == 1) {
 	$myData->setPalette("Speicher",array("R"=>252,"G"=>190,"B"=>50));
 	$myData->setSerieOnAxis("Speicher SoC",1);
 	$myData->setPalette("Speicher SoC",array("R"=>152,"G"=>190,"B"=>50));
-
 }
 $myData->addPoints($timef,"Labels");
 $myData->setSerieOnAxis("Labels",0);
@@ -92,16 +91,14 @@ $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 $myData->setAxisName(0,"kW");
 $myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
 
-
 $AxisBoundaries = array(0=>array("Min"=>$lowestg,"Max"=>$highest),1=>array("Min"=>$soc1,"Max"=>$hsocmaxxx));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>10,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>100);
 $myImage = new pImage(950, 400, $myData);
 $myImage->setFontProperties(array(
-    "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
-    "FontSize" => 16));
+	"FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+	"FontSize" => 16));
 $myImage->setGraphArea(75,25, 895,375);
 $myImage->drawScale($ScaleSettings);
-
 
 $myData->setSerieDrawable("PV",false);
 $myData->setSerieDrawable("EVU",false);
@@ -109,8 +106,6 @@ if ($speichervorhanden == 1) {
 	$myData->setSerieDrawable("Speicher",true);
 }
 $myImage->drawLegend(260,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
-
-
 
 $myImage->drawLineChart();
 if ($speichervorhanden == 1) {
@@ -126,10 +121,7 @@ $myData->setSerieDrawable("EV",false);
 $myData->setSerieDrawable("EVU",true);
 $myImage->drawAreaChart();
 
-
 $myImage->drawLegend(160,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
-
-
 
 header("Content-Type: image/png");
 $myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');

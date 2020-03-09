@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 
 	<head>
 		<meta charset="UTF-8">
@@ -67,9 +68,9 @@
 		</div>
 
 		<footer class="footer bg-dark text-light font-small">
-		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Logging/Jahr</small>
-		  </div>
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Logging/Jahr</small>
+			</div>
 		</footer>
 
 		<!-- load Chart.js library -->

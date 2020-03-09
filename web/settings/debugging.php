@@ -9,7 +9,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>OpenWB</title>
 		<meta name="description" content="Control your charge" />
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -35,7 +34,6 @@
 	</head>
 
 	<body>
-
 		<?php
 
 			include '/var/www/html/openWB/web/settings/navbar.php';
@@ -54,9 +52,7 @@
 			}
 
 		?>
-
 		<div role="main" class="container" style="margin-top:20px">
-
 			<div class="row">
 				<div class="col">
 					<h1>Debug-Modus</h1>
@@ -125,8 +121,8 @@
 						</div>
 					</div>
 					<div class="col-auto">
-      					<button type="submit" class="btn btn-green mb-2">Absenden</button>
-    				</div>
+						<button type="submit" class="btn btn-green mb-2">Absenden</button>
+					</div>
 				</div>
 			</form>
 
@@ -135,12 +131,12 @@
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
-		  <div class="container text-center">
-			  <small>Sie befinden sich hier: System/Debugging</small>
-		  </div>
+			<div class="container text-center">
+				<small>Sie befinden sich hier: System/Debugging</small>
+			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$(document).ready(function(){
 

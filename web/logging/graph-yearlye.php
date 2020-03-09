@@ -4,7 +4,7 @@ require_once "/var/www/html/openWB/web/class/pDraw.class.php";
 require_once "/var/www/html/openWB/web/class/pImage.class.php";
 require_once "/var/www/html/openWB/web/class/pData.class.php";
 
-$monthdate = $_GET[thedate];
+$monthdate = $_GET['thedate'];
 //$monthdate = "2019";
 //$monthdate = date("Y", strtotime($monthdate));
 $ll1arf = array();
@@ -48,10 +48,6 @@ foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-dat
 	$timefarf = array_merge($timefarf, $timefar);
 }
 
-
-
-
-
 $rll1 = $ll1arf;
 $rll2 = $ll2arf;
 $rll3 = $ll3arf;
@@ -63,34 +59,31 @@ $rtimef = array_reverse($timefarf);
 
 $anzahl = count($timefarf);
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = floor(($rbezug[$x-1] - $rbezug[$x]) * -1);
+	$bezugdiff[$x] = floor(($rbezug[$x-1] - $rbezug[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $timefk[$x] = substr($rtimef[$x], 6);
+	$timefk[$x] = substr($rtimef[$x], 6);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = floor(($rpv[$x-1] - $rpv[$x]) * -1);
+	$pvdiff[$x] = floor(($rpv[$x-1] - $rpv[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = floor(($reinspeisung[$x-1] - $reinspeisung[$x]) * -1);
+	$einspeisungdiff[$x] = floor(($reinspeisung[$x-1] - $reinspeisung[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = floor(($rllg[$x-1] - $rllg[$x]) * -1);
+	$llgdiff[$x] = floor(($rllg[$x-1] - $rllg[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = floor(($rll1[$x-1] - $rll1[$x]) * -1);
+	$ll1diff[$x] = floor(($rll1[$x-1] - $rll1[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = floor(($rll2[$x-1] - $rll2[$x]) * -1);
+	$ll2diff[$x] = floor(($rll2[$x-1] - $rll2[$x]) * -1);
 }
 for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = floor(($rll3[$x-1] - $rll3[$x]) * -1);
+	$ll3diff[$x] = floor(($rll3[$x-1] - $rll3[$x]) * -1);
 }
-
 
 for ($x = 0; $x < $anzahl; $x++){
 	$line = $timefarf[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . "0" . "," . "0" . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . PHP_EOL;
 	print($line);
 }
-
-

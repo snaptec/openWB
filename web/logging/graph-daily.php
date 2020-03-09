@@ -14,7 +14,7 @@ foreach($lines as $line) {
 		list(, $logeinspeisungneg) = explode("=", $line);
 	}
 }
-$daydate1 = $_GET[thedate];
+$daydate1 = $_GET['thedate'];
 $daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
 $ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';
@@ -83,69 +83,69 @@ $reinspeisung = array_reverse($einspeisung);
 $anzahl = count($timef);
 
 if ($logdailywh == 1) {
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = $rbezug[$x-1] - $rbezug[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = $rpv[$x-1] - $rpv[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = $rllg[$x-1] - $rllg[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = $rll1[$x-1] - $rll1[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = $rll2[$x-1] - $rll2[$x];
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x];
-}
-if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = $rspeicheriwh[$x-1] - $rspeicheriwh[$x];
+		$bezugdiff[$x] = $rbezug[$x-1] - $rbezug[$x];
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = $rspeicherewh[$x-1] - $rspeicherewh[$x];
+		$pvdiff[$x] = $rpv[$x-1] - $rpv[$x];
 	}
-}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$llgdiff[$x] = $rllg[$x-1] - $rllg[$x];
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll1diff[$x] = $rll1[$x-1] - $rll1[$x];
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll2diff[$x] = $rll2[$x-1] - $rll2[$x];
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll3diff[$x] = $rll3[$x-1] - $rll3[$x];
+	}
+	if ($speichervorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicheriwhdiff[$x] = $rspeicheriwh[$x-1] - $rspeicheriwh[$x];
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicherewhdiff[$x] = $rspeicherewh[$x-1] - $rspeicherewh[$x];
+		}
+	}
 } else {
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = $rbezug[$x-1] * 12 - $rbezug[$x] * 12;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = $rpv[$x-1] * 12 - $rpv[$x] * 12;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	if ($logeinspeisungneg == 1) {
-	$einspeisungdiff[$x] = ($reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12) * -1;    
-	} else {
-	$einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;
-	}
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = $rllg[$x-1] * 12 - $rllg[$x] * 12;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = $rll1[$x-1] * 12 - $rll1[$x] * 12;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = $rll2[$x-1] * 12 - $rll2[$x] * 12;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] * 12 - $rll3[$x] * 12;
-}
-if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = $rspeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12;
+		$bezugdiff[$x] = $rbezug[$x-1] * 12 - $rbezug[$x] * 12;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = $rspeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12;
+		$pvdiff[$x] = $rpv[$x-1] * 12 - $rpv[$x] * 12;
 	}
-}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		if ($logeinspeisungneg == 1) {
+			$einspeisungdiff[$x] = ($reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12) * -1;    
+		} else {
+			$einspeisungdiff[$x] = $reinspeisung[$x-1] * 12 - $reinspeisung[$x] * 12;
+		}
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$llgdiff[$x] = $rllg[$x-1] * 12 - $rllg[$x] * 12;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll1diff[$x] = $rll1[$x-1] * 12 - $rll1[$x] * 12;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll2diff[$x] = $rll2[$x-1] * 12 - $rll2[$x] * 12;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll3diff[$x] = $rll3[$x-1] * 12 - $rll3[$x] * 12;
+	}
+	if ($speichervorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicheriwhdiff[$x] = $rspeicheriwh[$x-1] * 12 - $rspeicheriwh[$x] * 12;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicherewhdiff[$x] = $rspeicherewh[$x-1] * 12 - $rspeicherewh[$x] * 12;
+		}
+	}
 }
 
 $myData = new pData();
@@ -165,9 +165,6 @@ if ($speichervorhanden == 1) {
 	$myData->setSerieOnAxis("Speicher Entladung ".$dailysewh,0);
 	$myData->setPalette("Speicher Ladung ".$dailysiwh,array("R"=>252,"G"=>190,"B"=>50));
 	$myData->setPalette("Speicher Entladung ".$dailysewh,array("R"=>190,"G"=>252,"B"=>50));
-
-
-
 }
 if ($soc1vorhanden == 1) {
 	$myData->addPoints($soc1,"SoC LP2");
@@ -223,26 +220,20 @@ $myData->setAbscissa("Labels");
 $myData->setAxisPosition(1,AXIS_POSITION_RIGHT);
 
 if ($logdailywh == 1) {
-$myData->setAxisName(0,"Wh");
+	$myData->setAxisName(0,"Wh");
 } else {
-$myData->setAxisName(0,"kW");
-$myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
-
-
+	$myData->setAxisName(0,"kW");
+	$myData->setAxisDisplay(0,AXIS_FORMAT_CUSTOM,"YAxisFormat");
 }
 $myData->setAxisName(1,"SoC");
 
-
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>$minsoc,"Max"=>$maxsoc));
 $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"=>128,"GridTicks"=>0,"GridAlpha"=>10,"DrawXLines"=>FALSE,"Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>20);
- 
-
 
 $myImage = new pImage(1000, 300, $myData);
 $myImage->setFontProperties(array(
-    "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
-    "FontSize" => 18));
-
+	"FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+	"FontSize" => 18));
 
 $myImage->setGraphArea(95,25, 895,275);
 
@@ -253,12 +244,11 @@ $myData->setSerieDrawable("Bezug ".$dailybezug,false);
 $myData->setSerieDrawable("PV ".$dailypv,false);
 $myImage->drawLineChart();
 if ($speichervorhanden == 1) {
-$myData->setSerieDrawable("Speicher Ladung ".$dailysiwh,false);
-$myData->setSerieDrawable("Speicher Entladung ".$dailysewh,false);
-
+	$myData->setSerieDrawable("Speicher Ladung ".$dailysiwh,false);
+	$myData->setSerieDrawable("Speicher Entladung ".$dailysewh,false);
 }
 if ($soc1vorhanden == 1) {
-$myData->setSerieDrawable("SoC LP2",false);
+	$myData->setSerieDrawable("SoC LP2",false);
 }
 $myData->setSerieDrawable("SoC",false);
 $myData->setSerieDrawable("PV ".$dailypv,true);
@@ -274,7 +264,7 @@ $myData->setSerieDrawable("EV ".$dailyev,true);
 $myImage->drawLegend(325,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 
 if ($soc1vorhanden == 1) {
-$myData->setSerieDrawable("SoC LP2",true);
+	$myData->setSerieDrawable("SoC LP2",true);
 }
 $myData->setSerieDrawable("SoC",true);
 $myData->setSerieDrawable("PV ".$dailypv,false);
@@ -284,9 +274,6 @@ $myData->setSerieDrawable("EV LP3",false);
 $myData->setSerieDrawable("EV ".$dailyev,false);
 $myData->setSerieDrawable("Bezug ".$dailybezug,false);
 $myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
-
-
-
 
 $myImage->drawLegend(170,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
 if ($speichervorhanden == 1) {
@@ -304,7 +291,6 @@ if ($speichervorhanden == 1) {
 	$myData->setSerieDrawable("Bezug ".$dailybezug,false);
 	$myData->setSerieDrawable("Einspeisung ".$dailyeinspeisung,false);
 	$myImage->drawLegend(220,42,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL, "Family"=>LEGEND_FAMILY_LINE));
-
 }
 
 header("Content-Type: image/png");
