@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
 
 $monthdate = $_GET['thedate'];
 $monthdate = date("Ym", strtotime($monthdate));
-$llgfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-llg.csv';
-$timefile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-date.csv';
+$llgfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-llg.csv';
+$timefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-date.csv';
 
 $timef = file($timefile, FILE_IGNORE_NEW_LINES);
 $llg = file($llgfile, FILE_IGNORE_NEW_LINES);
@@ -39,7 +39,7 @@ $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"
 
 $myImage = new pImage(1150, 400, $myData);
 $myImage->setFontProperties(array(
-	"FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+	"FontName" => $_SERVER['DOCUMENT_ROOT']."/openWB/web/fonts/GeosansLight.ttf",
 	"FontSize" => 12));
 
 $myImage->setGraphArea(105,25, 1095,375);

@@ -1,24 +1,24 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
-$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
-$evufile = '/var/www/html/openWB/ramdisk/evu-live.graph';
-$pvfile = '/var/www/html/openWB/ramdisk/pv-live.graph';
-$evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
-$timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
-$socfile = '/var/www/html/openWB/ramdisk/soc-live.graph';
-$ev1file = '/var/www/html/openWB/ramdisk/ev1-live.graph';
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
+$speichervorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichervorhanden');
+$soc1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1vorhanden');
+$evufile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/evu-live.graph';
+$pvfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/pv-live.graph';
+$evfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/ev-live.graph';
+$timefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/time-live.graph';
+$socfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc-live.graph';
+$ev1file = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/ev1-live.graph';
 
 if ($speichervorhanden == 1) {
-	$speicherfile = '/var/www/html/openWB/ramdisk/speicher-live.graph';
-	$speichersocfile = '/var/www/html/openWB/ramdisk/speichersoc-live.graph';
+	$speicherfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speicher-live.graph';
+	$speichersocfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichersoc-live.graph';
 }
 if ($soc1vorhanden == 1) {
-	$soc1file = '/var/www/html/openWB/ramdisk/soc1-live.graph';
-	$ev2file = '/var/www/html/openWB/ramdisk/ev2-live.graph';
+	$soc1file = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1-live.graph';
+	$ev2file = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/ev2-live.graph';
 }
 $EV = file($evfile, FILE_IGNORE_NEW_LINES);
 $EV1 = file($ev1file, FILE_IGNORE_NEW_LINES);
@@ -125,7 +125,7 @@ $height = 200;
 
 $myImage = new pImage($width, $height, $myData);
 $myImage->setFontProperties(array(
-    "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+    "FontName" => $_SERVER['DOCUMENT_ROOT']."/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 18));
 $myImage->setGraphArea(80,25,1010,175);
 // set background gradient
@@ -160,5 +160,5 @@ $myImage->drawAreaChart();
 
 
 header("Content-Type: image/png");
-$myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');
+$myImage->autoOutput($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/chart-m.png');
 function YAxisFormat($Value) { return(round($Value/1000,2)); }

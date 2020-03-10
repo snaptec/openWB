@@ -23,7 +23,7 @@ if ($uploadOk == 0) {
 	}
 }
 sleep(5);
-exec("/var/www/html/openWB/runs/restore.sh >> /var/www/html/openWB/web/tools/upload/restore.log");
+exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/restore.sh >> ".$_SERVER['DOCUMENT_ROOT']."/openWB/web/tools/upload/restore.log");
 ?>
 		<script type="text/javascript">
 			setTimeout(function() { window.location = "../index.php"; }, 15000);

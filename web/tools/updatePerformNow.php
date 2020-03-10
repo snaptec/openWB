@@ -1,3 +1,3 @@
 <?php
-exec("/var/www/html/openWB/runs/update.sh > /dev/null &");
+exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/update.sh > /dev/null &");
 ?>

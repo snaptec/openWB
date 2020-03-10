@@ -7,7 +7,7 @@ class Ajaxloader{
 	//Init
 	function __construct(){
 		$call = $_POST['call'];
-		$text = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
+		$text = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/lademodus');
 
 		if($call == "loadfile"){
 			$result = $text;

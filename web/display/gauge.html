@@ -519,7 +519,7 @@ if ( $displaythemeold == 0 ) { echo '
 <div id="dergraph">
 <?php
 	$result = '';
-	$lines = file('/var/www/html/openWB/openwb.conf');
+	$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 	foreach($lines as $line) {
 		if(strpos($line, "grapham=") !== false) {
 			list(, $graphamold) = explode("=", $line);
@@ -548,11 +548,11 @@ if ( $displaythemeold == 0 ) { echo '
 
 	}
     
-	$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-	$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
-	$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
-	$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
-	$verbraucher3vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher3vorhanden');
+	$speichervorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichervorhanden');
+	$soc1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1vorhanden');
+	$verbraucher1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/verbraucher1vorhanden');
+	$verbraucher2vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/verbraucher2vorhanden');
+	$verbraucher3vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/verbraucher3vorhanden');
 	$verbraucher1_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher1_nameold));
 	$verbraucher2_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher2_nameold));
 	$verbraucher3_nameold = trim(preg_replace('/\s+/', ' ', $verbraucher3_nameold));

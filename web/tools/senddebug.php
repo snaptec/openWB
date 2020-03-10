@@ -3,7 +3,7 @@ $result = '';
 
 if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL)) {
 	$result = $_POST['debugMessage'] . "\n" . $_POST['emailAddress'] . "\n";
-	file_put_contents('/var/www/html/openWB/ramdisk/debuguser', $result);
+	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debuguser', $result);
 	header("Location: ./debugredirect.html");
 } else {
 	header ("Refresh: 10; ../index.php");

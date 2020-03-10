@@ -42,7 +42,7 @@
 
 	<body>
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.php';?>
+		<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/navbar.php';?>
 		<?php
 			// support function for dynmic built of carousel content
 			function dir_list($rootDir){
@@ -57,7 +57,7 @@
 				return $dirList;
 			}
 			// call function to read all directories to $allThemes
-			$allThemes = dir_list('/var/www/html/openWB/web/themes');
+			$allThemes = dir_list($_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes');
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">

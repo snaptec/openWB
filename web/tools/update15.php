@@ -6,7 +6,7 @@
 	<body>
 		<p>Update wird durchgeführt, bitte nicht vom Strom trennen.</p>
 <?php
-exec("/var/www/html/openWB/runs/update15.sh > /dev/null &");
+exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/update15.sh > /dev/null &");
 ?>
 		<script>
 			setTimeout(function() { window.location.href = "../index.php"; }, 30000);

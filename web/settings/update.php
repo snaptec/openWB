@@ -36,10 +36,10 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/navbar.php';
 
 			// read selected releasetrain from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "releasetrain=") !== false) {
 					list(, $releasetrain) = explode("=", $line);

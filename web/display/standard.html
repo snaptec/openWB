@@ -100,7 +100,7 @@ echo '
 	</div>
 	<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 		<!-- if soc date of file is to old display it in grey -->
-		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc') > 1800) {
+		<?php if (time()-filemtime($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc') > 1800) {
 		echo '<span style="color: grey"><span id="soclevel"></span>% SoC </span>';
 		} else {
 		echo '<span id="soclevel"></span>% SoC';
@@ -118,7 +118,7 @@ echo '
 	</div>
 	<div class="col-xs-4 text-center" style="background-color:#00ffed;font-size: 2vw">
 		<!-- if soc date of file is to old display it in grey -->
-		<?php if (time()-filemtime('/var/www/html/openWB/ramdisk/soc1') > 1800) {
+		<?php if (time()-filemtime($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1') > 1800) {
 		echo '<span style="color: grey"><span id="soc1level"></span>% SoC </span>';
 		} else {
 		echo '<span id="soc1level"></span>% SoC';

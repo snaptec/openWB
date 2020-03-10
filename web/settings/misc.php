@@ -38,9 +38,9 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/navbar.php';
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "netzabschaltunghz=") !== false) {
 					list(, $netzabschaltunghzold) = explode("=", $line);
@@ -561,7 +561,7 @@
 			$hsocipold = str_replace( "'", "", $hsocipold);
 			$pushoveruserold = str_replace( "'", "", $pushoveruserold);
 			$pushovertokenold = str_replace( "'", "", $pushovertokenold);
-			$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
+			$lastrfid = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/rfidlasttag');
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">

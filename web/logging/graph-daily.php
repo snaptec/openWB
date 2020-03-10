@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
-$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
-$lines = file('/var/www/html/openWB/openwb.conf');
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
+$speichervorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichervorhanden');
+$soc1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1vorhanden');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "logdailywh=") !== false) {
 		list(, $logdailywh) = explode("=", $line);
@@ -16,18 +16,18 @@ foreach($lines as $line) {
 }
 $daydate1 = $_GET['thedate'];
 $daydate = date("Ymd", strtotime($daydate1));
-$ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
-$ll2file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';
-$ll3file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll3.csv';
-$llgfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-llg.csv';
-$pvfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-pv.csv';
-$bezugfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-bezug.csv';
-$einspeisungfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-einspeisung.csv';
-$timefile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-date.csv';
-$socfile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-soc.csv';
+$ll1file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
+$ll2file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-ll2.csv';
+$ll3file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-ll3.csv';
+$llgfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-llg.csv';
+$pvfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-pv.csv';
+$bezugfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-bezug.csv';
+$einspeisungfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-einspeisung.csv';
+$timefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-date.csv';
+$socfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-soc.csv';
 if ($speichervorhanden == 1) {
-	$speicherifile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-speicheriwh.csv';
-	$speicherefile = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-speicherewh.csv';
+	$speicherifile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-speicheriwh.csv';
+	$speicherefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-speicherewh.csv';
 	$speicheriwh = file($speicherifile, FILE_IGNORE_NEW_LINES);
 	$speicherewh = file($speicherefile, FILE_IGNORE_NEW_LINES);
 	$firstsiwh = reset($speicheriwh);
@@ -41,7 +41,7 @@ if ($speichervorhanden == 1) {
 
 }
 if ($soc1vorhanden == 1) {
-	$soc1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-soc1.csv';
+	$soc1file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/daily/'.$daydate.'-soc1.csv';
 	$soc1 = file($soc1file, FILE_IGNORE_NEW_LINES);
 }
 
@@ -232,7 +232,7 @@ $ScaleSettings  = array("DrawYLines"=>array(0),"GridR"=>128,"GridG"=>128,"GridB"
 
 $myImage = new pImage(1000, 300, $myData);
 $myImage->setFontProperties(array(
-	"FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+	"FontName" => $_SERVER['DOCUMENT_ROOT']."/openWB/web/fonts/GeosansLight.ttf",
 	"FontSize" => 18));
 
 $myImage->setGraphArea(95,25, 895,275);

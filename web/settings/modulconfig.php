@@ -42,9 +42,9 @@
 		</script>
 
 		<?php
-			include '/var/www/html/openWB/web/settings/navbar.php';
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/navbar.php';
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "wrsunwaysip=") !== false) {
 					list(, $wrsunwaysipold) = explode("=", $line);

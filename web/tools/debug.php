@@ -9,7 +9,7 @@
 			Die Daten werden automatisch verschickt. Automatische Weiterleitung nach dem Verschicken.
 		</p>
 <?php
-	exec("/var/www/html/openWB/runs/senddebuginit.sh");
+	exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/senddebuginit.sh");
 ?>
 		<script>
 			setTimeout(function() { window.location = "../index.php"; }, 500);

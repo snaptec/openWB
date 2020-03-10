@@ -9,10 +9,10 @@
 			Änderung grundsätzlich nicht nötig!
 		</h1>
 <?php
-$lp12000 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp12000');
-$lp12007 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp12007');
-$lp22000 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp22000');
-$lp22007 = file_get_contents('/var/www/html/openWB/ramdisk/progevsedinlp22007');
+$lp12000 = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/progevsedinlp12000');
+$lp12007 = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/progevsedinlp12007');
+$lp22000 = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/progevsedinlp22000');
+$lp22007 = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/progevsedinlp22007');
 ?>
 		<hr>
 		<form action="tools/changeevseconfig.php" method="post">

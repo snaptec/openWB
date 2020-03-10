@@ -64,7 +64,7 @@
 			$dayOfWeek;  // Mo = 1, ..., So = 7
 
 			// first read config-lines in array
-			$settingsFile = file('/var/www/html/openWB/openwb.conf');
+			$settingsFile = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			// prepare key/value array
 			$settingsArray = [];
 
@@ -216,7 +216,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
+		<?php include $_SERVER['DOCUMENT_ROOT']."/openWB/web/settings/navbar.php"; ?>
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">

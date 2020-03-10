@@ -1,7 +1,7 @@
 <?php
 if(isset($_POST['lademlp1'])) {
 	$result = '';
-	$lines = file('/var/www/html/openWB/openwb.conf');
+	$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 	foreach($lines as $line) {
 		$writeit = '0';
 
@@ -98,7 +98,7 @@ if(isset($_POST['lademlp1'])) {
 			$result .= $line;
 		}
 	}
-	file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf', $result);
 }
 header("Location: ../index.php");
 ?>

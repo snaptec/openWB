@@ -1,19 +1,19 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
 
 $monthdate = $_GET['thedate'];
 $monthdate = date("Ym", strtotime($monthdate));
-$ll1file = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-ll1.csv';
-$ll2file = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-ll2.csv';
-$ll3file = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-ll3.csv';
-$llgfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-llg.csv';
-$pvfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-pv.csv';
-$bezugfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-bezug.csv';
-$einspeisungfile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-einspeisung.csv';
-$timefile = '/var/www/html/openWB/web/logging/data/monthly/'.$monthdate.'-date.csv';
+$ll1file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-ll1.csv';
+$ll2file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-ll2.csv';
+$ll3file = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-ll3.csv';
+$llgfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-llg.csv';
+$pvfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-pv.csv';
+$bezugfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-bezug.csv';
+$einspeisungfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-einspeisung.csv';
+$timefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/logging/data/monthly/'.$monthdate.'-date.csv';
 
 $bezug = file($bezugfile, FILE_IGNORE_NEW_LINES);
 $einspeisung = file($einspeisungfile, FILE_IGNORE_NEW_LINES);

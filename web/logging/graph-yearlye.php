@@ -1,49 +1,49 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
 
 $monthdate = $_GET['thedate'];
 //$monthdate = "2019";
 //$monthdate = date("Y", strtotime($monthdate));
 $ll1arf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-ll1.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-ll1.csv") as $filename) {
 	$ll1ar = file($filename, FILE_IGNORE_NEW_LINES);
 	$ll1arf = array_merge($ll1arf, $ll1ar);
 }
 $ll2arf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-ll2.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-ll2.csv") as $filename) {
 	$ll2ar = file($filename, FILE_IGNORE_NEW_LINES);
 	$ll2arf = array_merge($ll2arf, $ll2ar);
 }
 $ll3arf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-ll3.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-ll3.csv") as $filename) {
 	$ll3ar = file($filename, FILE_IGNORE_NEW_LINES);
 	$ll3arf = array_merge($ll3arf, $ll3ar);
 }
 $llgarf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-llg.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-llg.csv") as $filename) {
 	$llgar = file($filename, FILE_IGNORE_NEW_LINES);
 	$llgarf = array_merge($llgarf, $llgar);
 }
 $pvarf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-pv.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-pv.csv") as $filename) {
 	$pvar = file($filename, FILE_IGNORE_NEW_LINES);
 	$pvarf = array_merge($pvarf, $pvar);
 }
 $bezugarf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-bezug.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-bezug.csv") as $filename) {
 	$bezugar = file($filename, FILE_IGNORE_NEW_LINES);
 	$bezugarf = array_merge($bezugarf, $bezugar);
 }
 $einspeisungarf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-einspeisung.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-einspeisung.csv") as $filename) {
 	$einspeisungar = file($filename, FILE_IGNORE_NEW_LINES);
 	$einspeisungarf = array_merge($einspeisungarf, $einspeisungar);
 }
 $timefarf = array();
-foreach (glob("/var/www/html/openWB/web/logging/data/monthly/".$monthdate."*-date.csv") as $filename) {
+foreach (glob($_SERVER['DOCUMENT_ROOT']."/openWB/web/logging/data/monthly/".$monthdate."*-date.csv") as $filename) {
 	$timefar = file($filename, FILE_IGNORE_NEW_LINES);
 	$timefarf = array_merge($timefarf, $timefar);
 }

@@ -1,6 +1,6 @@
 <?php
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "awattaraktiv=") !== false) {
 		list(, $awattaraktivold) = explode("=", $line);
@@ -158,18 +158,18 @@ foreach($lines as $line) {
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
-$lastregelungaktiv = file_get_contents('/var/www/html/openWB/ramdisk/lastregelungaktiv');
-$lademodusold = file_get_contents('/var/www/html/openWB/ramdisk/lademodus');
+$lastregelungaktiv = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/lastregelungaktiv');
+$lademodusold = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/lademodus');
 $lp1nameold = str_replace( "'", "", $lp1nameold);
 $lp2nameold = str_replace( "'", "", $lp2nameold);
 $lp3nameold = str_replace( "'", "", $lp3nameold);
-$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
-$soc1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/soc1vorhanden');
-$verbraucher1vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher1vorhanden');
-$verbraucher2vorhanden = file_get_contents('/var/www/html/openWB/ramdisk/verbraucher2vorhanden');
+$speichervorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichervorhanden');
+$soc1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc1vorhanden');
+$verbraucher1vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/verbraucher1vorhanden');
+$verbraucher2vorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/verbraucher2vorhanden');
 $settingspwold = str_replace("\n", '', $settingspwold);
 
-$owbversion = file_get_contents('/var/www/html/openWB/web/version');
+$owbversion = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/web/version');
 if (isset($_GET['theme'])) {
 	$theme = $_GET['theme'];
 	$_SESSION['theme'] = $theme;

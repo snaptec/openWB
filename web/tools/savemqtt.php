@@ -51,7 +51,7 @@ if ($previousBridgeName != $bridgeToConfig) {
 	foreach($files as $currentFile) {
 		if (strpos($currentFile, $previousBridgeName) !== false) {
 			//// print "Renaming bridge: Adding '$currentFile' to delete list<br/>";
-			file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
+			file_put_contents($_SERVER['DOCUMENT_ROOT']."/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
 		}
 	}
 }
@@ -76,13 +76,13 @@ $len = strlen($bridgeFileName);
 foreach($files as $currentFile) {
 	if (strpos($currentFile, $bridgeFileName) !== false) {
 		//// print "Deleting: $currentFile <br/>";
-		file_put_contents("/var/www/html/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
+		file_put_contents($_SERVER['DOCUMENT_ROOT']."/openWB/ramdisk/99-bridgesToDelete", $currentFile, FILE_APPEND);
 	}
 }
 
 if ($_POST['action'] === 'deleteBridge') {
 	echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom trennen";
-	exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
+	exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/checkmqttconf.sh >>".$_SERVER['DOCUMENT_ROOT']."/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
 			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
@@ -96,7 +96,7 @@ if ($_POST['action'] === 'deleteBridge') {
 //
 // validate input data and assign to variables
 //
-$fileToUseForNewConfig = "/var/www/html/openWB/ramdisk/$bridgeFileName";
+$fileToUseForNewConfig = $_SERVER['DOCUMENT_ROOT']."/openWB/ramdisk/$bridgeFileName";
 if (!isset($_POST['bridgeEnabled'])) {
 	$fileToUseForNewConfig = $fileToUseForNewConfig . ".no";
 }
@@ -317,7 +317,7 @@ EOS
 fclose($configFile);
 
 echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom trennen";
-exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
+exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/checkmqttconf.sh >>".$_SERVER['DOCUMENT_ROOT']."/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
 			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);

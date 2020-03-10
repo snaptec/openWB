@@ -6,7 +6,7 @@ class Ajaxloader{
 
 	//Init
 	function __construct(){
-		$lines = file('/var/www/html/openWB/openwb.conf');
+		$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 		foreach($lines as $line) {
 			if(strpos($line, "sofortll=") !== false) {
 				list(, $sofortllold) = explode("=", $line);
