@@ -3677,7 +3677,7 @@
 							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen. Funktioniert auch mit Energy Meter statt Home Manager.
+							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten none eintragen. Funktioniert auch mit Energy Meter statt Home Manager.
 						</div>
 					</div>
 					<div id="wattbezugsmartfox">
