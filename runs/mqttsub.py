@@ -38,6 +38,14 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/system/PerformUpdate"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
+            subprocess.Popen("/var/www/html/openWB/runs/update.sh");
+    if (msg.topic == "openWB/set/system/SendDebug"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
+            subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh");
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
