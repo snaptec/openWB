@@ -1,6 +1,6 @@
 <?php
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
 	$writeit = '0';
 	if(strpos($line, "dspeed=") !== false) {
@@ -321,8 +321,8 @@ foreach($lines as $line) {
 		$result .= $line;
 	}
 }
-file_put_contents('/var/www/html/openWB/openwb.conf', $result);
-file_put_contents('/var/www/html/openWB/ramdisk/reloaddisplay', "1");
-file_put_contents('/var/www/html/openWB/ramdisk/execdisplay', "1");
+file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf', $result);
+file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/reloaddisplay', "1");
+file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
 header("Location: ../index.php");
 ?>

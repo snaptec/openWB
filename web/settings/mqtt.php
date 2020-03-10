@@ -37,7 +37,7 @@
 
 		<?php
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			$refreshDuration = 8;
 			foreach($lines as $line) {
 				if(strpos($line, "debug=") !== false) {

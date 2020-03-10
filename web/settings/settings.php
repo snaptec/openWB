@@ -36,7 +36,7 @@
 	<body>
 		<?php
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 
 				if(strpos($line, "schieflastmaxa=") !== false) {
@@ -498,7 +498,7 @@
 					list(, $stopchargeafterdisclp8old) = explode("=", $line, 2);
 				}
 			}
-			$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
+			$speichervorhanden = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/speichervorhanden');
 			$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 			$bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
 			$bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);

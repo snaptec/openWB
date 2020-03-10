@@ -36,7 +36,7 @@
 	<body>
 		<?php
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "hook1einschaltverz=") !== false) {
 					list(, $hook1einschaltverzold) = explode("=", $line, 2);

@@ -6,7 +6,7 @@
 	<body>
 		<p> Backup erfoglreich erstellt....</p>
 		<?php 
-			exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf /var/www/html/openWB/web/backup/backup.tar.gz /var/www/html/");
+			exec("tar --exclude='".$_SERVER['DOCUMENT_ROOT']."/openWB/web/backup' --exclude='".$_SERVER['DOCUMENT_ROOT']."/openWB/.git' -czf ".$_SERVER['DOCUMENT_ROOT']."/openWB/web/backup/backup.tar.gz ".$_SERVER['DOCUMENT_ROOT']."/");
 		?>
 		<p>
 			<a href="/openWB/web/backup/backup.tar.gz"> Download</a><br>

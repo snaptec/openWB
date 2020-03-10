@@ -1,7 +1,7 @@
 <?php
 
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
  	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);

@@ -37,7 +37,7 @@
 		<?php
 
 			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugmode) = explode("=", $line);

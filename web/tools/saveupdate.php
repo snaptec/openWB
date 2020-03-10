@@ -10,7 +10,7 @@
 	// writes value to config file and start update
 	// author: M. Ortenstein
 
-	$myConfigFile = '/var/www/html/openWB/openwb.conf';
+	$myConfigFile = $_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf';
 
 	try {
 		if ( !file_exists($myConfigFile) ) {

@@ -56,7 +56,7 @@
 				return $dirList;
 			}
 			// call function to read all directories to $allThemes
-			$allThemes = dir_list('/var/www/html/openWB/web/themes');
+			$allThemes = dir_list($_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes');
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->

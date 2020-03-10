@@ -1,6 +1,6 @@
 <?php
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
 		$writeit = '0';
 	if(strpos($line, "releasetrain=") !== false) {
@@ -12,7 +12,7 @@ foreach($lines as $line) {
 		$result .= $line;
 	}
 }
-file_put_contents('/var/www/html/openWB/openwb.conf', $result);
+file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf', $result);
 
 header("Location: ./updateredirect.html");
 ?>

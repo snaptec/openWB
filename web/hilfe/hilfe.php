@@ -36,17 +36,17 @@
 
 	<body>
 		<?php
-			include '/var/www/html/openWB/web/hilfe/navbar.php';
+			include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/hilfe/navbar.php';
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
 
 			<div id="ersteSchritteDiv">
-				<?php include '/var/www/html/openWB/web/hilfe/hilfe_erste_schritte.php';?>
+				<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/hilfe/hilfe_erste_schritte.php';?>
 			</div>
 
 			<div id="indexDiv" style="display: none;">
-				<?php include '/var/www/html/openWB/web/hilfe/hilfe_index.php';?>
+				<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/hilfe/hilfe_index.php';?>
 			</div>
 
 		</div>  <!-- container -->

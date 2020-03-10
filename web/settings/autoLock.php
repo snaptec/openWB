@@ -64,7 +64,7 @@
 			$dayOfWeek;  // Mo = 1, ..., So = 7
 
 			// first read config-lines in array
-			$settingsFile = file('/var/www/html/openWB/openwb.conf');
+			$settingsFile = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			// prepare key/value array
 			$settingsArray = [];
 

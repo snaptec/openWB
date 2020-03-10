@@ -1,14 +1,14 @@
 <?php
 session_start();
-require_once "/var/www/html/openWB/web/class/pDraw.class.php";
-require_once "/var/www/html/openWB/web/class/pImage.class.php";
-require_once "/var/www/html/openWB/web/class/pData.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pDraw.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pImage.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/openWB/web/class/pData.class.php";
 
-$evufile = '/var/www/html/openWB/ramdisk/evu-live.graph';
-$pvfile = '/var/www/html/openWB/ramdisk/pv-live.graph';
-$evfile = '/var/www/html/openWB/ramdisk/ev-live.graph';
-$timefile = '/var/www/html/openWB/ramdisk/time-live.graph';
-$socfile = '/var/www/html/openWB/ramdisk/soc-live.graph';
+$evufile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/evu-live.graph';
+$pvfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/pv-live.graph';
+$evfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/ev-live.graph';
+$timefile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/time-live.graph';
+$socfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soc-live.graph';
 
 $EV = file($evfile, FILE_IGNORE_NEW_LINES);
 $EVU = file($evufile, FILE_IGNORE_NEW_LINES);
@@ -50,7 +50,7 @@ $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries
 $myImage = new pImage(320, 125, $myData);
 
 $myImage->setFontProperties(array(
-    "FontName" => "/var/www/html/openWB/web/fonts/GeosansLight.ttf",
+    "FontName" => $_SERVER['DOCUMENT_ROOT']."/openWB/web/fonts/GeosansLight.ttf",
     "FontSize" => 12));
 $myImage->setGraphArea(45,15, 290,100);
 $myImage->drawScale($ScaleSettings);
@@ -58,4 +58,4 @@ $myImage->drawScale($ScaleSettings);
 $myImage->drawLineChart();
 
 header("Content-Type: image/png");
-$myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');
+$myImage->autoOutput($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/chart-m.png');

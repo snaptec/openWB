@@ -37,7 +37,7 @@
 
 		<?php
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "soclp1_vin=") !== false) {
 					list(, $soclp1_vinold) = explode("=", $line);

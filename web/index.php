@@ -1,8 +1,8 @@
 <?php
 	// check if update.sh is still running
-	$updateinprogress = file_get_contents('/var/www/html/openWB/ramdisk/updateinprogress');
+	$updateinprogress = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/updateinprogress');
 	// check if atreboot.sh is still running
-	$bootinprogress = file_get_contents('/var/www/html/openWB/ramdisk/bootinprogress');
+	$bootinprogress = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/bootinprogress');
 	// if yes, show placeholder. If not, show theme
 	if ( $bootinprogress == 1 or $updateinprogress == 1) {
 		//atreboot.sh or update.sh still in progress, wait 5 seconds and retry
@@ -24,7 +24,7 @@
 	} else {
 		// check if forced theme is activated in config file
 		$simplemodeold = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
+		$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 		foreach( $lines as $line ) {
 			if( strpos($line, "simplemode=") !== false ) {
 				list(, $simplemodeold) = explode("=", $line);

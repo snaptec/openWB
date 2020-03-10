@@ -9,7 +9,7 @@
 	// writes settings from autolock-page via POST-request to config file
 	// author: M. Ortenstein
 
-	$myConfigFile = '/var/www/html/openWB/openwb.conf';
+	$myConfigFile = $_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf';
 
 	try {
 		if ( !file_exists($myConfigFile) ) {

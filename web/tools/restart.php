@@ -1,5 +1,5 @@
 <?php
-$cmd="/var/www/html/openWB/runs/reboot.sh &";
+$cmd=$_SERVER['DOCUMENT_ROOT']."/openWB/runs/reboot.sh &";
 //$cmd="touch /tmp/firsttouch";
 $outputfile="/tmp/out.log";
 $pidfile="/tmp/reboot.pid";

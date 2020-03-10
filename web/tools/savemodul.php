@@ -691,7 +691,6 @@ if(isset($_POST['evsecon'])) {
 				if($_POST['evsecon'] == "openwb12mid") {
 					$result .= 'mpm3pmllid=105'."\n";
 				}
-
 			} else {
 				$result .= 'mpm3pmllid='.$_POST['mpm3pmllid']."\n";
 			}
@@ -1392,7 +1391,7 @@ if(isset($_POST['evsecon'])) {
 	$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/web/files/smashm.conf');
 	foreach($lines as $line) {
 		if( (strpos($line, "serials=") !== false) and (strpos($line, "serials=") == 0) ) {
-				$result .= 'serials='.$_POST['smashmbezugid']."\n";
+			$result .= 'serials='.$_POST['smashmbezugid']."\n";
 		} else {
 			$result .= $line;
 		}

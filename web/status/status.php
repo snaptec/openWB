@@ -603,7 +603,7 @@
 	<?php
 		$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		$result = '';
-		$lines = file('/var/www/html/openWB/openwb.conf');
+		$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 		foreach ($lines as $line) {
 			if (strpos($line, "lp1name=") !== false) {
 				list(, $lp1nameold) = explode("=", $line);
@@ -668,7 +668,7 @@
 </head>
 <body>
 	<?php
-		include '/var/www/html/openWB/web/status/navbar.php';
+		include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/status/navbar.php';
 	?>
 
 	<div role="main" class="container" style="margin-top: 20px; display: block;">
@@ -945,7 +945,7 @@
 			<div class="col-sm-2 text-center bg-info">
 				<div id="evsedintestlp1div"></div>
 				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp1';
+				$filename = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/evsedintestlp1';
 				if (file_exists($filename)) {
 					echo "last check " . date("H:i", filemtime($filename));
 				}
@@ -954,7 +954,7 @@
 			<div class="col-sm-2 text-center bg-info">
 				<div id="evsedintestlp2div"></div>
 				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp2';
+				$filename = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/evsedintestlp2';
 				if (file_exists($filename)) {
 					echo "last check " . date("H:i", filemtime($filename));
 				}
@@ -963,7 +963,7 @@
 			<div class="col-sm-2 text-center bg-info">
 				<div id="evsedintestlp3div"></div>
 				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp3';
+				$filename = $_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/evsedintestlp3';
 				if (file_exists($filename)) {
 					echo "last check " . date("H:i", filemtime($filename));
 				}
