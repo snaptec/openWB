@@ -1243,9 +1243,7 @@
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
-		<div class="container text-center">
-			<small id="helpFooterText">Sie befinden sich hier: Status</small>
-		</div>
+		<!-- no text for footer -->
 	</footer>
 
 	<script>
