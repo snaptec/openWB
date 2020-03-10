@@ -244,7 +244,7 @@ EOS
 
 if ($subscribeConfigs) {
 	fwrite($configFile, <<<EOS
-topic openWB/set/# in 2 "" $remotePrefix
+topic openWB/set/# both 2 "" $remotePrefix
 EOS
 	);
 }
