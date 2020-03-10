@@ -639,6 +639,9 @@ else
 	soc=0
 fi
 hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+if (( hausverbrauch < 0 )); then
+	hausverbrauch=0
+fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 
 
