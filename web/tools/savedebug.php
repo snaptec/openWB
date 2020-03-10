@@ -1,6 +1,12 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<title>Debug</title>
+	</head>
+	<body>
 <?php
 
-    // receives chosen debug mode from settings page via POST-request,
+	// receives chosen debug mode from settings page via POST-request,
 	// writes value to config file and returns to theme
 	// author: M. Ortenstein
 
@@ -27,24 +33,25 @@
 		}
 		// now values can be accessed by $settingsArray[$key] = $value;
 
-        // update chosen setting in array
-        $settingsArray["debug"] = $_POST["debugmodeRadioBtn"];
+		// update chosen setting in array
+		$settingsArray["debug"] = $_POST["debugmodeRadioBtn"];
 
 		// write config to file
-  		$fp = fopen($myConfigFile, "w");
+		$fp = fopen($myConfigFile, "w");
 		if ( !$fp ) {
 			throw new Exception('Konfigurationsdatei konnte nicht geschrieben werden.');
-  		}
+		}
 		foreach($settingsArray as $key => $value) {
 			fwrite($fp, $key.'='.$value."\n");
 		}
-        fclose($fp);
+		fclose($fp);
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
-  		echo "<script type='text/javascript'>alert('$msg');</script>";
-    }
+		echo "<script>alert('$msg');</script>";
+	}
 
-    // return to theme
-    echo "<script>window.location.href='../index.php';</script>";
-
+	// return to theme
+	echo "<script>window.location.href='../index.php';</script>";
 ?>
+	</body>
+</html>

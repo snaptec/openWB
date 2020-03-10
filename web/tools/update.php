@@ -22,12 +22,12 @@
 	<body>
 
 		<header>
-		    <!-- Fixed navbar -->
-		    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-		        <div class="navbar-brand">
-		            openWB
-		        </div>
-		    </nav>
+			<!-- Fixed navbar -->
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+				<div class="navbar-brand">
+					openWB
+				</div>
+			</nav>
 		</header>
 
 		<div role="main" class="container" style="margin-top:20px">
@@ -52,21 +52,17 @@
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
-		  <div class="container text-center">
-		  </div>
+			<div class="container text-center">
+			</div>
 		</footer>
 
-		<script type="text/javascript">
-
+		<script>
 			$(document).ready(function(){
-
 				$("#infoText").text("Update der openWB angefordert...");
 				$.get("./tools/updatePerformNow.php").done(function() {
 					setTimeout(function() { window.location.href = "./index.php"; }, 20000);
 				})
-
 			});
-
 		</script>
 
 	</body>

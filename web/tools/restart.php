@@ -1,4 +1,3 @@
-
 <?php
 $cmd="/var/www/html/openWB/runs/reboot.sh &";
 //$cmd="touch /tmp/firsttouch";

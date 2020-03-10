@@ -3,13 +3,13 @@
 
 	<!-- Einstellungen für automatisches Sperren/Entsperren
 		 der LP: ein Vorgang pro Tag
-	 	 Autor: M. Ortenstein -->
+		 Autor: M. Ortenstein -->
 	<head>
 		<base href="/openWB/web/">
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>openWB Einstellungen</title>
 		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -24,8 +24,8 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- important scripts to be loaded -->
-		<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script  src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
@@ -38,11 +38,11 @@
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- clockpicker -->
-		<script type="text/javascript" src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
+		<script src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/clockpicker/bootstrap-clockpicker.min.css">
 
 		<!-- global variables -->
-		<script type="text/javascript">
+		<script>
 			var oldClockpickerTime;  // holds old value of clockpicker during changing the time
 		</script>
 	</head>
@@ -289,18 +289,16 @@ ECHOFORMGROUPTAIL;
 
 				</form>  <!-- end form -->
 			</div>
-			<br>
-
 
 		</div>  <!-- end container -->
 
 		<footer class="footer bg-dark text-light font-small">
-	      <div class="container text-center">
-			  <small>Sie befinden sich hier: Auto-Lock</small>
-	      </div>
-	    </footer>
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Auto-Lock</small>
+			</div>
+		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$(document).ready(function(){
 
@@ -353,23 +351,23 @@ ECHOFORMGROUPTAIL;
 				}
 
 				$(function() {
-	 			    $(".lockUnlockCheckbox").change(function() {
+					$(".lockUnlockCheckbox").change(function() {
 						// if a checkbox for enabling lock or unlock time is checked/unchecked
 						// add/remove respective clockpicker and empty input field if removed
-	 					var boxIsChecked = $(this).prop("checked") == true;
-	 					var clockpickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+						var boxIsChecked = $(this).prop("checked") == true;
+						var clockpickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
 						if ( boxIsChecked ) {
-	 						// activate clockpicker
+							// activate clockpicker
 							if ( $(clockpickerId).val() == "" ) {
 								// replace empty field (placeholder = --) with initial time
 								$(clockpickerId).val("00:00");
 							}
-	 						addClockpicker(clockpickerId, false);
-	 					} else {
-	 						// remove clockpicker
-	 						removeClockpicker(clockpickerId);
-	 					}
-	 			    });
+							addClockpicker(clockpickerId, false);
+						} else {
+							// remove clockpicker
+							removeClockpicker(clockpickerId);
+						}
+					});
 
 					$("input:text").click(function() {
 						// if clockpicker input is clickedstore the old clockpicker time of clicked clockpicker in global var
@@ -407,10 +405,10 @@ ECHOFORMGROUPTAIL;
 						}
 					});
 
-	 			});  // end $(function()...
+				});  // end $(function()...
 
 				// initially add all clockpickers to visible form-groups
-			 	for (chargePoint=1; chargePoint<=8; chargePoint++) {
+				for (chargePoint=1; chargePoint<=8; chargePoint++) {
 					if ( $("#lp"+chargePoint).is(":visible") ) {
 						for (day=1; day<=7; day++) {
 							if ( $("#lockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
@@ -426,7 +424,7 @@ ECHOFORMGROUPTAIL;
 
 			});  // end document ready function
 
-	    </script>
+		</script>
 
 		<!-- modal alert window -->
 		<div class="modal fade" id="alertModal">

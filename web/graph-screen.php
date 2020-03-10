@@ -47,8 +47,6 @@ $myData->setAxisName(0,"Watt");
 $AxisBoundaries = array(0=>array("Min"=>$lowest,"Max"=>$highest),1=>array("Min"=>0,"Max"=>100));
 $ScaleSettings  = array("Mode"=>SCALE_MODE_MANUAL,"ManualScale"=>$AxisBoundaries,"LabelSkip"=>24);
 
-
-
 $myImage = new pImage(320, 125, $myData);
 
 $myImage->setFontProperties(array(
@@ -58,8 +56,6 @@ $myImage->setGraphArea(45,15, 290,100);
 $myImage->drawScale($ScaleSettings);
 
 $myImage->drawLineChart();
-
-
 
 header("Content-Type: image/png");
 $myImage->autoOutput('/var/www/html/openWB/ramdisk/chart-m.png');

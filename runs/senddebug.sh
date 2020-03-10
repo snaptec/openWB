@@ -21,6 +21,8 @@ done
 echo "############################ config ##############" >> $debugFile
 grep -F -v -e leaf -e i3 -e zoe -e tesla -e carnet /var/www/html/openWB/openwb.conf >> $debugFile
 cat /var/www/html/openWB/ramdisk/debuguser >> $debugFile
+echo "############################ network ##############" >> $debugFile
+ifconfig >> $debugFile
 
 echo "############################ version ##############" >> $debugFile
 echo "Version" >> $debugFile
