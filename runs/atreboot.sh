@@ -1855,7 +1855,16 @@ if ! grep -Fq "rfidsofort=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidsofort=000" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidlp1start1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1start1=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start2=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start3=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start1=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start2=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start3=000" >> /var/www/html/openWB/openwb.conf
 
+fi
 if ! grep -Fq "rfidstandby=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidstandby=000" >> /var/www/html/openWB/openwb.conf

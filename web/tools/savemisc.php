@@ -99,6 +99,35 @@ foreach($lines as $line) {
 		$result .= 'rfidakt='.$_POST['rfidakt']."\n";
 		$writeit = '1';
 	}
+	if(strpos($line, "rfidlp1start1=") !== false) {
+		$result .= 'rfidlp1start1='.$_POST['rfidlp1start1']."\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "rfidlp1start2=") !== false) {
+		$result .= 'rfidlp1start2='.$_POST['rfidlp1start2']."\n";
+		$writeit = '1';
+	}
+
+	if(strpos($line, "rfidlp1start3=") !== false) {
+		$result .= 'rfidlp1start3='.$_POST['rfidlp1start3']."\n";
+		$writeit = '1';
+	}
+
+	if(strpos($line, "rfidlp2start1=") !== false) {
+		$result .= 'rfidlp2start1='.$_POST['rfidlp2start1']."\n";
+		$writeit = '1';
+	}
+
+	if(strpos($line, "rfidlp2start2=") !== false) {
+		$result .= 'rfidlp2start2='.$_POST['rfidlp2start2']."\n";
+		$writeit = '1';
+	}
+
+	if(strpos($line, "rfidlp2start3=") !== false) {
+		$result .= 'rfidlp2start3='.$_POST['rfidlp2start3']."\n";
+		$writeit = '1';
+	}
+
 	if(strpos($line, "rfidstop=") !== false) {
 		$result .= 'rfidstop='.$_POST['rfidstop']."\n";
 		$writeit = '1';
