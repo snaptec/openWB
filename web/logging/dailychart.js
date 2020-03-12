@@ -225,7 +225,9 @@ function formdata(graphdata){
 	convertsoc(csvData,'20',aspeichersoc,'hidespeichersoc','Speicher SoC','overallspeichersoc');
 
 	for (i = 0; i < abezug.length; i += 1) {
+
 		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+		
 		if ( hausverbrauch >= 0) {
 		    ahausverbrauch.push(hausverbrauch);
 		    overallhausverbrauch += hausverbrauch;
@@ -253,9 +255,20 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 			if (fincsvvar < -0){
 				fincsvvar=oldfincsvvar;
 	 		}
-			pushdataset.push(fincsvvar);
+			if (!isNaN(fincsvvar)) {
+				pushdataset.push(fincsvvar);
+			} else {
+				fincsvvar=0
+				pushdataset.push(fincsvvar);
+			
+			}
 	 	} else {
-		 	firstcsvvar = csvvar;
+			if (!isNaN(csvvar)) {
+		 		firstcsvvar = csvvar;
+			} else {
+				firstcsvvar = 0;
+			}
+
 	 	}
 		oldfincsvvar=fincsvvar;
 		counter++;
