@@ -9,7 +9,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>openWB</title>
 		<meta name="description" content="Control your charge" />
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -34,14 +33,13 @@
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 	</head>
 
-	<script type="text/javascript">
+	<body>
+		<script>
 			var r=confirm("Nach einmaliger Einrichtung ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig. Fortfahren?");
 			if (r!=true) {
 				window.location.href = './index.php';
 			}
-	</script>
-
-	<body>
+		</script>
 
 		<?php
 			include '/var/www/html/openWB/web/settings/navbar.php';
@@ -1159,186 +1157,189 @@
 					<div class="row">
 						<div class="col">
 							<b><label for="lp1name">Name Ladepunkt 1:</label></b>
-							<input type="text" name="lp1name" id="lp1name" value="<?php echo $lp1nameold ?>"><br>
+							<input type="text" name="lp1name" id="lp1name" value="<?php echo $lp1nameold ?>">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<b><label for="evsecon">Anbindung Ladepunkt 1:</label></b>
-					        <select type="text" name="evsecon" id="evsecon">
-								<option <?php if($evseconold == "modbusevse\n") echo selected ?> value="modbusevse">Modbusevse</option>
-								<option <?php if($evseconold == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evseconold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evseconold == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evseconold == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
-								<option <?php if($evseconold == "masterethframer\n") echo selected ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
-								<option <?php if($evseconold == "twcmanager\n") echo selected ?> value="twcmanager">Tesla TWC mit TWCManager</option>
-								<option <?php if($evseconold == "keba\n") echo selected ?> value="keba">Keba</option>
-								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo selected ?> value="openwb12">openWB series1/2</option>
-								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo selected ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
-								<option <?php if($evseconold == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit </option>
-							</select><br>
+							<select name="evsecon" id="evsecon">
+								<option <?php if($evseconold == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbusevse</option>
+								<option <?php if($evseconold == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evseconold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evseconold == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evseconold == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+								<option <?php if($evseconold == "masterethframer\n") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+								<option <?php if($evseconold == "twcmanager\n") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
+								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
+							</select>
 						</div>
 					</div>
 					<div id="evseconmastereth">
 						<div class="row bg-success">
-							Keine Konfiguration erforderlich.<br>
+							Keine Konfiguration erforderlich.
 						</div>
 					</div>
 					<div id="openwb12">
 						<div class="row bg-success">
-							<br>
 							Keine Konfiguration erforderlich.<br>
-							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.<br><br>
+							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
 						</div>
 					</div>
 					<div id="openwb12mid">
 						<div class="row bg-success">
-							<br>
 							Keine Konfiguration erforderlich.<br>
-							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.<br><br>
+							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.
 						</div>
 					</div>
 					<div id="evsecondac">
 						<div class="row bg-success">
-							<br>
 							<b><label for="dacregister">Dacregister:</label></b>
 							<input type="text" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>"><br>
-							Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Der benötigte Wert sollte <a href="../ramdisk/i2csearch">HIER</a> zu finden sein. <br> Alternativ rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"<br><br>
+							Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>
+							Der benötigte Wert sollte <a href="../ramdisk/i2csearch">HIER</a> zu finden sein.<br>
+							Alternativ rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1"
 						</div>
 					</div>
 					<div id="evseconswifi">
 						<div class="row bg-info">
 							<div class="col">
 								<b><label for="evsewifiiplp1">Simple EVSE Wifi IP Adressee:</label></b>
-								<input type="text" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo $evsewifiiplp1old ?>"><br>
+								<input type="text" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo $evsewifiiplp1old ?>">
 							</div>
 						</div>
 						<div class="row bg-info">
 							<div class="col">
-								Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12
 							</div>
 						</div>
 						<div class="row bg-info">
 							<div class="col">
 								<b><label for="evsewifitimeoutlp1">Simple EVSE Wifi Timeout:</label></b>
-								<input type="text" name="evsewifitimeoutlp1" id="evsewifitimeoutlp1" value="<?php echo $evsewifitimeoutlp1old ?>"><br>
+								<input type="text" name="evsewifitimeoutlp1" id="evsewifitimeoutlp1" value="<?php echo $evsewifitimeoutlp1old ?>">
 							</div>
 						</div>
 						<div class="row bg-info">
 							<div class="col">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
 							</div>
 						</div>
 					</div>
 					<div id="evseconmod">
 						<div class="row bg-info">
 							<b><label for="modbusevsesource">EVSE Source:</label></b>
-							<input type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>"><br>
+							<input type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+							Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.
 						</div>
 						<div class="row bg-info">
 							<b><label for="modbusevseid">EVSE ID:</label></b>
-							<input type="text" name="modbusevseid" id="modbusevseid" value="<?php echo $modbusevseidold ?>"><br>
+							<input type="text" name="modbusevseid" id="modbusevseid" value="<?php echo $modbusevseidold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="modbusevselanip">RS485/Lan-Konverter IP:</label></b>
-							<input type="text" name="modbusevselanip" id="modbusevselanip" value="<?php echo $modbusevselanipold ?>"><br>
+							<input type="text" name="modbusevselanip" id="modbusevselanip" value="<?php echo $modbusevselanipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.<br><br>
+							Gültige Werte IP. IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.
 						</div>
 					</div>
 					<div id="evseconipevse">
 						<div class="row bg-info">
 							<b><label for="evseiplp1">IP Adresse:</label></b>
-							<input type="text" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>"><br>
+							<input type="text" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+							Gültige Werte IP. Aufgedruckt auf dem Label der openWB.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp1">EVSE ID:</label></b>
-							<input type="text" name="evseidlp1" id="evseidlp1" value="<?php echo $evseidlp1old ?>"><br>
+							<input type="text" name="evseidlp1" id="evseidlp1" value="<?php echo $evseidlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+							Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.
 						</div>
 					</div>
 					<div id="evseconkeba">
 						<div class="row bg-info">
 							<b><label for="kebaiplp1">Keba IP Adresse:</label></b>
-							<input type="text" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>"><br>
+							<input type="text" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
+							Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+							Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
 						</div>
 					</div>
 					<div id="evsecontwcmanager">
 						<div class="row bg-info">
 							<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
-							<input type="text" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>"><br>
+							<input type="text" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse im Format: 192.168.0.12 <br> <br>
+							Gültige Werte IP Adresse im Format: 192.168.0.12
 						</div>
 						<div class="row bg-info">
 							<b><label for="twcmanagerlp1phasen">TWCManager Anzahl Phasen:</label></b>
-							<input type="text" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>"><br>
+							<input type="text" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte Zahl. Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA) <br> <br>
+							Gültige Werte Zahl. Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA)
 						</div>
 					</div>
 					<div id="evsecongoe">
 						<div class="row bg-info">
 							<b><label for="goeiplp1">Go-e IP Adresse:</label></b>
-							<input type="text" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>"><br>
+							<input type="text" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+							Gültige Werte IP Adresse im Format: 192.168.0.12
 						</div>
 						<div class="row bg-info">
 							<b><label for="goetimeoutlp1">Go-e Timeout:</label></b>
-							<input type="text" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>"><br>
+							<input type="text" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Eine zu große Wartezeit zieht einen Verzug der Regellogik von openWB mit sich, wenn der Go-echarger z.B. gerade unterwegs genutzt wird.<br><br>
+							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+							Eine zu große Wartezeit zieht einen Verzug der Regellogik von openWB mit sich, wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
 						</div>
 					</div>
 					<div id="evseconnrgkick">
 						<div class="row bg-info">
 							<b><label for="nrgkickiplp1">NRGKick IP Adresse:</label></b>
-							<input type="text" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo $nrgkickiplp1old ?>"><br>
+							<input type="text" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo $nrgkickiplp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+							Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.
 						</div>
 						<div class="row bg-info">
 							<b><label for="nrgkicktimeoutlp1">NRGKick Timeout:</label></b>
-							<input type="text" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>"><br>
+							<input type="text" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+							Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+							Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.
 						</div>
 						<div class="row bg-info">
 							<b><label for="nrgkickmaclp1">NRGKick MAC Adresse:</label></b>
-							<input type="text" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>"><br>
+							<input type="text" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+							Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.
 						</div>
 						<div class="row bg-info">
 							<b><label for="nrgkickpwlp1">NRGKick PW:</label></b>
-							<input type="text" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo $nrgkickpwlp1old ?>"><br>
+							<input type="text" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo $nrgkickpwlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							Password welches in der NRGKick App festgelegt wurde. <br><br>
+							Password welches in der NRGKick App festgelegt wurde.
 						</div>
 					</div>
 
@@ -1359,10 +1360,7 @@
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 								$('#llmodullp1').show();
-
 							}
-
-
 							if($('#evsecon').val() == 'dac') {
 								$('#evsecondac').show();
 								$('#llmodullp1').show();
@@ -1389,18 +1387,15 @@
 							if($('#evsecon').val() == 'twcmanager') {
 								$('#evsecontwcmanager').show();
 							}
-
 							if($('#evsecon').val() == 'openwb12') {
 								$('#openwb12').show();
 							}
 							if($('#evsecon').val() == 'openwb12mid') {
 								$('#openwb12mid').show();
 							}
-
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 							}
-
 						}
 
 						$(function() {
@@ -1411,38 +1406,36 @@
 						});
 					</script>
 
-					<br>
 					<div id="llmodullp1">
 						<div class="row">
 							<b><label for="ladeleistungmodul">Ladeleistungmodul:</label></b>
-							<select type="text" name="ladeleistungmodul" id="ladeleistungmodul">
-								<option <?php if($ladeleistungmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-								<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo selected ?> value="sdm630modbusll">SDM 630 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo selected ?> value="smaemd_ll">SMA Energy Meter</option>
-								<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo selected ?> value="sdm120modbusll">SDM 120 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">Simple EVSE Wifi</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo selected ?> value="mpm3pmll">MPM3PM</option>
-								<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo selected ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
-								<option <?php if($ladeleistungmodulold == "httpll\n") echo selected ?> value="httpll">HTTP</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo selected ?> value="mpm3pmtripple">openWB Tripple</option>
-								<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo selected ?> value="mpm3pmlllp1">openWB Satellit</option>
-
+							<select name="ladeleistungmodul" id="ladeleistungmodul">
+								<option <?php if($ladeleistungmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+								<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
+								<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
+								<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
+								<option <?php if($ladeleistungmodulold == "httpll\n") echo "selected" ?> value="httpll">HTTP</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
+								<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
 							</select>
 						</div>
 						<div id="mpm3pmlllp1div">
 							<div class="row bg-info">
 								<b><label for="mpmlp1ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-								<input type="text" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo $mpmlp1ipold ?>"><br>
+								<input type="text" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo $mpmlp1ipold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 							</div>
 							<div class="row bg-info">
 								<b><label for="mpmlp1id">MPM3PM Modbus Ladeleistung ID:</label></b>
-								<input type="text" name="mpmlp1id" id="mpmlp1id" value="<?php echo $mpmlp1idold ?>"><br>
+								<input type="text" name="mpmlp1id" id="mpmlp1id" value="<?php echo $mpmlp1idold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
 							</div>
 						</div>
 
@@ -1451,35 +1444,35 @@
 						<div id="httpll">
 							<div class="row bg-info" >
 								<b><label for="httpll_w_url">Vollständige URL für die Ladeleistungs Watt</label></b>
-								<input type="text" name="httpll_w_url" id="httpll_w_url" value="<?php echo htmlspecialchars($httpll_w_urlold) ?>"><br>
+								<input type="text" name="httpll_w_url" id="httpll_w_url" value="<?php echo htmlspecialchars($httpll_w_urlold) ?>">
 							</div>
 							<div class="row bg-info" >
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 							</div>
 							<div class="row bg-info" >
 								<b><label for="httpll_kwh_url">Vollständige URL für die Ladeleistungszählerstand in kWh</label></b>
-								<input type="text" name="httpll_kwh_url" id="httpll_kwh_url" value="<?php echo htmlspecialchars($httpll_kwh_urlold) ?>"><br>
+								<input type="text" name="httpll_kwh_url" id="httpll_kwh_url" value="<?php echo htmlspecialchars($httpll_kwh_urlold) ?>">
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in kWh sein als Trennstelle wird ein Punkt genutzt.
 							</div>
 							<div class="row bg-info" >
 								<b><label for="httpll_a1_url">Vollständige URL für die Ladeleistungs Ampere Phase 1</label></b>
-								<input type="text" name="httpll_a1_url" id="httpll_a1_url" value="<?php echo htmlspecialchars($httpll_a1_urlold) ?>"><br>
+								<input type="text" name="httpll_a1_url" id="httpll_a1_url" value="<?php echo htmlspecialchars($httpll_a1_urlold) ?>">
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
 							</div>
 							<div class="row bg-info" >
 								<b><label for="httpll_a2_url">Vollständige URL für die Ladeleistungs Ampere Phase 2</label></b>
-								<input type="text" name="httpll_a2_url" id="httpll_a2_url" value="<?php echo htmlspecialchars($httpll_a2_urlold) ?>"><br>
+								<input type="text" name="httpll_a2_url" id="httpll_a2_url" value="<?php echo htmlspecialchars($httpll_a2_urlold) ?>">
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
 							</div>
 							<div class="row bg-info" >
 								<b><label for="httpll_a3_url">Vollständige URL für die Ladeleistungs Ampere Phase 3</label></b>
-								<input type="text" name="httpll_a3_url" id="httpll_a3_url" value="<?php echo htmlspecialchars($httpll_a3_urlold) ?>"><br>
+								<input type="text" name="httpll_a3_url" id="httpll_a3_url" value="<?php echo htmlspecialchars($httpll_a3_urlold) ?>">
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
@@ -1487,106 +1480,111 @@
 						</div>
 						<div id="llmpm3pm">
 								<div class="row bg-info">
-								<b><label for="mpm3pmll">MPM3PM Modbus Ladeleistung Source:</label></b>
-								<input type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo $mpm3pmllsourceold ?>"><br>
+								<b><label for="mpm3pmllsource">MPM3PM Modbus Ladeleistung Source:</label></b>
+								<input type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo $mpm3pmllsourceold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+								Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 							</div>
 							<div class="row bg-info">
 								<b><label for="mpm3pmllid">MPM3PM Modbus Ladeleistung ID:</label></b>
-								<input type="text" name="mpm3pmllid" id="mpm3pmllid" value="<?php echo $mpm3pmllidold ?>"><br>
+								<input type="text" name="mpm3pmllid" id="mpm3pmllid" value="<?php echo $mpm3pmllidold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
 							</div>
 						</div>
 						<div id="llmfsm">
 							<div class="row bg-info">
 								<b><label for="fsm63a3modbusllsource">Zähler Source:</label></b>
-								<input type="text" name="fsm63a3modbusllsource" id="fsm63a3modbusllsource" value="<?php echo $fsm63a3modbusllsourceold ?>"><br>
+								<input type="text" name="fsm63a3modbusllsource" id="fsm63a3modbusllsource" value="<?php echo $fsm63a3modbusllsourceold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der fsm63a3 in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der fsm63a3 in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+								Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 							</div>
 							<div class="row bg-info">
 								<b><label for="fsm63a3modbusllid">Zähler ID:</label></b>
-								<input type="text" name="fsm63a3modbusllid" id="fsm63a3modbusllid" value="<?php echo $fsm63a3modbusllidold ?>"><br>
+								<input type="text" name="fsm63a3modbusllid" id="fsm63a3modbusllid" value="<?php echo $fsm63a3modbusllidold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des fsm63a3.<br><br>
+								Gültige Werte 1-254. Modbus ID des fsm63a3.
 							</div>
 						</div>
 						<div id="llmsdm">
 							<div class="row bg-info">
 								<b><label for="sdm630modbusllsource">Zähler Source:</label></b>
-								<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>"><br>
+								<input type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+								Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 							</div>
 							<div class="row bg-info">
 								<b><label for="sdm630modbusllid">Zähler ID:</label></b>
-								<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>"><br>
+								<input type="text" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.<br><br>
+								Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.
 							</div>
 						</div>
 						<div id="sdm120div">
 							<div class="row bg-info">
 								<b><label for="sdm120modbusllsource">Zähler Source:</label></b>
-								<input type="text" name="sdm120modbusllsource" id="sdm120modbusllsource" value="<?php echo $sdm120modbusllsourceold ?>"><br>
+								<input type="text" name="sdm120modbusllsource" id="sdm120modbusllsource" value="<?php echo $sdm120modbusllsourceold ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+								Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+								Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 							</div>
 
 							<div class="row bg-info">
 								<b><label for="sdm120modbusllid1">SDM 120 Zähler 1 ID:</label></b>
-								<input type="text" name="sdm120modbusllid1" id="sdm120modbusllid1" value="<?php echo $sdm120modbusllid1old ?>"><br>
+								<input type="text" name="sdm120modbusllid1" id="sdm120modbusllid1" value="<?php echo $sdm120modbusllid1old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers in der WB.<br><br>
+								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers in der WB.
 							</div>
 							<div class="row bg-info">
 								<b><label for="sdm120modbusllid2">SDM 120 Zähler 2 ID:</label></b>
-								<input type="text" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo $sdm120modbusllid2old ?>"><br>
+								<input type="text" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo $sdm120modbusllid2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.
 							</div>
 							<div class="row bg-info">
 								<b><label for="sdm120modbusllid3">SDM 120 Zähler 3 ID:</label></b>
-								<input type="text" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>"><br>
+								<input type="text" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+								Gültige Werte 1-254. Modbus ID des Ladepunkt 1 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.
 							</div>
 						</div>
 						<div id="rs485lanlp1">
 							<div class="row bg-info">
 								<b><label for="sdm630modbuslllanip">RS485/Lan-Konverter IP:</label></b>
-								<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>"><br>
+								<input type="text" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>">
 							</div>
 							<div class="row bg-info">
 								Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
-								Gültige Werte: IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+								Gültige Werte: IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
 
 							</div>
 						</div>
 						<div id="llswifi">
 							<div class="row">
-								Keine Konfiguration erforderlich.<br>
+								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="llsma">
 							<div class="row">
 								<b><label for="smaemdllid">Seriennummer des SMA Energy Meter</label></b>
-								<input type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>"><br>
+								<input type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>">
 							</div>
 							<div class="row">
-								Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+								Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben<br>
+								Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
 
 							</div>
 						</div>
@@ -1642,7 +1640,7 @@
 							if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
 								$('#rs485lanlp1').show();
 								$('#llmfsm').show();
-						      }
+							}
 						}
 
 						$(function() {
@@ -1653,32 +1651,32 @@
 						});
 					</script>
 
-					<br>
-
 					<div class="row">
 						<b><label for="socmodul">SOC Modul:</label></b>
-						<select type="text" name="socmodul" id="socmodul">
-							<option <?php if($socmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($socmodulold == "soc_http\n") echo selected ?> value="soc_http">SoC HTTP</option>
-							<option <?php if($socmodulold == "soc_leaf\n") echo selected ?> value="soc_leaf">SoC Nissan Leaf</option>
-							<option <?php if($socmodulold == "soc_i3\n") echo selected ?> value="soc_i3">SoC BMW i3</option>
-							<option <?php if($socmodulold == "soc_zoe\n") echo selected ?> value="soc_zoe">SoC Renault Zoe alt</option>
-							<option <?php if($socmodulold == "soc_myrenault\n") echo selected ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
-							<option <?php if($socmodulold == "soc_evnotify\n") echo selected ?> value="soc_evnotify">SoC EVNotify</option>
-							<option <?php if($socmodulold == "soc_tesla\n") echo selected ?> value="soc_tesla">SoC Tesla</option>
-							<option <?php if($socmodulold == "soc_carnet\n") echo selected ?> value="soc_carnet">SoC VW Carnet</option>
-							<option <?php if($socmodulold == "soc_zerong\n") echo selected ?> value="soc_zerong">SoC Zero NG</option>
-							<option <?php if($socmodulold == "soc_audi\n") echo selected ?> value="soc_audi">SoC Audi</option>
-							<option <?php if($socmodulold == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
+						<select name="socmodul" id="socmodul">
+							<option <?php if($socmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($socmodulold == "soc_http\n") echo "selected" ?> value="soc_http">SoC HTTP</option>
+							<option <?php if($socmodulold == "soc_leaf\n") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
+							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW i3</option>
+							<option <?php if($socmodulold == "soc_zoe\n") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
+							<option <?php if($socmodulold == "soc_myrenault\n") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
+							<option <?php if($socmodulold == "soc_evnotify\n") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
+							<option <?php if($socmodulold == "soc_tesla\n") echo "selected" ?> value="soc_tesla">SoC Tesla</option>
+							<option <?php if($socmodulold == "soc_carnet\n") echo "selected" ?> value="soc_carnet">SoC VW Carnet</option>
+							<option <?php if($socmodulold == "soc_zerong\n") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
+							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
+							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
-					<select type="text" name="stopsocnotpluggedlp1" id="stopsocnotpluggedp1">
-						<option <?php if($stopsocnotpluggedlp1old == "0\n") echo selected ?> value="0">Nein</option>
-						<option <?php if($stopsocnotpluggedlp1old == "1\n") echo selected ?> value="1">Ja</option>
+					<select name="stopsocnotpluggedlp1" id="stopsocnotpluggedlp1">
+						<option <?php if($stopsocnotpluggedlp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+						<option <?php if($stopsocnotpluggedlp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 					</select>
 					<div class="row bg-info">
-						Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist. <br>Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.<br><br>
+						Wenn Ja gewählt wird der SoC nur abgefragt während ein Auto angesteckt ist.<br>
+						Bei Nein wird immer entsprechend der SoC Modul Konfiguration abgefragt.<br>
+						Funktioniert nur wenn der "steckend" Status korrekt angezeigt wird.
 					</div>
 					<div id="socmqtt">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -1687,45 +1685,44 @@
 							<div class="row">Ladezustand in %, int, 0-100</div>		
 					</div>
 					<div id="socmnone">
-						<br>
 					</div>
 					<div id="socmtesla">
 						<div class="row bg-info">
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasocuser">Tesla Benutzername:</label></b>
-							<input type="text" name="teslasocuser" id="teslasocuser" value="<?php echo $socteslausernameold ?>"><br>
+							<input type="text" name="teslasocuser" id="teslasocuser" value="<?php echo $socteslausernameold ?>">
 						</div>
 						<div class="row bg-info">
-							Email Adresse des Tesla Logins<br><br>
+							Email Adresse des Tesla Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasocpw">Tesla Passwort:</label></b>
-							<input type="password" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>"><br>
+							<input type="password" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>">
 						</div>
 						<div class="row bg-info">
-							Password des Tesla Logins<br><br>
+							Password des Tesla Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasoccarnumber">Auto im Account:</label></b>
-							<input type="text" name="teslasoccarnumber" id="teslasoccarnumber" value="<?php echo $socteslacarnumberold ?>"><br>
+							<input type="text" name="teslasoccarnumber" id="teslasoccarnumber" value="<?php echo $socteslacarnumberold ?>">
 						</div>
 						<div class="row bg-info">
-							Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.<br><br>
+							Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasocintervall">Abfrageintervall Standby:</label></b>
-							<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>"><br>
+							<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+							Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasocintervallladen">Abfrageintervall Laden:</label></b>
-							<input type="text" name="teslasocintervallladen" id="teslasocintervallladen" value="<?php echo $socteslaintervallladenold ?>"><br>
+							<input type="text" name="teslasocintervallladen" id="teslasocintervallladen" value="<?php echo $socteslaintervallladenold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+							Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
 						</div>
 					</div>
 					<div id="socmzerong">
@@ -1733,32 +1730,32 @@
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_zerong_username">Zero Benutzername:</label></b>
-							<input type="text" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo $soc_zerong_usernameold ?>"><br>
+							<input type="text" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo $soc_zerong_usernameold ?>">
 						</div>
 						<div class="row bg-info">
-							Email Adresse des Zero Logins<br><br>
+							Email Adresse des Zero Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_zerong_password">Zero Passwort:</label></b>
-							<input type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo $soc_zerong_passwordold ?>"><br>
+							<input type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo $soc_zerong_passwordold ?>">
 						</div>
 						<div class="row bg-info">
-							Password des Zero Logins<br><br>
+							Password des Zero Logins
 						</div>
 
 						<div class="row bg-info">
 							<b><label for="soc_zerong_intervall">Abfrageintervall Standby:</label></b>
-							<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>"><br>
+							<input type="text" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+							Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_zerong_intervallladen">Abfrageintervall Laden:</label></b>
-							<input type="text" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>"><br>
+							<input type="text" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+							Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
 						</div>
 					</div>
 					<div id="socmaudi">
@@ -1766,17 +1763,17 @@
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_audi_username">Audi Benutzername:</label></b>
-							<input type="text" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>"><br>
+							<input type="text" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>">
 						</div>
 						<div class="row bg-info">
-							Email Adresse des Audi Logins<br><br>
+							Email Adresse des Audi Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_audi_passwort">Audi Passwort:</label></b>
-							<input type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>"><br>
+							<input type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>">
 						</div>
 						<div class="row bg-info">
-							Password des Audi Logins<br><br>
+							Password des Audi Logins
 						</div>
 					</div>
 					<div id="socmhttp">
@@ -1784,157 +1781,158 @@
 						</div>
 						<div class="row bg-info">
 							<b><label for="hsocip">SOC Http Abfrage URL:</label></b>
-							<input type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>"><br>
+							<input type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.<br><br>
+							Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
 						</div>
 					</div>
 					<div id="soczoe">
 						<div class="row bg-info">
 							<b><label for="zoeusername">Benutzername:</label></b>
-							<input type="text" name="zoeusername" id="zoeusername" value="<?php echo $zoeusernameold ?>"><br>
+							<input type="text" name="zoeusername" id="zoeusername" value="<?php echo $zoeusernameold ?>">
 						</div>
 						<div class="row bg-info">
-							Renault Zoe Benutzername<br><br>
+							Renault Zoe Benutzername
 						</div>
 						<div class="row bg-info">
 							<b><label for="zoepasswort">Passwort:</label></b>
-							<input type="password" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>"><br>
+							<input type="password" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>">
 						</div>
 						<div class="row bg-info">
-							Renault Zoe Passwort<br><br>
+							Renault Zoe Passwort
 						</div>
 						<b><label for="wakeupzoelp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
-						<select type="text" name="wakeupzoelp1" id="wakeupzoelp1">
-							<option <?php if($wakeupzoelp1old == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($wakeupzoelp1old == "1\n") echo selected ?> value="1">Ja</option>
+						<select name="wakeupzoelp1" id="wakeupzoelp1">
+							<option <?php if($wakeupzoelp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($wakeupzoelp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
-							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).
 						</div>
 					</div>
 					<div id="socmyrenault">
 						<div class="row bg-info">
 							<b><label for="myrenault_userlp1">Benutzername:</label></b>
-							<input type="text" name="myrenault_userlp1" id="myrenault_userlp1" value="<?php echo $myrenault_userlp1old ?>"><br>
+							<input type="text" name="myrenault_userlp1" id="myrenault_userlp1" value="<?php echo $myrenault_userlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							MyRenault Benutzername<br><br>
+							MyRenault Benutzername
 						</div>
 						<div class="row bg-info">
 							<b><label for="myrenault_passlp1">Passwort:</label></b>
-							<input type="password" name="myrenault_passlp1" id="myrenault_passlp1" value="<?php echo $myrenault_passlp1old ?>"><br>
+							<input type="password" name="myrenault_passlp1" id="myrenault_passlp1" value="<?php echo $myrenault_passlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							MyRenault Passwort<br><br>
+							MyRenault Passwort
 						</div>
 						<div class="row bg-info">
 							<b><label for="myrenault_locationlp1">Standort:</label></b>
-							<input type="text" name="myrenault_locationlp1" id="myrenault_locationlp1" value="<?php echo $myrenault_locationlp1old ?>"><br>
+							<input type="text" name="myrenault_locationlp1" id="myrenault_locationlp1" value="<?php echo $myrenault_locationlp1old ?>">
 						</div>
 						<div class="row bg-info">
-							MyRenault Standort, z.B. de_DE<br><br>
+							MyRenault Standort, z.B. de_DE
 						</div>
 						<div class="row bg-info">
 							<b><label for="myrenault_countrylp1">Land:</label></b>
-							<input type="text" name="myrenault_countrylp1" id="myrenault_countrylp1" value="<?php echo $myrenault_countrylp1old ?>"><br>
+							<input type="text" name="myrenault_countrylp1" id="myrenault_countrylp1" value="<?php echo $myrenault_countrylp1old ?>">
 						</div>
 						<div class="row bg-info">
-							MyRenault Land, z.B. CH, AT, DE<br><br>
+							MyRenault Land, z.B. CH, AT, DE
 						</div>
 						<b><label for="wakeupmyrenaultlp1">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
-						<select type="text" name="wakeupmyrenaultlp1" id="wakeupmyrenaultlp1">
-							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo selected ?> value="1">Ja</option>
+						<select name="wakeupmyrenaultlp1" id="wakeupmyrenaultlp1">
+							<option <?php if($wakeupmyrenaultlp1old == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($wakeupmyrenaultlp1old == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row bg-info">
-							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).
 						</div>
 					</div>
 					<div id="socevnotify">
 						<div class="row bg-info">
 							<b><label for="evnotifyakey">Akey:</label></b>
-							<input type="text" name="evnotifyakey" id="evnotifyakey" value="<?php echo $evnotifyakeyold ?>"><br>
+							<input type="text" name="evnotifyakey" id="evnotifyakey" value="<?php echo $evnotifyakeyold ?>">
 						</div>
 						<div class="row bg-info">
-							Akey des EVNotify Kontos<br><br>
+							Akey des EVNotify Kontos
 						</div>
 						<div class="row bg-info">
 							<b><label for="evnotifytoken">Token:</label></b>
-							<input type="text" name="evnotifytoken" id="evnotifytoken" value="<?php echo $evnotifytokenold ?>"><br>
+							<input type="text" name="evnotifytoken" id="evnotifytoken" value="<?php echo $evnotifytokenold ?>">
 						</div>
 						<div class="row bg-info">
-							Token des Kontos<br><br>
+							Token des Kontos
 						</div>
 					</div>
 					<div id="socleaf">
 						<div class="row bg-info">
 							<b><label for="leafusername">Benutzername:</label></b>
-							<input type="text" name="leafusername" id="leafusername" value="<?php echo $leafusernameold ?>"><br>
+							<input type="text" name="leafusername" id="leafusername" value="<?php echo $leafusernameold ?>">
 						</div>
 						<div class="row bg-info">
-							Nissan Connect Benutzername<br><br>
+							Nissan Connect Benutzername
 						</div>
 						<div class="row bg-info">
 							<b><label for="leafpasswort">Passwort:</label></b>
-							<input type="password" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>"><br>
+							<input type="password" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>">
 						</div>
 						<div class="row bg-info">
-							Nissan Connect Passwort<br><br>
+							Nissan Connect Passwort
 						</div>
 					</div>
 					<div id="soci3">
 						<div class="row bg-info">
 							<b><label for="i3username">Benutzername:</label></b>
-							<input type="text" name="i3username" id="i3username" value="<?php echo $i3usernameold ?>"><br>
+							<input type="text" name="i3username" id="i3username" value="<?php echo $i3usernameold ?>">
 						</div>
 						<div class="row bg-info">
-							BMW Services Benutzername<br><br>
+							BMW Services Benutzername
 						</div>
 						<div class="row bg-info">
 							<b><label for="i3passwort">Passwort:</label></b>
-							<input type="password" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>"><br>
+							<input type="password" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>">
 						</div>
 						<div class="row bg-info">
-							BMW Services Passwort<br><br>
+							BMW Services Passwort
 						</div>
 						<div class="row bg-info">
 							<b><label for="i3vin">VIN:</label></b>
-							<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>"><br>
+							<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>">
 						</div>
 						<div class="row bg-info">
-							BMW i3 VIN. Sie ist in voller Länge anzugeben.<br><br>
+							BMW i3 VIN. Sie ist in voller Länge anzugeben.
 						</div>
 						<div class="row bg-info">
 							<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
-							<input type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>"><br>
+							<input type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
 						</div>
 						<div class="row bg-info">
-							Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+							Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 						</div>
 					</div>
 					<div id="soccarnet">
 						<div class="row bg-info">
 							<b><label for="carnetuser">Benutzername:</label></b>
-							<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>"><br>
+							<input type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>">
 						</div>
 						<div class="row bg-info">
-							VW Carnet Benutzername. <br>Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden<br><br>
+							VW Carnet Benutzername. <br>
+							Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden
 						</div>
 						<div class="row bg-info">
 							<b><label for="carnetpass">Passwort:</label></b>
-							<input type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>"><br>
+							<input type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>">
 						</div>
 						<div class="row bg-info">
-							VW Carnet Passwort<br><br>
+							VW Carnet Passwort
 						</div>
 						<div class="row bg-info">
 							<b><label for="soccarnetintervall">Verkürztes Intervall beim Laden:</label></b>
-							<input type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>"><br>
+							<input type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>">
 						</div>
 						<div class="row bg-info">
-							Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+							Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 						</div>
 					</div>
 
@@ -1953,43 +1951,43 @@
 							$('#socmqtt').hide();
 
 							$('#socmyrenault').hide();
-							if($('#socmodul').val() == 'soc_mqtt')   {
+							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
 							}
 
-						   	if($('#socmodul').val() == 'soc_audi')   {
+							if($('#socmodul').val() == 'soc_audi') {
 								$('#socmaudi').show();
 							}
-						   	if($('#socmodul').val() == 'soc_myrenault')   {
+							if($('#socmodul').val() == 'soc_myrenault') {
 								$('#socmyrenault').show();
 							}
 
 							if($('#socmodul').val() == 'none') {
 								$('#socmnone').show();
 							}
-						   	if($('#socmodul').val() == 'soc_http')   {
+							if($('#socmodul').val() == 'soc_http') {
 								$('#socmhttp').show();
 							}
-						   	if($('#socmodul').val() == 'soc_zerong')   {
+							if($('#socmodul').val() == 'soc_zerong') {
 								$('#socmzerong').show();
 							}
 
-						  	if($('#socmodul').val() == 'soc_leaf')   {
+							if($('#socmodul').val() == 'soc_leaf') {
 								$('#socleaf').show();
 							}
-						    if($('#socmodul').val() == 'soc_i3')   {
+							if($('#socmodul').val() == 'soc_i3') {
 								$('#soci3').show();
 							}
-						    if($('#socmodul').val() == 'soc_zoe')   {
+							if($('#socmodul').val() == 'soc_zoe') {
 								$('#soczoe').show();
-						    }
-						    if($('#socmodul').val() == 'soc_evnotify')   {
+							}
+							if($('#socmodul').val() == 'soc_evnotify') {
 								$('#socevnotify').show();
-						    }
-						    if($('#socmodul').val() == 'soc_tesla')   {
+							}
+							if($('#socmodul').val() == 'soc_tesla') {
 								$('#socmtesla').show();
 							}
-							if($('#socmodul').val() == 'soc_carnet')   {
+							if($('#socmodul').val() == 'soc_carnet') {
 								$('#soccarnet').show();
 							}
 						}
@@ -2004,14 +2002,15 @@
 
 					<hr>
 					<div class="row">
-						<b><h4><label for="lastmanagement">Zweiter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagement" id="lastmanagement">
-							<option <?php if($lastmanagementold == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementold == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagement">Zweiter Ladepunkt:</label></b>
+							<select name="lastmanagement" id="lastmanagement">
+								<option <?php if($lastmanagementold == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementold == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 					<div id="lastmmaus">
-						<br>
 					</div>
 					<div id="lastmman" style="margin:5em;">
 
@@ -2019,153 +2018,159 @@
 						</div>
 						<div class="row">
 							<b><label for="lp2name">Name Ladepunkt 2:</label></b>
-							<input type="text" name="lp2name" id="lp2name" value="<?php echo $lp2nameold ?>"><br>
+							<input type="text" name="lp2name" id="lp2name" value="<?php echo $lp2nameold ?>">
 						</div>
 						<div class="row">
 							<b><label for="evsecons1">Anbindung der EVSE an Ladepunkt 2:</label></b>
-							<select type="text" name="evsecons1" id="evsecons1">
-								<option <?php if($evsecons1old == "slaveeth\n") echo selected ?> value="slaveeth">openWB Slave</option>
-								<option <?php if($evsecons1old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
-								<option <?php if($evsecons1old == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evsecons1old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evsecons1old == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evsecons1old == "nrgkick\n") echo selected ?> value="nrgkick">NRGKick + Connect</option>
-								<option <?php if($evsecons1old == "keba\n") echo selected ?> value="keba">Keba</option>
-								<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo selected ?> value="openwb12s1">openWB series1/2 Duo</option>
-								<option <?php if($evsecons1old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
+							<select name="evsecons1" id="evsecons1">
+								<option <?php if($evsecons1old == "slaveeth\n") echo "selected" ?> value="slaveeth">openWB Slave</option>
+								<option <?php if($evsecons1old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
+								<option <?php if($evsecons1old == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evsecons1old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evsecons1old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evsecons1old == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+								<option <?php if($evsecons1old == "keba\n") echo "selected" ?> value="keba">Keba</option>
+								<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo "selected" ?> value="openwb12s1">openWB series1/2 Duo</option>
+								<option <?php if($evsecons1old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
 							</select>
 						</div>
 						<div id="evseconipevselp2">
 							<div class="row bg-info">
 								<b><label for="evseiplp2">IP Adresse:</label></b>
-								<input type="text" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>"><br>
+								<input type="text" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+								Gültige Werte IP. Aufgedruckt auf dem Label der openWB.
 							</div>
 							<div class="row bg-info">
 								<b><label for="evseidlp2">EVSE ID:</label></b>
-								<input type="text" name="evseidlp2" id="evseidlp2" value="<?php echo $evseidlp2old ?>"><br>
+								<input type="text" name="evseidlp2" id="evseidlp2" value="<?php echo $evseidlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+								Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.
 							</div>
 						</div>
 						<div id="openwb12s1">
 							<div class="row bg-success">
-							Keine Konfiguration erforderlich.<br>
-							Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.<br>
+								Keine Konfiguration erforderlich.
+								Dies ist die richtige option sowohl für Bausatz als auch fertige openWB series1 oder series2.
 							</div>
 						</div>
 						<div id="evseconnrgkicks1">
 							<div class="row bg-info">
 								<b><label for="nrgkickiplp2">NRGKick IP Adresse:</label></b>
-								<input type="text" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo $nrgkickiplp2old ?>"><br>
+								<input type="text" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo $nrgkickiplp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12 Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.
 							</div>
 							<div class="row bg-info">
 								<b><label for="nrgkicktimeoutlp2">NRGKick Timeout:</label></b>
-								<input type="text" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>"><br>
+								<input type="text" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.
 							</div>
 							<div class="row bg-info">
 								<b><label for="nrgkickmaclp2">NRGKick MAC Adresse:</label></b>
-								<input type="text" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo $nrgkickmaclp2old ?>"><br>
+								<input type="text" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo $nrgkickmaclp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.<br><br>
+								Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC. Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.
 							</div>
 							<div class="row bg-info">
 								<b><label for="nrgkickpwlp2">NRGKick PW:</label></b>
-								<input type="text" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo $nrgkickpwlp2old ?>"><br>
+								<input type="text" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo $nrgkickpwlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Password welches in der NRGKick App festgelegt wurde. <br><br>
+								Password welches in der NRGKick App festgelegt wurde.
 							</div>
 						</div>
 						<div id="evseconkebas1">
 							<div class="row bg-info">
 								<b><label for="kebaiplp2">Keba IP Adresse:</label></b>
-								<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>"><br>
+								<input type="text" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse im Format: 192.168.0.12 <br> Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+								Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
 							</div>
 						</div>
 						<div id="evseconmbs1">
 							<div class="row">
-								Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br><br>
+								Modbus für EVSE DIN. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich
 							</div>
 							<div class="row bg-info">
 								<b><label for="evsesources1">EVSE Source:</label></b>
-								<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>"><br>
+								<input type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>">
 							</div>
 							<div class="row bg-info">
 								Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br>
-								Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br><br>
+								Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant
 							</div>
 							<div class="row bg-info">
 								<b><label for="evseids1">EVSE ID:</label></b>
-								<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>"><br>
+								<input type="text" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.<br><br>
+								Gültige Werte 1-254. Modbus ID der Slave 1 EVSE.
 							</div>
 							<div class="row bg-info">
 								<b><label for="evselanips1">RS485/Lan-Konverter IP:</label></b>
-								<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>"><br>
+								<input type="text" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten ist diese Option irrelevant.<br><br>
+								Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten ist diese Option irrelevant.
 							</div>
 						</div>
 						<div id="evsecondacs1">
 							<div class="row bg-success">
 								<b><label for="dacregisters1">Dacregister:</label></b>
-								<input type="text" name="dacregisters1" id="dacregisters1" value="<?php echo $dacregisters1old ?>"><br>
+								<input type="text" name="dacregisters1" id="dacregisters1" value="<?php echo $dacregisters1old ?>">
 							</div>
 							<div class="row bg-success">
-								Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
+								Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>
+								Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich bei Nutzung von zweimal DAC zum ersten unterscheiden!
 							</div>
 						</div>
 						<div id="evsecoslaveeth">
 							<div class="row bg-success">
-							Keine Konfiguration erforderlich.<br><br></div>
+								Keine Konfiguration erforderlich.
+							</div>
 						</div>
 						<div id="evseconswifis1">
 							<div class="row bg-info">
 								<b><label for="evsewifiiplp2">Simple EVSE Wifi IP Adressee:</label></b>
-								<input type="text" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo $evsewifiiplp2old ?>"><br>
+								<input type="text" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo $evsewifiiplp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12
 							</div>
 							<div class="row bg-info">
 								<b><label for="evsewifitimeoutlp2">Simple EVSE Wifi Timeout:</label></b>
-								<input type="text" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo $evsewifitimeoutlp2old ?>"><br>
+								<input type="text" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo $evsewifitimeoutlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
 							</div>
 						</div>
 						<div id="evsecongoes1">
 							<div class="row bg-info">
 								<b><label for="goeiplp2">Go-e IP Adressee:</label></b>
-								<input type="text" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>"><br>
+								<input type="text" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12
 							</div>
 							<div class="row bg-info">
 								<b><label for="goetimeoutlp2">Go-e Timeout:</label></b>
-								<input type="text" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo $goetimeoutlp2old ?>"><br>
+								<input type="text" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo $goetimeoutlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.
 							</div>
 						</div>
 
@@ -2185,7 +2190,6 @@
 									$('#evseconipevselp2').show();
 									$('#llmodullp2').show();
 								}
-
 								if($('#evsecons1').val() == 'dac') {
 									$('#evsecondacs1').show();
 									$('#llmodullp2').show();
@@ -2207,7 +2211,7 @@
 									$('#evseconkebas1').show();
 								}
 								if($('#evsecons1').val() == 'nrgkick') {
-							   		$('#evseconnrgkicks1').show();
+									$('#evseconnrgkicks1').show();
 								}
 								if($('#evsecon').val() == 'openwb12s1') {
 									$('#openwb12s1').show();
@@ -2223,131 +2227,133 @@
 						</script>
 
 						<div id="llmodullp2">
-							<div class="row"><br>
+							<div class="row">
 								<b><label for="ladeleistungs1modul">Ladeleistungsmodul für Ladepunkt 2:</label></b>
-								<select type="text" name="ladeleistungs1modul" id="ladeleistungs1modul">
-									<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo selected ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo selected ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo selected ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo selected ?> value="mpm3pmlls1">MPM3PM Modbus</option>
-									<option <?php if($ladeleistungs1modulold == "goelp2\n") echo selected ?> value="goelp2">Go-e</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo selected ?> value="mpm3pmtripplelp2">openWB Tripple</option>
-									<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo selected ?> value="mpm3pmlllp2">openWB Satelit</option>
+								<select name="ladeleistungs1modul" id="ladeleistungs1modul">
+									<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
+									<option <?php if($ladeleistungs1modulold == "goelp2\n") echo "selected" ?> value="goelp2">Go-e</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+									<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
 								</select>
 							</div>
 							<div class="row">
-								Modul zur Messung der Ladeleistung des zweiten Ladepunktes.<br><br>
+								Modul zur Messung der Ladeleistung des zweiten Ladepunktes.
 							</div>
 							<div id="mpm3pmlllp2div">
 								<div class="row bg-info">
 									<b><label for="mpmlp2ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-									<input type="text" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo $mpmlp2ipold ?>"><br>
+									<input type="text" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo $mpmlp2ipold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+									Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 								</div>
 								<div class="row bg-info">
 									<b><label for="mpmlp2id">MPM3PM Modbus Ladeleistung ID:</label></b>
-									<input type="text" name="mpmlp2id" id="mpmlp2id" value="<?php echo $mpmlp2idold ?>"><br>
+									<input type="text" name="mpmlp2id" id="mpmlp2id" value="<?php echo $mpmlp2idold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+									Gültige Werte 1-254. Modbus ID des MPM3PM.
 								</div>
 							</div>
 							<div id="mpm3pmlls1div">
 								<div class="row bg-info">
-									<b><label for="mpm3pmlls1">MPM3PM Modbus Ladeleistung Source:</label></b>
-									<input type="text" name="mpm3pmlls1source" id="mpm3pmlls1source" value="<?php echo $mpm3pmlls1sourceold ?>"><br>
+									<b><label for="mpm3pmlls1source">MPM3PM Modbus Ladeleistung Source:</label></b>
+									<input type="text" name="mpm3pmlls1source" id="mpm3pmlls1source" value="<?php echo $mpm3pmlls1sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+									Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 								</div>
 								<div class="row bg-info">
 									<b><label for="mpm3pmlls1id">MPM3PM Modbus Ladeleistung ID:</label></b>
-									<input type="text" name="mpm3pmlls1id" id="mpm3pmlls1id" value="<?php echo $mpm3pmlls1idold ?>"><br>
+									<input type="text" name="mpm3pmlls1id" id="mpm3pmlls1id" value="<?php echo $mpm3pmlls1idold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+									Gültige Werte 1-254. Modbus ID des MPM3PM.
 								</div>
 							</div>
 							<div id="sdm630s1div">
 								<div class="row bg-info">
 									<b><label for="sdm630lp2source">Zähler Source:</label></b>
-									<input type="text" name="sdm630lp2source" id="sdm630lp2source" value="<?php echo $sdm630lp2sourceold ?>"><br>
+									<input type="text" name="sdm630lp2source" id="sdm630lp2source" value="<?php echo $sdm630lp2sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+									Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdmids1">Zähler ID:</label></b>
-									<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>"><br>
+									<input type="text" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 Zählers in der WB.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 Zählers in der WB.
 								</div>
 							</div>
 							<div id="swifis1div">
 								<div class="row">
-								Keine Konfiguration erforderlich.<br>
+								Keine Konfiguration erforderlich.
 								</div>
 							</div>
 							<div id="sdm120s1div">
 								<div class="row bg-info">
 									<b><label for="sdm120lp2source">Zähler Source:</label></b>
-									<input type="text" name="sdm120lp2source" id="sdm120lp2source" value="<?php echo $sdm120lp2sourceold ?>"><br>
+									<input type="text" name="sdm120lp2source" id="sdm120lp2source" value="<?php echo $sdm120lp2sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+									Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid1s1">SDM 120 Zähler 1 ID:</label></b>
-									<input type="text" name="sdm120modbusllid1s1" id="sdm120modbusllid1s1" value="<?php echo $sdm120modbusllid1s1old ?>"><br>
+									<input type="text" name="sdm120modbusllid1s1" id="sdm120modbusllid1s1" value="<?php echo $sdm120modbusllid1s1old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers in der WB.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid2s1">SDM Zähler 2 ID:</label></b>
-									<input type="text" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo $sdm120modbusllid2s1old ?>"><br>
+									<input type="text" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo $sdm120modbusllid2s1old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid3s1">SDM Zähler 3 ID:</label></b>
-									<input type="text" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo $sdm120modbusllid3s1old ?>"><br>
+									<input type="text" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo $sdm120modbusllid3s1old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 2 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.
 								</div>
 							</div>
 							<div id="rs485lanlp2">
 								<div class="row bg-info">
 									<b><label for="lllaniplp2">RS485/Lan-Konverter IP:</label></b>
-									<input type="text" name="lllaniplp2" id="lllaniplp2" value="<?php echo $lllaniplp2old ?>"><br>
+									<input type="text" name="lllaniplp2" id="lllaniplp2" value="<?php echo $lllaniplp2old ?>">
 								</div>
 								<div class="row bg-info">
 									Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
 								</div>
 							</div>
 						</div>
-						<br><br>
 
 						<div class="row">
 							<b><label for="socmodul1">SOC Modul für Ladepunkt 2:</label></b>
-							<select type="text" name="socmodul1" id="socmodul1">
-								<option <?php if($socmodul1old == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-								<option <?php if($socmodul1old == "soc_http1\n") echo selected ?> value="soc_http1">SoC HTTP</option>
-								<option <?php if($socmodul1old == "soc_leafs1\n") echo selected ?> value="soc_leafs1">SoC Nissan Leaf</option>
-								<option <?php if($socmodul1old == "soc_i3s1\n") echo selected ?> value="soc_i3s1">SoC BMW i3</option>
-								<option <?php if($socmodul1old == "soc_evnotifys1\n") echo selected ?> value="soc_evnotifys1">SoC EVNotify</option>
-								<option <?php if($socmodul1old == "soc_zoelp2\n") echo selected ?> value="soc_zoelp2">SoC Zoe alt</option>
-								<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo selected ?> value="soc_myrenaultlp2">SoC MyRenault</option>
-								<option <?php if($socmodul1old == "soc_teslalp2\n") echo selected ?> value="soc_teslalp2">SoC Tesla</option>
-								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo selected ?> value="soc_carnetlp2">SoC VW Carnet</option>
-								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo selected ?> value="soc_zeronglp2">SoC Zero NG</option>
-								<option <?php if($socmodul1old == "soc_mqtt\n") echo selected ?> value="soc_mqtt">MQTT</option>
+							<select name="socmodul1" id="socmodul1">
+								<option <?php if($socmodul1old == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+								<option <?php if($socmodul1old == "soc_http1\n") echo "selected" ?> value="soc_http1">SoC HTTP</option>
+								<option <?php if($socmodul1old == "soc_leafs1\n") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
+								<option <?php if($socmodul1old == "soc_i3s1\n") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
+								<option <?php if($socmodul1old == "soc_evnotifys1\n") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
+								<option <?php if($socmodul1old == "soc_zoelp2\n") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
+								<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
+								<option <?php if($socmodul1old == "soc_teslalp2\n") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
+								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
+								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
+								<option <?php if($socmodul1old == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 
 							</select>
 						</div>
@@ -2358,38 +2364,37 @@
 							<div class="row">Ladezustand in %, int, 0-100</div>		
 						</div>
 						<div id="socmnone1">
-							<br>
 						</div>
 						<div id="socmzeronglp2">
 							<div class="row bg-info">
 							</div>
 							<div class="row bg-info">
 								<b><label for="soc_zeronglp2_username">Zero Benutzername:</label></b>
-								<input type="text" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo $soc_zeronglp2_usernameold ?>"><br>
+								<input type="text" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo $soc_zeronglp2_usernameold ?>">
 							</div>
 							<div class="row bg-info">
-								Email Adresse des Zero Logins<br><br>
+								Email Adresse des Zero Logins
 							</div>
 							<div class="row bg-info">
 								<b><label for="soc_zeronglp2_password">Zero Passwort:</label></b>
-								<input type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo $soc_zeronglp2_passwordold ?>"><br>
+								<input type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo $soc_zeronglp2_passwordold ?>">
 							</div>
 							<div class="row bg-info">
-								Password des Zero Logins<br><br>
+								Password des Zero Logins
 							</div>
 							<div class="row bg-info">
 								<b><label for="soc_zeronglp2_intervall">Abfrageintervall Standby:</label></b>
-								<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>"><br>
+								<input type="text" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+								Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 							</div>
 							<div class="row bg-info">
 								<b><label for="soc_zeronglp2_intervallladen">Abfrageintervall Laden:</label></b>
-								<input type="text" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo $soc_zeronglp2_intervallladenold ?>"><br>
+								<input type="text" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo $soc_zeronglp2_intervallladenold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+								Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
 							</div>
 						</div>
 						<div id="socmteslalp2">
@@ -2397,191 +2402,190 @@
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2user">Tesla Benutzername:</label></b>
-								<input type="text" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo $socteslalp2usernameold ?>"><br>
+								<input type="text" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo $socteslalp2usernameold ?>">
 							</div>
 							<div class="row bg-info">
-								Email Adresse des Tesla Logins<br><br>
+								Email Adresse des Tesla Logins
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2pw">Tesla Passwort:</label></b>
-								<input type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo $socteslalp2pwold ?>"><br>
+								<input type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo $socteslalp2pwold ?>">
 							</div>
 							<div class="row bg-info">
-								Password des Tesla Logins<br><br>
+								Password des Tesla Logins
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2intervall">Abfrageintervall Standby:</label></b>
-								<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>"><br>
+								<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.<br><br>
+								Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2intervallladen">Abfrageintervall Laden:</label></b>
-								<input type="text" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo $socteslalp2intervallladenold ?>"><br>
+								<input type="text" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo $socteslalp2intervallladenold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.<br><br>
+								Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
 							</div>
 						</div>
 						<div id="soccarnetlp2">
 							<div class="row bg-info">
 								<b><label for="carnetlp2user">Benutzername:</label></b>
-								<input type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>"><br>
+								<input type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>">
 							</div>
 							<div class="row bg-info">
-								VW Carnet Benutzername<br><br>
+								VW Carnet Benutzername
 							</div>
 							<div class="row bg-info">
 								<b><label for="carnetlp2pass">Passwort:</label></b>
-								<input type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>"><br>
+								<input type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>">
 							</div>
 							<div class="row bg-info">
-								VW Carnet Passwort<br><br>
+								VW Carnet Passwort
 							</div>
 							<div class="row bg-info">
 								<b><label for="soccarnetlp2intervall">Verkürztes Intervall beim Laden:</label></b>
-								<input type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>"><br>
+								<input type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>">
 							</div>
 							<div class="row bg-info">
-								Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+								Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 							</div>
 						</div>
 						<div id="soczoelp2">
 							<div class="row bg-info">
 								<b><label for="zoelp2username">Benutzername:</label></b>
-								<input type="text" name="zoelp2username" id="zoelp2username" value="<?php echo $zoelp2usernameold ?>"><br>
+								<input type="text" name="zoelp2username" id="zoelp2username" value="<?php echo $zoelp2usernameold ?>">
 							</div>
 							<div class="row bg-info">
-								Renault Zoe Benutzername<br><br>
+								Renault Zoe Benutzername
 							</div>
 							<div class="row bg-info">
 								<b><label for="zoelp2passwort">Passwort:</label></b>
-								<input type="password" name="zoelp2passwort" id="zoelp2passwort" value="<?php echo $zoelp2passwortold ?>"><br>
+								<input type="password" name="zoelp2passwort" id="zoelp2passwort" value="<?php echo $zoelp2passwortold ?>">
 							</div>
 							<div class="row bg-info">
-								Renault Zoe Passwort<br><br>
+								Renault Zoe Passwort
 							</div>
 							<b><label for="wakeupzoelp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
-							<select type="text" name="wakeupzoelp2" id="wakeupzoelp2">
-								<option <?php if($wakeupzoelp2old == "0\n") echo selected ?> value="0">Nein</option>
-								<option <?php if($wakeupzoelp2old == "1\n") echo selected ?> value="1">Ja</option>
+							<select name="wakeupzoelp2" id="wakeupzoelp2">
+								<option <?php if($wakeupzoelp2old == "0\n") echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wakeupzoelp2old == "1\n") echo "selected" ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
-								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).
 							</div>
 						</div>
 						<div id="socmyrenaultlp2">
 							<div class="row bg-info">
 								<b><label for="myrenault_userlp2">Benutzername:</label></b>
-								<input type="text" name="myrenault_userlp2" id="myrenault_userlp2" value="<?php echo $myrenault_userlp2old ?>"><br>
+								<input type="text" name="myrenault_userlp2" id="myrenault_userlp2" value="<?php echo $myrenault_userlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								MyRenault Benutzername<br><br>
+								MyRenault Benutzername
 							</div>
 							<div class="row bg-info">
 								<b><label for="myrenault_passlp2">Passwort:</label></b>
-								<input type="password" name="myrenault_passlp2" id="myrenault_passlp2" value="<?php echo $myrenault_passlp2old ?>"><br>
+								<input type="password" name="myrenault_passlp2" id="myrenault_passlp2" value="<?php echo $myrenault_passlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								MyRenault Passwort<br><br>
+								MyRenault Passwort
 							</div>
 							<div class="row bg-info">
 								<b><label for="myrenault_locationlp2">Standort:</label></b>
-								<input type="text" name="myrenault_locationlp2" id="myrenault_locationlp2" value="<?php echo $myrenault_locationlp2old ?>"><br>
+								<input type="text" name="myrenault_locationlp2" id="myrenault_locationlp2" value="<?php echo $myrenault_locationlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								MyRenault Standort, z.B. de_DE<br><br>
+								MyRenault Standort, z.B. de_DE
 							</div>
 							<div class="row bg-info">
 								<b><label for="myrenault_countrylp2">Land:</label></b>
-								<input type="text" name="myrenault_countrylp2" id="myrenault_countrylp2" value="<?php echo $myrenault_countrylp2old ?>"><br>
+								<input type="text" name="myrenault_countrylp2" id="myrenault_countrylp2" value="<?php echo $myrenault_countrylp2old ?>">
 							</div>
 							<div class="row bg-info">
-								MyRenault Land, z.B. CH, AT, DE<br><br>
+								MyRenault Land, z.B. CH, AT, DE
 							</div>
 							<b><label for="wakeupmyrenaultlp2">Zoe Remote wecken wenn sie eingeschlafen ist:</label></b>
-							<select type="text" name="wakeupmyrenaultlp2" id="wakeupmyrenaultlp2">
-								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo selected ?> value="0">Nein</option>
-								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo selected ?> value="1">Ja</option>
+							<select name="wakeupmyrenaultlp2" id="wakeupmyrenaultlp2">
+								<option <?php if($wakeupmyrenaultlp2old == "0\n") echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wakeupmyrenaultlp2old == "1\n") echo "selected" ?> value="1">Ja</option>
 							</select>
 							<div class="row bg-info">
-								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).<br><br>
+								Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).
 							</div>
 						</div>
 						<div id="socevnotifylp2">
 							<div class="row bg-info">
 								<b><label for="evnotifyakeylp2">Akey:</label></b>
-								<input type="text" name="evnotifyakeylp2" id="evnotifyakeylp2" value="<?php echo $evnotifyakeylp2old ?>"><br>
+								<input type="text" name="evnotifyakeylp2" id="evnotifyakeylp2" value="<?php echo $evnotifyakeylp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Akey des EVNotify Kontos<br><br>
+								Akey des EVNotify Kontos
 							</div>
 							<div class="row bg-info">
 								<b><label for="evnotifytokenlp2">Token:</label></b>
-								<input type="text" name="evnotifytokenlp2" id="evnotifytokenlp2" value="<?php echo $evnotifytokenlp2old ?>"><br>
+								<input type="text" name="evnotifytokenlp2" id="evnotifytokenlp2" value="<?php echo $evnotifytokenlp2old ?>">
 							</div>
 							<div class="row bg-info">
-								Token des Kontos<br><br>
+								Token des Kontos
 							</div>
 						</div>
 						<div id="socmhttp1">
 							<div class="row">
-								Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!<br><br>
+								Gültige Werte none, soc_http. Wenn nicht vorhanden auf none setzen!
 							</div>
 							<div class="row bg-info">
 								<b><label for="hsocip1">SOC zweiter Ladepunkt Http Abfrage URL:</label></b>
-								<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>"><br>
+								<input type="text" name="hsocip1" id="hsocip1" value="<?php echo $hsocip1old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.<br><br>
+								Gültige Werte none, "url". URL für die Abfrage des Soc der zweiten WB, Antwort muss der reine Zahlenwert sein.
 							</div>
 						</div>
 						<div id="socleaf1">
-							<br>
 							<div class="row bg-info">
 								<b><label for="leafusernames1">Benutzername:</label></b>
-								<input type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>"><br>
+								<input type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>">
 							</div>
 							<div class="row bg-info">
-								Nissan Connect Benutzername<br><br>
+								Nissan Connect Benutzername
 							</div>
 							<div class="row bg-info">
 								<b><label for="leafpassworts1">Passwort:</label></b>
-								<input type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>"><br>
+								<input type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>">
 							</div>
 							<div class="row bg-info">
-								Nissan Connect Passwort<br><br>
+								Nissan Connect Passwort
 							</div>
 						</div>
 						<div id="soci31">
 							<div class="row bg-info">
 								<b><label for="i3usernames1">Benutzername:</label></b>
-								<input type="text" name="i3usernames1" id="i3usernames1" value="<?php echo $i3usernames1old ?>"><br>
+								<input type="text" name="i3usernames1" id="i3usernames1" value="<?php echo $i3usernames1old ?>">
 							</div>
 							<div class="row bg-info">
-								BMW Services Benutzername<br><br>
+								BMW Services Benutzername
 							</div>
 							<div class="row bg-info">
 								<b><label for="i3passworts1">Passwort:</label></b>
-								<input type="password" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>"><br>
+								<input type="password" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>">
 							</div>
 							<div class="row bg-info">
-								BMW Services Passwort<br><br>
+								BMW Services Passwort
 							</div>
 							<div class="row bg-info">
 								<b><label for="i3vins1">VIN:</label></b>
-								<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>"><br>
+								<input type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>">
 							</div>
 							<div class="row bg-info">
-								BMW i3 VIN nötig. Es ist die vollständige aus dem Fzg-Schein anzugeben.<br><br>
+								BMW i3 VIN nötig. Es ist die vollständige aus dem Fzg-Schein anzugeben.
 							</div>
 							<div class="row bg-info">
 								<b><label for="soci3intervall1">Verkürztes Intervall beim Laden:</label></b>
-								<input type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>"><br>
+								<input type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
 							</div>
 							<div class="row bg-info">
-								Verkürzt das Abfrageintervall beim Laden auf xx Minuten<br><br>
+								Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 							</div>
 						</div>
 
@@ -2604,11 +2608,11 @@
 								if($('#ladeleistungs1modul').val() == 'simpleevsewifis1') {
 									$('#swifis1div').show();
 								}
-							    if($('#ladeleistungs1modul').val() == 'goelp2') {
+								if($('#ladeleistungs1modul').val() == 'goelp2') {
 									$('#swifis1div').show();
-							    }
-							    if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
-								    $('#mpm3pmlllp2div').show();
+								}
+								if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
+									$('#mpm3pmlllp2div').show();
 									$('#rs485lanlp2').hide();
 								}
 
@@ -2624,9 +2628,7 @@
 									display_llmp2();
 								});
 							});
-						</script>
 
-						<script>
 							function display_socmodul1() {
 								$('#socmqtt1').hide();
 								$('#socmnone1').hide();
@@ -2711,118 +2713,122 @@
 					</script>
 
 					<div class="row">
-						<b><h4><label for="lastmanagements2">Dritter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagements2" id="lastmanagements2">
-							<option <?php if($lastmanagements2old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagements2old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagements2">Dritter Ladepunkt:</label></b>
+							<select name="lastmanagements2" id="lastmanagements2">
+								<option <?php if($lastmanagements2old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagements2old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 					<div class="row">
 					</div>
 					<div id="lasts2mmaus">
-						<br>
 					</div>
 					<div id="lasts2mman" style="margin:5em;">
 						<div class="row">
 						</div>
 						<div class="row">
 							<b><label for="lp3name">Name Ladepunkt 3:</label></b>
-									<input type="text" name="lp3name" id="lp3name" value="<?php echo $lp3nameold ?>"><br>
-
+									<input type="text" name="lp3name" id="lp3name" value="<?php echo $lp3nameold ?>">
 						</div>
 
 						<div class="row">
 							<b><label for="evsecons2">Anbindung der EVSE an Ladepunkt 3:</label></b>
-							<select type="text" name="evsecons2" id="evsecons2">
-								<option <?php if($evsecons2old == "thirdeth\n") echo selected ?> value="thirdeth">openWB dritter Ladepunkte</option>
-								<option <?php if($evsecons2old == "modbusevse\n") echo selected ?> value="modbusevse">Modbus</option>
-								<option <?php if($evsecons2old == "dac\n") echo selected ?> value="dac">DAC</option>
-								<option <?php if($evsecons2old == "simpleevsewifi\n") echo selected ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-								<option <?php if($evsecons2old == "goe\n") echo selected ?> value="goe">Go-e</option>
-								<option <?php if($evsecons2old == "ipevse\n") echo selected ?> value="ipevse">openWB Satellit</option>
+							<select name="evsecons2" id="evsecons2">
+								<option <?php if($evsecons2old == "thirdeth\n") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkte</option>
+								<option <?php if($evsecons2old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
+								<option <?php if($evsecons2old == "dac\n") echo "selected" ?> value="dac">DAC</option>
+								<option <?php if($evsecons2old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+								<option <?php if($evsecons2old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+								<option <?php if($evsecons2old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
 							</select>
 						</div>
 						<div id="evseconipevselp3">
 							<div class="row bg-info">
 								<b><label for="evseiplp3">IP Adresse:</label></b>
-								<input type="text" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>"><br>
+								<input type="text" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP. Aufgedruckt auf dem Label der openWB.<br><br>
+								Gültige Werte IP. Aufgedruckt auf dem Label der openWB.
 							</div>
 							<div class="row bg-info">
 								<b><label for="evseidlp3">EVSE ID:</label></b>
-								<input type="text" name="evseidlp3" id="evseidlp3" value="<?php echo $evseidlp3old ?>"><br>
+								<input type="text" name="evseidlp3" id="evseidlp3" value="<?php echo $evseidlp3old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.<br><br>
+								Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.
 							</div>
 						</div>
 							<div id="evseconmbs2">
 								<div class="row">
-									Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br>Zudem gibt es einen Bug das die EVSE ID der EVSE DIN sich nicht verstellen und speichern lässt!<br><br>
+									Modbus nur mit EVSE DIN getestet. Auf der EVSE muss Register 2003 auf 1 gesetzt werden (Deaktivierung analog Eingang), sonst kein beschreiben möglich<br>
+									Zudem gibt es einen Bug das die EVSE ID der EVSE DIN sich nicht verstellen und speichern lässt!
 								</div>
 								<div class="row bg-info">
 									<b><label for="evsesources2">EVSE Source:</label></b>
-									<input type="text" name="evsesources2" id="evsesources2" value="<?php echo $evsesources2old ?>"><br>
+									<input type="text" name="evsesources2" id="evsesources2" value="<?php echo $evsesources2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.
 								</div>
 								<div class="row bg-info">
 									<b><label for="evseids2">EVSE ID:</label></b>
-									<input type="text" name="evseids2" id="evseids2" value="<?php echo $evseids2old ?>"><br>
+									<input type="text" name="evseids2" id="evseids2" value="<?php echo $evseids2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID der Slave 2 EVSE.<br><br>
+									Gültige Werte 1-254. Modbus ID der Slave 2 EVSE.
 								</div>
 								<div class="row bg-info">
 									<b><label for="evselanips2">RS485/Lan-Konverter IP:</label></b>
-									<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>"><br>
+									<input type="text" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten ist diese Option irrelevant.<br><br>
+									Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten ist diese Option irrelevant.
 								</div>
 							</div>
 							<div id="evsecondacs2">
 								<div class="row bg-success">
 									<b><label for="dacregisters2">Dacregister:</label></b>
-									<input type="text" name="dacregisters2" id="dacregisters2" value="<?php echo $dacregisters2old ?>"><br>
+									<input type="text" name="dacregisters2" id="dacregisters2" value="<?php echo $dacregisters2old ?>">
 								</div>
 								<div class="row bg-success">
-									Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!<br><br>
+									Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP<br>
+									Rauszufinden bei angeschlossenem MCP auf der shell mit dem Befehl: "sudo i2cdetect -y 1". Muss sich von bei Nutzung von zweimal DAC zum ersten unterscheiden!
 								</div>
 							</div>
 							<div id="evseconswifis2">
 								<div class="row bg-info">
 									<b><label for="evsewifiiplp3">Simple EVSE Wifi IP Adressee:</label></b>
-									<input type="text" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo $evsewifiiplp3old ?>"><br>
+									<input type="text" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo $evsewifiiplp3old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+									Gültige Werte IP Adresse im Format: 192.168.0.12
 								</div>
 								<div class="row bg-info">
 									<b><label for="evsewifitimeoutlp3">Simple EVSE Wifi Timeout:</label></b>
-									<input type="text" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo $evsewifitimeoutlp3old ?>"><br>
+									<input type="text" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo $evsewifitimeoutlp3old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.<br><br>
+									Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+									Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
 								</div>
 							</div>
 						<div id="evsecongoes2">
 							<div class="row bg-info">
 								<b><label for="goeiplp3">Go-e IP Adressee:</label></b>
-								<input type="text" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>"><br>
+								<input type="text" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte IP Adresse im Format: 192.168.0.12<br><br>
+								Gültige Werte IP Adresse im Format: 192.168.0.12
 							</div>
 							<div class="row bg-info">
 								<b><label for="goetimeoutlp3">Go-e Timeout:</label></b>
-								<input type="text" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo $goetimeoutlp3old ?>"><br>
+								<input type="text" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo $goetimeoutlp3old ?>">
 							</div>
 							<div class="row bg-info">
-								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus. <br> Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.<br><br>
+								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Go-e gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
+								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die Go-e z.B. gerade unterwegs genutzt wird.
 							</div>
 						</div>
 
@@ -2865,112 +2871,113 @@
 						</script>
 
 						<div id="llmodullp3">
-							<div class="row"><br>
+							<div class="row">
 								<b><label for="ladeleistungs2modul">Ladeleistungsmodul für Ladepunkt 3:</label></b>
-								<select type="text" name="ladeleistungs2modul" id="ladeleistungss2modul">
-									<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo selected ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo selected ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo selected ?> value="mpm3pmlls2">MPM3PM Modbus</option>
-									<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo selected ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-									<option <?php if($ladeleistungs2modulold == "goelp3\n") echo selected ?> value="goelp3">Go-E</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo selected ?> value="mpm3pmtripplelp3">openWB Tripple</option>
-									<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo selected ?> value="mpm3pmlllp3">openWB Satellit</option>
+								<select name="ladeleistungs2modul" id="ladeleistungss2modul">
+									<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
+									<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
+									<option <?php if($ladeleistungs2modulold == "goelp3\n") echo "selected" ?> value="goelp3">Go-E</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+									<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
 								</select>
 							</div>
 							<div class="row">
-								Modul zur Messung der Ladeleistung des dritten Ladepunktes.<br><br>
+								Modul zur Messung der Ladeleistung des dritten Ladepunktes.
 							</div>
 							<div id="mpm3pmlllp3div">
 								<div class="row bg-info">
 									<b><label for="mpmlp3ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-									<input type="text" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>"><br>
+									<input type="text" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+									Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 								</div>
 								<div class="row bg-info">
 									<b><label for="mpmlp3id">MPM3PM Modbus Ladeleistung ID:</label></b>
-									<input type="text" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>"><br>
+									<input type="text" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+									Gültige Werte 1-254. Modbus ID des MPM3PM.
 								</div>
 							</div>
 							<div id="swifis2div">
 								<div class="row">
-									Keine Konfiguration erforderlich.<br>
+									Keine Konfiguration erforderlich.
 								</div>
 							</div>
 							<div id="mpm3pmlls2div">
 									<div class="row bg-info">
-									<b><label for="mpm3pmlls2">MPM3PM Modbus Ladeleistung Source:</label></b>
-									<input type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>"><br>
+									<b><label for="mpm3pmlls2source">MPM3PM Modbus Ladeleistung Source:</label></b>
+									<input type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+									Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 								</div>
 								<div class="row bg-info">
 									<b><label for="mpm3pmlls2id">MPM3PM Modbus Ladeleistung ID:</label></b>
-									<input type="text" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>"><br>
+									<input type="text" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+									Gültige Werte 1-254. Modbus ID des MPM3PM.
 								</div>
 							</div>
 							<div id="sdm630s2div">
 								<div class="row bg-info">
 									<b><label for="sdm630lp3source">Zähler Source:</label></b>
-									<input type="text" name="sdm630lp3source" id="sdm630lp3source" value="<?php echo $sdm630lp3sourceold ?>"><br>
+									<input type="text" name="sdm630lp3source" id="sdm630lp3source" value="<?php echo $sdm630lp3sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus des Zählers angeschlossen ist.<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus des Zählers angeschlossen ist.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdmids2">SDM 630 Zähler ID:</label></b>
-									<input type="text" name="sdmids2" id="sdmids2" value="<?php echo $sdmids2old ?>"><br>
+									<input type="text" name="sdmids2" id="sdmids2" value="<?php echo $sdmids2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.
 								</div>
 							</div>
 							<div id="sdm120s2div">
 								<div class="row bg-info">
 									<b><label for="sdm120lp3source">Zähler Source:</label></b>
-									<input type="text" name="sdm120lp3source" id="sdm120lp3source" value="<?php echo $sdm120lp3sourceold ?>"><br>
+									<input type="text" name="sdm120lp3source" id="sdm120lp3source" value="<?php echo $sdm120lp3sourceold ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus des Zählers angeschlossen ist.<br><br>
+									Gültige Werte /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus des Zählers angeschlossen ist.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid1s2">SDM Zähler 1 ID:</label></b>
-									<input type="text" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo $sdm120modbusllid1s2old ?>"><br>
+									<input type="text" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo $sdm120modbusllid1s2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers in der WB.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid2s2">SDM Zähler 2 ID:</label></b>
-									<input type="text" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo $sdm120modbusllid2s2old ?>"><br>
+									<input type="text" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo $sdm120modbusllid2s2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 2 in der WB.  Ist keine zweite Phase / SDM120 vorhanden bitte none eintragen.
 								</div>
 								<div class="row bg-info">
 									<b><label for="sdm120modbusllid3s2">SDM Zähler 3 ID:</label></b>
-									<input type="text" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>"><br>
+									<input type="text" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>">
 								</div>
 								<div class="row bg-info">
-									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.<br><br>
+									Gültige Werte 1-254. Modbus ID des Ladepunkt 3 SDM Zählers 3 in der WB. Ist keine dritte Phase / SDM120 vorhanden bitte none eintragen.
 								</div>
 							</div>
 							<div id="rs485lanlp3">
 								<div class="row bg-info">
 									<b><label for="lllaniplp3">RS485/Lan-Konverter IP:</label></b>
-									<input type="text" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>"><br>
+									<input type="text" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>">
 								</div>
 								<div class="row bg-info">
 									Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
-									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.<br><br>
+									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
 								</div>
 							</div>
 						</div>
@@ -3011,15 +3018,14 @@
 							}
 
 						}
+
 						$(function() {
 							display_llmp3 ();
 							$('#ladeleistungss2modul').change( function(){
 								display_llmp3();
 							});
 						});
-					</script>
 
-					<script>
 						function display_lastmanagement2() {
 							if($('#lastmanagements2').val() == '0') {
 								$('#lasts2mmaus').show();
@@ -3032,6 +3038,7 @@
 								$('#durchslp3').show();
 							}
 						}
+
 						$(function() {
 							display_lastmanagement2();
 							$('#lastmanagements2').change( function() {
@@ -3041,49 +3048,49 @@
 					</script>
 
 					<div class="row">
-						<b><h4><label for="lastmanagementlp4">Vierter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagementlp4" id="lastmanagementlp4">
-							<option <?php if($lastmanagementlp4old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp4old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagementlp4">Vierter Ladepunkt:</label></b>
+							<select name="lastmanagementlp4" id="lastmanagementlp4">
+								<option <?php if($lastmanagementlp4old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementlp4old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="lastlp4mmaus">
-						<br>
 					</div>
 					<div id="lastlp4mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp3name">Name Ladepunkt 4:</label></b>
-									<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>"><br>
-
+							<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>">
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseiplp4">EVSE IP:</label></b>
-							<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>"><br>
+							<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse.<br><br>
+							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp4">EVSE ID:</label></b>
-							<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>"><br>
+							<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp4ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>"><br>
+							<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp4id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>"><br>
+							<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
@@ -3098,6 +3105,7 @@
 								$('#lastlp4mman').show();
 							}
 						}
+
 						$(function() {
 							display_lastmanagementlp4();
 							$('#lastmanagementlp4').change( function() {
@@ -3106,48 +3114,49 @@
 						});
 					</script>
 					<div class="row">
-						<b><h4><label for="lastmanagementlp5">Fünfter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagementlp5" id="lastmanagementlp5">
-							<option <?php if($lastmanagementlp5old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp5old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagementlp5">Fünfter Ladepunkt:</label></b>
+							<select name="lastmanagementlp5" id="lastmanagementlp5">
+								<option <?php if($lastmanagementlp5old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementlp5old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="lastlp5mmaus">
-						<br>
 					</div>
 					<div id="lastlp5mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp5name">Name Ladepunkt 5:</label></b>
-									<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>"><br>
+									<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>">
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseiplp5">EVSE IP:</label></b>
-							<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>"><br>
+							<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse.<br><br>
+							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp5">EVSE ID:</label></b>
-							<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>"><br>
+							<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp5ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>"><br>
+							<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp5id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>"><br>
+							<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
@@ -3162,6 +3171,7 @@
 								$('#lastlp5mman').show();
 							}
 						}
+
 						$(function() {
 							display_lastmanagementlp5();
 							$('#lastmanagementlp5').change( function() {
@@ -3170,48 +3180,49 @@
 						});
 					</script>
 					<div class="row">
-						<b><h4><label for="lastmanagementlp6">Sechster Ladepunkt:</label></b>
-						<select type="text" name="lastmanagementlp6" id="lastmanagementlp6">
-							<option <?php if($lastmanagementlp6old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp6old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagementlp6">Sechster Ladepunkt:</label></b>
+							<select name="lastmanagementlp6" id="lastmanagementlp6">
+								<option <?php if($lastmanagementlp6old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementlp6old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="lastlp6mmaus">
-						<br>
 					</div>
 					<div id="lastlp6mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp6name">Name Ladepunkt 6:</label></b>
-									<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>"><br>
+									<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>">
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseiplp6">EVSE IP:</label></b>
-							<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>"><br>
+							<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse.<br><br>
+							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp6">EVSE ID:</label></b>
-							<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>"><br>
+							<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp6ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>"><br>
+							<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp6id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>"><br>
+							<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
@@ -3234,48 +3245,49 @@
 						});
 					</script>
 					<div class="row">
-						<b><h4><label for="lastmanagementlp7">Siebter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagementlp7" id="lastmanagementlp7">
-							<option <?php if($lastmanagementlp7old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp7old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagementlp7">Siebter Ladepunkt:</label></b>
+							<select name="lastmanagementlp7" id="lastmanagementlp7">
+								<option <?php if($lastmanagementlp7old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementlp7old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="lastlp7mmaus">
-						<br>
 					</div>
 					<div id="lastlp7mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp7name">Name Ladepunkt 7:</label></b>
-									<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>"><br>
+									<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>">
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseiplp7">EVSE IP:</label></b>
-							<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>"><br>
+							<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse.<br><br>
+							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp7">EVSE ID:</label></b>
-							<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>"><br>
+							<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp7ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>"><br>
+							<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp7id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>"><br>
+							<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
@@ -3290,6 +3302,7 @@
 								$('#lastlp7mman').show();
 							}
 						}
+
 						$(function() {
 							display_lastmanagementlp7();
 							$('#lastmanagementlp7').change( function() {
@@ -3298,48 +3311,49 @@
 						});
 					</script>
 					<div class="row">
-						<b><h4><label for="lastmanagementlp8">Achter Ladepunkt:</label></b>
-						<select type="text" name="lastmanagementlp8" id="lastmanagementlp8">
-							<option <?php if($lastmanagementlp8old == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($lastmanagementlp8old == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="lastmanagementlp8">Achter Ladepunkt:</label></b>
+							<select name="lastmanagementlp8" id="lastmanagementlp8">
+								<option <?php if($lastmanagementlp8old == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($lastmanagementlp8old == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="lastlp8mmaus">
-						<br>
 					</div>
 					<div id="lastlp8mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp8name">Name Ladepunkt 8:</label></b>
-									<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>"><br>
+									<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>">
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseiplp8">EVSE IP:</label></b>
-							<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>"><br>
+							<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse.<br><br>
+							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
 							<b><label for="evseidlp8">EVSE ID:</label></b>
-							<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>"><br>
+							<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.<br><br>
+							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>"><br>
+							<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.<br><br>
+							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
 							<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>"><br>
+							<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>">
 						</div>
 						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
@@ -3354,6 +3368,7 @@
 								$('#lastlp8mman').show();
 							}
 						}
+
 						$(function() {
 							display_lastmanagementlp8();
 							$('#lastmanagementlp8').change( function() {
@@ -3366,119 +3381,119 @@
 					</div>
 					<div class="row">
 						<b><label for="wattbezugmodul">Strombezugsmodul:</label></b>
-						<select type="text" name="wattbezugmodul" id="wattbezugmodul">
-							<option <?php if($wattbezugmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo selected ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
-							<option <?php if($wattbezugmodulold == "vzlogger\n") echo selected ?> value="vzlogger">VZLogger</option>
-							<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo selected ?> value="sdm630modbusbezug">SDM 630</option>
-							<option <?php if($wattbezugmodulold == "bezug_http\n") echo selected ?> value="bezug_http">HTTP</option>
-							<option <?php if($wattbezugmodulold == "bezug_json\n") echo selected ?> value="bezug_json">Json</option>
-							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo selected ?> value="bezug_mpm3pm">MPM3PM</option>
-							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo selected ?> value="bezug_smashm">SMA HomeManager</option>
-							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo selected ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo selected ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo selected ?> value="bezug_solarlog">SolarLog</option>
-							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo selected ?> value="bezug_solaredge">Solaredge</option>
-							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo selected ?> value="bezug_smartme">Smartme</option>
-							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo selected ?> value="bezug_e3dc">E3DC Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo selected ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo selected ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
-							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo selected ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
-							<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo selected ?> value="bezug_smartfox">Smartfox</option>
-							<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo selected ?> value="bezug_powerwall">Tesla Powerwall</option>
-							<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo selected ?> value="bezug_victrongx">Victron (z.B. GX)</option>
-							<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo selected ?> value="bezug_alphaess">Alpha ESS</option>
-							<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo selected ?> value="bezug_solarview">Solarview</option>
-							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo selected ?> value="bezug_discovergy">Discovergy</option>
-							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo selected ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo selected ?> value="bezug_mqtt">MQTT</option>
+						<select name="wattbezugmodul" id="wattbezugmodul">
+							<option <?php if($wattbezugmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($wattbezugmodulold == "bezug_ethmpm3pm\n") echo "selected" ?> value="bezug_ethmpm3pm">openWB EVU Kit</option>
+							<option <?php if($wattbezugmodulold == "vzlogger\n") echo "selected" ?> value="vzlogger">VZLogger</option>
+							<option <?php if($wattbezugmodulold == "sdm630modbusbezug\n") echo "selected" ?> value="sdm630modbusbezug">SDM 630</option>
+							<option <?php if($wattbezugmodulold == "bezug_http\n") echo "selected" ?> value="bezug_http">HTTP</option>
+							<option <?php if($wattbezugmodulold == "bezug_json\n") echo "selected" ?> value="bezug_json">Json</option>
+							<option <?php if($wattbezugmodulold == "bezug_mpm3pm\n") echo "selected" ?> value="bezug_mpm3pm">MPM3PM</option>
+							<option <?php if($wattbezugmodulold == "bezug_smashm\n") echo "selected" ?> value="bezug_smashm">SMA HomeManager</option>
+							<option <?php if($wattbezugmodulold == "bezug_fronius_sm\n") echo "selected" ?> value="bezug_fronius_sm">Fronius Energy Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_fronius_s0\n") echo "selected" ?> value="bezug_fronius_s0">Fronius WR mit S0 Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarlog\n") echo "selected" ?> value="bezug_solarlog">SolarLog</option>
+							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
+							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo "selected" ?> value="bezug_smartme">Smartme</option>
+							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
+							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
+							<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
+							<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
+							<option <?php if($wattbezugmodulold == "bezug_alphaess\n") echo "selected" ?> value="bezug_alphaess">Alpha ESS</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarview\n") echo "selected" ?> value="bezug_solarview">Solarview</option>
+							<option <?php if($wattbezugmodulold == "bezug_discovergy\n") echo "selected" ?> value="bezug_discovergy">Discovergy</option>
+							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
 						<div class="row">
-							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.<br><br>
+							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
 						</div>
 					</div>
 					<div id="wattbezugmqtt">
-							<div class="row">Keine Konfiguration erforderlich</div>
-							<div class="row">Per MQTT zu schreiben:</div>
-							<div class="row"><b>"openWB/set/evu/W"</b></div>
-							<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
-							<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
-							<div class="row">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-							<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
-							<div class="row">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-							<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
-							<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-							<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-							<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
-							<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
-							<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
-							<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
-							<div class="row">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
-							<div class="row"><b>"openWB/set/evu/VPhase2"</b></div>
-							<div class="row">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
-							<div class="row"><b>"openWB/set/evu/VPhase3"</b></div>
-							<div class="row">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
-							<div class="row"><b>"openWB/set/evu/HzFrequenz"</b></div>
-							<div class="row">Netzfrequenz in Hz, float, Punkt als Trenner</div>
-
+						<div class="row">Keine Konfiguration erforderlich</div>
+						<div class="row">Per MQTT zu schreiben:</div>
+						<div class="row"><b>"openWB/set/evu/W"</b></div>
+						<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
+						<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
+						<div class="row">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
+						<div class="row">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
+						<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
+						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
+						<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
+						<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
+						<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
+						<div class="row">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
+						<div class="row"><b>"openWB/set/evu/VPhase2"</b></div>
+						<div class="row">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
+						<div class="row"><b>"openWB/set/evu/VPhase3"</b></div>
+						<div class="row">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
+						<div class="row"><b>"openWB/set/evu/HzFrequenz"</b></div>
+						<div class="row">Netzfrequenz in Hz, float, Punkt als Trenner</div>
 					</div>
 					<div id="wattbezuglgessv1">
 						<div class="row">
-							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
 					<div id="wattbezugethmpm3pm">
 						<div class="row">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
-							<select type="text" name="evukitversion" id="evukitversion">
-								<option <?php if($evukitversionold == 0) echo selected ?> value="0">EVU Kit</option>
-								<option <?php if($evukitversionold == 1) echo selected ?> value="1">EVU Kit v2</option>
+							<select name="evukitversion" id="evukitversion">
+								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit</option>
+								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit v2</option>
 							</select>
 						</div>
 					</div>
 					<div id="wattbezugsolarview">
 						<div class="row">
-							Konfiguration im zugehörigen PV Modul erforderlich.<br><br>
+							Konfiguration im zugehörigen PV Modul erforderlich.
 						</div>
 					</div>
 					<div id="wattbezugpowerwall">
 						<div class="row">
-							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. <br><br>
+							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. 
 						</div>
 					</div>
 					<div id="wattbezugvictrongx">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_victronip">Victron IP:</label></b>
-							<input type="text" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>"><br>
+							<input type="text" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. IP Adresse des Victron, z.B. GX.<br><br>
+							Gültige Werte IP. IP Adresse des Victron, z.B. GX.
 						</div>
 					</div>
 					<div id="wattbezugdiscovergy">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="discovergyuser">Discovergy Username (Email):</label></b>
-							<input type="text" name="discovergyuser" id="discovergyuser" value="<?php echo $discovergyuserold ?>"><br>
+							<input type="text" name="discovergyuser" id="discovergyuser" value="<?php echo $discovergyuserold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="discovergypass">Discovergy Passwort:</label></b>
-							<input type="text" name="discovergypass" id="discovergypass" value="<?php echo $discovergypassold ?>"><br>
+							<input type="text" name="discovergypass" id="discovergypass" value="<?php echo $discovergypassold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="discovergyevuid">Meter ID:</label></b>
-							<input type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>"><br>
+							<input type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>
+							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.
 						</div>
 					</div>
 					<div id="wattbezugkostalpiko">
-
 						<div class="row" style="background-color:#febebe">
-							IP Adresse wird im PV Modul konfiguriert. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby. <br> Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>Ein extra PV-Modul muss nicht mehr ausgewählt werden.<br><br>
+							IP Adresse wird im PV Modul konfiguriert. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby.<br>
+							Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>
+							Ein extra PV-Modul muss nicht mehr ausgewählt werden.
 						</div>
 					</div>
 					<div id="wattbezugplentihaus">
@@ -3486,287 +3501,306 @@
 							Dieses Modul erfordert einen am Plenticore angeschlossenen EM300 bzw. KSEM. Nach Wahl dieses Moduls ist die Auswahl des PV-Moduls fest auf Kostal Plenticore eingestellt.
 							Alle relevanten Daten werden aus dem Wechselrichter gelesen. Die IP des WR ist im PV-Modul anzugeben. Ein am Plenticore angeschlossener Speicher wird ebenfalls ohne weitere
 							Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt. Ein zusätzlicher und nicht am Plenticore angeschlossener Speicher kann im Speicher-Modul
-							extra konfiguriert werden.
-							<br>Bitte einstellen: EM300/KSEM verbaut im Hausverbrauchs-Zweig (Pos. 1) oder Netzanschluss-Zweig (Pos. 2).<br>
+							extra konfiguriert werden.<br>
+							Bitte einstellen: EM300/KSEM verbaut im Hausverbrauchs-Zweig (Pos. 1) oder Netzanschluss-Zweig (Pos. 2).
 						</div>
 						<input type='hidden' value='0' name='kostalplenticorehaus'>
 						<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
-						<label for="kostalplenticorehaus">EM300/KSEM im Netzanschluss-Zweig (Pos. 2)</label><br>
+						<label for="kostalplenticorehaus">EM300/KSEM im Netzanschluss-Zweig (Pos. 2)</label>
 					</div>
 					<div id="wattbezugmpm3pm">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="mpm3pmevu">MPM3PM Zähler EVU Source:</label></b>
-							<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>"><br>
+							<b><label for="mpm3pmevusource">MPM3PM Zähler EVU Source:</label></b>
+							<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="mpm3pmevuid">MPM3PM Zähler EVU ID:</label></b>
-							<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>"><br>
+							<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
-
 						<input type='hidden' value='0' name='mpm3pmevuhaus'>
 						<input id="mpm3pmevuhaus" name="mpm3pmevuhaus" value="1" type="checkbox" <?php if ( $mpm3pmevuhausold == 1){ echo "checked"; } ?> >
-						<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label><br>
+						<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label>
 						<div class="row" style="background-color:#febebe">
-							Wenn der MPM3PM EVU Zähler im Hausverbrauchszweig NACH den Ladepunkten angeschlossen ist hier ein Hacken setzen.<br>z.B. auch zu nutzen wenn der Ladepunkt an einem seperaten Rundsteuerempfänger(=extra Zähler) angeschlossen ist.<br>Bei gesetzten Hacken werden die Ladeströme der Ladepunkte zu den Strömen gemessen am EVU Zähler hinzuaddiert.<br> Somit ist ein Lastmanagement / Hausanschlussüberwachung möglich.<br>Auf korrekte Verkabelung ist zu achten!<br>
-							EVU L1, LP1 L1, LP2 L2<br>EVU L2, LP1 L2, LP2 L3<br> EVU L3, LP1 L3, LP2 L1<br>
+							Wenn der MPM3PM EVU Zähler im Hausverbrauchszweig NACH den Ladepunkten angeschlossen ist hier ein Hacken setzen.<br>
+							z.B. auch zu nutzen wenn der Ladepunkt an einem seperaten Rundsteuerempfänger(=extra Zähler) angeschlossen ist.<br>
+							Bei gesetzten Hacken werden die Ladeströme der Ladepunkte zu den Strömen gemessen am EVU Zähler hinzuaddiert.<br>
+							Somit ist ein Lastmanagement / Hausanschlussüberwachung möglich.
+							Auf korrekte Verkabelung ist zu achten!<br>
+							EVU L1, LP1 L1, LP2 L2<br>
+							EVU L2, LP1 L2, LP2 L3<br>
+							EVU L3, LP1 L3, LP2 L1
 						</div>
 					</div>
 					<div id="wattbezugnone">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
-							<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>"><br>
+							<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br> Daraus resultierend agiert die PV Regelung bei vorhandenem PV-Modul<br><br>
+							Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br>
+							Daraus resultierend agiert die PV Regelung bei vorhandenem PV-Modul
 						</div>
-						<br>
 					</div>
 					<div id="wattbezugsdm">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="sdm630modbusbezugsource">SDM 630 Zähler Source:</label></b>
-							<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>"><br>
+							<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.<br><br>
+							Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
-							<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>"><br>
+							<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
+							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
-							<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>"><br>
+							<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
 						</div>
 					</div>
 					<div id="wattbezugvz">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
-							<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>"><br>
+							<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
-							<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>"><br>
+							<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. <br><br>
+							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. 
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
-							<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>"><br>
+							<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br><br>
+							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+							Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
-							<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>"><br>
+							<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.<br><br>
+							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+							Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.
 						</div>
 					</div>
 					<div id="wattbezughttp">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_w_url">Vollständige URL für den Watt Bezug</label></b>
-							<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>"><br>
+							<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
-							<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>"><br>
+							<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_ekwh_url">Vollständige URL für die kWh Einspeisung</label></b>
-							<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>"><br>
+							<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-						Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_l1_url">Vollständige URL für die Ampere Phase 1</label></b>
-							<input type="text" name="bezug_http_l1_url" id="bezug_http_l1_url" value="<?php echo htmlspecialchars($bezug_http_l1_urlold) ?>"><br>
+							<input type="text" name="bezug_http_l1_url" id="bezug_http_l1_url" value="<?php echo htmlspecialchars($bezug_http_l1_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_l2_url">Vollständige URL für die Ampere Phase 2</label></b>
-							<input type="text" name="bezug_http_l2_url" id="bezug_http_l2_url" value="<?php echo htmlspecialchars($bezug_http_l2_urlold) ?>"><br>
+							<input type="text" name="bezug_http_l2_url" id="bezug_http_l2_url" value="<?php echo htmlspecialchars($bezug_http_l2_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_http_l3_url">Vollständige URL für die Ampere Phase 3</label></b>
-							<input type="text" name="bezug_http_l3_url" id="bezug_http_l3_url" value="<?php echo htmlspecialchars($bezug_http_l3_urlold) ?>"><br>
+							<input type="text" name="bezug_http_l3_url" id="bezug_http_l3_url" value="<?php echo htmlspecialchars($bezug_http_l3_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
 					</div>
 					<div id="wattbezugsmartme">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_smartme_user">Smartme Benutzername</label></b>
-							<input type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>"><br>
+							<input type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-						Smartme Benutzername<br>
+							Smartme Benutzername
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_smartme_pass">Smartme Passwort</label></b>
-							<input type="text" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>"><br>
+							<input type="text" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-						Smartme Passwort<br>
+							Smartme Passwort
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_smartme_url">Smartme Url</label></b>
-							<input type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo htmlspecialchars($bezug_smartme_urlold) ?>"><br>
+							<input type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo htmlspecialchars($bezug_smartme_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-						Smartme Url<br>
+							Smartme Url
 						</div>
 					</div>
 					<div id="wattbezugshm">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="smashmdbezugid">Seriennummer des SMA Home Manager</label></b>
-							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>"><br>
+							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten voreingestellte Nummer belassen. Funktioniert auch mit Energy Meter statt Home Manager<br><br><br>
+							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten none eintragen. Funktioniert auch mit Energy Meter statt Home Manager.
 						</div>
 					</div>
 					<div id="wattbezugsmartfox">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezug_smartfox_ip">Ip Adresse des SmartFox</label></b>
-							<input type="text" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo $bezug_smartfox_ipold ?>"><br>
+							<input type="text" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo $bezug_smartfox_ipold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP Adresse.<br>
+							Gültige Werte IP Adresse.
 						</div>
 					</div>
 					<div id="wattbezugsma">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="smaemdbezugid">Seriennummer des SMA Energy Meter</label></b>
-							<input type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>"><br>
+							<input type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br> Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a><br>
+							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br>
+							Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
 						</div>
 					</div>
 					<div id="wattbezugfronius">
 						<div class="row" style="background-color:#febebe">
-							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.<br>
+							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
 						</div>
 						<input type='hidden' value='0' name='froniusprimo'>
 						<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
-						<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label><br>
+						<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label>
 					</div>
 					<div id="wattbezugjson">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezugjsonurl">Bezug URL:</label></b>
-							<input type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo $bezugjsonurlold ?>"><br>
+							<input type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo $bezugjsonurlold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
+							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezugjsonwatt">Json Abfrage für Watt:</label></b>
-							<input type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo $bezugjsonwattold ?>"><br>
+							<input type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo $bezugjsonwattold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
+							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
+							Im Hintergrund wird der Befehl jq benutzt.<br>
+							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezugjsonkwh">Json Abfrage für Bezug kWh:</label></b>
-							<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>"><br>
+							<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
+							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
+							Im Hintergrund wird der Befehl jq benutzt.<br>
+							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung kWh:</label></b>
-							<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>"><br>
+							<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerSelfSupplied - ohne die - - eingetragen werden<br><br>
+							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
+							Im Hintergrund wird der Befehl jq benutzt.<br>
+							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerSelfSupplied - ohne die - - eingetragen werden.
 						</div>
 					</div>
 					<div id="wattbezugsolarlog">
 
 						<div class="row" style="background-color:#febebe">
-							Die zugehörige IP Adresse ist im PV Modul einzustellen.<br>
+							Die zugehörige IP Adresse ist im PV Modul einzustellen.
 						</div>
 						<div class="row">
 							<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
-							<select type="text" name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
-								<option <?php if($bezug_solarlog_speichervold == 0) echo selected ?> value="0">Nein</option>
-								<option <?php if($bezug_solarlog_speichervold == 1) echo selected ?> value="1">Ja</option>
+							<select name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
+								<option <?php if($bezug_solarlog_speichervold == 0) echo "selected" ?> value="0">Nein</option>
+								<option <?php if($bezug_solarlog_speichervold == 1) echo "selected" ?> value="1">Ja</option>
 							</select>
 						</div>
 					</div>
 					<div id="wattbezugsolaredge">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="solaredgeip">IP Adresse des SolarEdge</label></b>
-							<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>"><br>
+							<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP.<br>
 							Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
-							Ebenso muss ModbusTCP am Wechselrichter aktiviert werden<br>
+							Ebenso muss ModbusTCP am Wechselrichter aktiviert werden
 						</div>
 					</div>
 					<div id="wattbezuge3dc">
 						<div class="row" style="background-color:#febebe">
-							Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br> Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.<br>
+							Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br>
+							Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>
+							Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.
 						</div>
 					</div>
 					<div id="wattbezugsbs25">
 						<div class="row" style="background-color:#febebe">
-							Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.<br>
+							Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.
 						</div>
 					</div>
 
 					<div class="row">
-						<b><h5><label for="evuglaettungakt">EVU Glättung:</label></b>
-						<select type="text" name="evuglaettungakt" id="evuglaettungakt">
-							<option <?php if($evuglaettungaktold == 0) echo selected ?> value="0">Aus</option>
-							<option <?php if($evuglaettungaktold == 1) echo selected ?> value="1">An</option>
-						</select></h4>
+						<h4>
+							<b><label for="evuglaettungakt">EVU Glättung:</label></b>
+							<select name="evuglaettungakt" id="evuglaettungakt">
+								<option <?php if($evuglaettungaktold == 0) echo "selected" ?> value="0">Aus</option>
+								<option <?php if($evuglaettungaktold == 1) echo "selected" ?> value="1">An</option>
+							</select>
+						</h4>
 					</div>
 
 					<div id="evuglaettungdiv">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="evuglaettung">Glättung der EVU Werte:</label></b>
-							<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>"><br>
+							<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte: Zeit in Sekunden, z.B. 30,50,200. <br>
+							Gültige Werte: Zeit in Sekunden, z.B. 30,50,200.<br>
 							Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
 							Sinnvoll, wenn öfter kurze Lastspitzen auftreten.<br>
-							Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.<br><br>
+							Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.
 						</div>
-						<br><br>
 					</div>
 
 					<script>
@@ -3785,20 +3819,17 @@
 								}
 							});
 						});
-					</script>
 
-					<script>
 						function enable_pv_selector() {
 							// enable das Dropdown-Element zur Auswahl des PV-Moduls
 							document.getElementById("pvwattmodul").disabled=false;
 						}
+
 						function disable_pv_selector() {
 							// disable das Dropdown-Element zur Auswahl des PV-Moduls
 							document.getElementById("pvwattmodul").disabled=true;
 						}
-					</script>
 
-					<script>
 						function display_wattbezugmodul() {
 							$('#wattbezugvz').hide();
 							$('#wattbezugsdm').hide();
@@ -3840,11 +3871,9 @@
 							if($('#wattbezugmodul').val() == 'bezug_mqtt') {
 								$('#wattbezugmqtt').show();
 							}
-
 							if($('#wattbezugmodul').val() == 'bezug_victrongx') {
 								$('#wattbezugvictrongx').show();
 							}
-
 							if($('#wattbezugmodul').val() == 'vzlogger') {
 								$('#wattbezugvz').show();
 							}
@@ -3913,17 +3942,18 @@
 								$('#wattbezugsmartfox').show();
 							}
 							if($('#wattbezugmodul').val() == 'bezug_powerwall')   {
-						  		$('#wattbezugpowerwall').show();
+								$('#wattbezugpowerwall').show();
 							}
 							if($('#wattbezugmodul').val() == 'bezug_lgessv1')   {
-						  		$('#wattbezuglgessv1').show();
+								$('#wattbezuglgessv1').show();
 							}
 						}
+
 						$(function() {
 							display_wattbezugmodul();
-						  	$('#wattbezugmodul').change( function(){
+							$('#wattbezugmodul').change( function(){
 								display_wattbezugmodul();
-						  	});
+							});
 						});
 					</script>
 
@@ -3933,35 +3963,34 @@
 					<div class="row">
 						<b><label for="pvwattmodul">PV-Modul:</label></b>
 						<select type="text" name="pvwattmodul" id="pvwattmodul">
-							<option <?php if($pvwattmodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo selected ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
-							<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo selected ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
-							<option <?php if($pvwattmodulold == "wr_fronius\n") echo selected ?> value="wr_fronius">Fronius WR</option>
-							<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo selected ?> value="sdm630modbuswr">SDM 630 Modbus</option>
-							<option <?php if($pvwattmodulold == "vzloggerpv\n") echo selected ?> value="vzloggerpv">VZLogger</option>
-							<option <?php if($pvwattmodulold == "wr_http\n") echo selected ?> value="wr_http">WR mit URL abfragen</option>
-							<option <?php if($pvwattmodulold == "smaemd_pv\n") echo selected ?> value="smaemd_pv">SMA Energy Meter</option>
-							<option <?php if($pvwattmodulold == "wr_json\n") echo selected ?> value="wr_json">WR mit Json abfragen</option>
-							<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo selected ?> value="mpm3pmpv">MPM3PM </option>
-							<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo selected ?> value="wr_kostalpiko">Kostal Piko</option>
-							<option <?php if($pvwattmodulold == "wr_solaredge\n") echo selected ?> value="wr_solaredge">SolarEdge WR</option>
-							<option <?php if($pvwattmodulold == "wr_smartme\n") echo selected ?> value="wr_smartme">SmartMe</option>
-							<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo selected ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
-							<option <?php if($pvwattmodulold == "wr_plenticore\n") echo selected ?> value="wr_plenticore">Kostal Plenticore</option>
-							<option <?php if($pvwattmodulold == "wr_solarlog\n") echo selected ?> value="wr_solarlog">SolarLog</option>
-							<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo selected ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
-							<option <?php if($pvwattmodulold == "wr_powerwall\n") echo selected ?> value="wr_powerwall">Tesla Powerwall</option>
-							<option <?php if($pvwattmodulold == "wr_solarview\n") echo selected ?> value="wr_solarview">Solarview</option>
-							<option <?php if($pvwattmodulold == "wr_discovergy\n") echo selected ?> value="wr_discovergy">Discovergy</option>
-							<option <?php if($pvwattmodulold == "wr_youless120\n") echo selected ?> value="wr_youless120">Youless 120</option>
-							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo selected ?> value="wr_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo selected ?> value="wr_mqtt">MQTT</option>
-							<option <?php if($pvwattmodulold == "wr_sunways\n") echo selected ?> value="wr_sunways">Sunways</option>
+							<option <?php if($pvwattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo "selected" ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
+							<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
+							<option <?php if($pvwattmodulold == "wr_fronius\n") echo "selected" ?> value="wr_fronius">Fronius WR</option>
+							<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
+							<option <?php if($pvwattmodulold == "vzloggerpv\n") echo "selected" ?> value="vzloggerpv">VZLogger</option>
+							<option <?php if($pvwattmodulold == "wr_http\n") echo "selected" ?> value="wr_http">WR mit URL abfragen</option>
+							<option <?php if($pvwattmodulold == "smaemd_pv\n") echo "selected" ?> value="smaemd_pv">SMA Energy Meter</option>
+							<option <?php if($pvwattmodulold == "wr_json\n") echo "selected" ?> value="wr_json">WR mit Json abfragen</option>
+							<option <?php if($pvwattmodulold == "mpm3pmpv\n") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
+							<option <?php if($pvwattmodulold == "wr_kostalpiko\n") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
+							<option <?php if($pvwattmodulold == "wr_solaredge\n") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
+							<option <?php if($pvwattmodulold == "wr_smartme\n") echo "selected" ?> value="wr_smartme">SmartMe</option>
+							<option <?php if($pvwattmodulold == "wr_tripower9000\n") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
+							<option <?php if($pvwattmodulold == "wr_plenticore\n") echo "selected" ?> value="wr_plenticore">Kostal Plenticore</option>
+							<option <?php if($pvwattmodulold == "wr_solarlog\n") echo "selected" ?> value="wr_solarlog">SolarLog</option>
+							<option <?php if($pvwattmodulold == "wr_kostalpikovar2\n") echo "selected" ?> value="wr_kostalpikovar2">Kostal Piko alt</option>
+							<option <?php if($pvwattmodulold == "wr_powerwall\n") echo "selected" ?> value="wr_powerwall">Tesla Powerwall</option>
+							<option <?php if($pvwattmodulold == "wr_solarview\n") echo "selected" ?> value="wr_solarview">Solarview</option>
+							<option <?php if($pvwattmodulold == "wr_discovergy\n") echo "selected" ?> value="wr_discovergy">Discovergy</option>
+							<option <?php if($pvwattmodulold == "wr_youless120\n") echo "selected" ?> value="wr_youless120">Youless 120</option>
+							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
+							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
 						</select>
 					</div>
 
 					<div id="pvnone">
-						<br>
 					</div>
 					<div id="pvmqtt">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -3973,16 +4002,16 @@
 					</div>
 					<div id="pvlgessv1">
 						<div class="row">
-							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!<br><br>
+							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
 					<div id="pvyouless">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="wryoulessip">IP Adresse des Youless</label></b>
-							<input type="text" name="wryoulessip" id="wryoulessip" value="<?php echo htmlspecialchars($wryoulessipold) ?>"><br>
+							<input type="text" name="wryoulessip" id="wryoulessip" value="<?php echo htmlspecialchars($wryoulessipold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. <br>
+							Gültige Werte IP.
 						</div>
 					</div>
 					<div id="pvsunways">
@@ -4005,351 +4034,359 @@
 
 					<div id="pvsolarlog">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="bezug_solarlog">IP Adresse des SolarLog</label></b>
-							<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>"><br>
+							<b><label for="bezug_solarlog_ip">IP Adresse des SolarLog</label></b>
+							<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul<br>
+							Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
 						</div>
 					</div>
 					<div id="pvdiscovergy">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="discovergypvid">Meter ID des Zählers</label></b>
-							<input type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>"><br>
+							<input type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt. <br>Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert<br>
+							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.<br>
+							Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert.
 						</div>
 					</div>
 					<div id="pvsolarview">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
-							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>"><br>
+							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP. <br>
+							Gültige Werte IP.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="solarview_port">Port des Solarview</label></b>
-							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>"><br>
+							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Port, z.B. 80. <br>
+							Gültige Werte Port, z.B. 80.
 						</div>
 					</div>
 					<div id="pvpowerwall">
 						<div class="row" style="background-color:#febebe">
-							Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert<br>
+							Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert
 						</div>
 					</div>
 					<div id="pvmpmevu">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
-							<select type="text" name="pvkitversion" id="pvkitversion">
-								<option <?php if($pvkitversionold == 0) echo selected ?> value="0">PV Kit</option>
-								<option <?php if($pvkitversionold == 1) echo selected ?> value="1">PV Kit v2</option>
+							<select name="pvkitversion" id="pvkitversion">
+								<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit</option>
+								<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit v2</option>
 							</select>
 						</div>
 					</div>
 					<div id="pvplenti">
 						<div class="row" style="background-color:#befebe">
 							<b><label for="kostalplenticoreip">IP Adresse des 1. Kostal Plenticore:</label></b>
-							<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>"><br>
+							<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse. IP-Adresse des ersten Kostal Plenticore. An diesem sollte (wenn vorhanden) der EM300/KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).<br><br>
+							Gültige Werte: IP-Adresse. IP-Adresse des ersten Kostal Plenticore. An diesem sollte (wenn vorhanden) der EM300/KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter1">Bezeichnung des 1. Kostal Plenticore:</label></b>
-							<input type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo $name_wechselrichter1old ?>"><br>
+							<input type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo $name_wechselrichter1old ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.<br><br>
+							Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="kostalplenticoreip2">IP Adresse des weiteren Kostal Plenticore:</label></b>
-							<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>"><br>
+							<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse oder "none". IP-Adresse des weiteren Kostal Plenticore. Bei diesem wird nur die PV-Leistung und ggf. ein angeschlossener Speicher ausgelesen. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).<br>
+							Gültige Werte: IP-Adresse oder "none". IP-Adresse des weiteren Kostal Plenticore. Bei diesem wird nur die PV-Leistung und ggf. ein angeschlossener Speicher ausgelesen. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter2">Bezeichnung des 2. Kostal Plenticore:</label></b>
-							<input type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>"><br>
+							<input type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.<br><br>
+							Gültige Werte: Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
 					</div>
 					<div id="pvsmartme">
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_smartme_user">Smartme Benutzername</label></b>
-							<input type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo htmlspecialchars($wr_smartme_userold) ?>"><br>
+							<input type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo htmlspecialchars($wr_smartme_userold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Smartme Benutzername<br>
+							Smartme Benutzername
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_smartme_pass">Smartme Passwort</label></b>
-							<input type="text" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars($wr_smartme_passold) ?>"><br>
+							<input type="text" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars($wr_smartme_passold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Smartme Passwort<br>
+							Smartme Passwort
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_smartme_url">Smartme Url</label></b>
-							<input type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo htmlspecialchars($wr_smartme_urlold) ?>"><br>
+							<input type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo htmlspecialchars($wr_smartme_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Smartme Url<br>
+							Smartme Url
 						</div>
 					</div>
 					<div id="pvpiko2">
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_piko2_user">Benutzername</label></b>
-							<input type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo htmlspecialchars($wr_piko2_userold) ?>"><br>
+							<input type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo htmlspecialchars($wr_piko2_userold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Piko Benutzername<br>
+							Piko Benutzername
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_piko2_pass">Passwort</label></b>
-							<input type="text" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>"><br>
+							<input type="text" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Piko Passwort<br>
+							Piko Passwort
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="wr_piko2_url">Url</label></b>
-							<input type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo htmlspecialchars($wr_piko2_urlold) ?>"><br>
+							<input type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo htmlspecialchars($wr_piko2_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-						Piko Url<br>
+							Piko Url
 						</div>
 					</div>
 					<div id="pvwrjson">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrjsonurl">WR URL:</label></b>
-							<input type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>"><br>
+							<input type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.<br><br>
+							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrjsonwatt">Json Abfrage für Watt:</label></b>
-							<input type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo $wrjsonwattold ?>"><br>
+							<input type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo $wrjsonwattold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden<br><br>
+							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
+							Im Hintergrund wird der Befehl jq benutzt.<br>
+							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrjsonkwh">Json Abfrage für kWh:</label></b>
-							<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>"><br>
+							<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br> Im Hintergrund wird der Befehl jq benutzt.<br> Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden<br><br>
+							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
+							Im Hintergrund wird der Befehl jq benutzt.<br>
+							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden
 						</div>
 					</div>
 					<div id="pvwrkostalpiko">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrfroniusip">WR Kostal Piko IP:</label></b>
-							<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>"><br>
+							<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse Kostal Wechselrichter.<br><br>
+							Gültige Werte IP. IP Adresse Kostal Wechselrichter.
 						</div>
 					</div>
 					<div id="pvwrtri9000">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="tri9000ip">SMA WR IP:</label></b>
-							<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>"><br>
+							<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert).<br><br>
+							Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert).
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
-							<select type="text" name="wrsmawebbox" id="wrsmawebbox">
-								<option <?php if($wrsmawebboxold == 0) echo selected ?> value="0">Nein</option>
-								<option <?php if($wrsmawebboxold == 1) echo selected ?> value="1">Ja</option>
+							<select name="wrsmawebbox" id="wrsmawebbox">
+								<option <?php if($wrsmawebboxold == 0) echo "selected" ?> value="0">Nein</option>
+								<option <?php if($wrsmawebboxold == 1) echo "selected" ?> value="1">Ja</option>
 							</select>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsma2ip">WR 2 IP:</label></b>
-							<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>"><br>
+							<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.<br><br>
+							Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsma3ip">WR 3 IP:</label></b>
-							<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>"><br>
+							<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.<br><br>
+							Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsma4ip">WR 4 IP:</label></b>
-							<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>"><br>
+							<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.<br><br>
+							Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.
 						</div>
 					</div>
 					<div id="pvwrsolaredge">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgepvip">WR Solaredge IP:</label></b>
-							<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>"><br>
+							<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.<br><br>
+							Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>
-							<input type="text" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgeipslave1old ?>"><br>
+							<input type="text" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgeipslave1old ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Zahl. ID des SolarEdge Wechselrichters. Normalerweise 1.<br><br>
+							Gültige Werte Zahl. ID des SolarEdge Wechselrichters. Normalerweise 1.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgepvslave2">WR 2 Solaredge ID:</label></b>
-							<input type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo $solaredgeipslave2old ?>"><br>
+							<input type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo $solaredgeipslave2old ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.<br><br>
+							Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgepvslave3">WR 3 Solaredge ID:</label></b>
-							<input type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgeipslave3old ?>"><br>
+							<input type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgeipslave3old ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.<br><br>
+							Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgewr2ip">WR 2 Solaredge IP:</label></b>
-							<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>"><br>
+							<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP oder none. IP des zweiten SolarEdge Wechselrichters. Ist nur nötig wenn 2 Wechselrichter genutzt werden die nicht per Modbus miteinander verbunden sind.<br><br>
+							Gültige Werte IP oder none. IP des zweiten SolarEdge Wechselrichters. Ist nur nötig wenn 2 Wechselrichter genutzt werden die nicht per Modbus miteinander verbunden sind.
 						</div>
 					</div>
 					<div id="pvwrfronius">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrfroniusip">WR Fronius IP:</label></b>
-							<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>"><br>
+							<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.<br><br>
+							Gültige Werte IP. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
-							<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>"><br>
+							<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.<br><br>
+							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.
 						</div>
 					</div>
 					<div id="pvmpm3pm">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="mpm3pmpvsource">MPM3PM Wechselrichterleistung Source:</label></b>
-							<input type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>"><br>
+							<input type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.<br><br>
+							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>
+							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="mpm3pmpvid">MPM3PM Wechselrichterleistung ID:</label></b>
-							<input type="text" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo $mpm3pmpvidold ?>"><br>
+							<input type="text" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo $mpm3pmpvidold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.<br><br>
+							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="mpm3pmpvlanip">IP des Modbus/Lan Konverter:</label></b>
-							<input type="text" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>"><br>
+							<input type="text" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.<br><br>
+							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.
 						</div>
 					</div>
 					<div id="pvethsdm120">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wr_sdm120ip">SDM Modbus IP Adresse:</label></b>
-							<input type="text" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>"><br>
+							<input type="text" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. IP Adresse des ModbusLAN Konverters<br><br>
+							Gültige Werte IP. IP Adresse des ModbusLAN Konverters.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wr_sdm120id">SDM Modbus ID:</label></b>
-							<input type="text" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>"><br>
+							<input type="text" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte 1-254. Modbus ID des SDM. <br><br>
+							Gültige Werte 1-254. Modbus ID des SDM.
 						</div>
 					</div>
 					<div id="pvsdmwr">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
-							<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>"><br>
+							<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich<br><br>
+							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
+							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
-							<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>"><br>
+							<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.<br><br>
+							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
-							<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>"><br>
+							<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.<br><br>
+							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
 						</div>
 					</div>
 					<div id="pvvzl">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
-							<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>"><br>
+							<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. <br><br>
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
-							<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>"><br>
+							<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br> Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.<br><br>
+							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+							Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.
 						</div>
 					</div>
 					<div id="pvhttp">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wr_http_w_url">Vollständige URL für die Wechselrichter Watt</label></b>
-							<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>"><br>
+							<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wr_http_kwh_url">Vollständige URL für die Wechselrichter absolut kWh</label></b>
-							<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>"><br>
+							<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.<br>
+							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
 					</div>
 					<div id="pvsma">
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="smaemdpvid">Seriennummer des SMA Energy Meter</label></b>
-							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>"><br>
+							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben<br><br>
+							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben.
 
 						</div>
 					</div>
@@ -4388,11 +4425,9 @@
 							if($('#pvwattmodul').val() == 'wr_mqtt') {
 								$('#pvmqtt').show();
 							}
-
 							if($('#pvwattmodul').val() == 'wr_youless120') {
 								$('#pvyouless').show();
 							}
-
 							if($('#pvwattmodul').val() == 'wr_solarview') {
 								$('#pvsolarview').show();
 							}
@@ -4402,7 +4437,6 @@
 							if($('#pvwattmodul').val() == 'wr_ethsdm120') {
 								$('#pvethsdm120').show();
 							}
-
 							if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
 								$('#pvmpmevu').show();
 							}
@@ -4454,10 +4488,11 @@
 							if($('#pvwattmodul').val() == 'wr_powerwall')   {
 								$('#pvpowerwall').show();
 							}
-						    if($('#pvwattmodul').val() == 'wr_lgessv1')   {
+							if($('#pvwattmodul').val() == 'wr_lgessv1')   {
 								$('#pvlgessv1').show();
 							}
 						}
+
 						$(function() {
 							display_pvwattmodul();
 							$('#pvwattmodul').change( function(){
@@ -4470,271 +4505,266 @@
 						<h3> Speicher-Modul </h3>
 					</div>
 					<div class="row">
-						<b><label for="speicherodul">Speicher-Modul:</label></b>
-						<select type="text" name="speichermodul" id="speichermodul">
-							<option <?php if($speichermodulold == "none\n") echo selected ?> value="none">Nicht vorhanden</option>
-							<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo selected ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
-							<option <?php if($speichermodulold == "speicher_http\n") echo selected ?> value="speicher_http">HTTP Abfrage</option>
-							<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo selected ?> value="mpm3pmspeicher">MPM3PM</option>
-							<option <?php if($speichermodulold == "speicher_bydhv\n") echo selected ?> value="speicher_bydhv">ByD HV</option>
-							<option <?php if($speichermodulold == "speicher_fronius\n") echo selected ?> value="speicher_fronius">Fronius Speicher</option>
-							<option <?php if($speichermodulold == "speicher_e3dc\n") echo selected ?> value="speicher_e3dc">E3DC Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sbs25\n") echo selected ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
-							<option <?php if($speichermodulold == "speicher_solaredge\n") echo selected ?> value="speicher_solaredge">Solaredge Speicher</option>
-							<option <?php if($speichermodulold == "speicher_powerwall\n") echo selected ?> value="speicher_powerwall">Tesla Powerwall</option>
-							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo selected ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo selected ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo selected ?> value="speicher_sonneneco">Sonnen eco</option>
-							<option <?php if($speichermodulold == "speicher_varta\n") echo selected ?> value="speicher_varta">Varta Element u.a.</option>
-							<option <?php if($speichermodulold == "speicher_alphaess\n") echo selected ?> value="speicher_alphaess">Alpha ESS</option>
-							<option <?php if($speichermodulold == "speicher_victron\n") echo selected ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
-							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo selected ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
-							<option <?php if($speichermodulold == "speicher_mqtt\n") echo selected ?> value="speicher_mqtt">MQTT</option>
+						<b><label for="speichermodul">Speicher-Modul:</label></b>
+						<select name="speichermodul" id="speichermodul">
+							<option <?php if($speichermodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($speichermodulold == "speicher_mpm3pm\n") echo "selected" ?> value="speicher_mpm3pm">openWB Speicher Kit</option>
+							<option <?php if($speichermodulold == "speicher_http\n") echo "selected" ?> value="speicher_http">HTTP Abfrage</option>
+							<option <?php if($speichermodulold == "mpm3pmspeicher\n") echo "selected" ?> value="mpm3pmspeicher">MPM3PM</option>
+							<option <?php if($speichermodulold == "speicher_bydhv\n") echo "selected" ?> value="speicher_bydhv">ByD HV</option>
+							<option <?php if($speichermodulold == "speicher_fronius\n") echo "selected" ?> value="speicher_fronius">Fronius Speicher</option>
+							<option <?php if($speichermodulold == "speicher_e3dc\n") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($speichermodulold == "speicher_solaredge\n") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+							<option <?php if($speichermodulold == "speicher_powerwall\n") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
+							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
+							<option <?php if($speichermodulold == "speicher_varta\n") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
+							<option <?php if($speichermodulold == "speicher_alphaess\n") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
+							<option <?php if($speichermodulold == "speicher_victron\n") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
+							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
+							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 						</select>
 					</div>
 
 					<div id="divspeicherlgessv1">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="lgessv1ip">LG ESS 1.0VI IP:</label></b>
-							<input type="text" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>"><br>
+							<input type="text" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP-Adresse des LG ESS 1.0VI<br><br>
+							Gültige Werte IP. IP-Adresse des LG ESS 1.0VI
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="lgessv1pass">LG ESS 1.0VI Passwort:</label></b>
-							<input type="text" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>"><br>
+							<input type="text" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben<br>
+							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b>Bitte die API-Version wählen:</b><br />
-							<select type="text" name="ess_api_ver" id="ess_api_ver">
-								<option <?php if($ess_api_ver_old == "10.2019\n") echo selected ?> value="10.2019">API-Version Oktober 2019</option>
-								<option <?php if($ess_api_ver_old == "01.2020\n") echo selected ?> value="01.2020">API-Version Januar 2020</option>
+							<select name="ess_api_ver" id="ess_api_ver">
+								<option <?php if($ess_api_ver_old == "10.2019\n") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
+								<option <?php if($ess_api_ver_old == "01.2020\n") echo "selected" ?> value="01.2020">API-Version Januar 2020</option>
 							</select><br />
 							Falls Sie nicht wissen, welche API-Version benötigen, benutzten Sie bitte die neueste API-Version<br />
 						</div>
 					</div>
 					<div id="divspeichernone">
-						<br>
 					</div>
 					<div id="divspeicherkit">
 							<div class="row" style="background-color:#fcbe1e">
-							Keine Konfiguration erforderlich<br><br>
+							Keine Konfiguration erforderlich
 						</div>
 					</div>
 					<div id="divspeichermqtt">
-							<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
-							<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
-							<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
-							<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>	
-							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
-							<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>	
-							<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
-							<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>			
+						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
+						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>			
 					</div>
-
 					<div id="divspeichervictron">
 							<div class="row" style="background-color:#fcbe1e">
-							Konfiguration im Bezug Victron Modul<br><br>
+							Konfiguration im Bezug Victron Modul.
 						</div>
 					</div>
 					<div id="divspeichervarta">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="vartaspeicherip">Varta IP:</label></b>
-							<input type="text" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>"><br>
+							<input type="text" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse des Varta Speichers.<br><br>
+							Gültige Werte IP. IP Adresse des Varta Speichers.
 						</div>
 					</div>
 					<div id="divspeicheralphaess">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="alphaessip">Anbindung:</label></b>
-							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>"><br>
+							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1<br><br>
+							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1
 						</div>
 					</div>
 					<div id="divspeicherpw">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="speicherpwip">Powerwall IP:</label></b>
-							<input type="text" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>"><br>
+							<input type="text" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse der Tesla Powerwall.<br><br>
+							Gültige Werte IP. IP Adresse der Tesla Powerwall.
 						</div>
 					</div>
 					<div id="divspeicherseco">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="sonnenecoip">Sonnen eco IP:</label></b>
-							<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>"><br>
+							<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse der Sonnen eco serie 5, für ECO 6 alternative Auslesung nutzen.<br><br>
+							Gültige Werte IP. IP Adresse der Sonnen eco serie 5.
 						</div>
 						<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
-						<select type="text" name="sonnenecoalternativ" id="sonnenecoalternativ">
-							<option <?php if($sonnenecoalternativold == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($sonnenecoalternativold == "1\n") echo selected ?> value="1">Ja</option>
-							<option <?php if($sonnenecoalternativold == "2\n") echo selected ?> value="2">ECO 6</option>
+						<select name="sonnenecoalternativ" id="sonnenecoalternativ">
+							<option <?php if($sonnenecoalternativold == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($sonnenecoalternativold == "1\n") echo "selected" ?> value="1">Ja</option>
+							<option <?php if($sonnenecoalternativold == "2\n") echo "selected" ?> value="2">ECO 6</option>
 						</select>
 						<div class="row bg-info">
-							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.<br><br>
+							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.
 						</div>
 					</div>
 					<div id="divspeichere3dc">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="e3dcip">E3DCIP:</label></b>
-							<input type="text" name="e3dcip" id="e3dcip" value="<?php echo $e3dcipold ?>"><br>
+							<input type="text" name="e3dcip" id="e3dcip" value="<?php echo $e3dcipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse des E3DC Speichers.<br><br>
+							Gültige Werte IP. IP Adresse des E3DC Speichers.
 						</div>
 						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
 						<select type="text" name="e3dcextprod" id="e3dcextprod">
-							<option <?php if($e3dcextprodold == "0\n") echo selected ?> value="0">Nein</option>
-							<option <?php if($e3dcextprodold == "1\n") echo selected ?> value="1">Ja</option>
+							<option <?php if($e3dcextprodold == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($e3dcextprodold == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
-							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>"><br>
+							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP oder none. IP Adresse des zweiten E3DC Speichers. Wenn nicht vorhanden none eintragen.<br><br>
+							Gültige Werte IP oder none. IP Adresse des zweiten E3DC Speichers. Wenn nicht vorhanden none eintragen.
 						</div>
 					</div>
 					<div id="divspeichersbs25">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="sbs25ip">SBS 2.5 IP:</label></b>
-							<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>"><br>
+							<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.<br><br>
+							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.
 						</div>
 					</div>
 					<div id="divspeichersunnyisland">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="sunnyislandip">Sunny Island IP:</label></b>
-							<input type="text" name="sunnyislandip" id="sunnyislandip" value="<?php echo $sunnyislandipold ?>"><br>
+							<input type="text" name="sunnyislandip" id="sunnyislandip" value="<?php echo $sunnyislandipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse des SMA Sunny Island.<br><br>
+							Gültige Werte IP. IP Adresse des SMA Sunny Island.
 						</div>
 					</div>
 					<div id="divspeichersolaredge">
 						<div class="row" style="background-color:#fcbe1e">
 								<b><label for="solaredgespeicherip">Solaredge Speicher IP:</label></b>
-							<input type="text" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo htmlspecialchars($solaredgespeicheripold) ?>"><br>
+							<input type="text" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo htmlspecialchars($solaredgespeicheripold) ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte IP. IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.<br><br>
+							Gültige Werte IP. IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.
 						</div>
 					</div>
 					<div id="divspeicherplenti">
 						<div class="row" style="background-color:#fcbe1e">
-							Ein am Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und
-							Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.<br>
+							Ein am Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
 						</div>
 					</div>
 					<div id="divspeicherfronius">
 						<div class="row" style="background-color:#fcbe1e">
-							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.<br>
+							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
 						</div>
 					</div>
 					<div id="divspeicherhttp">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
-							<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>"><br>
+							<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt. Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird. Das Modul dient dazu bei NurPV Ladung eine Entladung des Speichers zu verhindern.<br><br>
+							Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt. Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird. Das Modul dient dazu bei NurPV Ladung eine Entladung des Speichers zu verhindern.
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="speichersoc_http">SpeicherSoC URL:</label></b>
-							<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>"><br>
+							<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.<br><br>
+							Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="speicherikwh_http">Speicher Import Wh URL:</label></b>
-							<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>"><br>
+							<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte URL. Wenn nicht vorhanden, none eintragen. Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
-						<br><br>
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="speicherekwh_http">Speicher Export Wh URL:</label></b>
-							<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>"><br>
+							<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte URL. Wenn nicht vorhanden, none eintragen.  Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
-						<br><br>
 						</div>
 					</div>
 					<div id="divspeicherbydhv">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="bydhvuser">Byd HV Benutzername:</label></b>
-							<input type="text" name="bydhvuser" id="bydhvuser" value="<?php echo $bydhvuserold ?>"><br>
+							<input type="text" name="bydhvuser" id="bydhvuser" value="<?php echo $bydhvuserold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						Benutzername der ByD Batterie<br><br>
+							Benutzername der ByD Batterie
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="bydhvpass">Byd HV Passwort:</label></b>
-							<input type="text" name="bydhvpass" id="bydhvpass" value="<?php echo $bydhvpassold ?>"><br>
+							<input type="text" name="bydhvpass" id="bydhvpass" value="<?php echo $bydhvpassold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						Passwort der ByD Batterie<br><br>
+							Passwort der ByD Batterie
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="bydhvip">Byd HV IP Adresse:</label></b>
-							<input type="text" name="bydhvip" id="bydhvip" value="<?php echo $bydhvipold ?>"><br>
+							<input type="text" name="bydhvip" id="bydhvip" value="<?php echo $bydhvipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						IP Adresse der ByD Batterie<br><br>
+							IP Adresse der ByD Batterie
 						</div>
 					</div>
 					<div id="divspeichermpm3pm">
-						<div class="row" style="background-color:#fcbe1e"><br>
+						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="mpm3pmspeichersource">Modbus Source:</label></b>
-							<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>"><br>
+							<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus<br><br>
+							Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="mpm3pmspeicherid">Modbus ID:</label></b>
-							<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>"><br>
+							<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						Gültige Werte Zahl. <br><br>
+							Gültige Werte Zahl.
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
-							<select type="text" name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
-								<option <?php if($mpm3pmspeicherpvold == "0\n") echo selected ?> value="0">Keine extra Berechnung</option>
-								<option <?php if($mpm3pmspeicherpvold == "1\n") echo selected ?> value="1">Subtrahieren der PV Leistung</option>
+							<select name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
+								<option <?php if($mpm3pmspeicherpvold == "0\n") echo "selected" ?> value="0">Keine extra Berechnung</option>
+								<option <?php if($mpm3pmspeicherpvold == "1\n") echo "selected" ?> value="1">Subtrahieren der PV Leistung</option>
 							</select>
 						</div>
-						<div class="row" style="background-color:#fcbe1e"><br>
+						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="mpm3pmspeicherlanip">Lan Modbus Konverter IP:</label></b>
-							<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>"><br>
+							<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-						Gültige Werte eine IP Adresse. <br>
+						Gültige Werte eine IP Adresse.
 						</div>
 					</div>
 
 					<script>
-			function display_speichermodul() {
+						function display_speichermodul() {
 							$('#divspeichermqtt').hide();
 							$('#divspeichernone').hide();
 							$('#divspeicherhttp').hide();
@@ -4752,7 +4782,7 @@
 							$('#divspeichervarta').hide();
 							$('#divspeicheralphaess').hide();
 							$('#divspeichervictron').hide();
-						    $('#divspeicherlgessv1').hide();
+							$('#divspeicherlgessv1').hide();
 
 							if($('#speichermodul').val() == 'speicher_alphaess') {
 								$('#divspeicheralphaess').show();
@@ -4760,7 +4790,6 @@
 							if($('#speichermodul').val() == 'speicher_mqtt') {
 								$('#divspeichermqtt').show();
 							}
-
 							if($('#speichermodul').val() == 'speicher_victron') {
 								$('#divspeichervictron').show();
 							}
@@ -4806,11 +4835,12 @@
 							}
 							if($('#speichermodul').val() == 'speicher_sunnyisland')   {
 								$('#divspeichersunnyisland').show();
-						   }
-						   if($('#speichermodul').val() == 'speicher_lgessv1')   {
+							}
+							if($('#speichermodul').val() == 'speicher_lgessv1')   {
 								$('#divspeicherlgessv1').show();
-						    }
+							}
 						}
+
 						$(function() {
 						display_speichermodul();
 							$('#speichermodul').change( function(){
@@ -4819,7 +4849,6 @@
 						});
 					</script>
 
-					<br><br>
 					<button type="submit" class="btn btn-green" onclick="enable_pv_selector()">Save</button>
 				</form>
 
@@ -4830,13 +4859,12 @@
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
-							<input type="image" src="./img/btn_donate_SM.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-							<img alt="" border="0" src="./img/pixel.gif" width="1" height="1">
+							<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+							<img alt="" src="./img/pixel.gif" width="1" height="1">
 						</form>
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">

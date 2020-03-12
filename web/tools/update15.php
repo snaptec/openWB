@@ -1,13 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 	<head>
 		<meta http-equiv="refresh" content="30;url=../index.php" />
 	</head>
+	<body>
+		<p>Update wird durchgeführt, bitte nicht vom Strom trennen.</p>
 <?php
-	echo "Update wird durchgeführt, bitte nicht vom Strom trennen";
-	exec("/var/www/html/openWB/runs/update15.sh > /dev/null &");
-	header( "refresh:30;url=../index.php" );
+exec("/var/www/html/openWB/runs/update15.sh > /dev/null &");
 ?>
-<script type="text/javascript">
-   setTimeout(function() { window.location.href = "../index.php"; }, 30000);
-</script>
+		<script>
+			setTimeout(function() { window.location.href = "../index.php"; }, 30000);
+		</script>
+	</body>
 </html>

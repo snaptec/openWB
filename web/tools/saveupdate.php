@@ -1,6 +1,12 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<title>Update wird gestartet</title>
+	</head>
+	<body>
 <?php
 
-    // receives chosen releasetrain from update-page via POST-request,
+	// receives chosen releasetrain from update-page via POST-request,
 	// writes value to config file and start update
 	// author: M. Ortenstein
 
@@ -30,8 +36,8 @@
 		}
 		// now values can be accessed by $settingsArray[$key] = $value;
 
-        // update chosen setting in array
-        $settingsArray["releasetrain"] = $_POST["releasetrainRadioBtn"];
+		// update chosen setting in array
+		$settingsArray["releasetrain"] = $_POST["releasetrainRadioBtn"];
 
 		// write config to file
   		$fp = fopen($myConfigFile, "w");
@@ -41,14 +47,15 @@
 		foreach($settingsArray as $key => $value) {
 			fwrite($fp, $key.'='.$value."\n");
 		}
-        fclose($fp);
+		fclose($fp);
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
-  		echo "<script type='text/javascript'>alert('$msg');</script>";
-        // return to theme on error
-        echo "<script>window.location.href='../index.php';</script>";
-    }
-    // if successfully saved to config, start update
-    echo "<script>window.location.href='./update.php';</script>";
-
+		echo "<script>alert('$msg');</script>";
+		// return to theme on error
+		echo "<script>window.location.href='../index.php';</script>";
+	}
+	// if successfully saved to config, start update
+	echo "<script>window.location.href='./update.php';</script>";
 ?>
+	</body>
+</html>

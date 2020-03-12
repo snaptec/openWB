@@ -9,7 +9,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>OpenWB</title>
 		<meta name="description" content="Control your charge" />
-		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
@@ -188,574 +187,533 @@
 				<form action="./tools/savesmarthome.php" method="POST">
 					<div class="row">
 						<b><label for="angesteckthooklp1">Webhook bei Anstecken an LP1:</label></b>
-						<select type="text" name="angesteckthooklp1" id="angesteckthooklp1">
-							<option <?php if($angesteckthooklp1old == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($angesteckthooklp1old == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="angesteckthooklp1" id="angesteckthooklp1">
+							<option <?php if($angesteckthooklp1old == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($angesteckthooklp1old == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="angesteckthooklp1ausdiv">
-						<br>
 					</div>
 					<div id="angesteckthooklp1andiv">
 						<div class="row">
-					       	<b><label for="angesteckthooklp1_url">URL:</label></b>
-					        <input type="text" name="angesteckthooklp1_url" id="angesteckthooklp1_url" value="<?php echo htmlspecialchars($angesteckthooklp1_urlold) ?>"><br>
-							<br>
+							<b><label for="angesteckthooklp1_url">URL:</label></b>
+							<input type="text" name="angesteckthooklp1_url" id="angesteckthooklp1_url" value="<?php echo htmlspecialchars($angesteckthooklp1_urlold) ?>">
 						</div>
 						<div class="row">
-							URL die (einmalig) aufgerufen wird wenn ein Fahrzeug an LP1 angesteckt wird. Erneutes Ausführen erfolgt erst nachdem abgesteckt wurde.<br><br>
+							URL die (einmalig) aufgerufen wird wenn ein Fahrzeug an LP1 angesteckt wird. Erneutes Ausführen erfolgt erst nachdem abgesteckt wurde.
 						</div>
 					</div>
 					<hr>
 					<script>
 						$(function() {
-						      if($('#angesteckthooklp1').val() == '0') {
+							if($('#angesteckthooklp1').val() == '0') {
 								$('#angesteckthooklp1ausdiv').show();
 								$('#angesteckthooklp1andiv').hide();
-						      } else {
+							} else {
 								$('#angesteckthooklp1ausdiv').hide();
-							       	$('#angesteckthooklp1andiv').show();
-						      }
+								$('#angesteckthooklp1andiv').show();
+							}
 
 							$('#angesteckthooklp1').change(function(){
-							      if($('#angesteckthooklp1').val() == '0') {
+								if($('#angesteckthooklp1').val() == '0') {
 									$('#angesteckthooklp1ausdiv').show();
 									$('#angesteckthooklp1andiv').hide();
-							      } else {
+								} else {
 									$('#angesteckthooklp1ausdiv').hide();
-								       	$('#angesteckthooklp1andiv').show();
-							      }
-							    });
+									$('#angesteckthooklp1andiv').show();
+								}
+							});
 						});
 					</script>
 
 					<div class="row">
 						<b><label for="hook1_aktiv">Externes Gerät 1:</label></b>
-						<select type="text" name="hook1_aktiv" id="hook1_aktiv">
-							<option <?php if($hook1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="hook1_aktiv" id="hook1_aktiv">
+							<option <?php if($hook1_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook1_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="hook1ausdiv">
-						<br>
 					</div>
 					<div id="hook1andiv">
 						<div class="row">
-							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
+							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses
 						</div>
 						<div class="row">
-					       	<b><label for="hook1ein_watt">Gerät 1 Einschaltschwelle:</label></b>
-					        <input type="text" name="hook1ein_watt" id="hook1ein_watt" value="<?php echo $hook1ein_wattold ?>"><br>
-							<br>
+							<b><label for="hook1ein_watt">Gerät 1 Einschaltschwelle:</label></b>
+							<input type="text" name="hook1ein_watt" id="hook1ein_watt" value="<?php echo $hook1ein_wattold ?>">
 						</div>
 						<div class="row">
-							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
-						</div>
-					    <div class="row">
-					    	<b><label for="hook1einschaltverz">Gerät 1 Einschaltverzögerung:</label></b>
-							<input type="text" name="hook1einschaltverz" id="hook1einschaltverz" value="<?php echo $hook1einschaltverzold ?>"><br>
-					        <br>
-						</div>
-				        <div class="row">
-				    		Bestimmt die Dauer für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.<br><br>
-				        </div>
-						<div class="row">
-					       	<b><label for="hook1ein_url">Gerät 1 Einschalturl:</label></b>
-					        <input type="text" name="hook1ein_url" id="hook1ein_url" value="<?php echo htmlspecialchars($hook1ein_urlold) ?>"><br>
-							<br>
+							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.
 						</div>
 						<div class="row">
-							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							<b><label for="hook1einschaltverz">Gerät 1 Einschaltverzögerung:</label></b>
+							<input type="text" name="hook1einschaltverz" id="hook1einschaltverz" value="<?php echo $hook1einschaltverzold ?>">
 						</div>
 						<div class="row">
-				       		<b><label for="hook1_dauer">Gerät 1 Einschaltdauer:</label></b>
-				        	<input type="text" name="hook1_dauer" id="hook1_dauer" value="<?php echo $hook1_dauerold ?>"><br>
-							<br>
+							Bestimmt die Dauer für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.<br><br>
 						</div>
 						<div class="row">
-							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.<br><br>
+							<b><label for="hook1ein_url">Gerät 1 Einschalturl:</label></b>
+							<input type="text" name="hook1ein_url" id="hook1ein_url" value="<?php echo htmlspecialchars($hook1ein_urlold) ?>">
 						</div>
 						<div class="row">
-				       		<b><label for="hook1aus_watt">Gerät 1 Ausschaltschwelle:</label></b>
-				        	<input type="text" name="hook1aus_watt" id="hook1aus_watt" value="<?php echo $hook1aus_wattold ?>"><br>
-							<br>
+							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.
 						</div>
 						<div class="row">
-							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.<br><br>
+							<b><label for="hook1_dauer">Gerät 1 Einschaltdauer:</label></b>
+							<input type="text" name="hook1_dauer" id="hook1_dauer" value="<?php echo $hook1_dauerold ?>">
 						</div>
 						<div class="row">
-				       		<b><label for="hook1aus_url">Gerät 1 Ausschalturl:</label></b>
-				        	<input type="text" name="hook1aus_url" id="hook1aus_url" value="<?php echo htmlspecialchars($hook1aus_urlold) ?>"><br>
-							<br>
+							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.
 						</div>
 						<div class="row">
-							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							<b><label for="hook1aus_watt">Gerät 1 Ausschaltschwelle:</label></b>
+							<input type="text" name="hook1aus_watt" id="hook1aus_watt" value="<?php echo $hook1aus_wattold ?>">
 						</div>
 						<div class="row">
-				       		<b><label for="hook1_ausverz">Gerät 1 Ausschaltverzögerung:</label></b>
-				        	<input type="text" name="hook1_ausverz" id="hook1_ausverz" value="<?php echo $hook1_ausverzold ?>"><br>
-							<br>
+							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.
 						</div>
 						<div class="row">
-							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+							<b><label for="hook1aus_url">Gerät 1 Ausschalturl:</label></b>
+							<input type="text" name="hook1aus_url" id="hook1aus_url" value="<?php echo htmlspecialchars($hook1aus_urlold) ?>">
+						</div>
+						<div class="row">
+							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.
+						</div>
+						<div class="row">
+							<b><label for="hook1_ausverz">Gerät 1 Ausschaltverzögerung:</label></b>
+							<input type="text" name="hook1_ausverz" id="hook1_ausverz" value="<?php echo $hook1_ausverzold ?>">
+						</div>
+						<div class="row">
+							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.
 						</div>
 					</div>
 					<script>
 						$(function() {
-						      if($('#hook1_aktiv').val() == '0') {
+							if($('#hook1_aktiv').val() == '0') {
 								$('#hook1ausdiv').show();
 								$('#hook1andiv').hide();
-						      } else {
+							} else {
 								$('#hook1ausdiv').hide();
-							       	$('#hook1andiv').show();
-						      }
+								$('#hook1andiv').show();
+							}
 
 							$('#hook1_aktiv').change(function(){
-							      if($('#hook1_aktiv').val() == '0') {
+								if($('#hook1_aktiv').val() == '0') {
 									$('#hook1ausdiv').show();
 									$('#hook1andiv').hide();
-							      } else {
+								} else {
 									$('#hook1ausdiv').hide();
-								       	$('#hook1andiv').show();
-							      }
-							    });
+									$('#hook1andiv').show();
+								}
+							});
 						});
 					</script>
 					<hr>
 					<div class="row">
 						<b><label for="hook2_aktiv">Externes Gerät 2:</label></b>
-						<select type="text" name="hook2_aktiv" id="hook2_aktiv">
-							<option <?php if($hook2_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook2_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="hook2_aktiv" id="hook2_aktiv">
+							<option <?php if($hook2_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook2_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="hook2ausdiv">
-						<br>
 					</div>
 					<div id="hook2andiv">
 						<div class="row">
-							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
+							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses
 						</div>
 						<div class="row">
-					       	<b><label for="hook2ein_watt">Gerät 2 Einschaltschwelle:</label></b>
-					        <input type="text" name="hook2ein_watt" id="hook2ein_watt" value="<?php echo $hook2ein_wattold ?>"><br>
-							<br>
+							<b><label for="hook2ein_watt">Gerät 2 Einschaltschwelle:</label></b>
+							<input type="text" name="hook2ein_watt" id="hook2ein_watt" value="<?php echo $hook2ein_wattold ?>">
 						</div>
 						<div class="row">
-							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
+							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.
 						</div>
 						<div class="row">
-					       	<b><label for="hook2ein_url">Gerät 2 Einschalturl:</label></b>
-					        <input type="text" name="hook2ein_url" id="hook2ein_url" value="<?php echo htmlspecialchars($hook2ein_urlold) ?>"><br>
-							<br>
+							<b><label for="hook2ein_url">Gerät 2 Einschalturl:</label></b>
+							<input type="text" name="hook2ein_url" id="hook2ein_url" value="<?php echo htmlspecialchars($hook2ein_urlold) ?>">
 						</div>
 						<div class="row">
-							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.
 						</div>
 						<div class="row">
-					       	<b><label for="hook2_dauer">Gerät 2 Einschaltdauer:</label></b>
-					        <input type="text" name="hook2_dauer" id="hook2_dauer" value="<?php echo $hook2_dauerold ?>"><br>
-							<br>
+							<b><label for="hook2_dauer">Gerät 2 Einschaltdauer:</label></b>
+							<input type="text" name="hook2_dauer" id="hook2_dauer" value="<?php echo $hook2_dauerold ?>">
 						</div>
 						<div class="row">
-							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.<br><br>
+							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.
 						</div>
 						<div class="row">
-					       	<b><label for="hook2aus_watt">Gerät 2 Ausschaltschwelle:</label></b>
-					        <input type="text" name="hook2aus_watt" id="hook2aus_watt" value="<?php echo $hook2aus_wattold ?>"><br>
-							<br>
+							<b><label for="hook2aus_watt">Gerät 2 Ausschaltschwelle:</label></b>
+							<input type="text" name="hook2aus_watt" id="hook2aus_watt" value="<?php echo $hook2aus_wattold ?>">
 						</div>
 						<div class="row">
-							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.<br><br>
+							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.
 						</div>
 						<div class="row">
-					       	<b><label for="hook2aus_url">Gerät 2 Ausschalturl:</label></b>
-					        <input type="text" name="hook2aus_url" id="hook2aus_url" value="<?php echo htmlspecialchars($hook2aus_urlold) ?>"><br>
-							<br>
+							<b><label for="hook2aus_url">Gerät 2 Ausschalturl:</label></b>
+							<input type="text" name="hook2aus_url" id="hook2aus_url" value="<?php echo htmlspecialchars($hook2aus_urlold) ?>">
 						</div>
 						<div class="row">
-							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.
 						</div>
 						<div class="row">
-					       	<b><label for="hook2_ausverz">Gerät 2 Ausschaltverzögerung:</label></b>
-					        <input type="text" name="hook2_ausverz" id="hook2_ausverz" value="<?php echo $hook2_ausverzold ?>"><br>
-							<br>
+							<b><label for="hook2_ausverz">Gerät 2 Ausschaltverzögerung:</label></b>
+							<input type="text" name="hook2_ausverz" id="hook2_ausverz" value="<?php echo $hook2_ausverzold ?>">
 						</div>
 						<div class="row">
-							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.
 						</div>
 					</div>
 					<script>
 						$(function() {
-						      if($('#hook2_aktiv').val() == '0') {
+							if($('#hook2_aktiv').val() == '0') {
 								$('#hook2ausdiv').show();
 								$('#hook2andiv').hide();
-						      } else {
+							} else {
 								$('#hook2ausdiv').hide();
-							       	$('#hook2andiv').show();
-						      }
+								$('#hook2andiv').show();
+							}
 
 							$('#hook2_aktiv').change(function(){
-							      if($('#hook2_aktiv').val() == '0') {
+								if($('#hook2_aktiv').val() == '0') {
 									$('#hook2ausdiv').show();
 									$('#hook2andiv').hide();
-							      } else {
+								} else {
 									$('#hook2ausdiv').hide();
-								       	$('#hook2andiv').show();
-							      }
-							    });
+									$('#hook2andiv').show();
+								}
+							});
 						});
 					</script>
 					<hr>
 					<div class="row">
 						<b><label for="hook3_aktiv">Externes Gerät 3:</label></b>
-						<select type="text" name="hook3_aktiv" id="hook3_aktiv">
-							<option <?php if($hook3_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($hook3_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="hook3_aktiv" id="hook3_aktiv">
+							<option <?php if($hook3_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($hook3_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="hook3ausdiv">
-						<br>
 					</div>
 					<div id="hook3andiv">
 						<div class="row">
-							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses<br><br>
+							Externe Geräte lassen sich per definierter URL (Webhook) an- und ausschalten in Abhängigkeit des Überschusses
 						</div>
 						<div class="row">
-					       	<b><label for="hook3ein_watt">Gerät 3 Einschaltschwelle:</label></b>
-					        <input type="text" name="hook3ein_watt" id="hook3ein_watt" value="<?php echo $hook3ein_wattold ?>"><br>
-							<br>
+							<b><label for="hook3ein_watt">Gerät 3 Einschaltschwelle:</label></b>
+							<input type="text" name="hook3ein_watt" id="hook3ein_watt" value="<?php echo $hook3ein_wattold ?>">
 						</div>
 						<div class="row">
-							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.<br><br>
+							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.
 						</div>
 						<div class="row">
-					       	<b><label for="hook3ein_url">Gerät 3 Einschalturl:</label></b>
-					        <input type="text" name="hook3ein_url" id="hook3ein_url" value="<?php echo htmlspecialchars($hook3ein_urlold) ?>"><br>
-							<br>
+							<b><label for="hook3ein_url">Gerät 3 Einschalturl:</label></b>
+							<input type="text" name="hook3ein_url" id="hook3ein_url" value="<?php echo htmlspecialchars($hook3ein_urlold) ?>">
 						</div>
 						<div class="row">
-							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							Einschalturl die aufgerufen wird bei entsprechendem Überschuss.
 						</div>
 						<div class="row">
-					       	<b><label for="hook3_dauer">Gerät 3 Einschaltdauer:</label></b>
-					        <input type="text" name="hook3_dauer" id="hook3_dauer" value="<?php echo $hook3_dauerold ?>"><br>
-							<br>
+							<b><label for="hook3_dauer">Gerät 3 Einschaltdauer:</label></b>
+							<input type="text" name="hook3_dauer" id="hook3_dauer" value="<?php echo $hook3_dauerold ?>">
 						</div>
 						<div class="row">
-							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.<br><br>
+							Einschaltdauer in Minuten. Gibt an wie lange das Gerät nach Start mindestens aktiv bleiben muss ehe Ausschalturl aufgerufen wird.
 						</div>
 						<div class="row">
-					       	<b><label for="hook3aus_watt">Gerät 3 Ausschaltschwelle:</label></b>
-					        <input type="text" name="hook3aus_watt" id="hook3aus_watt" value="<?php echo $hook3aus_wattold ?>"><br>
-							<br>
+							<b><label for="hook3aus_watt">Gerät 3 Ausschaltschwelle:</label></b>
+							<input type="text" name="hook3aus_watt" id="hook3aus_watt" value="<?php echo $hook3aus_wattold ?>">
 						</div>
 						<div class="row">
-							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.<br><br>
+							Ausschaltschwelle in Watt bei die unten stehende URL aufgerufen wird. Soll die Abschaltung bei Bezug stattfinden eine negative Zahl eingeben.
 						</div>
 						<div class="row">
-					       	<b><label for="hook3aus_url">Gerät 3 Ausschalturl:</label></b>
-					        <input type="text" name="hook3aus_url" id="hook3aus_url" value="<?php echo htmlspecialchars($hook3aus_urlold) ?>"><br>
-							<br>
+							<b><label for="hook3aus_url">Gerät 3 Ausschalturl:</label></b>
+							<input type="text" name="hook3aus_url" id="hook3aus_url" value="<?php echo htmlspecialchars($hook3aus_urlold) ?>">
 						</div>
 						<div class="row">
-							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.<br><br>
+							Ausschalturl die aufgerufen wird bei entsprechendem Überschuss.
 						</div>
 						<div class="row">
-					       	<b><label for="hook1_ausverz">Gerät 3 Ausschaltverzögerung:</label></b>
-					        <input type="text" name="hook3_ausverz" id="hook3_ausverz" value="<?php echo $hook3_ausverzold ?>"><br>
-						<br>
+							<b><label for="hook1_ausverz">Gerät 3 Ausschaltverzögerung:</label></b>
+							<input type="text" name="hook3_ausverz" id="hook3_ausverz" value="<?php echo $hook3_ausverzold ?>">
 						</div>
 						<div class="row">
-							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.<br><br>
+							Bestimmt die Dauer für die die Ausschaltschwelle unterschritten werden muss bevor ausgeschaltet wird.
 						</div>
 					</div><hr>
 					<script>
 						$(function() {
-						      if($('#hook3_aktiv').val() == '0') {
+							if($('#hook3_aktiv').val() == '0') {
 								$('#hook3ausdiv').show();
 								$('#hook3andiv').hide();
-						      } else {
+							} else {
 								$('#hook3ausdiv').hide();
-							       	$('#hook3andiv').show();
-						      }
+								$('#hook3andiv').show();
+							}
 
 							$('#hook3_aktiv').change(function(){
-							      if($('#hook3_aktiv').val() == '0') {
+								if($('#hook3_aktiv').val() == '0') {
 									$('#hook3ausdiv').show();
 									$('#hook3andiv').hide();
-							      } else {
+								} else {
 									$('#hook3ausdiv').hide();
-								       	$('#hook3andiv').show();
-							      }
-							    });
+									$('#hook3andiv').show();
+								}
+							});
 						});
 					</script>
 
 					<div class="row">
 						<b><label for="verbraucher1_aktiv">Verbraucher 1:</label></b>
-						<select type="text" name="verbraucher1_aktiv" id="verbraucher1_aktiv">
-							<option <?php if($verbraucher1_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($verbraucher1_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="verbraucher1_aktiv" id="verbraucher1_aktiv">
+							<option <?php if($verbraucher1_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($verbraucher1_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="verbraucher1ausdiv">
-						<br>
 					</div>
 					<div id="verbraucher1andiv">
 						<div class="row">
-							Externe Verbraucher lassen sich in das Logging von OpenWB mit einbinden.<br><br>
+							Externe Verbraucher lassen sich in das Logging von OpenWB mit einbinden.
 						</div>
 						<div class="row">
 							<b><label for="verbraucher1_typ">Anbindung Verbraucher 1:</label></b>
-							<select type="text" name="verbraucher1_typ" id="verbraucher1_typ">
-								<option <?php if($verbraucher1_typold == "http\n") echo selected ?> value="http">Http Abfrage</option>
-								<option <?php if($verbraucher1_typold == "mpm3pm\n") echo selected ?> value="mpm3pm">MPM3PM</option>
-								<option <?php if($verbraucher1_typold == "sdm120\n") echo selected ?> value="sdm120">SDM120</option>
-								<option <?php if($verbraucher1_typold == "sdm630\n") echo selected ?> value="sdm630">SDM630</option>
-								<option <?php if($verbraucher1_typold == "tasmota\n") echo selected ?> value="tasmota">Sonoff mit Tasmota FW</option>
-							</select><br><br>
+							<select name="verbraucher1_typ" id="verbraucher1_typ">
+								<option <?php if($verbraucher1_typold == "http\n") echo "selected" ?> value="http">Http Abfrage</option>
+								<option <?php if($verbraucher1_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
+								<option <?php if($verbraucher1_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
+								<option <?php if($verbraucher1_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher1_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
+							</select>
 						</div>
 						<div class="row">
-					       	<b><label for="verbraucher1_name">Verbraucher 1 Name:</label></b>
-					        <input type="text" name="verbraucher1_name" id="verbraucher1_name" value="<?php echo $verbraucher1_nameold ?>"><br>
-							<br>
+							<b><label for="verbraucher1_name">Verbraucher 1 Name:</label></b>
+							<input type="text" name="verbraucher1_name" id="verbraucher1_name" value="<?php echo $verbraucher1_nameold ?>">
 						</div>
 						<div class="row">
-							Name des Verbrauchers 1.<br><br>
+							Name des Verbrauchers 1.
 						</div>
 						<div id="v1http">
 							<div class="row">
-						       	<b><label for="verbraucher1_urlw">Verbraucher 1 URL:</label></b>
-						        <input size="50" type="text" name="verbraucher1_urlw" id="verbraucher1_urlw" value="<?php echo htmlspecialchars($verbraucher1_urlwold) ?>"><br>
-								<br>
+								<b><label for="verbraucher1_urlw">Verbraucher 1 URL:</label></b>
+								<input size="50" type="text" name="verbraucher1_urlw" id="verbraucher1_urlw" value="<?php echo htmlspecialchars($verbraucher1_urlwold) ?>">
 							</div>
 							<div class="row">
-								URL des Verbrauchers Momentanleistung in Watt.<br><br>
+								URL des Verbrauchers Momentanleistung in Watt.
 							</div>
 							<div class="row">
-						       	<b><label for="verbraucher1_urlh">Verbraucher 1 URL:</label></b>
-								<input size="50" type="text" name="verbraucher1_urlh" id="verbraucher1_urlh" value="<?php echo htmlspecialchars($verbraucher1_urlhold) ?>"><br>
-								<br>
+								<b><label for="verbraucher1_urlh">Verbraucher 1 URL:</label></b>
+								<input size="50" type="text" name="verbraucher1_urlh" id="verbraucher1_urlh" value="<?php echo htmlspecialchars($verbraucher1_urlhold) ?>">
 							</div>
 							<div class="row">
-								URL des Verbrauchers Zählerststandes in Watt Stunden.<br><br>
+								URL des Verbrauchers Zählerststandes in Watt Stunden.
 							</div>
 						</div>
 						<div id="v1modbus">
 							<div class="row">
-						       	<b><label for="verbraucher1_source">Verbraucher 1 Source:</label></b>
-						        <input type="text" name="verbraucher1_source" id="verbraucher1_source" value="<?php echo $verbraucher1_sourceold ?>"><br>
-								<br>
+								<b><label for="verbraucher1_source">Verbraucher 1 Source:</label></b>
+								<input type="text" name="verbraucher1_source" id="verbraucher1_source" value="<?php echo $verbraucher1_sourceold ?>">
 							</div>
 							<div class="row">
-								Bei lokal angeschlossenem Zähler ist dies /dev/ttyUSB3 (z.B.). Wird ein Modbus Ethernet Konverter genutzt, z.B. der aus dem Shop, hier die IP Adresse eintragen.<br><br>
+								Bei lokal angeschlossenem Zähler ist dies /dev/ttyUSB3 (z.B.). Wird ein Modbus Ethernet Konverter genutzt, z.B. der aus dem Shop, hier die IP Adresse eintragen.
 							</div>
 							<div class="row">
-						       	<b><label for="verbraucher1_id">Verbraucher 1 ID:</label></b>
-						        <input type="text" name="verbraucher1_id" id="verbraucher1_id" value="<?php echo $verbraucher1_idold ?>"><br>
-								<br>
+								<b><label for="verbraucher1_id">Verbraucher 1 ID:</label></b>
+								<input type="text" name="verbraucher1_id" id="verbraucher1_id" value="<?php echo $verbraucher1_idold ?>">
 							</div>
 							<div class="row">
-								Modbus ID.<br><br>
+								Modbus ID.
 							</div>
 						</div>
 						<div id="v1tasmota">
 							<div class="row">
-						       	<b><label for="verbraucher1_ip">Verbraucher 1 IP:</label></b>
-						        <input type="text" name="verbraucher1_ip" id="verbraucher1_ip" value="<?php echo $verbraucher1_ipold ?>"><br>
-								<br>
+								<b><label for="verbraucher1_ip">Verbraucher 1 IP:</label></b>
+								<input type="text" name="verbraucher1_ip" id="verbraucher1_ip" value="<?php echo $verbraucher1_ipold ?>">
 							</div>
 							<div class="row">
-								IP Adresse des Tasmota Sonoff Geräts.<br><br>
+								IP Adresse des Tasmota Sonoff Geräts.
 							</div>
 						</div>
-					</div><br>
+					</div>
 
 					<script>
 						function display_verbraucher1 () {
 							$('#v1http').hide();
 							$('#v1modbus').hide();
 							$('#v1tasmota').hide();
-						if($('#verbraucher1_typ').val() == 'http') {
-						$('#v1http').show();
-						}
-						if($('#verbraucher1_typ').val() == 'mpm3pm') {
-						$('#v1modbus').show();
-						}
-						if($('#verbraucher1_typ').val() == 'sdm630') {
-						$('#v1modbus').show();
-						}
-						if($('#verbraucher1_typ').val() == 'sdm120') {
-						$('#v1modbus').show();
-						}
-						if($('#verbraucher1_typ').val() == 'tasmota') {
-						$('#v1tasmota').show();
+							if($('#verbraucher1_typ').val() == 'http') {
+								$('#v1http').show();
+							}
+							if($('#verbraucher1_typ').val() == 'mpm3pm') {
+								$('#v1modbus').show();
+							}
+							if($('#verbraucher1_typ').val() == 'sdm630') {
+								$('#v1modbus').show();
+							}
+							if($('#verbraucher1_typ').val() == 'sdm120') {
+								$('#v1modbus').show();
+							}
+							if($('#verbraucher1_typ').val() == 'tasmota') {
+								$('#v1tasmota').show();
+							}
 						}
 
-						}
 						display_verbraucher1();
 						$('#verbraucher1_typ').change(function(){
 							display_verbraucher1();
 						});
-					</script>
 
-					<script>
 						$(function() {
-						      if($('#verbraucher1_aktiv').val() == '0') {
+							if($('#verbraucher1_aktiv').val() == '0') {
 								$('#verbraucher1ausdiv').show();
 								$('#verbraucher1andiv').hide();
-						      } else {
+							} else {
 								$('#verbraucher1ausdiv').hide();
-							       	$('#verbraucher1andiv').show();
-						      }
+								$('#verbraucher1andiv').show();
+							}
 
 							$('#verbraucher1_aktiv').change(function(){
-							      if($('#verbraucher1_aktiv').val() == '0') {
+								if($('#verbraucher1_aktiv').val() == '0') {
 									$('#verbraucher1ausdiv').show();
 									$('#verbraucher1andiv').hide();
-							      } else {
+								} else {
 									$('#verbraucher1ausdiv').hide();
-								       	$('#verbraucher1andiv').show();
-							      }
-							    });
+									$('#verbraucher1andiv').show();
+								}
+							});
 						});
 					</script>
 
 					<hr>
 					<div class="row">
 						<b><label for="verbraucher2_aktiv">Verbraucher 2:</label></b>
-						<select type="text" name="verbraucher2_aktiv" id="verbraucher2_aktiv">
-							<option <?php if($verbraucher2_aktivold == 0) echo selected ?> value="0">Deaktiviert</option>
-							<option <?php if($verbraucher2_aktivold == 1) echo selected ?> value="1">Aktiviert</option>
+						<select name="verbraucher2_aktiv" id="verbraucher2_aktiv">
+							<option <?php if($verbraucher2_aktivold == 0) echo "selected" ?> value="0">Deaktiviert</option>
+							<option <?php if($verbraucher2_aktivold == 1) echo "selected" ?> value="1">Aktiviert</option>
 						</select>
 					</div>
 
 					<div id="verbraucher2ausdiv">
-						<br>
 					</div>
 					<div id="verbraucher2andiv">
 						<div class="row">
-							Externe Verbraucher lassen sich in das Logging von OpenWB mit einbinden.<br><br>
+							Externe Verbraucher lassen sich in das Logging von OpenWB mit einbinden.
 						</div>
 						<div class="row">
 							<b><label for="verbraucher2_typ">Anbindung Verbraucher 2:</label></b>
-							<select type="text" name="verbraucher2_typ" id="verbraucher2_typ">
-								<option <?php if($verbraucher2_typold == "http\n") echo selected ?> value="http">Http Abfrage</option>
-								<option <?php if($verbraucher2_typold == "mpm3pm\n") echo selected ?> value="mpm3pm">MPM3PM</option>
-								<option <?php if($verbraucher2_typold == "sdm120\n") echo selected ?> value="sdm120">SDM120</option>
-								<option <?php if($verbraucher2_typold == "sdm630\n") echo selected ?> value="sdm630">SDM630</option>
-								<option <?php if($verbraucher2_typold == "tasmota\n") echo selected ?> value="tasmota">Sonoff mit Tasmota FW</option>
-							</select><br><br>
+							<select name="verbraucher2_typ" id="verbraucher2_typ">
+								<option <?php if($verbraucher2_typold == "http\n") echo "selected" ?> value="http">Http Abfrage</option>
+								<option <?php if($verbraucher2_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
+								<option <?php if($verbraucher2_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
+								<option <?php if($verbraucher2_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher2_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
+							</select>
 						</div>
 						<div class="row">
-					       <b><label for="verbraucher2_name">Verbraucher 2 Name:</label></b>
-					        <input type="text" name="verbraucher2_name" id="verbraucher2_name" value="<?php echo $verbraucher2_nameold ?>"><br>
-							<br>
+							<b><label for="verbraucher2_name">Verbraucher 2 Name:</label></b>
+							<input type="text" name="verbraucher2_name" id="verbraucher2_name" value="<?php echo $verbraucher2_nameold ?>">
 						</div>
 						<div class="row">
-							Name des Verbrauchers 2.<br><br>
+							Name des Verbrauchers 2.
 						</div>
 						<div id="v2http">
 							<div class="row">
-						       	<b><label for="verbraucher2_urlw">Verbraucher 2 URL:</label></b>
-						        <input size="50" type="text" name="verbraucher2_urlw" id="verbraucher2_urlw" value="<?php echo htmlspecialchars($verbraucher2_urlwold) ?>"><br>
-								<br>
+								<b><label for="verbraucher2_urlw">Verbraucher 2 URL:</label></b>
+								<input size="50" type="text" name="verbraucher2_urlw" id="verbraucher2_urlw" value="<?php echo htmlspecialchars($verbraucher2_urlwold) ?>">
 							</div>
 							<div class="row">
-								URL des Verbrauchers Momentanleistung in Watt.<br><br>
+								URL des Verbrauchers Momentanleistung in Watt.
 							</div>
 							<div class="row">
-						       	<b><label for="verbraucher2_urlh">Verbraucher 2 URL:</label></b>
-								<input size="50" type="text" name="verbraucher2_urlh" id="verbraucher2_urlh" value="<?php echo htmlspecialchars($verbraucher2_urlhold) ?>"><br>
-								<br>
+								<b><label for="verbraucher2_urlh">Verbraucher 2 URL:</label></b>
+								<input size="50" type="text" name="verbraucher2_urlh" id="verbraucher2_urlh" value="<?php echo htmlspecialchars($verbraucher2_urlhold) ?>">
 							</div>
 							<div class="row">
-								URL des Verbrauchers Zählerststandes in Watt Stunden.<br><br>
+								URL des Verbrauchers Zählerststandes in Watt Stunden.
 							</div>
 						</div>
 						<div id="v2modbus">
 							<div class="row">
-						       	<b><label for="verbraucher2_source">Verbraucher 2 Source:</label></b>
-						        <input type="text" name="verbraucher2_source" id="verbraucher2_source" value="<?php echo $verbraucher2_sourceold ?>"><br>
-								<br>
+								<b><label for="verbraucher2_source">Verbraucher 2 Source:</label></b>
+								<input type="text" name="verbraucher2_source" id="verbraucher2_source" value="<?php echo $verbraucher2_sourceold ?>">
 							</div>
 							<div class="row">
-								Bei lokal angeschlossenem Zähler ist dies /dev/ttyUSB3 (z.B.). Wird ein Modbus Ethernet Konverter genutzt, z.B. der aus dem Shop, hier die IP Adresse eintragen.<br><br>
+								Bei lokal angeschlossenem Zähler ist dies /dev/ttyUSB3 (z.B.). Wird ein Modbus Ethernet Konverter genutzt, z.B. der aus dem Shop, hier die IP Adresse eintragen.
 							</div>
 							<div class="row">
-						       	<b><label for="verbraucher2_id">Verbraucher 2 ID:</label></b>
-						        <input type="text" name="verbraucher2_id" id="verbraucher2_id" value="<?php echo $verbraucher2_idold ?>"><br>
-								<br>
+								<b><label for="verbraucher2_id">Verbraucher 2 ID:</label></b>
+								<input type="text" name="verbraucher2_id" id="verbraucher2_id" value="<?php echo $verbraucher2_idold ?>">
 							</div>
 							<div class="row">
-								Modbus ID.<br><br>
+								Modbus ID.
 							</div>
 						</div>
 						<div id="v2tasmota">
 							<div class="row">
-						       	<b><label for="verbraucher2_ip">Verbraucher 2 IP:</label></b>
-						        <input type="text" name="verbraucher2_ip" id="verbraucher2_ip" value="<?php echo $verbraucher2_ipold ?>"><br>
-								<br>
+								<b><label for="verbraucher2_ip">Verbraucher 2 IP:</label></b>
+								<input type="text" name="verbraucher2_ip" id="verbraucher2_ip" value="<?php echo $verbraucher2_ipold ?>">
 							</div>
 							<div class="row">
-								IP Adresse des Tasmota Sonoff Geräts.<br><br>
+								IP Adresse des Tasmota Sonoff Geräts.
 							</div>
 						</div>
-					</div><br>
+					</div>
 
 					<script>
 						function display_verbraucher2 () {
 							$('#v2http').hide();
 							$('#v2modbus').hide();
 							$('#v2tasmota').hide();
-						if($('#verbraucher2_typ').val() == 'http') {
-						$('#v2http').show();
-						}
-						if($('#verbraucher2_typ').val() == 'mpm3pm') {
-						$('#v2modbus').show();
-						}
-						if($('#verbraucher2_typ').val() == 'sdm630') {
-						$('#v2modbus').show();
-						}
-						if($('#verbraucher2_typ').val() == 'sdm120') {
-						$('#v2modbus').show();
-						}
-						if($('#verbraucher2_typ').val() == 'tasmota') {
-						$('#v2tasmota').show();
+							if($('#verbraucher2_typ').val() == 'http') {
+								$('#v2http').show();
+							}
+							if($('#verbraucher2_typ').val() == 'mpm3pm') {
+								$('#v2modbus').show();
+							}
+							if($('#verbraucher2_typ').val() == 'sdm630') {
+								$('#v2modbus').show();
+							}
+							if($('#verbraucher2_typ').val() == 'sdm120') {
+								$('#v2modbus').show();
+							}
+							if($('#verbraucher2_typ').val() == 'tasmota') {
+								$('#v2tasmota').show();
+							}
 						}
 
-						}
 						display_verbraucher2();
+
 						$('#verbraucher2_typ').change(function(){
 							display_verbraucher2();
 						});
-					</script>
 
-					<script>
 						$(function() {
-						      if($('#verbraucher2_aktiv').val() == '0') {
+							if($('#verbraucher2_aktiv').val() == '0') {
 								$('#verbraucher2ausdiv').show();
 								$('#verbraucher2andiv').hide();
-						      } else {
+							} else {
 								$('#verbraucher2ausdiv').hide();
-							       	$('#verbraucher2andiv').show();
-						      }
+								$('#verbraucher2andiv').show();
+							}
 
 							$('#verbraucher2_aktiv').change(function(){
-							      if($('#verbraucher2_aktiv').val() == '0') {
+								if($('#verbraucher2_aktiv').val() == '0') {
 									$('#verbraucher2ausdiv').show();
 									$('#verbraucher2andiv').hide();
-							      } else {
+								} else {
 									$('#verbraucher2ausdiv').hide();
-								       	$('#verbraucher2andiv').show();
-							      }
-							    });
+									$('#verbraucher2andiv').show();
+								}
+							});
 						});
 					</script>
 
@@ -769,19 +727,18 @@
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
-							<input type="image" src="./img/btn_donate_SM.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-							<img alt="" border="0" src="./img/pixel.gif" width="1" height="1">
+							<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+							<img alt="" src="./img/pixel.gif" width="1" height="1">
 						</form>
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
-		  <div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Smart Home</small>
-		  </div>
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Einstellungen/Smart Home</small>
+			</div>
 		</footer>
 
 		<script>

@@ -82,12 +82,7 @@
 	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
 	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
 <?php
-if ( $simplemodeold == 1 ) {
 	include 'display/simple.html';
-} else {
-	// das gewählte Theme einbinden
-	include 'display/gauge.html';
-}
 ?>
 	<!-- Scripts -->
 </body>
