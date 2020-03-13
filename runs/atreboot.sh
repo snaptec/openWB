@@ -1847,6 +1847,15 @@ if ! grep -Fq "httpll_a3_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_a3_url='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "clouduser=" /var/www/html/openWB/openwb.conf
+then
+	echo "clouduser=leer" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "cloudpw=" /var/www/html/openWB/openwb.conf
+then
+	echo "cloudpw=leer" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
@@ -2364,6 +2373,14 @@ fi
 if ! grep -Fq "e3dcextprod=" /var/www/html/openWB/openwb.conf
 then
 	echo "e3dcextprod=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "schieflastmaxa=" /var/www/html/openWB/openwb.conf
+then
+	echo "schieflastmaxa=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "schieflastaktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "schieflastaktiv=0" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "wrsunwaysip=" /var/www/html/openWB/openwb.conf

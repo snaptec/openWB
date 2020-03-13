@@ -41,8 +41,12 @@
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
 			
-	
-
+				if(strpos($line, "schieflastmaxa=") !== false) {
+					list(, $schieflastmaxaold) = explode("=", $line);
+				}
+				if(strpos($line, "schieflastaktiv=") !== false) {
+					list(, $schieflastaktivold) = explode("=", $line);
+				}
 				if(strpos($line, "mollp1moab=") !== false) {
 					list(, $mollp1moabold) = explode("=", $line);
 				}
@@ -933,6 +937,41 @@
 								</select>
 							</div>
 						</div>
+						<div class="row" style="background-color:#33ffa8">
+							<div class="col">
+								<b><label for="schieflastaktiv">Schieflastbeachtung:</label></b>
+								<select name="schieflastaktiv" id="schieflastaktiv">
+									<option <?php if($schieflastaktivold == 0) echo "selected" ?> value="0">Nein</option>
+									<option <?php if($schieflastaktivold == 1) echo "selected" ?> value="1">Ja</option>
+								</select>
+							</div>
+						</div>
+						<div class="row" style="background-color:#33ffa8">
+							<div class="col">
+								<b>Schieflastbegrenzung in A:</b><br>
+								<select name="schieflastmaxa" id="schieflastmaxa">
+									<option <?php if($schieflastmaxaold == 16) echo "selected" ?> value="16">16</option>
+									<option <?php if($schieflastmaxaold == 17) echo "selected" ?> value="17">17</option>
+									<option <?php if($schieflastmaxaold == 18) echo "selected" ?> value="18">18</option>
+									<option <?php if($schieflastmaxaold == 19) echo "selected" ?> value="19">19</option>
+									<option <?php if($schieflastmaxaold == 20) echo "selected" ?> value="20">20</option>
+									<option <?php if($schieflastmaxaold == 21) echo "selected" ?> value="21">21</option>
+									<option <?php if($schieflastmaxaold == 22) echo "selected" ?> value="22">22</option>
+									<option <?php if($schieflastmaxaold == 23) echo "selected" ?> value="23">23</option>
+									<option <?php if($schieflastmaxaold == 24) echo "selected" ?> value="24">24</option>
+									<option <?php if($schieflastmaxaold == 25) echo "selected" ?> value="25">25</option>
+									<option <?php if($schieflastmaxaold == 26) echo "selected" ?> value="26">26</option>
+									<option <?php if($schieflastmaxaold == 27) echo "selected" ?> value="27">27</option>
+									<option <?php if($schieflastmaxaold == 28) echo "selected" ?> value="28">28</option>
+									<option <?php if($schieflastmaxaold == 29) echo "selected" ?> value="29">29</option>
+									<option <?php if($schieflastmaxaold == 30) echo "selected" ?> value="30">30</option>
+									<option <?php if($schieflastmaxaold == 31) echo "selected" ?> value="31">31</option>
+									<option <?php if($schieflastmaxaold == 32) echo "selected" ?> value="32">32</option>
+								</select><br>
+								Gibt an mit wieviel Ampere maximal geladen wird wenn die automatische Umschaltung aktiv ist und mit einer Phase lädt.
+							</div>
+						</div>
+
 					</div>
 
 					<div class="row">
