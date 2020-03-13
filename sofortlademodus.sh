@@ -247,10 +247,8 @@ else
 
 		if (( maxdiffwa > maxdiff )); then
 			maxdiff=$maxdiff
-			echo "Ampere beschränkt"
 		else
 			maxdiff=$maxdiffwa
-			echo "Leistung beschränkt"
 		fi
 		if (( maxdiff < 0 )); then
 			maxdiff=0
@@ -315,6 +313,9 @@ else
 							fi
 							if (( llneu < sofortll )); then
 								echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+							fi
+							if (( llneu > maximalstromstaerke )); then
+								llneu=$maximalstromstaerke
 							fi
 							runs/set-current.sh "$llneu" m
 							if [[ $debug == "1" ]]; then
@@ -396,6 +397,9 @@ else
 						if (( llneu < sofortll )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi
+						if (( llneu > maximalstromstaerke )); then
+							llneu=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneu" m
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 1 um $maxdiff A Differenz auf $llneu A erhoeht, war kleiner als sofortll $sofortll"
@@ -476,7 +480,10 @@ else
 						fi
 						if (( llneus1 < sofortlls1 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-						fi 
+						fi
+						if (( llneus1 > maximalstromstaerke )); then
+							llneus1=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneus1" s1
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 um $maxdiff A Differenz auf $llneus1 A erhoeht, war kleiner als sofortll $sofortlls1"
@@ -555,6 +562,9 @@ else
 						if (( llneus1 < sofortlls1 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
+						if (( llneus1 > maximalstromstaerke )); then
+							llneus1=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneus1" s1
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 um $maxdiff A Differenz auf $llneus1 A erhoeht, war kleiner als sofortll $sofortlls1"
@@ -637,6 +647,9 @@ else
 						if (( llneus2 < sofortlls2 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
+						if (( llneus2 > maximalstromstaerke )); then
+							llneus2=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneus2" s2
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 3 um $maxdiff A Differenz auf $llneus2 A erhoeht, war kleiner als sofortll $sofortlls2"
@@ -710,6 +723,9 @@ else
 						if (( llneulp4 < sofortlllp4 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
+						if (( llneulp4 > maximalstromstaerke )); then
+							llneulp4=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneulp4" lp4
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 4 um $maxdiff A Differenz auf $llneulp4 A erhoeht, war kleiner als sofortll $sofortlllp4"
@@ -782,7 +798,10 @@ else
 						fi
 						if (( llneulp5 < sofortlllp5 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-						fi 
+						fi
+						if (( llneulp5 > maximalstromstaerke )); then
+							llneulp5=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneulp5" lp5
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 5 um $maxdiff A Differenz auf $llneulp5 A erhoeht, war kleiner als sofortll $sofortlllp5"
@@ -855,7 +874,10 @@ else
 						fi
 						if (( llneulp6 < sofortlllp6 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-						fi 
+						fi
+						if (( llneulp6 > maximalstromstaerke )); then
+							llneulp6=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneulp6" lp6
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 6 um $maxdiff A Differenz auf $llneulp6 A erhoeht, war kleiner als sofortll $sofortlllp6"
@@ -929,6 +951,9 @@ else
 						if (( llneulp7 < sofortlllp7 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 						fi 
+						if (( llneulp7 > maximalstromstaerke )); then
+							llneulp7=$maximalstromstaerke
+						fi
 						runs/set-current.sh "$llneulp7" lp7
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 7 um $maxdiff A Differenz auf $llneulp7 A erhoeht, war kleiner als sofortll $sofortlllp7"
@@ -1001,7 +1026,11 @@ else
 						fi
 						if (( llneulp8 < sofortlllp8 )); then
 							echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
-						fi 
+						fi
+						if (( llneulp8 > maximalstromstaerke )); then
+							llneulp8=$maximalstromstaerke
+						fi
+
 						runs/set-current.sh "$llneulp8" lp8
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 8 um $maxdiff A Differenz auf $llneulp8 A erhoeht, war kleiner als sofortll $sofortlllp8"
