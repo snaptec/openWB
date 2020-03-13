@@ -158,8 +158,10 @@ if (( verbraucher1_aktiv == "1")); then
 	if [[ $verbraucher1_typ == "sdm630" ]]; then
 		if [[ $verbraucher1_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm630local.py 1 $verbraucher1_source $verbraucher1_id &
+			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 		else
 			sudo python modules/verbraucher/sdm630remote.py 1 $verbraucher1_source $verbraucher1_id &
+			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 		fi
 	fi
 

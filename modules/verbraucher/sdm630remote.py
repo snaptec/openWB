@@ -110,7 +110,7 @@ f.write(str(l3whe3))
 f.close()
 
 #Totoal Export
-whe=l1whe3+l2whe3+l3whe3
+whe=l1whe2+l2whe2+l3whe2
 vwhestring = "/var/www/html/openWB/ramdisk/verbraucher%s_whe" % (verbrauchernr)
 f = open(vwhestring, 'w')
 f.write(str(whe))
