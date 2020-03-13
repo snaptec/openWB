@@ -1,3 +1,5 @@
-<div>
+<!-- Hilfe Index >>> -->
+<p>
 	Inhalt noch nicht fertig
-</div>
+</p>
+<!-- <<< Hilfe Index -->

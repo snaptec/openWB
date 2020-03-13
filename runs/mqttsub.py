@@ -21,15 +21,46 @@ def replaceAll(changeval,newval):
         time.sleep(0.1)
         inaction=0
 
+def getserial():
+    # Extract serial from cpuinfo file
+    with open('/proc/cpuinfo','r') as f:
+        for line in f:
+            if line[0:6] == 'Serial':
+                return line[10:26]
+        return "0000000000000000"
+
 mqtt_broker_ip = "localhost"
-client = mqtt.Client()
+client = mqtt.Client("openWB-mqttsub-" + getserial())
 
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
-    client.subscribe("openWB/set/#")
+    client.subscribe("openWB/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/system/ChangeVar"):
+        if msg.payload:
+            splitvar=msg.payload.decode("utf-8").split("=", 1)
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", splitvar[0], splitvar[1]]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/set/system/ChangeVar", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/system/GetVar"):
+        if msg.payload:
+            with open('/var/www/html/openWB/openwb.conf') as f:
+                datafile = f.readlines()
+            for line in datafile:
+                if msg.payload.decode("utf-8") in line:
+                    if "pass" not in line:
+                        client.publish("openWB/set/system/AskedVar", line, qos=0, retain=True)
+            client.publish("openWB/set/system/GetVar", "", qos=0, retain=True)  
+    if (msg.topic == "openWB/set/system/PerformUpdate"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
+            subprocess.Popen("/var/www/html/openWB/runs/update.sh");
+    if (msg.topic == "openWB/set/system/SendDebug"):
+        if (int(msg.payload) == 1):
+            client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
+            subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh");
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")

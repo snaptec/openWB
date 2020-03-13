@@ -14,14 +14,10 @@ foreach($lines as $line) {
 	}
 }
 $today = date('Y-m-d');
-if (isset($_GET[thedate])) {
-	$daydate1 = $_GET[thedate];
-
-}
-else
-{
+if (isset($_GET['thedate'])) {
+	$daydate1 = $_GET['thedate'];
+} else {
 	$daydate1 = $today;
-
 }
 $daydate = date("Ymd", strtotime($daydate1));
 $ll1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-ll1.csv';
@@ -49,7 +45,6 @@ if ($speichervorhanden == 1) {
 	$dailysewh = number_format((($lastsewh - $firstsewh) / 1000), 2);
 	$rspeicheriwh = $speicheriwh;
 	$rspeicherewh = $speicherewh;
-
 }
 if ($soc1vorhanden == 1) {
 	$soc1file = '/var/www/html/openWB/web/logging/data/daily/'.$daydate.'-soc1.csv';
@@ -106,7 +101,6 @@ $firstpv = reset($pv);
 $lastpv = end($pv);
 $dailypv = number_format((($lastpv - $firstpv) / 1000), 2);
 
-
 $firsteinspeisung = reset($einspeisung);
 $lasteinspeisung = end($einspeisung);
 $dailyeinspeisung = number_format((($lasteinspeisung - $firsteinspeisung) / 1000), 2);
@@ -122,119 +116,102 @@ $reinspeisung = $einspeisung;
 $anzahl = count($timef);
 
 if ($logdailywh == 1) {
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = ($rll3[$x-1] - $rll3[$x]) * -1;
-}
-if ($speichervorhanden == 1) {
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
+		$bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
-	}
-}
-if ($verbraucher1vorhanden == 1) {
-	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+		$pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
-	}
-
-}
-if ($verbraucher2vorhanden == 1) {
-	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbraucher2diff[$x] = ($rverbraucher2[$x-1] - $rverbraucher2[$x]) * -1;
+		$einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbrauchere2diff[$x] = ($rverbrauchere2[$x-1] - $rverbrauchere2[$x]) * -1;
+		$llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
 	}
-
-}
-
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll3diff[$x] = ($rll3[$x-1] - $rll3[$x]) * -1;
+	}
+	if ($speichervorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
+		}
+	}
+	if ($verbraucher1vorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
+		}
+	}
+	if ($verbraucher2vorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbraucher2diff[$x] = ($rverbraucher2[$x-1] - $rverbraucher2[$x]) * -1;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbrauchere2diff[$x] = ($rverbrauchere2[$x-1] - $rverbrauchere2[$x]) * -1;
+		}
+	}
 } else {
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	if ($logeinspeisungneg == 1) {
-	$einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];    
-	} else {
-	$einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
-	}
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
-}
-for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $ll3diff[$x] = $rll3[$x-1] - $rll3[$x] * -1;
-}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
+		$bezugdiff[$x] = ($rbezug[$x-1] - $rbezug[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
-	}
-if ($verbraucher1vorhanden == 1) {
-	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+		$pvdiff[$x] = ($rpv[$x-1] - $rpv[$x]) * -1;
 	}
 	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
+		if ($logeinspeisungneg == 1) {
+			$einspeisungdiff[$x] = $reinspeisung[$x-1] - $reinspeisung[$x];    
+		} else {
+			$einspeisungdiff[$x] = ($reinspeisung[$x-1] - $reinspeisung[$x]) * -1;
+		}
 	}
-
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$llgdiff[$x] = ($rllg[$x-1] - $rllg[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll1diff[$x] = ($rll1[$x-1] - $rll1[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll2diff[$x] = ($rll2[$x-1] - $rll2[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$ll3diff[$x] = $rll3[$x-1] - $rll3[$x] * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$speicheriwhdiff[$x] = ($rspeicheriwh[$x-1] - $rspeicheriwh[$x]) * -1;
+	}
+	for ($x = $anzahl - 1; $x > 0; $x--) {
+		$speicherewhdiff[$x] = ($rspeicherewh[$x-1] - $rspeicherewh[$x]) * -1;
+	}
+	if ($verbraucher1vorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbraucher1diff[$x] = ($rverbraucher1[$x-1] - $rverbraucher1[$x]) * -1;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbrauchere1diff[$x] = ($rverbrauchere1[$x-1] - $rverbrauchere1[$x]) * -1;
+		}
+	}
+	if ($verbraucher2vorhanden == 1) {
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbraucher2diff[$x] = ($rverbraucher2[$x-1] - $rverbraucher2[$x]) * -1;
+		}
+		for ($x = $anzahl - 1; $x > 0; $x--) {
+			$verbrauchere2diff[$x] = ($rverbrauchere2[$x-1] - $rverbrauchere2[$x]) * -1;
+		}
+	}
 }
-if ($verbraucher2vorhanden == 1) {
-	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbraucher2diff[$x] = ($rverbraucher2[$x-1] - $rverbraucher2[$x]) * -1;
-	}
-	for ($x = $anzahl - 1; $x > 0; $x--) {
-	    $verbrauchere2diff[$x] = ($rverbrauchere2[$x-1] - $rverbrauchere2[$x]) * -1;
-	}
-
-}
-
-
-
-}
-
-
-
 
 for ($x = 0; $x < $anzahl; $x++){
 	$line = $timef[$x] . "," . $bezugdiff[$x] . "," . $einspeisungdiff[$x] . "," . $llgdiff[$x] . "," . $pvdiff[$x] . "," . $speicheriwhdiff[$x] . "," . $speicherewhdiff[$x] . "," . $ll1diff[$x] . "," . $ll2diff[$x]  . "," . $soc[$x] . "," . $soc1[$x] . "," . $ll3diff[$x]  . "," . $speichersoc[$x] . "," . $verbraucher1diff[$x] . "," . $verbrauchere1diff[$x] . "," . $verbraucher2diff[$x] . "," . $verbrauchere2diff[$x] . PHP_EOL;
 	print($line);
 }
-
-
-
-
-
-

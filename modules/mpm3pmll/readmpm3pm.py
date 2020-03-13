@@ -147,3 +147,10 @@ else:
     f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
     f.write(str(llg))
     f.close()
+    resp = client.read_input_registers(0x46,2, unit=sdmid)
+    hz = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+    hz = float("%.2f" % hz)
+    f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
+    f.write(str(hz))
+    f.close()
+
