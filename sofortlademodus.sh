@@ -1,5 +1,13 @@
 #!/bin/bash
 sofortlademodus(){
+if [[ $schieflastaktiv == "1" ]]; then
+	if [[ $u1p3paktiv == "1" ]]; then
+		u1p3pstat=$(<ramdisk/u1p3pstat)
+		if [[ $u1p3pstat == "1" ]]; then
+			maximalstromstaerke=$schieflastmaxa
+		fi
+	fi
+fi
 if (( awattaraktiv == 1 )); then
 	actualprice=$(<ramdisk/awattarprice)
 	if (( $(echo "$actualprice < $awattarmaxprice" |bc -l) )); then
