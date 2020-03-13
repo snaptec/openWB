@@ -598,6 +598,7 @@
 	</script>
 
 	<?php
+		$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		$result = '';
 		$lines = file('/var/www/html/openWB/openwb.conf');
 		foreach ($lines as $line) {
@@ -1212,7 +1213,8 @@
 			<meter id='cpu' high=85 min=0 max=100 value=0></meter> <span id='cpuuse'>--</span>%<br>
 			Memory: <span id='memtot'>--</span>MB
 			<meter id='mem' min='0' value=0></meter> <span style="font-size: small;">(<span id='memfree'>--</span>MB free)</span><br>
-			Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.
+			Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.<br>
+			openWB Version <?php echo $owbversion ?>
 		</p>
 		<script>
 			function updateit() {
