@@ -1,5 +1,13 @@
 #!/bin/bash
 lastmnacht(){
+if [[ $schieflastaktiv == "1" ]]; then
+	if [[ $u1p3paktiv == "1" ]]; then
+		u1p3pstat=$(<ramdisk/u1p3pstat)
+		if [[ $u1p3pstat == "1" ]]; then
+			maximalstromstaerke=$schieflastmaxa
+		fi
+	fi
+fi
 if [ $# -eq 2 ]; then
 	if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) && (( evua3 < lastmaxap3 )); then
 		evudiff1=$((lastmaxap1 - evua1 ))

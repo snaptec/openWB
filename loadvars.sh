@@ -644,6 +644,9 @@ if (( hausverbrauch < 0 )); then
 fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 
+if [[ $wattbezugmodul == "bezug_e3dc" ]]; then
+	dummyvar="foobar"
+fi
 
 if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_byd" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
 	ra='^-?[0-9]+$'
