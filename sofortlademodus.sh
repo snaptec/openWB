@@ -8,7 +8,6 @@ if [[ $schieflastaktiv == "1" ]]; then
 		fi
 	fi
 fi
-echo $maximalstromstaerke AA
 if (( awattaraktiv == 1 )); then
 	actualprice=$(<ramdisk/awattarprice)
 	if (( $(echo "$actualprice < $awattarmaxprice" |bc -l) )); then
