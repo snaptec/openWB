@@ -10,7 +10,6 @@ var hidelp5;
 var hidelp6;
 var hidelp7;
 var hidelp8;
-var graphdata;
 var atime;
 var boolDisplayLp1 = false;
 var boolDisplayLp2 = false;
@@ -69,6 +68,7 @@ var boolDisplayLiveGraph;
 var datasend = 0;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
+var graphDataStr = '';
 var overalllp1wh = new Array();
 var overalllp2wh = new Array();
 
@@ -100,6 +100,7 @@ var thevalues = [
 ]
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
+
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg.match( /^openwb\/system\/monthgraphdata[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing "openwb/graph/monthgraphdata#"
@@ -108,9 +109,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d+/)[0];  // extract first match = number from mqttmsg
 		if ( index < 13 && initialread == 0 && (mqttpayload != "empty")) {
 			index -= 1;  // adjust to array starting at index 0
+			graphDataStr += ('\n') + mqttpayload;
 			graphDataSegments[index] = mqttpayload;
 			allValuesPresent[index] = 1;
-			putgraphtogether();
+			if ( !allValuesPresent.includes(0) ) {
+				// all segments received, so process data and display graph
+				loadgraph();
+			}
 		}
 	}
 }
@@ -167,23 +172,9 @@ if ( graphdate == null) {
 } else {
 	graphdate = graphdate.replace('-','');
 }
+
 function requestmonthgraph() {
 	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
-}
-
-function putgraphtogether() {
-	if ( !allValuesPresent.includes(0) ) {
-		graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
-		initialread = 1;
-		// test if graphdata starts with a date followed by comma like 20191201,
-		if ( !(/^\d{8},/.test(graphdata)) ) {
-			$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
-			$('#canvasdiv').hide();
-		} else {
-			formdata(graphdata);
-			$('#waitforgraphloadingdiv').hide();
-		}
-	}
 }
 
 function getCol(matrix, col){
@@ -194,64 +185,13 @@ function getCol(matrix, col){
     return column;
 }
 
-function formdata(graphdata){
-	graphdata = graphdata.replace(/^\s*[\n]/gm, '');
-	var csvData = new Array();
-	var rawcsv = graphdata.split(/\r?\n|\r/);
-	rawcsv.forEach((dataset) => {
-		csvData.push(dataset.split(','));
-	});
-	var splittime = new Array();
-	getCol(csvData, 0).forEach(function(zeit){
-		splittime.push(zeit.substring(0, zeit.length-4)+'-'+zeit.substring(4, zeit.length-2)+'-'+zeit.substring(6));
-	});
-	splittime.pop();
-	splittime.pop();
-	for (i = splittime.length; i < 28 ; i += 1) {
-		splittime.push("");
-	}
-	atime = splittime;
-
-	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
-	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
-	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
-	convertdata(csvData,'17',aspeicheri,'hidespeicheri','Speicher I','overallspeicheri','boolDisplaySpeicheri');
-	convertdata(csvData,'18',aspeichere,'hidespeichere','Speicher E','overallspeichere','boolDisplaySpeichere');
-	convertdata(csvData,'7',alpa,'hidelpa','Lp Gesamt','overalllpgesamt');
-	convertdata(csvData,'4',alp1,'hidelp1','Lp1','overalllp1','boolDisplayLp1');
-	convertdata(csvData,'5',alp2,'hidelp2','Lp2','overalllp2','boolDisplayLp2');
-	convertdata(csvData,'6',alp3,'hidelp3','Lp3','overalllp3','boolDisplayLp3');
-	convertdata(csvData,'12',alp4,'hidelp4','Lp4','overalllp4','boolDisplayLp4');
-	convertdata(csvData,'13',alp5,'hidelp5','Lp5','overalllp5','boolDisplayLp5');
-	convertdata(csvData,'14',alp6,'hidelp6','Lp6','overalllp6','boolDisplayLp6');
-	convertdata(csvData,'15',alp7,'hidelp7','Lp7','overalllp7','boolDisplayLp7');
-	convertdata(csvData,'16',alp8,'hidelp8','Lp8','overalllp8','boolDisplayLp8');
-	convertdata(csvData,'8',averbraucher1i,'hideload1i','Verbraucher 1 I','overallload1i','boolDisplayLoad1i');
-	convertdata(csvData,'9',averbraucher1e,'hideload1e','Verbraucher 1 E','overallload1e','boolDisplayLoad1e');
-	convertdata(csvData,'10',averbraucher2i,'hideload2i','Verbraucher 2 I','overallload2i','boolDisplayLoad2i');
-	convertdata(csvData,'11',averbraucher2e,'hideload2e','Verbraucher 2 E','overallload2e','boolDisplayLoad2e');
-
-	for (i = 0; i < abezug.length; i += 1) {
-		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
-		if ( hausverbrauch >= 0) {
-		    ahausverbrauch.push((hausverbrauch).toFixed(2));
-		    overallhausverbrauch += hausverbrauch;
-		} else {
-			ahausverbrauch.push('0');
-		}
-	}
-	overallhausverbrauch = (overallhausverbrauch).toFixed(2);
-	loadgraph();
-}
-
 function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideline) {
-	var counter = 0;
 	var oldcsvvar;
 	var fincsvvar;
 	var oldfincsvvar;
 	var firstcsvvar;
-	getCol(csvData, csvrow).forEach(function(csvvar){
-		if (counter > 0) {
+	getCol(csvData, csvrow).forEach(function(csvvar, index){
+		if (index > 0) {
 			var fincsvvar=(csvvar - oldcsvvar);
 			if (fincsvvar > 150000){
 				fincsvvar=oldfincsvvar;
@@ -272,7 +212,6 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 			}
 	 	}
 		oldfincsvvar=fincsvvar;
-		counter++;
 		if (csvvar > 100 ) {
 			oldcsvvar = csvvar;
 		}
@@ -288,34 +227,72 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 	pushdataset.pop();
 }
 
-function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
-	var counter = 0;
-	var oldcsvvar;
-	var fincsvvar;
-	var oldfincsvvar;
-	var firstcsvvar;
-	var vis=0;
-	getCol(csvData, csvrow).forEach(function(csvvar){
-		if (counter > 0) {
-	 		pushdataset.push(csvvar);
-	 	} else {
-		 	firstcsvvar = csvvar;
-	 	}
-		oldfincsvvar=fincsvvar;
-		if ( csvvar != 0 && typeof csvvar !== 'undefined'){
-			vis=1;
-		}
-		counter++;
-	});
-	//window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
-	if ( vis == 1 ){
-		window[hidevar] = 'foo';
-	} else {
-		window[hidevar] = hidevalue;
-	}
-}
-
 function loadgraph() {
+	var selectedGraphMonth = parseInt(graphdate.slice(4, 6));  // last 2 digits is month
+	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
+	// test if graphdata starts with a date followed by comma like 20191201,
+	if ( !(/^\d{8},/.test(graphDataStr)) ) {
+		$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
+		$('#canvasdiv').hide();
+		return;
+	}
+
+	// build array for graph from data-string
+	var csvData = new Array();
+	var rawcsv = graphDataStr.split(/\r?\n|\r/);
+	rawcsv.forEach((dataset) => {
+		var datasetArray = dataset.split(',');
+		var datasetDateStr = datasetArray[0];
+		if ( /^\d{8}$/.test(datasetDateStr) ) {
+			// test if first column is possible date and format correctly
+			datasetDateStr = datasetDateStr.slice(0, 4) + "/" + datasetDateStr.slice(4, 6) + "/" + datasetDateStr.slice(6, 8);
+			datasetDate = new Date(datasetDateStr);
+			if ( datasetDateStr.length > 0 && datasetDate !== "Invalid Date" && !isNaN(datasetDate) ) {
+				// date string is not undefined or empty and date string is a date and dataset is for selected month
+				datasetArray[0] = datasetDateStr;
+				for (var index=1; index<datasetArray.length; index++) {
+					// make sure all fields are numbers
+					if ( isNaN(datasetArray[index]) ) {
+						datasetArray[index] = '0';
+					}
+				}
+				csvData.push(datasetArray);
+			}
+		}
+	});
+	console.log(csvData);
+	atime = getCol(csvData, 0);
+	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
+	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
+	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
+	convertdata(csvData,'4',alp1,'hidelp1','Lp1','overalllp1','boolDisplayLp1');
+	convertdata(csvData,'5',alp2,'hidelp2','Lp2','overalllp2','boolDisplayLp2');
+	convertdata(csvData,'6',alp3,'hidelp3','Lp3','overalllp3','boolDisplayLp3');
+	convertdata(csvData,'7',alpa,'hidelpa','Lp Gesamt','overalllpgesamt');
+	convertdata(csvData,'8',averbraucher1i,'hideload1i','Verbraucher 1 I','overallload1i','boolDisplayLoad1i');
+	convertdata(csvData,'9',averbraucher1e,'hideload1e','Verbraucher 1 E','overallload1e','boolDisplayLoad1e');
+	convertdata(csvData,'10',averbraucher2i,'hideload2i','Verbraucher 2 I','overallload2i','boolDisplayLoad2i');
+	convertdata(csvData,'11',averbraucher2e,'hideload2e','Verbraucher 2 E','overallload2e','boolDisplayLoad2e');
+	convertdata(csvData,'12',alp4,'hidelp4','Lp4','overalllp4','boolDisplayLp4');
+	convertdata(csvData,'13',alp5,'hidelp5','Lp5','overalllp5','boolDisplayLp5');
+	convertdata(csvData,'14',alp6,'hidelp6','Lp6','overalllp6','boolDisplayLp6');
+	convertdata(csvData,'15',alp7,'hidelp7','Lp7','overalllp7','boolDisplayLp7');
+	convertdata(csvData,'16',alp8,'hidelp8','Lp8','overalllp8','boolDisplayLp8');
+	convertdata(csvData,'17',aspeicheri,'hidespeicheri','Speicher I','overallspeicheri','boolDisplaySpeicheri');
+	convertdata(csvData,'18',aspeichere,'hidespeichere','Speicher E','overallspeichere','boolDisplaySpeichere');
+
+	console.log(abezug);
+	for (i = 0; i < abezug.length; i += 1) {
+		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+		if ( hausverbrauch >= 0) {
+		    ahausverbrauch.push((hausverbrauch).toFixed(2));
+		    overallhausverbrauch += hausverbrauch;
+		} else {
+			ahausverbrauch.push('0');
+		}
+	}
+	overallhausverbrauch = (overallhausverbrauch).toFixed(2);
+
 	var lineChartData = {
 		labels: atime,
 		datasets: [{
@@ -585,25 +562,6 @@ function loadgraph() {
 
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
-}
-
-function checkgraphload(){
-	if ( graphloaded == 1) {
-       	myLine.destroy();
-		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0) {
-					loadgraph();
-					graphloaded += 1;
-				} else {
-			       	myLine.destroy();
-					loadgraph();
-				}
-		 	}
-		}
-	}
 }
 
 function showhidedataset(thedataset) {
