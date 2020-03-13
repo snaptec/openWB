@@ -3,7 +3,25 @@ Stylesheet zum openWB light19_01-Theme
 
 2019-2020 Michael Ortenstein
 */
+body {
+    margin-bottom: 30px;  /* margin bottom by footer height */
+}
 
+body > .container {
+    padding: 55px 15px 0;
+}
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 30px; /* fixed height of footer */
+    line-height: 30px; /* vertically center the text there */
+}
 @keyframes alertPulsation {
   0%   { opacity:1; }
   50%  { opacity:0; }
