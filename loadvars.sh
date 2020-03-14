@@ -680,7 +680,42 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-
+if [[ $pvwattbezugmodul == "none" ]]; then
+	ra='^-?[0-9]+$'
+	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
+	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
+		importtemp=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
+	else
+		importtemp=$(timeout 4 mosquitto_sub -t openWB/pv/WHImported_temp)
+		if ! [[ $importtemp =~ $ra ]] ; then
+			importtemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/pv/WHImported_temp from mosquito $importtemp"
+		echo $importtemp > /var/www/html/openWB/ramdisk/pvwatt0pos
+	fi
+	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0neg ]]; then
+		exporttemp=$(</var/www/html/openWB/ramdisk/pvwatt0neg)
+	else
+		exporttemp=$(timeout 4 mosquitto_sub -t openWB/pv/WHExport_temp)
+		if ! [[ $exporttemp =~ $ra ]] ; then
+			exporttemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/pv/WHExport_temp from mosquito $exporttemp"
+		echo $exporttemp > /var/www/html/openWB/ramdisk/pvwatt0neg
+	fi
+	sudo python /var/www/html/openWB/runs/simcount.py $watt3 pv pvposkwh pvkwh
+	importtemp1=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
+	exporttemp1=$(</var/www/html/openWB/ramdisk/pvwatt0neg)
+	if [[ $importtemp !=  $importtemp1 ]]; then
+		mosquitto_pub -t openWB/pv/WHImported_temp -r -m "$importtemp1"
+	fi
+	if [[ $exporttemp !=  $exporttemp1 ]]; then
+		mosquitto_pub -t openWB/pv/WHExport_temp -r -m "$exporttemp1"
+	fi
+	# sim bezug end
+fi
 if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_byd" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
