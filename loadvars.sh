@@ -680,7 +680,7 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-if [[ $pvwattbezugmodul == "none" ]]; then
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]]; then
 	ra='^-?[0-9]+$'
 	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
 	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
