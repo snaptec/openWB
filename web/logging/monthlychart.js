@@ -30,16 +30,16 @@ var boolDisplayLoad1e = false;
 var boolDisplayLoad2i = false;
 var boolDisplayLoad2e = false;
 var boolDisplayHouseConsumption = false;
-var alp1 = new Array();
-var alp2 = new Array();
-var alp3 = new Array();
-var alp4 = new Array();
-var alp5 = new Array();
-var alp6 = new Array();
-var alp7 = new Array();
-var alp8 = new Array();
-var abezug = new Array();
-var aeinspeisung = new Array();
+var alp1 = [];
+var alp2 = [];
+var alp3 = [];
+var alp4 = [];
+var alp5 = [];
+var alp6 = [];
+var alp7 = [];
+var alp8 = [];
+var abezug = [];
+var aeinspeisung = [];
 var lp1soc;
 var lp2soc;
 var lp1enabled;
@@ -68,22 +68,23 @@ var boolDisplayLiveGraph;
 var datasend = 0;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
-var graphDataStr = '';
-var overalllp1wh = new Array();
-var overalllp2wh = new Array();
+var graphDataStr = '';  // holds all concatenated data segments
+var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
+var overalllp1wh = [];
+var overalllp2wh = [];
 
-var apv = new Array();
-var aspeicheri = new Array();
-var aspeichere = new Array();
-var aspeichersoc = new Array();
-var asoc = new Array();
-var asoc1 = new Array();
-var averbraucher2i = new Array();
-var averbraucher2e = new Array();
-var averbraucher1i = new Array();
-var averbraucher1e = new Array();
-var ahausverbrauch = new Array();
-var alpa = new Array();
+var apv = [];
+var aspeicheri = [];
+var aspeichere = [];
+var aspeichersoc = [];
+var asoc = [];
+var asoc1 = [];
+var averbraucher2i = [];
+var averbraucher2e = [];
+var averbraucher1i = [];
+var averbraucher1e = [];
+var ahausverbrauch = [];
+var alpa = [];
 var thevalues = [
 	["openWB/system/MonthGraphData1", "#"],
 	["openWB/system/MonthGraphData2", "#"],
@@ -227,18 +228,72 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideli
 	pushdataset.pop();
 }
 
+function fillMissingDateRows() {
+	// fills missing date rows between existing dates for selected month with values
+	const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+	for ( var rowIndex = 1; rowIndex < csvData.length; rowIndex++ ) {
+		var firstDateStr = csvData[rowIndex-1][0];
+		var firstDate = new Date(firstDateStr + ' 00:00:00');
+		var secondDateStr = csvData[rowIndex][0];
+		var secondDate = new Date(secondDateStr + ' 00:00:00');
+		var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+		if ( diffDays > 1 ) {
+			// difference between 2 datasets is more than 1 day
+			var dd = String(firstDate.getDate() + 1).padStart(2, '0');  // day to insert
+			var newDatasetDateStr = firstDateStr.slice(0, 8) + dd;
+			var newDataSet = [newDatasetDateStr];  // insert new date in new array-row
+			for ( var colIndex = 1; colIndex < csvData[rowIndex-1].length; colIndex++ ) {
+				newDataSet.push(csvData[rowIndex-1][colIndex]);  // copy data from older date
+			}
+			csvData.splice(rowIndex, 0, newDataSet);  // insert row
+		}
+	}
+}
+
+function calcDailyValues() {
+	// calculates daily values by substracting two consecutive counter values from data array
+	// stores results in same array
+
+	for ( var column = 1; column < csvData[0].length; column++ ) {
+		// process every column after date-column
+		var dataColumn = getCol(csvData, column);
+		if ( dataColumn.every( value => value != '0' ) ) {
+			// don't process column if all values are zero
+			var prevValue = dataColumn[0];
+			var dailyValue = 0;
+			var prevDailyValue = 0;
+			dataColumn.forEach((value, row) => {
+				if ( row > 0 ) {  // start calculation with second row
+					dailyValue=(value - prevValue);
+					if ( isNaN(dailyValue) ) {
+						dailyValue = 0;
+					} else if ( dailyValue > 150000 || dailyValue < 0 ) {
+						// avoid large spikes or negative values
+						dailyValue=prevDailyValue;
+					}
+					csvData[row-1][column] = (dailyValue/1000).toFixed(2);
+				}
+				prevDailyValue = dailyValue;
+				if ( value > 100 ) {
+					prevValue = value;
+				}
+			});
+		}
+	}
+}
+
 function loadgraph() {
 	var selectedGraphMonth = parseInt(graphdate.slice(4, 6));  // last 2 digits is month
 	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
 	// test if graphdata starts with a date followed by comma like 20191201,
 	if ( !(/^\d{8},/.test(graphDataStr)) ) {
-		$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
+		// if not: nothing to display
+		$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar.');
 		$('#canvasdiv').hide();
 		return;
 	}
 
 	// build array for graph from data-string
-	var csvData = new Array();
 	var rawcsv = graphDataStr.split(/\r?\n|\r/);
 	rawcsv.forEach((dataset) => {
 		var datasetArray = dataset.split(',');
@@ -250,7 +305,7 @@ function loadgraph() {
 			if ( datasetDateStr.length > 0 && datasetDate !== "Invalid Date" && !isNaN(datasetDate) ) {
 				// date string is not undefined or empty and date string is a date and dataset is for selected month
 				datasetArray[0] = datasetDateStr;
-				for (var index=1; index<datasetArray.length; index++) {
+				for ( var index = 1; index < datasetArray.length; index++ ) {
 					// make sure all fields are numbers
 					if ( isNaN(datasetArray[index]) ) {
 						datasetArray[index] = '0';
@@ -260,7 +315,22 @@ function loadgraph() {
 			}
 		}
 	});
+
+	if ( csvData.length < 2 ) {
+		// not enough data rows: nothing to display
+		$("#waitforgraphloadingdiv").html('<br>Nicht genügend Daten für diesen Zeitraum verfügbar.');
+		$('#canvasdiv').hide();
+		return;
+	}
+
+	// sort array by date
+	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
+	console.log('sortiertes Array...');
 	console.log(csvData);
+	fillMissingDateRows();
+	calcDailyValues();
+	csvData.pop();  // discard last row in array, it is just needed for calculation
+
 	atime = getCol(csvData, 0);
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
@@ -301,7 +371,7 @@ function loadgraph() {
 			backgroundColor: "rgba(255, 10, 13, 0.3)",
 			borderWidth: 1,
 			fill: true,
-			data: abezug,
+			data: getCol(csvData,1),
 			hidden: boolDisplayEvu,
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
@@ -322,7 +392,7 @@ function loadgraph() {
 			fill: true,
 			hidden: boolDisplayPv,
 			borderWidth: 1,
-			data: apv,
+			data: getCol(csvData,3),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		}  , {
