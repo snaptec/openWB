@@ -220,22 +220,33 @@ function fillMissingDateRows() {
 	}
 }
 
+function fillLpCounterValuesArray() {
+	const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
+	csvData.forEach((dataRow, rowIndex) => {
+		// process every day
+		var lpCounterValuesRow = [''];  // row to hold the counter values of the day in kWh, first element empty to match index (timestamp in csvData)
+		if ( rowIndex < (csvData.length -1) ) {  // skipt last row of csvData-array, it is just needed for calculation
+			dataRow.forEach((value, columnIndex) => {
+				if ( lpColumns.includes(columnIndex) ) {
+					// current column is a LP-counter-value
+					lpCounterValuesRow.push(value/1000);
+				} else {
+					// no LP-counter-value so set to zero
+					lpCounterValuesRow.push(0);
+				}
+			});
+			lpCounterValues.push(lpCounterValuesRow);
+		}
+	});
+}
+
 function calcDailyValues() {
 	// values in logfile are stored as counter values
 	// calculates daily values by substracting two consecutive counter values from data array
 	// stores results in same array
 	for ( var column = 1; column < csvData[0].length; column++ ) {
 		// process every column after date-column
-		const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
-		var lpCounterValuesRow = [''];  // row to hold the counter values of the day in kWh, first element empty to match index (timestamp in csvData)
 		var dataColumn = getCol(csvData, column);
-		if ( lpColumns.includes(column) ) {
-			// current column is a LP-counter-value
-			lpCounterValuesRow.push(dataColumn);
-		} else {
-			// no LP-counter-value so set to zero
-			lpCounterValuesRow.push(0);
-		}
 		if ( dataColumn.every( value => value !== 0 ) ) {
 			// don't process column if all values are zero
 			var prevValue = dataColumn[0];
@@ -333,11 +344,14 @@ function loadgraph() {
 
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
+	// and process array
 	fillMissingDateRows();
-	console.log(csvData);
-return;
+	fillLpCounterValuesArray();
 	calcDailyValues();
-	csvData.pop();  // discard last row in array, it was just needed for calculation of daily values from original counter-values
+
+	console.log(lpCounterValues);
+
+	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
@@ -583,6 +597,7 @@ return;
 					label: function(t, d) {
 			   			if ( t.datasetIndex == 6 ) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp1wh[t.index] + " kWh";
+							console.log(xlabel + ' ' + t.index);
 						} else if ( t.datasetIndex == 7) {
 							var xLabel = d.datasets[t.datasetIndex].label + ", Zählerstand: " + overalllp2wh[t.index] + " kWh";
 						} else {
