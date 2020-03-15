@@ -227,9 +227,15 @@ function calcDailyValues() {
 	for ( var column = 1; column < csvData[0].length; column++ ) {
 		// process every column after date-column
 		const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
-		var lpCounterValuesRow = [''];  // row to hold the 
+		var lpCounterValuesRow = [''];  // row to hold the counter values of the day in kWh, first element empty to match index (timestamp in csvData)
 		var dataColumn = getCol(csvData, column);
-
+		if ( lpColumns.includes(column) ) {
+			// current column is a LP-counter-value
+			lpCounterValuesRow.push(dataColumn);
+		} else {
+			// no LP-counter-value so set to zero
+			lpCounterValuesRow.push(0);
+		}
 		if ( dataColumn.every( value => value !== 0 ) ) {
 			// don't process column if all values are zero
 			var prevValue = dataColumn[0];
