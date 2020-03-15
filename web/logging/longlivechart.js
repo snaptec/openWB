@@ -101,7 +101,7 @@ function prepareNewDataset(length, dataArray) {
 function loadgraph() {
 	alldata = alldata.replace(/^\s*[\n]/gm, '');
 	alldata = alldata.replace(/^\s*-[\n]/gm, '');
-	var csvData = new Array();
+	var csvData = [];
 	var rawcsv = alldata.split(/\r?\n|\r/);  // split line in array
 	rawcsv.forEach((dataset) => {
 		var datasetArray = dataset.split(',');

@@ -1,3 +1,13 @@
+/**
+ * reads monthly logging data and displays graph
+ *
+ * @author: Kevin Wieland, Michael Ortenstein
+ *
+ * fills data-gaps in timeline with respective values and hides empty data from being displayed
+ */
+
+const DATACOLUMNCOUNT = 19;  // count of native data columns received by mqtt (including timestamp-column)
+
 var overallhausverbrauch = 0;
 var hideload2;
 var hidespeichersoc;
@@ -70,6 +80,8 @@ var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were
 var graphDataSegments = new Array(12).fill('');  // all data segments
 var graphDataStr = '';  // holds all concatenated data segments
 var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
+var totalValues = [''];  // holds monthly totals for every data-column from csvData, starting with empty value at index 0 (equals timestamp index at csvData)
+var lpCounterValues = [];  // holds all counter values transformed to kWh
 var overalllp1wh = [];
 var overalllp2wh = [];
 
@@ -186,48 +198,6 @@ function getCol(matrix, col){
     return column;
 }
 
-function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall,hideline) {
-	var oldcsvvar;
-	var fincsvvar;
-	var oldfincsvvar;
-	var firstcsvvar;
-	getCol(csvData, csvrow).forEach(function(csvvar, index){
-		if (index > 0) {
-			var fincsvvar=(csvvar - oldcsvvar);
-			if (fincsvvar > 150000){
-				fincsvvar=oldfincsvvar;
-			}
-			if (fincsvvar < -0){
-				fincsvvar=oldfincsvvar;
-	 		}
-			if ( isNaN(fincsvvar)) {
-				fincsvvar=0 }
-			pushdataset.push(parseFloat((fincsvvar/1000).toFixed(2)));
-			if ( csvrow == 4 || csvrow == 5) {
-				window[overall+"wh"].push(csvvar/1000);
-			}
-	 	} else {
-		 	firstcsvvar = csvvar;
-			if ( csvrow == 4 || csvrow == 5 ) {
-				window[overall+"wh"].push(csvvar/1000);
-			}
-	 	}
-		oldfincsvvar=fincsvvar;
-		if (csvvar > 100 ) {
-			oldcsvvar = csvvar;
-		}
-	});
-	window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
-	if (window[overall] == 0 || isNaN(window[overall]) || window[overall] < 0) {
-		window[hidevar] = hidevalue;
-		window[hideline] = true;
-	} else {
-		window[hidevar] = 'foo';
-		window[hideline] = false;
-	}
-	pushdataset.pop();
-}
-
 function fillMissingDateRows() {
 	// fills missing date rows between existing dates for selected month with values
 	const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
@@ -251,13 +221,16 @@ function fillMissingDateRows() {
 }
 
 function calcDailyValues() {
+	// values in logfile are stored as counter values
 	// calculates daily values by substracting two consecutive counter values from data array
 	// stores results in same array
-
 	for ( var column = 1; column < csvData[0].length; column++ ) {
 		// process every column after date-column
+		const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
+		var lpCounterValuesRow = [''];  // row to hold the 
 		var dataColumn = getCol(csvData, column);
-		if ( dataColumn.every( value => value != '0' ) ) {
+
+		if ( dataColumn.every( value => value !== 0 ) ) {
 			// don't process column if all values are zero
 			var prevValue = dataColumn[0];
 			var dailyValue = 0;
@@ -265,13 +238,11 @@ function calcDailyValues() {
 			dataColumn.forEach((value, row) => {
 				if ( row > 0 ) {  // start calculation with second row
 					dailyValue=(value - prevValue);
-					if ( isNaN(dailyValue) ) {
-						dailyValue = 0;
-					} else if ( dailyValue > 150000 || dailyValue < 0 ) {
+					if ( dailyValue > 150000 || dailyValue < 0 ) {
 						// avoid large spikes or negative values
 						dailyValue=prevDailyValue;
 					}
-					csvData[row-1][column] = (dailyValue/1000).toFixed(2);
+					csvData[row-1][column] = dailyValue/1000;
 				}
 				prevDailyValue = dailyValue;
 				if ( value > 100 ) {
@@ -280,6 +251,19 @@ function calcDailyValues() {
 			});
 		}
 	}
+}
+
+function lpCount() {
+	// returns amount of LP containing other values than zero
+	const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
+	var count = 0;
+	for ( var i = 0; i < lpColumns.length; i++ ) {
+		var dataColumn = getCol(csvData, lpColumns[i]);
+		if ( dataColumn.every( value => value !== 0 ) ) {
+			count++;
+		}
+	}
+	return count;
 }
 
 function loadgraph() {
@@ -295,23 +279,41 @@ function loadgraph() {
 
 	// build array for graph from data-string
 	var rawcsv = graphDataStr.split(/\r?\n|\r/);
-	rawcsv.forEach((dataset) => {
-		var datasetArray = dataset.split(',');
-		var datasetDateStr = datasetArray[0];
-		if ( /^\d{8}$/.test(datasetDateStr) ) {
+	rawcsv.forEach((dataRowStr) => {
+		var dataRow = dataRowStr.split(',');
+		var dataRowDateStr = dataRow[0];
+		if ( /^\d{8}$/.test(dataRowDateStr) ) {
 			// test if first column is possible date and format correctly
-			datasetDateStr = datasetDateStr.slice(0, 4) + "/" + datasetDateStr.slice(4, 6) + "/" + datasetDateStr.slice(6, 8);
-			datasetDate = new Date(datasetDateStr);
-			if ( datasetDateStr.length > 0 && datasetDate !== "Invalid Date" && !isNaN(datasetDate) ) {
+			dataRowDateStr = dataRowDateStr.slice(0, 4) + "/" + dataRowDateStr.slice(4, 6) + "/" + dataRowDateStr.slice(6, 8);
+			dataRowDate = new Date(dataRowDateStr);
+			if ( dataRowDateStr.length > 0 && dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
 				// date string is not undefined or empty and date string is a date and dataset is for selected month
-				datasetArray[0] = datasetDateStr;
-				for ( var index = 1; index < datasetArray.length; index++ ) {
-					// make sure all fields are numbers
-					if ( isNaN(datasetArray[index]) ) {
-						datasetArray[index] = '0';
+				dataRow[0] = dataRowDateStr;
+				var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
+				if ( columnCountDifference > 0 ) {
+					// not enough columns in dataset, maybe due to older logfile, so add zero-fields
+					while ( columnCountDifference > 0 ) {
+						dataRow.push(0);
+						columnCountDifference--;
+					}
+				} else if ( columnCountDifference < 0 ) {
+					// too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+					while ( columnCountDifference < 0 ) {
+						dataRow.pop();
+						columnCountDifference++;
 					}
 				}
-				csvData.push(datasetArray);
+				dataRow.forEach((value, columnIndex, theArray) => {
+					// make sure all fields (except index 0 = timestamp) are numbers with two decimal places
+					if ( columnIndex > 0 ) {
+						if ( isNaN(value) ) {
+							theArray[columnIndex] = 0;
+						} else {
+							theArray[columnIndex] = parseFloat(value);
+						}
+					}
+				});
+				csvData.push(dataRow);
 			}
 		}
 	});
@@ -325,242 +327,248 @@ function loadgraph() {
 
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
-	console.log('sortiertes Array...');
-	console.log(csvData);
 	fillMissingDateRows();
+	console.log(csvData);
+return;
 	calcDailyValues();
-	csvData.pop();  // discard last row in array, it is just needed for calculation
+	csvData.pop();  // discard last row in array, it was just needed for calculation of daily values from original counter-values
 
-	atime = getCol(csvData, 0);
-	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug','boolDisplayEvu');
-	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
-	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
-	convertdata(csvData,'4',alp1,'hidelp1','Lp1','overalllp1','boolDisplayLp1');
-	convertdata(csvData,'5',alp2,'hidelp2','Lp2','overalllp2','boolDisplayLp2');
-	convertdata(csvData,'6',alp3,'hidelp3','Lp3','overalllp3','boolDisplayLp3');
-	convertdata(csvData,'7',alpa,'hidelpa','Lp Gesamt','overalllpgesamt');
-	convertdata(csvData,'8',averbraucher1i,'hideload1i','Verbraucher 1 I','overallload1i','boolDisplayLoad1i');
-	convertdata(csvData,'9',averbraucher1e,'hideload1e','Verbraucher 1 E','overallload1e','boolDisplayLoad1e');
-	convertdata(csvData,'10',averbraucher2i,'hideload2i','Verbraucher 2 I','overallload2i','boolDisplayLoad2i');
-	convertdata(csvData,'11',averbraucher2e,'hideload2e','Verbraucher 2 E','overallload2e','boolDisplayLoad2e');
-	convertdata(csvData,'12',alp4,'hidelp4','Lp4','overalllp4','boolDisplayLp4');
-	convertdata(csvData,'13',alp5,'hidelp5','Lp5','overalllp5','boolDisplayLp5');
-	convertdata(csvData,'14',alp6,'hidelp6','Lp6','overalllp6','boolDisplayLp6');
-	convertdata(csvData,'15',alp7,'hidelp7','Lp7','overalllp7','boolDisplayLp7');
-	convertdata(csvData,'16',alp8,'hidelp8','Lp8','overalllp8','boolDisplayLp8');
-	convertdata(csvData,'17',aspeicheri,'hidespeicheri','Speicher I','overallspeicheri','boolDisplaySpeicheri');
-	convertdata(csvData,'18',aspeichere,'hidespeichere','Speicher E','overallspeichere','boolDisplaySpeichere');
-
-	console.log(abezug);
-	for (i = 0; i < abezug.length; i += 1) {
-		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
-		if ( hausverbrauch >= 0) {
-		    ahausverbrauch.push((hausverbrauch).toFixed(2));
-		    overallhausverbrauch += hausverbrauch;
+	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+		// calculate daily 'Hausverbrauch [kWh]' from row-values
+		// and extend csvData by these values
+		// tägl. Hausverbrauch = Bezug - Einspeisung + PV - alle LP + Speicherentladung - Speicherladung ;
+		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] + csvData[rowIndex][18] - csvData[rowIndex][17];
+		if ( homeConsumption >= 0) {
+			csvData[rowIndex].push(homeConsumption);
 		} else {
-			ahausverbrauch.push('0');
+			csvData[rowIndex].push(0);
 		}
 	}
-	overallhausverbrauch = (overallhausverbrauch).toFixed(2);
 
-	var lineChartData = {
-		labels: atime,
-		datasets: [{
-			label: 'Bezug ' + overallbezug + ' kWh',
+	for ( var columnIndex = 1; columnIndex < csvData[0].length; columnIndex++ ) {
+		// summarize all columns for monthly totals
+		var dataColumn = getCol(csvData, columnIndex);
+		var total = 0;
+		dataColumn.forEach((value) => {
+			total+=value;
+		});
+		totalValues.push(total);
+	}
+
+	//for ( var i = 0; i < abezug.length; i += 1) {
+	//	var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+	//	if ( hausverbrauch >= 0) {
+	//	    ahausverbrauch.push((hausverbrauch).toFixed(2));
+	//	    overallhausverbrauch += hausverbrauch;
+	//	} else {
+	//		ahausverbrauch.push('0');
+	//	}
+	//}
+
+	//build array containing all available data from csvData
+	var lineChartDataSets = [
+		'', // first entry with index 0 is empty and later removed just needed to sync array index with respective csvData index
+		{
+			label: 'Bezug ' + totalValues[1].toFixed(2) + ' kWh',
 			borderColor: "rgba(255, 0, 0, 0.7)",
 			backgroundColor: "rgba(255, 10, 13, 0.3)",
 			borderWidth: 1,
 			fill: true,
-			data: getCol(csvData,1),
-			hidden: boolDisplayEvu,
+			data: getCol(csvData, 1),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Einspeisung ' + overalleinspeisung + ' kWh',
+			label: 'Einspeisung ' + totalValues[2].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 255, 105, 0.9)",
 			backgroundColor: "rgba(0, 255, 255, 0.3)",
 			borderWidth: 2,
 			fill: true,
-			data: aeinspeisung,
-			hidden: boolDisplayEvu,
+			data: getCol(csvData, 2),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'PV ' + overallpv + ' kWh',
+			label: 'PV ' + totalValues[3].toFixed(2) + ' kWh',
 			borderColor: 'green',
 			backgroundColor: "rgba(10, 255, 13, 0.3)",
 			fill: true,
-			hidden: boolDisplayPv,
 			borderWidth: 1,
-			data: getCol(csvData,3),
-			yAxisID: 'y-axis-1',
-			lineTension: 0.2
-		}  , {
-			label: 'Speicher I ' + overallspeicheri + ' kWh',
-			borderColor: 'orange',
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
-			fill: true,
-			borderWidth: 1,
-			data: aspeicheri,
-			hidden: boolDisplaySpeicheri,
+			data: getCol(csvData, 3),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Speicher E ' + overallspeichere + ' kWh',
-			borderColor: 'orange',
-			backgroundColor: "rgba(255, 155, 13, 0.3)",
-			fill: true,
+			label: 'Lp1 ' + totalValues[4].toFixed(2) + ' kWh',
+			borderColor: "rgba(0, 0, 255, 0.7)",
+			backgroundColor: "rgba(0, 0, 255, 0.7)",
 			borderWidth: 1,
-			data: aspeichere,
-			hidden: boolDisplaySpeichere,
+			fill: false,
+			data: getCol(csvData, 4),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Lp Gesamt ' + overalllpgesamt + ' kWh',
+			label: 'Lp2 ' + totalValues[5].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 30, 105, 0.7)",
+			backgroundColor: "rgba(50, 30, 105, 0.7)",
+			borderWidth: 1,
+			fill: false,
+			data: getCol(csvData, 5),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp3 ' + totalValues[6].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: getCol(csvData, 6),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp Gesamt ' + totalValues[7].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.1)",
 			backgroundColor: "rgba(0, 0, 255, 0.1)",
 			fill: true,
 			borderWidth: 2,
-			data: alpa,
-			hidden: boolDisplayLpAll,
+			data: getCol(csvData, 7),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Lp1 ' + overalllp1 + ' kWh',
-			borderColor: "rgba(0, 0, 255, 0.7)",
-			backgroundColor: "rgba(0, 0, 255, 0.7)",
-			borderWidth: 1,
-			hidden: boolDisplayLp1,
-			fill: false,
-			data: alp1,
-			yAxisID: 'y-axis-1',
-			lineTension: 0.2
-		} , {
-			label: 'Lp2 ' + overalllp2 + ' kWh',
-			borderColor: "rgba(50, 30, 105, 0.7)",
-			backgroundColor: "rgba(50, 30, 105, 0.7)",
-			borderWidth: 1,
-			hidden: boolDisplayLp2,
-			fill: false,
-			data: alp2,
-			yAxisID: 'y-axis-1',
-			lineTension: 0.2
-		} , {
-			label: 'Lp3 ' + overalllp3 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			borderWidth: 2,
-			data: alp3,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp3,
-			lineTension: 0.2
-		} , {
-			label: 'Lp4 ' + overalllp4 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			data: alp4,
-			borderWidth: 2,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp4,
-			lineTension: 0.2
-		} , {
-			label: 'Lp5 ' + overalllp5 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			borderWidth: 2,
-			data: alp5,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp5,
-			lineTension: 0.2
-		} , {
-			label: 'Lp6 ' + overalllp6 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			borderWidth: 2,
-			data: alp6,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp6,
-			lineTension: 0.2
-		} , {
-			label: 'Lp7 ' + overalllp7 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			borderWidth: 2,
-			data: alp7,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp7,
-			lineTension: 0.2
-		} , {
-			label: 'Lp8 ' + overalllp8 + ' kWh',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
-			fill: false,
-			borderWidth: 2,
-			data: alp8,
-			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8,
-			lineTension: 0.2
-		} , {
-			label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
+			label: 'Verbraucher 1 I ' + totalValues[8].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			hidden: boolDisplayLoad1i,
-			data: averbraucher1i,
+			data: getCol(csvData, 8),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
+			label: 'Verbraucher 1 E ' + totalValues[9].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			hidden: boolDisplayLoad1e,
-			data: averbraucher1e,
+			data: getCol(csvData, 9),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Verbraucher 2 I ' + overallload2i + ' kWh',
+			label: 'Verbraucher 2 I ' + totalValues[10].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: averbraucher2i,
-			hidden: boolDisplayLoad2i,
+			data: getCol(csvData, 10),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Verbraucher 2 E ' + overallload2e + ' kWh',
+			label: 'Verbraucher 2 E ' + totalValues[11].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: averbraucher2e,
-			hidden: boolDisplayLoad2e,
+			data: getCol(csvData, 11),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
 		} , {
-			label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
+			label: 'Lp4 ' + totalValues[12].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			data: getCol(csvData, 12),
+			borderWidth: 2,
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp5 ' + totalValues[13].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: getCol(csvData, 13),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp6 ' + totalValues[14].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: getCol(csvData, 14),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp7 ' + totalValues[15].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: getCol(csvData, 15),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Lp8 ' + totalValues[16].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 50, 55, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			borderWidth: 2,
+			data: getCol(csvData, 16),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Speicher I ' + totalValues[17].toFixed(2) + ' kWh',
+			borderColor: 'orange',
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: true,
+			borderWidth: 1,
+			data: getCol(csvData, 17),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Speicher E ' + totalValues[18].toFixed(2) + ' kWh',
+			borderColor: 'orange',
+			backgroundColor: "rgba(255, 155, 13, 0.3)",
+			fill: true,
+			borderWidth: 1,
+			data: getCol(csvData, 18),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2
+		} , {
+			label: 'Hausverbrauch ' + totalValues[19].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: ahausverbrauch,
-			hidden: boolDisplayHouseConsumption,
+			data: getCol(csvData, 19),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2
-		}]
-	};
+		}
+	];
+
+	// check if other LP than #1 has data !== 0 and if not, set all LP Gesamt to 0 so it will not be displayed
+	if ( lpCount() < 2 ) {
+		for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+			csvData[rowIndex][7] = 0;
+		}
+	}
+
+	// now delete all graph lines containing only zero values
+	// by deleting the respective field in the linChartDataSets-array
+	for ( var column = 1; column < csvData[0].length; column++ ) {
+		// process all data-columns except the date
+		// column in csvData is represented by column-entry in linChartData
+		var dataColumn = getCol(csvData, column);
+		if ( dataColumn.every( value => value === 0 ) ) {
+			lineChartDataSets[column] = '';  // mark entry for removal of line if data is all zero
+		}
+	}
+	// now remove lines marked by '' for removal
+	lineChartDataSets = lineChartDataSets.filter((element) => element !== '');
+
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myLine = new Chart(ctx, {
 		type: 'line',
-		data: lineChartData,
+		data: {
+			labels: getCol(csvData, 0),
+			datasets: lineChartDataSets
+		},
 		options: {
 			tooltips: {
 				enabled: true,
@@ -575,7 +583,7 @@ function loadgraph() {
 							var xLabel = d.datasets[t.datasetIndex].label;
 						}
 			   			var yLabel = t.yLabel;
-			   			return xLabel + ', Wert: ' + yLabel + 'kWh';
+			   			return 'Energiemenge: ' + yLabel.toFixed(2) + ' kWh';
 					}
 				}
 			},
@@ -588,15 +596,6 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				position: 'bottom',
-				labels: {
-			        filter: function(item, chart) {
-						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidelp1)|| item.text.includes(hidespeicheri)|| item.text.includes(hidespeichere) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
-							return false
-						} else {
-							return true
-						}
-					}
-				}
 			},
 			title: {
 				display: false
