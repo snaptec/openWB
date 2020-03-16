@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div class="col-6 col-sm-3">
+				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
 					<div class="input-group mb-3">
 						<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Monat" id="prevmonth"></i>
 						<input class="form-control datepicker" id="theDate" type="text" readonly>

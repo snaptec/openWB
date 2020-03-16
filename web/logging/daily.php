@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div class="col-9 col-sm-6">
+				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
 					<div class="input-group mb-3">
 						<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Tag" id="prevday"></i>
 						<input class="form-control datepicker" id="theDate" type="text" readonly>

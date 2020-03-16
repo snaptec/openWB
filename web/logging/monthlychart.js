@@ -672,9 +672,11 @@ function loadgraph() {
 	$('#canvas').click (function(evt) {
 		// on click of datapoint, jump to day view
 		var activePoint = myLine.getElementAtEvent(event);
-		if (activePoint.length > 0) {
+		if ( activePoint.length > 0) {
 			var clickedElementindex = activePoint[0]._index;
-			var jumpToDate = myLine.data.labels[clickedElementindex];
+			var jumpToDate = myLine.data.labels[clickedElementindex];  // get complete label of day clicked
+			// and format the string as needed to call daily graph: YYYY-mm-dd
+			jumpToDate = jumpToDate.substring(10) + '-' + jumpToDate.substr(7, 2) + '-' + jumpToDate.substr(4, 2);
 			window.location.href = "daily.php?date=" + jumpToDate;
 		}
 	});
