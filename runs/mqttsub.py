@@ -298,6 +298,13 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) >= 0 and int(msg.payload) <=100):
             replaceAll("lademkwhlp5=",msg.payload.decode("utf-8"))
 
+    if (msg.topic == "openWB/set/directChargeMinCurrent"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 32):
+            replaceAll("minimalstromstaerke=",msg.payload.decode("utf-8"))
+    if (msg.topic == "openWB/set/directChargeMaxCurrent"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 32):
+            replaceAll("maximalstromstaerke=",msg.payload.decode("utf-8"))
+
     if (msg.topic == "openWB/set/lp6/kWhDirectChargeToCharge"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=100):
             replaceAll("lademkwhlp6=",msg.payload.decode("utf-8"))
