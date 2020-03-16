@@ -166,7 +166,7 @@
 				});
 
 				// load graph
-				$.getScript("dailychart.js");
+				$.getScript("dailychart.js?ver=1.0");
 			})
 		</script>
 

@@ -112,7 +112,7 @@
 		<script src = "../js/mqttws31.js" ></script>
 
 		<!-- load respective Chart.js definition -->
-		<script src="longlivechart.js"></script>
+		<script src="longlivechart.js?ver=1.0"></script>
 
 	</body>
 </html>
