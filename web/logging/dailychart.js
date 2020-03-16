@@ -106,6 +106,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			allValuesPresent[index] = 1;
 			putgraphtogether();
 		}
+
 	}
 }
 
@@ -168,8 +169,11 @@ function requestdaygraph() {
 
 function putgraphtogether() {
 	if ( !allValuesPresent.includes(0) ) {
-		graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
+		var alldata = graphDataSegments[0] + "\n" + graphDataSegments[1] + "\n" + graphDataSegments[2] + "\n" + graphDataSegments[3] + "\n" + graphDataSegments[4] + "\n" + graphDataSegments[5] + "\n" + graphDataSegments[6] + "\n" + graphDataSegments[7] + "\n" + graphDataSegments[8] + "\n" + graphDataSegments[9] + "\n" + graphDataSegments[10] + "\n" + graphDataSegments[11];
+		graphdata = alldata.replace(/^\s*[\n]/gm, '');
+		//graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
 		initialread = 1;
+
 		// test if graphdata starts with a timestamp followed by comma like 0745,
 		if ( !(/^\d{4},/.test(graphdata)) ) {
 			$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
@@ -200,8 +204,7 @@ function formdata(graphdata){
 		splittime.push(zeit.substring(0, zeit.length -2)+':'+zeit.substring(2));
 	});
 	splittime.shift();
-	atime = splittime;
-
+	atime = splittime.slice(0,-1);
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
 	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
