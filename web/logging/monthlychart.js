@@ -8,95 +8,14 @@
 
 const DATACOLUMNCOUNT = 19;  // count of native data columns received by mqtt (including timestamp-column)
 
-var overallhausverbrauch = 0;
-var hideload2;
-var hidespeichersoc;
-var hidelpa;
-var hidelp1;
-var hidelp2;
-var hidelp3;
-var hidelp4;
-var hidelp5;
-var hidelp6;
-var hidelp7;
-var hidelp8;
-var atime;
-var boolDisplayLp1 = false;
-var boolDisplayLp2 = false;
-var boolDisplayLp3 = false;
-var boolDisplayLp4 = false;
-var boolDisplayLp5 = false;
-var boolDisplayLp6 = false;
-var boolDisplayLp7 = false;
-var boolDisplayLp8 = false;
-var boolDisplayEvu = false;
-var boolDisplayPv = false;
-var boolDisplaySpeicheri = false;
-var boolDisplaySpeichere = false;
-var boolDisplayLp1Soc = false;
-var boolDisplayLp2Soc = false;
-var boolDisplayLoad1i = false;
-var boolDisplayLoad1e = false;
-var boolDisplayLoad2i = false;
-var boolDisplayLoad2e = false;
-var boolDisplayHouseConsumption = false;
-var alp1 = [];
-var alp2 = [];
-var alp3 = [];
-var alp4 = [];
-var alp5 = [];
-var alp6 = [];
-var alp7 = [];
-var alp8 = [];
-var abezug = [];
-var aeinspeisung = [];
-var lp1soc;
-var lp2soc;
-var lp1enabled;
-var lp2enabled;
-var lp3enabled;
 var initialread = 0;
-var graphloaded = 0;
-var boolDisplayLoad1;
-var boolDisplayLp1Soc;
-var boolDisplayLoad2;
-var boolDisplayLp2Soc;
-var boolDisplayLp1;
-var boolDisplayLp2;
-var boolDisplayLp3;
-var boolDisplayLp4;
-var boolDisplayLp5;
-var boolDisplayLp6;
-var boolDisplayLp7;
-var boolDisplayLp8;
-var boolDisplayLpAll;
-var boolDisplaySpeicherSoc;
-var boolDisplayEvu;
-var boolDisplayPv;
 var boolDisplayLegend = true;
-var boolDisplayLiveGraph;
-var datasend = 0;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
 var graphDataStr = '';  // holds all concatenated data segments
 var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
 var totalValues = [''];  // holds monthly totals for every data-column from csvData, starting with empty value at index 0 (equals timestamp index at csvData)
 var lpCounterValues = [];  // holds all counter values transformed to kWh
-var overalllp1wh = [];
-var overalllp2wh = [];
-
-var apv = [];
-var aspeicheri = [];
-var aspeichere = [];
-var aspeichersoc = [];
-var asoc = [];
-var asoc1 = [];
-var averbraucher2i = [];
-var averbraucher2e = [];
-var averbraucher1i = [];
-var averbraucher1e = [];
-var ahausverbrauch = [];
-var alpa = [];
 var thevalues = [
 	["openWB/system/MonthGraphData1", "#"],
 	["openWB/system/MonthGraphData2", "#"],
@@ -111,6 +30,20 @@ var thevalues = [
 	["openWB/system/MonthGraphData11", "#"],
 	["openWB/system/MonthGraphData12", "#"],
 ]
+
+var url_string = window.location.href
+var url = new URL(url_string);
+var graphdate = url.searchParams.get("date");
+if ( graphdate == null) {
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	graphdate = yyyy + mm;
+} else {
+	graphdate = graphdate.replace('-','');
+}
+
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
@@ -172,19 +105,6 @@ var publish = function (payload, topic) {
 }
 
 client.connect(options);
-
-var url_string = window.location.href
-var url = new URL(url_string);
-var graphdate = url.searchParams.get("date");
-if ( graphdate == null) {
-	var today = new Date();
-	var dd = String(today.getDate()).padStart(2, '0');
-	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = today.getFullYear();
-	graphdate = yyyy + mm;
-} else {
-	graphdate = graphdate.replace('-','');
-}
 
 function requestmonthgraph() {
 	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
@@ -366,6 +286,17 @@ function loadgraph() {
 
 	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
+	// old routine, also not working corectly if no bezug and einspeisung are logged
+	//for ( var i = 0; i < abezug.length; i += 1) {
+	//	var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+	//	if ( hausverbrauch >= 0) {
+	//	    ahausverbrauch.push((hausverbrauch).toFixed(2));
+	//	    overallhausverbrauch += hausverbrauch;
+	//	} else {
+	//		ahausverbrauch.push('0');
+	//	}
+	//}
+
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
 		// and extend csvData by these values
@@ -387,16 +318,6 @@ function loadgraph() {
 		});
 		totalValues.push(total);
 	}
-
-	//for ( var i = 0; i < abezug.length; i += 1) {
-	//	var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
-	//	if ( hausverbrauch >= 0) {
-	//	    ahausverbrauch.push((hausverbrauch).toFixed(2));
-	//	    overallhausverbrauch += hausverbrauch;
-	//	} else {
-	//		ahausverbrauch.push('0');
-	//	}
-	//}
 
 	//build array containing all available data from csvData
 	var lineChartDataSets = [
@@ -685,32 +606,34 @@ function loadgraph() {
 	$('#waitforgraphloadingdiv').hide();
 }
 
-function showhidedataset(thedataset) {
-	if ( window[thedataset] == true ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == false ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else {
-		publish("1","openWB/graph/"+thedataset);
-	}
-}
 
-function showhidelegend(thedataset) {
-	if ( window[thedataset] == true ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == false ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else {
-		publish("0","openWB/graph/"+thedataset);
-	}
-}
+// old functions, called nowhere...
+//function showhidedataset(thedataset) {
+//	if ( window[thedataset] == true ) {
+//		publish("1","openWB/graph/"+thedataset);
+//	} else if ( window[thedataset] == false ) {
+//		publish("0","openWB/graph/"+thedataset);
+//	} else {
+//		publish("1","openWB/graph/"+thedataset);
+//	}
+//}
 
-function showhide(thedataset) {
-	if ( window[thedataset] == 0 ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == 1 ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else {
-		publish("1","openWB/graph/"+thedataset);
-	}
-}
+//function showhidelegend(thedataset) {
+//	if ( window[thedataset] == true ) {
+//		publish("0","openWB/graph/"+thedataset);
+//	} else if ( window[thedataset] == false ) {
+//		publish("1","openWB/graph/"+thedataset);
+//	} else {
+//		publish("0","openWB/graph/"+thedataset);
+//	}
+//}
+
+//function showhide(thedataset) {
+//	if ( window[thedataset] == 0 ) {
+//		publish("1","openWB/graph/"+thedataset);
+//	} else if ( window[thedataset] == 1 ) {
+//		publish("0","openWB/graph/"+thedataset);
+//	} else {
+//		publish("1","openWB/graph/"+thedataset);
+//	}
+//}
