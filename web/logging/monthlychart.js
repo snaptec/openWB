@@ -190,9 +190,9 @@ function requestmonthgraph() {
 	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
 }
 
-function getCol(matrix, col){
+function getCol(matrix, col) {
 	var column = [];
-	for(var i=0; i<matrix.length; i++){
+	for( var i = 0; i < matrix.length; i++) {
     	column.push(matrix[i][col]);
     }
     return column;
@@ -270,6 +270,18 @@ function calcDailyValues() {
 			});
 		}
 	}
+}
+
+function formatDateColumn() {
+    // formats the first csvdata-column so date is displayed at labels like 'Mo, 16.03.20'
+    for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+        var theDate = new Date(csvData[rowIndex][0]);
+        var dd = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
+        var mm = String(theDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var dayOfWeek = theDate.toLocaleDateString('de-DE', { weekday: 'short'});
+        var theDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + theDate.getFullYear();
+        csvData[rowIndex][0] = theDateStr;
+    }
 }
 
 function lpCount() {
@@ -350,8 +362,7 @@ function loadgraph() {
 	fillMissingDateRows();
 	fillLpCounterValuesArray();
 	calcDailyValues();
-
-	console.log(lpCounterValues);
+    formatDateColumn();
 
 	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
@@ -387,7 +398,6 @@ function loadgraph() {
 	//	}
 	//}
 
-    console.log(getCol(lpCounterValues, 4));
 	//build array containing all available data from csvData
 	var lineChartDataSets = [
 		'', // first entry with index 0 is empty and later removed just needed to sync array index with respective csvData index
