@@ -75,6 +75,7 @@ if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
 
+ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
 

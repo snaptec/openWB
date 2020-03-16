@@ -1,6 +1,7 @@
 #!/bin/bash
 
 declare -A mqttvar
+mqttvar["system/IpAddress"]=ipaddress
 mqttvar["evu/APhase1"]=bezuga1
 mqttvar["evu/APhase2"]=bezuga2
 mqttvar["evu/APhase3"]=bezuga3
