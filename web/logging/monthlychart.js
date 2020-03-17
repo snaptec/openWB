@@ -325,9 +325,6 @@ function loadgraph() {
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
 
-    console.log(csvData);
-    return;
-
 	// and process array
 	fillDataGaps();  // completes gaps in data
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
