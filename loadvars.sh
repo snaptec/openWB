@@ -75,6 +75,7 @@ if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 				fi
+				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 			plugstat=1
