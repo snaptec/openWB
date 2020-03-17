@@ -95,19 +95,15 @@ var options = {
 	}
 };
 
-//Creates a new Messaging.Message Object and sends it
-var publish = function (payload, topic) {
-	var message = new Messaging.Message(payload);
-	message.destinationName = topic;
-	message.qos = 2;
-	message.retained = true;
-	client.send(message);
-}
-
 client.connect(options);
 
 function requestmonthgraph() {
-	publish(graphdate, "openWB/set/graph/RequestMonthGraph");
+    // requests logging data by mqtt
+    var message = new Messaging.Message(graphdate);
+    message.destinationName = "openWB/set/graph/RequestMonthGraph";
+    message.qos = 2;
+    message.retained = true;
+    client.send(message);
 }
 
 function getCol(matrix, col) {
