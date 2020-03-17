@@ -62,7 +62,8 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			graphDataSegments[index] = mqttpayload;
 			allValuesPresent[index] = 1;
 			if ( !allValuesPresent.includes(0) ) {
-				// all segments received, so process data and display graph
+				// all segments received, so flush mqtt buffer, process data and display graph
+                publish('0', "openWB/set/graph/RequestMonthGraph");
 				loadgraph();
 			}
 		}
@@ -110,12 +111,7 @@ var publish = function (payload, topic) {
 }
 
 function requestmonthgraph() {
-    // first flush data
-    publish('0', "openWB/set/graph/RequestMonthGraph");
-    // then after short wait request logging data
-    setTimeout(function() {
-        publish(graphDate, "openWB/set/graph/RequestMonthGraph");
-    }, 200);
+    publish(graphDate, "openWB/set/graph/RequestMonthGraph");
 }
 
 function getCol(matrix, col) {
