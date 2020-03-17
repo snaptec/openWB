@@ -100,13 +100,22 @@ var options = {
 
 client.connect(options);
 
+//Creates a new Messaging.Message Object and sends it
+var publish = function (payload, topic) {
+	var message = new Messaging.Message(payload);
+	message.destinationName = topic;
+	message.qos = 2;
+	message.retained = true;
+	client.send(message);
+}
+
 function requestmonthgraph() {
-    // requests logging data by mqtt
-    var message = new Messaging.Message(graphDate);
-    message.destinationName = "openWB/set/graph/RequestMonthGraph";
-    message.qos = 2;
-    message.retained = true;
-    client.send(message);
+    // first flush data
+    publish('0', "openWB/set/graph/RequestMonthGraph");
+    // then after short wait request logging data
+    setTimeout(function() {
+        publish(graphDate, "openWB/set/graph/RequestMonthGraph");
+    }, 200);
 }
 
 function getCol(matrix, col) {
@@ -259,7 +268,7 @@ function loadgraph() {
 	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
 	// test if graphdata starts with a date followed by comma like 20191201,
 	if ( !(/^\d{8},/.test(graphDataStr)) ) {
-		// if not: nothing to display
+		// if not: nothing to display or corrupt data
 		$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar.');
 		$('#canvasdiv').hide();
 		return;
@@ -275,7 +284,7 @@ function loadgraph() {
 			dataRowDateStr = dataRowDateStr.substr(0, 4) + "/" + dataRowDateStr.substr(4, 2) + "/" + dataRowDateStr.substr(6, 2);
 			dataRowDate = new Date(dataRowDateStr);
 			if ( dataRowDateStr.length > 0 && dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
-				// date string is not undefined or empty and date string is a date and dataset is for selected month
+				// date string is not undefined or empty and date string represents a date
 				dataRow[0] = dataRowDateStr;
 				var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
 				if ( columnCountDifference > 0 ) {
@@ -315,6 +324,10 @@ function loadgraph() {
 
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
+
+    console.log(csvData);
+    return;
+
 	// and process array
 	fillDataGaps();  // completes gaps in data
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
