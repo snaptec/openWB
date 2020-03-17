@@ -7,6 +7,7 @@
  */
 
 const DATACOLUMNCOUNT = 19;  // count of native data columns received by mqtt (including timestamp-column)
+const LPCOLUMNS = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 
 var initialread = 0;
 var boolDisplayLegend = true;
@@ -33,16 +34,18 @@ var thevalues = [
 
 var url_string = window.location.href
 var url = new URL(url_string);
-var graphdate = url.searchParams.get("date");
-if ( graphdate == null) {
+var graphDate = url.searchParams.get("date");
+if ( graphDate == null) {
 	var today = new Date();
 	var dd = String(today.getDate()).padStart(2, '0');
 	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = today.getFullYear();
-	graphdate = yyyy + mm;
+	graphDate = yyyy + mm;
 } else {
-	graphdate = graphdate.replace('-','');
+	graphDate = graphDate.replace('-','');
 }
+var graphYear = graphDate.substr(0, 4);
+var graphMonth = graphDate.substring(4);
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
@@ -99,7 +102,7 @@ client.connect(options);
 
 function requestmonthgraph() {
     // requests logging data by mqtt
-    var message = new Messaging.Message(graphdate);
+    var message = new Messaging.Message(graphDate);
     message.destinationName = "openWB/set/graph/RequestMonthGraph";
     message.qos = 2;
     message.retained = true;
@@ -139,13 +142,12 @@ function fillDataGaps() {
 function fillLpCounterValuesArray() {
     // fills an array with same size as csvData but holding counter values of all lp in kWh
     // these values will be displayed at the graph tooltips
-	const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 	csvData.forEach((dataRow, rowIndex) => {
 		// process every day
 		var lpCounterValuesRow = [];  // row to hold the counter values of the day in kWh
 		if ( rowIndex < (csvData.length -1) ) {  // skipt last row of csvData-array, it is just needed for calculation
 			dataRow.forEach((value, columnIndex) => {
-				if ( lpColumns.includes(columnIndex) ) {
+				if ( LPCOLUMNS.includes(columnIndex) ) {
 					// current column is a LP-counter-value
 					lpCounterValuesRow.push(', Zählerstand: ' + (value/1000).toFixed(2) + ' kWh');
 				} else {
@@ -193,16 +195,14 @@ function completeMonth() {
     // no matter what day contains first or last logged data
     // need to fill csvData and the lpCounterValues-array
     var day;
-    var year = graphdate.substr(0, 4);
-    var month = graphdate.substring(4);
     var dayAtIndex;
     var newDayStr;
     var newDatasetDateStr;
     // day 0 is the last day in the previous month
     // Date-object expects month January = 0, so the var month actually contains number of next month
     // therefore no correction to month is needed
-    var daysInMonth = new Date(year, month, 0).getDate();
-    var dateStrPart = year + '/' + month + '/';
+    var daysInMonth = new Date(graphYear, graphMonth, 0).getDate();
+    var dateStrPart = graphYear + '/' + graphMonth + '/';
     for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
         // iterate over all days of the selected months
         day = dayIndex + 1;
@@ -234,20 +234,20 @@ function formatDateColumn() {
     // formats the first csvdata-column so date is displayed at labels like 'Mo, 16.03.20'
     for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
         var theDate = new Date(csvData[rowIndex][0]);
-        var dd = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
-        var mm = String(theDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var day = String(theDate.getDate()).padStart(2, '0');  // format with leading zeros
         var dayOfWeek = theDate.toLocaleDateString('de-DE', { weekday: 'short'});
-        var theDateStr = dayOfWeek + ', ' + dd + '.' + mm + '.' + theDate.getFullYear();
+        // old variant... just keep in case this format is wanted
+        // var theDateStr = dayOfWeek + ', ' + day + '.' + graphMonth + '.' + graphYear;
+        var theDateStr = dayOfWeek + ', ' + day + '.';
         csvData[rowIndex][0] = theDateStr;
     }
 }
 
 function lpCount() {
 	// returns amount of LP containing other values than zero
-	const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 	var count = 0;
-	for ( var i = 0; i < lpColumns.length; i++ ) {
-		var dataColumn = getCol(csvData, lpColumns[i]);
+	for ( var i = 0; i < LPCOLUMNS.length; i++ ) {
+		var dataColumn = getCol(csvData, LPCOLUMNS[i]);
 		if ( dataColumn.every( value => value !== 0 ) ) {
 			count++;
 		}
@@ -317,13 +317,12 @@ function loadgraph() {
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
 	// and process array
 	fillDataGaps();  // completes gaps in data
-	fillLpCounterValuesArray();
-	calcDailyValues();
+	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
+	calcDailyValues();  // sum up values for totals
     csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
     completeMonth();  // complete monthly csvData and counter values before/after first/last day logged
     formatDateColumn();  // format date for labels
-
 
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
@@ -575,6 +574,10 @@ function loadgraph() {
 				enabled: true,
 				mode: 'index',
 				callbacks: {
+                    title: function(dataPoint, graphData) {
+                        // return complete data as title
+                        return dataPoint[0].xLabel + graphMonth + '.' + graphYear;
+                    },
 					label: function(dataPoint, graphData) {
                         // get only the name of the respective dataline since total value is visible at legend
                         var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
