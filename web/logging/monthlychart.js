@@ -114,8 +114,8 @@ function getCol(matrix, col) {
     return column;
 }
 
-function fillMissingDateRows() {
-	// fills missing date rows between existing dates for selected month with values
+function fillDataGaps() {
+	// fills data-gaps between logged dates for selected month with respective values
 	const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 	for ( var rowIndex = 1; rowIndex < csvData.length; rowIndex++ ) {
 		var firstDateStr = csvData[rowIndex-1][0];
@@ -126,7 +126,7 @@ function fillMissingDateRows() {
 		if ( diffDays > 1 ) {
 			// difference between 2 datasets is more than 1 day
 			var dd = String(firstDate.getDate() + 1).padStart(2, '0');  // day to insert
-			var newDatasetDateStr = firstDateStr.slice(0, 8) + dd;
+			var newDatasetDateStr = firstDateStr.substr(0, 8) + dd;
 			var newDataSet = [newDatasetDateStr];  // insert new date in new array-row
 			for ( var colIndex = 1; colIndex < csvData[rowIndex-1].length; colIndex++ ) {
 				newDataSet.push(csvData[rowIndex-1][colIndex]);  // copy data from older date
@@ -142,7 +142,7 @@ function fillLpCounterValuesArray() {
 	const lpColumns = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 	csvData.forEach((dataRow, rowIndex) => {
 		// process every day
-		var lpCounterValuesRow = [];  // row to hold the counter values of the day in kWh, first element empty to match index (timestamp in csvData)
+		var lpCounterValuesRow = [];  // row to hold the counter values of the day in kWh
 		if ( rowIndex < (csvData.length -1) ) {  // skipt last row of csvData-array, it is just needed for calculation
 			dataRow.forEach((value, columnIndex) => {
 				if ( lpColumns.includes(columnIndex) ) {
@@ -165,7 +165,7 @@ function calcDailyValues() {
 	for ( var column = 1; column < csvData[0].length; column++ ) {
 		// process every column after date-column
 		var dataColumn = getCol(csvData, column);
-		if ( dataColumn.every( value => value !== 0 ) ) {
+		if ( dataColumn.some(value => value > 0) ) {
 			// don't process column if all values are zero
 			var prevValue = dataColumn[0];
 			var dailyValue = 0;
@@ -186,6 +186,48 @@ function calcDailyValues() {
 			});
 		}
 	}
+}
+
+function completeMonth() {
+    // makes sure graph-length is always all days of the selected month
+    // no matter what day contains first or last logged data
+    // need to fill csvData and the lpCounterValues-array
+    var day;
+    var year = graphdate.substr(0, 4);
+    var month = graphdate.substring(4);
+    var dayAtIndex;
+    var newDayStr;
+    var newDatasetDateStr;
+    // day 0 is the last day in the previous month
+    // Date-object expects month January = 0, so the var month actually contains number of next month
+    // therefore no correction to month is needed
+    var daysInMonth = new Date(year, month, 0).getDate();
+    var dateStrPart = year + '/' + month + '/';
+    for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
+        // iterate over all days of the selected months
+        day = dayIndex + 1;
+        if ( typeof csvData[dayIndex] === 'undefined' ) {
+            // day-element does not exist, so array needs to be extended at the end
+            newDayStr = String(day).padStart(2, '0');  // day with leading zero
+            newDatasetDateStr = dateStrPart + newDayStr;
+            csvData.push(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
+            csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
+            lpCounterValues.push(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
+        } else {
+            // day-element does exist
+            dayAtIndex = parseInt(csvData[dayIndex][0].substring(8));
+            if ( dayAtIndex !== day ) {
+                // but day doesn't match the array position so array needs to be extended at the front
+                day = dayAtIndex - 1;  //
+                newDayStr = String(day).padStart(2, '0');  // day with leading zero
+                newDatasetDateStr = dateStrPart + newDayStr;
+                csvData.unshift(Array(DATACOLUMNCOUNT + 1).fill(0));  // add row to csvData
+                csvData[dayIndex][0] = newDatasetDateStr;  // and set correct date
+                lpCounterValues.unshift(Array(DATACOLUMNCOUNT + 1).fill(''));  // add row to lp-counter-values
+                dayIndex--;
+            }
+        }
+    }
 }
 
 function formatDateColumn() {
@@ -214,7 +256,6 @@ function lpCount() {
 }
 
 function loadgraph() {
-	var selectedGraphMonth = parseInt(graphdate.slice(4, 6));  // last 2 digits is month
 	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
 	// test if graphdata starts with a date followed by comma like 20191201,
 	if ( !(/^\d{8},/.test(graphDataStr)) ) {
@@ -231,7 +272,7 @@ function loadgraph() {
 		var dataRowDateStr = dataRow[0];
 		if ( /^\d{8}$/.test(dataRowDateStr) ) {
 			// test if first column is possible date and format correctly
-			dataRowDateStr = dataRowDateStr.slice(0, 4) + "/" + dataRowDateStr.slice(4, 6) + "/" + dataRowDateStr.slice(6, 8);
+			dataRowDateStr = dataRowDateStr.substr(0, 4) + "/" + dataRowDateStr.substr(4, 2) + "/" + dataRowDateStr.substr(6, 2);
 			dataRowDate = new Date(dataRowDateStr);
 			if ( dataRowDateStr.length > 0 && dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
 				// date string is not undefined or empty and date string is a date and dataset is for selected month
@@ -275,23 +316,14 @@ function loadgraph() {
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
 	// and process array
-	fillMissingDateRows();
+	fillDataGaps();  // completes gaps in data
 	fillLpCounterValuesArray();
 	calcDailyValues();
-    formatDateColumn();
+    csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
-	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
+    completeMonth();  // complete monthly csvData and counter values before/after first/last day logged
+    formatDateColumn();  // format date for labels
 
-	// old routine, also not working corectly if no bezug and einspeisung are logged
-	//for ( var i = 0; i < abezug.length; i += 1) {
-	//	var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
-	//	if ( hausverbrauch >= 0) {
-	//	    ahausverbrauch.push((hausverbrauch).toFixed(2));
-	//	    overallhausverbrauch += hausverbrauch;
-	//	} else {
-	//		ahausverbrauch.push('0');
-	//	}
-	//}
 
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
@@ -389,7 +421,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Verbraucher 1 I ' + totalValues[8].toFixed(2) + ' kWh',
+			label: 'Verbraucher 1 in ' + totalValues[8].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -399,7 +431,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Verbraucher 1 E ' + totalValues[9].toFixed(2) + ' kWh',
+			label: 'Verbraucher 1 out ' + totalValues[9].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -409,7 +441,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Verbraucher 2 I ' + totalValues[10].toFixed(2) + ' kWh',
+			label: 'Verbraucher 2 in ' + totalValues[10].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -419,7 +451,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Verbraucher 2 E ' + totalValues[11].toFixed(2) + ' kWh',
+			label: 'Verbraucher 2 out ' + totalValues[11].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -479,7 +511,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Speicher I ' + totalValues[17].toFixed(2) + ' kWh',
+			label: 'Speicher in ' + totalValues[17].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: true,
@@ -489,7 +521,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Speicher E ' + totalValues[18].toFixed(2) + ' kWh',
+			label: 'Speicher out ' + totalValues[18].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(255, 155, 13, 0.3)",
 			fill: true,
@@ -601,35 +633,3 @@ function loadgraph() {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }
-
-
-// old functions, called nowhere...
-//function showhidedataset(thedataset) {
-//	if ( window[thedataset] == true ) {
-//		publish("1","openWB/graph/"+thedataset);
-//	} else if ( window[thedataset] == false ) {
-//		publish("0","openWB/graph/"+thedataset);
-//	} else {
-//		publish("1","openWB/graph/"+thedataset);
-//	}
-//}
-
-//function showhidelegend(thedataset) {
-//	if ( window[thedataset] == true ) {
-//		publish("0","openWB/graph/"+thedataset);
-//	} else if ( window[thedataset] == false ) {
-//		publish("1","openWB/graph/"+thedataset);
-//	} else {
-//		publish("0","openWB/graph/"+thedataset);
-//	}
-//}
-
-//function showhide(thedataset) {
-//	if ( window[thedataset] == 0 ) {
-//		publish("1","openWB/graph/"+thedataset);
-//	} else if ( window[thedataset] == 1 ) {
-//		publish("0","openWB/graph/"+thedataset);
-//	} else {
-//		publish("1","openWB/graph/"+thedataset);
-//	}
-//}
