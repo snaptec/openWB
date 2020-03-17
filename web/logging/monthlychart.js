@@ -122,6 +122,77 @@ function getCol(matrix, col) {
     return column;
 }
 
+function buildCsvDataArray() {
+    // build array for graph from data-string
+    // test if graphdata starts with a date followed by comma like 20191201,
+    //if ( !(/^\d{8},/.test(graphDataStr)) ) {
+        // if not: nothing to display or corrupt data
+    //    $("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar.');
+    //    $('#canvasdiv').hide();
+    //    return;
+    //}
+
+    var rawcsv = graphDataStr.split(/\r?\n|\r/);
+
+    // rawdata date format is YYYYmmdd, so use this for comparison
+    var firstDayOfThisMonthDate = new Date(graphYear + '/' + graphMonth + '/01');
+    var firstDayOfNextMonthDate = new Date(firstDayOfThisMonthDate.setMonth(firstDayOfThisMonthDate.getMonth() + 1));
+    var nextMonth = String(firstDayOfNextMonthDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var nextMonthYear = firstDayOfNextMonthDate.getFullYear();
+    // for calculation of daily values the first day of next month may be included in dataset
+    var firstDayOfNextMonthStr = nextMonthYear + nextMonth + '01';
+
+    rawcsv.forEach((rawDataRowStr) => {
+        var dataRow = rawDataRowStr.split(',');
+        var dataRowDateStr = dataRow[0];
+        if ( /^\d{8}$/.test(dataRowDateStr) ) {
+            // first column is possible date (format YYYYmmdd), so check if it is valid for selected month
+            var dataRowDayStr = dataRowDateStr.substring(6);
+            var dataRowMonthStr = dataRowDateStr.substr(4, 2);
+            var dataRowYearStr = dataRowDateStr.substr(0, 4);
+            var dataRowDate = new Date(dataRowYearStr + "/" + dataRowMonthStr + "/" + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
+            if ( dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
+                // date is a valid date
+                if ( dataRowMonthStr == String(dataRowDate.getMonth() + 1).padStart(2, '0') ) {
+                    // and after conversion the month did not chgange
+                    if ( dataRowDateStr.substr(0, 6) == graphDate || dataRowDateStr == firstDayOfNextMonthStr ) {
+                        // date falls within selected month or is first day of next month
+                        dataRowDateStr = dataRowYearStr + "/" + dataRowMonthStr + "/" + dataRowDayStr;
+                        dataRow[0] = dataRowDateStr;  // replace with new format
+
+                        // now format the array
+                        var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
+                        if ( columnCountDifference > 0 ) {
+                            // not enough columns in dataset, maybe due to older logfile, so add zero-fields
+                            while ( columnCountDifference > 0 ) {
+                                dataRow.push(0);
+                                columnCountDifference--;
+                            }
+                        } else if ( columnCountDifference < 0 ) {
+                            // too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+                            while ( columnCountDifference < 0 ) {
+                                dataRow.pop();
+                                columnCountDifference++;
+                            }
+                        }
+                        dataRow.forEach((value, columnIndex, theArray) => {
+                            // make sure all fields (except index 0 = timestamp) are numbers with two decimal places
+                            if ( columnIndex > 0 ) {
+                                if ( isNaN(value) ) {
+                                    theArray[columnIndex] = 0;
+                                } else {
+                                    theArray[columnIndex] = parseFloat(value);
+                                }
+                            }
+                        });
+                        csvData.push(dataRow);
+                    }
+                }
+            }
+        }
+    });
+}
+
 function fillDataGaps() {
 	// fills data-gaps between logged dates for selected month with respective values
 	const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
@@ -262,54 +333,7 @@ function lpCount() {
 
 function loadgraph() {
 	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
-	// test if graphdata starts with a date followed by comma like 20191201,
-	if ( !(/^\d{8},/.test(graphDataStr)) ) {
-		// if not: nothing to display or corrupt data
-		$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar.');
-		$('#canvasdiv').hide();
-		return;
-	}
-
-	// build array for graph from data-string
-	var rawcsv = graphDataStr.split(/\r?\n|\r/);
-	rawcsv.forEach((dataRowStr) => {
-		var dataRow = dataRowStr.split(',');
-		var dataRowDateStr = dataRow[0];
-		if ( /^\d{8}$/.test(dataRowDateStr) ) {
-			// test if first column is possible date and format correctly
-			dataRowDateStr = dataRowDateStr.substr(0, 4) + "/" + dataRowDateStr.substr(4, 2) + "/" + dataRowDateStr.substr(6, 2);
-			dataRowDate = new Date(dataRowDateStr);
-			if ( dataRowDateStr.length > 0 && dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
-				// date string is not undefined or empty and date string represents a date
-				dataRow[0] = dataRowDateStr;
-				var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
-				if ( columnCountDifference > 0 ) {
-					// not enough columns in dataset, maybe due to older logfile, so add zero-fields
-					while ( columnCountDifference > 0 ) {
-						dataRow.push(0);
-						columnCountDifference--;
-					}
-				} else if ( columnCountDifference < 0 ) {
-					// too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
-					while ( columnCountDifference < 0 ) {
-						dataRow.pop();
-						columnCountDifference++;
-					}
-				}
-				dataRow.forEach((value, columnIndex, theArray) => {
-					// make sure all fields (except index 0 = timestamp) are numbers with two decimal places
-					if ( columnIndex > 0 ) {
-						if ( isNaN(value) ) {
-							theArray[columnIndex] = 0;
-						} else {
-							theArray[columnIndex] = parseFloat(value);
-						}
-					}
-				});
-				csvData.push(dataRow);
-			}
-		}
-	});
+    buildCsvDataArray();
 
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
