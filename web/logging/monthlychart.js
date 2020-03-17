@@ -278,8 +278,20 @@ function completeMonth() {
     // Date-object expects month January = 0, so the var month actually contains number of next month
     // therefore no correction to month is needed
     var daysInMonth = new Date(graphYear, graphMonth, 0).getDate();
+    console.log('days = ' + daysInMonth + ', arraysize = ' + csvData.length);
+    csvData.forEach((item, i) => {
+        console.log(item.toString());
+    });
+
+
+    if ( daysInMonth == csvData.length ) {
+        // nothing to complete
+        console.log('complete month: returning - nothing to do');
+        return;
+    }
     var dateStrPart = graphYear + '/' + graphMonth + '/';
     for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
+        console.log('processing dayIndex ' + dayIndex);
         // iterate over all days of the selected months
         day = dayIndex + 1;
         if ( typeof csvData[dayIndex] === 'undefined' ) {
@@ -334,7 +346,10 @@ function lpCount() {
 function loadgraph() {
 	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
     buildCsvDataArray();
-
+    csvData.forEach((item, i) => {
+        console.log(item.toString());
+    });
+    
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
 		$("#waitforgraphloadingdiv").html('<br>Nicht genügend Daten für diesen Zeitraum verfügbar.');
@@ -350,6 +365,9 @@ function loadgraph() {
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
 	calcDailyValues();  // sum up values for totals
     csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
+    csvData.forEach((item, i) => {
+        console.log(item.toString());
+    });
 
     completeMonth();  // complete monthly csvData and counter values before/after first/last day logged
     formatDateColumn();  // format date for labels
