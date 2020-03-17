@@ -106,6 +106,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			allValuesPresent[index] = 1;
 			putgraphtogether();
 		}
+
 	}
 }
 
@@ -168,8 +169,11 @@ function requestdaygraph() {
 
 function putgraphtogether() {
 	if ( !allValuesPresent.includes(0) ) {
-		graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
+		var alldata = graphDataSegments[0] + "\n" + graphDataSegments[1] + "\n" + graphDataSegments[2] + "\n" + graphDataSegments[3] + "\n" + graphDataSegments[4] + "\n" + graphDataSegments[5] + "\n" + graphDataSegments[6] + "\n" + graphDataSegments[7] + "\n" + graphDataSegments[8] + "\n" + graphDataSegments[9] + "\n" + graphDataSegments[10] + "\n" + graphDataSegments[11];
+		graphdata = alldata.replace(/^\s*[\n]/gm, '');
+		//graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
 		initialread = 1;
+
 		// test if graphdata starts with a timestamp followed by comma like 0745,
 		if ( !(/^\d{4},/.test(graphdata)) ) {
 			$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
@@ -200,8 +204,7 @@ function formdata(graphdata){
 		splittime.push(zeit.substring(0, zeit.length -2)+':'+zeit.substring(2));
 	});
 	splittime.shift();
-	atime = splittime;
-
+	atime = splittime.slice(0,-1);
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
 	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
@@ -223,9 +226,10 @@ function formdata(graphdata){
 	convertsoc(csvData,'21',asoc,'hidesoc','SoC Lp 1','overalllp1soc');
 	convertsoc(csvData,'22',asoc1,'hidesoc1','SoC Lp 2','overalllp2soc');
 	convertsoc(csvData,'20',aspeichersoc,'hidespeichersoc','Speicher SoC','overallspeichersoc');
-
 	for (i = 0; i < abezug.length; i += 1) {
+
 		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+		
 		if ( hausverbrauch >= 0) {
 		    ahausverbrauch.push(hausverbrauch);
 		    overallhausverbrauch += hausverbrauch;
@@ -253,9 +257,20 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 			if (fincsvvar < -0){
 				fincsvvar=oldfincsvvar;
 	 		}
-			pushdataset.push(fincsvvar);
+			if (!isNaN(fincsvvar)) {
+				pushdataset.push(fincsvvar);
+			} else {
+				fincsvvar=0
+				pushdataset.push(fincsvvar);
+			
+			}
 	 	} else {
-		 	firstcsvvar = csvvar;
+			if (!isNaN(csvvar)) {
+		 		firstcsvvar = csvvar;
+			} else {
+				firstcsvvar = 0;
+			}
+
 	 	}
 		oldfincsvvar=fincsvvar;
 		counter++;
@@ -264,7 +279,8 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 		}
 	});
 	window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
-	if (window[overall] == 0 || window[overall] == "NaN" || window[overall] < 0) {
+	if (isNaN(window[overall])) {
+	//if (window[overall] == 0 || window[overall] == "NaN" || window[overall] < 0) {
 		window[hidevar] = hidevalue;
 	} else {
 		window[hidevar] = 'foo';
@@ -526,7 +542,7 @@ function loadgraph() {
 				position: 'bottom',
 				labels: {
 			        filter: function(item, chart) {
-						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
+						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
 							return false
 						} else {
 							return true

@@ -8,7 +8,7 @@
 <?php
 exec("/var/www/html/openWB/runs/update15.sh > /dev/null &");
 ?>
-		<script type="text/javascript">
+		<script>
 			setTimeout(function() { window.location.href = "../index.php"; }, 30000);
 		</script>
 	</body>

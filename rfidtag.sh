@@ -27,7 +27,13 @@ if [[ $lasttag != "0" ]]; then
 
 	if [ $lasttag == $rfidstandby ] || [ $lasttag == $rfidstandby2 ] || [ $lasttag == $rfidstandby3 ] ; then
 		echo 4 > ramdisk/lademodus
-	fi	
+	fi
+	if [ $lasttag == $rfidlp1start1 ] || [ $lasttag == $rfidlp1start2 ] || [ $lasttag == $rfidlp1start3 ] ; then
+		mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"
+	fi
+	if [ $lasttag == $rfidlp2start1 ] || [ $lasttag == $rfidlp2start2 ] || [ $lasttag == $rfidlp2start3 ] ; then
+		mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
+	fi
 	echo $lasttag > ramdisk/rfidlasttag
 	echo 0 > ramdisk/readtag
 fi

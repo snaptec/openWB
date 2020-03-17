@@ -183,6 +183,9 @@ if (( u1p3paktiv == 1 )); then
 					if (( u1p3pnurpv == 4 )); then
 						oldll=$(<ramdisk/llsoll)
 						if (( u1p3pstat == 1 )); then
+							if [[ $schieflastaktiv == "1" ]]; then
+								maximalstromstaerke=$schieflastmaxa
+							fi
 							if (( oldll == maximalstromstaerke )); then
 								uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
 								if (( uhcounter < 600 )); then

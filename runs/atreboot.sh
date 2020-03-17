@@ -14,6 +14,7 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
+echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
@@ -1847,6 +1848,15 @@ if ! grep -Fq "httpll_a3_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_a3_url='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "clouduser=" /var/www/html/openWB/openwb.conf
+then
+	echo "clouduser=leer" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "cloudpw=" /var/www/html/openWB/openwb.conf
+then
+	echo "cloudpw=leer" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "rfidakt=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidakt=0" >> /var/www/html/openWB/openwb.conf
@@ -1855,7 +1865,16 @@ if ! grep -Fq "rfidsofort=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidsofort=000" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "rfidlp1start1=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1start1=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start2=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start3=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start1=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start2=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start3=000" >> /var/www/html/openWB/openwb.conf
 
+fi
 if ! grep -Fq "rfidstandby=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidstandby=000" >> /var/www/html/openWB/openwb.conf
@@ -2356,6 +2375,14 @@ if ! grep -Fq "e3dcextprod=" /var/www/html/openWB/openwb.conf
 then
 	echo "e3dcextprod=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "schieflastmaxa=" /var/www/html/openWB/openwb.conf
+then
+	echo "schieflastmaxa=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "schieflastaktiv=" /var/www/html/openWB/openwb.conf
+then
+	echo "schieflastaktiv=0" >> /var/www/html/openWB/openwb.conf
+fi
 
 if ! grep -Fq "wrsunwaysip=" /var/www/html/openWB/openwb.conf
 then
@@ -2468,6 +2495,7 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get -qq install -y php-curl
 #  fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable

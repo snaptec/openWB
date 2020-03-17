@@ -698,6 +698,7 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		if ( pvPower <= 0){
 			// production is negative for calculations so adjust for display
 			pvPower = pvPower * -1;
+			updateGaugeValue(gaugePV, pvPower, "", true, true, false);
 			// adjust and add unit
 			if (pvPower > 999) {
 				var pvPowerStr = (pvPower / 1000).toFixed(2) + " kW";
