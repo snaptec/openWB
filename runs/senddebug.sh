@@ -3,8 +3,14 @@ sed -i 's/debug.*/debug=1/' /var/www/html/openWB/openwb.conf
 sleep 60
 
 debugFile=/var/www/html/openWB/ramdisk/debug.log
+cat /var/www/html/openWB/ramdisk/debuguser > $debugFile
+echo "############################ network ##############" >> $debugFile
+ifconfig >> $debugFile
 
-echo "$(tail -1000 /var/www/html/openWB/ramdisk/openWB.log)" > $debugFile
+echo "############################ version ##############" >> $debugFile
+echo "Version" >> $debugFile
+cat /var/www/html/openWB/web/version >> $debugFile
+echo "$(tail -1000 /var/www/html/openWB/ramdisk/openWB.log)" >> $debugFile
 
 echo "############################ mqtt ##############" >> $debugFile
 echo "$(tail -200 /var/www/html/openWB/ramdisk/mqtt.log)" >> $debugFile
@@ -20,13 +26,7 @@ done
 
 echo "############################ config ##############" >> $debugFile
 grep -F -v -e leaf -e i3 -e zoe -e tesla -e carnet /var/www/html/openWB/openwb.conf >> $debugFile
-cat /var/www/html/openWB/ramdisk/debuguser >> $debugFile
-echo "############################ network ##############" >> $debugFile
-ifconfig >> $debugFile
 
-echo "############################ version ##############" >> $debugFile
-echo "Version" >> $debugFile
-cat /var/www/html/openWB/web/version >> $debugFile
 
 curl --upload $debugFile https://openwb.de/tools/debug.php
 
