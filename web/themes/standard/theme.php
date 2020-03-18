@@ -6,9 +6,7 @@
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
-	<?php include ("values.php");
-	include '/var/www/html/openWB/web/themes/standard/navbar.php';
-	?>
+	<?php include ("values.php");?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -119,8 +117,9 @@
 		var speichervorhanden = <?php echo $speichervorhanden ?>;
 		var awattaraktiv = <?php echo $awattaraktivold?>;
 	</script>
+	<?php include '/var/www/html/openWB/web/themes/standard/navbar.php';?>
 
-	<div class="container">
+	<div role="main" class="container" style="margin-top: 20px">
 
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
@@ -855,9 +854,11 @@
 
 		</div>
 	</div><!-- container -->
+
 	<footer class="footer bg-dark text-light font-small">
 		<!-- no text for footer -->
 	</footer>
+
 	<!-- some scripts -->
 	<script>
 		function GraphOptionsClick() {
