@@ -13,7 +13,6 @@ var initialread = 0;
 var boolDisplayLegend = true;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
-var graphDataStr = '';  // holds all concatenated data segments
 var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
 var totalValues = [''];  // holds monthly totals for every data-column from csvData, starting with empty value at index 0 (equals timestamp index at csvData)
 var lpCounterValues = [];  // holds all counter values transformed to kWh
@@ -46,6 +45,10 @@ if ( graphDate == null) {
 }
 var graphYear = graphDate.substr(0, 4);
 var graphMonth = graphDate.substring(4);
+// day 0 is the last day in the previous month
+// Date-object expects month January = 0, so the var month actually contains number of next month
+// therefore no correction to month is needed by getting the # of days in selected month
+var daysInMonth = new Date(graphYear, graphMonth, 0).getDate();
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
@@ -58,12 +61,9 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d+/)[0];  // extract first match = number from mqttmsg
 		if ( index < 13 && initialread == 0 && (mqttpayload != "empty")) {
 			index -= 1;  // adjust to array starting at index 0
-			graphDataStr += ('\n') + mqttpayload;
 			graphDataSegments[index] = mqttpayload;
 			allValuesPresent[index] = 1;
 			if ( !allValuesPresent.includes(0) ) {
-				// all segments received, so flush mqtt buffer, process data and display graph
-                publish('0', "openWB/set/graph/RequestMonthGraph");
 				loadgraph();
 			}
 		}
@@ -123,16 +123,19 @@ function getCol(matrix, col) {
 }
 
 function buildCsvDataArray() {
-    // build array for graph from data-string
-    // test if graphdata starts with a date followed by comma like 20191201,
-    //if ( !(/^\d{8},/.test(graphDataStr)) ) {
-        // if not: nothing to display or corrupt data
-    //    $("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar.');
-    //    $('#canvasdiv').hide();
-    //    return;
-    //}
-
-    var rawcsv = graphDataStr.split(/\r?\n|\r/);
+    // build array for graph from data-segments
+    var rawcsv = [];
+    // first put lines containing data from received segments into raw-data-array
+    graphDataSegments.forEach((segment, i) => {
+        var trimmedSegment = segment.trim();
+        var splitSegment = trimmedSegment.split(/\r?\n|\r/);
+        splitSegment.forEach((splitSegmentRow) => {
+            var trimmedSplitSegmentRow = splitSegmentRow.trim();
+            if ( trimmedSplitSegmentRow != '' ) {
+                rawcsv.push(trimmedSplitSegmentRow);
+            }
+        });
+    });
 
     // rawdata date format is YYYYmmdd, so use this for comparison
     var firstDayOfThisMonthDate = new Date(graphYear + '/' + graphMonth + '/01');
@@ -141,52 +144,50 @@ function buildCsvDataArray() {
     var nextMonthYear = firstDayOfNextMonthDate.getFullYear();
     // for calculation of daily values the first day of next month may be included in dataset
     var firstDayOfNextMonthStr = nextMonthYear + nextMonth + '01';
-
     rawcsv.forEach((rawDataRowStr) => {
-        var dataRow = rawDataRowStr.split(',');
-        var dataRowDateStr = dataRow[0];
-        if ( /^\d{8}$/.test(dataRowDateStr) ) {
-            // first column is possible date (format YYYYmmdd), so check if it is valid for selected month
-            var dataRowDayStr = dataRowDateStr.substring(6);
+        if ( /^\d{8},$/.test(rawDataRowStr.substring(0, 9)) ) {
+            // first 9 chars is possible date followed by comma (format YYYYmmdd,)
+            // so check if it is valid for selected month
+            var dataRowDateStr = rawDataRowStr.substring(0, 8);
+            var dataRowDayStr = dataRowDateStr.substr(6, 2);
             var dataRowMonthStr = dataRowDateStr.substr(4, 2);
             var dataRowYearStr = dataRowDateStr.substr(0, 4);
-            var dataRowDate = new Date(dataRowYearStr + "/" + dataRowMonthStr + "/" + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
+            var dataRowDate = new Date(dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
             if ( dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
                 // date is a valid date
-                if ( dataRowMonthStr == String(dataRowDate.getMonth() + 1).padStart(2, '0') ) {
-                    // and after conversion the month did not chgange
-                    if ( dataRowDateStr.substr(0, 6) == graphDate || dataRowDateStr == firstDayOfNextMonthStr ) {
-                        // date falls within selected month or is first day of next month
-                        dataRowDateStr = dataRowYearStr + "/" + dataRowMonthStr + "/" + dataRowDayStr;
-                        dataRow[0] = dataRowDateStr;  // replace with new format
-
-                        // now format the array
-                        var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
-                        if ( columnCountDifference > 0 ) {
-                            // not enough columns in dataset, maybe due to older logfile, so add zero-fields
-                            while ( columnCountDifference > 0 ) {
-                                dataRow.push(0);
-                                columnCountDifference--;
-                            }
-                        } else if ( columnCountDifference < 0 ) {
-                            // too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
-                            while ( columnCountDifference < 0 ) {
-                                dataRow.pop();
-                                columnCountDifference++;
+                var isSelectedMonth = (dataRowDateStr.substr(0, 6) == graphDate);
+                var isFirstDayOfNextMonth = (dataRowDateStr == firstDayOfNextMonthStr);
+                if ( dataRowDateStr.substr(0, 6) == graphDate || dataRowDateStr == firstDayOfNextMonthStr ) {
+                    // date falls within selected month or is first day of next month
+                    dataRowDateStr = dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr;
+                    var dataRow = rawDataRowStr.split(',');  // now split row into csv-array
+                    dataRow[0] = dataRowDateStr;  // replace first element with date in new format
+                    // now format the array
+                    var columnCountDifference = DATACOLUMNCOUNT - dataRow.length;
+                    if ( columnCountDifference > 0 ) {
+                        // not enough columns in dataset, maybe due to older logfile, so add zero-fields
+                        while ( columnCountDifference > 0 ) {
+                            dataRow.push(0);
+                            columnCountDifference--;
+                        }
+                    } else if ( columnCountDifference < 0 ) {
+                        // too many columns in dataset, maybe due to read-errors of logfiles, so delete fields
+                        while ( columnCountDifference < 0 ) {
+                            dataRow.pop();
+                            columnCountDifference++;
+                        }
+                    }
+                    dataRow.forEach((value, columnIndex, theArray) => {
+                        // make sure all fields (except index 0 = timestamp) are numbers with two decimal places
+                        if ( columnIndex > 0 ) {
+                            if ( isNaN(value) ) {
+                                theArray[columnIndex] = 0;
+                            } else {
+                                theArray[columnIndex] = parseFloat(value);
                             }
                         }
-                        dataRow.forEach((value, columnIndex, theArray) => {
-                            // make sure all fields (except index 0 = timestamp) are numbers with two decimal places
-                            if ( columnIndex > 0 ) {
-                                if ( isNaN(value) ) {
-                                    theArray[columnIndex] = 0;
-                                } else {
-                                    theArray[columnIndex] = parseFloat(value);
-                                }
-                            }
-                        });
-                        csvData.push(dataRow);
-                    }
+                    });
+                    csvData.push(dataRow);
                 }
             }
         }
@@ -274,24 +275,8 @@ function completeMonth() {
     var dayAtIndex;
     var newDayStr;
     var newDatasetDateStr;
-    // day 0 is the last day in the previous month
-    // Date-object expects month January = 0, so the var month actually contains number of next month
-    // therefore no correction to month is needed
-    var daysInMonth = new Date(graphYear, graphMonth, 0).getDate();
-    console.log('days = ' + daysInMonth + ', arraysize = ' + csvData.length);
-    csvData.forEach((item, i) => {
-        console.log(item.toString());
-    });
-
-
-    if ( daysInMonth == csvData.length ) {
-        // nothing to complete
-        console.log('complete month: returning - nothing to do');
-        return;
-    }
     var dateStrPart = graphYear + '/' + graphMonth + '/';
     for ( var dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
-        console.log('processing dayIndex ' + dayIndex);
         // iterate over all days of the selected months
         day = dayIndex + 1;
         if ( typeof csvData[dayIndex] === 'undefined' ) {
@@ -344,18 +329,20 @@ function lpCount() {
 }
 
 function loadgraph() {
-	graphDataStr = graphDataStr.replace(/^\s*[\n]/gm, '');
     buildCsvDataArray();
-    csvData.forEach((item, i) => {
-        console.log(item.toString());
-    });
-    
+
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
 		$("#waitforgraphloadingdiv").html('<br>Nicht genügend Daten für diesen Zeitraum verfügbar.');
 		$('#canvasdiv').hide();
 		return;
 	}
+    if ( csvData.length > (daysInMonth + 1) ) {
+        // too many data-rows have been transmitted, data may be corrupt
+        $("#waitforgraphloadingdiv").html('<br>Fehler bei der Übertragung der Daten für diesen Monat, bitte erneut versuchen.');
+        $('#canvasdiv').hide();
+        return;
+    }
 
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
@@ -365,11 +352,13 @@ function loadgraph() {
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
 	calcDailyValues();  // sum up values for totals
     csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
-    csvData.forEach((item, i) => {
-        console.log(item.toString());
-    });
 
-    completeMonth();  // complete monthly csvData and counter values before/after first/last day logged
+    if ( csvData.length != daysInMonth ) {
+        // not all days of selected month have been logged,
+        // complete monthly csvData and counter values before/after first/last day logged
+        completeMonth();
+    }
+
     formatDateColumn();  // format date for labels
 
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
