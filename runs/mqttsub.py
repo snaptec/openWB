@@ -44,7 +44,7 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
-        f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
+        f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
         f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
