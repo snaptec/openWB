@@ -4,7 +4,7 @@ openwbisslave() {
 	AllowedTotalCurrentPerPhase=$(<ramdisk/AllowedTotalCurrentPerPhase)
 	TotalCurrentConsumptionOnL1=$(<ramdisk/TotalCurrentConsumptionOnL1)
 	ChargingVehiclesOnL1=$(<ramdisk/ChargingVehiclesOnL1)
-	lldiff=$(( AllowedTotalCurrentPerPhase - TotalCurrentConsumptionOnL1 / TotalCurrentConsumptionOnL1))
+	lldiff=$(( (AllowedTotalCurrentPerPhase - TotalCurrentConsumptionOnL1) / ChargingVehiclesOnL1))
 	llneu=$(( llalt - lldiff))
 	if (( llneu < minimalstromstaerke )); then
 		llneu=0
