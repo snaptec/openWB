@@ -38,6 +38,25 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
+        f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
+        f.write(msg.payload.decode("utf-8"))
+        f.close()
+    if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL1"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)
