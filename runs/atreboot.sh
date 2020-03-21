@@ -51,6 +51,8 @@ echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+echo 0 > /var/www/html/openWB/ramdisk/chargestats2
+echo 0 > /var/www/html/openWB/ramdisk/plugstats2
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
