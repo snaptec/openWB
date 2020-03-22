@@ -32,9 +32,12 @@ openwbisslave() {
 		echo "Slave Mode Aktiv, AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase, TotalCurrentConsumptionOnL1=$TotalCurrentConsumptionOnL1, ChargingVehiclesOnL1=$ChargingVehiclesOnL1, llalt=$llalt, lldiff=$lldiff, llneu=$llneu"
 	fi
 
-	if (( llneu < minimalstromstaerke )); then
-		if (( debug == 2 )); then
-			echo "Slave Mode Aktiv, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
+	if (( llneu < minimalstromstaerke )) || ((lp1enabled == 0)); then
+		if ((lp1enabled != 0)) && (( debug == 2 )); then
+			echo "Slave Mode Aktiv, LP akt., lp1enabled=$lp1enabled, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
+		fi
+		if ((lp1enabled == 0)) && (( debug == 2 )); then
+			echo "Slave Mode Aktiv, LP deakt. --> setze llneu=0"
 		fi
 		llneu=0
 	fi
