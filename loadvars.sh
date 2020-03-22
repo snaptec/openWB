@@ -75,6 +75,7 @@ if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 				fi
+				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 			plugstat=1
@@ -90,7 +91,9 @@ if [[ $evsecon == "modbusevse" ]]; then
 			chargestat=0
 		fi
 	fi
-
+else
+	plugstat=$(<ramdisk/plugstat)
+	chargestat=$(<ramdisk/chargestat)
 fi
 if [[ $evsecon == "ipevse" ]]; then
 	evseplugstatelp1=$(sudo python runs/readipmodbus.py $evseiplp1 $evseidlp1 1002 1)
@@ -165,6 +168,10 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)	
+else
+	plugstatlp2=$(<ramdisk/plugstats1)
+	chargestatlp2=$(<ramdisk/chargestats1)
+
 fi
 if [[ $lastmanagements2 == "1" ]]; then
 	if [[ $evsecons2 == "ipevse" ]]; then
@@ -196,6 +203,9 @@ if [[ $lastmanagements2 == "1" ]]; then
                         echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
                 fi
         fi
+else
+	plugstatlp3=$(<ramdisk/plugstats2)
+	chargestatlp3=$(<ramdisk/chargestats2)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $evseconlp4 == "ipevse" ]]; then
@@ -644,10 +654,78 @@ if (( hausverbrauch < 0 )); then
 fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 
-if [[ $wattbezugmodul == "bezug_e3dc" ]]; then
-	dummyvar="foobar"
+if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+	ra='^-?[0-9]+$'
+	watt2=$(</var/www/html/openWB/ramdisk/wattbezug)
+	if [[ -e /var/www/html/openWB/ramdisk/bezugwatt0pos ]]; then
+		importtemp=$(</var/www/html/openWB/ramdisk/bezugwatt0pos)
+	else
+		importtemp=$(timeout 4 mosquitto_sub -t openWB/evu/WHImported_temp)
+		if ! [[ $importtemp =~ $ra ]] ; then
+			importtemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/evu/WHImported_temp from mosquito $importtemp"
+		echo $importtemp > /var/www/html/openWB/ramdisk/bezugwatt0pos
+	fi
+	if [[ -e /var/www/html/openWB/ramdisk/bezugwatt0neg ]]; then
+		exporttemp=$(</var/www/html/openWB/ramdisk/bezugwatt0neg)
+	else
+		exporttemp=$(timeout 4 mosquitto_sub -t openWB/evu/WHExport_temp)
+		if ! [[ $exporttemp =~ $ra ]] ; then
+			exporttemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/evu/WHExport_temp from mosquito $exporttemp"
+		echo $exporttemp > /var/www/html/openWB/ramdisk/bezugwatt0neg
+	fi
+	sudo python /var/www/html/openWB/runs/simcount.py $watt2 bezug bezugkwh einspeisungkwh
+	importtemp1=$(</var/www/html/openWB/ramdisk/bezugwatt0pos)
+	exporttemp1=$(</var/www/html/openWB/ramdisk/bezugwatt0neg)
+	if [[ $importtemp !=  $importtemp1 ]]; then
+		mosquitto_pub -t openWB/evu/WHImported_temp -r -m "$importtemp1"
+	fi
+	if [[ $exporttemp !=  $exporttemp1 ]]; then
+		mosquitto_pub -t openWB/evu/WHExport_temp -r -m "$exporttemp1"
+	fi
+	# sim bezug end
 fi
-
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]]; then
+	ra='^-?[0-9]+$'
+	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
+	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
+		importtemp=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
+	else
+		importtemp=$(timeout 4 mosquitto_sub -t openWB/pv/WHImported_temp)
+		if ! [[ $importtemp =~ $ra ]] ; then
+			importtemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/pv/WHImported_temp from mosquito $importtemp"
+		echo $importtemp > /var/www/html/openWB/ramdisk/pvwatt0pos
+	fi
+	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0neg ]]; then
+		exporttemp=$(</var/www/html/openWB/ramdisk/pvwatt0neg)
+	else
+		exporttemp=$(timeout 4 mosquitto_sub -t openWB/pv/WHExport_temp)
+		if ! [[ $exporttemp =~ $ra ]] ; then
+			exporttemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/pv/WHExport_temp from mosquito $exporttemp"
+		echo $exporttemp > /var/www/html/openWB/ramdisk/pvwatt0neg
+	fi
+	sudo python /var/www/html/openWB/runs/simcount.py $watt3 pv pvposkwh pvkwh
+	importtemp1=$(</var/www/html/openWB/ramdisk/pvwatt0pos)
+	exporttemp1=$(</var/www/html/openWB/ramdisk/pvwatt0neg)
+	if [[ $importtemp !=  $importtemp1 ]]; then
+		mosquitto_pub -t openWB/pv/WHImported_temp -r -m "$importtemp1"
+	fi
+	if [[ $exporttemp !=  $exporttemp1 ]]; then
+		mosquitto_pub -t openWB/pv/WHExport_temp -r -m "$exporttemp1"
+	fi
+	# sim bezug end
+fi
 if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_byd" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)

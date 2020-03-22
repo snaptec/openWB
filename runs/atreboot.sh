@@ -13,7 +13,12 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/rfidlist
+echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
+echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
@@ -2391,6 +2396,10 @@ if ! grep -Fq "lastmmaxw=" /var/www/html/openWB/openwb.conf
 then
 	echo "lastmmaxw=44000" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "slavemode=" /var/www/html/openWB/openwb.conf
+then
+	echo "slavemode=0" >> /var/www/html/openWB/openwb.conf
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
@@ -2494,6 +2503,7 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get -qq install -y php-curl
 #  fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
+ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable

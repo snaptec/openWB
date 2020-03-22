@@ -43,6 +43,7 @@ source u1p3p.sh
 source nrgkickcheck.sh
 source rfidtag.sh
 source leds.sh
+source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
 
@@ -261,6 +262,12 @@ else
 	evsemodbustimer=0
 	echo $evsemodbustimer > ramdisk/evsemodbustimer
 	evsemodbuscheck
+fi
+
+# Slave Mode, openWB als Ladepunkt nutzen
+
+if (( slavemode == 1 )); then
+	openwbisslave
 fi
 #Lademodus 3 == Aus
 

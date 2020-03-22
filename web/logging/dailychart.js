@@ -25,16 +25,16 @@ var boolDisplayPv = false;
 var boolDisplaySpeicher = false;
 var boolDisplayLp1Soc = false;
 var boolDisplayLp2Soc = false;
-var alp1 = new Array();
-var alp2 = new Array();
-var alp3 = new Array();
-var alp4 = new Array();
-var alp5 = new Array();
-var alp6 = new Array();
-var alp7 = new Array();
-var alp8 = new Array();
-var abezug = new Array();
-var aeinspeisung = new Array();
+var alp1 = [];
+var alp2 = [];
+var alp3 = [];
+var alp4 = [];
+var alp5 = [];
+var alp6 = [];
+var alp7 = [];
+var alp8 = [];
+var abezug = [];
+var aeinspeisung = [];
 var lp1soc;
 var lp2soc;
 var lp1enabled;
@@ -65,18 +65,18 @@ var datasend = 0;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
 
-var apv = new Array();
-var aspeicheri = new Array();
-var aspeichere = new Array();
-var aspeichersoc = new Array();
-var asoc = new Array();
-var asoc1 = new Array();
-var averbraucher2i = new Array();
-var averbraucher2e = new Array();
-var averbraucher1i = new Array();
-var averbraucher1e = new Array();
-var ahausverbrauch = new Array();
-var alpa = new Array();
+var apv = [];
+var aspeicheri = [];
+var aspeichere = [];
+var aspeichersoc = [];
+var asoc = [];
+var asoc1 = [];
+var averbraucher2i = [];
+var averbraucher2e = [];
+var averbraucher1i = [];
+var averbraucher1e = [];
+var ahausverbrauch = [];
+var alpa = [];
 var thevalues = [
 	["openWB/system/DayGraphData1", "#"],
 	["openWB/system/DayGraphData2", "#"],
@@ -106,6 +106,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			allValuesPresent[index] = 1;
 			putgraphtogether();
 		}
+
 	}
 }
 
@@ -168,8 +169,11 @@ function requestdaygraph() {
 
 function putgraphtogether() {
 	if ( !allValuesPresent.includes(0) ) {
-		graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
+		var alldata = graphDataSegments[0] + "\n" + graphDataSegments[1] + "\n" + graphDataSegments[2] + "\n" + graphDataSegments[3] + "\n" + graphDataSegments[4] + "\n" + graphDataSegments[5] + "\n" + graphDataSegments[6] + "\n" + graphDataSegments[7] + "\n" + graphDataSegments[8] + "\n" + graphDataSegments[9] + "\n" + graphDataSegments[10] + "\n" + graphDataSegments[11];
+		graphdata = alldata.replace(/^\s*[\n]/gm, '');
+		//graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
 		initialread = 1;
+
 		// test if graphdata starts with a timestamp followed by comma like 0745,
 		if ( !(/^\d{4},/.test(graphdata)) ) {
 			$("#waitforgraphloadingdiv").html('<br>Keine Daten für diesen Zeitraum verfügbar');
@@ -190,18 +194,17 @@ function getCol(matrix, col){
 }
 
 function formdata(graphdata){
-	var csvData = new Array();
+	var csvData = [];
 	var rawcsv = graphdata.split(/\r?\n|\r/);
 	rawcsv.forEach((dataset) => {
 		csvData.push(dataset.split(','));
 	});
-	var splittime = new Array();
+	var splittime = [];
 	getCol(csvData, 0).forEach(function(zeit){
 		splittime.push(zeit.substring(0, zeit.length -2)+':'+zeit.substring(2));
 	});
 	splittime.shift();
-	atime = splittime;
-
+	atime = splittime.slice(0,-1);
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
 	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');

@@ -86,7 +86,6 @@ function prepareNewDataset(length, dataArray) {
 		socValues.forEach((column) => {
 			var dataColumn = getCol(dataArray, column);
 			// check how to cover the gaps so lines don't jump
-			console.log(dataColumn);
 			if ( dataColumn.every( value => value == '0' ) ) {
 				newArray[column] = '0';
 			} else if ( dataColumn.every( value => value == '' ) ) {
@@ -102,7 +101,7 @@ function prepareNewDataset(length, dataArray) {
 function loadgraph() {
 	alldata = alldata.replace(/^\s*[\n]/gm, '');
 	alldata = alldata.replace(/^\s*-[\n]/gm, '');
-	var csvData = new Array();
+	var csvData = [];
 	var rawcsv = alldata.split(/\r?\n|\r/);  // split line in array
 	rawcsv.forEach((dataset) => {
 		var datasetArray = dataset.split(',');
@@ -161,7 +160,6 @@ function loadgraph() {
 			lastScannedTimestampStr = currentTimestampStr;
 		}
 	}
-	console.log(csvData);
 	// Retrived data from csv file content
 	atime = getCol(csvData, 0);
 	abezug = getCol(csvData, 1);

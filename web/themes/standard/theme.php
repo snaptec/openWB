@@ -6,7 +6,9 @@
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
-	<?php include ("values.php");?>
+	<?php include ("values.php");
+	include '/var/www/html/openWB/web/themes/standard/navbar.php';
+	?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,7 +18,6 @@
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
 	<meta name="apple-mobile-web-app-title" content="openWB">
-
 	<meta name="description" content="openWB">
 	<meta name="keywords" content="openWB">
 	<meta name="author" content="Michael Ortenstein">
@@ -120,12 +121,6 @@
 	</script>
 
 	<div class="container">
-
-		<div class="row">
-			<div class="col gradient">
-				<h1>openWB Charge Controller</h1>
-			</div>
-		</div>
 
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
@@ -751,57 +746,7 @@
 
 		<!-- end old code-->
 
-		<hr style="color: white;">
 
-		<!-- a few buttons at end of page for options -->
-		<!-- too many cols per row so bootstrap will linebreak -->
-		<!-- and change to appropriate button layout -->
-		<div class="row no-gutters justify-content-center">
-			<div class="col-sm-3 py-1">
-				<button id="ladelogBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onClick='window.location.href="ladelog.php"'>Ladelog</button>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp;
-			</div>
-			<div class="col-sm-4 py-1">
-				<button id="loggingBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onClick='window.location.href="logging/index.php"'>Logging</button>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp;
-			</div>
-			<div class="col-sm-3 py-1">
-				<button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onClick='window.location.href="./status/status.php"'>Status</button>
-			</div>
-		</div>
-		<div class="row no-gutters justify-content-center">
-			<div class="col-sm-3 order-last order-sm-first py-1">
-				<button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onClick='window.location.href="hilfe/hilfe.php"'>Hilfe</button>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp;
-			</div>
-			<div class="col-sm-4 py-1">
-				<button id="graphOptionsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onclick="GraphOptionsClick()">Graph Optionen</button>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp;
-			</div>
-			<div class="col-sm-3 order-first order-sm-last py-1 ">
-				<button id="settingsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onClick='window.location.href="settings/settings.php"'>Einstellungen</button>
-			</div>
-		</div>
-
-		<div class="row justify-content-center">
-			<div class="col-3 versionTextStyle">
-				Ver <?php echo $owbversion ?>
-			</div>
-			<div class="col-4 regularTextStyle">
-				<a href="https://openwb.de">www.openwb.de</a>
-			</div>
-			<div class="col-3 versionTextStyle">
-				Theme 2020 by M.Ortenstein
-			</div>
-		</div>
 
 		<!-- Graph-Options with Popup-Window-Look -->
 		<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
@@ -910,7 +855,9 @@
 
 		</div>
 	</div><!-- container -->
-
+	<footer class="footer bg-dark text-light font-small">
+		<!-- no text for footer -->
+	</footer>
 	<!-- some scripts -->
 	<script>
 		function GraphOptionsClick() {
