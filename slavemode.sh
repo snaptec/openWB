@@ -33,16 +33,22 @@ openwbisslave() {
 	fi
 
 	if (( llneu < minimalstromstaerke )); then
+		if (( debug == 2 )); then
+			echo "Slave Mode Aktiv, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
+		fi
 		llneu=0
 	fi
 	if (( llneu > maximalstromstaerke )); then
+		if (( debug == 2 )); then
+			echo "Slave Mode Aktiv, llneu=$llneu < maximalstromstaerke=$maximalstromstaerke --> setze llneu=$maximalstromstaerke"
+		fi
 		llneu=$maximalstromstaerke
 	fi
 
 	runs/set-current.sh $llneu all
 
 	if (( llalt != llneu )); then
-		echo "$date Ändere Ladeleistung auf $llneu Ampere" >> ramdisk/ladestatus.log
+		echo "$date Ändere Ladeleistung von $llalt auf $llneu Ampere" >> ramdisk/ladestatus.log
 	fi
 
 	echo "Slave Mode Aktiv, openWB NUR fernsteuerbar" > ramdisk/lastregelungaktiv
