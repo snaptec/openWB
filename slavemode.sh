@@ -11,14 +11,21 @@ openwbisslave() {
 		ChargingVehiclesOnL1=1
 	fi
 
-	# compute difference in floats for not to loose too much precision
+	# compute difference in floats for not to loos too much precision
 	lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - $TotalCurrentConsumptionOnL1) / $ChargingVehiclesOnL1" | bc)
 
-	# new charge current in int but always rounded to the next (even for negative value numerically) _lower_ integer
+	# new charge current in int but always rounded to the next _lower_ integer
 	if [[ "$lldiff" =~ ^\s*- ]]; then
 		llneu=$(echo "scale=0; ($llalt + $lldiff - 1.0)/1" | bc)
 	else
 		llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
+	fi
+
+	# The llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
+	# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
+	# For this case we limit to the total remaining current (which might get further limited to maximalstromstaerke below).
+	if (( llneu > AllowedTotalCurrentPerPhase )); then
+		llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase - $TotalCurrentConsumptionOnL1)/1.0" | bc)
 	fi
 
 	if (( debug == 2 )); then
