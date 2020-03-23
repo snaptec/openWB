@@ -1,9 +1,39 @@
 #!/bin/bash
 
+HeartbeatTimeout=35
+
 openwbisslave() {
 	AllowedTotalCurrentPerPhase=$(<ramdisk/AllowedTotalCurrentPerPhase)
 	TotalCurrentConsumptionOnL1=$(<ramdisk/TotalCurrentConsumptionOnL1)
 	ChargingVehiclesOnL1=$(<ramdisk/ChargingVehiclesOnL1)
+	NowItIs=$(date +%s)
+
+	# check heartbeat if not stopped (stop = charge mode 3)
+	PreviousTotalCurrentConsumptionOnL1=$(<ramdisk/PreviousTotalCurrentConsumptionOnL1)
+	if (( lademodus != 3 )); then
+		IFS=',' read -ra previousTotalCurrentAndTimestampArray <<< "$PreviousTotalCurrentConsumptionOnL1"
+		heartbeatMissingFor=$(( NowItIs - previousTotalCurrentAndTimestampArray[1] ))
+		if [[ "$TotalCurrentConsumptionOnL1" == "${previousTotalCurrentAndTimestampArray[0]}" ]]; then
+			if (( debug == 2 )); then
+				echo "WARNING: Local Control Server Heartbeat: TotalCurrentConsumptionOnL1 ($TotalCurrentConsumptionOnL1) same as previous (${previousTotalCurrentAndTimestampArray[0]}) for $heartbeatMissingFor s (timeout $HeartbeatTimeout)"
+			fi
+
+			if (( heartbeatMissingFor > HeartbeatTimeout )); then
+				echo "HEARTBEAT ERROR: TotalCurrentConsumptionOnL1 ($TotalCurrentConsumptionOnL1) not change by local control server for > $HeartbeatTimeout seconds. STOP CHARGING IMMEDIATELY"
+				mosquitto_pub -t openWB/set/ChargeMode -r -m "3"
+			fi
+		else
+			if (( debug == 2 )); then
+				echo "TotalCurrentConsumptionOnL1 ($TotalCurrentConsumptionOnL1) different from previous (${previousTotalCurrentAndTimestampArray[0]}). Heartbeat OK after ${heartbeatMissingFor} s."
+			fi
+			echo "${TotalCurrentConsumptionOnL1},$NowItIs" > ramdisk/PreviousTotalCurrentConsumptionOnL1
+		fi
+	else
+		if (( debug == 2 )); then
+			echo "Charging stopped. Not checking heartbeat"
+		fi
+		echo "${TotalCurrentConsumptionOnL1},$NowItIs" > ramdisk/PreviousTotalCurrentConsumptionOnL1
+	fi
 
 	# if no EV's are charging at all it would be a div/0
 	# but also from logical point of view: we have to assume at least ourself as "charging"
