@@ -36,10 +36,11 @@ client = mqtt.Client("openWB-mqttsub-" + getserial())
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
     client.subscribe("openWB/set/#", 2)
+
 # handle each set topic
 def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
@@ -48,7 +49,7 @@ def on_message(client, userdata, msg):
         f.write(msg.payload.decode("utf-8"))
         f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
