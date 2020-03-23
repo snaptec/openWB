@@ -13,7 +13,7 @@ seradd = str(sys.argv[2])
 sdmid = int(sys.argv[3])
 
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd, port=502)
+client = ModbusTcpClient(seradd, port=8899)
 
 #Phase 1 A
 resp = client.read_input_registers(0x06,2, unit=sdmid)
