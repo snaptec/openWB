@@ -448,7 +448,7 @@
 							</div>
 					</div>
 
-					<input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
+					<input type="hidden" name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
 					<script>
 						$(function() {
 							if($('#speicherpvrang').val() == '1') {
