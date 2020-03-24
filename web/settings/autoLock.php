@@ -256,7 +256,7 @@ ECHODAYROWTAIL;
 										<div class="form-check">
 											<input type="hidden" name="{$elemName}">
 											<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-											<label class="form-check-label pl-10" for="{$elemName}">
+											<label class="form-check-label pl-10" for="{$elemId}">
 												sperren erst nach Ende lfd. Ladevorgang
 											</label>
 										</div>

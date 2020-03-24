@@ -60,8 +60,7 @@
 			}
 
 			$firstLoopDone = false;
-			foreach($files as $currentFile)
-			{
+			foreach($files as $currentFile) {
 				$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
 				$bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
 				$bridgeLines = $currentFile != "" ? file($currentFile) : array();
@@ -70,23 +69,16 @@
 					if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 						// echo "Matches: " . var_dump($matches);
 						$remotePrefix = trim($matches[5]);
-					}
-					else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
+					} else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
 						$connectionName = trim($matches[1]);
 					}
 				}
 			}
-
-
-
-
-				
 		?>
-
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
-					<h3>Cloud Einstellungen</h3><br><br>
+					<h3>Cloud Einstellungen</h3>
 				</div>
 				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) {
 				echo '
@@ -107,8 +99,8 @@
 				'; } else { echo '
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="row">
-							<b><label for="username">Benutzername:</label></b>
-							<input type="text" name="username" id="username" value="">
+							<b><label for="connect_username">Benutzername:</label></b>
+							<input type="text" name="username" id="connect_username" value="">
 						</div>
 						<div class="row">
 							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
@@ -126,8 +118,8 @@
 					<hr>
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="row">
-							<b><label for="username">Benutzername:</label></b>
-							<input type="text" name="username" id="username" value="">
+							<b><label for="register_username">Benutzername:</label></b>
+							<input type="text" name="username" id="register_username" value="">
 						</div>
 						<div class="row">
 							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
@@ -170,6 +162,7 @@
 			if ( settingspwaktold == 1 ) {
 			passWord();
 			}
+
 			function passWord() {
 			var testV = 1;
 			var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');

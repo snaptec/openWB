@@ -49,6 +49,7 @@ echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+echo 0 > /var/www/html/openWB/ramdisk/plugstats2
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 echo 0 > /var/www/html/openWB/ramdisk/chargestats2
@@ -2162,6 +2163,10 @@ fi
 if ! grep -Fq "discovergypvid=" /var/www/html/openWB/openwb.conf
 then
 	echo "discovergypvid=idesmeters" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "ksemip=" /var/www/html/openWB/openwb.conf
+then
+        echo "ksemip=ipdesmeters" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "mollp1moab=" /var/www/html/openWB/openwb.conf
 then

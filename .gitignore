@@ -2,3 +2,4 @@ web/ladelog
 *.csv
 *.log
 ramdisk/
+.DS_Store

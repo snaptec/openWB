@@ -1327,6 +1327,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'discovergypvid='.$_POST['discovergypvid']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "ksemip=") !== false) {
+                	$result .= 'ksemip='.$_POST[ksemip]."\n";
+                	$writeit = '1';
+        	}
 
 		if ( $writeit == '0') {
 			$result .= $line;
