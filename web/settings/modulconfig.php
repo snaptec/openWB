@@ -1167,7 +1167,7 @@
 						<div class="col">
 							<b><label for="evsecon">Anbindung Ladepunkt 1:</label></b>
 							<select name="evsecon" id="evsecon">
-								<option <?php if($evseconold == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbusevse</option>
+								<option <?php if($evseconold == "modbusevse\n" && !($ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && ($mpm3pmllidold == "5\n" || $mpm3pmllidold == "105\n"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
 								<option <?php if($evseconold == "dac\n") echo "selected" ?> value="dac">DAC</option>
 								<option <?php if($evseconold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 								<option <?php if($evseconold == "goe\n") echo "selected" ?> value="goe">Go-e</option>
@@ -2027,7 +2027,7 @@
 							<b><label for="evsecons1">Anbindung der EVSE an Ladepunkt 2:</label></b>
 							<select name="evsecons1" id="evsecons1">
 								<option <?php if($evsecons1old == "slaveeth\n") echo "selected" ?> value="slaveeth">openWB Slave</option>
-								<option <?php if($evsecons1old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
+								<option <?php if($evsecons1old == "modbusevse\n" && !($ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n")) echo "selected" ?> value="modbusevse">Modbus</option>
 								<option <?php if($evsecons1old == "dac\n") echo "selected" ?> value="dac">DAC</option>
 								<option <?php if($evsecons1old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 								<option <?php if($evsecons1old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
@@ -2875,7 +2875,7 @@
 
 						<div id="llmodullp3">
 							<div class="row">
-								<b><label for="ladeleistungs2modul">Ladeleistungsmodul für Ladepunkt 3:</label></b>
+								<b><label for="ladeleistungss2modul">Ladeleistungsmodul für Ladepunkt 3:</label></b>
 								<select name="ladeleistungs2modul" id="ladeleistungss2modul">
 									<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
 									<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
@@ -3683,7 +3683,7 @@
 					</div>
 					<div id="wattbezugshm">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="smashmdbezugid">Seriennummer des SMA Home Manager</label></b>
+							<b><label for="smaeshmbezugid">Seriennummer des SMA Home Manager</label></b>
 							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
@@ -3976,7 +3976,7 @@
 					</div>
 					<div class="row">
 						<b><label for="pvwattmodul">PV-Modul:</label></b>
-						<select type="text" name="pvwattmodul" id="pvwattmodul">
+						<select name="pvwattmodul" id="pvwattmodul">
 							<option <?php if($pvwattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
 							<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo "selected" ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
 							<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
@@ -4644,7 +4644,7 @@
 							Gültige Werte IP. IP Adresse des E3DC Speichers.
 						</div>
 						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
-						<select type="text" name="e3dcextprod" id="e3dcextprod">
+						<select name="e3dcextprod" id="e3dcextprod">
 							<option <?php if($e3dcextprodold == "0\n") echo "selected" ?> value="0">Nein</option>
 							<option <?php if($e3dcextprodold == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>

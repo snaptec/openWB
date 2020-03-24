@@ -721,7 +721,7 @@
 							<h1>EV Daten</h1>
 						</div>
 					</div>
-					<div id="durchslp1">
+					<div id="durchslp1div">
 						<div class="row bg-info">
 							<div class="col">
 								<b>Durchschnittsverbrauch deines Elektroautos in kWh an Ladepunkt 1:</b><br>
@@ -784,7 +784,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="durchslp2">
+					<div id="durchslp2div">
 						<div class="row bg-info">
 							<div class="col">
 								<hr>
@@ -803,7 +803,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="durchslp3">
+					<div id="durchslp3div">
 						<div class="row bg-info">
 							<div class="col">
 								<hr>
@@ -948,7 +948,7 @@
 						</div>
 						<div class="row" style="background-color:#33ffa8">
 							<div class="col">
-								<b>Schieflastbegrenzung in A:</b><br>
+								<b>Schieflastbegrenzung in A:</b>
 								<select name="schieflastmaxa" id="schieflastmaxa">
 									<option <?php if($schieflastmaxaold == 16) echo "selected" ?> value="16">16</option>
 									<option <?php if($schieflastmaxaold == 17) echo "selected" ?> value="17">17</option>

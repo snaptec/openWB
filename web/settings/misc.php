@@ -780,7 +780,7 @@
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 						</div>
 						<div class="row">
-							<b><label for="rfidlp1start">Aktiviere Ladepunkt 1:</label></b><br>
+							<b><label for="rfidlp1start1">Aktiviere Ladepunkt 1:</label></b><br>
 							<input type="text" name="rfidlp1start1" id="rfidlp1start1" value="<?php echo $rfidlp1start1old ?>"><br>
 							<input type="text" name="rfidlp1start2" id="rfidlp1start2" value="<?php echo $rfidlp1start2old ?>"><br>
 							<input type="text" name="rfidlp1start3" id="rfidlp1start3" value="<?php echo $rfidlp1start3old ?>">
@@ -789,7 +789,7 @@
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 						</div>
 						<div class="row">
-							<b><label for="rfidlp1start">Aktiviere Ladepunkt 2:</label></b><br>
+						<b><label for="rfidlp2start1">Aktiviere Ladepunkt 2:</label></b><br>
 							<input type="text" name="rfidlp2start1" id="rfidlp2start1" value="<?php echo $rfidlp2start1old ?>"><br>
 							<input type="text" name="rfidlp2start2" id="rfidlp2start2" value="<?php echo $rfidlp2start2old ?>"><br>
 							<input type="text" name="rfidlp2start3" id="rfidlp2start3" value="<?php echo $rfidlp2start3old ?>">
