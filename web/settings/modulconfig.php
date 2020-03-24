@@ -220,6 +220,9 @@
 				if(strpos($line, "discovergypvid=") !== false) {
 					list(, $discovergypvidold) = explode("=", $line);
 				}
+				if(strpos($line, "ksemip=") !== false) {
+                                        list(, $ksemipold) = explode("=", $line);
+                                }
 
 				if(strpos($line, "solarview_hostname=") !== false) {
 					list(, $solarview_hostnameold) = explode("=", $line);
@@ -3399,6 +3402,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
+							<option <?php if($wattbezugmodulold == "bezug_ksem\n") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
 							<option <?php if($wattbezugmodulold == "bezug_smartfox\n") echo "selected" ?> value="bezug_smartfox">Smartfox</option>
 							<option <?php if($wattbezugmodulold == "bezug_powerwall\n") echo "selected" ?> value="bezug_powerwall">Tesla Powerwall</option>
 							<option <?php if($wattbezugmodulold == "bezug_victrongx\n") echo "selected" ?> value="bezug_victrongx">Victron (z.B. GX)</option>
@@ -3489,6 +3493,12 @@
 							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.
 						</div>
 					</div>
+					<div id="wattbezugkostalsmartenergymeter">
+                                                <div class="row" style="background-color:#febebe">
+                                                        <b><label for="ksemip">Kostal Smart Energy Meter / TQ EM410 - IP Adresse:</label></b>
+                                                        <input type="text" name="ksemip" id="ksemip" value="<?php echo $ksemipold ?>"><br>
+                                                </div>
+                                        </div>
 					<div id="wattbezugkostalpiko">
 						<div class="row" style="background-color:#febebe">
 							IP Adresse wird im PV Modul konfiguriert. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby.<br>
@@ -3848,6 +3858,7 @@
 							$('#wattbezugethmpm3pm').hide();
 							$('#wattbezugplentihaus').hide();
 							$('#wattbezugkostalpiko').hide();
+							$('#wattbezugkostalsmartenergymeter').hide();
 							$('#wattbezugsmartfox').hide();
 							$('#wattbezugpowerwall').hide();
 							$('#wattbezugvictrongx').hide();
@@ -3938,6 +3949,9 @@
 							if($('#wattbezugmodul').val() == 'bezug_kostalpiko')   {
 								$('#wattbezugkostalpiko').show();
 							}
+							if($('#wattbezugmodul').val() == 'bezug_ksem')   {
+                                                                $('#wattbezugkostalsmartenergymeter').show();
+                                                        }
 							if($('#wattbezugmodul').val() == 'bezug_smartfox')   {
 								$('#wattbezugsmartfox').show();
 							}

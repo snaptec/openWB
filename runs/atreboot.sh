@@ -2161,6 +2161,10 @@ if ! grep -Fq "discovergypvid=" /var/www/html/openWB/openwb.conf
 then
 	echo "discovergypvid=idesmeters" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "ksemip=" /var/www/html/openWB/openwb.conf
+then
+        echo "ksemip=ipdesmeters" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mollp1moab=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1moab=06:00" >> /var/www/html/openWB/openwb.conf
