@@ -77,7 +77,8 @@ class KSEM:
         wattbezugp = self.ReadUInt32(0) * 0.1
         wattbezugm = self.ReadUInt32(2) * 0.1
         wattbezug = wattbezugp if wattbezugp >= wattbezugm else -wattbezugm
-        self.write('/var/www/html/openWB/ramdisk/wattbezug', wattbezug)
+        finalwattbezug = int(wattbezug)
+        self.write('/var/www/html/openWB/ramdisk/wattbezug', finalwattbezug)
 
         einspeisungkwh = self.ReadUInt64(516) * 0.1 * 0.001
         self.write('/var/www/html/openWB/ramdisk/einspeisungkwh', einspeisungkwh)
