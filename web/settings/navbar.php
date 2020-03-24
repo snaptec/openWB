@@ -44,9 +44,9 @@
 						System
 					</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
+						<a class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
+						<a class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
+						<a class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
 						<a class="dropdown-item" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" href="./settings/debugging.php">Debugging</a>
 					</div>
