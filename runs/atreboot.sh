@@ -724,7 +724,10 @@ if ! grep -Fq "speicherwattnurpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherwattnurpv=1500" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "nurpvslowup=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nurpvslowup=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllid1=10" >> /var/www/html/openWB/openwb.conf

@@ -156,13 +156,20 @@ else
 			exit 0
 		fi
 		if [[ $pvbezugeinspeisung == "0" ]]; then
-			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
-
+			if (( nurpvslowup == 1 )); then
+				llneu=$(( llalt + 1 ))
+			else
+				llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+			fi
 		else
 			if (( llalt == minimalapv )); then
 				llneu=$(( llalt + 1 ))
 			else
-				llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+				if (( nurpvslowup == 1 )); then
+					llneu=$(( llalt + 1 ))
+				else
+					llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+				fi
 			fi
 		fi
 		if (( llneu > maximalstromstaerke )); then
