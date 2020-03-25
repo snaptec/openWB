@@ -493,6 +493,7 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
 echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
+echo 0 > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
@@ -509,6 +510,10 @@ sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 if ! grep -Fq "hook1einschaltverz=" /var/www/html/openWB/openwb.conf
 then
   echo "hook1einschaltverz=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2einschaltverz=" /var/www/html/openWB/openwb.conf
+then
+  echo "hook2einschaltverz=20" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "stopsocnotpluggedlp1=" /var/www/html/openWB/openwb.conf
 then

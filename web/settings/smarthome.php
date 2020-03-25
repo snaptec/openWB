@@ -49,6 +49,9 @@
 				if(strpos($line, "hook1einschaltverz=") !== false) {
 					list(, $hook1einschaltverzold) = explode("=", $line, 2);
 				}
+				if(strpos($line, "hook2einschaltverz=") !== false) {
+					list(, $hook2einschaltverzold) = explode("=", $line, 2);
+				}
 				if(strpos($line, "hook2_ausverz=") !== false) {
 					list(, $hook2_ausverzold) = explode("=", $line, 2);
 				}
@@ -333,6 +336,13 @@
 						</div>
 						<div class="row">
 							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.
+						</div>
+						<div class="row">
+							<b><label for="hook2einschaltverz">Gerät 2 Einschaltverzögerung:</label></b>
+							<input type="text" name="hook2einschaltverz" id="hook2einschaltverz" value="<?php echo $hook2einschaltverzold ?>">
+						</div>
+						<div class="row">
+							Bestimmt die Dauer für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.<br><br>
 						</div>
 						<div class="row">
 							<b><label for="hook2ein_url">Gerät 2 Einschalturl:</label></b>

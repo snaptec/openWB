@@ -57,22 +57,38 @@ if (( hook1_aktiv == "1" )); then
 		fi
 	fi
 fi
+
 if (( hook2_aktiv == "1" )); then
-	if (( uberschuss > hook2ein_watt )); then
-		echo 0 > /var/www/html/openWB/ramdisk/hook2counter
-		if [ ! -e ramdisk/hook2aktiv ]; then
-			touch ramdisk/hook2aktiv
-			echo 1 > ramdisk/hook2akt
-			curl -s --connect-timeout 5 $hook2ein_url > /dev/null
-			echo "$date WebHook 2 aktiviert" >> ramdisk/ladestatus.log
-			if [[ $debug == "1" ]]; then
-				echo "Gerät 2 aktiviert"
+	if (( hook2akt == 0 )); then
+		hook2einschaltverzcounter=$(</var/www/html/openWB/ramdisk/hook2einschaltverzcounter)
+		if (( uberschuss > hook2ein_watt )); then
+			if (( hook2einschaltverzcounter > hook2einschaltverz)); then
+				echo 0 > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
+				echo 0 > /var/www/html/openWB/ramdisk/hook2counter
+				if [ ! -e ramdisk/hook2aktiv ]; then
+					touch ramdisk/hook2aktiv
+					echo 1 > ramdisk/hook2akt
+					curl -s --connect-timeout 5 $hook2ein_url > ramdisk/hook2msg
+					echo "$date WebHook 2 aktiviert" >> ramdisk/ladestatus.log
+					cat ramdisk/hook2msg >> ramdisk/ladestatus.log
+					rm ramdisk/hook2msg
+					if [[ $debug == "1" ]]; then
+						echo "Gerät 2 aktiviert"
+					fi
+					if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
+						./runs/pushover.sh "Gerät 2 eingeschaltet bei $uberschuss"
+					fi
+				fi
+			else
+				hook2einschaltverzcounter=$((hook2einschaltverzcounter +10))
+				echo $hook2einschaltverzcounter > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
 			fi
-			if ((pushbsmarthome == "1")) && ((pushbenachrichtigung == "1")); then
-				./runs/pushover.sh "Gerät 2 eingeschaltet bei $uberschuss"
-			fi
+		else
+			hook2einschaltverzcounter=0
 		fi
 	fi
+
+
 	if [ -e ramdisk/hook2aktiv  ]; then
 		if test $(find "ramdisk/hook2aktiv" -mmin +$hook2_dauer); then
 			if (( uberschuss < hook2aus_watt )); then
@@ -83,8 +99,10 @@ if (( hook2_aktiv == "1" )); then
 				else
 					rm ramdisk/hook2aktiv
 					echo 0 > ramdisk/hook2akt
-					curl -s --connect-timeout 5 $hook2aus_url > /dev/null
+					curl -s --connect-timeout 5 $hook2aus_url > ramdisk/hook2msg
 					echo "$date WebHook 2 deaktiviert" >> ramdisk/ladestatus.log
+					cat ramdisk/hook2msg >> ramdisk/ladestatus.log
+					rm ramdisk/hook2msg
 					if [[ $debug == "1" ]]; then
 						echo "Gerät 2 deaktiviert"
 					fi
@@ -96,6 +114,8 @@ if (( hook2_aktiv == "1" )); then
 		fi
 	fi
 fi
+
+
 if (( hook3_aktiv == "1" )); then
 	if (( uberschuss > hook3ein_watt )); then
 		echo 0 > /var/www/html/openWB/ramdisk/hook3counter
