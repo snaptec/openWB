@@ -716,6 +716,10 @@ if ! grep -Fq "speichersocminpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichersocminpv=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichersochystminpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersochystminpv=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "speicherwattnurpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherwattnurpv=1500" >> /var/www/html/openWB/openwb.conf

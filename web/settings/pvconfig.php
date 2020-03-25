@@ -140,6 +140,9 @@
 				if(strpos($line, "speichersocminpv=") !== false) {
 					list(, $speichersocminpvold) = explode("=", $line, 2);
 				}
+				if(strpos($line, "speichersochystminpv=") !== false) {
+					list(, $speichersochystminpvold) = explode("=", $line, 2);
+				}
 				if(strpos($line, "speicherwattnurpv=") !== false) {
 					list(, $speicherwattnurpvold) = explode("=", $line, 2);
 				}
@@ -446,11 +449,18 @@
 								Im "Min + PV" Modus wird die Ladung erst gestartet, wenn der SoC über dem eingestellten Wert liegt.<br>
 								Zum Deaktivieren der Funktion den Wert auf 0 setzen.
 							</div>
+							<div class="row" style="background-color:#fcbe1e">
+								<b><label for="speichersochystminpv">Speicher Entlade SoC Min + PV Hysterese:</label></b>
+								<input type="text" name="speichersochystminpv" id="speichersochystminpv" value="<?php echo $speichersochystminpvold ?>">
+							</div>
+							<div class="row" style="background-color:#fcbe1e">
+								Die Hysterese legt fest ab welchem SoC bei Unterschreitung die Ladung wieder beendet wird.<br>
+								Zum Deaktivieren der Funktion den Wert auf 0 setzen.
+							</div>
 					</div>
-
-					<input type="hidden" name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
+					<input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
 					<script>
-						$(function() {
+			$(function() {
 							if($('#speicherpvrang').val() == '1') {
 								$('#speicherpvrangdiv').show();
 							} else {
