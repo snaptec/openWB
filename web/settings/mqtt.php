@@ -45,16 +45,8 @@
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-
-			    if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-			    }
 			}
 
-			$settingspwsold = str_replace( "'", "", $settingspwold);
 			$lines = file('/etc/os-release');
 			$tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && empty(preg_grep('/VERSION_CODENAME=jessie/', $lines)) && empty(preg_grep('/VERSION_CODENAME=wheezy/', $lines));
 		?>

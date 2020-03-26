@@ -40,12 +40,6 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line, 2);
-				}
 				if(strpos($line, "hook1einschaltverz=") !== false) {
 					list(, $hook1einschaltverzold) = explode("=", $line, 2);
 				}

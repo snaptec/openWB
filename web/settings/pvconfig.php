@@ -46,13 +46,6 @@
 				if(strpos($line, "speicherpvui=") !== false) {
 					list(, $speicherpvuiold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
-
 				if(strpos($line, "speichermaxwatt=") !== false) {
 					list(, $speichermaxwattold) = explode("=", $line);
 				}

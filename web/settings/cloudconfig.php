@@ -47,12 +47,6 @@
 				if(strpos($line, "cloudpw=") !== false) {
 					list(, $cloudpwold) = explode("=", $line, 2);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line, 2);
-				}
 			}
 			$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
 			if (count($files) == 0) {

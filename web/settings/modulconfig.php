@@ -268,12 +268,6 @@
 				if(strpos($line, "bezug_victronip=") !== false) {
 					list(, $bezug_victronipold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line);
-				}
 				if(strpos($line, "sonnenecoip=") !== false) {
 					list(, $sonnenecoipold) = explode("=", $line);
 				}

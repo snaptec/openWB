@@ -116,12 +116,6 @@
 				if(strpos($line, "sofortll=") !== false) {
 					list(, $sofortllold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line);
-				}
 				if(strpos($line, "dspeed=") !== false) {
 					list(, $dspeedold) = explode("=", $line);
 				}
