@@ -319,6 +319,7 @@ fi
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speicherleistung=$(echo $speicherleistung | sed 's/\..*$//')
 	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
 	speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 	speichervorhanden="1"
