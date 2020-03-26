@@ -47,12 +47,6 @@
 				if(strpos($line, "cloudpw=") !== false) {
 					list(, $cloudpwold) = explode("=", $line, 2);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line, 2);
-				}
 			}
 			$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
 			if (count($files) == 0) {
@@ -155,31 +149,5 @@
 				<small>Sie befinden sich hier: Einstellungen/Cloudeinstellungen</small>
 			</div>
 		</footer>
-
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
-			if ( settingspwaktold == 1 ) {
-			passWord();
-			}
-
-			function passWord() {
-			var testV = 1;
-			var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
-
-			while (testV < 3) {
-				if (!pass1)
-					history.go(-1);
-				if (pass1 == settingspwold) {
-					break;
-				}
-				testV+=1;
-				var pass1 = prompt('Passwort falsch','Password');
-			}
-			if (pass1!="password" & testV == 3)
-				history.go(-1);
-			return " ";
-			}
-		</script>
 	</body>
 </html>

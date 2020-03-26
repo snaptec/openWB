@@ -49,6 +49,7 @@
 						<a class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
 						<a class="dropdown-item" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" href="./settings/debugging.php">Debugging</a>
+						<a class="dropdown-item" href="./settings/setPassword.php">Passwortschutz</a>
 					</div>
 				</li>
 

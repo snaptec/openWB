@@ -525,9 +525,6 @@
 				if(strpos($line, "ledsofort=") !== false) {
 					list(, $ledsofortold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
 				if(strpos($line, "lednurpv=") !== false) {
 					list(, $lednurpvold) = explode("=", $line);
 				}
@@ -565,11 +562,7 @@
 				if(strpos($line, "ledsakt=") !== false) {
 					list(, $ledsaktold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
 			}
-			$settingspwsold = str_replace( "'", "", $settingspwold);
 
 			$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 			$bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -655,18 +648,6 @@
 					<div class="row">
 						Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>
 						Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.
-					</div>
-
-					<hr>
-
-					<div class="row">
-						<b><label for="settingspwakt">Passwortabfrage für Einstellseiten:</label></b>
-						<select name="settingspwakt" id="settingspwakt">
-							<option <?php if($settingspwaktold == 0) echo "selected" ?> value="0">Deaktiviert</option>
-							<option <?php if($settingspwaktold == 1) echo "selected" ?> value="1">Aktiviert</option>
-						</select><br>
-						Passwort:
-						<input type="password" name="settingspw" id="settingspw" value="<?php echo $settingspwsold ?>">
 					</div>
 
 					<hr>
@@ -1380,31 +1361,5 @@
 				<small>Sie befinden sich hier: Verschiedenes</small>
 			</div>
 		</footer>
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
-
-			if ( settingspwaktold == 1 ) {
-				passWord();
-			}
-
-			function passWord() {
-				var testV = 1;
-				var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
-
-				while (testV < 3) {
-					if (!pass1)
-						history.go(-1);
-					if (pass1 == settingspwold) {
-						break;
-					}
-					testV+=1;
-					var pass1 = prompt('Passwort falsch','Password');
-				}
-				if (pass1!="password" & testV == 3)
-					history.go(-1);
-				return " ";
-			}
-		</script>
 	</body>
 </html>
