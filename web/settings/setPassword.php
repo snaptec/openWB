@@ -34,33 +34,37 @@
 	</head>
 
 	<body>
-		<?php include './navbar.php'; ?>
+		<?php
+		include './navbar.php';
+		$authfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.htaccess';
+		$passwordfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.passwd';
+		$tempfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/temppassword';
+		?>
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
 					<h3>Passwortschutz</h3>
 				</div>
 				<?php
-					$authfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.htaccess';
-
-					if(array_key_exists( 'action', $_POST )){
+					if(array_key_exists( 'action', $_POST )){ // We need to do something...
 						?>
 						<div class="row">
 						<?php
-						$authfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.htaccess';
-						$passwordfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.passwd';
-						$tempfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/temppassword';
-
-						//print_r($_POST);
 						switch( $_POST['action'] ){
 							case 'create':
+								// setup password protection
+								// generate necessary files and set proper permissions
 								exec( 'sudo touch ' . $passwordfile . ' ' . $authfile . ' ' . $tempfile );
 								exec( 'sudo chown pi:pi ' . $passwordfile . ' ' . $authfile . ' ' . $tempfile );
 								exec( 'sudo chmod 666 ' . $passwordfile . ' ' . $authfile . ' ' . $tempfile );
+								// save password in file
+								// no need to worry about special characters
 								file_put_contents( $tempfile, $_POST['password'] );
-								$result = exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . $_POST['username'] . ' < ' . $tempfile );
+								// generate password hash
+								exec( 'sudo htpasswd -i -c ' . $passwordfile . ' ' . $_POST['username'] . ' < ' . $tempfile );
+								// remove temp password file
 								exec( 'sudo rm ' . $tempfile );
-								//print_r( $result );
+								// write .htaccess file
 								$htaccessFile = fopen( $authfile, 'w');
 								fwrite( $htaccessFile, <<<AUTHEND
 AuthType Basic
@@ -74,6 +78,7 @@ require valid-user
 AUTHEND
 								);
 								fclose( $htaccessFile );
+								// protect .htaccess file
 								exec( 'sudo chmod 644 ' . $passwordfile . ' ' . $authfile );
 								?>
 									<p class="text-success">Passwortschutz wurde eingerichtet.</p>
@@ -81,6 +86,8 @@ AUTHEND
 								<?php
 							break;
 							case 'delete':
+								// remove password protection
+								// simply delete both files
 								if( file_exists( $authfile )){
 									exec( 'sudo rm ' . $authfile );
 								}
@@ -94,7 +101,7 @@ AUTHEND
 							break;
 						}
 					}
-					if( !file_exists( $authfile )){
+					if( !file_exists( $authfile )){ // show form to setup password protection
 						?>
 						<form action="./settings/setPassword.php" method="POST">
 							<div class="row">
@@ -113,7 +120,7 @@ AUTHEND
 							<button type="submit" name="action" value="create" class="btn btn-green">Passwort einrichten</button>
 						</form>
 						<?php
-					} else {
+					} else { // show button to delete password protection
 						?>
 						<div class="row">
 							<h4>Es wurde bereits ein Passwort eingerichtet.</h4>
