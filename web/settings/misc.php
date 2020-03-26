@@ -589,15 +589,12 @@
 						<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
 						<select name="dspeed" id="dspeed">
 							<option <?php if($dspeedold == 0) echo "selected" ?> value="0">Normal</option>
-							<option <?php if($dspeedold == 1) echo "selected" ?> value="1">Schnell</option>
 							<option <?php if($dspeedold == 2) echo "selected" ?> value="2">Langsam</option>
 							<option <?php if($dspeedold == 3) echo "selected" ?> value="3">Sehr Langsam</option>
 						</select>
 					</div>
 
 					<div class="row">
-						Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
-						Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
 						Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
 						Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
 						!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
