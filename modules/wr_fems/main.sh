@@ -1,9 +1,9 @@
 #!/bin/bash
 . /var/www/html/openWB/openwb.conf
 
-pvwatt=$(curl -s "http://x:user@$femsip:8084/rest/channel/charger0/ActualPower" | jq .value)
+pvwatt=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
 pvwatt=$(( pvwatt * -1 ))
-pvwh=$(curl -s "http://x:user@$femsip:8084/rest/channel/charger0/ActualEnergy" | jq .value)
+pvwh=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/ProductionActiveEnergy" | jq .value)
 
 re='^-?[0-9]+$'
 if ! [[ $pvwatt =~ $re ]] ; then
