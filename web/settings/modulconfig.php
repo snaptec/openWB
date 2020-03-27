@@ -46,6 +46,9 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "femsip=") !== false) {
+					list(, $femsipold) = explode("=", $line);
+				}
 				if(strpos($line, "wrsunwaysip=") !== false) {
 					list(, $wrsunwaysipold) = explode("=", $line);
 				}
@@ -3406,6 +3409,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
+							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3470,6 +3474,16 @@
 							Gültige Werte IP. IP Adresse des Victron, z.B. GX.
 						</div>
 					</div>
+					<div id="wattbezugfems">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="femsip">Fenecon IP:</label></b>
+							<input type="text" name="femsip" id="femsip" value="<?php echo $femsipold ?>">
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. IP Adresse des Fenecon FEMS.
+						</div>
+					</div>
+
 					<div id="wattbezugdiscovergy">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="discovergyuser">Discovergy Username (Email):</label></b>
@@ -3861,12 +3875,17 @@
 							$('#wattbezuglgessv1').hide();
 							$('#wattbezugmqtt').hide();
 							$('#wattbezugsonneneco').hide();
+							$('#wattbezugfems').hide();
 
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 								$('#wattbezugsonneneco').show(); 
 							}
+							if($('#wattbezugmodul').val() == 'bezug_fems') {
+								$('#wattbezugfems').show(); 
+							}
+
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
 								$('#wattbezugsolarview').show();
 							}
@@ -3995,6 +4014,8 @@
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
 							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
+							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">Fenecon FEMS</option>
+
 						</select>
 					</div>
 
@@ -4013,6 +4034,12 @@
 							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
+					<div id="pvfems">
+						<div class="row">
+							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
+						</div>
+					</div>
+
 					<div id="pvyouless">
 						<div class="row" style="background-color:#febebe">
 							<b><label for="wryoulessip">IP Adresse des Youless</label></b>
@@ -4425,6 +4452,11 @@
 							$('#pvlgessv1').hide();
 							$('#pvmqtt').hide();
 							$('#pvsunways').hide();
+							$('#pvfems').hide();
+
+							if($('#pvwattmodul').val() == 'wr_fems') {
+								$('#pvfems').show();
+							}
 
 							if($('#pvwattmodul').val() == 'wr_sunways') {
 								$('#pvsunways').show();
@@ -4533,6 +4565,7 @@
 							<option <?php if($speichermodulold == "speicher_victron\n") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
+							<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">Fenecon FEMS</option>
 						</select>
 					</div>
 
@@ -4584,6 +4617,12 @@
 							Konfiguration im Bezug Victron Modul.
 						</div>
 					</div>
+					<div id="divspeicherfems">
+							<div class="row" style="background-color:#fcbe1e">
+							Konfiguration im Bezug Fenecon Modul.
+						</div>
+					</div>
+
 					<div id="divspeichervarta">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="vartaspeicherip">Varta IP:</label></b>
@@ -4791,6 +4830,11 @@
 							$('#divspeicheralphaess').hide();
 							$('#divspeichervictron').hide();
 							$('#divspeicherlgessv1').hide();
+							$('#divspeicherfems').hide();
+
+							if($('#speichermodul').val() == 'speicher_fems') {
+								$('#divspeicherfems').show();
+							}
 
 							if($('#speichermodul').val() == 'speicher_alphaess') {
 								$('#divspeicheralphaess').show();

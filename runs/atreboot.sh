@@ -2419,6 +2419,10 @@ if ! grep -Fq "slavemode=" /var/www/html/openWB/openwb.conf
 then
 	echo "slavemode=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
+then
+	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
