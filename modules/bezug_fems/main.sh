@@ -1,43 +1,16 @@
 #!/bin/bash
 . /var/www/html/openWB/openwb.conf
-watt=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/ActualPower" | jq .value)
-iwh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/ActualProductionEnergy" | jq .value)
-ewh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/ActualConsumptionEnergy" | jq .value)
-evuv1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/VoltageL1" | jq .value)
-evuv2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/VoltageL2" | jq .value)
-evuv3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/VoltageL3" | jq .value)
-evua1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/CurrentL1" | jq .value)
-evua2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/CurrentL2" | jq .value)
-evua3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/meter0/CurrentL3" | jq .value)
+watt=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/ActivePower" | jq .value)
+iwh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/ActiveProductionEnergy" | jq .value)
+ewh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/ActiveConsumptionEnergy" | jq .value)
+evuv1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL1" | jq .value)
+evuv2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL2" | jq .value)
+evuv3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL3" | jq .value)
+evua1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL1" | jq .value)
+evua2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL2" | jq .value)
+evua3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL3" | jq .value)
 
-re='^-?[0-9]+$'
-if [[ $watt =~ $re ]] ; then
-        watt="0"
-fi
-if [[ $iwh =~ $re ]] ; then
-        iwh="0"
-fi
-if [[ $ewh =~ $re ]] ; then
-        ewh="0"
-fi
-if [[ $evuv1 =~ $re ]] ; then
-        evuv1="0"
-fi
-if [[ $evuv2 =~ $re ]] ; then
-        evuv2="0"
-fi
-if [[ $evuv3 =~ $re ]] ; then
-        evuv3="0"
-fi
-if [[ $evua1 =~ $re ]] ; then
-        evua1="0"
-fi
-if [[ $evua2 =~ $re ]] ; then
-        evua2="0"
-fi
-if [[ $evua3 =~ $re ]] ; then
-        evua3="0"
-fi
+
 echo $watt > /var/www/html/openWB/ramdisk/wattbezug
 echo $evuv1 > /var/www/html/openWB/ramdisk/evuv1
 echo $evuv2 > /var/www/html/openWB/ramdisk/evuv2
