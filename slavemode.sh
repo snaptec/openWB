@@ -49,21 +49,21 @@ openwbisslave() {
 	lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - $TotalCurrentConsumptionOnL1) / $ChargingVehiclesOnL1" | bc)
 
 	# new charge current in int but always rounded to the next _lower_ integer
-	if [[ "$lldiff" =~ ^\s*- ]]; then
-		llneu=$(echo "scale=0; ($llalt + $lldiff - 1.0)/1" | bc)
-	else
-		llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
-	fi
+	llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
 
 	# The llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
 	# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
-	# For this case we limit to the total remaining current (which might get further limited to maximalstromstaerke below).
-	if (( llneu > AllowedTotalCurrentPerPhase )); then
-		llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase - $TotalCurrentConsumptionOnL1)/1.0" | bc)
+	# For this case we limit to the total allowed current divided by the number of charging vehicals.
+	# The resulting value might get further limited to maximalstromstaerke below.
+	if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+	        if (( debug == 2 )); then
+			echo "$NowItIs: Slave Mode: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
+	        fi
+	        llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/$ChargingVehiclesOnL1)" | bc)
 	fi
 
 	if (( debug == 2 )); then
-		echo "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase, TotalCurrentConsumptionOnL1=$TotalCurrentConsumptionOnL1, ChargingVehiclesOnL1=$ChargingVehiclesOnL1, llalt=$llalt, lldiff=$lldiff, llneu=$llneu"
+		echo "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase, TotalCurrentConsumptionOnL1=$TotalCurrentConsumptionOnL1, ChargingVehiclesOnL1=$ChargingVehiclesOnL1, llalt=$llalt, lldiff=$lldiff --> llneu=$llneu"
 	fi
 
 	if (( llneu < minimalstromstaerke )) || ((lp1enabled == 0)); then
