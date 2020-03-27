@@ -8,6 +8,12 @@ for v in "${maxll[@]}"; do
 	if (( v > maxllvar )); then maxllvar=$v; fi;
 done
 llalt=$maxllvar
+if (( llalt > minimalapv )); then
+	if (( llaltlp1 == minimalapv )); then
+		llalt=$minimalapv
+	fi
+fi
+
 if [[ $schieflastaktiv == "1" ]]; then
 	if [[ $u1p3paktiv == "1" ]]; then
 		u1p3pstat=$(<ramdisk/u1p3pstat)

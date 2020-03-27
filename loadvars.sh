@@ -305,6 +305,7 @@ if [ -z "$lademodus" ] ; then
 	lademodus=$bootmodus
 fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
+llaltlp1=$llalt
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=$(modules/$pvwattmodul/main.sh || true)
