@@ -103,6 +103,7 @@ var thevalues = [
 	["openWB/evu/W", "#bezugdiv"],
 	["openWB/global/WHouseConsumption", "#"],
 	["openWB/pv/W", "#"],
+	["openWB/pv/DailyYieldKwh", "#"],
 	["openWB/lp/1/%Soc", "#"],
 	["openWB/lp/2/%Soc", "#"],
 	// heute geladene kWh ... nicht benutzt im Theme
@@ -757,12 +758,13 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			} else {
 				var pvwattStr = pvwatt + " W";
 			}
-			// only if production
-			if (pvwatt > 0) {
-				pvwattStr += " Erzeugung";
-			}
+
 		}
-		$("#pvdiv").html(pvwattStr);
+		$("#pvdiv").text(pvwattStr);
+	}
+	if ( mqttmsg == "openWB/pv/DailyYieldKwh") {
+		var pvDailyYieldStr = ' (' + parseFloat(mqttpayload).toFixed(2) + ' kWh)';
+		$("#pvdailyyielddiv").text(pvDailyYieldStr);
 	}
 }
 

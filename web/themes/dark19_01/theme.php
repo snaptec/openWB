@@ -120,13 +120,17 @@
 		var awattaraktiv = <?php echo $awattaraktivold?>;
 	</script>
 
-	<?php include '/var/www/html/openWB/web/themes/standard/navbar.php';?>
+	<div role="main" class="container">
 
-	<div role="main" class="container" style="margin-top: 20px">
+		<div class="row">
+			<div class="col gradient">
+				<h1>openWB Charge Controller</h1>
+			</div>
+		</div>
 
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
-				PV: <span id="pvdiv"></span>
+				PV: <span id="pvdiv"></span><span id="pvdailyyielddiv"></span>
 			</div>
 			<div id="evudiv" class="col-sm-6 pvInfoStyle" style="background-color:#febebe;" >
 				EVU: <span id="bezugdiv"></span>
