@@ -120,7 +120,7 @@
 		var awattaraktiv = <?php echo $awattaraktivold?>;
 	</script>
 
-	<div role="main" class="container">
+	<div class="container">
 
 		<div class="row">
 			<div class="col gradient">
@@ -814,10 +814,9 @@ EXTDEVICEDIVMIDDLE;
 		<!-- Graph-Options with Popup-Window-Look -->
 		<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 			<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
-				<div class="row">
-					<div class="col-sm-12">
-						Graph Sichtbarkeit:
-					</div>
+				<div class="row"><div class="col-sm-12">
+					Graph Sichtbarkeit:
+				</div>
 			</div>
 			<div class="row col-sm-12" style="white-space: nowrap;">
 				<div class="col-sm-6">
@@ -916,13 +915,8 @@ EXTDEVICEDIVMIDDLE;
 				</div>
 			</div>
 		</div>
-		</div>
 
-	</div> <!-- end container -->
-
-	<footer class="footer bg-dark text-light font-small">
-		<!-- no text for footer -->
-	</footer>
+	</container>
 
 	<!-- some scripts -->
 	<script>

@@ -4,41 +4,19 @@ Stylesheet zum openWB Dark19_01-Theme
 2019-2020 Michael Ortenstein
 */
 
-html {
-    font-size: 0.7rem;
-}
-
 body {
-    margin-bottom: 30px;  /* margin bottom by footer height */
-    color: white;
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
-    /* Old browsers */
-    background: rgb(125,126,125);
-    /* FF3.6-15 */
-    background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
-    /* IE6-9 */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
-}
-
-body > .container {
-    padding: 55px 15px 0;
-}
-
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 30px; /* fixed height of footer */
-    line-height: 30px; /* vertically center the text there */
+      color: white;
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+      /* Old browsers */
+      background: rgb(125,126,125);
+      /* FF3.6-15 */
+      background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+      /* IE6-9 */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
 }
 
 @keyframes alertPulsation {
@@ -261,45 +239,40 @@ h3 {
   -webkit-font-smoothing: antialiased;
 }
 
-/* very Small devices (up to 575.98px) */
-@media screen and (max-width: 575.98px) {
-    .navbar-collapse a {
-        font-size: 1.8em;
-    }
-    .navbar-brand {
-        font-size: 2.0em;
-    }
-}
-
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
-    html {
-        font-size: 0.8rem;
-    }
     h1 {
         font-size: 1.7rem;
     }
+
     h2 {
         font-size: 1.1rem;
     }
+
     h3 {
         font-size: 0.9rem;
     }
+
     .smallTextStyle {
           font-size: 1.1rem;
     }
+
     .regularTextStyle {
           font-size: 0.75rem;
     }
+
     .versionTextStyle {
           font-size: 0.5rem;
     }
+
     .pvInfoStyle, .extDeviceInfoStyle {
           font-size: 0.95rem;
     }
+
     .chargePointInfoStyle {
           font-size: 0.75rem;
     }
+
     .myButtonStyle {
           font-size: 1.0rem;
     }
@@ -307,33 +280,38 @@ h3 {
 
 /* Medium devices (tablets, 768px and up) */
 @media screen and (min-width: 768px) {
-    html {
-        font-size: 0.9rem;
-    }
     h1 {
         font-size: 2.0rem;
     }
+
     h2 {
         font-size: 1.4rem;
     }
+
     h3 {
         font-size: 1.1rem;
     }
+
     .smallTextStyle {
           font-size: 1.5rem;
     }
+
     .regularTextStyle {
           font-size: 1.0rem;
     }
+
     .versionTextStyle {
           font-size: 0.6rem;
     }
+
     .pvInfoStyle, .extDeviceInfoStyle {
           font-size: 1.3rem;
     }
+
     .chargePointInfoStyle {
           font-size: 1.0rem;
     }
+
     .myButtonStyle {
           font-size: 1.2rem;
     }
@@ -341,33 +319,38 @@ h3 {
 
 /* Large devices (desktops, 992px and up) */
 @media screen and (min-width: 992px) {
-    html {
-        font-size: 1.0rem;
-    }
     h1 {
         font-size: 2.6rem;
     }
+
     h2 {
         font-size: 2.0rem;
     }
+
     h3 {
         font-size: 1.6rem;
     }
+
     .smallTextStyle {
           font-size: 1.8rem;
     }
+
     .regularTextStyle {
           font-size: 1.4rem;
     }
+
     .versionTextStyle {
           font-size: 0.7rem;
     }
+
     .pvInfoStyle, .extDeviceInfoStyle {
           font-size: 1.6rem;
     }
+
     .chargePointInfoStyle {
           font-size: 1.4rem;
     }
+
     .myButtonStyle {
           font-size: 1.6rem;
     }
@@ -375,33 +358,38 @@ h3 {
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    html {
-        font-size: 1.1rem;
-    }
     h1 {
         font-size: 3rem;
     }
+
     h2 {
         font-size: 2.4rem;
     }
+
     h3 {
         font-size: 1.95rem;
     }
+
     .smallTextStyle {
           font-size: 1.8rem;
     }
+
     .regularTextStyle {
           font-size: 1.8rem;
     }
+
     .versionTextStyle {
           font-size: 0.8rem;
     }
+
     .pvInfoStyle, .extDeviceInfoStyle {
           font-size: 1.8rem;
     }
+
     .chargePointInfoStyle {
           font-size: 1.8rem;
     }
+
     .myButtonStyle {
           font-size: 2.0rem;
     }
