@@ -944,7 +944,7 @@ EXTDEVICEDIVMIDDLE;
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=1.0"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.1"></script>
 	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js?ver=1.0"></script>
 </body>
 
