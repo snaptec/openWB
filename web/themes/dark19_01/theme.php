@@ -130,7 +130,7 @@
 
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
-				PV: <span id="pvdiv"></span>
+				PV: <span id="pvdiv"></span><span id="pvdailyyielddiv"></span>
 			</div>
 			<div id="evudiv" class="col-sm-6 pvInfoStyle" style="background-color:#febebe;" >
 				EVU: <span id="bezugdiv"></span>
@@ -944,7 +944,7 @@ EXTDEVICEDIVMIDDLE;
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=1.0"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.2"></script>
 	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js?ver=1.0"></script>
 </body>
 

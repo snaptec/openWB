@@ -103,6 +103,7 @@ var thevalues = [
 	["openWB/evu/W", "#bezugdiv"],
 	["openWB/global/WHouseConsumption", "#"],
 	["openWB/pv/W", "#"],
+	["openWB/pv/DailyYieldKwh", "#"],
 	["openWB/lp/1/%Soc", "#"],
 	["openWB/lp/2/%Soc", "#"],
 	// heute geladene kWh ... nicht benutzt im Theme
@@ -247,6 +248,14 @@ function getCol(matrix, col){
 	return column;
 }
 
+function convertToKw(dataColum) {
+	var convertedDataColumn = [];
+	dataColum.forEach((value) => {
+		convertedDataColumn.push(value / 1000);
+	});
+	return convertedDataColumn;
+}
+
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// receives all messages and calls respective function to process them
 	if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
@@ -349,7 +358,6 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolDisplayLP: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['boolDisplayLp'+index] = false;
@@ -424,7 +432,6 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolDisplayLpSoc: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 1) {
 			$('#socenabledlp'+index).show();
 			window['boolDisplayLp'+index+'Soc'] = false;
@@ -447,7 +454,6 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolDisplayLoad: '+index+'   load='+mqttpayload);
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['hideload'+index] = 'foo';
@@ -469,48 +475,11 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-alllivevalues: '+index);
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
 			window['all'+index] = 1;
-		putgraphtogether();
-		}
-	}
-	else if ( mqttmsg == "openWB/graph/alllivevalues" ) {
-		if ( initialread == -10) {
-			var csvData = new Array();
-			var rawcsv = mqttpayload.split(/\r?\n|\r/);
-			for (var i = 0; i < rawcsv.length; i++) {
-				  csvData.push(rawcsv[i].split(','));
-			}
-			// Retrived data from csv file content
-			var splittime = new Array();
-			getCol(csvData, 0).forEach(function(zeit){
-				splittime.push(zeit.substring(0, zeit.length -3));
-			});
-			atime = splittime;
-			//atime = getCol(csvData, 0);
-			abezug = getCol(csvData, 1);
-			alpa = getCol(csvData, 2);
-			apv = getCol(csvData, 3);
-			alp1 = getCol(csvData, 4);
-			alp2 = getCol(csvData, 5);
-			aspeicherl = getCol(csvData, 7);
-			aspeichersoc = getCol(csvData, 8);
-			asoc = getCol(csvData, 9);
-			asoc1 = getCol(csvData, 10);
-			ahausverbrauch = getCol(csvData, 11);
-			averbraucher1 = getCol(csvData, 12);
-			averbraucher2 = getCol(csvData, 13);
-			alp3 = getCol(csvData, 14);
-			alp4 = getCol(csvData, 15);
-			alp5 = getCol(csvData, 16);
-			alp6 = getCol(csvData, 17);
-			alp7 = getCol(csvData, 18);
-			alp8 = getCol(csvData, 19);
-			initialread +=1 ;
-			checkgraphload();
+			putgraphtogether();
 		}
 	}
 	else if ( mqttmsg == "openWB/graph/lastlivevalues" ) {
@@ -538,24 +507,24 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				var lp8 = lines[i].split(",")[19];
 			}
 			myLine.data.labels.push(ldate.substring(0, ldate.length -3));
-			myLine.data.datasets[2].data.push(lbezug);
-			myLine.data.datasets[3].data.push(lpv);
-			myLine.data.datasets[4].data.push(lspeicherl);
+			myLine.data.datasets[2].data.push(lbezug / 1000);
+			myLine.data.datasets[3].data.push(lpv / 1000);
+			myLine.data.datasets[4].data.push(lspeicherl / 1000);
 			myLine.data.datasets[5].data.push(lspeichersoc);
 			myLine.data.datasets[6].data.push(lsoc);
-			myLine.data.datasets[0].data.push(llp1);
-			myLine.data.datasets[1].data.push(llp2);
+			myLine.data.datasets[0].data.push(llp1 / 1000);
+			myLine.data.datasets[1].data.push(llp2 / 1000);
 			myLine.data.datasets[7].data.push(lsoc1);
-			myLine.data.datasets[8].data.push(lhausverbrauch);
-			myLine.data.datasets[9].data.push(lverbraucher1);
-			myLine.data.datasets[10].data.push(lverbraucher2);
-			myLine.data.datasets[11].data.push(lpa);
-			myLine.data.datasets[12].data.push(lp3);
-			myLine.data.datasets[13].data.push(lp4);
-			myLine.data.datasets[14].data.push(lp5);
-			myLine.data.datasets[15].data.push(lp6);
-			myLine.data.datasets[16].data.push(lp7);
-			myLine.data.datasets[17].data.push(lp8);
+			myLine.data.datasets[8].data.push(lhausverbrauch / 1000);
+			myLine.data.datasets[9].data.push(lverbraucher1 / 1000);
+			myLine.data.datasets[10].data.push(lverbraucher2 / 1000);
+			myLine.data.datasets[11].data.push(lpa / 1000);
+			myLine.data.datasets[12].data.push(lp3 / 1000);
+			myLine.data.datasets[13].data.push(lp4 / 1000);
+			myLine.data.datasets[14].data.push(lp5 / 1000);
+			myLine.data.datasets[15].data.push(lp6 / 1000);
+			myLine.data.datasets[16].data.push(lp7 / 1000);
+			myLine.data.datasets[17].data.push(lp8 / 1000);
 			myLine.data.labels.splice(0, 1);
 			myLine.data.datasets.forEach(function(dataset) {
 				dataset.data.splice(0, 1);
@@ -570,25 +539,28 @@ function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// called by handlevar
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var wattbezug = mqttpayload;
-	    intbezug = parseInt(wattbezug, 10);
-		intbezugarrow = intbezug;
+	    var intbezug = parseInt(wattbezug, 10);
+		if ( intbezug == 0 ) {
+			wattbezug = '0 W';
+		} else {
 		    if (intbezug > 0) {
-		    if (intbezug > 999) {
-			    intbezug = (intbezug / 1000).toFixed(2);
+		    	if (intbezug > 999) {
+			    	intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + " kW Bezug";
-		    } else {
-			wattbezug = intbezug + " W Bezug";
-			}
-	    } else {
+		    	} else {
+					wattbezug = intbezug + " W Bezug";
+				}
+	    	} else {
 	    	    intbezug = intbezug * -1;
-			if (intbezug > 999) {
-			    intbezug = (intbezug / 1000).toFixed(2);
+				if (intbezug > 999) {
+			    	intbezug = (intbezug / 1000).toFixed(2);
 		    	    wattbezug = intbezug + " kW Einspeisung";
-		    } else {
-			wattbezug = intbezug + " W Einspeisung";
-			}
-	    }
-	    $("#bezugdiv").html(wattbezug);
+		    	} else {
+					wattbezug = intbezug + " W Einspeisung";
+				}
+	    	}
+		}
+	    $("#bezugdiv").text(wattbezug);
 	 }
 }
 
@@ -602,7 +574,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			mqttpayload = mqttpayload + " W";
 		}
-		$("#hausverbrauchdiv").html(mqttpayload);
+		$("#hausverbrauchdiv").text(mqttpayload);
 	}
 	else if ( mqttmsg == "openWB/global/WAllChargePoints") {
 		var powerAllLp = parseInt(mqttpayload, 10);
@@ -611,12 +583,12 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 			powerAllLp += " W";
 		}
-		$("#powerAllLpspan").html(powerAllLp);
+		$("#powerAllLpspan").text(powerAllLp);
 	}
 	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
 		if ( document.getElementById("lastregelungaktivdiv") ) {
 			// if the div for info text "Lastregelung" is present in theme
-			$('#lastregelungaktivdiv').html(mqttpayload);
+			$('#lastregelungaktivdiv').text(mqttpayload);
 			if ( mqttpayload.length >= 5 ) {
 				// if there is info-text in payload for topic, show the div
 				$('#lastregelungaktivdiv').show();
@@ -701,28 +673,32 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg == "openWB/housebattery/W" ) {
 		var speicherwatt = mqttpayload;
 		var intspeicherw = parseInt(speicherwatt, 10);
-		if (intspeicherw > 0) {
-			if ( intspeicherw > 999 ) {
-				intspeicherw = (intspeicherw / 1000).toFixed(2);
-				speicherwatt = intspeicherw + " kW Ladung";
-			} else {
-				speicherwatt = intspeicherw + " W Ladung";
-			}
+		if ( intspeicherw == 0 ) {
+			speicherwatt = '0 W';
 		} else {
-	    		intspeicherw = intspeicherw * -1;
-			if (intspeicherw > 999) {
-				intspeicherw = (intspeicherw / 1000).toFixed(2);
-				speicherwatt = intspeicherw + " kW Entladung";
+			if (intspeicherw > 0) {
+				if ( intspeicherw > 999 ) {
+					intspeicherw = (intspeicherw / 1000).toFixed(2);
+					speicherwatt = intspeicherw + " kW Ladung";
+				} else {
+					speicherwatt = intspeicherw + " W Ladung";
+				}
 			} else {
-				speicherwatt = intspeicherw + " W Entladung";
+		    		intspeicherw = intspeicherw * -1;
+				if (intspeicherw > 999) {
+					intspeicherw = (intspeicherw / 1000).toFixed(2);
+					speicherwatt = intspeicherw + " kW Entladung";
+				} else {
+					speicherwatt = intspeicherw + " W Entladung";
+				}
 			}
 		}
-		$("#speicherleistungdiv").html(speicherwatt);
+		$("#speicherleistungdiv").text(speicherwatt);
 	}
 	else if ( mqttmsg == "openWB/housebattery/%Soc" ) {
 		var speichersoc = ", " + mqttpayload;
 		speichersoc += " % SoC"
-		$("#speichersocdiv").html(speichersoc);
+		$("#speichersocdiv").text(speichersoc);
 	}
 	else if ( mqttmsg == "openWB/housebattery/boolHouseBatteryConfigured" ) {
 		if ( mqttpayload == 1 ) {
@@ -757,12 +733,17 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			} else {
 				var pvwattStr = pvwatt + " W";
 			}
-			// only if production
-			if (pvwatt > 0) {
-				pvwattStr += " Erzeugung";
-			}
+
 		}
-		$("#pvdiv").html(pvwattStr);
+		$("#pvdiv").text(pvwattStr);
+	} else if ( mqttmsg == "openWB/pv/DailyYieldKwh") {
+		var pvDailyYield = parseFloat(mqttpayload);
+		var pvDailyYieldStr = '';
+		if ( pvDailyYield > 0 ) {
+			// display only if > 0
+			pvDailyYieldStr = ' (' + pvDailyYield.toFixed(2) + ' kWh)';
+		}
+		$("#pvdailyyielddiv").text(pvDailyYieldStr);
 	}
 }
 
@@ -806,7 +787,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-ChargePointEnabled: '+index+'   load='+mqttpayload);
 		if ( mqttpayload == 0 ) {
 			window['lp'+index+'enabled'] = 0;
 			document.getElementById("lp"+index+"enableddiv").classList.remove("fa-check");
@@ -885,7 +865,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#aktgeladen"+index+"div").html(mqttpayload+" kWh");
+		$("#aktgeladen"+index+"div").text(mqttpayload+" kWh");
 		if ( document.getElementById("prog"+index) ) {
 			// only if target element exists
 			document.getElementById("prog"+index).value= mqttpayload;
@@ -904,7 +884,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 		actualPower += " W";
 		}
-		$("#actualPowerLp"+index+"div").html(actualPower);
+		$("#actualPowerLp"+index+"div").text(actualPower);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhchargedsinceplugged$/i ) ) {
 		// energy charged since ev was plugged in
@@ -912,9 +892,8 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		var energyCharged = parseFloat(mqttpayload, 10).toFixed(2) + " kWh";
-		$("#energyChargedLp"+index+"div").html(energyCharged);
+		$("#energyChargedLp"+index+"div").text(energyCharged);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kmcharged$/i ) ) {
 		// km charged at current charging segment
@@ -922,7 +901,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#gelrlp"+index+"div").html(mqttpayload+" km");
+		$("#gelrlp"+index+"div").text(mqttpayload+" km");
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
@@ -930,8 +909,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
-		$("#restzeitlp"+index+"div").html(mqttpayload);
+		$("#restzeitlp"+index+"div").text(mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
 		// target current value at charge point
@@ -940,14 +918,13 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var targetCurrent = " / " + parseInt(mqttpayload, 10) + " A";
-		$("#targetCurrentLp"+index+"div").html(targetCurrent);
+		$("#targetCurrentLp"+index+"div").text(targetCurrent);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/boolplugstat"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolPlugStat: '+index+'   load='+mqttpayload);
 		if ( $('#plugstatlp'+index+'div').length > 0 ) {
 			if ( mqttpayload == 1 ) {
 				document.getElementById("plugstatlp"+index+"div").classList.add("fa-plug");
@@ -969,7 +946,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-boolChargeStat: '+index+'   load='+mqttpayload);
 		if ($('#plugstatlp'+index+'div').length > 0) {
 			if (mqttpayload == 1) {
 				document.getElementById("plugstatlp"+index+"div").setAttribute("style", "color: #00FF00;");
@@ -992,14 +968,13 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		window['lp'+index+'soc'] = mqttpayload;
-		$("#socLp"+index).html(mqttpayload+' %');
+		$("#socLp"+index).text(mqttpayload+' %');
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargestatus$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/chargestatus"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-ChargeStatus: '+index+'   load='+mqttpayload);
 		if ($('#stationlp'+index).length > 0) {
 			if (mqttpayload == 1) {
 				document.getElementById("stationlp"+index).setAttribute("style", "color: #00FF00;");
@@ -1013,7 +988,6 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		//console.log('mqttmsg-ADirectModeAmps: '+index+'   load='+mqttpayload);
 		document.getElementById("sofortlllp"+index+"s").value = mqttpayload;
 		document.getElementById("sofortlllp"+index+"l").innerHTML = mqttpayload;
 	}
@@ -1236,6 +1210,18 @@ function renewMQTTclick() {
 	alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");
 }
 
+function subscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		client.subscribe('openWB/graph/' + segments + 'alllivevalues', {qos: 0});
+	}
+}
+
+function unsubscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		client.unsubscribe('openWB/graph/' + segments + 'alllivevalues');
+	}
+}
+
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
@@ -1254,28 +1240,41 @@ function putgraphtogether() {
 		});
 		atime = splittime;
 		//atime = getCol(csvData, 0);
-		abezug = getCol(csvData, 1);
-		alpa = getCol(csvData, 2);
-		apv = getCol(csvData, 3);
-		alp1 = getCol(csvData, 4);
-		alp2 = getCol(csvData, 5);
-		aspeicherl = getCol(csvData, 7);
+		abezug = convertToKw(getCol(csvData, 1));
+		alpa = convertToKw(getCol(csvData, 2));
+		apv = convertToKw(getCol(csvData, 3));
+		alp1 = convertToKw(getCol(csvData, 4));
+		alp2 = convertToKw(getCol(csvData, 5));
+		aspeicherl = convertToKw(getCol(csvData, 7));
 		aspeichersoc = getCol(csvData, 8);
 		asoc = getCol(csvData, 9);
 		asoc1 = getCol(csvData, 10);
-		ahausverbrauch = getCol(csvData, 11);
-		averbraucher1 = getCol(csvData, 12);
-		averbraucher2 = getCol(csvData, 13);
-		alp3 = getCol(csvData, 14);
-		alp4 = getCol(csvData, 15);
-		alp5 = getCol(csvData, 16);
-		alp6 = getCol(csvData, 17);
-		alp7 = getCol(csvData, 18);
-		alp8 = getCol(csvData, 19);
+		ahausverbrauch = convertToKw(getCol(csvData, 11));
+		averbraucher1 = convertToKw(getCol(csvData, 12));
+		averbraucher2 = convertToKw(getCol(csvData, 13));
+		alp3 = convertToKw(getCol(csvData, 14));
+		alp4 = convertToKw(getCol(csvData, 15));
+		alp5 = convertToKw(getCol(csvData, 16));
+		alp6 = convertToKw(getCol(csvData, 17));
+		alp7 = convertToKw(getCol(csvData, 18));
+		alp8 = convertToKw(getCol(csvData, 19));
 		initialread = 1 ;
+
+		// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
+		unsubscribeMqttGraphSegments();
+
 		checkgraphload();
 	}
 }  // end putgraphtogether
+
+
+$(window).focus(function() {
+    // if the browser window gets focus again after being blurred,
+    // check if mqtt segments for graph need to be subsribed again
+    if ( initialread == 0 ) {
+		subscribeMqttGraphSegments();
+	}
+});
 
 function getHookStatus(dataURL) {
 	// read dataURL filecontent and return it

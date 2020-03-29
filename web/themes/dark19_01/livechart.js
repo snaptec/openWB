@@ -76,7 +76,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-2',
 		} , {
 			label: 'Hausverbrauch',
-			borderColor: "rgba(150, 150, 150, 0.7)",
+			borderColor: "rgba(255,255,204,0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
@@ -214,7 +214,7 @@ function loadgraph() {
 						display: true,
 						scaleLabel: {
 		        			display: true,
-		        			labelString: 'Leistung [W]',
+		        			labelString: 'Leistung [kW]',
 							fontColor: "rgba(255, 255, 255, 0.82)"
 		      			},
 						gridLines: {
@@ -254,19 +254,37 @@ function loadgraph() {
 }  // end loadgraph
 
 function checkgraphload(){
-	if ( graphloaded == 1) {
+	if ( graphloaded == 1 ) {
        	myLine.destroy();
 		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0 ) {
-					graphloaded += 1;
-				} else {
-		       		myLine.destroy();
-				}
-				loadgraph();
-	 		}
+		return;
+	}
+	if ( typeof boolDisplayHouseConsumption === "boolean" &&
+		 typeof boolDisplayLoad1 === "boolean" &&
+		 typeof boolDisplayLp1Soc === "boolean" &&
+		 typeof boolDisplayLp2Soc === "boolean" &&
+		 typeof boolDisplayLoad2 === "boolean" &&
+	 	 typeof boolDisplayLp1 === "boolean" &&
+	 	 typeof boolDisplayLp2 === "boolean" &&
+	 	 typeof boolDisplayLp3 === "boolean" &&
+	 	 typeof boolDisplayLp4 === "boolean" &&
+	 	 typeof boolDisplayLp5 === "boolean" &&
+	 	 typeof boolDisplayLp6 === "boolean" &&
+	 	 typeof boolDisplayLp7 === "boolean" &&
+	 	 typeof boolDisplayLp8 === "boolean" &&
+	 	 typeof boolDisplayLpAll === "boolean" &&
+	 	 typeof boolDisplaySpeicherSoc === "boolean" &&
+	 	 typeof boolDisplaySpeicher === "boolean" &&
+	 	 typeof boolDisplayEvu === "boolean" &&
+	 	 typeof boolDisplayPv === "boolean" &&
+	 	 typeof boolDisplayLegend === "boolean" ) {
+		if ( initialread != 0 ) {
+			if ( graphloaded == 0 ) {
+				graphloaded = 1;
+			} else {
+   				myLine.destroy();
+			}
+			loadgraph();
 		}
 	}
 }
@@ -277,61 +295,61 @@ window.onload = function(){
 
 function forcegraphload() {
 	if ( graphloaded == 0 ) {
-		if ( !( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) ) {
+		if ( !(typeof boolDisplayHouseConsumption === "boolean") ) {
 			showhidedataset('boolDisplayHouseConsumption');
 		}
-		if ( !( boolDisplayLoad1 == true  ||  boolDisplayLoad1 == false) ) {
+		if ( !(typeof boolDisplayLoad1 === "boolean") ) {
 			showhidedataset('boolDisplayLoad1');
 		}
-		if ( !( boolDisplayLp1Soc == true  ||  boolDisplayLp1Soc == false) ) {
+		if ( !(typeof boolDisplayLp1Soc === "boolean") ) {
 			showhidedataset('boolDisplayLp1Soc');
 		}
-		if ( !( boolDisplayLp2Soc == true  ||  boolDisplayLp2Soc == false) ) {
+		if ( !(typeof boolDisplayLp2Soc === "boolean") ) {
 			showhidedataset('boolDisplayLp2Soc');
 		}
-		if ( !( boolDisplayLoad2 == true  ||  boolDisplayLoad2 == false) ) {
+		if ( !(typeof boolDisplayLoad2 === "boolean") ) {
 			showhidedataset('boolDisplayLoad2');
 		}
-		if ( !( boolDisplayLp1 == true  ||  boolDisplayLp1 == false) ) {
+		if ( !(typeof boolDisplayLp1 === "boolean") ) {
 			showhidedataset('boolDisplayLp1');
 		}
-		if ( !( boolDisplayLp2 == true  ||  boolDisplayLp2 == false) ) {
+		if ( !(typeof boolDisplayLp2 === "boolean") ) {
 			showhidedataset('boolDisplayLp2');
 		}
-		if ( !( boolDisplayLp3 == true  ||  boolDisplayLp3 == false) ) {
+		if ( !(typeof boolDisplayLp3 === "boolean") ) {
 			showhidedataset('boolDisplayLp3');
 		}
-		if ( !( boolDisplayLp4 == true  ||  boolDisplayLp4 == false) ) {
+		if ( !(typeof boolDisplayLp4 === "boolean") ) {
 			showhidedataset('boolDisplayLp4');
 		}
-		if ( !( boolDisplayLp5 == true  ||  boolDisplayLp5 == false) ) {
+		if ( !(typeof boolDisplayLp5 === "boolean") ) {
 			showhidedataset('boolDisplayLp5');
 		}
-		if ( !( boolDisplayLp6 == true  ||  boolDisplayLp6 == false) ) {
+		if ( !(typeof boolDisplayLp6 === "boolean") ) {
 			showhidedataset('boolDisplayLp6');
 		}
-		if ( !( boolDisplayLp7 == true  ||  boolDisplayLp7 == false) ) {
+		if ( !(typeof boolDisplayLp7 === "boolean") ) {
 			showhidedataset('boolDisplayLp7');
 		}
-		if ( !( boolDisplayLp8 == true  ||  boolDisplayLp8 == false) ) {
+		if ( !(typeof boolDisplayLp8 === "boolean") ) {
 			showhidedataset('boolDisplayLp8');
 		}
-		if ( !( boolDisplayLpAll == true  ||  boolDisplayLpAll == false)){
+		if ( !(typeof boolDisplayLpAll === "boolean") ) {
 			showhidedataset('boolDisplayLpAll');
 		}
-		if ( !( boolDisplaySpeicherSoc == true  ||  boolDisplaySpeicherSoc == false) ) {
+		if ( !(typeof boolDisplaySpeicherSoc === "boolean") ) {
 			showhidedataset('boolDisplaySpeicherSoc');
 		}
-		if ( !( boolDisplaySpeicher == true  ||  boolDisplaySpeicher == false) ) {
+		if ( !(typeof boolDisplaySpeicher === "boolean") ) {
 			showhidedataset('boolDisplaySpeicher');
 		}
-		if ( !( boolDisplayEvu == true  ||  boolDisplayEvu == false) ) {
+		if ( !(typeof boolDisplayEvu === "boolean") ) {
 			showhidedataset('boolDisplayEvu');
 		}
-		if ( !( boolDisplayPv == true  ||  boolDisplayPv == false) ) {
+		if ( !(typeof boolDisplayPv === "boolean") ) {
 			showhidedataset('boolDisplayPv');
 		}
-		if ( !( boolDisplayLegend == true  ||  boolDisplayLegend == false) ) {
+		if ( !(typeof boolDisplayLegend === "boolean") ) {
 			showhidedataset('boolDisplayLegend');
 		}
 		checkgraphload();
