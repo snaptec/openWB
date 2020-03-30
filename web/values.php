@@ -199,7 +199,7 @@ $isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
 for ( $lp = 4  ; $lp <= 8; $lp++) {
 	$isConfiguredLp[$lp] = ($settingsArray['lastmanagementlp'.$lp] == 1) ? 1 : 0;
 }
-$quantityLpConfigured = array_sum($isConfiguredLp);
+$countLpConfigured = array_sum($isConfiguredLp);
 
 // remove special characters from lp-names except space and underscore... maybe dangerous
 for ( $lp = 1  ; $lp <= 8; $lp++) {

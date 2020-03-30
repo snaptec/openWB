@@ -96,7 +96,7 @@
 		var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 		var speichervorhanden = <?php echo $speichervorhanden ?>;
 		var awattaraktiv = <?php echo $awattaraktivold?>;
-		var quant = <?php echo $quantityLpConfigured?>;
+		var countLpConfigured = <?php echo $countLpConfigured?>;
 	</script>
 
 	<div class="container">
@@ -230,7 +230,7 @@ EXTDEVICEDIVMIDDLE;
 				echo '        </div>'."\n\n";
 				echo '        ';
 			}
-			if ( $quantityLpConfigured > 1 ) {
+			if ( $countLpConfigured > 1 ) {
 				echo '        <div id="powerAllLpdiv" class="row justify-content-center">';
 				echo '            <div class="col-sm-5 chargePointInfoStyle">';
 				echo '                Gesamt-Ladeleistung: <span id="powerAllLpspan">lade Daten</span>';
