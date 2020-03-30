@@ -1234,8 +1234,9 @@ function putgraphtogether() {
 		}
 		csvData.pop();
 		// Retrived data from csv file content
-		var splittime = new Array();
+		var splittime = [];
 		getCol(csvData, 0).forEach(function(zeit){
+			console.log(zeit);
 			splittime.push(zeit.substring(0, zeit.length -3));
 		});
 		atime = splittime;
