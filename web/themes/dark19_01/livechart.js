@@ -198,7 +198,6 @@ function loadgraph() {
 			chartInstance.config.options.scales.yAxes[0].scaleLabel.fontSize = 12;
 			chartInstance.config.options.scales.yAxes[1].ticks.fontSize = 12;
 			chartInstance.config.options.scales.yAxes[1].scaleLabel.fontSize = 12;
-
 		} else {
 			setGraphLineBorderWidth(chartInstance, 1);
 			chartInstance.config.options.scales.xAxes[0].ticks.fontSize = 10;
