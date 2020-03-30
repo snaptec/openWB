@@ -5,20 +5,20 @@ function loadgraph() {
 			label: 'Lp1',
 			borderColor: "rgba(0, 0, 255, 0.7)",
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
-			borderWidth: 1,
+			borderWidth: 2,
 			hidden: boolDisplayLp1,
 			fill: false,
 			data: alp1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp2',
 			borderColor: "rgba(50, 30, 105, 0.7)",
 			backgroundColor: "rgba(50, 30, 105, 0.7)",
-			borderWidth: 1,
+			borderWidth: 2,
 			hidden: boolDisplayLp2,
 			fill: false,
 			data: alp2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Bezug',
 			borderColor: "rgba(255, 0, 0, 0.7)",
@@ -27,7 +27,7 @@ function loadgraph() {
 			fill: true,
 			data: abezug,
 			hidden: boolDisplayEvu,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV',
 			borderColor: 'green',
@@ -36,7 +36,7 @@ function loadgraph() {
 			hidden: boolDisplayPv,
 			borderWidth: 1,
 			data: apv,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicherleistung',
 			borderColor: 'orange',
@@ -45,7 +45,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: aspeicherl,
 			hidden: boolDisplaySpeicher,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
 			borderColor: 'orange',
@@ -53,9 +53,9 @@ function loadgraph() {
 			borderDash: [10,5],
 			hidden: boolDisplaySpeicherSoc,
 			fill: false,
-			borderWidth: 1,
+			borderWidth: 2,
 			data: aspeichersoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP1 SoC',
 			borderColor: "rgba(0, 0, 255, 0.5)",
@@ -64,7 +64,7 @@ function loadgraph() {
 			hidden: boolDisplayLp1Soc,
 			fill: false,
 			data: asoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP2 SoC',
 			borderColor: "rgba(50, 50, 55, 0.5)",
@@ -73,7 +73,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp2Soc,
 			data: asoc1,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Hausverbrauch',
 			borderColor: "rgba(255,255,204,0.7)",
@@ -82,7 +82,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayHouseConsumption,
 			data: ahausverbrauch,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -91,7 +91,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -100,7 +100,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: averbraucher2,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'LP Gesamt',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -109,7 +109,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alpa,
 			hidden: boolDisplayLpAll,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp3',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -118,7 +118,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp3,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp3,
+			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -127,7 +127,7 @@ function loadgraph() {
 			data: alp4,
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp4,
+			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -136,7 +136,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp5,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp5,
+			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -145,7 +145,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp6,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp6,
+			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -154,7 +154,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp7,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp7,
+			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -163,13 +163,60 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8,
+			hidden: boolDisplayLp8
 		}]
+	}
+
+	function getMaxTicksLimit(width) {
+		if ( width < 350 ) {
+			return 6;
+		} else if ( width < 470 ) {
+			return 10;
+		} else {
+			return 15;
+		}
+	}
+
+	function setGraphLineBorderWidth(theGraph, newWidth) {
+		// sets borderWidth attribute for all single lines without fill
+		for ( var index = 0; index < theGraph.config.data.datasets.length; index++) {
+			if ( !theGraph.config.data.datasets[index].fill ) {
+				theGraph.config.data.datasets[index].borderWidth = newWidth;
+			}
+		}
+	}
+
+	function doGraphResponsive(chartInstance) {
+		// changes graph resonding to screen size
+		// quantity of x-axis labels
+		chartInstance.config.options.scales.xAxes[0].ticks.maxTicksLimit = getMaxTicksLimit(chartInstance.width);
+		// other settings
+		if ( chartInstance.width > 390 ) {
+			setGraphLineBorderWidth(chartInstance, 2);
+			chartInstance.config.options.scales.xAxes[0].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[0].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[0].scaleLabel.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[1].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[1].scaleLabel.fontSize = 12;
+		} else {
+			setGraphLineBorderWidth(chartInstance, 1);
+			chartInstance.config.options.scales.xAxes[0].ticks.fontSize = 10;
+			chartInstance.config.options.scales.yAxes[0].ticks.fontSize = 9;
+			chartInstance.config.options.scales.yAxes[0].scaleLabel.fontSize = 10;
+			chartInstance.config.options.scales.yAxes[1].ticks.fontSize = 9;
+			chartInstance.config.options.scales.yAxes[1].scaleLabel.fontSize = 10;
+		}
+
+		chartInstance.update();
 	}
 
 	var ctx = document.getElementById('canvas').getContext('2d');
 
 	window.myLine = new Chart.Line(ctx, {
+		plugins: {
+        	afterInit: doGraphResponsive,
+        	resize: doGraphResponsive
+		},
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -202,7 +249,8 @@ function loadgraph() {
 				xAxes: [
 					{
          				ticks: {
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: "rgba(255, 255, 255, 0.82)",
+							maxTicksLimit: 15
          				}
       				}],
 				yAxes: [
