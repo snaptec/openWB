@@ -1274,18 +1274,7 @@
 						</select>
 					</div>
 
-					<div class="row">
-						Wenn Interaktiver Graph auf der Haupseite deaktiviert: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>
-						Empfehlung maximal 60 Minuten.<br>
-						Beim interaktiven Graph bis 120 Minuten
-					</div>
-					<div class="row">
-						<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
-						<select name="graphliveam" id="graphliveam">
-							<option <?php if($graphliveamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphliveamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
+
 					<!--
 					<div class="row">
 						<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
@@ -1295,13 +1284,6 @@
 						</select>
 					</div>
 					-->
-					<div class="row">
-						<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
-						<select name="grapham" id="grapham">
-							<option <?php if($graphamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
 					<div id="nonintdaily">
 					<!--
 						<div class="row">
