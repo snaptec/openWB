@@ -46,6 +46,9 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "solarworld_emanagerip=") !== false) {
+					list(, $solarworld_emanageripold) = explode("=", $line);
+				}
 				if(strpos($line, "femsip=") !== false) {
 					list(, $femsipold) = explode("=", $line);
 				}
@@ -3410,6 +3413,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarword">Solarworld</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3481,6 +3485,15 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP. IP Adresse des Fenecon FEMS.
+						</div>
+					</div>
+					<div id="wattbezugsolarworld">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="femsip">Solarworld IP:</label></b>
+							<input type="text" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo $solarworld_emanageripold ?>">
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. IP Adresse des Solarworld eManager.
 						</div>
 					</div>
 
@@ -3854,6 +3867,7 @@
 							$('#wattbezugnone').hide();
 							$('#wattbezughttp').hide();
 							$('#wattbezugsma').hide();
+							$('#wattbezugsolarworld').hide();
 							$('#wattbezugfronius').hide();
 							$('#wattbezugjson').hide();
 							$('#wattbezugmpm3pm').hide();
@@ -3884,6 +3898,9 @@
 							}
 							if($('#wattbezugmodul').val() == 'bezug_fems') {
 								$('#wattbezugfems').show(); 
+							}
+							if($('#wattbezugmodul').val() == 'bezug_solarworld') {
+								$('#wattbezugsolarworld').show(); 
 							}
 
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
@@ -4015,7 +4032,7 @@
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
 							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
 							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">Fenecon FEMS</option>
-
+							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 						</select>
 					</div>
 
@@ -4037,6 +4054,11 @@
 					<div id="pvfems">
 						<div class="row">
 							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
+						</div>
+					</div>
+					<div id="pvsolarworld">
+						<div class="row">
+							Konfiguration im zugehörigen EVU Modul des Solarworld erforderlich.
 						</div>
 					</div>
 
@@ -4453,9 +4475,13 @@
 							$('#pvmqtt').hide();
 							$('#pvsunways').hide();
 							$('#pvfems').hide();
+							$('#pvsolarworld').hide();
 
 							if($('#pvwattmodul').val() == 'wr_fems') {
 								$('#pvfems').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_solarworld') {
+								$('#pvsolarworld').show();
 							}
 
 							if($('#pvwattmodul').val() == 'wr_sunways') {
