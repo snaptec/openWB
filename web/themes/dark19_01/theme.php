@@ -81,26 +81,6 @@
 		}
 	</script>
 
-	<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
-	<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
-	<input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />
-	<input hidden name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold ; ?>" />
-	<input hidden name="lademlp2stat" id="lademlp2stat" value="<?php echo $lademstats1old ; ?>" />
-	<input hidden name="lademlp3stat" id="lademlp3stat" value="<?php echo $lademstats2old ; ?>" />
-	<input hidden name="evuglaettungakt" id="evuglaettungakt" value="<?php echo $evuglaettungaktold ; ?>" />
-	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>" />
-	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>" />
-	<input hidden name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo $nlakt_nurpvold ; ?>" />
-	<input hidden name="nlakt_sofort" id="nlakt_sofort" value="<?php echo $nlakt_sofortold ; ?>" />
-	<input hidden name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold ; ?>" />
-	<input hidden name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold ; ?>" />
-	<input hidden name="lademodus" id="lademodus" value="<?php echo $lademodusold ; ?>" />
-	<input hidden name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo $hausverbrauchstatold ; ?>" />
-	<input hidden name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold ; ?>" />
-	<input hidden name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old ; ?>" />
-	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
-	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
-
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js//bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
@@ -111,13 +91,12 @@
 		var hook1_aktiv = <?php echo $hook1_aktivold ?>;
 		var hook2_aktiv = <?php echo $hook2_aktivold ?>;
 		var hook3_aktiv = <?php echo $hook3_aktivold ?>;
-		var lastmanagements2 = <?php echo $lastmanagements2old ?>;
-		var lastmanagement = <?php echo $lastmanagementold ?>;
 		var soc1vorhanden = <?php echo $soc1vorhanden ?>;
 		var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
 		var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
 		var speichervorhanden = <?php echo $speichervorhanden ?>;
 		var awattaraktiv = <?php echo $awattaraktivold?>;
+		var quant = <?php echo $quantityLpConfigured?>;
 	</script>
 
 	<div class="container">
@@ -217,28 +196,33 @@ EXTDEVICEDIVMIDDLE;
 		<!-- chargepoint info data -->
 		<?php
 			// generate html code dynamically for all charging points
-			for($i=1; $i <= 8; $i++) {
+			for( $i = 1; $i <= 8; $i++) {
+				if ( $isConfiguredLp[$i] == 0 ) {
+					continue;  // skip if lp not configured
+				}
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle" style="display: none;">'."\n";
+				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle">'."\n";
 				echo '            <div class="col-4">'."\n";
 				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
 				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
-				echo '                    <span class="nameLp'.$i.'"></span>'."\n";
+				echo '                    <span class="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
 				echo '                <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
-				echo '                <span class="fa" id="zielladenaktivlp'.$i.'div"></span>'."\n";
+				if ( $zielladenaktivlp1old == 1 ) {
+				echo '                <span class="fa fa-flag-checkered"></span>'."\n";
+				}
 				echo '                <span class="fa" id="nachtladenaktivlp'.$i.'div"></span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3">'."\n";
-				echo '                <span id="actualPowerLp'.$i.'div"></span><span id="targetCurrentLp'.$i.'div"></span>'."\n";
+				echo '                <span id="actualPowerLp'.$i.'div">lade Daten</span><span id="targetCurrentLp'.$i.'div"></span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3 text-center">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'div"></span>'."\n";
+				echo '                <span id="energyChargedLp'.$i.'div">lade Daten</span>'."\n";
 				echo '            </div>'."\n";
 				// standard: soc not configured for charging point
 				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2">'."\n";
-				echo '                --'."\n";
+				echo '              --'."\n";
 				echo '            </div>'."\n";
 				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2" style="display: none;">'."\n";
 				echo '                <span id="socLp'.$i.'"></span>'."\n";
@@ -246,13 +230,14 @@ EXTDEVICEDIVMIDDLE;
 				echo '        </div>'."\n\n";
 				echo '        ';
 			}
+			if ( $quantityLpConfigured > 1 ) {
+				echo '        <div id="powerAllLpdiv" class="row justify-content-center">';
+				echo '            <div class="col-sm-5 chargePointInfoStyle">';
+				echo '                Gesamt-Ladeleistung: <span id="powerAllLpspan">lade Daten</span>';
+				echo '            </div>';
+				echo '        </div>';
+			}
 		?>
-
-		<div id="powerAllLpdiv" class="row justify-content-center" style="display: none;">
-			<div class="col-sm-5 chargePointInfoStyle">
-				Gesamt-Ladeleistung: <span id="powerAllLpspan"></span>
-			</div>
-		</div>
 
 		<hr color="white">
 
@@ -267,34 +252,34 @@ EXTDEVICEDIVMIDDLE;
 		<!-- and change to appropriate button layout -->
 		<div class="row no-gutters justify-content-center">
 			<div class="col-sm-5 py-1">
-				<button id="sofortBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="0">Sofortladen</button>
+				<button id="sofortBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle chargeModeBtn" chargeMode="0">Sofortladen</button>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp
 			</div>
 			<div class="col-sm-5 py-1">
-				<button id="minUndPvBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="1">Min + PV</button>
+				<button id="minUndPvBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle chargeModeBtn" chargeMode="1">Min + PV</button>
 			</div>
 		</div>
 		<div class="row no-gutters justify-content-center">
 			<div class="col-sm-4 py-1">
-				<button id="standbyBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="4">Standby</button>
+				<button id="standbyBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle chargeModeBtn" chargeMode="4">Standby</button>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp
 			</div>
 			<div class="col-sm-2 py-1">
-				<button id="stopBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="3">Stop</button>
+				<button id="stopBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle chargeModeBtn" chargeMode="3">Stop</button>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp
 			</div>
 			<div class="col-sm-4 order-first order-sm-last py-1">
-				<button id="pvBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="2">PV</button>
+				<button id="pvBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle chargeModeBtn"  chargeMode="2">PV</button>
 			</div>
 		</div>
 
-		<div id="speicherpvuidiv" class="row no-gutters justify-content-center">
+		<div id="vorrangButtonDiv" class="row no-gutters justify-content-center" style="display: none;" value="<?php echo trim($speicherpvuiold); ?>">
 			<div class="col-sm-4 py-1">
 				<?php
 					if ($speicherpveinbeziehenold == 0) {
@@ -306,7 +291,11 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 		</div>
 
-		<hr color="white">
+		<div class="row justify-content-center">
+			<div class="col-12">
+				<hr color="white">
+			</div>
+		</div>
 
 <!-- old code, not optimized for mqtt -->
 <!-- will be replaced once mqtt is fully functional -->
@@ -319,10 +308,10 @@ EXTDEVICEDIVMIDDLE;
 			<div class="col-4">
 				LP1 <span class="nameLp1"></span>
 			</div>
-			<div  id="ladepunkts11div" class="col-4">
+			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
 				LP2 <span class="nameLp2"></span>
 			</div>
-			<div id="ladepunkts22div" class="col-4 ">
+			<div class="col-4 " <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
 				LP3 <span class="nameLp3"></span>
 			</div>
 		</div>
@@ -331,10 +320,10 @@ EXTDEVICEDIVMIDDLE;
 			<div class="col-4">
 				<span id="gelrlp1div"></span>
 			</div>
-			<div id="ladepunkts111div" class="col-4">
+			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
 				<span id="gelrlp2div"></span>
 			</div>
-			<div id="ladepunkts222div" class="col-4">
+			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
 				<span id="gelrlp3div"></span>
 			</div>
 		</div>
@@ -343,97 +332,89 @@ EXTDEVICEDIVMIDDLE;
 			<div class="col-4">
 				<span id="aktgeladen1div"></span>
 			</div>
-			<div id="ladepunkts1111div" class="col-4">
+			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
 				<span id="aktgeladen2div"></span>
 			</div>
-			<div id="ladepunkts2222div" class="col-4">
+			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
 				<span id="aktgeladen3div"></span>
 			</div>
 		</div>
 
 		<div id="targetChargingProgressDiv" style="display: none;">
 			<div class="row justify-content-center regularTextStyle">
-				<div class="col-4">
-					<div id="lademstatdiv">
-						<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
-					</div>
+				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
+					<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
 				</div>
-				<div id="ladepunkts11111div" class="col-4">
-					<div id="lademstats1div">
-						<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
-					</div>
+				<div class="col-4" <?php if($lademstats1old != 1) echo 'style="display: none;"' ?>>
+					<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 				</div>
-				<div id="ladepunkts22222div" class="col-4">
-					<div id="lademstats2div">
-						<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
-					</div>
+				<div class="col-4" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
+					<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 				</div>
 			</div>
 
 			<div class="row justify-content-center regularTextStyle">
-				<div class="col-4">
-					<div id="lademstat1div">
-						Restzeit <span id="restzeitlp1div"></span>
-					</div>
+				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
+					Restzeit <span id="restzeitlp1div"></span>
 				</div>
-				<div id="ladepunkts1111111div" class="col-4">
-					<div id="lademstats1div1">
-						Restzeit <span id="restzeitlp2div"></span>
-					</div>
+				<div class="col-4" <?php if($lademstats1old != 1) echo 'style="display: none;"' ?>>
+					Restzeit <span id="restzeitlp2div"></span>
 				</div>
-				<div id="ladepunkts2222222div" class="col-4">
-					<div id="lademstats2div1">
-						Restzeit <span id="restzeitlp3div"></span>
-					</div>
+				<div class="col-4" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
+					Restzeit <span id="restzeitlp3div"></span>
 				</div>
 			</div>
 		</div>
-
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortlmdiv" name="sofortll" action="./tools/sofortll.php" method="POST">
+	    <form id="sofortladenEinstellungenDiv" name="sofortll" action="./tools/sofortll.php" method="POST" style="display: none;">
 		    <div id="awattardiv" style="display: none;">
-			<hr color="white">
-			<div class="row justify-content-center">
-				<h3>Awattar</h3>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-sm-12" style="height: 150px; text-align: center;">
-					<canvas id="awattarcanvas"></canvas>
+				<div class="row justify-content-center">
+					<h3>Awattar</h3>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-sm-12" style="height: 150px; text-align: center;">
+						<canvas id="awattarcanvas"></canvas>
+					</div>
+				</div>
+				<div class="row justify-content-center" id="sliderawattardiv">
+					<div class="col-7">
+						<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
+					</div>
+					<div class="col-2 regularTextStyle">
+						<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span>Cent/kWh</label>
+					</div>
+					<script>
+						var aslider1 = document.getElementById("awattar1s");
+						var aoutput1 = document.getElementById("awattar1l");
+						aoutput1.innerHTML = aslider1.value;
+						aslider1.oninput = function() {
+							aoutput1.innerHTML = this.value;
+							AwattarMaxPriceClick();
+						}
+					</script>
 				</div>
 			</div>
-			<div class="row justify-content-center" id="sliderawattardiv">
-				<div class="col-7">
-					<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextStyle">
-					<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span>Cent/kWh</label>
-				</div>
-				<script>
-					var aslider1 = document.getElementById("awattar1s");
-					var aoutput1 = document.getElementById("awattar1l");
-					aoutput1.innerHTML = aslider1.value;
-					aslider1.oninput = function() {
-						aoutput1.innerHTML = this.value;
-						AwattarMaxPriceClick();
-					}
-				</script>
-			</div>
-			<hr color="white">
-		</div>
+
 			<div class="row justify-content-center">
-		            <h3>Sofortladen Ladeziel-Einstellungen</h3>
+				<div class="col-12">
+					<hr color="white">
+				</div>
+			</div>
+
+			<div class="row justify-content-center">
+		   		<h3>Sofortladen Ladeziel-Einstellungen</h3>
 		    </div>
 
 	        <div class="row justify-content-center">
                 <div class="col-4 regularTextStyle">
                     <label for="msmoduslp1"></label>
-                    <select type="text" name="msmoduslp1" id="msmoduslp1">
+                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp1" id="msmoduslp1">
                         <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
                         <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
                         <option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
-                    <span id="msmodusmlp1">
+                    <span id="msmodusmlp1" <?php if($msmoduslp1old != 1) echo 'style="display: none;"' ?>>
                         <br><br>
                         <label for="lademlp1">Lademenge</label>
                         <select type="text" name="lademlp1" id="lademlp1">
@@ -460,9 +441,10 @@ EXTDEVICEDIVMIDDLE;
                             <option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
                         </select> kWh
                         <br><br>
-                        <button onclick="rslp1()">Reset</button>
+                        <button class="resetTargetChargingBtn" lp="1">Reset</button>
                     </span>
-                    <span id="msmodusslp1"><br><br>
+                    <span id="msmodusslp1" <?php if($msmoduslp1old != 2) echo 'style="display: none;"' ?>>
+						<br><br>
                         <label for="sofortsoclp1">SoC</label>
                         <select type="text" name="sofortsoclp1" id="sofortsoclp1">
                         	<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
@@ -483,19 +465,19 @@ EXTDEVICEDIVMIDDLE;
                             <option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
                         </select> %
                     </span>
-                    <span id="msmodusnlp1">
+                    <span id="msmodusnlp1" <?php if($msmoduslp1old != 0) echo 'style="display: none;"' ?>>
                     	<br><br>
                     </span>
                 </div>
 
-				<div class="col-4 regularTextStyle" id="ladepunkts111111div">
+				<div class="col-4 regularTextStyle" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
                     <label for="msmoduslp2"></label>
-                    <select type="text" name="msmoduslp2" id="msmoduslp2">
+                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp2" id="msmoduslp2">
                     	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
                         <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
                         <option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
-					<div id="msmodusmlp2">
+					<div id="msmodusmlp2" <?php if($msmoduslp2old != 1) echo 'style="display: none;"' ?>>
 						<br>
 						<label for="lademlp2">Lademenge</label>
 						<select type="text" name="lademlp2" id="lademlp2">
@@ -522,9 +504,10 @@ EXTDEVICEDIVMIDDLE;
 							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 						<br><br>
-						<button onclick="rslp2()">Reset</button>
+						<button class="resetTargetChargingBtn" lp="2">Reset</button>
 					</div>
-					<span id="msmodusslp2"><br><br>
+					<span id="msmodusslp2" <?php if($msmoduslp2old != 2) echo 'style="display: none;"' ?>>
+						<br><br>
 						<label for="sofortsoclp1">SoC</label>
 						<select type="text" name="sofortsoclp2" id="sofortsoclp2">
 						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
@@ -545,18 +528,18 @@ EXTDEVICEDIVMIDDLE;
 							<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
 						</select> %
 					</span>
-                  	<span id="msmodusnlp2">
+                  	<span id="msmodusnlp2" <?php if($msmoduslp2old != 0) echo 'style="display: none;"' ?>>
 			        	<br><br>
 					</span>
                 </div>
 
-            	<div class="col-4 regularTextStyle" id="ladepunkts222222div">
-                    <label for="lademlp3check"></label>
-                    <select type="text" name="lademlp3check" id="lademlp3check">
+            	<div class="col-4 regularTextStyle" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
+                    <label for="msmoduslp3"></label>
+                    <select class="sofortladenLadezielSelektor" type="text" name="lademlp3check" id="msmoduslp3">
                     	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
                         <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
                     </select>
-					<span id="msmodusmlp3">
+					<span id="msmodusmlp3" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
 						<br><br>
 						<label for="lademlp3">Lademenge</label>
 						<select type="text" name="lademlp3" id="lademlp3">
@@ -583,14 +566,13 @@ EXTDEVICEDIVMIDDLE;
 							<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 						<br><br>
-						<button onclick="rslp3()">Reset</button>
+						<button class="resetTargetChargingBtn" lp="3">Reset</button>
 					</span>
-                    <span id="msmodusnlp3"></span>
+                    <span id="msmodusnlp3" <?php if($lademstats2old != 0) echo 'style="display: none;"' ?>></span>
 				</div>
 	  		</div>
-
 			<div class="row justify-content-center">
-				<div class="col-10">
+				<div class="col-12">
 					<hr color="white">
 				</div>
 			</div>
@@ -618,7 +600,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider2div">
+			<div class="row justify-content-center" id="slider2div" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s" class="custom-range">
 				</div>
@@ -636,7 +618,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider3div">
+			<div class="row justify-content-center" id="slider3div" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s" class="custom-range">
 				</div>
@@ -654,7 +636,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider4div">
+			<div class="row justify-content-center" id="slider4div" <?php if($isConfiguredLp[4] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s" class="custom-range">
 				</div>
@@ -672,7 +654,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider5div">
+			<div class="row justify-content-center" id="slider5div" <?php if($isConfiguredLp[5] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s" class="custom-range">
 				</div>
@@ -690,7 +672,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider6div">
+			<div class="row justify-content-center" id="slider6div" <?php if($isConfiguredLp[6] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s" class="custom-range">
 				</div>
@@ -708,7 +690,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider7div">
+			<div class="row justify-content-center" id="slider7div" <?php if($isConfiguredLp[7] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s" class="custom-range">
 				</div>
@@ -726,7 +708,7 @@ EXTDEVICEDIVMIDDLE;
 				</script>
 			</div>
 
-			<div class="row justify-content-center" id="slider8div">
+			<div class="row justify-content-center" id="slider8div" <?php if($isConfiguredLp[8] != 1) echo 'style="display: none;"' ?>>
 				<div class="col-7">
 					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s" class="custom-range">
 				</div>
@@ -787,7 +769,7 @@ EXTDEVICEDIVMIDDLE;
 				&nbsp
 			</div>
 			<div class="col-sm-4 py-1">
-				<button id="graphOptionsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle" onclick="GraphOptionsClick()">Graph Optionen</button>
+				<button id="graphOptionsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Graph Optionen</button>
 			</div>
 			<div class="d-none d-sm-block">
 				&nbsp
@@ -911,28 +893,12 @@ EXTDEVICEDIVMIDDLE;
 			<hr>
 			<div class="row">
 				<div class="col-sm-12">
-					<input type="button" value="Schließen" label="Schließen" onclick="off()"/>
+					<input id="closeGraphOptionsBtn" type="button" value="Schließen" label="Schließen"/>
 				</div>
 			</div>
 		</div>
 
 	</container>
-
-	<!-- some scripts -->
-	<script>
-		function GraphOptionsClick() {
-			document.getElementById("graphsettings").style.display = "block";
-		}
-
-		function off() {
-		  	document.getElementById("graphsettings").style.display = "none";
-		}
-
-		function chargeModeBtnClick(chargeMode) {
-	  		publish(chargeMode,"openWB/set/ChargeMode");
-	  		publish(chargeMode,"openWB/global/ChargeMode");
-  		}
-	</script>
 
 	<!-- load Chart.js library -->
 	<script src="js/Chart.bundle.js"></script>
@@ -941,11 +907,68 @@ EXTDEVICEDIVMIDDLE;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200330-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=1.2"></script>
-	<script src="themes/<?php echo $themeCookie ?>/livefunctions.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200330-a"></script>
+
+	<!-- some scripts -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('#graphOptionsBtn').click(function(event){
+				$("#graphsettings").show();
+			});
+
+			$('#closeGraphOptionsBtn').click(function(event){
+				$("#graphsettings").hide();
+			});
+
+			$('.resetTargetChargingBtn').click(function(event){
+				var lp = $(this).attr("lp");
+				$.ajax({
+			        type: "POST",
+			        url: './tools/resetlpladem.php',
+			        data:{action:'resetlp' + lp},
+			        success:function(html) {
+					}
+        		});
+    		});
+
+			$('.chargeModeBtn').click(function(event){
+			    // sets the charge mode depending on the button clicked
+				var chargeMode = $(this).attr("chargeMode")
+				publish(chargeMode, "openWB/set/ChargeMode");
+				publish(chargeMode, "openWB/global/ChargeMode");
+			});
+
+			$('.sofortladenLadezielSelektor').change(function(event){
+			    // switches the visibility of the settings-divs according to dropdown selection
+			    var selectorId = '#' + event.target.id;
+			    var divAusId = selectorId.slice(0, 8) + 'n' + selectorId.slice(8);
+			    var divSocId = selectorId.slice(0, 8) + 's' + selectorId.slice(8);
+			    var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
+			    switch ($(selectorId).val()) {
+			        case '0':
+			            $(divAusId).show();
+			            $(divSocId).hide();
+			            $(divMengeId).hide();
+			            break;
+			        case '1':
+			            $(divAusId).hide();
+			            $(divSocId).hide();
+			            $(divMengeId).show();
+			            break;
+			        case '2':
+			            $(divAusId).hide();
+			            $(divSocId).show();
+			            $(divMengeId).hide();
+			            break;
+			    }
+			});
+
+		});
+	</script>
 </body>
 
 </html>
