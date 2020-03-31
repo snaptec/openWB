@@ -62,7 +62,7 @@
 
 		<div class="row">
 			<div class="col gradient">
-				<h1>openWB Charge Controller</h1>
+				<h1 class="my-3">openWB Charge Controller</h1>
 			</div>
 		</div>
 
