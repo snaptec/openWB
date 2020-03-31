@@ -4891,5 +4891,12 @@
 			}
 		</script>
 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navModulkonfiguration').addClass('disabled');
+			});
+		</script>
+
 	</body>
 </html>
