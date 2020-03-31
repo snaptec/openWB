@@ -171,9 +171,11 @@ function loadgraph() {
 		if ( width < 350 ) {
 			return 6;
 		} else if ( width < 470 ) {
-			return 10;
+			return 9;
+		} else if ( width < 768 ) {
+			return 12;
 		} else {
-			return 15;
+			return 18;
 		}
 	}
 
