@@ -15,28 +15,28 @@
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings" data-toggle="dropdown">
-					Einstellungen
+						Einstellungen
 					</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="./settings/settings.php">Allgemein</a>
-						<a class="dropdown-item" href="./settings/pvconfig.php">PV-Ladeeinstellungen</a>
-						<a class="dropdown-item" href="./settings/smarthome.php">Smart Home</a>
-						<a class="dropdown-item" href="./settings/cloudconfig.php">openWB Cloud</a>
-						<a class="dropdown-item" href="./settings/mqtt.php">MQTT-Brücke</a>
-						<a class="dropdown-item" href="./settings/modulconfig.php">Modulkonfiguration</a>
+						<a class="dropdown-item" id="navAllgemein" href="./settings/settings.php">Allgemein</a>
+						<a class="dropdown-item" id="navPVLadeeinstellungen" href="./settings/pvconfig.php">PV-Ladeeinstellungen</a>
+						<a class="dropdown-item" id="navSmartHome" href="./settings/smarthome.php">Smart Home</a>
+						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
+						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
+						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal">Modulkonfiguration</a>
 					</div>
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="./settings/autoLock.php">Auto-Lock</a>
+					<a class="nav-link" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="./settings/setTheme.php">Theme</a>
+					<a class="nav-link" id="navSetTheme" href="./settings/setTheme.php">Theme</a>
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="./settings/misc.php">Verschiedenes</a>
+					<a class="nav-link" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 				</li>
 
 				<li class="nav-item dropdown">
@@ -44,11 +44,11 @@
 						System
 					</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
-						<a class="dropdown-item" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
-						<a class="dropdown-item" href="./settings/update.php">Update</a>
-						<a class="dropdown-item" href="./settings/debugging.php">Debugging</a>
+						<a class="dropdown-item" id="navBackup" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
+						<a class="dropdown-item" id="navWiederherstellen" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
+						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
+						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
+						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
 					</div>
 				</li>
 
@@ -61,12 +61,10 @@
 <div class="modal fade" id="backupConfirmationModal" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-
 			<!-- modal header -->
 			<div class="modal-header btn-blue">
 				<h4 class="modal-title text-light">Info</h4>
 			</div>
-
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
@@ -74,13 +72,11 @@
 					Fortfahren?
 				</p>
 			</div>
-
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
 				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/bckredirect.html'">Backup</button>
 				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
 			</div>
-
 		</div>
 	</div>
 </div>
@@ -89,12 +85,10 @@
 <div class="modal fade" id="restoreConfirmationModal" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-
 			<!-- modal header -->
 			<div class="modal-header btn-red">
 				<h4 class="modal-title text-light">Achtung</h4>
 			</div>
-
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
@@ -105,13 +99,11 @@
 					<span class="text-danger">Fahrzeuge sind vor der Wiederherstellung abzustecken!</span>
 				</p>
 			</div>
-
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
 				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/upload.html'">Wiederherstellen</button>
 				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
 			</div>
-
 		</div>
 	</div>
 </div>
@@ -120,25 +112,45 @@
 <div class="modal fade" id="rebootConfirmationModal" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-
 			<!-- modal header -->
 			<div class="modal-header btn-red">
 				<h4 class="modal-title text-light">Achtung</h4>
 			</div>
-
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
 					Soll die openWB wirklich neu gestartet werden?
 				</p>
 			</div>
-
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
 				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/reboot.html'">Reboot</button>
 				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
 			</div>
+		</div>
+	</div>
+</div>
 
+<!-- modal modulkonfig-confirmation window -->
+<div class="modal fade" id="modulconfigConfirmationModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- modal header -->
+			<div class="modal-header btn-red">
+				<h4 class="modal-title text-light">Achtung</h4>
+			</div>
+			<!-- modal body -->
+			<div class="modal-body text-center">
+				<p>
+					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig.<br>
+					Fortfahren?
+				</p>
+			</div>
+			<!-- modal footer -->
+			<div class="modal-footer d-flex justify-content-center">
+				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./settings/modulconfig.php'">Weiter</button>
+				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+			</div>
 		</div>
 	</div>
 </div>
