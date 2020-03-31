@@ -40,6 +40,7 @@
 	<!-- <link rel="apple-touch-startup-image" href="img/loader.gif"> -->
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
+
 	<!-- Bootstrap -->
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 	<!-- Normalize -->
@@ -83,7 +84,7 @@
 
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
-	<script src="js//bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -796,8 +797,10 @@ EXTDEVICEDIVMIDDLE;
 		<!-- Graph-Options with Popup-Window-Look -->
 		<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 			<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
-				<div class="row"><div class="col-sm-12">
-					Graph Sichtbarkeit:
+				<div class="row">
+					<div class="col-sm-12">
+						Graph Sichtbarkeit:
+					</div>
 				</div>
 			</div>
 			<div class="row col-sm-12" style="white-space: nowrap;">
@@ -898,7 +901,7 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 		</div>
 
-	</container>
+	</div>  <!-- end container -->
 
 	<!-- load Chart.js library -->
 	<script src="js/Chart.bundle.js"></script>
@@ -969,6 +972,7 @@ EXTDEVICEDIVMIDDLE;
 
 		});
 	</script>
+
 </body>
 
 </html>
