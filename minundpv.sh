@@ -16,12 +16,14 @@ minundpvlademodus(){
 			fi
 		fi
 	fi
-	if (( speichersoc >= speichersocminpv )); then
+	if (( speichersoc >= speichersochystminpv )); then
 		if (( ladestatus == 0 )); then
-			runs/set-current.sh $minimalampv all
-			echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
-			if [[ $debug == "1" ]]; then
-				echo "starte min + pv ladung mit $minimalampv"
+			if (( speichersoc >= speichersocminpv )); then
+				runs/set-current.sh $minimalampv all
+				echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
+				if [[ $debug == "1" ]]; then
+					echo "starte min + pv ladung mit $minimalampv"
+				fi
 			fi
 		else
 			if (( ladeleistung < 500 )); then

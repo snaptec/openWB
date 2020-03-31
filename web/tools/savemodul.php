@@ -16,8 +16,16 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'dacregisters1='.$_POST['dacregisters1']."\n";
 			$writeit = '1';
 			}
+			if(strpos($line, "solarworld_emanagerip=") !== false) {
+			$result .= 'solarworld_emanagerip='.$_POST['solarworld_emanagerip']."\n";
+			$writeit = '1';
+			}
 			if(strpos($line, "dacregister=") !== false) {
 			$result .= 'dacregister='.$_POST['dacregister']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "femsip=") !== false) {
+			$result .= 'femsip='.$_POST['femsip']."\n";
 			$writeit = '1';
 			}
 			if(strpos($line, "modbusevsesource=") !== false) {
@@ -1327,6 +1335,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'discovergypvid='.$_POST['discovergypvid']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "ksemip=") !== false) {
+                	$result .= 'ksemip='.$_POST[ksemip]."\n";
+                	$writeit = '1';
+        	}
 
 		if ( $writeit == '0') {
 			$result .= $line;

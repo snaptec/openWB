@@ -13,6 +13,10 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/rfidlist
+echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
@@ -45,8 +49,11 @@ echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp2
 echo 0 > /var/www/html/openWB/ramdisk/ladungaktivlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstat
 echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+echo 0 > /var/www/html/openWB/ramdisk/plugstats2
 echo 0 > /var/www/html/openWB/ramdisk/chargestat
 echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+echo 0 > /var/www/html/openWB/ramdisk/chargestats2
+echo 0 > /var/www/html/openWB/ramdisk/plugstats2
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 echo 0 > /var/www/html/openWB/ramdisk/plugstatlp4
@@ -486,6 +493,7 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp2
 echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
 echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
+echo 0 > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
@@ -502,6 +510,10 @@ sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
 if ! grep -Fq "hook1einschaltverz=" /var/www/html/openWB/openwb.conf
 then
   echo "hook1einschaltverz=20" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "hook2einschaltverz=" /var/www/html/openWB/openwb.conf
+then
+  echo "hook2einschaltverz=20" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "stopsocnotpluggedlp1=" /var/www/html/openWB/openwb.conf
 then
@@ -704,11 +716,18 @@ if ! grep -Fq "speichersocminpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichersocminpv=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speichersochystminpv=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speichersochystminpv=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "speicherwattnurpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speicherwattnurpv=1500" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "nurpvslowup=" /var/www/html/openWB/openwb.conf
+then
+	  echo "nurpvslowup=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "sdm120modbusllid1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllid1=10" >> /var/www/html/openWB/openwb.conf
@@ -2157,6 +2176,10 @@ if ! grep -Fq "discovergypvid=" /var/www/html/openWB/openwb.conf
 then
 	echo "discovergypvid=idesmeters" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "ksemip=" /var/www/html/openWB/openwb.conf
+then
+        echo "ksemip=ipdesmeters" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "mollp1moab=" /var/www/html/openWB/openwb.conf
 then
 	echo "mollp1moab=06:00" >> /var/www/html/openWB/openwb.conf
@@ -2391,6 +2414,18 @@ fi
 if ! grep -Fq "lastmmaxw=" /var/www/html/openWB/openwb.conf
 then
 	echo "lastmmaxw=44000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "slavemode=" /var/www/html/openWB/openwb.conf
+then
+	echo "slavemode=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "solarworld_emanagerip=" /var/www/html/openWB/openwb.conf
+then
+	echo "solarworld_emanagerip=192.192.192.192" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
+then
+	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null

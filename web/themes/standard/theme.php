@@ -6,8 +6,8 @@
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
-	<?php include ("values.php");
-	include '/var/www/html/openWB/web/themes/standard/navbar.php';
+	<?php
+	include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/values.php';
 	?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -87,25 +87,26 @@
 </head>
 
 <body>
-	<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
-	<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
-	<input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />
-	<input hidden name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold ; ?>" />
-	<input hidden name="lademlp2stat" id="lademlp2stat" value="<?php echo $lademstats1old ; ?>" />
-	<input hidden name="lademlp3stat" id="lademlp3stat" value="<?php echo $lademstats2old ; ?>" />
-	<input hidden name="evuglaettungakt" id="evuglaettungakt" value="<?php echo $evuglaettungaktold ; ?>" />
-	<input hidden name="nachtladenstate" id="nachtladenstate" value="<?php echo $nachtladenstate ; ?>" />
-	<input hidden name="nachtladenstates1" id="nachtladenstates1" value="<?php echo $nachtladenstates1 ; ?>" />
-	<input hidden name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo $nlakt_nurpvold ; ?>" />
-	<input hidden name="nlakt_sofort" id="nlakt_sofort" value="<?php echo $nlakt_sofortold ; ?>" />
-	<input hidden name="nlakt_minpv" id="nlakt_minpv" value="<?php echo $nlakt_minpvold ; ?>" />
-	<input hidden name="nlakt_standby" id="nlakt_standby" value="<?php echo $nlakt_standbyold ; ?>" />
-	<input hidden name="lademodus" id="lademodus" value="<?php echo $lademodusold ; ?>" />
-	<input hidden name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo $hausverbrauchstatold ; ?>" />
-	<input hidden name="speicherpvui" id="speicherpvui" value="<?php echo $speicherpvuiold ; ?>" />
-	<input hidden name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo $zielladenaktivlp1old ; ?>" />
-	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
-	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes/standard/navbar.php'; ?>
+	<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
+	<input type="hidden" name="lastmanagements2" id="lastmanagements2" value="<?php echo trim($lastmanagements2old); ?>" />
+	<input type="hidden" name="speicherstat" id="speicherstat" value="<?php echo trim($speicherstatold); ?>" />
+	<input type="hidden" name="lademlp1stat" id="lademlp1stat" value="<?php echo trim($lademstatold); ?>" />
+	<input type="hidden" name="lademlp2stat" id="lademlp2stat" value="<?php echo trim($lademstats1old); ?>" />
+	<input type="hidden" name="lademlp3stat" id="lademlp3stat" value="<?php echo trim($lademstats2old); ?>" />
+	<input type="hidden" name="evuglaettungakt" id="evuglaettungakt" value="<?php echo trim($evuglaettungaktold); ?>" />
+	<input type="hidden" name="nachtladenstate" id="nachtladenstate" value="<?php echo trim($nachtladenstate); ?>" />
+	<input type="hidden" name="nachtladenstates1" id="nachtladenstates1" value="<?php echo trim($nachtladenstates1); ?>" />
+	<input type="hidden" name="nlakt_nurpv" id="nlakt_nurpv" value="<?php echo trim($nlakt_nurpvold); ?>" />
+	<input type="hidden" name="nlakt_sofort" id="nlakt_sofort" value="<?php echo trim($nlakt_sofortold); ?>" />
+	<input type="hidden" name="nlakt_minpv" id="nlakt_minpv" value="<?php echo trim($nlakt_minpvold); ?>" />
+	<input type="hidden" name="nlakt_standby" id="nlakt_standby" value="<?php echo trim($nlakt_standbyold); ?>" />
+	<input type="hidden" name="lademodus" id="lademodus" value="<?php echo trim($lademodusold); ?>" />
+	<input type="hidden" name="hausverbrauchstat" id="hausverbrauchstat" value="<?php echo trim($hausverbrauchstatold); ?>" />
+	<input type="hidden" name="speicherpvui" id="speicherpvui" value="<?php echo trim($speicherpvuiold); ?>" />
+	<input type="hidden" name="zielladenaktivlp1" id="zielladenaktivlp1" value="<?php echo trim($zielladenaktivlp1old); ?>" />
+	<input type="hidden" name="sofortlm" id="sofortlm" value="<?php echo trim($lademodusold); ?>" />
+	<input type="hidden" name="heutegeladen" id="heutegeladen" value="<?php echo trim($heutegeladenold); ?>" />
 
 	<script>
 		var hook1_aktiv = <?php echo $hook1_aktivold ?>;

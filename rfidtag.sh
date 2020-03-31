@@ -34,6 +34,13 @@ if [[ $lasttag != "0" ]]; then
 	if [ $lasttag == $rfidlp2start1 ] || [ $lasttag == $rfidlp2start2 ] || [ $lasttag == $rfidlp2start3 ] ; then
 		mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
 	fi
+	rfidlist=$(<ramdisk/AllowedRfidsForLp1)
+	for i in $(echo $rfidlist | sed "s/,/ /g")
+	do
+		if [ $lasttag == $i ] ; then
+			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"
+		fi
+	done
 	echo $lasttag > ramdisk/rfidlasttag
 	echo 0 > ramdisk/readtag
 fi

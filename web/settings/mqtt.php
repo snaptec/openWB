@@ -45,16 +45,8 @@
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-
-			    if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-			    }
 			}
 
-			$settingspwsold = str_replace( "'", "", $settingspwold);
 			$lines = file('/etc/os-release');
 			$tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && empty(preg_grep('/VERSION_CODENAME=jessie/', $lines)) && empty(preg_grep('/VERSION_CODENAME=wheezy/', $lines));
 		?>
@@ -252,39 +244,13 @@
 			</div>
 		</footer>
 
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
-
-			if ( settingspwaktold == 1 ) {
-				passWord();
-			}
-
-			function passWord() {
-				var testV = 1;
-				var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
-
-				while (testV < 3) {
-					if (!pass1)
-						history.go(-1);
-					if (pass1 == settingspwold) {
-						break;
-					}
-					testV+=1;
-					var pass1 = prompt('Passwort falsch','Password');
-				}
-				if (pass1!="password" & testV == 3)
-					history.go(-1);
-				return " ";
-			}
-		</script>
-
 		<script type="text/javascript">
 			$(document).ready(function(){
 				// disable navbar entry for current page
 				$('#navMqttBruecke').addClass('disabled');
 			});
 		</script>
+
 
 
 	</body>

@@ -8,6 +8,12 @@ for v in "${maxll[@]}"; do
 	if (( v > maxllvar )); then maxllvar=$v; fi;
 done
 llalt=$maxllvar
+if (( llalt > minimalapv )); then
+	if (( llaltlp1 == minimalapv )); then
+		llalt=$minimalapv
+	fi
+fi
+
 if [[ $schieflastaktiv == "1" ]]; then
 	if [[ $u1p3paktiv == "1" ]]; then
 		u1p3pstat=$(<ramdisk/u1p3pstat)
@@ -153,22 +159,32 @@ else
 	fi
 	if (( uberschuss > schaltschwelle )); then
 		if (( llalt == maximalstromstaerke )); then
-			exit 0
+			if [[ $debug == "1" ]]; then
+				echo "llalt == maximalstromstaerke"
+			fi
+			#exit 0
 		fi
 		if [[ $pvbezugeinspeisung == "0" ]]; then
-			llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
-
+			if (( nurpvslowup == 1 )); then
+				llneu=$(( llalt + 1 ))
+			else
+				llneu=$(( llalt + ( uberschuss / 230 / anzahlphasen)))
+			fi
 		else
 			if (( llalt == minimalapv )); then
 				llneu=$(( llalt + 1 ))
 			else
-				llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+				if (( nurpvslowup == 1 )); then
+					llneu=$(( llalt + 1 ))
+				else
+					llneu=$(( llalt + ( (uberschuss - schaltschwelle) / 230 / anzahlphasen)))
+				fi
 			fi
 		fi
 		if (( llneu > maximalstromstaerke )); then
 			llneu=$maximalstromstaerke
 		fi
-		if (( llalt < minimalapv )); then
+		if (( llneu < minimalapv )); then
 			llneu=$minimalapv
 		fi
 		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then

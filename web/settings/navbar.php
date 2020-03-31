@@ -44,11 +44,13 @@
 						System
 					</a>
 					<div class="dropdown-menu">
+
 						<a class="dropdown-item" id="navBackup" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
 						<a class="dropdown-item" id="navWiederherstellen" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
 						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
 						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
+
 					</div>
 				</li>
 

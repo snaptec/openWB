@@ -75,6 +75,7 @@ if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 					export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
 				fi
+				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			fi
 			echo 1 > /var/www/html/openWB/ramdisk/plugstat
 			plugstat=1
@@ -90,7 +91,9 @@ if [[ $evsecon == "modbusevse" ]]; then
 			chargestat=0
 		fi
 	fi
-
+else
+	plugstat=$(<ramdisk/plugstat)
+	chargestat=$(<ramdisk/chargestat)
 fi
 if [[ $evsecon == "ipevse" ]]; then
 	evseplugstatelp1=$(sudo python runs/readipmodbus.py $evseiplp1 $evseidlp1 1002 1)
@@ -165,6 +168,10 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)	
+else
+	plugstatlp2=$(<ramdisk/plugstats1)
+	chargestatlp2=$(<ramdisk/chargestats1)
+
 fi
 if [[ $lastmanagements2 == "1" ]]; then
 	if [[ $evsecons2 == "ipevse" ]]; then
@@ -196,6 +203,9 @@ if [[ $lastmanagements2 == "1" ]]; then
                         echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
                 fi
         fi
+else
+	plugstatlp3=$(<ramdisk/plugstats2)
+	chargestatlp3=$(<ramdisk/chargestats2)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $evseconlp4 == "ipevse" ]]; then
@@ -295,6 +305,7 @@ if [ -z "$lademodus" ] ; then
 	lademodus=$bootmodus
 fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
+llaltlp1=$llalt
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=$(modules/$pvwattmodul/main.sh || true)
@@ -309,6 +320,7 @@ fi
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speicherleistung=$(echo $speicherleistung | sed 's/\..*$//')
 	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
 	speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 	speichervorhanden="1"
@@ -545,19 +557,21 @@ if [[ $wattbezugmodul != "none" ]]; then
 	fi
 	#evu glaettung
 	if (( evuglaettungakt == 1 )); then
-		ganzahl=$(( evuglaettung / 10 ))
-		for ((i=ganzahl;i>=1;i--)); do
-			i2=$(( i + 1 ))
-			cp ramdisk/glaettung$i ramdisk/glaettung$i2
-		done
-		echo $wattbezug > ramdisk/glaettung1
-		for ((i=1;i<=ganzahl;i++)); do
-			glaettung=$(<ramdisk/glaettung$i)
-			glaettungw=$(( glaettung + glaettungw))
-		done
-		glaettungfinal=$((glaettungw / ganzahl))
-		echo $glaettungfinal > ramdisk/glattwattbezug
-		wattbezug=$glaettungfinal
+		if (( evuglaettung > 20 )); then
+			ganzahl=$(( evuglaettung / 10 ))
+			for ((i=ganzahl;i>=1;i--)); do
+				i2=$(( i + 1 ))
+				cp ramdisk/glaettung$i ramdisk/glaettung$i2
+			done
+			echo $wattbezug > ramdisk/glaettung1
+			for ((i=1;i<=ganzahl;i++)); do
+				glaettung=$(<ramdisk/glaettung$i)
+				glaettungw=$(( glaettung + glaettungw))
+			done
+			glaettungfinal=$((glaettungw / ganzahl))
+			echo $glaettungfinal > ramdisk/glattwattbezug
+			wattbezug=$glaettungfinal
+		fi
 	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)

@@ -46,13 +46,6 @@
 				if(strpos($line, "speicherpvui=") !== false) {
 					list(, $speicherpvuiold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
-
 				if(strpos($line, "speichermaxwatt=") !== false) {
 					list(, $speichermaxwattold) = explode("=", $line);
 				}
@@ -139,6 +132,9 @@
 				}
 				if(strpos($line, "speichersocminpv=") !== false) {
 					list(, $speichersocminpvold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "speichersochystminpv=") !== false) {
+					list(, $speichersochystminpvold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "speicherwattnurpv=") !== false) {
 					list(, $speicherwattnurpvold) = explode("=", $line, 2);
@@ -446,11 +442,18 @@
 								Im "Min + PV" Modus wird die Ladung erst gestartet, wenn der SoC über dem eingestellten Wert liegt.<br>
 								Zum Deaktivieren der Funktion den Wert auf 0 setzen.
 							</div>
+							<div class="row" style="background-color:#fcbe1e">
+								<b><label for="speichersochystminpv">Speicher Entlade SoC Min + PV Hysterese:</label></b>
+								<input type="text" name="speichersochystminpv" id="speichersochystminpv" value="<?php echo $speichersochystminpvold ?>">
+							</div>
+							<div class="row" style="background-color:#fcbe1e">
+								Die Hysterese legt fest ab welchem SoC bei Unterschreitung die Ladung wieder beendet wird.<br>
+								Zum Deaktivieren der Funktion den Wert auf 0 setzen.
+							</div>
 					</div>
-
-					<input hidden name="speicherpvrang" id="speicherpvrang" value="<?php echo $speichervorhanden ; ?>">
+					<input type="hidden" name="speicherpvrang" id="speicherpvrang" value="<?php echo trim($speichervorhanden); ?>">
 					<script>
-						$(function() {
+			$(function() {
 							if($('#speicherpvrang').val() == '1') {
 								$('#speicherpvrangdiv').show();
 							} else {
@@ -545,30 +548,6 @@
 			</div>
 		</footer>
 
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
-			if ( settingspwaktold == 1 ) {
-			passWord();
-			}
-			function passWord() {
-			var testV = 1;
-			var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
-
-			while (testV < 3) {
-				if (!pass1)
-					history.go(-1);
-				if (pass1 == settingspwold) {
-					break;
-				}
-				testV+=1;
-				var pass1 = prompt('Passwort falsch','Password');
-			}
-			if (pass1!="password" & testV == 3)
-				history.go(-1);
-			return " ";
-			}
-		</script>
 
 		<script type="text/javascript">
 			$(document).ready(function(){
