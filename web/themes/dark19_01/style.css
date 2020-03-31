@@ -298,7 +298,6 @@ h3 {
         font-size: 0.75rem;
     }
 
-
     .myButtonStyle {
           font-size: 1.0rem;
     }
@@ -338,6 +337,10 @@ h3 {
           font-size: 1.0rem;
     }
 
+    .dateTimeInfoStyle {
+        font-size: 0.85rem;
+    }
+
     .myButtonStyle {
           font-size: 1.2rem;
     }
@@ -374,9 +377,8 @@ h3 {
     }
 
     .dateTimeInfoStyle {
-        font-size: 0.8rem;
+        font-size: 1.0rem;
     }
-
 
     .myButtonStyle {
           font-size: 1.6rem;
@@ -406,7 +408,7 @@ h3 {
     }
 
     .versionTextStyle {
-          font-size: 0.8rem;
+          font-size: 1.0rem;
     }
 
     .pvInfoStyle, .extDeviceInfoStyle {
@@ -418,7 +420,7 @@ h3 {
     }
 
     .dateTimeInfoStyle {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
     }
 
     .myButtonStyle {
