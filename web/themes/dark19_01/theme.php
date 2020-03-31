@@ -68,8 +68,8 @@
 
 		<div class="row dateTimeInfoStyle">
 			<div class="col ">
-				<span id="timeSpan" style="float: right">.</span>
-				<span id="dateSpan" style="float: left">.</span>
+				<span id="timeSpan" style="float: right">&nbsp;</span>
+				<span id="dateSpan" style="float: left">&nbsp;</span>
 			</div>
 		</div>
 

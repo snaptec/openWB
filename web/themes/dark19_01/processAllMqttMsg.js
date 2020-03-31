@@ -701,8 +701,8 @@ function processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// called by handlevar
 	if ( mqttmsg == "openWB/system/Timestamp") {
 		var dateObject = new Date(mqttpayload * 1000);  // Unix timestamp to date-object
-		var time = ".";
-		var date = ".";
+		var time = "&nbsp;";
+		var date = "&nbsp;";
 		if ( dateObject instanceof Date && !isNaN(dateObject.valueOf()) ) {
 			// timestamp is valid date so process
 			var HH = String(dateObject.getHours()).padStart(2, '0');
