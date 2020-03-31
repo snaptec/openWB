@@ -142,7 +142,7 @@
 			<!-- modal body -->
 			<div class="modal-body text-center">
 				<p>
-					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig.<br>
+					Nach erfolgter Einrichtung der openWB ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung notwendig.<br>
 					Fortfahren?
 				</p>
 			</div>
