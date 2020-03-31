@@ -3413,7 +3413,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
-							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarword">Solarworld</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3489,7 +3489,7 @@
 					</div>
 					<div id="wattbezugsolarworld">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="femsip">Solarworld IP:</label></b>
+							<b><label for="solarworld_emanagerip">Solarworld IP:</label></b>
 							<input type="text" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo $solarworld_emanageripold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
