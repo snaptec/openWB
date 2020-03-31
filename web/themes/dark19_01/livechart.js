@@ -171,9 +171,11 @@ function loadgraph() {
 		if ( width < 350 ) {
 			return 6;
 		} else if ( width < 470 ) {
-			return 10;
+			return 9;
+		} else if ( width < 768 ) {
+			return 12;
 		} else {
-			return 15;
+			return 18;
 		}
 	}
 
@@ -269,9 +271,10 @@ function loadgraph() {
 							color: "rgba(255, 255, 255, 0.82)"
 						},
 						ticks: {
+							stepSize: 0.2,
+							maxTicksLimit: 10,
 							fontColor: "rgba(255, 255, 255, 0.82)"
 						}
-
 					},{
 						// horizontal line for values displayed on the right side (SoC)
 						position: 'right',
@@ -288,7 +291,7 @@ function loadgraph() {
 							color: "rgba(0, 0, 0, 0)",
 						},
 						ticks: {
-							min: 1,
+							min: 0,
 							suggestedMax: 100,
 							fontColor: "rgba(255, 255, 255, 0.82)"
 						}

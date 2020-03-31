@@ -34,12 +34,6 @@
 	</head>
 
 	<body>
-		<script>
-			var r=confirm("Nach einmaliger Einrichtung ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig. Fortfahren?");
-			if (r!=true) {
-				window.location.href = './index.php';
-			}
-		</script>
 
 		<?php
 			include '/var/www/html/openWB/web/settings/navbar.php';
@@ -1685,7 +1679,7 @@
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
 							<div class="row"><b>"openWB/set/lp/1/%Soc"</b></div>
-							<div class="row">Ladezustand in %, int, 0-100</div>		
+							<div class="row">Ladezustand in %, int, 0-100</div>
 					</div>
 					<div id="socmnone">
 					</div>
@@ -2364,7 +2358,7 @@
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
 							<div class="row"><b>"openWB/set/lp/2/%Soc"</b></div>
-							<div class="row">Ladezustand in %, int, 0-100</div>		
+							<div class="row">Ladezustand in %, int, 0-100</div>
 						</div>
 						<div id="socmnone1">
 						</div>
@@ -3433,7 +3427,7 @@
 						<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
 						<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 						<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
+						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>
 						<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
 						<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
 						<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
@@ -3466,7 +3460,7 @@
 					</div>
 					<div id="wattbezugpowerwall">
 						<div class="row">
-							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. 
+							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich.
 						</div>
 					</div>
 					<div id="wattbezugvictrongx">
@@ -3608,7 +3602,7 @@
 							<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
@@ -3616,7 +3610,7 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
-							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. 
+							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
@@ -3894,7 +3888,7 @@
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
-								$('#wattbezugsonneneco').show(); 
+								$('#wattbezugsonneneco').show();
 							}
 							if($('#wattbezugmodul').val() == 'bezug_fems') {
 								$('#wattbezugfems').show(); 
@@ -4044,7 +4038,7 @@
 							<div class="row"><b>"openWB/set/pv/W"</b></div>
 							<div class="row">PVleistung in Watt, int, negativ</div>
 							<div class="row"><b>"openWB/set/pv/WhCounter"</b></div>
-							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>	
+							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>
 					</div>
 					<div id="pvlgessv1">
 						<div class="row">
@@ -4410,7 +4404,7 @@
 							<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
@@ -4632,11 +4626,11 @@
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>			
+						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
 							<div class="row" style="background-color:#fcbe1e">
@@ -4950,5 +4944,14 @@
 			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
-	</body>
+
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navModulkonfiguration').addClass('disabled');
+			});
+		</script>
+
+
 </html>

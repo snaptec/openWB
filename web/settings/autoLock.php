@@ -82,7 +82,7 @@
 
 			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
 			// due to inconsitent variable naming need individual lines
-			$isConfiguredLp[1] = true;  // lp1 always configured
+			$isConfiguredLp[1] = 1;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
 			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
 			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
@@ -298,9 +298,12 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script>
+		<script type="text/javascript">
 
 			$(document).ready(function(){
+
+				// disable navbar entry for current page
+				$('#navAutolock').addClass('disabled');
 
 				function addClockpicker(clockpickerId, initialSetup) {
 					if ( !initialSetup ) {

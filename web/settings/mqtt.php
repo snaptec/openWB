@@ -243,5 +243,15 @@
 				  <small>Sie befinden sich hier: Einstellungen/MQTT-Brücke</small>
 			</div>
 		</footer>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navMqttBruecke').addClass('disabled');
+			});
+		</script>
+
+
+
 	</body>
 </html>

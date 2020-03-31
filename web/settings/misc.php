@@ -1343,5 +1343,15 @@
 				<small>Sie befinden sich hier: Verschiedenes</small>
 			</div>
 		</footer>
+
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navVerschiedenes').addClass('disabled');
+			});
+		</script>
+
+
 	</body>
 </html>
