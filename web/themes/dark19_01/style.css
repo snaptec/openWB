@@ -333,6 +333,10 @@ h3 {
           font-size: 1.0rem;
     }
 
+    .dateTimeInfoStyle {
+        font-size: 0.7rem;
+    }
+
     .myButtonStyle {
           font-size: 1.2rem;
     }
@@ -372,6 +376,11 @@ h3 {
           font-size: 1.4rem;
     }
 
+    .dateTimeInfoStyle {
+        font-size: 0.8rem;
+    }
+
+
     .myButtonStyle {
           font-size: 1.6rem;
     }
@@ -409,6 +418,10 @@ h3 {
 
     .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.8rem;
+    }
+
+    .dateTimeInfoStyle {
+        font-size: 0.9rem;
     }
 
     .myButtonStyle {
