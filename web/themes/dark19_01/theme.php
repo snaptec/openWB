@@ -62,7 +62,14 @@
 
 		<div class="row">
 			<div class="col gradient">
-				<h1>openWB Charge Controller</h1>
+				<h1 class="my-3">openWB Charge Controller</h1>
+			</div>
+		</div>
+
+		<div class="row dateTimeInfoStyle">
+			<div class="col ">
+				<span id="timeSpan" style="float: right">&nbsp;</span>
+				<span id="dateSpan" style="float: left">&nbsp;</span>
 			</div>
 		</div>
 
@@ -119,7 +126,7 @@ EXTDEVICEDIVMIDDLE;
 
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
-		<div class="row justify-content-center" id="thegraph">
+		<div class="row justify-content-center mb-2" id="thegraph">
 			<div class="col-sm-12" style="height: 350px; text-align: center;">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...

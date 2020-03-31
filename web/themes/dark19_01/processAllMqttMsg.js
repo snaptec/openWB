@@ -79,7 +79,7 @@ var thevalues = [
 	["openWB/graph/boolDisplayLegend", "#"],
 	["openWB/graph/boolDisplayLiveGraph", "#"],
 	["openWB/graph/boolDisplayPv", "#"],
-	["openWB/evu/W", "#bezugdiv"],
+	["openWB/evu/W", "#"],
 	["openWB/global/WHouseConsumption", "#"],
 	["openWB/pv/W", "#"],
 	["openWB/pv/DailyYieldKwh", "#"],
@@ -143,8 +143,6 @@ var thevalues = [
 	["openWB/lp/1/kmCharged", "#"],
 	["openWB/lp/2/kmCharged", "#"],
 	["openWB/lp/3/kmCharged", "#"],
-	// geglätteter Wert erst einmal nicht angezeigt
-	["openWB/evu/WAverage", "#bezugglattdiv"],
 	["openWB/lp/1/ChargeStatus", "#"],
 	["openWB/lp/2/ChargeStatus", "#"],
 	["openWB/lp/3/ChargeStatus", "#"],
@@ -175,22 +173,22 @@ var thevalues = [
 	["openWB/lp/6/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/7/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/8/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/1/ChargePointEnabled", "#lp1enabled"],
-	["openWB/lp/2/ChargePointEnabled", "#lp2enabled"],
-	["openWB/lp/3/ChargePointEnabled", "#lp3enabled"],
-	["openWB/lp/4/ChargePointEnabled", "#lp4enabled"],
-	["openWB/lp/5/ChargePointEnabled", "#lp5enabled"],
-	["openWB/lp/6/ChargePointEnabled", "#lp6enabled"],
-	["openWB/lp/7/ChargePointEnabled", "#lp7enabled"],
-	["openWB/lp/8/ChargePointEnabled", "#lp8enabled"],
-	["openWB/lp/1/strChargePointName", "#lp1name"],
-	["openWB/lp/2/strChargePointName", "#lp2name"],
-	["openWB/lp/3/strChargePointName", "#lp3name"],
-	["openWB/lp/4/strChargePointName", "#lp4name"],
-	["openWB/lp/5/strChargePointName", "#lp5name"],
-	["openWB/lp/6/strChargePointName", "#lp6name"],
-	["openWB/lp/7/strChargePointName", "#lp7name"],
-	["openWB/lp/8/strChargePointName", "#lp8name"],
+	["openWB/lp/1/ChargePointEnabled", "#"],
+	["openWB/lp/2/ChargePointEnabled", "#"],
+	["openWB/lp/3/ChargePointEnabled", "#"],
+	["openWB/lp/4/ChargePointEnabled", "#"],
+	["openWB/lp/5/ChargePointEnabled", "#"],
+	["openWB/lp/6/ChargePointEnabled", "#"],
+	["openWB/lp/7/ChargePointEnabled", "#"],
+	["openWB/lp/8/ChargePointEnabled", "#"],
+	["openWB/lp/1/strChargePointName", "#"],
+	["openWB/lp/2/strChargePointName", "#"],
+	["openWB/lp/3/strChargePointName", "#"],
+	["openWB/lp/4/strChargePointName", "#"],
+	["openWB/lp/5/strChargePointName", "#"],
+	["openWB/lp/6/strChargePointName", "#"],
+	["openWB/lp/7/strChargePointName", "#"],
+	["openWB/lp/8/strChargePointName", "#"],
 	["openWB/lp/1/AutolockConfigured", "#"],
 	["openWB/lp/2/AutolockConfigured", "#"],
 	["openWB/lp/3/AutolockConfigured", "#"],
@@ -214,7 +212,8 @@ var thevalues = [
 	["openWB/lp/5/ADirectModeAmps", "#"],
 	["openWB/lp/6/ADirectModeAmps", "#"],
 	["openWB/lp/7/ADirectModeAmps", "#"],
-	["openWB/lp/8/ADirectModeAmps", "#"]
+	["openWB/lp/8/ADirectModeAmps", "#"],
+	["openWB/system/Timestamp", "#"]
 ];
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
@@ -700,6 +699,25 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 function processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
+	if ( mqttmsg == "openWB/system/Timestamp") {
+		var dateObject = new Date(mqttpayload * 1000);  // Unix timestamp to date-object
+		var time = "&nbsp;";
+		var date = "&nbsp;";
+		if ( dateObject instanceof Date && !isNaN(dateObject.valueOf()) ) {
+			// timestamp is valid date so process
+			var HH = String(dateObject.getHours()).padStart(2, '0');
+			var MM = String(dateObject.getMinutes()).padStart(2, '0');
+			time = HH + ":"  + MM;
+			var dd = String(dateObject.getDate()).padStart(2, '0');  // format with leading zeros
+			var mm = String(dateObject.getMonth() + 1).padStart(2, '0'); //January is 0 so add +1!
+			var dayOfWeek = dateObject.toLocaleDateString('de-DE', { weekday: 'short'});
+			date = dayOfWeek + ", " + dd + "." + mm + "." + dateObject.getFullYear();
+		} else {
+			console.log('not valid');
+		}
+		$("#timeSpan").text(time);
+		$("#dateSpan").text(date);
+	}
 }
 
 function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {

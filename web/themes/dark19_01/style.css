@@ -183,6 +183,13 @@ h3 {
       text-align: center;
 }
 
+.dateTimeInfoStyle {
+      font-size: 0.68rem;
+      color: #515151;
+      background-color: #d0d7e6;
+      font-weight: bolder;
+}
+
 .chargePointInfoHeaderStyle {
       font-size: 0.65rem;
       color: #515151;
@@ -287,6 +294,10 @@ h3 {
           font-size: 0.75rem;
     }
 
+    .dateTimeInfoStyle {
+        font-size: 0.75rem;
+    }
+
     .myButtonStyle {
           font-size: 1.0rem;
     }
@@ -326,6 +337,10 @@ h3 {
           font-size: 1.0rem;
     }
 
+    .dateTimeInfoStyle {
+        font-size: 0.85rem;
+    }
+
     .myButtonStyle {
           font-size: 1.2rem;
     }
@@ -353,16 +368,16 @@ h3 {
           font-size: 1.4rem;
     }
 
-    .versionTextStyle {
-          font-size: 0.7rem;
-    }
-
     .pvInfoStyle, .extDeviceInfoStyle {
           font-size: 1.6rem;
     }
 
     .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.4rem;
+    }
+
+    .dateTimeInfoStyle {
+        font-size: 1.0rem;
     }
 
     .myButtonStyle {
@@ -393,7 +408,7 @@ h3 {
     }
 
     .versionTextStyle {
-          font-size: 0.8rem;
+          font-size: 1.0rem;
     }
 
     .pvInfoStyle, .extDeviceInfoStyle {
@@ -402,6 +417,10 @@ h3 {
 
     .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.8rem;
+    }
+
+    .dateTimeInfoStyle {
+        font-size: 1.1rem;
     }
 
     .myButtonStyle {
