@@ -137,7 +137,7 @@ EXTDEVICEDIVMIDDLE;
 		</div>
 
 		<!-- chargepoint info header -->
-		<div class="row chargePointInfoStyle px-0 py-1 py-md-0" style="font-weight: bolder;">
+		<div class="row chargePointInfoHeaderStyle px-0 py-1 py-md-0">
 			<div class="col-4">
 				Ladepunkt
 			</div>
@@ -164,7 +164,7 @@ EXTDEVICEDIVMIDDLE;
 				echo '            <div class="col-4 px-0">'."\n";
 				echo '                <span class="cursor-pointer lpEnableSpan" lp="'.$i.'">'."\n";
 				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="nameLp'.$i.'" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
+				echo '                    <span class="nameLp'.$i.'" id="nameLp'.$i.'" style="font-weight: bolder;">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
 				echo '                <span class="fa fa-plug" id="plugstatlp'.$i.'div" style="display: none;"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {

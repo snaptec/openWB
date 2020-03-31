@@ -754,10 +754,10 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
-			$("#nameLp" + index).css("color", "red");
+			$("#nameLp" + index).css("color", "#A30000");
 			$("#nameLp" + index).css("text-decoration", "line-through");
 		} else {
-			$("#nameLp" + index).css("color", "green");
+			$("#nameLp" + index).css("color", "#006515");
 			$("#nameLp" + index).css("text-decoration", "none");
 		}
 	}
