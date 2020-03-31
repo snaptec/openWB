@@ -183,9 +183,17 @@ h3 {
       text-align: center;
 }
 
+.chargePointInfoHeaderStyle {
+      font-size: 0.65rem;
+      color: #515151;
+      background-color: #d0d7e6;
+      text-align: center;
+      font-weight: bolder;
+}
+
 .chargePointInfoStyle {
       font-size: 0.65rem;
-      color: #576075;
+      color: #515151;
       background-color: #b6bcc9;
       text-align: center;
 }
@@ -275,7 +283,7 @@ h3 {
           font-size: 0.95rem;
     }
 
-    .chargePointInfoStyle {
+    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 0.75rem;
     }
 
@@ -314,7 +322,7 @@ h3 {
           font-size: 1.3rem;
     }
 
-    .chargePointInfoStyle {
+    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.0rem;
     }
 
@@ -353,7 +361,7 @@ h3 {
           font-size: 1.6rem;
     }
 
-    .chargePointInfoStyle {
+    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.4rem;
     }
 
@@ -392,7 +400,7 @@ h3 {
           font-size: 1.8rem;
     }
 
-    .chargePointInfoStyle {
+    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
           font-size: 1.8rem;
     }
 
