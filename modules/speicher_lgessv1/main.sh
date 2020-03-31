@@ -82,5 +82,6 @@ speicherekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_discharge' | sed 's/.
 #
 echo $speicherikwh > /var/www/html/openWB/ramdisk/speicherikwh
 echo $speicherekwh > /var/www/html/openWB/ramdisk/speicherekwh
+bat_user_soc=$(echo $bat_user_soc | sed 's/\..*$//')
 echo $bat_user_soc > /var/www/html/openWB/ramdisk/speichersoc
 echo $batconv_power > /var/www/html/openWB/ramdisk/speicherleistung
