@@ -50,7 +50,7 @@
 						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
 						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
-
+						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
 					</div>
 				</li>
 
