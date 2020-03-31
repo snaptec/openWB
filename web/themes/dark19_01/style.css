@@ -123,6 +123,12 @@ body {
   cursor: pointer;
 }
 
+.vaRow {
+    /* vertical alignment of content in rows */
+  display: flex;
+  align-items: center;
+}
+
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
 h1 {
@@ -179,8 +185,8 @@ h3 {
 
 .chargePointInfoStyle {
       font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.82);
-      background-color: #327eb8;
+      color: #576075;
+      background-color: #b6bcc9;
       text-align: center;
 }
 

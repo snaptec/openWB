@@ -1,5 +1,6 @@
 function loadawattargraph() {
-	if ( awattaraktiv == 1) {
+	if ( $("#awattardiv").attr("enabled") == "1" ) {
+		console.log('awattar visible');
 		var lineAwattarData = {
 			labels: awattartime,
 			datasets: [{
@@ -78,7 +79,6 @@ function loadawattargraph() {
 			}
 		});
 		$('#awattardiv').show();
-	} 
+	}
 
 }  // end loadgraph
-

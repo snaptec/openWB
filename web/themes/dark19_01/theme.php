@@ -51,54 +51,12 @@
     <!-- include special Theme style -->
 	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
 
-	<script>
-		registerPageVisibility()
-		function registerPageVisibility() {
-			let hidden;
-		        let visibilityChange;
-		        if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
-			        hidden = 'hidden';
-			        visibilityChange = 'visibilitychange';
-			} else if (typeof document.msHidden !== 'undefined') {
-				hidden = 'msHidden';
-			        visibilityChange = 'msvisibilitychange';
-			} else if (typeof document.webkitHidden !== 'undefined') {
-			        hidden = 'webkitHidden';
-			        visibilityChange = 'webkitvisibilitychange';
-			}
-			window.document.addEventListener(visibilityChange, () => {
-		        if (!document[hidden]) {
-					initialread = 0;
-					all1 = 0;
-					all2 = 0;
-					all3 = 0;
-					all4 = 0;
-					all5 = 0;
-					all6 = 0;
-					all7 = 0;
-					all8 = 0;
-				}
-			});
-		}
-	</script>
-
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-	<script>
-		var hook1_aktiv = <?php echo $hook1_aktivold ?>;
-		var hook2_aktiv = <?php echo $hook2_aktivold ?>;
-		var hook3_aktiv = <?php echo $hook3_aktivold ?>;
-		var soc1vorhanden = <?php echo $soc1vorhanden ?>;
-		var verbraucher1vorhanden = <?php echo $verbraucher1vorhanden ?>;
-		var verbraucher2vorhanden = <?php echo $verbraucher2vorhanden ?>;
-		var speichervorhanden = <?php echo $speichervorhanden ?>;
-		var awattaraktiv = <?php echo $awattaraktivold?>;
-		var countLpConfigured = <?php echo $countLpConfigured?>;
-	</script>
 
 	<div class="container">
 
@@ -179,7 +137,7 @@ EXTDEVICEDIVMIDDLE;
 		</div>
 
 		<!-- chargepoint info header -->
-		<div class="row no-gutter justify-content-center chargePointInfoStyle" style="font-weight: bolder;">
+		<div class="row chargePointInfoStyle px-0 py-1 py-md-0" style="font-weight: bolder;">
 			<div class="col-4">
 				Ladepunkt
 			</div>
@@ -203,29 +161,29 @@ EXTDEVICEDIVMIDDLE;
 				}
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle">'."\n";
-				echo '            <div class="col-4">'."\n";
-				echo '                <span class="cursor-pointer" onclick="lp'.$i.'enabledclick()">'."\n";
+				echo '            <div class="col-4 px-0">'."\n";
+				echo '                <span class="cursor-pointer lpEnableSpan" lp="'.$i.'">'."\n";
 				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="fa" id="lp'.$i.'enableddiv"></span>'."\n";
-				echo '                    <span class="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
+				echo '                    <span class="nameLp'.$i.'" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
-				echo '                <span class="fa" id="plugstatlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa fa-plug" id="plugstatlp'.$i.'div" style="display: none;"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {
 				echo '                <span class="fa fa-flag-checkered"></span>'."\n";
 				}
-				echo '                <span class="fa" id="nachtladenaktivlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa fa-moon" id="nachtladenaktivlp'.$i.'div" style="display: none;"></span>'."\n";
 				echo '            </div>'."\n";
-				echo '            <div class="col-3">'."\n";
-				echo '                <span id="actualPowerLp'.$i.'div">lade Daten</span><span id="targetCurrentLp'.$i.'div"></span>'."\n";
+				echo '            <div class="col-3 px-0">'."\n";
+				echo '                <span id="actualPowerLp'.$i.'span" style="display: none;"></span><span id="targetCurrentLp'.$i.'span" style="display: none;"></span>'."\n";
+				echo '                <span id="actualPowerTargetCurrentUnpluggedLp'.$i.'span">lade Daten</span>'."\n";
 				echo '            </div>'."\n";
-				echo '            <div class="col-3 text-center">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'div">lade Daten</span>'."\n";
+				echo '            <div class="col-3 px-0">'."\n";
+				echo '                <span id="energyChargedLp'.$i.'span">lade Daten</span>'."\n";
 				echo '            </div>'."\n";
 				// standard: soc not configured for charging point
-				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2">'."\n";
+				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2 px-0">'."\n";
 				echo '              --'."\n";
 				echo '            </div>'."\n";
-				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2" style="display: none;">'."\n";
+				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2 px-0" style="display: none;">'."\n";
 				echo '                <span id="socLp'.$i.'"></span>'."\n";
 				echo '            </div>'."\n";
 				echo '        </div>'."\n\n";
@@ -234,7 +192,7 @@ EXTDEVICEDIVMIDDLE;
 			if ( $countLpConfigured > 1 ) {
 				echo '        <div id="powerAllLpdiv" class="row justify-content-center">';
 				echo '            <div class="col-sm-5 chargePointInfoStyle">';
-				echo '                Gesamt-Ladeleistung: <span id="powerAllLpspan">lade Daten</span>';
+				echo '                Gesamt-Ladeleistung: <span id="powerAllLpspan" style="display: none;">lade Daten</span><span id="powerAllLpInactivespan">lade Daten</span>';
 				echo '            </div>';
 				echo '        </div>';
 			}
@@ -367,9 +325,11 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 		</div>
 
+		<hr color="white">
+
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungenDiv" name="sofortll" action="./tools/sofortll.php" method="POST" style="display: none;">
-		    <div id="awattardiv" style="display: none;">
+		    <div id="awattardiv" style="display: none;" enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
 				<div class="row justify-content-center">
 					<h3>Awattar</h3>
 				</div>
@@ -378,12 +338,12 @@ EXTDEVICEDIVMIDDLE;
 						<canvas id="awattarcanvas"></canvas>
 					</div>
 				</div>
-				<div class="row justify-content-center" id="sliderawattardiv">
-					<div class="col-7">
+				<div class="row vaRow justify-content-center" id="sliderawattardiv">
+					<div class="col-6 col-md-4">
 						<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
 					</div>
-					<div class="col-2 regularTextStyle">
-						<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span>Cent/kWh</label>
+					<div class="col-sm-5 col-md-6 regularTextStyle">
+						<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span> Cent/kWh</label>
 					</div>
 					<script>
 						var aslider1 = document.getElementById("awattar1s");
@@ -395,13 +355,14 @@ EXTDEVICEDIVMIDDLE;
 						}
 					</script>
 				</div>
-			</div>
 
-			<div class="row justify-content-center">
-				<div class="col-12">
-					<hr color="white">
+				<div class="row justify-content-center">
+					<div class="col-12">
+						<hr color="white">
+					</div>
 				</div>
-			</div>
+
+			</div> <!--/ awattardiv -->
 
 			<div class="row justify-content-center">
 		   		<h3>Sofortladen Ladeziel-Einstellungen</h3>
@@ -734,13 +695,12 @@ EXTDEVICEDIVMIDDLE;
 				</div>
 			</div>
 
+			<hr color="white">
 
 		</form>
 
 
 <!-- end old code-->
-
-		<hr color="white">
 
 		<!-- a few buttons at end of page for options -->
 		<!-- too many cols per row so bootstrap will linebreak -->
@@ -910,10 +870,10 @@ EXTDEVICEDIVMIDDLE;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200330-a"></script>
-	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=1.0"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200331-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200330-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200331-b"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -925,6 +885,15 @@ EXTDEVICEDIVMIDDLE;
 
 			$('#closeGraphOptionsBtn').click(function(event){
 				$("#graphsettings").hide();
+			});
+
+			$('.lpEnableSpan').click(function(event){
+				var lp = $(this).attr("lp");
+				if ( $("#nameLp" + lp).css("color") == "rgb(255, 0, 0)" ) {
+					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				} else {
+					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				}
 			});
 
 			$('.resetTargetChargingBtn').click(function(event){
@@ -968,6 +937,33 @@ EXTDEVICEDIVMIDDLE;
 			            $(divMengeId).hide();
 			            break;
 			    }
+			});
+
+			// register an event listener for changes in visibility
+			let hidden;
+			let visibilityChange;
+			if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
+				hidden = 'hidden';
+				visibilityChange = 'visibilitychange';
+			} else if (typeof document.msHidden !== 'undefined') {
+				hidden = 'msHidden';
+				visibilityChange = 'msvisibilitychange';
+			} else if (typeof document.webkitHidden !== 'undefined') {
+				hidden = 'webkitHidden';
+				visibilityChange = 'webkitvisibilitychange';
+			}
+			window.document.addEventListener(visibilityChange, () => {
+				if (!document[hidden]) {
+					initialread = 0;
+					all1 = 0;
+					all2 = 0;
+					all3 = 0;
+					all4 = 0;
+					all5 = 0;
+					all6 = 0;
+					all7 = 0;
+					all8 = 0;
+				}
 			});
 
 		});

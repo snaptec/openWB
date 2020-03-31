@@ -7,13 +7,6 @@
 var awattartime = [];
 var graphawattarprice;
 var doInterval;
-var do2Interval;
-var speichersoc;
-var lp1soc;
-var lp2soc;
-var lp1enabled;
-var lp2enabled;
-var lp3enabled;
 var initialread = 0;
 var graphloaded = 0;
 var boolDisplayHouseConsumption;
@@ -223,7 +216,7 @@ var thevalues = [
 	["openWB/lp/7/ADirectModeAmps", "#"],
 	["openWB/lp/8/ADirectModeAmps", "#"]
 ];
-var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function getCol(matrix, col){
@@ -261,7 +254,7 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
-			hidehaus = 'foo';
+			hidehaus = "foo";
 			document.getElementById("graphhausdiv").setAttribute("style", "color: green;");
 			graphhausdiv.classList.remove("fa-toggle-off");
 			graphhausdiv.classList.add("fa-toggle-on");
@@ -271,7 +264,7 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			document.getElementById("graphhausdiv").setAttribute("style", "color: red;");
 			graphhausdiv.classList.remove("fa-toggle-on");
 			graphhausdiv.classList.add("fa-toggle-off");
-			hidehaus = 'Hausverbrauch';
+			hidehaus = "Hausverbrauch";
 		}
 		checkgraphload();
 	}
@@ -292,13 +285,13 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLiveGraph" ) {
 		if ( mqttpayload == 0) {
-			$('#thegraph').hide();
+			$("#thegraph").hide();
 			boolDisplayLiveGraph = false;
 			document.getElementById("graphgraphdiv").setAttribute("style", "color: red;");
 			graphgraphdiv.classList.remove("fa-toggle-on");
 			graphgraphdiv.classList.add("fa-toggle-off");
 		} else {
-			$('#thegraph').show();
+			$("#thegraph").show();
 			boolDisplayLiveGraph = true;
 			document.getElementById("graphgraphdiv").setAttribute("style", "color: green;");
 			graphgraphdiv.classList.remove("fa-toggle-off");
@@ -308,14 +301,14 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
-			hideevu = 'foo';
+			hideevu = "foo";
 			document.getElementById("graphevudiv").setAttribute("style", "color: green;");
 			graphevudiv.classList.remove("fa-toggle-off");
 			graphevudiv.classList.add("fa-toggle-on");
 
 		} else {
 			boolDisplayEvu = true;
-			hideevu = 'Bezug';
+			hideevu = "Bezug";
 			document.getElementById("graphevudiv").setAttribute("style", "color: red;");
 			graphevudiv.classList.remove("fa-toggle-on");
 			graphevudiv.classList.add("fa-toggle-off");
@@ -326,13 +319,13 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayPv" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
-			hidepv = 'foo';
+			hidepv = "foo";
 			document.getElementById("graphpvdiv").setAttribute("style", "color: green;");
 			graphpvdiv.classList.remove("fa-toggle-off");
 			graphpvdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayPv = true;
-			hidepv = 'PV';
+			hidepv = "PV";
 			document.getElementById("graphpvdiv").setAttribute("style", "color: red;");
 			graphpvdiv.classList.remove("fa-toggle-on");
 			graphpvdiv.classList.add("fa-toggle-off");
@@ -346,31 +339,31 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
-			window['boolDisplayLp'+index] = false;
-			window['hidelp'+index] = 'foo';
+			window["boolDisplayLp"+index] = false;
+			window["hidelp"+index] = "foo";
 			document.getElementById("graphlp"+index+"div").setAttribute("style", "color: green;");
-			window['graphlp'+index+'div'].classList.remove('fa-toggle-off');
-			window['graphlp'+index+'div'].classList.add('fa-toggle-on');
+			window["graphlp"+index+"div"].classList.remove("fa-toggle-off");
+			window["graphlp"+index+"div"].classList.add("fa-toggle-on");
 		} else {
-			window['boolDisplayLp'+index] = true;
-			window['hidelp'+index] = 'Lp' + index;
+			window["boolDisplayLp"+index] = true;
+			window["hidelp"+index] = "Lp" + index;
 			document.getElementById("graphlp"+index+"div").setAttribute("style", "color: red;");
-			window['graphlp'+index+'div'].classList.remove('fa-toggle-on');
-			window['graphlp'+index+'div'].classList.add('fa-toggle-off');
+			window["graphlp"+index+"div"].classList.remove("fa-toggle-on");
+			window["graphlp"+index+"div"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayLpAll" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
-			hidelpa = 'foo';
+			hidelpa = "foo";
 			var element = document.getElementById("graphlpalldiv");
 			graphlpalldiv.classList.remove("fa-toggle-off");
 			graphlpalldiv.classList.add("fa-toggle-on");
 			element.setAttribute("style", "color: green;");
 		} else {
 			boolDisplayLpAll = true;
-			hidelpa = 'LP Gesamt';
+			hidelpa = "LP Gesamt";
 			var element = document.getElementById("graphlpalldiv");
 			graphlpalldiv.classList.remove("fa-toggle-on");
 			graphlpalldiv.classList.add("fa-toggle-off");
@@ -382,12 +375,12 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicher" ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
-			hidespeicher = 'foo';
+			hidespeicher = "foo";
 			document.getElementById("graphspeicherdiv").setAttribute("style", "color: green;");
 			graphspeicherdiv.classList.remove("fa-toggle-off");
 			graphspeicherdiv.classList.add("fa-toggle-on");
 		} else {
-			hidespeicher = 'Speicherleistung';
+			hidespeicher = "Speicherleistung";
 			boolDisplaySpeicher = true;
 			document.getElementById("graphspeicherdiv").setAttribute("style", "color: red;");
 			graphspeicherdiv.classList.remove("fa-toggle-on");
@@ -398,13 +391,13 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplaySpeicherSoc" ) {
 		if ( mqttpayload == 1) {
-			hidespeichersoc = 'foo';
+			hidespeichersoc = "foo";
 			boolDisplaySpeicherSoc = false;
 			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: green;");
 			graphspeichersocdiv.classList.remove("fa-toggle-off");
 			graphspeichersocdiv.classList.add("fa-toggle-on");
 		} else {
-			hidespeichersoc = 'Speicher SoC';
+			hidespeichersoc = "Speicher SoC";
 			boolDisplaySpeicherSoc = true;
 			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: red;");
 			graphspeichersocdiv.classList.remove("fa-toggle-on");
@@ -419,19 +412,19 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1) {
-			$('#socenabledlp'+index).show();
-			window['boolDisplayLp'+index+'Soc'] = false;
-			window['hidelp'+index+'soc'] = 'foo';
+			$("#socenabledlp"+index).show();
+			window["boolDisplayLp"+index+"Soc"] = false;
+			window["hidelp"+index+"soc"] = "foo";
 			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: green;");
-			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-off');
-			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-on');
+			window["graphlp"+index+"socdiv"].classList.remove("fa-toggle-off");
+			window["graphlp"+index+"socdiv"].classList.add("fa-toggle-on");
 		} else {
-			$('#socenabledlp'+index).hide();
-			window['boolDisplayLp'+index+'Soc'] = true;
-			window['hidelp'+index+'soc'] = 'LP'+index+' SoC';
+			$("#socenabledlp"+index).hide();
+			window["boolDisplayLp"+index+"Soc"] = true;
+			window["hidelp"+index+"soc"] = "LP"+index+" SoC";
 			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: red;");
-			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-on');
-			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-off');
+			window["graphlp"+index+"socdiv"].classList.remove("fa-toggle-on");
+			window["graphlp"+index+"socdiv"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -442,17 +435,17 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
-			window['hideload'+index] = 'foo';
-			window['boolDisplayLoad'+index] = false;
+			window["hideload"+index] = "foo";
+			window["boolDisplayLoad"+index] = false;
 			document.getElementById("graphload"+index+"div").setAttribute("style", "color: green;");
-			window['graphload'+index+'div'].classList.remove('fa-toggle-off');
-			window['graphload'+index+'div'].classList.add('fa-toggle-on');
+			window["graphload"+index+"div"].classList.remove("fa-toggle-off");
+			window["graphload"+index+"div"].classList.add("fa-toggle-on");
 		} else {
-			window['hideload'+index] = 'Verbraucher ' + index;
-			window['boolDisplayLoad'+index] = true;
+			window["hideload"+index] = "Verbraucher " + index;
+			window["boolDisplayLoad"+index] = true;
 			document.getElementById("graphload"+index+"div").setAttribute("style", "color: red;");
-			window['graphload'+index+'div'].classList.remove('fa-toggle-on');
-			window['graphload'+index+'div'].classList.add('fa-toggle-off');
+			window["graphload"+index+"div"].classList.remove("fa-toggle-on");
+			window["graphload"+index+"div"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -463,8 +456,8 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
-			window['all'+index+'p'] = mqttpayload;
-			window['all'+index] = 1;
+			window["all"+index+"p"] = mqttpayload;
+			window["all"+index] = 1;
 			putgraphtogether();
 		}
 	}
@@ -527,7 +520,7 @@ function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	    var wattbezug = mqttpayload;
 	    var intbezug = parseInt(wattbezug, 10);
 		if ( intbezug == 0 ) {
-			wattbezug = '0 W';
+			wattbezug = "0 W";
 		} else {
 		    if (intbezug > 0) {
 		    	if (intbezug > 999) {
@@ -572,13 +565,13 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		$("#powerAllLpspan").text(powerAllLp);
 	}
 	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
-		$('#lastregelungaktivdiv').text(mqttpayload);
+		$("#lastregelungaktivdiv").text(mqttpayload);
 		if ( mqttpayload.length >= 5 ) {
 			// if there is info-text in payload for topic, show the div
-			$('#lastregelungaktivdiv').show();
+			$("#lastregelungaktivdiv").show();
 		} else {
 			// if there is no text, hide the div
-			$('#lastregelungaktivdiv').hide();
+			$("#lastregelungaktivdiv").hide();
 		}
 	}
 	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
@@ -588,7 +581,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
-			  csvaData.push(rawacsv[i].split(','));
+			  csvaData.push(rawacsv[i].split(","));
 		}
 		awattartime = getCol(csvaData, 0);
 		graphawattarprice = getCol(csvaData, 1);
@@ -603,62 +596,62 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		switch (mqttpayload) {
 			case "0":
 				// mode sofort
-				$('#targetChargingProgressDiv').show();
-				$('#sofortladenEinstellungenDiv').show();
-				$('#sofortBtn').addClass("btn-green").removeClass("btn-red");
-				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
-				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
-				$('#vorrangButtonDiv').hide();
+				$("#targetChargingProgressDiv").show();
+				$("#sofortladenEinstellungenDiv").show();
+				$("#sofortBtn").addClass("btn-green").removeClass("btn-red");
+				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
+				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
+				$("#vorrangButtonDiv").hide();
 				break;
 			case "1":
 				// mode min+pv
-				$('#targetChargingProgressDiv').hide();
-				$('#sofortladenEinstellungenDiv').hide();
-				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
-				$('#minUndPvBtn').addClass("btn-green").removeClass("btn-red");
-				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
-				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
-				$('#vorrangButtonDiv').hide();
+				$("#targetChargingProgressDiv").hide();
+				$("#sofortladenEinstellungenDiv").hide();
+				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
+				$("#minUndPvBtn").addClass("btn-green").removeClass("btn-red");
+				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
+				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
+				$("#vorrangButtonDiv").hide();
 				break;
 			case "2":
 				// mode pv
-				$('#targetChargingProgressDiv').hide();
-				$('#sofortladenEinstellungenDiv').hide();
-				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
-				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#pvBtn').addClass("btn-green").removeClass("btn-red");
-				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
-				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
-				if ( $('#vorrangButtonDiv').attr('value') == '1' ) {
-					$('#vorrangButtonDiv').show();
+				$("#targetChargingProgressDiv").hide();
+				$("#sofortladenEinstellungenDiv").hide();
+				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
+				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#pvBtn").addClass("btn-green").removeClass("btn-red");
+				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
+				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
+				if ( $("#vorrangButtonDiv").attr("value") == "1" ) {
+					$("#vorrangButtonDiv").show();
 				} else {
-					$('#vorrangButtonDiv').hide();
+					$("#vorrangButtonDiv").hide();
 				}
 				break;
 			case "3":
 				// mode stop
-				$('#targetChargingProgressDiv').hide();
-				$('#sofortladenEinstellungenDiv').hide();
-				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
-				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#stopBtn').addClass("btn-green").removeClass("btn-red");
-				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
-				$('#vorrangButtonDiv').hide();
+				$("#targetChargingProgressDiv").hide();
+				$("#sofortladenEinstellungenDiv").hide();
+				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
+				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#stopBtn").addClass("btn-green").removeClass("btn-red");
+				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
+				$("#vorrangButtonDiv").hide();
 				break;
 			case "4":
 				// mode standby
-				$('#targetChargingProgressDiv').hide();
-				$('#sofortladenEinstellungenDiv').hide();
-				$('#sofortBtn').addClass("btn-red").removeClass("btn-green");
-				$('#minUndPvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
-				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
-				$('#standbyBtn').addClass("btn-green").removeClass("btn-red");
-				$('#vorrangButtonDiv').hide();
+				$("#targetChargingProgressDiv").hide();
+				$("#sofortladenEinstellungenDiv").hide();
+				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
+				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
+				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
+				$("#standbyBtn").addClass("btn-green").removeClass("btn-red");
+				$("#vorrangButtonDiv").hide();
 		}
 	}
 }
@@ -670,7 +663,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var speicherwatt = mqttpayload;
 		var intspeicherw = parseInt(speicherwatt, 10);
 		if ( intspeicherw == 0 ) {
-			speicherwatt = '0 W';
+			speicherwatt = "0 W";
 		} else {
 			if (intspeicherw > 0) {
 				if ( intspeicherw > 999 ) {
@@ -699,7 +692,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/housebattery/boolHouseBatteryConfigured" ) {
 		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show div
-			$('#speicherdiv').show();
+			$("#speicherdiv").show();
 		}
 	}
 }
@@ -729,15 +722,14 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			} else {
 				var pvwattStr = pvwatt + " W";
 			}
-
 		}
 		$("#pvdiv").text(pvwattStr);
 	} else if ( mqttmsg == "openWB/pv/DailyYieldKwh") {
 		var pvDailyYield = parseFloat(mqttpayload);
-		var pvDailyYieldStr = '';
+		var pvDailyYieldStr = "";
 		if ( pvDailyYield > 0 ) {
 			// display only if > 0
-			pvDailyYieldStr = ' (' + pvDailyYield.toFixed(2) + ' kWh)';
+			pvDailyYieldStr = " (" + pvDailyYield.toFixed(2) + " kWh)";
 		}
 		$("#pvdailyyielddiv").text(pvDailyYieldStr);
 	}
@@ -762,13 +754,11 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
-			window['lp'+index+'enabled'] = 0;
-			$('#lp'+index+'enableddiv').removeClass("fa-check").addClass("fa-times");
-			$('#lp'+index+'enableddiv').attr("style", "color: red;");
+			$("#nameLp" + index).css("color", "red");
+			$("#nameLp" + index).css("text-decoration", "line-through");
 		} else {
-			window['lp'+index+'enabled'] = 1;
-			$('#lp'+index+'enableddiv').removeClass("fa-times").addClass("fa-check");
-			$('#lp'+index+'enableddiv').attr("style", "color: lightgreen;");
+			$("#nameLp" + index).css("color", "green");
+			$("#nameLp" + index).css("text-decoration", "none");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
@@ -778,10 +768,10 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
 			// hide icon
-			$("#lp"+index+"AutolockConfiguredSpan").hide();
+			$("#lp" + index + "AutolockConfiguredSpan").hide();
 		} else {
 			// show icon
-			$("#lp"+index+"AutolockConfiguredSpan").show();
+			$("#lp" + index + "AutolockConfiguredSpan").show();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockstatus$/i ) ) {
@@ -795,7 +785,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// 3 = auto-unlock performed
 
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var element = "#lp"+index+"AutolockConfiguredSpan";  // element to manipulate
+		var element = "#lp" + index + "AutolockConfiguredSpan";  // element to manipulate
 		switch ( mqttpayload ) {
 			case "0":
 				// remove animation from span and set standard colored key icon
@@ -825,9 +815,9 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$('#nachtladenaktivlp'+index+'div').addClass("fa-moon");
+			$("#nachtladenaktivlp" + index + "div").show();
 		} else {
-			$('#nachtladenaktivlp'+index+'div').removeClass("fa-moon");
+			$("#nachtladenaktivlp" + index + "div").hide();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i ) ) {
@@ -835,8 +825,8 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$('#aktgeladen'+index+'div').text(mqttpayload+" kWh");
-		$('prog'+index).val(mqttpayload);
+		$("#aktgeladen" + index + "div").text(mqttpayload+" kWh");
+		$("prog" + index).val(mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/w$/i ) ) {
 		// actual charing power at respective charge point
@@ -851,7 +841,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		} else {
 		actualPower += " W";
 		}
-		$("#actualPowerLp"+index+"div").text(actualPower);
+		$("#actualPowerLp" + index + "span").text(actualPower);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhchargedsinceplugged$/i ) ) {
 		// energy charged since ev was plugged in
@@ -860,7 +850,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var energyCharged = parseFloat(mqttpayload, 10).toFixed(2) + " kWh";
-		$("#energyChargedLp"+index+"div").text(energyCharged);
+		$("#energyChargedLp" + index + "span").text(energyCharged);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kmcharged$/i ) ) {
 		// km charged at current charging segment
@@ -868,7 +858,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#gelrlp"+index+"div").text(mqttpayload+" km");
+		$("#gelrlp" + index + "div").text(mqttpayload + " km");
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
@@ -876,7 +866,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#restzeitlp"+index+"div").text(mqttpayload);
+		$("#restzeitlp" + index + "div").text(mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
 		// target current value at charge point
@@ -885,25 +875,39 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var targetCurrent = " / " + parseInt(mqttpayload, 10) + " A";
-		$("#targetCurrentLp"+index+"div").text(targetCurrent);
+		$("#targetCurrentLp" + index + "span").text(targetCurrent);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/boolplugstat"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		if ( $('#plugstatlp'+index+'div').length > 0 ) {
-			if ( mqttpayload == 1 ) {
-				$("#plugstatlp"+index+"div").addClass("fa-plug");
-			} else {
-				$("#plugstatlp"+index+"div").removeClass("fa-plug");
+		if ( mqttpayload == 1 ) {
+			$("#plugstatlp" + index + "div").show();
+			$("#actualPowerLp" + index + "span").show();
+			$("#targetCurrentLp" + index + "span").show();
+			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").hide();
+		} else {
+			$("#plugstatlp" + index + "div").css("color", "white").hide();
+			$("#actualPowerLp" + index + "span").hide();
+			$("#targetCurrentLp" + index + "span").hide();
+			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").text("- / -");
+			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").show();
+			var isAnyEvPlugged = false;
+			// show total values only if ev is/are plugged
+			for ( index = 1; index <= 8; index++) {
+				if ( $("#plugstatlp" + index + "div").is(':visible') ) {
+					isAnyEvPlugged = true;
+					break;
+				}
 			}
-		}
-		if ($('#carlp'+index).length > 0) {
-			if (mqttpayload == 1) {
-				$("#carlp"+index).attr("style", "color: green;");
+			if ( isAnyEvPlugged ) {
+				$("#powerAllLpspan").show();
+				$("#powerAllLpInactivespan").hide();
 			} else {
-				$("#carlp"+index).attr("style", "color: blue;");
+				$("#powerAllLpspan").hide();
+				$("#powerAllLpInactivespan").text("-");
+				$("#powerAllLpInactivespan").show();
 			}
 		}
 	}
@@ -912,19 +916,12 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		if ($('#plugstatlp'+index+'div').length > 0) {
-			if (mqttpayload == 1) {
-				$("#plugstatlp"+index+"div").attr("style", "color: #00FF00;");
-			} else {
-				$("#plugstatlp"+index+"div").attr("style", "color: white;");
-			}
-		}
-		if ($('#socstatlp'+index).length > 0) {
-			if (mqttpayload == 1) {
-				$("#socstatlp"+index).attr("style", "color: #00FF00;");
-			} else {
-				$("#socstatlp"+index).attr("style", "color: black;");
-			}
+		if ( mqttpayload == 1 ) {
+			$("#plugstatlp" + index + "div:visible").css("color", "green");
+			$("#socstatlp" + index).css("color", "green");
+		} else {
+			$("#plugstatlp" + index + "div:visible").css("color", "white");
+			$("#socstatlp" + index).css("color", "black");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
@@ -933,19 +930,19 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		window['lp'+index+'soc'] = mqttpayload;
-		$("#socLp"+index).text(mqttpayload+' %');
+		window["lp" + index + "soc"] = mqttpayload;
+		$("#socLp" + index).text(mqttpayload+" %");
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargestatus$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/chargestatus"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		if ($('#stationlp'+index).length > 0) {
+		if ($("#stationlp" + index).length > 0) {
 			if (mqttpayload == 1) {
-				$("#stationlp"+index).attr("style", "color: #00FF00;");
+				$("#stationlp" + index).css("color", "green");
 			} else {
-				$("#stationlp"+index).attr("style", "color: blue;");
+				$("#stationlp" + index).css("color", "blue");
 			}
 		}
 	}
@@ -954,8 +951,8 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#sofortlllp"+index+"s").val(mqttpayload);
-		$("sofortlllp"+index+"l").text(mqttpayload);
+		$("#sofortlllp" + index + "s").val(mqttpayload);
+		$("sofortlllp" + index + "l").text(mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/strchargepointname"
@@ -965,7 +962,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// fill span-tags from class=strChargePointName with respective payload-string
 		// and set the div visibility from hidden to visible
 		var ele = document.getElementsByClassName("nameLp"+index);
-	    for(var i=0; i<ele.length; i++) {
+	    for( var i=0; i<ele.length; i++ ) {
 	      	ele[i].textContent = mqttpayload;
 	    }
 	}
@@ -977,8 +974,8 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// change visibility of div
 		if (mqttpayload == 1) {
-			$('#socNotConfiguredLp'+index+'div').hide();
-			$('#socConfiguredLp'+index+'div').show();
+			$("#socNotConfiguredLp" + index + "div").hide();
+			$("#socConfiguredLp" + index + "div").show();
 		}
 	}
 }
@@ -1028,77 +1025,6 @@ function graphoptionclick() {
 	}
 }
 
-function lp1enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp1enabled == 0 ) {
-		publish("1","openWB/set/lp1/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp1/ChargePointEnabled");
-	}
-}
-
-function lp2enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp2enabled == 0 ) {
-		publish("1","openWB/set/lp2/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp2/ChargePointEnabled");
-	}
-}
-
-function lp3enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp3enabled == 0 ) {
-		publish("1","openWB/set/lp3/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp3/ChargePointEnabled");
-	}
-}
-
-function lp4enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp4enabled == 0 ) {
-		publish("1","openWB/set/lp4/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp4/ChargePointEnabled");
-	}
-}
-
-function lp5enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp5enabled == 0 ) {
-		publish("1","openWB/set/lp5/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp5/ChargePointEnabled");
-	}
-}
-
-function lp6enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp6enabled == 0 ) {
-		publish("1","openWB/set/lp6/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp6/ChargePointEnabled");
-	}
-}
-
-function lp7enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp7enabled == 0 ) {
-		publish("1","openWB/set/lp7/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp7/ChargePointEnabled");
-	}
-}
-
-function lp8enabledclick() {
-	publish("0","openWB/set/lp/1/AutolockStatus");
-	if ( lp8enabled == 0 ) {
-		publish("1","openWB/set/lp8/ChargePointEnabled");
-	} else {
-		publish("0","openWB/set/lp8/ChargePointEnabled");
-	}
-}
 function AwattarMaxPriceClick() {
 	publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
 }
@@ -1142,25 +1068,25 @@ function renewMQTTclick() {
 
 function subscribeMqttGraphSegments() {
 	for (var segments = 1; segments < 9; segments++) {
-		client.subscribe('openWB/graph/' + segments + 'alllivevalues', {qos: 0});
+		client.subscribe("openWB/graph/" + segments + "alllivevalues", {qos: 0});
 	}
 }
 
 function unsubscribeMqttGraphSegments() {
 	for (var segments = 1; segments < 9; segments++) {
-		client.unsubscribe('openWB/graph/' + segments + 'alllivevalues');
+		client.unsubscribe("openWB/graph/" + segments + "alllivevalues");
 	}
 }
 
 function putgraphtogether() {
 	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
-		alldata = alldata.replace(/^\s*[\n]/gm, '');
-		alldata = alldata.replace(/^\s*-[\n]/gm, '');
+		alldata = alldata.replace(/^\s*[\n]/gm, "");
+		alldata = alldata.replace(/^\s*-[\n]/gm, "");
 		var csvData = [];
 		var rawcsv = alldata.split(/\r?\n|\r/);
 		for (var i = 0; i < rawcsv.length; i++) {
-			  csvData.push(rawcsv[i].split(','));
+			  csvData.push(rawcsv[i].split(","));
 		}
 		csvData.pop();
 		// Retrived data from csv file content
