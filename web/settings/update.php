@@ -184,6 +184,9 @@
 
 			$(document).ready(function(){
 
+				// disable navbar entry for current page
+				$('#navUpdate').addClass('disabled');
+
 				function getVersion(dataURL) {
 					// read dataURL filecontent = releasetrain version and return it
 					return $.get(dataURL);

@@ -766,5 +766,13 @@
 			return " ";
 			}
 		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navSmartHome').addClass('disabled');
+			});
+		</script>
+
 	</body>
 </html>

@@ -310,7 +310,7 @@
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert einen Mindest-SoC-Wert (EV) bis zu welchem im "Nur PV" Modus immer geladen wird, auch, wenn keine PV Leistung zur Verfügung steht.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!  
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 
 					<div class="row" style="background-color:#befebe">
@@ -331,7 +331,7 @@
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert einen Maximal-SoC-Wert bis zu welchem im "Nur PV" Modus geladen wird.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! 
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
@@ -367,7 +367,7 @@
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert die Ladeleistung, wenn Mindest-SoC im "Nur PV Laden" Modus noch nicht erreicht ist.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! 
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 
 					<div class="row" style="background-color:#befebe">
@@ -569,5 +569,13 @@
 			return " ";
 			}
 		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navPVLadeeinstellungen').addClass('disabled');
+			});
+		</script>
+
 	</body>
 </html>

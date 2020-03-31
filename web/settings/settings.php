@@ -40,7 +40,7 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-			
+
 				if(strpos($line, "schieflastmaxa=") !== false) {
 					list(, $schieflastmaxaold) = explode("=", $line);
 				}
@@ -2209,6 +2209,13 @@
 					history.go(-1);
 				return " ";
 			}
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navAllgemein').addClass('disabled');
+			});
 		</script>
 
 	</body>

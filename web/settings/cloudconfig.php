@@ -40,7 +40,7 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				
+
 				if(strpos($line, "clouduser=") !== false) {
 					list(, $clouduserold) = explode("=", $line, 2);
 				}
@@ -80,7 +80,7 @@
 
 
 
-				
+
 		?>
 
 		<div role="main" class="container" style="margin-top:20px">
@@ -188,5 +188,13 @@
 			return " ";
 			}
 		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navOpenwbCloud').addClass('disabled');
+			});
+		</script>
+
 	</body>
 </html>

@@ -1383,6 +1383,7 @@
 				<small>Sie befinden sich hier: Verschiedenes</small>
 			</div>
 		</footer>
+
 		<script>
 			var settingspwaktold = <?php echo $settingspwaktold ?>;
 			var settingspwold = <?php echo $settingspwold ?>;
@@ -1409,5 +1410,13 @@
 				return " ";
 			}
 		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navVerschiedenes').addClass('disabled');
+			});
+		</script>
+
 	</body>
 </html>

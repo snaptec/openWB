@@ -92,7 +92,7 @@
 			</div>
 		</footer>
 
-		<script>
+		<script type="text/javascript">
 			function saveTheme() {
 				var selectedTheme = $('#themeName').text();  // get theme name from div
 				$.ajax({
@@ -120,6 +120,13 @@
 				var title = activeImg.attr('title');
 				if(title) $('#themeName').html('<h1>'+title+'</h1>');
 			}
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// disable navbar entry for current page
+				$('#navSetTheme').addClass('disabled');
+			});
 		</script>
 
 	</body>

@@ -298,9 +298,12 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script>
+		<script type="text/javascript">
 
 			$(document).ready(function(){
+
+				// disable navbar entry for current page
+				$('#navAutolock').addClass('disabled');
 
 				function addClockpicker(clockpickerId, initialSetup) {
 					if ( !initialSetup ) {

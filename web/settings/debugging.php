@@ -140,6 +140,9 @@
 
 			$(document).ready(function(){
 
+				// disable navbar entry for current page
+				$('#navDebugging').addClass('disabled');
+
 				$('textarea').on('change keyup paste', function() {
 					var length = $(this).val().length;
 					var length = 500-length;
