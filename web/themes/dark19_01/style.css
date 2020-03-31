@@ -183,6 +183,13 @@ h3 {
       text-align: center;
 }
 
+.dateTimeInfoStyle {
+      font-size: 0.65rem;
+      color: #515151;
+      background-color: #d0d7e6;
+      font-weight: bolder;
+}
+
 .chargePointInfoHeaderStyle {
       font-size: 0.65rem;
       color: #515151;

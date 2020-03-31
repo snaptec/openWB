@@ -66,6 +66,13 @@
 			</div>
 		</div>
 
+		<div class="row dateTimeInfoStyle">
+			<div class="col ">
+				<span id="timeSpan" style="float: right">.</span>
+				<span id="dateSpan" style="float: left">.</span>
+			</div>
+		</div>
+
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
 				PV: <span id="pvdiv"></span><span id="pvdailyyielddiv"></span>
