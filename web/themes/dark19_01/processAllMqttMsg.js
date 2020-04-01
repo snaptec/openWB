@@ -48,176 +48,176 @@ var all7p;
 var all8p;
 var hidehaus;
 var thevalues = [
-	["openWB/global/awattar/MaxPriceForCharging", "#"],
-	["openWB/global/awattar/pricelist", "#"],
-	["openWB/graph/lastlivevalues", "#"],
-	["openWB/graph/1alllivevalues", "#"],
-	["openWB/graph/2alllivevalues", "#"],
-	["openWB/graph/3alllivevalues", "#"],
-	["openWB/graph/4alllivevalues", "#"],
-	["openWB/graph/5alllivevalues", "#"],
-	["openWB/graph/6alllivevalues", "#"],
-	["openWB/graph/7alllivevalues", "#"],
-	["openWB/graph/8alllivevalues", "#"],
-	["openWB/graph/boolDisplayHouseConsumption", "#"],
-	["openWB/graph/boolDisplayLoad1", "#"],
-	["openWB/graph/boolDisplayLoad2", "#"],
-	["openWB/graph/boolDisplayLp1Soc", "#"],
-	["openWB/graph/boolDisplayLp2Soc", "#"],
-	["openWB/graph/boolDisplayLp1", "#"],
-	["openWB/graph/boolDisplayLp2", "#"],
-	["openWB/graph/boolDisplayLp3", "#"],
-	["openWB/graph/boolDisplayLp4", "#"],
-	["openWB/graph/boolDisplayLp5", "#"],
-	["openWB/graph/boolDisplayLp6", "#"],
-	["openWB/graph/boolDisplayLp7", "#"],
-	["openWB/graph/boolDisplayLp8", "#"],
-	["openWB/graph/boolDisplayLpAll", "#"],
-	["openWB/graph/boolDisplaySpeicherSoc", "#"],
-	["openWB/graph/boolDisplaySpeicher", "#"],
-	["openWB/graph/boolDisplayEvu", "#"],
-	["openWB/graph/boolDisplayLegend", "#"],
-	["openWB/graph/boolDisplayLiveGraph", "#"],
-	["openWB/graph/boolDisplayPv", "#"],
-	["openWB/evu/W", "#"],
-	["openWB/global/WHouseConsumption", "#"],
-	["openWB/pv/W", "#"],
-	["openWB/pv/DailyYieldKwh", "#"],
-	["openWB/lp/1/%Soc", "#"],
-	["openWB/lp/2/%Soc", "#"],
+	"openWB/global/awattar/MaxPriceForCharging",
+	"openWB/global/awattar/pricelist",
+	"openWB/graph/lastlivevalues",
+	"openWB/graph/1alllivevalues",
+	"openWB/graph/2alllivevalues",
+	"openWB/graph/3alllivevalues",
+	"openWB/graph/4alllivevalues",
+	"openWB/graph/5alllivevalues",
+	"openWB/graph/6alllivevalues",
+	"openWB/graph/7alllivevalues",
+	"openWB/graph/8alllivevalues",
+	"openWB/graph/boolDisplayHouseConsumption",
+	"openWB/graph/boolDisplayLoad1",
+	"openWB/graph/boolDisplayLoad2",
+	"openWB/graph/boolDisplayLp1Soc",
+	"openWB/graph/boolDisplayLp2Soc",
+	"openWB/graph/boolDisplayLp1",
+	"openWB/graph/boolDisplayLp2",
+	"openWB/graph/boolDisplayLp3",
+	"openWB/graph/boolDisplayLp4",
+	"openWB/graph/boolDisplayLp5",
+	"openWB/graph/boolDisplayLp6",
+	"openWB/graph/boolDisplayLp7",
+	"openWB/graph/boolDisplayLp8",
+	"openWB/graph/boolDisplayLpAll",
+	"openWB/graph/boolDisplaySpeicherSoc",
+	"openWB/graph/boolDisplaySpeicher",
+	"openWB/graph/boolDisplayEvu",
+	"openWB/graph/boolDisplayLegend",
+	"openWB/graph/boolDisplayLiveGraph",
+	"openWB/graph/boolDisplayPv",
+	"openWB/evu/W",
+	"openWB/global/WHouseConsumption",
+	"openWB/pv/W",
+	"openWB/pv/DailyYieldKwh",
+	"openWB/lp/1/%Soc",
+	"openWB/lp/2/%Soc",
 	// heute geladene kWh ... nicht benutzt im Theme
-	["openWB/lp/1/kWhDailyCharged", "#"],
-	["openWB/lp/2/kWhDailyCharged", "#"],
-	["openWB/lp/3/kWhDailyCharged", "#"],
+	"openWB/lp/1/kWhDailyCharged",
+	"openWB/lp/2/kWhDailyCharged",
+	"openWB/lp/3/kWhDailyCharged",
 	// geladene kWh des aktuellen Ladesegments
-	["openWB/lp/1/kWhActualCharged", "#"],
-	["openWB/lp/2/kWhActualCharged", "#"],
-	["openWB/lp/3/kWhActualCharged", "#"],
+	"openWB/lp/1/kWhActualCharged",
+	"openWB/lp/2/kWhActualCharged",
+	"openWB/lp/3/kWhActualCharged",
 	// geladene kWh seit anstecken des EV
-	["openWB/lp/1/kWhChargedSincePlugged", "#"],
-	["openWB/lp/2/kWhChargedSincePlugged", "#"],
-	["openWB/lp/3/kWhChargedSincePlugged", "#"],
-	["openWB/lp/4/kWhChargedSincePlugged", "#"],
-	["openWB/lp/5/kWhChargedSincePlugged", "#"],
-	["openWB/lp/6/kWhChargedSincePlugged", "#"],
-	["openWB/lp/7/kWhChargedSincePlugged", "#"],
-	["openWB/lp/8/kWhChargedSincePlugged", "#"],
+	"openWB/lp/1/kWhChargedSincePlugged",
+	"openWB/lp/2/kWhChargedSincePlugged",
+	"openWB/lp/3/kWhChargedSincePlugged",
+	"openWB/lp/4/kWhChargedSincePlugged",
+	"openWB/lp/5/kWhChargedSincePlugged",
+	"openWB/lp/6/kWhChargedSincePlugged",
+	"openWB/lp/7/kWhChargedSincePlugged",
+	"openWB/lp/8/kWhChargedSincePlugged",
 	// Ladeleistung am LP
-	["openWB/lp/1/W", "#"],
-	["openWB/lp/2/W", "#"],
-	["openWB/lp/3/W", "#"],
-	["openWB/lp/4/W", "#"],
-	["openWB/lp/5/W", "#"],
-	["openWB/lp/6/W", "#"],
-	["openWB/lp/7/W", "#"],
-	["openWB/lp/8/W", "#"],
-	["openWB/lp/1/boolPlugStat", "#"],
-	["openWB/lp/2/boolPlugStat", "#"],
-	["openWB/lp/3/boolPlugStat", "#"],
-	["openWB/lp/4/boolPlugStat", "#"],
-	["openWB/lp/5/boolPlugStat", "#"],
-	["openWB/lp/6/boolPlugStat", "#"],
-	["openWB/lp/7/boolPlugStat", "#"],
-	["openWB/lp/8/boolPlugStat", "#"],
-	["openWB/lp/1/boolChargeStat", "#"],
-	["openWB/lp/2/boolChargeStat", "#"],
-	["openWB/lp/3/boolChargeStat", "#"],
-	["openWB/lp/4/boolChargeStat", "#"],
-	["openWB/lp/5/boolChargeStat", "#"],
-	["openWB/lp/6/boolChargeStat", "#"],
-	["openWB/lp/7/boolChargeStat", "#"],
-	["openWB/lp/8/boolChargeStat", "#"],
-	["openWB/lp/1/boolSocConfigured", "#"],
-	["openWB/lp/2/boolSocConfigured", "#"],
-	["openWB/lp/1/AConfigured", "#"],
-	["openWB/lp/2/AConfigured", "#"],
-	["openWB/lp/3/AConfigured", "#"],
-	["openWB/lp/8/AConfigured", "#"],
-	["openWB/lp/4/AConfigured", "#"],
-	["openWB/lp/5/AConfigured", "#"],
-	["openWB/lp/6/AConfigured", "#"],
-	["openWB/lp/7/AConfigured", "#"],
-	["openWB/lp/1/TimeRemaining", "#"],
-	["openWB/lp/2/TimeRemaining", "#"],
-	["openWB/lp/3/TimeRemaining", "#"],
-	["openWB/lp/1/kmCharged", "#"],
-	["openWB/lp/2/kmCharged", "#"],
-	["openWB/lp/3/kmCharged", "#"],
-	["openWB/lp/1/ChargeStatus", "#"],
-	["openWB/lp/2/ChargeStatus", "#"],
-	["openWB/lp/3/ChargeStatus", "#"],
-	["openWB/lp/4/ChargeStatus", "#"],
-	["openWB/lp/5/ChargeStatus", "#"],
-	["openWB/lp/6/ChargeStatus", "#"],
-	["openWB/lp/7/ChargeStatus", "#"],
-	["openWB/lp/8/ChargeStatus", "#"],
-	["openWB/global/ChargeMode", "#"],
-	["openWB/global/WAllChargePoints", "#"],
-	["openWB/housebattery/boolHouseBatteryConfigured", "#"],
-	["openWB/housebattery/W", "#"],
-	["openWB/housebattery/%Soc", "#"],
-	["openWB/global/strLastmanagementActive", "#"],
-	["openWB/lp/1/boolChargePointConfigured", "#"],
-	["openWB/lp/2/boolChargePointConfigured", "#"],
-	["openWB/lp/3/boolChargePointConfigured", "#"],
-	["openWB/lp/4/boolChargePointConfigured", "#"],
-	["openWB/lp/5/boolChargePointConfigured", "#"],
-	["openWB/lp/6/boolChargePointConfigured", "#"],
-	["openWB/lp/7/boolChargePointConfigured", "#"],
-	["openWB/lp/8/boolChargePointConfigured", "#"],
-	["openWB/lp/1/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/2/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/3/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/4/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/5/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/6/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/7/boolDirectChargeMode_none_kwh_soc", "#"],
-	["openWB/lp/8/boolDirectChargeMode_none_kwh_soc", "#"],
+	"openWB/lp/1/W",
+	"openWB/lp/2/W",
+	"openWB/lp/3/W",
+	"openWB/lp/4/W",
+	"openWB/lp/5/W",
+	"openWB/lp/6/W",
+	"openWB/lp/7/W",
+	"openWB/lp/8/W",
+	"openWB/lp/1/boolPlugStat",
+	"openWB/lp/2/boolPlugStat",
+	"openWB/lp/3/boolPlugStat",
+	"openWB/lp/4/boolPlugStat",
+	"openWB/lp/5/boolPlugStat",
+	"openWB/lp/6/boolPlugStat",
+	"openWB/lp/7/boolPlugStat",
+	"openWB/lp/8/boolPlugStat",
+	"openWB/lp/1/boolChargeStat",
+	"openWB/lp/2/boolChargeStat",
+	"openWB/lp/3/boolChargeStat",
+	"openWB/lp/4/boolChargeStat",
+	"openWB/lp/5/boolChargeStat",
+	"openWB/lp/6/boolChargeStat",
+	"openWB/lp/7/boolChargeStat",
+	"openWB/lp/8/boolChargeStat",
+	"openWB/lp/1/boolSocConfigured",
+	"openWB/lp/2/boolSocConfigured",
+	"openWB/lp/1/AConfigured",
+	"openWB/lp/2/AConfigured",
+	"openWB/lp/3/AConfigured",
+	"openWB/lp/8/AConfigured",
+	"openWB/lp/4/AConfigured",
+	"openWB/lp/5/AConfigured",
+	"openWB/lp/6/AConfigured",
+	"openWB/lp/7/AConfigured",
+	"openWB/lp/1/TimeRemaining",
+	"openWB/lp/2/TimeRemaining",
+	"openWB/lp/3/TimeRemaining",
+	"openWB/lp/1/kmCharged",
+	"openWB/lp/2/kmCharged",
+	"openWB/lp/3/kmCharged",
+	"openWB/lp/1/ChargeStatus",
+	"openWB/lp/2/ChargeStatus",
+	"openWB/lp/3/ChargeStatus",
+	"openWB/lp/4/ChargeStatus",
+	"openWB/lp/5/ChargeStatus",
+	"openWB/lp/6/ChargeStatus",
+	"openWB/lp/7/ChargeStatus",
+	"openWB/lp/8/ChargeStatus",
+	"openWB/global/ChargeMode",
+	"openWB/global/WAllChargePoints",
+	"openWB/housebattery/boolHouseBatteryConfigured",
+	"openWB/housebattery/W",
+	"openWB/housebattery/%Soc",
+	"openWB/global/strLastmanagementActive",
+	"openWB/lp/1/boolChargePointConfigured",
+	"openWB/lp/2/boolChargePointConfigured",
+	"openWB/lp/3/boolChargePointConfigured",
+	"openWB/lp/4/boolChargePointConfigured",
+	"openWB/lp/5/boolChargePointConfigured",
+	"openWB/lp/6/boolChargePointConfigured",
+	"openWB/lp/7/boolChargePointConfigured",
+	"openWB/lp/8/boolChargePointConfigured",
+	"openWB/lp/1/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/2/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/3/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/4/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/5/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/6/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/7/boolDirectChargeMode_none_kwh_soc",
+	"openWB/lp/8/boolDirectChargeMode_none_kwh_soc",
 
-	["openWB/lp/1/boolChargeAtNight", "#"],
-	["openWB/lp/2/boolChargeAtNight", "#"],
+	"openWB/lp/1/boolChargeAtNight",
+	"openWB/lp/2/boolChargeAtNight",
 
-	["openWB/lp/1/ChargePointEnabled", "#"],
-	["openWB/lp/2/ChargePointEnabled", "#"],
-	["openWB/lp/3/ChargePointEnabled", "#"],
-	["openWB/lp/4/ChargePointEnabled", "#"],
-	["openWB/lp/5/ChargePointEnabled", "#"],
-	["openWB/lp/6/ChargePointEnabled", "#"],
-	["openWB/lp/7/ChargePointEnabled", "#"],
-	["openWB/lp/8/ChargePointEnabled", "#"],
-	["openWB/lp/1/strChargePointName", "#"],
-	["openWB/lp/2/strChargePointName", "#"],
-	["openWB/lp/3/strChargePointName", "#"],
-	["openWB/lp/4/strChargePointName", "#"],
-	["openWB/lp/5/strChargePointName", "#"],
-	["openWB/lp/6/strChargePointName", "#"],
-	["openWB/lp/7/strChargePointName", "#"],
-	["openWB/lp/8/strChargePointName", "#"],
-	["openWB/lp/1/AutolockConfigured", "#"],
-	["openWB/lp/2/AutolockConfigured", "#"],
-	["openWB/lp/3/AutolockConfigured", "#"],
-	["openWB/lp/4/AutolockConfigured", "#"],
-	["openWB/lp/5/AutolockConfigured", "#"],
-	["openWB/lp/6/AutolockConfigured", "#"],
-	["openWB/lp/7/AutolockConfigured", "#"],
-	["openWB/lp/8/AutolockConfigured", "#"],
-	["openWB/lp/1/AutolockStatus", "#"],
-	["openWB/lp/2/AutolockStatus", "#"],
-	["openWB/lp/3/AutolockStatus", "#"],
-	["openWB/lp/4/AutolockStatus", "#"],
-	["openWB/lp/5/AutolockStatus", "#"],
-	["openWB/lp/6/AutolockStatus", "#"],
-	["openWB/lp/7/AutolockStatus", "#"],
-	["openWB/lp/8/AutolockStatus", "#"],
-	["openWB/lp/1/ADirectModeAmps", "#"],
-	["openWB/lp/2/ADirectModeAmps", "#"],
-	["openWB/lp/3/ADirectModeAmps", "#"],
-	["openWB/lp/4/ADirectModeAmps", "#"],
-	["openWB/lp/5/ADirectModeAmps", "#"],
-	["openWB/lp/6/ADirectModeAmps", "#"],
-	["openWB/lp/7/ADirectModeAmps", "#"],
-	["openWB/lp/8/ADirectModeAmps", "#"],
-	["openWB/system/Timestamp", "#"]
+	"openWB/lp/1/ChargePointEnabled",
+	"openWB/lp/2/ChargePointEnabled",
+	"openWB/lp/3/ChargePointEnabled",
+	"openWB/lp/4/ChargePointEnabled",
+	"openWB/lp/5/ChargePointEnabled",
+	"openWB/lp/6/ChargePointEnabled",
+	"openWB/lp/7/ChargePointEnabled",
+	"openWB/lp/8/ChargePointEnabled",
+	"openWB/lp/1/strChargePointName",
+	"openWB/lp/2/strChargePointName",
+	"openWB/lp/3/strChargePointName",
+	"openWB/lp/4/strChargePointName",
+	"openWB/lp/5/strChargePointName",
+	"openWB/lp/6/strChargePointName",
+	"openWB/lp/7/strChargePointName",
+	"openWB/lp/8/strChargePointName",
+	"openWB/lp/1/AutolockConfigured",
+	"openWB/lp/2/AutolockConfigured",
+	"openWB/lp/3/AutolockConfigured",
+	"openWB/lp/4/AutolockConfigured",
+	"openWB/lp/5/AutolockConfigured",
+	"openWB/lp/6/AutolockConfigured",
+	"openWB/lp/7/AutolockConfigured",
+	"openWB/lp/8/AutolockConfigured",
+	"openWB/lp/1/AutolockStatus",
+	"openWB/lp/2/AutolockStatus",
+	"openWB/lp/3/AutolockStatus",
+	"openWB/lp/4/AutolockStatus",
+	"openWB/lp/5/AutolockStatus",
+	"openWB/lp/6/AutolockStatus",
+	"openWB/lp/7/AutolockStatus",
+	"openWB/lp/8/AutolockStatus",
+	"openWB/lp/1/ADirectModeAmps",
+	"openWB/lp/2/ADirectModeAmps",
+	"openWB/lp/3/ADirectModeAmps",
+	"openWB/lp/4/ADirectModeAmps",
+	"openWB/lp/5/ADirectModeAmps",
+	"openWB/lp/6/ADirectModeAmps",
+	"openWB/lp/7/ADirectModeAmps",
+	"openWB/lp/8/ADirectModeAmps",
+	"openWB/system/Timestamp"
 ];
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
@@ -238,20 +238,20 @@ function convertToKw(dataColum) {
 	return convertedDataColumn;
 }
 
-function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function handlevar(mqttmsg, mqttpayload) {
 	// receives all messages and calls respective function to process them
-	if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/evu\//i) ) { processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/global\//i) ) { processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/housebattery\//i) ) { processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/system\//i) ) { processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/pv\//i) ) { processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/verbraucher\//i) ) { processVerbraucherMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/set\//i) ) { processSetMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
-	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
+	if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/evu\//i) ) { processEvuMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/global\//i) ) { processGlobalMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/housebattery\//i) ) { processHousebatteryMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/system\//i) ) { processSystemMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/pv\//i) ) { processPvMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/verbraucher\//i) ) { processVerbraucherMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/set\//i) ) { processSetMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processLpMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
-function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
 	if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
@@ -516,7 +516,7 @@ function processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 }  // end processGraphMessages
 
-function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processEvuMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/evu
 	// called by handlevar
 	if ( mqttmsg == "openWB/evu/W" ) {
@@ -544,7 +544,7 @@ function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	 }
 }
 
-function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processGlobalMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
 	if ( mqttmsg == "openWB/global/WHouseConsumption" ) {
@@ -663,7 +663,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 }
 
-function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/housebattery
 	// called by handlevar
 	if ( mqttmsg == "openWB/housebattery/W" ) {
@@ -708,7 +708,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 }
 
-function processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processSystemMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
 	if ( mqttmsg == "openWB/system/Timestamp") {
@@ -730,7 +730,7 @@ function processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 }
 
-function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processPvMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/pv
 	// called by handlevar
 	if ( mqttmsg == "openWB/pv/W") {
@@ -765,17 +765,17 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 }
 
-function processVerbraucherMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processVerbraucherMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
 }
 
-function processSetMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processSetMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/set
 	// called by handlevar
 }
 
-function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function processLpMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/lp
 	// called by handlevar
 	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
@@ -1043,7 +1043,7 @@ client.onConnectionLost = function (responseObject) {
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-		handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
+	handlevar(message.destinationName, message.payloadString);
 };
 var retries = 0;
 
@@ -1054,14 +1054,14 @@ var options = {
 	onSuccess: function () {
 		retries = 0;
 		thevalues.forEach(function(thevar) {
-			client.subscribe(thevar[0], {qos: 0});
+			client.subscribe(thevar, {qos: 0});
 		});
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
 		client.connect(options);
 	}
-	};
+};
 
 //Creates a new Messaging.Message Object and sends it
 var publish = function (payload, topic) {
