@@ -173,6 +173,10 @@ var thevalues = [
 	["openWB/lp/6/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/7/boolDirectChargeMode_none_kwh_soc", "#"],
 	["openWB/lp/8/boolDirectChargeMode_none_kwh_soc", "#"],
+
+	["openWB/lp/1/boolChargeAtNight", "#"],
+	["openWB/lp/2/boolChargeAtNight", "#"],
+
 	["openWB/lp/1/ChargePointEnabled", "#"],
 	["openWB/lp/2/ChargePointEnabled", "#"],
 	["openWB/lp/3/ChargePointEnabled", "#"],
@@ -712,8 +716,6 @@ function processSystemMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			var mm = String(dateObject.getMonth() + 1).padStart(2, '0'); //January is 0 so add +1!
 			var dayOfWeek = dateObject.toLocaleDateString('de-DE', { weekday: 'short'});
 			date = dayOfWeek + ", " + dd + "." + mm + "." + dateObject.getFullYear();
-		} else {
-			console.log('not valid');
 		}
 		$("#timeSpan").text(time);
 		$("#dateSpan").text(date);
@@ -774,9 +776,11 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		if ( mqttpayload == 0 ) {
 			$("#nameLp" + index).css("color", "#A30000");
 			$("#nameLp" + index).css("text-decoration", "line-through");
+			$("#lpEnableSpanLp" + index).attr("isEnabled", "0");
 		} else {
 			$("#nameLp" + index).css("color", "#006515");
 			$("#nameLp" + index).css("text-decoration", "none");
+			$("#lpEnableSpanLp" + index).attr("isEnabled", "1");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {

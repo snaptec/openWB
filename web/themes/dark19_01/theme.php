@@ -169,7 +169,7 @@ EXTDEVICEDIVMIDDLE;
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle">'."\n";
 				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnableSpan" lp="'.$i.'">'."\n";
+				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'" isEnabled="-1">'."\n";
 				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="nameLp'.$i.'" id="nameLp'.$i.'" style="font-weight: bolder;">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
@@ -177,7 +177,7 @@ EXTDEVICEDIVMIDDLE;
 				if ( $zielladenaktivlp1old == 1 ) {
 				echo '                <span class="fa fa-flag-checkered"></span>'."\n";
 				}
-				echo '                <span class="fa fa-moon" id="nachtladenaktivlp'.$i.'div" style="display: none;"></span>'."\n";
+				echo '                <span class="fa fa-xs fa-moon" id="nachtladenaktivlp'.$i.'div" style="display: none;"></span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3 px-0">'."\n";
 				echo '                <span id="actualPowerLp'.$i.'span" style="display: none;"></span><span id="targetCurrentLp'.$i.'span" style="display: none;"></span>'."\n";
@@ -880,7 +880,7 @@ EXTDEVICEDIVMIDDLE;
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200331-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200331-b"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200401-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -895,11 +895,17 @@ EXTDEVICEDIVMIDDLE;
 			});
 
 			$('.lpEnableSpan').click(function(event){
+				// send mqtt set to enable/disable charge point after click
+				// attribut value is changed at receipt of confirmation mqttmsg
 				var lp = $(this).attr("lp");
-				if ( $("#nameLp" + lp).css("color") == "rgb(255, 0, 0)" ) {
-					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
-				} else {
-					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				var isEnabled = $(this).attr("isEnabled");
+				switch ( isEnabled ) {
+					case "1":
+						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+						break;
+					case "0":
+						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+						break;
 				}
 			});
 
