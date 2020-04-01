@@ -673,28 +673,26 @@ function processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// called by handlevar
 	if ( mqttmsg == "openWB/housebattery/W" ) {
 		var speicherwatt = mqttpayload;
-		var intspeicherw = parseInt(speicherwatt, 10);
-		if ( isNaN(intspeicherw) ) {
-			intspeicherw = 0;
+		var speicherwatt = parseInt(speicherwatt, 10);
+		if ( isNaN(speicherwatt) ) {
+			speicherwatt = 0;
 		}
-		if ( intspeicherw == 0 ) {
+		if ( speicherwatt == 0 ) {
 			speicherwatt = "0 W";
-		} else {
-			if (intspeicherw > 0) {
-				if ( intspeicherw > 999 ) {
-					intspeicherw = (intspeicherw / 1000).toFixed(2);
-					speicherwatt = intspeicherw + " kW Ladung";
-				} else {
-					speicherwatt = intspeicherw + " W Ladung";
-				}
+		} else if (speicherwatt > 0) {
+			if ( speicherwatt > 999 ) {
+				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = speicherwatt + " kW Ladung";
 			} else {
-		    		intspeicherw = intspeicherw * -1;
-				if (intspeicherw > 999) {
-					intspeicherw = (intspeicherw / 1000).toFixed(2);
-					speicherwatt = intspeicherw + " kW Entladung";
-				} else {
-					speicherwatt = intspeicherw + " W Entladung";
-				}
+				speicherwatt = speicherwatt + " W Ladung";
+			}
+		} else {
+	    	speicherwatt *= -1;
+			if (speicherwatt > 999) {
+				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = speicherwatt + " kW Entladung";
+			} else {
+				speicherwatt = speicherwatt + " W Entladung";
 			}
 		}
 		$("#speicherleistungdiv").text(speicherwatt);
@@ -742,26 +740,21 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// called by handlevar
 	if ( mqttmsg == "openWB/pv/W") {
 		var pvwatt = parseInt(mqttpayload, 10);
-		if ( isNaN(pvwatt) ) {
+		if ( isNaN(pvwatt) || pvwatt > 0 ) {
+			// if pv-power is not a number or positive, adjust to 0 because pv cannot consume power
 			pvwatt = 0;
 		}
-		if ( pvwatt > 0 ) {
-			// if pv-power is positive, adjust to 0
-			// since pv cannot consume power
-			pvwatt = 0;
-		}
-		// convert raw number for display
 		if ( pvwatt <= 0){
 			// production is negative for calculations so adjust for display
-			pvwatt = pvwatt * -1;
+			pvwatt *= -1;
 			// adjust and add unit
 			if (pvwatt > 999) {
-				var pvwattStr = (pvwatt / 1000).toFixed(2) + " kW";
+				pvwatt = (pvwatt / 1000).toFixed(2) + " kW";
 			} else {
-				var pvwattStr = pvwatt + " W";
+				pvwatt += " W";
 			}
 		}
-		$("#pvdiv").text(pvwattStr);
+		$("#pvdiv").text(pvwatt);
 	}
 	else if ( mqttmsg == "openWB/pv/DailyYieldKwh") {
 		var pvDailyYield = parseFloat(mqttpayload);
