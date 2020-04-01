@@ -857,7 +857,7 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
-					<input type="button" value="Renew MQTT" label="Renew MQTT" onclick="renewMQTTclick()"/><br>
+					<input id="renewMqttBtn" type="button" value="Renew MQTT" label="Renew MQTT"/><br>
 				</div>
 			</div>
 			<hr>
@@ -884,7 +884,46 @@ EXTDEVICEDIVMIDDLE;
 
 	<!-- some scripts -->
 	<script type="text/javascript">
+
+		function AwattarMaxPriceClick() {
+			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
+		}
+		function lp1DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");
+		}
+
+		function lp2DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/set/lp2/DirectChargeAmps");
+		}
+
+		function lp3DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/set/lp3/DirectChargeAmps");
+		}
+
+		function lp4DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/set/lp4/DirectChargeAmps");
+		}
+
+		function lp5DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/set/lp5/DirectChargeAmps");
+		}
+
+		function lp6DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/set/lp6/DirectChargeAmps");
+		}
+
+		function lp7DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/set/lp7/DirectChargeAmps");
+		}
+
+		function lp8DirectChargeAmpsClick() {
+			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
+		}
+
 		$(document).ready(function(){
+
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
 
 			$('#graphOptionsBtn').click(function(event){
 				$("#graphsettings").show();
@@ -892,6 +931,11 @@ EXTDEVICEDIVMIDDLE;
 
 			$('#closeGraphOptionsBtn').click(function(event){
 				$("#graphsettings").hide();
+			});
+
+			$('#renewMqttBtn').click(function(event){
+				publish("1", "openWB/set/RenewMQTT");
+				alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");
 			});
 
 			$('.lpEnableSpan').click(function(event){
