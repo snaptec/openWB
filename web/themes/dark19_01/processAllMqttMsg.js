@@ -520,32 +520,27 @@ function processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/evu
 	// called by handlevar
 	if ( mqttmsg == "openWB/evu/W" ) {
-	    var wattbezug = mqttpayload;
-	    var intbezug = parseInt(wattbezug, 10);
-		if ( isNaN(intbezug) ) {
-			intbezug = 0;
-		}
-		if ( intbezug == 0 ) {
-			wattbezug = "0 W";
-		} else {
-		    if (intbezug > 0) {
-		    	if (intbezug > 999) {
-			    	intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + " kW Bezug";
-		    	} else {
-					wattbezug = intbezug + " W Bezug";
-				}
+	    var powerEvu = mqttpayload;
+	    var powerEvu = parseInt(powerEvu, 10);
+		if ( isNaN(powerEvu) || powerEvu == 0 ) {
+			powerEvu = "0 W";
+		} else if (powerEvu > 0) {
+	    	if (powerEvu > 999) {
+		    	powerEvu = (powerEvu / 1000).toFixed(2);
+	    	    powerEvu += " kW Bezug";
 	    	} else {
-	    	    intbezug = intbezug * -1;
-				if (intbezug > 999) {
-			    	intbezug = (intbezug / 1000).toFixed(2);
-		    	    wattbezug = intbezug + " kW Einspeisung";
-		    	} else {
-					wattbezug = intbezug + " W Einspeisung";
-				}
-	    	}
-		}
-	    $("#bezugdiv").text(wattbezug);
+				powerEvu += " W Bezug";
+			}
+    	} else {
+    	    powerEvu *= -1;
+			if (powerEvu > 999) {
+		    	powerEvu = (powerEvu / 1000).toFixed(2);
+	    	    powerEvu += " kW Einspeisung";
+	    	} else {
+				powerEvu += " W Einspeisung";
+			}
+    	}
+	    $("#bezugdiv").text(powerEvu);
 	 }
 }
 
@@ -560,7 +555,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		if ( powerHouse > 999 ) {
 			powerHouse = (powerHouse / 1000).toFixed(2) + " kW";
 		} else {
-			powerHouse = powerHouse + " W";
+			powerHouse += " W";
 		}
 		$("#hausverbrauchdiv").text(powerHouse);
 	}
