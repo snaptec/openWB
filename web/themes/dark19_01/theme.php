@@ -75,10 +75,10 @@
 
 		<div class="row justify-content-center">
 			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
-				PV: <span id="pvdiv"></span><span id="pvdailyyielddiv"></span>
+				PV: <span id="pvdiv">0 W</span><span id="pvdailyyielddiv"></span>
 			</div>
 			<div id="evudiv" class="col-sm-6 pvInfoStyle" style="background-color:#febebe;" >
-				EVU: <span id="bezugdiv"></span>
+				EVU: <span id="bezugdiv">0 W</span>
 			</div>
 		</div>
 
@@ -87,7 +87,7 @@
 echo <<<HAUSVERBRAUCHDIV
 			<div class="row justify-content-center">
 				<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
-					Hausverbrauch: <span id="hausverbrauchdiv"></span>
+					Hausverbrauch: <span id="hausverbrauchdiv">0 W</span>
 				</div>
 			</div>
 HAUSVERBRAUCHDIV;
@@ -97,7 +97,7 @@ HAUSVERBRAUCHDIV;
 echo <<<SPEICHERDIV
 		<div id="speicherdiv" class="row justify-content-center">
 			<div class="col-sm-12 pvInfoStyle" style="background-color:#fcbe1e;">
-				Speicher: <span id="speicherleistungdiv"></span><span id="speichersocdiv"></span>
+				Speicher: <span id="speicherleistungdiv">0 W</span><span id="speichersocdiv"></span>
 			</div>
 		</div>
 SPEICHERDIV;
@@ -880,7 +880,7 @@ EXTDEVICEDIVMIDDLE;
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200331-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200401-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200401-c"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
