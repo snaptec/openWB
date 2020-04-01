@@ -843,7 +843,9 @@ if [[ "$osoc1" != "$soc1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/%Soc=${soc1}"
 	echo $soc1 > ramdisk/mqttsoc1
 fi
-
+if [[ $rfidakt == "1" ]]; then
+	rfid
+fi
 dailychargelp1=$(curl -s -X POST -d "dailychargelp1call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp1.php | jq -r .text)
 dailychargelp2=$(curl -s -X POST -d "dailychargelp2call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp2.php | jq -r .text)
 dailychargelp3=$(curl -s -X POST -d "dailychargelp3call=loadfile" http://127.0.0.1:/openWB/web/tools/dailychargelp3.php | jq -r .text)

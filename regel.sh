@@ -97,9 +97,9 @@ fi
 
 #######################################
 # check rfid
-if [[ $rfidakt == "1" ]]; then
-	rfid
-fi
+#moved in loadvars
+
+
 #goe mobility check
 goecheck
 # nrgkick mobility check
