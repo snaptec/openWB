@@ -2427,6 +2427,15 @@ if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_bluelink_email=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_bluelink_email=mail@mail.de" >> /var/www/html/openWB/openwb.conf
+	echo "soc_bluelink_password=passwort" >> /var/www/html/openWB/openwb.conf
+	echo "soc_bluelink_pin=1111" >> /var/www/html/openWB/openwb.conf
+	echo "soc_bluelink_interval=30" >> /var/www/html/openWB/openwb.conf
+
+fi
+
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then

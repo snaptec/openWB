@@ -40,6 +40,18 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "soc_bluelink_interval=") !== false) {
+					list(, $soc_bluelink_intervalold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_email=") !== false) {
+					list(, $soc_bluelink_emailold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_password=") !== false) {
+					list(, $soc_bluelink_passwordold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_pin=") !== false) {
+					list(, $soc_bluelink_pinold) = explode("=", $line);
+				}
 				if(strpos($line, "solarworld_emanagerip=") !== false) {
 					list(, $solarworld_emanageripold) = explode("=", $line);
 				}
@@ -1663,6 +1675,7 @@
 							<option <?php if($socmodulold == "soc_zerong\n") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
 							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
 							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
+							<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1722,6 +1735,39 @@
 							Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
 						</div>
 					</div>
+					<div id="socmbluelink">
+						<div class="row bg-info">
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_email">Email Adresse:</label></b>
+							<input type="text" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo $soc_bluelink_emailold ?>">
+						</div>
+						<div class="row bg-info">
+							Email Adresse des Hyundai Bluelink Logins
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_password">Passwort:</label></b>
+							<input type="password" name="soc_bluelink_password" id="soc_bluelink_password" value="<?php echo $soc_bluelink_passwordold ?>">
+						</div>
+						<div class="row bg-info">
+							Password des Logins
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_pin">PIN:</label></b>
+							<input type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
+						</div>
+						<div class="row bg-info">
+							PIN des Accounts.
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_interval">Abfrageintervall:</label></b>
+							<input type="text" name="soc_bluelink_interval" id="soc_bluelink_interval" value="<?php echo $soc_bluelink_intervalold ?>">
+						</div>
+						<div class="row bg-info">
+							Wie oft abgefragt wird. Angabe in Minuten.
+						</div>
+					</div>
+
 					<div id="socmzerong">
 						<div class="row bg-info">
 						</div>
@@ -1946,10 +1992,14 @@
 							$('#socmzerong').hide();
 							$('#socmaudi').hide();
 							$('#socmqtt').hide();
+							$('#socmbluelink').hide();
 
 							$('#socmyrenault').hide();
 							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
+							}
+							if($('#socmodul').val() == 'soc_bluelink') {
+								$('#socmbluelink').show();
 							}
 
 							if($('#socmodul').val() == 'soc_audi') {

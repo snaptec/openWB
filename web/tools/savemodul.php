@@ -16,6 +16,22 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'dacregisters1='.$_POST['dacregisters1']."\n";
 			$writeit = '1';
 			}
+			if(strpos($line, "soc_bluelink_interval=") !== false) {
+			$result .= 'soc_bluelink_interval='.$_POST['soc_bluelink_interval']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "soc_bluelink_email=") !== false) {
+			$result .= 'soc_bluelink_email='.$_POST['soc_bluelink_email']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "soc_bluelink_password=") !== false) {
+			$result .= 'soc_bluelink_password='.$_POST['soc_bluelink_password']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "soc_bluelink_pin=") !== false) {
+			$result .= 'soc_bluelink_pin='.$_POST['soc_bluelink_pin']."\n";
+			$writeit = '1';
+			}
 			if(strpos($line, "solarworld_emanagerip=") !== false) {
 			$result .= 'solarworld_emanagerip='.$_POST['solarworld_emanagerip']."\n";
 			$writeit = '1';
