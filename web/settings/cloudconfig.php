@@ -148,7 +148,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Einstellungen/Cloudeinstellungen</small>
+				<small>Sie befinden sich hier: Einstellungen/openWB Cloud</small>
 			</div>
 		</footer>
 
