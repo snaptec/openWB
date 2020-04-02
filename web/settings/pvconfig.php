@@ -36,8 +36,6 @@
 	<body>
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "speicherpveinbeziehen=") !== false) {
@@ -148,6 +146,8 @@
 			$wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 			$wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
@@ -552,10 +552,13 @@
 
 
 		<script type="text/javascript">
-			$(document).ready(function(){
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navPVLadeeinstellungen').addClass('disabled');
 			});
+
 		</script>
 
 	</body>

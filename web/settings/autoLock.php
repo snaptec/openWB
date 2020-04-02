@@ -216,7 +216,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
@@ -294,16 +294,19 @@ ECHOFORMGROUPTAIL;
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Auto-Lock</small>
+				<small>Sie befinden sich hier: Einstellungen/Auto-Lock</small>
 			</div>
 		</footer>
 
 		<script type="text/javascript">
 
-			$(document).ready(function(){
-
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navAutolock').addClass('disabled');
+			});
+
+			$(document).ready(function(){
 
 				function addClockpicker(clockpickerId, initialSetup) {
 					if ( !initialSetup ) {

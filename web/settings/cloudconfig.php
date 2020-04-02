@@ -36,8 +36,6 @@
 	<body>
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
 
@@ -70,6 +68,9 @@
 			}
 
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
@@ -152,10 +153,13 @@
 		</footer>
 
 		<script type="text/javascript">
-			$(document).ready(function(){
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navOpenwbCloud').addClass('disabled');
 			});
+
 		</script>
 
 

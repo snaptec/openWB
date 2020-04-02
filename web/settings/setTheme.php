@@ -42,7 +42,6 @@
 
 	<body>
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.php';?>
 		<?php
 			// support function for dynmic built of carousel content
 			function dir_list($rootDir){
@@ -59,6 +58,8 @@
 			// call function to read all directories to $allThemes
 			$allThemes = dir_list('/var/www/html/openWB/web/themes');
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 
@@ -93,6 +94,13 @@
 		</footer>
 
 		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navSetTheme').addClass('disabled');
+			});
+
 			function saveTheme() {
 				var selectedTheme = $('#themeName').text();  // get theme name from div
 				$.ajax({
@@ -120,13 +128,6 @@
 				var title = activeImg.attr('title');
 				if(title) $('#themeName').html('<h1>'+title+'</h1>');
 			}
-		</script>
-
-		<script type="text/javascript">
-			$(document).ready(function(){
-				// disable navbar entry for current page
-				$('#navSetTheme').addClass('disabled');
-			});
 		</script>
 
 	</body>
