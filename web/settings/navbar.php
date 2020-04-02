@@ -23,7 +23,7 @@
 						<a class="dropdown-item" id="navSmartHome" href="./settings/smarthome.php">Smart Home</a>
 						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
 						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
-						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal">Modulkonfiguration</a>
+						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal" style="cursor: pointer;">Modulkonfiguration</a>
 					</div>
 				</li>
 
@@ -45,9 +45,9 @@
 					</a>
 					<div class="dropdown-menu">
 
-						<a class="dropdown-item" id="navBackup" data-toggle="modal" data-target="#backupConfirmationModal">Backup erstellen</a>
-						<a class="dropdown-item" id="navWiederherstellen" data-toggle="modal" data-target="#restoreConfirmationModal">Backup wiederherstellen</a>
-						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal">Reboot</a>
+						<a class="dropdown-item" id="navBackup" data-toggle="modal" data-target="#backupConfirmationModal" style="cursor: pointer;">Backup erstellen</a>
+						<a class="dropdown-item" id="navWiederherstellen" data-toggle="modal" data-target="#restoreConfirmationModal" style="cursor: pointer;">Backup wiederherstellen</a>
+						<a class="dropdown-item" id="navReboot" data-toggle="modal" data-target="#rebootConfirmationModal" style="cursor: pointer;">Reboot</a>
 						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
 						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
