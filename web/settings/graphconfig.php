@@ -203,6 +203,15 @@
 					publish("1","openWB/graph/"+thedataset);
 				}
 			}
+			function showhidelegend(thedataset) {
+				if ( window[thedataset] == true ) {
+					publish("0","openWB/graph/"+thedataset);
+				} else if ( window[thedataset] == false ) {
+					publish("1","openWB/graph/"+thedataset);
+				} else {
+					publish("0","openWB/graph/"+thedataset);
+				}
+			}
 
 		</script>
 
