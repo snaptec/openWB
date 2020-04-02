@@ -21,9 +21,7 @@
 				<li class="nav-item">
 					<a class="nav-link" href="hilfe/hilfe.php">Hilfe</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" style="cursor: pointer;" onclick="GraphOptionsClick()">Graph Optionen</a>
-				</li>
+
 				<li class="nav-item">
 					<a class="nav-link" href="settings/settings.php">Einstellungen</a>
 				</li>
