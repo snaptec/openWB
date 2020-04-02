@@ -871,7 +871,6 @@
 
 		function chargeModeBtnClick(chargeMode) {
 			publish(chargeMode,"openWB/set/ChargeMode");
-			publish(chargeMode,"openWB/global/ChargeMode");
 		}
 	</script>
 
