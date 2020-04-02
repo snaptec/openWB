@@ -31,8 +31,14 @@
 					<a class="nav-link" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" id="navSetTheme" href="./settings/setTheme.php">Theme</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings2" data-toggle="dropdown">
+						Erscheinungsbild
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" id="navSetTheme" href="./settings/setTheme.php">Theme</a>
+						<a class="dropdown-item" id="navGraphSettings" href="./settings/graphconfig.php">Graph</a>
+					</div>
 				</li>
 
 				<li class="nav-item">
