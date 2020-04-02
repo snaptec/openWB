@@ -323,6 +323,8 @@
 							<option <?php if($maxnurpvsoclp1old == 90) echo "selected" ?> value="90">90</option>
 							<option <?php if($maxnurpvsoclp1old == 95) echo "selected" ?> value="95">95</option>
 							<option <?php if($maxnurpvsoclp1old == 100) echo "selected" ?> value="100">100</option>
+							<option <?php if($maxnurpvsoclp1old == 101) echo "selected" ?> value="101">Deaktiviert</option>
+
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
