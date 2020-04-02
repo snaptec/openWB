@@ -968,7 +968,6 @@ EXTDEVICEDIVMIDDLE;
 			    // sets the charge mode depending on the button clicked
 				var chargeMode = $(this).attr("chargeMode")
 				publish(chargeMode, "openWB/set/ChargeMode");
-				publish(chargeMode, "openWB/global/ChargeMode");
 			});
 
 			$('.sofortladenLadezielSelektor').change(function(event){
