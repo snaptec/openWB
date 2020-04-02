@@ -736,12 +736,6 @@ EXTDEVICEDIVMIDDLE;
 			<div class="d-none d-sm-block">
 				&nbsp
 			</div>
-			<div class="col-sm-4 py-1">
-				<button id="graphOptionsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Graph Optionen</button>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp
-			</div>
 			<div class="col-sm-3 order-first order-sm-last py-1 ">
 				<a href="settings/settings.php"><button id="settingsBtn" type="button" class="btn btn-lg btn-block btn-blue myButtonStyle">Einstellungen</button></a>
 			</div>
@@ -759,115 +753,6 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 		</div>
 
-			<br><br><br><br>
-
-		<!-- Graph-Options with Popup-Window-Look -->
-		<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
-			<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
-				<div class="row">
-					<div class="col-sm-12">
-						Graph Sichtbarkeit:
-					</div>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
-				</div>
-			</div>
-			<div class="row col-sm-12" style="white-space: nowrap;">
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
-				</div>
-				<div class="col-sm-6">
-					<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					Optionen:
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<input id="renewMqttBtn" type="button" value="Renew MQTT" label="Renew MQTT"/><br>
-				</div>
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-sm-12">
-					<input id="closeGraphOptionsBtn" type="button" value="Schließen" label="Schließen"/>
-				</div>
-			</div>
-		</div>
-
 	</div>  <!-- end container -->
 
 	<!-- load Chart.js library -->
@@ -877,10 +762,10 @@ EXTDEVICEDIVMIDDLE;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200331-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200402-b"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200401-c"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200402-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -924,19 +809,6 @@ EXTDEVICEDIVMIDDLE;
 
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
-
-			$('#graphOptionsBtn').click(function(event){
-				$("#graphsettings").show();
-			});
-
-			$('#closeGraphOptionsBtn').click(function(event){
-				$("#graphsettings").hide();
-			});
-
-			$('#renewMqttBtn').click(function(event){
-				publish("1", "openWB/set/RenewMQTT");
-				alert("Erneuern der Werte initiert, dies dauert ca 15-20 Sekunden.");
-			});
 
 			$('.lpEnableSpan').click(function(event){
 				// send mqtt set to enable/disable charge point after click

@@ -39,9 +39,94 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row justify-content-center">
 
-			</div>
+			<!-- Graph-Options with Popup-Window-Look -->
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
+					</div>
+				</div>
+				<div class="row justify-content-center" style="white-space: nowrap;">
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
+					</div>
+					<div class="col-4">
+						<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
+					</div>
+				</div>
+				<br>
+				<div class="row justify-content-center">
+					<div class="col-4">
+						<button type="button" id="renewMqttBtn" class="btn btn-green">MQTT erneuern</button>
+					</div>
+				</div>
 
 		</div>  <!-- end container -->
 
@@ -51,6 +136,34 @@
 			</div>
 		</footer>
 
+		<!-- modal mqtt-renew-confirmation window -->
+		<div class="modal fade" id="renewConfirmationModal" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<!-- modal header -->
+					<div class="modal-header btn-blue">
+						<h4 class="modal-title text-light">Info</h4>
+					</div>
+					<!-- modal body -->
+					<div class="modal-body text-center">
+						<p>
+							Das Erneuern der MQTT-Werte dauert einige Sekunden.<br>
+							Fortfahren?
+						</p>
+					</div>
+					<!-- modal footer -->
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="button" id="doRenewBtn" class="btn btn-green" data-dismiss="modal">Erneuern</button>
+						<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- load mqtt library -->
+		<script src = "js/mqttws31.js" ></script>
+
 		<script type="text/javascript">
 
 			$.get("settings/navbar.php", function(data){
@@ -59,7 +172,37 @@
 
 			$(document).ready(function(){
 
+				<!-- load scripts -->
+				$.getScript("./settings/processAllMqttMsg.js?ver=20200402-a");
+				$.getScript("./settings/setupMqttServices.js?ver=20200402-a");
+
+				$('#graphOptionsBtn').click(function(event){
+					$("#graphsettings").show();
+				});
+
+				$('#closeGraphOptionsBtn').click(function(event){
+					$("#graphsettings").hide();
+				});
+
+				$('#renewMqttBtn').click(function(event){
+					$("#renewConfirmationModal").modal('show');
+				});
+
+				$('#doRenewBtn').click(function(event){
+					publish("1", "openWB/set/RenewMQTT");
+				});
+
 			});  // end document ready function
+
+			function showhidedataset(thedataset) {
+				if ( window[thedataset] == true ) {
+					publish("1","openWB/graph/"+thedataset);
+				} else if ( window[thedataset] == false ) {
+					publish("0","openWB/graph/"+thedataset);
+				} else {
+					publish("1","openWB/graph/"+thedataset);
+				}
+			}
 
 		</script>
 
