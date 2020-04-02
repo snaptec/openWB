@@ -35,11 +35,13 @@
 
 	<body>
 		<?php
-		include './navbar.php';
 		$authfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.htaccess';
 		$passwordfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.passwd';
 		$tempfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/temppassword';
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
@@ -148,16 +150,22 @@ AUTHEND
 				</div>
 			</div>
 		</div>  <!-- container -->
-		<script type="text/javascript">
- 			$(document).ready(function(){
- 				// disable navbar entry for current page
-				$('#navPasswort').addClass('disabled');
-				});
-		</script>
+
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
 				<small>Sie befinden sich hier: Einstellungen/Passwortschutz</small>
 			</div>
 		</footer>
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navPasswort').addClass('disabled');
+			});
+			
+		</script>
+
 	</body>
 </html>

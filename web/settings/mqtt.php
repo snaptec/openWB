@@ -37,8 +37,6 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			$refreshDuration = 8;
 			foreach($lines as $line) {
@@ -50,6 +48,8 @@
 			$lines = file('/etc/os-release');
 			$tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && empty(preg_grep('/VERSION_CODENAME=jessie/', $lines)) && empty(preg_grep('/VERSION_CODENAME=wheezy/', $lines));
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
@@ -245,13 +245,14 @@
 		</footer>
 
 		<script type="text/javascript">
-			$(document).ready(function(){
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navMqttBruecke').addClass('disabled');
 			});
+
 		</script>
-
-
 
 	</body>
 </html>
