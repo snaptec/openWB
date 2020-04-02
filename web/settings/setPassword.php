@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -72,7 +72,7 @@ AuthUserFile $passwordfile
 AuthName "openWB Einstellungen"
 require valid-user
 
-<Files ".passwd">  
+<Files ".passwd">
   Require all denied
 </Files>
 AUTHEND
