@@ -26,6 +26,7 @@ from pymodbus.client.sync import ModbusTcpClient
 # beide übergebene IP-Adressen auslesen
 ipaddress = str(sys.argv[1])
 ipaddress2 = str(sys.argv[2])
+boolspeicher = int(sys.argv[3])
 
 # Plenticore als Modbus Client einrichhten
 client = ModbusTcpClient(ipaddress, port=1502)
@@ -290,9 +291,11 @@ Yearly_yield = Yearly_yield1 + Yearly_yield2
 # Gesamtleistung AC PV-Module
 with open('/var/www/html/openWB/ramdisk/pvwatt', 'w') as f:
     f.write(str(PV_power_total))
-# Gesamtertrag in Wattstunden
-with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
-    f.write(str(Total_yield))
+#schreibe den Wert nur wenn kein Speicher vorhanden ist. Wenn er da ist nutze die openWB PV Watt beschränkung
+if boolspeicher != 1:
+    # Gesamtertrag in Wattstunden
+    with open('/var/www/html/openWB/ramdisk/pvkwh', 'w') as f:
+        f.write(str(Total_yield))
 # Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
     f.write(str(Total_yield / 1000))
