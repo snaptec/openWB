@@ -1,3 +1,45 @@
+var awattartime = [];
+var graphawattarprice;
+var initialread = 0;
+var graphloaded = 0;
+var boolDisplayHouseConsumption;
+var boolDisplayLoad1;
+var boolDisplayLp1Soc;
+var boolDisplayLoad2;
+var boolDisplayLp2Soc;
+var boolDisplayLp1;
+var boolDisplayLp2;
+var boolDisplayLp3;
+var boolDisplayLp4;
+var boolDisplayLp5;
+var boolDisplayLp6;
+var boolDisplayLp7;
+var boolDisplayLp8;
+var boolDisplayLpAll;
+var boolDisplaySpeicherSoc;
+var boolDisplaySpeicher;
+var boolDisplayEvu;
+var boolDisplayPv;
+var boolDisplayLegend;
+var boolDisplayLiveGraph;
+var all1 = 0;
+var all2 = 0;
+var all3 = 0;
+var all4 = 0;
+var all5 = 0;
+var all6 = 0;
+var all7 = 0;
+var all8 = 0;
+var all1p;
+var all2p;
+var all3p;
+var all4p;
+var all5p;
+var all6p;
+var all7p;
+var all8p;
+var hidehaus;
+
 function loadgraph() {
 	var lineChartData = {
 		labels: atime,
@@ -304,6 +346,60 @@ function loadgraph() {
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
 
+function putgraphtogether() {
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
+		alldata = alldata.replace(/^\s*[\n]/gm, "");
+		alldata = alldata.replace(/^\s*-[\n]/gm, "");
+		var csvData = [];
+		var rawcsv = alldata.split(/\r?\n|\r/);
+		for (var i = 0; i < rawcsv.length; i++) {
+			  csvData.push(rawcsv[i].split(","));
+		}
+		csvData.pop();
+		// Retrived data from csv file content
+		var splittime = [];
+		getCol(csvData, 0).forEach(function(zeit){
+			splittime.push(zeit.substring(0, zeit.length -3));
+		});
+		atime = splittime;
+		//atime = getCol(csvData, 0);
+		abezug = convertToKw(getCol(csvData, 1));
+		alpa = convertToKw(getCol(csvData, 2));
+		apv = convertToKw(getCol(csvData, 3));
+		alp1 = convertToKw(getCol(csvData, 4));
+		alp2 = convertToKw(getCol(csvData, 5));
+		aspeicherl = convertToKw(getCol(csvData, 7));
+		aspeichersoc = getCol(csvData, 8);
+		asoc = getCol(csvData, 9);
+		asoc1 = getCol(csvData, 10);
+		ahausverbrauch = convertToKw(getCol(csvData, 11));
+		averbraucher1 = convertToKw(getCol(csvData, 12));
+		averbraucher2 = convertToKw(getCol(csvData, 13));
+		alp3 = convertToKw(getCol(csvData, 14));
+		alp4 = convertToKw(getCol(csvData, 15));
+		alp5 = convertToKw(getCol(csvData, 16));
+		alp6 = convertToKw(getCol(csvData, 17));
+		alp7 = convertToKw(getCol(csvData, 18));
+		alp8 = convertToKw(getCol(csvData, 19));
+		initialread = 1 ;
+
+		// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
+		unsubscribeMqttGraphSegments();
+
+		checkgraphload();
+	}
+}  // end putgraphtogether
+
+
+$(window).focus(function() {
+    // if the browser window gets focus again after being blurred,
+    // check if mqtt segments for graph need to be subsribed again
+    if ( initialread == 0 ) {
+		subscribeMqttGraphSegments();
+	}
+});
+
 function checkgraphload(){
 	if ( graphloaded == 1 ) {
        	myLine.destroy();
@@ -434,5 +530,19 @@ function showhide(thedataset) {
 		publish("0","openWB/graph/"+thedataset);
 	} else {
 		publish("1","openWB/graph/"+thedataset);
+	}
+}
+
+function subscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		topic = "openWB/graph/" + segments + "alllivevalues";
+		client.subscribe(topic, {qos: 0});
+	}
+}
+
+function unsubscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		topic = "openWB/graph/" + segments + "alllivevalues";
+		client.unsubscribe(topic);
 	}
 }
