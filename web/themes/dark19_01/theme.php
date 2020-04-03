@@ -67,17 +67,17 @@
 		</div>
 
 		<div class="row dateTimeInfoStyle">
-			<div class="col ">
+			<div class="col">
 				<span id="timeSpan" style="float: right">&nbsp;</span>
 				<span id="dateSpan" style="float: left">&nbsp;</span>
 			</div>
 		</div>
 
 		<div class="row justify-content-center">
-			<div class="col-sm-6 pvInfoStyle" style="background-color:#befebe;">
+			<div class="col-sm pvInfoStyle" style="background-color:#befebe;">
 				PV: <span id="pvdiv">0 W</span><span id="pvdailyyielddiv"></span>
 			</div>
-			<div id="evudiv" class="col-sm-6 pvInfoStyle" style="background-color:#febebe;" >
+			<div id="evudiv" class="col-sm pvInfoStyle" style="background-color:#febebe;" >
 				EVU: <span id="bezugdiv">0 W</span>
 			</div>
 		</div>
@@ -87,14 +87,12 @@
 
 			if ( $hausverbrauchstatold == 1 ) {
 echo <<<HAUSVERBRAUCHDIV
-				<div class="col-sm-6 pvInfoStyle" style="background-color:#fefedf;">
+				<div class="col-sm pvInfoStyle" style="background-color:#fefedf;">
 					Hausverbrauch: <span id="hausverbrauchdiv">0 W</span>
 				</div>
-				<div class="col-sm-6 pvInfoStyle" style="background-color:#d0d7e6;">
 HAUSVERBRAUCHDIV;
-			} else {
-				echo '<div class="col-sm-12 pvInfoStyle" style="background-color:#d0d7e6;">';
 			}
+			echo '<div class="col-sm pvInfoStyle" style="background-color:#d0d7e6;">';
 			echo 'Ladeleistung: <span id="powerAllLpspan" style="display: none;">lade Daten</span><span id="powerAllLpInactivespan">lade Daten</span>';
 			echo '    </div>';
 			echo '</div>';
@@ -102,7 +100,7 @@ HAUSVERBRAUCHDIV;
 			if ( strcmp(trim($speicherstatold),"none") != 0 ) {
 echo <<<SPEICHERDIV
 		<div id="speicherdiv" class="row justify-content-center">
-			<div class="col-sm-12 pvInfoStyle" style="background-color:#fcbe1e;">
+			<div class="col-sm pvInfoStyle" style="background-color:#fcbe1e;">
 				Speicher: <span id="speicherleistungdiv">0 W</span><span id="speichersocdiv"></span>
 			</div>
 		</div>
