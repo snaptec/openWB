@@ -124,6 +124,23 @@ def on_message(client, userdata, msg):
             client.publish("openWB/system/MonthGraphData10", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestMonthLadelog"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
+            sendcommand = ["/var/www/html/openWB/runs/sendladelog.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/MonthLadelogData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData12", "empty", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
