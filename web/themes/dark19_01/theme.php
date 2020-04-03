@@ -883,7 +883,6 @@ EXTDEVICEDIVMIDDLE;
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
 					// once page is unhidden... reload graph completety
-					console.log('unhidden');
 					initialread = 0;
 					all1 = 0;
 					all2 = 0;
