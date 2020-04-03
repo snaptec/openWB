@@ -311,6 +311,9 @@ function loadgraph() {
 			scales: {
 				xAxes: [
 					{
+						gridLines: {
+							color: "rgba(255, 255, 255, 0.1)"
+						},
          				ticks: {
 							fontColor: "rgba(255, 255, 255, 0.82)",
 							maxTicksLimit: 15
