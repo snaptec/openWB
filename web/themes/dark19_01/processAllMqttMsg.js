@@ -447,12 +447,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
-			$("#nameLp" + index).css("color", "#A30000");
-			$("#nameLp" + index).css("text-decoration", "line-through");
+			$("#nameLp" + index).removeClass("lpEnabledStyle").addClass("lpDisabledStyle");
 			$("#lpEnableSpanLp" + index).attr("isEnabled", "0");
 		} else {
-			$("#nameLp" + index).css("color", "#006515");
-			$("#nameLp" + index).css("text-decoration", "none");
+			$("#nameLp" + index).removeClass("lpDisabledStyle").addClass("lpEnabledStyle");
 			$("#lpEnableSpanLp" + index).attr("isEnabled", "1");
 		}
 	}
@@ -484,23 +482,23 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		switch ( mqttpayload ) {
 			case "0":
 				// remove animation from span and set standard colored key icon
-				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation text-danger text-success");
+				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation color-red color-green");
 				$(element).addClass("fa-key");
 				break;
 			case "1":
 				// add animation to standard icon
-				$(element).removeClass("fa-lock fa-lock-open text-danger text-success");
+				$(element).removeClass("fa-lock fa-lock-open color-red color-green");
 				$(element).addClass("fa-key animate-alertPulsation");
 				break;
 			case "2":
 				// add red locked icon
-				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation text-success");
-				$(element).addClass("fa-lock text-danger");
+				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation color-green");
+				$(element).addClass("fa-lock color-red");
 				break;
 			case "3":
 				// add green unlock icon
-				$(element).removeClass("fa-lock fa-key animate-alertPulsation text-danger");
-				$(element).addClass("fa-lock-open text-success");
+				$(element).removeClass("fa-lock fa-key animate-alertPulsation color-red");
+				$(element).addClass("fa-lock-open color-green");
 				break;
 		}
 	}
@@ -600,27 +598,27 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$("#targetCurrentLp" + index + "span").show();
 			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").hide();
 		} else {
-			$("#plugstatlp" + index + "div").css("color", "white").hide();
+			$("#plugstatlp" + index + "div").addClass("color-white").hide();
 			$("#actualPowerLp" + index + "span").hide();
 			$("#targetCurrentLp" + index + "span").hide();
 			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").text("- / -");
 			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").show();
-			var isAnyEvPlugged = false;
-			// show total values only if ev is/are plugged
-			for ( index = 1; index <= 8; index++) {
-				if ( $("#plugstatlp" + index + "div").is(':visible') ) {
-					isAnyEvPlugged = true;
-					break;
-				}
+		}
+		var isAnyEvPlugged = false;
+		// show total values only if ev is/are plugged
+		for ( index = 1; index <= 8; index++) {
+			if ( $("#plugstatlp" + index + "div").is(':visible') ) {
+				isAnyEvPlugged = true;
+				break;
 			}
-			if ( isAnyEvPlugged ) {
-				$("#powerAllLpspan").show();
-				$("#powerAllLpInactivespan").hide();
-			} else {
-				$("#powerAllLpspan").hide();
-				$("#powerAllLpInactivespan").text("-");
-				$("#powerAllLpInactivespan").show();
-			}
+		}
+		if ( isAnyEvPlugged ) {
+			$("#powerAllLpspan").show();
+			$("#powerAllLpInactivespan").hide();
+		} else {
+			$("#powerAllLpspan").hide();
+			$("#powerAllLpInactivespan").text("0 W");
+			$("#powerAllLpInactivespan").show();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i ) ) {
@@ -629,11 +627,11 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$("#plugstatlp" + index + "div:visible").css("color", "green");
-			$("#socstatlp" + index).css("color", "green");
+			$("#plugstatlp" + index + "div:visible").removeClass("color-white").addClass("color-green");
+			$("#socstatlp" + index).removeClass("color-black").addClass("color-green");
 		} else {
-			$("#plugstatlp" + index + "div:visible").css("color", "white");
-			$("#socstatlp" + index).css("color", "black");
+			$("#plugstatlp" + index + "div:visible").removeClass("color-green").addClass("color-white");
+			$("#socstatlp" + index).removeClass("color-green").addClass("color-black");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
@@ -656,9 +654,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ($("#stationlp" + index).length > 0) {
 			if (mqttpayload == 1) {
-				$("#stationlp" + index).css("color", "green");
+				$("#stationlp" + index).removeClass("color-blue").addClass("color-green");
 			} else {
-				$("#stationlp" + index).css("color", "blue");
+				$("#stationlp" + index).removeClass("color-green").addClass("color-blue");
 			}
 		}
 	}
