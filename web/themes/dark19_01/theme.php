@@ -128,11 +128,9 @@ EXTDEVICEDIVMIDDLE;
 			}  // end if hook configured
 		?>
 
-		<br>
-
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
-		<div class="row justify-content-center mb-2" id="thegraph">
+		<div class="row justify-content-center my-2" id="thegraph">
 			<div class="col-sm-12" style="height: 350px; text-align: center;">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
