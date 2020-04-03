@@ -48,6 +48,10 @@ def on_message(client, userdata, msg):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
         f.close()
+    if (msg.topic == "openWB/set/configure/AllowedRfidsForLp2"):
+        f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp2', 'w')
+        f.write(msg.payload.decode("utf-8"))
+        f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
