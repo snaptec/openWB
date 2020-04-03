@@ -83,15 +83,21 @@
 		</div>
 
 		<?php
+			echo '<div class="row justify-content-center">';
+
 			if ( $hausverbrauchstatold == 1 ) {
 echo <<<HAUSVERBRAUCHDIV
-			<div class="row justify-content-center">
-				<div class="col-sm-12 pvInfoStyle" style="background-color:#fefedf;">
+				<div class="col-sm-6 pvInfoStyle" style="background-color:#fefedf;">
 					Hausverbrauch: <span id="hausverbrauchdiv">0 W</span>
 				</div>
-			</div>
+				<div class="col-sm-6 pvInfoStyle" style="background-color:#d0d7e6;">
 HAUSVERBRAUCHDIV;
+			} else {
+				echo '<div class="col-sm-12 pvInfoStyle" style="background-color:#d0d7e6;">';
 			}
+			echo 'Ladeleistung: <span id="powerAllLpspan" style="display: none;">lade Daten</span><span id="powerAllLpInactivespan">lade Daten</span>';
+			echo '    </div>';
+			echo '</div>';
 			// if speichermodul is not "none", show the info
 			if ( strcmp(trim($speicherstatold),"none") != 0 ) {
 echo <<<SPEICHERDIV
@@ -122,11 +128,9 @@ EXTDEVICEDIVMIDDLE;
 			}  // end if hook configured
 		?>
 
-		<br>
-
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
-		<div class="row justify-content-center mb-2" id="thegraph">
+		<div class="row justify-content-center my-2" id="thegraph">
 			<div class="col-sm-12" style="height: 350px; text-align: center;">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
@@ -195,13 +199,6 @@ EXTDEVICEDIVMIDDLE;
 				echo '            </div>'."\n";
 				echo '        </div>'."\n\n";
 				echo '        ';
-			}
-			if ( $countLpConfigured > 1 ) {
-				echo '        <div id="powerAllLpdiv" class="row justify-content-center">';
-				echo '            <div class="col-sm-5 chargePointInfoStyle">';
-				echo '                Gesamt-Ladeleistung: <span id="powerAllLpspan" style="display: none;">lade Daten</span><span id="powerAllLpInactivespan">lade Daten</span>';
-				echo '            </div>';
-				echo '        </div>';
 			}
 		?>
 

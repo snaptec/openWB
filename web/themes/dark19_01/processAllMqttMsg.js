@@ -603,22 +603,22 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$("#targetCurrentLp" + index + "span").hide();
 			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").text("- / -");
 			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").show();
-			var isAnyEvPlugged = false;
-			// show total values only if ev is/are plugged
-			for ( index = 1; index <= 8; index++) {
-				if ( $("#plugstatlp" + index + "div").is(':visible') ) {
-					isAnyEvPlugged = true;
-					break;
-				}
+		}
+		var isAnyEvPlugged = false;
+		// show total values only if ev is/are plugged
+		for ( index = 1; index <= 8; index++) {
+			if ( $("#plugstatlp" + index + "div").is(':visible') ) {
+				isAnyEvPlugged = true;
+				break;
 			}
-			if ( isAnyEvPlugged ) {
-				$("#powerAllLpspan").show();
-				$("#powerAllLpInactivespan").hide();
-			} else {
-				$("#powerAllLpspan").hide();
-				$("#powerAllLpInactivespan").text("-");
-				$("#powerAllLpInactivespan").show();
-			}
+		}
+		if ( isAnyEvPlugged ) {
+			$("#powerAllLpspan").show();
+			$("#powerAllLpInactivespan").hide();
+		} else {
+			$("#powerAllLpspan").hide();
+			$("#powerAllLpInactivespan").text("0 W");
+			$("#powerAllLpInactivespan").show();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i ) ) {
