@@ -613,11 +613,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 		}
 		if ( isAnyEvPlugged ) {
-			console.log("is plugged");
 			$("#powerAllLpspan").show();
 			$("#powerAllLpInactivespan").hide();
 		} else {
-			console.log("is not plugged");
 			$("#powerAllLpspan").hide();
 			$("#powerAllLpInactivespan").text("0 W");
 			$("#powerAllLpInactivespan").show();
