@@ -441,14 +441,6 @@ function updateGraph(dataset) {
 	myLine.update();
 }
 
-$(window).focus(function() {
-    // if the browser window gets focus again after being blurred,
-    // check if mqtt segments for graph need to be subsribed again
-    if ( initialread == 0 ) {
-		subscribeMqttGraphSegments();
-	}
-});
-
 function checkgraphload(){
 	if ( graphloaded == 1 ) {
        	myLine.destroy();

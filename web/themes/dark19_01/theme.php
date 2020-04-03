@@ -49,7 +49,7 @@
   	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
     <!-- include special Theme style -->
-	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css">
+	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css?ver=20200403-a">
 
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
@@ -170,12 +170,12 @@ EXTDEVICEDIVMIDDLE;
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 justify-content-center chargePointInfoStyle">'."\n";
 				echo '            <div class="col-4 px-0">'."\n";
 				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'" isEnabled="-1">'."\n";
-				echo '                    <span class="fas fa-xs fa-key" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
+				echo '                    <span class="fas fa-xs" id="lp'.$i.'AutolockConfiguredSpan" style="display: none;"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="nameLp'.$i.'" id="nameLp'.$i.'" style="font-weight: bolder;">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
-				echo '                <span class="fa fa-plug" id="plugstatlp'.$i.'div" style="display: none;"></span>'."\n";
+				echo '                <span class="fa fa-xs fa-plug" id="plugstatlp'.$i.'div" style="display: none;"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {
-				echo '                <span class="fa fa-flag-checkered"></span>'."\n";
+				echo '                <span class="fa fa-xs fa-flag-checkered"></span>'."\n";
 				}
 				echo '                <span class="fa fa-xs fa-moon" id="nachtladenaktivlp'.$i.'div" style="display: none;"></span>'."\n";
 				echo '            </div>'."\n";
@@ -257,14 +257,13 @@ EXTDEVICEDIVMIDDLE;
 			</div>
 		</div>
 
+		<!-- removed to see if people miss it
+
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<hr color="white">
 			</div>
 		</div>
-
-<!-- old code, not optimized for mqtt -->
-<!-- will be replaced once mqtt is fully functional -->
 
 		<div class="row justify-content-center">
 			<h3>letztes zusammenhängendes Ladesegment</h3>
@@ -305,6 +304,7 @@ EXTDEVICEDIVMIDDLE;
 				<span id="aktgeladen3div"></span>
 			</div>
 		</div>
+-->
 
 		<div id="targetChargingProgressDiv" style="display: none;">
 			<div class="row justify-content-center regularTextStyle">
@@ -762,10 +762,10 @@ EXTDEVICEDIVMIDDLE;
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200402-b"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200402-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200403-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -882,6 +882,8 @@ EXTDEVICEDIVMIDDLE;
 			}
 			window.document.addEventListener(visibilityChange, () => {
 				if (!document[hidden]) {
+					// once page is unhidden... reload graph completety
+					console.log('unhidden');
 					initialread = 0;
 					all1 = 0;
 					all2 = 0;
@@ -891,6 +893,7 @@ EXTDEVICEDIVMIDDLE;
 					all6 = 0;
 					all7 = 0;
 					all8 = 0;
+					subscribeMqttGraphSegments();
 				}
 			});
 

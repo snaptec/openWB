@@ -209,6 +209,36 @@ h3 {
     font-size: 0.9rem;
 }
 
+.lpEnabledStyle {
+    color: #006515;
+    text-decoration: none;
+}
+
+.lpDisabledStyle {
+    color: #A30000;
+    text-decoration: line-through;
+}
+
+.color-green {
+    color: #006515;
+}
+
+.color-red {
+    color: #A30000;
+}
+
+.color-white {
+    color: white;
+}
+
+.color-black {
+    color: black;
+}
+
+.color-blue {
+    color: blue;
+}
+
 .btn-blue {
   background-color: hsl(197, 95%, 24%) !important;
   background-repeat: repeat-x;
