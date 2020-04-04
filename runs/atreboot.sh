@@ -16,7 +16,11 @@ echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL2
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL3
 echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice

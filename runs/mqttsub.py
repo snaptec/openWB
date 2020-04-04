@@ -57,21 +57,31 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL2"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL3"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL1"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/hook/HookControl"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=30):
-            hookmsg=msg.payload.decode("utf-8")
-            hooknmb=hookmsg[1:2]
-            hookact=hookmsg[0:1]
-            sendhook = ["/var/www/html/openWB/runs/hookcontrol.sh", hookmsg]
-            subprocess.Popen(sendhook)
-            client.publish("openWB/set/hook/HookControl", "", qos=0, retain=True)
-            client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
-
+    if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL2"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL3"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL3', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)
@@ -86,7 +96,7 @@ def on_message(client, userdata, msg):
                 if msg.payload.decode("utf-8") in line:
                     if "pass" not in line:
                         client.publish("openWB/set/system/AskedVar", line, qos=0, retain=True)
-            client.publish("openWB/set/system/GetVar", "", qos=0, retain=True)  
+            client.publish("openWB/set/system/GetVar", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/PerformUpdate"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
