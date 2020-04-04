@@ -65,7 +65,7 @@ function computeAndSetCurrentForChargePoint() {
 	fi
 
 	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
-		echo "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - skipping slave loop for CP#${chargePoint}"
+		echo "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - skipping slave loop for CP#${chargePoint} - is your CONTROLLER USING A TOO HIGH LIMIT FOR DETECTING CHARGING PHASES ??"
 		return 1
 	fi
 
