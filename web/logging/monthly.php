@@ -80,7 +80,8 @@
 
 		<!-- load Chart.js library -->
 		<script src="../js/Chart.bundle.js"></script>
-
+		<script src="../js/hammerjs@2.0.8"></script>
+		<script src="../js/chartjs-plugin-zoom@0.7.4"></script>
 		<!-- load Bootstrap-Datepicker library -->
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
