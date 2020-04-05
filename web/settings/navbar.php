@@ -36,7 +36,7 @@
 						Erscheinungsbild
 					</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" id="navSetTheme" href="./settings/setTheme.php">Theme</a>
+						<a class="dropdown-item" id="navSetTheme" href="./settings/setTheme.php">Theme-Auswahl</a>
 						<a class="dropdown-item" id="navGraphSettings" href="./settings/graphconfig.php">Graph</a>
 					</div>
 				</li>
