@@ -168,6 +168,11 @@ mqttvar["lp/7/AutolockConfigured"]=autolockconfiguredlp7
 mqttvar["lp/8/AutolockConfigured"]=autolockconfiguredlp8
 mqttvar["pv/DailyYieldKwh"]=daily_pvkwhk
 mqttvar["global/boolRse"]=rsestatus
+mqttvar["hook/1/boolHookStatus"]=hook1akt
+mqttvar["hook/2/boolHookStatus"]=hook1akt
+mqttvar["hook/3/boolHookStatus"]=hook1akt
+
+
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do

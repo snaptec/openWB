@@ -138,9 +138,11 @@ if len(vin) < 10:
 f = open('/var/www/html/openWB/ramdisk/zoereply7lp2', 'w')
 f.write(str(responsetext))
 f.close()
-#
-headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
-reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/kmr/remote-services/car-adapter/v1/cars/' + vin + '/battery-status')
+# new
+payload = {'country': country} 
+data = urllib.urlencode(payload) 
+data = data.encode('Big5')
+reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereon/kca/car-adapter/v2/cars/' + vin + '/battery-status?'  + data)
 reg.add_header('x-gigya-id_token',gigya_jwttoken)
 reg.add_header('apikey', kamereonapikey)
 reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
@@ -156,18 +158,6 @@ soc = batt['data']['attributes']['batteryLevel']
 f = open('/var/www/html/openWB/ramdisk/soc1', 'w')
 f.write(str(soc))
 f.close()
-#print(time_string,'responsetext',responsetext)
-#
-headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
-reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/kmr/remote-services/car-adapter/v1/cars/' + vin + '/charge-mode')
-reg.add_header('x-gigya-id_token',gigya_jwttoken)
-reg.add_header('apikey', kamereonapikey)
-reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
-#print('c7',reg)
-response= urllib2.urlopen(reg)
-responsetext  = response.read()
-f = open('/var/www/html/openWB/ramdisk/zoereply9lp2', 'w')
-f.write(str(responsetext))
-f.close()
+
 
 

@@ -48,6 +48,10 @@ def on_message(client, userdata, msg):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
         f.close()
+    if (msg.topic == "openWB/set/configure/AllowedRfidsForLp2"):
+        f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp2', 'w')
+        f.write(msg.payload.decode("utf-8"))
+        f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
@@ -58,6 +62,16 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/hook/HookControl"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=30):
+            hookmsg=msg.payload.decode("utf-8")
+            hooknmb=hookmsg[1:2]
+            hookact=hookmsg[0:1]
+            sendhook = ["/var/www/html/openWB/runs/hookcontrol.sh", hookmsg]
+            subprocess.Popen(sendhook)
+            client.publish("openWB/set/hook/HookControl", "", qos=0, retain=True)
+            client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
+
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)
@@ -120,6 +134,23 @@ def on_message(client, userdata, msg):
             client.publish("openWB/system/MonthGraphData10", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestMonthLadelog"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
+            sendcommand = ["/var/www/html/openWB/runs/sendladelog.sh", msg.payload]
+            subprocess.Popen(sendcommand)
+        else:
+            client.publish("openWB/system/MonthLadelogData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData10", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData11", "empty", qos=0, retain=True)
+            client.publish("openWB/system/MonthLadelogData12", "empty", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
