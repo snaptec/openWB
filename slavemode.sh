@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HeartbeatTimeout=35
-CurrentLimitAmpereForCpCharging=2
+CurrentLimitAmpereForCpCharging=0.5
 NumberOfSupportedChargePoints=2
 
 #
