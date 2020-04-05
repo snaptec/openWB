@@ -234,6 +234,7 @@ function checkControllerHeartbeat() {
 			if (( Heartbeat == 1 )) || (( debug == 2 )); then
 				echo "$NowItIs: Slave Mode: HEARTBEAT ERROR: MaximumTotalCurrent (${MaximumTotalCurrent}) not changed by local control server for $heartbeatMissingFor > $HeartbeatTimeout seconds. STOP CHARGING IMMEDIATELY"
 			fi
+			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
 			callSetCurrent 0 0
 			exit 1
