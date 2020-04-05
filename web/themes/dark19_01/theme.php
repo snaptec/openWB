@@ -98,7 +98,7 @@ echo <<<HAUSVERBRAUCHDIV
 HAUSVERBRAUCHDIV;
 	}
 	echo '<div class="col-sm bg-lightgrey">';
-	echo 'Ladeleistung: <span id="powerAllLpspan" style="display: none;">lade Daten</span><span id="powerAllLpInactivespan">lade Daten</span>';
+	echo 'Ladeleistung: <span id="powerAllLpspan">lade Daten</span>';
 	echo '    </div>';
 	echo '</div>';
 	// if speichermodul is not "none", show the info
