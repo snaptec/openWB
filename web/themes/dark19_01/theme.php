@@ -70,8 +70,10 @@
 			<div id="time" class="col text-left">
 				&nbsp;
 			</div>
-			<div class="col-5 cursor-pointer regularTextSize font-weight-bold text-center text-red" id="chargeModeSelect">
-				>> Lademodus <<
+			<div class="col-5 cursor-pointer regularTextSize font-weight-bold text-center text-red">
+				<span id="chargeModeSelect">
+					>> Lademodus <<
+				</span>
 			</div>
 			<div id="date" class="col text-right">
 				&nbsp;
