@@ -22,7 +22,10 @@ openwbisslave() {
 
 		# we have to do a slightly ugly if-else-cascade to determine whether the currentCp is actually present
 		# if not we continue the loop with the next CP
-		if (( currentCp == 2)) && (( lastmanagementaktiv == 0)); then
+		if (( currentCp == 1)); then
+			# CP1 exists unconditionally
+			:
+		elif (( currentCp == 2)) && (( lastmanagement == 0)); then
 			# CP2 does not actually exist
 			continue
 		elif (( currentCp == 3)) && (( lastmanagements2 == 0)); then
@@ -36,6 +39,9 @@ openwbisslave() {
 				# CPx (x >= 4) does not actually exist
 				continue
 			fi
+		else
+			echo "$NowItIs: Slave Mode charge point ERROR: Charge Point #${currentCp} is not supported"
+			continue
 		fi
 
 		# handle the currentCp: first aggregate the data ...
@@ -149,6 +155,9 @@ function aggregateDataForChargePoint() {
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/llas2${i}")
 		elif (( chargePoint >= 4 )); then
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/lla${i}lp${chargePoint}")
+		else
+			echo "$NowItIs: Slave Mode charge current fetch ERROR: Charge Point #${chargePoint} is not supported"
+			return 1
 		fi
 
 		if (( `echo "${ChargeCurrentOnPhase[i]} > $CurrentLimitAmpereForCpCharging" | bc` == 1 )); then
@@ -268,6 +277,9 @@ function callSetCurrent() {
 		local chargePointString="s2"
 	elif (( chargePoint >= 4 )); then
 		local chargePointString="lp${chargePoint}"
+	else
+		echo "$NowItIs: Slave Mode charge current set ERROR: Charge Point #${chargePoint} is not supported"
+		return 1
 	fi
 
 	$dbgWrite "$NowItIs: callSetCurrent(${currentToSet}, ${chargePoint}): Calling runs/set-current.sh ${currentToSet} ${chargePointString}"
