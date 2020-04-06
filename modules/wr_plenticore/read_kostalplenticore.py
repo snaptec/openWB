@@ -38,7 +38,6 @@ else:
     Total_DC_power2 = 0
     Actual_batt_ch_disch_power2 = 0
     Total_yield2 = 0
-    Daily_yield2 = 0
     Yearly_yield2 = 0
     Monthly_yield2 = 0
     Inverter_generation_power_actual2 = 0
@@ -106,9 +105,6 @@ reg_150 = client.read_holding_registers(150,2,unit=71)
 # Plenticore Register 320: Total_yield [Wh]
 # ist PV Gesamtertrag
 reg_320 = client.read_holding_registers(320,2,unit=71)
-# Plenticore Register 322: Daily_yield [Wh]
-# ist PV Tagesertrag
-reg_322 = client.read_holding_registers(322,2,unit=71)
 # Plenticore Register 324: Yearly_yield [Wh]
 # ist PV Jahresertrag
 reg_324 = client.read_holding_registers(324,2,unit=71)
@@ -136,9 +132,6 @@ if ipaddress2 != "none":
     # Plenticore Register 320: Total_yield [Wh]
     # ist PV Gesamtertrag
     reg2_320 = client2.read_holding_registers(320,2,unit=71)
-    # Plenticore Register 322: Daily_yield [Wh]
-    # ist PV Tagesertrag
-    reg2_322 = client2.read_holding_registers(322,2,unit=71)
     # Plenticore Register 324: Yearly_yield [Wh]
     # ist PV Jahresertrag
     reg2_324 = client2.read_holding_registers(324,2,unit=71)
@@ -161,7 +154,6 @@ FRegister_244 = BinaryPayloadDecoder.fromRegisters(reg_244.registers, byteorder=
 FRegister_250 = BinaryPayloadDecoder.fromRegisters(reg_250.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_252 = BinaryPayloadDecoder.fromRegisters(reg_252.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_320 = BinaryPayloadDecoder.fromRegisters(reg_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-FRegister_322 = BinaryPayloadDecoder.fromRegisters(reg_322.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_324 = BinaryPayloadDecoder.fromRegisters(reg_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_326 = BinaryPayloadDecoder.fromRegisters(reg_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
 FRegister_514 = BinaryPayloadDecoder.fromRegisters(reg_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
@@ -172,7 +164,6 @@ FRegister_582 = BinaryPayloadDecoder.fromRegisters(reg_582.registers, byteorder=
 if ipaddress2 != "none":
     FRegister2_100 = BinaryPayloadDecoder.fromRegisters(reg2_100.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_320 = BinaryPayloadDecoder.fromRegisters(reg2_320.registers, byteorder=Endian.Big, wordorder=Endian.Little)
-    FRegister2_322 = BinaryPayloadDecoder.fromRegisters(reg2_322.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_324 = BinaryPayloadDecoder.fromRegisters(reg2_324.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_326 = BinaryPayloadDecoder.fromRegisters(reg2_326.registers, byteorder=Endian.Big, wordorder=Endian.Little)
     FRegister2_514 = BinaryPayloadDecoder.fromRegisters(reg2_514.registers, byteorder=Endian.Big, wordorder=Endian.Little)
@@ -183,7 +174,6 @@ if ipaddress2 != "none":
 Total_DC_power1 = int(FRegister_100.decode_32bit_float())
 Actual_batt_ch_disch_power1 = int(FRegister_582.decode_16bit_int())
 Total_yield1 = int(FRegister_320.decode_32bit_float())
-Daily_yield1 = round((FRegister_322.decode_32bit_float()/1000),2)
 Yearly_yield1 = round((FRegister_324.decode_32bit_float()/1000),2)
 Monthly_yield1 = round((FRegister_326.decode_32bit_float()/1000),2)
 Inverter_generation_power_actual1 = int(FRegister_575.decode_16bit_int())
@@ -207,7 +197,6 @@ if ipaddress2 != "none":
     Total_DC_power2 = int(FRegister2_100.decode_32bit_float())
     Actual_batt_ch_disch_power2 = int(FRegister2_582.decode_16bit_int())
     Total_yield2 = int(FRegister2_320.decode_32bit_float())
-    Daily_yield2 = round((FRegister2_322.decode_32bit_float()/1000),2)
     Yearly_yield2 = round((FRegister2_324.decode_32bit_float()/1000),2)
     Monthly_yield2 = round((FRegister2_326.decode_32bit_float()/1000),2)
     Inverter_generation_power_actual2 = int(FRegister2_575.decode_16bit_int())
@@ -282,7 +271,6 @@ Actual_batt_ch_disch_power2 = Actual_batt_ch_disch_power2 * -1
 
 # Summen der Erträge bestimmen
 Total_yield = Total_yield1 + Total_yield2
-Daily_yield = Daily_yield1 + Daily_yield2
 Monthly_yield = Monthly_yield1 + Monthly_yield2
 Yearly_yield = Yearly_yield1 + Yearly_yield2
 
@@ -299,9 +287,6 @@ if boolspeicher != 1:
 # Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk', 'w') as f:
     f.write(str(Total_yield / 1000))
-# Tagesertrag in Kilowattstunden
-with open('/var/www/html/openWB/ramdisk/daily_pvkwhk', 'w') as f:
-    f.write(str(Daily_yield))
 # Jahresertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk', 'w') as f:
     f.write(str(Yearly_yield))
@@ -319,9 +304,6 @@ with open('/var/www/html/openWB/ramdisk/pvkwh1', 'w') as f:
 # Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk1', 'w') as f:
     f.write(str(Total_yield1 / 1000))
-# Tagesertrag in Kilowattstunden
-with open('/var/www/html/openWB/ramdisk/daily_pvkwhk1', 'w') as f:
-    f.write(str(Daily_yield1))
 # Jahresertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk1', 'w') as f:
     f.write(str(Yearly_yield1))
@@ -339,9 +321,6 @@ with open('/var/www/html/openWB/ramdisk/pvkwh2', 'w') as f:
 # Gesamtertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/pvkwhk2', 'w') as f:
     f.write(str(Total_yield2 / 1000))
-# Tagesertrag in Kilowattstunden
-with open('/var/www/html/openWB/ramdisk/daily_pvkwhk2', 'w') as f:
-    f.write(str(Daily_yield2))
 # Jahresertrag in Kilowattstunden
 with open('/var/www/html/openWB/ramdisk/yearly_pvkwhk2', 'w') as f:
     f.write(str(Yearly_yield2))
