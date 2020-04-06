@@ -84,7 +84,7 @@ do
 	if (( pvyieldcount == 4 )); then
 
 		pvdailyyield=$(echo "scale=2;($pvkwh - $i) / 1000" |bc)
-		echo $pvdailyyield > ramdisk/daily_pvkwhk
+		echo $pvdailyyield > /var/www/html/openWB/ramdisk/daily_pvkwhk
 	fi
 done
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
