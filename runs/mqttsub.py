@@ -39,6 +39,15 @@ def on_connect(client, userdata, flags, rc):
 
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/hook/HookControl"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=30):
+            hookmsg=msg.payload.decode("utf-8")
+            hooknmb=hookmsg[1:2]
+            hookact=hookmsg[0:1]
+            sendhook = ["/var/www/html/openWB/runs/hookcontrol.sh", hookmsg]
+            subprocess.Popen(sendhook)
+            client.publish("openWB/set/hook/HookControl", "", qos=0, retain=True)
+            client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
     if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
