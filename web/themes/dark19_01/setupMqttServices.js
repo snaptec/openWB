@@ -63,7 +63,7 @@ var options = {
 		// configured lp all have class lpEnableSpan
 		$(".lpEnableSpan").each(function() {
 			var lp = $(this).attr('lp');
-			var topic = "openWB/lp/" + lp + "/#"
+			var topic = "openWB/lp/" + lp + "/#";
 			client.subscribe(topic, {qos: 0});
 		});
 	},

@@ -4,6 +4,11 @@ Stylesheet zum openWB Dark19_01-Theme
 2019-2020 Michael Ortenstein
 */
 
+html{
+   min-height: 100%;
+   min-width:100%;
+}
+
 body {
       color: white;
       /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
@@ -129,84 +134,8 @@ body {
   align-items: center;
 }
 
-/* Extra small devices (portrait phones, less than 576px) */
-/* No media query since this is the default in Bootstrap */
-h1 {
-    font-size: 1.4rem;
-    font-weight: bolder;
-    text-align: center;
-}
-
-h2 {
-    font-size: 0.9rem;
-    font-weight: bolder;
-    color: rgba(255, 255, 255, 0.82);
-    text-align: center;
-}
-
-h3 {
-    font-size: 0.7rem;
-    font-weight: bolder;
-    color: rgba(255, 255, 255, 0.82);
-    text-align: center;
-}
-
-.smallTextStyle {
-      font-size: 1.0rem;
-      color: red;
-      text-align: center;
-}
-
-.regularTextStyle {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.82);
-      text-align: center;
-}
-
-.versionTextStyle {
-      font-size: 0.5rem;
-      color: rgba(255, 255, 255, 0.82);
-      text-align: center;
-}
-
-.pvInfoStyle {
-      font-size: 0.8rem;
-      font-weight: bolder;
-      color: black;
-      text-align: center;
-}
-
-.extDeviceInfoStyle {
-      font-size: 0.8rem;
-      font-weight: bolder;
-      color: rgba(255, 255, 255, 0.82);
-      text-align: center;
-}
-
-.dateTimeInfoStyle {
-      font-size: 0.68rem;
-      color: #515151;
-      background-color: #d0d7e6;
-      font-weight: bolder;
-}
-
-.chargePointInfoHeaderStyle {
-      font-size: 0.65rem;
-      color: #515151;
-      background-color: #d0d7e6;
-      text-align: center;
-      font-weight: bolder;
-}
-
-.chargePointInfoStyle {
-      font-size: 0.65rem;
-      color: #515151;
-      background-color: #b6bcc9;
-      text-align: center;
-}
-
-.myButtonStyle {
-    font-size: 0.9rem;
+.hide {
+    display: none;
 }
 
 .lpEnabledStyle {
@@ -219,24 +148,56 @@ h3 {
     text-decoration: line-through;
 }
 
-.color-green {
+.text-green {
     color: #006515;
 }
 
-.color-red {
+.text-red {
     color: #A30000;
 }
 
-.color-white {
+.text-white {
     color: white;
 }
 
-.color-black {
+.text-black {
     color: black;
 }
 
-.color-blue {
+.text-blue {
     color: blue;
+}
+
+.text-grey {
+    color: #515151;
+}
+
+.text-lightgrey {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.bg-darkgrey {
+    background-color: #b6bcc9;
+}
+
+.bg-lightgrey {
+    background-color: #d0d7e6;
+}
+
+.bg-lightgreen {
+    background-color: #befebe;
+}
+
+.bg-rose {
+    background-color: #febebe;
+}
+
+.bg-apricot {
+    background-color:#fefedf;
+}
+
+.bg-orange {
+    background-color:#fcbe1e;
 }
 
 .btn-blue {
@@ -290,6 +251,40 @@ h3 {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query since this is the default in Bootstrap */
+h1 {
+    font-size: 1.4rem;
+}
+
+h2 {
+    font-size: 0.9rem;
+}
+
+h3 {
+    font-size: 0.7rem;
+}
+
+.verySmallTextSize {
+      font-size: 0.5rem;
+}
+
+.smallTextSize {
+      font-size: 0.5rem;
+}
+
+.regularTextSize {
+      font-size: 0.7rem;
+}
+
+.largeTextSize {
+      font-size: 0.8rem;
+}
+
+.buttonTextSize {
+    font-size: 0.9rem;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
     h1 {
@@ -304,31 +299,23 @@ h3 {
         font-size: 0.9rem;
     }
 
-    .smallTextStyle {
-          font-size: 1.1rem;
+    .verySmallTextSize {
+          font-size: 0.6rem;
     }
 
-    .regularTextStyle {
+    .smallTextSize {
+          font-size: 0.68rem;
+    }
+
+    .regularTextSize {
           font-size: 0.75rem;
     }
 
-    .versionTextStyle {
-          font-size: 0.5rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
+    .largeTextSize {
           font-size: 0.95rem;
     }
 
-    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
-          font-size: 0.75rem;
-    }
-
-    .dateTimeInfoStyle {
-        font-size: 0.75rem;
-    }
-
-    .myButtonStyle {
+    .buttonTextSize {
           font-size: 1.0rem;
     }
 }
@@ -347,31 +334,23 @@ h3 {
         font-size: 1.1rem;
     }
 
-    .smallTextStyle {
-          font-size: 1.5rem;
+    .verySmallTextSize {
+          font-size: 0.8rem;
     }
 
-    .regularTextStyle {
+    .smallTextSize {
+          font-size: 0.9rem;
+    }
+
+    .regularTextSize {
           font-size: 1.0rem;
     }
 
-    .versionTextStyle {
-          font-size: 0.6rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
+    .largeTextSize {
           font-size: 1.3rem;
     }
 
-    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
-          font-size: 1.0rem;
-    }
-
-    .dateTimeInfoStyle {
-        font-size: 0.85rem;
-    }
-
-    .myButtonStyle {
+    .buttonTextSize {
           font-size: 1.2rem;
     }
 }
@@ -390,27 +369,23 @@ h3 {
         font-size: 1.6rem;
     }
 
-    .smallTextStyle {
-          font-size: 1.8rem;
+    .verySmallTextSize {
+          font-size: 1.1rem;
     }
 
-    .regularTextStyle {
+    .smallTextSize {
+          font-size: 1.25rem;
+    }
+
+    .regularTextSize {
           font-size: 1.4rem;
     }
 
-    .pvInfoStyle, .extDeviceInfoStyle {
+    .largeTextSize {
           font-size: 1.6rem;
     }
 
-    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
-          font-size: 1.4rem;
-    }
-
-    .dateTimeInfoStyle {
-        font-size: 1.0rem;
-    }
-
-    .myButtonStyle {
+    .buttonTextSize {
           font-size: 1.6rem;
     }
 }
@@ -429,31 +404,23 @@ h3 {
         font-size: 1.95rem;
     }
 
-    .smallTextStyle {
+    .verySmallTextSize {
+          font-size: 1.4rem;
+    }
+
+    .smallTextSize {
+          font-size: 1.65rem;
+    }
+
+    .regularTextSize {
           font-size: 1.8rem;
     }
 
-    .regularTextStyle {
+    .largeTextSize {
           font-size: 1.8rem;
     }
 
-    .versionTextStyle {
-          font-size: 1.0rem;
-    }
-
-    .pvInfoStyle, .extDeviceInfoStyle {
-          font-size: 1.8rem;
-    }
-
-    .chargePointInfoStyle, .chargePointInfoHeaderStyle {
-          font-size: 1.8rem;
-    }
-
-    .dateTimeInfoStyle {
-        font-size: 1.1rem;
-    }
-
-    .myButtonStyle {
+    .buttonTextSize {
           font-size: 2.0rem;
     }
 }

@@ -223,25 +223,36 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		$("#hausverbrauchdiv").text(powerHouse);
 	}
 	else if ( mqttmsg == "openWB/global/WAllChargePoints") {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if ( isNaN(powerAllLp) ) {
-			powerAllLp = 0;
+		var isAnyEvPlugged = false;
+		// show charging power only if ev is/are plugged
+		for ( index = 1; index <= 8; index++) {
+			if ( $("#plugstatlp" + index + "div").is(':visible') ) {
+				isAnyEvPlugged = true;
+				break;
+			}
 		}
-		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toFixed(2) + " kW";
+		if ( isAnyEvPlugged ) {
+			var powerAllLp = parseInt(mqttpayload, 10);
+			if ( isNaN(powerAllLp) ) {
+				powerAllLp = 0;
+			}
+			if (powerAllLp > 999) {
+				powerAllLp = (powerAllLp / 1000).toFixed(2) + " kW";
+			} else {
+				powerAllLp += " W";
+			}
 		} else {
-			powerAllLp += " W";
+			var powerAllLp = "0 W";
 		}
 		$("#powerAllLpspan").text(powerAllLp);
 	}
 	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
-		$("#lastregelungaktivdiv").text(mqttpayload);
 		if ( mqttpayload.length >= 5 ) {
-			// if there is info-text in payload for topic, show the div
-			$("#lastregelungaktivdiv").show();
+			// if there is info-text in payload for topic, show the text
+			$("#lastregelungaktiv").text(mqttpayload);
 		} else {
-			// if there is no text, hide the div
-			$("#lastregelungaktivdiv").hide();
+			// if there is no text, show nothing (hides row)
+			$("#lastregelungaktiv").text("");
 		}
 	}
 	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
@@ -266,62 +277,43 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case "0":
 				// mode sofort
+				$("#chargeModeSelect").text(">> Sofortladen <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeSofortBtn").addClass("btn-green");
 				$("#targetChargingProgressDiv").show();
 				$("#sofortladenEinstellungenDiv").show();
-				$("#sofortBtn").addClass("btn-green").removeClass("btn-red");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
 				break;
 			case "1":
 				// mode min+pv
+				$("#chargeModeSelect").text(">> Min+PV-Laden <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeMinPVBtn").addClass("btn-green");
 				$("#targetChargingProgressDiv").hide();
 				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-green").removeClass("btn-red");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
 				break;
 			case "2":
 				// mode pv
+				$("#chargeModeSelect").text(">> PV-Laden <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModePVBtn").addClass("btn-green");
 				$("#targetChargingProgressDiv").hide();
 				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-green").removeClass("btn-red");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				if ( $("#vorrangButtonDiv").attr("value") == "1" ) {
-					$("#vorrangButtonDiv").show();
-				} else {
-					$("#vorrangButtonDiv").hide();
-				}
 				break;
 			case "3":
 				// mode stop
+				$("#chargeModeSelect").text(">> Stop <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeStopBtn").addClass("btn-green");
 				$("#targetChargingProgressDiv").hide();
 				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-green").removeClass("btn-red");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
 				break;
 			case "4":
 				// mode standby
+				$("#chargeModeSelect").text(">> Standby <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeStdbyBtn").addClass("btn-green");
 				$("#targetChargingProgressDiv").hide();
 				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-green").removeClass("btn-red");
-				$("#vorrangButtonDiv").hide();
 		}
 	}
 }
@@ -388,8 +380,8 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 			var dayOfWeek = dateObject.toLocaleDateString('de-DE', { weekday: 'short'});
 			date = dayOfWeek + ", " + dd + "." + mm + "." + dateObject.getFullYear();
 		}
-		$("#timeSpan").text(time);
-		$("#dateSpan").text(date);
+		$("#time").text(time);
+		$("#date").text(date);
 	}
 }
 
@@ -482,23 +474,23 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		switch ( mqttpayload ) {
 			case "0":
 				// remove animation from span and set standard colored key icon
-				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation color-red color-green");
+				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation text-red text-green");
 				$(element).addClass("fa-key");
 				break;
 			case "1":
 				// add animation to standard icon
-				$(element).removeClass("fa-lock fa-lock-open color-red color-green");
+				$(element).removeClass("fa-lock fa-lock-open text-red text-green");
 				$(element).addClass("fa-key animate-alertPulsation");
 				break;
 			case "2":
 				// add red locked icon
-				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation color-green");
-				$(element).addClass("fa-lock color-red");
+				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation text-green");
+				$(element).addClass("fa-lock text-red");
 				break;
 			case "3":
 				// add green unlock icon
-				$(element).removeClass("fa-lock fa-key animate-alertPulsation color-red");
-				$(element).addClass("fa-lock-open color-green");
+				$(element).removeClass("fa-lock fa-key animate-alertPulsation text-red");
+				$(element).addClass("fa-lock-open text-green");
 				break;
 		}
 	}
@@ -531,15 +523,20 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var actualPower = parseInt(mqttpayload, 10);
-		if ( isNaN(actualPower) ) {
-			actualPower = 0;
-		}
-		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toFixed(2);
-			actualPower += " kW";
+		if ( $("#plugstatlp" + index + "div").is(':visible') ) {
+			// only show value if ev is plugged in
+			var actualPower = parseInt(mqttpayload, 10);
+			if ( isNaN(actualPower) ) {
+				actualPower = 0;
+			}
+			if (actualPower > 999) {
+				actualPower = (actualPower / 1000).toFixed(2);
+				actualPower += " kW";
+			} else {
+				actualPower += " W";
+			}
 		} else {
-			actualPower += " W";
+			var actualPower = "-"
 		}
 		$("#actualPowerLp" + index + "span").text(actualPower);
 	}
@@ -575,18 +572,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$("#restzeitlp" + index + "div").text(mqttpayload);
 	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
-		// target current value at charge point
-		// matches to all messages containing "openwb/lp/#/aconfigured"
-		// where # is an integer > 0
-		// search is case insensitive
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var current = parseInt(mqttpayload, 10);
-		if ( isNaN(current) ) {
-			current = 0;
-		}
-		$("#targetCurrentLp" + index + "span").text(" / " + current + " A");
-	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/boolplugstat"
 		// where # is an integer > 0
@@ -594,31 +579,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
 			$("#plugstatlp" + index + "div").show();
-			$("#actualPowerLp" + index + "span").show();
-			$("#targetCurrentLp" + index + "span").show();
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").hide();
 		} else {
-			$("#plugstatlp" + index + "div").addClass("color-white").hide();
-			$("#actualPowerLp" + index + "span").hide();
-			$("#targetCurrentLp" + index + "span").hide();
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").text("- / -");
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").show();
-		}
-		var isAnyEvPlugged = false;
-		// show total values only if ev is/are plugged
-		for ( index = 1; index <= 8; index++) {
-			if ( $("#plugstatlp" + index + "div").is(':visible') ) {
-				isAnyEvPlugged = true;
-				break;
-			}
-		}
-		if ( isAnyEvPlugged ) {
-			$("#powerAllLpspan").show();
-			$("#powerAllLpInactivespan").hide();
-		} else {
-			$("#powerAllLpspan").hide();
-			$("#powerAllLpInactivespan").text("0 W");
-			$("#powerAllLpInactivespan").show();
+			$("#plugstatlp" + index + "div").addClass("text-white").hide();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i ) ) {
@@ -627,11 +589,11 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$("#plugstatlp" + index + "div:visible").removeClass("color-white").addClass("color-green");
-			$("#socstatlp" + index).removeClass("color-black").addClass("color-green");
+			$("#plugstatlp" + index + "div:visible").removeClass("text-white").addClass("text-green");
+			$("#socstatlp" + index).removeClass("text-black").addClass("text-green");
 		} else {
-			$("#plugstatlp" + index + "div:visible").removeClass("color-green").addClass("color-white");
-			$("#socstatlp" + index).removeClass("color-green").addClass("color-black");
+			$("#plugstatlp" + index + "div:visible").removeClass("text-green").addClass("text-white");
+			$("#socstatlp" + index).removeClass("text-green").addClass("text-black");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
@@ -654,9 +616,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ($("#stationlp" + index).length > 0) {
 			if (mqttpayload == 1) {
-				$("#stationlp" + index).removeClass("color-blue").addClass("color-green");
+				$("#stationlp" + index).removeClass("text-blue").addClass("text-green");
 			} else {
-				$("#stationlp" + index).removeClass("color-green").addClass("color-blue");
+				$("#stationlp" + index).removeClass("text-green").addClass("text-blue");
 			}
 		}
 	}
