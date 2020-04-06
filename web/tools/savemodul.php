@@ -28,6 +28,27 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'soc_bluelink_password='.$_POST['soc_bluelink_password']."\n";
 			$writeit = '1';
 			}
+			if(strpos($line, "pv2ip=") !== false) {
+			$result .= 'pv2ip='.$_POST['pv2ip']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "pv2id=") !== false) {
+			$result .= 'pv2id='.$_POST['pv2id']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "pv2user=") !== false) {
+			$result .= 'pv2user='.$_POST['pv2user']."\n";
+			$writeit = '1';
+			}
+			if(strpos($line, "pv2pass=") !== false) {
+			$result .= 'pv2pass='.$_POST['pv2pass']."\n";
+			$writeit = '1';
+			}
+
+			if(strpos($line, "pv2wattmodul=") !== false) {
+			$result .= 'pv2wattmodul='.$_POST['pv2wattmodul']."\n";
+			$writeit = '1';
+			}
 			if(strpos($line, "soc_bluelink_pin=") !== false) {
 			$result .= 'soc_bluelink_pin='.$_POST['soc_bluelink_pin']."\n";
 			$writeit = '1';

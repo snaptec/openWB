@@ -232,6 +232,10 @@ echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp6
 echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp7
 echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp8
 
+echo 0 > /var/www/html/openWB/ramdisk/pv2watt
+
+echo 0 > /var/www/html/openWB/ramdisk/pv2kwh
+
 # Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
 echo 0 > /var/www/html/openWB/ramdisk/pvwatt
@@ -2430,6 +2434,16 @@ fi
 if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "pv2wattmodul=" /var/www/html/openWB/openwb.conf
+then
+	echo "pv2wattmodul=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattip=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattid=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattuser=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattpass=none" >> /var/www/html/openWB/openwb.conf
+
+
 fi
 if ! grep -Fq "soc_bluelink_email=" /var/www/html/openWB/openwb.conf
 then

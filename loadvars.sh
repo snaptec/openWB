@@ -315,7 +315,19 @@ if [[ $pvwattmodul != "none" ]]; then
 else
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
+if [[ $pv2wattmodul != "none" ]]; then
+	pv2watt=$(modules/$pv2wattmodul/main.sh || true)
+	pvwatt=$(( pvwatt + pv2watt ))
+	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+	pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
 
+	pvkwh=$(echo "$pvkwh + $pv2kwh" |bc)
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+	if ! [[ $pvwatt =~ $re ]] ; then
+		pvwatt="0"
+	fi
+fi
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
