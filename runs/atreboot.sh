@@ -2458,6 +2458,14 @@ then
 	echo "soc_bluelink_interval=30" >> /var/www/html/openWB/openwb.conf
 
 fi
+if ! grep -Fq "https=" /var/www/html/openWB/openwb.conf
+then
+	echo "https=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpsCert=" /var/www/html/openWB/openwb.conf
+then
+	echo "httpsCert=0" >> /var/www/html/openWB/openwb.conf
+fi  
 
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
@@ -2493,7 +2501,7 @@ if  grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf
 then
 	echo "...ok"
 else
-	sudo cp /var/www/html/openWB/web/tools/000-default.conf /etc/apache2/sites-available/
+	sudo cp /var/www/html/openWB/configfiles/000-default.conf /etc/apache2/sites-available/
 	echo "...changed"
 fi
 if ! sudo grep -Fq "cronnightly.sh" /var/spool/cron/crontabs/pi
@@ -2530,15 +2538,26 @@ if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi
 sudo cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+restartMosquitto=0
 if [ ! -f /etc/mosquitto/mosquitto.conf ]; then
 	sudo apt-get update
 	sudo apt-get -qq install -y mosquitto mosquitto-clients
-	sudo service mosquitto restart
+	restartMosquitto=1
 fi
 if [ ! -f /etc/mosquitto/conf.d/openwb.conf ]; then
-	sudo cp /var/www/html/openWB/web/files/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
+	sudo cp /var/www/html/openWB/configfiles/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
+	restartMosquitto=1
+fi
+if [ ! -f /etc/mosquitto/conf.d/openwb-websocket.conf ]; then
+	sudo cp /var/www/html/openWB/configfiles/mosquitto.conf /etc/mosquitto/conf.d/openwb.conf
+	sudo cp /var/www/html/openWB/configfiles/mosquitto-websocket.conf /etc/mosquitto/conf.d/openwb-websocket.conf
+	restartMosquitto=1
+fi
+if (( restartMosquitto == 1 )); then
 	sudo service mosquitto restart
 fi
+
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
 	echo 'mqtt installed...'
 else

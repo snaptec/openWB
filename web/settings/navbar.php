@@ -57,6 +57,7 @@
 						<a class="dropdown-item" id="navUpdate" href="./settings/update.php">Update</a>
 						<a class="dropdown-item" id="navDebugging" href="./settings/debugging.php">Debugging</a>
 						<a class="dropdown-item" id="navPasswortschutz" href="./settings/setPassword.php">Passwortschutz</a>
+						<a class="dropdown-item" id="navSicherheitsEinstellungen" href="./settings/securitySettings.php">Sicherheits Einstellungen</a>
 					</div>
 				</li>
 
