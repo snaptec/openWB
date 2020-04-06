@@ -91,6 +91,13 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL3', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/system/priorityModeEVBattery"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+            einbeziehen=msg.payload.decode("utf-8")
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen", einbeziehen]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/global/priorityModeEVBattery", "", qos=0, retain=True)
+
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)

@@ -1187,6 +1187,11 @@ if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
 fi
+ospeicherpveinbeziehen=$(<ramdisk/mqttspeicherpveinbeziehen)
+if [[ "$ospeicherpveinbeziehen" != "$speicherpveinbeziehen" ]]; then
+	tempPubList="${tempPubList}\nopenWB/global/priorityModeEVBattery=${speicherpveinbeziehen}"
+	echo $speicherpveinbeziehen > ramdisk/mqttspeicherpveinbeziehen
+fi
 oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
 if [[ "$oawattaraktiv" != "$awattaraktiv" ]]; then
 	tempPubList="${tempPubList}\nopenWB/global/awattar/boolAwattarEnabled=${awattaraktiv}"
