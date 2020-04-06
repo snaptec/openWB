@@ -67,7 +67,7 @@
 		</div>
 
 		<div class="row verySmallTextSize text-black bg-darkgrey">
-			<div id="time" class="col text-left">
+			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
 			<div class="col-5 cursor-pointer regularTextSize font-weight-bold text-center text-red">
@@ -75,7 +75,7 @@
 					>> Lademodus <<
 				</span>
 			</div>
-			<div id="date" class="col text-right">
+			<div id="time" class="col text-right">
 				&nbsp;
 			</div>
 		</div>
@@ -193,7 +193,7 @@ echo '</div>';
 				echo '                <span id="actualPowerLp'.$i.'span">lade Daten</span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'span">lade Daten</span>'."\n";
+				echo '                <span id="energyChargedLp'.$i.'span">lade Daten</span><span id="kmChargedLp'.$i.'"></span>'."\n";
 				echo '            </div>'."\n";
 				// standard: soc not configured for charging point
 				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2 px-0">'."\n";
@@ -770,7 +770,7 @@ echo '</div>';
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200405-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200406-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
