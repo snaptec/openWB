@@ -51,7 +51,7 @@
 
 
 		<div role="main" class="container" style="margin-top:20px">
-		<div class="col-sm-12"><?php echo $_SERVER['HTTP_HOST']; ?>
+		<div class="col-sm-12">
 				<form action="./tools/saveSecuritySettings.php" method="POST">
 					<h3>HTTPS</h3>
 					<div class="row">
