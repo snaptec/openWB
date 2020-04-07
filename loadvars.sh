@@ -328,6 +328,7 @@ if [[ $pv2wattmodul != "none" ]]; then
 		pvwatt="0"
 	fi
 fi
+
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
@@ -706,7 +707,7 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]]; then
 	ra='^-?[0-9]+$'
 	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
 	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then

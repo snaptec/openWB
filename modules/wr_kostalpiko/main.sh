@@ -17,8 +17,8 @@ echo $pvwatt
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 #Gesamtzählerstand am WR [kWh]
-pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
-pvkwh=$(echo "$pvkwh*1000" |bc)
+#pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
+#pvkwh=$(echo "$pvkwh*1000" |bc)
 #zur weiteren verwendung im webinterface
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
