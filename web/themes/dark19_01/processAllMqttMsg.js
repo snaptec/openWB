@@ -546,11 +546,25 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var energyCharged = parseFloat(mqttpayload, 10).toFixed(2);
+		var energyCharged = parseFloat(mqttpayload, 10);
 		if ( isNaN(energyCharged) ) {
 			energyCharged = 0;
 		}
-		$("#energyChargedLp" + index + "span").text(energyCharged + " kWh");
+		$("#energyChargedLp" + index + "span").text(energyCharged.toFixed(1) + " kWh");
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/energyconsumptionper100km$/i ) ) {
+		// calculate km charged since plugged and display value
+		// if mqttpayload < 0 the value is not configured and nothing is displayed
+		if ( mqttpayload >= 0 ) {
+			var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+			var consumption = parseFloat(mqttpayload);
+			var energyCharged = parseFloat($("#energyChargedLp" + index + "span").text());
+			var kmCharged = 0;
+			if ( !isNaN(energyCharged) && !isNaN(consumption) && consumption > 0 ) {
+				kmCharged = (energyCharged / consumption) * 100;
+			}
+			$("#kmChargedLp" + index).text(" / " + kmCharged.toFixed(1) + " km");
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kmcharged$/i ) ) {
 		// km charged at current charging segment
