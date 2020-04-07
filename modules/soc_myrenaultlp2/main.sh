@@ -13,13 +13,10 @@ sudo python /var/www/html/openWB/modules/soc_myrenaultlp2/zoensoclp2.py $myrenau
  plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
  chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
  r8=$(</var/www/html/openWB/ramdisk/zoereply8lp2)
- charging=$(echo $r8 | jq -r .data.attributes.chargeStatus)
- r9=$(</var/www/html/openWB/ramdisk/zoereply9lp2)
- scheduler=$(echo $r9 | jq -r .data.attributes.chargeMode)
-# echo " $dtime zoe p2 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeupmyrenaultlp2 "
- if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $scheduler == "always_charging" ]] && [[ $soc -ne 100 ]] && [[ $wakeupmyrenaultlp2 == "1" ]] ; then
+ charging=$(echo $r8 | jq -r .data.attributes.chargingStatus)
+ if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == "-1" ]] && [[ $soc -ne 100 ]] && [[ $wakeupmyrenaultlp2 == "1" ]] ; then
         echo " $dtime zoe p2 ladung remote gestartet"
-        echo " $dtime zoe p2 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
-      sudo python /var/www/html/openWB/modules/soc_myrenaultlp2/zoenwakelp2.py $myrenault_userlp2 $myrenault_passlp2  $myrenault_locationlp2  $myrenault_countrylp2
+        echo " $dtime zoe p2 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging soc $soc "
+        sudo python /var/www/html/openWB/modules/soc_myrenaultlp2/zoenwakelp2.py $myrenault_userlp2 $myrenault_passlp2  $myrenault_locationlp2  $myrenault_countrylp2
  fi
 fi
