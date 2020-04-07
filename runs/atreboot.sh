@@ -2515,6 +2515,11 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+if ! [ -x "$(command -v sshpass)" ];then
+	apt-get -qq update
+	sleep 1
+	apt-get -qq install sshpass
+fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get -qq update

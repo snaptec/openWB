@@ -39,6 +39,12 @@ def on_connect(client, userdata, flags, rc):
 
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/set/system/GetRemoteSupport"):
+        if len(msg.payload) >= 5 and len(msg.payload) <=30:
+            token=msg.payload.decode("utf-8")
+            getsupport = ["/var/www/html/openWB/runs/startremotesupport.sh", token]
+            subprocess.Popen(getsupport)
+            client.publish("openWB/set/system/GetRemoteSupport", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/hook/HookControl"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=30):
             hookmsg=msg.payload.decode("utf-8")
