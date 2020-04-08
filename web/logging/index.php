@@ -23,7 +23,7 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="../css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="logging_style.css">
+		<link rel="stylesheet" type="text/css" href="logging_style.css?ver=200407-a">
 
 		<!-- important scripts to be loaded -->
 		<script src="../js/jquery-3.4.1.min.js"></script>
@@ -67,7 +67,7 @@
 		?>
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row">
-				<div class="col" style="text-align: center;">
+				<div class="col text-center">
 					<h4>Logging Langzeitansicht</h4>
 				</div>
 			</div>
@@ -115,7 +115,7 @@
 		<script src = "../js/mqttws31.js" ></script>
 
 		<!-- load respective Chart.js definition -->
-		<script src="longlivechart.js?ver=1.0"></script>
+		<script src="longlivechart.js?ver=200407-a"></script>
 
 	</body>
 </html>
