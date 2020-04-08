@@ -37,29 +37,6 @@
                 <?php
                         include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/navbar.php';
                 ?>
-<!--	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
-	</div>
-	<section id="services">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<h3> Ladelog </h3>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-2">
-					<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
-				</div>
-				<div class="col-xs-2">
-				</div>
-			</div>
-		
-        		<div id="ladelogtablediv"></div>
-       			<div class="row text-center">
-                		<br><input onkeydown="if (event.keyCode == 13) document.getElementById('datebtn').click()" id="datePickerlog" type="date" name="configname" />
-        			<input type="button" value="Submit" id="datebtn" onclick="selectladelogclick(document.getElementById('datePickerlog').value)" />
-			</div> -->
  		<div role="main" class="container" style="margin-top:20px">
                         <div class="row">
                                 <div class="col" style="text-align: center;">
