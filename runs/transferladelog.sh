@@ -1,5 +1,6 @@
 #!/bin/bash
 if [ -e /var/www/html/openWB/web/ladelog ]; then
+	mkdir /var/www/html/openWB/web/logging/data/ladelog
 	oldlog="/var/www/html/openWB/web/ladelog"
 	while IFS= read -r line
 	do
