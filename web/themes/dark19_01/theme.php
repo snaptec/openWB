@@ -58,6 +58,31 @@
 
 <body>
 
+	<!-- Preloader with Progress Bar -->
+	<div class="loader bg-light">
+		<div class="loader-container">
+		  	<div class="row text-black justify-content-center">
+			  	<div class="col-10 col-sm-6">
+				  	<h3><b>openWB</b></h3>
+			  	</div>
+			</div>
+			<div class="row text-grey justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					Bitte warten, während die Daten geladen werden.
+				</div>
+			</div>
+			<div class="row justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					<div class="progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped" id="preloaderbar" role="progressbar" style="width: 0%;">
+						</div>
+					</div>
+				</div>
+  			</div>
+		</div>
+	</div>
+
+	<!-- Landing Page -->
 	<div class="container">
 
 		<div class="row">
@@ -811,6 +836,10 @@ echo '</div>';
 		}
 
 		$(document).ready(function(){
+
+			$("#preloaderbar").width(100+"%");
+			$(".loader").fadeOut(3000);
+
 
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
