@@ -2531,6 +2531,7 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
+/var/www/html/openWB/runs/transferladelog.sh
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi

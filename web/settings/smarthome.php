@@ -498,6 +498,7 @@
 								<option <?php if($verbraucher1_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
 								<option <?php if($verbraucher1_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
 								<option <?php if($verbraucher1_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
+								<option <?php if($verbraucher1_typold == "shelly\n") echo "selected" ?> value="shelly">Shelly 1PM</option>
 							</select>
 						</div>
 						<div class="row">
@@ -545,7 +546,7 @@
 								<input type="text" name="verbraucher1_ip" id="verbraucher1_ip" value="<?php echo $verbraucher1_ipold ?>">
 							</div>
 							<div class="row">
-								IP Adresse des Tasmota Sonoff Geräts.
+								IP Adresse des Geräts.
 							</div>
 						</div>
 					</div>
@@ -570,6 +571,10 @@
 							if($('#verbraucher1_typ').val() == 'tasmota') {
 								$('#v1tasmota').show();
 							}
+							if($('#verbraucher1_typ').val() == 'shelly') {
+								$('#v1tasmota').show();
+							}
+
 						}
 
 						display_verbraucher1();
