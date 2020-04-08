@@ -94,7 +94,7 @@ var thevalues = [
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
-function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+function handlevar(mqttmsg, mqttpayload) {
 	if ( mqttmsg.match( /^openwb\/system\/daygraphdata[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing "openwb/graph/daygraphdata#"
 		// where # is an integer > 0
@@ -117,7 +117,7 @@ client.onConnectionLost = function (responseObject) {
 
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-	handlevar(message.destinationName, message.payloadString, thevalues[0], thevalues[1]);
+	handlevar(message.destinationName, message.payloadString);
 }
 
 var retries = 0;
@@ -229,7 +229,7 @@ function formdata(graphdata){
 	for (i = 0; i < abezug.length; i += 1) {
 
 		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
-		
+
 		if ( hausverbrauch >= 0) {
 		    ahausverbrauch.push(hausverbrauch);
 		    overallhausverbrauch += hausverbrauch;
@@ -262,7 +262,7 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 			} else {
 				fincsvvar=0
 				pushdataset.push(fincsvvar);
-			
+
 			}
 	 	} else {
 			if (!isNaN(csvvar)) {
@@ -345,7 +345,7 @@ function loadgraph() {
 			data: apv,
 			yAxisID: 'y-axis-1'
 		}  , {
-			label: 'Speicher I ' + overallspeicheri + ' kWh',
+			label: 'Speicherladung ' + overallspeicheri + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: true,
@@ -354,7 +354,7 @@ function loadgraph() {
 			hidden: boolDisplaySpeicher,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: 'Speicher E ' + overallspeichere + ' kWh',
+			label: 'Speicherentladung ' + overallspeichere + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(255, 155, 13, 0.3)",
 			fill: true,
@@ -533,7 +533,7 @@ function loadgraph() {
 					    // Boolean to enable panning
 					    enabled: true,
 
-					    // Panning directions. Remove the appropriate direction to disable 
+					    // Panning directions. Remove the appropriate direction to disable
 					    // Eg. 'y' would only allow panning in the y direction
 					    mode: 'x',
 					    rangeMin: {
@@ -550,12 +550,12 @@ function loadgraph() {
 					    // Boolean to enable zooming
 					    enabled: true,
 
-					    // Zooming directions. Remove the appropriate direction to disable 
+					    // Zooming directions. Remove the appropriate direction to disable
 					    // Eg. 'y' would only allow zooming in the y direction
 					    mode: 'x',
 
 					    sensitivity: 0.01
-					   
+
 					}
 				    }
 			 },
@@ -590,88 +590,49 @@ function loadgraph() {
 				xAxes: [{
 					type: 'category',
 				}],
-				yAxes: [{
-					type: 'linear',
-					display: true,
-					position: 'left',
-					id: 'y-axis-1',
-					scaleLabel: {
+				yAxes: [
+					{
+						type: 'linear',
 						display: true,
-						labelString: 'Leistung [W]',
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-					}
-				} , {
-					type: 'linear',
-					display: true,
-					gridLines: {
-						color: "rgba(0, 0, 0, 0)",
+						position: 'left',
+						id: 'y-axis-1',
+						scaleLabel: {
+							display: true,
+							labelString: 'Leistung [kW]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						afterTickToLabelConversion : function(q){
+							// convert labels from W to kW
+							for ( var tick in q.ticks ) {
+								var value = (parseInt(q.ticks[tick]) / 1000).toFixed(1);
+								q.ticks[tick] = value;
+							}
+						}
 					},
-					ticks: {
-						min: 1,
-						suggestedMax: 100
-					},
-					position: 'right',
-					id: 'y-axis-2',
-					scaleLabel: {
+					{
+						type: 'linear',
 						display: true,
-						labelString: 'SoC [%]',
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
+						position: 'right',
+						id: 'y-axis-2',
+						scaleLabel: {
+							display: true,
+							labelString: 'SoC [%]',
+							// middle grey, opacy = 100% (visible)
+							fontColor: "rgba(153, 153, 153, 1)"
+						},
+						gridLines: {
+							color: "rgba(0, 0, 0, 0)",
+						},
+						ticks: {
+							min: 1,
+							suggestedMax: 100
+						}
 					}
-				}]
+				]
 			}
 		}
 	});
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
-}
-
-function checkgraphload(){
-	if ( graphloaded == 1) {
-       	myLine.destroy();
-		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0) {
-					loadgraph();
-					graphloaded += 1;
-				} else {
-			       	myLine.destroy();
-					loadgraph();
-				}
-		 	}
-		}
-	}
-};
-
-function showhidedataset(thedataset) {
-	if ( window[thedataset] == true ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == false ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else {
-		publish("1","openWB/graph/"+thedataset);
-	}
-}
-
-function showhidelegend(thedataset) {
-	if ( window[thedataset] == true ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == false ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else {
-		publish("0","openWB/graph/"+thedataset);
-	}
-}
-
-function showhide(thedataset) {
-	if ( window[thedataset] == 0 ) {
-		publish("1","openWB/graph/"+thedataset);
-	} else if ( window[thedataset] == 1 ) {
-		publish("0","openWB/graph/"+thedataset);
-	} else {
-		publish("1","openWB/graph/"+thedataset);
-	}
 }

@@ -82,10 +82,10 @@
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="col-sm bg-lightgreen">
-				PV: <span id="pvdiv">0 W</span><span id="pvdailyyielddiv"></span>
+				PV: <span id="pvleistung">0 W</span><span id="pvdailyyield"></span>
 			</div>
 			<div id="evudiv" class="col-sm bg-rose">
-				EVU: <span id="bezugdiv">0 W</span>
+				EVU: <span id="bezug">0 W</span>
 			</div>
 		</div>
 
@@ -95,20 +95,20 @@
 	if ( $hausverbrauchstatold == 1 ) {
 echo <<<HAUSVERBRAUCHDIV
 		<div class="col-sm bg-apricot">
-			Hausverbrauch: <span id="hausverbrauchdiv">0 W</span>
+			Hausverbrauch: <span id="hausverbrauch">0 W</span>
 		</div>
 HAUSVERBRAUCHDIV;
 	}
 	echo '<div class="col-sm bg-lightgrey">';
-	echo 'Ladeleistung: <span id="powerAllLpspan">lade Daten</span>';
+	echo 'Ladeleistung: <span id="powerAllLp">lade Daten</span>';
 	echo '    </div>';
 	echo '</div>';
 	// if speichermodul is not "none", show the info
 	if ( strcmp(trim($speicherstatold),"none") != 0 ) {
 echo <<<SPEICHERDIV
-<div id="speicherdiv" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 	<div class="col-sm bg-orange">
-		Speicher: <span id="speicherleistungdiv">0 W</span><span id="speichersocdiv"></span>
+		Speicher: <span id="speicherleistung">0 W</span><span id="speichersoc"></span>
 	</div>
 </div>
 SPEICHERDIV;
@@ -179,24 +179,24 @@ echo '</div>';
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey">'."\n";
 				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'" isEnabled="-1">'."\n";
-				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfiguredSpan"></span>'."\n"; // placeholder for autolock icons
+				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'">'."\n";
+				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfigured"></span>'."\n"; // placeholder for autolock icons
 				echo '                    <span class="nameLp'.$i.' font-weight-bold" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
-				echo '                <span class="fa fa-xs fa-plug hide" id="plugstatlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa fa-xs fa-plug text-white hide" id="plugstatlp'.$i.'"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {
 				echo '                <span class="fa fa-xs fa-flag-checkered"></span>'."\n";
 				}
-				echo '                <span class="fa fa-xs fa-moon hide" id="nachtladenaktivlp'.$i.'div"></span>'."\n";
+				echo '                <span class="fa fa-xs fa-moon hide" id="nachtladenaktivlp'.$i.'"></span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="actualPowerLp'.$i.'span">lade Daten</span>'."\n";
+				echo '                <span id="actualPowerLp'.$i.'">lade Daten</span>'."\n";
 				echo '            </div>'."\n";
 				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'span">lade Daten</span><span id="kmChargedLp'.$i.'"></span>'."\n";
+				echo '                <span id="energyChargedLp'.$i.'">lade Daten</span><span id="kmChargedLp'.$i.'" consumption="0"></span>'."\n";
 				echo '            </div>'."\n";
 				// standard: soc not configured for charging point
-				echo '            <div id="socNotConfiguredLp'.$i.'div" class="col-2 px-0">'."\n";
+				echo '            <div id="socNotConfiguredLp'.$i.'" class="col-2 px-0">'."\n";
 				echo '              --'."\n";
 				echo '            </div>'."\n";
 				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2 px-0 hide">'."\n";
@@ -245,18 +245,18 @@ echo '</div>';
 
 		<div class="row justify-content-center regularTextSize">
 			<div class="col-4">
-				<span id="aktgeladen1div"></span>
+				<span id="aktgeladen1"></span>
 			</div>
 			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen2div"></span>
+				<span id="aktgeladen2"></span>
 			</div>
 			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen3div"></span>
+				<span id="aktgeladen3"></span>
 			</div>
 		</div>
 -->
 
-		<div id="targetChargingProgressDiv" class="hide">
+		<div id="targetChargingProgress" class="hide">
 			<div class="row justify-content-center regularTextSize text-center">
 				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
 					<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
@@ -271,13 +271,13 @@ echo '</div>';
 
 			<div class="row justify-content-center regularTextSize text-center">
 				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp1div"></span>
+					Restzeit <span id="restzeitlp1"></span>
 				</div>
 				<div class="col-4" <?php if($lademstats1old != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp2div"></span>
+					Restzeit <span id="restzeitlp2"></span>
 				</div>
 				<div class="col-4" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp3div"></span>
+					Restzeit <span id="restzeitlp3"></span>
 				</div>
 			</div>
 		</div>
@@ -285,7 +285,7 @@ echo '</div>';
 		<hr color="white">
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungenDiv" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
+	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
 		    <div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-center text-lightgrey">Awattar</h3>
@@ -770,7 +770,7 @@ echo '</div>';
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200406-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200408-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">

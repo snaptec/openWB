@@ -3574,11 +3574,10 @@
 					</div>
 					<div id="wattbezugplentihaus">
 						<div class="row" style="background-color:#febebe">
-							Dieses Modul erfordert einen am Plenticore angeschlossenen EM300 bzw. KSEM. Nach Wahl dieses Moduls ist die Auswahl des PV-Moduls fest auf Kostal Plenticore eingestellt.
-							Alle relevanten Daten werden aus dem Wechselrichter gelesen. Die IP des WR ist im PV-Modul anzugeben. Ein am Plenticore angeschlossener Speicher wird ebenfalls ohne weitere
-							Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt. Ein zusätzlicher und nicht am Plenticore angeschlossener Speicher kann im Speicher-Modul
-							extra konfiguriert werden.<br>
-							Bitte einstellen: EM300/KSEM verbaut im Hausverbrauchs-Zweig (Pos. 1) oder Netzanschluss-Zweig (Pos. 2).
+							Dieses Modul erfordert als 1. PV-Modul das Modul "Kostal Plenticore". Dieses wird automatisch fest eingestellt. Der EM300 bzw. das KSEM muss am 1. Plenticore angeschlossen sein.
+							Ein am 1. Plenticore angeschlossener Speicher wird ebenfalls ohne weitere Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt.
+							Am 2. Plenticore darf kein Speicher angeschlossen sein, da dies die weiteren Berechnungen verfälscht.
+							Die Einbauposition des EM300/KSEM (Hausverbrauchs-Zweig = Pos. 1 oder Netzanschluss-Zweig = Pos. 2) ist anzugeben.
 						</div>
 						<input type='hidden' value='0' name='kostalplenticorehaus'>
 						<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
@@ -4189,7 +4188,7 @@
 							<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse. IP-Adresse des ersten Kostal Plenticore. An diesem sollte (wenn vorhanden) der EM300/KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
+							Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter1">Bezeichnung des 1. Kostal Plenticore:</label></b>
@@ -4199,11 +4198,11 @@
 							Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
 						<div class="row" style="background-color:#befebe">
-							<b><label for="kostalplenticoreip2">IP Adresse des weiteren Kostal Plenticore:</label></b>
+							<b><label for="kostalplenticoreip2">IP Adresse des 2. Kostal Plenticore:</label></b>
 							<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse oder "none". IP-Adresse des weiteren Kostal Plenticore. Bei diesem wird nur die PV-Leistung und ggf. ein angeschlossener Speicher ausgelesen. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
+							Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter2">Bezeichnung des 2. Kostal Plenticore:</label></b>
@@ -4789,7 +4788,7 @@
 					</div>
 					<div id="divspeicherplenti">
 						<div class="row" style="background-color:#fcbe1e">
-							Ein am Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
+							Ein am 1. Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
 						</div>
 					</div>
 					<div id="divspeicherfronius">
