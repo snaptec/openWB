@@ -200,6 +200,11 @@ if (( verbraucher1_aktiv == "1")); then
 		verbraucher1_totalwh=$(echo "scale=0;(($verbraucher1_wh * 1000) + $verbraucher1_tempwh)  / 1" | bc)
 		echo $verbraucher1_totalwh > /var/www/html/openWB/ramdisk/verbraucher1_wh
 	fi
+	if [[ $verbraucher1_typ == "shelly" ]]; then
+		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/status )
+		verbraucher1_watt=$(echo $verbraucher1_out |jq '.meters[0].power' | sed 's/\..*$//')
+		echo $verbraucher1_watt > /var/www/html/openWB/ramdisk/verbraucher1_watt
+	fi
 else
 	verbraucher1_watt=0
 fi

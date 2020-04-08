@@ -16,7 +16,11 @@ echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL2
+echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL3
 echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2
+echo 0 > /var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3
 echo 0 > /var/www/html/openWB/ramdisk/autolocktimer
 echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
@@ -227,6 +231,15 @@ echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp5
 echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp6
 echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp7
 echo 0 > /var/www/html/openWB/ramdisk/boolstopchargeafterdisclp8
+
+echo 0 > /var/www/html/openWB/ramdisk/pv2watt
+
+echo 0 > /var/www/html/openWB/ramdisk/pv2kwh
+echo 0 > /var/www/html/openWB/ramdisk/pv2a1
+echo 0 > /var/www/html/openWB/ramdisk/pv2a2
+echo 0 > /var/www/html/openWB/ramdisk/pv2a3
+
+
 
 # Gesamtleistung AC PV-Module WR 1 + 2
 touch /var/www/html/openWB/ramdisk/pvwatt
@@ -471,8 +484,8 @@ echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
 echo 0 > /var/www/html/openWB/ramdisk/llkwhges
-echo 57 > /var/www/html/openWB/ramdisk/soctimer
-echo 57 > /var/www/html/openWB/ramdisk/soctimer1
+echo 20000 > /var/www/html/openWB/ramdisk/soctimer
+echo 20000 > /var/www/html/openWB/ramdisk/soctimer1
 echo 0 > /var/www/html/openWB/ramdisk/ev.graph
 echo 0 > /var/www/html/openWB/ramdisk/ev-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/evu.graph
@@ -1637,6 +1650,10 @@ if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_tesla_carnumber=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_carnumber=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_teslalp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
@@ -2427,6 +2444,16 @@ if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pv2wattmodul=" /var/www/html/openWB/openwb.conf
+then
+	echo "pv2wattmodul=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattip=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattid=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattuser=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2wattpass=none" >> /var/www/html/openWB/openwb.conf
+
+
+fi
 if ! grep -Fq "soc_bluelink_email=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_bluelink_email=mail@mail.de" >> /var/www/html/openWB/openwb.conf
@@ -2492,6 +2519,11 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+if ! [ -x "$(command -v sshpass)" ];then
+	apt-get -qq update
+	sleep 1
+	apt-get -qq install sshpass
+fi
 if [ $(dpkg-query -W -f='${Status}' php-gd 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
 	sudo apt-get -qq update
@@ -2503,6 +2535,7 @@ then
 fi
 
 . /var/www/html/openWB/openwb.conf
+/var/www/html/openWB/runs/transferladelog.sh
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
 fi

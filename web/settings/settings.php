@@ -949,6 +949,12 @@
 							<div class="col">
 								<b>Schieflastbegrenzung in A:</b>
 								<select name="schieflastmaxa" id="schieflastmaxa">
+									<option <?php if($schieflastmaxaold == 10) echo "selected" ?> value="10">10</option>
+									<option <?php if($schieflastmaxaold == 11) echo "selected" ?> value="11">11</option>
+									<option <?php if($schieflastmaxaold == 12) echo "selected" ?> value="12">12</option>
+									<option <?php if($schieflastmaxaold == 13) echo "selected" ?> value="13">13</option>
+									<option <?php if($schieflastmaxaold == 14) echo "selected" ?> value="14">14</option>
+									<option <?php if($schieflastmaxaold == 15) echo "selected" ?> value="15">15</option>
 									<option <?php if($schieflastmaxaold == 16) echo "selected" ?> value="16">16</option>
 									<option <?php if($schieflastmaxaold == 17) echo "selected" ?> value="17">17</option>
 									<option <?php if($schieflastmaxaold == 18) echo "selected" ?> value="18">18</option>

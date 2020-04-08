@@ -315,6 +315,19 @@ if [[ $pvwattmodul != "none" ]]; then
 else
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
+if [[ $pv2wattmodul != "none" ]]; then
+	pv2watt=$(modules/$pv2wattmodul/main.sh || true)
+	pvwatt=$(( pvwatt + pv2watt ))
+	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+	pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
+
+	pvkwh=$(echo "$pvkwh + $pv2kwh" |bc)
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
+	if ! [[ $pvwatt =~ $re ]] ; then
+		pvwatt="0"
+	fi
+fi
 
 #Speicher werte
 if [[ $speichermodul != "none" ]] ; then
@@ -694,7 +707,7 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]]; then
 	ra='^-?[0-9]+$'
 	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
 	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
@@ -766,7 +779,42 @@ if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_byd
 	fi
 	# sim speicher end
 fi
-
+if [[ $verbraucher1_aktiv == "1" ]] && [[ $verbraucher1_typ == "shelly" ]]; then
+	ra='^-?[0-9]+$'
+	watt3=$(</var/www/html/openWB/ramdisk/verbraucher1_watt)
+	if [[ -e /var/www/html/openWB/ramdisk/verbraucher1watt0pos ]]; then
+		importtemp=$(</var/www/html/openWB/ramdisk/verbraucher1watt0pos)
+	else
+		importtemp=$(timeout 4 mosquitto_sub -t openWB/Verbraucher/1/WH1Imported_temp)
+		if ! [[ $importtemp =~ $ra ]] ; then
+			importtemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/Verbraucher/1/WHImported_temp from mosquito $importtemp"
+		echo $importtemp > /var/www/html/openWB/ramdisk/verbraucher1watt0pos
+	fi
+	if [[ -e /var/www/html/openWB/ramdisk/verbraucher1watt0neg ]]; then
+		exporttemp=$(</var/www/html/openWB/ramdisk/verbraucher1watt0neg)
+	else
+		exporttemp=$(timeout 4 mosquitto_sub -t openWB/verbraucher/1/WH1Export_temp)
+		if ! [[ $exporttemp =~ $ra ]] ; then
+			exporttemp="0"
+		fi
+		dtime=$(date +"%T")
+		echo " $dtime loadvars read openWB/verbraucher/1/WHExport_temp from mosquito $exporttemp"
+		echo $exporttemp > /var/www/html/openWB/ramdisk/verbraucher1watt0neg
+	fi
+	sudo python /var/www/html/openWB/runs/simcount.py $watt3 verbraucher1 verbraucher1_wh verbraucher1_whe
+	importtemp1=$(</var/www/html/openWB/ramdisk/verbraucher1watt0pos)
+	exporttemp1=$(</var/www/html/openWB/ramdisk/verbraucher1watt0neg)
+	if [[ $importtemp !=  $importtemp1 ]]; then
+		mosquitto_pub -t openWB/verbraucher/1/WHImported_temp -r -m "$importtemp1"
+	fi
+	if [[ $exporttemp !=  $exporttemp1 ]]; then
+		mosquitto_pub -t openWB/verbraucher/1/WHExport_temp -r -m "$exporttemp1"
+	fi
+	# sim bezug end
+fi
 
 #Uhrzeit
 date=$(date)
@@ -1177,15 +1225,16 @@ if [[ "$oevuglaettungakt" != "$evuglaettungakt" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolEvuSmoothedActive=${evuglaettungakt}"
 	echo $evuglaettungakt > ramdisk/mqttevuglaettungakt
 fi
-ographliveam=$(<ramdisk/mqttgraphliveam)
-if [[ "$ographliveam" != "$graphliveam" ]]; then
-	tempPubList="${tempPubList}\nopenWB/boolGraphLiveAM=${graphliveam}"
-	echo $graphliveam > ramdisk/mqttgraphliveam
-fi
+
 ospeicherpvui=$(<ramdisk/mqttspeicherpvui)
 if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
 	echo $speicherpvui > ramdisk/mqttspeicherpvui
+fi
+ospeicherpveinbeziehen=$(<ramdisk/mqttspeicherpveinbeziehen)
+if [[ "$ospeicherpveinbeziehen" != "$speicherpveinbeziehen" ]]; then
+	tempPubList="${tempPubList}\nopenWB/global/priorityModeEVBattery=${speicherpveinbeziehen}"
+	echo $speicherpveinbeziehen > ramdisk/mqttspeicherpveinbeziehen
 fi
 oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
 if [[ "$oawattaraktiv" != "$awattaraktiv" ]]; then

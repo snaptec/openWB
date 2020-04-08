@@ -10,7 +10,7 @@ NumberOfSupportedChargePoints=2
 rfid() {
 
 	# prepare for normal debug output in level 2
-	dbgWrite=
+	dbgWrite=:
 	if (( debug == 2 )); then
 		dbgWrite=echo
 	fi

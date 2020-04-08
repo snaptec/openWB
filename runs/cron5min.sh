@@ -74,7 +74,19 @@ fi
 if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
+pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 
+pvdailyyieldstart=$(head -n 1 /var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv)
+pvyieldcount=0
+for i in ${pvdailyyieldstart//,/ }
+do
+	pvyieldcount=$((pvyieldcount + 1 ))
+	if (( pvyieldcount == 4 )); then
+
+		pvdailyyield=$(echo "scale=2;($pvkwh - $i) / 1000" |bc)
+		echo $pvdailyyield > /var/www/html/openWB/ramdisk/daily_pvkwhk
+	fi
+done
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 

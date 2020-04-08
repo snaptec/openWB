@@ -39,6 +39,22 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "pv2wattmodul=") !== false) {
+					list(, $pv2wattmodulold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2id=") !== false) {
+					list(, $pv2idold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2ip=") !== false) {
+					list(, $pv2ipold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2user=") !== false) {
+					list(, $pv2userold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2pass=") !== false) {
+					list(, $pv2passold) = explode("=", $line);
+				}
+
 				if(strpos($line, "soc_bluelink_interval=") !== false) {
 					list(, $soc_bluelink_intervalold) = explode("=", $line);
 				}
@@ -811,6 +827,9 @@
 				}
 				if(strpos($line, "soc_teslalp2_username=") !== false) {
 					list(, $socteslalp2usernameold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_teslalp2_carnumber=") !== false) {
+					list(, $socteslalp2carnumberold) = explode("=", $line);
 				}
 				if(strpos($line, "soc_teslalp2_password=") !== false) {
 					list(, $socteslalp2pwold) = explode("=", $line);
@@ -2461,6 +2480,13 @@
 							</div>
 							<div class="row bg-info">
 								Password des Tesla Logins
+							</div>
+							<div class="row bg-info">
+								<b><label for="teslasoclp2carnumber">Auto im Account:</label></b>
+								<input type="text" name="teslasoclp2carnumber" id="teslasoclp2carnumber" value="<?php echo $socteslalp2carnumberold ?>">
+							</div>
+							<div class="row bg-info">
+								Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2intervall">Abfrageintervall Standby:</label></b>
@@ -4611,6 +4637,63 @@
 						});
 					</script>
 
+					<div class="row">
+						<h3> Zweites PV-Modul </h3>
+					</div>
+					<div class="row">
+						<b><label for="pv2wattmodul">Zweites PV-Modul:</label></b>
+						<select name="pv2wattmodul" id="pv2wattmodul">
+							<option <?php if($pv2wattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu\n") echo "selected" ?> value="wr2_ethlovatoaevu">Lovato an openWB EVU Kit</option>
+							<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit v2</option>
+							<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
+
+						</select>
+					</div>
+
+					<div id="pv2none">
+					</div>
+					<div id="pv2noconfig">
+						Keine Konfiguration erforderlich.
+					</div>
+					<div id="pv2ipdiv">
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="pv2ip">Wechselrichter IP:</label></b>
+							<input type="text" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							Gültige Werte: IPs. IP Adresse des Wechselrichters, ggf. muss modbusTCP im WR noch aktiviert werden.
+						</div>
+					</div>
+
+
+					<script>
+						function display_pv2wattmodul() {
+							$('#pv2none').hide();
+							$('#pv2noconfig').hide();
+							$('#pv2ipdiv').hide();
+
+							if($('#pv2wattmodul').val() == 'none') {
+								$('#pv2none').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
+								$('#pv2noconfig').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_ethlovato') {
+								$('#pv2noconfig').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
+								$('#pv2ipdiv').show();
+							}
+
+						}
+						$(function() {
+							display_pv2wattmodul();
+							$('#pv2wattmodul').change( function(){
+								display_pv2wattmodul();
+							} );
+						});
+					</script>
 					<div class="row">
 						<h3> Speicher-Modul </h3>
 					</div>

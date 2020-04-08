@@ -126,7 +126,32 @@
 					</div>
 				</div>
 			</form>
-
+			<div class="row">
+				<div class="col">
+					<h1>Remote Support</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-7">
+					Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt.
+					openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
+				</div>
+			</div>
+			<form class="form" id="sendDebugMessageForm" action="./tools/starttunnel.php" method="POST">
+				<div class="col-7 col-lg-5">
+					<div class="input-group mb-2">
+						<div class="input-group-prepend">
+							<div class="input-group-text">Token</div>
+							</div>
+							<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
+						</div>
+					</div>
+					<div class="col-auto">
+						<button type="submit" class="btn btn-green mb-2">Tunnel herstellen</button>
+					</div>
+				</div>
+			</form>
+			
 
 
 		</div>  <!-- container -->
