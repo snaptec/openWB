@@ -707,7 +707,7 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]]; then
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 	ra='^-?[0-9]+$'
 	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
 	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
@@ -1225,7 +1225,11 @@ if [[ "$oevuglaettungakt" != "$evuglaettungakt" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolEvuSmoothedActive=${evuglaettungakt}"
 	echo $evuglaettungakt > ramdisk/mqttevuglaettungakt
 fi
-
+overbraucher1_name=$(<ramdisk/mqttverbraucher1_name)
+if [[ "$overbraucher1_name" != "$verbraucher1_name" ]]; then
+	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Name=${verbraucher1_name}"
+	echo $verbraucher1_name > ramdisk/mqttverbraucher1_name
+fi
 ospeicherpvui=$(<ramdisk/mqttspeicherpvui)
 if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
