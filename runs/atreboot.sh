@@ -484,8 +484,8 @@ echo 0 > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs1
 echo 0 > /var/www/html/openWB/ramdisk/llkwhs2
 echo 0 > /var/www/html/openWB/ramdisk/llkwhges
-echo 57 > /var/www/html/openWB/ramdisk/soctimer
-echo 57 > /var/www/html/openWB/ramdisk/soctimer1
+echo 20000 > /var/www/html/openWB/ramdisk/soctimer
+echo 20000 > /var/www/html/openWB/ramdisk/soctimer1
 echo 0 > /var/www/html/openWB/ramdisk/ev.graph
 echo 0 > /var/www/html/openWB/ramdisk/ev-live.graph
 echo 0 > /var/www/html/openWB/ramdisk/evu.graph
@@ -1649,6 +1649,10 @@ fi
 if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc_tesla_carnumber=" /var/www/html/openWB/openwb.conf
+then
+	  echo "soc_tesla_carnumber=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
 then
