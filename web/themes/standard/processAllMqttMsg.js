@@ -1136,6 +1136,7 @@ client.onMessageArrived = function (message) {
 };
 var retries = 0;
 
+var isSSL = location.protocol == 'https:'
 //Connect Options
 var isSSL = location.protocol == 'https:'
 var options = {
