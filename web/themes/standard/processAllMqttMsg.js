@@ -36,6 +36,15 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
+var verbraucher1_name='notyet';
+var verbraucher2_name='notyet';
+var verbraucher3_name='Verbraucher 3';
+var verbraucher4_name='Verbraucher 4';
+var verbraucher5_name='Verbraucher 5';
+var verbraucher6_name='Verbraucher 6';
+var verbraucher7_name='Verbraucher 7';
+var verbraucher8_name='Verbraucher 8';
+var verbraucher9_name='Verbraucher 9';
 var datasend = 0;
 var all1 = 0;
 var all2 = 0;
@@ -234,7 +243,17 @@ var thevalues = [
 	["openWB/lp/5/ADirectModeAmps", "#"],
 	["openWB/lp/6/ADirectModeAmps", "#"],
 	["openWB/lp/7/ADirectModeAmps", "#"],
-	["openWB/lp/8/ADirectModeAmps", "#"]
+	["openWB/lp/8/ADirectModeAmps", "#"],
+	["openWB/Verbraucher/1/Name", "#"],
+	["openWB/Verbraucher/2/Name", "#"],
+	["openWB/Verbraucher/3/Name", "#"],
+	["openWB/Verbraucher/4/Name", "#"],
+	["openWB/Verbraucher/5/Name", "#"],
+	["openWB/Verbraucher/6/Name", "#"],
+	["openWB/Verbraucher/7/Name", "#"],
+	["openWB/Verbraucher/8/Name", "#"],
+	["openWB/Verbraucher/9/Name", "#"]
+
 ];
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
@@ -249,7 +268,8 @@ function getCol(matrix, col){
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// receives all messages and calls respective function to process them
-	if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
+	if ( mqttmsg.match( /^openwb\/verbraucher\//i) ) { processVerbraucherMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
+	else if ( mqttmsg.match( /^openwb\/graph\//i ) ) { processGraphMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
 	else if ( mqttmsg.match( /^openwb\/evu\//i) ) { processEvuMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
 	else if ( mqttmsg.match( /^openwb\/global\//i) ) { processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
 	else if ( mqttmsg.match( /^openwb\/housebattery\//i) ) { processHousebatteryMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv); }
@@ -769,6 +789,14 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 function processVerbraucherMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
+	if ( mqttmsg.match( /^openwb\/verbraucher\/[1-9][0-9]*\/Name$/i ) ) {
+		// matches to all messages containing "openwb/lp/#/boolchargepointconfigured"
+		// where # is an integer > 0
+		// search is case insensitive
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		window['verbraucher'+index+'_name'] = mqttpayload; 
+		putgraphtogether();
+	}
 }
 
 function processSetMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
@@ -1237,7 +1265,7 @@ function renewMQTTclick() {
 }
 
 function putgraphtogether() {
-	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (verbraucher1_name != "notyet") && (verbraucher2_name != "notyet")){
 		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
 		alldata = alldata.replace(/^\s*[\n]/gm, '');
 		alldata = alldata.replace(/^\s*-[\n]/gm, '');

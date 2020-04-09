@@ -84,7 +84,7 @@ function loadgraph() {
 			data: ahausverbrauch,
 			yAxisID: 'y-axis-1',
 		} , {
-			label: 'Verbraucher 1',
+			label: verbraucher1_name,
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -93,7 +93,7 @@ function loadgraph() {
 			data: averbraucher1,
 			yAxisID: 'y-axis-1',
 		} , {
-			label: 'Verbraucher 2',
+			label: verbraucher2_name,
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
