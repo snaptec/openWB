@@ -5,6 +5,7 @@
  * @author Michael Ortenstein
  */
 var awattartime = new Array();
+var nurpv70status;
 var graphawattarprice;
 var doInterval;
 var do2Interval;
@@ -252,7 +253,10 @@ var thevalues = [
 	["openWB/Verbraucher/6/Name", "#"],
 	["openWB/Verbraucher/7/Name", "#"],
 	["openWB/Verbraucher/8/Name", "#"],
-	["openWB/Verbraucher/9/Name", "#"]
+	["openWB/Verbraucher/9/Name", "#"],
+	["openWB/pv/bool70PVDynActive", "#"],
+	["openWB/pv/bool70PVDynStatus", "#"]
+
 
 ];
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
@@ -784,6 +788,21 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		$("#pvdiv").html(pvwattStr);
 	}
+	if ( mqttmsg == "openWB/pv/bool70PVDynActive") {
+		if ( mqttpayload == 1 ) {
+			$('#nurpv70div').show();
+		}
+	}
+	if ( mqttmsg == "openWB/pv/bool70PVDynStatus") {
+		if ( mqttpayload == 1 ) {
+			$('#nurpv70Btn').addClass("btn-green").removeClass("btn-red");
+			nurpv70status = mqttpayload;
+		} else {
+			$('#nurpv70Btn').addClass("btn-red").removeClass("btn-green");
+			nurpv70status = mqttpayload;
+		}
+	}
+
 }
 
 function processVerbraucherMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {

@@ -1225,6 +1225,17 @@ if [[ "$oevuglaettungakt" != "$evuglaettungakt" ]]; then
 	tempPubList="${tempPubList}\nopenWB/boolEvuSmoothedActive=${evuglaettungakt}"
 	echo $evuglaettungakt > ramdisk/mqttevuglaettungakt
 fi
+onurpv70dynact=$(<ramdisk/mqttnurpv70dynact)
+if [[ "$onurpv70dynact" != "$nurpv70dynact" ]]; then
+	tempPubList="${tempPubList}\nopenWB/pv/bool70PVDynActive=${nurpv70dynact}"
+	echo $nurpv70dynact > ramdisk/mqttnurpv70dynact
+fi
+onurpv70dynw=$(<ramdisk/mqttnurpv70dynw)
+if [[ "$onurpv70dynw" != "$nurpv70dynw" ]]; then
+	tempPubList="${tempPubList}\nopenWB/pv/W70PVDyn=${nurpv70dynw}"
+	echo $nurpv70dynw > ramdisk/mqttnurpv70dynw
+fi
+
 overbraucher1_name=$(<ramdisk/mqttverbraucher1_name)
 if [[ "$overbraucher1_name" != "$verbraucher1_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Name=${verbraucher1_name}"

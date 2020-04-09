@@ -171,8 +171,7 @@ mqttvar["global/boolRse"]=rsestatus
 mqttvar["hook/1/boolHookStatus"]=hook1akt
 mqttvar["hook/2/boolHookStatus"]=hook2akt
 mqttvar["hook/3/boolHookStatus"]=hook3akt
-
-
+mqttvar["pv/bool70PVDynStatus"]=nurpv70dynstatus
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do

@@ -290,7 +290,11 @@
 				<button id="pvBtn" type="button" class="btn btn-lg btn-block btn-red myButtonStyle" onclick="chargeModeBtnClick(this.value)" value="2">PV</button>
 			</div>
 		</div>
-
+		<div id="nurpv70div" class="row no-gutters justify-content-center" style="display: none;">
+			<div class="col-sm-4 py-1">
+				<button id="nurpv70Btn" type="button" class="btn btn-lg btn-block myButtonStyle" onclick="changenurpv70Click()">70% beachten</button>
+			</div>
+		</div>
 		<div id="speicherpvuidiv" class="row no-gutters justify-content-center">
 			<div class="col-sm-4 py-1">
 				<?php
@@ -871,6 +875,13 @@
 
 		function chargeModeBtnClick(chargeMode) {
 			publish(chargeMode,"openWB/set/ChargeMode");
+		}
+		function changenurpv70Click() {
+			if ( nurpv70status == 0 ) {
+				publish("1","openWB/set/NurPV70Status");
+			} else {
+				publish("0","openWB/set/NurPV70Status");
+			}
 		}
 	</script>
 

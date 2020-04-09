@@ -13,6 +13,7 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
+echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
 echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
@@ -1612,7 +1613,12 @@ if ! grep -Fq "verbraucher3_urlh=" /var/www/html/openWB/openwb.conf
 then
 	  echo "verbraucher3_urlh='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "nurpv70dynact=" /var/www/html/openWB/openwb.conf
+then
+	echo "nurpv70dynact=0" >> /var/www/html/openWB/openwb.conf
+	echo "nurpv70dynw=6000" >> /var/www/html/openWB/openwb.conf
 
+fi
 
 if ! grep -Fq "nlakt_sofort=" /var/www/html/openWB/openwb.conf
 then

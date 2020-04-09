@@ -41,6 +41,13 @@
 				if(strpos($line, "speicherpveinbeziehen=") !== false) {
 					list(, $speicherpveinbeziehenold) = explode("=", $line);
 				}
+				if(strpos($line, "nurpv70dynact=") !== false) {
+					list(, $nurpv70dynactold) = explode("=", $line);
+				}
+				if(strpos($line, "nurpv70dynw=") !== false) {
+					list(, $nurpv70dynwold) = explode("=", $line);
+				}
+
 				if(strpos($line, "speicherpvui=") !== false) {
 					list(, $speicherpvuiold) = explode("=", $line);
 				}
@@ -525,6 +532,42 @@
 							});
 						});
 					</script>
+					<div class="row" style="background-color:#befebe">
+						<b><label for="nurpv70dynact">Beachtung der 70% Grenze beim PV Laden:</label></b>
+						<select name="nurpv70dynact" id="nurpv70dynact">
+							<option <?php if($nurpv70dynactold == 0) echo "selected" ?> value="0">Aus</option>
+							<option <?php if($nurpv70dynactold == 1) echo "selected" ?> value="1">An</option>
+						</select>
+					</div>
+					<div class="row" style="background-color:#befebe">
+							Wenn aktiviert wird im Nur PV Modus erst mit der Ladung begonnen wenn die 70% Grenze erreicht ist.<br>Diese Grenze gilt dann auch als Regelpunkt
+					</div>
+					<div id="70pvdiv">
+						<div class="row" style="background-color:#befebe">
+							<b><label for="nurpv70dynw">70% Grenze:</label></b>
+							<input type="text" name="nurpv70dynw" id="nurpv70dynw" value="<?php echo $nurpv70dynwold ?>">
+						</div>
+						<div class="row" style="background-color:#befebe">
+							Defniert den Wert in Watt für die 70% Grenze. Bei einer 9,9kWP PV Anlage macht hier z.B. 6000 Watt Sinn.<br>
+						</div>
+					</div>
+					<script>
+						$(function() {
+							if($('#nurpv70dynact').val() == '1') {
+								$('#70pvdiv').show();
+							} else {
+								$('#70pvdiv').hide();
+							}
+							$('#nurpv70dynact').change(function(){
+								if($('#nurpv70dynact').val() == '1') {
+									$('#70pvdiv').show();
+								} else {
+									$('#70pvdiv').hide();
+								}
+							});
+						});
+					</script>
+
 
 					<button type="submit" class="btn btn-green">Save</button>
 				</form>
