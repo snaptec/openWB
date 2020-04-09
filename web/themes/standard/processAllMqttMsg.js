@@ -5,7 +5,9 @@
  * @author Michael Ortenstein
  */
 var awattartime = new Array();
+var lademodus;
 var nurpv70status;
+var nurpv70active = 0;
 var graphawattarprice;
 var doInterval;
 var do2Interval;
@@ -668,6 +670,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		document.getElementById("awattar1l").innerHTML = mqttpayload;
 	}
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
+		lademodus = mqttpayload;
 		// set button colors depending on charge mode
 		switch (mqttpayload) {
 			case "0":
@@ -678,6 +681,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "1":
 				// mode min+pv
@@ -687,6 +691,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "2":
 				// mode pv
@@ -696,6 +701,10 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-green").removeClass("btn-red");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				if ( nurpv70active == 1 ) {
+					$('#nurpv70div').show();
+				}
+
 				break;
 			case "3":
 				// mode stop
@@ -705,6 +714,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-green").removeClass("btn-red");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "4":
 				// mode standby
@@ -714,6 +724,8 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-green").removeClass("btn-red");
+				$('#nurpv70div').hide();
+
 		}
 		loaddivs();
 	}
@@ -790,7 +802,10 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	if ( mqttmsg == "openWB/pv/bool70PVDynActive") {
 		if ( mqttpayload == 1 ) {
-			$('#nurpv70div').show();
+			nurpv70active = 1;
+			if ( lademodus == 2 ) {
+				$('#nurpv70div').show();
+			}	
 		}
 	}
 	if ( mqttmsg == "openWB/pv/bool70PVDynStatus") {
