@@ -204,9 +204,9 @@ echo '</div>';
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey">'."\n";
 				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'">'."\n";
+				echo '                <span class="cursor-pointer lpEnable" lp="'.$i.'">'."\n";
 				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfigured"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="nameLp'.$i.' font-weight-bold" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
+				echo '                    <span class="nameLp'.$i.' font-weight-bold lpDisabledStyle" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
 				echo '                <span class="fa fa-xs fa-plug text-white hide" id="plugstatlp'.$i.'"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {
@@ -874,18 +874,14 @@ echo '</div>';
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200409-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
 
-			$('.lpEnableSpan').click(function(event){
+			$('.lpEnable').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				// attribut value is changed at receipt of confirmation mqttmsg
 				var lp = $(this).attr("lp");
-				var isEnabled = $(this).attr("isEnabled");
-				switch ( isEnabled ) {
-					case "1":
-						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
-					case "0":
-						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
+				var isEnabled = $("#nameLp" + lp).hasClass("lpEnabledStyle")
+				if ( isEnabled ) {
+					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				} else {
+					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
 				}
 			});
 
