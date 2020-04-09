@@ -74,7 +74,7 @@
 			<div class="row justify-content-center mt-2">
 				<div class="col-10 col-sm-6">
 					<div class="progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="preloaderbar" role="progressbar" style="width: 0%;">
+						<div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" id="preloaderbar" role="progressbar" style="width: 0%;">
 						</div>
 					</div>
 				</div>
@@ -800,6 +800,9 @@ echo '</div>';
 	<!-- some scripts -->
 	<script type="text/javascript">
 
+		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
+		var landingpageShown = false;  // holds flag for landing page being shown
+
 		function AwattarMaxPriceClick() {
 			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
 		}
@@ -835,11 +838,37 @@ echo '</div>';
 			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
 		}
 
+		function processPreloader(mqttTopic) {
+			// sets flag for topic received in topic-array
+			// and updates the preloader progress bar
+			if ( !landingpageShown ) {
+				var countTopicsReceived = 0;
+				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
+					if ( topicsToSubscribe[index][0] == mqttTopic ) {
+						// topic found in array
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
+					};
+					if ( topicsToSubscribe[index][1] > 0 ) {
+						countTopicsReceived++;
+					}
+				};
+				var percentageReceived = (countTopicsReceived / topicsToSubscribe.length * 100).toFixed(0);
+				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMesagges > 3000 ) {
+					// latest after 3 sec without new messages
+					percentageReceived = 100;
+				}
+				timeOfLastMqttMessage = Date.now();
+				$("#preloaderbar").width(percentageReceived+"%");
+				$("#preloaderbar").text(percentageReceived+" %");
+				if ( percentageReceived == 100 ) {
+					landingpageShown = true;
+					$(".loader").fadeOut(2000);
+				}
+			}
+		}
+
 		$(document).ready(function(){
-
-			$("#preloaderbar").width(100+"%");
-			$(".loader").fadeOut(3000);
-
 
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");

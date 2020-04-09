@@ -182,7 +182,7 @@ var topicsToSubscribe = [
 		["openWB/lp/5/ADirectModeAmps", 0],
 		["openWB/lp/6/ADirectModeAmps", 0],
 		["openWB/lp/7/ADirectModeAmps", 0],
-		["openWB/lp/8/ADirectModeAmps", 0]
+		["openWB/lp/8/ADirectModeAmps", 0],
 	// housebattery topics
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/W", 0],
@@ -212,6 +212,7 @@ var client = new Messaging.Client(location.host, 9001, clientuid);
 
 $(document).ready(function(){
 	client.connect(options);
+	timeOfLastMqttMessage = Date.now();
 });
 
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
