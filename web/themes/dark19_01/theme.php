@@ -59,16 +59,16 @@
 <body>
 
 	<!-- Preloader with Progress Bar -->
-	<div class="loader bg-light">
+	<div class="loader bg-white">
 		<div class="loader-container">
-		  	<div class="row text-black justify-content-center">
-			  	<div class="col-10 col-sm-6">
-				  	<h3><b>openWB</b></h3>
+		  	<div class="row text-black">
+			  	<div class="mx-auto d-block justify-content-center">
+					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
 			  	</div>
 			</div>
 			<div class="row text-grey justify-content-center mt-2">
 				<div class="col-10 col-sm-6">
-					Bitte warten, während die Daten geladen werden.
+					Bitte warten, während die Seite aufgebaut wird.
 				</div>
 			</div>
 			<div class="row justify-content-center mt-2">
@@ -795,7 +795,7 @@ echo '</div>';
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200408-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200409-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -856,6 +856,7 @@ echo '</div>';
 				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
 				if ( timeBetweenTwoMesagges > 3000 ) {
 					// latest after 3 sec without new messages
+					console.log(topicsToSubscribe);
 					percentageReceived = 100;
 				}
 				timeOfLastMqttMessage = Date.now();
@@ -870,7 +871,7 @@ echo '</div>';
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200409-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
 
 			$('.lpEnableSpan').click(function(event){
