@@ -1136,9 +1136,11 @@ client.onMessageArrived = function (message) {
 };
 var retries = 0;
 
+var isSSL = location.protocol == 'https:'
 //Connect Options
 var options = {
 	timeout: 5,
+	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		retries = 0;

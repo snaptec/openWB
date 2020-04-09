@@ -29,8 +29,10 @@ var topicsToSubscribe = [
 ];
 
 //Connect Options
+var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
+	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		topicsToSubscribe.forEach((topic) => {
