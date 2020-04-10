@@ -1310,12 +1310,12 @@ if [[ "$odurchslp1" != "$durchslp1" ]]; then
 fi
 odurchslp2=$(<ramdisk/mqttdurchslp2)
 if [[ "$odurchslp2" != "$durchslp2" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/energyConsumptionPer100km=${durchslp2}"
+	tempPubList="${tempPubList}\nopenWB/lp/2/energyConsumptionPer100km=${durchslp2}"
 	echo $durchslp2 > ramdisk/mqttdurchslp2
 fi
 odurchslp3=$(<ramdisk/mqttdurchslp3)
 if [[ "$odurchslp3" != "$durchslp3" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/energyConsumptionPer100km=${durchslp3}"
+	tempPubList="${tempPubList}\nopenWB/lp/3/energyConsumptionPer100km=${durchslp3}"
 	echo $durchslp3 > ramdisk/mqttdurchslp3
 fi
 # publish last RFID scans as CSV with timestamp
