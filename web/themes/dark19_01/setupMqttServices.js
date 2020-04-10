@@ -98,6 +98,9 @@ var topicsToSubscribe = [
 		// Status Konfiguration SoC
 		["openWB/lp/1/boolSocConfigured", 0],
 		["openWB/lp/2/boolSocConfigured", 0],
+		// Status Nachtladen
+		["openWB/lp/1/boolChargeAtNight", 0],
+		["openWB/lp/2/boolChargeAtNight", 0],
 		// eingestellter Ladestrom
 		["openWB/lp/1/AConfigured", 0],
 		["openWB/lp/2/AConfigured", 0],

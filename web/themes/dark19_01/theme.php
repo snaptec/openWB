@@ -105,38 +105,27 @@
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="col-sm bg-lightgreen">
-				PV: <span id="pvleistung">0 W</span><span id="pvdailyyield"></span>
+				PV: <span id="pvleistung">lade Daten</span><span id="pvdailyyield"></span>
 			</div>
 			<div id="evudiv" class="col-sm bg-rose">
-				EVU: <span id="bezug">0 W</span>
+				EVU: <span id="bezug">lade Daten</span>
 			</div>
 		</div>
 
-<?php
-	echo '<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">';
-
-	if ( $hausverbrauchstatold == 1 ) {
-echo <<<HAUSVERBRAUCHDIV
-		<div class="col-sm bg-apricot">
-			Hausverbrauch: <span id="hausverbrauch">0 W</span>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-apricot">
+				Hausverbrauch: <span id="hausverbrauch">lade Daten</span>
+			</div>
+			<div class="col-sm bg-lightgrey">
+				Ladeleistung: <span id="powerAllLp">lade Daten</span>
+			</div>
 		</div>
-HAUSVERBRAUCHDIV;
-	}
-	echo '<div class="col-sm bg-lightgrey">';
-	echo 'Ladeleistung: <span id="powerAllLp">lade Daten</span>';
-	echo '    </div>';
-	echo '</div>';
-	// if speichermodul is not "none", show the info
-	if ( strcmp(trim($speicherstatold),"none") != 0 ) {
-echo <<<SPEICHERDIV
-<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-	<div class="col-sm bg-orange">
-		Speicher: <span id="speicherleistung">0 W</span><span id="speichersoc"></span>
-	</div>
-</div>
-SPEICHERDIV;
-	}  // end if speichervorhanden
-
+		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-orange">
+				Speicher: <span id="speicherleistung">lade Daten</span><span id="speichersoc"></span>
+			</div>
+		</div>
+<?php
 	if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
 	// if hooks for external devices are configured, show div
 		echo '<div id="webhooksdiv" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">';
@@ -152,8 +141,8 @@ echo <<<EXTDEVICEDIVMIDDLE
 EXTDEVICEDIVMIDDLE;
 			}  // end if
 		}  // end for
+	}  // end if
 echo '</div>';
-	}  // end if hook configured
 ?>
 
 		<!-- interactive chart.js -->
@@ -192,43 +181,57 @@ echo '</div>';
 			</div>
 		</div>
 
-		<!-- chargepoint info data -->
-		<?php
-			// generate html code dynamically for all charging points
-			for( $i = 1; $i <= 8; $i++) {
-				if ( $isConfiguredLp[$i] == 0 ) {
-					continue;  // skip if lp not configured
-				}
-				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey">'."\n";
-				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnable" lp="'.$i.'">'."\n";
-				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfigured"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="nameLp'.$i.' font-weight-bold lpDisabledStyle" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
-				echo '                </span>'."\n";
-				echo '                <span class="fa fa-xs fa-plug text-white hide" id="plugstatlp'.$i.'"></span>'."\n";
-				if ( $zielladenaktivlp1old == 1 ) {
-				echo '                <span class="fa fa-xs fa-flag-checkered"></span>'."\n";
-				}
-				echo '                <span class="fa fa-xs fa-moon hide" id="nachtladenaktivlp'.$i.'"></span>'."\n";
-				echo '            </div>'."\n";
-				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="actualPowerLp'.$i.'">lade Daten</span>'."\n";
-				echo '            </div>'."\n";
-				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'">lade Daten</span><span id="kmChargedLp'.$i.'" consumption="0"></span>'."\n";
-				echo '            </div>'."\n";
-				// standard: soc not configured for charging point
-				echo '            <div id="socNotConfiguredLp'.$i.'" class="col-2 px-0">'."\n";
-				echo '              --'."\n";
-				echo '            </div>'."\n";
-				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2 px-0 hide">'."\n";
-				echo '                <span id="socLp'.$i.'"></span>'."\n";
-				echo '            </div>'."\n";
-				echo '        </div>'."\n\n";
-				echo '        ';
-			}
-		?>
+		<!-- chargepoint info data lp1-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="1">
+			<div class="col-4 px-0">
+				<span class="cursor-pointer enableLp">
+					<span class="fas fa-xs hide autolockConfiguredLp"></span>
+					<!-- only class for lp name needs to have lp-# as appendix -->
+					<span class="font-weight-bold nameLp1">LP Name</span>
+				</span>
+				<span class="fa fa-xs fa-plug text-white hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+			</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span>
+            </div>
+            <div class="col-3 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
+
+		<!-- chargepoint info data lp2-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="2">
+			<div class="col-4 px-0">
+				<span class="cursor-pointer enableLp">
+					<span class="fas fa-xs hide autolockConfiguredLp"></span>
+					<!-- only class for lp name needs to have lp-# as appendix -->
+					<span class="font-weight-bold nameLp2">LP Name</span>
+				</span>
+				<span class="fa fa-xs fa-plug text-white hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+			</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span>
+            </div>
+            <div class="col-3 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
 		<!-- removed to see if people miss it
 
@@ -347,6 +350,18 @@ echo '</div>';
 			<div class="row justify-content-center">
 		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Ladeziel-Einstellungen</h3>
 		    </div>
+
+			<div class="row justify-content-center text-center regularTextSize">
+				<div class="col-4">
+					LP1 <span class="nameLp1"></span>
+				</div>
+				<div class="col-4">
+					LP2 <span class="nameLp2"></span>
+				</div>
+				<div class="col-4">
+					LP3 <span class="nameLp3"></span>
+				</div>
+			</div>
 
 	        <div class="row justify-content-center">
                 <div class="col-4 regularTextSize text-center">
@@ -872,9 +887,8 @@ echo '</div>';
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200409-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
 
-			$('.lpEnable').click(function(event){
+			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				var lp = $(this).attr("lp");
 				var isEnabled = $("#nameLp" + lp).hasClass("lpEnabledStyle")
 				if ( isEnabled ) {
 					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
