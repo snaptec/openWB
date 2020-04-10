@@ -17,6 +17,8 @@ rfid() {
 
 	NowItIs=$(date +%s)
 
+	setLpPlugChangeState
+
 	lasttag=$(<"ramdisk/readtag")
 
 	if [[ $lasttag != "0" ]]; then
@@ -63,13 +65,10 @@ rfid() {
 		echo 0 > "ramdisk/readtag"
 	fi
 
-
 	#
 	# handle special behaviour for slave mode
 	#
 	if (( slavemode == 1 )); then
-
-		setLpPlugChangeState
 
 		# handle plugin only if we have valid un-assigned start data (i.e. an RFID-scan that has not yet been assigned to a CP)
 		if [ -f "ramdisk/startRfidScanData" ]; then
@@ -95,7 +94,7 @@ rfid() {
 
 					# in case of timeout we disable all CPs that are NOT plugged in right now
 					for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
-						if [[ "${lpsPlugStat[$currentCp]}" -eq "0" ]]; then
+						if [[ "${lpsPlugStat[$currentCp]}" -ne "1" ]]; then
 							echo "$NowItIs: Disabling CP #${currentCp} as it's still unplugged after timeout of RFID tag scan has been exceeded"
 							mosquitto_pub -r -q 2 -t "openWB/set/lp${currentCp}/ChargePointEnabled" -m "0"
 							eval lp${currentCp}enabled=0
@@ -132,9 +131,22 @@ sendAccounting() {
 	chargePoint=$1
 
 	if [ -f "ramdisk/startRfidScanDataLp${chargePoint}" ]; then
+
+		if (( lpsPlugStat[$chargePoint] == 255 )); then
+			echo "$NowItIs: Plug state for CP ${chargePoint} contains garbage. Not sending accounting data"
+			return
+		fi
+
+		getCpChargestat $chargePoint
+		local chargestatToUse=$?
+		if (( chargestatToUse == 255 )); then
+			echo "$NowItIs: Charge state for CP ${chargePoint} contains garbage. Not sending accounting data"
+			return
+		fi
+
 		$dbgWrite "$NowItIs: Sending accounting data for CP #${chargePoint}"
 		startDataAcc=$(<"ramdisk/startRfidScanDataLp${chargePoint}")
-		mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/Accounting" -m "${startDataAcc},$NowItIs,$plugstat,$chargestat,$llkwh"
+		mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/Accounting" -m "${startDataAcc},$NowItIs,${lpsPlugStat[$chargePoint]},$chargestatToUse,$llkwh"
 	fi
 }
 
@@ -147,39 +159,49 @@ setLpPlugChangeState() {
 	local oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
 	local oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
 
-	if [ -f "ramdisk/mockedPlugstat" ]; then
-		plugstat=$(<"ramdisk/mockedPlugstat")
-	fi
-
-	if [ -f "ramdisk/mockedPlugstats1" ]; then
-		plugstats1=$(<"ramdisk/mockedPlugstats1")
-	fi
-
 	pluggedLp=0
-	lpsPlugStat=($plugstat $plugstats1)
+
+	getCpPlugstat 1
+	local plugstatToUse1=$?
+	getCpPlugstat 2
+	local plugstatToUse2=$?
+
+	lpsPlugStat=(0 $plugstatToUse1 $plugstatToUse2)
 	unpluggedLps=(0 0 0)
 
 	# first check LP2 as the last one will win for plugin and it seems more logical to let LP1 win
-	if (( plugstats1 == 1 )) && (( oplugstats1 == 0 )); then
-		echo "$NowItIs: LP 2 plugged in"
-		pluggedLp=2
-	elif (( plugstats1 == 0 )) && (( oplugstats1 == 1 )); then
-		echo "$NowItIs: LP 2 un-plugged"
-		unpluggedLps[2]=1
-	fi
+	if [ -n "$plugstats1" ]; then
+		if (( lpsPlugStat[2] == oplugstats1 )); then
+			:
+		elif (( lpsPlugStat[2] == 1 )) && (( oplugstats1 == 0 )); then
+			echo "$NowItIs: LP 2 plugged in"
+			pluggedLp=2
+		elif (( lpsPlugStat[2] == 0 )) && (( oplugstats1 == 1 )); then
+			echo "$NowItIs: LP 2 un-plugged"
+			unpluggedLps[2]=1
+		else
+			echo "$NowItIs: LP 2 unkown plug state '${plugstats1}'"
+		fi
 
-	echo $plugstats1 > "ramdisk/accPlugstatChangeDetectLp2"
+		echo ${lpsPlugStat[2]} > "ramdisk/accPlugstatChangeDetectLp2"
+	fi
 
 	# finally check LP1 so it wins
-	if (( plugstat == 1 )) && (( oplugstat == 0 )); then
-		echo "$NowItIs: LP 1 plugged in"
-		pluggedLp=1
-	elif (( plugstat == 0 )) && (( oplugstat == 1 )); then
-		echo "$NowItIs: LP 1 un-plugged"
-		unpluggedLps[1]=1
-	fi
+	if [ -n "$plugstat" ]; then
+		if (( lpsPlugStat[1] == oplugstat )); then
+			:
+		elif (( lpsPlugStat[1] == 1 )) && (( oplugstat == 0 )); then
+			echo "$NowItIs: LP 1 plugged in"
+			pluggedLp=1
+		elif (( lpsPlugStat[1] == 0 )) && (( oplugstat == 1 )); then
+			echo "$NowItIs: LP 1 un-plugged"
+			unpluggedLps[1]=1
+		else
+			echo "$NowItIs: LP 1 unkown plug state '${plugstat}'"
+		fi
 
-	echo $plugstat > "ramdisk/accPlugstatChangeDetectLp1"
+		echo ${lpsPlugStat[1]} > "ramdisk/accPlugstatChangeDetectLp1"
+	fi
 }
 
 
@@ -188,11 +210,8 @@ checkTagValidAndSetStartScanData() {
 
 	local chargePoint=$1
 
-	getCpPlugstat $chargePoint
-	local plugstatToUse=$?
-
-	if (( slavemode == 1 )) && (( $plugstatToUse != 0 )); then
-		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is already in plugged-in state (plugstatToUse == ${plugstatToUse})"
+	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )); then
+		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]})"
 		return 0
 	fi
 
@@ -233,13 +252,45 @@ checkTagValidAndSetStartScanData() {
 getCpPlugstat() {
 
 	local chargePoint=$1
+	local returnstat=255
 
 	if (( $chargePoint == 1 )); then
-		return $plugstat
+		returnstat=$plugstat
 	elif (( $chargePoint == 2 )); then
-		return $plugstats1
+		returnstat=$plugstats1
 	else
-		echo "$NowItIs: Don't know how to get plugged status of CP #${chargePoint}. Returning -1"
-		return -1
+		echo "$NowItIs: Don't know how to get plugged status of CP #${chargePoint}. Returning 255"
+		returnstat=255
 	fi
+
+	# heal cases where $plugstat contains garbage
+	if [ -z "${returnstat}" ]; then
+		returnstat=255
+	fi
+
+	return $returnstat
+}
+
+
+# returns the chargestat value for the given CP as exit code
+getCpChargestat() {
+
+	local chargePoint=$1
+	local returnstat=255
+
+	if (( $chargePoint == 1 )); then
+		returnstat=$chargestat
+	elif (( $chargePoint == 2 )); then
+		returnstat=$chargestats1
+	else
+		echo "$NowItIs: Don't know how to get chage status of CP #${chargePoint}. Returning 255"
+		returnstat=255
+	fi
+
+	# heal cases where $chargestat contains garbage
+	if [ -z "${returnstat}" ]; then
+		returnstat=255
+	fi
+
+	return $returnstat
 }
