@@ -402,6 +402,17 @@ if [ "$anzahlphasen" -ge "24" ]; then
 fi
 ########################
 # Berechnung für PV Regelung
+if [[ $nurpv70dynact == "1" ]]; then
+	nurpv70status=$(<ramdisk/nurpv70dynstatus)
+	if [[ $nurpv70status == "1" ]]; then
+        	uberschuss=$((uberschuss - nurpv70dynw))
+		wattbezugint=$((wattbezugint + nurpv70dynw))
+	fi
+	if [[ $debug == "1" ]]; then
+		echo "PV 70% aktiv! derzeit genutzter Überschuss $uberschuss"
+	fi
+fi
+
 mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
 wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
 abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)

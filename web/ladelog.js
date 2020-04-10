@@ -151,10 +151,7 @@ function showhideladelog() {
 		}
 	};
 function selectladelogclick(newdate){
-	        console.log("selectladelogclick");
-	        console.log(newdate);
 	        newdate = newdate.replace('-','');
-	        console.log(newdate);
 	        ladelog1=0;
 	        ladelog2=0;
 	        ladelog3=0;
@@ -181,10 +178,8 @@ function selectladelogclick(newdate){
 	        ladelog12p="";
 	        initialladelogread=0;
 	        publish(newdate, "openWB/set/graph/RequestMonthLadelog");
-		console.log("newdate" + newdate);
 }
 function putladelogtogether() {
-	 console.log("putladelogtogehter");
 	if ( (ladelog1 == 1) && (ladelog2 == 1) && (ladelog3 == 1) && (ladelog4 == 1) && (ladelog5 == 1) && (ladelog6 == 1) && (ladelog7 == 1) && (ladelog8 == 1) && (ladelog9 == 1) && (ladelog10 == 1) && (ladelog11 == 1) && (ladelog12 == 1) ){
 		 var ladelogdata = ladelog1p + "\n" + ladelog2p + "\n" + ladelog3p + "\n" + ladelog4p + "\n" + ladelog5p + "\n" + ladelog6p + "\n" + ladelog7p + "\n" + ladelog8p + "\n" + ladelog9p + "\n" + ladelog10p + "\n" + ladelog11p + "\n" + ladelog12p;
 		ladelogdata = ladelogdata.replace(/^\s*[\n]/gm, '');
@@ -299,12 +294,16 @@ function putladelogtogether() {
 					writerfid = 1;
 					}
 				}
+				if (row.length == 8) {
+					if ( cellcount == 8 && writelp == 1 && writemodus == 1 && showrfid == 0) {
+						testout.push(temparr);
+					}
+				}
 				if ( cellcount == 9 && writelp == 1 && writemodus == 1 && writerfid == 1) {
 					testout.push(temparr);
 				}
 			});
 		});
-		console.log(testout.length);
 		if ( testout.length >= 1 ) {
 		var content = '<table class="table"> <thead><tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col">geladene km</th><th scope="col">kWh</th><th scope="col">mit kW</th><th scope="col">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th></tr></thead> <tbody>';
 		var rowcount=0;

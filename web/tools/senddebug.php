@@ -1,7 +1,7 @@
 <?php
 $result = '';
 
-if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL)) {
+if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
 	$result = $_POST['debugMessage'] . "\n" . $_POST['emailAddress'] . "\n";
 	file_put_contents('/var/www/html/openWB/ramdisk/debuguser', $result);
 	header("Location: ./debugredirect.html");
@@ -14,7 +14,7 @@ if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL)) {
 		<title>Weiterleitung</title>
 	</head>
 	<body>
-		<h1>Keine gültige Email angegeben!</h1>
+		<h1>Keine gültige Email angegeben oder Fehlerbeschreibung zu kurz</h1>
 		<p>Weiterleitung in 10 Sekunden...</p>
 	</body>
 </html>
