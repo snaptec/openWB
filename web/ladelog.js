@@ -151,7 +151,6 @@ function showhideladelog() {
 		}
 	};
 function selectladelogclick(newdate){
-	        console.log(newdate);
 	        newdate = newdate.replace('-','');
 	        ladelog1=0;
 	        ladelog2=0;
