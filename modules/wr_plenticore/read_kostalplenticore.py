@@ -380,6 +380,7 @@ else:
     # wenn man die AC-Leistung der PV-Module und des Speichers bestimmen möchte.
     # Kostal liefert nur DC-Werte, also DC-Leistung berechnen
     PV_power_dc1 = DC1_power1 + DC2_power1 # PV an String 1 und 2
+
     # schauen, ob überhaupt PV-Leistung erzeugt wird
     if PV_power_dc1 < 0:
         # PV-Anlage kann nichts verbrauchen, also ggf. Register-/Rundungsfehler korrigieren
@@ -400,8 +401,8 @@ else:
             Actual_batt_ch_disch_power = Inverter_generation_power_actual1 - PV_power_ac1
         else:
             # Batterie wird geladen
-            # dann ist PV-Leistung die Wechselrichter-AC-Leistung + die Ladeleistung der Batterie
-            PV_power_ac1 = Inverter_generation_power_actual1 + Actual_batt_ch_disch_power
+            # dann ist PV-Leistung die Wechselrichter-AC-Leistung + die Ladeleistung der Batterie (negative because charging)
+            PV_power_ac1 = Inverter_generation_power_actual1 - Actual_batt_ch_disch_power
 
 # am WR2 darf keine Batterie sein, deswegen hier vereinfacht PV-Leistung = AC-Leistung des WR
 if ipaddress2 != 'none':
