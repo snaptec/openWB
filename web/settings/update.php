@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<br>
-			<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
+			<form class="form" id="releasetrainForm" action="./settings/saveupdate.php" method="POST">
 				<div class="form-row align-items-center">
 					<div class="col">
 						<div class="form-group">
