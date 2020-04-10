@@ -20,35 +20,35 @@ rfid() {
 	lasttag=$(<"ramdisk/readtag")
 
 	if [[ $lasttag != "0" ]]; then
-		if [ $lasttag == $rfidlp1c1 ] || [ $lasttag == $rfidlp1c2 ]  || [ $lasttag == $rfidlp1c3 ] ; then
+		if [ "$lasttag" == "$rfidlp1c1" ] || [ "$lasttag" == "$rfidlp1c2" ]  || [ "$lasttag" == "$rfidlp1c3" ] ; then
 			echo $lasttag > ramdisk/rfidlp1
 		fi
-		if [ $lasttag == $rfidlp2c1 ] || [ $lasttag == $rfidlp2c2 ]  || [ $lasttag == $rfidlp2c3 ] ; then
+		if [ "$lasttag" == "$rfidlp2c1" ] || [ "$lasttag" == "$rfidlp2c2" ]  || [ "$lasttag" == "$rfidlp2c3" ] ; then
 			echo $lasttag > ramdisk/rfidlp2
 		fi
-		if [ $lasttag == $rfidstop ] || [ $lasttag == $rfidstop2 ] || [ $lasttag == $rfidstop3 ] ; then
+		if [ "$lasttag" == "$rfidstop" ] || [ "$lasttag" == "$rfidstop2" ] || [ "$lasttag" == "$rfidstop3" ] ; then
 			echo 3 > ramdisk/lademodus
 		fi
 
-		if [ $lasttag == $rfidsofort ] || [ $lasttag == $rfidsofort2 ] || [ $lasttag == $rfidsofort3 ]  ; then
+		if [ "$lasttag" == "$rfidsofort" ] || [ "$lasttag" == "$rfidsofort2" ] || [ "$lasttag" == "$rfidsofort3" ]  ; then
 			echo 0 > ramdisk/lademodus
 		fi
 
-		if [ $lasttag == $rfidminpv ] || [ $lasttag == $rfidminpv2 ] || [ $lasttag == $rfidminpv3 ]  ; then
+		if [ "$lasttag" == "$rfidminpv" ] || [ "$lasttag" == "$rfidminpv2" ] || [ "$lasttag" == "$rfidminpv3" ]  ; then
 			echo 1 > ramdisk/lademodus
 		fi
 
-		if [ $lasttag == $rfidnurpv ] || [ $lasttag == $rfidnurpv2 ] || [ $lasttag == $rfidnurpv3 ]   ; then
+		if [ "$lasttag" == "$rfidnurpv" ] || [ "$lasttag" == "$rfidnurpv2" ] || [ "$lasttag" == "$rfidnurpv3" ]   ; then
 			echo 2 > ramdisk/lademodus
 		fi
 
-		if [ $lasttag == $rfidstandby ] || [ $lasttag == $rfidstandby2 ] || [ $lasttag == $rfidstandby3 ] ; then
+		if [ "$lasttag" == "$rfidstandby" ] || [ "$lasttag" == "$rfidstandby2" ] || [ "$lasttag" == "$rfidstandby3" ] ; then
 			echo 4 > ramdisk/lademodus
 		fi
-		if [ $lasttag == $rfidlp1start1 ] || [ $lasttag == $rfidlp1start2 ] || [ $lasttag == $rfidlp1start3 ] ; then
+		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] ; then
 			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"
 		fi
-		if [ $lasttag == $rfidlp2start1 ] || [ $lasttag == $rfidlp2start2 ] || [ $lasttag == $rfidlp2start3 ] ; then
+		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] ; then
 			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
 		fi
 
@@ -141,8 +141,8 @@ sendAccounting() {
 # if it has NOT, pluggedLp will be set to 0
 setLpPlugChangeState() {
 
-	oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
-	oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
+	local oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
+	local oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
 
 	if [ -f "ramdisk/mockedPlugstat" ]; then
 		plugstat=$(<"ramdisk/mockedPlugstat")
@@ -183,14 +183,22 @@ setLpPlugChangeState() {
 # checks if the tag stored in $lasttag is valid for the charge point passed in $1
 checkTagValidAndSetStartScanData() {
 
-	chargePoint=$1
+	local chargePoint=$1
 
-	ramdiskFileForCp="ramdisk/AllowedRfidsForLp${chargePoint}"
+	getCpPlugstat $chargePoint
+	local plugstatToUse=$?
+
+	if (( slavemode == 1 )) && (( $plugstatToUse != 0 )); then
+		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is already in plugged-in state (plugstatToUse == ${plugstatToUse})"
+		return 0
+	fi
+
+	local ramdiskFileForCp="ramdisk/AllowedRfidsForLp${chargePoint}"
 	if [ ! -f "$ramdiskFileForCp" ]; then
 		return 1
 	fi
 
-	rfidlist=$(<"$ramdiskFileForCp")
+	local rfidlist=$(<"$ramdiskFileForCp")
 	$dbgWrite "$NowItIs: rfidlist(LP${chargePoint})='${rfidlist}'"
 
 	# leave right away if we have no list of valid RFID tags for the charge point
@@ -201,12 +209,12 @@ checkTagValidAndSetStartScanData() {
 
 	for i in $(echo $rfidlist | sed "s/,/ /g")
 	do
-		if [ $lasttag == $i ] ; then
+		if [ "$lasttag" == "$i" ] ; then
 
 			# found valid RFID tag for the charge point
 			echo "$NowItIs,$lasttag,$llkwh" > "ramdisk/startRfidScanData"
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
-			echo "$NowItIs: Start waiting for LP${chargePoint} plugin after RFID scan of '$lasttag' @ meter value $llkwh"
+			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for LP${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh"
 
 			return 0
 		fi
@@ -215,4 +223,19 @@ checkTagValidAndSetStartScanData() {
 	echo "$NowItIs: RFID tag '${lasttag}' is not authorized to enable this CP"
 
 	return 1
+}
+
+# returns the plugstat value for the given CP as exit code
+getCpPlugstat() {
+
+	local chargePoint=$1
+
+	if (( $chargePoint == 1 )); then
+		return $plugstat
+	elif (( $chargePoint == 2 )); then
+		return $plugstats1
+	else
+		echo "$NowItIs: Don't know how to get plugged status of CP #${chargePoint}. Returning -1"
+		return -1
+	fi
 }
