@@ -103,7 +103,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen", einbeziehen]
             subprocess.Popen(sendcommand)
             client.publish("openWB/global/priorityModeEVBattery", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/LiveGraphDuration"):
+        if (int(msg.payload) >= 20 and int(msg.payload) <=120):
 
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)
