@@ -93,7 +93,7 @@
 						</div>
 					</form>
 				'; } else { echo '
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="row">
 							<b><label for="connect_username">Benutzername:</label></b>
 							<input type="text" name="username" id="connect_username" value="">
@@ -112,7 +112,7 @@
 						<button type="submit" class="btn btn-green">Mit Account anmelden</button>
 					</form>
 					<hr>
-					<form action="./tools/cloudregistrate.php" method="POST">
+					<form action="./settings/cloudregistrate.php" method="POST">
 						<div class="row">
 							<b><label for="register_username">Benutzername:</label></b>
 							<input type="text" name="username" id="register_username" value="">
