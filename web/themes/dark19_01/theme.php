@@ -91,14 +91,12 @@
 			</div>
 		</div>
 
-		<div class="row verySmallTextSize text-black bg-darkgrey">
+		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
-			<div class="col-5 cursor-pointer regularTextSize font-weight-bold text-center text-red">
-				<span id="chargeModeSelect">
-					>> Lademodus <<
-				</span>
+			<div class="col-5 text-center">
+				<button type="button" class="btn btn-sm btn-secondary cursor-pointer" id="chargeModeSelectBtn">Lademodus</button>
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -846,7 +844,7 @@ echo '</div>';
 				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
 					if ( topicsToSubscribe[index][0] == mqttTopic ) {
 						// topic found in array
-						topicsToSubscribe[index][1] = 1;  // mark topic as received
+						topicsToSubscribe[index][1] += 1;  // mark topic as received
 					};
 					if ( topicsToSubscribe[index][1] > 0 ) {
 						countTopicsReceived++;
@@ -885,7 +883,7 @@ echo '</div>';
 				}
 			});
 
-			$('#chargeModeSelect').click(function(event){
+			$('#chargeModeSelectBtn').click(function(event){
 				$("#chargeModeModal").modal("show");
 			});
 
