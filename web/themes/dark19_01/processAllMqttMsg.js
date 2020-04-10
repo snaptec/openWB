@@ -280,7 +280,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case "0":
 				// mode sofort
-				$("#chargeModeSelect").text(">> Sofortladen <<");
+				$("#chargeModeSelectBtn").text("Sofortladen");
 				$(".chargeModeBtn").removeClass("btn-green");
 				$("#chargeModeSofortBtn").addClass("btn-green");
 				$("#targetChargingProgress").show();
@@ -288,7 +288,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				break;
 			case "1":
 				// mode min+pv
-				$("#chargeModeSelect").text(">> Min+PV-Laden <<");
+				$("#chargeModeSelectBtn").text("Min+PV-Laden");
 				$(".chargeModeBtn").removeClass("btn-green");
 				$("#chargeModeMinPVBtn").addClass("btn-green");
 				$("#targetChargingProgress").hide();
@@ -296,7 +296,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				break;
 			case "2":
 				// mode pv
-				$("#chargeModeSelect").text(">> PV-Laden <<");
+				$("#chargeModeSelectBtn").text("PV-Laden");
 				$(".chargeModeBtn").removeClass("btn-green");
 				$("#chargeModePVBtn").addClass("btn-green");
 				$("#targetChargingProgress").hide();
@@ -304,7 +304,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				break;
 			case "3":
 				// mode stop
-				$("#chargeModeSelect").text(">> Stop <<");
+				$("#chargeModeSelectBtn").text("Stop");
 				$(".chargeModeBtn").removeClass("btn-green");
 				$("#chargeModeStopBtn").addClass("btn-green");
 				$("#targetChargingProgress").hide();
@@ -312,7 +312,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				break;
 			case "4":
 				// mode standby
-				$("#chargeModeSelect").text(">> Standby <<");
+				$("#chargeModeSelectBtn").text("Standby");
 				$(".chargeModeBtn").removeClass("btn-green");
 				$("#chargeModeStdbyBtn").addClass("btn-green");
 				$("#targetChargingProgress").hide();
