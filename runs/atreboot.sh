@@ -854,7 +854,16 @@ if ! grep -Fq "msmoduslp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "msmoduslp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "msmoduslp3=" /var/www/html/openWB/openwb.conf
+then
+	echo "msmoduslp3=0" >> /var/www/html/openWB/openwb.conf
+	echo "msmoduslp4=0" >> /var/www/html/openWB/openwb.conf
+	echo "msmoduslp5=0" >> /var/www/html/openWB/openwb.conf
+	echo "msmoduslp6=0" >> /var/www/html/openWB/openwb.conf
+	echo "msmoduslp7=0" >> /var/www/html/openWB/openwb.conf
+	echo "msmoduslp8=0" >> /var/www/html/openWB/openwb.conf
 
+fi
 if ! grep -Fq "nachtladenbisuhrs1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "nachtladenbisuhrs1=6" >> /var/www/html/openWB/openwb.conf
