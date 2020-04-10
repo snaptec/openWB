@@ -71,8 +71,9 @@ function computeAndSetCurrentForChargePoint() {
 	fi
 
 	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
-		echo "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - skipping slave loop for CP#${chargePoint} - is your CONTROLLER USING A TOO HIGH LIMIT FOR DETECTING CHARGING PHASES ??"
-		return 1
+		# this can happen in transient when master has not yet detected us as charging but we have already detected us as charging and no other car is charging
+		$dbgWrite "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
+		chargingVehiclesAdjustedForThisCp=1
 	fi
 
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
