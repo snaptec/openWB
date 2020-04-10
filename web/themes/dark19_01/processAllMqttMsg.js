@@ -37,6 +37,7 @@ function handlevar(mqttmsg, mqttpayload) {
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/graph/boolDisplayHouseConsumption" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
@@ -182,6 +183,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 function processEvuMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/evu
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/evu/W" ) {
 	    var powerEvu = mqttpayload;
 	    var powerEvu = parseInt(powerEvu, 10);
@@ -210,6 +212,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 function processGlobalMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/global
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/global/WHouseConsumption" ) {
 		var powerHouse = parseInt(mqttpayload, 10);
 		if ( isNaN(powerHouse) ) {
@@ -321,6 +324,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/housebattery
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/housebattery/W" ) {
 		var speicherwatt = mqttpayload;
 		var speicherwatt = parseInt(speicherwatt, 10);
@@ -366,6 +370,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 function processSystemMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/system/Timestamp") {
 		var dateObject = new Date(mqttpayload * 1000);  // Unix timestamp to date-object
 		var time = "&nbsp;";
@@ -388,6 +393,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 function processPvMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/pv
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg == "openWB/pv/W") {
 		var pvwatt = parseInt(mqttpayload, 10);
 		if ( isNaN(pvwatt) || pvwatt > 0 ) {
@@ -419,16 +425,19 @@ function processPvMessages(mqttmsg, mqttpayload) {
 function processVerbraucherMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
+	processPreloader(mqttmsg);
 }
 
 function processSetMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/set
 	// called by handlevar
+	processPreloader(mqttmsg);
 }
 
 function processLpMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/lp
 	// called by handlevar
+	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/boolchargepointenabled"
 		// where # is an integer > 0
