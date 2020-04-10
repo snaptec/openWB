@@ -109,7 +109,7 @@
 			</div>
 			<!-- modal footer -->
 			<div class="modal-footer d-flex justify-content-center">
-				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./tools/upload.html'">Wiederherstellen</button>
+				<button type="button" class="btn btn-green" data-dismiss="modal" onclick="window.location.href='./settings/upload.html'">Wiederherstellen</button>
 				<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
 			</div>
 		</div>
