@@ -47,9 +47,11 @@ rfid() {
 		fi
 		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] ; then
 			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"
+			lp1enabled=0
 		fi
 		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] ; then
 			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
+			lp2enabled=0
 		fi
 
 		# check all CPs that we support for whether the tag is valid for that CP
@@ -96,6 +98,7 @@ rfid() {
 						if [[ "${lpsPlugStat[$currentCp]}" -eq "0" ]]; then
 							echo "$NowItIs: Disabling CP #${currentCp} as it's still unplugged after timeout of RFID tag scan has been exceeded"
 							mosquitto_pub -r -q 2 -t "openWB/set/lp${currentCp}/ChargePointEnabled" -m "0"
+							eval lp${currentCp}enabled=0
 						fi
 					done
 
@@ -214,6 +217,7 @@ checkTagValidAndSetStartScanData() {
 			# found valid RFID tag for the charge point
 			echo "$NowItIs,$lasttag,$llkwh" > "ramdisk/startRfidScanData"
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
+			eval lp${chargePoint}enabled=1
 			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for LP${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh"
 
 			return 0
