@@ -137,7 +137,7 @@
 					openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
 				</div>
 			</div>
-			<form class="form" id="sendDebugMessageForm" action="./tools/starttunnel.php" method="POST">
+			<form class="form" id="sendDebugMessageForm" action="./settings/starttunnel.php" method="POST">
 				<div class="col-7 col-lg-5">
 					<div class="input-group mb-2">
 						<div class="input-group-prepend">
