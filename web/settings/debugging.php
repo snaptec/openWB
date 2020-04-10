@@ -59,7 +59,7 @@
 					<h1>Debug-Modus</h1>
 				</div>
 			</div>
-			<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
+			<form class="form" id="debugmodeForm" action="./settings/savedebug.php" method="POST">
 				<div class="form-row">
 					<div class="col-auto">
 						<div class="form-group">
@@ -105,7 +105,7 @@
 				</div>
 			</div>
 			<br>
-			<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
+			<form class="form" id="sendDebugMessageForm" action="./settings/senddebug.php" method="POST">
 				<div class="form-row">
 					<div class="form-group col-lg-7">
 						<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
