@@ -1129,6 +1129,36 @@ if [[ "$omsmoduslp2" != "$msmoduslp2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/boolDirectChargeMode_none_kwh_soc=${msmoduslp2}"
 	echo $msmoduslp2 > ramdisk/mqttmsmoduslp2
 fi
+omsmoduslp3=$(<ramdisk/mqttmsmoduslp3)
+if [[ "$omsmoduslp3" != "$msmoduslp3" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/3/boolDirectChargeMode_none_kwh_soc=${msmoduslp3}"
+	echo $msmoduslp3 > ramdisk/mqttmsmoduslp3
+fi
+omsmoduslp4=$(<ramdisk/mqttmsmoduslp4)
+if [[ "$omsmoduslp4" != "$msmoduslp4" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/4/boolDirectChargeMode_none_kwh_soc=${msmoduslp4}"
+	echo $msmoduslp4 > ramdisk/mqttmsmoduslp4
+fi
+omsmoduslp5=$(<ramdisk/mqttmsmoduslp5)
+if [[ "$omsmoduslp5" != "$msmoduslp5" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/5/boolDirectChargeMode_none_kwh_soc=${msmoduslp5}"
+	echo $msmoduslp5 > ramdisk/mqttmsmoduslp5
+fi
+omsmoduslp6=$(<ramdisk/mqttmsmoduslp6)
+if [[ "$omsmoduslp6" != "$msmoduslp6" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/6/boolDirectChargeMode_none_kwh_soc=${msmoduslp6}"
+	echo $msmoduslp6 > ramdisk/mqttmsmoduslp6
+fi
+omsmoduslp7=$(<ramdisk/mqttmsmoduslp7)
+if [[ "$omsmoduslp7" != "$msmoduslp7" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/7/boolDirectChargeMode_none_kwh_soc=${msmoduslp7}"
+	echo $msmoduslp7 > ramdisk/mqttmsmoduslp7
+fi
+omsmoduslp8=$(<ramdisk/mqttmsmoduslp8)
+if [[ "$omsmoduslp8" != "$msmoduslp8" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/8/boolDirectChargeMode_none_kwh_soc=${msmoduslp8}"
+	echo $msmoduslp8 > ramdisk/mqttmsmoduslp8
+fi
 ospeichervorhanden=$(<ramdisk/mqttspeichervorhanden)
 if (( ospeichervorhanden != speichervorhanden )); then
 	tempPubList="${tempPubList}\nopenWB/housebattery/boolHouseBatteryConfigured=${speichervorhanden}"
