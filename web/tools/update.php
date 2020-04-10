@@ -12,7 +12,7 @@
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include reboot-style -->
-		<link rel="stylesheet" type="text/css" href="tools/reboot.css">
+		<link rel="stylesheet" type="text/css" href="css/reboot.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
