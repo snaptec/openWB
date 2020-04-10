@@ -57,11 +57,9 @@
 
 		<script>
 			$(document).ready(function(){
-				console.log("reboot initiated");
 				$("#infoText").text("Neustart der openWB angefordert...");
 				$.get("./tools/restart.php").always(function() {
 					$("#infoText").text("Neustart läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
-					console.log("reboot in progress, waiting for main page to load");
 					setTimeout(function() { window.location.href = "./index.php"; }, 50000);
 				});
 			});

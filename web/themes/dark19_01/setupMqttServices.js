@@ -51,7 +51,7 @@ var topicsToSubscribe = [
 	["openWB/pv/W", 0],
 	["openWB/pv/DailyYieldKwh", 0],
 	// evu topics
-	["openWB/evu/W", "#bezugdiv"],
+	["openWB/evu/W", 0],
 	// lp topics
 		["openWB/lp/1/%Soc", 0],
 		["openWB/lp/2/%Soc", 0],
