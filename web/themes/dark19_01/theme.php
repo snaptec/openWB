@@ -58,6 +58,31 @@
 
 <body>
 
+	<!-- Preloader with Progress Bar -->
+	<div class="loader bg-white">
+		<div class="loader-container">
+		  	<div class="row text-black">
+			  	<div class="mx-auto d-block justify-content-center">
+					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
+			  	</div>
+			</div>
+			<div class="row text-grey justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					Bitte warten, während die Seite aufgebaut wird.
+				</div>
+			</div>
+			<div class="row justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					<div class="progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" id="preloaderbar" role="progressbar" style="width: 0%;">
+						</div>
+					</div>
+				</div>
+  			</div>
+		</div>
+	</div>
+
+	<!-- Landing Page -->
 	<div class="container">
 
 		<div class="row">
@@ -179,9 +204,9 @@ echo '</div>';
 				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
 				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey">'."\n";
 				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'">'."\n";
+				echo '                <span class="cursor-pointer lpEnable" lp="'.$i.'">'."\n";
 				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfigured"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="nameLp'.$i.' font-weight-bold" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
+				echo '                    <span class="nameLp'.$i.' font-weight-bold lpDisabledStyle" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
 				echo '                </span>'."\n";
 				echo '                <span class="fa fa-xs fa-plug text-white hide" id="plugstatlp'.$i.'"></span>'."\n";
 				if ( $zielladenaktivlp1old == 1 ) {
@@ -770,10 +795,13 @@ echo '</div>';
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200408-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200409-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
+
+		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
+		var landingpageShown = false;  // holds flag for landing page being shown
 
 		function AwattarMaxPriceClick() {
 			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
@@ -810,23 +838,50 @@ echo '</div>';
 			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
 		}
 
+		function processPreloader(mqttTopic) {
+			// sets flag for topic received in topic-array
+			// and updates the preloader progress bar
+			if ( !landingpageShown ) {
+				var countTopicsReceived = 0;
+				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
+					if ( topicsToSubscribe[index][0] == mqttTopic ) {
+						// topic found in array
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
+					};
+					if ( topicsToSubscribe[index][1] > 0 ) {
+						countTopicsReceived++;
+					}
+				};
+				var percentageReceived = (countTopicsReceived / topicsToSubscribe.length * 100).toFixed(0);
+				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMesagges > 3000 ) {
+					// latest after 3 sec without new messages
+					console.log(topicsToSubscribe);
+					percentageReceived = 100;
+				}
+				timeOfLastMqttMessage = Date.now();
+				$("#preloaderbar").width(percentageReceived+"%");
+				$("#preloaderbar").text(percentageReceived+" %");
+				if ( percentageReceived == 100 ) {
+					landingpageShown = true;
+					$(".loader").fadeOut(2000);
+				}
+			}
+		}
+
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200409-a");
 			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
 
-			$('.lpEnableSpan').click(function(event){
+			$('.lpEnable').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				// attribut value is changed at receipt of confirmation mqttmsg
 				var lp = $(this).attr("lp");
-				var isEnabled = $(this).attr("isEnabled");
-				switch ( isEnabled ) {
-					case "1":
-						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
-					case "0":
-						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
+				var isEnabled = $("#nameLp" + lp).hasClass("lpEnabledStyle")
+				if ( isEnabled ) {
+					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				} else {
+					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
 				}
 			});
 
