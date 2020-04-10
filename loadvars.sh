@@ -947,14 +947,17 @@ fi
 
 if (( ohook1aktiv != hook1aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook1Active=${hook1aktiv}"
+	tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1aktiv}"
 	echo $hook1aktiv > ramdisk/mqtthook1aktiv
 fi
 if (( ohook2aktiv != hook2aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook2Active=${hook2aktiv}"
+	tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2aktiv}"
 	echo $hook2aktiv > ramdisk/mqtthook2aktiv
 fi
 if (( ohook3aktiv != hook3aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook3Active=${hook3aktiv}"
+	tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3aktiv}"
 	echo $hook3aktiv > ramdisk/mqtthook3aktiv
 fi
 oversion=$(<ramdisk/mqttversion)
