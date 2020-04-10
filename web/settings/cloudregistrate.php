@@ -54,7 +54,7 @@ if ( $response == "nomail" ) {
 	}
 	file_put_contents('/var/www/html/openWB/openwb.conf', $result);
 
-	$url = $_SERVER['HTTP_HOST'].'/openWB/web/tools/savemqtt.php?bridge=cloud';
+	$url = $_SERVER['HTTP_HOST'].'/openWB/web/settings/savemqtt.php?bridge=cloud';
 $data = array(
 	'ConnectionName' => 'cloud',
 	'bridgeEnabled' => '1',

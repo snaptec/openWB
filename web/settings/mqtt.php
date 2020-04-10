@@ -133,7 +133,7 @@
 
 						if ($firstLoopDone) echo "<hr>";
 				?>
-				<form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
+				<form action="./settings/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
 					<div >
 						<input type="checkbox" name="bridgeEnabled" value="bridgeEnabled" <?php echo $bridgeEnabled ? "checked=\"checked\"" : "" ?>><?php echo $bridgeEnabled ? "": "&nbsp;&nbsp;<em>! Deaktiviert !</em>" ?><b><label>&nbsp;&nbsp;Br&uuml;cke&nbsp;&nbsp;<input type="text" size="35" name="ConnectionName" id="ConnectionName" value="<?php echo $connectionName; ?>" /></label></b><br/>
 						<?php if($debugold >= 1) echo "<small>in Datei '$currentFile'</small>"; ?><br/>

@@ -86,7 +86,7 @@
 					<div class="row">
 						Mit den Zugangsdaten auf web.openwb.de anmelden
 					</div>
-					<form action="./tools/savemqtt.php?bridge='.urlencode($connectionName).'" method="POST">
+					<form action="./settings/savemqtt.php?bridge='.urlencode($connectionName).'" method="POST">
 						<input type="hidden" name="ConnectionName" value="cloud"/>
                                         	<div class="row justify-content-center py-1">
                                         	        <button type="submit" class="btn btn-green" name="action" value="deleteBridge">Br&uuml;cke '.urlencode($connectionName).' l&ouml;schen</button>
