@@ -577,7 +577,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
-				<form action="./tools/savemisc.php" method="POST">
+				<form action="./settings/savemisc.php" method="POST">
 					<div class="row">
 						<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
 						<select name="dspeed" id="dspeed">

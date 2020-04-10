@@ -182,7 +182,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
-				<form action="./tools/savesmarthome.php" method="POST">
+				<form action="./settings/savesmarthome.php" method="POST">
 					<div class="row">
 						<b><label for="angesteckthooklp1">Webhook bei Anstecken an LP1:</label></b>
 						<select name="angesteckthooklp1" id="angesteckthooklp1">

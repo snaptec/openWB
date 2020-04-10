@@ -509,7 +509,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
-				<form action="./tools/savemain.php" method="POST">
+				<form action="./settings/savemain.php" method="POST">
 					<div class="row ">
 						<b><label for="awattaraktiv">Awattar aktivieren:</label></b>
 						<select name="awattaraktiv" id="awattaraktiv">

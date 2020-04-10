@@ -1177,7 +1177,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
-				<form action="./tools/savemodul.php" method="POST">
+				<form action="./settings/savemodul.php" method="POST">
 					<div class="row">
 						<div class="col">
 							<h1> Erster Ladepunkt </h1>

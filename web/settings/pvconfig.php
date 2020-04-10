@@ -158,7 +158,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
-				<form action="./tools/savepv.php" method="POST">
+				<form action="./settings/savepv.php" method="POST">
 
 					<div class="row">
 						<h3>PV Regelung</h3>

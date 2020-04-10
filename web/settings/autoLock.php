@@ -221,7 +221,7 @@ ECHODAYROWTAIL;
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
 
-				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
+				<form class="form col-md-10" action="./settings/saveautolock.php" method="POST">
 
 				<?php
 
