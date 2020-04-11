@@ -156,7 +156,14 @@ sendAccounting() {
 # if it has NOT, pluggedLp will be set to 0
 setLpPlugChangeState() {
 
+	if [ ! -f "ramdisk/accPlugstatChangeDetectLp1" ]; then
+		echo "$plugstat" > "ramdisk/accPlugstatChangeDetectLp1"
+	fi
 	local oplugstat=$(<"ramdisk/accPlugstatChangeDetectLp1")
+
+	if [ ! -f "ramdisk/accPlugstatChangeDetectLp2" ]; then
+		echo "$plugstats1" > "ramdisk/accPlugstatChangeDetectLp2"
+	fi
 	local oplugstats1=$(<"ramdisk/accPlugstatChangeDetectLp2")
 
 	pluggedLp=0
