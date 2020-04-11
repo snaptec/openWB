@@ -1853,6 +1853,10 @@ if ! grep -Fq "wakeupmyrenaultlp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "wakeupmyrenaultlp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "awattarlocation=" /var/www/html/openWB/openwb.conf
+then
+	echo "awattarlocation=de" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "awattaraktiv=" /var/www/html/openWB/openwb.conf
 then
 	echo "awattaraktiv=0" >> /var/www/html/openWB/openwb.conf
