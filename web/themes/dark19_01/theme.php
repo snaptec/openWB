@@ -930,7 +930,7 @@
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200411-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
 	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200411-a"></script>
