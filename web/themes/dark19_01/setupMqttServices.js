@@ -115,14 +115,6 @@ var topicsToSubscribe = [
 		["openWB/lp/2/TimeRemaining", 0],
 		["openWB/lp/3/TimeRemaining", 0],
 
-		["openWB/lp/1/ChargeStatus", 0],
-		["openWB/lp/2/ChargeStatus", 0],
-		["openWB/lp/3/ChargeStatus", 0],
-		["openWB/lp/4/ChargeStatus", 0],
-		["openWB/lp/5/ChargeStatus", 0],
-		["openWB/lp/6/ChargeStatus", 0],
-		["openWB/lp/7/ChargeStatus", 0],
-		["openWB/lp/8/ChargeStatus", 0],
 		// Status Konfiguration Ladepunkt
 		["openWB/lp/1/boolChargePointConfigured", 0],
 		["openWB/lp/2/boolChargePointConfigured", 0],
@@ -190,6 +182,14 @@ var topicsToSubscribe = [
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/W", 0],
 	["openWB/housebattery/%Soc", 0],
+	// hook topics
+	["openWB/hook/1/boolHookConfigured", 0],
+	["openWB/hook/2/boolHookConfigured", 0],
+	["openWB/hook/3/boolHookConfigured", 0],
+
+	["openWB/hook/1/boolHookStatus", 0],
+	["openWB/hook/2/boolHookStatus", 0],
+	["openWB/hook/3/boolHookStatus", 0],
 ];
 
 var retries = 0;
