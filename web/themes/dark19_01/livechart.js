@@ -385,7 +385,7 @@ function putgraphtogether() {
 			splittime.push(zeit.substring(0, zeit.length -3));
 		});
 		atime = splittime;
-		if ( atime.length >= 30 ) {
+		if ( atime.length >= 60 ) {
 			//atime = getCol(csvData, 0);
 			abezug = convertToKw(getCol(csvData, 1));
 			alpa = convertToKw(getCol(csvData, 2));
@@ -420,7 +420,7 @@ function putgraphtogether() {
 			all6 = 0;
 			all7 = 0;
 			all8 = 0;
-			var percent = (atime.length / 30 * 100).toFixed();
+			var percent = (atime.length / 60 * 100).toFixed();
 			$('#waitforgraphloadingdiv').text('Erst ca. ' + percent + '% der mindestens benötigten Datenpunkte für den Graph seit Neustart vorhanden.');
 		}
 	}

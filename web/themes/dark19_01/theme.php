@@ -992,23 +992,15 @@
 				};
 				var percentageReceived = (countTopicsReceived / topicsToSubscribe.length * 100).toFixed(0);
 				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
-				var countTopicsNotReceived = 0;
 				if ( timeBetweenTwoMesagges > 3000 ) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
-					topicsToSubscribe.forEach((item, i) => {
-						if ( item[1] == 0 ) {
-							console.log('not received: ' + item[0]);
-							countTopicsNotReceived++;
-						}
-					});
-					console.log('not received: ' + countTopicsNotReceived);
 				}
 				timeOfLastMqttMessage = Date.now();
 				$("#preloaderbar").width(percentageReceived+"%");
 				$("#preloaderbar").text(percentageReceived+" %");
 				if ( percentageReceived == 100 ) {
-					//landingpageShown = true;
+					landingpageShown = true;
 					$(".loader").fadeOut(2000);
 				}
 			}
