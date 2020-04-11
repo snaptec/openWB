@@ -944,20 +944,32 @@ if (( ogelrlp3 != gelrlp3 )); then
 	tempPubList="${tempPubList}\nopenWB/lp/3/kmCharged=${gelrlp3}"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
+ohook1_aktiv=$(<ramdisk/mqtthook1_aktiv)
+if [[ "$ohook1_aktiv" != "$hook1_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1_aktiv}"
+	echo $ > ramdisk/mqtthook1_aktiv
+fi
+ohook2_aktiv=$(<ramdisk/mqtthook2_aktiv)
+if [[ "$ohook2_aktiv" != "$hook2_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2_aktiv}"
+	echo $ > ramdisk/mqtthook2_aktiv
+fi
+ohook3_aktiv=$(<ramdisk/mqtthook3_aktiv)
+if [[ "$ohook3_aktiv" != "$hook3_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3_aktiv}"
+	echo $ > ramdisk/mqtthook3_aktiv
+fi
 
 if (( ohook1aktiv != hook1aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook1Active=${hook1aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1aktiv}"
 	echo $hook1aktiv > ramdisk/mqtthook1aktiv
 fi
 if (( ohook2aktiv != hook2aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook2Active=${hook2aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2aktiv}"
 	echo $hook2aktiv > ramdisk/mqtthook2aktiv
 fi
 if (( ohook3aktiv != hook3aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook3Active=${hook3aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3aktiv}"
 	echo $hook3aktiv > ramdisk/mqtthook3aktiv
 fi
 oversion=$(<ramdisk/mqttversion)
