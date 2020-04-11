@@ -631,7 +631,6 @@ function processHookMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/hook\/[1-9][0-9]*\/boolhookconfigured$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-console.log('received boolHookConfigured for '+index+' = '+mqttpayload);
 		if ( mqttpayload == 1 ) {
 			$('#hook' + index).show();
 		} else {
