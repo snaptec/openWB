@@ -1001,7 +1001,10 @@
 				$("#preloaderbar").text(percentageReceived+" %");
 				if ( percentageReceived == 100 ) {
 					landingpageShown = true;
-					$(".loader").fadeOut(2000);
+					setTimeout(function (){
+						// delay a little bit
+						$(".loader").fadeOut(2000);
+					}, 800);
 				}
 			}
 		}
