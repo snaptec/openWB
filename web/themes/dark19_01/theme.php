@@ -126,13 +126,13 @@
 			</div>
 		</div>
 		<div id="webhooks" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">
-			<div id="hook1" class="col-3 m-1 hide">
+			<div id="hook1" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 1
 			</div>
-			<div id="hook2" class="col-3 m-1 hide">
+			<div id="hook2" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 2
 			</div>
-			<div id="hook3" class="col-3 m-1 hide">
+			<div id="hook3" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 2
 			</div>
 		</div>
@@ -140,7 +140,7 @@
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
-			<div class="col-sm-12 text-center" style="height: 350px;">
+			<div class="col-sm-12 text-center smallTextSize" style="height: 350px;">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
 				</div>

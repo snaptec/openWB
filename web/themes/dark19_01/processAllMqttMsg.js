@@ -623,7 +623,19 @@ function processHookMessages(mqttmsg, mqttpayload) {
 	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/hook\/[1-9][0-9]*\/boolhookstatus$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		if ( mqttpayload == 1 ) {
+			$('#hook' + index).removeClass("bg-danger").addClass("bg-success");
+		} else {
+			$('#hook' + index).removeClass("bg-success").addClass("bg-danger");
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/hook\/[1-9][0-9]*\/boolhookconfigured$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+console.log('received boolHookConfigured for '+index+' = '+mqttpayload);
+		if ( mqttpayload == 1 ) {
+			$('#hook' + index).show();
+		} else {
+			$('#hook' + index).hide();
+		}
 	}
 }
