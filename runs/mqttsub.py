@@ -103,7 +103,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen", einbeziehen]
             subprocess.Popen(sendcommand)
             client.publish("openWB/global/priorityModeEVBattery", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/LiveGraphDuration"):
+        if (int(msg.payload) >= 20 and int(msg.payload) <=120):
 
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/ChangeVar"):
         if msg.payload:
             splitvar=msg.payload.decode("utf-8").split("=", 1)
@@ -132,6 +137,19 @@ def on_message(client, userdata, msg):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
         else:
             client.publish("openWB/system/LiveGraphData", "empty", qos=0, retain=True)
+    if (msg.topic == "openWB/set/graph/RequestLLiveGraph"):
+        if (int(msg.payload) == 1):
+            subprocess.Popen("/var/www/html/openWB/runs/sendllivegraphdata.sh")
+        else:
+            client.publish("openWB/system/LiveGraphData1", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData2", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData3", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData4", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData5", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData6", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData7", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData8", "empty", qos=0, retain=True)
+            client.publish("openWB/system/LiveGraphData9", "empty", qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/RequestDayGraph"):
         if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
             sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
