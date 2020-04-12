@@ -452,10 +452,6 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'wakeupmyrenaultlp2='.$_POST['wakeupmyrenaultlp2']."\n";
 			$writeit = '1';
 		}
-		if(strpos($line, "wrsmawebbox=") !== false) {
-			$result .= 'wrsmawebbox='.$_POST['wrsmawebbox']."\n";
-			$writeit = '1';
-		}
 		if(strpos($line, "evseids2=") !== false) {
 			$result .= 'evseids2='.$_POST['evseids2']."\n";
 			$writeit = '1';
@@ -1193,19 +1189,19 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "tri9000ip=") !== false) {
-			$result .= 'tri9000ip='.$_POST['tri9000ip']."\n";
+			$result .= 'tri9000ip='.trim($_POST['tri9000ip'])."@".$_POST['wrsmatype']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "wrsma2ip=") !== false) {
-			$result .= 'wrsma2ip='.$_POST['wrsma2ip']."\n";
+			$result .= 'wrsma2ip='.trim($_POST['wrsma2ip'])."@".$_POST['wrsma2type']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "wrsma3ip=") !== false) {
-			$result .= 'wrsma3ip='.$_POST['wrsma3ip']."\n";
+			$result .= 'wrsma3ip='.trim($_POST['wrsma3ip'])."@".$_POST['wrsma3type']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "wrsma4ip=") !== false) {
-			$result .= 'wrsma4ip='.$_POST['wrsma4ip']."\n";
+			$result .= 'wrsma4ip='.trim($_POST['wrsma4ip'])."@".$_POST['wrsma4type']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "kostalplenticoreip=") !== false) {

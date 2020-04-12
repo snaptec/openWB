@@ -1039,21 +1039,30 @@
 				}
 				if(strpos($line, "tri9000ip=") !== false) {
 					list(, $tri9000ipold) = explode("=", $line);
+					if(strpos($tri9000ipold, "@") !== false) {
+					   list($tri9000ipold, $wrsmatype) = explode("@", $tri9000ipold);  
+					}
 				}
 				if(strpos($line, "bezug_smartfox_ip=") !== false) {
 					list(, $bezug_smartfox_ipold) = explode("=", $line);
 				}
-				if(strpos($line, "wrsmawebbox=") !== false) {
-					list(, $wrsmawebboxold) = explode("=", $line);
-				}
 				if(strpos($line, "wrsma2ip=") !== false) {
 					list(, $wrsma2ipold) = explode("=", $line);
+					if(strpos($wrsma2ipold, "@") !== false) {
+					   list($wrsma2ipold, $wrsma2type) = explode("@", $wrsma2ipold);			   
+					}
 				}
 				if(strpos($line, "wrsma3ip=") !== false) {
 					list(, $wrsma3ipold) = explode("=", $line);
+					if(strpos($wrsma3ipold, "@") !== false) {
+					   list($wrsma3ipold, $wrsma3type) = explode("@", $wrsma3ipold);				   
+					}
 				}
 				if(strpos($line, "wrsma4ip=") !== false) {
 					list(, $wrsma4ipold) = explode("=", $line);
+					if(strpos($wrsma4ipold, "@") !== false) {
+					   list($wrsma4ipold, $wrsma4type) = explode("@", $wrsma4ipold);			   
+					}
 				}
 				if(strpos($line, "kostalplenticoreip=") !== false) {
 					list(, $kostalplenticoreipold) = explode("=", $line);
@@ -4326,13 +4335,14 @@
 							<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert, entweder direkt am Wechselrichter, per Sunny Portal oder über das Tool "Sunny Explorer").
+							Gültige Werte: IP / Hostname des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert, entweder direkt am Wechselrichter, per Sunny Portal oder über das Tool "Sunny Explorer").
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
-							<select name="wrsmawebbox" id="wrsmawebbox">
-								<option <?php if($wrsmawebboxold == 0) echo "selected" ?> value="0">Nein</option>
-								<option <?php if($wrsmawebboxold == 1) echo "selected" ?> value="1">Ja</option>
+							<b><label for="wrsmatype">Zugang zum Wechselrichter:</label></b>
+							<select name="wrsmatype" id="wrsmatype">
+								<option <?php if($wrsmatypeold == modbus) echo "selected" ?> value="modbus">ModBus</option>
+								<option <?php if($wrsmatypeold == dash)   echo "selected" ?> value="dash">Dashboard</option>
+								<option <?php if($wrsmatypeold == webbox) echo "selected" ?> value="webbox">Webbox</option>
 							</select>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
@@ -4340,21 +4350,45 @@
 							<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.
+							Gültige Werte: IP / Hostname des zweiten SMA Wechselrichters oder "none". Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="wrsma2type">Zugang zum Wechselrichter:</label></b>
+							<select name="wrsma2type" id="wrsma2type">
+								<option <?php if($wrsma2typeold == modbus) echo "selected" ?> value="modbus">ModBus</option>
+								<option <?php if($wrsma2typeold == dash)   echo "selected" ?> value="dash">Dashboard</option>
+								<!-- option <?php if($wrsma2typeold == webbox) echo "selected" ?> value="webbox">Webbox</option nicht unterstützt -->
+							</select>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsma3ip">WR 3 IP:</label></b>
 							<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.
+							Gültige Werte: IP / Hostname des dritten SMA Wechselrichters oder "none". Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="wrsma3type">Zugang zum Wechselrichter:</label></b>
+							<select name="wrsma3type" id="wrsma3type">
+								<option <?php if($wrsma3typeold == modbus) echo "selected" ?> value="modbus">ModBus</option>
+								<option <?php if($wrsma3typeold == dash)   echo "selected" ?> value="dash">Dashboard</option>
+								<!-- option <?php if($wrsma3typeold == webbox) echo "selected" ?> value="webbox">Webbox</option -->
+							</select>
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="wrsma4ip">WR 4 IP:</label></b>
 							<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.
+							Gültige Werte: IP / Hostname des vierten SMA Wechselrichters oder "none". Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="wrsma4type">Zugang zum Wechselrichter:</label></b>
+							<select name="wrsma4type" id="wrsma4type">
+								<option <?php if($wrsma4typeold == modbus) echo "selected" ?> value="modbus">ModBus</option>
+								<option <?php if($wrsma4typeold == dash)   echo "selected" ?> value="dash">Dashboard</option>
+								<!-- option <?php if($wrsma4typeold == webbox) echo "selected" ?> value="webbox">Webbox</option -->
+							</select>
 						</div>
 					</div>
 					<div id="pvwrsolaredge">
