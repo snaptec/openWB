@@ -1338,6 +1338,17 @@ if [[ "$overbraucher1_name" != "$verbraucher1_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Name=${verbraucher1_name}"
 	echo $verbraucher1_name > ramdisk/mqttverbraucher1_name
 fi
+overbraucher1_aktiv=$(<ramdisk/mqttverbraucher1_aktiv)
+if [[ "$overbraucher1_aktiv" != "$verbraucher1_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Configured=${verbraucher1_aktiv}"
+	echo $verbraucher1_aktiv > ramdisk/mqttverbraucher1_aktiv
+fi
+overbraucher2_aktiv=$(<ramdisk/mqttverbraucher2_aktiv)
+if [[ "$overbraucher2_aktiv" != "$verbraucher2_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/Verbraucher/2/Configured=${verbraucher2_aktiv}"
+	echo $verbraucher2_aktiv > ramdisk/mqttverbraucher2_aktiv
+fi
+
 overbraucher2_name=$(<ramdisk/mqttverbraucher2_name)
 if [[ "$overbraucher2_name" != "$verbraucher2_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/2/Name=${verbraucher2_name}"
