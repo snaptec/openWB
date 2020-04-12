@@ -1089,21 +1089,73 @@ if [[ "$olademstats2" != "$lademstats2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/boolDirectModeChargekWh=${lademstats2}"
 	echo $lademstats2 > ramdisk/mqttlademstats2
 fi
+olademstatlp4=$(<ramdisk/mqttlademstatlp4)
+if [[ "$olademstatlp4" != "$lademstatlp4" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/4/boolDirectModeChargekWh=${lademstatlp4}"
+	echo $lademstatlp4 > ramdisk/mqttlademstatlp4
+fi
+olademstatlp5=$(<ramdisk/mqttlademstatlp5)
+if [[ "$olademstatlp5" != "$lademstatlp5" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/5/boolDirectModeChargekWh=${lademstatlp5}"
+	echo $lademstatlp5 > ramdisk/mqttlademstatlp5
+fi
+olademstatlp6=$(<ramdisk/mqttlademstatlp6)
+if [[ "$olademstatlp6" != "$lademstatlp6" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/6/boolDirectModeChargekWh=${lademstatlp6}"
+	echo $lademstatlp6 > ramdisk/mqttlademstatlp6
+fi
+olademstatlp7=$(<ramdisk/mqttlademstatlp7)
+if [[ "$olademstatlp7" != "$lademstatlp7" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/7/boolDirectModeChargekWh=${lademstatlp7}"
+	echo $lademstatlp7 > ramdisk/mqttlademstatlp7
+fi
+olademstatlp8=$(<ramdisk/mqttlademstatlp8)
+if [[ "$olademstatlp8" != "$lademstatlp8" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/8/boolDirectModeChargekWh=${lademstatlp8}"
+	echo $lademstatlp8 > ramdisk/mqttlademstatlp8
+fi
 olademkwh=$(<ramdisk/mqttlademkwh)
 if (( olademkwh != lademkwh )); then
-	tempPubList="${tempPubList}\nopenWB/lp/1/kWhDirectModeToChargekWh=${lademkwh}"
+	tempPubList="${tempPubList}\nopenWB/lp/1/kWhDirectModeToCharge=${lademkwh}"
 	echo $lademkwh > ramdisk/mqttlademkwh
 fi
 olademkwhs1=$(<ramdisk/mqttlademkwhs1)
 if (( olademkwhs1 != lademkwhs1 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/2/kWhDirectModeToChargekWh=${lademkwhs1}"
+	tempPubList="${tempPubList}\nopenWB/lp/2/kWhDirectModeToCharge=${lademkwhs1}"
 	echo $lademkwhs1 > ramdisk/mqttlademkwhs1
 fi
 olademkwhs2=$(<ramdisk/mqttlademkwhs2)
 if (( olademkwhs2 != lademkwhs2 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToChargekWh=${lademkwhs2}"
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhs2}"
 	echo $lademkwhs2 > ramdisk/mqttlademkwhs2
 fi
+olademkwhlp4=$(<ramdisk/mqttlademkwhlp4)
+if (( olademkwhlp4 != lademkwhlp4 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp4}"
+	echo $lademkwhlp4 > ramdisk/mqttlademkwhlp4
+fi
+
+olademkwhlp8=$(<ramdisk/mqttlademkwhlp8)
+if (( olademkwhlp8 != lademkwhlp8 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp8}"
+	echo $lademkwhlp8 > ramdisk/mqttlademkwhlp8
+fi
+olademkwhlp7=$(<ramdisk/mqttlademkwhlp7)
+if (( olademkwhlp7 != lademkwhlp7 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp7}"
+	echo $lademkwhlp7 > ramdisk/mqttlademkwhlp7
+fi
+olademkwhlp6=$(<ramdisk/mqttlademkwhlp6)
+if (( olademkwhlp6 != lademkwhlp6 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp6}"
+	echo $lademkwhlp6 > ramdisk/mqttlademkwhlp6
+fi
+olademkwhlp5=$(<ramdisk/mqttlademkwhlp5)
+if (( olademkwhlp5 != lademkwhlp5 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp5}"
+	echo $lademkwhlp5 > ramdisk/mqttlademkwhlp5
+fi
+
 osofortsocstatlp1=$(<ramdisk/mqttsofortsocstatlp1)
 if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/boolDirectChargeModeSoc=${sofortsocstatlp1}"
