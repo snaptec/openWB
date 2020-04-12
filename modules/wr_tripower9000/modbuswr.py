@@ -10,9 +10,13 @@ import binascii
 from pymodbus.client.sync import ModbusTcpClient
 
 class ModbusWR:
+    """
+    Read values from SMA inverter via Modbus
+    In order to work, Modbus must be enabled.
+    """
     def __init__(self, ip):
         self.host = ip
-    
+
     def read(self):
         client = ModbusTcpClient(self.host, port=502)
 
@@ -37,4 +41,3 @@ class ModbusWR:
 if __name__ == '__main__':
    power, generation = ModbusWR(sys.argv[1]).read()
    print("Current power: %s; Total generation: %s" % (power,generation))
-   
