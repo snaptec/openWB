@@ -96,7 +96,7 @@
 				&nbsp;
 			</div>
 			<div class="col-5 text-center">
-				<button type="button" class="btn btn-sm btn-secondary cursor-pointer" id="chargeModeSelectBtn">Lademodus</button>
+				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">Lademodus</button>
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -1003,8 +1003,8 @@
 					landingpageShown = true;
 					setTimeout(function (){
 						// delay a little bit
-						$(".loader").fadeOut(2000);
-					}, 800);
+						$(".loader").fadeOut(1000);
+					}, 500);
 				}
 			}
 		}

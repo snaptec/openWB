@@ -616,7 +616,19 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 		$(element).text(kmCharged);
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolfinishattimechargeactive$/i ) ) {
+		// respective charge point configured
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.targetChargingLp');  // now get parents respective child element
+		if (mqttpayload == 1) {
+			$(element).show();
+		} else {
+			$(element).hide();
+		}
+	}
 }
+
 function processHookMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/hook
 	// called by handlevar

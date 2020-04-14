@@ -114,7 +114,6 @@ var topicsToSubscribe = [
 		["openWB/lp/1/TimeRemaining", 0],
 		["openWB/lp/2/TimeRemaining", 0],
 		["openWB/lp/3/TimeRemaining", 0],
-
 		// Status Konfiguration Ladepunkt
 		["openWB/lp/1/boolChargePointConfigured", 0],
 		["openWB/lp/2/boolChargePointConfigured", 0],
@@ -178,6 +177,9 @@ var topicsToSubscribe = [
 		["openWB/lp/6/ADirectModeAmps", 0],
 		["openWB/lp/7/ADirectModeAmps", 0],
 		["openWB/lp/8/ADirectModeAmps", 0],
+		// Zielladen
+		["openWB/lp/1/boolFinishAtTimeChargeActive", 0],
+		
 	// housebattery topics
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/W", 0],
