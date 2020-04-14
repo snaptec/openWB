@@ -904,12 +904,12 @@
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="ev">EV</button>
+							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">EV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="battery">Speicher</button>
+							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">Speicher</button>
 						</div>
 					</div>
 
@@ -1013,12 +1013,14 @@
 
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				var lp = $(this).closest('[lp]').attr('lp');  // get attribute lp-# of parent element
-				var isEnabled = $(this).hasClass("lpEnabledStyle")
-				if ( isEnabled ) {
-					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
-				} else {
-					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
+				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
+					var isEnabled = $(this).hasClass("lpEnabledStyle")
+					if ( isEnabled ) {
+						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+					} else {
+						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+					}
 				}
 			});
 
@@ -1032,11 +1034,10 @@
 			});
 
 			$('.priorityModeBtn').click(function(event){
-				var priority = $(this).attr('priority')
-				if ( priority == "ev" ) {
-					publish('1', 'openWB/set/system/priorityModeEVBattery';
-				} else {
-					publish('0', 'openWB/set/system/priorityModeEVBattery');
+				// prio: 0 = battery, 1 = ev
+				var priority = $(this).attr('priority');
+				if ( priority == '0' || priority == '1' ) {
+					publish(priority, 'openWB/set/system/priorityModeEVBattery');
 				}
 			});
 
