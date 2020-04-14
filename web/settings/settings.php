@@ -54,6 +54,9 @@
 				if(strpos($line, "mollp1moll=") !== false) {
 					list(, $mollp1mollold) = explode("=", $line);
 				}
+				if(strpos($line, "awattarlocation=") !== false) {
+					list(, $awattarlocationold) = explode("=", $line);
+				}
 				if(strpos($line, "awattaraktiv=") !== false) {
 					list(, $awattaraktivold) = explode("=", $line);
 				}
@@ -521,6 +524,14 @@
 						<p>Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler.<br>
 						Die Awattar Funktion ist nur im SofortLaden Modus aktiv!</p>
 					</div>
+					<div class="row ">
+						<b><label for="awattarlocation">Land:</label></b>
+						<select name="awattarlocation" id="awattarlocation">
+							<option <?php if($awattarlocationold == "de\n") echo "selected" ?> value="de">Deutschland</option>
+							<option <?php if($awattarlocationold == "at\n") echo "selected" ?> value="at">Österreich</option>
+						</select>
+					</div>
+
 					<hr>
 
 					<div class="row">

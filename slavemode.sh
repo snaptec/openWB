@@ -228,12 +228,18 @@ function setVariablesFromRamdisk() {
 # Heartbeat is always checked looking for regular change of total current reported by control server for phase #1
 function checkControllerHeartbeat() {
 
-	if [[ "${MaximumTotalCurrent}" == "${previousTotalCurrentAndTimestampArray[0]}" ]]; then
-		$dbgWrite "$NowItIs: WARNING: Local Control Server Heartbeat: MaximumTotalCurrent (${MaximumTotalCurrent}) same as previous (${previousTotalCurrentAndTimestampArray[0]}) for $heartbeatMissingFor s (timeout $HeartbeatTimeout)"
+	local comparisonValue="${MaximumTotalCurrent}"
+
+	if [ -f "ramdisk/LastControllerPublish" ]; then
+		comparisonValue=$(<"ramdisk/LastControllerPublish")
+	fi
+
+	if [[ "${comparisonValue}" == "${previousTotalCurrentAndTimestampArray[0]}" ]]; then
+		$dbgWrite "$NowItIs: WARNING: Local Control Server Heartbeat: Comparison value (${comparisonValue}) same as previous (${previousTotalCurrentAndTimestampArray[0]}) for $heartbeatMissingFor s (timeout $HeartbeatTimeout)"
 
 		if (( heartbeatMissingFor > HeartbeatTimeout )); then
 			if (( Heartbeat == 1 )) || (( debug == 2 )); then
-				echo "$NowItIs: Slave Mode: HEARTBEAT ERROR: MaximumTotalCurrent (${MaximumTotalCurrent}) not changed by local control server for $heartbeatMissingFor > $HeartbeatTimeout seconds. STOP CHARGING IMMEDIATELY"
+				echo "$NowItIs: Slave Mode: HEARTBEAT ERROR: Comparison value (${comparisonValue}) not changed by local control server for $heartbeatMissingFor > $HeartbeatTimeout seconds. STOP CHARGING IMMEDIATELY"
 			fi
 			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
@@ -243,13 +249,13 @@ function checkControllerHeartbeat() {
 			echo "1" > ramdisk/heartbeat
 		fi
 	else
-		$dbgWrite "$NowItIs: MaximumTotalCurrent (${MaximumTotalCurrent}) different from previous (${previousTotalCurrentAndTimestampArray[0]}). Heartbeat OK after ${heartbeatMissingFor} s."
+		$dbgWrite "$NowItIs: Comparison value (${comparisonValue}) different from previous (${previousTotalCurrentAndTimestampArray[0]}). Heartbeat OK after ${heartbeatMissingFor} s."
 
 		if (( Heartbeat == 0 )); then
 			echo "$NowItIs: Slave Mode: HEARTBEAT RETURNED: After $heartbeatMissingFor seconds"
 		fi
 
-		echo "${MaximumTotalCurrent},$NowItIs" > ramdisk/PreviousMaximumTotalCurrent
+		echo "${comparisonValue},$NowItIs" > ramdisk/PreviousMaximumTotalCurrent
 		echo "1" > ramdisk/heartbeat
 	fi
 

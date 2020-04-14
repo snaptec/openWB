@@ -944,20 +944,32 @@ if (( ogelrlp3 != gelrlp3 )); then
 	tempPubList="${tempPubList}\nopenWB/lp/3/kmCharged=${gelrlp3}"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
+ohook1_aktiv=$(<ramdisk/mqtthook1_aktiv)
+if [[ "$ohook1_aktiv" != "$hook1_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1_aktiv}"
+	echo $ > ramdisk/mqtthook1_aktiv
+fi
+ohook2_aktiv=$(<ramdisk/mqtthook2_aktiv)
+if [[ "$ohook2_aktiv" != "$hook2_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2_aktiv}"
+	echo $ > ramdisk/mqtthook2_aktiv
+fi
+ohook3_aktiv=$(<ramdisk/mqtthook3_aktiv)
+if [[ "$ohook3_aktiv" != "$hook3_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3_aktiv}"
+	echo $ > ramdisk/mqtthook3_aktiv
+fi
 
 if (( ohook1aktiv != hook1aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook1Active=${hook1aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/1/boolHookConfigured=${hook1aktiv}"
 	echo $hook1aktiv > ramdisk/mqtthook1aktiv
 fi
 if (( ohook2aktiv != hook2aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook2Active=${hook2aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/2/boolHookConfigured=${hook2aktiv}"
 	echo $hook2aktiv > ramdisk/mqtthook2aktiv
 fi
 if (( ohook3aktiv != hook3aktiv )); then
 	tempPubList="${tempPubList}\nopenWB/boolHook3Active=${hook3aktiv}"
-	tempPubList="${tempPubList}\nopenWB/hook/3/boolHookConfigured=${hook3aktiv}"
 	echo $hook3aktiv > ramdisk/mqtthook3aktiv
 fi
 oversion=$(<ramdisk/mqttversion)
@@ -1077,21 +1089,73 @@ if [[ "$olademstats2" != "$lademstats2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/boolDirectModeChargekWh=${lademstats2}"
 	echo $lademstats2 > ramdisk/mqttlademstats2
 fi
+olademstatlp4=$(<ramdisk/mqttlademstatlp4)
+if [[ "$olademstatlp4" != "$lademstatlp4" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/4/boolDirectModeChargekWh=${lademstatlp4}"
+	echo $lademstatlp4 > ramdisk/mqttlademstatlp4
+fi
+olademstatlp5=$(<ramdisk/mqttlademstatlp5)
+if [[ "$olademstatlp5" != "$lademstatlp5" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/5/boolDirectModeChargekWh=${lademstatlp5}"
+	echo $lademstatlp5 > ramdisk/mqttlademstatlp5
+fi
+olademstatlp6=$(<ramdisk/mqttlademstatlp6)
+if [[ "$olademstatlp6" != "$lademstatlp6" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/6/boolDirectModeChargekWh=${lademstatlp6}"
+	echo $lademstatlp6 > ramdisk/mqttlademstatlp6
+fi
+olademstatlp7=$(<ramdisk/mqttlademstatlp7)
+if [[ "$olademstatlp7" != "$lademstatlp7" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/7/boolDirectModeChargekWh=${lademstatlp7}"
+	echo $lademstatlp7 > ramdisk/mqttlademstatlp7
+fi
+olademstatlp8=$(<ramdisk/mqttlademstatlp8)
+if [[ "$olademstatlp8" != "$lademstatlp8" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/8/boolDirectModeChargekWh=${lademstatlp8}"
+	echo $lademstatlp8 > ramdisk/mqttlademstatlp8
+fi
 olademkwh=$(<ramdisk/mqttlademkwh)
 if (( olademkwh != lademkwh )); then
-	tempPubList="${tempPubList}\nopenWB/lp/1/kWhDirectModeToChargekWh=${lademkwh}"
+	tempPubList="${tempPubList}\nopenWB/lp/1/kWhDirectModeToCharge=${lademkwh}"
 	echo $lademkwh > ramdisk/mqttlademkwh
 fi
 olademkwhs1=$(<ramdisk/mqttlademkwhs1)
 if (( olademkwhs1 != lademkwhs1 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/2/kWhDirectModeToChargekWh=${lademkwhs1}"
+	tempPubList="${tempPubList}\nopenWB/lp/2/kWhDirectModeToCharge=${lademkwhs1}"
 	echo $lademkwhs1 > ramdisk/mqttlademkwhs1
 fi
 olademkwhs2=$(<ramdisk/mqttlademkwhs2)
 if (( olademkwhs2 != lademkwhs2 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToChargekWh=${lademkwhs2}"
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhs2}"
 	echo $lademkwhs2 > ramdisk/mqttlademkwhs2
 fi
+olademkwhlp4=$(<ramdisk/mqttlademkwhlp4)
+if (( olademkwhlp4 != lademkwhlp4 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp4}"
+	echo $lademkwhlp4 > ramdisk/mqttlademkwhlp4
+fi
+
+olademkwhlp8=$(<ramdisk/mqttlademkwhlp8)
+if (( olademkwhlp8 != lademkwhlp8 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp8}"
+	echo $lademkwhlp8 > ramdisk/mqttlademkwhlp8
+fi
+olademkwhlp7=$(<ramdisk/mqttlademkwhlp7)
+if (( olademkwhlp7 != lademkwhlp7 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp7}"
+	echo $lademkwhlp7 > ramdisk/mqttlademkwhlp7
+fi
+olademkwhlp6=$(<ramdisk/mqttlademkwhlp6)
+if (( olademkwhlp6 != lademkwhlp6 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp6}"
+	echo $lademkwhlp6 > ramdisk/mqttlademkwhlp6
+fi
+olademkwhlp5=$(<ramdisk/mqttlademkwhlp5)
+if (( olademkwhlp5 != lademkwhlp5 )); then
+	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp5}"
+	echo $lademkwhlp5 > ramdisk/mqttlademkwhlp5
+fi
+
 osofortsocstatlp1=$(<ramdisk/mqttsofortsocstatlp1)
 if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/boolDirectChargeModeSoc=${sofortsocstatlp1}"
@@ -1274,6 +1338,17 @@ if [[ "$overbraucher1_name" != "$verbraucher1_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Name=${verbraucher1_name}"
 	echo $verbraucher1_name > ramdisk/mqttverbraucher1_name
 fi
+overbraucher1_aktiv=$(<ramdisk/mqttverbraucher1_aktiv)
+if [[ "$overbraucher1_aktiv" != "$verbraucher1_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/Verbraucher/1/Configured=${verbraucher1_aktiv}"
+	echo $verbraucher1_aktiv > ramdisk/mqttverbraucher1_aktiv
+fi
+overbraucher2_aktiv=$(<ramdisk/mqttverbraucher2_aktiv)
+if [[ "$overbraucher2_aktiv" != "$verbraucher2_aktiv" ]]; then
+	tempPubList="${tempPubList}\nopenWB/Verbraucher/2/Configured=${verbraucher2_aktiv}"
+	echo $verbraucher2_aktiv > ramdisk/mqttverbraucher2_aktiv
+fi
+
 overbraucher2_name=$(<ramdisk/mqttverbraucher2_name)
 if [[ "$overbraucher2_name" != "$verbraucher2_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/2/Name=${verbraucher2_name}"

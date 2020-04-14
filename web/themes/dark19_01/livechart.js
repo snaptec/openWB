@@ -385,31 +385,44 @@ function putgraphtogether() {
 			splittime.push(zeit.substring(0, zeit.length -3));
 		});
 		atime = splittime;
-		//atime = getCol(csvData, 0);
-		abezug = convertToKw(getCol(csvData, 1));
-		alpa = convertToKw(getCol(csvData, 2));
-		apv = convertToKw(getCol(csvData, 3));
-		alp1 = convertToKw(getCol(csvData, 4));
-		alp2 = convertToKw(getCol(csvData, 5));
-		aspeicherl = convertToKw(getCol(csvData, 7));
-		aspeichersoc = getCol(csvData, 8);
-		asoc = getCol(csvData, 9);
-		asoc1 = getCol(csvData, 10);
-		ahausverbrauch = convertToKw(getCol(csvData, 11));
-		averbraucher1 = convertToKw(getCol(csvData, 12));
-		averbraucher2 = convertToKw(getCol(csvData, 13));
-		alp3 = convertToKw(getCol(csvData, 14));
-		alp4 = convertToKw(getCol(csvData, 15));
-		alp5 = convertToKw(getCol(csvData, 16));
-		alp6 = convertToKw(getCol(csvData, 17));
-		alp7 = convertToKw(getCol(csvData, 18));
-		alp8 = convertToKw(getCol(csvData, 19));
-		initialread = 1 ;
+		if ( atime.length >= 60 ) {
+			//atime = getCol(csvData, 0);
+			abezug = convertToKw(getCol(csvData, 1));
+			alpa = convertToKw(getCol(csvData, 2));
+			apv = convertToKw(getCol(csvData, 3));
+			alp1 = convertToKw(getCol(csvData, 4));
+			alp2 = convertToKw(getCol(csvData, 5));
+			aspeicherl = convertToKw(getCol(csvData, 7));
+			aspeichersoc = getCol(csvData, 8);
+			asoc = getCol(csvData, 9);
+			asoc1 = getCol(csvData, 10);
+			ahausverbrauch = convertToKw(getCol(csvData, 11));
+			averbraucher1 = convertToKw(getCol(csvData, 12));
+			averbraucher2 = convertToKw(getCol(csvData, 13));
+			alp3 = convertToKw(getCol(csvData, 14));
+			alp4 = convertToKw(getCol(csvData, 15));
+			alp5 = convertToKw(getCol(csvData, 16));
+			alp6 = convertToKw(getCol(csvData, 17));
+			alp7 = convertToKw(getCol(csvData, 18));
+			alp8 = convertToKw(getCol(csvData, 19));
+			initialread = 1 ;
 
-		// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
-		unsubscribeMqttGraphSegments();
+			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
+			unsubscribeMqttGraphSegments();
 
-		checkgraphload();
+			checkgraphload();
+		} else {
+			all1 = 0;
+			all2 = 0;
+			all3 = 0;
+			all4 = 0;
+			all5 = 0;
+			all6 = 0;
+			all7 = 0;
+			all8 = 0;
+			var percent = (atime.length / 60 * 100).toFixed();
+			$('#waitforgraphloadingdiv').text('Erst ca. ' + percent + '% der mindestens benötigten Datenpunkte für den Graph seit Neustart vorhanden.');
+		}
 	}
 }  // end putgraphtogether
 

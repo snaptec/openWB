@@ -27,7 +27,7 @@ echo 0 > /var/www/html/openWB/ramdisk/ipaddress
 echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
-echo 0 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -142,22 +142,22 @@ echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp5
 echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp6
 echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp7
 echo 0 > /var/www/html/openWB/ramdisk/autolockconfiguredlp8
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp1
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp2
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp3
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp4
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp5
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp6
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp7
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp8
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp1
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp2
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp3
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp4
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp5
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp6
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp7
-echo 0 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp8
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp1
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp2
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp3
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp4
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp5
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp6
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp7
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockstatuslp8
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp1
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp2
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp3
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp4
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp5
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp6
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp7
+echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp8
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
@@ -173,8 +173,8 @@ echo 0 > /var/www/html/openWB/ramdisk/hook2akt
 echo 0 > /var/www/html/openWB/ramdisk/hook3akt
 echo 0 > /var/www/html/openWB/ramdisk/urcounter
 echo 0 > /var/www/html/openWB/ramdisk/uhcounter
-echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls1
-echo 0 > /var/www/html/openWB/ramdisk/mqttllsolls2
+echo 1 > /var/www/html/openWB/ramdisk/mqttllsolls1
+echo 1 > /var/www/html/openWB/ramdisk/mqttllsolls2
 echo 0 > /var/www/html/openWB/ramdisk/lla1lp4
 echo 0 > /var/www/html/openWB/ramdisk/lla2lp4
 echo 0 > /var/www/html/openWB/ramdisk/lla3lp4
@@ -1659,9 +1659,9 @@ if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_tesla_carnumber=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_teslalp2_carnumber=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_tesla_carnumber=0" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_teslalp2_carnumber=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
 then
@@ -1852,6 +1852,10 @@ fi
 if ! grep -Fq "wakeupmyrenaultlp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "wakeupmyrenaultlp2=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "awattarlocation=" /var/www/html/openWB/openwb.conf
+then
+	echo "awattarlocation=de" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "awattaraktiv=" /var/www/html/openWB/openwb.conf
 then
@@ -2585,6 +2589,8 @@ ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
+mosquitto_pub -r -t openWB/global/awattar/pricelist -m " "
+mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
 mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
