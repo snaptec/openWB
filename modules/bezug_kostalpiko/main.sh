@@ -25,7 +25,7 @@ bezugw1=$(echo $pvwatttmp | jq '.dxsEntries[2].value' | sed 's/\..*$//')
 bezugw2=$(echo $pvwatttmp | jq '.dxsEntries[3].value' | sed 's/\..*$//')
 bezugw3=$(echo $pvwatttmp | jq '.dxsEntries[4].value' | sed 's/\..*$//')
 hausw=$(echo "$bezugw1+$bezugw1+$bezugw3+$pvwatt" |bc)
-wattbezug=$(echo "$wattbezug / 1" | bc)
+wattbezug=$(echo "$hausw / 1" | bc)
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 bezuga1=$(echo "scale=2 ; $bezugw1 / 225" | bc)

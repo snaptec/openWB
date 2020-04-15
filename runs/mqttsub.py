@@ -186,6 +186,10 @@ def on_message(client, userdata, msg):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp2', 'w')
         f.write(msg.payload.decode("utf-8"))
         f.close()
+    if (msg.topic == "openWB/set/configure/LastControllerPublish"):
+        f = open('/var/www/html/openWB/ramdisk/LastControllerPublish', 'w')
+        f.write(msg.payload.decode("utf-8"))
+        f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
@@ -306,7 +310,7 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/system/debug/RequestDebugInfo"):
         if (int(msg.payload) == 1):
             sendcommand = ["/var/www/html/openWB/runs/sendmqttdebug.sh"]
-            subprocess.Popen(sendcommand)            
+            subprocess.Popen(sendcommand)
     if (msg.topic == "openWB/set/graph/RequestMonthLadelog"):
         if (int(msg.payload) >= 1 and int(msg.payload) <= 205012):
             sendcommand = ["/var/www/html/openWB/runs/sendladelog.sh", msg.payload]
