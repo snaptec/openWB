@@ -980,11 +980,13 @@ fi
 ominimalstromstaerke=$(<ramdisk/mqttminimalstromstaerke)
 if (( ominimalstromstaerke != minimalstromstaerke )); then
 	tempPubList="${tempPubList}\nopenWB/AMinimalAmpsConfigured=${minimalstromstaerke}"
+	tempPubList="${tempPubList}\nopenWB/config/get/global/minimalstromstaerke=${minimalstromstaerke}"
 	echo $minimalstromstaerke > ramdisk/mqttminimalstromstaerke
 fi
 omaximalstromstaerke=$(<ramdisk/mqttmaximalstromstaerke)
 if (( omaximalstromstaerke != maximalstromstaerke )); then
 	tempPubList="${tempPubList}\nopenWB/AMaximalAmpsConfigured=${maximalstromstaerke}"
+	tempPubList="${tempPubList}\nopenWB/config/get/global/maximalstromstaerke=${maximalstromstaerke}"
 	echo $maximalstromstaerke > ramdisk/mqttmaximalstromstaerke
 fi
 osofortll=$(<ramdisk/mqttsofortll)
@@ -1325,11 +1327,13 @@ fi
 onurpv70dynact=$(<ramdisk/mqttnurpv70dynact)
 if [[ "$onurpv70dynact" != "$nurpv70dynact" ]]; then
 	tempPubList="${tempPubList}\nopenWB/pv/bool70PVDynActive=${nurpv70dynact}"
+	tempPubList="${tempPubList}\nopenWB/config/get/pv/nurpv70dynact=${nurpv70dynact}"
 	echo $nurpv70dynact > ramdisk/mqttnurpv70dynact
 fi
 onurpv70dynw=$(<ramdisk/mqttnurpv70dynw)
 if [[ "$onurpv70dynw" != "$nurpv70dynw" ]]; then
 	tempPubList="${tempPubList}\nopenWB/pv/W70PVDyn=${nurpv70dynw}"
+	tempPubList="${tempPubList}\nopenWB/config/get/pv/nurpv70dynw=${nurpv70dynw}"
 	echo $nurpv70dynw > ramdisk/mqttnurpv70dynw
 fi
 
@@ -1423,9 +1427,18 @@ fi
 tempPubList="${tempPubList}\nopenWB/system/Uptime=$(uptime)"
 tempPubList="${tempPubList}\nopenWB/system/Date=$(date)"
 tempPubList="${tempPubList}\nopenWB/system/Timestamp=${timestamp}"
-
+declare -a pvarray=("speichersocminpv" "speichersochystminpv" "mindestuberschuss" "abschaltuberschuss" "abschaltverzoegerung" "einschaltverzoegerung" "minimalampv" "minimalampv" "minimalalp2pv" "minnurpvsoclp1" "minnurpvsocll" "pvbezugeinspeisung" "offsetpv" "speicherpvui" "speichermaxwatt" "speichersocnurpv" "speicherwattnurpv" "adaptpv" "adaptfaktor")
+for val in ${pvarray[@]}; do
+	declare o$val
+	ramdiskvar=$(<ramdisk/mqtt"$val")
+	actualvar=${!val}
+	tempname=$val
+	if [[ "$ramdiskvar" != "$actualvar" ]]; then
+		tempPubList="${tempPubList}\nopenWB/config/get/pv/${val}=${actualvar}"
+		echo $actualvar > ramdisk/mqtt$val
+	fi	      
+done
 echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
-
 runs/pubmqtt.sh &
 
 }

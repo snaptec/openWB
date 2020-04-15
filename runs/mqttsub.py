@@ -36,9 +36,128 @@ client = mqtt.Client("openWB-mqttsub-" + getserial())
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
     client.subscribe("openWB/set/#", 2)
-
+    client.subscribe("openWB/config/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+    if (msg.topic == "openWB/config/set/pv/mindestuberschuss"):
+        if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "mindestuberschuss=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/mindestuberschuss", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/abschaltuberschuss"):
+        if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "abschaltuberschuss=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/abschaltuberschuss", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/abschaltverzoegerung"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 10000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "abschaltverzoegerung=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/abschaltverzoegerung", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/einschaltverzoegerung"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 10000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "einschaltverzoegerung=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/einschaltverzoegerung", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/minimalampv"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 16):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalampv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/minimalampv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/minimalamp"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 16):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalamp=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/minimalamp", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/minimalalp2mpv"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 16):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalalp2mpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/minimalalp2mpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/global/maximalstromstaerke"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 32):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "maximalstromstaerke=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/global/maximalstromstaerke", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/minnurpvsoclp1"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 80):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minnurpvsoclp1=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/minnurpvsoclp1", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/maxnurpvsoclp1"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 101):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "maxnurpvsoclp1=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/maxnurpvsoclp1", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/minnurpvsocll"):
+        if (int(msg.payload) >= 6 and int(msg.payload) <= 32):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minnurpvsocll=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/minnurpvsocll", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/pvbezugeinspeisung"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "pvbezugeinspeisung=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/pvbezugeinspeisung", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/offset"):
+        if (int(msg.payload) >= -300000 and int(msg.payload) <= 300000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "offsetpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/offsetpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speicherpvui"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpvui=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speicherpvui", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speichermaxwatt"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 90000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speichermaxwatt=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speichermaxwatt", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speichersocnurpv"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 101):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speichersocnurpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speichersocnurpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speicherwattnurpv"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 90000):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherwattnurpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speicherwattnurpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speichersocminpv"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 101):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speichersocminpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speichersocminpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/speichersochystminpv"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 101):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speichersochystminpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/speichersochystminpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/adaptpv"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "adaptpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/adaptpv", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/adaptfaktor"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 100):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "adaptfaktor=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/adaptfaktor", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/nurpv70dynact"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "nurpv70dynact=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/nurpv70dynact", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/pv/nurpv70dynw"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "nurpv70dynw=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/pv/nurpv70dynw", msg.payload.decode("utf-8"), qos=0, retain=True)
+
+
+
+
     if (msg.topic == "openWB/set/system/GetRemoteSupport"):
         if len(msg.payload) >= 5 and len(msg.payload) <=30:
             token=msg.payload.decode("utf-8")
