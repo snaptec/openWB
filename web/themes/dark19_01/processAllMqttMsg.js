@@ -297,7 +297,6 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/global/priorityModeEVBattery' ) {
 		// sets button color in charge mode modal and shows symbol in mode select button
-		console.log("received prio = "+mqttpayload);
 		switch (mqttpayload) {
 			case '0':
 				// battery priority

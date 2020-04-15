@@ -980,9 +980,9 @@
 			if ( !landingpageShown ) {
 				var countTopicsReceived = 0;
 				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
-					if ( topicsToSubscribe[index][0] == mqttTopic ) {
+					if ( topicsToSubscribe[index][0] == mqttTopic && topicsToSubscribe[index][1] == 0 ) {
 						// topic found in array
-						topicsToSubscribe[index][1] += 1;  // mark topic as received
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
 					};
 					if ( topicsToSubscribe[index][1] > 0 ) {
 						countTopicsReceived++;
@@ -993,6 +993,13 @@
 				if ( timeBetweenTwoMesagges > 3000 ) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
+					// debug output
+					topicsToSubscribe.forEach((item, i) => {
+						if ( item[1] == 0 ) {
+							console.log('not received: ' + item[0]);
+						}
+					});
+
 				}
 				timeOfLastMqttMessage = Date.now();
 				$("#preloaderbar").width(percentageReceived+"%");
