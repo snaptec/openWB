@@ -137,13 +137,16 @@
 
 			$.get("settings/navbar.php", function(data){
 				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navGraphSettings').addClass('disabled');
 			});
 
 			$(document).ready(function(){
 
 				<!-- load scripts -->
-				$.getScript("./settings/processAllMqttMsg.js?ver=20200402-a");
-				$.getScript("./settings/setupMqttServices.js?ver=20200402-a");
+				$.getScript("./settings/topicsToSubscribe_graphconfig.js?ver=20200415-a");
+				$.getScript("./settings/processAllMqttMsg_graphconfig.js?ver=20200415-a");
+				$.getScript("./settings/setupMqttServices.js?ver=20200415-a");
 
 			});  // end document ready function
 
