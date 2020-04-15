@@ -533,14 +533,14 @@
 						});
 					</script>
 					<div class="row" style="background-color:#befebe">
-						<b><label for="nurpv70dynact">Beachtung der 70% Grenze beim PV Laden:</label></b>
+						<b><label for="nurpv70dynact">Regelziel 70% Grenze beim PV Laden:</label></b>
 						<select name="nurpv70dynact" id="nurpv70dynact">
 							<option <?php if($nurpv70dynactold == 0) echo "selected" ?> value="0">Aus</option>
 							<option <?php if($nurpv70dynactold == 1) echo "selected" ?> value="1">An</option>
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
-							Wenn aktiviert wird im Nur PV Modus erst mit der Ladung begonnen wenn der eingestellte Wer + Mindestüberschuss erreicht ist.<br>Die Grenze gilt dann als Regelpunkt
+							Wenn aktiviert wird im Nur PV Modus erst mit der Ladung begonnen wenn der eingestellte Wert erreicht ist.<br>Die Grenze gilt dann als Regelpunkt
 					</div>
 					<div id="70pvdiv">
 						<div class="row" style="background-color:#befebe">
@@ -548,7 +548,7 @@
 							<input type="text" name="nurpv70dynw" id="nurpv70dynw" value="<?php echo $nurpv70dynwold ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Defniert den Wert in Watt für die 70% Grenze. Bei einer 9,9kWP PV Anlage macht hier z.B. 6000 Watt Sinn.<br> Ist der Mindestüberschuss bei 1300 Watt beginnt die Ladung ab 7300 Watt Überschuss und regelt dann um 6000 Watt<br>
+							Defniert den Wert in Watt für die 70% Grenze. Bei einer 9,9kWP PV Anlage macht hier z.B. 6900 Watt Sinn.<br>Der PV-Regler wird diesen Wert versuchen niemals zu überschreiten.<br>
 						</div>
 					</div>
 					<script>
