@@ -225,7 +225,7 @@ def on_message(client, userdata, msg):
             einbeziehen=msg.payload.decode("utf-8")
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen=", einbeziehen]
             subprocess.Popen(sendcommand)
-            client.publish("openWB/global/priorityModeEVBattery", "", qos=0, retain=True)
+            client.publish("openWB/global/priorityModeEVBattery", einbeziehen, qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/LiveGraphDuration"):
         if (int(msg.payload) >= 20 and int(msg.payload) <=120):
 
