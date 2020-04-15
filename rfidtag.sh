@@ -4,6 +4,7 @@
 MaximumSecondsAfterRfidScanToAssignCp=180
 NumberOfSupportedChargePoints=2
 
+StartScanDataLocation="web/logging/data/startRfidScanData"
 
 #
 # the main script that is called from outside world
@@ -71,18 +72,18 @@ rfid() {
 	if (( slavemode == 1 )); then
 
 		# handle plugin only if we have valid un-assigned start data (i.e. an RFID-scan that has not yet been assigned to a CP)
-		if [ -f "ramdisk/startRfidScanData" ]; then
+		if [ -f "${StartScanDataLocation}" ]; then
 
 			# extract fragments of start data
-			startData=$(<"ramdisk/startRfidScanData")
+			startData=$(<"${StartScanDataLocation}")
 			IFS=',' read -r -a startDataSegments <<< "$startData"
 
 			if (( pluggedLp > 0 )); then
 
 				startDataForPluggedLp="${startData}"
 				echo "$NowItIs: Charge point #${pluggedLp} has been plugged in - recording accounting start data"
-				echo "${startDataForPluggedLp}" > "ramdisk/startRfidScanDataLp${pluggedLp}"
-				rm -f "ramdisk/startRfidScanData"
+				echo "${startDataForPluggedLp}" > "${StartScanDataLocation}Lp${pluggedLp}"
+				rm -f "${StartScanDataLocation}"
 			else
 				secondsSinceRfidScan=$(( NowItIs - startDataSegments[0] ))
 
@@ -101,7 +102,7 @@ rfid() {
 						fi
 					done
 
-					rm -f "ramdisk/startRfidScanData"
+					rm -f "${StartScanDataLocation}"
 				fi
 			fi
 		fi
@@ -109,13 +110,13 @@ rfid() {
 		# handle un-plug
 		for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
 			if (( unpluggedLps[$currentCp] > 0 )); then
-				echo "$NowItIs: Charge point #${currentCp} has been UNplugged - stop sending accounting data after one final transmission"
+				echo "$NowItIs: Charge point #${currentCp} has been UNplugged - if running, stop sending accounting data (after one final transmission)"
 
 				# one final transmission of accounting data ...
 				sendAccounting $currentCp
 
 				# ... before we disabled it by removing the start info
-				rm -f "ramdisk/startRfidScanDataLp${currentCp}"
+				rm -f "${StartScanDataLocation}Lp${currentCp}"
 			fi
 
 			# finally actually transmit the accounting data
@@ -130,7 +131,7 @@ sendAccounting() {
 
 	chargePoint=$1
 
-	if [ -f "ramdisk/startRfidScanDataLp${chargePoint}" ]; then
+	if [ -f "${StartScanDataLocation}Lp${chargePoint}" ]; then
 
 		if (( lpsPlugStat[$chargePoint] == 255 )); then
 			echo "$NowItIs: Plug state for CP ${chargePoint} contains garbage. Not sending accounting data"
@@ -145,7 +146,7 @@ sendAccounting() {
 		fi
 
 		$dbgWrite "$NowItIs: Sending accounting data for CP #${chargePoint}"
-		startDataAcc=$(<"ramdisk/startRfidScanDataLp${chargePoint}")
+		startDataAcc=$(<"${StartScanDataLocation}Lp${chargePoint}")
 		mosquitto_pub -r -q 2 -t "openWB/lp/${chargePoint}/Accounting" -m "${startDataAcc},$NowItIs,${lpsPlugStat[$chargePoint]},$chargestatToUse,$llkwh"
 	fi
 }
@@ -241,7 +242,7 @@ checkTagValidAndSetStartScanData() {
 		if [ "$lasttag" == "$i" ] ; then
 
 			# found valid RFID tag for the charge point
-			echo "$NowItIs,$lasttag,$llkwh" > "ramdisk/startRfidScanData"
+			echo "$NowItIs,$lasttag,$llkwh" > "${StartScanDataLocation}"
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
 			eval lp${chargePoint}enabled=1
 			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for LP${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh"
