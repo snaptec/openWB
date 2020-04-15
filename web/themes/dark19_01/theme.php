@@ -863,35 +863,35 @@
 			<div class="modal-content">
 
 				<!-- modal header -->
-				<div class="modal-header btn-green">
-					<h4 class="modal-title">Auswahl</h4>
+				<div class="modal-header bg-success">
+					<h4 class="modal-title">Lademodus-Auswahl</h4>
 				</div>
 
 				<!-- modal body -->
 				<div class="modal-body">
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="0">Sofortladen</button>
+							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 order-first order-sm-last py-1">
-							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="2">PV</button>
+							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="1">Min + PV</button>
+							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="4">Standby</button>
+							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="3">Stop</button>
+							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
 						</div>
 					</div>
 
@@ -900,18 +900,16 @@
 					<div class="row">
 						<div class="col text-center text-grey">
 							Vorrang im Lademodus PV-Laden:
-							<br>
-							derzeit noch nicht implementiert... Einstellung unter "Einstellungen/PV-Ladeeinstellungen"
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" priority="ev">EV</button>
+							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">EV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" priority="battery">Speicher</button>
+							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">Speicher</button>
 						</div>
 					</div>
 
@@ -933,7 +931,7 @@
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200411-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200411-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200414-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -982,9 +980,9 @@
 			if ( !landingpageShown ) {
 				var countTopicsReceived = 0;
 				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
-					if ( topicsToSubscribe[index][0] == mqttTopic ) {
+					if ( topicsToSubscribe[index][0] == mqttTopic && topicsToSubscribe[index][1] == 0 ) {
 						// topic found in array
-						topicsToSubscribe[index][1] += 1;  // mark topic as received
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
 					};
 					if ( topicsToSubscribe[index][1] > 0 ) {
 						countTopicsReceived++;
@@ -995,6 +993,13 @@
 				if ( timeBetweenTwoMesagges > 3000 ) {
 					// latest after 3 sec without new messages
 					percentageReceived = 100;
+					// debug output
+					topicsToSubscribe.forEach((item, i) => {
+						if ( item[1] == 0 ) {
+							console.log('not received: ' + item[0]);
+						}
+					});
+
 				}
 				timeOfLastMqttMessage = Date.now();
 				$("#preloaderbar").width(percentageReceived+"%");
@@ -1011,16 +1016,18 @@
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200411-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200414-a");
 
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				var lp = $(this).closest('[lp]').attr('lp');  // get attribute lp-# of parent element
-				var isEnabled = $(this).hasClass("lpEnabledStyle")
-				if ( isEnabled ) {
-					publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
-				} else {
-					publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
+				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
+					var isEnabled = $(this).hasClass("lpEnabledStyle")
+					if ( isEnabled ) {
+						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+					} else {
+						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+					}
 				}
 			});
 
@@ -1034,11 +1041,10 @@
 			});
 
 			$('.priorityModeBtn').click(function(event){
-				var priority = $(this).attr("priority")
-				if ( priority == "ev" ) {
-					// <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green myButtonStyle">Speichervorrang</a>
-				} else {
-					//<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green myButtonStyle">EV Vorrang</a>
+				// prio: 0 = battery, 1 = ev
+				var priority = $(this).attr('priority');
+				if ( priority == '0' || priority == '1' ) {
+					publish(priority, 'openWB/set/system/priorityModeEVBattery');
 				}
 			});
 

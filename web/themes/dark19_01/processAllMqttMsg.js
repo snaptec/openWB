@@ -257,42 +257,57 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			case '0':
 				// mode sofort
 				$('#chargeModeSelectBtn').text('Sofortladen');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeSofortBtn').addClass('btn-green');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeSofortBtn').addClass('btn-success');
 				$('#targetChargingProgress').show();
 				$('#sofortladenEinstellungen').show();
 				break;
 			case '1':
 				// mode min+pv
 				$('#chargeModeSelectBtn').text('Min+PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeMinPVBtn').addClass('btn-green');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeMinPVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				break;
 			case '2':
 				// mode pv
 				$('#chargeModeSelectBtn').text('PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModePVBtn').addClass('btn-green');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModePVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				break;
 			case '3':
 				// mode stop
 				$('#chargeModeSelectBtn').text('Stop');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStopBtn').addClass('btn-green');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStopBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				break;
 			case '4':
 				// mode standby
 				$('#chargeModeSelectBtn').text('Standby');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStdbyBtn').addClass('btn-green');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStdbyBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/priorityModeEVBattery' ) {
+		// sets button color in charge mode modal and shows symbol in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// battery priority
+				$('#evPriorityBtn').removeClass('btn-success');
+				$('#batteryPriorityBtn').addClass('btn-success');
+				break;
+			case '1':
+				// ev priority
+				$('#evPriorityBtn').addClass('btn-success');
+				$('#batteryPriorityBtn').removeClass('btn-success');
+			break;
 		}
 	}
 }
