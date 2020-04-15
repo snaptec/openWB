@@ -96,7 +96,12 @@
 				&nbsp;
 			</div>
 			<div class="col-5 text-center">
-				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">Lademodus</button>
+				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">
+					<span id="chargeModeSelectBtnText">Lademodus</span>
+					<span id="priorityEvBattery">
+						<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
+					</span>
+				</button>
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -894,24 +899,28 @@
 							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
 						</div>
 					</div>
-
-					<hr>
-
-					<div class="row">
-						<div class="col text-center text-grey">
-							Vorrang im Lademodus PV-Laden:
+					<span id='priorityModeBtns'>
+						<hr>
+						<div class="row">
+							<div class="col text-center text-grey">
+								Vorrang im Lademodus PV-Laden:
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">EV</button>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
+									EV <span class="fas fa-car">&nbsp;</span>
+								</button>
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">Speicher</button>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
+									Speicher <span class="fas fa-car-battery">&nbsp;</span>
+								</button>
+							</div>
 						</div>
-					</div>
+					</span>
 
 				</div> <!-- /modal body -->
 
