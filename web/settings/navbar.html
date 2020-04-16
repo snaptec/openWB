@@ -9,9 +9,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" href="./index.php">Home</a>
-				</li>
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings" data-toggle="dropdown">
@@ -24,11 +21,18 @@
 						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
 						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
 						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal" style="cursor: pointer;">Modulkonfiguration</a>
+						<a class="dropdown-item" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
+						<a class="dropdown-item" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 					</div>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings2" data-toggle="dropdown">
+						Ladeeinstellungen(Test)
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" id="navPvLaden2" href="./settings/pvconfig_new.html">PV-Laden</a>
+					</div>
 				</li>
 
 				<li class="nav-item dropdown">
@@ -39,10 +43,6 @@
 						<a class="dropdown-item" id="navSetTheme" href="./settings/setTheme.php">Theme-Auswahl</a>
 						<a class="dropdown-item" id="navGraphSettings" href="./settings/graphconfig.php">Graph</a>
 					</div>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 				</li>
 
 				<li class="nav-item dropdown">

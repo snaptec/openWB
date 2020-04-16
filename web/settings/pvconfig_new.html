@@ -49,19 +49,24 @@
 			</div>
 		</footer>
 
+		<!-- load mqtt library -->
+		<script src = "js/mqttws31.js" ></script>
+		<!-- load topics -->
+		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200415-a" ></script>
+		<!-- load service -->
+		<script src = "settings/setupMqttServices.js?ver=20200415-a" ></script>
+		<!-- load mqtt handler-->
+		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200415-a" ></script>
+
 		<script type="text/javascript">
 
-			$.get("settings/navbar.php", function(data){
-				$("#nav").replaceWith(data);
+			$.get('settings/navbar.html', function(data){
+				$('#nav').replaceWith(data);
 				// disable navbar entry for current page
-				$('#navPVLadeeinstellungen').addClass('disabled');
+				$('#navPvLaden2').addClass('disabled');
 			});
 
 			$(document).ready(function(){
-
-				<!-- load scripts -->
-				$.getScript("./settings/topicsToSubscribe_pvconfig.js?ver=20200415-a");
-				$.getScript("./settings/setupMqttServices.js?ver=20200415-a");
 
 			});  // end document ready function
 
