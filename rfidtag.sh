@@ -242,7 +242,12 @@ checkTagValidAndSetStartScanData() {
 		if [ "$lasttag" == "$i" ] ; then
 
 			# found valid RFID tag for the charge point
+			# write at-scan accounting info
 			echo "$NowItIs,$lasttag,$llkwh" > "${StartScanDataLocation}"
+
+			# and the ramdisk file for legacy ladelog
+			echo $lasttag > "ramdisk/rfidlp${chargePoint}"
+
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
 			eval lp${chargePoint}enabled=1
 			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for LP${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh"
