@@ -1829,6 +1829,20 @@ if ! grep -Fq "sunnyislandip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sunnyislandip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "bezug_ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "bezug1_ip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_ipa=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_ipb=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_ipc=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_ipd=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_ida=1" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_idb=1" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_idc=1" >> /var/www/html/openWB/openwb.conf
+	echo "pv1_idd=1" >> /var/www/html/openWB/openwb.conf
+	echo "speicher1_ip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
+
+fi
 if ! grep -Fq "fsm63a3modbusllsource=" /var/www/html/openWB/openwb.conf
 then
 	  echo "fsm63a3modbusllsource=/dev/ttyUSB2" >> /var/www/html/openWB/openwb.conf
