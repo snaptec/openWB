@@ -351,7 +351,7 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/system/SendDebug"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
-            subprocess.Popen("/var/www/html/-10000openWB/runs/senddebuginit.sh");
+            subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh");
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
