@@ -1424,20 +1424,70 @@ if [[ "$orfidlast" != "$arfidlast" ]]; then
 	echo $arfidlast > ramdisk/mqttrfidlasttag
 fi
 
+declare -A mqttconfvar
+mqttconfvar["config/get/pv/minFeedinPowerBeforStart"]=mindestuberschuss
+mqttconfvar["config/get/pv/maxPowerConsumptionBeforeStop"]=abschaltuberschuss
+mqttconfvar["config/get/pv/stopDelay"]=abschaltverzoegerung
+mqttconfvar["config/get/pv/startDelay"]=einschaltverzoegerung
+mqttconfvar["config/get/pv/minCurrentMinPv"]=minimalampv
+mqttconfvar["config/get/pv/lp/1/minCurrent"]=minimalapv
+mqttconfvar["config/get/pv/lp/2/minCurrent"]=minmalalp2pv
+mqttconfvar["config/get/pv/lp/1/minSocAlwaysToChargeTo"]=minnurpvsoclp1
+mqttconfvar["config/get/pv/lp/1/maxSocToChargeTo"]=maxnurpvsoclp1
+mqttconfvar["config/get/pv/lp/1/minSocAlwaysToChargeToCurrent"]=minnurpvsocll
+mqttconfvar["config/get/pv/chargeSubmode"]=pvbezugeinspeisung
+mqttconfvar["config/get/pv/regulationPoint"]=offsetpv
+mqttconfvar["config/get/pv/boolShowPriorityIconInTheme"]=speicherpvui
+mqttconfvar["config/get/pv/minBatteryChargePowerAtEvPriority"]=speichermaxwatt
+mqttconfvar["config/get/pv/minBatteryDischargeSocAtBattPriority"]=speichersocnurpv
+mqttconfvar["config/get/pv/batteryDischargePowerAtBattPriority"]=speicherwattnurpv
+mqttconfvar["config/get/pv/socStartChargeAtMinPv"]=speichersocminpv
+mqttconfvar["config/get/pv/socStopChargeAtMinPv"]=speichersochystminpv
+mqttconfvar["config/get/pv/boolAdaptiveCharging"]=adaptpv
+mqttconfvar["config/get/pv/adaptiveChargingFactor"]=adaptfaktor
+mqttconfvar["config/get/pv/nurpv70dynact"]=nurpv70dynact
+mqttconfvar["config/get/pv/nurpv70dynw"]=nurpv70dynw
+mqttconfvar["config/get/global/maxEVSECurrentAllowed"]=maximalstromstaerke
+mqttconfvar["config/get/global/minEVSECurrentAllowed"]=minimalstromstaerke
+
+
+
+
+
+for mq in "${!mqttconfvar[@]}"; do
+	theval=${!mqttconfvar[$mq]}
+	declare o${mqttconfvar[$mq]}
+	declare ${mqttconfvar[$mq]}
+
+	tempnewname=${mqttconfvar[$mq]}
+
+	tempoldname=o${mqttconfvar[$mq]}
+	tempoldname=$(<ramdisk/mqtt"${mqttconfvar[$mq]}")
+	tempnewname="${mqttconfvar[$mq]}"
+	if [[ "$tempoldname" != "$theval" ]]; then
+		tempPubList="${tempPubList}\nopenWB/${mq}=${theval}"
+		echo $theval > ramdisk/mqtt${mqttconfvar[$mq]}
+	fi
+done
+
+
+
+
+
 tempPubList="${tempPubList}\nopenWB/system/Uptime=$(uptime)"
 tempPubList="${tempPubList}\nopenWB/system/Date=$(date)"
 tempPubList="${tempPubList}\nopenWB/system/Timestamp=${timestamp}"
-declare -a pvarray=("speichersocminpv" "speichersochystminpv" "mindestuberschuss" "abschaltuberschuss" "abschaltverzoegerung" "einschaltverzoegerung" "minimalampv" "minimalampv" "minimalalp2pv" "minnurpvsoclp1" "minnurpvsocll" "pvbezugeinspeisung" "offsetpv" "speicherpvui" "speichermaxwatt" "speichersocnurpv" "speicherwattnurpv" "adaptpv" "adaptfaktor")
-for val in ${pvarray[@]}; do
-	declare o$val
-	ramdiskvar=$(<ramdisk/mqtt"$val")
-	actualvar=${!val}
-	tempname=$val
-	if [[ "$ramdiskvar" != "$actualvar" ]]; then
-		tempPubList="${tempPubList}\nopenWB/config/get/pv/${val}=${actualvar}"
-		echo $actualvar > ramdisk/mqtt$val
-	fi	      
-done
+#declare -a pvarray=("speichersocminpv" "speichersochystminpv" "mindestuberschuss" "abschaltuberschuss" "abschaltverzoegerung" "einschaltverzoegerung" "minimalampv" "minimalampv" "minimalalp2pv" "minnurpvsoclp1" "minnurpvsocll" "pvbezugeinspeisung" "offsetpv" "speicherpvui" "speichermaxwatt" "speichersocnurpv" "speicherwattnurpv" "adaptpv" "adaptfaktor")
+#for val in ${pvarray[@]}; do
+#	declare o$val
+#	ramdiskvar=$(<ramdisk/mqtt"$val")
+#	actualvar=${!val}
+#	tempname=$val
+#	if [[ "$ramdiskvar" != "$actualvar" ]]; then
+#		tempPubList="${tempPubList}\nopenWB/config/get/pv/${val}=${actualvar}"
+#		echo $actualvar > ramdisk/mqtt$val
+#	fi	      
+#done
 echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
 runs/pubmqtt.sh &
 
