@@ -130,3 +130,7 @@ body > .container {
   display: flex;
   align-items: center;
 }
+
+.input {
+    vertical-align: midle;
+}

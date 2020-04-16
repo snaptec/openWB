@@ -25,12 +25,18 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- ion range.slider -->
+		<link rel="stylesheet" type="text/css" href="css/ion.rangeSlider.min.css">
+		<!-- Bootstrap Toggle (Button) -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap4-toggle.min.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/ion.rangeSlider.min.js"></script>
+		<script src="js/bootstrap4-toggle.min.js"></script>
 	</head>
 
 	<body>
@@ -41,7 +47,60 @@
 
 			<h1>Einstellungen für PV-Laden</h1>
 
-			<h1>Einstellungen für Min+PV-Laden</h1>
+			<h5>Einschaltschwelle</h5>
+			<div>
+				<small>
+					Paramter für das Einschalten der Laderegelung.
+					Steigt die <b>Einspeisung</b> über Einschaltschwelle, startet die Laderegelung.
+				</small>
+			</div>
+			<div class="m-2">
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="minFeedinPowerBeforeStartScale" id="exampleRadios1" value="10000" checked>
+					<label class="form-check-label ml-1" for="exampleRadios1">
+						Skala 10kW, Schrittweite 50W
+					</label>
+				</div>
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="minFeedinPowerBeforeStartScale" id="exampleRadios2" value="100000">
+					<label class="form-check-label ml-1" for="exampleRadios2">
+						Skala 100kW, Schrittweite 100W
+					</label>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-10">
+					<input type="text" id="minFeedinPowerBeforeStart" name="minFeedinPowerBeforeStart" value="" />
+				</div>
+			</div>
+			<br>
+
+			<h5>Ausschaltschwelle</h5>
+			<div>
+				<small>
+					Paramter für das Ausschalten der Laderegelung.
+					Steigt der <b>Bezug</b> über Ausschaltschwelle, stoppt die Laderegelung.
+				</small>
+			</div>
+			<div class="m-2">
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="maxPowerConsumptionBeforeStopScale" id="exampleRadios3" value="10000" step="50" checked>
+					<label class="form-check-label ml-1" for="exampleRadios3">
+						Skala 10kW, Schrittweite 50W
+					</label>
+				</div>
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="maxPowerConsumptionBeforeStopScale" id="exampleRadios4" value="100000" step="100">
+					<label class="form-check-label ml-1" for="exampleRadios4">
+						Skala 100kW, Schrittweite 100W
+					</label>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-10">
+					<input type="text" id="maxPowerConsumptionBeforeStop" name="maxPowerConsumptionBeforeStop" value="" />
+				</div>
+			</div>
 
 		</div>  <!-- container -->
 
@@ -67,6 +126,27 @@
 				// disable navbar entry for current page
 				$('#navPvLaden2').addClass('disabled');
 			});
+
+			$("#minFeedinPowerBeforeStart").ionRangeSlider({
+				skin: "big",
+		        grid: true,
+		        min: 0,
+		        max: 10000,
+				step: 50,
+		        from: 1350,
+		        postfix: ' W'
+		    });
+
+			$("#maxPowerConsumptionBeforeStop").ionRangeSlider({
+				skin: "big",
+				grid: true,
+				min: 0,
+				max: 100000,
+				step: 100,
+				from: 1000,
+				postfix: ' W'
+			});
+
 
 			$(document).ready(function(){
 
