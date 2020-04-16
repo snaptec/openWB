@@ -252,47 +252,72 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		$('#awattar1l').text(mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
-		// set button colors depending on charge mode
+		// set modal button colors depending on charge mode
+		// set visibility of divs
+		// set visibility of priority icon depending on charge mode
+		// (priority icon is encapsulated in another element hidden/shown by housebattery configured or not)
 		switch (mqttpayload) {
 			case '0':
 				// mode sofort
-				$('#chargeModeSelectBtn').text('Sofortladen');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeSofortBtn').addClass('btn-green');
-				$('#targetChargingProgress').show();
+				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn mainpage
+				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
+				$('#chargeModeSofortBtn').addClass('btn-success');
+				$('#targetChargingProgress').show();  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').show();
+				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
 				break;
 			case '1':
 				// mode min+pv
-				$('#chargeModeSelectBtn').text('Min+PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeMinPVBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Min+PV-Laden');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeMinPVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
 				break;
 			case '2':
 				// mode pv
-				$('#chargeModeSelectBtn').text('PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModePVBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('PV-Laden');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModePVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').show();
 				break;
 			case '3':
 				// mode stop
-				$('#chargeModeSelectBtn').text('Stop');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStopBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Stop');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStopBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
 				break;
 			case '4':
 				// mode standby
-				$('#chargeModeSelectBtn').text('Standby');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStdbyBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Standby');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStdbyBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/priorityModeEVBattery' ) {
+		// sets button color in charge mode modal and sets icon in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// battery priority
+				$('#evPriorityBtn').removeClass('btn-success');
+				$('#batteryPriorityBtn').addClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car').addClass('fa-car-battery')
+				break;
+			case '1':
+				// ev priority
+				$('#evPriorityBtn').addClass('btn-success');
+				$('#batteryPriorityBtn').removeClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
+			break;
 		}
 	}
 }
@@ -337,10 +362,16 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
 		if ( mqttpayload == 1 ) {
-			// if housebattery is configured, show div
+			// if housebattery is configured, show info-div
 			$('#speicher').show();
+			// and outer element for priority icon in pv mode
+			$('#priorityEvBattery').show();
+			// priority buttons in modal
+			$('#priorityModeBtns').show();
 		} else {
 			$('#speicher').hide();
+			$('#priorityEvBattery').hide();
+			$('#priorityModeBtns').hide();
 		}
 	}
 }

@@ -45,6 +45,7 @@ var topicsToSubscribe = [
 	["openWB/global/ChargeMode", 0],
 	["openWB/global/WAllChargePoints", 0],
 	["openWB/global/strLastmanagementActive", 0],
+	["openWB/global/priorityModeEVBattery", 0],
 	// system topics
 	["openWB/system/Timestamp", 0],
 	// pv topics
@@ -179,7 +180,7 @@ var topicsToSubscribe = [
 		["openWB/lp/8/ADirectModeAmps", 0],
 		// Zielladen
 		["openWB/lp/1/boolFinishAtTimeChargeActive", 0],
-		
+
 	// housebattery topics
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/W", 0],
