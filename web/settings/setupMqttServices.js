@@ -37,7 +37,8 @@ client.onConnectionLost = function (responseObject) {
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
 	if ( message.destinationName.match( /^openwb\/graph\//i ) ) {
-		processGraphMessages(message.destinationName, message.payloadString);
+        // func processMessages defined in respective processAllMqttMsg_
+		processMessages(message.destinationName, message.payloadString);
 	}
 };
 
