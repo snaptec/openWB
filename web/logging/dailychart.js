@@ -290,16 +290,16 @@ function formdata(graphdata){
 	convertsoc(csvData,'23',atemp1,'hidetemp1',d1name + ' Temp 1','overalltemp1');
 	convertsoc(csvData,'24',atemp2,'hidetemp2',d1name + ' Temp 2','overalltemp2');
 	convertsoc(csvData,'25',atemp3,'hidetemp3',d1name + ' Temp 3','overalltemp3');
-	convertdata(csvData,'26',adevice1,'hidedevice1',d1name,'overalldevice1');
-	convertdata(csvData,'27',adevice2,'hidedevice2',d2name,'overalldevice2');
-	convertdata(csvData,'28',adevice3,'hidedevice3',d3name,'overalldevice3');
-	convertdata(csvData,'29',adevice4,'hidedevice4',d4name,'overalldevice4');
-	convertdata(csvData,'30',adevice5,'hidedevice5',d5name,'overalldevice5');
-	convertdata(csvData,'31',adevice6,'hidedevice6',d6name,'overalldevice6');
-	convertdata(csvData,'32',adevice7,'hidedevice7',d7name,'overalldevice7');
-	convertdata(csvData,'33',adevice8,'hidedevice8',d8name,'overalldevice8');
-	convertdata(csvData,'34',adevice9,'hidedevice9',d9name,'overalldevice9');
-	convertdata(csvData,'35',adevice10,'hidedevice10',d10name,'overalldevice10');
+	convertdata(csvData,'26',adevice1,'hidedevice1',d1name + ' Import','overalldevice1');
+	convertdata(csvData,'27',adevice2,'hidedevice2',d2name + ' Import','overalldevice2');
+	convertdata(csvData,'28',adevice3,'hidedevice3',d3name + ' Import','overalldevice3');
+	convertdata(csvData,'29',adevice4,'hidedevice4',d4name + ' Import','overalldevice4');
+	convertdata(csvData,'30',adevice5,'hidedevice5',d5name + ' Import','overalldevice5');
+	convertdata(csvData,'31',adevice6,'hidedevice6',d6name + ' Import','overalldevice6');
+	convertdata(csvData,'32',adevice7,'hidedevice7',d7name + ' Import','overalldevice7');
+	convertdata(csvData,'33',adevice8,'hidedevice8',d8name + ' Import','overalldevice8');
+	convertdata(csvData,'34',adevice9,'hidedevice9',d9name + ' Import','overalldevice9');
+	convertdata(csvData,'35',adevice10,'hidedevice10',d10name + ' Import','overalldevice10');
 	convertsoc(csvData,'36',atemp4,'hidetemp4',d2name + ' Temp 4','overalltemp4');
 	convertsoc(csvData,'37',atemp5,'hidetemp5',d2name + ' Temp 5','overalltemp5');
 	convertsoc(csvData,'38',atemp6,'hidetemp6',d2name + ' Temp 6','overalltemp6');
@@ -390,6 +390,7 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	} else {
 		window[hidevar] = hidevalue;
 	}
+	console.log(window[hidevar]);
 }
 
 function loadgraph() {
@@ -586,7 +587,7 @@ function loadgraph() {
 			hidden: boolDisplayLoad2,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d1name + ' ' + overalldevice1 + ' kWh',
+			label: d1name + ' Import' + overalldevice1 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -595,7 +596,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice1,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d2name + ' ' + overalldevice2 + ' kWh',
+			label: d2name + ' Import' + overalldevice2 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -604,7 +605,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice2,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d3name + ' ' + overalldevice3 + ' kWh',
+			label: d3name + ' Import' + overalldevice3 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -613,7 +614,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice3,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d4name + ' ' + overalldevice4 + ' kWh',
+			label: d4name + ' Import' + overalldevice4 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -622,7 +623,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice4,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d5name + ' ' + overalldevice5 + ' kWh',
+			label: d5name + ' Import' + overalldevice5 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -631,7 +632,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice5,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d6name + ' ' + overalldevice6 + ' kWh',
+			label: d6name + ' Import' + overalldevice6 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -640,7 +641,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice6,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d7name + ' ' + overalldevice7 + ' kWh',
+			label: d7name + ' Import' + overalldevice7 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -649,7 +650,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice7,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d8name + ' ' + overalldevice8 + ' kWh',
+			label: d8name + ' Import' + overalldevice8 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -658,7 +659,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice8,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d9name + ' ' + overalldevice9 + ' kWh',
+			label: d9name + ' Import' + overalldevice9 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
@@ -667,7 +668,7 @@ function loadgraph() {
 			hidden: boolDisplayDevice9,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: d10name + ' ' + overalldevice10 + ' kWh',
+			label: d10name + ' Import' + overalldevice10 + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
