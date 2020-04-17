@@ -61,16 +61,58 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend = true;
 var boolDisplayLiveGraph;
+var boolDisplayDevice1;
+var boolDisplayDevice2;
+var boolDisplayDevice3;
+var boolDisplayDevice4;
+var boolDisplayDevice5;
+var boolDisplayDevice6;
+var boolDisplayDevice7;
+var boolDisplayDevice8;
+var boolDisplayDevice9;
+var boolDisplayDevice10;
+var boolDisplayDevice1t1;
+var boolDisplayDevice1t2;
+var boolDisplayDevice1t3;
+var boolDisplayDevice2t1;
+var boolDisplayDevice2t2;
+var boolDisplayDevice2t3;
+
 var datasend = 0;
 var allValuesPresent = new Array(12).fill(0);  // flag if all data segments were received
 var graphDataSegments = new Array(12).fill('');  // all data segments
-
+var d1name = 'Device 1';
+var d2name = 'Device 2';
+var d3name = 'Device 3';
+var d4name = 'Device 4';
+var d5name = 'Device 5';
+var d6name = 'Device 6';
+var d7name = 'Device 7';
+var d8name = 'Device 8';
+var d9name = 'Device 9';
+var d10name = 'Device 10';
+var atemp4 = [];
+var atemp5 = [];
+var atemp6 = [];
 var apv = [];
 var aspeicheri = [];
 var aspeichere = [];
 var aspeichersoc = [];
 var asoc = [];
 var asoc1 = [];
+var atemp1 = [];
+var atemp2 = [];
+var atemp3 = [];
+var adevice1 = [];
+var adevice2 = [];
+var adevice3 = [];
+var adevice4 = [];
+var adevice5 = [];
+var adevice6 = [];
+var adevice7 = [];
+var adevice8 = [];
+var adevice9 = [];
+var adevice10 = [];
 var averbraucher2i = [];
 var averbraucher2e = [];
 var averbraucher1i = [];
@@ -90,11 +132,26 @@ var thevalues = [
 	["openWB/system/DayGraphData10", "#"],
 	["openWB/system/DayGraphData11", "#"],
 	["openWB/system/DayGraphData12", "#"],
+	["openWB/config/get/SmartHome/Devices/1/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/2/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/3/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/4/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/5/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/6/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/7/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/8/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/9/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/10/device_name", "#"],
+
 ];
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload) {
+	if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
+		var index = mqttmsg.match(/\d+/)[0];
+		window['d'+index+'name']=mqttpayload;
+	}
 	if ( mqttmsg.match( /^openwb\/system\/daygraphdata[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing "openwb/graph/daygraphdata#"
 		// where # is an integer > 0
@@ -141,7 +198,9 @@ var options = {
 	}
 }
 
-//Creates a new Messaging.Message Object and sends it
+//Creates a new Messagvar boolDisplayDevice1t1;
+
+//ing.Message Object and sends it
 var publish = function (payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
@@ -210,8 +269,8 @@ function formdata(graphdata){
 	convertdata(csvData,'1',abezug,'hidebezug','Bezug','overallbezug');
 	convertdata(csvData,'2',aeinspeisung,'hideeinspeisung','Einspeisung','overalleinspeisung');
 	convertdata(csvData,'3',apv,'hidepv','PV','overallpv');
-	convertdata(csvData,'8',aspeicheri,'hidespeicheri','Speicher I','overallspeicheri');
-	convertdata(csvData,'9',aspeichere,'hidespeichere','Speicher E','overallspeichere');
+	convertdata(csvData,'8',aspeicheri,'hidespeicheri','Speicherladung','overallspeicheri');
+	convertdata(csvData,'9',aspeichere,'hidespeichere','Speicherentladung','overallspeichere');
 	convertdata(csvData,'7',alpa,'hidelpa','Lp Gesamt','overalllpgesamt');
 	convertdata(csvData,'4',alp1,'hidelp1','Lp1','overalllp1');
 	convertdata(csvData,'5',alp2,'hidelp2','Lp2','overalllp2');
@@ -228,9 +287,26 @@ function formdata(graphdata){
 	convertsoc(csvData,'21',asoc,'hidesoc','SoC Lp 1','overalllp1soc');
 	convertsoc(csvData,'22',asoc1,'hidesoc1','SoC Lp 2','overalllp2soc');
 	convertsoc(csvData,'20',aspeichersoc,'hidespeichersoc','Speicher SoC','overallspeichersoc');
+	convertsoc(csvData,'23',atemp1,'hidetemp1',d1name + ' Temp 1','overalltemp1');
+	convertsoc(csvData,'24',atemp2,'hidetemp2',d1name + ' Temp 2','overalltemp2');
+	convertsoc(csvData,'25',atemp3,'hidetemp3',d1name + ' Temp 3','overalltemp3');
+	convertdata(csvData,'26',adevice1,'hidedevice1',d1name + ' Import','overalldevice1');
+	convertdata(csvData,'27',adevice2,'hidedevice2',d2name + ' Import','overalldevice2');
+	convertdata(csvData,'28',adevice3,'hidedevice3',d3name + ' Import','overalldevice3');
+	convertdata(csvData,'29',adevice4,'hidedevice4',d4name + ' Import','overalldevice4');
+	convertdata(csvData,'30',adevice5,'hidedevice5',d5name + ' Import','overalldevice5');
+	convertdata(csvData,'31',adevice6,'hidedevice6',d6name + ' Import','overalldevice6');
+	convertdata(csvData,'32',adevice7,'hidedevice7',d7name + ' Import','overalldevice7');
+	convertdata(csvData,'33',adevice8,'hidedevice8',d8name + ' Import','overalldevice8');
+	convertdata(csvData,'34',adevice9,'hidedevice9',d9name + ' Import','overalldevice9');
+	convertdata(csvData,'35',adevice10,'hidedevice10',d10name + ' Import','overalldevice10');
+	convertsoc(csvData,'36',atemp4,'hidetemp4',d2name + ' Temp 4','overalltemp4');
+	convertsoc(csvData,'37',atemp5,'hidetemp5',d2name + ' Temp 5','overalltemp5');
+	convertsoc(csvData,'38',atemp6,'hidetemp6',d2name + ' Temp 6','overalltemp6');
+
 	for (i = 0; i < abezug.length; i += 1) {
 
-		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i];
+		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i] - adevice1[i] - adevice2[i] - adevice3[i] - adevice4[i] - adevice5[i] - adevice6[i] - adevice7[i] - adevice8[i] - adevice9[i] - adevice10[i];
 
 		if ( hausverbrauch >= 0) {
 		    ahausverbrauch.push(hausverbrauch);
@@ -280,9 +356,9 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 			oldcsvvar = csvvar;
 		}
 	});
+
 	window[overall] = ((oldcsvvar - firstcsvvar) / 1000).toFixed(2);
-	if (isNaN(window[overall])) {
-	//if (window[overall] == 0 || window[overall] == "NaN" || window[overall] < 0) {
+	if (isNaN(window[overall]) || window[overall] == 0) {
 		window[hidevar] = hidevalue;
 	} else {
 		window[hidevar] = 'foo';
@@ -314,6 +390,7 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	} else {
 		window[hidevar] = hidevalue;
 	}
+	console.log(window[hidevar]);
 }
 
 function loadgraph() {
@@ -510,6 +587,159 @@ function loadgraph() {
 			hidden: boolDisplayLoad2,
 			yAxisID: 'y-axis-1'
 		} , {
+			label: d1name + ' Import' + overalldevice1 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice1,
+			hidden: boolDisplayDevice1,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d2name + ' Import' + overalldevice2 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice2,
+			hidden: boolDisplayDevice2,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d3name + ' Import' + overalldevice3 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice3,
+			hidden: boolDisplayDevice3,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d4name + ' Import' + overalldevice4 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice4,
+			hidden: boolDisplayDevice4,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d5name + ' Import' + overalldevice5 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice5,
+			hidden: boolDisplayDevice5,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d6name + ' Import' + overalldevice6 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice6,
+			hidden: boolDisplayDevice6,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d7name + ' Import' + overalldevice7 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice7,
+			hidden: boolDisplayDevice7,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d8name + ' Import' + overalldevice8 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice8,
+			hidden: boolDisplayDevice8,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d9name + ' Import' + overalldevice9 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice9,
+			hidden: boolDisplayDevice9,
+			yAxisID: 'y-axis-1'
+		} , {
+			label: d10name + ' Import' + overalldevice10 + ' kWh',
+			borderColor: "rgba(150, 150, 0, 0.7)",
+			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			fill: false,
+			borderWidth: 2,
+			data: adevice10,
+			hidden: boolDisplayDevice10,
+			yAxisID: 'y-axis-1'
+		} , {
+
+			label: d1name + ' Temp 1',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice1t1,
+			fill: false,
+			borderWidth: 1,
+			data: atemp1,
+			yAxisID: 'y-axis-2'
+		} , {
+			label: d1name + ' Temp 2',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice1t2,
+			fill: false,
+			borderWidth: 1,
+			data: atemp2,
+			yAxisID: 'y-axis-2'
+		} , {
+			label: d1name + ' Temp 3',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice1t3,
+			fill: false,
+			borderWidth: 1,
+			data: atemp3,
+			yAxisID: 'y-axis-2'
+		} , {
+
+			label: d2name + ' Temp 4',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice2t1,
+			fill: false,
+			borderWidth: 1,
+			data: atemp4,
+			yAxisID: 'y-axis-2'
+		} , {
+			label: d2name + ' Temp 5',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice2t2,
+			fill: false,
+			borderWidth: 1,
+			data: atemp5,
+			yAxisID: 'y-axis-2'
+		} , {
+			label: d2name + ' Temp 6',
+			borderColor: 'blue',
+			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderDash: [10,5],
+			hidden: boolDisplayDevice2t3,
+			fill: false,
+			borderWidth: 1,
+			data: atemp6,
+			yAxisID: 'y-axis-2'
+
+		} , {
 			label: 'Hausverbrauch ' + overallhausverbrauch + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
@@ -577,7 +807,7 @@ function loadgraph() {
 				position: 'bottom',
 				labels: {
 			        filter: function(item, chart) {
-						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)) {
+						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)|| item.text.includes(hidedevice3)|| item.text.includes(hidedevice4)|| item.text.includes(hidedevice5)|| item.text.includes(hidedevice6)|| item.text.includes(hidedevice7)|| item.text.includes(hidedevice8)|| item.text.includes(hidedevice9)|| item.text.includes(hidedevice10)|| item.text.includes(hidedevice1)|| item.text.includes(hidedevice2)|| item.text.includes(hidetemp1)|| item.text.includes(hidetemp2)|| item.text.includes(hidetemp3)|| item.text.includes(hidetemp4)|| item.text.includes(hidetemp5)|| item.text.includes(hidetemp6)) {
 							return false
 						} else {
 							return true

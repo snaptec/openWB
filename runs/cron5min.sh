@@ -33,7 +33,26 @@ ll5=$(echo "$ll5 * 1000" | bc)
 ll6=$(echo "$ll6 * 1000" | bc)
 ll7=$(echo "$ll7 * 1000" | bc)
 ll8=$(echo "$ll8 * 1000" | bc)
-echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1 >> $dailyfile.csv
+temp1=$(</var/www/html/openWB/ramdisk/device1_temp0)
+temp2=$(</var/www/html/openWB/ramdisk/device1_temp1)
+temp3=$(</var/www/html/openWB/ramdisk/device1_temp2)
+temp4=$(</var/www/html/openWB/ramdisk/device2_temp0)
+temp5=$(</var/www/html/openWB/ramdisk/device2_temp1)
+temp6=$(</var/www/html/openWB/ramdisk/device2_temp2)
+d1=$(</var/www/html/openWB/ramdisk/device1_wh)
+d2=$(</var/www/html/openWB/ramdisk/device2_wh)
+d3=$(</var/www/html/openWB/ramdisk/device3_wh)
+d4=$(</var/www/html/openWB/ramdisk/device4_wh)
+d5=$(</var/www/html/openWB/ramdisk/device5_wh)
+d6=$(</var/www/html/openWB/ramdisk/device6_wh)
+d7=$(</var/www/html/openWB/ramdisk/device7_wh)
+d8=$(</var/www/html/openWB/ramdisk/device8_wh)
+d9=$(</var/www/html/openWB/ramdisk/device9_wh)
+d10=$(</var/www/html/openWB/ramdisk/device10_wh)
+
+
+
+echo $(date +%H%M),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$speicheri,$speichere,$verbraucher1,$verbrauchere1,$verbraucher2,$verbrauchere2,$verbraucher3,$ll4,$ll5,$ll6,$ll7,$ll8,$speichersoc,$soc,$soc1,$temp1,$temp2,$temp3,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$temp4,$temp5,$temp6 >> $dailyfile.csv
 
 netzabschaltunghz=0
 if (( netzabschaltunghz == 1 )); then
@@ -90,7 +109,19 @@ done
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
+echo "$(tail -1000 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
+echo "$(tail -1000 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
 
-
-
+if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
+then
+	echo "test" > /dev/null
+else
+	python3 /var/www/html/openWB/runs/mqttsub.py &
+fi
+if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
+then
+	echo "test" > /dev/null
+else
+	python3 /var/www/html/openWB/runs/smarthomehandler.py &
+fi
 

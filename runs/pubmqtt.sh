@@ -172,7 +172,14 @@ mqttvar["hook/1/boolHookStatus"]=hook1akt
 mqttvar["hook/2/boolHookStatus"]=hook2akt
 mqttvar["hook/3/boolHookStatus"]=hook3akt
 mqttvar["pv/bool70PVDynStatus"]=nurpv70dynstatus
-
+mqttvar["lp/1/countPhasesInUse"]=lp1phasen
+mqttvar["lp/2/countPhasesInUse"]=lp2phasen
+mqttvar["lp/3/countPhasesInUse"]=lp3phasen
+mqttvar["lp/4/countPhasesInUse"]=lp4phasen
+mqttvar["lp/5/countPhasesInUse"]=lp5phasen
+mqttvar["lp/6/countPhasesInUse"]=lp6phasen
+mqttvar["lp/7/countPhasesInUse"]=lp7phasen
+mqttvar["lp/8/countPhasesInUse"]=lp8phasen
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
