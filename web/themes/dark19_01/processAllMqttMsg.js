@@ -468,7 +468,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 		$(element).text(energyCharged.toFixed(1) + ' kWh');
 		var kmChargedLp = $(parent).find('.kmChargedLp');  // now get parents kmChargedLp child element
-		var consumption = $(kmChargedLp).attr('consumption');
+		var consumption = parseFloat($(kmChargedLp).attr('consumption'));
 		var kmCharged = '';
 		if ( !isNaN(consumption) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
@@ -556,6 +556,17 @@ function processLpMessages(mqttmsg, mqttpayload) {
 				}
 			}
 		});
+	}
+	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.phasesInUse');  // now get parents respective child element
+		var phasesInUse = parseInt(mqttpayload, 10);
+		if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
+			$(element).text('');
+		} else {
+			$(element).text(' (' + phasesInUse + ' Ph)');
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point

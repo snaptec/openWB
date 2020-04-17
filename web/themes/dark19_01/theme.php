@@ -163,24 +163,24 @@
 		</div>
 
 		<!-- chargepoint info header -->
-		<div class="row smallTextSize bg-darkgrey text-grey font-weight-bold text-center px-0 py-1 py-md-0">
-			<div class="col-4">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
+			<div class="col-3 px-0">
 				Ladepunkt
 			</div>
-			<div class="col-3">
+			<div class="col-3 px-0">
 				Ladeleistung
 			</div>
-			<div class="col-3">
+			<div class="col-4 px-0">
 				geladen
 			</div>
-			<div class="col-2">
+			<div class="col-2 px-0">
 				SoC
 			</div>
 		</div>
 
 		<!-- chargepoint info data lp1-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="1">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -188,9 +188,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -203,7 +203,7 @@
 
 		<!-- chargepoint info data lp2-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="2">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -211,9 +211,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -226,7 +226,7 @@
 
 		<!-- chargepoint info data lp3-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="3">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -234,9 +234,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -249,7 +249,7 @@
 
 		<!-- chargepoint info data lp4-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="4">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -257,9 +257,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -272,7 +272,7 @@
 
 		<!-- chargepoint info data lp5-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="5">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -280,9 +280,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -295,7 +295,7 @@
 
 		<!-- chargepoint info data lp6-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="6">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -303,9 +303,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -318,7 +318,7 @@
 
 		<!-- chargepoint info data lp7-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="7">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -326,9 +326,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -341,7 +341,7 @@
 
 		<!-- chargepoint info data lp8-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="8">
-			<div class="col-4 px-0">
+			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
@@ -349,9 +349,9 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
             </div>
-            <div class="col-3 px-0">
+            <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
             </div>
             <div class="col-2 px-0 socNotConfiguredLp text-center">
@@ -940,7 +940,7 @@
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200411-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200414-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200417-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -1025,7 +1025,7 @@
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200414-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200417-a");
 
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
