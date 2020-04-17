@@ -122,7 +122,6 @@ if (( ladeleistung < 300 )); then
 	fi
 	if (( llalt == minimalapv )); then
 		if (( uberschuss < mindestuberschussphasen )); then
-		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
 			#	pvcounter=$((pvcounter + 10))
@@ -149,11 +148,9 @@ else
 		if (( speicherleistung < 0 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
-				wattbezugint=$((wattbezugint - speicherleistung - speicherwattnurpv))
 
 			else
 				uberschuss=$((uberschuss + speicherleistung))
-				wattbezugint=$((wattbezugint - speicherleistung))
 			fi
 		fi
 	fi
@@ -297,7 +294,7 @@ else
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
 		else
-			if (( wattbezugint > abschaltuberschuss )); then
+			if (( uberschuss < -abschaltuberschuss )); then
 				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 				if (( pvcounter < abschaltverzoegerung )); then
 					pvcounter=$((pvcounter + 10))
