@@ -31,6 +31,22 @@ echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
+echo 0 > /var/www/html/openWB/ramdisk/device1_wh
+echo 0 > /var/www/html/openWB/ramdisk/device2_wh
+echo 0 > /var/www/html/openWB/ramdisk/device3_wh
+echo 0 > /var/www/html/openWB/ramdisk/device4_wh
+echo 0 > /var/www/html/openWB/ramdisk/device5_wh
+echo 0 > /var/www/html/openWB/ramdisk/device6_wh
+echo 0 > /var/www/html/openWB/ramdisk/device7_wh
+echo 0 > /var/www/html/openWB/ramdisk/device8_wh
+echo 0 > /var/www/html/openWB/ramdisk/device9_wh
+echo 0 > /var/www/html/openWB/ramdisk/device10_wh
+echo 0 > /var/www/html/openWB/ramdisk/device1_temp0
+echo 0 > /var/www/html/openWB/ramdisk/device1_temp1
+echo 0 > /var/www/html/openWB/ramdisk/device1_temp2
+echo 0 > /var/www/html/openWB/ramdisk/device2_temp0
+echo 0 > /var/www/html/openWB/ramdisk/device2_temp1
+echo 0 > /var/www/html/openWB/ramdisk/device2_temp2
 echo 1 > /var/www/html/openWB/ramdisk/lp2enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp3enabled
 echo 1 > /var/www/html/openWB/ramdisk/lp4enabled
@@ -2489,7 +2505,13 @@ then
 	echo "soc_bluelink_interval=30" >> /var/www/html/openWB/openwb.conf
 
 fi
-
+sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
+if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
+then
+	echo "test" > /dev/null
+else
+	python3 /var/www/html/openWB/runs/smarthomehandler.py &
+fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
