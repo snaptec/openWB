@@ -2487,13 +2487,13 @@ if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "pv2wattmodul=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "pv2modul=" /var/www/html/openWB/openwb.conf
 then
-	echo "pv2wattmodul=none" >> /var/www/html/openWB/openwb.conf
-	echo "pv2wattip=none" >> /var/www/html/openWB/openwb.conf
-	echo "pv2wattid=none" >> /var/www/html/openWB/openwb.conf
-	echo "pv2wattuser=none" >> /var/www/html/openWB/openwb.conf
-	echo "pv2wattpass=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2modul=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2ip=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2id=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2user=none" >> /var/www/html/openWB/openwb.conf
+	echo "pv2pass=none" >> /var/www/html/openWB/openwb.conf
 
 
 fi
