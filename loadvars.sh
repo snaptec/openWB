@@ -295,7 +295,7 @@ fi
 
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
-       echo "" > ramdisk/lastregelungaktiv
+       echo " " > ramdisk/lastregelungaktiv
 fi
 
 # Werte für die Berechnung ermitteln
