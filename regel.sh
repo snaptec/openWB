@@ -406,7 +406,6 @@ if [[ $nurpv70dynact == "1" ]]; then
 	nurpv70status=$(<ramdisk/nurpv70dynstatus)
 	if [[ $nurpv70status == "1" ]]; then
 		uberschuss=$((uberschuss - nurpv70dynw))
-		wattbezugint=$((wattbezugint + nurpv70dynw))
 		# Schwelle zum Beginn der Ladung
 		mindestuberschuss=0
 		# Schwelle zum Beenden der Ladung

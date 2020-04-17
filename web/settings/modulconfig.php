@@ -4647,6 +4647,7 @@
 							<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu\n") echo "selected" ?> value="wr2_ethlovatoaevu">Lovato an openWB EVU Kit</option>
 							<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit v2</option>
 							<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
+							<option <?php if($pv2wattmodulold == "wr2_kostalsteca\n") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 
 						</select>
 					</div>
@@ -4683,6 +4684,9 @@
 								$('#pv2noconfig').show();
 							}
 							if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
+								$('#pv2ipdiv').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
 								$('#pv2ipdiv').show();
 							}
 

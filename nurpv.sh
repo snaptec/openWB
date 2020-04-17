@@ -125,7 +125,6 @@ if (( ladeleistung < 300 )); then
 	fi
 	if (( llalt == minimalapv )); then
 		if (( uberschuss < mindestuberschussphasen )); then
-		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
 			#	pvcounter=$((pvcounter + 10))
@@ -152,11 +151,9 @@ else
 		if (( speicherleistung < 0 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
-				wattbezugint=$((wattbezugint - speicherleistung - speicherwattnurpv))
 
 			else
 				uberschuss=$((uberschuss + speicherleistung))
-				wattbezugint=$((wattbezugint - speicherleistung))
 			fi
 		fi
 	fi
@@ -301,9 +298,9 @@ else
 			exit 0
 		else
 			if [[ $debug == "1" ]]; then
-				echo "Abschaltschwelle: $abschaltuberschuss, Bezug derzeit: $wattbezugint"
+				echo Abschaltschwelle: $((-abschaltuberschuss)), Überschuss derzeit: $uberschuss
 			fi
-			if (( wattbezugint > abschaltuberschuss )); then
+			if (( uberschuss < -abschaltuberschuss )); then
 				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 				if (( pvcounter < abschaltverzoegerung )); then
 					pvcounter=$((pvcounter + 10))
@@ -313,7 +310,7 @@ else
 					fi
 				else
 					runs/set-current.sh 0 all
-					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung: $wattbezugint" >>  ramdisk/ladestatus.log
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung: $uberschuss" >>  ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung beendet"
 					fi
