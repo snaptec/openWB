@@ -68,8 +68,9 @@ nameallowed='^[a-zA-Z ]+$'
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
+    #client.subscribe("openWB/#", 2)
     client.subscribe("openWB/set/#", 2)
-    client.subscribe("openWB/config/#", 2)
+    client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_configured" in msg.topic)):
@@ -141,6 +142,7 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "mindestuberschuss=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/minFeedinPowerBeforStart", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/pv/minFeedinPowerBeforStart", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/pv/maxPowerConsumptionBeforeStop"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "abschaltuberschuss=", msg.payload.decode("utf-8")]
