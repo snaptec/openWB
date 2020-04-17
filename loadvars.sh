@@ -351,7 +351,7 @@ else
 	speichervorhanden="0"
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
-
+llphaset=3
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
 	timeout 10 modules/$ladeleistungmodul/main.sh || true
@@ -375,6 +375,18 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	if ! [[ $lla3 =~ $re ]] ; then
 		 lla3="0"
 	fi
+
+	lp1phasen=0
+	if [ $lla1 -ge $llphaset ]; then
+		lp1phasen=$((lp1phasen + 1 ))
+	fi
+	if [ $lla2 -ge $llphaset ]; then
+		lp1phasen=$((lp1phasen + 1 ))
+	fi
+	if [ $lla3 -ge $llphaset ]; then
+		lp1phasen=$((lp1phasen + 1 ))
+	fi
+	echo $lp1phasen > /var/www/html/openWB/ramdisk/lp1phasen
 	if ! [[ $ladeleistung =~ $re ]] ; then
 		 ladeleistung="0"
 	fi
@@ -421,6 +433,17 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	ladeleistung=$(( ladeleistung + ladeleistungs1 ))
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
+	lp2phasen=0
+	if [ $llas11 -ge $llphaset ]; then
+		lp2phasen=$((lp2phasen + 1 ))
+	fi
+	if [ $llas12 -ge $llphaset ]; then
+		lp2phasen=$((lp2phasen + 1 ))
+	fi
+	if [ $llas13 -ge $llphaset ]; then
+		lp2phasen=$((lp2phasen + 1 ))
+	fi
+	echo $lp2phasen > /var/www/html/openWB/ramdisk/lp2phasen
 else
 	echo "$ladeleistung" > /var/www/html/openWB/ramdisk/llkombiniert
 	ladeleistunglp2=0
@@ -440,6 +463,17 @@ if [[ $lastmanagements2 == "1" ]]; then
 	llas21=$(echo $llas21 | sed 's/\..*$//')
 	llas22=$(echo $llas22 | sed 's/\..*$//')
 	llas23=$(echo $llas23 | sed 's/\..*$//')
+	lp3phasen=0
+	if [ $llas21 -ge $llphaset ]; then
+		lp3phasen=$((lp3phasen + 1 ))
+	fi
+	if [ $llas22 -ge $llphaset ]; then
+		lp3phasen=$((lp3phasen + 1 ))
+	fi
+	if [ $llas23 -ge $llphaset ]; then
+		lp3phasen=$((lp3phasen + 1 ))
+	fi
+	echo $lp3phasen > /var/www/html/openWB/ramdisk/lp3phasen
 	ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 	if ! [[ $ladeleistungs2 =~ $re ]] ; then
 	 ladeleistungs2="0"
@@ -464,6 +498,17 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	lla1lp4=$(echo $lla1lp4 | sed 's/\..*$//')
 	lla2lp4=$(echo $lla2lp4 | sed 's/\..*$//')
 	lla3lp4=$(echo $lla3lp4 | sed 's/\..*$//')
+	lp4phasen=0
+	if [ $lla1lp4 -ge $llphaset ]; then
+		lp4phasen=$((lp4phasen + 1 ))
+	fi
+	if [ $lla2lp4 -ge $llphaset ]; then
+		lp4phasen=$((lp4phasen + 1 ))
+	fi
+	if [ $lla3lp4 -ge $llphaset ]; then
+		lp4phasen=$((lp4phasen + 1 ))
+	fi
+	echo $lp4phasen > /var/www/html/openWB/ramdisk/lp4phasen
 	ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
 	if ! [[ $ladeleistunglp4 =~ $re ]] ; then
 	 ladeleistunglp4="0"
@@ -485,6 +530,17 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	lla1lp5=$(echo $lla1lp5 | sed 's/\..*$//')
 	lla2lp5=$(echo $lla2lp5 | sed 's/\..*$//')
 	lla3lp5=$(echo $lla3lp5 | sed 's/\..*$//')
+	lp5phasen=0
+	if [ $lla1lp5 -ge $llphaset ]; then
+		lp5phasen=$((lp5phasen + 1 ))
+	fi
+	if [ $lla2lp5 -ge $llphaset ]; then
+		lp5phasen=$((lp5phasen + 1 ))
+	fi
+	if [ $lla3lp5 -ge $llphaset ]; then
+		lp5phasen=$((lp5phasen + 1 ))
+	fi
+	echo $lp5phasen > /var/www/html/openWB/ramdisk/lp5phasen
 	ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
 	if ! [[ $ladeleistunglp5 =~ $re ]] ; then
 	 ladeleistunglp5="0"
@@ -506,6 +562,17 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	lla1lp6=$(echo $lla1lp6 | sed 's/\..*$//')
 	lla2lp6=$(echo $lla2lp6 | sed 's/\..*$//')
 	lla3lp6=$(echo $lla3lp6 | sed 's/\..*$//')
+	lp6phasen=0
+	if [ $lla1lp6 -ge $llphaset ]; then
+		lp6phasen=$((lp6phasen + 1 ))
+	fi
+	if [ $lla2lp6 -ge $llphaset ]; then
+		lp6phasen=$((lp6phasen + 1 ))
+	fi
+	if [ $lla3lp6 -ge $llphaset ]; then
+		lp6phasen=$((lp6phasen + 1 ))
+	fi
+	echo $lp6phasen > /var/www/html/openWB/ramdisk/lp6phasen
 	ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
 	if ! [[ $ladeleistunglp6 =~ $re ]] ; then
 	 ladeleistunglp6="0"
@@ -532,6 +599,17 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	 ladeleistunglp7="0"
 	fi
 	ladeleistung=$(( ladeleistung + ladeleistunglp7 ))
+	lp7phasen=0
+	if [ $lla1lp7 -ge $llphaset ]; then
+		lp7phasen=$((lp7phasen + 1 ))
+	fi
+	if [ $lla2lp7 -ge $llphaset ]; then
+		lp7phasen=$((lp7phasen + 1 ))
+	fi
+	if [ $lla3lp7 -ge $llphaset ]; then
+		lp7phasen=$((lp7phasen + 1 ))
+	fi
+	echo $lp7phasen > /var/www/html/openWB/ramdisk/lp7phasen
 else
 	ladeleistunglp7=0
 fi
@@ -548,6 +626,17 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 	lla1lp8=$(echo $lla1lp8 | sed 's/\..*$//')
 	lla2lp8=$(echo $lla2lp8 | sed 's/\..*$//')
 	lla3lp8=$(echo $lla3lp8 | sed 's/\..*$//')
+	lp8phasen=0
+	if [ $lla1lp8 -ge $llphaset ]; then
+		lp8phasen=$((lp8phasen + 1 ))
+	fi
+	if [ $lla2lp8 -ge $llphaset ]; then
+		lp8phasen=$((lp8phasen + 1 ))
+	fi
+	if [ $lla3lp8 -ge $llphaset ]; then
+		lp8phasen=$((lp8phasen + 1 ))
+	fi
+	echo $lp8phasen > /var/www/html/openWB/ramdisk/lp8phasen
 	ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
 	if ! [[ $ladeleistunglp8 =~ $re ]] ; then
 	 ladeleistunglp8="0"

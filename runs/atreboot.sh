@@ -14,6 +14,14 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
+echo 0 > /var/www/html/openWB/ramdisk/lp1phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp2phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp3phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp4phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp5phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp6phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp7phasen
+echo 0 > /var/www/html/openWB/ramdisk/lp8phasen
 echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
