@@ -2636,5 +2636,7 @@ mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
+chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
+chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress

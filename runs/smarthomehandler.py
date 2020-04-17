@@ -8,6 +8,7 @@ import os
 import argparse
 import re
 import getopt
+os.chdir('/var/www/html/openWB')
 config = configparser.ConfigParser()
 config.read('/var/www/html/openWB/smarthome.ini')
 loglevel=2
@@ -144,6 +145,7 @@ def loadregelvars():
     global speichersoc
     global speichervorhanden
     global loglevel
+    global reread
     try:
         with open('ramdisk/wattbezug', 'r') as value:
             uberschuss = int(value.read()) * -1
@@ -176,6 +178,7 @@ def loadregelvars():
         with open('ramdisk/rereadsmarthomedevices', 'r') as value:
             reread = int(value.read())
     except:
+        reread = 1
         config.read('/var/www/html/openWB/smarthome.ini')
     if ( reread == 1):
         config.read('/var/www/html/openWB/smarthome.ini')
@@ -193,6 +196,17 @@ def loadregelvars():
         except:
             DeviceValues.update( {str(i) + "manual": 0})
     logDebug("1", "Uberschuss: " + str(uberschuss) + " Speicherleistung: " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
+DeviceValues.update( {"1WHImported_tmp": int(0)})
+DeviceValues.update( {"2WHImported_tmp": int(0)})
+DeviceValues.update( {"3WHImported_tmp": int(0)})
+DeviceValues.update( {"4WHImported_tmp": int(0)})
+DeviceValues.update( {"5WHImported_tmp": int(0)})
+DeviceValues.update( {"6WHImported_tmp": int(0)})
+DeviceValues.update( {"7WHImported_tmp": int(0)})
+DeviceValues.update( {"8WHImported_tmp": int(0)})
+DeviceValues.update( {"9WHImported_tmp": int(0)})
+DeviceValues.update( {"10WHImported_tmp": int(0)})
+
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
 def on_message(client, userdata, msg):
