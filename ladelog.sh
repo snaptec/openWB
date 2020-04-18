@@ -2,7 +2,7 @@
 . openwb.conf
 monthlyfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
 if [ ! -f $monthlyfile ]; then
-	    touch $monthlyfile
+	    echo $monthlyfile
 fi
 ladeleistung=$(<ramdisk/llaktuell)
 llkwh=$(<ramdisk/llkwh)
