@@ -676,8 +676,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 		fi
 	fi
 	#uberschuss zur berechnung
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	uberschuss=$((wattbezugint * -1))
+	uberschuss=$(printf "%.0f\n" $((-wattbezug)))
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
@@ -718,13 +717,8 @@ if [[ $wattbezugmodul != "none" ]]; then
 	schieflast=$(( maxevu - lowevu ))
 	echo $schieflast > /var/www/html/openWB/ramdisk/schieflast
 else
-	wattbezug=$pvwatt
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	wattbezugint=$(echo "($wattbezugint+$hausbezugnone+$ladeleistung)" |bc)
-	wattbezug=$wattbezugint
-	echo "$wattbezugint" > /var/www/html/openWB/ramdisk/wattbezug
-	uberschuss=$((wattbezugint * -1))
-
+	uberschuss=$((-pvwatt - hausbezugnone - ladeleistung))
+	echo $((-uberschuss)) > /var/www/html/openWB/ramdisk/wattbezug
 fi
 
 #Soc ermitteln
@@ -754,7 +748,7 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/socvorhanden
 	soc=0
 fi
-hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+hausverbrauch=$((-pvwatt - uberschuss - ladeleistung - speicherleistung))
 if (( hausverbrauch < 0 )); then
 	hausverbrauch=0
 fi
@@ -916,13 +910,11 @@ if [[ $debug == "1" ]]; then
 	fi
 	echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
 	echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
 	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
 	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
 	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
-
-
 fi
 
 tempPubList=""
