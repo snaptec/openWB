@@ -3,6 +3,7 @@
 HeartbeatTimeout=35
 CurrentLimitAmpereForCpCharging=0.5
 NumberOfSupportedChargePoints=2
+LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
 
 #
 # the main entry point of the script that is called from outside
@@ -161,6 +162,7 @@ function aggregateDataForChargePoint() {
 			return 1
 		fi
 
+		# detect the phases on which WE are CURRENTLY charging
 		if (( `echo "${ChargeCurrentOnPhase[i]} > $CurrentLimitAmpereForCpCharging" | bc` == 1 )); then
 			ChargingOnPhase[i]=1
 			CpIsCharging=1
@@ -172,10 +174,49 @@ function aggregateDataForChargePoint() {
 		fi
 	done
 
-	# if we're not charging at all, use highest total current (assuming we would start charging on all 3 phases)
+	# write the phases on which we're currently charging to the ramdisk
+	if (( CpIsCharging == 1 )); then
+		local chargingOnPhaseString="${ChargingOnPhase[*]}"
+		echo "${chargingOnPhaseString//${IFS:0:1}/,}" > "${LastChargingPhaseFile}${chargePoint}"
+	fi
+
+	# if we're not charging at all, try smart fallback first: uses the phase(s) on which we have last charged or
 	if (( ChargingPhaseWithMaximumTotalCurrent == 0 )); then
-		ChargingPhaseWithMaximumTotalCurrent=$PhaseWithMaximumTotalCurrent
-		TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=$MaximumTotalCurrent
+
+		# check if "last charging phase" usage is enabled openwb.conf
+		# if not right away skip to the ultimate fallback
+		if (( slaveModeUseLastChargingPhase == 1)); then
+
+			local previousChargingPhasesArray=(0 0 0 0)
+
+			# get previously charging phases if available, else use all 0 (none)
+			if [ -f "${LastChargingPhaseFile}${chargePoint}" ]; then
+				previousChargingPhasesString=$(<"${LastChargingPhaseFile}${chargePoint}")
+				IFS=',' read -ra previousChargingPhasesArray <<< "$previousChargingPhasesString"
+			fi
+
+			# iterate the phases and determine the last charging phase with maximum current
+			# if no last charging phase, leaves variables unchagned (i.e. at their default of 0 to trigger ultimate fallback)
+			for i in {1..3}; do
+				if (( previousChargingPhasesArray[i] == 1 )); then
+
+					if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $TotalCurrentOfChargingPhaseWithMaximumTotalCurrent" | bc` == 1 )); then
+						TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
+						ChargingPhaseWithMaximumTotalCurrent=$i
+					fi
+				fi
+			done
+		fi
+
+		# ultimate fallback: use phase with the highest total current
+		# (i.e. assume we would start charging on all 3 phases)
+		if (( ChargingPhaseWithMaximumTotalCurrent == 0 )); then
+			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase unknown or disabled. Using highst of all 3 phases for load management"
+			ChargingPhaseWithMaximumTotalCurrent=$PhaseWithMaximumTotalCurrent
+			TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=$MaximumTotalCurrent
+		else
+			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase #${ChargingPhaseWithMaximumTotalCurrent} has highest current and will be used for load management"
+		fi
 	fi
 
 	$dbgWrite "$NowItIs: CP${chargePoint} (enabled=${LpEnabled}): ChargeCurrentOnPhase=${ChargeCurrentOnPhase[@]:1}, ChargingOnPhase=${ChargingOnPhase[@]:1}, charging phase with max total current = ${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, CpIsCharging=${CpIsCharging}"
