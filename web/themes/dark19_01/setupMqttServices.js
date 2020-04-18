@@ -78,6 +78,15 @@ var topicsToSubscribe = [
 		["openWB/lp/6/W", 0],
 		["openWB/lp/7/W", 0],
 		["openWB/lp/8/W", 0],
+		// Anzahl genutzter Phasen während Ladung am LP
+		["openWB/lp/1/countPhasesInUse", 0],
+		["openWB/lp/2/countPhasesInUse", 0],
+		["openWB/lp/3/countPhasesInUse", 0],
+		["openWB/lp/4/countPhasesInUse", 0],
+		["openWB/lp/5/countPhasesInUse", 0],
+		["openWB/lp/6/countPhasesInUse", 0],
+		["openWB/lp/7/countPhasesInUse", 0],
+		["openWB/lp/8/countPhasesInUse", 0],
 		// Status Stecker
 		["openWB/lp/1/boolPlugStat", 0],
 		["openWB/lp/2/boolPlugStat", 0],
