@@ -696,24 +696,16 @@ if [[ $wattbezugmodul != "none" ]]; then
 	evua1=$(echo $evua1 | sed 's/\..*$//')
 	evua2=$(echo $evua2 | sed 's/\..*$//')
 	evua3=$(echo $evua3 | sed 's/\..*$//')
-	if ! [[ $evua1 =~ $re ]] ; then
-		evua1="0"
-	fi
-	if ! [[ $evua2 =~ $re ]] ; then
-		evua2="0"
-	fi
-	if ! [[ $evua3 =~ $re ]] ; then
-		evua3="0"
-	fi
+	[[ $evua1 =~ $re ]] || evua1="0"
+	[[ $evua2 =~ $re ]] || evua2="0"
+	[[ $evua3 =~ $re ]] || evua3="0"
 	evuas=($evua1 $evua2 $evua3)
 	maxevu=${evuas[0]}
-	for v in "${evuas[@]}"; do
-		if (( v > maxevu )); then maxevu=$v; fi;
-			done
 	lowevu=${evuas[0]}
 	for v in "${evuas[@]}"; do
 		if (( v < lowevu )); then lowevu=$v; fi;
-			done
+		if (( v > maxevu )); then maxevu=$v; fi;
+	done
 	schieflast=$(( maxevu - lowevu ))
 	echo $schieflast > /var/www/html/openWB/ramdisk/schieflast
 else
@@ -912,7 +904,7 @@ if [[ $debug == "1" ]]; then
 	echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
 	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
 	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
-	echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
+	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"
 	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
 	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
 fi
