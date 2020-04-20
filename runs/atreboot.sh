@@ -2488,6 +2488,10 @@ if ! grep -Fq "slavemode=" /var/www/html/openWB/openwb.conf
 then
 	echo "slavemode=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "slaveModeUseLastChargingPhase=" /var/www/html/openWB/openwb.conf
+then
+	echo "slaveModeUseLastChargingPhase=1" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "solarworld_emanagerip=" /var/www/html/openWB/openwb.conf
 then
 	echo "solarworld_emanagerip=192.192.192.192" >> /var/www/html/openWB/openwb.conf
