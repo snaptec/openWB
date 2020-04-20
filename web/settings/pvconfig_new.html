@@ -25,18 +25,12 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
-		<!-- ion range.slider -->
-		<link rel="stylesheet" type="text/css" href="css/ion.rangeSlider.min.css">
-		<!-- Bootstrap Toggle (Button) -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap4-toggle.min.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-		<script src="js/ion.rangeSlider.min.js"></script>
-		<script src="js/bootstrap4-toggle.min.js"></script>
 	</head>
 
 	<body>
@@ -47,60 +41,157 @@
 
 			<h1>Einstellungen für PV-Laden</h1>
 
-			<h5>Einschaltschwelle</h5>
-			<div>
-				<small>
-					Paramter für das Einschalten der Laderegelung.
-					Steigt die <b>Einspeisung</b> über Einschaltschwelle, startet die Laderegelung.
-				</small>
-			</div>
-			<div class="m-2">
-				<div class="form-check mb-2">
-					<input class="form-check-input" type="radio" name="minFeedinPowerBeforeStartScale" id="exampleRadios1" value="10000" checked>
-					<label class="form-check-label ml-1" for="exampleRadios1">
-						Skala 10kW, Schrittweite 50W
-					</label>
-				</div>
-				<div class="form-check mb-2">
-					<input class="form-check-input" type="radio" name="minFeedinPowerBeforeStartScale" id="exampleRadios2" value="100000">
-					<label class="form-check-label ml-1" for="exampleRadios2">
-						Skala 100kW, Schrittweite 100W
-					</label>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-10">
-					<input type="text" id="minFeedinPowerBeforeStart" name="minFeedinPowerBeforeStart" value="" />
-				</div>
-			</div>
+			<div class="card">
+				<div class="card-header font-weight-bold">
+    				Allgemeine Einstellungen
+  				</div>
+				<div class="card-body">
+					<h6>Einschaltschwelle</h6>
+					<div>
+						<small>
+							Paramter in Watt [W] für das Einschalten der Laderegelung.
+							Steigt die <b>Einspeisung</b> über die Einschaltschwelle, startet die Laderegelung.
+						</small>
+					</div>
+					<div class="form-group row mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="minFeedinPowerBeforeStart" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
+						</div>
+						<label for="minFeedinPowerBeforeStart" class="col col-form-label"><small>{0 - 100000 ganzzahlig}</small></label>
+					</div>
+					<h6>Einschaltverzögerung</h6>
+					<div>
+						<small>
+							Paramter in Sekunden [s] für die Verzögerung bis Ladebeginn.
+							Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt.
+							Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.
+						</small>
+					</div>
+					<div class="form-group row mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="startDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
+						</div>
+						<label for="startDelay" class="col col-form-label"><small>{0 - 2400 ganzzahlig}</small></label>
+					</div>
+					<h6>Abschaltschwelle</h6>
+					<div>
+						<small>
+							Paramter in Watt [W] für das Ausschalten der Laderegelung.
+							Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
+						</small>
+					</div>
+					<div class="form-group row mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="maxPowerConsumptionBeforeStop" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
+						</div>
+						<label for="minFeedinPowerBeforeStart" class="col col-form-label"><small>{0 - 100000 ganzzahlig}</small></label>
+					</div>
+					<h6>Abschaltverzögerung</h6>
+					<div>
+						<small>
+							Paramter in Sekunden [s] für die Verzögerung bis Ladestop.
+							Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt.
+							Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.
+						</small>
+					</div>
+					<div class="form-group row mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="stopDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
+						</div>
+						<label for="stopDelay" class="col col-form-label"><small>{0 - 2400 ganzzahlig}</small></label>
+					</div>
+					<h6>Mindeststromstärke</h6>
+					<div>
+						<small>
+							Paramter in Ampere [A] für den minimalen Strom.
+							Definiert den minimalen Ladestrom am Ladepunkt. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
+						</small>
+					</div>
+					<div class="form-group row mt-1 mb-0 vaRow">
+						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
+						</div>
+						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A">6 A</label>
+					</div>
+					<div class="form-group row vaRow">
+						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
+						</div>
+						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A">6 A</label>
+					</div>
+					<h6>Maximalstromstärke</h6>
+					<div>
+						<small>
+							Paramter in Ampere [A] für den maximalen Strom.
+							Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
+						</small>
+					</div>
+					<div class="form-group row mt-1 mb-0 vaRow">
+						<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" default="32">
+						</div>
+						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">32 A</label>
+					</div>
+				</div>  <!-- end card body Allgemeine Einstellungen -->
+			</div>  <!-- end card Allgemeine Einstellungen -->
+
 			<br>
 
-			<h5>Ausschaltschwelle</h5>
-			<div>
-				<small>
-					Paramter für das Ausschalten der Laderegelung.
-					Steigt der <b>Bezug</b> über Ausschaltschwelle, stoppt die Laderegelung.
-				</small>
-			</div>
-			<div class="m-2">
-				<div class="form-check mb-2">
-					<input class="form-check-input" type="radio" name="maxPowerConsumptionBeforeStopScale" id="exampleRadios3" value="10000" step="50" checked>
-					<label class="form-check-label ml-1" for="exampleRadios3">
-						Skala 10kW, Schrittweite 50W
-					</label>
+			<div class="card">
+				<div class="card-header font-weight-bold">
+					EV-SoC-Ladung
 				</div>
-				<div class="form-check mb-2">
-					<input class="form-check-input" type="radio" name="maxPowerConsumptionBeforeStopScale" id="exampleRadios4" value="100000" step="100">
-					<label class="form-check-label ml-1" for="exampleRadios4">
-						Skala 100kW, Schrittweite 100W
-					</label>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-10">
-					<input type="text" id="maxPowerConsumptionBeforeStop" name="maxPowerConsumptionBeforeStop" value="" />
-				</div>
-			</div>
+				<div class="card-body">
+					<p class="card-text">Diese Funktion ist nur aktiv, wenn ausschließlich LP1 konfiguriert ist und ein SoC-Modul eingestellt wurde.</p>
+					<h6>Mindest-SoC</h6>
+					<div>
+						<small>
+							Paramter in Prozent [%] für den Mindest-SoC am LP1.
+							Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.
+						</small>
+					</div>
+					<div class="form-group row vaRow">
+						<label for="minSocAlwaysToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="0" default="0">
+						</div>
+						<label for="minSocAlwaysToChargeTo" class="col col-form-label valueLabel" suffix="%">0 %</label>
+					</div>
+					<h6>Mindest-SoC-Stromstärke</h6>
+					<div>
+						<small>
+							Paramter in Ampere [A] für den minimalen Strom.
+							Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A.
+						</small>
+					</div>
+					<div class="form-group row mt-1 mb-0 vaRow">
+						<label for="minSocAlwaysToChargeToCurrent" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="6" default="6">
+						</div>
+						<label for="minSocAlwaysToChargeToCurrent" class="col col-form-label valueLabel" suffix="A">6 A</label>
+					</div>
+					<h6>Maximal-SoC</h6>
+					<div>
+						<small>
+							Paramter in Prozent [%] für den Maximal-SoC am LP1.
+							Definiert einen EV-Maximal-SoC, bis zu höchstens geladen wird.
+						</small>
+					</div>
+					<div class="form-group row vaRow">
+						<label for="maxSocToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="100" default="100">
+						</div>
+						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">0 %</label>
+					</div>
+
+
+				</div>  <!-- end card body EV-SoC-Steuerung -->
+			</div>  <!-- end card EV-SoC-Steuerung -->
 
 		</div>  <!-- container -->
 
@@ -127,28 +218,28 @@
 				$('#navPvLaden2').addClass('disabled');
 			});
 
-			$("#minFeedinPowerBeforeStart").ionRangeSlider({
-				skin: "big",
-		        grid: true,
-		        min: 0,
-		        max: 10000,
-				step: 50,
-		        from: 1350,
-		        postfix: ' W'
-		    });
-
-			$("#maxPowerConsumptionBeforeStop").ionRangeSlider({
-				skin: "big",
-				grid: true,
-				min: 0,
-				max: 100000,
-				step: 100,
-				from: 1000,
-				postfix: ' W'
-			});
-
-
 			$(document).ready(function(){
+
+				$('.rangeInput').on('input', function() {
+					// show slider value in label of class valueLabel
+					var label = $('label[for="' + $(this).attr('id') + '"].valueLabel');
+					if ( label.length == 1 ) {
+						var suffix = $(label).attr('suffix');
+						var text = this.value;
+						if ( suffix != '' ) {
+							text += ' ' + suffix;
+						}
+						$(label).text(text);
+					}
+				});
+
+				$('input.integerNumber').on('input', function() {
+					//integer and max input value validation
+					this.value = this.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g, '$1');
+					if ( parseInt(this.value) > $(this).attr('max') ) {
+						this.value = $(this).attr('max');
+					}
+				});
 
 			});  // end document ready function
 
