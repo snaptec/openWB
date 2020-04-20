@@ -323,10 +323,14 @@ if [[ $pv2wattmodul != "none" ]]; then
 
 	pvkwh=$(echo "$pvkwh + $pv2kwh" |bc)
 	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
 	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
+else
+	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
 fi
 
 #Speicher werte

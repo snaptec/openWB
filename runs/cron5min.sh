@@ -9,7 +9,11 @@ if [[ "$linesladelog" == 0 ]]; then
 fi
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
 einspeisung=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
-pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+if [[ $pv2wattmodul != "none" ]]; then
+	pv=$(</var/www/html/openWB/ramdisk/pvallwh)
+else
+	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+fi
 ll1=$(</var/www/html/openWB/ramdisk/llkwh)
 ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
