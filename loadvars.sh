@@ -657,6 +657,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $wattbezug =~ $re ]] ; then
 		wattbezug="0"
 	fi
+	wattbezugint=$(printf "%.0f\n" $(wattbezug))
 	#evu glaettung
 	if (( evuglaettungakt == 1 )); then
 		if (( evuglaettung > 20 )); then
@@ -711,6 +712,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 else
 	uberschuss=$((-pvwatt - hausbezugnone - ladeleistung))
 	echo $((-uberschuss)) > /var/www/html/openWB/ramdisk/wattbezug
+	wattbezugint=$((-uberschuss))
 fi
 
 #Soc ermitteln
@@ -740,7 +742,7 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/socvorhanden
 	soc=0
 fi
-hausverbrauch=$((-pvwatt - uberschuss - ladeleistung - speicherleistung))
+hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
 if (( hausverbrauch < 0 )); then
 	hausverbrauch=0
 fi
