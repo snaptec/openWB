@@ -25,7 +25,7 @@ for i in range(1,11):
             config.set('smarthomedevices', 'device_configured_' + str(i), str(0))
 with open(shconfigfile, 'w') as f:
     config.write(f)
- 
+
 def writetoconfig(configpart,section,key,value):
     config.read(configpart)
     try:
@@ -41,7 +41,7 @@ def writetoconfig(configpart,section,key,value):
         f.close()
     except Exception as e:
         print(str(e))
-    
+
 def replaceAll(changeval,newval):
     global inaction
     if ( inaction == 0 ):
@@ -282,6 +282,11 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/configure/AllowedPeakPower"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
+            f = open('/var/www/html/openWB/ramdisk/AllowedPeakPower', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
@@ -294,6 +299,11 @@ def on_message(client, userdata, msg):
         f = open('/var/www/html/openWB/ramdisk/LastControllerPublish', 'w')
         f.write(msg.payload.decode("utf-8"))
         f.close()
+    if (msg.topic == "openWB/set/configure/TotalPower"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
+            f = open('/var/www/html/openWB/ramdisk/TotalPower', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')

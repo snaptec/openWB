@@ -4,6 +4,7 @@ HeartbeatTimeout=35
 CurrentLimitAmpereForCpCharging=0.5
 NumberOfSupportedChargePoints=2
 LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
+SystemVoltage=240
 
 #
 # the main entry point of the script that is called from outside
@@ -78,8 +79,19 @@ function computeAndSetCurrentForChargePoint() {
 	fi
 
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
-	# in floats for not to loos too much precision
+	# in floats for not to loose too much precision
 	lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}) / ${chargingVehiclesAdjustedForThisCp}" | bc)
+
+	# see if we have to limit by allowed peak power (we have to if the value exists in ramdisk file and is > 0, ==0 means: peak limit disabled)
+	if (( `echo "$AllowedPeakPower > 0" | bc` == 1 )); then
+		local pwrDiff=$(echo "scale=3; ($AllowedPeakPower - ${TotalPowerConsumption}) / ${chargingVehiclesAdjustedForThisCp}" | bc)
+		local pwrCurrDiff=$(echo "scale=3; (${pwrDiff} / ${SystemVoltage} / ${NumberOfChargingPhases})" | bc)
+
+		if (( `echo "$pwrCurrDiff < $lldiff" | bc` == 1 )); then
+			$dbgWrite "$NowItIs: Slave Mode: Difference to power limt of $AllowedPeakPower W is $pwrDiff W (@ ${SystemVoltage} V @ ${chargingVehiclesAdjustedForThisCp} charging vehicles) --> overriding $lldiff A to $pwrCurrDiff A on ${NumberOfChargingPhases} phase(s)"
+			lldiff=$pwrCurrDiff
+		fi
+	fi
 
 	# new charge current in int but always rounded to the next _lower_ integer
 	llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
@@ -163,9 +175,11 @@ function aggregateDataForChargePoint() {
 		fi
 
 		# detect the phases on which WE are CURRENTLY charging
+		NumberOfChargingPhases=0
 		if (( `echo "${ChargeCurrentOnPhase[i]} > $CurrentLimitAmpereForCpCharging" | bc` == 1 )); then
 			ChargingOnPhase[i]=1
 			CpIsCharging=1
+			NumberOfChargingPhases=$(( NumberOfChargingPhases + 1 ))
 
 			if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $TotalCurrentOfChargingPhaseWithMaximumTotalCurrent" | bc` == 1 )); then
 				TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
@@ -188,6 +202,7 @@ function aggregateDataForChargePoint() {
 		if (( slaveModeUseLastChargingPhase == 1)); then
 
 			local previousChargingPhasesArray=(0 0 0 0)
+			local previousNumberOfChargingPhases=0
 
 			# get previously charging phases if available, else use all 0 (none)
 			if [ -f "${LastChargingPhaseFile}${chargePoint}" ]; then
@@ -199,6 +214,8 @@ function aggregateDataForChargePoint() {
 			# if no last charging phase, leaves variables unchagned (i.e. at their default of 0 to trigger ultimate fallback)
 			for i in {1..3}; do
 				if (( previousChargingPhasesArray[i] == 1 )); then
+
+					previousNumberOfChargingPhases=$(( previousNumberOfChargingPhases + 1 ))
 
 					if (( `echo "${TotalCurrentConsumptionOnPhase[i]} > $TotalCurrentOfChargingPhaseWithMaximumTotalCurrent" | bc` == 1 )); then
 						TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
@@ -215,11 +232,18 @@ function aggregateDataForChargePoint() {
 			ChargingPhaseWithMaximumTotalCurrent=$PhaseWithMaximumTotalCurrent
 			TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=$MaximumTotalCurrent
 		else
+			NumberOfChargingPhases=$previousNumberOfChargingPhases
 			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase #${ChargingPhaseWithMaximumTotalCurrent} has highest current and will be used for load management"
 		fi
 	fi
 
-	$dbgWrite "$NowItIs: CP${chargePoint} (enabled=${LpEnabled}): ChargeCurrentOnPhase=${ChargeCurrentOnPhase[@]:1}, ChargingOnPhase=${ChargingOnPhase[@]:1}, charging phase with max total current = ${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, CpIsCharging=${CpIsCharging}"
+	# we must make sure that we don't leave NumberOfChargingPhases at 0 if we couldn't count it up to here
+	# so we have to assume worst-case (charging on all three phases)
+	if (( NumberOfChargingPhases == 0 )); then
+		NumberOfChargingPhases=3
+	fi
+
+	$dbgWrite "$NowItIs: CP${chargePoint} (enabled=${LpEnabled}): NumberOfChargingPhases=${NumberOfChargingPhases}, ChargeCurrentOnPhase=${ChargeCurrentOnPhase[@]:1}, ChargingOnPhase=${ChargingOnPhase[@]:1}, charging phase with max total current = ${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, CpIsCharging=${CpIsCharging}"
 
 	return 0
 }
@@ -232,8 +256,19 @@ function setVariablesFromRamdisk() {
 	# general use
 	NowItIs=$(date +%s)
 
-	# data from local control server
+	# data from local control server - the total allowed current per phase ...
+	# ... and optionally the Allowed Peak Power and the Total Power
 	AllowedTotalCurrentPerPhase=$(<ramdisk/AllowedTotalCurrentPerPhase)
+	if [ -f "ramdisk/AllowedPeakPower" ]; then
+		AllowedPeakPower=$(<"ramdisk/AllowedPeakPower")
+	else
+		AllowedPeakPower=0
+	fi
+	if [ -f "ramdisk/TotalPower" ]; then
+		TotalPowerConsumption=$(<ramdisk/TotalPower)
+	else
+		TotalPowerConsumption=0
+	fi
 
 	# phase with maximum current
 	PhaseWithMaximumTotalCurrent=0
