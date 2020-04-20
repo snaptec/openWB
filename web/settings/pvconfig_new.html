@@ -53,7 +53,7 @@
 							Steigt die <b>Einspeisung</b> über die Einschaltschwelle, startet die Laderegelung.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
 							<input id="minFeedinPowerBeforeStart" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
 						</div>
@@ -67,7 +67,7 @@
 							Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
 							<input id="startDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
 						</div>
@@ -80,7 +80,7 @@
 							Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
 							<input id="maxPowerConsumptionBeforeStop" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
 						</div>
@@ -94,7 +94,7 @@
 							Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
 							<input id="stopDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
 						</div>
@@ -107,14 +107,14 @@
 							Definiert den minimalen Ladestrom am Ladepunkt. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
 						</small>
 					</div>
-					<div class="form-group row mt-1 mb-0 vaRow">
+					<div class="row form-group mt-1 mb-0 vaRow">
 						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-4">
 							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
 						</div>
 						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A">6 A</label>
 					</div>
-					<div class="form-group row vaRow">
+					<div class="row form-group vaRow">
 						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 						<div class="col-4">
 							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
@@ -128,12 +128,46 @@
 							Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
 						</small>
 					</div>
-					<div class="form-group row mt-1 mb-0 vaRow">
+					<div class="row form-group mt-1 vaRow">
 						<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
 						<div class="col-4">
 							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" default="32">
 						</div>
 						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">32 A</label>
+					</div>
+					<h6>Sub-Lademodus</h6>
+					<div>
+						<small>
+							Auswahl des Sub-Lademodus bei PV-Ladung.
+							Definiert den Sub-Lademodus. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.
+						</small>
+					</div>
+					<div class="row form-group mt-1">
+						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn btn-outline-secondary btn-toggle active">
+								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked> Einspeisung
+							</label>
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off"> Bezug
+							</label>
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="chargeSubmode" id="optionManual" autocomplete="off"> manueller Regelpunkt
+							</label>
+						</div>
+					</div>
+					<h6>manueller Regelpunkt</h6>
+					<div>
+						<small>
+							Paramter in Watt [W] für den manuellen Regelpunkt.
+							Dieser Parameter ist nur wirksam bei der Einstellung "manueller Regelpunkt".
+							Die dem EV zur Verfügung stehende Ladeleistung berechnet sich bei dieser Option aus der Differenz zwischen der Einspeiseleistung und dem eingegebenen Wert.
+						</small>
+					</div>
+					<div class="form-group row mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="regulationPoint" class="form-control" type="number" min="-50000" max="50000" default="0">
+						</div>
+						<label for="regulationPoint" class="col col-form-label"><small>{-50000 - 50000 ganzzahlig}</small></label>
 					</div>
 				</div>  <!-- end card body Allgemeine Einstellungen -->
 			</div>  <!-- end card Allgemeine Einstellungen -->
@@ -186,12 +220,77 @@
 						<div class="col-4">
 							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="100" default="100">
 						</div>
-						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">0 %</label>
+						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">100 %</label>
+					</div>
+				</div>  <!-- end card body EV-SoC-Steuerung -->
+			</div>  <!-- end card EV-SoC-Steuerung -->
+
+			<br>
+
+			<div class="card">
+				<div class="card-header font-weight-bold">
+					Speicher-Beachtung
+				</div>
+				<div class="card-body">
+					<p class="card-text">Diese Funktion ist nur aktiv, wenn ein Speicher konfiguriert wurde.</p>
+					<h6>Vorrang-Steuerung</h6>
+					<div>
+						<small>
+							Auswahl des Vorrang-Modus.
+							Bei Speichervorrang wird die Ladung des Speichers vorrangig vor der EV-Ladung geregelt.
+							Bei EV-Vorrang wird ungeachtet des Speicher-SoC die Ladung des EV vorrangig geregelt.
+						</small>
+					</div>
+					<div class="row form-group mt-1">
+						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn btn-outline-secondary btn-toggle active">
+								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" checked> Speichervorrang
+							</label>
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="priorityMode" id="evPriority" autocomplete="off"> EV-Vorrang
+							</label>
+						</div>
+					</div>
+					<h6>Anzeige</h6>
+					<div>
+						<small>
+							Auswahl der Vorrang-Anzeige.
+							In einigen Themes kann die Anzeige des gewählten Vorrang-Modes angezeigt oder versteckt werden.
+						</small>
+					</div>
+					<div class="row form-group mt-1">
+						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn btn-outline-secondary btn-toggle active">
+								<input type="radio" name="boolShowPriorityIconInTheme" id="showPriority" autocomplete="off" checked> anzeigen
+							</label>
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="boolShowPriorityIconInTheme" id="hidePriority" autocomplete="off"> nicht anzeigen
+							</label>
+						</div>
+					</div>
+
+Speicher Mindestladeleistung
+
+
+					<h6>Speicher-Entlade-SoC</h6>
+					<div>
+						<small>
+							Paramter in Prozent [%] für den minimalen Soeicher-SoC.
+							Definiert einen minimalen Speicher-SoC, bis zu dem ein Speicher höchstens entladen wird. Der Wert 100 schaltet die Funktion aus.
+						</small>
+					</div>
+					<div class="form-group row vaRow">
+						<label for="maxSocToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-4">
+							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="100" default="100">
+						</div>
+						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">100 %</label>
 					</div>
 
 
-				</div>  <!-- end card body EV-SoC-Steuerung -->
-			</div>  <!-- end card EV-SoC-Steuerung -->
+				</div>  <!-- end card Speicher-Beachtung -->
+			</div>  <!-- end card Speicher-Beachtung -->
+
 
 		</div>  <!-- container -->
 
