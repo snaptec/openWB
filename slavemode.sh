@@ -84,6 +84,13 @@ function computeAndSetCurrentForChargePoint() {
 
 	# see if we have to limit by allowed peak power (we have to if the value exists in ramdisk file and is > 0, ==0 means: peak limit disabled)
 	if (( `echo "$AllowedPeakPower > 0" | bc` == 1 )); then
+
+		if (( TotalPowerConsumption == -1 )); then
+			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption}): Immediately stopping charge and exiting"
+			callSetCurrent 0 $chargePoint
+			exit 2
+		fi
+
 		local pwrDiff=$(echo "scale=3; ($AllowedPeakPower - ${TotalPowerConsumption}) / ${chargingVehiclesAdjustedForThisCp}" | bc)
 		local pwrCurrDiff=$(echo "scale=3; (${pwrDiff} / ${SystemVoltage} / ${NumberOfChargingPhases})" | bc)
 
@@ -267,7 +274,7 @@ function setVariablesFromRamdisk() {
 	if [ -f "ramdisk/TotalPower" ]; then
 		TotalPowerConsumption=$(<ramdisk/TotalPower)
 	else
-		TotalPowerConsumption=0
+		TotalPowerConsumption=-1
 	fi
 
 	# phase with maximum current
