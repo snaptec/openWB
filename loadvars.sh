@@ -661,7 +661,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $wattbezug =~ $re ]] ; then
 		wattbezug="0"
 	fi
-	wattbezugint=$(printf "%.0f\n" $(wattbezug))
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	#evu glaettung
 	if (( evuglaettungakt == 1 )); then
 		if (( evuglaettung > 20 )); then
