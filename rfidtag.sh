@@ -176,6 +176,7 @@ setLpPlugChangeState() {
 
 	lpsPlugStat=(0 $plugstatToUse1 $plugstatToUse2)
 	unpluggedLps=(0 0 0)
+	pluggedLps=(0 0 0)
 
 	# first check LP2 as the last one will win for plugin and it seems more logical to let LP1 win
 	if [ -n "$plugstats1" ]; then
@@ -184,6 +185,7 @@ setLpPlugChangeState() {
 		elif (( lpsPlugStat[2] == 1 )) && (( oplugstats1 == 0 )); then
 			echo "$NowItIs: LP 2 plugged in"
 			pluggedLp=2
+			pluggedLps[2]=1
 		elif (( lpsPlugStat[2] == 0 )) && (( oplugstats1 == 1 )); then
 			echo "$NowItIs: LP 2 un-plugged"
 			unpluggedLps[2]=1
@@ -201,6 +203,7 @@ setLpPlugChangeState() {
 		elif (( lpsPlugStat[1] == 1 )) && (( oplugstat == 0 )); then
 			echo "$NowItIs: LP 1 plugged in"
 			pluggedLp=1
+			pluggedLps[1]=1
 		elif (( lpsPlugStat[1] == 0 )) && (( oplugstat == 1 )); then
 			echo "$NowItIs: LP 1 un-plugged"
 			unpluggedLps[1]=1
@@ -218,8 +221,10 @@ checkTagValidAndSetStartScanData() {
 
 	local chargePoint=$1
 
-	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )); then
-		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]})"
+	# if we're in slave mode and the LP has not just been plugged in (in same control interval as the RFID scan)
+	# we completely ignore the scan.
+	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )) && (( pluggedLps[$chargePoint] != 1 )); then
+		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]}, justPlugged == ${pluggedLps[$chargePoint]})"
 		return 0
 	fi
 
@@ -250,7 +255,7 @@ checkTagValidAndSetStartScanData() {
 
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
 			eval lp${chargePoint}enabled=1
-			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for LP${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh"
+			echo "$NowItIs: Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for CP #${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh (justPlugged == ${pluggedLps[$chargePoint]})"
 
 			return 0
 		fi

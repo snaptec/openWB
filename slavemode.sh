@@ -165,6 +165,7 @@ function aggregateDataForChargePoint() {
 	eval LpEnabled=\$$cpenabledVar
 
 	# iterate the phases (index 1-3, index 0 of array will simply be untouched/ignored)
+	NumberOfChargingPhases=0
 	for i in {1..3}; do
 
 		# we have to do a slightly ugly if-else-cascade to determine the right ramdisk file name
@@ -182,7 +183,6 @@ function aggregateDataForChargePoint() {
 		fi
 
 		# detect the phases on which WE are CURRENTLY charging
-		NumberOfChargingPhases=0
 		if (( `echo "${ChargeCurrentOnPhase[i]} > $CurrentLimitAmpereForCpCharging" | bc` == 1 )); then
 			ChargingOnPhase[i]=1
 			CpIsCharging=1
