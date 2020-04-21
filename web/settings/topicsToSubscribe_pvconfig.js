@@ -24,12 +24,14 @@ var topicsToSubscribe = [
 	["openWB/config/get/pv/minBatteryChargePowerAtEvPriority", 0],
 	["openWB/config/get/pv/minBatteryDischargeSocAtBattPriority", 0],
 	["openWB/config/get/pv/batteryDischargePowerAtBattPriority", 0],
-	["openWB/config/get/pv/socStartChargeAtMinPv", 0],
-	["openWB/config/get/pv/socStopChargeAtMinPv", 0],
 	["openWB/config/get/pv/boolAdaptiveCharging", 0],
 	["openWB/config/get/pv/adaptiveChargingFactor", 0],
 	["openWB/config/get/pv/nurpv70dynact", 0],
 	["openWB/config/get/pv/nurpv70dynw", 0],
+
+	["openWB/config/get/pv/minCurrentMinPv", 0],
+	["openWB/config/get/pv/socStartChargeAtMinPv", 0],
+	["openWB/config/get/pv/socStopChargeAtMinPv", 0],
 
 	["openWB/config/get/global/maxEVSECurrentAllowed", 0]
 ];
