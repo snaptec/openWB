@@ -353,16 +353,25 @@ if (( llalt > 3 )); then
 		anzahlphasen=$((anzahlphasen + 1 ))
 	fi
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+	echo $anzahlphasen > /var/www/html/openWB/ramdisk/lp1anzahlphasen
 else
-	if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-  	echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
-	fi
-	if (( u1p3paktiv == 1 )); then
-		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
+		if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
+			echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+		fi
+		if (( u1p3paktiv == 1 )); then
+			anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+		else
+			if [ ! -f /var/www/html/openWB/ramdisk/lp1anzahlphasen ]; then
+				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp1anzahlphasen)
+			else
+				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+			fi
+		fi
 	else
-		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
-
+		anzahlphasen=0
 	fi
+
 fi
 if (( lastmanagement == 1 )); then
 	if (( llas11 > 3 )); then
@@ -377,6 +386,23 @@ if (( lastmanagement == 1 )); then
 		fi
 
 		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo $anzahlphasen > /var/www/html/openWB/ramdisk/lp2anzahlphasen
+	else
+		if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
+			if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
+				echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+			fi
+			if (( u1p3plp2aktiv == 1 )); then
+				lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+				anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
+			else
+				if [ ! -f /var/www/html/openWB/ramdisk/lp2anzahlphasen ]; then
+					lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp2anzahlphasen)
+					anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
+				fi
+			fi
+		fi
+
 	fi
 fi
 if (( lastmanagements2 == 1 )); then
