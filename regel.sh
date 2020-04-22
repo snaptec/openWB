@@ -444,7 +444,8 @@ if [[ $nurpv70dynact == "1" ]]; then
 		# Schwelle zum Beginn der Ladung
 		mindestuberschuss=0
 		# Schwelle zum Beenden der Ladung
-		abschaltuberschuss=$((minimalapv * 230 * anzahlphasen))
+		abschaltuberschuss=0
+		#abschaltuberschuss=$((minimalapv * 230 * anzahlphasen))
  		if [[ $debug == "1" ]]; then
 			echo "PV 70% aktiv! derzeit genutzter Überschuss $uberschuss"
 		fi
