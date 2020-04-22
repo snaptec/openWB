@@ -39,99 +39,23 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-			<h1>Einstellungen für PV-Laden</h1>
+			<h1>Einstellungen für PV- und Min+PV-Laden</h1>
 
 			<div class="card">
-				<div class="card-header font-weight-bold bg-success">
+				<div class="card-header font-weight-bold text-white bg-secondary">
     				Allgemeine Einstellungen
   				</div>
 				<div class="card-body">
-					<h6 class="mb-0">Einschaltschwelle</h6>
-					<div>
-						<small>
-							Paramter in Watt [W] für das Einschalten der Laderegelung.
-							Steigt die <b>Einspeisung</b> über die Einschaltschwelle, startet die Laderegelung.
-						</small>
-					</div>
-					<div class="row form-group mt-1">
-						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minFeedinPowerBeforeStart" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
-						</div>
-						<label for="minFeedinPowerBeforeStart" class="col col-form-label"><small>{0 - 100000 ganzzahlig}</small></label>
-					</div>
-					<h6 class="mb-0">Einschaltverzögerung</h6>
-					<div>
-						<small>
-							Paramter in Sekunden [s] für die Verzögerung bis Ladebeginn.
-							Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt.
-							Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.
-						</small>
-					</div>
-					<div class="row form-group mt-1">
-						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="startDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
-						</div>
-						<label for="startDelay" class="col col-form-label"><small>{0 - 2400 ganzzahlig}</small></label>
-					</div>
-					<h6 class="mb-0">Abschaltschwelle</h6>
-					<div>
-						<small>
-							Paramter in Watt [W] für das Ausschalten der Laderegelung.
-							Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
-						</small>
-					</div>
-					<div class="row form-group mt-1">
-						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="maxPowerConsumptionBeforeStop" class="form-control integerNumber" type="number" min="0" max="100000" default="1320">
-						</div>
-						<label for="minFeedinPowerBeforeStart" class="col col-form-label"><small>{0 - 100000 ganzzahlig}</small></label>
-					</div>
-					<h6 class="mb-0">Abschaltverzögerung</h6>
-					<div>
-						<small>
-							Paramter in Sekunden [s] für die Verzögerung bis Ladestop.
-							Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt.
-							Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.
-						</small>
-					</div>
-					<div class="row form-group mt-1">
-						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="stopDelay" class="form-control integerNumber" type="number" min="0" max="2400" default="10">
-						</div>
-						<label for="stopDelay" class="col col-form-label"><small>{0 - 2400 ganzzahlig}</small></label>
-					</div>
-					<h6 class="mb-0">Mindeststromstärke</h6>
-					<div>
-						<small>
-							Paramter in Ampere [A] für den minimalen Strom.
-							Definiert den minimalen Ladestrom am Ladepunkt. Einige EV benötigen einen bestimmten Mindestladestrom, da ansonsten die Ladung nicht startet.
-							Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
-						</small>
-					</div>
-					<div class="row form-group mb-0 vaRow">
-						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
-						<div class="col-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
-						</div>
-						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A">6 A</label>
-					</div>
-					<div class="row form-group mb-1 vaRow">
-						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
-						<div class="col-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
-						</div>
-						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A">6 A</label>
-					</div>
 					<h6 class="mb-0">Maximalstromstärke</h6>
 					<div>
 						<small>
-							Paramter in Ampere [A] für den maximalen Strom.
+							Paramter in Ampere [A] für den maximalen Strom in beiden Lademodi.
 							Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
 						</small>
 					</div>
-					<div class="row form-group mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" default="32">
 						</div>
 						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">32 A</label>
@@ -139,17 +63,17 @@
 					<h6 class="mb-0">Regelmodus</h6>
 					<div>
 						<small>
-							Auswahl des Regelmodus.
+							Auswahl des Regelmodus in beiden Lademodi.
 							Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.
 						</small>
 					</div>
-					<div class="row form-group mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked> Einspeisung
+								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked default="yes"> Einspeisung
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off"> Bezug
+								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off" default="no"> Bezug
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
 								<input type="radio" name="chargeSubmode" id="optionManual" autocomplete="off"> manueller Regelpunkt
@@ -159,27 +83,123 @@
 					<h6 class="mb-0">manueller Regelpunkt</h6>
 					<div>
 						<small>
-							Paramter in Watt [W] für den manuellen Regelpunkt.
+							Paramter in Watt [W] für den manuellen Regelpunkt in beiden Lademodi.
 							Dieser Parameter ist nur wirksam bei der Einstellung "manueller Regelpunkt".
 							Die dem EV zur Verfügung stehende Ladeleistung berechnet sich bei dieser Option aus der Differenz zwischen der Einspeiseleistung und dem eingegebenen Wert.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
-						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="regulationPoint" class="form-control" type="number" min="-50000" max="50000" default="0">
+					<div class="form-row vaRow mt-1">
+						<div class="col-auto">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg">
+								<label class="form-check-label" for="regulationPointPosNeg">
+									&nbsp;negativ
+								</label>
+							</div>
 						</div>
-						<label for="regulationPoint" class="col col-form-label"><small>{-50000 - 50000 ganzzahlig}</small></label>
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" default="0">
+						</div>
+						<label class="col col-form-label" for="regulationPoint"><small>{&plusmn;50000 ganzzahlig}</small></label>
 					</div>
-					<h6 class="mb-0">adaptives Laden</h6>
+				</div>  <!-- end card body Allgemeine Einstellungen PV und Min+PV -->
+			</div>  <!-- end card Allgemeine Einstellungen PV und Min+PV -->
+
+			<br>
+
+			<h1>Einstellungen für PV-Laden</h1>
+
+			<div class="card">
+				<div class="card-header font-weight-bold bg-success">
+    				Allgemeine PV-Laden-Einstellungen
+  				</div>
+				<div class="card-body">
+					<h6 class="mb-0">Einschaltschwelle</h6>
 					<div>
 						<small>
-							Auswahl des adaptiven Lademodus.
-							Der adaptive Lademodus versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird.
+							Paramter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden.
+							Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.
+						</small>
+					</div>
+					<div class="form-row form-group mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="1320" default="1320">
+						</div>
+						<label class="col col-form-label" for="minFeedinPowerBeforeStart"><small>{0 - 100000 ganzzahlig}</small></label>
+					</div>
+					<h6 class="mb-0">Einschaltverzögerung</h6>
+					<div>
+						<small>
+							Paramter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden.
+							Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt.
+							Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.
+						</small>
+					</div>
+					<div class="form-row form-group mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="0" default="10">
+						</div>
+						<label class="col col-form-label" for="startDelay"><small>{0 - 2400 ganzzahlig}</small></label>
+					</div>
+					<h6 class="mb-0">Abschaltschwelle</h6>
+					<div>
+						<small>
+							Paramter in Watt [W] für das Ausschalten der Laderegelung im Modus PV-Laden.
+							Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
+						</small>
+					</div>
+					<div class="form-row form-group mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="0" default="0">
+						</div>
+						<label class="col col-form-label" for="minFeedinPowerBeforeStart"><small>{0 - 100000 ganzzahlig}</small></label>
+					</div>
+					<h6 class="mb-0">Abschaltverzögerung</h6>
+					<div>
+						<small>
+							Paramter in Sekunden [s] für die Verzögerung bis Ladestop im Modus PV-Laden.
+							Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt.
+							Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.
+						</small>
+					</div>
+					<div class="form-row form-group mt-1">
+						<div class="col-4 col-sm-3 col-lg-2">
+							<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="10" default="10">
+						</div>
+						<label class="col col-form-label" for="stopDelay"><small>{0 - 2400 ganzzahlig}</small></label>
+					</div>
+					<h6 class="mb-0">Mindeststromstärke</h6>
+					<div>
+						<small>
+							Paramter in Ampere [A] für den minimalen Strom im Modus PV-Laden.
+							Definiert den minimalen Ladestrom am Ladepunkt. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet.
+							Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
+						</small>
+					</div>
+					<div class="form-row form-group mb-0 vaRow">
+						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<div class="col-6 col-sm-4">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
+						</div>
+						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A">6 A</label>
+					</div>
+					<div class="form-row form-group mb-1 vaRow">
+						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
+						<div class="col-6 col-sm-4">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
+						</div>
+						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A">6 A</label>
+					</div>
+					<h6 class="mb-0">adaptive Ladung</h6>
+					<div>
+						<small>
+							Auswahl der adaptiven Ladung im Modus PV-Laden.
+							Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird.
 							Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und
 							beide EV mit derselben Anzahl an Phasen laden.
 						</small>
 					</div>
-					<div class="row form-group mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
 								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" checked> eingeschaltet
@@ -192,14 +212,14 @@
 					<h6 class="mb-0">adaptiver Regelfaktor</h6>
 					<div>
 						<small>
-							Paramter für die Gewichtung bei adaptivem Laden.
-							Dieser Parameter ist nur wirksam bei der Einstellung "adaptives Laden eingeschaltet".
+							Paramter für die Gewichtung bei adaptiver Ladung im Modus PV-Laden.
+							Dieser Parameter ist nur wirksam bei der Einstellung "adaptive Ladung eingeschaltet".
 							Je höher der Faktor, desto stärker wird das EV mit dem kleineren SoC bei der Aufteilung der Ladeleistung bevorzugt.
 						</small>
 					</div>
-					<div class="form-group row mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="adaptiveChargingFactor" class="col-3 col-sm-2 col-form-label">Faktor:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="5" default="5">
 						</div>
 						<label for="adaptiveChargingFactor" class="col col-form-label valueLabel" suffix="">5</label>
@@ -207,11 +227,11 @@
 					<h6 class="mb-0">70%-Regelung</h6>
 					<div>
 						<small>
-							Auswahl zur Nutzung der 70%-Regelung.
+							Auswahl zur Nutzung der 70%-Regelung im Modus PV-Laden.
 							Diese Option dient der einfachen Konfiguration einer optimierten Eigenverbrauchssteuerung.
 						</small>
 					</div>
-					<div class="row form-group mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
 								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" checked> eingeschaltet
@@ -224,14 +244,14 @@
 					<h6 class="mb-0">70%-Regelpunkt</h6>
 					<div>
 						<small>
-							Paramter in Watt [W] für den 70%-Regelpunkt.
+							Paramter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden.
 							Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet".
 							Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp abzüglich der gewählten Einschaltschwelle betragen.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="nurpv70dynw" class="form-control" type="number" min="2000" max="50000" default="2000">
+							<input id="nurpv70dynw" class="form-control naturalNumber" type="number" min="2000" max="50000" value="2000" default="2000">
 						</div>
 						<label for="nurpv70dynw" class="col col-form-label"><small>{2000 - 50000 ganzzahlig}</small></label>
 					</div>
@@ -249,13 +269,13 @@
 					<h6 class="mb-0">Mindest-SoC</h6>
 					<div>
 						<small>
-							Paramter in Prozent [%] für den Mindest-SoC am LP1.
+							Paramter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden.
 							Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.
 						</small>
 					</div>
-					<div class="form-group row mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="minSocAlwaysToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="0" default="0">
 						</div>
 						<label for="minSocAlwaysToChargeTo" class="col col-form-label valueLabel" suffix="%">0 %</label>
@@ -263,13 +283,14 @@
 					<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
 					<div>
 						<small>
-							Paramter in Ampere [A] für den minimalen Strom.
+							Paramter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden.
 							Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A.
+							Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.
 						</small>
 					</div>
-					<div class="form-group row mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="minSocAlwaysToChargeToCurrent" class="col-3 col-sm-2 col-form-label">LP1:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="6" default="6">
 						</div>
 						<label for="minSocAlwaysToChargeToCurrent" class="col col-form-label valueLabel" suffix="A">6 A</label>
@@ -277,13 +298,13 @@
 					<h6 class="mb-0">Maximal-SoC</h6>
 					<div>
 						<small>
-							Paramter in Prozent [%] für den Maximal-SoC am LP1.
-							Definiert einen EV-Maximal-SoC, bis zu höchstens geladen wird.
+							Paramter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden.
+							Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.
 						</small>
 					</div>
-					<div class="form-group row mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="maxSocToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="100" default="100">
 						</div>
 						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">100 %</label>
@@ -302,12 +323,12 @@
 					<h6 class="mb-0">Vorrang-Steuerung</h6>
 					<div>
 						<small>
-							Auswahl des Vorrang-Modus.
+							Auswahl der Vorrang-Steuerung im Modus PV-Laden.
 							Bei Speichervorrang wird die Ladung des Speichers vorrangig vor der EV-Ladung geregelt.
 							Bei EV-Vorrang wird ungeachtet des Speicher-SoC die Ladung des EV vorrangig geregelt.
 						</small>
 					</div>
-					<div class="row form-group mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
 								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" checked> Speichervorrang
@@ -320,11 +341,11 @@
 					<h6 class="mb-0">Anzeige</h6>
 					<div>
 						<small>
-							Auswahl der Vorrang-Anzeige.
+							Auswahl der Vorrang-Anzeige im Modus PV-Laden.
 							In einigen Themes kann die Anzeige des gewählten Vorrang-Modes angezeigt oder versteckt werden.
 						</small>
 					</div>
-					<div class="row form-group mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
 								<input type="radio" name="boolShowPriorityIconInTheme" id="showPriority" autocomplete="off" checked> anzeigen
@@ -337,49 +358,51 @@
 					<h6 class="mb-0">Ladeleistung-Reserve</h6>
 					<div>
 						<small>
-							Paramter in Watt [W] für die Ladeleistung-Reserve des Speichers.
+							Paramter in Watt [W] für die Ladeleistung-Reserve des Speichers im Modus PV-Laden.
 							Dieser Parameter ist nur wirksam bei der Einstellung "EV-Vorrang".
 							Trotz vorrangiger Regelung der Ladeleistung des EV wird der hier eingestellte Wert immer für die Ladung des Speichers vorgehalten.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" min="0" max="10000" default="0">
+							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="0" default="0">
 						</div>
-						<label for="minBatteryChargePowerAtEvPriority" class="col col-form-label"><small>{0 - 10000 ganzzahlig}</small></label>
+						<label class="col col-form-label" for="minBatteryChargePowerAtEvPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
 					<h6 class="mb-0">erlaubte Entladeleistung</h6>
 					<div>
 						<small>
-							Paramter in Watt [W] für die Entladeleistung Speichers.
+							Paramter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden.
 							Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang" und wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde.
 							Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung trotz Speichervorrang zur Ladung des EV entladen werden darf.
 						</small>
 					</div>
-					<div class="form-group row mt-1">
+					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" min="0" max="10000" default="0">
+							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="0" default="0">
 						</div>
-						<label for="batteryDischargePowerAtBattPriority" class="col col-form-label"><small>{0 - 10000 ganzzahlig}</small></label>
+						<label class="col col-form-label" for="batteryDischargePowerAtBattPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
 
 					<h6 class="mb-0">minimaler Entlade-SoC</h6>
 					<div>
 						<small>
-							Paramter in Prozent [%] für den minimalen Entlade-SoC des Speichers.
+							Paramter in Prozent [%] für den minimalen Entlade-SoC des Speichers im Modus PV-Laden.
 							Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang".
 							Definiert einen minimalen SoC, bis zu dem ein Speicher trotz Speichervorrang zur Ladung des EV höchstens entladen werden darf. Der Wert 100 schaltet die Funktion aus.
 						</small>
 					</div>
-					<div class="form-group row mb-0 vaRow">
+					<div class="form-row form-group mb-0 vaRow">
 						<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">LP1:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="100" default="100">
 						</div>
 						<label for="minBatteryDischargeSocAtBattPriority" class="col col-form-label valueLabel" suffix="%">100 %</label>
 					</div>
 				</div>  <!-- end card Speicher-Beachtung PV -->
 			</div>  <!-- end card Speicher-Beachtung PV -->
+
+			<br>
 
 			<h1>Einstellungen für Min+PV-Laden</h1>
 
@@ -391,14 +414,14 @@
 					<h6 class="mb-0">Mindeststromstärke</h6>
 					<div>
 						<small>
-							Paramter in Ampere [A] für den minimalen Strom.
-							Definiert den minimalen Ladestrom an den Ladepunkten. Einige EV benötigen einen bestimmten Mindestladestrom, da ansonsten die Ladung nicht startet.
+							Paramter in Ampere [A] für den minimalen Strom im Modus Min+PV-Laden.
+							Definiert den minimalen Ladestrom an den Ladepunkten. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet.
 							Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
 						</small>
 					</div>
-					<div class="row form-group mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="minCurrentMinPv" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" default="6">
 						</div>
 						<label for="minCurrentMinPv" class="col col-form-label valueLabel" suffix="A">6 A</label>
@@ -417,13 +440,13 @@
 					<h6 class="mb-0">Einschalt-SoC</h6>
 					<div>
 						<small>
-							Paramter in Prozent [%] für den Einschalt-SoC der Laderegelung.
+							Paramter in Prozent [%] für den Einschalt-SoC der Laderegelung im Modus Min+PV-Laden.
 							Definiert einen Speicher-SoC, der überschritten werden muss, damit die Ladereglung startet. Der Wert 0 schaltet die Funktion aus.
 						</small>
 					</div>
-					<div class="form-group row mb-1 vaRow">
+					<div class="form-row form-group mb-1 vaRow">
 						<label for="socStartChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="80" step="5" value="0" default="0">
 						</div>
 						<label for="socStartChargeAtMinPv" class="col col-form-label valueLabel" suffix="%">0 %</label>
@@ -431,13 +454,13 @@
 					<h6 class="mb-0">Ausschalt-SoC</h6>
 					<div>
 						<small>
-							Paramter in Prozent [%] für den Ausschalt-SoC der Laderegelung.
+							Paramter in Prozent [%] für den Ausschalt-SoC der Laderegelung im Modus Min+PV-Laden.
 							Definiert einen Speicher-SoC, bei dessen Unterschreitung die Ladereglung stoppt. Der Wert 0 schaltet die Funktion aus.
 						</small>
 					</div>
-					<div class="form-group row mb-0 vaRow">
+					<div class="form-row form-group mb-0 vaRow">
 						<label for="socStopChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
-						<div class="col-4">
+						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="80" step="5" value="0" default="0">
 						</div>
 						<label for="socStopChargeAtMinPv" class="col col-form-label valueLabel" suffix="%">0 %</label>
@@ -448,11 +471,25 @@
 
 			<br>
 
+			<div class="row justify-content-center">
+				<div class="col-3">
+					<button id="saveBtn" type="button" class="btn btn-success">Einstellungen speichern</button>
+				</div>
+				<div class="col-1">
+					&nbsp;
+				</div>
+				<div class="col-3">
+					<button id="resetBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+				</div>
+			</div>
+
+			<br>
+
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladeeinstellungen/PV-Laden</small>
+				<small>Sie befinden sich hier: Ladeeinstellungen/PV & Min+PV-Laden</small>
 			</div>
 		</footer>
 
@@ -473,29 +510,78 @@
 				$('#navPvLaden2').addClass('disabled');
 			});
 
+			function updateLabel(element) {
+				var label = $('label[for="' + $(element).attr('id') + '"].valueLabel');
+				if ( label.length == 1 ) {
+					var suffix = $(label).attr('suffix');
+					var text = element.value;
+					if ( suffix != '' ) {
+						text += ' ' + suffix;
+					}
+					$(label).text(text);
+				}
+			}
+
 			$(document).ready(function(){
+
+				$('#resetBtn').on("click",function() {
+					$('input').each(function() {
+						var defaultValue = $(this).attr('default');
+						console.log($(this).val('id'));
+						console.log(defaultValue);
+
+						if ( typeof defaultValue === 'undefined' ) {
+							console.log($(this).val('id'));
+						}
+						$(this).val();
+						if ( this.type == "range" ) {
+							updateLabel(this);
+						}
+					});
+				});
+
+				$('input').on("paste",function(e) {
+					// prevent paste to input fields to avoid garbage
+					e.preventDefault();
+				});
 
 				$('.rangeInput').on('input', function() {
 					// show slider value in label of class valueLabel
-					var label = $('label[for="' + $(this).attr('id') + '"].valueLabel');
-					if ( label.length == 1 ) {
-						var suffix = $(label).attr('suffix');
-						var text = this.value;
-						if ( suffix != '' ) {
-							text += ' ' + suffix;
+					updateLabel(this);
+				});
+
+				$('#minCurrentLp1').on('input', function() {
+					// adjust min value for minSocAlwaysToChargeToCurrent
+					var targetSlider = $('#minSocAlwaysToChargeToCurrent');
+					var newMinCurrent = this.value;
+					var targetSliderMinCurrent = targetSlider.attr('min');
+					var targetSliderValue = targetSlider.val();
+					console.log('new min '+newMinCurrent);
+					console.log('slide min '+targetSliderMinCurrent);
+					console.log('slide val '+targetSliderValue);
+
+					if ( newMinCurrent > targetSliderMinCurrent ) {
+						targetSlider.attr('min', newMinCurrent);
+						if ( targetSliderValue < newMinCurrent ) {
+							console.log('changing');
+							targetSlider.val(newMinCurrent);
 						}
-						$(label).text(text);
+						targetSlider.slider('refresh');
+
+						console.log('sliderval neu '+targetSlider.val());
+
 					}
 				});
 
-				$('input.integerNumber').on('input', function() {
-					//integer and max input value validation
-					this.value = this.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g, '$1');
+				$('input.naturalNumber').on('input', function() {
+					// natural number input validation on the fly
+					// validates max of typed value
+					// if negative numbers are allowed pos-neg-range must be symmetrical
+					this.value = this.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1');
 					if ( parseInt(this.value) > $(this).attr('max') ) {
 						this.value = $(this).attr('max');
 					}
 				});
-
 			});  // end document ready function
 
 
