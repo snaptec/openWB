@@ -25,7 +25,7 @@ for currentConfig in /etc/mosquitto/conf.d/99-bridge-*; do
 done
 
 echo "############################ config ##############" >> $debugFile
-grep -F -v -e leaf -e i3 -e zoe -e tesla -e carnet /var/www/html/openWB/openwb.conf >> $debugFile
+grep -F -v -e leaf -e i3 -e zoe -e tesla -e carnet -e bezug_smartme -e bydhv -e cloud -e discovergy -e evnotify -e lgessv1 -e myrenault -e nrgkick -e pushover -e pv2 -e settingspw -e soc_audi -e soc_bluelink -e soc_zerong -e wr_piko2 -e wr_smartme -e wrsunwayspw /var/www/html/openWB/openwb.conf >> $debugFile
 
 
 curl --upload $debugFile https://openwb.de/tools/debug.php
