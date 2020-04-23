@@ -302,7 +302,7 @@ else
 				if [[ $nurpv70status == "1" ]]; then
 					abschaltuberschuss=1500
 					if [[ $debug == "1" ]]; then
-						echo "Setze neue Abschwaltschwelle""
+						echo "Setze neue Abschwaltschwelle"
 					fi
 				fi
 			fi
