@@ -297,6 +297,15 @@ else
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
 		else
+			if [[ $nurpv70dynact == "1" ]]; then
+				nurpv70status=$(<ramdisk/nurpv70dynstatus)
+				if [[ $nurpv70status == "1" ]]; then
+					abschaltuberschuss=1500
+					if [[ $debug == "1" ]]; then
+						echo "Setze neue Abschwaltschwelle""
+					fi
+				fi
+			fi
 			if [[ $debug == "1" ]]; then
 				echo Abschaltschwelle: $((-abschaltuberschuss)), Überschuss derzeit: $uberschuss
 			fi
