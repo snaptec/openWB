@@ -473,17 +473,40 @@
 
 			<div class="row justify-content-center">
 				<div class="col-3">
-					<button id="saveBtn" type="button" class="btn btn-success">Einstellungen speichern</button>
+					<button id="saveSettingsBtn" type="button" class="btn btn-success">Einstellungen speichern</button>
 				</div>
 				<div class="col-1">
 					&nbsp;
 				</div>
 				<div class="col-3">
-					<button id="resetBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+					<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
 				</div>
 			</div>
 
 			<br>
+
+			<!-- modal set-defaults-confirmation window -->
+			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-danger">
+							<h4 class="modal-title text-light">Achtung</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Sollen für die Lademodi PV-Laden & Min+PV-Laden wirklich die Werkseinstellungen eingestellt werden?
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn">Fortfahren</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
 		</div>  <!-- container -->
 
@@ -524,7 +547,11 @@
 
 			$(document).ready(function(){
 
-				$('#resetBtn').on("click",function() {
+				$('#modalDefaultsBtn').on("click",function() {
+					$('#setDefaultsConfirmationModal').modal();
+				});
+
+				$('#saveDefaultsBtn').on("click",function() {
 					$('input').each(function() {
 						var defaultValue = $(this).attr('default');
 						if ( typeof defaultValue !== 'undefined' ) {
@@ -552,7 +579,7 @@
 									updateLabel(this);
 								}
 							}
-						} 
+						}
 					});
 				});
 
