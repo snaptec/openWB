@@ -593,29 +593,6 @@
 					updateLabel(this);
 				});
 
-				$('#minCurrentLp1').on('input', function() {
-					// adjust min value for minSocAlwaysToChargeToCurrent
-					var targetSlider = $('#minSocAlwaysToChargeToCurrent');
-					var newMinCurrent = this.value;
-					var targetSliderMinCurrent = targetSlider.attr('min');
-					var targetSliderValue = targetSlider.val();
-					console.log('new min '+newMinCurrent);
-					console.log('slide min '+targetSliderMinCurrent);
-					console.log('slide val '+targetSliderValue);
-
-					if ( newMinCurrent > targetSliderMinCurrent ) {
-						targetSlider.attr('min', newMinCurrent);
-						if ( targetSliderValue < newMinCurrent ) {
-							console.log('changing');
-							targetSlider.val(newMinCurrent);
-						}
-						targetSlider.slider('refresh');
-
-						console.log('sliderval neu '+targetSlider.val());
-
-					}
-				});
-
 				$('input.naturalNumber').on('input', function() {
 					// natural number input validation on the fly
 					// validates max of typed value
@@ -626,7 +603,6 @@
 					}
 				});
 			});  // end document ready function
-
 
 		</script>
 
