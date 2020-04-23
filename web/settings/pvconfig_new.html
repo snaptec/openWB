@@ -70,13 +70,13 @@
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked default="yes"> Einspeisung
+								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked default="true"> Einspeisung
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off" default="no"> Bezug
+								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off" default="false"> Bezug
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionManual" autocomplete="off"> manueller Regelpunkt
+								<input type="radio" name="chargeSubmode" id="optionManual" autocomplete="false" default="false"> manueller Regelpunkt
 							</label>
 						</div>
 					</div>
@@ -91,14 +91,14 @@
 					<div class="form-row vaRow mt-1">
 						<div class="col-auto">
 							<div class="form-check mb-2">
-								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg">
+								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg" default="false">
 								<label class="form-check-label" for="regulationPointPosNeg">
 									&nbsp;negativ
 								</label>
 							</div>
 						</div>
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" default="0">
+							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="0" default="0">
 						</div>
 						<label class="col col-form-label" for="regulationPoint"><small>{&plusmn;50000 ganzzahlig}</small></label>
 					</div>
@@ -202,10 +202,10 @@
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" checked> eingeschaltet
+								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" checked default="true"> eingeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOff" autocomplete="off"> ausgeschaltet
+								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOff" autocomplete="off" default="false"> ausgeschaltet
 							</label>
 						</div>
 					</div>
@@ -234,10 +234,10 @@
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" checked> eingeschaltet
+								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" checked default="true"> eingeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOff" autocomplete="off"> ausgeschaltet
+								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOff" autocomplete="off" default="false"> ausgeschaltet
 							</label>
 						</div>
 					</div>
@@ -331,10 +331,10 @@
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" checked> Speichervorrang
+								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" checked default="true"> Speichervorrang
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="priorityMode" id="evPriority" autocomplete="off"> EV-Vorrang
+								<input type="radio" name="priorityMode" id="evPriority" autocomplete="off" default="false"> EV-Vorrang
 							</label>
 						</div>
 					</div>
@@ -348,10 +348,10 @@
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="boolShowPriorityIconInTheme" id="showPriority" autocomplete="off" checked> anzeigen
+								<input type="radio" name="boolShowPriorityIconInTheme" id="showPriority" autocomplete="off" checked default="true"> anzeigen
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="boolShowPriorityIconInTheme" id="hidePriority" autocomplete="off"> nicht anzeigen
+								<input type="radio" name="boolShowPriorityIconInTheme" id="hidePriority" autocomplete="off" default="false"> nicht anzeigen
 							</label>
 						</div>
 					</div>
@@ -527,15 +527,33 @@
 				$('#resetBtn').on("click",function() {
 					$('input').each(function() {
 						var defaultValue = $(this).attr('default');
-						console.log($(this).val('id'));
-						console.log(defaultValue);
-
-						if ( typeof defaultValue === 'undefined' ) {
-							console.log($(this).val('id'));
-						}
-						$(this).val();
-						if ( this.type == "range" ) {
-							updateLabel(this);
+						if ( typeof defaultValue !== 'undefined' ) {
+							if ( this.type == 'radio' || this.type == 'checkbox' ) {
+								// radio btn and checkbox, set checked property accordingly
+								if ( this.type == 'checkbox' ) console.log('check: ' + defaultValue);
+								switch (defaultValue) {
+									case 'true':
+										$(this).prop('checked', true);
+										if ( this.type == 'radio' ) {
+											$(this).closest('label').addClass("active");
+										}
+										break;
+									case 'false':
+										$(this).prop('checked', false);
+										if ( this.type == 'radio' ) {
+											$(this).closest('label').removeClass ("active");
+										}
+										break;
+								}
+							} else {
+								// everything else, so reset value to default
+								$(this).val(defaultValue);
+								if ( this.type == "range" ) {
+									updateLabel(this);
+								}
+							}
+						} else {
+							console.log('undefinded');
 						}
 					});
 				});
