@@ -1443,7 +1443,7 @@ if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
 fi
 ospeicherpveinbeziehen=$(<ramdisk/mqttspeicherpveinbeziehen)
 if [[ "$ospeicherpveinbeziehen" != "$speicherpveinbeziehen" ]]; then
-	tempPubList="${tempPubList}\nopenWB/global/priorityModeEVBattery=${speicherpveinbeziehen}"
+	tempPubList="${tempPubList}\nopenWB/config/get/pv/priorityModeEVBattery=${speicherpveinbeziehen}"
 	echo $speicherpveinbeziehen > ramdisk/mqttspeicherpveinbeziehen
 fi
 oawattaraktiv=$(<ramdisk/mqttawattaraktiv)
