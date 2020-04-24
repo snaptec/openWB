@@ -1066,18 +1066,7 @@ if [[ $oversion != $version ]]; then
 	tempPubList="${tempPubList}\nopenWB/system/Version=${version}"
 	echo -n "$version" > ramdisk/mqttversion
 fi
-ominimalstromstaerke=$(<ramdisk/mqttminimalstromstaerke)
-if (( ominimalstromstaerke != minimalstromstaerke )); then
-	tempPubList="${tempPubList}\nopenWB/AMinimalAmpsConfigured=${minimalstromstaerke}"
-	tempPubList="${tempPubList}\nopenWB/config/get/global/minimalstromstaerke=${minimalstromstaerke}"
-	echo $minimalstromstaerke > ramdisk/mqttminimalstromstaerke
-fi
-omaximalstromstaerke=$(<ramdisk/mqttmaximalstromstaerke)
-if (( omaximalstromstaerke != maximalstromstaerke )); then
-	tempPubList="${tempPubList}\nopenWB/AMaximalAmpsConfigured=${maximalstromstaerke}"
-	tempPubList="${tempPubList}\nopenWB/config/get/global/maximalstromstaerke=${maximalstromstaerke}"
-	echo $maximalstromstaerke > ramdisk/mqttmaximalstromstaerke
-fi
+
 osofortll=$(<ramdisk/mqttsofortll)
 if (( osofortll != sofortll )); then
 	tempPubList="${tempPubList}\nopenWB/lp/1/ADirectModeAmps=${sofortll}"
