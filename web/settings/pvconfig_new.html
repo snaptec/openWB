@@ -59,7 +59,7 @@
 						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" default="32">
 						</div>
-						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">32 A</label>
+						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">0</label>
 					</div>
 					<h6 class="mb-0">Regelmodus</h6>
 					<div>
@@ -520,11 +520,11 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200415-a" ></script>
+		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200424-a" ></script>
 		<!-- load service -->
-		<script src = "settings/setupMqttServices.js?ver=20200415-a" ></script>
+		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200415-a" ></script>
+		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200424-a" ></script>
 
 		<script type="text/javascript">
 
@@ -558,7 +558,6 @@
 						if ( typeof defaultValue !== 'undefined' ) {
 							if ( this.type == 'radio' || this.type == 'checkbox' ) {
 								// radio btn and checkbox, set checked property accordingly
-								if ( this.type == 'checkbox' ) console.log('check: ' + defaultValue);
 								switch (defaultValue) {
 									case 'true':
 										$(this).prop('checked', true);

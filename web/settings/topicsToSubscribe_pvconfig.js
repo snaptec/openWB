@@ -9,6 +9,10 @@
 // line[1] = load counter (if needed)
 
 var topicsToSubscribe = [
+	["openWB/config/get/global/maxEVSECurrentAllowed", 0],
+
+	["openWB/config/get/pv/chargeSubmode", 0],
+
 	["openWB/config/get/pv/minFeedinPowerBeforeStart", 0],
 	["openWB/config/get/pv/maxPowerConsumptionBeforeStop", 0],
 	["openWB/config/get/pv/stopDelay", 0],
@@ -18,7 +22,6 @@ var topicsToSubscribe = [
 	["openWB/config/get/pv/lp/1/minSocAlwaysToChargeTo", 0],
 	["openWB/config/get/pv/lp/1/maxSocToChargeTo", 0],
 	["openWB/config/get/pv/lp/1/minSocAlwaysToChargeToCurrent", 0],
-	["openWB/config/get/pv/chargeSubmode", 0],
 	["openWB/config/get/pv/regulationPoint", 0],
 	["openWB/config/get/pv/boolShowPriorityIconInTheme", 0],
 	["openWB/config/get/pv/minBatteryChargePowerAtEvPriority", 0],
@@ -31,7 +34,5 @@ var topicsToSubscribe = [
 
 	["openWB/config/get/pv/minCurrentMinPv", 0],
 	["openWB/config/get/pv/socStartChargeAtMinPv", 0],
-	["openWB/config/get/pv/socStopChargeAtMinPv", 0],
-
-	["openWB/config/get/global/maxEVSECurrentAllowed", 0]
+	["openWB/config/get/pv/socStopChargeAtMinPv", 0]
 ];

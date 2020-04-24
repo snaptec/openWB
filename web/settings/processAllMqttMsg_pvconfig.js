@@ -4,38 +4,43 @@
  * @author Michael Ortenstein
  */
 
- function processMessages(mqttmsg, mqttpayload) {
-	if ( mqttmsg == 'openWB/graph/boolDisplayHouseConsumption' ) {
-		if ( mqttpayload == 1) {
-			boolDisplayHouseConsumption = false;
-			hidehaus = 'foo';
-			document.getElementById('graphhausdiv').setAttribute('style', 'color: green;');
-			graphhausdiv.classList.remove('fa-toggle-off');
-			graphhausdiv.classList.add('fa-toggle-on');
-
-		} else {
-			boolDisplayHouseConsumption = true;
-			document.getElementById('graphhausdiv').setAttribute('style', 'color: red;');
-			graphhausdiv.classList.remove('fa-toggle-on');
-			graphhausdiv.classList.add('fa-toggle-off');
-			hidehaus = 'Hausverbrauch';
-		}
-
+function processMessages(mqttmsg, mqttpayload) {
+    console.log('received '+mqttmsg+' = '+mqttpayload);
+	if ( mqttmsg == 'openWB/config/get/global/maxEVSECurrentAllowed' ) {
+        console.log('received:');
+		if ( !isNaN(mqttpayload) ) {
+            console.log(mqttpayload);
+            $('#maxEVSECurrentAllowed').val(mqttpayload);
+        }
 	}
-	else if ( mqttmsg == 'openWB/graph/boolDisplayLegend' ) {
-		if ( mqttpayload == 0) {
-			boolDisplayLegend = false;
-			document.getElementById('graphlegenddiv').setAttribute('style', 'color: red;');
-			graphlegenddiv.classList.remove('fa-toggle-on');
-			graphlegenddiv.classList.add('fa-toggle-off');
-		} else {
-			boolDisplayLegend = true;
-			document.getElementById('graphlegenddiv').setAttribute('style', 'color: green;');
-			graphlegenddiv.classList.remove('fa-toggle-off');
-			graphlegenddiv.classList.add('fa-toggle-on');
-
-		}
-
+	else if ( mqttmsg == 'openWB/config/get/pv/chargeSubmode' ) {
+        // 0 = Einspeisung, 1 = Bezug, 2 = manueller Regelpunkt
+        switch ( mqttpayload ) {
+            case '0':
+                $('#optionFeedIn').prop('checked', true);
+                $('#optionFeedIn').closest('label').addClass("active");
+                $('#optionConsume').prop('checked', false);
+                $('#optionConsume').closest('label').removeClass("active");
+                $('#optionManual').prop('checked', false);
+                $('#optionManual').closest('label').removeClass("active");
+                break;
+            case '1':
+                $('#optionFeedIn').prop('checked', false);
+                $('#optionFeedIn').closest('label').removeClass("active");
+                $('#optionConsume').prop('checked', true);
+                $('#optionConsume').closest('label').addClass("active");
+                $('#optionManual').prop('checked', false);
+                $('#optionManual').closest('label').removeClass("active");
+                break;
+            case '2':
+                $('#optionFeedIn').prop('checked', false);
+                $('#optionFeedIn').closest('label').removeClass("active");
+                $('#optionConsume').prop('checked', false);
+                $('#optionConsume').closest('label').removeClass("active");
+                $('#optionManual').prop('checked', true);
+                $('#optionManual').closest('label').addClass("active");
+                break;
+        }
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayLiveGraph' ) {
 		if ( mqttpayload == 0) {
