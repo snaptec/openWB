@@ -1,10 +1,19 @@
 #!/bin/bash
 . /var/www/html/openWB/openwb.conf
 dailyfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d)"
+monthlyladelogfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
 
+linesladelog=$(cat $monthlyladelogfile | wc -l)
+if [[ "$linesladelog" == 0 ]]; then
+	echo > $monthlyladelogfile
+fi
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
 einspeisung=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
-pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+if [[ $pv2wattmodul != "none" ]]; then
+	pv=$(</var/www/html/openWB/ramdisk/pvallwh)
+else
+	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+fi
 ll1=$(</var/www/html/openWB/ramdisk/llkwh)
 ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)

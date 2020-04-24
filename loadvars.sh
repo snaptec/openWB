@@ -323,10 +323,14 @@ if [[ $pv2wattmodul != "none" ]]; then
 
 	pvkwh=$(echo "$pvkwh + $pv2kwh" |bc)
 	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
 	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
+else
+	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
 fi
 
 #Speicher werte
@@ -657,6 +661,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 	if ! [[ $wattbezug =~ $re ]] ; then
 		wattbezug="0"
 	fi
+	wattbezugint=$(printf "%.0f\n" $wattbezug)
 	#evu glaettung
 	if (( evuglaettungakt == 1 )); then
 		if (( evuglaettung > 20 )); then
@@ -676,8 +681,7 @@ if [[ $wattbezugmodul != "none" ]]; then
 		fi
 	fi
 	#uberschuss zur berechnung
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	uberschuss=$((wattbezugint * -1))
+	uberschuss=$(printf "%.0f\n" $((-wattbezug)))
 	if [[ $speichervorhanden == "1" ]]; then
 		if [[ $speicherpveinbeziehen == "1" ]]; then
 			if (( speicherleistung > 0 )); then
@@ -697,34 +701,22 @@ if [[ $wattbezugmodul != "none" ]]; then
 	evua1=$(echo $evua1 | sed 's/\..*$//')
 	evua2=$(echo $evua2 | sed 's/\..*$//')
 	evua3=$(echo $evua3 | sed 's/\..*$//')
-	if ! [[ $evua1 =~ $re ]] ; then
-		evua1="0"
-	fi
-	if ! [[ $evua2 =~ $re ]] ; then
-		evua2="0"
-	fi
-	if ! [[ $evua3 =~ $re ]] ; then
-		evua3="0"
-	fi
+	[[ $evua1 =~ $re ]] || evua1="0"
+	[[ $evua2 =~ $re ]] || evua2="0"
+	[[ $evua3 =~ $re ]] || evua3="0"
 	evuas=($evua1 $evua2 $evua3)
 	maxevu=${evuas[0]}
-	for v in "${evuas[@]}"; do
-		if (( v > maxevu )); then maxevu=$v; fi;
-			done
 	lowevu=${evuas[0]}
 	for v in "${evuas[@]}"; do
 		if (( v < lowevu )); then lowevu=$v; fi;
-			done
+		if (( v > maxevu )); then maxevu=$v; fi;
+	done
 	schieflast=$(( maxevu - lowevu ))
 	echo $schieflast > /var/www/html/openWB/ramdisk/schieflast
 else
-	wattbezug=$pvwatt
-	wattbezugint=$(printf "%.0f\n" $wattbezug)
-	wattbezugint=$(echo "($wattbezugint+$hausbezugnone+$ladeleistung)" |bc)
-	wattbezug=$wattbezugint
-	echo "$wattbezugint" > /var/www/html/openWB/ramdisk/wattbezug
-	uberschuss=$((wattbezugint * -1))
-
+	uberschuss=$((-pvwatt - hausbezugnone - ladeleistung))
+	echo $((-uberschuss)) > /var/www/html/openWB/ramdisk/wattbezug
+	wattbezugint=$((-uberschuss))
 fi
 
 #Soc ermitteln
@@ -796,7 +788,17 @@ if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_kostalp
 	fi
 	# sim bezug end
 fi
-if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]] || [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+usesimpv=0
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]]; then
+	usesimpv=1
+fi
+if [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
+	usesimpv=1
+fi
+if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+	usesimpv=1
+fi
+if [[ $usesimpv == "1" ]]; then
 	ra='^-?[0-9]+$'
 	watt3=$(</var/www/html/openWB/ramdisk/pvwatt)
 	if [[ -e /var/www/html/openWB/ramdisk/pvwatt0pos ]]; then
@@ -916,13 +918,11 @@ if [[ $debug == "1" ]]; then
 	fi
 	echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
 	echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezugint "$wattbezugint" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
 	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
-	echo evua 1 "$evua1" 2 "$evua2" 3 "$evua3"
+	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"
 	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
 	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
-
-
 fi
 
 tempPubList=""
@@ -1066,18 +1066,7 @@ if [[ $oversion != $version ]]; then
 	tempPubList="${tempPubList}\nopenWB/system/Version=${version}"
 	echo -n "$version" > ramdisk/mqttversion
 fi
-ominimalstromstaerke=$(<ramdisk/mqttminimalstromstaerke)
-if (( ominimalstromstaerke != minimalstromstaerke )); then
-	tempPubList="${tempPubList}\nopenWB/AMinimalAmpsConfigured=${minimalstromstaerke}"
-	tempPubList="${tempPubList}\nopenWB/config/get/global/minimalstromstaerke=${minimalstromstaerke}"
-	echo $minimalstromstaerke > ramdisk/mqttminimalstromstaerke
-fi
-omaximalstromstaerke=$(<ramdisk/mqttmaximalstromstaerke)
-if (( omaximalstromstaerke != maximalstromstaerke )); then
-	tempPubList="${tempPubList}\nopenWB/AMaximalAmpsConfigured=${maximalstromstaerke}"
-	tempPubList="${tempPubList}\nopenWB/config/get/global/maximalstromstaerke=${maximalstromstaerke}"
-	echo $maximalstromstaerke > ramdisk/mqttmaximalstromstaerke
-fi
+
 osofortll=$(<ramdisk/mqttsofortll)
 if (( osofortll != sofortll )); then
 	tempPubList="${tempPubList}\nopenWB/lp/1/ADirectModeAmps=${sofortll}"

@@ -21,7 +21,7 @@ if ! [[ $power_kostal_piko_MP =~ $re ]] ; then
 fi
 
 # call for XM file and parse it for total produced kwh
-pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $wrkostalpikoip/yields.xml | grep -Po "Value=\'\K[^\']*" | sed -n 1p)
+pvkwh_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/yields.xml | grep -Po "Value=\'\K[^\']*" | sed -n 1p)
 
 
 ## Daten in Ramdisk schreiben

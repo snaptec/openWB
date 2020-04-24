@@ -57,6 +57,9 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		runs/set-current.sh 0 all
 		echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt" >> ramdisk/ladestatus.log
 	fi
+	if [[ $debug == "1" ]]; then
+		echo "Überschuss $uberschuss; mindestens $mindestuberschussphasen"
+	fi
 	if (( mindestuberschussphasen <= uberschuss )); then
 		pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
 		if (( pvecounter < einschaltverzoegerung )); then
@@ -122,7 +125,6 @@ if (( ladeleistung < 300 )); then
 	fi
 	if (( llalt == minimalapv )); then
 		if (( uberschuss < mindestuberschussphasen )); then
-		#if (( wattbezugint > abschaltuberschuss )); then
 			#pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 			#if (( pvcounter < abschaltverzoegerung )); then
 			#	pvcounter=$((pvcounter + 10))
@@ -149,11 +151,9 @@ else
 		if (( speicherleistung < 0 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
-				wattbezugint=$((wattbezugint - speicherleistung - speicherwattnurpv))
 
 			else
 				uberschuss=$((uberschuss + speicherleistung))
-				wattbezugint=$((wattbezugint - speicherleistung))
 			fi
 		fi
 	fi
@@ -297,7 +297,19 @@ else
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
 		else
-			if (( wattbezugint > abschaltuberschuss )); then
+			if [[ $nurpv70dynact == "1" ]]; then
+				nurpv70status=$(<ramdisk/nurpv70dynstatus)
+				if [[ $nurpv70status == "1" ]]; then
+					abschaltuberschuss=1500
+					if [[ $debug == "1" ]]; then
+						echo "Setze neue Abschwaltschwelle"
+					fi
+				fi
+			fi
+			if [[ $debug == "1" ]]; then
+				echo Abschaltschwelle: $((-abschaltuberschuss)), Überschuss derzeit: $uberschuss
+			fi
+			if (( uberschuss < -abschaltuberschuss )); then
 				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 				if (( pvcounter < abschaltverzoegerung )); then
 					pvcounter=$((pvcounter + 10))
@@ -307,7 +319,7 @@ else
 					fi
 				else
 					runs/set-current.sh 0 all
-					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung" >>  ramdisk/ladestatus.log
+					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung: $uberschuss" >>  ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
 						echo "pv ladung beendet"
 					fi
