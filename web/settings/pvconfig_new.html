@@ -57,9 +57,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" default="32">
+							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" default="32">
 						</div>
-						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A">0</label>
+						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">Regelmodus</h6>
 					<div>
@@ -70,8 +70,8 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" checked default="true"> Einspeisung
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" default="true"> Einspeisung
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
 								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off" default="false"> Bezug
@@ -99,7 +99,7 @@
 							</div>
 						</div>
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="0" default="0">
+							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="" default="0">
 						</div>
 						<label class="col col-form-label" for="regulationPoint"><small>{&plusmn;50000 ganzzahlig}</small></label>
 					</div>
@@ -124,7 +124,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="1320" default="1320">
+							<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" default="1320">
 						</div>
 						<label class="col col-form-label" for="minFeedinPowerBeforeStart"><small>{0 - 100000 ganzzahlig}</small></label>
 					</div>
@@ -138,7 +138,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="0" default="10">
+							<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" default="10">
 						</div>
 						<label class="col col-form-label" for="startDelay"><small>{0 - 2400 ganzzahlig}</small></label>
 					</div>
@@ -151,9 +151,9 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="0" default="0">
+							<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" default="0">
 						</div>
-						<label class="col col-form-label" for="minFeedinPowerBeforeStart"><small>{0 - 100000 ganzzahlig}</small></label>
+						<label class="col col-form-label" for="maxPowerConsumptionBeforeStop"><small>{0 - 100000 ganzzahlig}</small></label>
 					</div>
 					<h6 class="mb-0">Abschaltverzögerung</h6>
 					<div>
@@ -165,7 +165,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="10" default="10">
+							<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" default="10">
 						</div>
 						<label class="col col-form-label" for="stopDelay"><small>{0 - 2400 ganzzahlig}</small></label>
 					</div>
@@ -182,14 +182,14 @@
 						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
 						</div>
-						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A">6 A</label>
+						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 						<div class="col-6 col-sm-4">
 							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
 						</div>
-						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A">6 A</label>
+						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">adaptive Ladung</h6>
 					<div>
@@ -202,8 +202,8 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" checked default="true"> eingeschaltet
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" default="true"> eingeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
 								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOff" autocomplete="off" default="false"> ausgeschaltet
@@ -221,9 +221,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="adaptiveChargingFactor" class="col-3 col-sm-2 col-form-label">Faktor:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="5" default="5">
+							<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" default="5">
 						</div>
-						<label for="adaptiveChargingFactor" class="col col-form-label valueLabel" suffix="">5</label>
+						<label for="adaptiveChargingFactor" class="col col-form-label valueLabel" suffix=""></label>
 					</div>
 					<h6 class="mb-0">70%-Regelung</h6>
 					<div>
@@ -234,8 +234,8 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" checked default="true"> eingeschaltet
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" default="true"> eingeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
 								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOff" autocomplete="off" default="false"> ausgeschaltet
@@ -252,7 +252,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="nurpv70dynw" class="form-control naturalNumber" type="number" min="2000" max="50000" value="2000" default="2000">
+							<input id="nurpv70dynw" class="form-control naturalNumber" type="number" min="2000" max="50000" value="" default="2000">
 						</div>
 						<label for="nurpv70dynw" class="col col-form-label"><small>{2000 - 50000 ganzzahlig}</small></label>
 					</div>
@@ -277,9 +277,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minSocAlwaysToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="0" default="0">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" default="0">
 						</div>
-						<label for="minSocAlwaysToChargeTo" class="col col-form-label valueLabel" suffix="%">0 %</label>
+						<label for="minSocAlwaysToChargeTo" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 					<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
 					<div>
@@ -292,9 +292,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minSocAlwaysToChargeToCurrent" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="6" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" default="6">
 						</div>
-						<label for="minSocAlwaysToChargeToCurrent" class="col col-form-label valueLabel" suffix="A">6 A</label>
+						<label for="minSocAlwaysToChargeToCurrent" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">Maximal-SoC</h6>
 					<div>
@@ -306,9 +306,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="maxSocToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="100" default="100">
+							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="" default="100">
 						</div>
-						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%">100 %</label>
+						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 				</div>  <!-- end card body EV-SoC-Steuerung PV -->
 			</div>  <!-- end card EV-SoC-Steuerung PV -->
@@ -331,8 +331,8 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" checked default="true"> Speichervorrang
+							<label class="btn btn-outline-secondary btn-toggle">
+								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" default="true"> Speichervorrang
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
 								<input type="radio" name="priorityMode" id="evPriority" autocomplete="off" default="false"> EV-Vorrang
@@ -366,7 +366,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="0" default="0">
+							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" default="0">
 						</div>
 						<label class="col col-form-label" for="minBatteryChargePowerAtEvPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
@@ -380,7 +380,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="0" default="0">
+							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" default="0">
 						</div>
 						<label class="col col-form-label" for="batteryDischargePowerAtBattPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
@@ -396,9 +396,9 @@
 					<div class="form-row form-group mb-0 vaRow">
 						<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="100" default="100">
+							<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" default="100">
 						</div>
-						<label for="minBatteryDischargeSocAtBattPriority" class="col col-form-label valueLabel" suffix="%">100 %</label>
+						<label for="minBatteryDischargeSocAtBattPriority" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 				</div>  <!-- end card Speicher-Beachtung PV -->
 			</div>  <!-- end card Speicher-Beachtung PV -->
@@ -423,9 +423,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minCurrentMinPv" class="col-3 col-sm-2 col-form-label">alle LP:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="" default="6">
 						</div>
-						<label for="minCurrentMinPv" class="col col-form-label valueLabel" suffix="A">6 A</label>
+						<label for="minCurrentMinPv" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 				</div>  <!-- end card Allgemeine Einstellungen Min+PV-->
 			</div>  <!-- end card Allgemeine Einstellungen Min+PV -->
@@ -448,9 +448,9 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="socStartChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="80" step="5" value="0" default="0">
+							<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="80" step="5" value="" default="0">
 						</div>
-						<label for="socStartChargeAtMinPv" class="col col-form-label valueLabel" suffix="%">0 %</label>
+						<label for="socStartChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 					<h6 class="mb-0">Ausschalt-SoC</h6>
 					<div>
@@ -462,9 +462,9 @@
 					<div class="form-row form-group mb-0 vaRow">
 						<label for="socStopChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="80" step="5" value="0" default="0">
+							<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="80" step="5" value="" default="0">
 						</div>
-						<label for="socStopChargeAtMinPv" class="col col-form-label valueLabel" suffix="%">0 %</label>
+						<label for="socStopChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 
 				</div>  <!-- end card Speicher-Beachtung -->
@@ -534,15 +534,26 @@
 				$('#navPvLaden2').addClass('disabled');
 			});
 
-			function updateLabel(element) {
-				var label = $('label[for="' + $(element).attr('id') + '"].valueLabel');
+			function updateLabel(elementId) {
+				// sets a label to value of the range slider if one exists
+				var label = $('label[for="' + $(elementId).attr('id') + '"].valueLabel');
 				if ( label.length == 1 ) {
 					var suffix = $(label).attr('suffix');
-					var text = element.value;
+					var text = $(elementId).val();
 					if ( suffix != '' ) {
 						text += ' ' + suffix;
 					}
-					$(label).text(text);
+					label.text(text);
+				}
+			}
+
+			function setInputValue(elementId, value) {
+				// sets value of an input element
+				if ( !isNaN(value) && $(elementId).length != 0 ) {
+					$(elementId).val(value);
+					if ( $(elementId).attr('type') == 'range' ) {
+						updateLabel(elementId);
+					}
 				}
 			}
 
@@ -574,10 +585,7 @@
 								}
 							} else {
 								// everything else, so reset value to default
-								$(this).val(defaultValue);
-								if ( this.type == "range" ) {
-									updateLabel(this);
-								}
+								setInputValue(this, defaultValue);
 							}
 						}
 					});

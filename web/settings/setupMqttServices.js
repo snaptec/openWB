@@ -14,7 +14,6 @@ var options = {
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		topicsToSubscribe.forEach((topic) => {
-            console.log('subscribed '+topic[0]);
 			client.subscribe(topic[0], {qos: 0});
 		});
 	},
@@ -37,11 +36,8 @@ client.onConnectionLost = function (responseObject) {
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-	if ( message.destinationName.match( /^openwb\/graph\//i ) ) {
-        // func processMessages defined in respective processAllMqttMsg_
-        console.log('received msg');
-		processMessages(message.destinationName, message.payloadString);
-	}
+    // func processMessages defined in respective processAllMqttMsg_
+	processMessages(message.destinationName, message.payloadString);
 };
 
 //Creates a new Messaging.Message Object and sends it
