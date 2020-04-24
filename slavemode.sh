@@ -74,7 +74,7 @@ function computeAndSetCurrentForChargePoint() {
 
 	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
 		# this can happen in transient when master has not yet detected us as charging but we have already detected us as charging and no other car is charging
-		$dbgWrite "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
+		$dbgWrite "$NowItIs: Slave Mode: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
 		chargingVehiclesAdjustedForThisCp=1
 	fi
 
@@ -86,7 +86,7 @@ function computeAndSetCurrentForChargePoint() {
 	if (( `echo "$AllowedPeakPower > 0" | bc` == 1 )); then
 
 		if (( TotalPowerConsumption == -1 )); then
-			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption}): Immediately stopping charge and exiting"
+			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption} W): Immediately stopping charge and exiting"
 			callSetCurrent 0 $chargePoint
 			exit 2
 		fi
@@ -103,19 +103,47 @@ function computeAndSetCurrentForChargePoint() {
 	# new charge current in int but always rounded to the next _lower_ integer
 	llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
 
-	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase, TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}, chargingVehiclesAdjustedForThisCp=${chargingVehiclesAdjustedForThisCp}, llalt=$llalt, lldiff=$lldiff --> llneu=$llneu"
+	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W"
+    $dbgWrite "$NowItIs: Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, chargingVehiclesAdjustedForThisCp=${chargingVehiclesAdjustedForThisCp}, llalt=$llalt A, lldiff=$lldiff A"
 
-	# The llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
-	# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
-	# For this case we limit to the total allowed current divided by the number of charging vehicals.
-	# The resulting value might get further limited to maximalstromstaerke below.
-	if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+	# limit the change to +1, -1 or -3 if slow ramping is enabled,
+	# a value of 0 will be kept unchanged
+	if (( slaveModeSlowRamping == 1 )); then
 
-		$dbgWrite "$NowItIs: Slave Mode: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
+		local adjustment=0;
+		if (( `echo "$lldiff > 1" | bc` == 1 )); then
+			adjustment=1
+		elif (( `echo "$lldiff < -3" | bc` == 1 )); then
+			adjustment=-3
+		elif (( `echo "$lldiff < 0" | bc` == 1 )); then
+			adjustment=-1
+		fi
 
-		llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${chargingVehiclesAdjustedForThisCp})" | bc)
+		if !(( CpIsCharging )); then
+			# if we're not charging, we always start off with minimalstromstaerke
+			llneu=${minimalstromstaerke}
+			$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Starting at minimal supported charge current ${llneu} A"
+		else
+			llneu=$(( llalt + adjustment ))
+			$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Limiting adjustment to ${llalt} + (${adjustment}) --> llneu = ${llneu} A"
+		fi
+	else
+
+		# In "fast" mode the llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
+		# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
+		# For this case we limit to the total allowed current divided by the number of charging vehicals.
+		# The resulting value might get further limited to maximalstromstaerke below.
+		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
+
+			llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${chargingVehiclesAdjustedForThisCp})" | bc)
+		else
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
+		fi
 	fi
 
+	# finally limit to the configured min or max values
 	if (( llneu < minimalstromstaerke )) || ((LpEnabled == 0)); then
 		if ((LpEnabled != 0)); then
 			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
