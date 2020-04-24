@@ -38,7 +38,7 @@ echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
-echo 2 > /var/www/html/openWB/ramdisk/mqttsoc1
+echo 1 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
 echo 0 > /var/www/html/openWB/ramdisk/device1_wh
 echo 0 > /var/www/html/openWB/ramdisk/device2_wh
@@ -486,7 +486,7 @@ echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp6
 echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp7
 echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp8
 echo 0 > /var/www/html/openWB/ramdisk/soc
-echo 0 > /var/www/html/openWB/ramdisk/soc1
+echo 2 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
