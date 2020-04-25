@@ -26,13 +26,8 @@ var topicsToSubscribe = [
 	["openWB/config/get/pv/lp/1/minSocAlwaysToChargeTo", 0],
 	["openWB/config/get/pv/lp/1/minSocAlwaysToChargeToCurrent", 0],
 	["openWB/config/get/pv/lp/1/maxSocToChargeTo", 0],
+	["openWB/config/get/pv/priorityModeEVBattery", 0],
 	["openWB/config/get/pv/boolShowPriorityIconInTheme", 0],
-
-
-	//openWB/global/priorityModeEVBattery
-
-
-
 	["openWB/config/get/pv/minBatteryChargePowerAtEvPriority", 0],
 	["openWB/config/get/pv/minBatteryDischargeSocAtBattPriority", 0],
 	["openWB/config/get/pv/batteryDischargePowerAtBattPriority", 0],

@@ -57,7 +57,7 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" default="32">
+							<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" data-default="32" data-topicprefix="openWB/config/get/global/">
 						</div>
 						<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
@@ -69,15 +69,15 @@
 						</small>
 					</div>
 					<div class="form-row form-group mt-1">
-						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+						<div class="col btn-group btn-group-toggle" id="chargeSubmode" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionFeedIn" autocomplete="off" default="true"> Einspeisung
+								<input type="radio" name="chargeSubmode" autocomplete="off" data-option="0"> Einspeisung
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionConsume" autocomplete="off" default="false"> Bezug
+								<input type="radio" name="chargeSubmode" autocomplete="off" data-option="1"> Bezug
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="chargeSubmode" id="optionManual" autocomplete="false" default="false"> manueller Regelpunkt
+								<input type="radio" name="chargeSubmode" autocomplete="off" data-option="2"> manueller Regelpunkt
 							</label>
 						</div>
 					</div>
@@ -92,14 +92,14 @@
 					<div class="form-row vaRow mt-1">
 						<div class="col-auto">
 							<div class="form-check mb-2">
-								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg" default="false">
+								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg" data-default="false" data-topicprefix="openWB/config/get/pv/">
 								<label class="form-check-label" for="regulationPointPosNeg">
 									&nbsp;negativ
 								</label>
 							</div>
 						</div>
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="" default="0">
+							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="regulationPoint"><small>{&plusmn;50000 ganzzahlig}</small></label>
 					</div>
@@ -124,7 +124,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" default="1320">
+							<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" data-default="1320" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="minFeedinPowerBeforeStart"><small>{0 - 100000 ganzzahlig}</small></label>
 					</div>
@@ -138,7 +138,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" default="10">
+							<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" data-default="10" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="startDelay"><small>{0 - 2400 ganzzahlig}</small></label>
 					</div>
@@ -151,7 +151,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" default="0">
+							<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="100000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="maxPowerConsumptionBeforeStop"><small>{0 - 100000 ganzzahlig}</small></label>
 					</div>
@@ -165,7 +165,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" default="10">
+							<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" min="0" max="2400" value="" data-default="10" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="stopDelay"><small>{0 - 2400 ganzzahlig}</small></label>
 					</div>
@@ -180,14 +180,14 @@
 					<div class="form-row form-group mb-0 vaRow">
 						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
@@ -201,12 +201,12 @@
 						</small>
 					</div>
 					<div class="form-row form-group mt-1">
-						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+						<div class="col btn-group btn-group-toggle" id="boolAdaptiveCharging" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOn" autocomplete="off" default="true"> eingeschaltet
+								<input type="radio" name="boolAdaptiveCharging" autocomplete="off" data-option="0"> ausgeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="boolAdaptiveCharging" id="adaptiveChargingOff" autocomplete="off" default="false"> ausgeschaltet
+								<input type="radio" name="boolAdaptiveCharging" autocomplete="off" data-option="1"> eingeschaltet
 							</label>
 						</div>
 					</div>
@@ -221,7 +221,7 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="adaptiveChargingFactor" class="col-3 col-sm-2 col-form-label">Faktor:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" default="5">
+							<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" data-default="5">
 						</div>
 						<label for="adaptiveChargingFactor" class="col col-form-label valueLabel" suffix=""></label>
 					</div>
@@ -233,12 +233,12 @@
 						</small>
 					</div>
 					<div class="form-row form-group mt-1">
-						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+						<div class="col btn-group btn-group-toggle" id="nurpv70dynact" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" default="true"> eingeschaltet
+								<input type="radio" name="nurpv70dynact" autocomplete="off" data-option="0"> ausgeschaltet
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="nurpv70dynact" id="nurpv70dynactOff" autocomplete="off" default="false"> ausgeschaltet
+								<input type="radio" name="nurpv70dynact" autocomplete="off" data-option="1"> eingeschaltet
 							</label>
 						</div>
 					</div>
@@ -252,7 +252,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="nurpv70dynw" class="form-control naturalNumber" type="number" min="2000" max="50000" value="" default="2000">
+							<input id="nurpv70dynw" class="form-control naturalNumber" type="number" min="2000" max="50000" value="" data-default="2000" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="nurpv70dynw" class="col col-form-label"><small>{2000 - 50000 ganzzahlig}</small></label>
 					</div>
@@ -275,11 +275,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="minSocAlwaysToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="minSocAlwaysToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" default="0">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
-						<label for="minSocAlwaysToChargeTo" class="col col-form-label valueLabel" suffix="%"></label>
+						<label for="minSocAlwaysToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 					<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
 					<div>
@@ -290,11 +290,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="minSocAlwaysToChargeToCurrent" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="minSocAlwaysToChargeToCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/">
 						</div>
-						<label for="minSocAlwaysToChargeToCurrent" class="col col-form-label valueLabel" suffix="A"></label>
+						<label for="minSocAlwaysToChargeToCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">Maximal-SoC</h6>
 					<div>
@@ -304,11 +304,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="maxSocToChargeTo" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="maxSocToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTo" min="50" max="100" step="5" value="" default="100">
+							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
 						</div>
-						<label for="maxSocToChargeTo" class="col col-form-label valueLabel" suffix="%"></label>
+						<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 				</div>  <!-- end card body EV-SoC-Steuerung PV -->
 			</div>  <!-- end card EV-SoC-Steuerung PV -->
@@ -330,12 +330,12 @@
 						</small>
 					</div>
 					<div class="form-row form-group mt-1">
-						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+						<div class="col btn-group btn-group-toggle" id="priorityModeEVBattery" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="priorityMode" id="batteryPriority" autocomplete="off" default="true"> Speichervorrang
+								<input type="radio" name="priorityModeEVBattery" autocomplete="off" data-option="0"> Speichervorrang
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="priorityMode" id="evPriority" autocomplete="off" default="false"> EV-Vorrang
+								<input type="radio" name="priorityModeEVBattery" autocomplete="off" data-option="1"> EV-Vorrang
 							</label>
 						</div>
 					</div>
@@ -347,12 +347,12 @@
 						</small>
 					</div>
 					<div class="form-row form-group mt-1">
-						<div class="col btn-group btn-group-toggle" data-toggle="buttons">
+						<div class="col btn-group btn-group-toggle" id="boolShowPriorityIconInTheme" data-toggle="buttons" data-default="1" data-topicprefix="openWB/config/get/pv/">
 							<label class="btn btn-outline-secondary btn-toggle active">
-								<input type="radio" name="boolShowPriorityIconInTheme" id="showPriority" autocomplete="off" checked default="true"> anzeigen
+								<input type="radio" name="boolShowPriorityIconInTheme" autocomplete="off" data-option="0"> nicht anzeigen
 							</label>
 							<label class="btn btn-outline-secondary btn-toggle">
-								<input type="radio" name="boolShowPriorityIconInTheme" id="hidePriority" autocomplete="off" default="false"> nicht anzeigen
+								<input type="radio" name="boolShowPriorityIconInTheme" autocomplete="off" data-option="1"> anzeigen
 							</label>
 						</div>
 					</div>
@@ -366,7 +366,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" default="0">
+							<input id="minBatteryChargePowerAtEvPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="minBatteryChargePowerAtEvPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
@@ -380,7 +380,7 @@
 					</div>
 					<div class="form-row form-group mt-1">
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" default="0">
+							<input id="batteryDischargePowerAtBattPriority" class="form-control" type="number" inputmode="decimal" min="0" max="10000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="batteryDischargePowerAtBattPriority"><small>{0 - 10000 ganzzahlig}</small></label>
 					</div>
@@ -396,7 +396,7 @@
 					<div class="form-row form-group mb-0 vaRow">
 						<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" default="100">
+							<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="minBatteryDischargeSocAtBattPriority" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
@@ -423,7 +423,7 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="minCurrentMinPv" class="col-3 col-sm-2 col-form-label">alle LP:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="" default="6">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="minCurrentMinPv" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
@@ -448,7 +448,7 @@
 					<div class="form-row form-group mb-1 vaRow">
 						<label for="socStartChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="80" step="5" value="" default="0">
+							<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="socStartChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
@@ -462,7 +462,7 @@
 					<div class="form-row form-group mb-0 vaRow">
 						<label for="socStopChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="80" step="5" value="" default="0">
+							<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label for="socStopChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
@@ -531,7 +531,7 @@
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);
 				// disable navbar entry for current page
-				$('#navPvLaden2').addClass('disabled');
+				$('#navPVLadeeinstellungen').addClass('disabled');
 			});
 
 			function updateLabel(elementId) {
@@ -557,36 +557,61 @@
 				}
 			}
 
+			function setToggleBtnGroup(groupId, option) {
+				// sets the option btn in a btn-group to active an all others to inactive
+				// check input field of selected option
+				$('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
+				$('input[name=' + groupId + '][data-option="' + option + '"]').closest('label').addClass('active');
+				// and uncheck all others
+				$('input[name=' + groupId + '][data-option!="' + option + '"]').each(function() {
+					$(this).prop('checked', false);
+					$(this).closest('label').removeClass('active');
+				});
+			}
+
+			function saveSettings() {
+				// sends all values by mqtt
+				$('input[type="number"], input[type="range"]').each(function() {
+					var name = $(this).attr('id');
+					var topic = 'openWB/config/get/pv/' + name;
+					if ( id == 'maxEVSECurrentAllowed' )
+					console.log($(this).attr('id'));
+
+				});
+			}
+
 			$(document).ready(function(){
+
+				$('#saveSettingsBtn').on("click",function() {
+					saveSettings();
+				});
 
 				$('#modalDefaultsBtn').on("click",function() {
 					$('#setDefaultsConfirmationModal').modal();
 				});
 
 				$('#saveDefaultsBtn').on("click",function() {
-					$('input').each(function() {
-						var defaultValue = $(this).attr('default');
+					// shown in confirmation modal
+					$('input[type="number"], input[type="range"]').each(function() {
+						// first all number-field and range sliders
+						var defaultValue = $(this).data('default');
 						if ( typeof defaultValue !== 'undefined' ) {
-							if ( this.type == 'radio' || this.type == 'checkbox' ) {
-								// radio btn and checkbox, set checked property accordingly
-								switch (defaultValue) {
-									case 'true':
-										$(this).prop('checked', true);
-										if ( this.type == 'radio' ) {
-											$(this).closest('label').addClass("active");
-										}
-										break;
-									case 'false':
-										$(this).prop('checked', false);
-										if ( this.type == 'radio' ) {
-											$(this).closest('label').removeClass ("active");
-										}
-										break;
-								}
-							} else {
-								// everything else, so reset value to default
-								setInputValue(this, defaultValue);
-							}
+							setInputValue(this, defaultValue);
+						}
+					});
+					$('input[type="checkbox"]').each(function() {
+						// then all checkboxes
+						var defaultValue = $(this).data('default');
+						if ( typeof defaultValue !== 'boolean' ) {
+							defaultValue = false;
+						}
+						$(this).prop('checked', defaultValue);
+					});
+					$('.btn-group-toggle').each(function() {
+						// then all toggle btn-groups
+						var defaultValue = $(this).data('default');
+						if ( typeof defaultValue !== 'undefined' ) {
+							setToggleBtnGroup($(this).attr('id'), defaultValue);
 						}
 					});
 				});
