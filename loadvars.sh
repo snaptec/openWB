@@ -746,7 +746,20 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/socvorhanden
 	soc=0
 fi
-hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung))
+
+if [ -s "ramdisk/device1_watt" ]; then shd1_w=$(<ramdisk/device1_watt); else shd1_w=0; fi
+if [ -s "ramdisk/device2_watt" ]; then shd2_w=$(<ramdisk/device2_watt); else shd2_w=0; fi
+if [ -s "ramdisk/device3_watt" ]; then shd3_w=$(<ramdisk/device3_watt); else shd3_w=0; fi
+if [ -s "ramdisk/device4_watt" ]; then shd4_w=$(<ramdisk/device4_watt); else shd4_w=0; fi
+if [ -s "ramdisk/device5_watt" ]; then shd5_w=$(<ramdisk/device5_watt); else shd5_w=0; fi
+if [ -s "ramdisk/device6_watt" ]; then shd6_w=$(<ramdisk/device6_watt); else shd6_w=0; fi
+if [ -s "ramdisk/device7_watt" ]; then shd7_w=$(<ramdisk/device7_watt); else shd7_w=0; fi
+if [ -s "ramdisk/device8_watt" ]; then shd8_w=$(<ramdisk/device8_watt); else shd8_w=0; fi
+if [ -s "ramdisk/device9_watt" ]; then shd9_w=$(<ramdisk/device9_watt); else shd9_w=0; fi
+if [ -s "ramdisk/device1_temp0" ]; then shd1_t0=$(<ramdisk/device1_temp0); else shd1_t0=0; fi
+if [ -s "ramdisk/device1_temp1" ]; then shd1_t1=$(<ramdisk/device1_temp1); else shd1_t1=0; fi
+if [ -s "ramdisk/device1_temp2" ]; then shd1_t2=$(<ramdisk/device1_temp2); else shd1_t2=0; fi
+hausverbrauch=$((wattbezugint - pvwatt - ladeleistung - speicherleistung - shd1_w - shd2_w - shd3_w - shd4_w - shd5_w - shd6_w - shd7_w - shd8_w - shd9_w))
 if (( hausverbrauch < 0 )); then
 	hausverbrauch=0
 fi
@@ -1503,7 +1516,7 @@ if [[ "$orfidlast" != "$arfidlast" ]]; then
 fi
 
 declare -A mqttconfvar
-mqttconfvar["config/get/pv/minFeedinPowerBeforStart"]=mindestuberschuss
+mqttconfvar["config/get/pv/minFeedinPowerBeforeStart"]=mindestuberschuss
 mqttconfvar["config/get/pv/maxPowerConsumptionBeforeStop"]=abschaltuberschuss
 mqttconfvar["config/get/pv/stopDelay"]=abschaltverzoegerung
 mqttconfvar["config/get/pv/startDelay"]=einschaltverzoegerung
