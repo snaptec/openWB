@@ -434,7 +434,7 @@
 				<div class="col-4 regularTextStyle">
 					<label for="msmoduslp1"></label>
 					<select name="msmoduslp1" id="msmoduslp1">
-						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
+						<option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
 						<option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
 						<option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
 					</select><br>
@@ -493,7 +493,7 @@
 				<div class="col-4 regularTextStyle" id="ladepunkts111111div">
 					<label for="msmoduslp2"></label>
 					<select name="msmoduslp2" id="msmoduslp2">
-						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
+						<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
 						<option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
 						<option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
 					</select>
@@ -552,7 +552,7 @@
 				<div class="col-4 regularTextStyle" id="ladepunkts222222div">
 					<label for="lademlp3check"></label>
 					<select name="lademlp3check" id="lademlp3check">
-						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
+						<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
 						<option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
 					</select><br>
 					<span id="msmodusmlp3">

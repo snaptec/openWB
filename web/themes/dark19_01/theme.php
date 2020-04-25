@@ -535,7 +535,7 @@
                 <div class="col-4 regularTextSize text-center">
                     <label for="msmoduslp1"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp1" id="msmoduslp1">
-                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
+                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
                         <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Energie</option>
                         <option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
@@ -598,7 +598,7 @@
 				<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
                     <label for="msmoduslp2"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp2" id="msmoduslp2">
-                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
+                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
                         <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Energie</option>
                         <option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
@@ -661,7 +661,7 @@
             	<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
                     <label for="msmoduslp3"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="lademlp3check" id="msmoduslp3">
-                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
+                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
                         <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Energie</option>
                     </select>
 					<span id="msmodusmlp3" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
