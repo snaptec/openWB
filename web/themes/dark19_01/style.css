@@ -196,6 +196,9 @@ body {
 .bg-lightgrey {
     background-color: #d0d7e6;
 }
+.bg-lightblue {
+    background-color: #23ebe1;
+}
 
 .bg-lightgreen {
     background-color: #befebe;
@@ -212,7 +215,6 @@ body {
 .bg-orange {
     background-color:#fcbe1e;
 }
-
 .btn-blue {
   background-color: hsl(197, 95%, 24%) !important;
   background-repeat: repeat-x;
