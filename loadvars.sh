@@ -1449,11 +1449,7 @@ if [[ "$overbraucher2_name" != "$verbraucher2_name" ]]; then
 	tempPubList="${tempPubList}\nopenWB/Verbraucher/2/Name=${verbraucher2_name}"
 	echo $verbraucher2_name > ramdisk/mqttverbraucher2_name
 fi
-ospeicherpvui=$(<ramdisk/mqttspeicherpvui)
-if [[ "$ospeicherpvui" != "$speicherpvui" ]]; then
-	tempPubList="${tempPubList}\nopenWB/boolDisplayHouseBatteryPriority=${speicherpvui}"
-	echo $speicherpvui > ramdisk/mqttspeicherpvui
-fi
+
 ospeicherpveinbeziehen=$(<ramdisk/mqttspeicherpveinbeziehen)
 if [[ "$ospeicherpveinbeziehen" != "$speicherpveinbeziehen" ]]; then
 	tempPubList="${tempPubList}\nopenWB/config/get/pv/priorityModeEVBattery=${speicherpveinbeziehen}"
