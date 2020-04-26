@@ -121,8 +121,15 @@ function computeAndSetCurrentForChargePoint() {
 
 		if !(( CpIsCharging )); then
 			# if we're not charging, we always start off with minimalstromstaerke
-			llneu=${minimalstromstaerke}
-			$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Starting at minimal supported charge current ${llneu} A"
+		if (( `echo "$lldiff < 0" | bc` == 1 )); then
+				llneu=0
+
+				$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Too few current left to start"
+			else
+				llneu=${minimalstromstaerke}
+
+				$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Starting at minimal supported charge current ${llneu} A"
+			fi
 		else
 			llneu=$(( llalt + adjustment ))
 			$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Limiting adjustment to ${llalt} + (${adjustment}) --> llneu = ${llneu} A"
