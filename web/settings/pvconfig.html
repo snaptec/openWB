@@ -475,13 +475,13 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success">Einstellungen speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="submit" class="btn btn-danger">Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
@@ -620,25 +620,34 @@
 				});
 			}
 
-			function sendValue(topic, value) {
-				// sends the value for the topic if it was changed by user
-				if ( originalValues[topic] != value ) {
-					console.log('value for ' + topic + ' changed from ' + originalValues[topic] + ' to ' + value);
-					topic = topic.replace('/get/', '/set/');
-					//publish(value, topic);
-				} else {
-					console.log('value for ' + topic + ' did not change');
+			function sendValues(valueList) {
+				/** @function sendValues
+				 * send all topic-value-pairs from valueList
+				 * @typedef {Object} topic-value-pair
+				 * @property {string} topic - the topic
+				 * @property {string} value - the value
+				 * @param {topic-value-pair} - the changed values and their topics
+				 */
+				if ( !(Object.keys(valueList).length === 0 && valueList.constructor === Object) ) {
+					// there are changed values
+					Object.keys(valueList).forEach(function(topic) {
+						var value = this[topic].toString();
+						console.log(topic +' = '+ value);
+						publish(value, topic);
+					}, valueList);
 				}
 			}
 
-			function saveSettings() {
-				// sends all values by mqtt
-				var formValid = $("#myForm")[0].checkValidity();
-				if ( !formValid ) {
-					$('#formNotValidModal').modal();
-					return;
-				}
-				$('input[type="number"], input[type="text"], input[type="range"]').each(function() {
+			function getChangedValues() {
+				/** @function getChangedValues
+				 * gets all topic-value-pairs changed by the user and sets topic from /get/ to /set/
+				 * @typedef {Object} topic-value-pair
+				 * @property {string} topic - the topic
+				 * @property {string} value - the value
+				 * @return {topic-value-pair} - the changed values and their topics
+				 */
+				var allChanged = {};
+				$('.btn-group-toggle, input[type="number"], input[type="text"], input[type="range"]').each(function() {
 					var topicPrefix = $(this).data('topicprefix');
 					var topicSubGroup = $(this).data('topicsubgroup');
 					if ( typeof topicSubGroup == 'undefined' ) {
@@ -651,19 +660,40 @@
 						// topicIdentifier is the non-unique element name
 						var topicIdentifier = $(this).attr('name');
 					}
-					var value = $(this).val();
-					if ( $(this).attr('type') == 'number' || $(this).attr('type') == 'text' ) {
-						// check if sign checkbox exists and adjust value accordingly
-						var signCheckboxName = $(this).data('signcheckbox');
-						var signCheckbox = $('#' + signCheckboxName);
-						if ( signCheckbox.is(':checked') ) {
-							// checkbox exists and is checked
-							value *= -1;
+					if ( $(this).hasClass('btn-group-toggle') ) {
+						var value = $('input[name="' + $(this).attr('id') + '"]:checked').data('option');
+					} else {
+						var value = $(this).val();
+						if ( $(this).attr('type') == 'number' || $(this).attr('type') == 'text' ) {
+							// check if sign checkbox exists and adjust value accordingly
+							var signCheckboxName = $(this).data('signcheckbox');
+							var signCheckbox = $('#' + signCheckboxName);
+							if ( signCheckbox.is(':checked') && !isNaN(value) ) {
+								// checkbox exists and is checked
+								value *= -1;
+							}
 						}
 					}
 					var topic = topicPrefix + topicSubGroup + topicIdentifier;
-					sendValue(topic, value);
+					if ( originalValues[topic] != value ) {
+						console.log('value for ' + topic + ' changed from ' + originalValues[topic] + ' to ' + value);
+						topic = topic.replace('/get/', '/set/');
+						allChanged[topic] = value;
+					} else {
+						console.log('value for ' + topic + ' did not change');
+					}
 				});
+				return allChanged;
+			}
+
+			function saveSettings() {
+				// sends all values by mqtt
+				var formValid = $("#myForm")[0].checkValidity();
+				if ( !formValid ) {
+					$('#formNotValidModal').modal();
+					return;
+				}
+				sendValues(getChangedValues());
 			}
 
 			$(document).ready(function(){
@@ -691,7 +721,6 @@
 						// first all number-field and range sliders
 						var defaultValue = $(this).data('default');
 						if ( typeof defaultValue !== 'undefined' ) {
-							console.log($(this).attr('id'));
 							setInputValue($(this).attr('id'), defaultValue);
 						}
 					});
@@ -702,6 +731,7 @@
 							setToggleBtnGroup($(this).attr('id'), defaultValue);
 						}
 					});
+					sendValues(getChangedValues());
 				});
 
 				$('input').on("paste",function(e) {

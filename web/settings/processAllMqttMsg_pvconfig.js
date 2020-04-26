@@ -4,7 +4,7 @@
  * @author Michael Ortenstein
  */
 
-var originalValues = {};  // holds all topics and its values received by mqtt before possible changes made by user
+var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
 
 function processMessages(mqttmsg, mqttpayload) {
     /** @function processMessages
