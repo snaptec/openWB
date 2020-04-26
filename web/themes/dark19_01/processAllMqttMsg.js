@@ -32,6 +32,9 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/verbraucher\//i) ) { processVerbraucherMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processLpMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/hook\//i) ) { processHookMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
+
 }  // end handlevar
 
 function processGraphMessages(mqttmsg, mqttpayload) {
@@ -691,4 +694,100 @@ function processHookMessages(mqttmsg, mqttpayload) {
 			$('#hook' + index).hide();
 		}
 	}
+}
+function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/SmartHomeDevices - actual values only!
+	// called by handlevar
+	processPreloader(mqttmsg);
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualPowerDevice');  // now get parents respective child element
+		var actualPower = parseInt(mqttpayload, 10);
+		if ( isNaN(actualPower) ) {
+			actualPower = 0;
+		}
+		if (actualPower > 999) {
+			actualPower = (actualPower / 1000).toFixed(2);
+			actualPower += ' kW';
+		} else {
+			actualPower += ' W';
+		}
+		$(element).text(actualPower);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualTemp0Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+			$(parent).hide();
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+				$(parent).hide();
+			} else {
+				StringTemp = 'Temp1 ' + actualTemp.toFixed(2); // make complete string to display
+				$(parent).show();
+			}
+		}
+		$(element).text(StringTemp);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.actualTemp1Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+			} else {
+				StringTemp = 'Temp2 ' + actualTemp.toFixed(2); // make complete string to display
+			}
+		}
+		$(element).text(StringTemp);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.actualTemp2Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+			} else {
+				StringTemp = 'Temp3 ' + actualTemp.toFixed(2); // make complete string to display
+			}
+		}
+		$(element).text(StringTemp);
+	}
+
+}
+function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
+	// called by handlevar
+
+	processPreloader(mqttmsg);
+	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_configured$/i ) ) {
+		// respective SH Device configured
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var infoElement = $('.SmartHome[dev="' + index + '"]');  // get row of SH Device
+		if (mqttpayload == 1) {
+			$(infoElement).show();
+		} else {
+			$(infoElement).hide();
+		}
+	}
+	else if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.nameDevice');  // now get parents respective child element
+		$(element).text(mqttpayload);
+	}
+
 }
