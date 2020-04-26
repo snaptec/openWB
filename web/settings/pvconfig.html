@@ -748,7 +748,9 @@
 					// natural number input validation on the fly
 					// validates max of typed value
 					// if negative numbers are allowed pos-neg-range must be symmetrical
-					this.value = this.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1');
+					if ( this.value.length > 0 ) {
+						this.value = parseInt(this.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
+					}
 					if ( parseInt(this.value) > $(this).attr('max') ) {
 						this.value = $(this).attr('max');
 					}
