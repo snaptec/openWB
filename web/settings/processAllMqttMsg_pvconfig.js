@@ -1,12 +1,19 @@
 /**
- * functions to setup pv charging parameters via MQTT-messages
- *
- * required function setInputValue and setToggleBtnGroup defined in main pvconfig.html
+ * processes mqtt messages
  *
  * @author Michael Ortenstein
  */
 
+var originalValues = {};  // holds all topics and its values received by mqtt before possible changes made by user
+
 function processMessages(mqttmsg, mqttpayload) {
+    /** @function processMessages
+     * sets input fields, range sliders and button-groups to values by mqtt
+     * @param {string} mqttmsg - the complete mqtt topic
+     * @param {string} mqttpayload - the value for the topic
+     * @requires function:setInputValue - is declared in pvconfig.html
+     * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
+     */
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);
     // check if topic contains subgroup like /lp/1/
@@ -21,8 +28,10 @@ function processMessages(mqttmsg, mqttpayload) {
     }
     var element = $('#' + elementId);
     if ( element.attr('type') == 'number' || element.attr('type') == 'text' || element.attr('type') == 'range' ) {
+        originalValues[mqttmsg] = mqttpayload;
         setInputValue(elementId, mqttpayload);
     } else if ( element.hasClass('btn-group-toggle') ) {
+        originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
     } else {
         console.log(elementId + ' not found');
