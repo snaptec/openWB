@@ -92,14 +92,14 @@
 					<div class="form-row vaRow mt-1">
 						<div class="col-auto">
 							<div class="form-check mb-2">
-								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg" data-default="false" data-topicprefix="openWB/config/get/pv/">
+								<input class="form-check-input" type="checkbox" id="regulationPointPosNeg" data-topicprefix="openWB/config/get/pv/">
 								<label class="form-check-label" for="regulationPointPosNeg">
 									&nbsp;negativ
 								</label>
 							</div>
 						</div>
 						<div class="col-4 col-sm-3 col-lg-2">
-							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+							<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" min="-50000" max="50000" value="" data-signcheckbox="regulationPointPosNeg" data-default="0" data-topicprefix="openWB/config/get/pv/">
 						</div>
 						<label class="col col-form-label" for="regulationPoint"><small>{&plusmn;50000 ganzzahlig}</small></label>
 					</div>
@@ -178,18 +178,18 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-0 vaRow">
-						<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="minCurrentlp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentlp1" name="minCurrent" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 						</div>
-						<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
+						<label for="minCurrentlp1" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
+						<label for="minCurrentlp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/">
+							<input type="range" class="form-control-range rangeInput" id="minCurrentlp2" name="minCurrent" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 						</div>
-						<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A"></label>
+						<label for="minCurrentlp2" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">adaptive Ladung</h6>
 					<div>
@@ -275,11 +275,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="minSocAlwaysToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="minSocAlwaysToChargeTolp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeTolp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 						</div>
-						<label for="minSocAlwaysToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
+						<label for="minSocAlwaysToChargeTolp1" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 					<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
 					<div>
@@ -290,11 +290,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="minSocAlwaysToChargeToCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="minSocAlwaysToChargeToCurrentlp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/">
+							<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentlp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 						</div>
-						<label for="minSocAlwaysToChargeToCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
+						<label for="minSocAlwaysToChargeToCurrentlp1" class="col col-form-label valueLabel" suffix="A"></label>
 					</div>
 					<h6 class="mb-0">Maximal-SoC</h6>
 					<div>
@@ -304,11 +304,11 @@
 						</small>
 					</div>
 					<div class="form-row form-group mb-1 vaRow">
-						<label for="maxSocToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+						<label for="maxSocToChargeTolp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 						<div class="col-6 col-sm-4">
-							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
+							<input type="range" class="form-control-range rangeInput" id="maxSocToChargeTolp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 						</div>
-						<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
+						<label for="maxSocToChargeTolp1" class="col col-form-label valueLabel" suffix="%"></label>
 					</div>
 				</div>  <!-- end card body EV-SoC-Steuerung PV -->
 			</div>  <!-- end card EV-SoC-Steuerung PV -->
@@ -536,10 +536,11 @@
 
 			function updateLabel(elementId) {
 				// sets a label to value of the range slider if one exists
-				var label = $('label[for="' + $(elementId).attr('id') + '"].valueLabel');
+				var element = $('#' + elementId);
+				var label = $('label[for="' + element.attr('id') + '"].valueLabel');
 				if ( label.length == 1 ) {
-					var suffix = $(label).attr('suffix');
-					var text = $(elementId).val();
+					var suffix = label.attr('suffix');
+					var text = element.val();
 					if ( suffix != '' ) {
 						text += ' ' + suffix;
 					}
@@ -549,9 +550,23 @@
 
 			function setInputValue(elementId, value) {
 				// sets value of an input element
-				if ( !isNaN(value) && $(elementId).length != 0 ) {
-					$(elementId).val(value);
-					if ( $(elementId).attr('type') == 'range' ) {
+				// if data-attribut defines a checkbox for the sign it will be used to display pos/neg sign
+				// otherwise a negative value will be displayed with '-' in the input element
+				if ( !isNaN(value) ) {
+					var element = $('#' + elementId);
+					var signCheckboxName = element.data('signcheckbox');
+					var signCheckbox = $('#' + signCheckboxName);
+					if ( signCheckbox.length == 1 ) {
+						// checkbox exists
+						if ( value < 0 ) {
+							signCheckbox.prop('checked', true);
+							value *= -1;
+						} else {
+							signCheckbox.prop('checked', false);
+						}
+					}
+					element.val(value);
+					if ( element.attr('type') == 'range' ) {
 						updateLabel(elementId);
 					}
 				}
@@ -592,20 +607,13 @@
 
 				$('#saveDefaultsBtn').on("click",function() {
 					// shown in confirmation modal
-					$('input[type="number"], input[type="range"]').each(function() {
+					$('input[type="number"], input[type="text"], input[type="range"]').each(function() {
 						// first all number-field and range sliders
 						var defaultValue = $(this).data('default');
 						if ( typeof defaultValue !== 'undefined' ) {
-							setInputValue(this, defaultValue);
+							console.log($(this).attr('id'));
+							setInputValue($(this).attr('id'), defaultValue);
 						}
-					});
-					$('input[type="checkbox"]').each(function() {
-						// then all checkboxes
-						var defaultValue = $(this).data('default');
-						if ( typeof defaultValue !== 'boolean' ) {
-							defaultValue = false;
-						}
-						$(this).prop('checked', defaultValue);
 					});
 					$('.btn-group-toggle').each(function() {
 						// then all toggle btn-groups
