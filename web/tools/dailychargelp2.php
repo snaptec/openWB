@@ -14,7 +14,7 @@ class Ajaxloader{
 
 		if($call == "loadfile"){
 			$result = $dailyevlp2;
-			header("Content-type: text/json");
+			header("Content-type: application/json");
 			echo json_encode(array("text"=> $result));
 		}
 	}
