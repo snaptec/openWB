@@ -357,12 +357,12 @@ def on_message(client, userdata, msg):
 
 
 
-    if (msg.topic == "openWB/set/system/priorityModeEVBattery"):
+    if (msg.topic == "openWB/config/set/pv/priorityModeEVBattery"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             einbeziehen=msg.payload.decode("utf-8")
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen=", einbeziehen]
             subprocess.Popen(sendcommand)
-            client.publish("openWB/global/priorityModeEVBattery", einbeziehen, qos=0, retain=True)
+            client.publish("openWB/config/get/pv/priorityModeEVBattery", einbeziehen, qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/LiveGraphDuration"):
         if (int(msg.payload) >= 20 and int(msg.payload) <=120):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph=", msg.payload.decode("utf-8")]
