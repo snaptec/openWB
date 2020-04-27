@@ -277,6 +277,25 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendhook)
             client.publish("openWB/set/hook/HookControl", "", qos=0, retain=True)
             client.publish("openWB/hook/"+hooknmb+"/BoolHookStatus", hookact, qos=0, retain=True)
+
+
+
+
+    if (msg.topic == "openWB/config/set/slave/MinimumAdjustmentInterval"):
+        if (int(msg.payload) >= 10 and int(msg.payload) <= 300):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeMinimumAdjustmentInterval=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/slave/MinimumAdjustmentInterval", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/slave/SlowRamping"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeSlowRamping=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/slave/SlowRamping", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/slave/UseLastChargingPhase"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slaveModeUseLastChargingPhase=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/slave/UseLastChargingPhase", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
         if (float(msg.payload) >= 0 and float(msg.payload) <=200):
             f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
@@ -334,15 +353,18 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL3', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/config/set/pv/priorityModeEVBattery"):
+
+
+
+
+    if (msg.topic == "openWB/set/system/priorityModeEVBattery"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=1):
             einbeziehen=msg.payload.decode("utf-8")
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "speicherpveinbeziehen=", einbeziehen]
             subprocess.Popen(sendcommand)
-            client.publish("openWB/config/get/pv/priorityModeEVBattery", einbeziehen, qos=0, retain=True)
+            client.publish("openWB/global/priorityModeEVBattery", einbeziehen, qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/LiveGraphDuration"):
         if (int(msg.payload) >= 20 and int(msg.payload) <=120):
-
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
