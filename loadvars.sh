@@ -1034,15 +1034,15 @@ if [[ "$orestzeitlp3" != "$restzeitlp3" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/TimeRemaining=${restzeitlp3}"
 	echo $restzeitlp3 > ramdisk/mqttrestzeitlp3
 fi
-if (( ogelrlp1 != gelrlp1 )); then
+if [[ "$ogelrlp1" != "$gelrlp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/kmCharged=${gelrlp1}"
 	echo $gelrlp1 > ramdisk/mqttgelrlp1
 fi
-if (( ogelrlp2 != gelrlp2 )); then
+if [[ "$ogelrlp2" != "$gelrlp2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/kmCharged=${gelrlp2}"
 	echo $gelrlp2 > ramdisk/mqttgelrlp2
 fi
-if (( ogelrlp3 != gelrlp3 )); then
+if [[ "$ogelrlp3" != "$gelrlp3" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/3/kmCharged=${gelrlp3}"
 	echo $gelrlp3 > ramdisk/mqttgelrlp3
 fi
