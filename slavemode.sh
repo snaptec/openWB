@@ -78,10 +78,6 @@ function computeAndSetCurrentForChargePoint() {
 		expectedChangeTimestamp=${expectedChangeArray[0]}
 		expectedCurrentPerPhase=${expectedChangeArray[1]}
 		local timeSinceAdjustment=$(( NowItIs - expectedChangeTimestamp ))
-		if (( `echo "(${expectedCurrentPerPhase} - ${ChargeCurrentOnPhase[1]}) > ${MaxCurrentOffset}" | bc` == 1 )); then
-			echo "$NowItIs: Slave Mode: Expecting current ${expectedCurrentPerPhase} A on max charging phase but found ${ChargeCurrentOnPhase[1]} A ${timeSinceAdjustment} seconds after adjustment. Not doing any further adjustment."
-			return 0
-		fi
 		if (( timeSinceAdjustment < MinimumAdjustmentInterval )); then
 			$dbgWrite "$NowItIs: Slave Mode: Time after adjustment ${timeSinceAdjustment} < ${MinimumAdjustmentInterval} seconds. Skipping control loop"
 			return 0
