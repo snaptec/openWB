@@ -63,7 +63,7 @@ if(isset($_GET["get"])) {
 			"pvw"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/pvwatt'))[0] / 1000),
 			"socLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc1'))[0]
 		);
-		header("Content-type: text/json");
+		header("Content-type: application/json");
 		echo json_encode($json);
 	}
 	if($_GET["get"] == "all") {
@@ -131,7 +131,7 @@ if(isset($_GET["get"])) {
 			"lla2LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas22'))[0],
 			"lla3LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas23'))[0]
 		);
-		header("Content-type: text/json");
+		header("Content-type: application/json");
 		echo json_encode($json);
 	}
 }
