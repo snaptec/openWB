@@ -153,3 +153,17 @@ function setToDefaults() {
          }
      });
 }
+
+function formatToNaturalNumber(element) {
+    /** @function formatToNaturalNumber
+     * validation of user input so only natural numbers can be typed into field
+     * @param {object} element - the input element
+     * @requires max value set up for input field properly
+     */
+     if ( element.value.length > 0 ) {
+         element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
+     }
+     if ( parseInt(element.value) > $(element).attr('max') ) {
+         element.value = $(element).attr('max');
+     }
+}
