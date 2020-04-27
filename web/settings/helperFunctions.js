@@ -80,7 +80,6 @@ function sendValues(valueList) {
         // there are changed values
         Object.keys(valueList).forEach(function(topic) {
             var value = this[topic].toString();
-            console.log(topic +' = '+ value);
             publish(value, topic);
         }, valueList);
     }
@@ -124,11 +123,8 @@ function getChangedValues() {
         }
         var topic = topicPrefix + topicSubGroup + topicIdentifier;
         if ( originalValues[topic] != value ) {
-            console.log('value for ' + topic + ' changed from ' + originalValues[topic] + ' to ' + value);
             topic = topic.replace('/get/', '/set/');
             allChanged[topic] = value;
-        } else {
-            console.log('value for ' + topic + ' did not change');
         }
     });
     return allChanged;

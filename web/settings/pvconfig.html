@@ -561,13 +561,14 @@
 			});
 
 			function saveSettings() {
-				// sends all values by mqtt
+				// sends all changed values by mqtt if valid
 				var formValid = $("#myForm")[0].checkValidity();
 				if ( !formValid ) {
 					$('#formNotValidModal').modal();
 					return;
 				}
 				sendValues(getChangedValues());
+				window.location.href = './index.php';
 			}
 
 			$(document).ready(function(){
@@ -591,8 +592,10 @@
 
 				$('#saveDefaultsBtn').on("click",function() {
 					// shown in confirmation modal
+					// resets all values to defaults and sends all changed values by mqtt
 					setToDefaults();
 					sendValues(getChangedValues());
+					window.location.href = './index.php';
 				});
 
 				$('input').on("paste",function(e) {
