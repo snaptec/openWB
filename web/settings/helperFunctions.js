@@ -133,3 +133,23 @@ function getChangedValues() {
     });
     return allChanged;
 }
+
+function setToDefaults() {
+    /** @function setToDefaults
+     * sets all inputs and button-groups to their default value
+     */
+     $('input[type="number"], input[type="text"], input[type="range"]').each(function() {
+         // first all number-field and range sliders
+         var defaultValue = $(this).data('default');
+         if ( typeof defaultValue !== 'undefined' ) {
+             setInputValue($(this).attr('id'), defaultValue);
+         }
+     });
+     $('.btn-group-toggle').each(function() {
+         // then all toggle btn-groups
+         var defaultValue = $(this).data('default');
+         if ( typeof defaultValue !== 'undefined' ) {
+             setToggleBtnGroup($(this).attr('id'), defaultValue);
+         }
+     });
+}
