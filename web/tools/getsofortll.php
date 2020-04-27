@@ -15,7 +15,7 @@ class Ajaxloader{
 		$call = $_POST['call'];
 		if($call == "loadfile"){
 			$result = $sofortllold;
-			header("Content-type: text/json");
+			header("Content-type: application/json");
 			echo json_encode(array("text"=> $result));
 		}
 	}

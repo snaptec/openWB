@@ -4,7 +4,10 @@ HeartbeatTimeout=35
 CurrentLimitAmpereForCpCharging=0.5
 NumberOfSupportedChargePoints=2
 LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
+ExpectedChangeFile="ramdisk/expectedChangeLp"
 SystemVoltage=240
+MaxCurrentOffset=1.0
+MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
 
 #
 # the main entry point of the script that is called from outside
@@ -64,7 +67,24 @@ function computeAndSetCurrentForChargePoint() {
 
 	# the charge point that we're looking at is our first parameter
 	local chargePoint=$1
+	local expectedChangeFile="${ExpectedChangeFile}${chargePoint}"
 
+	# check if the car has done the adjustment that it has last been asked for
+	local expectedChangeTimestamp=NowItIs
+	local expectedCurrentPerPhase=-1
+	if [ -f "${expectedChangeFile}" ]; then
+		local expectedChangeContent=$(<"${expectedChangeFile}")
+		IFS=',' read -ra expectedChangeArray <<< "$expectedChangeContent"
+		expectedChangeTimestamp=${expectedChangeArray[0]}
+		expectedCurrentPerPhase=${expectedChangeArray[1]}
+		local timeSinceAdjustment=$(( NowItIs - expectedChangeTimestamp ))
+		if (( timeSinceAdjustment < MinimumAdjustmentInterval )); then
+			$dbgWrite "$NowItIs: Slave Mode: Time after adjustment ${timeSinceAdjustment} < ${MinimumAdjustmentInterval} seconds. Skipping control loop"
+			return 0
+		fi
+	fi
+
+	# we may adjust -- start calculating
 	declare -i chargingVehiclesAdjustedForThisCp=${ChargingVehiclesOnPhase[$ChargingPhaseWithMaximumTotalCurrent]}
 	if !(( CpIsCharging )); then
 
@@ -74,7 +94,7 @@ function computeAndSetCurrentForChargePoint() {
 
 	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
 		# this can happen in transient when master has not yet detected us as charging but we have already detected us as charging and no other car is charging
-		$dbgWrite "$NowItIs: Slave Mode INTERNAL ERROR: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
+		$dbgWrite "$NowItIs: Slave Mode: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
 		chargingVehiclesAdjustedForThisCp=1
 	fi
 
@@ -86,7 +106,7 @@ function computeAndSetCurrentForChargePoint() {
 	if (( `echo "$AllowedPeakPower > 0" | bc` == 1 )); then
 
 		if (( TotalPowerConsumption == -1 )); then
-			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption}): Immediately stopping charge and exiting"
+			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption} W): Immediately stopping charge and exiting"
 			callSetCurrent 0 $chargePoint
 			exit 2
 		fi
@@ -101,21 +121,56 @@ function computeAndSetCurrentForChargePoint() {
 	fi
 
 	# new charge current in int but always rounded to the next _lower_ integer
-	llneu=$(echo "scale=0; ($llalt + $lldiff)/1" | bc)
+	llneu=$(echo "scale=0; ($PreviousExpectedChargeCurrent + $lldiff)/1" | bc)
 
-	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase, TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}, chargingVehiclesAdjustedForThisCp=${chargingVehiclesAdjustedForThisCp}, llalt=$llalt, lldiff=$lldiff --> llneu=$llneu"
+	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W"
+    $dbgWrite "$NowItIs: Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, chargingVehiclesAdjustedForThisCp=${chargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
 
-	# The llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
-	# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
-	# For this case we limit to the total allowed current divided by the number of charging vehicals.
-	# The resulting value might get further limited to maximalstromstaerke below.
-	if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+	# limit the change to +1, -1 or -3 if slow ramping is enabled,
+	# a value of 0 will be kept unchanged
+	if (( slaveModeSlowRamping == 1 )); then
 
-		$dbgWrite "$NowItIs: Slave Mode: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
+		local adjustment=0;
+		if (( `echo "$lldiff > 1.0" | bc` == 1 )); then
+			adjustment=1
+		elif (( `echo "$lldiff < -3.0" | bc` == 1 )); then
+			adjustment=-3
+		elif (( `echo "$lldiff < -0.5" | bc` == 1 )); then
+			adjustment=-1
+		fi
 
-		llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${chargingVehiclesAdjustedForThisCp})" | bc)
+		if !(( CpIsCharging )); then
+			# if we're not charging, we always start off with minimalstromstaerke
+		if (( `echo "$lldiff < 0" | bc` == 1 )); then
+				llneu=0
+
+				$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Too few current left to start"
+			else
+				llneu=${minimalstromstaerke}
+
+				$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Not charging: Starting at minimal supported charge current ${llneu} A"
+			fi
+		else
+			llneu=$(( PreviousExpectedChargeCurrent + adjustment ))
+			$dbgWrite "$NowItIs: Slave Mode: Slow ramping: Limiting adjustment to ${PreviousExpectedChargeCurrent} + (${adjustment}) --> llneu = ${llneu} A"
+		fi
+	else
+
+		# In "fast" mode the llneu might exceed the AllowedTotalCurrentPerPhase if the EV doesn't actually start consuming
+		# the allowed current (and hence TotalCurrentConsumptionOnL1 doesn't increase).
+		# For this case we limit to the total allowed current divided by the number of charging vehicals.
+		# The resulting value might get further limited to maximalstromstaerke below.
+		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
+
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
+
+			llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${chargingVehiclesAdjustedForThisCp})" | bc)
+		else
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
+		fi
 	fi
 
+	# finally limit to the configured min or max values
 	if (( llneu < minimalstromstaerke )) || ((LpEnabled == 0)); then
 		if ((LpEnabled != 0)); then
 			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
@@ -131,8 +186,8 @@ function computeAndSetCurrentForChargePoint() {
 
 	callSetCurrent $llneu $chargePoint
 
-	if (( llalt != llneu )); then
-		echo "$date Ändere Ladeleistung von $llalt auf $llneu Ampere" >> ramdisk/ladestatus.log
+	if (( PreviousExpectedChargeCurrent != llneu )); then
+		echo "$date Ändere Ladeleistung von $PreviousExpectedChargeCurrent auf $llneu Ampere" >> ramdisk/ladestatus.log
 	fi
 
 	return 0
@@ -159,6 +214,7 @@ function aggregateDataForChargePoint() {
 
 	ChargingPhaseWithMaximumTotalCurrent=0
 	TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=0
+	PreviousExpectedChargeCurrent=0
 
 	# indication whether the given charge point is actually enabled
 	local cpenabledVar="lp${chargePoint}enabled"
@@ -171,12 +227,16 @@ function aggregateDataForChargePoint() {
 		# we have to do a slightly ugly if-else-cascade to determine the right ramdisk file name
 		if (( chargePoint == 1 )); then
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/lla${i}")
+			PreviousExpectedChargeCurrent=$llalt
 		elif (( chargePoint == 2 )); then
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/llas1${i}")
+			PreviousExpectedChargeCurrent=$llalts1
 		elif (( chargePoint == 3 )); then
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/llas2${i}")
+			PreviousExpectedChargeCurrent=$llalts2
 		elif (( chargePoint >= 4 )); then
 			ChargeCurrentOnPhase[i]=$(<"ramdisk/lla${i}lp${chargePoint}")
+			PreviousExpectedChargeCurrent=$(<"ramdisk/ramdisk/llsolllp${chargePoint}")
 		else
 			echo "$NowItIs: Slave Mode charge current fetch ERROR: Charge Point #${chargePoint} is not supported"
 			return 1
@@ -374,6 +434,10 @@ function callSetCurrent() {
 	fi
 
 	$dbgWrite "$NowItIs: callSetCurrent(${currentToSet}, ${chargePoint}): Calling runs/set-current.sh ${currentToSet} ${chargePointString}"
+
+	if (( PreviousExpectedChargeCurrent != currentToSet )); then
+		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
+	fi
 
 	runs/set-current.sh $currentToSet "${chargePointString}"
 
