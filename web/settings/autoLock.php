@@ -300,7 +300,7 @@ ECHOFORMGROUPTAIL;
 
 		<script type="text/javascript">
 
-			$.get("settings/navbar.php", function(data){
+			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navAutolock').addClass('disabled');
