@@ -78,6 +78,6 @@ loadkwh=$(echo $json | jq '.loginfo['$arr_pos'].total_consumption' | sed 's/.*:/
 #
 ## Daten in Ramdisk schreiben
 #
-echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
+#echo $ikwh > /var/www/html/openWB/ramdisk/bezugkwh
 echo $grid_power > /var/www/html/openWB/ramdisk/wattbezug
 echo $grid_power
