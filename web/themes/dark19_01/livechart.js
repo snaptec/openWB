@@ -508,11 +508,9 @@ function loadgraph() {
 function setvisibility(datarr,hidevar,hidevalue){
 
 	if ( datarr.every( (val, i, arr) => val === arr[0] ) ) {
-		console.log("passed"+ hidevar);
 		window[hidevar] = hidevalue;
 	}else {
 		window[hidevar] = 'foo';
-		console.log("nonpassed"+ hidevar);
 	}
 }
 function putgraphtogether() {
@@ -582,7 +580,6 @@ function putgraphtogether() {
 
 
 			initialread = 1 ;
-			console.log(hidelp4);
 			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
 			unsubscribeMqttGraphSegments();
 
