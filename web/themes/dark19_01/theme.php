@@ -130,7 +130,7 @@
 				Speicher: <span id="speicherleistung">lade Daten</span><span id="speichersoc"></span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-lightblue SmartHome" dev="1">
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
@@ -138,7 +138,7 @@
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-lightblue SmartHome" dev="3">
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
@@ -146,7 +146,7 @@
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-lightblue SmartHome" dev="5">
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
@@ -154,7 +154,7 @@
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-lightblue SmartHome" dev="7">
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
@@ -162,13 +162,13 @@
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="col-sm bg-lightblue SmartHome" dev="9">
 				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
 			</div>
 
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 			<div class="bg-lightblue col-sm SmartHomeTemp" dev="1">
 				<span class="actualTemp0Device"></span>
 			</div>
@@ -179,7 +179,7 @@
 				<span class="actualTemp2Device"></span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black hide">
 
 			<div class="bg-lightblue col-sm SmartHomeTemp" dev="2">
 				<span class="actualTemp0Device"></span>
