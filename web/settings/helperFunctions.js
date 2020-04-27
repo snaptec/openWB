@@ -163,7 +163,8 @@ function formatToNaturalNumber(element) {
      if ( element.value.length > 0 ) {
          element.value = parseInt(element.value.replace(/[^0-9.-]/g,'').replace(/(\..*)\./g, '$1'));
      }
-     if ( parseInt(element.value) > $(element).attr('max') ) {
-         element.value = $(element).attr('max');
+     var max = $(element).attr('max');
+     if ( typeof max !== 'undefined' && !isNaN(max) && parseInt(element.value) > max ) {
+         element.value = max;
      }
 }
