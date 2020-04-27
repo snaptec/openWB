@@ -169,7 +169,6 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg == 'openWB/graph/lastlivevalues' ) {
-		console.log(initialread);
 		if ( initialread > 0) {
 			updateGraph(mqttpayload);
 		}
