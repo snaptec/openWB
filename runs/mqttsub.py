@@ -254,7 +254,7 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/nurpv70dynact", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/config/set/pv/nurpv70dynw"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+        if (int(msg.payload) >= 2000 and int(msg.payload) <= 50000):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "nurpv70dynw=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/nurpv70dynw", msg.payload.decode("utf-8"), qos=0, retain=True)
