@@ -137,12 +137,12 @@ def on_message(client, userdata, msg):
 
 
 
-    if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforStart"):
+    if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "mindestuberschuss=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
-            client.publish("openWB/config/get/pv/minFeedinPowerBeforStart", msg.payload.decode("utf-8"), qos=0, retain=True)
-            client.publish("openWB/config/set/pv/minFeedinPowerBeforStart", "", qos=0, retain=True)
+            client.publish("openWB/config/get/pv/minFeedinPowerBeforeStart", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/pv/minFeedinPowerBeforeStart", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/pv/maxPowerConsumptionBeforeStop"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "abschaltuberschuss=", msg.payload.decode("utf-8")]
