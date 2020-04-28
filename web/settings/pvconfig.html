@@ -608,6 +608,11 @@
 					updateLabel($(this).attr('id'));
 				});
 
+				$('.rangeInput').each(function() {
+					// show slider value in label of class valueLabel
+					updateLabel($(this).attr('id'));
+				});
+
 				$('input.naturalNumber').on('input', function() {
 					// on the fly input validation
 					formatToNaturalNumber(this);
