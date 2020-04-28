@@ -22,6 +22,15 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
+var boolDisplayshd1;
+var boolDisplayshd2;
+var boolDisplayshd3;
+var boolDisplayshd4;
+var boolDisplayshd5;
+var boolDisplayshd6;
+var boolDisplayshd7;
+var boolDisplayshd8;
+var boolDisplayshd9;
 var d1name = 'Device 1';
 var d2name = 'Device 2';
 var d3name = 'Device 3';
@@ -260,7 +269,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd1,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd1
 		}, {
 			label: d2name,
 			borderColor: "rgba(50, 250, 255, 0.7)",
@@ -270,7 +279,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd2,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd2
 		}, {
 			label: d3name,
 			borderColor: "rgba(250, 50, 255, 0.7)",
@@ -280,7 +289,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd3,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd3
 		}, {
 			label: d4name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -290,7 +299,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd4,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd4
 		}, {
 			label: d5name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -300,7 +309,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd5,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd5
 		}, {
 			label: d6name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -310,7 +319,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd6,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd6
 		}, {
 			label: d7name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -320,7 +329,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd7,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd7
 		}, {
 			label: d8name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -330,7 +339,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd8,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd8
 		}, {
 			label: d9name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -340,7 +349,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: ashd9,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8
+			hidden: boolDisplayshd9
 		}/*, {
 			label: 'Device 1t0',
 			borderColor: "rgba(250, 250, 155, 0.7)",
@@ -515,7 +524,7 @@ function loadgraph() {
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
 // Sichtbarkeit für SmartHome Devices im Graph
-function setvisibility(datarr,hidevar,hidevalue){
+function setvisibility(datarr,hidevar,hidevalue,booldisplay){
 	var arrayLength = datarr.length;
 	var vis=0
 	for (var i = 0; i < arrayLength; i++) {
@@ -525,8 +534,11 @@ function setvisibility(datarr,hidevar,hidevalue){
 	}
 	if ( vis == 0){
 		window[hidevar] = hidevalue;
+		window[booldisplay] = true;
 	} else {
 		window[hidevar] = 'foo';
+		window[booldisplay] = false;
+
 	}
 }
 function putgraphtogether() {
@@ -584,15 +596,15 @@ function putgraphtogether() {
 			setvisibility(alp6,'hidelp6','Lp6');
 			setvisibility(alp7,'hidelp7','Lp7');
 			setvisibility(alp8,'hidelp8','Lp8');
-			setvisibility(ashd1,'hideshd1',d1name);
-			setvisibility(ashd2,'hideshd2',d2name);
-			setvisibility(ashd3,'hideshd3',d3name);
-			setvisibility(ashd4,'hideshd4',d4name);
-			setvisibility(ashd5,'hideshd5',d5name);
-			setvisibility(ashd6,'hideshd6',d6name);
-			setvisibility(ashd7,'hideshd7',d7name);
-			setvisibility(ashd8,'hideshd8',d8name);
-			setvisibility(ashd9,'hideshd9',d9name);
+			setvisibility(ashd1,'hideshd1',d1name,'boolDisplayshd1');
+			setvisibility(ashd2,'hideshd2',d2name,'boolDisplayshd2');
+			setvisibility(ashd3,'hideshd3',d3name,'boolDisplayshd3');
+			setvisibility(ashd4,'hideshd4',d4name,'boolDisplayshd4');
+			setvisibility(ashd5,'hideshd5',d5name,'boolDisplayshd5');
+			setvisibility(ashd6,'hideshd6',d6name,'boolDisplayshd6');
+			setvisibility(ashd7,'hideshd7',d7name,'boolDisplayshd7');
+			setvisibility(ashd8,'hideshd8',d8name,'boolDisplayshd8');
+			setvisibility(ashd9,'hideshd9',d9name,'boolDisplayshd9');
 
 			initialread = 1 ;
 			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
