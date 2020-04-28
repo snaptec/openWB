@@ -13,7 +13,9 @@ RUN apt-get install -y \
     mosquitto-clients \
     nano \
     socat \
-    supervisor
+    supervisor \
+    sudo \
+    bc
 
 # fix invoke-rc.d: policy-rc.d denied execution of start
 RUN printf "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
