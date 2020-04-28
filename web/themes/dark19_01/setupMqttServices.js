@@ -34,9 +34,17 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/7/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/8/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/9/device_configured", 0],
+	["openWB/config/get/SmartHome/Devices/1/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/2/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/3/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/4/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/5/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/6/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/7/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
+	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
 	// graph topcis
-
 	["openWB/global/awattar/MaxPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
 	["openWB/graph/lastlivevalues", 1],
@@ -225,29 +233,21 @@ var topicsToSubscribe = [
 	["openWB/hook/3/boolHookStatus", 1],
 	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
 	["openWB/SmartHome/Devices/1/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/1/device_name", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor2", 1],
 	["openWB/SmartHome/Devices/2/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/2/device_name", 1],
 	["openWB/SmartHome/Devices/2/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/2/TemperatureSensor1", 1],
 	["openWB/SmartHome/Devices/2/TemperatureSensor2", 1],
 	["openWB/SmartHome/Devices/3/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/3/device_name", 1],
 	["openWB/SmartHome/Devices/4/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/4/device_name", 1],
 	["openWB/SmartHome/Devices/5/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/5/device_name", 1],
 	["openWB/SmartHome/Devices/6/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/6/device_name", 1],
 	["openWB/SmartHome/Devices/7/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/7/device_name", 1],
 	["openWB/SmartHome/Devices/8/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/SmartHome/Devices/9/Watt", 1],
-	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
+
 ];
 
 var retries = 0;

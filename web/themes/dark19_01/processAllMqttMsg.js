@@ -792,6 +792,7 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
 		var element = $(parent).find('.nameDevice');  // now get parents respective child element
 		$(element).text(mqttpayload);
+		window['d'+index+'name']=mqttpayload;
 	}
 
 }

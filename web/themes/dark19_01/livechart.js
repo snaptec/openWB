@@ -22,6 +22,15 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
+var d1name = 'Device 1';
+var d2name = 'Device 2';
+var d3name = 'Device 3';
+var d4name = 'Device 4';
+var d5name = 'Device 5';
+var d6name = 'Device 6';
+var d7name = 'Device 7';
+var d8name = 'Device 8';
+var d9name = 'Device 9';
 var all1 = 0;
 var all2 = 0;
 var all3 = 0;
@@ -243,8 +252,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 1',
-			borderColor: "rgba(50, 50, 55, 0.7)",
+			label: d1name,
+			borderColor: "rgba(230, 50, 220, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
 			lineTension: 0.2,
@@ -253,8 +262,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 2',
-			borderColor: "rgba(50, 50, 55, 0.7)",
+			label: d2name,
+			borderColor: "rgba(50, 250, 255, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
 			lineTension: 0.2,
@@ -263,8 +272,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 3',
-			borderColor: "rgba(50, 50, 55, 0.7)",
+			label: d3name,
+			borderColor: "rgba(250, 50, 255, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
 			lineTension: 0.2,
@@ -273,7 +282,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 4',
+			label: d4name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -283,7 +292,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 5',
+			label: d5name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -293,7 +302,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 6',
+			label: d6name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -303,7 +312,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 7',
+			label: d7name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -313,7 +322,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 8',
+			label: d8name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -323,7 +332,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		}, {
-			label: 'Device 9',
+			label: d9name,
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
@@ -505,11 +514,18 @@ function loadgraph() {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+// Sichtbarkeit für SmartHome Devices im Graph
 function setvisibility(datarr,hidevar,hidevalue){
-
-	if ( datarr.every( (val, i, arr) => val === arr[0] ) ) {
+	var arrayLength = datarr.length;
+	var vis=0
+	for (var i = 0; i < arrayLength; i++) {
+		if (( datarr[i] >= 0.010) || (datarr[i] <=- 0.010)) {
+			vis=1
+		}
+	}
+	if ( vis == 0){
 		window[hidevar] = hidevalue;
-	}else {
+	} else {
 		window[hidevar] = 'foo';
 	}
 }
@@ -568,16 +584,15 @@ function putgraphtogether() {
 			setvisibility(alp6,'hidelp6','Lp6');
 			setvisibility(alp7,'hidelp7','Lp7');
 			setvisibility(alp8,'hidelp8','Lp8');
-			setvisibility(ashd1,'hideshd1','Device 1');
-			setvisibility(ashd2,'hideshd2','Device 2');
-			setvisibility(ashd3,'hideshd3','Device 3');
-			setvisibility(ashd4,'hideshd4','Device 4');
-			setvisibility(ashd5,'hideshd5','Device 5');
-			setvisibility(ashd6,'hideshd6','Device 6');
-			setvisibility(ashd7,'hideshd7','Device 7');
-			setvisibility(ashd8,'hideshd8','Device 8');
-			setvisibility(ashd9,'hideshd9','Device 9');
-
+			setvisibility(ashd1,'hideshd1',d1name);
+			setvisibility(ashd2,'hideshd2',d2name);
+			setvisibility(ashd3,'hideshd3',d3name);
+			setvisibility(ashd4,'hideshd4',d4name);
+			setvisibility(ashd5,'hideshd5',d5name);
+			setvisibility(ashd6,'hideshd6',d6name);
+			setvisibility(ashd7,'hideshd7',d7name);
+			setvisibility(ashd8,'hideshd8',d8name);
+			setvisibility(ashd9,'hideshd9',d9name);
 
 			initialread = 1 ;
 			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
