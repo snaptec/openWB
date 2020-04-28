@@ -157,6 +157,10 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/[1-9][0-9]*alllivevalues$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index2 = mqttmsg.match(/\d/g)[1];
+		if (typeof index2 !== 'undefined'){
+			index = index+index2
+		}
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;

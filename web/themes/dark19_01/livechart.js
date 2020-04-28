@@ -30,6 +30,14 @@ var all5 = 0;
 var all6 = 0;
 var all7 = 0;
 var all8 = 0;
+var all9 = 0;
+var all10 = 0;
+var all11 = 0;
+var all12 = 0;
+var all13 = 0;
+var all14 = 0;
+var all15 = 0;
+var all16 = 0;
 var all1p;
 var all2p;
 var all3p;
@@ -38,6 +46,15 @@ var all5p;
 var all6p;
 var all7p;
 var all8p;
+var all9p;
+var all10p;
+var all11p;
+var all12p;
+var all13p;
+var all14p;
+var all15p;
+var all16p;
+
 var hidehaus;
 var myLine;
 
@@ -422,7 +439,7 @@ function loadgraph() {
 				labels: {
 					fontColor: "rgba(255, 255, 255, 0.82)",
 					filter: function(item,chart) {
-						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) ) { return false } else { return true}
+						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) || item.text.includes(hideshd1)|| item.text.includes(hideshd2)|| item.text.includes(hideshd3)|| item.text.includes(hideshd4)|| item.text.includes(hideshd5)|| item.text.includes(hideshd6) || item.text.includes(hideshd7) || item.text.includes(hideshd8)|| item.text.includes(hideshd9) ) { return false } else { return true}
 					}
 				}
 			},
@@ -488,10 +505,17 @@ function loadgraph() {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+function setvisibility(datarr,hidevar,hidevalue){
 
+	if ( datarr.every( (val, i, arr) => val === arr[0] ) ) {
+		window[hidevar] = hidevalue;
+	}else {
+		window[hidevar] = 'foo';
+	}
+}
 function putgraphtogether() {
-	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
-		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (all9 == 1) && (all10 == 1) && (all11 == 1) && (all12 == 1) && (all13 == 1) && (all14 == 1) && (all15 == 1) && (all16 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p + "\n" + all9p + "\n" + all10p + "\n" + all11p + "\n" + all12p + "\n" + all13p + "\n" + all14p + "\n" + all15p + "\n" + all16p;
 		alldata = alldata.replace(/^\s*[\n]/gm, "");
 		alldata = alldata.replace(/^\s*-[\n]/gm, "");
 		var csvData = [];
@@ -538,9 +562,24 @@ function putgraphtogether() {
 			//ashd1t0 = getCol(csvData, 29);
 			//ashd1t1 = getCol(csvData, 30);
 			//ashd1t2 = getCol(csvData, 31);
+			setvisibility(alp3,'hidelp3','Lp3');
+			setvisibility(alp4,'hidelp4','Lp4');
+			setvisibility(alp5,'hidelp5','Lp5');
+			setvisibility(alp6,'hidelp6','Lp6');
+			setvisibility(alp7,'hidelp7','Lp7');
+			setvisibility(alp8,'hidelp8','Lp8');
+			setvisibility(ashd1,'hideshd1','Device 1');
+			setvisibility(ashd2,'hideshd2','Device 2');
+			setvisibility(ashd3,'hideshd3','Device 3');
+			setvisibility(ashd4,'hideshd4','Device 4');
+			setvisibility(ashd5,'hideshd5','Device 5');
+			setvisibility(ashd6,'hideshd6','Device 6');
+			setvisibility(ashd7,'hideshd7','Device 7');
+			setvisibility(ashd8,'hideshd8','Device 8');
+			setvisibility(ashd9,'hideshd9','Device 9');
+
 
 			initialread = 1 ;
-
 			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
 			unsubscribeMqttGraphSegments();
 
@@ -554,6 +593,15 @@ function putgraphtogether() {
 			all6 = 0;
 			all7 = 0;
 			all8 = 0;
+			all9 = 0;
+			all10 = 0;
+			all11 = 0;
+			all12 = 0;
+			all13 = 0;
+			all14 = 0;
+			all15 = 0;
+			all16 = 0;
+
 			var percent = (atime.length / 60 * 100).toFixed();
 			$('#waitforgraphloadingdiv').text('Erst ca. ' + percent + '% der mindestens benötigten Datenpunkte für den Graph seit Neustart vorhanden.');
 		}
