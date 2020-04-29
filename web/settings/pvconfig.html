@@ -47,21 +47,6 @@
 	    				Allgemeine Einstellungen
 	  				</div>
 					<div class="card-body">
-						<h6 class="mb-0">Maximalstromstärke</h6>
-						<div>
-							<small>
-								Paramter in Ampere [A] für den maximalen Strom in beiden Lademodi.
-								Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
-								Parameter wird im weiteren Ausbau verschoben nach "Grundeinstellungen alle Lademodi".
-							</small>
-						</div>
-						<div class="form-row form-group mb-1 vaRow">
-							<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-							<div class="col-6 col-sm-4">
-								<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" data-default="32" data-topicprefix="openWB/config/get/global/">
-							</div>
-							<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
-						</div>
 						<h6 class="mb-0">Regelmodus</h6>
 						<div>
 							<small>
@@ -550,7 +535,7 @@
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200426-a" ></script>
+		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200428-a" ></script>
 
 		<script type="text/javascript">
 
@@ -568,7 +553,7 @@
 					return;
 				}
 				sendValues(getChangedValues());
-				window.location.href = './index.php';
+				setTimeout(function(){ window.location.href = './index.php'; }, 100);
 			}
 
 			$(document).ready(function(){
@@ -595,7 +580,7 @@
 					// resets all values to defaults and sends all changed values by mqtt
 					setToDefaults();
 					sendValues(getChangedValues());
-					window.location.href = './index.php';
+					setTimeout(function(){ window.location.href = './index.php'; }, 100);
 				});
 
 				$('input').on("paste",function(e) {
