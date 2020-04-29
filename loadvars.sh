@@ -6,7 +6,7 @@ if (( renewmqtt == 1 )); then
 	echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
 	echo 01 | tee ramdisk/mqtt*
 fi
-	
+
 #get temp vars
 sofortll=$(<ramdisk/lp1sofortll)
 sofortlls1=$(<ramdisk/lp2sofortll)
@@ -167,7 +167,7 @@ if [[ $lastmanagement == "1" ]]; then
 		fi
 	fi
 	plugstatlp2=$(<ramdisk/plugstats1)
-	chargestatlp2=$(<ramdisk/chargestats1)	
+	chargestatlp2=$(<ramdisk/chargestats1)
 else
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)
@@ -1493,21 +1493,21 @@ timestamp="$(date +%s)"
 orfidlp1=$(<ramdisk/mqttrfidlp1)
 arfidlp1=$(<ramdisk/rfidlp1)
 if [[ "$orfidlp1" != "$arfidlp1" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/lastRfId=${arfidlp1},${timestamp}"
+	tempPubList="${tempPubList}\nopenWB/lp/1/lastRfId=${arfidlp1}"
 	echo $arfidlp1 > ramdisk/mqttrfidlp1
 fi
 
 orfidlp2=$(<ramdisk/mqttrfidlp2)
 arfidlp2=$(<ramdisk/rfidlp2)
 if [[ "$orfidlp2" != "$arfidlp2" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/2/lastRfId=${arfidlp2},${timestamp}"
+	tempPubList="${tempPubList}\nopenWB/lp/2/lastRfId=${arfidlp2}"
 	echo $arfidlp2 > ramdisk/mqttrfidlp2
 fi
 
 orfidlast=$(<ramdisk/mqttrfidlasttag)
 arfidlast=$(<ramdisk/rfidlasttag)
 if [[ "$orfidlast" != "$arfidlast" ]]; then
-	tempPubList="${tempPubList}\nopenWB/system/lastRfId=${arfidlast},${timestamp}"
+	tempPubList="${tempPubList}\nopenWB/system/lastRfId=${arfidlast}"
 	echo $arfidlast > ramdisk/mqttrfidlasttag
 fi
 
@@ -1573,7 +1573,7 @@ tempPubList="${tempPubList}\nopenWB/system/Timestamp=${timestamp}"
 #	if [[ "$ramdiskvar" != "$actualvar" ]]; then
 #		tempPubList="${tempPubList}\nopenWB/config/get/pv/${val}=${actualvar}"
 #		echo $actualvar > ramdisk/mqtt$val
-#	fi	      
+#	fi
 #done
 echo -e $tempPubList | python3 runs/mqttpub.py -q 0 -r &
 runs/pubmqtt.sh &

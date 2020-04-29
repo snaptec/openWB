@@ -11,7 +11,9 @@ soc1=$(<ramdisk/soc1)
 nachtladenstate=$(</var/www/html/openWB/ramdisk/nachtladenstate)
 nachtladen2state=$(</var/www/html/openWB/ramdisk/nachtladen2state)
 rfidlp1=$(<ramdisk/rfidlp1)
+rfidlp1=$( cut -d ',' -f 1 <<< "$rfidlp1" )
 rfidlp2=$(<ramdisk/rfidlp2)
+rfidlp2=$( cut -d ',' -f 1 <<< "$rfidlp2" )
 if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
 	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
 else
@@ -20,7 +22,7 @@ fi
 if [ -e ramdisk/loglademodus ]; then
 lademodus=$(</var/www/html/openWB/ramdisk/loglademodus)
 fi
-if (( soc > 0 )); then 
+if (( soc > 0 )); then
 	soctext=$(echo ", bei $soc %SoC")
 else
 	soctext=$(echo ".")
@@ -363,7 +365,7 @@ else
 			ladegeschws2=$(echo "scale=2;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
 			gelrlp3=$(echo "scale=2;$bishergeladens2 / $durchslp3 * 100" |bc)
 			gelrlp3=${gelrlp3%.*}
-	
+
 			if (( ladedauers2 > 60 )); then
 				ladedauerhs2=$((ladedauers2 / 60))
 				laderests2=$((ladedauers2 % 60))
@@ -484,7 +486,7 @@ else
 			ladegeschwlp4=$(echo "scale=2;$bishergeladenlp4 * 60 * 60 / $ladedauerslp4" |bc)
 			gelrlp4=$(echo "scale=2;$bishergeladenlp4 / $durchslp4 * 100" |bc)
 			gelrlp4=${gelrlp4%.*}
-	
+
 			if (( ladedauerlp4 > 60 )); then
 				ladedauerhlp4=$((ladedauerlp4 / 60))
 				laderestlp4=$((ladedauerlp4 % 60))
@@ -603,7 +605,7 @@ else
 			ladegeschwlp5=$(echo "scale=2;$bishergeladenlp5 * 60 * 60 / $ladedauerslp5" |bc)
 			gelrlp5=$(echo "scale=2;$bishergeladenlp5 / $durchslp5 * 100" |bc)
 			gelrlp5=${gelrlp5%.*}
-	
+
 			if (( ladedauerlp5 > 60 )); then
 				ladedauerhlp5=$((ladedauerlp5 / 60))
 				laderestlp5=$((ladedauerlp5 % 60))
@@ -722,7 +724,7 @@ else
 			ladegeschwlp6=$(echo "scale=2;$bishergeladenlp6 * 60 * 60 / $ladedauerslp6" |bc)
 			gelrlp6=$(echo "scale=2;$bishergeladenlp6 / $durchslp6 * 100" |bc)
 			gelrlp6=${gelrlp6%.*}
-	
+
 			if (( ladedauerlp6 > 60 )); then
 				ladedauerhlp6=$((ladedauerlp6 / 60))
 				laderestlp6=$((ladedauerlp6 % 60))
@@ -841,7 +843,7 @@ else
 			ladegeschwlp7=$(echo "scale=2;$bishergeladenlp7 * 60 * 60 / $ladedauerslp7" |bc)
 			gelrlp7=$(echo "scale=2;$bishergeladenlp7 / $durchslp7 * 100" |bc)
 			gelrlp7=${gelrlp7%.*}
-	
+
 			if (( ladedauerlp7 > 60 )); then
 				ladedauerhlp7=$((ladedauerlp7 / 60))
 				laderestlp7=$((ladedauerlp7 % 60))
@@ -960,7 +962,7 @@ else
 			ladegeschwlp8=$(echo "scale=2;$bishergeladenlp8 * 60 * 60 / $ladedauerslp8" |bc)
 			gelrlp8=$(echo "scale=2;$bishergeladenlp8 / $durchslp8 * 100" |bc)
 			gelrlp8=${gelrlp8%.*}
-	
+
 			if (( ladedauerlp8 > 60 )); then
 				ladedauerhlp8=$((ladedauerlp8 / 60))
 				laderestlp8=$((ladedauerlp8 % 60))

@@ -2490,6 +2490,14 @@ if ! grep -Fq "slaveModeUseLastChargingPhase=" /var/www/html/openWB/openwb.conf
 then
 	echo "slaveModeUseLastChargingPhase=1" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "slaveModeSlowRamping=" /var/www/html/openWB/openwb.conf
+then
+	echo "slaveModeSlowRamping=1" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "slaveModeMinimumAdjustmentInterval=" /var/www/html/openWB/openwb.conf
+then
+	echo "slaveModeMinimumAdjustmentInterval=15" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "solarworld_emanagerip=" /var/www/html/openWB/openwb.conf
 then
 	echo "solarworld_emanagerip=192.192.192.192" >> /var/www/html/openWB/openwb.conf
@@ -2552,9 +2560,9 @@ fi
 ethstate=$(</sys/class/net/eth0/carrier)
 if (( ethstate == 1 )); then
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+else
+	sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
 fi
-sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
-
 
 if  grep -Fxq "AllowOverride" /etc/apache2/sites-available/000-default.conf
 then
