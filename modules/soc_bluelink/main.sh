@@ -13,6 +13,6 @@ if (( soctimer < tmpintervall )); then
 	soctimer=$((soctimer+1))
 	echo $soctimer > /var/www/html/openWB/ramdisk/soctimer
 else
-	sudo python3 /var/www/html/openWB/modules/soc_bluelink/bluelibksoc.py $soc_bluelink_email $soc_bluelink_password $soc_bluelink_pin &
+	sudo python3 /var/www/html/openWB/modules/soc_bluelink/bluelinksoc.py $soc_bluelink_email $soc_bluelink_password $soc_bluelink_pin &
 	echo 0 > /var/www/html/openWB/ramdisk/soctimer
 fi
