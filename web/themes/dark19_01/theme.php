@@ -253,7 +253,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span><span id="targetCurrentLp<?php echo $i; ?>div"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>

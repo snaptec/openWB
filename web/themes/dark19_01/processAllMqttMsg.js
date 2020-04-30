@@ -576,6 +576,15 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$(element).text( phaseSymbols[ phasesInUse ] );
 		}
 	}
+        if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
+                 // target current value at charge point
+                 // matches to all messages containing "openwb/lp/#/aconfigured"
+                 // where # is an integer > 0
+                 // search is case insensitive
+                 var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+                 var targetCurrent = " * " + parseInt(mqttpayload, 10) + " A";
+                 $("#targetCurrentLp"+index+"div").html(targetCurrent);
+        }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
