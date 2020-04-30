@@ -133,8 +133,14 @@ def on_message(client, userdata, msg):
             writetoconfig(shconfigfile,'smarthomedevices','device_mineinschaltdauer_'+str(devicenumb), msg.payload.decode("utf-8"))
             client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_mineinschaltdauer", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_mineinschaltdauer", "", qos=0, retain=True)
-
-
+    if (( "openWB/config/set/sofort/lp" in msg.topic) and ("current" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 32):
+            client.publish("openWB/config/get/sofort/current/"+str(devicenumb)+"/current", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/sofort/current/"+str(devicenumb)+"/current", "", qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
@@ -534,54 +540,6 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
             client.publish("openWB/lp/8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp1/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp1sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/1/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp2/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp2sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/2/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp3/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp3sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/3/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp4/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp4sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/4/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp5/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp5sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/5/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp8/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp8sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/8/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp6/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp6sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/6/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp7/DirectChargeAmps"):
-        if (int(msg.payload) >= 6 and int(msg.payload) <=32):
-            f = open('/var/www/html/openWB/ramdisk/lp7sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/7/ADirectModeAmps", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp1/boolResetDirectCharge"):
         if (int(msg.payload) == 1):
             f = open('/var/www/html/openWB/ramdisk/aktgeladen', 'w')

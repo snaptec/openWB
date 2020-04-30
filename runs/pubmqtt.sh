@@ -180,6 +180,14 @@ mqttvar["lp/5/countPhasesInUse"]=lp5phasen
 mqttvar["lp/6/countPhasesInUse"]=lp6phasen
 mqttvar["lp/7/countPhasesInUse"]=lp7phasen
 mqttvar["lp/8/countPhasesInUse"]=lp8phasen
+mqttvar["config/get/sofort/lp/1/current"]=lp1sofortll
+mqttvar["config/get/sofort/lp/2/current"]=lp2sofortll
+mqttvar["config/get/sofort/lp/3/current"]=lp3sofortll
+mqttvar["config/get/sofort/lp/4/current"]=lp4sofortll
+mqttvar["config/get/sofort/lp/5/current"]=lp5sofortll
+mqttvar["config/get/sofort/lp/6/current"]=lp6sofortll
+mqttvar["config/get/sofort/lp/7/current"]=lp7sofortll
+mqttvar["config/get/sofort/lp/8/current"]=lp8sofortll
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
