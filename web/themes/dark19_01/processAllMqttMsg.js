@@ -572,7 +572,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
 			$(element).text('');
 		} else {
-			$(element).text(' (' + phasesInUse + ' Ph)');
+			var phaseSymbols = ['&#x2460','&#x2461','&#x2462'];
+			$(element).text( phaseSymbols[ phasesInUse ] );
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
