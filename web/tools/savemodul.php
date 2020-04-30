@@ -16,6 +16,19 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'dacregisters1='.$_POST['dacregisters1']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "speicher1_ip=") !== false) {
+			$result .= 'speicher1_ip='.$_POST['speicher1_ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "bezug1_ip=") !== false) {
+			$result .= 'bezug1_ip='.$_POST['bezug1_ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "pv1_ip=") !== false) {
+			$result .= 'pv1_ip='.$_POST['pv1_ip']."\n";
+			$writeit = '1';
+		}
+
 		if(strpos($line, "soc_bluelink_interval=") !== false) {
 			$result .= 'soc_bluelink_interval='.$_POST['soc_bluelink_interval']."\n";
 			$writeit = '1';
