@@ -321,9 +321,9 @@ if [[ $pv2wattmodul != "none" ]]; then
 	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 	pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
 
-	pvkwh=$(echo "$pvkwh + $pv2kwh" |bc)
-	echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
+	pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
+	#echo $pvallkwh > /var/www/html/openWB/ramdisk/pvkwh
+	echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
 	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
@@ -1078,47 +1078,6 @@ oversion=$(<ramdisk/mqttversion)
 if [[ $oversion != $version ]]; then
 	tempPubList="${tempPubList}\nopenWB/system/Version=${version}"
 	echo -n "$version" > ramdisk/mqttversion
-fi
-
-osofortll=$(<ramdisk/mqttsofortll)
-if (( osofortll != sofortll )); then
-	tempPubList="${tempPubList}\nopenWB/lp/1/ADirectModeAmps=${sofortll}"
-	echo $sofortll > ramdisk/mqttsofortll
-fi
-osofortlls1=$(<ramdisk/mqttsofortlls1)
-if (( osofortlls1 != sofortlls1 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/2/ADirectModeAmps=${sofortlls1}"
-	echo $sofortlls1 > ramdisk/mqttsofortlls1
-fi
-osofortlls2=$(<ramdisk/mqttsofortlls2)
-if (( osofortlls2 != sofortlls2 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/ADirectModeAmps=${sofortlls2}"
-	echo $sofortlls2 > ramdisk/mqttsofortlls2
-fi
-osofortlllp4=$(<ramdisk/mqttsofortlllp4)
-if (( osofortlllp4 != sofortlllp4 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/4/ADirectModeAmps=${sofortlllp4}"
-	echo $sofortlllp4 > ramdisk/mqttsofortlllp4
-fi
-osofortlllp5=$(<ramdisk/mqttsofortlllp5)
-if (( osofortlllp5 != sofortlllp5 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/5/ADirectModeAmps=${sofortlllp5}"
-	echo $sofortlllp5 > ramdisk/mqttsofortlllp5
-fi
-osofortlllp6=$(<ramdisk/mqttsofortlllp6)
-if (( osofortlllp6 != sofortlllp6 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/6/ADirectModeAmps=${sofortlllp6}"
-	echo $sofortlllp6 > ramdisk/mqttsofortlllp6
-fi
-osofortlllp7=$(<ramdisk/mqttsofortlllp7)
-if (( osofortlllp7 != sofortlllp7 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/7/ADirectModeAmps=${sofortlllp7}"
-	echo $sofortlllp7 > ramdisk/mqttsofortlllp7
-fi
-osofortlllp8=$(<ramdisk/mqttsofortlllp8)
-if (( osofortlllp8 != sofortlllp8 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/8/ADirectModeAmps=${sofortlllp8}"
-	echo $sofortlllp8 > ramdisk/mqttsofortlllp8
 fi
 
 olastmanagement=$(<ramdisk/mqttlastmanagement)
