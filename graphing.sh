@@ -6,7 +6,7 @@ echo "$(tail -100 /var/www/html/openWB/ramdisk/ladestatus.log)" > /var/www/html/
 if [[ $pv2wattmodul != "none" ]]; then
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvallwatt)
 else
-	pvwatt=$(</var/www/html/openWB/ramdisk/pvallwatt)
+	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
 pvgraph=$((-pvwatt))
 if (( speichervorhanden == 1 )); then
