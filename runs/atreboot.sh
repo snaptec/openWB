@@ -183,15 +183,15 @@ echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp5
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp6
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp7
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp8
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_1
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_2
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_3
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_4
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_5
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_6
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_7
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_8
-echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_9
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_1
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_2
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_3
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_4
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_5
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_6
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_7
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_8
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_9
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
