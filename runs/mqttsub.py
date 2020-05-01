@@ -404,6 +404,16 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/AllowedPeakPower', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp1"):
+        if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
+        if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
