@@ -6,7 +6,7 @@
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
@@ -44,8 +44,25 @@
 
 				<div class="card">
 					<div class="card-header font-weight-bold text-white bg-secondary">
-	    				Allgemeine Einstellungen
+	    				 Allgemeine Einstellungen
 	  				</div>
+					<div class="card-body">
+						<h6 class="mb-0">Mindeststromstärke</h6>
+						<div>
+							<small>
+								Paramter in Ampere [A] für den minimalen Strom im Modus Sofortladen.
+								Definiert den minimalen Ladestrom an den Ladepunkten. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet.
+								Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
+							</small>
+						</div>
+						<div class="form-row form-group mb-0 vaRow">
+							<label for="minCurrent" class="col-3 col-sm-2 col-form-label">alle LP:</label>
+							<div class="col-6 col-sm-4">
+								<input type="range" class="form-control-range rangeInput" id="minCurrent" min="6" max="16" step="1" value="6" data-default="6" data-topicprefix="openWB/config/get/sofort/">
+							</div>
+							<label for="minCurrent" class="col col-form-label valueLabel" suffix="A"></label>
+						</div>
+					</div>  <!-- end card body Allgemeine Einstellungen Sofort -->
 				</div>  <!-- end card Allgemeine Einstellungen Sofort -->
 
 				<br>
