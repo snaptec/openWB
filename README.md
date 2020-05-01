@@ -1,6 +1,6 @@
 # openWB
 
-
+**Dieser Fork von OpenWB ermöglicht es, OpenWB als Docker Image zu bauen und betreiben. Mit EVCC steht unter  https://github.com/andig/evcc eine alternative, vollständig Docker-kompatible und leichtgewichtigere Alternative zu OpenWB steht zur Verfügung.**
 
 
 Die Software steht frei für jeden zur Verfügung, siehe GPLv3 Bedingungen.
