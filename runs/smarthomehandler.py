@@ -29,6 +29,8 @@ global numberOfDevices
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
         file = open('/var/www/html/openWB/ramdisk/smarthome.log', 'a')
+        if (int(level) == 0):
+            file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 1):
             file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 2):
@@ -163,21 +165,25 @@ def loadregelvars():
     global speichervorhanden
     global loglevel
     global reread
+    global wattbezug
     try:
         with open('ramdisk/wattbezug', 'r') as value:
-            uberschuss = int(value.read()) * -1
+            wattbezug = int(value.read()) * -1
         with open('ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
         if ( speichervorhanden == 1):
             with open('ramdisk/speicherleistung', 'r') as value:
                 speicherleistung = int(value.read())
+                uberschuss = wattbezug + speicherleistung
             with open('ramdisk/speichersoc', 'r') as value:
                 speichersoc = int(value.read())
         else:
             speicherleistung = 0
             speichersoc = 100
+            uberschuss = wattbezug
     except Exception as e:
         logDebug("2", "Fehler beim Auslesen der Ramdisk: " + str(e))
+        wattbezug = 0
         uberschuss = 0
         speichervorhanden = 0
         speicherleistung = 0
@@ -212,7 +218,13 @@ def loadregelvars():
                 DeviceValues.update( {str(i) + "manual": int(value.read())}) 
         except:
             DeviceValues.update( {str(i) + "manual": 0})
-    logDebug("1", "Uberschuss: " + str(uberschuss) + " Speicherleistung: " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
+    for i in range(1, 10):
+        try:
+            with open('ramdisk/smarthome_device_manual_control_' + str(i), 'r') as value:
+                DeviceValues.update( {str(i) + "manualmodevar": int(value.read())}) 
+        except:
+            DeviceValues.update( {str(i) + "manualmodevar": 2})
+    logDebug("0", "Wattbezug: " + str(wattbezug) + " Uberschuss: " + str(uberschuss) + " Speicherleistung: " + str(speicherleistung) + " SpeicherSoC: " + str(speichersoc))
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
@@ -315,7 +327,7 @@ def getdevicevalues():
                                 if str(numberOfDevices) + "eintime" in DeviceCounters:
                                     del DeviceCounters[str(numberOfDevices) + "eintime"]
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                    logDebug("1", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))
+                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device Shelly " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
@@ -346,54 +358,76 @@ def conditions(nummer):
     mineinschaltdauer = int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(nummer))) * 60
     maxeinschaltdauer = int(config.get('smarthomedevices', 'device_maxeinschaltdauer_'+str(nummer))) * 60
     if ( uberschuss > einschwelle):
-        logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss größer Einschaltschwelle")
+        try:
+            del DeviceCounters[str(nummer)+"ausverz"]
+        except:
+            pass
+        logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss größer Einschaltschwelle")
         if ( maxeinschaltdauer > int(DeviceValues[str(nummer)+"runningtime"])):
-            if  str(nummer)+"einverz" in DeviceCounters:
-                timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
-                if ( einverz < timesince ):
-                    if ( DeviceValues[str(nummer)+"relais"] == 0 ):
+            if ( DeviceValues[str(nummer)+"relais"] == 0 ):
+                if  str(nummer)+"einverz" in DeviceCounters:
+                    timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
+                    if ( einverz < timesince ):
                         logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))  + " Einschaltverzögerung erreicht, schalte ein")
                         turndevicerelais(nummer, 1)
+                        del DeviceCounters[str(nummer)+"einverz"]
                     else:
-                        logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Einschaltverzögerung erreicht, bereits eingeschaltet")
+                        logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Einschaltverzögerung noch nicht erreicht. " + str(einverz) + " ist größer als " + str(timesince))
                 else:
-                    logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Einschaltverzögerung noch nicht erreicht. " + str(einverz) + " ist größer als " + str(timesince))
+                    DeviceCounters.update( {str(nummer) + "einverz" : time.time()})
+                    logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Einschaltverzögerung gestartet")
             else:
-                DeviceCounters.update( {str(nummer) + "einverz" : time.time()})
-                logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Einschaltverzögerung gestartet")
+                logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Einschaltverzögerung erreicht, bereits eingeschaltet")
+                try:
+                    del DeviceCounters[str(nummer)+"einverz"]
+                except:
+                    pass
+
         else:
             if ( DeviceValues[str(nummer)+"relais"] == 1 ):
                 logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Maximale Einschaltdauer erreicht schalte ab")
                 turndevicerelais(nummer, 0)
             else:
-                logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Maximale Einschaltdauer erreicht bereits abgeschaltet")
+                logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Maximale Einschaltdauer erreicht bereits abgeschaltet")
     else:
+        try:
+            del DeviceCounters[str(nummer)+"einverz"]
+        except:
+            pass
         if ( uberschuss < ausschwelle):
-            logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ "Überschuss kleiner Ausschaltschwelle")
-            if  str(nummer)+"ausverz" in DeviceCounters:
-                timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"ausverz"])
-                if ( ausverz < timesince ):
-                    if ( DeviceValues[str(nummer)+"relais"] == 1 ):
+            logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ "Überschuss kleiner Ausschaltschwelle")
+            if ( DeviceValues[str(nummer)+"relais"] == 1 ):
+                if  str(nummer)+"ausverz" in DeviceCounters:
+                    timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"ausverz"])
+                    if ( ausverz < timesince ):
                         if  str(nummer)+"eintime" in DeviceCounters:
                             timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                             if ( mineinschaltdauer < timestart):
                                 logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))  + " Ausschaltverzögerung & Mindesteinschaltdauer erreicht, schalte aus")
                                 turndevicerelais(nummer, 0)
+                                del DeviceCounters[str(nummer)+"ausverz"]
                             else:
                                 logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))  + " Ausschaltverzögerung erreicht, Mindesteinschaltdauer noch nicht erreicht, " + str(mineinschaltdauer) + " ist größer als " + str(timestart))
                         else:
                             logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Mindesteinschaltdauer nicht bekannt, schalte aus")
                             turndevicerelais(nummer, 0)
                     else:
-                        logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Ausschaltverzögerung erreicht, bereits ausgeschaltet")
-
+                        logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Ausschaltverzögerung noch nicht erreicht. " + str(ausverz) + " ist größer als " + str(timesince))
                 else:
-                    logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Ausschaltverzögerung noch nicht erreicht. " + str(ausverz) + " ist größer als " + str(timesince))
+                    DeviceCounters.update( {str(nummer) + "ausverz" : time.time()})
+                    logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Ausschaltverzögerung gestartet")
             else:
-                DeviceCounters.update( {str(nummer) + "ausverz" : time.time()})
-                logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Ausschaltverzögerung gestartet")
+                logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Ausschaltverzögerung erreicht, bereits ausgeschaltet")
+                try:
+                    del DeviceCounters[str(nummer)+"ausverz"]
+                except:
+                    pass
         else:
-            logDebug("1","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Überschuss kleiner als Einschaltschwelle und größer als Ausschaltschwelle")
+            logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Überschuss kleiner als Einschaltschwelle und größer als Ausschaltschwelle")
+            try:
+                del DeviceCounters[str(nummer)+"einverz"]
+            except:
+                pass
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
 
@@ -418,7 +452,13 @@ while True:
             configured = config.get('smarthomedevices', 'device_configured_' + str(i))
             if (configured == "1"):
                 if ( DeviceValues[str(i)+"manual"] == 1 ):
-                    logDebug("1","Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, führe keine Regelung durch")
+                    if ( DeviceValues[str(i)+"manualmodevar"] == 0 ):
+                        if ( DeviceValues[str(i)+"relais"] == 1 ):
+                            turndevicerelais(i, 0)
+                    if ( DeviceValues[str(i)+"manualmodevar"] == 1 ):
+                        if ( DeviceValues[str(i)+"relais"] == 0 ):
+                            turndevicerelais(i, 1)
+                    logDebug("0","Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, führe keine Regelung durch")
                 else:
                     conditions(int(i))
         except Exception as e:

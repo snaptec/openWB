@@ -228,6 +228,7 @@
 			</div>
 			<div class="col-3">
 				<span id="actualPowerLp<?php echo $i; ?>div"></span>
+                                <span id="phasesInUse<?php echo $i; ?>div"></span>
 				<span id="targetCurrentLp<?php echo $i; ?>div"></span>
 			</div>
 			<div class="col-3 text-center">

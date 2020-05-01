@@ -570,11 +570,27 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var element = $(parent).find('.phasesInUse');  // now get parents respective child element
 		var phasesInUse = parseInt(mqttpayload, 10);
 		if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
-			$(element).text('');
+			$(element).text(' ');
 		} else {
-			$(element).text(' (' + phasesInUse + ' Ph)');
+			var phaseSymbols = ['&#x2460','&#x2461','&#x2462'];
+			$(element).text( phaseSymbols[ phasesInUse ] + ' * ');
 		}
 	}
+        if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
+                 // target current value at charge point
+                 // matches to all messages containing "openwb/lp/#/aconfigured"
+                 // where # is an integer > 0
+                 // search is case insensitive
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.targetCurrentLp');  // now get parents respective child element
+		var targetCurrent = parseInt(mqttpayload, 10);
+		if ( isNaN(targetCurrent) ) {
+			$(element).text('0 A');
+		} else {
+			$(element).text( targetCurrent + " A");
+		}
+        }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
@@ -719,6 +735,23 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		$(element).text(actualPower);
 	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'
+			var dev = $(this).closest('[dev]').attr('dev');  // get attribute lp from parent
+			if ( dev == index ) {
+				if ( $(this).hasClass('enableDevice') ) {
+					// but only apply styles to element in chargepoint info data block
+					if ( mqttpayload == 0 ) {
+						$(this).removeClass('lpEnabledStyle').removeClass('lpWaitingStyle').addClass('lpDisabledStyle');
+					} else {
+						$(this).removeClass('lpDisabledStyle').removeClass('lpWaitingStyle').addClass('lpEnabledStyle');
+					}
+				}
+			}
+		});
+	}
+
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for SH Device
@@ -786,6 +819,43 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		} else {
 			$(infoElement).hide();
 		}
+		if ( index == 1) {
+			if (mqttpayload == 1) {
+				$('.shInfoHeader').show();
+			} else {
+				$('.shInfoHeader').hide();
+			}
+		}
+	}
+	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualModeDevice');  // now get parents respective child element
+
+		if ( mqttpayload == 0 ) {
+			actualMode = "Automatik"
+		} else {
+			actualMode = "Manuell"
+		}
+		$(element).text(actualMode);
+		$('.nameDevice').each(function() {  // check all elements of class '.nameDevice'
+			var dev = $(this).closest('[dev]').attr('dev');  // get attribute Device from parent
+			if ( dev == index ) {
+				if ( $(this).hasClass('enableDevice') ) {
+					// but only apply styles to element in chargepoint info data block
+					if ( mqttpayload == 1 ) {
+						$(this).addClass('cursor-pointer').addClass('locked');
+					} else {
+						$(this).removeClass('cursor-pointer').removeClass('locked');
+					}
+				}
+			}
+		});
+
+
+
+
+
 	}
 	else if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg

@@ -45,6 +45,16 @@
 				if(strpos($line, "pv2id=") !== false) {
 					list(, $pv2idold) = explode("=", $line);
 				}
+				if(strpos($line, "pv1_ip=") !== false) {
+					list(, $pv1_ipold) = explode("=", $line);
+				}
+				if(strpos($line, "speicher1_ip=") !== false) {
+					list(, $speicher1_ipold) = explode("=", $line);
+				}
+				if(strpos($line, "bezug1_ip=") !== false) {
+					list(, $bezug1_ipold) = explode("=", $line);
+				}
+
 				if(strpos($line, "pv2ip=") !== false) {
 					list(, $pv2ipold) = explode("=", $line);
 				}
@@ -3485,6 +3495,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
 							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
+							<option <?php if($wattbezugmodulold == "bezug_siemens\n") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3521,6 +3532,19 @@
 							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
+					<div id="wattbezugip">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="bezug1_ip">IP:</label></b>
+							<input type="text" name="bezug1_ip" id="bezug1_ip" value="<?php echo $bezug1_ipold ?>">
+						</div>
+					</div>
+
+					<div id="wattbezugsiemens">
+						<div class="row">
+							IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
+						</div>
+					</div>
+
 					<div id="wattbezugethmpm3pm">
 						<div class="row">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
@@ -3960,12 +3984,20 @@
 							$('#wattbezugmqtt').hide();
 							$('#wattbezugsonneneco').hide();
 							$('#wattbezugfems').hide();
+							$('#wattbezugsiemens').hide();
+							$('#wattbezugip').hide();
 
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 								$('#wattbezugsonneneco').show();
 							}
+							if($('#wattbezugmodul').val() == 'bezug_siemens') {
+								$('#wattbezugsiemens').show();
+								$('#wattbezugip').show();
+
+							}
+
 							if($('#wattbezugmodul').val() == 'bezug_fems') {
 								$('#wattbezugfems').show();
 							}
@@ -4103,6 +4135,7 @@
 							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
 							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">Fenecon FEMS</option>
 							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
+							<option <?php if($pvwattmodulold == "wr_siemens\n") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 						</select>
 					</div>
 
@@ -4121,6 +4154,19 @@
 							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
+					<div id="pvip">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="pv1_ip">IP Adresse:</label></b>
+							<input type="text" name="pv1_ip" id="pv1_ip" value="<?php echo htmlspecialchars($pv1_ipold) ?>">
+						</div>
+					</div>
+
+					<div id="pvsiemens">
+						<div class="row">
+							IP Adresse des Siemens Speichers.
+						</div>
+					</div>
+
 					<div id="pvfems">
 						<div class="row">
 							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
@@ -4546,7 +4592,12 @@
 							$('#pvsunways').hide();
 							$('#pvfems').hide();
 							$('#pvsolarworld').hide();
-
+							$('#pvip').hide();
+							$('#pvsiemens').hide();
+							if($('#pvwattmodul').val() == 'wr_siemens') {
+								$('#pvip').show();
+								$('#pvsiemens').show();
+							}
 							if($('#pvwattmodul').val() == 'wr_fems') {
 								$('#pvfems').show();
 							}
@@ -4723,6 +4774,7 @@
 							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 							<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">Fenecon FEMS</option>
+							<option <?php if($speichermodulold == "speicher_siemens\n") echo "selected" ?> value="speicher_siemens">Siemens</option>
 						</select>
 					</div>
 
@@ -4777,6 +4829,17 @@
 					<div id="divspeicherfems">
 							<div class="row" style="background-color:#fcbe1e">
 							Konfiguration im Bezug Fenecon Modul.
+						</div>
+					</div>
+					<div id="divspeicherip">
+						<div class="row" style="background-color:#fcbe1e">
+							<b><label for="speicher1_ip">IP:</label></b>
+							<input type="text" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
+						</div>
+					</div>
+					<div id="divspeichersiemens">
+							<div class="row" style="background-color:#fcbe1e">
+							IP Adresse des Siemens Speichers. Im Siemens Speicher muss als Schnittstelle openWB gewählt werden.
 						</div>
 					</div>
 
@@ -4988,9 +5051,15 @@
 							$('#divspeichervictron').hide();
 							$('#divspeicherlgessv1').hide();
 							$('#divspeicherfems').hide();
+							$('#divspeicherip').hide();
+							$('#divspeichersiemens').hide();
 
 							if($('#speichermodul').val() == 'speicher_fems') {
 								$('#divspeicherfems').show();
+							}
+							if($('#speichermodul').val() == 'speicher_siemens') {
+								$('#divspeicherip').show();
+								$('#divspeichersiemens').show();
 							}
 
 							if($('#speichermodul').val() == 'speicher_alphaess') {

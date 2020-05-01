@@ -188,6 +188,17 @@ mqttvar["config/get/sofort/lp/5/current"]=lp5sofortll
 mqttvar["config/get/sofort/lp/6/current"]=lp6sofortll
 mqttvar["config/get/sofort/lp/7/current"]=lp7sofortll
 mqttvar["config/get/sofort/lp/8/current"]=lp8sofortll
+mqttvar["config/get/SmartHome/Devices/1/mode"]=smarthome_device_manual_1
+mqttvar["config/get/SmartHome/Devices/2/mode"]=smarthome_device_manual_2
+mqttvar["config/get/SmartHome/Devices/3/mode"]=smarthome_device_manual_3
+mqttvar["config/get/SmartHome/Devices/4/mode"]=smarthome_device_manual_4
+mqttvar["config/get/SmartHome/Devices/5/mode"]=smarthome_device_manual_5
+mqttvar["config/get/SmartHome/Devices/6/mode"]=smarthome_device_manual_6
+mqttvar["config/get/SmartHome/Devices/7/mode"]=smarthome_device_manual_7
+mqttvar["config/get/SmartHome/Devices/8/mode"]=smarthome_device_manual_8
+mqttvar["config/get/SmartHome/Devices/9/mode"]=smarthome_device_manual_9
+
+
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}

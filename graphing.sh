@@ -3,6 +3,11 @@ graphing(){
 #Ladestatuslog keurzen
 echo "$(tail -100 /var/www/html/openWB/ramdisk/ladestatus.log)" > /var/www/html/openWB/ramdisk/ladestatus.log
 #Live Graphing
+if [[ $pv2wattmodul != "none" ]]; then
+	pvwatt=$(</var/www/html/openWB/ramdisk/pvallwatt)
+else
+	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
+fi
 pvgraph=$((-pvwatt))
 if (( speichervorhanden == 1 )); then
 	echo $speicherleistung >> /var/www/html/openWB/ramdisk/speicher-live.graph

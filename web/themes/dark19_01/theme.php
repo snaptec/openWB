@@ -253,7 +253,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span><span id="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -477,7 +477,127 @@
 -->
 
 		<hr color="white">
+                <!-- SmartHome info header -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
+                        <div class="col-3 px-0">
+                                Gerät
+                        </div>
+                        <div class="col-3 px-0">
+                                Verbrauch
+                        </div>
+                        <div class="col-6 px-0">
+                                Modus
+                        </div>
 
+		</div>
+		<!-- SmartHome Device 1 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="1">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 2 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="2">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="3">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="4">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="5">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="6">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="7">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="8">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="9">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
 		    <div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
@@ -1104,7 +1224,37 @@
 					}
 				}
 			});
+			$('.enableDevice').click(function(event){
+				// send mqtt set to enable/disable Device after click
+				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+				var isLocked = $(this).hasClass("locked")
+				if ( isLocked ) {
+					if ( !isNaN(dev) && dev > 0 && dev < 9 ) {
+						var isEnabled = $(this).hasClass("lpEnabledStyle")
+						if ( isEnabled ) {
+							publish("0", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
+							$(this).removeClass('lpEnabledStyle').removeClass('lpDisabledStyle').addClass('lpWaitingStyle');
+						} else {
+							publish("1", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
+							$(this).removeClass('lpEnabledStyle').removeClass('lpDisabledStyle').addClass('lpWaitingStyle');
 
+						}
+					}
+				}
+			});
+			$('.changeSHMode').click(function(event){
+				// send mqtt set to enable/disable Device after click
+				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+
+
+				if ( $(this).text() == "Automatik" ) {
+						publish("1", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
+					} else {
+						publish("0", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
+
+				}
+
+			});
 			$('#chargeModeSelectBtn').click(function(event){
 				$("#chargeModeModal").modal("show");
 			});

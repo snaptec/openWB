@@ -133,14 +133,27 @@ def on_message(client, userdata, msg):
             writetoconfig(shconfigfile,'smarthomedevices','device_mineinschaltdauer_'+str(devicenumb), msg.payload.decode("utf-8"))
             client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_mineinschaltdauer", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_mineinschaltdauer", "", qos=0, retain=True)
+    if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_manual_control" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
+            client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_manual_control", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_manual_control", "", qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/smarthome_device_manual_control_'+str(devicenumb), 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("mode" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
+            client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/mode", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/mode", "", qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/smarthome_device_manual_'+str(devicenumb), 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("current" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 32):
             client.publish("openWB/config/get/sofort/current/"+str(devicenumb)+"/current", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/current/"+str(devicenumb)+"/current", "", qos=0, retain=True)
-            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
 
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
