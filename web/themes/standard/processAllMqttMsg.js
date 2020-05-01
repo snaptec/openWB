@@ -997,14 +997,12 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
         else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
                  var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-                 var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
-                 var element = $(parent).find('.phasesInUse');  // now get parents respective child element
                  var phasesInUse = parseInt(mqttpayload, 10);
                  if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
-                         $(element).text('');
+			$("#phasesInUse"+index+"div").html(" / ");
                  } else {
                          var phaseSymbols = ['&#x2460','&#x2461','&#x2462'];
-                         $(element).text(" / " + phaseSymbols[ phasesInUse ] );
+			$("#phasesInUse"+index+"div").html(" / " + phaseSymbols[ phasesInUse ] + " * ");
                  }
          }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
@@ -1013,7 +1011,7 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var targetCurrent = " * " + parseInt(mqttpayload, 10) + " A";
+		var targetCurrent =  parseInt(mqttpayload, 10) + " A";
 		$("#targetCurrentLp"+index+"div").html(targetCurrent);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
