@@ -183,6 +183,15 @@ echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp5
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp6
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp7
 echo 1 > /var/www/html/openWB/ramdisk/mqttautolockconfiguredlp8
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_1
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_2
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_3
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_4
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_5
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_6
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_7
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_8
+echo 0 > /var/www/html/openWB/ramdisk/ramdisk/smarthome_device_manual_9
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
@@ -1852,7 +1861,7 @@ if ! grep -Fq "sunnyislandip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sunnyislandip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "bezug_ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "bezug1_ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "bezug1_ip=192.168.0.17" >> /var/www/html/openWB/openwb.conf
 	echo "pv1_ipa=192.168.0.17" >> /var/www/html/openWB/openwb.conf

@@ -155,7 +155,10 @@ body {
     color: #006515;
     text-decoration: none;
 }
-
+.lpWaitingStyle {
+    color: #ffdb00;
+    text-decoration: none;
+}
 .lpDisabledStyle {
     color: #A30000;
     text-decoration: line-through;

@@ -247,6 +247,25 @@ var topicsToSubscribe = [
 	["openWB/SmartHome/Devices/7/Watt", 1],
 	["openWB/SmartHome/Devices/8/Watt", 1],
 	["openWB/SmartHome/Devices/9/Watt", 1],
+	["openWB/SmartHome/Devices/1/RelayStatus", 1],
+	["openWB/SmartHome/Devices/2/RelayStatus", 1],
+	["openWB/SmartHome/Devices/3/RelayStatus", 1],
+	["openWB/SmartHome/Devices/4/RelayStatus", 1],
+	["openWB/SmartHome/Devices/5/RelayStatus", 1],
+	["openWB/SmartHome/Devices/6/RelayStatus", 1],
+	["openWB/SmartHome/Devices/7/RelayStatus", 1],
+	["openWB/SmartHome/Devices/8/RelayStatus", 1],
+	["openWB/SmartHome/Devices/9/RelayStatus", 1],
+	["openWB/config/get/SmartHome/Devices/1/mode", 1],
+	["openWB/config/get/SmartHome/Devices/2/mode", 1],
+	["openWB/config/get/SmartHome/Devices/3/mode", 1],
+	["openWB/config/get/SmartHome/Devices/4/mode", 1],
+	["openWB/config/get/SmartHome/Devices/5/mode", 1],
+	["openWB/config/get/SmartHome/Devices/6/mode", 1],
+	["openWB/config/get/SmartHome/Devices/7/mode", 1],
+	["openWB/config/get/SmartHome/Devices/8/mode", 1],
+	["openWB/config/get/SmartHome/Devices/9/mode", 1],
+
 
 ];
 
