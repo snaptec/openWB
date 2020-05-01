@@ -428,6 +428,10 @@ def conditions(nummer):
                 del DeviceCounters[str(nummer)+"einverz"]
             except:
                 pass
+            try:
+                del DeviceCounters[str(nummer)+"ausverz"]
+            except:
+                pass
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
 
