@@ -70,7 +70,7 @@
 						<h6 class="mb-0">manueller Regelpunkt</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] für den manuellen Regelpunkt in beiden Lademodi.
+								Parameter in Watt [W] für den manuellen Regelpunkt in beiden Lademodi.
 								Dieser Parameter ist nur wirksam bei der Einstellung "manueller Regelpunkt".
 								Die dem EV zur Verfügung stehende Ladeleistung berechnet sich bei dieser Option aus der Differenz zwischen der Einspeiseleistung und dem eingegebenen Wert.
 							</small>
@@ -104,7 +104,7 @@
 						<h6 class="mb-0">Einschaltschwelle</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden.
+								Parameter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden.
 								Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.
 							</small>
 						</div>
@@ -117,7 +117,7 @@
 						<h6 class="mb-0">Einschaltverzögerung</h6>
 						<div>
 							<small>
-								Paramter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden.
+								Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden.
 								Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt.
 								Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.
 							</small>
@@ -131,7 +131,7 @@
 						<h6 class="mb-0">Abschaltschwelle</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] für das Ausschalten der Laderegelung im Modus PV-Laden.
+								Parameter in Watt [W] für das Ausschalten der Laderegelung im Modus PV-Laden.
 								Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
 							</small>
 						</div>
@@ -144,7 +144,7 @@
 						<h6 class="mb-0">Abschaltverzögerung</h6>
 						<div>
 							<small>
-								Paramter in Sekunden [s] für die Verzögerung bis Ladestop im Modus PV-Laden.
+								Parameter in Sekunden [s] für die Verzögerung bis Ladestop im Modus PV-Laden.
 								Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt.
 								Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.
 							</small>
@@ -158,7 +158,7 @@
 						<h6 class="mb-0">Mindeststromstärke</h6>
 						<div>
 							<small>
-								Paramter in Ampere [A] für den minimalen Strom im Modus PV-Laden.
+								Parameter in Ampere [A] für den minimalen Strom im Modus PV-Laden.
 								Definiert den minimalen Ladestrom am Ladepunkt. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet.
 								Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
 							</small>
@@ -199,7 +199,7 @@
 						<h6 class="mb-0">adaptiver Regelfaktor</h6>
 						<div>
 							<small>
-								Paramter für die Gewichtung bei adaptiver Ladung im Modus PV-Laden.
+								Parameter für die Gewichtung bei adaptiver Ladung im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "adaptive Ladung eingeschaltet".
 								Je höher der Faktor, desto stärker wird das EV mit dem kleineren SoC bei der Aufteilung der Ladeleistung bevorzugt.
 							</small>
@@ -231,7 +231,7 @@
 						<h6 class="mb-0">70%-Regelpunkt</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden.
+								Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet".
 								Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp abzüglich der gewählten Einschaltschwelle betragen.
 							</small>
@@ -256,7 +256,7 @@
 						<h6 class="mb-0">Mindest-SoC</h6>
 						<div>
 							<small>
-								Paramter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden.
+								Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden.
 								Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.
 							</small>
 						</div>
@@ -270,7 +270,7 @@
 						<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
 						<div>
 							<small>
-								Paramter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden.
+								Parameter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden.
 								Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A.
 								Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.
 							</small>
@@ -285,7 +285,7 @@
 						<h6 class="mb-0">Maximal-SoC</h6>
 						<div>
 							<small>
-								Paramter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden.
+								Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden.
 								Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.
 							</small>
 						</div>
@@ -345,7 +345,7 @@
 						<h6 class="mb-0">Ladeleistung-Reserve</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] für die Ladeleistung-Reserve des Speichers im Modus PV-Laden.
+								Parameter in Watt [W] für die Ladeleistung-Reserve des Speichers im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "EV-Vorrang".
 								Trotz vorrangiger Regelung der Ladeleistung des EV wird der hier eingestellte Wert immer für die Ladung des Speichers vorgehalten.
 							</small>
@@ -359,7 +359,7 @@
 						<h6 class="mb-0">erlaubte Entladeleistung</h6>
 						<div>
 							<small>
-								Paramter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden.
+								Parameter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang" und wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde.
 								Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung trotz Speichervorrang zur Ladung des EV entladen werden darf.
 							</small>
@@ -374,7 +374,7 @@
 						<h6 class="mb-0">minimaler Entlade-SoC</h6>
 						<div>
 							<small>
-								Paramter in Prozent [%] für den minimalen Entlade-SoC des Speichers im Modus PV-Laden.
+								Parameter in Prozent [%] für den minimalen Entlade-SoC des Speichers im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang".
 								Definiert einen minimalen SoC, bis zu dem ein Speicher trotz Speichervorrang zur Ladung des EV höchstens entladen werden darf. Der Wert 100 schaltet die Funktion aus.
 							</small>
@@ -401,7 +401,7 @@
 						<h6 class="mb-0">Mindeststromstärke</h6>
 						<div>
 							<small>
-								Paramter in Ampere [A] für den minimalen Strom im Modus Min+PV-Laden.
+								Parameter in Ampere [A] für den minimalen Strom im Modus Min+PV-Laden.
 								Definiert den minimalen Ladestrom an den Ladepunkten. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet.
 								Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.
 							</small>
@@ -427,7 +427,7 @@
 						<h6 class="mb-0">Einschalt-SoC</h6>
 						<div>
 							<small>
-								Paramter in Prozent [%] für den Einschalt-SoC der Laderegelung im Modus Min+PV-Laden.
+								Parameter in Prozent [%] für den Einschalt-SoC der Laderegelung im Modus Min+PV-Laden.
 								Definiert einen Speicher-SoC, der überschritten werden muss, damit die Ladereglung startet. Der Wert 0 schaltet die Funktion aus.
 							</small>
 						</div>
@@ -441,7 +441,7 @@
 						<h6 class="mb-0">Ausschalt-SoC</h6>
 						<div>
 							<small>
-								Paramter in Prozent [%] für den Ausschalt-SoC der Laderegelung im Modus Min+PV-Laden.
+								Parameter in Prozent [%] für den Ausschalt-SoC der Laderegelung im Modus Min+PV-Laden.
 								Definiert einen Speicher-SoC, bei dessen Unterschreitung die Ladereglung stoppt. Der Wert 0 schaltet die Funktion aus.
 							</small>
 						</div>
