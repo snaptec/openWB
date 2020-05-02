@@ -233,7 +233,7 @@
 				Ladepunkt
 			</div>
 			<div class="col-3 px-0">
-				Ladeleistung
+				Ladeparameter
 			</div>
 			<div class="col-4 px-0">
 				geladen
@@ -253,7 +253,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -276,7 +276,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -299,7 +299,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -322,7 +322,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -345,7 +345,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -368,7 +368,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -391,7 +391,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -414,7 +414,7 @@
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
             <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUse"></span>
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
             </div>
             <div class="col-4 px-0">
                 <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
@@ -426,55 +426,6 @@
                 <span class="socLp"></span>
             </div>
         </div>
-
-		<!-- removed to see if people miss it
-
-		<div class="row justify-content-center">
-			<div class="col-12">
-				<hr color="white">
-			</div>
-		</div>
-
-		<div class="row justify-content-center">
-			<h3 class ="text-center font-weight-bold text-lightgrey">letztes zusammenhängendes Ladesegment</h3>
-		</div>
-
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				LP1 <span class="nameLp1"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				LP2 <span class="nameLp2"></span>
-			</div>
-			<div class="col-4 " <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				LP3 <span class="nameLp3"></span>
-			</div>
-		</div>
-
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				<span id="gelrlp1div"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<span id="gelrlp2div"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<span id="gelrlp3div"></span>
-			</div>
-		</div>
-
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				<span id="aktgeladen1"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen2"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen3"></span>
-			</div>
-		</div>
--->
 
 		<hr color="white">
                 <!-- SmartHome info header -->

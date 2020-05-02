@@ -995,13 +995,23 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		$("#restzeitlp"+index+"div").html(mqttpayload);
 	}
+        else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
+                 var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+                 var phasesInUse = parseInt(mqttpayload, 10);
+                 if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
+			$("#phasesInUse"+index+"div").html(" / ");
+                 } else {
+                         var phaseSymbols = ['&#x2460','&#x2461','&#x2462'];
+			$("#phasesInUse"+index+"div").html(" / " + phaseSymbols[ phasesInUse ] + " * ");
+                 }
+         }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
 		// target current value at charge point
 		// matches to all messages containing "openwb/lp/#/aconfigured"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var targetCurrent = " / " + parseInt(mqttpayload, 10) + " A";
+		var targetCurrent =  parseInt(mqttpayload, 10) + " A";
 		$("#targetCurrentLp"+index+"div").html(targetCurrent);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
