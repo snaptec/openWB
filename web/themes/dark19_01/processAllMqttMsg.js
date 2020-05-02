@@ -557,7 +557,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 	    });
 	}
-	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$('.nameLp').each(function() {  // check all elements of class '.nameLp'
 			var lp = $(this).closest('[lp]').attr('lp');  // get attribute lp from parent
@@ -573,7 +573,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 		});
 	}
-	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
 		var element = $(parent).find('.phasesInUseLp');  // now get parents respective child element
@@ -585,18 +585,18 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$(element).text(' ' + phaseSymbols[phasesInUse]);
 		}
 	}
-        if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
-        	// target current value at charge point
-			var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-			var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
-			var element = $(parent).find('.targetCurrentLp');  // now get parents respective child element
-			var targetCurrent = parseInt(mqttpayload, 10);
-			if ( isNaN(targetCurrent) ) {
-				$(element).text(' 0 A');
-			} else {
-				$(element).text(' ' + targetCurrent + ' A');
-			}
-        }
+    else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
+    	// target current value at charge point
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.targetCurrentLp');  // now get parents respective child element
+		var targetCurrent = parseInt(mqttpayload, 10);
+		if ( isNaN(targetCurrent) ) {
+			$(element).text(' 0 A');
+		} else {
+			$(element).text(' ' + targetCurrent + ' A');
+		}
+    }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
