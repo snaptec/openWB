@@ -67,9 +67,20 @@ function computeAndSetCurrentForChargePoint() {
 
 	# the charge point that we're looking at is our first parameter
 	local chargePoint=$1
-	local expectedChangeFile="${ExpectedChangeFile}${chargePoint}"
+
+	# check if we're asked for a very fixed charge current (special cases superseding regular load management)
+	# needed especially to allow additional cars a charge start
+	if [ -f "ramdisk/FixedChargeCurrentCp${chargePoint}" ]; then
+		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
+		if (( fixedCurrent >= 0 )); then
+			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A"
+			callSetCurrent $fixedCurrent $chargePoint
+			return 0
+		fi
+	fi
 
 	# check if the car has done the adjustment that it has last been asked for
+	local expectedChangeFile="${ExpectedChangeFile}${chargePoint}"
 	local expectedChangeTimestamp=NowItIs
 	local expectedCurrentPerPhase=-1
 	if [ -f "${expectedChangeFile}" ]; then
@@ -80,17 +91,6 @@ function computeAndSetCurrentForChargePoint() {
 		local timeSinceAdjustment=$(( NowItIs - expectedChangeTimestamp ))
 		if (( timeSinceAdjustment < MinimumAdjustmentInterval )); then
 			$dbgWrite "$NowItIs: Slave Mode: Time after adjustment ${timeSinceAdjustment} < ${MinimumAdjustmentInterval} seconds. Skipping control loop"
-			return 0
-		fi
-	fi
-
-	# check if we're asked for a very fixed charge current (special cases superseding regular load management)
-	# needed especially to allow additional cars a charge start
-	if [ -f "ramdisk/FixedChargeCurrentCp${chargePoint}" ]; then
-		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
-		if (( fixedCurrent >= 0 )); then
-			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A"
-			callSetCurrent $fixedCurrent $chargePoint
 			return 0
 		fi
 	fi
@@ -436,7 +436,7 @@ function callSetCurrent() {
 	fi
 
 	# finally limit to the configured min or max values
-	if (( currentToSet < minimumCurrentPossible )) || ((LpEnabled == 0)); then
+	if ( (( currentToSet < minimumCurrentPossible )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
 		if ((LpEnabled != 0)); then
 			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < minimumCurrentPossible=$minimumCurrentPossible --> setze currentToSet=0"
 		else
