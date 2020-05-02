@@ -20,8 +20,10 @@ function processMessages(mqttmsg, mqttpayload) {
     var topicSubGoup = mqttmsg.match( /(\w+)\/(\d\d?)\// );
     if ( topicSubGoup != null ) {
         // topic might be for one of several subgroups
-        // topicSubGoup[0]=complete subgroup, [1]=first part between //, [1]=second part between //
-        var elementId = topicIdentifier + topicSubGoup[1] + topicSubGoup[2];
+        // topicSubGoup[0]=complete subgroup, [1]=suffix=first part between //, [1]=index=second part between //
+        var suffix = topicSubGoup[1].charAt(0).toUpperCase() + topicSubGoup[1].slice(1);  // capitalize suffix
+        var index = topicSubGoup[2];
+        var elementId = topicIdentifier + suffix + index;
     } else {
         // no subgroup so everything after last '/' might be the id
         var elementId = topicIdentifier;
