@@ -34,9 +34,26 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/hook\//i) ) { processHookMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
-
+	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
+
+function processSofortConfigMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/config/get/sofort/
+	// called by handlevar
+	processPreloader(mqttmsg);
+
+
+	if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var current = parseInt(mqttpayload, 10);
+		if ( isNaN(current) ) {
+			current = 0;
+		}
+		$('#sofortlllp' + index + 's').val(current);
+		$('sofortlllp' + index + 'l').text(current);
+	}
+}
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
@@ -530,15 +547,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$(element).removeClass('text-green').addClass('text-lightgrey');
 		}
 	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/adirectmodeamps$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var current = parseInt(mqttpayload, 10);
-		if ( isNaN(current) ) {
-			current = 0;
-		}
-		$('#sofortlllp' + index + 's').val(current);
-		$('sofortlllp' + index + 'l').text(current);
-	}
+
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$('.nameLp').each(function() {  // fill in name for all element of class '.nameLp'

@@ -151,10 +151,12 @@ def on_message(client, userdata, msg):
             f.close()
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("current" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 32):
-            client.publish("openWB/config/get/sofort/current/"+str(devicenumb)+"/current", msg.payload.decode("utf-8"), qos=0, retain=True)
-            client.publish("openWB/config/set/sofort/current/"+str(devicenumb)+"/current", "", qos=0, retain=True)
-
+        if ( 1 <= int(devicenumb) <= 8 and 6 <= int(msg.payload) <= 32):
+            client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/current", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/current", "", qos=0, retain=True)
+            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):

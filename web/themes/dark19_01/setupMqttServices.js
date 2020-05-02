@@ -265,6 +265,21 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/7/mode", 1],
 	["openWB/config/get/SmartHome/Devices/8/mode", 1],
 	["openWB/config/get/SmartHome/Devices/9/mode", 1],
+	// Config Vars Sofort current
+	["openWB/config/get/sofort/lp/1/current", 1],
+	["openWB/config/get/sofort/lp/2/current", 1],
+	["openWB/config/get/sofort/lp/3/current", 1],
+	["openWB/config/get/sofort/lp/4/current", 1],
+	["openWB/config/get/sofort/lp/5/current", 1],
+	["openWB/config/get/sofort/lp/6/current", 1],
+	["openWB/config/get/sofort/lp/7/current", 1],
+	["openWB/config/get/sofort/lp/8/current", 1],
+
+
+
+
+
+
 
 
 ];
