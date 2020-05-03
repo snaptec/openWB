@@ -1,13 +1,18 @@
 #!/bin/bash
 
-HeartbeatTimeout=35
-CurrentLimitAmpereForCpCharging=0.5
-NumberOfSupportedChargePoints=2
-LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
-ExpectedChangeFile="ramdisk/expectedChangeLp"
-SystemVoltage=240
-MaxCurrentOffset=1.0
-MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
+declare -r HeartbeatTimeout=35
+declare -r CurrentLimitAmpereForCpCharging=0.5
+declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
+declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
+declare -r SystemVoltage=240
+declare -r MaxCurrentOffset=1.0
+declare -r MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
+
+if (( lastmanagement > 0 )); then
+	declare -r -i NumberOfSupportedChargePoints=2
+else
+	declare -r -i NumberOfSupportedChargePoints=1
+fi
 
 #
 # the main entry point of the script that is called from outside
