@@ -1166,67 +1166,18 @@ if [[ "$olademstatlp8" != "$lademstatlp8" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/8/boolDirectModeChargekWh=${lademstatlp8}"
 	echo $lademstatlp8 > ramdisk/mqttlademstatlp8
 fi
-olademkwh=$(<ramdisk/mqttlademkwh)
-if (( olademkwh != lademkwh )); then
-	tempPubList="${tempPubList}\nopenWB/lp/1/kWhDirectModeToCharge=${lademkwh}"
-	echo $lademkwh > ramdisk/mqttlademkwh
-fi
-olademkwhs1=$(<ramdisk/mqttlademkwhs1)
-if (( olademkwhs1 != lademkwhs1 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/2/kWhDirectModeToCharge=${lademkwhs1}"
-	echo $lademkwhs1 > ramdisk/mqttlademkwhs1
-fi
-olademkwhs2=$(<ramdisk/mqttlademkwhs2)
-if (( olademkwhs2 != lademkwhs2 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhs2}"
-	echo $lademkwhs2 > ramdisk/mqttlademkwhs2
-fi
-olademkwhlp4=$(<ramdisk/mqttlademkwhlp4)
-if (( olademkwhlp4 != lademkwhlp4 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp4}"
-	echo $lademkwhlp4 > ramdisk/mqttlademkwhlp4
-fi
 
-olademkwhlp8=$(<ramdisk/mqttlademkwhlp8)
-if (( olademkwhlp8 != lademkwhlp8 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp8}"
-	echo $lademkwhlp8 > ramdisk/mqttlademkwhlp8
-fi
-olademkwhlp7=$(<ramdisk/mqttlademkwhlp7)
-if (( olademkwhlp7 != lademkwhlp7 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp7}"
-	echo $lademkwhlp7 > ramdisk/mqttlademkwhlp7
-fi
-olademkwhlp6=$(<ramdisk/mqttlademkwhlp6)
-if (( olademkwhlp6 != lademkwhlp6 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp6}"
-	echo $lademkwhlp6 > ramdisk/mqttlademkwhlp6
-fi
-olademkwhlp5=$(<ramdisk/mqttlademkwhlp5)
-if (( olademkwhlp5 != lademkwhlp5 )); then
-	tempPubList="${tempPubList}\nopenWB/lp/3/kWhDirectModeToCharge=${lademkwhlp5}"
-	echo $lademkwhlp5 > ramdisk/mqttlademkwhlp5
-fi
 
 osofortsocstatlp1=$(<ramdisk/mqttsofortsocstatlp1)
 if [[ "$osofortsocstatlp1" != "$sofortsocstatlp1" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/1/boolDirectChargeModeSoc=${sofortsocstatlp1}"
 	echo $sofortsocstatlp1 > ramdisk/mqttsofortsocstatlp1
 fi
-osofortsoclp1=$(<ramdisk/mqttsofortsoclp1)
-if [[ "$osofortsoclp1" != "$sofortsoclp1" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/percentDirectChargeModeSoc=${sofortsoclp1}"
-	echo $sofortsoclp1 > ramdisk/mqttsofortsoclp1
-fi
+
 osofortsocstatlp2=$(<ramdisk/mqttsofortsocstatlp2)
 if [[ "$osofortsocstatlp2" != "$sofortsocstatlp2" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/boolDirectChargeModeSoc=${sofortsocstatlp2}"
 	echo $sofortsocstatlp2 > ramdisk/mqttsofortsocstatlp2
-fi
-osofortsoclp2=$(<ramdisk/mqttsofortsoclp2)
-if [[ "$osofortsoclp2" != "$sofortsoclp2" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/2/percentDirectChargeModeSoc=${sofortsoclp2}"
-	echo $sofortsoclp2 > ramdisk/mqttsofortsoclp2
 fi
 #osofortsocstatlp3=$(<ramdisk/mqttsofortsocstatlp3)
 #if (( osofortsocstatlp3 != sofortsocstatlp3 )); then
@@ -1238,46 +1189,6 @@ fi
 #	tempPubList="${tempPubList}\nopenWB/percentsofortlademodussoclp3=${sofortsoclp3}"
 #	echo $sofortsoclp3 > ramdisk/mqttsofortsoclp3
 #fi
-omsmoduslp1=$(<ramdisk/mqttmsmoduslp1)
-if [[ "$omsmoduslp1" != "$msmoduslp1" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/1/boolDirectChargeMode_none_kwh_soc=${msmoduslp1}"
-	echo $msmoduslp1 > ramdisk/mqttmsmoduslp1
-fi
-omsmoduslp2=$(<ramdisk/mqttmsmoduslp2)
-if [[ "$omsmoduslp2" != "$msmoduslp2" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/2/boolDirectChargeMode_none_kwh_soc=${msmoduslp2}"
-	echo $msmoduslp2 > ramdisk/mqttmsmoduslp2
-fi
-omsmoduslp3=$(<ramdisk/mqttmsmoduslp3)
-if [[ "$omsmoduslp3" != "$msmoduslp3" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/3/boolDirectChargeMode_none_kwh_soc=${msmoduslp3}"
-	echo $msmoduslp3 > ramdisk/mqttmsmoduslp3
-fi
-omsmoduslp4=$(<ramdisk/mqttmsmoduslp4)
-if [[ "$omsmoduslp4" != "$msmoduslp4" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/4/boolDirectChargeMode_none_kwh_soc=${msmoduslp4}"
-	echo $msmoduslp4 > ramdisk/mqttmsmoduslp4
-fi
-omsmoduslp5=$(<ramdisk/mqttmsmoduslp5)
-if [[ "$omsmoduslp5" != "$msmoduslp5" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/5/boolDirectChargeMode_none_kwh_soc=${msmoduslp5}"
-	echo $msmoduslp5 > ramdisk/mqttmsmoduslp5
-fi
-omsmoduslp6=$(<ramdisk/mqttmsmoduslp6)
-if [[ "$omsmoduslp6" != "$msmoduslp6" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/6/boolDirectChargeMode_none_kwh_soc=${msmoduslp6}"
-	echo $msmoduslp6 > ramdisk/mqttmsmoduslp6
-fi
-omsmoduslp7=$(<ramdisk/mqttmsmoduslp7)
-if [[ "$omsmoduslp7" != "$msmoduslp7" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/7/boolDirectChargeMode_none_kwh_soc=${msmoduslp7}"
-	echo $msmoduslp7 > ramdisk/mqttmsmoduslp7
-fi
-omsmoduslp8=$(<ramdisk/mqttmsmoduslp8)
-if [[ "$omsmoduslp8" != "$msmoduslp8" ]]; then
-	tempPubList="${tempPubList}\nopenWB/lp/8/boolDirectChargeMode_none_kwh_soc=${msmoduslp8}"
-	echo $msmoduslp8 > ramdisk/mqttmsmoduslp8
-fi
 ospeichervorhanden=$(<ramdisk/mqttspeichervorhanden)
 if (( ospeichervorhanden != speichervorhanden )); then
 	tempPubList="${tempPubList}\nopenWB/housebattery/boolHouseBatteryConfigured=${speichervorhanden}"
@@ -1495,10 +1406,24 @@ mqttconfvar["config/get/pv/nurpv70dynact"]=nurpv70dynact
 mqttconfvar["config/get/pv/nurpv70dynw"]=nurpv70dynw
 mqttconfvar["config/get/global/maxEVSECurrentAllowed"]=maximalstromstaerke
 mqttconfvar["config/get/global/minEVSECurrentAllowed"]=minimalstromstaerke
-
-
-
-
+mqttconfvar["config/get/sofort/lp/1/energyToCharge"]=lademkwh
+mqttconfvar["config/get/sofort/lp/2/energyToCharge"]=lademkwhs1
+mqttconfvar["config/get/sofort/lp/3/energyToCharge"]=lademkwhs2
+mqttconfvar["config/get/sofort/lp/4/energyToCharge"]=lademkwhlp4
+mqttconfvar["config/get/sofort/lp/5/energyToCharge"]=lademkwhlp5
+mqttconfvar["config/get/sofort/lp/6/energyToCharge"]=lademkwhlp6
+mqttconfvar["config/get/sofort/lp/7/energyToCharge"]=lademkwhlp7
+mqttconfvar["config/get/sofort/lp/8/energyToCharge"]=lademkwhlp8
+mqttconfvar["config/get/sofort/lp/1/socToChargeTo"]=sofortsoclp1
+mqttconfvar["config/get/sofort/lp/2/socToChargeTo"]=sofortsoclp2
+mqttconfvar["config/get/sofort/lp/1/chargeLimitation"]=msmoduslp1
+mqttconfvar["config/get/sofort/lp/2/chargeLimitation"]=msmoduslp2
+mqttconfvar["config/get/sofort/lp/3/chargeLimitation"]=msmoduslp3
+mqttconfvar["config/get/sofort/lp/4/chargeLimitation"]=msmoduslp4
+mqttconfvar["config/get/sofort/lp/5/chargeLimitation"]=msmoduslp5
+mqttconfvar["config/get/sofort/lp/6/chargeLimitation"]=msmoduslp6
+mqttconfvar["config/get/sofort/lp/7/chargeLimitation"]=msmoduslp7
+mqttconfvar["config/get/sofort/lp/8/chargeLimitation"]=msmoduslp8
 
 for mq in "${!mqttconfvar[@]}"; do
 	theval=${!mqttconfvar[$mq]}
