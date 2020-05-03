@@ -178,7 +178,7 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("resetEnergyToCharge" in msg.topic)):
+    if (( "openWB/config/set/sofort/lp" in msg.topic) and ("resetEnergyToCharge" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and int(msg.payload) == 1):
             if ( int(devicenumb) == 1):
