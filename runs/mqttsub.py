@@ -652,8 +652,8 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "sofortsocstatlp1=", "0"]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/1/boolDirectChargeModeSoc", "0", qos=0, retain=True)
-            client.publish("openWB/config/set/sofort/1/chargeLimitation", " ", qos=0, retain=True)
-            client.publish("openWB/config/get/sofort/1/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/sofort/lp/1/chargeLimitation", " ", qos=0, retain=True)
+            client.publish("openWB/config/get/sofort/lp/1/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
 
     if (msg.topic == "openWB/config/set/sofort/lp/2/chargeLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=2):
@@ -677,22 +677,6 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/lp/2/boolDirectChargeModeSoc", "0", qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/2/chargeLimitation", " ", qos=0, retain=True)
             client.publish("openWB/config/get/sofort/lp/2/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/config/set/sofort/3/chargeLimitation"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=2):
-            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp3=", msg.payload.decode("utf-8")]
-            subprocess.Popen(sendcommand)
-            if (int(msg.payload) == 1):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstats2=", "1"]
-                subprocess.Popen(sendcommand)
-                client.publish("openWB/lp/3/boolDirectModeChargekWh", msg.payload.decode("utf-8"), qos=0, retain=True)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstats2=", "0"]
-                subprocess.Popen(sendcommand)
-                client.publish("openWB/lp/3/boolDirectModeChargekWh", "0", qos=0, retain=True)
-
-            client.publish("openWB/config/set/sofort/3/chargeLimitation", " ", qos=0, retain=True)
-            client.publish("openWB/config/get/sofort/3/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
-
     if (msg.topic == "openWB/set/lp1/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
             replaceAll("lademstat=",msg.payload.decode("utf-8"))
