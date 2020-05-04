@@ -3509,54 +3509,54 @@
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
 						</div>
 					</div>
 					<div id="wattbezugmqtt">
-						<div class="row">Keine Konfiguration erforderlich</div>
-						<div class="row">Per MQTT zu schreiben:</div>
-						<div class="row"><b>"openWB/set/evu/W"</b></div>
-						<div class="row">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
-						<div class="row"><b>"openWB/set/evu/APhase1"</b></div>
-						<div class="row">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-						<div class="row"><b>"openWB/set/evu/APhase2"</b></div>
-						<div class="row">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-						<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
-						<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
-						<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>
-						<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
-						<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
-						<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
-						<div class="row">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
-						<div class="row"><b>"openWB/set/evu/VPhase2"</b></div>
-						<div class="row">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
-						<div class="row"><b>"openWB/set/evu/VPhase3"</b></div>
-						<div class="row">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
-						<div class="row"><b>"openWB/set/evu/HzFrequenz"</b></div>
-						<div class="row">Netzfrequenz in Hz, float, Punkt als Trenner</div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Keine Konfiguration erforderlich</div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Per MQTT zu schreiben:</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/W"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Bezugsleistung in Watt, int, positiv Bezug, negativ Einspeisung</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/APhase1"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Strom in Ampere für Phase 1, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/APhase2"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Strom in Ampere für Phase 2, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/APhase3"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/WhImported"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/WhExported"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/VPhase1"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Spannung in Volt für Phase 1, float, Punkt als Trenner</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/VPhase2"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Spannung in Volt für Phase 2, float, Punkt als Trenner</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/VPhase3"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Spannung in Volt für Phase 3, float, Punkt als Trenner</div>
+						<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/evu/HzFrequenz"</b></div>
+						<div class="row" style="background-color:#febebe; color:#000000;">Netzfrequenz in Hz, float, Punkt als Trenner</div>
 					</div>
 					<div id="wattbezuglgessv1">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
 					<div id="wattbezugip">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug1_ip">IP:</label></b>
 							<input type="text" name="bezug1_ip" id="bezug1_ip" value="<?php echo $bezug1_ipold ?>">
 						</div>
 					</div>
 
 					<div id="wattbezugsiemens">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
 						</div>
 					</div>
 
 					<div id="wattbezugethmpm3pm">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
 							<select name="evukitversion" id="evukitversion">
 								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit</option>
@@ -3565,75 +3565,75 @@
 						</div>
 					</div>
 					<div id="wattbezugsolarview">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Konfiguration im zugehörigen PV Modul erforderlich.
 						</div>
 					</div>
 					<div id="wattbezugpowerwall">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich.
 						</div>
 					</div>
 					<div id="wattbezugvictrongx">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_victronip">Victron IP:</label></b>
 							<input type="text" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des Victron, z.B. GX.
 						</div>
 					</div>
 					<div id="wattbezugfems">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="femsip">Fenecon IP:</label></b>
 							<input type="text" name="femsip" id="femsip" value="<?php echo $femsipold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des Fenecon FEMS.
 						</div>
 					</div>
 					<div id="wattbezugsolarworld">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="solarworld_emanagerip">Solarworld IP:</label></b>
 							<input type="text" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo $solarworld_emanageripold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des Solarworld eManager.
 						</div>
 					</div>
 
 					<div id="wattbezugdiscovergy">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="discovergyuser">Discovergy Username (Email):</label></b>
 							<input type="text" name="discovergyuser" id="discovergyuser" value="<?php echo $discovergyuserold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="discovergypass">Discovergy Passwort:</label></b>
 							<input type="text" name="discovergypass" id="discovergypass" value="<?php echo $discovergypassold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="discovergyevuid">Meter ID:</label></b>
 							<input type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.
 						</div>
 					</div>
 					<div id="wattbezugkostalsmartenergymeter">
-                                                <div class="row" style="background-color:#febebe">
-                                                        <b><label for="ksemip">Kostal Smart Energy Meter / TQ EM410 - IP Adresse:</label></b>
-                                                        <input type="text" name="ksemip" id="ksemip" value="<?php echo $ksemipold ?>"><br>
-                                                </div>
-                                        </div>
+						<div class="row" style="background-color:#febebe; color:#000000;">
+							<b><label for="ksemip">Kostal Smart Energy Meter / TQ EM410 - IP Adresse:</label></b>
+							<input type="text" name="ksemip" id="ksemip" value="<?php echo $ksemipold ?>"><br>
+						</div>
+					</div>
 					<div id="wattbezugkostalpiko">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							IP Adresse wird im PV Modul konfiguriert. Angeschlossenes Meter erforderlich. Der WR liefert Werte nur solange er auch PV Leistung liefert. Nachts geht er in den Standby.<br>
 							Die Hausanschlussüberwachung ist nur aktiv wenn der Wechselrichter auch aktiv ist.<br>
 							Ein extra PV-Modul muss nicht mehr ausgewählt werden.
 						</div>
 					</div>
 					<div id="wattbezugplentihaus">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Dieses Modul erfordert als 1. PV-Modul das Modul "Kostal Plenticore". Dieses wird automatisch fest eingestellt. Der EM300 bzw. das KSEM muss am 1. Plenticore angeschlossen sein.
 							Ein am 1. Plenticore angeschlossener Speicher wird ebenfalls ohne weitere Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt.
 							Am 2. Plenticore darf kein Speicher angeschlossen sein, da dies die weiteren Berechnungen verfälscht.
@@ -3644,25 +3644,25 @@
 						<label for="kostalplenticorehaus">EM300/KSEM im Netzanschluss-Zweig (Pos. 2)</label>
 					</div>
 					<div id="wattbezugmpm3pm">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="mpm3pmevusource">MPM3PM Zähler EVU Source:</label></b>
 							<input type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
 							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="mpm3pmevuid">MPM3PM Zähler EVU ID:</label></b>
 							<input type="text" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 						<input type='hidden' value='0' name='mpm3pmevuhaus'>
 						<input id="mpm3pmevuhaus" name="mpm3pmevuhaus" value="1" type="checkbox" <?php if ( $mpm3pmevuhausold == 1){ echo "checked"; } ?> >
 						<label for="mpm3pmevuhaus">MPM3PM im Hausverbrauchszweig</label>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Wenn der MPM3PM EVU Zähler im Hausverbrauchszweig NACH den Ladepunkten angeschlossen ist hier ein Hacken setzen.<br>
 							z.B. auch zu nutzen wenn der Ladepunkt an einem seperaten Rundsteuerempfänger(=extra Zähler) angeschlossen ist.<br>
 							Bei gesetzten Hacken werden die Ladeströme der Ladepunkte zu den Strömen gemessen am EVU Zähler hinzuaddiert.<br>
@@ -3674,168 +3674,168 @@
 						</div>
 					</div>
 					<div id="wattbezugnone">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="hausbezugnone">Angenommener Hausverbrauch:</label></b>
 							<input type="text" name="hausbezugnone" id="hausbezugnone" value="<?php echo $hausbezugnoneold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.<br>
 							Daraus resultierend agiert die PV Regelung bei vorhandenem PV-Modul
 						</div>
 					</div>
 					<div id="wattbezugsdm">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="sdm630modbusbezugsource">SDM 630 Zähler Source:</label></b>
 							<input type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="sdm630modbusbezugid">Zähler ID:</label></b>
 							<input type="text" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="sdm630modbusbezuglanip">RS485/Lan-Konverter IP:</label></b>
 							<input type="text" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
 						</div>
 					</div>
 					<div id="wattbezugvz">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="vzloggerip">Vzlogger IP Adresse inkl Port:</label></b>
 							<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
 							<input type="text" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
 							<input type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 							Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="vzloggerline">Vzlogger Einspeisung kWh Zeile:</label></b>
 							<input type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 							Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.
 						</div>
 					</div>
 					<div id="wattbezughttp">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_w_url">Vollständige URL für den Watt Bezug</label></b>
 							<input type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_ikwh_url">Vollständige URL für den kWh Bezug</label></b>
 							<input type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_ekwh_url">Vollständige URL für die kWh Einspeisung</label></b>
 							<input type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_l1_url">Vollständige URL für die Ampere Phase 1</label></b>
 							<input type="text" name="bezug_http_l1_url" id="bezug_http_l1_url" value="<?php echo htmlspecialchars($bezug_http_l1_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_l2_url">Vollständige URL für die Ampere Phase 2</label></b>
 							<input type="text" name="bezug_http_l2_url" id="bezug_http_l2_url" value="<?php echo htmlspecialchars($bezug_http_l2_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_http_l3_url">Vollständige URL für die Ampere Phase 3</label></b>
 							<input type="text" name="bezug_http_l3_url" id="bezug_http_l3_url" value="<?php echo htmlspecialchars($bezug_http_l3_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
 					</div>
 					<div id="wattbezugsmartme">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_smartme_user">Smartme Benutzername</label></b>
 							<input type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Smartme Benutzername
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_smartme_pass">Smartme Passwort</label></b>
 							<input type="text" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Smartme Passwort
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_smartme_url">Smartme Url</label></b>
 							<input type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo htmlspecialchars($bezug_smartme_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Smartme Url
 						</div>
 					</div>
 					<div id="wattbezugshm">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="smaeshmbezugid">Seriennummer des SMA Home Manager</label></b>
 							<input type="text" name="smashmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben. Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten none eintragen. Funktioniert auch mit Energy Meter statt Home Manager.
 						</div>
 					</div>
 					<div id="wattbezugsmartfox">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_smartfox_ip">Ip Adresse des SmartFox</label></b>
 							<input type="text" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo $bezug_smartfox_ipold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP Adresse.
 						</div>
 					</div>
 					<div id="wattbezugsma">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="smaemdbezugid">Seriennummer des SMA Energy Meter</label></b>
 							<input type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br>
 							Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
 						</div>
 					</div>
 					<div id="wattbezugfronius">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
 						</div>
 						<input type='hidden' value='0' name='froniusprimo'>
@@ -3843,36 +3843,36 @@
 						<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label>
 					</div>
 					<div id="wattbezugjson">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezugjsonurl">Bezug URL:</label></b>
 							<input type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo $bezugjsonurlold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezugjsonwatt">Json Abfrage für Watt:</label></b>
 							<input type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo $bezugjsonwattold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
 							Im Hintergrund wird der Befehl jq benutzt.<br>
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezugjsonkwh">Json Abfrage für Bezug kWh:</label></b>
 							<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
 							Im Hintergrund wird der Befehl jq benutzt.<br>
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung kWh:</label></b>
 							<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
 							Im Hintergrund wird der Befehl jq benutzt.<br>
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerSelfSupplied - ohne die - - eingetragen werden.
@@ -3880,10 +3880,10 @@
 					</div>
 					<div id="wattbezugsolarlog">
 
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Die zugehörige IP Adresse ist im PV Modul einzustellen.
 						</div>
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_solarlog_speicherv">Kompatibilitätsmodus bei vorhandenem Speicher:</label></b>
 							<select name="bezug_solarlog_speicherv" id="bezug_solarlog_speicherv">
 								<option <?php if($bezug_solarlog_speichervold == 0) echo "selected" ?> value="0">Nein</option>
@@ -3892,25 +3892,25 @@
 						</div>
 					</div>
 					<div id="wattbezugsolaredge">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="solaredgeip">IP Adresse des SolarEdge</label></b>
 							<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP.<br>
 							Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
 							Ebenso muss ModbusTCP am Wechselrichter aktiviert werden
 						</div>
 					</div>
 					<div id="wattbezuge3dc">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br>
 							Es kann nötig sein in den Einstellungen des E3DC ModbusTCP zu aktivieren.<br>
 							Das Protokoll in den E3DC Einstellungen ist auf E3DC zu stellen.
 						</div>
 					</div>
 					<div id="wattbezugsbs25">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.
 						</div>
 					</div>
@@ -3926,11 +3926,11 @@
 					</div>
 
 					<div id="evuglaettungdiv">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="evuglaettung">Glättung der EVU Werte:</label></b>
 							<input type="text" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte: Zeit in Sekunden, z.B. 30,50,200.<br>
 							Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.<br>
 							Sinnvoll, wenn öfter kurze Lastspitzen auftreten.<br>
@@ -4152,111 +4152,111 @@
 					<div id="pvnone">
 					</div>
 					<div id="pvmqtt">
-							<div class="row">Keine Konfiguration erforderlich</div>
-							<div class="row">Per MQTT zu schreiben:</div>
-							<div class="row"><b>"openWB/set/pv/W"</b></div>
-							<div class="row">PVleistung in Watt, int, negativ</div>
-							<div class="row"><b>"openWB/set/pv/WhCounter"</b></div>
-							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>
+							<div class="row" style="background-color:#febebe; color:#000000;">Keine Konfiguration erforderlich</div>
+							<div class="row" style="background-color:#febebe; color:#000000;">Per MQTT zu schreiben:</div>
+							<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/pv/W"</b></div>
+							<div class="row" style="background-color:#febebe; color:#000000;">PVleistung in Watt, int, negativ</div>
+							<div class="row" style="background-color:#febebe; color:#000000;"><b>"openWB/set/pv/WhCounter"</b></div>
+							<div class="row" style="background-color:#febebe; color:#000000;">Erzeugte Energie in Wh, float, nur positiv</div>
 					</div>
 					<div id="pvlgessv1">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Konfiguration im zugehörigen Speichermodul des LG ESS 1.0VI erforderlich. Als PV-Modul auch LG ESS 1.0VI wählen!
 						</div>
 					</div>
 					<div id="pvip">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="pv1_ip">IP Adresse:</label></b>
 							<input type="text" name="pv1_ip" id="pv1_ip" value="<?php echo htmlspecialchars($pv1_ipold) ?>">
 						</div>
 					</div>
 
 					<div id="pvsiemens">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							IP Adresse des Siemens Speichers.
 						</div>
 					</div>
 
 					<div id="pvfems">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
 						</div>
 					</div>
 					<div id="pvsolarworld">
-						<div class="row">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Konfiguration im zugehörigen EVU Modul des Solarworld erforderlich.
 						</div>
 					</div>
 
 					<div id="pvyouless">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="wryoulessip">IP Adresse des Youless</label></b>
 							<input type="text" name="wryoulessip" id="wryoulessip" value="<?php echo htmlspecialchars($wryoulessipold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP.
 						</div>
 					</div>
 					<div id="pvsunways">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="wrsunwaysip">IP Adresse des Sunways</label></b>
 							<input type="text" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo htmlspecialchars($wrsunwaysipold) ?>"><br>
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. <br>
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="wrsunwayspw">Passwort des Sunways</label></b>
 							<input type="text" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars($wrsunwayspwold) ?>"><br>
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte Passwort. <br>
 						</div>
 
 					</div>
 
 					<div id="pvsolarlog">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="bezug_solarlog_ip">IP Adresse des SolarLog</label></b>
 							<input type="text" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo htmlspecialchars($bezug_solarlog_ipold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP. Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
 						</div>
 					</div>
 					<div id="pvdiscovergy">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="discovergypvid">Meter ID des Zählers</label></b>
 							<input type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.<br>
 							Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert.
 						</div>
 					</div>
 					<div id="pvsolarview">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
 							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte IP.
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="solarview_port">Port des Solarview</label></b>
 							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Gültige Werte Port, z.B. 80.
 						</div>
 					</div>
 					<div id="pvpowerwall">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							Keine Einstellung nötig. Die IP wird im Speichermodul konfiguriert
 						</div>
 					</div>
 					<div id="pvmpmevu">
-						<div class="row" style="background-color:#febebe">
+						<div class="row" style="background-color:#febebe; color:#000000;">
 							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
 							<select name="pvkitversion" id="pvkitversion">
 								<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit</option>
@@ -4265,310 +4265,310 @@
 						</div>
 					</div>
 					<div id="pvplenti">
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="kostalplenticoreip">IP Adresse des 1. Kostal Plenticore:</label></b>
 							<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="name_wechselrichter1">Bezeichnung des 1. Kostal Plenticore:</label></b>
 							<input type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo $name_wechselrichter1old ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="kostalplenticoreip2">IP Adresse des 2. Kostal Plenticore:</label></b>
 							<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="name_wechselrichter2">Bezeichnung des 2. Kostal Plenticore:</label></b>
 							<input type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
 					</div>
 					<div id="pvsmartme">
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_smartme_user">Smartme Benutzername</label></b>
 							<input type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo htmlspecialchars($wr_smartme_userold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Smartme Benutzername
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_smartme_pass">Smartme Passwort</label></b>
 							<input type="text" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars($wr_smartme_passold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Smartme Passwort
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_smartme_url">Smartme Url</label></b>
 							<input type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo htmlspecialchars($wr_smartme_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Smartme Url
 						</div>
 					</div>
 					<div id="pvpiko2">
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_piko2_user">Benutzername</label></b>
 							<input type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo htmlspecialchars($wr_piko2_userold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Piko Benutzername
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_piko2_pass">Passwort</label></b>
 							<input type="text" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Piko Passwort
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_piko2_url">Url</label></b>
 							<input type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo htmlspecialchars($wr_piko2_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#befebe">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Piko Url
 						</div>
 					</div>
 					<div id="pvwrjson">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrjsonurl">WR URL:</label></b>
 							<input type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrjsonwatt">Json Abfrage für Watt:</label></b>
 							<input type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo $wrjsonwattold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
 							Im Hintergrund wird der Befehl jq benutzt.<br>
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrjsonkwh">Json Abfrage für kWh:</label></b>
 							<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche.<br>
 							Im Hintergrund wird der Befehl jq benutzt.<br>
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden
 						</div>
 					</div>
 					<div id="pvwrkostalpiko">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrfroniusip">WR Kostal Piko IP:</label></b>
 							<input type="text" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. IP Adresse Kostal Wechselrichter.
 						</div>
 					</div>
 					<div id="pvwrtri9000">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="tri9000ip">SMA WR IP:</label></b>
 							<input type="text" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert, entweder direkt am Wechselrichter, per Sunny Portal oder über das Tool "Sunny Explorer").
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrsmawebbox">Handelt es sich um eine SMA Webbox?:</label></b>
 							<select name="wrsmawebbox" id="wrsmawebbox">
 								<option <?php if($wrsmawebboxold == 0) echo "selected" ?> value="0">Nein</option>
 								<option <?php if($wrsmawebboxold == 1) echo "selected" ?> value="1">Ja</option>
 							</select>
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrsma2ip">WR 2 IP:</label></b>
 							<input type="text" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrsma3ip">WR 3 IP:</label></b>
 							<input type="text" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn nur zwei WR genutzt werden, muss der Wert "none" gesetzt werden.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrsma4ip">WR 4 IP:</label></b>
 							<input type="text" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn nur drei WR genutzt werden, muss der Wert "none" gesetzt werden.
 						</div>
 					</div>
 					<div id="pvwrsolaredge">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="solaredgepvip">WR Solaredge IP:</label></b>
 							<input type="text" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>
 							<input type="text" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgeipslave1old ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte Zahl. ID des SolarEdge Wechselrichters. Normalerweise 1.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="solaredgepvslave2">WR 2 Solaredge ID:</label></b>
 							<input type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo $solaredgeipslave2old ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="solaredgepvslave3">WR 3 Solaredge ID:</label></b>
 							<input type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgeipslave3old ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="solaredgewr2ip">WR 2 Solaredge IP:</label></b>
 							<input type="text" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP oder none. IP des zweiten SolarEdge Wechselrichters. Ist nur nötig wenn 2 Wechselrichter genutzt werden die nicht per Modbus miteinander verbunden sind.
 						</div>
 					</div>
 					<div id="pvwrfronius">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrfroniusip">WR Fronius IP:</label></b>
 							<input type="text" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wrfronius2ip">WR Fronius 2 IP:</label></b>
 							<input type="text" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.
 						</div>
 					</div>
 					<div id="pvmpm3pm">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="mpm3pmpvsource">MPM3PM Wechselrichterleistung Source:</label></b>
 							<input type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>
 							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="mpm3pmpvid">MPM3PM Wechselrichterleistung ID:</label></b>
 							<input type="text" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo $mpm3pmpvidold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="mpm3pmpvlanip">IP des Modbus/Lan Konverter:</label></b>
 							<input type="text" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt, ansonsten irrelevant.
 						</div>
 					</div>
 					<div id="pvethsdm120">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_sdm120ip">SDM Modbus IP Adresse:</label></b>
 							<input type="text" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. IP Adresse des ModbusLAN Konverters.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_sdm120id">SDM Modbus ID:</label></b>
 							<input type="text" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte 1-254. Modbus ID des SDM.
 						</div>
 					</div>
 					<div id="pvsdmwr">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="sdm630modbuswrsource">SDM Modbus Wechselrichterleistung Source:</label></b>
 							<input type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
 							Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="sdm630modbuswrid">SDM Modbus Wechselrichterleistung ID:</label></b>
 							<input type="text" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="sdm630modbuswrlanip">IP des Modbus/Lan Konverter:</label></b>
 							<input type="text" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP. Ist die source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
 						</div>
 					</div>
 					<div id="pvvzl">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="vzloggerpvip">Vzloggerpv IP Adresse inkl Port:</label></b>
 							<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
 							<input type="text" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 							Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.
 						</div>
 					</div>
 					<div id="pvhttp">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_http_w_url">Vollständige URL für die Wechselrichter Watt</label></b>
 							<input type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="wr_http_kwh_url">Vollständige URL für die Wechselrichter absolut kWh</label></b>
 							<input type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 						</div>
 					</div>
 					<div id="pvsma">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="smaemdpvid">Seriennummer des SMA Energy Meter</label></b>
 							<input type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben.
 
 						</div>
@@ -4720,11 +4720,11 @@
 						Keine Konfiguration erforderlich.
 					</div>
 					<div id="pv2ipdiv">
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							<b><label for="pv2ip">Wechselrichter IP:</label></b>
 							<input type="text" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 						</div>
-						<div class="row" style="background-color:#BEFEBE">
+						<div class="row" style="background-color:#befebe; color:#000000;">
 							Gültige Werte: IPs. IP Adresse des Wechselrichters, ggf. muss modbusTCP im WR noch aktiviert werden.
 						</div>
 					</div>
@@ -4803,21 +4803,21 @@
 					</div>
 
 					<div id="divspeicherlgessv1">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="lgessv1ip">LG ESS 1.0VI IP:</label></b>
 							<input type="text" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP-Adresse des LG ESS 1.0VI
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="lgessv1pass">LG ESS 1.0VI Passwort:</label></b>
 							<input type="text" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b>Bitte die API-Version wählen:</b><br />
 							<select name="ess_api_ver" id="ess_api_ver">
 								<option <?php if($ess_api_ver_old == "10.2019\n") echo "selected" ?> value="10.2019">API-Version Oktober 2019</option>
@@ -4829,77 +4829,77 @@
 					<div id="divspeichernone">
 					</div>
 					<div id="divspeicherkit">
-							<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Keine Konfiguration erforderlich
 						</div>
 					</div>
 					<div id="divspeichermqtt">
-						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
-						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Keine Konfiguration erforderlich</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Per MQTT zu schreiben:</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Geladene Energie in Wh, float, nur positiv</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Entladene Energie in Wh, float, nur positiv</div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
-							<div class="row" style="background-color:#fcbe1e">
+							<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Konfiguration im Bezug Victron Modul.
 						</div>
 					</div>
 					<div id="divspeicherfems">
-							<div class="row" style="background-color:#fcbe1e">
+							<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Konfiguration im Bezug Fenecon Modul.
 						</div>
 					</div>
 					<div id="divspeicherip">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speicher1_ip">IP:</label></b>
 							<input type="text" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
 						</div>
 					</div>
 					<div id="divspeichersiemens">
-							<div class="row" style="background-color:#fcbe1e">
+							<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							IP Adresse des Siemens Speichers. Im Siemens Speicher muss als Schnittstelle openWB gewählt werden.
 						</div>
 					</div>
 
 					<div id="divspeichervarta">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="vartaspeicherip">Varta IP:</label></b>
 							<input type="text" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse des Varta Speichers.
 						</div>
 					</div>
 					<div id="divspeicheralphaess">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="alphaessip">Anbindung:</label></b>
 							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1
 						</div>
 					</div>
 					<div id="divspeicherpw">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speicherpwip">Powerwall IP:</label></b>
 							<input type="text" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse der Tesla Powerwall.
 						</div>
 					</div>
 					<div id="divspeicherseco">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="sonnenecoip">Sonnen eco IP:</label></b>
 							<input type="text" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse der Sonnen eco serie 5.
 						</div>
 						<b><label for="sonnenecoalternativ">Alternativ Auslesung:</label></b>
@@ -4908,16 +4908,16 @@
 							<option <?php if($sonnenecoalternativold == "1\n") echo "selected" ?> value="1">Ja</option>
 							<option <?php if($sonnenecoalternativold == "2\n") echo "selected" ?> value="2">ECO 6</option>
 						</select>
-						<div class="row bg-info">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Je nach Sonnen Batterie kann die Alternative Auslesung benötigt werden.
 						</div>
 					</div>
 					<div id="divspeichere3dc">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="e3dcip">E3DCIP:</label></b>
 							<input type="text" name="e3dcip" id="e3dcip" value="<?php echo $e3dcipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse des E3DC Speichers.
 						</div>
 						<b><label for="e3dcextprod">Externe Produktion des E3DC mit einbeziehen:</label></b>
@@ -4925,131 +4925,131 @@
 							<option <?php if($e3dcextprodold == "0\n") echo "selected" ?> value="0">Nein</option>
 							<option <?php if($e3dcextprodold == "1\n") echo "selected" ?> value="1">Ja</option>
 						</select>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="e3dc2ip">E3DC 2 IP:</label></b>
 							<input type="text" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP oder none. IP Adresse des zweiten E3DC Speichers. Wenn nicht vorhanden none eintragen.
 						</div>
 					</div>
 					<div id="divspeichersbs25">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="sbs25ip">SBS 2.5 IP:</label></b>
 							<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.
 						</div>
 					</div>
 					<div id="divspeichersunnyisland">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="sunnyislandip">Sunny Island IP:</label></b>
 							<input type="text" name="sunnyislandip" id="sunnyislandip" value="<?php echo $sunnyislandipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse des SMA Sunny Island.
 						</div>
 					</div>
 					<div id="divspeichersolaredge">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 								<b><label for="solaredgespeicherip">Solaredge Speicher IP:</label></b>
 							<input type="text" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo htmlspecialchars($solaredgespeicheripold) ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte IP. IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.
 						</div>
 					</div>
 					<div id="divspeicherplenti">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Ein am 1. Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
 						</div>
 					</div>
 					<div id="divspeicherfronius">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
 						</div>
 					</div>
 					<div id="divspeicherhttp">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speicherleistung_http">Speicherleistung URL:</label></b>
 							<input type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo $speicherleistung_httpold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt. Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird. Das Modul dient dazu bei NurPV Ladung eine Entladung des Speichers zu verhindern.
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speichersoc_http">SpeicherSoC URL:</label></b>
 							<input type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo $speichersoc_httpold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speicherikwh_http">Speicher Import Wh URL:</label></b>
 							<input type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo $speicherikwh_httpold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte URL. Wenn nicht vorhanden, none eintragen. Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="speicherekwh_http">Speicher Export Wh URL:</label></b>
 							<input type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo $speicherekwh_httpold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte URL. Wenn nicht vorhanden, none eintragen.  Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
 						</div>
 					</div>
 					<div id="divspeicherbydhv">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="bydhvuser">Byd HV Benutzername:</label></b>
 							<input type="text" name="bydhvuser" id="bydhvuser" value="<?php echo $bydhvuserold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Benutzername der ByD Batterie
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="bydhvpass">Byd HV Passwort:</label></b>
 							<input type="text" name="bydhvpass" id="bydhvpass" value="<?php echo $bydhvpassold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Passwort der ByD Batterie
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="bydhvip">Byd HV IP Adresse:</label></b>
 							<input type="text" name="bydhvip" id="bydhvip" value="<?php echo $bydhvipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							IP Adresse der ByD Batterie
 						</div>
 					</div>
 					<div id="divspeichermpm3pm">
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="mpm3pmspeichersource">Modbus Source:</label></b>
 							<input type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="mpm3pmspeicherid">Modbus ID:</label></b>
 							<input type="text" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							Gültige Werte Zahl.
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="mpm3pmspeicherpv">PV mit einberechnen?:</label></b>
 							<select name="mpm3pmspeicherpv" id="mpm3pmspeicherpv">
 								<option <?php if($mpm3pmspeicherpvold == "0\n") echo "selected" ?> value="0">Keine extra Berechnung</option>
 								<option <?php if($mpm3pmspeicherpvold == "1\n") echo "selected" ?> value="1">Subtrahieren der PV Leistung</option>
 							</select>
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 							<b><label for="mpm3pmspeicherlanip">Lan Modbus Konverter IP:</label></b>
 							<input type="text" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>">
 						</div>
-						<div class="row" style="background-color:#fcbe1e">
+						<div class="row" style="background-color:#fcbe1e; color:#000000;">
 						Gültige Werte eine IP Adresse.
 						</div>
 					</div>
