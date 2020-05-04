@@ -5,6 +5,7 @@
  */
 
 var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
+var sendConfirmationValues = {}; // holds all topics and its values send by mqtt as objects to confirm receipt after send
 
 function processMessages(mqttmsg, mqttpayload) {
     /** @function processMessages
@@ -15,14 +16,16 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
     // last part of topic after /
+    console.log('received <' + mqttmsg + '> = ' + mqttpayload);
+    delete sendConfirmationValues[mqttmsg];
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);
     // check if topic contains subgroup like /lp/1/
-    var topicSubGoup = mqttmsg.match( /(\w+)\/(\d\d?)\// );
-    if ( topicSubGoup != null ) {
+    var topicSubGroup = mqttmsg.match( /(\w+)\/(\d\d?)\// );
+    if ( topicSubGroup != null ) {
         // topic might be for one of several subgroups
-        // topicSubGoup[0]=complete subgroup, [1]=suffix=first part between //, [1]=index=second part between //
-        var suffix = topicSubGoup[1].charAt(0).toUpperCase() + topicSubGoup[1].slice(1);  // capitalize suffix
-        var index = topicSubGoup[2];
+        // topicSubGroup[0]=complete subgroup, [1]=suffix=first part between //, [1]=index=second part between //
+        var suffix = topicSubGroup[1].charAt(0).toUpperCase() + topicSubGroup[1].slice(1);  // capitalize suffix
+        var index = topicSubGroup[2];
         var elementId = topicIdentifier + suffix + index;
     } else {
         // no subgroup so everything after last '/' might be the id

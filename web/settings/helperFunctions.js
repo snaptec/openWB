@@ -80,6 +80,8 @@ function sendValues(valueList) {
         // there are changed values
         Object.keys(valueList).forEach(function(topic) {
             var value = this[topic].toString();
+            console.log('sending >' + topic + '< = ' + value);
+            sendConfirmationValues[topic] = value;
             publish(value, topic);
         }, valueList);
     }
