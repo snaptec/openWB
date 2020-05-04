@@ -135,27 +135,59 @@ body > .container {
     vertical-align: middle;
 }
 
+/* dark mode on supported devices */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #212529;
         color: #ffffff;
     }
 
+    .modal-content {
+        background-color: #212529;
+        color: #ffffff;
+    }
     .card {
         background-color: #212529;
         border-color: rgba(255, 255, 255, 0.5);
     }
 
-    .bg-warning {
+    .bg-warning,
+    .bg-info,
+    .bg-success {
         color: #212529;
     }
 
-    .form-control {
-        background-color: #6c757d;
+    .form-control,
+    .form-control[readonly],
+    .form-control:focus {
+        background-color: #343a40;
         color: #ffffff;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control::placeholder {
+      color:#ffffffbf;
+    }
+
+    .input-group-text {
+      background-color: #212529;
+      color: #ffffff;
     }
 
     .btn-outline-secondary {
         color: #ffffff;
     }
+
+    input,
+    select {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+        border: 1px solid #ced4da;
+    }
+
 }

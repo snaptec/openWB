@@ -830,7 +830,7 @@
 							<h1>Sofort Laden</h1>
 						</div>
 					</div>
-					<div class="row" style="background-color:#febebe">
+					<div class="row" style="background-color:#febebe; color:#000000;">
 						<div class="col">
 							<b>Minimalstromstärke in A:</b><br>
 							<select name="minimalstromstaerke" id="minimalstromstaerke">
@@ -847,7 +847,7 @@
 							Gibt an mit wieviel Ampere je Phase mindestens geladen wird, gilt auch für das Nachtladen. Bei der Zoe z.B. sind 7-12A nötig, sonst wird das Laden nicht begonnen.
 						</div>
 					</div>
-					<div class="row" style="background-color:#febebe">
+					<div class="row" style="background-color:#febebe; color:#000000;">
 						<div class="col">
 							<b>Maximalstromstärke in A:</b><br>
 							<select name="maximalstromstaerke" id="maximalstromstaerke">
@@ -883,7 +883,7 @@
 							<h1>Automatische Phasenumschaltung</h1>
 						</div>
 					</div>
-					<div class="row" style="background-color:#33ffa8">
+					<div class="row" style="background-color:#33ffa8; color:#000000;">
 						<div class="col">
 							<b>Phasenumschaltung Aktiv:</b><br>
 							<select name="u1p3paktiv" id="u1p3paktiv">
@@ -896,7 +896,7 @@
 					<div id="u1p3paus">
 					</div>
 					<div id="u1p3pan">
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="u1p3psofort">Sofort Laden:</label></b>
 								<select name="u1p3psofort" id="u1p3psofort">
@@ -905,7 +905,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="u1p3pstandby">Standby:</label></b>
 								<select name="u1p3pstandby" id="u1p3pstandby">
@@ -914,7 +914,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="u1p3pminundpv">Min + PV Laden:</label></b>
 								<select name="u1p3pminundpv" id="u1p3pminundpv">
@@ -923,7 +923,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="u1p3pnurpv">Nur PV Laden:</label></b>
 								<select name="u1p3pnurpv" id="u1p3pnurpv">
@@ -933,12 +933,12 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht, wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke, wird wieder auf einphasige Ladung gewechselt.
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="u1p3pnl">Nachtladen:</label></b>
 								<select name="u1p3pnl" id="u1p3pnl">
@@ -947,7 +947,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b><label for="schieflastaktiv">Schieflastbeachtung:</label></b>
 								<select name="schieflastaktiv" id="schieflastaktiv">
@@ -956,7 +956,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row" style="background-color:#33ffa8">
+						<div class="row" style="background-color:#33ffa8; color:#000000;">
 							<div class="col">
 								<b>Schieflastbegrenzung in A:</b>
 								<select name="schieflastmaxa" id="schieflastmaxa">
@@ -995,7 +995,7 @@
 							<h1>Nachtlademodus</h1>
 						</div>
 					</div>
-					<div class="row" style="background-color:#00ada8">
+					<div class="row" style="background-color:#00ada8; color:#000000;">
 						<div class="col">
 							<input type='hidden' value='0' name='nlakt_sofort'>
 							<input id="nlakt_sofort" name="nlakt_sofort" value="1" type="checkbox" <?php if ( $nlakt_sofortold == 1){ echo "checked"; } ?> >
@@ -1011,7 +1011,7 @@
 							<label for="nlakt_standby">Aktiv im Standby Lademodus</label>
 						</div>
 					</div>
-					<div class="row" style="background-color:#00ada8">
+					<div class="row" style="background-color:#00ada8; color:#000000;">
 						<div class="col">
 							<b>Nachtladen Ladepunkt 1:</b><br>
 							<select name="nachtladen" id="nachtladen">
@@ -1025,7 +1025,7 @@
 					<div id="nachtladenaus">
 					</div>
 					<div id="nachtladenan">
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Nachtladestromstärke in A:</b><br>
 								<select name="nachtll" id="nachtll">
@@ -1060,7 +1060,7 @@
 								Ampere mit der nachts geladen werden soll
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Nachtladen Uhrzeit ab:</b><br>
 								<select name="nachtladenabuhr" id="nachtladenabuhr">
@@ -1076,7 +1076,7 @@
 								Ab wann Abends geladen werden soll
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Nachtladen Uhrzeit bis:</b><br>
 								<select name="nachtladenbisuhr" id="nachtladenbisuhr">
@@ -1094,7 +1094,7 @@
 								Bis wann morgens geladen werden soll
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Nacht SoC Sonntag bis Donnerstag:</b><br>
 								<input type="text" name="nachtsoc" id="nachtsoc" value="<?php echo $nachtsocold ?>"><br>
@@ -1102,7 +1102,7 @@
 								Das SoC Fenster is von von Sonntag Abend bis Freitag Morgen aktiv.
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Nacht SoC Freitag bis Sonntag:</b><br>
 								<input type="text" name="nachtsoc1" id="nachtsoc1" value="<?php echo $nachtsoc1old ?>"><br>
@@ -1110,7 +1110,7 @@
 								Das SoC Fenster is von von Freitag Morgen bis Sonntag Abend aktiv.
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b>Die SoC Grenzen gelten nicht für das morgens Laden</b><br>
 								<b><label for="mollp1moll">Montag morgens Laden Stromstärke in A:</label></b>
@@ -1217,7 +1217,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1dill">Dienstag morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1dill" id="mollp1dill">
@@ -1323,7 +1323,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1mill">Mittwoch morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1mill" id="mollp1mill">
@@ -1429,7 +1429,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1doll">Donnerstag morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1doll" id="mollp1doll">
@@ -1535,7 +1535,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1frll">Freitag morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1frll" id="mollp1frll">
@@ -1640,7 +1640,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1sall">Samstag morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1sall" id="mollp1sall">
@@ -1746,7 +1746,7 @@
 								<hr>
 							</div>
 						</div>
-						<div class="row" style="background-color:#00ada8">
+						<div class="row" style="background-color:#00ada8; color:#000000;">
 							<div class="col">
 								<b><label for="mollp1soll">Sonntag morgens Laden Stromstärke in A:</label></b>
 								<select name="mollp1soll" id="mollp1soll">
@@ -1909,7 +1909,7 @@
 					</script>
 					<div id="nachtladenlp2div">
 						<div id="nachtls1div">
-							<div class="row" style="background-color:#00ada8">
+							<div class="row" style="background-color:#00ada8; color:#000000;">
 								<div class="col">
 									<b>Nachtladen Ladepunkt 2:</b><br>
 									<select name="nachtladens1" id="nachtladens1">
@@ -1922,7 +1922,7 @@
 							<div id="nachtladenauss1">
 							</div>
 							<div id="nachtladenans1">
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nachtlls1">Nachtladestromstärke in A:</label></b>
 										<select name="nachtlls1" id="nachtlls1">
@@ -1957,7 +1957,7 @@
 										Ampere mit der nachts geladen werden soll
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nachtladenabuhrs1">Nachtladen Uhrzeit ab:</label></b>
 										<select name="nachtladenabuhrs1" id="nachtladenabuhrs1">
@@ -1973,7 +1973,7 @@
 										Ab wann Abends geladen werden soll
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nachtladenbisuhrs1">Nachtladen Uhrzeit bis:</label></b>
 										<select name="nachtladenbisuhrs1" id="nachtladenbisuhrs1">
@@ -1991,21 +1991,21 @@
 										Bis wann morgens geladen werden soll
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b>Nacht SoC Sonntag bis Donnerstag:</b><br>
 										<input type="text" name="nachtsocs1" id="nachtsocs1" value="<?php echo $nachtsocs1old ?>"><br>
 										Gültiger Wert 1-99. Wenn SoC Modul vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b>Nacht SoC Freitag bis Sonntag:</b><br>
 										<input type="text" name="nachtsoc1s1" id="nachtsoc1s1" value="<?php echo $nachtsoc1s1old ?>"><br>
 										Gültiger Wert 1-99. Wenn SoC Modul Ladepunkt 2 vorhanden wird Nachts bis xx% SoC geladen in dem angegebenen Zeitfenster.
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nacht2lls1">Morgens Laden Stromstärke in A:</label></b>
 										<select name="nacht2lls1" id="nacht2lls1">
@@ -2040,7 +2040,7 @@
 										Ampere mit der im zweiten Intervall geladen werden soll
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nachtladen2abuhrs1">Morgens Laden Uhrzeit ab:</label></b>
 										<select name="nachtladen2abuhrs1" id="nachtladen2abuhrs1">
@@ -2055,7 +2055,7 @@
 										Ab wann im zweiten Intervall geladen werden soll
 									</div>
 								</div>
-								<div class="row" style="background-color:#00ada8">
+								<div class="row" style="background-color:#00ada8; color:#000000;">
 									<div class="col">
 										<b><label for="nachtladen2bisuhrs1">Morgens Laden Uhrzeit bis:</label></b>
 										<select name="nachtladen2bisuhrs1" id="nachtladen2bisuhrs1">
@@ -2098,36 +2098,36 @@
 							<h1>EVU basiertes Lastmanagement</h1>
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							<b><label for="lastmaxap1">Lastmanagement Max Ampere Phase 1:</label></b>
 							<input type="text" name="lastmaxap1" id="lastmaxap1" value="<?php echo $lastmaxap1old ?>">
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							<b><label for="lastmaxap2">Lastmanagement Max Ampere Phase 2:</label></b>
 							<input type="text" name="lastmaxap2" id="lastmaxap2" value="<?php echo $lastmaxap2old ?>">
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							<b><label for="lastmaxap3">Lastmanagement Max Ampere Phase 3:</label></b>
 							<input type="text" name="lastmaxap3" id="lastmaxap3" value="<?php echo $lastmaxap3old ?>">
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							<b><label for="lastmmaxw">Lastmanagement maximaler Bezug:</label></b>
 							<input type="text" name="lastmmaxw" id="lastmmaxw" value="<?php echo $lastmmaxwold ?>"><br>
 						</div>
 					</div>
-					<div class="row" style="background-color:#ffffcc">
+					<div class="row" style="background-color:#ffffcc; color:#000000;">
 						<div class="col">
 							Gültige Werte 2000-200000. Definiert die maximal erlaubten bezogenen Watt des Hausanschlusses im Sofort Laden Modus, sofern die Bezugsleistung bekannt ist.<br><br>
 						</div>
@@ -2139,7 +2139,7 @@
 								<h1>Loadsharing LP1/2</h1>
 							</div>
 						</div>
-						<div class="row" style="background-color:#e6ccb3">
+						<div class="row" style="background-color:#e6ccb3; color:#000000;">
 							<div class="col">
 								<b><label for="loadsharinglp12">Loadsharing LP 1 / LP 2:</label></b>
 								<select name="loadsharinglp12" id="loadsharinglp12">
@@ -2148,7 +2148,7 @@
 								</select><br>
 							</div>
 						</div>
-						<div class="row" style="background-color:#e6ccb3">
+						<div class="row" style="background-color:#e6ccb3; color:#000000;">
 							<div class="col">
 								<b><label for="loadsharingalp12">Loadsharing Ampere LP 1 / LP 2:</label></b>
 								<select name="loadsharingalp12" id="loadsharingalp12">
@@ -2157,7 +2157,7 @@
 								</select><br>
 							</div>
 						</div>
-						<div class="row" style="background-color:#e6ccb3">
+						<div class="row" style="background-color:#e6ccb3; color:#000000;">
 							<div class="col">
 								Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen, diese Option aktivieren. Bei der OpenWB Duo muss diese Option aktiviert werden!<br>
 								Sie stellt in jedem Lademodus sicher, dass nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.<br>
