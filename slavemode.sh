@@ -1,13 +1,18 @@
 #!/bin/bash
 
-HeartbeatTimeout=35
-CurrentLimitAmpereForCpCharging=0.5
-NumberOfSupportedChargePoints=2
-LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
-ExpectedChangeFile="ramdisk/expectedChangeLp"
-SystemVoltage=240
-MaxCurrentOffset=1.0
-MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
+declare -r HeartbeatTimeout=35
+declare -r CurrentLimitAmpereForCpCharging=0.5
+declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
+declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
+declare -r SystemVoltage=240
+declare -r MaxCurrentOffset=1.0
+declare -r MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
+
+if (( lastmanagement > 0 )); then
+	declare -r -i NumberOfSupportedChargePoints=2
+else
+	declare -r -i NumberOfSupportedChargePoints=1
+fi
 
 #
 # the main entry point of the script that is called from outside
@@ -67,9 +72,20 @@ function computeAndSetCurrentForChargePoint() {
 
 	# the charge point that we're looking at is our first parameter
 	local chargePoint=$1
-	local expectedChangeFile="${ExpectedChangeFile}${chargePoint}"
+
+	# check if we're asked for a very fixed charge current (special cases superseding regular load management)
+	# needed especially to allow additional cars a charge start
+	if [ -f "ramdisk/FixedChargeCurrentCp${chargePoint}" ]; then
+		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
+		if (( fixedCurrent >= 0 )); then
+			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A"
+			callSetCurrent $fixedCurrent $chargePoint
+			return 0
+		fi
+	fi
 
 	# check if the car has done the adjustment that it has last been asked for
+	local expectedChangeFile="${ExpectedChangeFile}${chargePoint}"
 	local expectedChangeTimestamp=NowItIs
 	local expectedCurrentPerPhase=-1
 	if [ -f "${expectedChangeFile}" ]; then
@@ -86,12 +102,6 @@ function computeAndSetCurrentForChargePoint() {
 
 	# we may adjust -- start calculating
 	declare -i chargingVehiclesAdjustedForThisCp=${ChargingVehiclesOnPhase[$ChargingPhaseWithMaximumTotalCurrent]}
-	if !(( CpIsCharging )); then
-
-		# add 1 for "ourself" as we need to calculate as if we were actually charging
-		chargingVehiclesAdjustedForThisCp=$((chargingVehiclesAdjustedForThisCp+1))
-	fi
-
 	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
 		# this can happen in transient when master has not yet detected us as charging but we have already detected us as charging and no other car is charging
 		$dbgWrite "$NowItIs: Slave Mode: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
@@ -168,20 +178,6 @@ function computeAndSetCurrentForChargePoint() {
 		else
 			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
 		fi
-	fi
-
-	# finally limit to the configured min or max values
-	if (( llneu < minimalstromstaerke )) || ((LpEnabled == 0)); then
-		if ((LpEnabled != 0)); then
-			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, llneu=$llneu < minmalstromstaerke=$minimalstromstaerke --> setze llneu=0"
-		else
-			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP deakt. --> setze llneu=0"
-		fi
-		llneu=0
-	fi
-	if (( llneu > maximalstromstaerke )); then
-		$dbgWrite "$NowItIs: Slave Mode Aktiv, llneu=$llneu < maximalstromstaerke=$maximalstromstaerke --> setze llneu=$maximalstromstaerke"
-		llneu=$maximalstromstaerke
 	fi
 
 	callSetCurrent $llneu $chargePoint
@@ -411,31 +407,56 @@ function checkControllerHeartbeat() {
 function callSetCurrent() {
 
 	# the new current to set is our first parameter
-	declare -i -r currentToSet=$1
+	declare -i currentToSet=$1
 
 	# the charge point that we're looking at is the second parameter
 	# numeric, value of 0 means "all"
 	local chargePoint=$2
 
 	# we have to do a slightly ugly if-else-cascade to set the charge point selector for set-current.sh
+	# Note: There's currently only one current limit (min/max) per box - so setting same for all CPs
 	if (( chargePoint == 0 )); then
 		local chargePointString="all"
+		local minimumCurrentPossible=$minimalstromstaerke
+		local maximumCurrentPossible=$maximalstromstaerke
 	elif (( chargePoint == 1 )); then
 		local chargePointString="m"
+		local minimumCurrentPossible=$minimalstromstaerke
+		local maximumCurrentPossible=$maximalstromstaerke
 	elif (( chargePoint == 2 )); then
 		local chargePointString="s1"
+		local minimumCurrentPossible=$minimalstromstaerke
+		local maximumCurrentPossible=$maximalstromstaerke
 	elif (( chargePoint == 3 )); then
 		local chargePointString="s2"
+		local minimumCurrentPossible=$minimalstromstaerke
+		local maximumCurrentPossible=$maximalstromstaerke
 	elif (( chargePoint >= 4 )); then
 		local chargePointString="lp${chargePoint}"
+		local minimumCurrentPossible=$minimalstromstaerke
+		local maximumCurrentPossible=$maximalstromstaerke
 	else
 		echo "$NowItIs: Slave Mode charge current set ERROR: Charge Point #${chargePoint} is not supported"
 		return 1
 	fi
 
-	$dbgWrite "$NowItIs: callSetCurrent(${currentToSet}, ${chargePoint}): Calling runs/set-current.sh ${currentToSet} ${chargePointString}"
+	# finally limit to the configured min or max values
+	if ( (( currentToSet < minimumCurrentPossible )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
+		if ((LpEnabled != 0)); then
+			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < minimumCurrentPossible=$minimumCurrentPossible --> setze currentToSet=0"
+		else
+			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP deakt. --> setze currentToSet=0"
+		fi
+		currentToSet=0
+	fi
+	if (( currentToSet > maximumCurrentPossible )); then
+		$dbgWrite "$NowItIs: Slave Mode Aktiv, currentToSet=$currentToSet < maximumCurrentPossible=$maximumCurrentPossible --> setze currentToSet=$maximumCurrentPossible"
+		currentToSet=$maximumCurrentPossible
+	fi
 
 	if (( PreviousExpectedChargeCurrent != currentToSet )); then
+
+		$dbgWrite "$NowItIs: Setting current to ${currentToSet} A for CP#${chargePoint}"
 		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
 	fi
 
