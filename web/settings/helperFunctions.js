@@ -11,6 +11,7 @@ var changedValuesHandler = {
         delete obj[key];
         // if array is empty after delete, all send topics have been received with correct value
         // so redirect to main page
+        // array is only filled by function getChangedValues!
         if ( Object.keys(changedValues).length === 0 ) {
             window.location.href = './index.php';
         } else {
