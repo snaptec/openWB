@@ -60,7 +60,7 @@ else
 			boolstopchargeafterdisclp1=$(<ramdisk/boolstopchargeafterdisclp1)
 			if (( boolstopchargeafterdisclp1 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp1
-				mosquitto_pub -r -t "openWB/set/lp1/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -180,7 +180,7 @@ else
 			boolstopchargeafterdisclp2=$(<ramdisk/boolstopchargeafterdisclp2)
 			if (( boolstopchargeafterdisclp2 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp2
-				mosquitto_pub -r -t "openWB/set/lp2/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -304,7 +304,7 @@ else
 			boolstopchargeafterdisclp3=$(<ramdisk/boolstopchargeafterdisclp3)
 			if (( boolstopchargeafterdisclp3 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp3
-				mosquitto_pub -r -t "openWB/set/lp3/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/3/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -424,7 +424,7 @@ else
 			boolstopchargeafterdisclp4=$(<ramdisk/boolstopchargeafterdisclp4)
 			if (( boolstopchargeafterdisclp4 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp4
-				mosquitto_pub -r -t "openWB/set/lp4/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/4/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -545,7 +545,7 @@ else
 			boolstopchargeafterdisclp5=$(<ramdisk/boolstopchargeafterdisclp5)
 			if (( boolstopchargeafterdisclp5 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp5
-				mosquitto_pub -r -t "openWB/set/lp5/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/5/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -664,7 +664,7 @@ else
 			boolstopchargeafterdisclp6=$(<ramdisk/boolstopchargeafterdisclp6)
 			if (( boolstopchargeafterdisclp6 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp6
-				mosquitto_pub -r -t "openWB/set/lp6/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/6/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -783,7 +783,7 @@ else
 			boolstopchargeafterdisclp7=$(<ramdisk/boolstopchargeafterdisclp7)
 			if (( boolstopchargeafterdisclp7 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp7
-				mosquitto_pub -r -t "openWB/set/lp7/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/7/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -902,7 +902,7 @@ else
 			boolstopchargeafterdisclp8=$(<ramdisk/boolstopchargeafterdisclp8)
 			if (( boolstopchargeafterdisclp8 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp8
-				mosquitto_pub -r -t "openWB/set/lp8/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/8/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
