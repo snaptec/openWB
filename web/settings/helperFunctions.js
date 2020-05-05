@@ -101,7 +101,6 @@ function sendValues() {
         // then send changed values
         Object.keys(changedValues).forEach(function(topic) {
             var value = this[topic].toString();
-            console.log('sending >' + topic + '< = ' + value);
             publish(value, topic);
         }, changedValues);
     } else {
