@@ -687,7 +687,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/lp/2/boolDirectChargeModeSoc", "0", qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/2/chargeLimitation", " ", qos=0, retain=True)
             client.publish("openWB/config/get/sofort/lp/2/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp1/DirectChargeSubMode"):
+    if (msg.topic == "openWB/set/lp/1/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
             replaceAll("lademstat=",msg.payload.decode("utf-8"))
             replaceAll("sofortsocstatlp1=",msg.payload.decode("utf-8"))
