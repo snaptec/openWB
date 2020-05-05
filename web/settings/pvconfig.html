@@ -518,6 +518,28 @@
 				</div>
 			</div>
 
+			<!-- modal no-values-changed window -->
+			<div class="modal fade" id="noValuesChangedInfoModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-info">
+							<h4 class="modal-title text-light">Info</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Es wurden keine geänderten Einstellungen gefunden.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
@@ -531,11 +553,11 @@
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200424-a" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200427-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
-		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
+		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg_pvconfig.js?ver=20200428-a" ></script>
+		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script type="text/javascript">
 
@@ -551,9 +573,9 @@
 				if ( !formValid ) {
 					$('#formNotValidModal').modal();
 					return;
-				}
-				sendValues(getChangedValues());
-				setTimeout(function(){ window.location.href = './index.php'; }, 100);
+				};
+				getChangedValues();
+				sendValues();
 			}
 
 			$(document).ready(function(){
@@ -579,8 +601,8 @@
 					// shown in confirmation modal
 					// resets all values to defaults and sends all changed values by mqtt
 					setToDefaults();
-					sendValues(getChangedValues());
-					setTimeout(function(){ window.location.href = './index.php'; }, 100);
+					getChangedValues();
+					sendValues();
 				});
 
 				$('input').on("paste",function(e) {
