@@ -825,59 +825,6 @@
 						</div>
 					</div>
 
-					<div class="row"><hr>
-						<div class="col">
-							<h1>Sofort Laden</h1>
-						</div>
-					</div>
-					<div class="row" style="background-color:#febebe">
-						<div class="col">
-							<b>Minimalstromstärke in A:</b><br>
-							<select name="minimalstromstaerke" id="minimalstromstaerke">
-								<option <?php if($minimalstromstaerkeold == 6) echo "selected" ?> value="6">6</option>
-								<option <?php if($minimalstromstaerkeold == 7) echo "selected" ?> value="7">7</option>
-								<option <?php if($minimalstromstaerkeold == 8) echo "selected" ?> value="8">8</option>
-								<option <?php if($minimalstromstaerkeold == 9) echo "selected" ?> value="9">9</option>
-								<option <?php if($minimalstromstaerkeold == 10) echo "selected" ?> value="10">10</option>
-								<option <?php if($minimalstromstaerkeold == 11) echo "selected" ?> value="11">11</option>
-								<option <?php if($minimalstromstaerkeold == 12) echo "selected" ?> value="12">12</option>
-								<option <?php if($minimalstromstaerkeold == 13) echo "selected" ?> value="13">13</option>
-								<option <?php if($minimalstromstaerkeold == 14) echo "selected" ?> value="14">14</option>
-							</select><br>
-							Gibt an mit wieviel Ampere je Phase mindestens geladen wird, gilt auch für das Nachtladen. Bei der Zoe z.B. sind 7-12A nötig, sonst wird das Laden nicht begonnen.
-						</div>
-					</div>
-					<div class="row" style="background-color:#febebe">
-						<div class="col">
-							<b>Maximalstromstärke in A:</b><br>
-							<select name="maximalstromstaerke" id="maximalstromstaerke">
-								<option <?php if($maximalstromstaerkeold == 11) echo "selected" ?> value="11">11</option>
-								<option <?php if($maximalstromstaerkeold == 12) echo "selected" ?> value="12">12</option>
-								<option <?php if($maximalstromstaerkeold == 13) echo "selected" ?> value="13">13</option>
-								<option <?php if($maximalstromstaerkeold == 14) echo "selected" ?> value="14">14</option>
-								<option <?php if($maximalstromstaerkeold == 15) echo "selected" ?> value="15">15</option>
-								<option <?php if($maximalstromstaerkeold == 16) echo "selected" ?> value="16">16</option>
-								<option <?php if($maximalstromstaerkeold == 17) echo "selected" ?> value="17">17</option>
-								<option <?php if($maximalstromstaerkeold == 18) echo "selected" ?> value="18">18</option>
-								<option <?php if($maximalstromstaerkeold == 19) echo "selected" ?> value="19">19</option>
-								<option <?php if($maximalstromstaerkeold == 20) echo "selected" ?> value="20">20</option>
-								<option <?php if($maximalstromstaerkeold == 21) echo "selected" ?> value="21">21</option>
-								<option <?php if($maximalstromstaerkeold == 22) echo "selected" ?> value="22">22</option>
-								<option <?php if($maximalstromstaerkeold == 23) echo "selected" ?> value="23">23</option>
-								<option <?php if($maximalstromstaerkeold == 24) echo "selected" ?> value="24">24</option>
-								<option <?php if($maximalstromstaerkeold == 25) echo "selected" ?> value="25">25</option>
-								<option <?php if($maximalstromstaerkeold == 26) echo "selected" ?> value="26">26</option>
-								<option <?php if($maximalstromstaerkeold == 27) echo "selected" ?> value="27">27</option>
-								<option <?php if($maximalstromstaerkeold == 28) echo "selected" ?> value="28">28</option>
-								<option <?php if($maximalstromstaerkeold == 29) echo "selected" ?> value="29">29</option>
-								<option <?php if($maximalstromstaerkeold == 30) echo "selected" ?> value="30">30</option>
-								<option <?php if($maximalstromstaerkeold == 31) echo "selected" ?> value="31">31</option>
-								<option <?php if($maximalstromstaerkeold == 32) echo "selected" ?> value="32">32</option>
-							</select><br>
-							Gibt an mit wieviel Ampere maximal geladen wird.
-						</div>
-					</div>
-
 					<div class="row">
 						<div class="col">
 							<h1>Automatische Phasenumschaltung</h1>
