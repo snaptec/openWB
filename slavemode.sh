@@ -164,9 +164,8 @@ function computeAndSetCurrentForChargePoint() {
 		# The resulting value might get further limited to maximalstromstaerke below.
 		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
 
-			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
-
-			llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${ChargingVehiclesAdjustedForThisCp})" | bc)
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase): Not changing allowed current."
+			llneu=$PreviousExpectedChargeCurrent
 		else
 			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
 		fi
