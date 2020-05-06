@@ -432,8 +432,11 @@
                         <div class="col-3 px-0">
                                 Verbrauch
                         </div>
-                        <div class="col-6 px-0">
+                        <div class="col-3 px-0">
                                 Modus
+			</div>
+	                <div class="col-3 px-0">
+                                Laufzeit
                         </div>
 
 		</div>
@@ -445,9 +448,12 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
 		</div>
 		<!-- SmartHome Device 2 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="2">
@@ -457,9 +463,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="3">
@@ -469,9 +479,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="4">
@@ -481,9 +495,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="5">
@@ -493,9 +511,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="6">
@@ -505,9 +527,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="7">
@@ -517,9 +543,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="8">
@@ -529,9 +559,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="9">
@@ -541,9 +575,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
