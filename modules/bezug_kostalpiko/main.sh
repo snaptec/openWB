@@ -3,7 +3,7 @@
 #Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
 . /var/www/html/openWB/openwb.conf
 
-pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=67109120'&'dxsEntries=251658753'&'dxsEntries=83887106'&'dxsEntries=83887362'&'dxsEntries=83887618)
+pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=33556736'&'dxsEntries=251658753'&'dxsEntries=83887106'&'dxsEntries=83887362'&'dxsEntries=83887618)
 
 #aktuelle Ausgangsleistung am WR [W]
 pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
@@ -24,15 +24,14 @@ echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 bezugw1=$(echo $pvwatttmp | jq '.dxsEntries[2].value' | sed 's/\..*$//')
 bezugw2=$(echo $pvwatttmp | jq '.dxsEntries[3].value' | sed 's/\..*$//')
 bezugw3=$(echo $pvwatttmp | jq '.dxsEntries[4].value' | sed 's/\..*$//')
-if [[$speichermodul == "speicher_byd"]]; then
-	speicherleistung = (<ramdisk/speicherleistung)
-	hausw=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt+$speicherleistung" | bc) 
+if [[$speichermodul == "speicher_bydhv"]]; then
+	speicherleistung = $(</var/www/html/openWB/ramdisk/speicherleistung)
+	wattbezug=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt+$speicherleistung" | bc) 
 else
-	hausw=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt" |bc)
+	wattbezug=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt" |bc)
 fi
 
 
-wattbezug=$(echo "$hausw / 1" | bc)
 echo $wattbezug
 echo $wattbezug > /var/www/html/openWB/ramdisk/wattbezug
 bezuga1=$(echo "scale=2 ; $bezugw1 / 225" | bc)

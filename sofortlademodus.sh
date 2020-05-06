@@ -16,13 +16,13 @@ if (( awattaraktiv == 1 )); then
 			echo "Aktiviere preisbasierte Ladung"
 		fi
 		if (( lp1enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"	
+			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"	
 		fi
 		if (( lp2enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
+			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 		fi
 		if (( lp3enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp3/ChargePointEnabled -m "1"	
+			mosquitto_pub -r -t openWB/set/lp/3/ChargePointEnabled -m "1"	
 		fi
 	else
 		if [[ $debug == "1" ]]; then
@@ -30,13 +30,13 @@ if (( awattaraktiv == 1 )); then
 		fi
 		#price higher than max price, disable charging
 		if (( lp1enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "0"	
+			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "0"	
 		fi
 		if (( lp2enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "0"
+			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "0"
 		fi
 		if (( lp3enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp3/ChargePointEnabled -m "0"	
+			mosquitto_pub -r -t openWB/set/lp/3/ChargePointEnabled -m "0"	
 		fi
 
 	fi

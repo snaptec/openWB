@@ -1,5 +1,5 @@
 /*!
-Stylesheet zum openWB Dark19_01-Theme
+Stylesheet zum openWB Standard-Theme
 
 2019-2020 Michael Ortenstein
 */
@@ -23,7 +23,9 @@ body {
       /* IE6-9 */
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
 }
-
+body > .container {
+	    padding: 55px 15px 0;
+    }
 .loader {
 	position: fixed;
 	left: 0;
@@ -442,3 +444,54 @@ h3 {
           font-size: 2.0rem;
     }
 }
+/* Livechart colors */
+:root {
+	--fontCol: rgba(255, 255, 255, 0.82);
+	--gridCol: rgba(255, 255, 255, 0.82);
+	--xgridCol: rgba(255, 255, 255, 0.1);
+	--gridSocCol: rgba(0, 0, 0, 0);
+	--tickCol: rgba(255, 255, 255, 0.82);
+	--lp1Col: rgba(0, 0, 255, 0.7);
+	--lp1bgCol: rgba(0, 0, 255, 0.7);
+	--lp2Col: rgba(50, 30, 105, 0.7);
+	--lp2bgCol: rgba(50, 30, 105, 0.7);
+	--evuCol: rgba(255, 0, 0, 0.7);
+	--evubgCol: rgba(255, 10, 13, 0.3);
+	--pvCol: green;
+	--pvbgCol: rgba(10, 255, 13, 0.3);
+	--speicherCol: orange;
+	--speicherbgCol: rgba(200, 255, 13, 0.3);
+	--speicherSocCol: orange;
+	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
+	--lp1SocCol: rgba(0, 0, 255, 0.5);
+	--lp2SocCol: rgba(50, 50, 55, 0.5);
+	--hausverbrauchCol: rgba(255,255,204,0.7);
+	--hausverbrauchbgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher1Col: rgba(0, 150, 150, 0.7);
+	--verbraucher1bgCol: rgba(200, 255, 13, 0.3);
+	--verbraucher2Col: rgba(150, 150, 0, 0.7);
+	--verbraucher2bgCol: rgba(200, 255, 13, 0.3);
+	--lpgesamtCol: rgba(50, 50, 55, 0.1);
+	--lpgesamtbgCol: rgba(0, 0, 255, 0.1);
+	--lp3Col: rgba(50, 50, 55, 0.7);
+	--lp3bgCol: blue;
+	--lp4Col: rgba(50, 50, 55, 0.7);
+	--lp4bgCol: blue;
+	--lp5Col: rgba(50, 50, 55, 0.7);
+	--lp5bgCol: blue;
+	--lp6Col: rgba(50, 50, 55, 0.7);
+	--lp6bgCol: blue;
+	--lp7Col: rgba(50, 50, 55, 0.7);
+	--lp7bgCol: blue;
+	--lp8Col: rgba(50, 50, 55, 0.7);
+	--lp8bgCol: blue;
+	--d1Col: rgba(230, 50, 220, 0.7);
+	--d1bgCol: blue;
+	--d2Col: rgba(230, 50, 220, 0.7);
+	--d2bgCol: blue;
+	--d3Col: rgba(230, 50, 220, 0.7);
+	--d3bgCol: blue;
+	--d4Col: rgba(230, 50, 220, 0.7);
+	--d4bgCol: blue;
+	--d5Col: rgba(230, 50, 220, 0.7);
+	--d5bgCol: blue;

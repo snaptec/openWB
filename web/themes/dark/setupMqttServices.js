@@ -274,7 +274,15 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/6/current", 1],
 	["openWB/config/get/sofort/lp/7/current", 1],
 	["openWB/config/get/sofort/lp/8/current", 1],
-
+        ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
+        ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+        ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
+        ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+        ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
+        ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 
 
 

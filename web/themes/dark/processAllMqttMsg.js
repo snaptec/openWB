@@ -741,6 +741,24 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		$(element).text(actualPower);
 	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualRunningTimeDevice');  // now get parents respective child element
+		var actualPower = parseInt(mqttpayload, 10);
+		if ( isNaN(actualPower) ) {
+						actualPower = 0;
+					}
+		if (actualPower < 3600) {
+						actualPower = (actualPower / 60).toFixed(0);
+						actualPower += ' Min';
+					} else {
+									rest = (actualPower % 3600 / 60).toFixed(0);
+									ganz = (actualPower / 3600).toFixed(0);
+									actualPower = ganz + ' H ' + rest +' Min';
+								}
+		$(element).text(actualPower);
+	}
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'

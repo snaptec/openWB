@@ -1,3 +1,62 @@
+var style = getComputedStyle(document.body);
+var fontCol = style.getPropertyValue('--fontCol');
+var gridCol = style.getPropertyValue('--gridCol');
+var xgridCol = style.getPropertyValue('--xgridCol');
+var gridSocCol = style.getPropertyValue('--gridSocCol');
+var tickCol = style.getPropertyValue('--tickCol');
+var lp1Col = style.getPropertyValue('--lp1Col');
+var lp1bgCol = style.getPropertyValue('--lp1bgCol');
+var lp2Col = style.getPropertyValue('--lp2Col');
+var lp2bgCol = style.getPropertyValue('--lp2bgCol');
+var evuCol = style.getPropertyValue('--evuCol');
+var evubgCol = style.getPropertyValue('--evubgCol');
+var pvCol = style.getPropertyValue('--pvCol');
+var pvbgCol = style.getPropertyValue('--pvbgCol');
+var speicherCol = style.getPropertyValue('--speicherCol');
+var speicherSocCol = style.getPropertyValue('--speicherSocCol');
+var speicherbgCol = style.getPropertyValue('--speicherbgCol');
+var speicherSocbgCol = style.getPropertyValue('--speicherSocbgCol');
+var lp1SocCol = style.getPropertyValue('--lp1SocCol');
+var lp2SocCol = style.getPropertyValue('--lp2SocCol');
+var hausverbrauchCol = style.getPropertyValue('--hausverbrauchCol');
+var hausverbrauchbgCol = style.getPropertyValue('--hausverbrauchbgCol');
+var lpgesamtCol = style.getPropertyValue('--lpgesamtCol');
+var lpgesamtbgCol = style.getPropertyValue('--lpgesamtbgCol');
+var lp3Col = style.getPropertyValue('--lp3Col');
+var lp3bgCol = style.getPropertyValue('--lp3bgCol');
+var lp4Col = style.getPropertyValue('--lp4Col');
+var lp4bgCol = style.getPropertyValue('--lp4bgCol');
+var lp5Col = style.getPropertyValue('--lp5Col');
+var lp5bgCol = style.getPropertyValue('--lp5bgCol');
+var lp6Col = style.getPropertyValue('--lp6Col');
+var lp6bgCol = style.getPropertyValue('--lp6bgCol');
+var lp7Col = style.getPropertyValue('--lp7Col');
+var lp7bgCol = style.getPropertyValue('--lp7bgCol');
+var lp8Col = style.getPropertyValue('--lp8Col');
+var lp8bgCol = style.getPropertyValue('--lp8bgCol');
+var verbraucher1Col = style.getPropertyValue('--verbraucher1Col');
+var verbraucher1bgCol = style.getPropertyValue('--verbraucher1bgCol');
+var verbraucher2Col = style.getPropertyValue('--verbraucher2Col');
+var verbraucher2bgCol = style.getPropertyValue('--verbraucher2bgCol');
+var d1Col = style.getPropertyValue('--d1Col');
+var d1bgCol = style.getPropertyValue('--d1bgCol');
+var d2Col = style.getPropertyValue('--d2Col');
+var d2bgCol = style.getPropertyValue('--d2bgCol');
+var d3Col = style.getPropertyValue('--d3Col');
+var d3bgCol = style.getPropertyValue('--d3bgCol');
+var d4Col = style.getPropertyValue('--d4Col');
+var d4bgCol = style.getPropertyValue('--d4bgCol');
+var d5Col = style.getPropertyValue('--d5Col');
+var d5bgCol = style.getPropertyValue('--d5bgCol');
+var d6Col = style.getPropertyValue('--d6Col');
+var d6bgCol = style.getPropertyValue('--d6bgCol');
+var d7Col = style.getPropertyValue('--d7Col');
+var d7bgCol = style.getPropertyValue('--d7bgCol');
+var d8Col = style.getPropertyValue('--d8Col');
+var d8bgCol = style.getPropertyValue('--d8bgCol');
+var d9Col = style.getPropertyValue('--d9Col');
+var d9bgCol = style.getPropertyValue('--d9bgCol');
+
 var awattartime = [];
 var graphawattarprice;
 var initialread = 0;
@@ -81,8 +140,8 @@ function loadgraph() {
 		labels: atime,
 		datasets: [{
 			label: 'Lp1',
-			borderColor: "rgba(0, 0, 255, 0.7)",
-			backgroundColor: "rgba(0, 0, 255, 0.7)",
+			borderColor: lp1Col,
+			backgroundColor: lp1bgCol,
 			borderWidth: 2,
 			hidden: boolDisplayLp1,
 			fill: false,
@@ -91,8 +150,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp2',
-			borderColor: "rgba(50, 30, 105, 0.7)",
-			backgroundColor: "rgba(50, 30, 105, 0.7)",
+			borderColor: lp2Col,
+			backgroundColor: lp2bgCol,
 			borderWidth: 2,
 			hidden: boolDisplayLp2,
 			fill: false,
@@ -101,8 +160,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'EVU',
-			borderColor: "rgba(255, 0, 0, 0.7)",
-			backgroundColor: "rgba(255, 10, 13, 0.3)",
+			borderColor: evuCol,
+			backgroundColor: evubgCol,
 			borderWidth: 1,
 			fill: true,
 			lineTension: 0.2,
@@ -111,8 +170,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV',
-			borderColor: 'green',
-			backgroundColor: "rgba(10, 255, 13, 0.3)",
+			borderColor: pvCol,
+			backgroundColor: pvbgCol,
 			fill: true,
 			lineTension: 0.2,
 			hidden: boolDisplayPv,
@@ -121,8 +180,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicher',
-			borderColor: 'orange',
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: speicherCol,
+			backgroundColor: speicherbgCol,
 			fill: true,
 			lineTension: 0.2,
 			borderWidth: 1,
@@ -131,8 +190,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
-			borderColor: 'orange',
-			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderColor: speicherSocCol,
+			backgroundColor: speicherSocbgCol,
 			borderDash: [10,5],
 			hidden: boolDisplaySpeicherSoc,
 			fill: false,
@@ -142,7 +201,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP1 SoC',
-			borderColor: "rgba(0, 0, 255, 0.5)",
+			borderColor: lp1SocCol,
 			borderDash: [10,5],
 			borderWidth: 2,
 			hidden: boolDisplayLp1Soc,
@@ -152,7 +211,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP2 SoC',
-			borderColor: "rgba(50, 50, 55, 0.5)",
+			borderColor: lp2SocCol,
 			borderDash: [10,5],
 			fill: false,
 			lineTension: 0.2,
@@ -162,8 +221,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Hausverbrauch',
-			borderColor: "rgba(255,255,204,0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: hausverbrauchCol,
+			backgroundColor: hausverbrauchbgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -172,8 +231,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: verbraucher1Col,
+			backgroundColor: verbraucher1bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -182,8 +241,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: verbraucher2Col,
+			backgroundColor: verbraucher2bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -192,8 +251,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'LP Gesamt',
-			borderColor: "rgba(50, 50, 55, 0.1)",
-			backgroundColor: "rgba(0, 0, 255, 0.1)",
+			borderColor: lpgesamtCol,
+			backgroundColor: lpgesamtbgCol,
 			fill: true,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -202,8 +261,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp3',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp3Col,
+			backgroundColor: lp3bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -212,8 +271,8 @@ function loadgraph() {
 			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp4Col,
+			backgroundColor: lp4bgCol,
 			fill: false,
 			lineTension: 0.2,
 			data: alp4,
@@ -222,8 +281,8 @@ function loadgraph() {
 			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp5Col,
+			backgroundColor: lp5bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -232,8 +291,8 @@ function loadgraph() {
 			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp6Col,
+			backgroundColor: lp6bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -242,8 +301,8 @@ function loadgraph() {
 			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp7Col,
+			backgroundColor: lp7bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -252,8 +311,8 @@ function loadgraph() {
 			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp8Col,
+			backgroundColor: lp8bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -262,8 +321,8 @@ function loadgraph() {
 			hidden: boolDisplayLp8
 		}, {
 			label: d1name,
-			borderColor: "rgba(230, 50, 220, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d1Col,
+			backgroundColor: d1bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -272,8 +331,8 @@ function loadgraph() {
 			hidden: boolDisplayshd1
 		}, {
 			label: d2name,
-			borderColor: "rgba(50, 250, 255, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d2Col,
+			backgroundColor: d2bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -282,8 +341,8 @@ function loadgraph() {
 			hidden: boolDisplayshd2
 		}, {
 			label: d3name,
-			borderColor: "rgba(250, 50, 255, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d3Col,
+			backgroundColor: d3bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -292,8 +351,8 @@ function loadgraph() {
 			hidden: boolDisplayshd3
 		}, {
 			label: d4name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d4Col,
+			backgroundColor: d4bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -302,8 +361,8 @@ function loadgraph() {
 			hidden: boolDisplayshd4
 		}, {
 			label: d5name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d5Col,
+			backgroundColor: d5bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -312,8 +371,8 @@ function loadgraph() {
 			hidden: boolDisplayshd5
 		}, {
 			label: d6name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d6Col,
+			backgroundColor: d6bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -322,8 +381,8 @@ function loadgraph() {
 			hidden: boolDisplayshd6
 		}, {
 			label: d7name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d7Col,
+			backgroundColor: d7bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -332,8 +391,8 @@ function loadgraph() {
 			hidden: boolDisplayshd7
 		}, {
 			label: d8name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d8Col,
+			backgroundColor: d8bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -342,8 +401,8 @@ function loadgraph() {
 			hidden: boolDisplayshd8
 		}, {
 			label: d9name,
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: d9Col,
+			backgroundColor: d9bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -455,7 +514,7 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				labels: {
-					fontColor: "rgba(255, 255, 255, 0.82)",
+					fontColor: fontCol,
 					filter: function(item,chart) {
 						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) || item.text.includes(hideshd1)|| item.text.includes(hideshd2)|| item.text.includes(hideshd3)|| item.text.includes(hideshd4)|| item.text.includes(hideshd5)|| item.text.includes(hideshd6) || item.text.includes(hideshd7) || item.text.includes(hideshd8)|| item.text.includes(hideshd9) ) { return false } else { return true}
 					}
@@ -468,10 +527,10 @@ function loadgraph() {
 				xAxes: [
 					{
 						gridLines: {
-							color: "rgba(255, 255, 255, 0.1)"
+							color: xgridCol
 						},
          				ticks: {
-							fontColor: "rgba(255, 255, 255, 0.82)",
+							fontColor: tickCol,
 							maxTicksLimit: 15
          				}
       				}],
@@ -485,15 +544,15 @@ function loadgraph() {
 						scaleLabel: {
 		        			display: true,
 		        			labelString: 'Leistung [kW]',
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: fontCol
 		      			},
 						gridLines: {
-							color: "rgba(255, 255, 255, 0.82)"
+							color: gridCol
 						},
 						ticks: {
 							stepSize: 0.2,
 							maxTicksLimit: 10,
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: tickCol
 						}
 					},{
 						// horizontal line for values displayed on the right side (SoC)
@@ -504,16 +563,16 @@ function loadgraph() {
 						scaleLabel: {
 							display: true,
 							labelString: 'SoC [%]',
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: fontCol
 						},
 						gridLines: {
 							// black, opacy = 0% (invisible)
-							color: "rgba(0, 0, 0, 0)",
+							color: gridSocCol,
 						},
 						ticks: {
 							min: 0,
 							suggestedMax: 100,
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: tickCol
 						}
 					}
 				]

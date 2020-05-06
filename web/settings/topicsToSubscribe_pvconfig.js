@@ -17,6 +17,8 @@ var topicsToSubscribe = [
 	["openWB/config/get/pv/stopDelay", 0],
 	["openWB/config/get/pv/lp/1/minCurrent", 0],
 	["openWB/config/get/pv/lp/2/minCurrent", 0],
+	["openWB/config/get/pv/lp/1/maxSoc", 0],
+	["openWB/config/get/pv/lp/2/maxSoc", 0],
 	["openWB/config/get/pv/boolAdaptiveCharging", 0],
 	["openWB/config/get/pv/adaptiveChargingFactor", 0],
 	["openWB/config/get/pv/nurpv70dynact", 0],

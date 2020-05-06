@@ -179,9 +179,13 @@ if (( cpunterbrechunglp1 == 1 )); then
                        if (( ladeleistung < 200 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
                                if (( cpulp1waraktiv == 0 )); then
-				       echo "CP Unterbrechung an LP1 durchgeführt"
-                                       sudo python runs/cpulp1.py
-                                       echo 1 > ramdisk/cpulp1waraktiv
+					echo "CP Unterbrechung an LP1 durchgeführt"
+					if [[ $evsecon == "simpleevsewifi" ]]; then
+						curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
+					else
+                                       		sudo python runs/cpulp1.py
+					fi
+                               		echo 1 > ramdisk/cpulp1waraktiv
                                fi
                        else
                                echo 0 > ramdisk/cpulp1waraktiv
@@ -198,7 +202,11 @@ if (( cpunterbrechunglp2 == 1 )); then
                                cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
                                if (( cpulp2waraktiv == 0 )); then
 				       echo "CP Unterbrechung an LP2 durchgeführt"
-                                       sudo python runs/cpulp2.py
+					if [[ $evsecons1 == "simpleevsewifi" ]]; then
+						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+					else
+                                       		sudo python runs/cpulp2.py
+			       		fi
                                        echo 1 > ramdisk/cpulp2waraktiv
                                fi
                        else

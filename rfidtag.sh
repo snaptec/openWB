@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # Allow 3 minutes between RFID scan and plugin - else the CP gets disabled again
-MaximumSecondsAfterRfidScanToAssignCp=180
-NumberOfSupportedChargePoints=2
+declare -r MaximumSecondsAfterRfidScanToAssignCp=180
 
-StartScanDataLocation="web/logging/data/startRfidScanData"
+# lastmanagement == 1 means that it's on openWB duo
+if (( lastmanagement > 0 )); then
+	declare -r InstalledChargePoints=2
+else
+	declare -r InstalledChargePoints=1
+fi
+
+declare -r StartScanDataLocation="web/logging/data/startRfidScanData"
 
 #
 # the main script that is called from outside world
@@ -49,16 +55,16 @@ rfid() {
 			echo 4 > ramdisk/lademodus
 		fi
 		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] ; then
-			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"
+			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"
 			lp1enabled=1
 		fi
 		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] ; then
-			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
+			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 			lp2enabled=1
 		fi
 
 		# check all CPs that we support for whether the tag is valid for that CP
-		for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
+		for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
 			checkTagValidAndSetStartScanData $currentCp
 		done
 
@@ -78,7 +84,13 @@ rfid() {
 			startData=$(<"${StartScanDataLocation}")
 			IFS=',' read -r -a startDataSegments <<< "$startData"
 
-			if (( pluggedLp > 0 )); then
+			if (( pluggedLp > 0 )) || ( (( InstalledChargePoints == 1 )) && (( plugstat == 1 )) && [[ ! -f "${StartScanDataLocation}Lp1" ]] ); then
+
+				local pluggedLpToUse=$pluggedLp
+				if (( pluggedLp == 0)); then
+					# happens for openWB single if already plugged in
+					pluggedLp=1
+				fi
 
 				startDataForPluggedLp="${startData}"
 				echo "$NowItIs: Charge point #${pluggedLp} has been plugged in - recording accounting start data"
@@ -94,7 +106,7 @@ rfid() {
 					echo "$NowItIs: Timeout (${secondsSinceRfidScan} > ${MaximumSecondsAfterRfidScanToAssignCp} seconds) waiting for plugin after RFID scan. Disabling the CP and deleting accounting data."
 
 					# in case of timeout we disable all CPs that are NOT plugged in right now
-					for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
+					for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
 						if [[ "${lpsPlugStat[$currentCp]}" -ne "1" ]]; then
 							echo "$NowItIs: Disabling CP #${currentCp} as it's still unplugged after timeout of RFID tag scan has been exceeded"
 							mosquitto_pub -r -q 2 -t "openWB/set/lp${currentCp}/ChargePointEnabled" -m "0"
@@ -108,7 +120,7 @@ rfid() {
 		fi
 
 		# handle un-plug
-		for ((currentCp=1; currentCp<=NumberOfSupportedChargePoints; currentCp++)); do
+		for ((currentCp=1; currentCp<=InstalledChargePoints; currentCp++)); do
 			if (( unpluggedLps[$currentCp] > 0 )); then
 				echo "$NowItIs: Charge point #${currentCp} has been UNplugged - if running, stop sending accounting data (after one final transmission)"
 
@@ -221,10 +233,10 @@ checkTagValidAndSetStartScanData() {
 
 	local chargePoint=$1
 
-	# if we're in slave mode and the LP has not just been plugged in (in same control interval as the RFID scan)
-	# we completely ignore the scan.
-	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )) && (( pluggedLps[$chargePoint] != 1 )); then
-		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]}, justPlugged == ${pluggedLps[$chargePoint]})"
+	# if we're in slave mode on an openWB dual and the LP has not just been plugged in (in same control interval as the RFID scan)
+	# we completely ignore the scan as we cannot associate it with a plugin operation
+	if (( slavemode == 1 )) && (( lpsPlugStat[$chargePoint] > 0 )) && (( pluggedLps[$chargePoint] != 1 )) && ( (( lastmanagement != 0 )) || (( chargePoint > 1 )) ); then
+		echo "$NowItIs: Ignoring RFID scan of tag '${lasttag}' for CP #${chargePoint} because that CP is not in 'unplugged' state (plugstatToUse == ${lpsPlugStat[$chargePoint]}, justPlugged == ${pluggedLps[$chargePoint]}, lastmanagement=${lastmanagement})"
 		return 0
 	fi
 
