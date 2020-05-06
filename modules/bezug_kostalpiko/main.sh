@@ -25,7 +25,7 @@ bezugw1=$(echo $pvwatttmp | jq '.dxsEntries[2].value' | sed 's/\..*$//')
 bezugw2=$(echo $pvwatttmp | jq '.dxsEntries[3].value' | sed 's/\..*$//')
 bezugw3=$(echo $pvwatttmp | jq '.dxsEntries[4].value' | sed 's/\..*$//')
 if [[$speichermodul == "speicher_bydhv"]]; then
-	speicherleistung = (<ramdisk/speicherleistung)
+	speicherleistung = (</var/www/html/openWB/ramdisk/speicherleistung)
 	wattbezug=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt+$speicherleistung" | bc) 
 else
 	wattbezug=$(echo "$bezugw1+$bezugw2+$bezugw3+$pvwatt" |bc)
