@@ -51,7 +51,7 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 			current = 0;
 		}
 		$('#sofortlllp' + index + 's').val(current);
-		$('sofortlllp' + index + 'l').text(current);
+		$('#sofortlllp' + index + 'l').text(current);
 	}
 }
 function processGraphMessages(mqttmsg, mqttpayload) {
