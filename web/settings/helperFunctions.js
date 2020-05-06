@@ -104,12 +104,14 @@ function sendValues() {
 	var index = 0;
         // then send changed values
         Object.keys(changedValues).forEach(function(topic) {
+
         	var value = this[topic].toString();
                	setTimeout(function () {
                 	publish(value, topic);
            	}, index * interval);
              	index = index + 1;
 	}, changedValues);
+
     } else {
         $('#noValuesChangedInfoModal').modal();
     }
