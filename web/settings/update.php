@@ -233,9 +233,9 @@
 					cache: false
 				})
 				.done(function(result) {
-					$("#installedVersionSpan").text(result);
+					$("#installedVersionSpan").prepend(result);
 					$("#installedVersionSpan").data("version", result);
-					$("#modalInstalledVersionSpan").text(result);
+					$("#modalInstalledVersionSpan").prepend(result);
 				});
 
 				if("<?php echo $releasetrain ?>" == "master") {
