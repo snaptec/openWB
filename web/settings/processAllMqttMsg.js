@@ -4,7 +4,20 @@
  * @author Michael Ortenstein
  */
 
-var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
+function checkAllSaved(topic, value) {
+    /** @function checkAllSaved
+     * checks if received value equals the last saved and removes key from array
+     * @param {string} topic - the complete mqtt topic
+     * @param {string} value - the value for the topic
+     * @requires global var:changedValues - is declared with proxy in helperFunctions.js
+     */
+    topic = topic.replace('/get/', '/set/');
+    if ( changedValues.hasOwnProperty(topic) && changedValues[topic] == value ) {
+        // received topic-value-pair equals one that was send before
+        delete changedValues[topic];  // delete it
+        // proxy will initiate redirect to main page if array is now empty
+    }
+};
 
 function processMessages(mqttmsg, mqttpayload) {
     /** @function processMessages
@@ -14,14 +27,17 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setInputValue - is declared in pvconfig.html
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
+    checkAllSaved(mqttmsg, mqttpayload);
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);
     // check if topic contains subgroup like /lp/1/
-    var topicSubGoup = mqttmsg.match( /(\w+)\/(\d\d?)\// );
-    if ( topicSubGoup != null ) {
+    var topicSubGroup = mqttmsg.match( /(\w+)\/(\d\d?)\// );
+    if ( topicSubGroup != null ) {
         // topic might be for one of several subgroups
-        // topicSubGoup[0]=complete subgroup, [1]=first part between //, [1]=second part between //
-        var elementId = topicIdentifier + topicSubGoup[1] + topicSubGoup[2];
+        // topicSubGroup[0]=complete subgroup, [1]=suffix=first part between //, [1]=index=second part between //
+        var suffix = topicSubGroup[1].charAt(0).toUpperCase() + topicSubGroup[1].slice(1);  // capitalize suffix
+        var index = topicSubGroup[2];
+        var elementId = topicIdentifier + suffix + index;
     } else {
         // no subgroup so everything after last '/' might be the id
         var elementId = topicIdentifier;

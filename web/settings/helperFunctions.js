@@ -6,6 +6,22 @@
 
 var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
 
+var changedValuesHandler = {
+    deleteProperty: function(obj, key, value) {
+        delete obj[key];
+        // if array is empty after delete, all send topics have been received with correct value
+        // so redirect to main page
+        // array is only filled by function getChangedValues!
+        if ( Object.keys(changedValues).length === 0 ) {
+            window.location.href = './index.php';
+        } else {
+            return true;
+        }
+    }
+}
+
+var changedValues = new Proxy({}, changedValuesHandler);
+
 function updateLabel(elementId) {
     /** @function updateLabel
      * sets the value-label (if exists) attached to the element to the element value
@@ -68,20 +84,28 @@ function setToggleBtnGroup(groupId, option) {
     });
 }
 
-function sendValues(valueList) {
+function sendValues() {
     /** @function sendValues
      * send all topic-value-pairs from valueList
      * @typedef {Object} topic-value-pair
      * @property {string} topic - the topic
      * @property {string} value - the value
      * @param {topic-value-pair} - the changed values and their topics
+     * @requires global variable 'toBeSendValues'
+     * @requires modal with id 'noValuesChangedInfoModal'
      */
-    if ( !(Object.keys(valueList).length === 0 && valueList.constructor === Object) ) {
+    if ( !(Object.keys(changedValues).length === 0) ) {
         // there are changed values
-        Object.keys(valueList).forEach(function(topic) {
+        // so first disable buttons on page
+        $('#saveSettingsBtn').prop('disabled', true);
+        $('#modalDefaultsBtn').prop('disabled', true);
+        // then send changed values
+        Object.keys(changedValues).forEach(function(topic) {
             var value = this[topic].toString();
             publish(value, topic);
-        }, valueList);
+        }, changedValues);
+    } else {
+        $('#noValuesChangedInfoModal').modal();
     }
 }
 
@@ -93,7 +117,6 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    var allChanged = {};
     $('.btn-group-toggle, input[type="number"], input[type="text"], input[type="range"]').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
@@ -124,10 +147,9 @@ function getChangedValues() {
         var topic = topicPrefix + topicSubGroup + topicIdentifier;
         if ( originalValues[topic] != value ) {
             topic = topic.replace('/get/', '/set/');
-            allChanged[topic] = value;
+            changedValues[topic] = value;
         }
     });
-    return allChanged;
 }
 
 function setToDefaults() {

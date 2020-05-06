@@ -29,6 +29,10 @@ body > .container {
     line-height: 30px; /* vertically center the text there */
 }
 
+.hide {
+    display: none;
+}
+
 .btn-blue {
   background-color: hsl(197, 95%, 24%) !important;
   background-repeat: repeat-x;

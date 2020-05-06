@@ -34,10 +34,16 @@ $(document).ready(function(){
 client.onConnectionLost = function (responseObject) {
 	client.connect(options);
 };
+
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
     // func processMessages defined in respective processAllMqttMsg_
 	processMessages(message.destinationName, message.payloadString);
+};
+
+client.onDeliveryComplete = function (token) {
+    // func processMessages defined in respective processAllMqttMsg_
+	console.log("token");
 };
 
 //Creates a new Messaging.Message Object and sends it
@@ -46,5 +52,6 @@ function publish(payload, topic) {
 	message.destinationName = topic;
 	message.qos = 2;
 	message.retained = true;
+	console.log('publishing ' + payload + ' for topic ' + topic);
 	client.send(message);
 }
