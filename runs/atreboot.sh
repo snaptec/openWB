@@ -2679,6 +2679,7 @@ mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
 mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
+rm -rf /var/www/html/openWB/web/themes/dark19_01
 (sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus) &
 (sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
