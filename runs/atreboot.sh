@@ -886,6 +886,14 @@ if ! grep -Fq "msmoduslp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "msmoduslp2=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "stopchargepvatpercentlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "stopchargepvatpercentlp1=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargepvatpercentlp2=0" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargepvpercentagelp1=90" >> /var/www/html/openWB/openwb.conf
+	echo "stopchargepvpercentagelp2=90" >> /var/www/html/openWB/openwb.conf
+
+fi
 if ! grep -Fq "msmoduslp3=" /var/www/html/openWB/openwb.conf
 then
 	echo "msmoduslp3=0" >> /var/www/html/openWB/openwb.conf
