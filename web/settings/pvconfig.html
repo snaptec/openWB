@@ -296,7 +296,7 @@
 							</div>
 							<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<p class="card-text text-info">Diese Funktionen sind nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
+						<p class="card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
 						<div class="form-row form-group mb-1 vaRow">
 							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
 							<div class="col-6 col-sm-4">
@@ -311,7 +311,12 @@
 							</div>
 							<label for="maxSoclp2" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-
+						<div>
+							<small>
+								Parameter in Prozent [%] für den Maximal-SoC am LP1 bzw. LP2 im Modus PV-Laden.
+								Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+							</small>
+						</div>
 					</div>  <!-- end card body EV-SoC-Steuerung PV -->
 				</div>  <!-- end card EV-SoC-Steuerung PV -->
 
