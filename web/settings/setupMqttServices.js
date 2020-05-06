@@ -52,6 +52,5 @@ function publish(payload, topic) {
 	message.destinationName = topic;
 	message.qos = 2;
 	message.retained = true;
-	console.log('publishing ' + payload + ' for topic ' + topic);
 	client.send(message);
 }
