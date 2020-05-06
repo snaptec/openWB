@@ -847,7 +847,7 @@ if [[ $usesimpv == "1" ]]; then
 	fi
 	# sim bezug end
 fi
-if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_byd" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
+if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] ; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
@@ -1424,6 +1424,10 @@ mqttconfvar["config/get/sofort/lp/5/chargeLimitation"]=msmoduslp5
 mqttconfvar["config/get/sofort/lp/6/chargeLimitation"]=msmoduslp6
 mqttconfvar["config/get/sofort/lp/7/chargeLimitation"]=msmoduslp7
 mqttconfvar["config/get/sofort/lp/8/chargeLimitation"]=msmoduslp8
+mqttconfvar["config/get/pv/lp/1/socLimitation"]=stopchargepvatpercentlp1
+mqttconfvar["config/get/pv/lp/2/socLimitation"]=stopchargepvatpercentlp2
+mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1
+mqttconfvar["config/get/pv/lp/2/maxSoc"]=stopchargepvpercentagelp2
 
 for mq in "${!mqttconfvar[@]}"; do
 	theval=${!mqttconfvar[$mq]}
