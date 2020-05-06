@@ -22,6 +22,25 @@ if [[ $schieflastaktiv == "1" ]]; then
 		fi
 	fi
 fi
+if (( stopchargeafterdisclp1 == 0 )); then
+	if (( stopchargepvatpercentlp1 == 1 )); then
+		if (( soc > stopchargepvpercentagelp1 )); then
+			echo 0 > ramdisk/lp1enabled
+		else
+			echo 1 > ramdisk/lp1enabled
+		fi
+	fi
+fi
+if (( stopchargeafterdisclp2 == 0 )); then
+	if (( stopchargepvatpercentlp2 == 1 )); then
+		if (( soc1 > stopchargepvpercentagelp2 )); then
+			echo 0 > ramdisk/lp2enabled
+		else
+			echo 1 > ramdisk/lp2enabled
+		fi
+	fi
+fi
+
 if [[ $lastmanagement == "0" ]]; then
 	if [[ $socmodul != "none" ]]; then
 		if (( soc < minnurpvsoclp1 )); then

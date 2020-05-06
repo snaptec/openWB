@@ -436,7 +436,7 @@ def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
 
     hour=time.strftime("%H")
-    if (int(hour) == 1):
+    if (int(hour) == 0):
         try:
             if (int(resetmaxeinschaltdauer) == 0):
                 for i in range(0, 10):
