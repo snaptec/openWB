@@ -1,5 +1,5 @@
 /**
- * set of topics that has to be subscribed for the graph settings
+ * set of topics that has to be subscribed for the pv-charging settings
  *
  * @author Kevin Wieland
  * @author Michael Ortenstein

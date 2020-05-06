@@ -1,5 +1,5 @@
 /**
- * set of topics that has to be subscribed for the general charge settings
+ * set of topics that has to be subscribed for the Nachtladen settings
  *
  * @author Kevin Wieland
  * @author Michael Ortenstein
@@ -9,5 +9,5 @@
 // line[1] = load counter (if needed)
 
 var topicsToSubscribe = [
-	["openWB/config/get/global/maxEVSECurrentAllowed", 0]
+	
 ];

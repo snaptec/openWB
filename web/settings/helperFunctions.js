@@ -103,6 +103,7 @@ function sendValues() {
         Object.keys(changedValues).forEach(function(topic) {
             var value = this[topic].toString();
             publish(value, topic);
+            console.log('sending '+topic+' = '+value);
         }, changedValues);
     } else {
         $('#noValuesChangedInfoModal').modal();
