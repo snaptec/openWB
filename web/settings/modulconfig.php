@@ -4709,6 +4709,7 @@
 							<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit v2</option>
 							<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 							<option <?php if($pv2wattmodulold == "wr2_kostalsteca\n") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
+							<option <?php if($pv2wattmodulold == "wr2_victron\n") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 
 						</select>
 					</div>
@@ -4727,13 +4728,22 @@
 							Gültige Werte: IPs. IP Adresse des Wechselrichters, ggf. muss modbusTCP im WR noch aktiviert werden.
 						</div>
 					</div>
-
+					<div id="pv2iddiv">
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="pv2id">Modbus ID:</label></b>
+							<input type="text" name="pv2id" id="pv2id" value="<?php echo $pv2idold ?>">
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							Gültige Werte: ID. 
+						</div>
+					</div>
 
 					<script>
 						function display_pv2wattmodul() {
 							$('#pv2none').hide();
 							$('#pv2noconfig').hide();
 							$('#pv2ipdiv').hide();
+							$('#pv2iddiv').hide();
 
 							if($('#pv2wattmodul').val() == 'none') {
 								$('#pv2none').show();
@@ -4749,6 +4759,10 @@
 							}
 							if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
 								$('#pv2ipdiv').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_victron') {
+								$('#pv2ipdiv').show();
+								$('#pv2iddiv').show();
 							}
 
 						}
