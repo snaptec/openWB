@@ -39,6 +39,9 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "soclp1_vin=") !== false) {
+					list(, $soclp1_vinold) = explode("=", $line);
+				}
 				if(strpos($line, "pv2wattmodul=") !== false) {
 					list(, $pv2wattmodulold) = explode("=", $line);
 				}
@@ -1920,6 +1923,13 @@
 						</select>
 						<div class="row bg-info">
 							Erfordert einen openWB Ladepunkt, Go-e oder Keba. Nicht kompatibel mit EVSE Wifi und SimpleEVSE WB (mit DAC).
+						</div>
+						<div class="row bg-info">
+							<b><label for="soclp1_vin">VIN:</label></b>
+							<input type="text" name="soclp1_vin" id="soclp1_vin" value="<?php echo $soclp1_vinold ?>">
+						</div>
+						<div class="row bg-info">
+							VIN des Autos. Ist nur nötig wenn es sich um ein Importfahrzeug handelt. Kann auf none belassen werden wenn die Auslesung funktioniert.
 						</div>
 					</div>
 					<div id="socevnotify">

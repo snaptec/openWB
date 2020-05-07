@@ -16,6 +16,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'dacregisters1='.$_POST['dacregisters1']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "soclp1_vin=") !== false) {
+			$result .= 'soclp1_vin='.$_POST['soclp1_vin']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "speicher1_ip=") !== false) {
 			$result .= 'speicher1_ip='.$_POST['speicher1_ip']."\n";
 			$writeit = '1';
