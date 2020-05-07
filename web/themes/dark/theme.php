@@ -583,9 +583,80 @@
                         </div>
 
 		</div>
+
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
-		    <div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
+	    <form id="sofortladenEinstellungen" class="hide" name="sofortll" action="./tools/sofortll.php" method="POST">
+
+			<div class="row justify-content-center">
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp1" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+				</div>
+				<label for="currentLp1" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp2" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
+				</div>
+				<label for="currentLp2" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp3" class="col-3 col-sm-2 col-form-label">LP3:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp3" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
+				</div>
+				<label for="currentLp3" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp4" class="col-3 col-sm-2 col-form-label">LP4:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp4" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
+				</div>
+				<label for="currentLp4" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp5" class="col-3 col-sm-2 col-form-label">LP5:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp5" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
+				</div>
+				<label for="currentLp5" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp6" class="col-3 col-sm-2 col-form-label">LP6:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp6" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
+				</div>
+				<label for="currentLp6" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp7" class="col-3 col-sm-2 col-form-label">LP7:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp7" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
+				</div>
+				<label for="currentLp7" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+				<label for="currentLp8" class="col-3 col-sm-2 col-form-label">LP8:</label>
+				<div class="col-6 col-sm-4">
+					<input type="range" class="form-control-range rangeInput" id="currentLp8" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
+				</div>
+				<label for="currentLp8" class="col-2 col-form-label valueLabel" suffix="A"></label>
+			</div>
+
+			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
+				<hr>
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-center text-lightgrey">Awattar</h3>
 				</div>
@@ -619,6 +690,8 @@
 				</div>
 
 			</div> <!--/ awattardiv -->
+
+			<hr>
 
 			<div class="row justify-content-center">
 		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Lademengen-Einstellungen</h3>
@@ -834,156 +907,6 @@
 				</div>
 			</div>
 
-
-			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
-			</div>
-
-			<div class="row justify-content-center" id="slider1div">
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp1s" id="sofortlllp1s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp1">LP 1: <span id="sofortlllp1l"></span>A</label>
-				</div>
-				<script>
-					var slider1 = document.getElementById("sofortlllp1s");
-					var output1 = document.getElementById("sofortlllp1l");
-					output1.innerHTML = slider1.value;
-					slider1.oninput = function() {
-						output1.innerHTML = this.value;
-						lp1DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider2div" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp2s" id="sofortlllp2s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp2">LP 2: <span id="sofortlllp2l"></span>A</label>
-				</div>
-				<script>
-					var slider2 = document.getElementById("sofortlllp2s");
-					var output2 = document.getElementById("sofortlllp2l");
-					output2.innerHTML = slider2.value;
-					slider2.oninput = function() {
-						output2.innerHTML = this.value;
-						lp2DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider3div" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp3s" id="sofortlllp3s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp3">LP 3: <span id="sofortlllp3l"></span>A</label>
-				</div>
-				<script>
-					var slider3 = document.getElementById("sofortlllp3s");
-					var output3 = document.getElementById("sofortlllp3l");
-					output3.innerHTML = slider3.value;
-					slider3.oninput = function() {
-						output3.innerHTML = this.value;
-						lp3DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider4div" <?php if($isConfiguredLp[4] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp4s" id="sofortlllp4s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp4">LP 4: <span id="sofortlllp4l"></span>A</label>
-				</div>
-				<script>
-					var slider4 = document.getElementById("sofortlllp4s");
-					var output4 = document.getElementById("sofortlllp4l");
-					output4.innerHTML = slider4.value;
-					slider4.oninput = function() {
-						output4.innerHTML = this.value;
-						lp4DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider5div" <?php if($isConfiguredLp[5] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp5s" id="sofortlllp5s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp5">LP 5: <span id="sofortlllp5l"></span>A</label>
-				</div>
-				<script>
-					var slider5 = document.getElementById("sofortlllp5s");
-					var output5 = document.getElementById("sofortlllp5l");
-					output5.innerHTML = slider5.value;
-					slider5.oninput = function() {
-						output5.innerHTML = this.value;
-						lp5DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider6div" <?php if($isConfiguredLp[6] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp6s" id="sofortlllp6s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp6">LP 6: <span id="sofortlllp6l"></span>A</label>
-				</div>
-				<script>
-					var slider6 = document.getElementById("sofortlllp6s");
-					var output6 = document.getElementById("sofortlllp6l");
-					output6.innerHTML = slider6.value;
-					slider6.oninput = function() {
-						output6.innerHTML = this.value;
-						lp6DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider7div" <?php if($isConfiguredLp[7] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp7s" id="sofortlllp7s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp7">LP 7: <span id="sofortlllp7l"></span>A</label>
-				</div>
-				<script>
-					var slider7 = document.getElementById("sofortlllp7s");
-					var output7 = document.getElementById("sofortlllp7l");
-					output7.innerHTML = slider7.value;
-					slider7.oninput = function() {
-						output7.innerHTML = this.value;
-						lp7DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-
-			<div class="row justify-content-center" id="slider8div" <?php if($isConfiguredLp[8] != 1) echo 'style="display: none;"' ?>>
-				<div class="col-7">
-					<input type="range" min=<?php echo $minimalstromstaerkeold ?> max=<?php echo $maximalstromstaerkeold ?> step="1" name="sofortlllp8s" id="sofortlllp8s" class="custom-range">
-				</div>
-				<div class="col-2 regularTextSize text-center">
-					<label for="sofortlllp8">LP 8: <span id="sofortlllp8l"></span>A</label>
-				</div>
-				<script>
-					var slider8 = document.getElementById("sofortlllp8s");
-					var output8 = document.getElementById("sofortlllp8l");
-					output8.innerHTML = slider8.value;
-					slider8.oninput = function() {
-						output8.innerHTML = this.value;
-						lp8DirectChargeAmpsClick();
-					}
-				</script>
-			</div>
-			<br>
-
 			<div class="row">
 				<div class="col text-center">
 					<button type="submit" class="btn btn-green">Save</button>
@@ -1088,37 +1011,6 @@
 		function AwattarMaxPriceClick() {
 			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
 		}
-		function lp1DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/config/set/sofort/lp/1/current");
-		}
-
-		function lp2DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/config/set/sofort/lp/2/current");
-		}
-
-		function lp3DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/config/set/sofort/lp/3/current");
-		}
-
-		function lp4DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/config/set/sofort/lp/4/current");
-		}
-
-		function lp5DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/config/set/sofort/lp/5/current");
-		}
-
-		function lp6DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/config/set/sofort/lp/6/current");
-		}
-
-		function lp7DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/config/set/sofort/lp/7/current");
-		}
-
-		function lp8DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/config/set/sofort/lp/8/current");
-		}
 
 		function processPreloader(mqttTopic) {
 			// sets flag for topic received in topic-array
@@ -1160,6 +1052,78 @@
 			}
 		}
 
+		function updateLabel(elementId) {
+		    /** @function updateLabel
+		     * sets the value-label (if exists) attached to the element to the element value
+		     * @param {string} elementId - the id of the element
+		     * @requires class:valueLabel assigned to the attached label
+		     */
+		    var element = $('#' + elementId);
+		    var label = $('label[for="' + element.attr('id') + '"].valueLabel');
+		    if ( label.length == 1 ) {
+		        var suffix = label.attr('suffix');
+		        var text = element.val();
+		        if ( suffix != '' ) {
+		            text += ' ' + suffix;
+		        }
+		        label.text(text);
+		    }
+		}
+
+		function setInputValue(elementId, value) {
+		    /** @function setInputValue
+		     * sets the value-label (if exists) attached to the element to the element value
+		     * @param {string} elementId - the id of the element
+		     * @param {string} value - the value the element has to be set to
+		     * if the element has data-attribute 'signcheckbox' the checkbox with the id of the attribute
+		     * will represent negative numbers by being checked
+		     */
+		    if ( !isNaN(value) ) {
+		        var element = $('#' + elementId);
+		        var signCheckboxName = element.data('signcheckbox');
+		        var signCheckbox = $('#' + signCheckboxName);
+		        if ( signCheckbox.length == 1 ) {
+		            // checkbox exists
+		            if ( value < 0 ) {
+		                signCheckbox.prop('checked', true);
+		                value *= -1;
+		            } else {
+		                signCheckbox.prop('checked', false);
+		            }
+		        }
+		        element.val(value);
+		        if ( element.attr('type') == 'range' ) {
+		            updateLabel(elementId);
+		        }
+		    }
+		}
+
+		function setToggleBtnGroup(groupId, option) {
+		    /** @function setInputValue
+		     * sets the value-label (if exists) attached to the element to the element value
+		     * @param {string} elementId - the id of the button group
+		     * @param {string} option - the option the group btns will be set to
+		     * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
+		     */
+		    $('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
+		    $('input[name=' + groupId + '][data-option="' + option + '"]').closest('label').addClass('active');
+		    // and uncheck all others
+		    $('input[name=' + groupId + '][data-option!="' + option + '"]').each(function() {
+		        $(this).prop('checked', false);
+		        $(this).closest('label').removeClass('active');
+		    });
+		}
+
+		var delayUserInput = (function () {
+			var timeoutHandles = {};
+			return function (id, callback, ms) {
+				if (timeoutHandles[id]) {
+					clearTimeout(timeoutHandles[id]);
+				};
+				timeoutHandles[id] = setTimeout(callback, ms);
+			};
+		})();
+
 		$(document).ready(function(){
 
 			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200506-a");
@@ -1176,6 +1140,7 @@
 					}
 				}
 			});
+
 			$('.enableDevice').click(function(event){
 				// send mqtt set to enable/disable Device after click
 				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
@@ -1194,19 +1159,17 @@
 					}
 				}
 			});
+
 			$('.changeSHMode').click(function(event){
 				// send mqtt set to enable/disable Device after click
 				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
-
-
 				if ( $(this).text() == "Automatik" ) {
 						publish("1", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
 					} else {
 						publish("0", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
-
 				}
-
 			});
+
 			$('#chargeModeSelectBtn').click(function(event){
 				$("#chargeModeModal").modal("show");
 			});
@@ -1260,6 +1223,19 @@
 			    }
 			});
 
+			$('.rangeInput').on('input', function() {
+				// show slider value in label of class valueLabel
+				var elementId = $(this).attr('id');
+				updateLabel(elementId);
+				var element = $('#' + elementId);
+				var label = $('label[for="' + element.attr('id') + '"].valueLabel');
+				label.addClass('text-danger');
+
+				delayUserInput(elementId, function () {
+     				label.addClass('text-success');
+  				}, 1000);
+			});
+
 			// register an event listener for changes in visibility
 			let hidden;
 			let visibilityChange;
@@ -1289,7 +1265,7 @@
 				}
 			});
 
-		});
+		});  // end document ready
 	</script>
 
 </body>
