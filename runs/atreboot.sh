@@ -495,7 +495,7 @@ echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp6
 echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp7
 echo 1 > /var/www/html/openWB/ramdisk/llaktuelllp8
 echo 0 > /var/www/html/openWB/ramdisk/soc
-echo 2 > /var/www/html/openWB/ramdisk/soc1
+echo 0 > /var/www/html/openWB/ramdisk/soc1
 echo 0 > /var/www/html/openWB/ramdisk/soc1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/lla1
 echo 0 > /var/www/html/openWB/ramdisk/lla2
