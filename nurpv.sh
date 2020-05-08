@@ -25,18 +25,26 @@ fi
 if (( stopchargeafterdisclp1 == 0 )); then
 	if (( stopchargepvatpercentlp1 == 1 )); then
 		if (( soc > stopchargepvpercentagelp1 )); then
-			echo 0 > ramdisk/lp1enabled
+			if [[ $lp1enabled == "1" ]]; then
+				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
+			fi
 		else
-			echo 1 > ramdisk/lp1enabled
+			if [[ $lp1enabled == "0" ]]; then
+				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
+			fi
 		fi
 	fi
 fi
 if (( stopchargeafterdisclp2 == 0 )); then
 	if (( stopchargepvatpercentlp2 == 1 )); then
 		if (( soc1 > stopchargepvpercentagelp2 )); then
-			echo 0 > ramdisk/lp2enabled
+			if [[ $lp2enabled == "1" ]]; then
+				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
+			fi
 		else
-			echo 1 > ramdisk/lp2enabled
+			if [[ $lp2enabled == "0" ]]; then
+				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "1"
+			fi
 		fi
 	fi
 fi
