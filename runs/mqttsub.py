@@ -73,6 +73,16 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+ 
+    if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
+            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'enabled', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/lp/"+str(devicenumb)+"/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/set/lp/"+str(devicenumb)+"/ChargePointEnabled", "", qos=0, retain=True)
+
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_configured" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
@@ -658,54 +668,6 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
             client.publish("openWB/global/ChargeMode", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/1/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp1enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/1/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/2/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp2enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/2/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/3/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp3enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/3/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/4/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp4enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/4/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/5/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp5enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/5/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/6/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp6enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/6/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/7/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp7enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/7/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/8/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp8enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/config/set/sofort/lp/1/chargeLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=2):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp1=", msg.payload.decode("utf-8")]
