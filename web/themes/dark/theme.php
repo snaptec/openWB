@@ -1232,7 +1232,6 @@
 			});
 
 			$('.priorityModeBtn').click(function(event){
-				console.log("prioclick");
 				// prio: 0 = battery, 1 = ev
 				var priority = $(this).attr('priority');
 				if ( priority == '0' || priority == '1' ) {
@@ -1240,14 +1239,11 @@
 				}
 			});
 			$('.70PvBtn').click(function(event){
-				console.log("click");
 				// 0 deaktiviert, 1 aktiviert
 				var element = document.getElementById('70PvBtn');
 				if ( element.classList.contains("btn-success") ) {
 					publish("0", "openWB/set/pv/NurPV70Status");
-					console.log("do");
 				} else {
-					console.log("done");
 					publish("1", "openWB/set/pv/NurPV70Status");
 				}
 			});
