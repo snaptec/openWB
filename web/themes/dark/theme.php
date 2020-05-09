@@ -1058,6 +1058,21 @@
 							</div>
 						</div>
 					</span>
+					<hr>
+					
+					<div class="row">
+						<div class="col text-center text-grey">
+							70% beachten im Lademodus PV-Laden:
+						</div>
+					</div>
+					<div class="row justify-content-center">
+						<div class="col-sm-5 py-1">
+							<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
+								70 % beachten
+							</button>
+						</div>
+					</div>
+					
 
 				</div> <!-- /modal body -->
 
@@ -1217,13 +1232,25 @@
 			});
 
 			$('.priorityModeBtn').click(function(event){
+				console.log("prioclick");
 				// prio: 0 = battery, 1 = ev
 				var priority = $(this).attr('priority');
 				if ( priority == '0' || priority == '1' ) {
 					publish(priority, 'openWB/set/system/priorityModeEVBattery');
 				}
 			});
-
+			$('.70PvBtn').click(function(event){
+				console.log("click");
+				// 0 deaktiviert, 1 aktiviert
+				var element = document.getElementById('70PvBtn');
+				if ( element.classList.contains("btn-success") ) {
+					publish("0", "openWB/set/pv/NurPV70Status");
+					console.log("do");
+				} else {
+					console.log("done");
+					publish("1", "openWB/set/pv/NurPV70Status");
+				}
+			});
 			$('.resetTargetChargingBtn').click(function(event){
 				var lp = $(this).attr("lp");
 				$.ajax({

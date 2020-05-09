@@ -646,11 +646,9 @@ def on_message(client, userdata, msg):
             client.publish("openWB/system/MonthLadelogData10", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthLadelogData11", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthLadelogData12", "empty", qos=0, retain=True)
-    if (msg.topic == "openWB/set/NurPV70Status"):
+    if (msg.topic == "openWB/set/pv/NurPV70Status"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
             client.publish("openWB/pv/bool70PVDynStatus", msg.payload.decode("utf-8"), qos=0, retain=True)
-            #time.sleep(0.5)
-            #subprocess.Popen("/var/www/html/openWB/runs/renewmqtt.sh")
             f = open('/var/www/html/openWB/ramdisk/nurpv70dynstatus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()

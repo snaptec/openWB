@@ -452,6 +452,18 @@ function processPvMessages(mqttmsg, mqttpayload) {
 		var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
 		$('#pvdailyyield').text(pvDailyYieldStr);
 	}
+	else if ( mqttmsg == 'openWB/pv/bool70PVDynStatus') {
+		switch (mqttpayload) {
+			case '0':
+				// deaktiviert
+				$('#70PvBtn').removeClass('btn-success');
+				break;
+			case '1':
+				// ev priority
+				$('#70PvBtn').addClass('btn-success');
+			break;
+		}
+	}
 }
 
 function processVerbraucherMessages(mqttmsg, mqttpayload) {
