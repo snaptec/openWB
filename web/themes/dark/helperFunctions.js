@@ -50,6 +50,25 @@ function setInputValue(elementId, value) {
     }
 }
 
+function getTopicToSendTo (elementId) {
+    var element = $('#' + elementId);
+    var topicPrefix = element.data('topicprefix');
+    var topicSubGroup = element.data('topicsubgroup');
+    if ( typeof topicSubGroup == 'undefined' ) {
+        // if no data-attribute for subgroup like /lp/1/ exists
+        // topicIdentifier is the unique element id
+        topicSubGroup = '';
+        var topicIdentifier = element.attr('id');
+    } else {
+        // if data-attribute for subgroup like /lp/1/ exists
+        // topicIdentifier is the non-unique element name
+        var topicIdentifier = element.attr('name');
+    }
+    var topic = topicPrefix + topicSubGroup + topicIdentifier;
+    topic = topic.replace('/get/', '/set/');
+    return topic;
+}
+
 function setToggleBtnGroup(groupId, option) {
     /** @function setInputValue
      * sets the value-label (if exists) attached to the element to the element value

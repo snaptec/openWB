@@ -49,7 +49,6 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 			current = 0;
 		}
 		elementId = 'currentLp' + index;
-		console.log(elementId+' = '+current);
 		setInputValue(elementId, current);
 	}
 }

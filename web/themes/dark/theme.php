@@ -594,7 +594,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp1" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp1" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
 				</div>
 				<label for="currentLp1" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -602,7 +602,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp2" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp2" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
 				</div>
 				<label for="currentLp2" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -610,7 +610,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp3" class="col-3 col-sm-2 col-form-label">LP3:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp3" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp3" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
 				</div>
 				<label for="currentLp3" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -618,7 +618,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp4" class="col-3 col-sm-2 col-form-label">LP4:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp4" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp4" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
 				</div>
 				<label for="currentLp4" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -626,7 +626,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp5" class="col-3 col-sm-2 col-form-label">LP5:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp5" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp5" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
 				</div>
 				<label for="currentLp5" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -634,7 +634,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp6" class="col-3 col-sm-2 col-form-label">LP6:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp6" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp6" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
 				</div>
 				<label for="currentLp6" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -642,7 +642,7 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp7" class="col-3 col-sm-2 col-form-label">LP7:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp7" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp7" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
 				</div>
 				<label for="currentLp7" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
@@ -650,13 +650,13 @@
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="currentLp8" class="col-3 col-sm-2 col-form-label">LP8:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp8" name="current" min="6" max="32" step="1" value="" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
+					<input type="range" class="form-control-range rangeInput" id="currentLp8" name="current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
 				</div>
 				<label for="currentLp8" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
-				<hr>
+				<hr color="white">
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-center text-lightgrey">Awattar</h3>
 				</div>
@@ -683,15 +683,9 @@
 					</script>
 				</div>
 
-				<div class="row justify-content-center">
-					<div class="col-12">
-						<hr color="white">
-					</div>
-				</div>
-
 			</div> <!--/ awattardiv -->
 
-			<hr>
+			<hr color="white">
 
 			<div class="row justify-content-center">
 		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Lademengen-Einstellungen</h3>
@@ -901,25 +895,16 @@
 				</div>
 			</div>
 
-			<div class="row justify-content-center">
-				<div class="col-12">
-					<hr color="white">
-				</div>
-			</div>
-
 			<div class="row">
 				<div class="col text-center">
 					<button type="submit" class="btn btn-green">Save</button>
 				</div>
 			</div>
 
-			<hr color="white">
-
 		</form>
 
 
 <!-- end old code-->
-
 
 
 	<!-- modal chargemode-select-window -->
@@ -999,7 +984,9 @@
 	<!-- load respective Chart.js definition -->
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
-	<!-- Data refresher -->
+	<!-- some helper functions-->
+	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200511-a"></script>
+	<!-- data refresher -->
 	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200506-b"></script>
 
 	<!-- some scripts -->
@@ -1115,12 +1102,16 @@
 		}
 
 		var delayUserInput = (function () {
+			// sets a timeout on call and resets timout if called again for same id before timeout fires
 			var timeoutHandles = {};
 			return function (id, callback, ms) {
-				if (timeoutHandles[id]) {
+				if ( timeoutHandles[id] ) {
 					clearTimeout(timeoutHandles[id]);
 				};
-				timeoutHandles[id] = setTimeout(callback, ms);
+				timeoutHandles[id] = setTimeout(function(){
+					delete timeoutHandles[id];
+					callback(id);
+				}, ms);
 			};
 		})();
 
@@ -1230,10 +1221,16 @@
 				var element = $('#' + elementId);
 				var label = $('label[for="' + element.attr('id') + '"].valueLabel');
 				label.addClass('text-danger');
-
-				delayUserInput(elementId, function () {
-     				label.addClass('text-success');
-  				}, 1000);
+				delayUserInput(elementId, function (id) {
+					// gets executed on callback, 2000ms after last input-change
+					// changes label color back to normal and sends input-value by mqtt
+					var elem = $('#' + id);
+					var value = elem.val();
+					var topic = getTopicToSendTo(id);
+					publish(value, topic);
+					var label = $('label[for="' + elem.attr('id') + '"].valueLabel');
+     				label.removeClass('text-danger');
+  				}, 2000);
 			});
 
 			// register an event listener for changes in visibility
