@@ -51,6 +51,6 @@ function processMessages(mqttmsg, mqttpayload) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
     } else {
-        //console.log(elementId + ' not found');
+        console.log(elementId + ' not found');
     }
 }  // end processMessages
