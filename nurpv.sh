@@ -23,30 +23,33 @@ if [[ $schieflastaktiv == "1" ]]; then
 	fi
 fi
 if (( stopchargeafterdisclp1 == 0 )); then
-	if (( stopchargepvatpercentlp1 == 1 )); then
-		if (( soc > stopchargepvpercentagelp1 )); then
-			if [[ $lp1enabled == "1" ]]; then
-				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
-			fi
-		else
-			if [[ $lp1enabled == "0" ]]; then
-				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
-			fi
+	if (( soc > stopchargepvpercentagelp1 )); then
+		if [[ $lp1enabled == "1" ]]; then
+			mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
+			echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
+		fi
+	else
+		if [[ $lp1enabled == "0" ]]; then
+			mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
+			echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
+
 		fi
 	fi
 fi
 if (( stopchargeafterdisclp2 == 0 )); then
-	if (( stopchargepvatpercentlp2 == 1 )); then
 		if (( soc1 > stopchargepvpercentagelp2 )); then
 			if [[ $lp2enabled == "1" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
+				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
+
 			fi
 		else
 			if [[ $lp2enabled == "0" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "1"
+				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
+
 			fi
 		fi
-	fi
 fi
 
 if [[ $lastmanagement == "0" ]]; then
