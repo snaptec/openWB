@@ -9,9 +9,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" href="./index.php">Home</a>
-				</li>
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings" data-toggle="dropdown">
@@ -19,16 +16,25 @@
 					</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" id="navAllgemein" href="./settings/settings.php">Allgemein</a>
-						<a class="dropdown-item" id="navPVLadeeinstellungen" href="./settings/pvconfig.php">PV-Ladeeinstellungen</a>
 						<a class="dropdown-item" id="navSmartHome" href="./settings/smarthome.php">Smart Home</a>
 						<a class="dropdown-item" id="navOpenwbCloud" href="./settings/cloudconfig.php">openWB Cloud</a>
 						<a class="dropdown-item" id="navMqttBruecke" href="./settings/mqtt.php">MQTT-Brücke</a>
 						<a class="dropdown-item" id="navModulkonfiguration" data-toggle="modal" data-target="#modulconfigConfirmationModal" style="cursor: pointer;">Modulkonfiguration</a>
+						<a class="dropdown-item" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
+						<a class="dropdown-item" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 					</div>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" id="navAutolock" href="./settings/autoLock.php">Auto-Lock</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbardropSettings2" data-toggle="dropdown">
+						Ladeeinstellungen
+					</a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" id="navGeneralLadeeinstellungen" href="./settings/generalchargeconfig.html">Übergreifendes</a>
+						<a class="dropdown-item" id="navSofortLadeeinstellungen" href="./settings/sofortconfig.html">Sofortladen</a>
+						<a class="dropdown-item" id="navPVLadeeinstellungen" href="./settings/pvconfig.html">PV & Min+PV</a>
+						<a class="dropdown-item" id="navNachtladen" href="./settings/nachtladenconfig.html">Nachtladen</a>
+					</div>
 				</li>
 
 				<li class="nav-item dropdown">
@@ -37,12 +43,8 @@
 					</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" id="navSetTheme" href="./settings/setTheme.php">Theme-Auswahl</a>
-						<a class="dropdown-item" id="navGraphSettings" href="./settings/graphconfig.php">Graph</a>
+						<a class="dropdown-item" id="navGraphSettings" href="./settings/graphconfig.html">Graph</a>
 					</div>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" id="navVerschiedenes" href="./settings/misc.php">Verschiedenes</a>
 				</li>
 
 				<li class="nav-item dropdown">

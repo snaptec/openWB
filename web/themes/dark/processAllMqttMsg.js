@@ -32,8 +32,28 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/verbraucher\//i) ) { processVerbraucherMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processLpMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/hook\//i) ) { processHookMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
+
+function processSofortConfigMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/config/get/sofort/
+	// called by handlevar
+	processPreloader(mqttmsg);
+
+
+	if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var current = parseInt(mqttpayload, 10);
+		if ( isNaN(current) ) {
+			current = 0;
+		}
+		$('#sofortlllp' + index + 's').val(current);
+		$('#sofortlllp' + index + 'l').text(current);
+	}
+}
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
@@ -154,6 +174,10 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/[1-9][0-9]*alllivevalues$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index2 = mqttmsg.match(/\d/g)[1];
+		if (typeof index2 !== 'undefined'){
+			index = index+index2
+		}
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
@@ -179,7 +203,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 			powerEvu = '0 W';
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toFixed(2);
+		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 	    	    powerEvu += ' kW Bezug';
 	    	} else {
 				powerEvu += ' W Bezug';
@@ -187,7 +211,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
     	} else {
     	    powerEvu *= -1;
 			if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toFixed(2);
+		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 	    	    powerEvu += ' kW Einspeisung';
 	    	} else {
 				powerEvu += ' W Einspeisung';
@@ -207,7 +231,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			powerHouse = 0;
 		}
 		if ( powerHouse > 999 ) {
-			powerHouse = (powerHouse / 1000).toFixed(2) + ' kW';
+			powerHouse = (powerHouse / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 		} else {
 			powerHouse += ' W';
 		}
@@ -219,7 +243,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			powerAllLp = 0;
 		}
 		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toFixed(2) + ' kW';
+			powerAllLp = (powerAllLp / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 		} else {
 			powerAllLp += ' W';
 		}
@@ -252,47 +276,72 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		$('#awattar1l').text(mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
-		// set button colors depending on charge mode
+		// set modal button colors depending on charge mode
+		// set visibility of divs
+		// set visibility of priority icon depending on charge mode
+		// (priority icon is encapsulated in another element hidden/shown by housebattery configured or not)
 		switch (mqttpayload) {
 			case '0':
 				// mode sofort
-				$('#chargeModeSelectBtn').text('Sofortladen');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeSofortBtn').addClass('btn-green');
-				$('#targetChargingProgress').show();
+				$('#chargeModeSelectBtnText').text('Sofortladen');  // text btn mainpage
+				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
+				$('#chargeModeSofortBtn').addClass('btn-success');
+				$('#targetChargingProgress').show();  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').show();
+				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
 				break;
 			case '1':
 				// mode min+pv
-				$('#chargeModeSelectBtn').text('Min+PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeMinPVBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Min+PV-Laden');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeMinPVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
 				break;
 			case '2':
 				// mode pv
-				$('#chargeModeSelectBtn').text('PV-Laden');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModePVBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('PV-Laden');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModePVBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').show();
 				break;
 			case '3':
 				// mode stop
-				$('#chargeModeSelectBtn').text('Stop');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStopBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Stop');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStopBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
 				break;
 			case '4':
 				// mode standby
-				$('#chargeModeSelectBtn').text('Standby');
-				$('.chargeModeBtn').removeClass('btn-green');
-				$('#chargeModeStdbyBtn').addClass('btn-green');
+				$('#chargeModeSelectBtnText').text('Standby');
+				$('.chargeModeBtn').removeClass('btn-success');
+				$('#chargeModeStdbyBtn').addClass('btn-success');
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
+				$('#priorityEvBatteryIcon').hide();
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/priorityModeEVBattery' ) {
+		// sets button color in charge mode modal and sets icon in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// battery priority
+				$('#evPriorityBtn').removeClass('btn-success');
+				$('#batteryPriorityBtn').addClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car').addClass('fa-car-battery')
+				break;
+			case '1':
+				// ev priority
+				$('#evPriorityBtn').addClass('btn-success');
+				$('#batteryPriorityBtn').removeClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
+			break;
 		}
 	}
 }
@@ -311,7 +360,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			speicherwatt = '0 W';
 		} else if (speicherwatt > 0) {
 			if ( speicherwatt > 999 ) {
-				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW Ladung';
 			} else {
 				speicherwatt = speicherwatt + ' W Ladung';
@@ -319,7 +368,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		} else {
 	    	speicherwatt *= -1;
 			if (speicherwatt > 999) {
-				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW Entladung';
 			} else {
 				speicherwatt = speicherwatt + ' W Entladung';
@@ -337,10 +386,16 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
 		if ( mqttpayload == 1 ) {
-			// if housebattery is configured, show div
+			// if housebattery is configured, show info-div
 			$('#speicher').show();
+			// and outer element for priority icon in pv mode
+			$('#priorityEvBattery').show();
+			// priority buttons in modal
+			$('#priorityModeBtns').show();
 		} else {
 			$('#speicher').hide();
+			$('#priorityEvBattery').hide();
+			$('#priorityModeBtns').hide();
 		}
 	}
 }
@@ -382,7 +437,7 @@ function processPvMessages(mqttmsg, mqttpayload) {
 			pvwatt *= -1;
 			// adjust and add unit
 			if (pvwatt > 999) {
-				pvwatt = (pvwatt / 1000).toFixed(2) + ' kW';
+				pvwatt = (pvwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 			} else {
 				pvwatt += ' W';
 			}
@@ -394,8 +449,20 @@ function processPvMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(pvDailyYield) ) {
 			pvDailyYield = 0;
 		}
-		var pvDailyYieldStr = ' (' + pvDailyYield.toFixed(2) + ' kWh)';
+		var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
 		$('#pvdailyyield').text(pvDailyYieldStr);
+	}
+	else if ( mqttmsg == 'openWB/pv/bool70PVDynStatus') {
+		switch (mqttpayload) {
+			case '0':
+				// deaktiviert
+				$('#70PvBtn').removeClass('btn-success');
+				break;
+			case '1':
+				// ev priority
+				$('#70PvBtn').addClass('btn-success');
+			break;
+		}
 	}
 }
 
@@ -418,7 +485,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			actualPower = 0;
 		}
 		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toFixed(2);
+			actualPower = (actualPower / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 			actualPower += ' kW';
 		} else {
 			actualPower += ' W';
@@ -435,13 +502,13 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(energyCharged) ) {
 			energyCharged = 0;
 		}
-		$(element).text(energyCharged.toFixed(1) + ' kWh');
+		$(element).text(energyCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' kWh');
 		var kmChargedLp = $(parent).find('.kmChargedLp');  // now get parents kmChargedLp child element
-		var consumption = $(kmChargedLp).attr('consumption');
+		var consumption = parseFloat($(kmChargedLp).attr('consumption'));
 		var kmCharged = '';
 		if ( !isNaN(consumption) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toFixed(1) + ' km';
+			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
@@ -492,15 +559,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$(element).removeClass('text-green').addClass('text-lightgrey');
 		}
 	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/adirectmodeamps$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var current = parseInt(mqttpayload, 10);
-		if ( isNaN(current) ) {
-			current = 0;
-		}
-		$('#sofortlllp' + index + 's').val(current);
-		$('sofortlllp' + index + 'l').text(current);
-	}
+
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$('.nameLp').each(function() {  // fill in name for all element of class '.nameLp'
@@ -510,7 +569,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 	    });
 	}
-	if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		$('.nameLp').each(function() {  // check all elements of class '.nameLp'
 			var lp = $(this).closest('[lp]').attr('lp');  // get attribute lp from parent
@@ -526,6 +585,30 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			}
 		});
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.phasesInUseLp');  // now get parents respective child element
+		var phasesInUse = parseInt(mqttpayload, 10);
+		if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
+			$(element).text(' /');
+		} else {
+			var phaseSymbols = ['', '\u2460', '\u2461', '\u2462'];
+			$(element).text(' ' + phaseSymbols[phasesInUse]);
+		}
+	}
+    else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
+    	// target current value at charge point
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.chargePointInfoLp[lp="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.targetCurrentLp');  // now get parents respective child element
+		var targetCurrent = parseInt(mqttpayload, 10);
+		if ( isNaN(targetCurrent) ) {
+			$(element).text(' 0 A');
+		} else {
+			$(element).text(' ' + targetCurrent + ' A');
+		}
+    }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
@@ -612,7 +695,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var kmCharged = '';
 		if ( !isNaN(energyCharged) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toFixed(1) + ' km';
+			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		}
 		$(element).text(kmCharged);
 	}
@@ -649,4 +732,173 @@ function processHookMessages(mqttmsg, mqttpayload) {
 			$('#hook' + index).hide();
 		}
 	}
+}
+function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/SmartHomeDevices - actual values only!
+	// called by handlevar
+	processPreloader(mqttmsg);
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualPowerDevice');  // now get parents respective child element
+		var actualPower = parseInt(mqttpayload, 10);
+		if ( isNaN(actualPower) ) {
+			actualPower = 0;
+		}
+		if (actualPower > 999) {
+			actualPower = (actualPower / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			actualPower += ' kW';
+		} else {
+			actualPower += ' W';
+		}
+		$(element).text(actualPower);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualRunningTimeDevice');  // now get parents respective child element
+		var actualPower = parseInt(mqttpayload, 10);
+		if ( isNaN(actualPower) ) {
+						actualPower = 0;
+					}
+		if (actualPower < 3600) {
+						actualPower = (actualPower / 60).toFixed(0);
+						actualPower += ' Min';
+					} else {
+									rest = (actualPower % 3600 / 60).toFixed(0);
+									ganz = (actualPower / 3600).toFixed(0);
+									actualPower = ganz + ' H ' + rest +' Min';
+								}
+		$(element).text(actualPower);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'
+			var dev = $(this).closest('[dev]').attr('dev');  // get attribute lp from parent
+			if ( dev == index ) {
+				if ( $(this).hasClass('enableDevice') ) {
+					// but only apply styles to element in chargepoint info data block
+					if ( mqttpayload == 0 ) {
+						$(this).removeClass('lpEnabledStyle').removeClass('lpWaitingStyle').addClass('lpDisabledStyle');
+					} else {
+						$(this).removeClass('lpDisabledStyle').removeClass('lpWaitingStyle').addClass('lpEnabledStyle');
+					}
+				}
+			}
+		});
+	}
+
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualTemp0Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+			$(parent).hide();
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+				$(parent).hide();
+			} else {
+				StringTemp = 'Temp1 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
+				$(parent).show();
+			}
+		}
+		$(element).text(StringTemp);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.actualTemp1Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+			} else {
+				StringTemp = 'Temp2 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
+			}
+		}
+		$(element).text(StringTemp);
+	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var element = $(parent).find('.actualTemp2Device');  // now get parents respective child element
+		var actualTemp = parseFloat(mqttpayload);
+		if ( isNaN(actualTemp) ) {
+			StringTemp = '';
+		} else {
+			if (actualTemp > 200) {
+				StringTemp = ''; // display only something if we got a value
+			} else {
+				StringTemp = 'Temp3 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
+			}
+		}
+		$(element).text(StringTemp);
+	}
+
+}
+function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
+	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
+	// called by handlevar
+
+	processPreloader(mqttmsg);
+	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_configured$/i ) ) {
+		// respective SH Device configured
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var infoElement = $('.SmartHome[dev="' + index + '"]');  // get row of SH Device
+		if (mqttpayload == 1) {
+			$(infoElement).show();
+		} else {
+			$(infoElement).hide();
+		}
+		if ( index == 1) {
+			if (mqttpayload == 1) {
+				$('.shInfoHeader').show();
+			} else {
+				$('.shInfoHeader').hide();
+			}
+		}
+	}
+	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.actualModeDevice');  // now get parents respective child element
+
+		if ( mqttpayload == 0 ) {
+			actualMode = "Automatik"
+		} else {
+			actualMode = "Manuell"
+		}
+		$(element).text(actualMode);
+		$('.nameDevice').each(function() {  // check all elements of class '.nameDevice'
+			var dev = $(this).closest('[dev]').attr('dev');  // get attribute Device from parent
+			if ( dev == index ) {
+				if ( $(this).hasClass('enableDevice') ) {
+					// but only apply styles to element in chargepoint info data block
+					if ( mqttpayload == 1 ) {
+						$(this).addClass('cursor-pointer').addClass('locked');
+					} else {
+						$(this).removeClass('cursor-pointer').removeClass('locked');
+					}
+				}
+			}
+		});
+
+
+
+
+
+	}
+	else if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var element = $(parent).find('.nameDevice');  // now get parents respective child element
+		$(element).text(mqttpayload);
+		window['d'+index+'name']=mqttpayload;
+	}
+
 }

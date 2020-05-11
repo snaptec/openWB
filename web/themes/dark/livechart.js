@@ -1,3 +1,62 @@
+var style = getComputedStyle(document.body);
+var fontCol = style.getPropertyValue('--fontCol');
+var gridCol = style.getPropertyValue('--gridCol');
+var xgridCol = style.getPropertyValue('--xgridCol');
+var gridSocCol = style.getPropertyValue('--gridSocCol');
+var tickCol = style.getPropertyValue('--tickCol');
+var lp1Col = style.getPropertyValue('--lp1Col');
+var lp1bgCol = style.getPropertyValue('--lp1bgCol');
+var lp2Col = style.getPropertyValue('--lp2Col');
+var lp2bgCol = style.getPropertyValue('--lp2bgCol');
+var evuCol = style.getPropertyValue('--evuCol');
+var evubgCol = style.getPropertyValue('--evubgCol');
+var pvCol = style.getPropertyValue('--pvCol');
+var pvbgCol = style.getPropertyValue('--pvbgCol');
+var speicherCol = style.getPropertyValue('--speicherCol');
+var speicherSocCol = style.getPropertyValue('--speicherSocCol');
+var speicherbgCol = style.getPropertyValue('--speicherbgCol');
+var speicherSocbgCol = style.getPropertyValue('--speicherSocbgCol');
+var lp1SocCol = style.getPropertyValue('--lp1SocCol');
+var lp2SocCol = style.getPropertyValue('--lp2SocCol');
+var hausverbrauchCol = style.getPropertyValue('--hausverbrauchCol');
+var hausverbrauchbgCol = style.getPropertyValue('--hausverbrauchbgCol');
+var lpgesamtCol = style.getPropertyValue('--lpgesamtCol');
+var lpgesamtbgCol = style.getPropertyValue('--lpgesamtbgCol');
+var lp3Col = style.getPropertyValue('--lp3Col');
+var lp3bgCol = style.getPropertyValue('--lp3bgCol');
+var lp4Col = style.getPropertyValue('--lp4Col');
+var lp4bgCol = style.getPropertyValue('--lp4bgCol');
+var lp5Col = style.getPropertyValue('--lp5Col');
+var lp5bgCol = style.getPropertyValue('--lp5bgCol');
+var lp6Col = style.getPropertyValue('--lp6Col');
+var lp6bgCol = style.getPropertyValue('--lp6bgCol');
+var lp7Col = style.getPropertyValue('--lp7Col');
+var lp7bgCol = style.getPropertyValue('--lp7bgCol');
+var lp8Col = style.getPropertyValue('--lp8Col');
+var lp8bgCol = style.getPropertyValue('--lp8bgCol');
+var verbraucher1Col = style.getPropertyValue('--verbraucher1Col');
+var verbraucher1bgCol = style.getPropertyValue('--verbraucher1bgCol');
+var verbraucher2Col = style.getPropertyValue('--verbraucher2Col');
+var verbraucher2bgCol = style.getPropertyValue('--verbraucher2bgCol');
+var d1Col = style.getPropertyValue('--d1Col');
+var d1bgCol = style.getPropertyValue('--d1bgCol');
+var d2Col = style.getPropertyValue('--d2Col');
+var d2bgCol = style.getPropertyValue('--d2bgCol');
+var d3Col = style.getPropertyValue('--d3Col');
+var d3bgCol = style.getPropertyValue('--d3bgCol');
+var d4Col = style.getPropertyValue('--d4Col');
+var d4bgCol = style.getPropertyValue('--d4bgCol');
+var d5Col = style.getPropertyValue('--d5Col');
+var d5bgCol = style.getPropertyValue('--d5bgCol');
+var d6Col = style.getPropertyValue('--d6Col');
+var d6bgCol = style.getPropertyValue('--d6bgCol');
+var d7Col = style.getPropertyValue('--d7Col');
+var d7bgCol = style.getPropertyValue('--d7bgCol');
+var d8Col = style.getPropertyValue('--d8Col');
+var d8bgCol = style.getPropertyValue('--d8bgCol');
+var d9Col = style.getPropertyValue('--d9Col');
+var d9bgCol = style.getPropertyValue('--d9bgCol');
+
 var awattartime = [];
 var graphawattarprice;
 var initialread = 0;
@@ -22,6 +81,24 @@ var boolDisplayEvu;
 var boolDisplayPv;
 var boolDisplayLegend;
 var boolDisplayLiveGraph;
+var boolDisplayshd1;
+var boolDisplayshd2;
+var boolDisplayshd3;
+var boolDisplayshd4;
+var boolDisplayshd5;
+var boolDisplayshd6;
+var boolDisplayshd7;
+var boolDisplayshd8;
+var boolDisplayshd9;
+var d1name = 'Device 1';
+var d2name = 'Device 2';
+var d3name = 'Device 3';
+var d4name = 'Device 4';
+var d5name = 'Device 5';
+var d6name = 'Device 6';
+var d7name = 'Device 7';
+var d8name = 'Device 8';
+var d9name = 'Device 9';
 var all1 = 0;
 var all2 = 0;
 var all3 = 0;
@@ -30,6 +107,14 @@ var all5 = 0;
 var all6 = 0;
 var all7 = 0;
 var all8 = 0;
+var all9 = 0;
+var all10 = 0;
+var all11 = 0;
+var all12 = 0;
+var all13 = 0;
+var all14 = 0;
+var all15 = 0;
+var all16 = 0;
 var all1p;
 var all2p;
 var all3p;
@@ -38,6 +123,15 @@ var all5p;
 var all6p;
 var all7p;
 var all8p;
+var all9p;
+var all10p;
+var all11p;
+var all12p;
+var all13p;
+var all14p;
+var all15p;
+var all16p;
+
 var hidehaus;
 var myLine;
 
@@ -46,8 +140,8 @@ function loadgraph() {
 		labels: atime,
 		datasets: [{
 			label: 'Lp1',
-			borderColor: "rgba(0, 0, 255, 0.7)",
-			backgroundColor: "rgba(0, 0, 255, 0.7)",
+			borderColor: lp1Col,
+			backgroundColor: lp1bgCol,
 			borderWidth: 2,
 			hidden: boolDisplayLp1,
 			fill: false,
@@ -56,8 +150,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp2',
-			borderColor: "rgba(50, 30, 105, 0.7)",
-			backgroundColor: "rgba(50, 30, 105, 0.7)",
+			borderColor: lp2Col,
+			backgroundColor: lp2bgCol,
 			borderWidth: 2,
 			hidden: boolDisplayLp2,
 			fill: false,
@@ -66,8 +160,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'EVU',
-			borderColor: "rgba(255, 0, 0, 0.7)",
-			backgroundColor: "rgba(255, 10, 13, 0.3)",
+			borderColor: evuCol,
+			backgroundColor: evubgCol,
 			borderWidth: 1,
 			fill: true,
 			lineTension: 0.2,
@@ -76,8 +170,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV',
-			borderColor: 'green',
-			backgroundColor: "rgba(10, 255, 13, 0.3)",
+			borderColor: pvCol,
+			backgroundColor: pvbgCol,
 			fill: true,
 			lineTension: 0.2,
 			hidden: boolDisplayPv,
@@ -86,8 +180,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicher',
-			borderColor: 'orange',
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: speicherCol,
+			backgroundColor: speicherbgCol,
 			fill: true,
 			lineTension: 0.2,
 			borderWidth: 1,
@@ -96,8 +190,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
-			borderColor: 'orange',
-			backgroundColor: "rgba(200, 255, 13, 0.5)",
+			borderColor: speicherSocCol,
+			backgroundColor: speicherSocbgCol,
 			borderDash: [10,5],
 			hidden: boolDisplaySpeicherSoc,
 			fill: false,
@@ -107,7 +201,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP1 SoC',
-			borderColor: "rgba(0, 0, 255, 0.5)",
+			borderColor: lp1SocCol,
 			borderDash: [10,5],
 			borderWidth: 2,
 			hidden: boolDisplayLp1Soc,
@@ -117,7 +211,7 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP2 SoC',
-			borderColor: "rgba(50, 50, 55, 0.5)",
+			borderColor: lp2SocCol,
 			borderDash: [10,5],
 			fill: false,
 			lineTension: 0.2,
@@ -127,8 +221,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Hausverbrauch',
-			borderColor: "rgba(255,255,204,0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: hausverbrauchCol,
+			backgroundColor: hausverbrauchbgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -137,8 +231,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: verbraucher1Col,
+			backgroundColor: verbraucher1bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -147,8 +241,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: verbraucher2Col,
+			backgroundColor: verbraucher2bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -157,8 +251,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'LP Gesamt',
-			borderColor: "rgba(50, 50, 55, 0.1)",
-			backgroundColor: "rgba(0, 0, 255, 0.1)",
+			borderColor: lpgesamtCol,
+			backgroundColor: lpgesamtbgCol,
 			fill: true,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -167,8 +261,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp3',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp3Col,
+			backgroundColor: lp3bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -177,8 +271,8 @@ function loadgraph() {
 			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp4Col,
+			backgroundColor: lp4bgCol,
 			fill: false,
 			lineTension: 0.2,
 			data: alp4,
@@ -187,8 +281,8 @@ function loadgraph() {
 			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp5Col,
+			backgroundColor: lp5bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -197,8 +291,8 @@ function loadgraph() {
 			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp6Col,
+			backgroundColor: lp6bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -207,8 +301,8 @@ function loadgraph() {
 			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp7Col,
+			backgroundColor: lp7bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
@@ -217,15 +311,136 @@ function loadgraph() {
 			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8',
-			borderColor: "rgba(50, 50, 55, 0.7)",
-			backgroundColor: 'blue',
+			borderColor: lp8Col,
+			backgroundColor: lp8bgCol,
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
-		}]
+		}, {
+			label: d1name,
+			borderColor: d1Col,
+			backgroundColor: d1bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd1,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd1
+		}, {
+			label: d2name,
+			borderColor: d2Col,
+			backgroundColor: d2bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd2,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd2
+		}, {
+			label: d3name,
+			borderColor: d3Col,
+			backgroundColor: d3bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd3,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd3
+		}, {
+			label: d4name,
+			borderColor: d4Col,
+			backgroundColor: d4bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd4,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd4
+		}, {
+			label: d5name,
+			borderColor: d5Col,
+			backgroundColor: d5bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd5,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd5
+		}, {
+			label: d6name,
+			borderColor: d6Col,
+			backgroundColor: d6bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd6,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd6
+		}, {
+			label: d7name,
+			borderColor: d7Col,
+			backgroundColor: d7bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd7,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd7
+		}, {
+			label: d8name,
+			borderColor: d8Col,
+			backgroundColor: d8bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd8,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd8
+		}, {
+			label: d9name,
+			borderColor: d9Col,
+			backgroundColor: d9bgCol,
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd9,
+			yAxisID: 'y-axis-1',
+			hidden: boolDisplayshd9
+		}/*, {
+			label: 'Device 1t0',
+			borderColor: "rgba(250, 250, 155, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd1t0,
+			yAxisID: 'y-axis-2',
+			hidden: boolDisplayLp8
+		}, {
+			label: 'Device 1t1',
+			borderColor: "rgba(150, 250, 255, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd1t1,
+			yAxisID: 'y-axis-2',
+			hidden: boolDisplayLp8
+		}, {
+			label: 'Device 1t2',
+			borderColor: "rgba(255, 150, 255, 0.7)",
+			backgroundColor: 'blue',
+			fill: false,
+			lineTension: 0.2,
+			borderWidth: 2,
+			data: ashd1t2,
+			yAxisID: 'y-axis-2',
+			hidden: boolDisplayLp8
+		}*/
+		]
 	}
 
 	function getMaxTicksLimit(width) {
@@ -299,9 +514,9 @@ function loadgraph() {
 			legend: {
 				display: boolDisplayLegend,
 				labels: {
-					fontColor: "rgba(255, 255, 255, 0.82)",
+					fontColor: fontCol,
 					filter: function(item,chart) {
-						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) ) { return false } else { return true}
+						if ( item.text.includes(hidehaus) || item.text.includes(hideload2) || item.text.includes(hideload1) || item.text.includes(hidelp2soc) || item.text.includes(hidelp1soc) || item.text.includes(hidelp1) || item.text.includes(hidelp2) || item.text.includes(hidelp3) || item.text.includes(hidelp4) || item.text.includes(hidelp5) || item.text.includes(hidelp6) || item.text.includes(hidelp7) || item.text.includes(hidelp8) || item.text.includes(hidespeichersoc) || item.text.includes(hidespeicher) || item.text.includes(hidelpa) || item.text.includes(hidepv) || item.text.includes(hideevu) || item.text.includes(hideshd1)|| item.text.includes(hideshd2)|| item.text.includes(hideshd3)|| item.text.includes(hideshd4)|| item.text.includes(hideshd5)|| item.text.includes(hideshd6) || item.text.includes(hideshd7) || item.text.includes(hideshd8)|| item.text.includes(hideshd9) ) { return false } else { return true}
 					}
 				}
 			},
@@ -312,10 +527,10 @@ function loadgraph() {
 				xAxes: [
 					{
 						gridLines: {
-							color: "rgba(255, 255, 255, 0.1)"
+							color: xgridCol
 						},
          				ticks: {
-							fontColor: "rgba(255, 255, 255, 0.82)",
+							fontColor: tickCol,
 							maxTicksLimit: 15
          				}
       				}],
@@ -329,15 +544,15 @@ function loadgraph() {
 						scaleLabel: {
 		        			display: true,
 		        			labelString: 'Leistung [kW]',
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: fontCol
 		      			},
 						gridLines: {
-							color: "rgba(255, 255, 255, 0.82)"
+							color: gridCol
 						},
 						ticks: {
 							stepSize: 0.2,
 							maxTicksLimit: 10,
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: tickCol
 						}
 					},{
 						// horizontal line for values displayed on the right side (SoC)
@@ -348,16 +563,16 @@ function loadgraph() {
 						scaleLabel: {
 							display: true,
 							labelString: 'SoC [%]',
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: fontCol
 						},
 						gridLines: {
 							// black, opacy = 0% (invisible)
-							color: "rgba(0, 0, 0, 0)",
+							color: gridSocCol,
 						},
 						ticks: {
 							min: 0,
 							suggestedMax: 100,
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: tickCol
 						}
 					}
 				]
@@ -367,10 +582,27 @@ function loadgraph() {
 	initialread = 1;
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
+// Sichtbarkeit für SmartHome Devices im Graph
+function setvisibility(datarr,hidevar,hidevalue,booldisplay){
+	var arrayLength = datarr.length;
+	var vis=0
+	for (var i = 0; i < arrayLength; i++) {
+		if (( datarr[i] >= 0.010) || (datarr[i] <=- 0.010)) {
+			vis=1
+		}
+	}
+	if ( vis == 0){
+		window[hidevar] = hidevalue;
+		window[booldisplay] = true;
+	} else {
+		window[hidevar] = 'foo';
+		window[booldisplay] = false;
 
+	}
+}
 function putgraphtogether() {
-	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
-		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) && (all9 == 1) && (all10 == 1) && (all11 == 1) && (all12 == 1) && (all13 == 1) && (all14 == 1) && (all15 == 1) && (all16 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p + "\n" + all9p + "\n" + all10p + "\n" + all11p + "\n" + all12p + "\n" + all13p + "\n" + all14p + "\n" + all15p + "\n" + all16p;
 		alldata = alldata.replace(/^\s*[\n]/gm, "");
 		alldata = alldata.replace(/^\s*-[\n]/gm, "");
 		var csvData = [];
@@ -385,7 +617,7 @@ function putgraphtogether() {
 			splittime.push(zeit.substring(0, zeit.length -3));
 		});
 		atime = splittime;
-		if ( atime.length >= 60 ) {
+		if ( atime.length >= 30 ) {
 			//atime = getCol(csvData, 0);
 			abezug = convertToKw(getCol(csvData, 1));
 			alpa = convertToKw(getCol(csvData, 2));
@@ -405,8 +637,35 @@ function putgraphtogether() {
 			alp6 = convertToKw(getCol(csvData, 17));
 			alp7 = convertToKw(getCol(csvData, 18));
 			alp8 = convertToKw(getCol(csvData, 19));
-			initialread = 1 ;
+			ashd1 = convertToKw(getCol(csvData, 20));
+			ashd2 = convertToKw(getCol(csvData, 21));
+			ashd3 = convertToKw(getCol(csvData, 22));
+			ashd4 = convertToKw(getCol(csvData, 23));
+			ashd5 = convertToKw(getCol(csvData, 24));
+			ashd6 = convertToKw(getCol(csvData, 25));
+			ashd7 = convertToKw(getCol(csvData, 26));
+			ashd8 = convertToKw(getCol(csvData, 27));
+			ashd9 = convertToKw(getCol(csvData, 28));
+			//ashd1t0 = getCol(csvData, 29);
+			//ashd1t1 = getCol(csvData, 30);
+			//ashd1t2 = getCol(csvData, 31);
+			setvisibility(alp3,'hidelp3','Lp3');
+			setvisibility(alp4,'hidelp4','Lp4');
+			setvisibility(alp5,'hidelp5','Lp5');
+			setvisibility(alp6,'hidelp6','Lp6');
+			setvisibility(alp7,'hidelp7','Lp7');
+			setvisibility(alp8,'hidelp8','Lp8');
+			setvisibility(ashd1,'hideshd1',d1name,'boolDisplayshd1');
+			setvisibility(ashd2,'hideshd2',d2name,'boolDisplayshd2');
+			setvisibility(ashd3,'hideshd3',d3name,'boolDisplayshd3');
+			setvisibility(ashd4,'hideshd4',d4name,'boolDisplayshd4');
+			setvisibility(ashd5,'hideshd5',d5name,'boolDisplayshd5');
+			setvisibility(ashd6,'hideshd6',d6name,'boolDisplayshd6');
+			setvisibility(ashd7,'hideshd7',d7name,'boolDisplayshd7');
+			setvisibility(ashd8,'hideshd8',d8name,'boolDisplayshd8');
+			setvisibility(ashd9,'hideshd9',d9name,'boolDisplayshd9');
 
+			initialread = 1 ;
 			// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
 			unsubscribeMqttGraphSegments();
 
@@ -420,6 +679,15 @@ function putgraphtogether() {
 			all6 = 0;
 			all7 = 0;
 			all8 = 0;
+			all9 = 0;
+			all10 = 0;
+			all11 = 0;
+			all12 = 0;
+			all13 = 0;
+			all14 = 0;
+			all15 = 0;
+			all16 = 0;
+
 			var percent = (atime.length / 60 * 100).toFixed();
 			$('#waitforgraphloadingdiv').text('Erst ca. ' + percent + '% der mindestens benötigten Datenpunkte für den Graph seit Neustart vorhanden.');
 		}
@@ -448,6 +716,19 @@ function updateGraph(dataset) {
 		var lp6 = lines[i].split(",")[17];
 		var lp7 = lines[i].split(",")[18];
 		var lp8 = lines[i].split(",")[19];
+		var shd1 = lines[i].split(",")[20];
+		var shd2 = lines[i].split(",")[21];
+		var shd3 = lines[i].split(",")[22];
+		var shd4 = lines[i].split(",")[23];
+		var shd5 = lines[i].split(",")[24];
+		var shd6 = lines[i].split(",")[25];
+		var shd7 = lines[i].split(",")[26];
+		var shd8 = lines[i].split(",")[27];
+		var shd9 = lines[i].split(",")[28];
+		//var shd1t0 = lines[i].split(",")[29];
+		//var shd1t1 = lines[i].split(",")[30];
+		//var shd1t2 = lines[i].split(",")[31];
+
 	}
 	myLine.data.labels.push(ldate.substring(0, ldate.length -3));
 	myLine.data.datasets[2].data.push(lbezug / 1000);
@@ -468,6 +749,18 @@ function updateGraph(dataset) {
 	myLine.data.datasets[15].data.push(lp6 / 1000);
 	myLine.data.datasets[16].data.push(lp7 / 1000);
 	myLine.data.datasets[17].data.push(lp8 / 1000);
+	myLine.data.datasets[18].data.push(shd1 / 1000);
+	myLine.data.datasets[19].data.push(shd2 / 1000);
+	myLine.data.datasets[20].data.push(shd3 / 1000);
+	myLine.data.datasets[21].data.push(shd4 / 1000);
+	myLine.data.datasets[22].data.push(shd5 / 1000);
+	myLine.data.datasets[23].data.push(shd6 / 1000);
+	myLine.data.datasets[24].data.push(shd7 / 1000);
+	myLine.data.datasets[25].data.push(shd8 / 1000);
+	myLine.data.datasets[26].data.push(shd9 / 1000);
+	//myLine.data.datasets[27].data.push(shd1t0);
+	//myLine.data.datasets[28].data.push(shd1t1);
+	//myLine.data.datasets[29].data.push(shd1t2);
 	myLine.data.labels.splice(0, 1);
 	myLine.data.datasets.forEach(function(dataset) {
 		dataset.data.splice(0, 1);

@@ -132,20 +132,20 @@
 
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
+		<!-- load topics -->
+		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20200415-a" ></script>
+		<!-- load service -->
+		<script src = "settings/setupMqttServices.js?ver=20200415-a" ></script>
+		<!-- load mqtt handler-->
+		<script src = "settings/processAllMqttMsg_graphconfig.js?ver=20200415-a" ></script>
 
 		<script type="text/javascript">
 
-			$.get("settings/navbar.php", function(data){
+			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navGraphSettings').addClass('disabled');
 			});
-
-			$(document).ready(function(){
-
-				<!-- load scripts -->
-				$.getScript("./settings/processAllMqttMsg.js?ver=20200402-a");
-				$.getScript("./settings/setupMqttServices.js?ver=20200402-a");
-
-			});  // end document ready function
 
 			function showhidedataset(thedataset) {
 				if ( window[thedataset] == true ) {

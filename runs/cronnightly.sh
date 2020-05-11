@@ -30,7 +30,16 @@ ll5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
 ll6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
 ll7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
 ll8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
-
+d1=$(</var/www/html/openWB/ramdisk/device1_wh)
+d2=$(</var/www/html/openWB/ramdisk/device2_wh)
+d3=$(</var/www/html/openWB/ramdisk/device3_wh)
+d4=$(</var/www/html/openWB/ramdisk/device4_wh)
+d5=$(</var/www/html/openWB/ramdisk/device5_wh)
+d6=$(</var/www/html/openWB/ramdisk/device6_wh)
+d7=$(</var/www/html/openWB/ramdisk/device7_wh)
+d8=$(</var/www/html/openWB/ramdisk/device8_wh)
+d9=$(</var/www/html/openWB/ramdisk/device9_wh)
+d10=$(</var/www/html/openWB/ramdisk/device10_wh)
 
 ll1=$(echo "$ll1 * 1000" | bc)
 ll2=$(echo "$ll2 * 1000" | bc)
@@ -42,7 +51,7 @@ ll6=$(echo "$ll6 * 1000" | bc)
 ll7=$(echo "$ll7 * 1000" | bc)
 ll8=$(echo "$ll8 * 1000" | bc)
 
-echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh >> $monthlyfile.csv
+echo $(date +%Y%m%d),$bezug,$einspeisung,$pv,$ll1,$ll2,$ll3,$llg,$verbraucher1iwh,$verbraucher1ewh,$verbraucher2iwh,$verbraucher2ewh,$ll4,$ll5,$ll6,$ll7,$ll8,$speicherikwh,$speicherekwh,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10 >> $monthlyfile.csv
 
 
 if [[ $verbraucher1_typ == "tasmota" ]]; then

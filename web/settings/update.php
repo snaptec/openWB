@@ -135,7 +135,10 @@
 					<h2>Beta</h2>
 					<p>Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.</p>
 					<h2>Nightly</h2>
-					<p>Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.</p>
+					<p>
+						Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.<br>
+						Alle Änderungen können auf <a href="https://github.com/snaptec/openWB/commits/master">GitHub</a> eingesehen werden.
+					</p>
 				</div>
 			</div>
 
@@ -182,7 +185,7 @@
 
 		<script type="text/javascript">
 
-			$.get("settings/navbar.php", function(data){
+			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navUpdate').addClass('disabled');
@@ -192,15 +195,17 @@
 
 				function getVersion(dataURL) {
 					// read dataURL filecontent = releasetrain version and return it
-					return $.get(dataURL);
+					return $.get({
+						url: dataURL,
+						cache: false
+					});
 				}
 
 				function displayVersion(releasetrain, url) {
 					var elemSpan = "#avail"+releasetrain+"VersionSpan";
 					var elemSpinner = "#avail"+releasetrain+"VersionSpinner";
 					var elemRadioBtn = "#radioBtn"+releasetrain;
-					var getURL = url + "?" + $.now();  // add timestamp to request to avoid cache
-					getVersion(getURL, function() {
+					getVersion(url, function() {
 						$(elemSpan).text("rufe ab...");
 					})
 						.done(function(result) {
@@ -223,12 +228,28 @@
 					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
 				});
 
-				$.get("/openWB/web/version")
+				$.get({
+					url: "/openWB/web/version",
+					cache: false
+				})
+				.done(function(result) {
+					$("#installedVersionSpan").prepend(result);
+					$("#installedVersionSpan").data("version", result);
+					$("#modalInstalledVersionSpan").prepend(result);
+				});
+
+				if("<?php echo $releasetrain ?>" == "master") {
+					$.get({
+						url: "/openWB/web/lastcommit",
+						cache: false
+					})
 					.done(function(result) {
-						$("#installedVersionSpan").text(result);
-						$("#installedVersionSpan").data("version", result);
-						$("#modalInstalledVersionSpan").text(result);
+						$("#installedVersionSpan").append(" ("+result+")");
+						//$("#installedVersionSpan").data("version", result);
+						$("#modalInstalledVersionSpan").append(" ("+result+")");
 					});
+				}
+
 
 				$(document).ajaxStop(function(){
 					// after all ajax requests are finished, set checkbox and enable update button

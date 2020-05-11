@@ -29,6 +29,10 @@ body > .container {
     line-height: 30px; /* vertically center the text there */
 }
 
+.hide {
+    display: none;
+}
+
 .btn-blue {
   background-color: hsl(197, 95%, 24%) !important;
   background-repeat: repeat-x;
@@ -129,4 +133,33 @@ body > .container {
     /* vertical alignment of content in rows */
   display: flex;
   align-items: center;
+}
+
+.input {
+    vertical-align: middle;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+        color: #ffffff;
+    }
+
+    .card {
+        background-color: #212529;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .bg-warning {
+        color: #212529;
+    }
+
+    .form-control {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    .btn-outline-secondary {
+        color: #ffffff;
+    }
 }

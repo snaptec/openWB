@@ -73,7 +73,8 @@ ekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_Feed_in' | sed 's/.*://' | tr
 #
 ## Daten in Ramdisk schreiben
 #
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pv1kwh_temp
+#echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo '-'$pcs_pv_total_power > /var/www/html/openWB/ramdisk/pvwatt
 echo '-'$pcs_pv_total_power
