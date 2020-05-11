@@ -38,6 +38,7 @@ function processMessages(mqttmsg, mqttpayload) {
         var suffix = topicSubGroup[1].charAt(0).toUpperCase() + topicSubGroup[1].slice(1);  // capitalize suffix
         var index = topicSubGroup[2];
         var elementId = topicIdentifier + suffix + index;
+
     } else {
         // no subgroup so everything after last '/' might be the id
         var elementId = topicIdentifier;
@@ -50,6 +51,6 @@ function processMessages(mqttmsg, mqttpayload) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
     } else {
-        console.log(elementId + ' not found');
+        //console.log(elementId + ' not found');
     }
 }  // end processMessages

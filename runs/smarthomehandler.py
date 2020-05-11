@@ -404,10 +404,10 @@ def conditions(nummer):
             pass
         if ( uberschuss < ausschwelle):
             if ( speichersoc > speichersocbeforestop ):
-                logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC höher als Abschalt SoC, lasse weiterlaufen")
+                logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC höher als Abschalt SoC, lasse Gerät weiterlaufen")
                 return
             else:
-                logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC niedriger als Abschalt SoC, lasse weiterlaufen")
+                logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC niedriger als Abschalt SoC, prüfe weitere Bedingungen")
             logDebug("0","Device: " + str(nummer) + " " + str(name)+ "Überschuss kleiner Ausschaltschwelle")
             if ( DeviceValues[str(nummer)+"relais"] == 1 ):
                 if  str(nummer)+"ausverz" in DeviceCounters:
