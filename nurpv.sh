@@ -1,7 +1,6 @@
 #!/bin/bash
 #NUR PV Uberschussregelung lademodus 2
 nurpvlademodus(){
-. /var/www/html/openWB/openwb.conf
 maxll=($llalt $llalts1 $llalts2 $llaltlp4 $llaltlp5 $llaltlp6 $llaltlp7 $llaltlp8)
 maxllvar=0
 for v in "${maxll[@]}"; do

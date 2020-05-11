@@ -1,5 +1,5 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 dailyfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d)"
 monthlyladelogfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
 

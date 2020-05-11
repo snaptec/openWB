@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 if [[ "$1" == "1" ]]; then
 	if [[ $evsecon == "modbusevse" ]]; then

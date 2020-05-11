@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Auslesen eines Varta Speicher über die integrierte XML-API der Batteroe.
-. /var/www/html/openWB/openwb.conf
 
 
 speicherwatt=$(curl --connect-timeout 5 -s "$vartaspeicherip/cgi/ems_data.xml" | grep 'P' | sed 's/.*value=//' |tr -d "'/>")

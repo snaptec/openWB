@@ -25,8 +25,6 @@ set -eo pipefail
 #####
 
 cd /var/www/html/openWB/
-# read config file
-. openwb.conf
 
 # sets variables necessary due to inconsistent naming
 powerLp1=$(<ramdisk/llaktuell)

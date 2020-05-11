@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 sresponse=$(curl --connect-timeout 3 -s"http://$speichersolarwattip/rest/kiwigrid/wizard/devices")
 pvwh=$(echo $sresponse | jq '.result.items | .[0].tagValues.WorkProduced.value')
 echo "PV erzeugt $pvwh"

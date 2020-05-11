@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
-
 curl -s \
 	--form-string "token=$pushovertoken" \
 	--form-string "user=$pushoveruser" \

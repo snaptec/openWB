@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 
 answer=$(curl --connect-timeout 5 -s $wrjsonurl)

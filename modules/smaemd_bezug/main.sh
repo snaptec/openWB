@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 
 ikwh=$(cat /run/shm/em-$smaemdbezugid-pregardcounter)

@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 soc=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
 #leistung=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/ActivePower" | jq .value)
 grid=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/GridActivePower" | jq .value)

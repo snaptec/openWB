@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 output=$(curl --connect-timeout 3 -s -u $discovergyuser:$discovergypass "https://api.discovergy.com/public/v1/last_reading?meterId=$discovergyevuid")
 
 einspeisungwh=$(echo $output | jq .values.energyOut)

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 #Daten einlesen
 json=$(curl -u $wr_smartme_user:$wr_smartme_pass --connect-timeout 10 -s $wr_smartme_url)

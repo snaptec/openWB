@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Auslesen einer Sonnbenbatterie Eco 4.5 über die integrierte JSON-API des Batteriesystems
-. /var/www/html/openWB/openwb.conf
 ra='^-?[0-9]+$'
 if (( sonnenecoalternativ == 2 )); then
 	speichersoc=$(curl --connect-timeout 5 -s "$sonnenecoip:7979/rest/devices/battery/M05")
