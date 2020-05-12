@@ -294,27 +294,12 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/1/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/1/maxSoc", "", qos=0, retain=True)
-            sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "1"]
-                subprocess.Popen(sendcommand)
     if (msg.topic == "openWB/config/set/pv/lp/2/maxSoc"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 100):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvpercentagelp2=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/2/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/2/maxSoc", "", qos=0, retain=True)
-            time.sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "1"]
-                subprocess.Popen(sendcommand)
-
     if (msg.topic == "openWB/config/set/pv/lp/1/socLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", msg.payload.decode("utf-8")]
