@@ -65,6 +65,9 @@ function setInputValue(elementId, value) {
         if ( element.attr('type') == 'range' ) {
             updateLabel(elementId);
         }
+    } else {
+	var element = $('#' + elementId);
+	element.val(value);
     }
 }
 
@@ -102,12 +105,14 @@ function sendValues() {
         // delay in ms between publishes
         var intervall = 200;
         // then send changed values
+
         Object.keys(changedValues).forEach(function(topic, index) {
             var value = this[topic].toString();
             setTimeout(function () {
                 publish(value, topic);
             }, index * intervall);
         }, changedValues);
+
     } else {
         $('#noValuesChangedInfoModal').modal();
     }

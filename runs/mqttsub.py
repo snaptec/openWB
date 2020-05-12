@@ -73,6 +73,16 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
+ 
+    if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
+            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'enabled', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/lp/"+str(devicenumb)+"/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/set/lp/"+str(devicenumb)+"/ChargePointEnabled", "", qos=0, retain=True)
+
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_configured" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
@@ -93,10 +103,11 @@ def on_message(client, userdata, msg):
             client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_name", "", qos=0, retain=True)
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6 and msg.payload.decode("utf-8") == "shelly"):
-            writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
-            client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
-            client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_type", "", qos=0, retain=True)
+        if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6):
+            if ( msg.payload.decode("utf-8") == "tasmota" or msg.payload.decode("utf-8") == "shelly"):
+                writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_type", "", qos=0, retain=True)
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_temperatur_configured" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 3):
@@ -127,6 +138,18 @@ def on_message(client, userdata, msg):
             writetoconfig(shconfigfile,'smarthomedevices','device_einschaltverzoegerung_'+str(devicenumb), msg.payload.decode("utf-8"))
             client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_einschaltverzoegerung", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_einschaltverzoegerung", "", qos=0, retain=True)
+    if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_speichersocbeforestop" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 100):
+            writetoconfig(shconfigfile,'smarthomedevices','device_speichersocbeforestop_'+str(devicenumb), msg.payload.decode("utf-8"))
+            client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_speichersocbeforestop", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_speichersocbeforestop", "", qos=0, retain=True)
+    if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_maxeinschaltdauer" in msg.topic)):
+        devicenumb=re.sub('\D', '', msg.topic)
+        if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 100000):
+            writetoconfig(shconfigfile,'smarthomedevices','device_maxeinschaltdauer_'+str(devicenumb), msg.payload.decode("utf-8"))
+            client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_maxeinschaltdauer", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_maxeinschaltdauer", "", qos=0, retain=True)
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_mineinschaltdauer" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 100000):
@@ -572,15 +595,23 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendllivegraphdata.sh")
         else:
-            client.publish("openWB/system/LiveGraphData1", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData2", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData3", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData4", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData5", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData6", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData7", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData8", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/1alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/2alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/3alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/4alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/5alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/6alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/7alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/8alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/9alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/10alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/11alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/12alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/13alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/14alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/15alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/16alllivevalues", "empty", qos=0, retain=True)
+
     if (msg.topic == "openWB/set/graph/RequestDayGraph"):
         if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
             sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
@@ -636,14 +667,13 @@ def on_message(client, userdata, msg):
             client.publish("openWB/system/MonthLadelogData10", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthLadelogData11", "empty", qos=0, retain=True)
             client.publish("openWB/system/MonthLadelogData12", "empty", qos=0, retain=True)
-    if (msg.topic == "openWB/set/NurPV70Status"):
+    if (msg.topic == "openWB/set/pv/NurPV70Status"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
             client.publish("openWB/pv/bool70PVDynStatus", msg.payload.decode("utf-8"), qos=0, retain=True)
-            #time.sleep(0.5)
-            #subprocess.Popen("/var/www/html/openWB/runs/renewmqtt.sh")
             f = open('/var/www/html/openWB/ramdisk/nurpv70dynstatus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            client.publish("openWB/set/pv/bool70PVDynStatus", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
@@ -658,54 +688,6 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
             client.publish("openWB/global/ChargeMode", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/1/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp1enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/1/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/2/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp2enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/2/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/3/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp3enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/3/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/4/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp4enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/4/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/5/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp5enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/5/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/6/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp6enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/6/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/7/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp7enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/7/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
-    if (msg.topic == "openWB/set/lp/8/ChargePointEnabled"):
-        if (int(msg.payload) >= 0 and int(msg.payload) <=1):
-            f = open('/var/www/html/openWB/ramdisk/lp8enabled', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
-            client.publish("openWB/lp/8/ChargePointEnabled", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/config/set/sofort/lp/1/chargeLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=2):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp1=", msg.payload.decode("utf-8")]

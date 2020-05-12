@@ -100,17 +100,9 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
-	# we may adjust -- start calculating
-	declare -i chargingVehiclesAdjustedForThisCp=${ChargingVehiclesOnPhase[$ChargingPhaseWithMaximumTotalCurrent]}
-	if (( chargingVehiclesAdjustedForThisCp == 0 )); then
-		# this can happen in transient when master has not yet detected us as charging but we have already detected us as charging and no other car is charging
-		$dbgWrite "$NowItIs: Slave Mode: chargingVehiclesAdjustedForThisCp == 0 - forcing chargingVehiclesAdjustedForThisCp=1 for CP#${chargePoint}"
-		chargingVehiclesAdjustedForThisCp=1
-	fi
-
 	# compute difference between allowed current on the total current of the phase that has the highest total current and is actually used for charging
 	# in floats for not to loose too much precision
-	lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}) / ${chargingVehiclesAdjustedForThisCp}" | bc)
+	lldiff=$(echo "scale=3; ($AllowedTotalCurrentPerPhase - ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent}) / ${ChargingVehiclesAdjustedForThisCp}" | bc)
 
 	# see if we have to limit by allowed peak power (we have to if the value exists in ramdisk file and is > 0, ==0 means: peak limit disabled)
 	if (( `echo "$AllowedPeakPower > 0" | bc` == 1 )); then
@@ -121,11 +113,11 @@ function computeAndSetCurrentForChargePoint() {
 			exit 2
 		fi
 
-		local pwrDiff=$(echo "scale=3; ($AllowedPeakPower - ${TotalPowerConsumption}) / ${chargingVehiclesAdjustedForThisCp}" | bc)
+		local pwrDiff=$(echo "scale=3; ($AllowedPeakPower - ${TotalPowerConsumption}) / ${ChargingVehiclesAdjustedForThisCp}" | bc)
 		local pwrCurrDiff=$(echo "scale=3; (${pwrDiff} / ${SystemVoltage} / ${NumberOfChargingPhases})" | bc)
 
 		if (( `echo "$pwrCurrDiff < $lldiff" | bc` == 1 )); then
-			$dbgWrite "$NowItIs: Slave Mode: Difference to power limt of $AllowedPeakPower W is $pwrDiff W (@ ${SystemVoltage} V @ ${chargingVehiclesAdjustedForThisCp} charging vehicles) --> overriding $lldiff A to $pwrCurrDiff A on ${NumberOfChargingPhases} phase(s)"
+			$dbgWrite "$NowItIs: Slave Mode: Difference to power limt of $AllowedPeakPower W is $pwrDiff W (@ ${SystemVoltage} V @ ${ChargingVehiclesAdjustedForThisCp} charging vehicles) --> overriding $lldiff A to $pwrCurrDiff A on ${NumberOfChargingPhases} phase(s)"
 			lldiff=$pwrCurrDiff
 		fi
 	fi
@@ -134,7 +126,7 @@ function computeAndSetCurrentForChargePoint() {
 	llneu=$(echo "scale=0; ($PreviousExpectedChargeCurrent + $lldiff)/1" | bc)
 
 	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W"
-    $dbgWrite "$NowItIs: Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, chargingVehiclesAdjustedForThisCp=${chargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
+    $dbgWrite "$NowItIs: Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
 
 	# limit the change to +1, -1 or -3 if slow ramping is enabled,
 	# a value of 0 will be kept unchanged
@@ -172,9 +164,8 @@ function computeAndSetCurrentForChargePoint() {
 		# The resulting value might get further limited to maximalstromstaerke below.
 		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
 
-			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Special case: EV consuming less than allowed. Limiting to AllowedTotalCurrentPerPhase/ChargingVehicles"
-
-			llneu=$(echo "scale=0; ($AllowedTotalCurrentPerPhase/${chargingVehiclesAdjustedForThisCp})" | bc)
+			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase): Not changing allowed current."
+			llneu=$PreviousExpectedChargeCurrent
 		else
 			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
 		fi
@@ -217,6 +208,8 @@ function aggregateDataForChargePoint() {
 	eval LpEnabled=\$$cpenabledVar
 
 	# iterate the phases (index 1-3, index 0 of array will simply be untouched/ignored)
+	ChargingVehiclesAdjustedForThisCp=0
+	local maxNumberOfChargingVehiclesAcrossAllPhases=0
 	NumberOfChargingPhases=0
 	for i in {1..3}; do
 
@@ -238,7 +231,7 @@ function aggregateDataForChargePoint() {
 			return 1
 		fi
 
-		# detect the phases on which WE are CURRENTLY charging
+		# detect the phases on which WE are CURRENTLY charging and calculate dependent values
 		if (( `echo "${ChargeCurrentOnPhase[i]} > $CurrentLimitAmpereForCpCharging" | bc` == 1 )); then
 			ChargingOnPhase[i]=1
 			CpIsCharging=1
@@ -248,6 +241,14 @@ function aggregateDataForChargePoint() {
 				TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 				ChargingPhaseWithMaximumTotalCurrent=$i
 			fi
+
+			if (( ChargingVehiclesOnPhase[i] > ChargingVehiclesAdjustedForThisCp )); then
+				ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesOnPhase[i]}
+			fi
+		fi
+
+		if (( ChargingVehiclesOnPhase[i] > maxNumberOfChargingVehiclesAcrossAllPhases )); then
+			maxNumberOfChargingVehiclesAcrossAllPhases=${ChargingVehiclesOnPhase[i]}
 		fi
 	done
 
@@ -276,6 +277,7 @@ function aggregateDataForChargePoint() {
 			# iterate the phases and determine the last charging phase with maximum current
 			# if no last charging phase, leaves variables unchagned (i.e. at their default of 0 to trigger ultimate fallback)
 			for i in {1..3}; do
+
 				if (( previousChargingPhasesArray[i] == 1 )); then
 
 					previousNumberOfChargingPhases=$(( previousNumberOfChargingPhases + 1 ))
@@ -284,8 +286,15 @@ function aggregateDataForChargePoint() {
 						TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 						ChargingPhaseWithMaximumTotalCurrent=$i
 					fi
+
+					if (( ChargingVehiclesOnPhase[i] > ChargingVehiclesAdjustedForThisCp )); then
+						ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesOnPhase[i]}
+					fi
 				fi
 			done
+		else
+			# not supposed to use last charging phase --> use maximum number of charging vehicles across all phases
+			ChargingVehiclesAdjustedForThisCp=$maxNumberOfChargingVehiclesAcrossAllPhases
 		fi
 
 		# ultimate fallback: use phase with the highest total current
@@ -298,6 +307,11 @@ function aggregateDataForChargePoint() {
 			NumberOfChargingPhases=$previousNumberOfChargingPhases
 			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase #${ChargingPhaseWithMaximumTotalCurrent} has highest current and will be used for load management"
 		fi
+
+		# if we have no charging vehicles at all, assume ourself as charging (and avoid dev/0 error)
+		if (( ChargingVehiclesAdjustedForThisCp == 0 )); then
+			ChargingVehiclesAdjustedForThisCp=1
+		fi
 	fi
 
 	# we must make sure that we don't leave NumberOfChargingPhases at 0 if we couldn't count it up to here
@@ -306,7 +320,7 @@ function aggregateDataForChargePoint() {
 		NumberOfChargingPhases=3
 	fi
 
-	$dbgWrite "$NowItIs: CP${chargePoint} (enabled=${LpEnabled}): NumberOfChargingPhases=${NumberOfChargingPhases}, ChargeCurrentOnPhase=${ChargeCurrentOnPhase[@]:1}, ChargingOnPhase=${ChargingOnPhase[@]:1}, charging phase with max total current = ${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, CpIsCharging=${CpIsCharging}"
+	$dbgWrite "$NowItIs: CP${chargePoint} (enabled=${LpEnabled}): NumberOfChargingPhases=${NumberOfChargingPhases}, ChargeCurrentOnPhase=${ChargeCurrentOnPhase[@]:1}, ChargingOnPhase=${ChargingOnPhase[@]:1}, charging phase max total current = ${ChargingPhaseWithMaximumTotalCurrent} @ ${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, CpIsCharging=${CpIsCharging}, ChargingVehicles=${ChargingVehiclesOnPhase[@]:1}, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}"
 
 	return 0
 }

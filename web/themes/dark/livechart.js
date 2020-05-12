@@ -617,7 +617,7 @@ function putgraphtogether() {
 			splittime.push(zeit.substring(0, zeit.length -3));
 		});
 		atime = splittime;
-		if ( atime.length >= 60 ) {
+		if ( atime.length >= 30 ) {
 			//atime = getCol(csvData, 0);
 			abezug = convertToKw(getCol(csvData, 1));
 			alpa = convertToKw(getCol(csvData, 2));

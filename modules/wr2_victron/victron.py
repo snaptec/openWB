@@ -20,7 +20,7 @@ connection = client.connect()
 resp= client.read_holding_registers(789,1,unit=mid)
 decoder = BinaryPayloadDecoder.fromRegisters(resp.registers,byteorder=Endian.Big,wordorder=Endian.Big)
 mpp_watt1 = str(decoder.decode_16bit_uint())
-mpp_watt2 = int(mpp_watt1) / 10
+mpp_watt2 = int(mpp_watt1) / 10 * -1
 f = open('/var/www/html/openWB/ramdisk/pv2watt', 'w')
 f.write(str(mpp_watt2))
 f.close()

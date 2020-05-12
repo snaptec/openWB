@@ -225,7 +225,10 @@ if ($exportGraph) {
 	fwrite($configFile, <<<EOS
 
 # export global data to remote
-topic openWB/graph/# out 2 "" $remotePrefix/
+topic openWB/config/get/# out 2 "" $remotePrefix
+topic openWB/SmartHome/# out 2 "" $remotePrefix
+
+
 EOS
 	);
 }
@@ -245,6 +248,9 @@ EOS
 if ($subscribeConfigs) {
 	fwrite($configFile, <<<EOS
 topic openWB/set/# both 2 "" $remotePrefix
+topic openWB/config/set/# both 2 "" $remotePrefix
+
+
 EOS
 	);
 }
