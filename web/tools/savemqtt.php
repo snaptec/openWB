@@ -226,6 +226,9 @@ if ($exportGraph) {
 
 # export global data to remote
 topic openWB/config/get/# out 2 "" $remotePrefix
+topic openWB/SmartHome/# out 2 "" $remotePrefix
+
+
 EOS
 	);
 }
