@@ -5,7 +5,7 @@
 speicherwatttmp=$(curl -k --connect-timeout 5 -s "https://$speicherpwip/api/meters/aggregates")
 
 
-speicherwatt=$(echo $speicherwatttmp | jq .battery.instant_power)
+speicherwatt=$(echo $speicherwatttmp | jq .battery.instant_power | sed 's/\..*$//')
 speicherwatt=$(echo "$speicherwatt * -1" | bc)
 ra='^[-+]?[0-9]+\.?[0-9]*$'
 if ! [[ $speicherwatt =~ $ra ]] ; then
