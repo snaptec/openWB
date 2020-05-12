@@ -99,10 +99,15 @@ function sendValues() {
         // so first disable buttons on page
         $('#saveSettingsBtn').prop('disabled', true);
         $('#modalDefaultsBtn').prop('disabled', true);
+        // delay between publishes
+        var intervall = 200;
         // then send changed values
-        Object.keys(changedValues).forEach(function(topic) {
+        Object.keys(changedValues).forEach(function(topic, index) {
+            console.log(index);
             var value = this[topic].toString();
-            publish(value, topic);
+            setTimeout(function () {
+                publish(value, topic);
+            }, index * intervall);
         }, changedValues);
     } else {
         $('#noValuesChangedInfoModal').modal();

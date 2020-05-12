@@ -589,7 +589,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/1/current" class="col-3 col-sm-2 col-form-label">LP1:</label>
+				<label for="lp/1/current" class="col-4 col-form-label"><span class="nameLp"></span>:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
@@ -687,6 +687,23 @@
 			<div class="row justify-content-center">
 		   		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung</h3>
 		    </div>
+
+			<div class="form-row form-group mt-1">
+				<label for="chargeLimitationLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+				<div class="col-4 btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/">
+					<label class="btn btn-outline-info btn-toggle regularTextSize">
+						<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
+					</label>
+					<label class="btn btn-outline-info btn-toggle regularTextSize">
+						<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energie
+					</label>
+					<label class="btn btn-outline-info btn-toggle regularTextSize">
+						<input type="radio" name="lp/1/chargeLimitation" data-option="2"> SoC
+					</label>
+				</div>
+
+			</div>
+
 
 			<div class="row justify-content-center text-center regularTextSize">
 				<div class="col-4 targetChargeLp" lp="1">
