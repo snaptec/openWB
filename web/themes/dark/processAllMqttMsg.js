@@ -42,18 +42,17 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/config/get/sofort/
 	// called by handlevar
 	processPreloader(mqttmsg);
-
-
 	if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i ) ) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var current = parseInt(mqttpayload, 10);
 		if ( isNaN(current) ) {
 			current = 0;
 		}
-		$('#sofortlllp' + index + 's').val(current);
-		$('#sofortlllp' + index + 'l').text(current);
+		elementId = mqttmsg.replace('openWB/config/get/sofort/', '');
+		setInputValue(elementId, current);
 	}
 }
+
 function processGraphMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/graph
 	// called by handlevar
@@ -256,6 +255,13 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		} else {
 			// if there is no text, show nothing (hides row)
 			$('#lastregelungaktiv').text('');
+		}
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		if ( mqttpayload == '1' ) {
+			$('#awattarEnabledIcon').show();
+		} else {
+			$('#awattarEnabledIcon').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
