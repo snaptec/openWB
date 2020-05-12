@@ -589,67 +589,67 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
+				<label for="lp/1/current" class="col-3 col-sm-2 col-form-label">LP1:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp1" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp1" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/1/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
+				<label for="lp/2/current" class="col-3 col-sm-2 col-form-label">LP2:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp2" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
+					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp2" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/2/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp3" class="col-3 col-sm-2 col-form-label">LP3:</label>
+				<label for="lp/3/current" class="col-3 col-sm-2 col-form-label">LP3:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp3" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
+					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp3" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/3/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp4" class="col-3 col-sm-2 col-form-label">LP4:</label>
+				<label for="lp/4/current" class="col-3 col-sm-2 col-form-label">LP4:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp4" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
+					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp4" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/4/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp5" class="col-3 col-sm-2 col-form-label">LP5:</label>
+				<label for="lp/5/current" class="col-3 col-sm-2 col-form-label">LP5:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp5" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
+					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp5" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/5/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp6" class="col-3 col-sm-2 col-form-label">LP6:</label>
+				<label for="lp/6/current" class="col-3 col-sm-2 col-form-label">LP6:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp6" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
+					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp6" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/6/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp7" class="col-3 col-sm-2 col-form-label">LP7:</label>
+				<label for="lp/7/current" class="col-3 col-sm-2 col-form-label">LP7:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp7" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
+					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp7" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/7/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="currentLp8" class="col-3 col-sm-2 col-form-label">LP8:</label>
+				<label for="lp/8/current" class="col-3 col-sm-2 col-form-label">LP8:</label>
 				<div class="col-6 col-sm-4">
-					<input type="range" class="form-control-range rangeInput" id="currentLp8" min="6" max="32" step="1" value="6" data-initialized="0" data-topicidentifier="current" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
+					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="currentLp8" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/8/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
@@ -685,8 +685,23 @@
 			<hr color="white">
 
 			<div class="row justify-content-center">
-		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Lademengen-Einstellungen</h3>
+		   		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung</h3>
 		    </div>
+
+			<div class="form-row form-group mt-1">
+				<div class="col btn-group btn-group-toggle" id="chargeLimitationLp1" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/chargeLimitation">
+					<label class="btn btn-outline-info btn-toggle">
+						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="0"> keine
+					</label>
+					<label class="btn btn-outline-info btn-toggle">
+						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="1"> Energiemenge
+					</label>
+					<label class="btn btn-outline-info btn-toggle">
+						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="2"> EV-SoC
+					</label>
+				</div>
+			</div>
+
 
 			<div class="row justify-content-center text-center regularTextSize">
 				<div class="col-4 targetChargeLp" lp="1">
@@ -982,7 +997,7 @@
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- some helper functions-->
-	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200511-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200512-a"></script>
 	<!-- data refresher -->
 	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200506-b"></script>
 
@@ -1034,68 +1049,6 @@
 					}, 500);
 				}
 			}
-		}
-
-		function updateLabel(elementId) {
-		    /** @function updateLabel
-		     * sets the value-label (if exists) attached to the element to the element value
-		     * @param {string} elementId - the id of the element
-		     * @requires class:valueLabel assigned to the attached label
-		     */
-		    var element = $('#' + elementId);
-		    var label = $('label[for="' + element.attr('id') + '"].valueLabel');
-		    if ( label.length == 1 ) {
-		        var suffix = label.attr('suffix');
-		        var text = element.val();
-		        if ( suffix != '' ) {
-		            text += ' ' + suffix;
-		        }
-		        label.text(text);
-		    }
-		}
-
-		function setInputValue(elementId, value) {
-		    /** @function setInputValue
-		     * sets the value-label (if exists) attached to the element to the element value
-		     * @param {string} elementId - the id of the element
-		     * @param {string} value - the value the element has to be set to
-		     * if the element has data-attribute 'signcheckbox' the checkbox with the id of the attribute
-		     * will represent negative numbers by being checked
-		     */
-		    if ( !isNaN(value) ) {
-		        var element = $('#' + elementId);
-		        var signCheckboxName = element.data('signcheckbox');
-		        var signCheckbox = $('#' + signCheckboxName);
-		        if ( signCheckbox.length == 1 ) {
-		            // checkbox exists
-		            if ( value < 0 ) {
-		                signCheckbox.prop('checked', true);
-		                value *= -1;
-		            } else {
-		                signCheckbox.prop('checked', false);
-		            }
-		        }
-		        element.val(value);
-		        if ( element.attr('type') == 'range' ) {
-		            updateLabel(elementId);
-		        }
-		    }
-		}
-
-		function setToggleBtnGroup(groupId, option) {
-		    /** @function setInputValue
-		     * sets the value-label (if exists) attached to the element to the element value
-		     * @param {string} elementId - the id of the button group
-		     * @param {string} option - the option the group btns will be set to
-		     * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
-		     */
-		    $('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
-		    $('input[name=' + groupId + '][data-option="' + option + '"]').closest('label').addClass('active');
-		    // and uncheck all others
-		    $('input[name=' + groupId + '][data-option!="' + option + '"]').each(function() {
-		        $(this).prop('checked', false);
-		        $(this).closest('label').removeClass('active');
-		    });
 		}
 
 		var delayUserInput = (function () {
@@ -1215,17 +1168,17 @@
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
 				updateLabel(elementId);
-				var element = $('#' + elementId);
-				var label = $('label[for="' + element.attr('id') + '"].valueLabel');
+				var element = $('#' + $.escapeSelector(elementId));
+				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt
-					var elem = $('#' + id);
+					var elem = $('#' + $.escapeSelector(id));
 					var value = elem.val();
 					var topic = getTopicToSendTo(id);
 					publish(value, topic);
-					var label = $('label[for="' + elem.attr('id') + '"].valueLabel');
+					var label = $('label[for="' + id + '"].valueLabel');
      				label.removeClass('text-danger');
   				}, 2000);
 			});

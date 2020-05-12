@@ -10,8 +10,8 @@ function updateLabel(elementId) {
      * @param {string} elementId - the id of the element
      * @requires class:valueLabel assigned to the attached label
      */
-    var element = $('#' + elementId);
-    var label = $('label[for="' + element.attr('id') + '"].valueLabel');
+    var element = $('#' + $.escapeSelector(elementId));
+    var label = $('label[for="' + elementId + '"].valueLabel');
     if ( label.length == 1 ) {
         var suffix = label.attr('suffix');
         var text = element.val();
@@ -31,7 +31,7 @@ function setInputValue(elementId, value) {
      * will represent negative numbers by being checked
      */
     if ( !isNaN(value) ) {
-        var element = $('#' + elementId);
+        var element = $('#' + $.escapeSelector(elementId));
         var signCheckboxName = element.data('signcheckbox');
         var signCheckbox = $('#' + signCheckboxName);
         if ( signCheckbox.length == 1 ) {
@@ -51,20 +51,8 @@ function setInputValue(elementId, value) {
 }
 
 function getTopicToSendTo (elementId) {
-    var element = $('#' + elementId);
-    var topicPrefix = element.data('topicprefix');
-    var topicSubGroup = element.data('topicsubgroup');
-    if ( typeof topicSubGroup == 'undefined' ) {
-        // if no data-attribute for subgroup like /lp/1/ exists
-        // topicIdentifier is the unique element id
-        topicSubGroup = '';
-        var topicIdentifier = element.attr('id');
-    } else {
-        // if data-attribute for subgroup like /lp/1/ exists
-        // topicIdentifier is the non-unique element name
-        var topicIdentifier = element.data('topicidentifier');
-    }
-    var topic = topicPrefix + topicSubGroup + topicIdentifier;
+    var element = $('#' + $.escapeSelector(elementId));
+    var topic = element.data('topicprefix') + elementId;
     topic = topic.replace('/get/', '/set/');
     return topic;
 }

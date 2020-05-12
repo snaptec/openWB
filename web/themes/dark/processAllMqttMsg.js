@@ -48,7 +48,7 @@ function processSofortConfigMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(current) ) {
 			current = 0;
 		}
-		elementId = 'currentLp' + index;
+		elementId = mqttmsg.replace('openWB/config/get/sofort/', '');
 		setInputValue(elementId, current);
 	}
 }
