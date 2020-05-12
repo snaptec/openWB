@@ -1,1 +1,1 @@
-dark/helperFunctions.js
+../dark/helperFunctions.js
