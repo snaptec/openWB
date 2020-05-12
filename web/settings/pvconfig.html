@@ -297,12 +297,32 @@
 							<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
 						<p class="card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
+						<div class="form-row form-group mt-1">
+							<div class="col btn-group btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp1" autocomplete="off" data-option="0"> ausgeschaltet
+								</label>
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp1" autocomplete="off" data-option="1"> eingeschaltet
+								</label>
+							</div>
+						</div>
 						<div class="form-row form-group mb-1 vaRow">
 							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocLp1" class="col col-form-label valueLabel" suffix="%"></label>
+						</div>
+						<div class="form-row form-group mt-1">
+							<div class="col btn-group btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp2" autocomplete="off" data-option="0"> ausgeschaltet
+								</label>
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp2" autocomplete="off" data-option="1"> eingeschaltet
+								</label>
+							</div>
 						</div>
 						<div class="form-row form-group mb-1 vaRow">
 							<label for="maxSoclp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
@@ -583,7 +603,9 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script type="text/javascript">
-
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity on buttons
+			}
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);
 				// disable navbar entry for current page
