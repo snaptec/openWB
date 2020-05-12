@@ -688,21 +688,6 @@
 		   		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung</h3>
 		    </div>
 
-			<div class="form-row form-group mt-1">
-				<div class="col btn-group btn-group-toggle" id="chargeLimitationLp1" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/chargeLimitation">
-					<label class="btn btn-outline-info btn-toggle">
-						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="0"> keine
-					</label>
-					<label class="btn btn-outline-info btn-toggle">
-						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="1"> Energiemenge
-					</label>
-					<label class="btn btn-outline-info btn-toggle">
-						<input type="radio" name="chargeLimitationLp1" autocomplete="off" data-option="2"> EV-SoC
-					</label>
-				</div>
-			</div>
-
-
 			<div class="row justify-content-center text-center regularTextSize">
 				<div class="col-4 targetChargeLp" lp="1">
 					LP1 <span class="nameLp"></span>
