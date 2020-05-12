@@ -64,15 +64,15 @@
 					<div class="col-auto">
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
+								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo "checked"?>>
 								<label class="form-check-label" for="mode0RadioBtn">
-								    Mode 0 (aus)
+									Mode 0 (aus)
 								</label>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
+								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo "checked"?>>
 								<label class="form-check-label" for="mode1RadioBtn">
 									Mode 1 (Regelwerte)
 								</label>
@@ -80,7 +80,7 @@
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
+								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo "checked"?>>
 								<label class="form-check-label" for="mode2RadioBtn">
 									Mode 2 (Berechnungsgrundlage)
 								</label>
@@ -137,11 +137,12 @@
 					openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
 				</div>
 			</div>
-			<form class="form" id="sendDebugMessageForm" action="./tools/starttunnel.php" method="POST">
+			<form class="form" id="startTunnelForm" action="./tools/starttunnel.php" method="POST">
 				<div class="col-7 col-lg-5">
 					<div class="input-group mb-2">
 						<div class="input-group-prepend">
-							<div class="input-group-text">Token</div>
+							<div class="input-group-text">
+								Token
 							</div>
 							<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
 						</div>
@@ -152,8 +153,6 @@
 				</div>
 			</form>
 
-
-
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
@@ -162,7 +161,7 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);

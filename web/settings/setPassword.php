@@ -151,25 +151,18 @@ AUTHEND
 			</div>
 		</div>  <!-- container -->
 
-		<script type="text/javascript">
- 			$(document).ready(function(){
- 				// disable navbar entry for current page
-				$('#navPasswortschutz').addClass('disabled');
-				});
-		</script>
-
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
 				<small>Sie befinden sich hier: Einstellungen/Passwortschutz</small>
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
-				$('#navPasswort').addClass('disabled');
+				$('#navPasswortschutz').addClass('disabled');
 			});
 
 		</script>

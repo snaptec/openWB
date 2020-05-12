@@ -57,13 +57,13 @@
 						<div class="form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="chargeSubmode" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeSubmode" autocomplete="off" data-option="0"> Einspeisung
+									<input type="radio" name="chargeSubmode" data-option="0"> Einspeisung
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeSubmode" autocomplete="off" data-option="1"> Bezug
+									<input type="radio" name="chargeSubmode" data-option="1"> Bezug
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeSubmode" autocomplete="off" data-option="2"> manueller Regelpunkt
+									<input type="radio" name="chargeSubmode" data-option="2"> manueller Regelpunkt
 								</label>
 							</div>
 						</div>
@@ -189,10 +189,10 @@
 						<div class="form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="boolAdaptiveCharging" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="boolAdaptiveCharging" autocomplete="off" data-option="0"> ausgeschaltet
+									<input type="radio" name="boolAdaptiveCharging" data-option="0"> ausgeschaltet
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="boolAdaptiveCharging" autocomplete="off" data-option="1"> eingeschaltet
+									<input type="radio" name="boolAdaptiveCharging" data-option="1"> eingeschaltet
 								</label>
 							</div>
 						</div>
@@ -221,10 +221,10 @@
 						<div class="form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="nurpv70dynact" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="nurpv70dynact" autocomplete="off" data-option="0"> ausgeschaltet
+									<input type="radio" name="nurpv70dynact" data-option="0"> ausgeschaltet
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="nurpv70dynact" autocomplete="off" data-option="1"> eingeschaltet
+									<input type="radio" name="nurpv70dynact" data-option="1"> eingeschaltet
 								</label>
 							</div>
 						</div>
@@ -298,14 +298,14 @@
 						</div>
 						<p class="card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
 						<div class="form-row form-group mb-1 vaRow">
-							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
+							<label for="maxSocLp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
 						<div class="form-row form-group mb-1 vaRow">
-							<label for="maxSoclp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
+							<label for="maxSocLp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 							</div>
@@ -341,10 +341,10 @@
 						<div class="form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="priorityModeEVBattery" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="priorityModeEVBattery" autocomplete="off" data-option="0"> Speichervorrang
+									<input type="radio" name="priorityModeEVBattery" data-option="0"> Speichervorrang
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="priorityModeEVBattery" autocomplete="off" data-option="1"> EV-Vorrang
+									<input type="radio" name="priorityModeEVBattery" data-option="1"> EV-Vorrang
 								</label>
 							</div>
 						</div>
@@ -358,10 +358,10 @@
 						<div class="form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="boolShowPriorityIconInTheme" data-toggle="buttons" data-default="1" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle active">
-									<input type="radio" name="boolShowPriorityIconInTheme" autocomplete="off" data-option="0"> nicht anzeigen
+									<input type="radio" name="boolShowPriorityIconInTheme" data-option="0"> nicht anzeigen
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="boolShowPriorityIconInTheme" autocomplete="off" data-option="1"> anzeigen
+									<input type="radio" name="boolShowPriorityIconInTheme" data-option="1"> anzeigen
 								</label>
 							</div>
 						</div>
@@ -582,7 +582,7 @@
 		<!-- load mqtt handler-->
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);

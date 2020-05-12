@@ -93,7 +93,7 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
