@@ -131,7 +131,11 @@
 
 				$elemId = $elemType.$lp.'_'.$dayOfWeek;
 				$elemName = $elemType.'['.$lp.']['.$dayOfWeek.']';
-				$elemValue = $settingsArray[$elemId];
+				if ( array_key_exists($elemId, $settingsArray) ) {
+					$elemValue = $settingsArray[$elemId];
+				} else {
+					$elemValue = "";
+				}
 			}
 
 			function echoCheckboxDiv($elemType, $label) {
@@ -298,7 +302,7 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);

@@ -55,12 +55,12 @@
 							</small>
 						</div>
 						<div class="form-row form-group mt-2">
-							<div class="col btn-group btn-group-toggle" id="chargeLimitationLp3" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
+							<div class="col btn-group btn-group-toggle" id="chargeLimitationLp3" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="0"> ausgeschaltet
+									<input type="radio" name="chargeLimitationLp3" data-option="0"> ausgeschaltet
 								</label>
 								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="1"> eingeschaltet
+									<input type="radio" name="chargeLimitationLp3" data-option="1"> eingeschaltet
 								</label>
 							</div>
 						</div>
@@ -170,12 +170,12 @@
 		<!-- load mqtt handler-->
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);
 				// disable navbar entry for current page
-				$('#navSofortLadeeinstellungen').addClass('disabled');
+				$('#navNachtladen').addClass('disabled');
 			});
 
 			function saveSettings() {
