@@ -62,7 +62,7 @@ function getTopicToSendTo (elementId) {
     } else {
         // if data-attribute for subgroup like /lp/1/ exists
         // topicIdentifier is the non-unique element name
-        var topicIdentifier = element.attr('name');
+        var topicIdentifier = element.data('topicidentifier');
     }
     var topic = topicPrefix + topicSubGroup + topicIdentifier;
     topic = topic.replace('/get/', '/set/');

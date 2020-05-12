@@ -257,6 +257,13 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			$('#lastregelungaktiv').text('');
 		}
 	}
+	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		if ( mqttpayload == '1' ) {
+			$('#awattarEnabledIcon').show();
+		} else {
+			$('#awattarEnabledIcon').hide();
+		}
+	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
 		// read awattar values and trigger graph creation
 		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
