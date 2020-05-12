@@ -237,7 +237,7 @@
 		</div>
 
 		<!-- chargepoint info data lp1-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="1">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="1">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -260,7 +260,7 @@
         </div>
 
 		<!-- chargepoint info data lp2-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="2">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="2">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -283,7 +283,7 @@
         </div>
 
 		<!-- chargepoint info data lp3-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="3">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="3">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -306,7 +306,7 @@
         </div>
 
 		<!-- chargepoint info data lp4-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="4">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="4">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -329,7 +329,7 @@
         </div>
 
 		<!-- chargepoint info data lp5-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="5">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="5">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -352,7 +352,7 @@
         </div>
 
 		<!-- chargepoint info data lp6-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="6">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="6">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -375,7 +375,7 @@
         </div>
 
 		<!-- chargepoint info data lp7-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="7">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="7">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -398,7 +398,7 @@
         </div>
 
 		<!-- chargepoint info data lp8-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="8">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="8">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
@@ -585,71 +585,71 @@
 	    <form id="sofortladenEinstellungen" class="hide" name="sofortll" action="./tools/sofortll.php" method="POST">
 
 			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/1/current" class="col-3 col-sm-2 col-form-label">LP1:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/1/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/2/current" class="col-3 col-sm-2 col-form-label">LP2:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
+				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/2/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/3/current" class="col-3 col-sm-2 col-form-label">LP3:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
+				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/3/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/4/current" class="col-3 col-sm-2 col-form-label">LP4:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
+				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/4/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/5/current" class="col-3 col-sm-2 col-form-label">LP5:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
+				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/5/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/6/current" class="col-3 col-sm-2 col-form-label">LP6:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
+				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/6/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/7/current" class="col-3 col-sm-2 col-form-label">LP7:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
+				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/7/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/8/current" class="col-3 col-sm-2 col-form-label">LP8:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
+				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/8/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
 			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
@@ -683,20 +683,87 @@
 			</div> <!--/ awattardiv -->
 
 			<hr color="white">
+			<div data-lp="1">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
+					<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-default="30" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/1/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="row vaRow mt-2 regularTextSize">
+					<span class="col">Fortschritt: </span>
+					<div class="col progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+						</div>
+					</div>
+					<span class="col">Restzeit: </span><span class="col">1h 56 </span>
+					<input class="btn btn-sm btn-primary regularTextSize" type="button" value="Reset">
 
-			<div class="row justify-content-center">
-		   		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung</h3>
-		    </div>
+				</div>
 
 
+
+
+			</div>
+
+<div data-lp="2">
+	<hr color="white">
+	<div class="row justify-content-center">
+		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+	</div>
+	<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
+		<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+				<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
+			</label>
+			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+				<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energiemenge
+			</label>
+			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+				<input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
+			</label>
+		</div>
+	</div>
+	<div class="form-row form-group mb-1 vaRow regularTextSize">
+		<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+		<div class="col">
+			<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-default="30" data-topicprefix="openWB/config/get/sofort/">
+		</div>
+		<label for="lp/1/energyToCharge" class="col-2 col-form-label valueLabel" suffix="kWh"></label>
+	</div>
+
+
+
+	<input class="btn btn-sm btn-primary regularTextSize" type="button" value="Reset">
+
+</div>
+<br>
+<br>
 			<div class="row justify-content-center text-center regularTextSize">
-				<div class="col-4 targetChargeLp" lp="1">
+				<div class="col-4" data-lp="1">
 					LP1 <span class="nameLp"></span>
 				</div>
-				<div class="col-4 targetChargeLp" lp="2">
+				<div class="col-4" data-lp="2">
 					LP2 <span class="nameLp"></span>
 				</div>
-				<div class="col-4 targetChargeLp" lp="3">
+				<div class="col-4" data-lp="3">
 					LP3 <span class="nameLp"></span>
 				</div>
 			</div>
@@ -736,7 +803,7 @@
                             <option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
                         </select> kWh
                         <br><br>
-                        <button class="resetTargetChargingBtn" lp="1">Reset</button>
+                        <button class="resetTargetChargingBtn" data-lp="1">Reset</button>
                     </span>
                     <span id="msmodusslp1" <?php if($msmoduslp1old != 2) echo 'style="display: none;"' ?>>
 						<br><br>
@@ -799,7 +866,7 @@
 							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 						<br><br>
-						<button class="resetTargetChargingBtn" lp="2">Reset</button>
+						<button class="resetTargetChargingBtn" data-lp="2">Reset</button>
 					</div>
 					<span id="msmodusslp2" <?php if($msmoduslp2old != 2) echo 'style="display: none;"' ?>>
 						<br><br>
@@ -861,7 +928,7 @@
 							<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
 						</select> kWh
 						<br><br>
-						<button class="resetTargetChargingBtn" lp="3">Reset</button>
+						<button class="resetTargetChargingBtn" data-lp="3">Reset</button>
 					</span>
                     <span id="msmodusnlp3" <?php if($lademstats2old != 0) echo 'style="display: none;"' ?>></span>
 				</div>
@@ -869,25 +936,25 @@
 
 			<div id="targetChargingProgress" class="hide">
 				<div class="row justify-content-center regularTextSize text-center">
-					<div class="col-4 targetChargeLp" lp='1'>
+					<div class="col-4" data-lp='1'>
 						<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
 					</div>
-					<div class="col-4 targetChargeLp" lp='2'>
+					<div class="col-4" data-lp='2'>
 						<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
 					</div>
-					<div class="col-4 targetChargeLp" lp='3'>
+					<div class="col-4" data-lp='3'>
 						<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
 					</div>
 				</div>
 
 				<div class="row justify-content-center regularTextSize text-center">
-					<div class="col-4 targetChargeLp" lp='1'>
+					<div class="col-4" data-lp='1'>
 						Restzeit <span id="restzeitlp1"></span>
 					</div>
-					<div class="col-4 targetChargeLp" lp='2'>
+					<div class="col-4" data-lp='2'>
 						Restzeit <span id="restzeitlp2"></span>
 					</div>
-					<div class="col-4 targetChargeLp" lp='3'>
+					<div class="col-4" data-lp='3'>
 						Restzeit <span id="restzeitlp3"></span>
 					</div>
 				</div>
@@ -965,7 +1032,7 @@
 						</div>
 					</span>
 					<hr>
-					
+
 					<div class="row">
 						<div class="col text-center text-grey">
 							70% beachten im Lademodus PV-Laden:
@@ -978,7 +1045,7 @@
 							</button>
 						</div>
 					</div>
-					
+
 
 				</div> <!-- /modal body -->
 
