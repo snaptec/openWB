@@ -12,6 +12,7 @@ loginID=str(sys.argv[1])
 password=str(sys.argv[2])
 location=str(sys.argv[3])
 country=str(sys.argv[4])
+vin=str(sys.argv[5])
 
 named_tuple = time.localtime() # get struct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S myrenault wake lp1", named_tuple)
@@ -46,9 +47,9 @@ kamereonaccesstoken = kamereon_token['accessToken']
 f = open('/var/www/html/openWB/ramdisk/zoereply7lp1', 'r')
 vehic = json.loads(f.read())
 f.close()
-vin = vehic['vehicleLinks'][0]['vin']
+if len(vin) < 10:
+    vin = vehic['vehicleLinks'][0]['vin']
 print(time_string,'vin wakeup',vin)
-
 payload = {"data":{"type":"ChargingStart","attributes":{"action":"start"}}}
 data=json.dumps(payload)
 payloadc = {'country': country} 

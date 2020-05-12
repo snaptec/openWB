@@ -202,7 +202,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 			powerEvu = '0 W';
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toFixed(2);
+		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 	    	    powerEvu += ' kW Bezug';
 	    	} else {
 				powerEvu += ' W Bezug';
@@ -210,7 +210,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
     	} else {
     	    powerEvu *= -1;
 			if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toFixed(2);
+		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 	    	    powerEvu += ' kW Einspeisung';
 	    	} else {
 				powerEvu += ' W Einspeisung';
@@ -230,7 +230,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			powerHouse = 0;
 		}
 		if ( powerHouse > 999 ) {
-			powerHouse = (powerHouse / 1000).toFixed(2) + ' kW';
+			powerHouse = (powerHouse / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 		} else {
 			powerHouse += ' W';
 		}
@@ -242,7 +242,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			powerAllLp = 0;
 		}
 		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toFixed(2) + ' kW';
+			powerAllLp = (powerAllLp / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 		} else {
 			powerAllLp += ' W';
 		}
@@ -366,7 +366,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			speicherwatt = '0 W';
 		} else if (speicherwatt > 0) {
 			if ( speicherwatt > 999 ) {
-				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW Ladung';
 			} else {
 				speicherwatt = speicherwatt + ' W Ladung';
@@ -374,7 +374,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		} else {
 	    	speicherwatt *= -1;
 			if (speicherwatt > 999) {
-				speicherwatt = (speicherwatt / 1000).toFixed(2);
+				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW Entladung';
 			} else {
 				speicherwatt = speicherwatt + ' W Entladung';
@@ -443,7 +443,7 @@ function processPvMessages(mqttmsg, mqttpayload) {
 			pvwatt *= -1;
 			// adjust and add unit
 			if (pvwatt > 999) {
-				pvwatt = (pvwatt / 1000).toFixed(2) + ' kW';
+				pvwatt = (pvwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kW';
 			} else {
 				pvwatt += ' W';
 			}
@@ -455,8 +455,20 @@ function processPvMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(pvDailyYield) ) {
 			pvDailyYield = 0;
 		}
-		var pvDailyYieldStr = ' (' + pvDailyYield.toFixed(2) + ' kWh)';
+		var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
 		$('#pvdailyyield').text(pvDailyYieldStr);
+	}
+	else if ( mqttmsg == 'openWB/pv/bool70PVDynStatus') {
+		switch (mqttpayload) {
+			case '0':
+				// deaktiviert
+				$('#70PvBtn').removeClass('btn-success');
+				break;
+			case '1':
+				// ev priority
+				$('#70PvBtn').addClass('btn-success');
+			break;
+		}
 	}
 }
 
@@ -479,7 +491,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			actualPower = 0;
 		}
 		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toFixed(2);
+			actualPower = (actualPower / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 			actualPower += ' kW';
 		} else {
 			actualPower += ' W';
@@ -496,13 +508,13 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(energyCharged) ) {
 			energyCharged = 0;
 		}
-		$(element).text(energyCharged.toFixed(1) + ' kWh');
+		$(element).text(energyCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' kWh');
 		var kmChargedLp = $(parent).find('.kmChargedLp');  // now get parents kmChargedLp child element
 		var consumption = parseFloat($(kmChargedLp).attr('consumption'));
 		var kmCharged = '';
 		if ( !isNaN(consumption) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toFixed(1) + ' km';
+			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
@@ -689,7 +701,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var kmCharged = '';
 		if ( !isNaN(energyCharged) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
-			kmCharged = ' / ' + kmCharged.toFixed(1) + ' km';
+			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		}
 		$(element).text(kmCharged);
 	}
@@ -740,7 +752,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			actualPower = 0;
 		}
 		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toFixed(2);
+			actualPower = (actualPower / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 			actualPower += ' kW';
 		} else {
 			actualPower += ' W';
@@ -795,7 +807,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 				StringTemp = ''; // display only something if we got a value
 				$(parent).hide();
 			} else {
-				StringTemp = 'Temp1 ' + actualTemp.toFixed(2); // make complete string to display
+				StringTemp = 'Temp1 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
 				$(parent).show();
 			}
 		}
@@ -812,7 +824,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			if (actualTemp > 200) {
 				StringTemp = ''; // display only something if we got a value
 			} else {
-				StringTemp = 'Temp2 ' + actualTemp.toFixed(2); // make complete string to display
+				StringTemp = 'Temp2 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
 			}
 		}
 		$(element).text(StringTemp);
@@ -828,7 +840,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			if (actualTemp > 200) {
 				StringTemp = ''; // display only something if we got a value
 			} else {
-				StringTemp = 'Temp3 ' + actualTemp.toFixed(2); // make complete string to display
+				StringTemp = 'Temp3 ' + actualTemp.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); // make complete string to display
 			}
 		}
 		$(element).text(StringTemp);

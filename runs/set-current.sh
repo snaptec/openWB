@@ -108,10 +108,7 @@ function setChargingCurrentThirdeth () {
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
-		oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
-		if (( oldcurrent != $current )) ; then
-			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
-		fi
+		curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
 	fi
 }
 function setChargingCurrenttwcmanager () {

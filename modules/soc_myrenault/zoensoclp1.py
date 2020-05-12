@@ -17,7 +17,7 @@ loginID=str(sys.argv[1])
 password=str(sys.argv[2])
 location=str(sys.argv[3])
 country=str(sys.argv[4])
-vin='?'
+vin=str(sys.argv[5])
 #vin = '?'
 #print(time_string, ' start ', loginID)
 #
@@ -133,11 +133,12 @@ reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
 response= urllib2.urlopen(reg)
 responsetext  = response.read()
 vehic = json.loads(responsetext)
-if len(vin) < 10:
-    vin = vehic['vehicleLinks'][0]['vin']
 f = open('/var/www/html/openWB/ramdisk/zoereply7lp1', 'w')
 f.write(str(responsetext))
 f.close()
+if len(vin) < 10:
+    vin = vehic['vehicleLinks'][0]['vin']
+#print(vin)
 #
 payload = {'country': country} 
 data = urllib.urlencode(payload) 
