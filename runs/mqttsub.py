@@ -595,15 +595,23 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendllivegraphdata.sh")
         else:
-            client.publish("openWB/system/LiveGraphData1", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData2", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData3", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData4", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData5", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData6", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData7", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData8", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/1alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/2alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/3alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/4alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/5alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/6alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/7alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/8alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/9alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/10alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/11alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/12alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/13alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/14alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/15alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/16alllivevalues", "empty", qos=0, retain=True)
+
     if (msg.topic == "openWB/set/graph/RequestDayGraph"):
         if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
             sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
