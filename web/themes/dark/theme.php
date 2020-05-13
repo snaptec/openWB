@@ -588,7 +588,7 @@
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp1 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/1/current" class="col-3 col-sm-2 col-form-label">LP1:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -596,7 +596,7 @@
 				<label for="lp/1/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp2 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/2/current" class="col-3 col-sm-2 col-form-label">LP2:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -604,7 +604,7 @@
 				<label for="lp/2/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp3 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/3/current" class="col-3 col-sm-2 col-form-label">LP3:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -612,7 +612,7 @@
 				<label for="lp/3/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp4 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/4/current" class="col-3 col-sm-2 col-form-label">LP4:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -620,7 +620,7 @@
 				<label for="lp/4/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp5 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/5/current" class="col-3 col-sm-2 col-form-label">LP5:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -628,7 +628,7 @@
 				<label for="lp/5/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp6 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/6/current" class="col-3 col-sm-2 col-form-label">LP6:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -636,7 +636,7 @@
 				<label for="lp/6/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp7 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/7/current" class="col-3 col-sm-2 col-form-label">LP7:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -644,7 +644,7 @@
 				<label for="lp/7/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="form-row form-group mb-1 vaRow justify-content-center regularTextSize">
+			<div class="sofortCurrentVisLp8 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
 				<label for="lp/8/current" class="col-3 col-sm-2 col-form-label">LP8:</label>
 				<div class="col-6 col-sm-4">
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">

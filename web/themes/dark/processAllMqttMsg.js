@@ -634,12 +634,16 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		var infoElement = $('.chargePointInfoLp[lp="' + index + '"]');  // get row of charge point
 		var targetChargeElements = $('.targetChargeLp[lp="' + index + '"]');  // get column elements for target charging
+		var sofortCurrentElement = $('.sofortCurrentVisLp' + index);
 		if (mqttpayload == 1) {
 			$(infoElement).show();
 			$(targetChargeElements).show();
+			$(sofortCurrentElement).show();
 		} else {
 			$(infoElement).hide();
 			$(targetChargeElements).hide();
+			$(sofortCurrentElement).hide();
+
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
