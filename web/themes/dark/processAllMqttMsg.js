@@ -115,7 +115,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		checkgraphload();
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplaylp[1-9][0-9]*$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['boolDisplayLp'+index] = false;
@@ -157,7 +157,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		checkgraphload();
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplaylp[1-9][0-9]*soc$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		if ( mqttpayload == 1) {
 			$('#socenabledlp' + index).show();
 			window['boolDisplayLp' + index + 'Soc'] = false;
@@ -170,7 +170,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		checkgraphload();
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplayload[1-9][0-9]*$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 		// now call functions or set variables corresponding to the index
 		if ( mqttpayload == 1) {
 			window['hideload'+index] = 'foo';
@@ -182,11 +182,8 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		checkgraphload();
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/[1-9][0-9]*alllivevalues$/i ) ) {
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var index2 = mqttmsg.match(/\d/g)[1];
-		if (typeof index2 !== 'undefined'){
-			index = index+index2
-		}
+		var index = mqttmsg.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+		console.log('alllive ' + index);
 		// now call functions or set variables corresponding to the index
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
