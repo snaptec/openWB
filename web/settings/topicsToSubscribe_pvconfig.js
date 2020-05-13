@@ -33,6 +33,10 @@ var topicsToSubscribe = [
 	["openWB/config/get/pv/minBatteryChargePowerAtEvPriority", 0],
 	["openWB/config/get/pv/minBatteryDischargeSocAtBattPriority", 0],
 	["openWB/config/get/pv/batteryDischargePowerAtBattPriority", 0],
+	["openWB/lp/2/boolSocConfigured", 0],
+	["openWB/lp/1/boolSocConfigured", 0],
+	["openWB/lp/1/boolChargePointConfigured", 0],
+	["openWB/lp/2/boolChargePointConfigured", 0],
 
 	["openWB/config/get/pv/minCurrentMinPv", 0],
 	["openWB/config/get/pv/socStartChargeAtMinPv", 0],

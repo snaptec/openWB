@@ -43,6 +43,8 @@ function processMessages(mqttmsg, mqttpayload) {
         // no subgroup so everything after last '/' might be the id
         var elementId = topicIdentifier;
     }
+    // Could be a main on / off switch, check visibility func on main settings page
+    visibiltycheck(elementId, mqttpayload);
     var element = $('#' + elementId);
     if ( element.attr('type') == 'number' || element.attr('type') == 'text' || element.attr('type') == 'range' ) {
         originalValues[mqttmsg] = mqttpayload;
@@ -50,8 +52,7 @@ function processMessages(mqttmsg, mqttpayload) {
     } else if ( element.hasClass('btn-group-toggle') ) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
-	// Could be a main on / off switch, check visibility func on main settings page
-	visibiltycheck(elementId, mqttpayload);
+
 
 
     } else {
