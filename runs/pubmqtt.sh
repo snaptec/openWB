@@ -197,7 +197,11 @@ mqttvar["config/get/SmartHome/Devices/6/mode"]=smarthome_device_manual_6
 mqttvar["config/get/SmartHome/Devices/7/mode"]=smarthome_device_manual_7
 mqttvar["config/get/SmartHome/Devices/8/mode"]=smarthome_device_manual_8
 mqttvar["config/get/SmartHome/Devices/9/mode"]=smarthome_device_manual_9
-
+mqttvar["lp/4/TimeRemaining"]=restzeitlp4
+mqttvar["lp/5/TimeRemaining"]=restzeitlp5
+mqttvar["lp/6/TimeRemaining"]=restzeitlp6
+mqttvar["lp/7/TimeRemaining"]=restzeitlp7
+mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
