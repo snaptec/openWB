@@ -28,13 +28,13 @@ if ! [ -z "$output" ]; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
 	fi
 	if [[ $evsewifiplugstatelp3 > "1" ]]; then
-		echo 1 > /var/www/html/openWB/ramdisk/plugstats2
+		echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
 	else
-		echo 0 > /var/www/html/openWB/ramdisk/plugstats2
+		echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
 	fi
 	if [[ $evsewifiplugstatelp3 > "2" ]] ; then
-		echo 1 > /var/www/html/openWB/ramdisk/chargestats2
+		echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
 	else
-		echo 0 > /var/www/html/openWB/ramdisk/chargestats2
+		echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 	fi
 fi
