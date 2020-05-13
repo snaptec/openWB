@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
 
 #soc_bluelink_email='xxx@xxx.xxx'

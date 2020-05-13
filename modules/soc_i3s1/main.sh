@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 i3timer=$(</var/www/html/openWB/ramdisk/soctimer1)
 cd /var/www/html/openWB/modules/soc_i3s1

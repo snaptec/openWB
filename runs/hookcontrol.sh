@@ -1,5 +1,4 @@
 #!/bin/bash
-. ./openwb.conf
 code=$1
 hook=${1:1:1}
 action=${1:0:1}

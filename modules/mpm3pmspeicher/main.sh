@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 if [[ $mpm3pmspeichersource = *virtual* ]]
 then

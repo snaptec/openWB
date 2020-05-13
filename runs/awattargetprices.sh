@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 if [[ "$awattarlocation" == "de" ]]; then
 	awadata=$(curl -s https://api.awattar.de/v1/marketdata)
 fi

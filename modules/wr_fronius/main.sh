@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Auslesen eine Fronius Symo WR über die integrierte API des WR. Rückgabewert ist die aktuelle Wirkleistung in [W].
-. /var/www/html/openWB/openwb.conf
 
 pvwatttmp=$(curl --connect-timeout 3 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
 pvwatt=$(echo $pvwatttmp | jq '.Body.Data.Site.P_PV' | sed 's/\..*$//')

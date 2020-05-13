@@ -1,5 +1,5 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 echo "Start cron nightly @ $(date)"
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log

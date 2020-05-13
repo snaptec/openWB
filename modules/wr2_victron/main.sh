@@ -2,7 +2,6 @@
 #
 
 
-. /var/www/html/openWB/openwb.conf
 
 
 python /var/www/html/openWB/modules/wr2_victron/victron.py $pv2ip $pv2id

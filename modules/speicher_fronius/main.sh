@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Auslesen eines Fronius Symo WR Hybrid mit Fronius Smartmeter und Batterie über die integrierte JSON-API des WR.
-. /var/www/html/openWB/openwb.conf
 
 speicherwatttmp=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope?System")
 

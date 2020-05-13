@@ -4,7 +4,6 @@
 #Rückgabewert ist die aktuelle Einspeiseleistung (negativ) oder Bezugsleistung (positiv)
 # Einspeiseleistung: PV-Leistung > Verbrauch, es wird Strom eingespeist
 # Bezugsleistug: PV-Leistung < Verbrauch, es wird Strom aus dem Netz bezogen
-. /var/www/html/openWB/openwb.conf
 
 wattbezugtmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetPowerFlowRealtimeData.fcgi)
 if (( froniusprimo == 1 )); then

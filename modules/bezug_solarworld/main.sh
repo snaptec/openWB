@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Auslesen eines Solarworl eManagers über die integrierte JSON-API
-. /var/www/html/openWB/openwb.conf
 emanagerantwort=$(curl --connect-timeout 5 -s "$solarworld_emanagerip/rest/solarworld/lpvm/powerAndBatteryData")
 
 em_in_watt=$(echo $emanagerantwort | jq '.PowerIn')

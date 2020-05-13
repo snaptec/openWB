@@ -1,7 +1,7 @@
 #!/bin/bash
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
@@ -589,7 +589,7 @@ if ! grep -Fq "rseenabled=" /var/www/html/openWB/openwb.conf
 then
 	  echo "rseenabled=0" >> /var/www/html/openWB/openwb.conf
 fi
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 if (( ladetaster == 1 )); then
 	if ! [ -x "$(command -v nmcli)" ]; then
 		if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
@@ -2626,7 +2626,7 @@ then
 
 fi
 
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 /var/www/html/openWB/runs/transferladelog.sh
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup

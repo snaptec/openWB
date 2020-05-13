@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Auslesen vom S0-Eingang eines Youless LS120 Energy Monitor.
-. /var/www/html/openWB/openwb.conf
 
 answer=$(curl --connect-timeout 5 -s $wryoulessip/a?f=j)
 

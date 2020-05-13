@@ -4,7 +4,6 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 # echo $OPENWBBASEDIR
 
-. $OPENWBBASEDIR/openwb.conf
 
 case $1 in
 	2)

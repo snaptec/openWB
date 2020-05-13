@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 soc=$(curl -s -u $bydhvuser:$bydhvpass http://$bydhvip/asp/RunData.asp | grep -A 2 SOC: | sed -n 2p | cut -f1 -d"%" | sed 's/.*value=//')
 echo $soc > /var/www/html/openWB/ramdisk/speichersoc

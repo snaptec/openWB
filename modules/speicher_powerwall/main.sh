@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 speicherwatttmp=$(curl -k --connect-timeout 5 -s "https://$speicherpwip/api/meters/aggregates")
 

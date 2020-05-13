@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 if [[ $sdm630modbusbezugsource = *virtual* ]]
 then

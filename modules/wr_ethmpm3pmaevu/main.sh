@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 if (( pvkitversion == 1 )); then
 	sudo python /var/www/html/openWB/modules/wr_ethmpm3pmaevu/readlovato.py 
 else

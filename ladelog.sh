@@ -1,5 +1,4 @@
 #!/bin/bash
-. openwb.conf
 monthlyfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
 if [ ! -f $monthlyfile ]; then
 	    echo $monthlyfile
