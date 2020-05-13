@@ -658,7 +658,7 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/nurpv70dynstatus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/set/pv/bool70PVDynStatus", "", qos=0, retain=True)
+            client.publish("openWB/set/pv/NurPV70Status", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
