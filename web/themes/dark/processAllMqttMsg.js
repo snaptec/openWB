@@ -47,20 +47,18 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
 
-
 function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/config/get/sofort/
 	// called by handlevar
 	processPreloader(mqttmsg);
-	if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i ) ) {
-		var index = getIndex(mqttmsg);
-		var current = parseInt(mqttpayload, 10);
-		if ( isNaN(current) ) {
-			current = 0;
-		}
-		elementId = mqttmsg.replace('openWB/config/get/sofort/', '');
-		setInputValue(elementId, current);
+	var elementId = mqttmsg.replace('openWB/config/get/sofort/', '');
+	var element = $('#' + $.escapeSelector(elementId));
+	if ( element.attr('type') == 'range' ) {
+		setInputValue(elementId, mqttpayload);
+	} else if ( element.hasClass('btn-group-toggle') ) {
+		setToggleBtnGroup(elementId, mqttpayload);
 	}
+
 }
 
 function processGraphMessages(mqttmsg, mqttpayload) {

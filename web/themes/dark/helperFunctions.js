@@ -64,11 +64,12 @@ function setToggleBtnGroup(groupId, option) {
      * @param {string} option - the option the group btns will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
-    $('input[name=' + groupId + '][data-option="' + option + '"]').prop('checked', true);
-    $('input[name=' + groupId + '][data-option="' + option + '"]').closest('label').addClass('active');
+    $('input[name="' + groupId + '"][data-option="' + option + '"]').prop('checked', true);
+    $('input[name="' + groupId + '"][data-option="' + option + '"]').closest('label').addClass('active');
     // and uncheck all others
-    $('input[name=' + groupId + '][data-option!="' + option + '"]').each(function() {
+    $('input[name="' + groupId + '"]').not('[data-option="' + option + '"]').each(function() {
         $(this).prop('checked', false);
         $(this).closest('label').removeClass('active');
     });
+    chargeLimitationOptionsShowHide($('#' + $.escapeSelector(groupId)), option)
 }

@@ -683,7 +683,7 @@
 			</div> <!--/ awattardiv -->
 
 			<hr color="white">
-			<div data-lp="1">
+			<div class="chargeLimitation" data-lp="1">
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
 				</div>
@@ -700,240 +700,109 @@
 						</label>
 					</div>
 				</div>
-				<div class="form-row form-group mb-1 vaRow regularTextSize">
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-default="30" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/1/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
-				<div class="row vaRow mt-2 regularTextSize">
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
+					<label for="lp/1/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/socToChargeTo" min="5" max="100" step="5" value="" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/1/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
+				</div>
+				<div class="form-row vaRow mt-2 regularTextSize" data-option="1,2">
 					<span class="col">Fortschritt: </span>
 					<div class="col progress active">
 						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
 						</div>
 					</div>
-					<span class="col">Restzeit: </span><span class="col">1h 56 </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" value="Reset">
-
-				</div>
-
-
-
-
-			</div>
-
-<div data-lp="2">
-	<hr color="white">
-	<div class="row justify-content-center">
-		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
-	</div>
-	<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
-		<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
-				<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
-			</label>
-			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
-				<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energiemenge
-			</label>
-			<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
-				<input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
-			</label>
-		</div>
-	</div>
-	<div class="form-row form-group mb-1 vaRow regularTextSize">
-		<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
-		<div class="col">
-			<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-default="30" data-topicprefix="openWB/config/get/sofort/">
-		</div>
-		<label for="lp/1/energyToCharge" class="col-2 col-form-label valueLabel" suffix="kWh"></label>
-	</div>
-
-
-
-	<input class="btn btn-sm btn-primary regularTextSize" type="button" value="Reset">
-
-</div>
-<br>
-<br>
-			<div class="row justify-content-center text-center regularTextSize">
-				<div class="col-4" data-lp="1">
-					LP1 <span class="nameLp"></span>
-				</div>
-				<div class="col-4" data-lp="2">
-					LP2 <span class="nameLp"></span>
-				</div>
-				<div class="col-4" data-lp="3">
-					LP3 <span class="nameLp"></span>
+					<span class="col">Restzeit: </span>
+					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/1/reset" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
-	        <div class="row justify-content-center">
-                <div class="col-4 regularTextSize text-center">
-                    <label for="msmoduslp1"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp1" id="msmoduslp1">
-                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Energie</option>
-                        <option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
-                    </select>
-                    <span id="msmodusmlp1" <?php if($msmoduslp1old != 1) echo 'style="display: none;"' ?>>
-                        <br><br>
-                        <label for="lademlp1">Energie</label>
-                        <select type="text" name="lademlp1" id="lademlp1">
-                        	<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
-                            <option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
-                            <option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
-                            <option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
-                            <option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
-                            <option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
-                            <option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
-                            <option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
-                            <option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
-                            <option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
-                            <option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
-                            <option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
-                            <option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
-                            <option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
-                            <option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
-                            <option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
-                            <option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
-                            <option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
-                            <option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
-                            <option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
-                            <option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
-                        </select> kWh
-                        <br><br>
-                        <button class="resetTargetChargingBtn" data-lp="1">Reset</button>
-                    </span>
-                    <span id="msmodusslp1" <?php if($msmoduslp1old != 2) echo 'style="display: none;"' ?>>
-						<br><br>
-                        <label for="sofortsoclp1">SoC</label>
-                        <select type="text" name="sofortsoclp1" id="sofortsoclp1">
-                        	<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
-                            <option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
-                            <option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
-                            <option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
-                            <option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
-                            <option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
-                            <option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
-                            <option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
-                            <option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
-                            <option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
-                            <option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
-                            <option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
-                            <option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
-                            <option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
-                            <option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
-                            <option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
-                        </select> %
-                    </span>
-                    <span id="msmodusnlp1" <?php if($msmoduslp1old != 0) echo 'style="display: none;"' ?>>
-                    	<br><br>
-                    </span>
-                </div>
-
-				<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-                    <label for="msmoduslp2"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp2" id="msmoduslp2">
-                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Energie</option>
-                        <option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
-                    </select>
-					<div id="msmodusmlp2" <?php if($msmoduslp2old != 1) echo 'style="display: none;"' ?>>
-						<br>
-						<label for="lademlp2">Energie</label>
-						<select type="text" name="lademlp2" id="lademlp2">
-							<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
-							<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
-							<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
-							<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
-							<option <?php if($lademkwhs1old == 8) echo 'selected' ?> value="8">8</option>
-							<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($lademkwhs1old == 12) echo 'selected' ?> value="12">12</option>
-							<option <?php if($lademkwhs1old == 14) echo 'selected' ?> value="14">14</option>
-							<option <?php if($lademkwhs1old == 16) echo 'selected' ?> value="16">16</option>
-							<option <?php if($lademkwhs1old == 18) echo 'selected' ?> value="18">18</option>
-							<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>
-							<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
-							<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($lademkwhs1old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($lademkwhs1old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
-						</select> kWh
-						<br><br>
-						<button class="resetTargetChargingBtn" data-lp="2">Reset</button>
+			<div class="chargeLimitation" data-lp="2">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
+					<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="2"> EV-SoC
+						</label>
 					</div>
-					<span id="msmodusslp2" <?php if($msmoduslp2old != 2) echo 'style="display: none;"' ?>>
-						<br><br>
-						<label for="sofortsoclp1">SoC</label>
-						<select type="text" name="sofortsoclp2" id="sofortsoclp2">
-						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($sofortsoclp2old == 15) echo 'selected' ?> value="15">15</option>
-							<option <?php if($sofortsoclp2old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($sofortsoclp2old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($sofortsoclp2old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($sofortsoclp2old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($sofortsoclp2old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($sofortsoclp2old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($sofortsoclp2old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($sofortsoclp2old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($sofortsoclp2old == 70) echo 'selected' ?> value="70">70</option>
-							<option <?php if($sofortsoclp2old == 75) echo 'selected' ?> value="75">75</option>
-							<option <?php if($sofortsoclp2old == 80) echo 'selected' ?> value="80">80</option>
-							<option <?php if($sofortsoclp2old == 85) echo 'selected' ?> value="85">85</option>
-							<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
-							<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
-						</select> %
-					</span>
-                  	<span id="msmodusnlp2" <?php if($msmoduslp2old != 0) echo 'style="display: none;"' ?>>
-			        	<br><br>
-					</span>
-                </div>
-
-            	<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-                    <label for="msmoduslp3"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="lademlp3check" id="msmoduslp3">
-                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Energie</option>
-                    </select>
-					<span id="msmodusmlp3" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
-						<br><br>
-						<label for="lademlp3">Energie</label>
-						<select type="text" name="lademlp3" id="lademlp3">
-							<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
-							<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
-							<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
-							<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
-							<option <?php if($lademkwhs2old == 8) echo 'selected' ?> value="8">8</option>
-							<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($lademkwhs2old == 12) echo 'selected' ?> value="12">12</option>
-							<option <?php if($lademkwhs2old == 14) echo 'selected' ?> value="14">14</option>
-							<option <?php if($lademkwhs2old == 16) echo 'selected' ?> value="16">16</option>
-							<option <?php if($lademkwhs2old == 18) echo 'selected' ?> value="18">18</option>
-							<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
-							<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
-							<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($lademkwhs2old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($lademkwhs2old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
-						</select> kWh
-						<br><br>
-						<button class="resetTargetChargingBtn" data-lp="3">Reset</button>
-					</span>
-                    <span id="msmodusnlp3" <?php if($lademstats2old != 0) echo 'style="display: none;"' ?>></span>
 				</div>
-	  		</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/2/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/2/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
+					<label for="lp/2/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/socToChargeTo" min="5" max="100" step="5" value="" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/2/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
+				</div>
+				<div class="form-row vaRow mt-2 regularTextSize" data-option="1,2">
+					<span class="col">Fortschritt: </span>
+					<div class="col progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+						</div>
+					</div>
+					<span class="col">Restzeit: </span>
+					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/2/reset" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
 
+			<div class="chargeLimitation" data-lp="3">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
+					<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/3/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/3/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/3/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/3/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/3/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
+					<span class="col">Fortschritt: </span>
+					<div class="col progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+						</div>
+					</div>
+					<span class="col">Restzeit: </span>
+					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/3/reset" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+<br>
+<br>
 			<div id="targetChargingProgress" class="hide">
 				<div class="row justify-content-center regularTextSize text-center">
 					<div class="col-4" data-lp='1'>
@@ -1077,6 +946,13 @@
 
 		function AwattarMaxPriceClick() {
 			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
+		}
+
+		function chargeLimitationOptionsShowHide(btnGrp, option) {
+			// show/hide all option-parameters in form-rows for selected option
+			var parent = btnGrp.closest('.chargeLimitation[data-lp]');  // get parent div element for charge limitation options
+			$(parent).find('.form-row[data-option*=' + option + ']').show();  // now show option elements for selected option
+			$(parent).find('.form-row[data-option]').not('[data-option*=' + option + ']').hide();  // hide all other option elements
 		}
 
 		function processPreloader(mqttTopic) {
@@ -1238,6 +1114,17 @@
 			            $(divMengeId).hide();
 			            break;
 			    }
+			});
+
+			$('.btn-group-toggle').change(function(event){
+				// only charge limitation has class btn-group-toggle so far
+				// option: 0 = keine, 1 = Energiemenge, 2 = EV-SoC
+				var elementId = $(this).attr('id');
+				var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
+				var topic = getTopicToSendTo(elementId);
+				publish(option, topic);
+				// show/hide respective option-values and progress
+				chargeLimitationOptionsShowHide(this, option);
 			});
 
 			$('.rangeInput').on('input', function() {
