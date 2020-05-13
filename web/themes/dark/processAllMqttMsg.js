@@ -35,9 +35,31 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/config\/get\/pv\//i) ) { processPvConfigMessages(mqttmsg, mqttpayload); }
+
 }  // end handlevar
 
 
+function processPvConfigMessages(mqttmsg, mqttpayload) {
+
+	if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
+		// sets button color in charge mode modal and sets icon in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// battery priority
+				$('#evPriorityBtn').removeClass('btn-success');
+				$('#batteryPriorityBtn').addClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car').addClass('fa-car-battery')
+				break;
+			case '1':
+				// ev priority
+				$('#evPriorityBtn').addClass('btn-success');
+				$('#batteryPriorityBtn').removeClass('btn-success');
+				$('#priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
+			break;
+		}
+	}
+}
 function processSofortConfigMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/config/get/sofort/
 	// called by handlevar
@@ -333,23 +355,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#priorityEvBatteryIcon').hide();
 		}
 	}
-	else if ( mqttmsg == 'openWB/global/priorityModeEVBattery' ) {
-		// sets button color in charge mode modal and sets icon in mode select button
-		switch (mqttpayload) {
-			case '0':
-				// battery priority
-				$('#evPriorityBtn').removeClass('btn-success');
-				$('#batteryPriorityBtn').addClass('btn-success');
-				$('#priorityEvBatteryIcon').removeClass('fa-car').addClass('fa-car-battery')
-				break;
-			case '1':
-				// ev priority
-				$('#evPriorityBtn').addClass('btn-success');
-				$('#batteryPriorityBtn').removeClass('btn-success');
-				$('#priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
-			break;
-		}
-	}
+
 }
 
 function processHousebatteryMessages(mqttmsg, mqttpayload) {
