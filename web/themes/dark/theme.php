@@ -208,9 +208,6 @@
 				</div>
 				<canvas id="canvas"></canvas>
 			</div>
-			<div id="graphoptiondiv" class="hide">
-				<br><br>
-			</div>
 		</div>
 
 		<div class="row text-center bg-darkgrey">
