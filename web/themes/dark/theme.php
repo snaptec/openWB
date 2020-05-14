@@ -703,25 +703,27 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/1/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
 					<label for="lp/1/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/1/socToChargeTo" min="5" max="100" step="5" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/1/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
 				</div>
-				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
-					<span class="col">Fortschritt: </span>
-					<div class="col progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
 						</div>
 					</div>
-					<span class="col">Restzeit: </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/1/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/1/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
@@ -746,25 +748,27 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/2/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/2/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/2/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
 					<label for="lp/2/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/2/socToChargeTo" min="5" max="100" step="5" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/2/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
 				</div>
-				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
-					<span class="col">Fortschritt: </span>
-					<div class="col progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
 						</div>
 					</div>
-					<span class="col">Restzeit: </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/2/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/2/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
@@ -786,18 +790,20 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/3/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/3/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/3/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/3/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
-				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
-					<span class="col">Fortschritt: </span>
-					<div class="col progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
 						</div>
 					</div>
-					<span class="col">Restzeit: </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/3/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/3/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
@@ -819,18 +825,20 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/4/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/4/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/4/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/4/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
-				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
-					<span class="col">Fortschritt: </span>
-					<div class="col progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
 						</div>
 					</div>
-					<span class="col">Restzeit: </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/4/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/4/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
@@ -852,18 +860,125 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
 					<label for="lp/5/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="lp/5/energyToCharge" min="2" max="100" step="2" value="" data-topicprefix="openWB/config/get/sofort/">
+						<input type="range" class="form-control-range rangeInput" id="lp/5/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
 					<label for="lp/5/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
 				</div>
-				<div class="form-row vaRow mt-2 regularTextSize" data-option="1">
-					<span class="col">Fortschritt: </span>
-					<div class="col progress active">
-						<div class="progress-bar progress-bar-success progress-bar-striped" id="test" role="progressbar">
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
 						</div>
 					</div>
-					<span class="col">Restzeit: </span>
-					<input class="btn btn-sm btn-primary regularTextSize" type="button" id="lp/5/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/5/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="6">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
+					<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/6/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/6/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/6/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/6/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/6/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/6/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="7">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
+					<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/7/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/7/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/7/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/7/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/7/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/7/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="8">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
+					<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/8/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/8/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/8/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/8/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/8/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/8/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
@@ -962,9 +1077,9 @@
 	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- some helper functions-->
-	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200512-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200514-a"></script>
 	<!-- data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200506-b"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200514-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -1112,8 +1227,7 @@
 
 			$('.btn[value="Reset"]').click(function(event){
 				var topic = getTopicToSendTo($(this).attr('id'));
-				console.log(topic);
-				//publish("1", topic);
+				publish("1", topic);
     		});
 
 			$('.sofortladenLadezielSelektor').change(function(event){
@@ -1168,6 +1282,17 @@
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
      				label.removeClass('text-danger');
+					// if rangeInput is for chargeLimitation, recalc progress
+					if ( id.includes('/energyToCharge') ) {
+						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
+						var element = parent.find('.progress-bar');  // now get parents progressbar
+						var actualCharged = element.data('actualCharged');  // get stored value
+						if ( isNaN(actualCharged) ) {
+							actualCharged = 0;  // minimum value
+						}
+						var progress = (actualCharged / value * 100).toFixed(0);
+						element.width(progress+"%");
+					}
   				}, 2000);
 			});
 

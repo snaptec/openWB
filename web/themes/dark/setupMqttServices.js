@@ -113,6 +113,15 @@ var topicsToSubscribe = [
 	["openWB/lp/6/kWhChargedSincePlugged", 1],
 	["openWB/lp/7/kWhChargedSincePlugged", 1],
 	["openWB/lp/8/kWhChargedSincePlugged", 1],
+	// geladene kWh seit Reset Lademengenbegrenzung
+	["openWB/lp/1/kWhActualCharged", 1],
+	["openWB/lp/2/kWhActualCharged", 1],
+	["openWB/lp/3/kWhActualCharged", 1],
+	["openWB/lp/4/kWhActualCharged", 1],
+	["openWB/lp/5/kWhActualCharged", 1],
+	["openWB/lp/6/kWhActualCharged", 1],
+	["openWB/lp/7/kWhActualCharged", 1],
+	["openWB/lp/8/kWhActualCharged", 1],
 	// Durchschnittsverbrauch
 	["openWB/lp/1/energyConsumptionPer100km", 1],
 	["openWB/lp/2/energyConsumptionPer100km", 1],
@@ -172,6 +181,11 @@ var topicsToSubscribe = [
 	["openWB/lp/1/TimeRemaining", 1],
 	["openWB/lp/2/TimeRemaining", 1],
 	["openWB/lp/3/TimeRemaining", 1],
+	["openWB/lp/4/TimeRemaining", 1],
+	["openWB/lp/5/TimeRemaining", 1],
+	["openWB/lp/6/TimeRemaining", 1],
+	["openWB/lp/7/TimeRemaining", 1],
+	["openWB/lp/8/TimeRemaining", 1],
 
 	["openWB/lp/1/boolDirectChargeMode_none_kwh_soc", 1],
 	["openWB/lp/2/boolDirectChargeMode_none_kwh_soc", 1],

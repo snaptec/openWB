@@ -522,6 +522,23 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i ) ) {
+		// energy charged since reset of limitation
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		if ( isNaN(mqttpayload) ) {
+			mqttpayload = 0;
+		}
+		var parent = $('[data-lp="' + index + '"]');  // get parent div element for charge limitation
+		var element = parent.find('.progress-bar');  // now get parents progressbar
+		element.data('actualCharged', mqttpayload);  // store value received
+		var limitElementId = 'lp/' + index + '/energyToCharge';
+		var limit = $('#' + $.escapeSelector(limitElementId)).val();  // slider value
+		if ( isNaN(limit) || limit < 2 ) {
+			limit = 2;  // minimum value
+		}
+		var progress = (mqttpayload / limit * 100).toFixed(0);
+		element.width(progress+"%");
+	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
 		// soc of ev at respective charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -536,7 +553,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		$('#restzeitlp' + index).text(mqttpayload);
+		var parent = $('.chargeLimitation[data-lp="' + index + '"]');  // get parent div element for charge limitation
+		var element = parent.find('.restzeitLp');  // get element
+		$(element).text('Restzeit ' + mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargeatnight$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -851,6 +870,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	}
 
 }
+
 function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
 	// called by handlevar
@@ -897,11 +917,6 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 				}
 			}
 		});
-
-
-
-
-
 	}
 	else if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
