@@ -2,11 +2,10 @@
 <html lang="de">
 
 <head>
-	<!-- dark19_01 theme for openWB -->
+	<!-- theme for openWB layout for standard and dark, only css is different-->
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
-	<?php include ("values.php");?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,16 +47,32 @@
 	<!-- Font Awesome, all styles -->
   	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
-    <!-- include special Theme style -->
-	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css?ver=20200405-b">
-
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	<script>
+		function getCookie(cname) {
+			var name = cname + '=';
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return '';
+		}
+		var themeCookie = getCookie('openWBTheme');
+		// include special Theme style
+		$('head').append('<link rel="stylesheet" type="text/css" href="themes/' + themeCookie + '/style.css">');
+	</script>
 </head>
 
 <body>
-	<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes/standard/navbar.php'; ?>
 	<!-- Preloader with Progress Bar -->
 	<div class="loader bg-white">
 		<div class="loader-container regularTextSize">
@@ -83,8 +98,9 @@
 	</div>
 
 	<!-- Landing Page -->
+	<div id="nav-placeholder">
+	</div>
 	<div class="container">
-
 		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
@@ -1056,23 +1072,11 @@
 		</div>
 	</div>
 
-
-	<!-- load Chart.js library -->
-	<script src="js/Chart.bundle.js"></script>
-
-	<!-- load mqtt library -->
-	<script src = "js/mqttws31.js" ></script>
-
-	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
-	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
-	<!-- some helper functions-->
-	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200514-a"></script>
-	<!-- data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200514-a"></script>
-
 	<!-- some scripts -->
-	<script type="text/javascript">
+	<script>
+
+		// load navbar
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1140,8 +1144,31 @@
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200506-a");
+			// load scripts synchronously in order specified
+			var scriptsToLoad = [
+				// load Chart.js library
+				'js/Chart.bundle.js',
+				// load mqtt library
+				'js/mqttws31.js',
+				// some helper functions
+				'themes/' + themeCookie + '/helperFunctions.js?ver=20200514-a',
+				// functions for processing messages
+				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-a',
+				// respective Chart.js definition live
+				'themes/' + themeCookie + '/livechart.js?ver=20200506-a',
+				// respective Chart.js definition awattar
+				'themes/' + themeCookie + '/awattarchart.js?ver=20200331-a',
+				// functions performing mqtt and start mqtt-service
+				'themes/' + themeCookie + '/setupMqttServices.js?ver=20200506-a',
+			];
+			scriptsToLoad.forEach(function(src) {
+				var script = document.createElement('script');
+				script.src = src;
+				script.async = false;
+				document.body.appendChild(script);
+			});
 
+			// load MQTT services
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
 				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
