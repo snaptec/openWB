@@ -14,7 +14,7 @@ function updateLabel(elementId) {
     var label = $('label[for="' + elementId + '"].valueLabel');
     if ( label.length == 1 ) {
         var suffix = label.attr('suffix');
-        var text = element.val();
+        var text = parseFloat(element.val()).toLocaleString(undefined, {maximumFractionDigits: 2});
         if ( suffix != '' ) {
             text += ' ' + suffix;
         }

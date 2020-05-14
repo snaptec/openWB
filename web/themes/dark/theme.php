@@ -187,7 +187,6 @@
 			</div>
 		</div>
 
-
 		<div id="webhooks" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">
 			<div id="hook1" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 1
@@ -652,35 +651,29 @@
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
+			<div class="hide" id="awattar">
 				<hr color="white">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Awattar</h3>
+					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
 				</div>
-				<div class="row justify-content-center">
-					<div class="col-sm-12 text-center" style="height: 150px;">
+				<div class="row regularTextSize">
+					<div class="col text-center">
+						aktueller Awattar-Preis: <span id="ActualPriceForCharging"></span> Cent/kWh
+					</div>
+				</div>
+				<div class="row justify-content-center my-2">
+					<div class="col text-center" style="height: 150px;">
 						<canvas id="awattarcanvas"></canvas>
 					</div>
 				</div>
-				<div class="row vaRow justify-content-center" id="sliderawattardiv">
-					<div class="col-6 col-md-4">
-						<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-8" max="12" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
-					<div class="col-sm-5 col-md-6 regularTextSize text-center">
-						<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span> Cent/kWh</label>
-					</div>
-					<script>
-						var aslider1 = document.getElementById("awattar1s");
-						var aoutput1 = document.getElementById("awattar1l");
-						aoutput1.innerHTML = aslider1.value;
-						aslider1.oninput = function() {
-							aoutput1.innerHTML = this.value;
-							AwattarMaxPriceClick();
-						}
-					</script>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
-
-			</div> <!--/ awattardiv -->
+			</div>  <!--/ awattar -->
 
 			<div class="chargeLimitation" data-lp="1">
 				<hr color="white">
@@ -1086,10 +1079,6 @@
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
-
-		function AwattarMaxPriceClick() {
-			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
-		}
 
 		function chargeLimitationOptionsShowHide(btnGrp, option) {
 			// show/hide all option-parameters in form-rows for selected option

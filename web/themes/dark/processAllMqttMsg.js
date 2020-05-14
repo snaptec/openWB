@@ -264,8 +264,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
 		if ( mqttpayload == '1' ) {
 			$('#awattarEnabledIcon').show();
+			$('#awattar').show();
 		} else {
 			$('#awattarEnabledIcon').hide();
+			$('#awattar').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
@@ -282,8 +284,10 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		loadawattargraph();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
-		$('#awattar1s').val(mqttpayload);
-		$('#awattar1l').text(mqttpayload);
+		setInputValue('MaxPriceForCharging', mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
+		$('#ActualPriceForCharging').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}));
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode
