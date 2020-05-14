@@ -582,7 +582,7 @@
 		</div>
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungen" class="hide" name="sofortll" action="./tools/sofortll.php" method="POST">
+	    <form id="sofortladenEinstellungen" class="hide">
 
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
