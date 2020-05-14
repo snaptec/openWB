@@ -420,22 +420,21 @@
             </div>
         </div>
 
-		<hr color="white">
                 <!-- SmartHome info header -->
-                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
-                        <div class="col-3 px-0">
-                                Gerät
-                        </div>
-                        <div class="col-3 px-0">
-                                Verbrauch
-                        </div>
-                        <div class="col-3 px-0">
-                                Modus
+        <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
+			<hr color="white">
+			<div class="col-3 px-0">
+                Gerät
+            </div>
+            <div class="col-3 px-0">
+                Verbrauch
+            </div>
+            <div class="col-3 px-0">
+                Modus
 			</div>
-	                <div class="col-3 px-0">
-                                Laufzeit
-                        </div>
-
+			<div class="col-3 px-0">
+                Laufzeit
+            </div>
 		</div>
 		<!-- SmartHome Device 1 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="1">
@@ -584,6 +583,7 @@
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungen" class="hide">
 
+			<hr color="white">
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
@@ -682,8 +682,8 @@
 
 			</div> <!--/ awattardiv -->
 
-			<hr color="white">
 			<div class="chargeLimitation" data-lp="1">
+				<hr color="white">
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
 				</div>
@@ -983,7 +983,7 @@
 			</div>
 
 		</form>
-
+		<br>
 	<!-- modal chargemode-select-window -->
 	<div class="modal fade" id="chargeModeModal">
 		<div class="modal-dialog">
