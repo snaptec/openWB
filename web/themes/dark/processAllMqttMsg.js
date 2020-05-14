@@ -277,7 +277,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
-			  csvaData.push(rawacsv[i].split(','));
+			csvaData.push(rawacsv[i].split(','));
 		}
 		awattartime = getCol(csvaData, 0);
 		graphawattarprice = getCol(csvaData, 1);
