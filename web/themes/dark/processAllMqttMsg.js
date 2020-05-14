@@ -588,9 +588,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = $(parent).find('.plugstatLp');  // now get parents respective child element
 		if ( mqttpayload == 1 ) {
-			$(element).removeClass('text-lightgrey').addClass('text-green');
+			$(element).removeClass('text-orange').addClass('text-green');
 		} else {
-			$(element).removeClass('text-green').addClass('text-lightgrey');
+			$(element).removeClass('text-green').addClass('text-orange');
 		}
 	}
 

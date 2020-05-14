@@ -253,7 +253,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -276,7 +276,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -299,7 +299,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -322,7 +322,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -345,7 +345,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -368,7 +368,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -391,7 +391,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -414,7 +414,7 @@
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>

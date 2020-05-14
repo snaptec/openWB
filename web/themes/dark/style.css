@@ -26,7 +26,7 @@ body {
 body > .container {
 	    padding: 55px 15px 0;
     }
-    
+
 .loader {
     position: absolute;
     z-index: 999999;
@@ -131,6 +131,10 @@ body > .container {
 
 .text-white {
     color: white;
+}
+
+.text-orange {
+    color: #ff8c1a;
 }
 
 .text-black {
