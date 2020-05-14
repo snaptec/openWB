@@ -24,7 +24,8 @@ function convertToKw(dataColum) {
 function getIndex(topic) {
 	// get occurence of numbers between / / in topic
 	// since this is supposed to be the index like in openwb/lp/4/w
-	var index = topic.match(/(?<=\/)[0-9]+(?=\/)/g)[0];
+	// no lookbehind supported by safari, so workaround with replace needed
+	var index = topic.match(/(?:\/)([0-9]+)(?=\/)/g)[0].replace(/[^0-9]+/g, '');
 	if ( typeof index === 'undefined' ) {
 		index = '';
 	}

@@ -1153,7 +1153,7 @@
 				// some helper functions
 				'themes/' + themeCookie + '/helperFunctions.js?ver=20200514-a',
 				// functions for processing messages
-				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-a',
+				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-d',
 				// respective Chart.js definition live
 				'themes/' + themeCookie + '/livechart.js?ver=20200506-a',
 				// respective Chart.js definition awattar
