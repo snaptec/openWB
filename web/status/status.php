@@ -346,9 +346,9 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/pvkwhk",
+					url: "/openWB/ramdisk/pvkwh",
 					complete: function(request){
-						$("#pvkwhdiv").html(request.responseText);
+						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
 					}
 				});
 				$.ajax({
