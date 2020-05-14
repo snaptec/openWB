@@ -26,13 +26,15 @@ body {
 body > .container {
 	    padding: 55px 15px 0;
     }
+    
 .loader {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 99;
+    position: absolute;
+    z-index: 999999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
 }
 .loader-container {
 	margin-top: 150px;
