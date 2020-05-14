@@ -339,4 +339,9 @@ function publish(payload, topic) {
 	message.qos = 2;
 	message.retained = true;
 	client.send(message);
+	var message = new Messaging.Message("local client uid: " + clientuid + " sent: " + topic);
+	message.destinationName = "openWB/set/system/topicSender";
+	message.qos = 2;
+	message.retained = true;
+	client.send(message);
 }

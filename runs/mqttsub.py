@@ -430,7 +430,10 @@ def on_message(client, userdata, msg):
 
 
 
+    if (msg.topic == "openWB/set/system/topicSender"):
+        if len(msg.payload) >= 3 and len(msg.payload) <=100:
 
+            client.publish("openWB/set/system/topicSender", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/GetRemoteSupport"):
         if len(msg.payload) >= 5 and len(msg.payload) <=30:
             token=msg.payload.decode("utf-8")
@@ -916,13 +919,13 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
 
-
-    theTime = datetime.now()
-    timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
-    file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
-    sys.stdout = file
-    print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
-    file.close()
+    if (len(msg.payload) >= 1): 
+        theTime = datetime.now()
+        timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
+        file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+        sys.stdout = file
+        print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
+        file.close()
 
 client.on_connect = on_connect
 client.on_message = on_message
