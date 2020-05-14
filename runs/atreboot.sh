@@ -2553,7 +2553,7 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	echo "test" > /dev/null
 else
-	python3 /var/www/html/openWB/runs/smarthomehandler.py &
+	su -c "python3 /var/www/html/openWB/runs/smarthomehandler.py &" pi
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
