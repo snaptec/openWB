@@ -487,7 +487,7 @@ function processPvMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(pvDailyYield) ) {
 			pvDailyYield = 0;
 		}
-		if ( pvDailyYield > 0 ) {
+		if ( pvDailyYield >= 0 ) {
 			var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
 			$('#pvdailyyield').text(pvDailyYieldStr);
 		} else {
