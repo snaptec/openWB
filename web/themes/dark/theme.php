@@ -2,11 +2,10 @@
 <html lang="de">
 
 <head>
-	<!-- dark19_01 theme for openWB -->
+	<!-- theme for openWB layout for standard and dark, only css is different-->
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
-	<?php include ("values.php");?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,16 +47,32 @@
 	<!-- Font Awesome, all styles -->
   	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
-    <!-- include special Theme style -->
-	<link rel="stylesheet" type="text/css" href="themes/<?php echo $_COOKIE['openWBTheme'];?>/style.css?ver=20200405-b">
-
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	<script>
+		function getCookie(cname) {
+			var name = cname + '=';
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return '';
+		}
+		var themeCookie = getCookie('openWBTheme');
+		// include special Theme style
+		$('head').append('<link rel="stylesheet" type="text/css" href="themes/' + themeCookie + '/style.css">');
+	</script>
 </head>
 
 <body>
-	<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes/standard/navbar.php'; ?>
 	<!-- Preloader with Progress Bar -->
 	<div class="loader bg-white">
 		<div class="loader-container regularTextSize">
@@ -83,8 +98,9 @@
 	</div>
 
 	<!-- Landing Page -->
+	<div id="nav-placeholder">
+	</div>
 	<div class="container">
-
 		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
@@ -187,7 +203,6 @@
 			</div>
 		</div>
 
-
 		<div id="webhooks" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">
 			<div id="hook1" class="col-3 m-1 bg-danger hide">
 				ext. Gerät 1
@@ -208,9 +223,6 @@
 					Graph lädt, bitte warten...
 				</div>
 				<canvas id="canvas"></canvas>
-			</div>
-			<div id="graphoptiondiv" class="hide">
-				<br><br>
 			</div>
 		</div>
 
@@ -237,11 +249,11 @@
 		</div>
 
 		<!-- chargepoint info data lp1-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="1">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="1">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -260,11 +272,11 @@
         </div>
 
 		<!-- chargepoint info data lp2-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="2">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="2">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -283,11 +295,11 @@
         </div>
 
 		<!-- chargepoint info data lp3-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="3">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="3">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -306,11 +318,11 @@
         </div>
 
 		<!-- chargepoint info data lp4-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="4">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="4">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -329,11 +341,11 @@
         </div>
 
 		<!-- chargepoint info data lp5-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="5">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="5">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -352,11 +364,11 @@
         </div>
 
 		<!-- chargepoint info data lp6-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="6">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="6">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -375,11 +387,11 @@
         </div>
 
 		<!-- chargepoint info data lp7-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="7">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="7">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -398,11 +410,11 @@
         </div>
 
 		<!-- chargepoint info data lp8-->
-		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="8">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="8">
 			<div class="col-3 px-0">
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
-				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
 			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
 			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
@@ -420,22 +432,21 @@
             </div>
         </div>
 
-		<hr color="white">
                 <!-- SmartHome info header -->
-                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
-                        <div class="col-3 px-0">
-                                Gerät
-                        </div>
-                        <div class="col-3 px-0">
-                                Verbrauch
-                        </div>
-                        <div class="col-3 px-0">
-                                Modus
+        <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
+			<hr color="white">
+			<div class="col-3 px-0">
+                Gerät
+            </div>
+            <div class="col-3 px-0">
+                Verbrauch
+            </div>
+            <div class="col-3 px-0">
+                Modus
 			</div>
-	                <div class="col-3 px-0">
-                                Laufzeit
-                        </div>
-
+			<div class="col-3 px-0">
+                Laufzeit
+            </div>
 		</div>
 		<!-- SmartHome Device 1 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="1">
@@ -582,329 +593,417 @@
 		</div>
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungen" class="hide" name="sofortll" action="./tools/sofortll.php" method="POST">
+	    <form id="sofortladenEinstellungen" class="hide">
 
+			<hr color="white">
 			<div class="row justify-content-center">
-				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke</h3>
+				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
 
-			<div class="sofortCurrentVisLp1 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/1/current" class="col-3 col-sm-2 col-form-label">LP1:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/1/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp2 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/2/current" class="col-3 col-sm-2 col-form-label">LP2:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
+				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/2/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp3 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/3/current" class="col-3 col-sm-2 col-form-label">LP3:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
+				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/3/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp4 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/4/current" class="col-3 col-sm-2 col-form-label">LP4:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
+				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/4/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp5 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/5/current" class="col-3 col-sm-2 col-form-label">LP5:</label>
-				<div class="col-6 col-sm-4">
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
+				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/5/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp6 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/6/current" class="col-3 col-sm-2 col-form-label">LP6:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
+				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/6/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp7 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/7/current" class="col-3 col-sm-2 col-form-label">LP7:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
+				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/7/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div class="sofortCurrentVisLp8 form-row form-group mb-1 vaRow justify-content-center regularTextSize">
-				<label for="lp/8/current" class="col-3 col-sm-2 col-form-label">LP8:</label>
-				<div class="col-6 col-sm-4">
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
+				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
-				<label for="lp/8/current" class="col-2 col-form-label valueLabel" suffix="A"></label>
+				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
-			<div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
+			<div class="hide" id="awattar">
 				<hr color="white">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Awattar</h3>
+					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
 				</div>
-				<div class="row justify-content-center">
-					<div class="col-sm-12 text-center" style="height: 150px;">
+				<div class="row regularTextSize">
+					<div class="col text-center">
+						aktueller Awattar-Preis: <span id="ActualPriceForCharging"></span> Cent/kWh
+					</div>
+				</div>
+				<div class="row justify-content-center my-2">
+					<div class="col text-center" style="height: 150px;">
 						<canvas id="awattarcanvas"></canvas>
 					</div>
 				</div>
-				<div class="row vaRow justify-content-center" id="sliderawattardiv">
-					<div class="col-6 col-md-4">
-						<input type="range" min="-8" max="12" step="0.10" name="awattar1s" id="awattar1s" class="custom-range">
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-8" max="12" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
-					<div class="col-sm-5 col-md-6 regularTextSize text-center">
-						<label for="awattar1">Maximaler Preis: <span id="awattar1l"></span> Cent/kWh</label>
-					</div>
-					<script>
-						var aslider1 = document.getElementById("awattar1s");
-						var aoutput1 = document.getElementById("awattar1l");
-						aoutput1.innerHTML = aslider1.value;
-						aslider1.oninput = function() {
-							aoutput1.innerHTML = this.value;
-							AwattarMaxPriceClick();
-						}
-					</script>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
+			</div>  <!--/ awattar -->
 
-			</div> <!--/ awattardiv -->
-
-			<hr color="white">
-
-			<div class="row justify-content-center">
-		   		<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung</h3>
-		    </div>
-
-
-			<div class="row justify-content-center text-center regularTextSize">
-				<div class="col-4 targetChargeLp" lp="1">
-					LP1 <span class="nameLp"></span>
+			<div class="chargeLimitation" data-lp="1">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
 				</div>
-				<div class="col-4 targetChargeLp" lp="2">
-					LP2 <span class="nameLp"></span>
-				</div>
-				<div class="col-4 targetChargeLp" lp="3">
-					LP3 <span class="nameLp"></span>
-				</div>
-			</div>
-
-	        <div class="row justify-content-center">
-                <div class="col-4 regularTextSize text-center">
-                    <label for="msmoduslp1"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp1" id="msmoduslp1">
-                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Energie</option>
-                        <option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
-                    </select>
-                    <span id="msmodusmlp1" <?php if($msmoduslp1old != 1) echo 'style="display: none;"' ?>>
-                        <br><br>
-                        <label for="lademlp1">Energie</label>
-                        <select type="text" name="lademlp1" id="lademlp1">
-                        	<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
-                            <option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
-                            <option <?php if($lademkwhold == 4) echo 'selected' ?> value="4">4</option>
-                            <option <?php if($lademkwhold == 6) echo 'selected' ?> value="6">6</option>
-                            <option <?php if($lademkwhold == 8) echo 'selected' ?> value="8">8</option>
-                            <option <?php if($lademkwhold == 10) echo 'selected' ?> value="10">10</option>
-                            <option <?php if($lademkwhold == 12) echo 'selected' ?> value="12">12</option>
-                            <option <?php if($lademkwhold == 14) echo 'selected' ?> value="14">14</option>
-                            <option <?php if($lademkwhold == 16) echo 'selected' ?> value="16">16</option>
-                            <option <?php if($lademkwhold == 18) echo 'selected' ?> value="18">18</option>
-                            <option <?php if($lademkwhold == 20) echo 'selected' ?> value="20">20</option>
-                            <option <?php if($lademkwhold == 25) echo 'selected' ?> value="25">25</option>
-                            <option <?php if($lademkwhold == 30) echo 'selected' ?> value="30">30</option>
-                            <option <?php if($lademkwhold == 35) echo 'selected' ?> value="35">35</option>
-                            <option <?php if($lademkwhold == 40) echo 'selected' ?> value="40">40</option>
-                            <option <?php if($lademkwhold == 45) echo 'selected' ?> value="45">45</option>
-                            <option <?php if($lademkwhold == 50) echo 'selected' ?> value="50">50</option>
-                            <option <?php if($lademkwhold == 55) echo 'selected' ?> value="55">55</option>
-                            <option <?php if($lademkwhold == 60) echo 'selected' ?> value="60">60</option>
-                            <option <?php if($lademkwhold == 65) echo 'selected' ?> value="65">65</option>
-                            <option <?php if($lademkwhold == 70) echo 'selected' ?> value="70">70</option>
-                        </select> kWh
-                        <br><br>
-                        <button class="resetTargetChargingBtn" lp="1">Reset</button>
-                    </span>
-                    <span id="msmodusslp1" <?php if($msmoduslp1old != 2) echo 'style="display: none;"' ?>>
-						<br><br>
-                        <label for="sofortsoclp1">SoC</label>
-                        <select type="text" name="sofortsoclp1" id="sofortsoclp1">
-                        	<option <?php if($sofortsoclp1old == 10) echo 'selected' ?> value="10">10</option>
-                            <option <?php if($sofortsoclp1old == 15) echo 'selected' ?> value="15">15</option>
-                            <option <?php if($sofortsoclp1old == 20) echo 'selected' ?> value="20">20</option>
-                            <option <?php if($sofortsoclp1old == 30) echo 'selected' ?> value="30">30</option>
-                            <option <?php if($sofortsoclp1old == 40) echo 'selected' ?> value="40">40</option>
-                            <option <?php if($sofortsoclp1old == 45) echo 'selected' ?> value="45">45</option>
-                            <option <?php if($sofortsoclp1old == 50) echo 'selected' ?> value="50">50</option>
-                            <option <?php if($sofortsoclp1old == 55) echo 'selected' ?> value="55">55</option>
-                            <option <?php if($sofortsoclp1old == 60) echo 'selected' ?> value="60">60</option>
-                            <option <?php if($sofortsoclp1old == 65) echo 'selected' ?> value="65">65</option>
-                            <option <?php if($sofortsoclp1old == 70) echo 'selected' ?> value="70">70</option>
-                            <option <?php if($sofortsoclp1old == 75) echo 'selected' ?> value="75">75</option>
-                            <option <?php if($sofortsoclp1old == 80) echo 'selected' ?> value="80">80</option>
-                            <option <?php if($sofortsoclp1old == 85) echo 'selected' ?> value="85">85</option>
-                            <option <?php if($sofortsoclp1old == 90) echo 'selected' ?> value="90">90</option>
-                            <option <?php if($sofortsoclp1old == 95) echo 'selected' ?> value="95">95</option>
-                        </select> %
-                    </span>
-                    <span id="msmodusnlp1" <?php if($msmoduslp1old != 0) echo 'style="display: none;"' ?>>
-                    	<br><br>
-                    </span>
-                </div>
-
-				<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-                    <label for="msmoduslp2"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp2" id="msmoduslp2">
-                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Energie</option>
-                        <option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
-                    </select>
-					<div id="msmodusmlp2" <?php if($msmoduslp2old != 1) echo 'style="display: none;"' ?>>
-						<br>
-						<label for="lademlp2">Energie</label>
-						<select type="text" name="lademlp2" id="lademlp2">
-							<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
-							<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
-							<option <?php if($lademkwhs1old == 4) echo 'selected' ?> value="4">4</option>
-							<option <?php if($lademkwhs1old == 6) echo 'selected' ?> value="6">6</option>
-							<option <?php if($lademkwhs1old == 8) echo 'selected' ?> value="8">8</option>
-							<option <?php if($lademkwhs1old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($lademkwhs1old == 12) echo 'selected' ?> value="12">12</option>
-							<option <?php if($lademkwhs1old == 14) echo 'selected' ?> value="14">14</option>
-							<option <?php if($lademkwhs1old == 16) echo 'selected' ?> value="16">16</option>
-							<option <?php if($lademkwhs1old == 18) echo 'selected' ?> value="18">18</option>
-							<option <?php if($lademkwhs1old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($lademkwhs1old == 25) echo 'selected' ?> value="25">25</option>
-							<option <?php if($lademkwhs1old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($lademkwhs1old == 35) echo 'selected' ?> value="35">35</option>
-							<option <?php if($lademkwhs1old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($lademkwhs1old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($lademkwhs1old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($lademkwhs1old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($lademkwhs1old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($lademkwhs1old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($lademkwhs1old == 70) echo 'selected' ?> value="70">70</option>
-						</select> kWh
-						<br><br>
-						<button class="resetTargetChargingBtn" lp="2">Reset</button>
-					</div>
-					<span id="msmodusslp2" <?php if($msmoduslp2old != 2) echo 'style="display: none;"' ?>>
-						<br><br>
-						<label for="sofortsoclp1">SoC</label>
-						<select type="text" name="sofortsoclp2" id="sofortsoclp2">
-						<option <?php if($sofortsoclp2old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($sofortsoclp2old == 15) echo 'selected' ?> value="15">15</option>
-							<option <?php if($sofortsoclp2old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($sofortsoclp2old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($sofortsoclp2old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($sofortsoclp2old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($sofortsoclp2old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($sofortsoclp2old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($sofortsoclp2old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($sofortsoclp2old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($sofortsoclp2old == 70) echo 'selected' ?> value="70">70</option>
-							<option <?php if($sofortsoclp2old == 75) echo 'selected' ?> value="75">75</option>
-							<option <?php if($sofortsoclp2old == 80) echo 'selected' ?> value="80">80</option>
-							<option <?php if($sofortsoclp2old == 85) echo 'selected' ?> value="85">85</option>
-							<option <?php if($sofortsoclp2old == 90) echo 'selected' ?> value="90">90</option>
-							<option <?php if($sofortsoclp2old == 95) echo 'selected' ?> value="95">95</option>
-						</select> %
-					</span>
-                  	<span id="msmodusnlp2" <?php if($msmoduslp2old != 0) echo 'style="display: none;"' ?>>
-			        	<br><br>
-					</span>
-                </div>
-
-            	<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-                    <label for="msmoduslp3"></label>
-                    <select class="sofortladenLadezielSelektor" type="text" name="lademlp3check" id="msmoduslp3">
-                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
-                        <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Energie</option>
-                    </select>
-					<span id="msmodusmlp3" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
-						<br><br>
-						<label for="lademlp3">Energie</label>
-						<select type="text" name="lademlp3" id="lademlp3">
-							<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
-							<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
-							<option <?php if($lademkwhs2old == 4) echo 'selected' ?> value="4">4</option>
-							<option <?php if($lademkwhs2old == 6) echo 'selected' ?> value="6">6</option>
-							<option <?php if($lademkwhs2old == 8) echo 'selected' ?> value="8">8</option>
-							<option <?php if($lademkwhs2old == 10) echo 'selected' ?> value="10">10</option>
-							<option <?php if($lademkwhs2old == 12) echo 'selected' ?> value="12">12</option>
-							<option <?php if($lademkwhs2old == 14) echo 'selected' ?> value="14">14</option>
-							<option <?php if($lademkwhs2old == 16) echo 'selected' ?> value="16">16</option>
-							<option <?php if($lademkwhs2old == 18) echo 'selected' ?> value="18">18</option>
-							<option <?php if($lademkwhs2old == 20) echo 'selected' ?> value="20">20</option>
-							<option <?php if($lademkwhs2old == 25) echo 'selected' ?> value="25">25</option>
-							<option <?php if($lademkwhs2old == 30) echo 'selected' ?> value="30">30</option>
-							<option <?php if($lademkwhs2old == 35) echo 'selected' ?> value="35">35</option>
-							<option <?php if($lademkwhs2old == 40) echo 'selected' ?> value="40">40</option>
-							<option <?php if($lademkwhs2old == 45) echo 'selected' ?> value="45">45</option>
-							<option <?php if($lademkwhs2old == 50) echo 'selected' ?> value="50">50</option>
-							<option <?php if($lademkwhs2old == 55) echo 'selected' ?> value="55">55</option>
-							<option <?php if($lademkwhs2old == 60) echo 'selected' ?> value="60">60</option>
-							<option <?php if($lademkwhs2old == 65) echo 'selected' ?> value="65">65</option>
-							<option <?php if($lademkwhs2old == 70) echo 'selected' ?> value="70">70</option>
-						</select> kWh
-						<br><br>
-						<button class="resetTargetChargingBtn" lp="3">Reset</button>
-					</span>
-                    <span id="msmodusnlp3" <?php if($lademstats2old != 0) echo 'style="display: none;"' ?>></span>
-				</div>
-	  		</div>
-
-			<div id="targetChargingProgress" class="hide">
-				<div class="row justify-content-center regularTextSize text-center">
-					<div class="col-4 targetChargeLp" lp='1'>
-						<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
-					</div>
-					<div class="col-4 targetChargeLp" lp='2'>
-						<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
-					</div>
-					<div class="col-4 targetChargeLp" lp='3'>
-						<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
+					<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
+						</label>
 					</div>
 				</div>
-
-				<div class="row justify-content-center regularTextSize text-center">
-					<div class="col-4 targetChargeLp" lp='1'>
-						Restzeit <span id="restzeitlp1"></span>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/1/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
 					</div>
-					<div class="col-4 targetChargeLp" lp='2'>
-						Restzeit <span id="restzeitlp2"></span>
+					<label for="lp/1/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
+					<label for="lp/1/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/1/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
 					</div>
-					<div class="col-4 targetChargeLp" lp='3'>
-						Restzeit <span id="restzeitlp3"></span>
+					<label for="lp/1/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
 					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/1/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col text-center">
-					<button type="submit" class="btn btn-green">Save</button>
+			<div class="chargeLimitation" data-lp="2">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
+					<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/2/chargeLimitation" data-option="2"> EV-SoC
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/2/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/2/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="2">
+					<label for="lp/2/socToChargeTo" class="col-3 col-form-label text-right">SoC:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/2/socToChargeTo" min="5" max="100" step="5" value="5" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/2/socToChargeTo" class="col-3 col-form-label valueLabel" suffix="%"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/2/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="3">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
+					<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/3/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/3/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/3/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/3/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/3/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/3/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="4">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
+					<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/4/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/4/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/4/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/4/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/4/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/4/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="5">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
+					<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/5/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/5/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/5/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/5/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/5/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/5/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="6">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
+					<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/6/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/6/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/6/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/6/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/6/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/6/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="7">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
+					<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/7/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/7/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/7/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/7/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/7/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/7/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
+				</div>
+			</div>
+
+			<div class="chargeLimitation" data-lp="8">
+				<hr color="white">
+				<div class="row justify-content-center">
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+				</div>
+				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
+					<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/8/chargeLimitation" data-option="0"> keine
+						</label>
+						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+							<input type="radio" name="lp/8/chargeLimitation" data-option="1"> Energiemenge
+						</label>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize" data-option="1">
+					<label for="lp/8/energyToCharge" class="col-3 col-form-label text-right">Energie:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="lp/8/energyToCharge" min="2" max="100" step="2" value="2" data-topicprefix="openWB/config/get/sofort/">
+					</div>
+					<label for="lp/8/energyToCharge" class="col-3 col-form-label valueLabel" suffix="kWh"></label>
+				</div>
+				<div class="form-row mt-2 justify-content-center regularTextSize" data-option="1">
+					<div class="col col-sm-6">
+						<span class="progress-label">Fortschritt: </span>
+						<span class="restzeitLp pull-right"></span>
+						<div class="progress active limitation-progress">
+							<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-actualCharged="0">
+							</div>
+						</div>
+					</div>
+					<input class="btn btn-sm btn-primary regularTextSize ml-2" type="button" id="lp/8/resetEnergyToCharge" value="Reset" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 			</div>
 
 		</form>
-
-
-<!-- end old code-->
-
-
+		<br>
 	<!-- modal chargemode-select-window -->
 	<div class="modal fade" id="chargeModeModal">
 		<div class="modal-dialog">
@@ -965,7 +1064,7 @@
 						</div>
 					</span>
 					<hr>
-					
+
 					<div class="row">
 						<div class="col text-center text-grey">
 							70% beachten im Lademodus PV-Laden:
@@ -978,7 +1077,7 @@
 							</button>
 						</div>
 					</div>
-					
+
 
 				</div> <!-- /modal body -->
 
@@ -987,29 +1086,20 @@
 		</div>
 	</div>
 
-
-	<!-- load Chart.js library -->
-	<script src="js/Chart.bundle.js"></script>
-
-	<!-- load mqtt library -->
-	<script src = "js/mqttws31.js" ></script>
-
-	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
-	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
-	<!-- some helper functions-->
-	<script src="themes/<?php echo $themeCookie ?>/helperFunctions.js?ver=20200512-a"></script>
-	<!-- data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200506-b"></script>
-
 	<!-- some scripts -->
-	<script type="text/javascript">
+	<script>
+
+		// load navbar
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
 
-		function AwattarMaxPriceClick() {
-			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
+		function chargeLimitationOptionsShowHide(btnGrp, option) {
+			// show/hide all option-parameters in form-rows for selected option
+			var parent = btnGrp.closest('.chargeLimitation[data-lp]');  // get parent div element for charge limitation options
+			$(parent).find('.form-row[data-option*=' + option + ']').show();  // now show option elements for selected option
+			$(parent).find('.form-row[data-option]').not('[data-option*=' + option + ']').hide();  // hide all other option elements
 		}
 
 		function processPreloader(mqttTopic) {
@@ -1068,8 +1158,31 @@
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200506-a");
+			// load scripts synchronously in order specified
+			var scriptsToLoad = [
+				// load Chart.js library
+				'js/Chart.bundle.js',
+				// load mqtt library
+				'js/mqttws31.js',
+				// some helper functions
+				'themes/' + themeCookie + '/helperFunctions.js?ver=20200514-a',
+				// functions for processing messages
+				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-d',
+				// respective Chart.js definition live
+				'themes/' + themeCookie + '/livechart.js?ver=20200506-a',
+				// respective Chart.js definition awattar
+				'themes/' + themeCookie + '/awattarchart.js?ver=20200331-a',
+				// functions performing mqtt and start mqtt-service
+				'themes/' + themeCookie + '/setupMqttServices.js?ver=20200506-a',
+			];
+			scriptsToLoad.forEach(function(src) {
+				var script = document.createElement('script');
+				script.src = src;
+				script.async = false;
+				document.body.appendChild(script);
+			});
 
+			// load MQTT services
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
 				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
@@ -1128,6 +1241,7 @@
 					publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
 				}
 			});
+
 			$('.70PvBtn').click(function(event){
 				// 0 deaktiviert, 1 aktiviert
 				var element = document.getElementById('70PvBtn');
@@ -1137,15 +1251,10 @@
 					publish("1", "openWB/set/pv/NurPV70Status");
 				}
 			});
-			$('.resetTargetChargingBtn').click(function(event){
-				var lp = $(this).attr("lp");
-				$.ajax({
-			        type: "POST",
-			        url: './tools/resetlpladem.php',
-			        data:{action:'resetlp' + lp},
-			        success:function(html) {
-					}
-        		});
+
+			$('.btn[value="Reset"]').click(function(event){
+				var topic = getTopicToSendTo($(this).attr('id'));
+				publish("1", topic);
     		});
 
 			$('.sofortladenLadezielSelektor').change(function(event){
@@ -1173,6 +1282,17 @@
 			    }
 			});
 
+			$('.btn-group-toggle').change(function(event){
+				// only charge limitation has class btn-group-toggle so far
+				// option: 0 = keine, 1 = Energiemenge, 2 = EV-SoC
+				var elementId = $(this).attr('id');
+				var option = $('input[name="' + elementId + '"]:checked').data('option').toString();
+				var topic = getTopicToSendTo(elementId);
+				publish(option, topic);
+				// show/hide respective option-values and progress
+				chargeLimitationOptionsShowHide(this, option);
+			});
+
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');
@@ -1189,6 +1309,17 @@
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
      				label.removeClass('text-danger');
+					// if rangeInput is for chargeLimitation, recalc progress
+					if ( id.includes('/energyToCharge') ) {
+						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
+						var element = parent.find('.progress-bar');  // now get parents progressbar
+						var actualCharged = element.data('actualCharged');  // get stored value
+						if ( isNaN(actualCharged) ) {
+							actualCharged = 0;  // minimum value
+						}
+						var progress = (actualCharged / value * 100).toFixed(0);
+						element.width(progress+"%");
+					}
   				}, 2000);
 			});
 

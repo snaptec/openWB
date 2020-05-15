@@ -47,6 +47,7 @@ var topicsToSubscribe = [
 	// awattar topcis
 	["openWB/global/awattar/boolAwattarEnabled", 1],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
+	["openWB/global/awattar/ActualPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
 	// graph topcis
 	//
@@ -113,6 +114,15 @@ var topicsToSubscribe = [
 	["openWB/lp/6/kWhChargedSincePlugged", 1],
 	["openWB/lp/7/kWhChargedSincePlugged", 1],
 	["openWB/lp/8/kWhChargedSincePlugged", 1],
+	// geladene kWh seit Reset Lademengenbegrenzung
+	["openWB/lp/1/kWhActualCharged", 1],
+	["openWB/lp/2/kWhActualCharged", 1],
+	["openWB/lp/3/kWhActualCharged", 1],
+	["openWB/lp/4/kWhActualCharged", 1],
+	["openWB/lp/5/kWhActualCharged", 1],
+	["openWB/lp/6/kWhActualCharged", 1],
+	["openWB/lp/7/kWhActualCharged", 1],
+	["openWB/lp/8/kWhActualCharged", 1],
 	// Durchschnittsverbrauch
 	["openWB/lp/1/energyConsumptionPer100km", 1],
 	["openWB/lp/2/energyConsumptionPer100km", 1],
@@ -172,6 +182,11 @@ var topicsToSubscribe = [
 	["openWB/lp/1/TimeRemaining", 1],
 	["openWB/lp/2/TimeRemaining", 1],
 	["openWB/lp/3/TimeRemaining", 1],
+	["openWB/lp/4/TimeRemaining", 1],
+	["openWB/lp/5/TimeRemaining", 1],
+	["openWB/lp/6/TimeRemaining", 1],
+	["openWB/lp/7/TimeRemaining", 1],
+	["openWB/lp/8/TimeRemaining", 1],
 
 	["openWB/lp/1/boolDirectChargeMode_none_kwh_soc", 1],
 	["openWB/lp/2/boolDirectChargeMode_none_kwh_soc", 1],
@@ -277,6 +292,26 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/6/current", 1],
 	["openWB/config/get/sofort/lp/7/current", 1],
 	["openWB/config/get/sofort/lp/8/current", 1],
+	["openWB/config/get/sofort/lp/1/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/2/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/3/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/4/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/5/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/6/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/7/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/8/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/1/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/2/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/3/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/4/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/5/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/6/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/7/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/8/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
+	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
+
+
         ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
         ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
