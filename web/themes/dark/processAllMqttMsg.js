@@ -224,6 +224,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if (initialread == 0) {
 			window['all'+index+'p'] = mqttpayload;
 			window['all'+index] = 1;
+			console.log(mqttpayload);
 			putgraphtogether();
 		}
 	}
