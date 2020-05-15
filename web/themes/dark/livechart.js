@@ -902,14 +902,14 @@ function showhide(thedataset) {
 }
 
 function subscribeMqttGraphSegments() {
-	for (var segments = 1; segments < 9; segments++) {
+	for (var segments = 1; segments < 17; segments++) {
 		topic = "openWB/graph/" + segments + "alllivevalues";
 		client.subscribe(topic, {qos: 0});
 	}
 }
 
 function unsubscribeMqttGraphSegments() {
-	for (var segments = 1; segments < 9; segments++) {
+	for (var segments = 1; segments < 17; segments++) {
 		topic = "openWB/graph/" + segments + "alllivevalues";
 		client.unsubscribe(topic);
 	}

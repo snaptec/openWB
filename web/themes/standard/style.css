@@ -19,7 +19,7 @@ body > .container {
 	    padding: 55px 15px 0;
     }
 .loader {
-	position: absolute;
+	position: fixed;
 	z-index: 999999;
 	top: 0;
 	left: 0;

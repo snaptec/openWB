@@ -1063,21 +1063,22 @@
 							</div>
 						</div>
 					</span>
-					<hr>
+					<span id='70ModeBtn'>
+						<hr>
 
-					<div class="row">
-						<div class="col text-center text-grey">
-							70% beachten im Lademodus PV-Laden:
+						<div class="row">
+							<div class="col text-center text-grey">
+								70% beachten im Lademodus PV-Laden:
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
-								70 % beachten
-							</button>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
+									70 % beachten
+								</button>
+							</div>
 						</div>
-					</div>
-
+					</span>
 
 				</div> <!-- /modal body -->
 
@@ -1165,15 +1166,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/' + themeCookie + '/helperFunctions.js?ver=20200514-a',
+				'themes/' + themeCookie + '/helperFunctions.js?ver=20200514-b',
 				// functions for processing messages
-				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-d',
+				'themes/' + themeCookie + '/processAllMqttMsg.js?ver=20200514-e',
 				// respective Chart.js definition live
-				'themes/' + themeCookie + '/livechart.js?ver=20200506-a',
+				'themes/' + themeCookie + '/livechart.js?ver=20200506-b',
 				// respective Chart.js definition awattar
-				'themes/' + themeCookie + '/awattarchart.js?ver=20200331-a',
+				'themes/' + themeCookie + '/awattarchart.js?ver=20200331-b',
 				// functions performing mqtt and start mqtt-service
-				'themes/' + themeCookie + '/setupMqttServices.js?ver=20200506-a',
+				'themes/' + themeCookie + '/setupMqttServices.js?ver=20200506-b',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
