@@ -838,7 +838,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'
-			var dev = $(this).closest('[dev]').attr('dev');  // get attribute lp from parent
+			var dev = $(this).closest('[data-dev]').data('dev');  // get attribute lp from parent
 			if ( dev == index ) {
 				if ( $(this).hasClass('enableDevice') ) {
 					// but only apply styles to element in chargepoint info data block
@@ -940,7 +940,7 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		}
 		$(element).text(actualMode);
 		$('.nameDevice').each(function() {  // check all elements of class '.nameDevice'
-			var dev = $(this).closest('[dev]').attr('dev');  // get attribute Device from parent
+			var dev = $(this).closest('[data-dev]').data('dev');  // get attribute Device from parent
 			if ( dev == index ) {
 				if ( $(this).hasClass('enableDevice') ) {
 					// but only apply styles to element in chargepoint info data block
