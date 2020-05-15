@@ -54,8 +54,8 @@
 				$_COOKIE['openWBTheme'] = 'standard';
 				$themeCookie = 'standard';
 			}
-			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.php'; ?> --><?php
-			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.php';
+			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.html'; ?> --><?php
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
 	}
 
