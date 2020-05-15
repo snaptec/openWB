@@ -86,6 +86,9 @@ body > .container {
     padding-right: 0;
     padding-left: 0;
 }
+.row.middle {
+    align-items: center;
+}
 
 .gradient {
     background: -webkit-linear-gradient(black, #f2f2f2, black);
@@ -404,3 +407,4 @@ h3 {
 	--d4bgCol: blue;
 	--d5Col: rgba(230, 50, 220, 0.7);
 	--d5bgCol: blue;
+}

@@ -80,6 +80,9 @@ body > .container {
     padding-right: 0;
     padding-left: 0;
 }
+.row.middle {
+    align-items: center;
+}
 
 .gradient {
     background: -webkit-linear-gradient(black, #f2f2f2, black);
@@ -228,13 +231,8 @@ body > .container {
 	--d8bgCol: blue;
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
+}
 
-
-
-
-    }
-
-    
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query since this is the default in Bootstrap */
 h1 {
