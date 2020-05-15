@@ -267,6 +267,17 @@ h3 {
     font-size: 0.9rem;
 }
 
+@media screen and (max-width: 575px) {
+    #date {
+        padding-right: 0;
+        padding-left: 5px;
+    }
+    #time {
+        padding-right: 5px;
+        padding-left: 0;
+    }
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media screen and (min-width: 576px) {
     h1 {
