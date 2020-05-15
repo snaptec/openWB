@@ -802,8 +802,9 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i ) ) {
+		
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualPowerDevice');  // now get parents respective child element
 		var actualPower = parseInt(mqttpayload, 10);
 		if ( isNaN(actualPower) ) {
@@ -819,7 +820,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	}
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
+		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualRunningTimeDevice');  // now get parents respective child element
 		var actualPower = parseInt(mqttpayload, 10);
 		if ( isNaN(actualPower) ) {
@@ -854,7 +855,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for SH Device
+		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualTemp0Device');  // now get parents respective child element
 		var actualTemp = parseFloat(mqttpayload);
 		if ( isNaN(actualTemp) ) {
@@ -873,7 +874,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	}
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.actualTemp1Device');  // now get parents respective child element
 		var actualTemp = parseFloat(mqttpayload);
 		if ( isNaN(actualTemp) ) {
@@ -889,7 +890,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	}
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('.SmartHomeTemp[dev="' + index + '"]');  // get parent row element for charge point
+		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.actualTemp2Device');  // now get parents respective child element
 		var actualTemp = parseFloat(mqttpayload);
 		if ( isNaN(actualTemp) ) {
