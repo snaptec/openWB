@@ -509,6 +509,11 @@ echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp4
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp5
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp6
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp7
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp8
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp1m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp2m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp3m

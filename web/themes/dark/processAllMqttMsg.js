@@ -632,9 +632,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	    });
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
+
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function() {  // check all elements of class '.nameLp'
-			var lp = $(this).closest('[data-lp]').attr('lp');  // get attribute lp from parent
+			var lp = $(this).closest('[data-lp]').data('lp');  // get attribute lp from parent
 			if ( lp == index ) {
 				if ( $(this).hasClass('enableLp') ) {
 					// but only apply styles to element in chargepoint info data block
@@ -687,7 +688,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i ) ) {
 		// respective charge point configured
-
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		// now show/hide element containing data-lp attribute with value=index
 		switch (mqttpayload) {
