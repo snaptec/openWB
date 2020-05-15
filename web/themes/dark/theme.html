@@ -1202,7 +1202,7 @@
 				var dev = parseInt($(this).closest('[data-dev]').data('dev'));  // get attribute device-# of parent element
 				var isLocked = $(this).hasClass("locked")
 				if ( isLocked ) {
-					if ( !isNaN(dev) && dev > 0 && dev < 9 ) {
+					if ( !isNaN(dev) && dev > 0 && dev < 10 ) {
 						var isEnabled = $(this).hasClass("lpEnabledStyle")
 						if ( isEnabled ) {
 							publish("0", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
