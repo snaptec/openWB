@@ -914,25 +914,23 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_configured$/i ) ) {
 		// respective SH Device configured
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var infoElement = $('.SmartHome[dev="' + index + '"]');  // get row of SH Device
+		var infoElement = $('[data-dev="' + index + '"]');  // get row of SH Device
 		if (mqttpayload == 1) {
 			$(infoElement).show();
 		} else {
 			$(infoElement).hide();
 		}
-		if ( index == 1) {
-			if (mqttpayload == 1) {
-				$('.shInfoHeader').show();
-			} else {
-				$('.shInfoHeader').hide();
-			}
+		var visibleRows = $('[data-dev]:visible');  // show/hide complete block depending on visible rows within
+		if ( visibleRows.length > 0 ) {
+			$('.smartHome').show();
+		} else {
+			$('.smartHome').hide();
 		}
 	}
-	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/mode$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('.SmartHome[dev="' + index + '"]');  // get parent row element for SH Device
 		var element = $(parent).find('.actualModeDevice');  // now get parents respective child element
-
 		if ( mqttpayload == 0 ) {
 			actualMode = "Automatik"
 		} else {
