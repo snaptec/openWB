@@ -1186,7 +1186,7 @@
 			// load MQTT services
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
+				var lp = parseInt($(this).closest('[data-lp]').attr('data-lp'));  // get attribute lp-# of parent element
 				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
 					var isEnabled = $(this).hasClass("lpEnabledStyle")
 					if ( isEnabled ) {
