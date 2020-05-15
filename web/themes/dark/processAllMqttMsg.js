@@ -487,8 +487,13 @@ function processPvMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(pvDailyYield) ) {
 			pvDailyYield = 0;
 		}
-		var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
-		$('#pvdailyyield').text(pvDailyYieldStr);
+		if ( pvDailyYield >= 0 ) {
+			var pvDailyYieldStr = ' (' + pvDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#pvdailyyield').text(pvDailyYieldStr);
+		} else {
+			$('#pvdailyyield').text("");
+		}
+
 	}
 	else if ( mqttmsg == 'openWB/pv/bool70PVDynStatus') {
 		switch (mqttpayload) {
