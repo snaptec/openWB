@@ -71,6 +71,19 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 			break;
 		}
 	}
+	else if ( mqttmsg == 'openWB/config/get/pv/nurpv70dynact' ) {
+		//  and sets icon in mode select button
+		switch (mqttpayload) {
+			case '0':
+				// deaktiviert
+				$('#70ModeBtn').hide();
+				break;
+			case '1':
+				// activiert
+				$('#70ModeBtn').show();
+			break;
+		}
+	}
 }
 
 function processSofortConfigMessages(mqttmsg, mqttpayload) {
@@ -307,6 +320,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 		awattartime = getCol(csvaData, 0);
 		graphawattarprice = getCol(csvaData, 1);
+
 		loadawattargraph();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {

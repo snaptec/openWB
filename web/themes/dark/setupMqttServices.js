@@ -322,7 +322,7 @@ var topicsToSubscribe = [
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
         ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
-
+	["openWB/config/get/pv/nurpv70dynact", 1],
 
 
 
