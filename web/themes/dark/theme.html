@@ -1199,7 +1199,7 @@
 
 			$('.enableDevice').click(function(event){
 				// send mqtt set to enable/disable Device after click
-				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+				var dev = parseInt($(this).closest('[data-dev]').data('dev'));  // get attribute device-# of parent element
 				var isLocked = $(this).hasClass("locked")
 				if ( isLocked ) {
 					if ( !isNaN(dev) && dev > 0 && dev < 9 ) {
@@ -1218,7 +1218,7 @@
 
 			$('.changeSHMode').click(function(event){
 				// send mqtt set to enable/disable Device after click
-				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+				var dev = parseInt($(this).closest('[data-dev]').data('dev'));  // get attribute device-# of parent element
 				if ( $(this).text() == "Automatik" ) {
 						publish("1", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
 					} else {
