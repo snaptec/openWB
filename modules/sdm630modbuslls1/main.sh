@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 if [[ $sdm630lp2source = *virtual* ]]
 then

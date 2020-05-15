@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 zintervallladen=$(( soc_zeronglp2_intervallladen * 6 ))
 zintervall=$(( soc_zeronglp2_intervall * 6 ))

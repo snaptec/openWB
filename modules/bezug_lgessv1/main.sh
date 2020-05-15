@@ -10,7 +10,6 @@
 #            dem Menüpunkt "Systeminformationen"
 #            Mit der Registrierungsnr. kann man sich dann in der 
 #            Rolle "installer" einloggen. 
-. /var/www/html/openWB/openwb.conf
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #

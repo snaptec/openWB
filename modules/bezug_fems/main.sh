@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 watt=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/ActivePower" | jq .value)
 iwh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/_sum/GridBuyActiveEnergy" | jq .value)
 ewh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/_sum/GridSellActiveEnergy" | jq .value)

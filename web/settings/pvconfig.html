@@ -170,15 +170,15 @@
 							</div>
 							<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="lp2options form-row form-group mb-1 vaRow">
 							<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" name="minCurrent" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 							</div>
 							<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
-						<h6 class="mb-0">adaptive Ladung</h6>
-						<div>
+						<h6 class="soclp12options mb-0">adaptive Ladung</h6>
+						<div class="soclp12options">
 							<small>
 								Auswahl der adaptiven Ladung im Modus PV-Laden.
 								Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird.
@@ -186,7 +186,7 @@
 								beide EV mit derselben Anzahl an Phasen laden.
 							</small>
 						</div>
-						<div class="form-row form-group mt-1">
+						<div class="soclp12options form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="boolAdaptiveCharging" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
 								<label class="btn btn-outline-info btn-toggle">
 									<input type="radio" name="boolAdaptiveCharging" autocomplete="off" data-option="0"> ausgeschaltet
@@ -196,15 +196,15 @@
 								</label>
 							</div>
 						</div>
-						<h6 class="mb-0">adaptiver Regelfaktor</h6>
-						<div>
+						<h6 class="soclp12options mb-0">adaptiver Regelfaktor</h6>
+						<div class="soclp12options">
 							<small>
 								Parameter für die Gewichtung bei adaptiver Ladung im Modus PV-Laden.
 								Dieser Parameter ist nur wirksam bei der Einstellung "adaptive Ladung eingeschaltet".
 								Je höher der Faktor, desto stärker wird das EV mit dem kleineren SoC bei der Aufteilung der Ladeleistung bevorzugt.
 							</small>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="soclp12options form-row form-group mb-1 vaRow">
 							<label for="adaptiveChargingFactor" class="col-3 col-sm-2 col-form-label">Faktor:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" data-default="5" data-topicprefix="openWB/config/get/pv/">
@@ -252,66 +252,85 @@
 						EV-SoC-Ladung
 					</div>
 					<div class="card-body">
-						<p class="card-text text-danger">Diese Funktionen sind nur aktiv, wenn ausschließlich LP1 und ein SoC-Modul konfiguriert ist.</p>
-						<h6 class="mb-0">Mindest-SoC</h6>
-						<div>
+						<h6 class="onlysoclp1options mb-0">Mindest-SoC</h6>
+						<div class="onlysoclp1options">
 							<small>
 								Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden.
 								Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.
 							</small>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="onlysoclp1options form-row form-group mb-1 vaRow">
 							<label for="minSocAlwaysToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="minSocAlwaysToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<h6 class="mb-0">Mindest-SoC-Stromstärke</h6>
-						<div>
+						<h6 class="mb-0 onlysoclp1options">Mindest-SoC-Stromstärke</h6>
+						<div class="onlysoclp1options">
 							<small>
 								Parameter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden.
 								Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A.
 								Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.
 							</small>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="form-row onlysoclp1options form-group mb-1 vaRow">
 							<label for="minSocAlwaysToChargeToCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="minSocAlwaysToChargeToCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
-						<h6 class="mb-0">Maximal-SoC</h6>
-						<div>
+						<h6 class="mb-0 onlysoclp1options">Maximal-SoC</h6>
+						<div class="onlysoclp1options">
 							<small>
 								Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden.
 								Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.
 							</small>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="onlysoclp1options form-row form-group mb-1 vaRow">
 							<label for="maxSocToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<p class="card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
-						<div class="form-row form-group mb-1 vaRow">
+						<p class="soclp1options card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
+						<div class="soclp1options form-row form-group mt-1">
+							<div class="col btn-group btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp1" autocomplete="off" data-option="0"> ausgeschaltet
+								</label>
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp1" autocomplete="off" data-option="1"> eingeschaltet
+								</label>
+							</div>
+						</div>
+						<div class="soclp1options form-row form-group mb-1 vaRow">
 							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
+						<div class="soclp2options form-row form-group mt-1">
+							<div class="col btn-group btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp2" autocomplete="off" data-option="0"> ausgeschaltet
+								</label>
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="socLimitationLp2" autocomplete="off" data-option="1"> eingeschaltet
+								</label>
+							</div>
+						</div>
+						<div class="soclp2options form-row form-group mb-1 vaRow">
 							<label for="maxSoclp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 							</div>
 							<label for="maxSocLp2" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<div>
+						<div class="soclp2options">
 							<small>
 								Parameter in Prozent [%] für den Maximal-SoC am LP1 bzw. LP2 im Modus PV-Laden.
 								Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
@@ -403,7 +422,7 @@
 							</small>
 						</div>
 						<div class="form-row form-group mb-0 vaRow">
-							<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">LP1:</label>
+							<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">Speicher:</label>
 							<div class="col-6 col-sm-4">
 								<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
 							</div>
@@ -583,7 +602,64 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script type="text/javascript">
+			var soc1vis
+			var soc2vis
+			var lp1vis
+			var lp2vis
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity on buttons
+				
+				if ( elementId == "boolSocConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp1options').hide();
+						soc1vis = 0;
+					} else {
+						$('.soclp1options').show();
+						soc1vis = 1;
+					}
+				}
+				if ( elementId == "boolSocConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp2options').hide();
+						soc2vis = 0;
+					} else {
+						$('.soclp2options').show();
+						soc2vis = 1;
+					}
+				}
+				if ( soc1vis == 1 && soc2vis == 0){
+					$('.onlysoclp1options').show();
+					$('.soclp1options').hide();
 
+				} else {
+					$('.onlysoclp1options').hide();
+				}
+				if ( soc1vis == 1 && soc2vis == 1){
+					$('.soclp12options').show();
+
+				} else {
+					$('.soclp12options').hide();
+				}
+
+				if ( elementId == "boolChargePointConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.lp1options').hide();
+						lp1vis = 0;
+					} else {
+						$('.lp1options').show();
+						lp1vis = 1;
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.lp2options').hide();
+						lp2vis = 0;
+					} else {
+						$('.lp1options').show();
+						lp2vis = 1;
+					}
+				}	
+			}
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);
 				// disable navbar entry for current page

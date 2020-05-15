@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 re='^[-+]?[0-9]+\.?[0-9]*$'
 
 wattll=$(curl --connect-timeout 3 -s $httpll_w_url)

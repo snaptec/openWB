@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 soc=$(curl --connect-timeout 10 -s $speichersoc_http |sed 's/\..*$//')
 
 re='^-?[0-9]+$'

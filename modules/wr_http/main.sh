@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 wattwr=$(curl --connect-timeout 10 -s $wr_http_w_url)
 

@@ -600,25 +600,31 @@
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
 				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/1/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
 				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/2/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
 				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/3/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -627,6 +633,7 @@
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
 				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/4/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -635,30 +642,37 @@
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
 				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/5/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
 				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/6/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
 				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/7/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
 
+
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
 				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
 				<div class="col">
+
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
@@ -1224,7 +1238,7 @@
 				// prio: 0 = battery, 1 = ev
 				var priority = $(this).attr('priority');
 				if ( priority == '0' || priority == '1' ) {
-					publish(priority, 'openWB/set/system/priorityModeEVBattery');
+					publish(priority, 'openWB/config/set/pv/priorityModeEVBattery');
 				}
 			});
 

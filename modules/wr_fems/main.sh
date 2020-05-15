@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 pvwatt=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
 pvwatt=$(( pvwatt * -1 ))

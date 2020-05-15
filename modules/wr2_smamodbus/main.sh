@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 sudo python /var/www/html/openWB/modules/wr2_smamodbus/sma.py $pv2ip
 

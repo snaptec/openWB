@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-. /var/www/html/openWB/openwb.conf
 
 
 answer=$(curl -d {\"801\":{\"170\":null}} --connect-timeout 5 -s $bezug_solarlog_ip/getjp)

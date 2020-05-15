@@ -1,5 +1,5 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 dailyfile="/var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d)"
 monthlyladelogfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
 
@@ -118,8 +118,8 @@ done
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
-echo "$(tail -1000 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
-echo "$(tail -1000 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
+echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
+echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then

@@ -346,9 +346,9 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/pvkwhk",
+					url: "/openWB/ramdisk/pvkwh",
 					complete: function(request){
-						$("#pvkwhdiv").html(request.responseText);
+						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
 					}
 				});
 				$.ajax({
@@ -598,6 +598,32 @@
 			});
 		}
 		loadstatuslog();
+		function mqttlog() {
+			$.ajax({
+				url: "/openWB/ramdisk/mqtt.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#mqttdiv").html(result);
+				}
+			});
+		}
+		mqttlog();
+		function smarthomelog() {
+			$.ajax({
+				url: "/openWB/ramdisk/smarthome.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#smarthomediv").html(result);
+				}
+			});
+		}
+		smarthomelog();
 	</script>
 
 	<?php
@@ -1271,9 +1297,22 @@
 		</script>
 
 		<div class="row">
-			Ladestatus Änderungen:
+			<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
 		</div>
-		<div style="white-space: pre-line;" id="ladestatuslogdiv"></div>
+		<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
+		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
+		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
+
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
@@ -1286,6 +1325,37 @@
 				$('#pvinverter1and2div').hide();
 			}
 		});
+		$('#mqttlog').click(function(event){
+			var element = document.getElementById('mqttdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#mqttdiv').show();
+				$('#mqttdiv').removeClass("hide");
+			} else {
+				$('#mqttdiv').hide(); 
+				$('#mqttdiv').addClass("hide");
+			}
+		});
+		$('#ladestatuslog').click(function(event){
+			var element = document.getElementById('ladestatuslogdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#ladestatuslogdiv').show();
+				$('#ladestatuslogdiv').removeClass("hide");
+			} else {
+				$('#ladestatuslogdiv').hide(); 
+				$('#ladestatuslogdiv').addClass("hide");
+			}
+		});
+		$('#smarthomelog').click(function(event){
+			var element = document.getElementById('smarthomediv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#smarthomediv').show();
+				$('#smarthomediv').removeClass("hide");
+			} else {
+				$('#smarthomediv').hide(); 
+				$('#smarthomediv').addClass("hide");
+			}
+		});
+
 	</script>
 </body>
 </html>

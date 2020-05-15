@@ -27,7 +27,7 @@
 set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
-. openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 source minundpv.sh
 source nurpv.sh
 source auslademodus.sh

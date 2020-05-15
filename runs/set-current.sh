@@ -31,7 +31,6 @@
 # Example: ./set-current.sh 9 s1
 # sets charging current on point "s1" to 9A
 
-. /var/www/html/openWB/openwb.conf
 lp1enabled=$(<ramdisk/lp1enabled)
 lp2enabled=$(<ramdisk/lp2enabled)
 lp3enabled=$(<ramdisk/lp3enabled)

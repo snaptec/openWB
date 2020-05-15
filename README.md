@@ -225,8 +225,6 @@ Exemplarisch der Aufbau erklärt am bezug_http Modul:
 
 
 	#!/bin/bash
-	#Laden der openwb.conf Einstellung
-	. /var/www/html/openWB/openwb.conf
 	#Die eigentliche (in dem Fall http) Abfrage. Die Variable sollte den Modulnamen und im Anschluss den Wert enthalten um sie eindeutig zu identifizieren
 	wattbezug=$(curl --connect-timeout 10 -s $bezug_http_w_url)
 	#Prüfung auf Richtigkeit der Variable. Sie darf bei bezug modulen ein - enthalten sowie die Zahlen 0-9
@@ -265,7 +263,6 @@ Fronius bietet eine Json API an. Diese wird hier auf die Werte die gebraucht wer
 
 	#!/bin/bash
 	#Auslesen eine Fronius Symo WR über die integrierte API des WR. Rückgabewert ist die aktuelle Wattleistung
-	. /var/www/html/openWB/openwb.conf
 	#Abfrage der kompletten Json Rückgabe
 	pvwatttmp=$(curl --connect-timeout 5 -s $wrfroniusip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=System)
 	# Das Tool jq verarbeitet die Rückgabe und reduziert sie auf die gewünschte Zeile. sed & tr entfernen ungewollte Klammern, Punkte und \n newline Zeichen um die reine Zahl zu erhalten

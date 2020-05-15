@@ -294,27 +294,12 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/1/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/1/maxSoc", "", qos=0, retain=True)
-            sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "1"]
-                subprocess.Popen(sendcommand)
     if (msg.topic == "openWB/config/set/pv/lp/2/maxSoc"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 100):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvpercentagelp2=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/2/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/2/maxSoc", "", qos=0, retain=True)
-            time.sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "1"]
-                subprocess.Popen(sendcommand)
-
     if (msg.topic == "openWB/config/set/pv/lp/1/socLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", msg.payload.decode("utf-8")]
@@ -445,7 +430,10 @@ def on_message(client, userdata, msg):
 
 
 
+    if (msg.topic == "openWB/set/system/topicSender"):
+        if len(msg.payload) >= 3 and len(msg.payload) <=100:
 
+            client.publish("openWB/set/system/topicSender", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/GetRemoteSupport"):
         if len(msg.payload) >= 5 and len(msg.payload) <=30:
             token=msg.payload.decode("utf-8")
@@ -673,7 +661,7 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/nurpv70dynstatus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/set/pv/bool70PVDynStatus", "", qos=0, retain=True)
+            client.publish("openWB/set/pv/NurPV70Status", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
@@ -931,13 +919,13 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
 
-
-    theTime = datetime.now()
-    timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
-    file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
-    sys.stdout = file
-    print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
-    file.close()
+    if (len(msg.payload) >= 1): 
+        theTime = datetime.now()
+        timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
+        file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+        sys.stdout = file
+        print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
+        file.close()
 
 client.on_connect = on_connect
 client.on_message = on_message

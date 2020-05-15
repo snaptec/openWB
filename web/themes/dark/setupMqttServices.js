@@ -94,7 +94,7 @@ var topicsToSubscribe = [
 	["openWB/global/ChargeMode", 1],
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
-	["openWB/global/priorityModeEVBattery", 1],
+	["openWB/config/get/pv/priorityModeEVBattery", 1],
 	// system topics
 	["openWB/system/Timestamp", 1],
 	// pv topics
@@ -371,6 +371,11 @@ client.onMessageArrived = function (message) {
 function publish(payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
+	message.qos = 2;
+	message.retained = true;
+	client.send(message);
+	var message = new Messaging.Message("local client uid: " + clientuid + " sent: " + topic);
+	message.destinationName = "openWB/set/system/topicSender";
 	message.qos = 2;
 	message.retained = true;
 	client.send(message);
