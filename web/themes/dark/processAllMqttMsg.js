@@ -635,7 +635,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function() {  // check all elements of class '.nameLp'
-			var lp = $(this).closest('[data-lp]').attr('data-lp');  // get attribute lp from parent
+			var lp = $(this).closest('[data-lp]').data('lp');  // get attribute lp from parent
 			if ( lp == index ) {
 				if ( $(this).hasClass('enableLp') ) {
 					// but only apply styles to element in chargepoint info data block
