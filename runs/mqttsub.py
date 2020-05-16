@@ -551,21 +551,6 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
-    if (msg.topic == "openWB/set/system/ChangeVar"):
-        if msg.payload:
-            splitvar=msg.payload.decode("utf-8").split("=", 1)
-            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", splitvar[0]+"=", splitvar[1]]
-            subprocess.Popen(sendcommand)
-            client.publish("openWB/set/system/ChangeVar", "", qos=0, retain=True)
-    if (msg.topic == "openWB/set/system/GetVar"):
-        if msg.payload:
-            with open('/var/www/html/openWB/openwb.conf') as f:
-                datafile = f.readlines()
-            for line in datafile:
-                if msg.payload.decode("utf-8") in line:
-                    if "pass" not in line:
-                        client.publish("openWB/set/system/AskedVar", line, qos=0, retain=True)
-            client.publish("openWB/set/system/GetVar", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/PerformUpdate"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
@@ -574,6 +559,11 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
             subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh")
+    if (msg.topic == "openWB/config/set/releaseTrain"):
+        if ( msg.payload.decode("utf-8") == "stable17" or msg.payload.decode("utf-8") == "master" or msg.payload.decode("utf-8") == "beta"):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/set/releaseTrain", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
