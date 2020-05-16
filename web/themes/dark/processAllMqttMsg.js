@@ -546,12 +546,14 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			energyCharged = 0;
 		}
 		element.text(energyCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' kWh');
-		var kmChargedLp = $(parent).find('.kmChargedLp');  // now get parents kmChargedLp child element
-		var consumption = parseFloat($(kmChargedLp).attr('consumption'));
+		var kmChargedLp = parent.find('.kmChargedLp');  // now get parents kmChargedLp child element
+		var consumption = parseFloat($(kmChargedLp).data('consumption'));
 		var kmCharged = '';
 		if ( !isNaN(consumption) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
+		} else {
+			kmCharged = '-- km';
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
@@ -632,7 +634,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	    });
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/chargepointenabled$/i ) ) {
-
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function() {  // check all elements of class '.nameLp'
 			var lp = $(this).closest('[data-lp]').data('lp');  // get attribute lp from parent
@@ -752,14 +753,16 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(consumption) ) {
 			consumption = 0;
 		}
-		element.attr('consumption', consumption);
+		element.data('consumption', consumption);  // store value in data-attribute
 		// if already energyCharged-displayed, update kmCharged
-		var energyChargedLp = $(parent).find('.energyChargedLp');  // now get parents respective energyCharged child element
+		var energyChargedLp = parent.find('.energyChargedLp');  // now get parents respective energyCharged child element
 		var energyCharged = parseFloat($(energyChargedLp).text());
 		var kmCharged = '';
 		if ( !isNaN(energyCharged) && consumption > 0 ) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
+		} else {
+			kmCharged = '-- km';
 		}
 		element.text(kmCharged);
 	}
@@ -797,6 +800,7 @@ function processHookMessages(mqttmsg, mqttpayload) {
 		}
 	}
 }
+
 function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/SmartHomeDevices - actual values only!
 	// called by handlevar
@@ -818,7 +822,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualRunningTimeDevice');  // now get parents respective child element
@@ -836,7 +840,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RelayStatus$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameDevice').each(function() {  // check all elements of class '.nameLp'
 			var dev = $(this).closest('[data-dev]').data('dev');  // get attribute lp from parent
@@ -852,8 +856,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 			}
 		});
 	}
-
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor0$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualTemp0Device');  // now get parents respective child element
@@ -872,7 +875,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(StringTemp);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor1$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.actualTemp1Device');  // now get parents respective child element
@@ -888,7 +891,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(StringTemp);
 	}
-	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/TemperatureSensor2$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('.SmartHomeTemp[data-dev="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.actualTemp2Device');  // now get parents respective child element
@@ -904,13 +907,11 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(StringTemp);
 	}
-
 }
 
 function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/config/get/SmartHome/Devices - config variables (Name / configured only!), actual Variables in proccessSMartHomeDevices
 	// called by handlevar
-
 	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_configured$/i ) ) {
 		// respective SH Device configured
@@ -959,5 +960,4 @@ function processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload) {
 		element.text(mqttpayload);
 		window['d'+index+'name']=mqttpayload;
 	}
-
 }
