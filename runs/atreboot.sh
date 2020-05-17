@@ -1125,6 +1125,12 @@ if ! grep -Fq "speichersoc_http=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichersoc_http=192.168.0.10/soc" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherekwh_http=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherekwh_http=192.168.0.10/eWh" >> /var/www/html/openWB/openwb.conf
+	  echo "speicherikwh_http=192.168.0.10/iWh" >> /var/www/html/openWB/openwb.conf
+
+fi
 if ! grep -Fq "soc_tesla_username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soc_tesla_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
