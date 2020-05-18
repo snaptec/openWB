@@ -16,13 +16,13 @@ if (( awattaraktiv == 1 )); then
 			echo "Aktiviere preisbasierte Ladung"
 		fi
 		if (( lp1enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "1"	
+			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"	
 		fi
 		if (( lp2enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "1"
+			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 		fi
 		if (( lp3enabled == 0 )); then
-			mosquitto_pub -r -t openWB/set/lp3/ChargePointEnabled -m "1"	
+			mosquitto_pub -r -t openWB/set/lp/3/ChargePointEnabled -m "1"	
 		fi
 	else
 		if [[ $debug == "1" ]]; then
@@ -30,13 +30,13 @@ if (( awattaraktiv == 1 )); then
 		fi
 		#price higher than max price, disable charging
 		if (( lp1enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp1/ChargePointEnabled -m "0"	
+			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "0"	
 		fi
 		if (( lp2enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp2/ChargePointEnabled -m "0"
+			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "0"
 		fi
 		if (( lp3enabled == 1 )); then
-			mosquitto_pub -r -t openWB/set/lp3/ChargePointEnabled -m "0"	
+			mosquitto_pub -r -t openWB/set/lp/3/ChargePointEnabled -m "0"	
 		fi
 
 	fi
@@ -90,7 +90,7 @@ if [[ $lastmanagement == "0" ]]; then
 	        	       	echo "Beende Sofort Laden da  $lademkwh kWh erreicht"
        			fi
 		else
-			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )); then
+			if (( evua1 < lastmaxap1 )) && (( evua2 < lastmaxap2 )) &&  (( evua3 < lastmaxap3 )) && (( wattbezug < lastmmaxw )); then
 				if (( ladeleistunglp1 < 100 )); then
 					if (( llalt > minimalstromstaerke )); then
         	                        	llneu=$((llalt - 1 ))
@@ -150,6 +150,19 @@ if [[ $lastmanagement == "0" ]]; then
 						for v in "${evudiffmax[@]}"; do
 							if (( v < maxdiff )); then maxdiff=$v; fi;
 						done
+						maxdiff=$((maxdiff - 1 ))
+						maxdiffw=$(( lastmmaxw - wattbezug ))
+						maxdiffwa=$(( maxdiffw / 230 ))
+						maxdiffwa=$(( maxdiffwa - 2 ))
+						if (( maxdiffwa > maxdiff )); then
+							maxdiff=$maxdiff
+						else
+							maxdiff=$maxdiffwa
+						fi
+						if (( maxdiff < 0 )); then
+							maxdiff=0
+						fi
+
 						llneu=$((llalt + maxdiff))
 						if (( llneu > sofortll )); then
 							llneu=$sofortll
@@ -193,17 +206,31 @@ if [[ $lastmanagement == "0" ]]; then
 					fi
 				fi
 			else
-				evudiff1=$((evua1 - lastmaxap1 ))
-				evudiff2=$((evua2 - lastmaxap2 ))
-				evudiff3=$((evua3 - lastmaxap3 ))
-				evudiffmax=($evudiff1 $evudiff2 $evudiff3)
-				maxdiff=${evudiffmax[0]}
-				for v in "${evudiffmax[@]}"; do
-					if (( v > maxdiff )); then maxdiff=$v; fi;
-				done
-				maxdiff=$((maxdiff + 1 ))
+				if (( wattbezug < lastmmaxw )); then
+
+					evudiff1=$((evua1 - lastmaxap1 ))
+					evudiff2=$((evua2 - lastmaxap2 ))
+					evudiff3=$((evua3 - lastmaxap3 ))
+					evudiffmax=($evudiff1 $evudiff2 $evudiff3)
+					maxdiff=${evudiffmax[0]}
+					for v in "${evudiffmax[@]}"; do
+						if (( v > maxdiff )); then maxdiff=$v; fi;
+					done
+					maxdiff=$((maxdiff + 1 ))
+					echo "Lastmanagement aktiv (Ampere), Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+
+				else
+					wattzuviel=$((wattbezug - lastmmaxw))
+					amperezuviel=$(( wattzuviel / 230 ))
+					maxdiff=$((amperezuviel + 2 ))
+					if (( activechargepoints > 1 )); then
+						maxdiff=$(echo "($maxdiff / $activechargepoints) / 1" |bc)
+					fi
+					echo "Lastmanagement aktiv (Leistung), Ladeleistung reduziert" > ramdisk/lastregelungaktiv
+
+				fi
+
 				llneu=$((llalt - maxdiff))
-				echo "Lastmanagement aktiv, Ladeleistung reduziert" > ramdisk/lastregelungaktiv
 				if (( llneu < minimalstromstaerke )); then
 					llneu=$minimalstromstaerke
 					if [[ $debug == "1" ]]; then

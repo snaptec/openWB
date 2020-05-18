@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 auditimer=$(</var/www/html/openWB/ramdisk/soctimer)
 if (( auditimer < 180 )); then

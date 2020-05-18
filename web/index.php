@@ -32,6 +32,7 @@
 		}
 		if ( $simplemodeold == 1 ) {
 			// force hidden theme
+			?><!-- including themes/hidden/simplemode.php --><?php
 			include 'themes/hidden/simplemode.php';
 		} else {
 			// theme set by cookie
@@ -53,7 +54,8 @@
 				$_COOKIE['openWBTheme'] = 'standard';
 				$themeCookie = 'standard';
 			}
-			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.php';
+			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.html'; ?> --><?php
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
 	}
 

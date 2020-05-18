@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 vwtimer=$(</var/www/html/openWB/ramdisk/soctimer)
 if (( vwtimer < 60 )); then

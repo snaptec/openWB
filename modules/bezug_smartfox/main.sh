@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 
 #Daten einlesen
 xml=$(curl --max-time 10 -s http://$bezug_smartfox_ip/values.xml -XGET -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Host: $bezug_smartfox_ip'-H 'Connection: keep-alive')

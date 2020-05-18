@@ -9,7 +9,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge">
 		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -42,7 +42,6 @@
 
 	<body>
 
-		<?php include '/var/www/html/openWB/web/settings/navbar.php';?>
 		<?php
 			// support function for dynmic built of carousel content
 			function dir_list($rootDir){
@@ -59,6 +58,8 @@
 			// call function to read all directories to $allThemes
 			$allThemes = dir_list('/var/www/html/openWB/web/themes');
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 
@@ -88,11 +89,18 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Theme</small>
+				<small>Sie befinden sich hier: Erscheinungsbild/Theme-Auswahl</small>
 			</div>
 		</footer>
 
-		<script>
+		<script type="text/javascript">
+
+			$.get("settings/navbar.html", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navSetTheme').addClass('disabled');
+			});
+
 			function saveTheme() {
 				var selectedTheme = $('#themeName').text();  // get theme name from div
 				$.ajax({

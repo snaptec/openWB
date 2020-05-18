@@ -1,8 +1,6 @@
-<!DOCTYPE html>
 <html lang="de">
 
 <head>
-	<script src="js/jquery-1.11.1.min.js"></script>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,530 +17,178 @@
 	<meta name="msapplication-TileColor" content="#00a8ff">
 	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<!-- Normalize -->
-	<link rel="stylesheet" type="text/css" href="css/normalize.css">
-	<!-- Bootstrap -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<!-- Owl -->
-	<link rel="stylesheet" type="text/css" href="css/owl.css">
-	<!-- Animate.css -->
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<!-- Font Awesome, all styles -->
-    <link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
-	<!-- Elegant Icons -->
-	<link rel="stylesheet" type="text/css" href="fonts/eleganticons/et-icons.css">
-	<!-- Main styles -->
-	<link rel="stylesheet" type="text/css" href="css/cardio.css">
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- Bootstrap-Datepicker -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+		<!-- Font Awesome, all styles -->
+		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="ladelog_style.css">
+
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 </head>
-<?php
-$limit = 10;
-if (isset($_GET['lines'])) {
-	$limit = $_GET['lines'];
-	$_SESSION = $limit;
-} else {
-	$limit = 20;
-	$_SESSION = $limit;
-}
-if (isset($_GET['von'])) {
-	$wahlstart = strtotime($_GET['von']);
-} else {
-	$wahlstart = strtotime("-4 weeks");
-}
-if (isset($_GET['bis'])) {
-	$wahlstop = strtotime($_GET['bis']);
-} else {
-	$wahlstop = strtotime("tomorrow");
-}
-?>
+
 <body>
-	<div class="preloader">
-		<img src="img/loader.gif" alt="Preloader image">
-	</div>
-	<section id="services">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<h3> Ladelog </h3>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-2">
-					<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
-				</div>
-				<div class="col-xs-2">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Startzeit
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Endzeit
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Geladene km
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Geladene kWh
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Durchschnittliche Ladeleistung kW
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Ladedauer
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Ladepunkt
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Lademodus
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						RFID
+                <?php
+                        include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/navbar.php';
+                ?>
+ 		<div role="main" class="container" style="margin-top:20px">
+                        <div class="row">
+                                <div class="col" style="text-align: center;">
+                                        <h4>Ladelog Monatsansicht</h4>
+                                </div>
+                        </div>
+			<div class="row justify-content-center">
+				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
+					<div class="input-group mb-3">
+					<!--	<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Monat" id="prevmonth"></i> -->
+						<input class="form-control datepicker" id="theDate" type="text" readonly>
+						<div class="input-group-append">
+							<span class="input-group-text far fa-calendar-alt fa-lg vaRow"></span>
+						</div>
+					<!--	<i class="far fa-caret-square-right fa-lg vaRow ml-4" title="nächster Monat" id="nextmonth"></i> -->
 					</div>
 				</div>
 			</div>
-			<hr>
-<?php
-$ifile = fopen('ladelog', "r");
-$ofile = fopen('../ramdisk/tladelog', "w+");
+			<div class="row justify-content-center">
+				<label class="checkbox-inline"><input type="checkbox" id="showlp1" value="" checked>Ladepunkt 1</label>
+				<label class="checkbox-inline"><input type="checkbox" id="showlp2" value="" checked>Ladepunkt 2</label>
+				<label class="checkbox-inline"><input type="checkbox" id="showlp3" value="" checked>Ladepunkt 3</label>
+			</div>
+			<div class="row justify-content-center">
+				<label class="checkbox-inline"><input type="checkbox" id="showsofort" value="" checked>Sofort Laden</label>
+				<label class="checkbox-inline"><input type="checkbox" id="showminpv" value="" checked>Min und PV</label>
+				<label class="checkbox-inline"><input type="checkbox" id="shownurpv" value="" checked>Nur PV</label>
+				<label class="checkbox-inline"><input type="checkbox" id="showstandby" value="" checked>Standby</label>
+				<label class="checkbox-inline"><input type="checkbox" id="shownacht" value="" checked>Nachtladen</label>
 
-$counter = 1;
-while($counter <= $limit) {
-	$line = fgetcsv($ifile);
-	fputcsv($ofile, $line);
-	$counter++;
-}
-
-$start = 0;
-$stop = 0;
-$ladezeit = 0;
-$count = 0;
-$avgladel = 0;
-$sumkwh = 0;
-$sumgelkm = 0;
-$file = fopen('../ramdisk/tladelog', 'r');
-$extractf = fopen('../ramdisk/ladelog.csv', "w+");
-if (isset($_GET['lp1akt'])) {
-	if ($_GET['lp1akt'] == "on"){
-		$lp1akt = "1";
-	} else {
-		$lp1akt = 0;
-	}
-} else {
-	$lp1akt = 0;
-}
-if (isset($_GET['lp2akt'])) {
-	if ($_GET['lp2akt'] == "on"){
-		$lp2akt = "2";
-	} else {
-		$lp2akt = 0;
-	}
-} else {
-	$lp2akt = 0;
-}
-if (isset($_GET['lp3akt'])) {
-	if ($_GET['lp3akt'] == "on"){
-		$lp3akt = "3";
-	} else {
-		$lp3akt = 0;
-	}
-} else {
-	$lp3akt = 0;
-}
-if (isset($_GET['sofort'])) {
-	if ($_GET['sofort'] == "on"){
-		$sofort = "0";
-	} else {
-		$sofort = 8;
-	}
-} else {
-	$sofort = 8;
-}
-if (isset($_GET['minpv'])) {
-	if ($_GET['minpv'] == "on"){
-		$minpv = "1";
-	} else {
-		$minpv = 8;
-	}
-} else {
-	$minpv = 8;
-}
-if (isset($_GET['nurpv'])) {
-	if ($_GET['nurpv'] == "on"){
-		$nurpv = "2";
-	} else {
-		$nurpv = 8;
-	}
-} else {
-	$nurpv = 8;
-}
-if (isset($_GET['standby'])) {
-	if ($_GET['standby'] == "on"){
-		$standby = "4";
-	} else {
-		$standby = 8;
-	}
-} else {
-	$standby = 8;
-}
-if (isset($_GET['nachtladenlp1'])) {
-	if ($_GET['nachtladenlp1'] == "on"){
-		$nachtladenlp1 = "7";
-	} else {
-		$nachtladenlp1 = 8;
-	}
-} else {
-	$standby = 8;
-}
-while (($logarray = fgetcsv($file)) !== FALSE) {
-	$startime = str_replace('.', '-', $logarray[0]);
-	$startime = strtotime(substr_replace($startime, "20", "6", 0));
-	$endtime = str_replace('.', '-', $logarray[1]);
-	$endtime = strtotime(substr_replace($endtime, "20", "6", 0));
-	if (isset($_GET['zeitakt']) && $_GET['zeitakt'] == "on" ) {
-		if ( $wahlstart < $startime && $wahlstop > $endtime) {
-			if ( ($lp1akt == intval($logarray[6]) || $lp2akt == intval($logarray[6]) || $lp3akt == intval($logarray[6])) && ($sofort == intval($logarray[7]) || $minpv == intval($logarray[7])  || $nachtladenlp1 == intval($logarray[7])|| $standby == intval($logarray[7]) || $nurpv == intval($logarray[7])) ) {
-				if ( isset($_GET['rfidakt']) && $_GET['rfidakt'] == "on" ){
-					if ( $_GET['rfid'] == intval($logarray[8]) ){	
-						fputcsv($extractf, $logarray);
-						?>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-						<?php
-						print_r($logarray[0]);
-						$start = $startime;
-						?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-						<?php
-						print_r($logarray[1]);
-						$stop = $endtime;
-						?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php
-						print_r($logarray[2]);
-						$sumgelkm=$sumgelkm + $logarray[2];
-						?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php
-						print_r($logarray[3]);
-						$sumkwh=$sumkwh + $logarray[3];
-						?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-						<?php
-						print_r($logarray[4]);
-						$avgladel=$avgladel + $logarray[4];
-						$count=$count + 1;
-						?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[5]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[6]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php
-						if (isset($logarray[7])){
-							if ($logarray[7] == '0'){
-								echo 'Sofort';
-							}
-							if ($logarray[7] == '1'){
-								echo 'Min+PV';
-							}
-							if ($logarray[7] == '2'){
-								echo 'NurPV';
-							}
-							if ($logarray[7] == '4'){
-								echo 'Standby';
-							}
-							if ($logarray[7] == '7'){
-								echo 'NL';
-							}
-						}
-						?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[8]); ?>
-					</div>
-				</div>
 			</div>
-			<hr>
-						<?php
-						$ladezeit = $ladezeit + (($stop - $start) / 60 );
-					}
-				} else {
-					fputcsv($extractf, $logarray);
-					?>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-					<?php
-					print_r($logarray[0]);
-					$start = $startime;
-					?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-					<?php
-					print_r($logarray[1]);
-					$stop = $endtime;
-					?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-					<?php
-					print_r($logarray[2]);
-					$sumgelkm=$sumgelkm + $logarray[2];
-					?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-					<?php
-					print_r($logarray[3]);
-					$sumkwh=$sumkwh + $logarray[3];
-					?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-					<?php
-					print_r($logarray[4]);
-					$avgladel=$avgladel + $logarray[4];
-					$count=$count + 1;
-					?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[5]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[6]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-					<?php
-					if (isset($logarray[7])){
-						if ($logarray[7] == '0'){
-							echo 'Sofort';
-						}
-						if ($logarray[7] == '1'){
-							echo 'Min+PV';
-						}
-						if ($logarray[7] == '2'){
-							echo 'NurPV';
-						}
-						if ($logarray[7] == '4'){
-							echo 'Standby';
-						}
-						if ($logarray[7] == '7'){
-							echo 'NL';
-						}
-					}
-					?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[8]); ?>
-					</div>
-				</div>
+			<div class="row justify-content-center">
+				<label class="checkbox-inline"><input type="checkbox" id="showrfid" value="">RFID</label><input type="text" id="rfidtag" value="">
 			</div>
-			<hr>
-					<?php
-					$ladezeit = $ladezeit + (($stop - $start) / 60 );
-				}
-			}
-		}
-	} else {
-		fputcsv($extractf, $logarray);
-		?>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-		<?php
-		print_r($logarray[0]);
-		$start = $startime;
-		?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-		<?php
-		print_r($logarray[1]);
-		$stop = $endtime;
-		?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-		<?php
-		print_r($logarray[2]);
-		$sumgelkm=$sumgelkm + $logarray[2];
-		?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-		<?php
-		print_r($logarray[3]);
-		$sumkwh=$sumkwh + $logarray[3];
-		?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-		<?php
-		print_r($logarray[4]);
-		$avgladel=$avgladel + $logarray[4];
-		$count=$count + 1;
-		?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[5]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[6]); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-		<?php
-		if (isset($logarray[7])){
-			if ($logarray[7] == '0'){
-				echo 'Sofort';
-			}
-			if ($logarray[7] == '1'){
-				echo 'Min+PV';
-			}
-			if ($logarray[7] == '2'){
-				echo 'NurPV';
-			}
-			if ($logarray[7] == '4'){
-				echo 'Standby';
-			}
-			if ($logarray[7] == '4'){
-				echo 'NL';
-			}
-		}
-		?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print_r($logarray[8]); ?>
-					</div>
-				</div>
-			</div>
-			<hr>
-		<?php
-		$ladezeit = $ladezeit + (($stop - $start) / 60 );
-	}
-}
-fclose($file);
-fclose($extractf);
-$avgladel = round($avgladel / $count, 3);
-$ladezeit = intval(round($ladezeit / $count, 2));
-?>
-			<hr>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Startzeit
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Endzeit
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Geladene km gesamt
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Geladene kWh gesamt
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-						Durchschnittliche Ladeleistung kW
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Durchschnittliche Ladedauer
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Ladepunkt
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						Lademodus
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-						RFID
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1vw">
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($sumgelkm); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($sumkwh); ?>
-					</div>
-					<div class="col-xs-2 text-center" style="font-size: 1.5vw">
-						<?php print($avgladel); ?>
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1.5vw">
-						<?php print($ladezeit); ?> Min
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-					</div>
-					<div class="col-xs-1 text-center" style="font-size: 1vw">
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-xs-1">
-				</div>
-				<div class="col-xs-7">
-					<form name="limitlines" id="limitlines" action="ladelog.php" method="GET">
-						<label for="lines">Anzahl berücksichtiger Ladungen</label>
-						<input id="lines" name="lines" type="number" min="0" value="<?php print $limit ?>" required="required" /><br>
-						<label for="zeitakt">Filter aktiv:</label>
-						<input id="zeitakt" name="zeitakt" type="checkbox" <?php if (isset($_GET['zeitakt'])){ if ( $_GET['zeitakt'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="von">Startdatum:</label>
-						<input id="von" name="von" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstart) ?>" required="required" />
-						<label for="bis">Enddatum:</label>
-						<input id="bis" name="bis" type="date" min="2018-01-01" value="<?php print date("Y-m-d", $wahlstop) ?>" required="required" /><br>
-						<label for="lp1akt">LP1:</label>
-						<input id="lp1akt" name="lp1akt" type="checkbox" <?php if (isset($_GET['lp1akt'])){ if ( $_GET['lp1akt'] == "on"){ echo "checked"; }} ?> >
-						<label for="lp2akt">LP2:</label>
-						<input id="lp2akt" name="lp2akt" type="checkbox" <?php if (isset($_GET['lp2akt'])){ if ( $_GET['lp2akt'] == "on"){ echo "checked"; }} ?> >
-						<label for="lp3akt">LP3:</label>
-						<input id="lp3akt" name="lp3akt" type="checkbox" <?php if (isset($_GET['lp3akt'])){ if ( $_GET['lp3akt'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="sofort">Sofortlademodus:</label>
-						<input id="sofort" name="sofort" type="checkbox" <?php if (isset($_GET['sofort'])){ if ( $_GET['sofort'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="minpv">Min+PV Lademodus:</label>
-						<input id="minpv" name="minpv" type="checkbox" <?php if (isset($_GET['minpv'])){ if ( $_GET['minpv'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="nurpv">NurPV Lademodus:</label>
-						<input id="nurpv" name="nurpv" type="checkbox" <?php if (isset($_GET['nurpv'])){ if ( $_GET['nurpv'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="standby">Standby Lademodus:</label>
-						<input id="standby" name="standby" type="checkbox" <?php if (isset($_GET['standby'])){ if ( $_GET['standby'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="nachtladenlp1">Nachtladen LP1:</label>
-						<input id="nachtladenlp1" name="nachtladenlp1" type="checkbox" <?php if (isset($_GET['nachtladenlp1'])){ if ( $_GET['nachtladenlp1'] == "on"){ echo "checked"; }} ?> ><br>
-						<label for="rfidakt">RFID:</label>
-						<input id="rfidakt" name="rfidakt" type="checkbox" <?php if (isset($_GET['rfidakt'])){ if ( $_GET['rfidakt'] == "on"){ echo "checked"; }} ?> >
-						<label for="rfid">TAG:</label>
-						<input id="rfid" name="rfid" type="text" value="<?php if (isset($_GET['rfid'])){  echo $_GET['rfid']; } ?>" ><br>
-						<button class="btn btn-primary btn-green" type="submit">Go</button>
-					</form>
-				</div>
-				<div class="col-xs-4">
-				</div>
-			</div>
-			<div class="row">
-				<button onclick="window.location.href='./index.php'" class="btn btn-primary btn-blue">Zurück</button>
-				<form method="get" action="../ramdisk/ladelog.csv">
-					<button class="btn btn-primary btn-green">Download csv</button>
-				</form>
-			</div>
+		<div id="ladelogtablediv"></div>
 		</div>
-	</section>
+
+
+
+
+
+<!--	</section> -->
 
 	<div class="mobile-nav">
 		<a href="#" class="close-link"><i class="arrow_up"></i></a>
 	</div>
 	<!-- Scripts -->
+        <script src="js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+        <script src="js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
+	<script src="js/mqttws31.js"></script>
+	<script src="ladelog.js"></script>
 	<script src="js/owl.carousel.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/wow.min.js"></script>
 	<script src="js/typewriter.js"></script>
 	<script src="js/jquery.onepagenav.js"></script>
-	<script src="js/main.js"></script>
+	<!-- get parsed date, setup datepicker and load respective Chart.js definition -->
+		<script>
+			$(document).ready(function(){
+				// GET expects date format Y-m like 2020-10
+				// get parsed date and format nicely for input field
+				var earliestDate = new Date('2018/01/01 00:00:00');
+				var url_string = window.location.href;
+				var url = new URL(url_string);
+				var parsedDateString = url.searchParams.get('date');
+				var pattern = /^[0-9]{4}\-(0[1-9]|1[012])$/;
+				var reloadNeeded = false;
+				if ( parsedDateString == null || parsedDateString.match(pattern) == null ) {
+					// nothing parsed or format not valid, so set date to today
+					var parsedDate = new Date();
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					parsedDate.setDate(1);  // // make sure day is 1 for later comparisons
+				} else {
+					var parsedDate = new Date(parsedDateString);
+					parsedDate.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					parsedDate.setDate(1);  // // make sure day is 1 for later comparisons
+					if ( parsedDate < earliestDate ) {
+						// date parsed was too early so set to today
+						parsedDate = new Date();
+						reloadNeeded = true;
+					}
+				}
+				var mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); // January is 0!, string with leading zeros
+				if ( reloadNeeded ) {
+					// date parsed was too early so reload with today
+					//window.location.href = "monthly.php?date=" + parsedDate.getFullYear() + '-' + mm;
+					selectladelogclick(parsedDate.getFullYear()+mm);
+				}
+				var month = parsedDate.toLocaleDateString('de-DE', { month: 'long'});
+				var theDate = month + ' ' + parsedDate.getFullYear();
+				setTimeout(
+					function() {
+						selectladelogclick(parsedDate.getFullYear() + mm);
+					}, 1000);
+				
+				$('#theDate').val(theDate);  // set value of input field
+				// config the datepicker
+				$('.datepicker').datepicker({
+					format: 'MM yyyy',
+					language: 'de-DE',
+					startDate: '01.2018',
+					endDate: '0d',
+					startView: 'months',
+    				minViewMode: 'months',
+					todayBtn: true,
+					todayHighlight: true,
+					autoclose: true
+				})
+				.on('changeDate', function(e) {
+					// `e` here contains the extra attributes
+					var mm = String(e.date.getMonth() + 1).padStart(2, '0'); //January is 0!, string with leading zeros
+					var dateToParseStr = e.date.getFullYear() + '-' + mm;
+					//window.location.href = "monthly.php?date=" + dateToParseStr;
+					parsedDate = e.date;
+					console.log(parsedDate);
+					selectladelogclick(dateToParseStr);
+				});
+
+
+				$('#prevmonth').click(function(e) {
+					// on click of prev month button
+					let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
+					dateToParse.setMonth(parsedDate.getMonth() - 1);  // and substract month
+					if ( dateToParse >= earliestDate ) {
+						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
+						var month = dateToParse.toLocaleDateString('de-DE', { month: 'long'});
+						$('#theDate').val(month + ' ' + dateToParse.getFullYear());
+						selectladelogclick(dateToParseStr);
+					}
+				});
+
+				$('#nextmonth').click(function(e) {
+					// on click of next month button
+					let dateToParse = new Date(parsedDate.getTime());  // copy currently selected date
+					dateToParse.setMonth(parsedDate.getMonth() + 1);  // and add month
+					let today = new Date();
+					today.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+					if ( dateToParse <= today ) {
+						let mm = String(dateToParse.getMonth() + 1).padStart(2, '0'); //January is 0!
+						let dateToParseStr = dateToParse.getFullYear() + '-' + mm;
+						selectladelogclick(dateToParseStr);
+					}
+				});
+
+			})
+		</script>
+
 </body>
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Ladelog</small>
+			</div>
+		</footer>
 </html>

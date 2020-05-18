@@ -52,6 +52,14 @@ function getCol(matrix, col){
 	return column;
 }
 
+function convertToKw(dataColum) {
+	var convertedDataColumn = [];
+	dataColum.forEach((value) => {
+		convertedDataColumn.push(value / 1000);
+	});
+	return convertedDataColumn;
+}
+
 function visibility(datavar,hidevar,hidevalue,boolvar) {
 	var vis=0;
 	datavar.forEach(function(csvvar){
@@ -86,7 +94,6 @@ function prepareNewDataset(length, dataArray) {
 		socValues.forEach((column) => {
 			var dataColumn = getCol(dataArray, column);
 			// check how to cover the gaps so lines don't jump
-			console.log(dataColumn);
 			if ( dataColumn.every( value => value == '0' ) ) {
 				newArray[column] = '0';
 			} else if ( dataColumn.every( value => value == '' ) ) {
@@ -102,7 +109,7 @@ function prepareNewDataset(length, dataArray) {
 function loadgraph() {
 	alldata = alldata.replace(/^\s*[\n]/gm, '');
 	alldata = alldata.replace(/^\s*-[\n]/gm, '');
-	var csvData = new Array();
+	var csvData = [];
 	var rawcsv = alldata.split(/\r?\n|\r/);  // split line in array
 	rawcsv.forEach((dataset) => {
 		var datasetArray = dataset.split(',');
@@ -161,27 +168,26 @@ function loadgraph() {
 			lastScannedTimestampStr = currentTimestampStr;
 		}
 	}
-	console.log(csvData);
 	// Retrived data from csv file content
 	atime = getCol(csvData, 0);
-	abezug = getCol(csvData, 1);
-	alpa = getCol(csvData, 2);
-	apv = getCol(csvData, 3);
-	alp1 = getCol(csvData, 4);
-	alp2 = getCol(csvData, 5);
-	alp3 = getCol(csvData, 6);
-	alp4 = getCol(csvData, 7);
-	alp5 = getCol(csvData, 8);
-	alp6 = getCol(csvData, 9);
-	alp7 = getCol(csvData, 10);
-	alp8 = getCol(csvData, 11);
-	aspeicherl = getCol(csvData, 12);
+	abezug = convertToKw(getCol(csvData, 1));
+	alpa = convertToKw(getCol(csvData, 2));
+	apv = convertToKw(getCol(csvData, 3));
+	alp1 = convertToKw(getCol(csvData, 4));
+	alp2 = convertToKw(getCol(csvData, 5));
+	alp3 = convertToKw(getCol(csvData, 6));
+	alp4 = convertToKw(getCol(csvData, 7));
+	alp5 = convertToKw(getCol(csvData, 8));
+	alp6 = convertToKw(getCol(csvData, 9));
+	alp7 = convertToKw(getCol(csvData, 10));
+	alp8 = convertToKw(getCol(csvData, 11));
+	aspeicherl = convertToKw(getCol(csvData, 12));
 	aspeichersoc = getCol(csvData, 13);
 	asoc = getCol(csvData, 14);
 	asoc1 = getCol(csvData, 15);
-	ahausverbrauch = getCol(csvData, 16);
-	averbraucher1 = getCol(csvData, 17);
-	averbraucher2 = getCol(csvData, 18);
+	ahausverbrauch = convertToKw(getCol(csvData, 16));
+	averbraucher1 = convertToKw(getCol(csvData, 17));
+	averbraucher2 = convertToKw(getCol(csvData, 18));
 	visibility(abezug,'hidebezug','Bezug',boolDisplayEvu);
 	visibility(alpa,'hidelpa','LP Gesamt',boolDisplayLpAll);
 	visibility(apv,'hidepv','PV',boolDisplayPv);
@@ -385,6 +391,39 @@ function loadgraph() {
             		tension: 0
         		}
 			},
+			plugins: {
+			    zoom: {
+					// Container for pan options
+					pan: {
+					    // Boolean to enable panning
+					    enabled: true,
+
+					    // Panning directions. Remove the appropriate direction to disable
+					    // Eg. 'y' would only allow panning in the y direction
+					    mode: 'x',
+					    rangeMin: {
+						    x: null
+					    },
+					    rangeMax: {
+						    x: null
+					    },
+					    speed: 1000
+					},
+
+					// Container for zoom options
+					zoom: {
+					    // Boolean to enable zooming
+					    enabled: true,
+
+					    // Zooming directions. Remove the appropriate direction to disable
+					    // Eg. 'y' would only allow zooming in the y direction
+					    mode: 'x',
+
+					    sensitivity: 0.01
+
+					}
+				    }
+			},
 			responsive: true,
 			maintainAspectRatio: false,
 			hover: {
@@ -410,67 +449,72 @@ function loadgraph() {
 				display: false
 			},
 			scales: {
-				xAxes: [{
-					type: 'time',
-					time: {
-						parser: 'YYYY/MM/DD HH:mm:ss',
-						unit: 'minute',
-						displayFormats: {
-							'minute': 'DD.MM.YY - HH:mm',
-						},
-						distribution: 'linear',
-						precision: 60
-					},
-					ticks: {
-						//source: 'data',
-						maxTicksLimit: 25,
-						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
-					}
-      			}],
-				yAxes: [{
-					// horizontal line for values displayed on the left side (power)
-					position: 'left',
-					id: 'y-axis-1',
-					type: 'linear',
-					avoidFirstLastClippingEnabled: true,
-					display: true,
-					scaleLabel: {
-	        			display: true,
-	        			labelString: 'Leistung [W]',
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-	      			},
-					gridLines: {
-						// light grey, opacy = 100% (visible)
-						color: "rgba(204, 204, 204, 1)",
-					},
-					ticks: {
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-					}
-				},{
-					// horizontal line for values displayed on the right side (SoC)
-					position: 'right',
-					id: 'y-axis-2',
-					type: 'linear',
-					display: true,
-					scaleLabel: {
-						display: true,
-						labelString: 'SoC [%]',
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-					},
-					gridLines: {
-						// black, opacy = 0% (invisible)
-						color: "rgba(0, 0, 0, 0)",
-					},
-					ticks: {
-						min: 1,
-						suggestedMax: 100,
-						// middle grey, opacy = 100% (visible)
-						fontColor: "rgba(153, 153, 153, 1)"
-					}
-				}]
+				xAxes: [
+                    {
+    					type: 'time',
+    					time: {
+    						parser: 'YYYY/MM/DD HH:mm:ss',
+    						unit: 'minute',
+    						displayFormats: {
+    							'minute': 'DD.MM.YY - HH:mm',
+    						},
+    						distribution: 'linear',
+    						precision: 60
+    					},
+    					ticks: {
+    						//source: 'data',
+    						maxTicksLimit: 25,
+    						fontColor: "rgba(153, 153, 153, 1)"  // middle grey, opacy = 100% (visible)
+    					}
+          			}
+                ],
+				yAxes: [
+                    {
+    					// horizontal line for values displayed on the left side (power)
+    					position: 'left',
+    					id: 'y-axis-1',
+    					type: 'linear',
+    					avoidFirstLastClippingEnabled: true,
+    					display: true,
+    					scaleLabel: {
+    	        			display: true,
+    	        			labelString: 'Leistung [kW]',
+    						// middle grey, opacy = 100% (visible)
+    						fontColor: "rgba(153, 153, 153, 1)"
+    	      			},
+    					gridLines: {
+    						// light grey, opacy = 100% (visible)
+    						color: "rgba(204, 204, 204, 1)",
+    					},
+    					ticks: {
+    						// middle grey, opacy = 100% (visible)
+    						fontColor: "rgba(153, 153, 153, 1)"
+    					}
+                    },
+                    {
+    					// horizontal line for values displayed on the right side (SoC)
+    					position: 'right',
+    					id: 'y-axis-2',
+    					type: 'linear',
+    					display: true,
+    					scaleLabel: {
+    						display: true,
+    						labelString: 'SoC [%]',
+    						// middle grey, opacy = 100% (visible)
+    						fontColor: "rgba(153, 153, 153, 1)"
+    					},
+    					gridLines: {
+    						// black, opacy = 0% (invisible)
+    						color: "rgba(0, 0, 0, 0)",
+    					},
+    					ticks: {
+    						min: 1,
+    						suggestedMax: 100,
+    						// middle grey, opacy = 100% (visible)
+    						fontColor: "rgba(153, 153, 153, 1)"
+    					}
+                    }
+                ]
 			}
 		}
 	});

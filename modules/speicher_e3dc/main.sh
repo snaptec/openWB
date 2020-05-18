@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 if [[ $pvwattmodul != "none" ]]; then
 	pvwattold=$(</var/www/html/openWB/ramdisk/pvwatt)

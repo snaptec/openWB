@@ -4,7 +4,6 @@
 #Das pipen durch "jq" führt zeilenumbrüche ein.
 #Mithilfe von sed wird die die gewünschte Zeile ausgewählt
 #tr entfernt unnötige leerzeilen
-. /var/www/html/openWB/openwb.conf
 
 
 watttmp=$(curl --connect-timeout 15 -s $vzloggerip)

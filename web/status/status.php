@@ -346,9 +346,9 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/pvkwhk",
+					url: "/openWB/ramdisk/pvkwh",
 					complete: function(request){
-						$("#pvkwhdiv").html(request.responseText);
+						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
 					}
 				});
 				$.ajax({
@@ -367,6 +367,9 @@
 					url: "/openWB/ramdisk/yearly_pvkwhk",
 					complete: function(request){
 						$("#yearly_pvkwhdiv").html(request.responseText);
+						if ( request.responseText > 100 ) {
+							$('#pvpartlycounterdiv').show();
+						}
 					}
 				});
 				$.ajax({
@@ -595,9 +598,36 @@
 			});
 		}
 		loadstatuslog();
+		function mqttlog() {
+			$.ajax({
+				url: "/openWB/ramdisk/mqtt.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#mqttdiv").html(result);
+				}
+			});
+		}
+		mqttlog();
+		function smarthomelog() {
+			$.ajax({
+				url: "/openWB/ramdisk/smarthome.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#smarthomediv").html(result);
+				}
+			});
+		}
+		smarthomelog();
 	</script>
 
 	<?php
+		$owbversion = file_get_contents('/var/www/html/openWB/web/version');
 		$result = '';
 		$lines = file('/var/www/html/openWB/openwb.conf');
 		foreach ($lines as $line) {
@@ -609,6 +639,12 @@
 			}
 			if (strpos($line, "lp3name=") !== false) {
 				list(, $lp3nameold) = explode("=", $line);
+			}
+			if (strpos($line, "lastmanagement=") !== false) {
+				list(, $lastmanagementold) = explode("=", $line);
+			}
+			if (strpos($line, "lastmanagements2=") !== false) {
+				list(, $lastmanagements2old) = explode("=", $line);
 			}
 			if (strpos($line, "simplemode=") !== false) {
 				list(, $simplemodeold) = explode("=", $line);
@@ -636,7 +672,25 @@
 				$kostalplenticoreip2old = trim(preg_replace('/\s+/', '', $kostalplenticoreip2old));
 			}
 		}
-	?>
+?>
+<script>
+	$(function() {
+		var lp2akt = <?php echo $lastmanagementold ?>;
+		var lp3akt = <?php echo $lastmanagements2old ?>;
+		
+		if(lp2akt == '0') {
+			$('#ladepunkt2div').hide();
+		} else {
+			$('#ladepunkt2div').show();
+		}
+		if(lp2akt == '0') {
+			$('#ladepunkt3div').hide();
+		} else {
+			$('#ladepunkt3div').show();
+		}
+	});
+</script>
+
 </head>
 <body>
 	<?php
@@ -777,67 +831,70 @@
 				<div id="lla3div"></div>
 			</div>
 		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				LP2 <?php echo $lp2nameold ?>  Spannung [V]
+		<div id="ladepunkt2div">
+			<hr>
+			<div class="row bg-info">
+				<div class="col-sm-4 text-center">
+					LP2 <?php echo $lp2nameold ?>  Spannung [V]
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv1s1div"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv2s1div"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv3s1div"></div>
+				</div>
 			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv1s1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv2s1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv3s1div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center bg-info">
-				LP2 <?php echo $lp2nameold ?> Stromstärke [A]
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas11div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas12div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas13div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center">
-				LP3 <?php echo $lp3nameold ?> Spannung [V]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv1s2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv2s2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="llv3s2div"></div>
+			<hr>
+			<div class="row bg-info">
+				<div class="col-sm-4 text-center bg-info">
+					LP2 <?php echo $lp2nameold ?> Stromstärke [A]
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas11div"></div>
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas12div"></div>
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas13div"></div>
+				</div>
 			</div>
 		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center bg-info">
-				LP3 <?php echo $lp3nameold ?> Stromstärke [A]
+		<div id="ladepunkt3div">
+			<hr>
+			<div class="row bg-info">
+				<div class="col-sm-4 text-center">
+					LP3 <?php echo $lp3nameold ?> Spannung [V]
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv1s2div"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv2s2div"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="llv3s2div"></div>
+				</div>
 			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas21div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas22div"></div>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="llas23div"></div>
+			<hr>
+			<div class="row bg-info">
+				<div class="col-sm-4 text-center bg-info">
+					LP3 <?php echo $lp3nameold ?> Stromstärke [A]
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas21div"></div>
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas22div"></div>
+				</div>
+				<div class="col-sm-2 text-center bg-info">
+					<div id="llas23div"></div>
+				</div>
 			</div>
 		</div>
-
 		<hr style="height:3px;background-color:#333;" />
 		<div class="row">
 			<div class="col-sm-4 text-center"></div>
@@ -980,24 +1037,26 @@
 				<div id="pvkwhdiv"></div>
 			</div>
 		</div>
-		<div class="row" style="background-color:#BEFEBE">
-			<div class="col-sm-2 text-center">
-				PV Tagesertrag [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="daily_pvkwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				PV Monatsertrag [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="monthly_pvkwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				PV Jahresertrag [kWh]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="yearly_pvkwhdiv"></div>
+		<div id="pvpartlycounterdiv" style="display: none;">
+			<div class="row" style="background-color:#BEFEBE">
+				<div class="col-sm-2 text-center">
+					PV Tagesertrag [kWh]
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="daily_pvkwhdiv"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					PV Monatsertrag [kWh]
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="monthly_pvkwhdiv"></div>
+				</div>
+				<div class="col-sm-2 text-center">
+					PV Jahresertrag [kWh]
+				</div>
+				<div class="col-sm-2 text-center">
+					<div id="yearly_pvkwhdiv"></div>
+				</div>
 			</div>
 		</div>
 		<div class="row" style="background-color:#FCBE1E">
@@ -1212,7 +1271,8 @@
 			<meter id='cpu' high=85 min=0 max=100 value=0></meter> <span id='cpuuse'>--</span>%<br>
 			Memory: <span id='memtot'>--</span>MB
 			<meter id='mem' min='0' value=0></meter> <span style="font-size: small;">(<span id='memfree'>--</span>MB free)</span><br>
-			Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.
+			Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.<br>
+			openWB Version <?php echo $owbversion ?>
 		</p>
 		<script>
 			function updateit() {
@@ -1237,9 +1297,22 @@
 		</script>
 
 		<div class="row">
-			Ladestatus Änderungen:
+			<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
 		</div>
-		<div style="white-space: pre-line;" id="ladestatuslogdiv"></div>
+		<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
+		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
+		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
+
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
@@ -1252,6 +1325,37 @@
 				$('#pvinverter1and2div').hide();
 			}
 		});
+		$('#mqttlog').click(function(event){
+			var element = document.getElementById('mqttdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#mqttdiv').show();
+				$('#mqttdiv').removeClass("hide");
+			} else {
+				$('#mqttdiv').hide(); 
+				$('#mqttdiv').addClass("hide");
+			}
+		});
+		$('#ladestatuslog').click(function(event){
+			var element = document.getElementById('ladestatuslogdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#ladestatuslogdiv').show();
+				$('#ladestatuslogdiv').removeClass("hide");
+			} else {
+				$('#ladestatuslogdiv').hide(); 
+				$('#ladestatuslogdiv').addClass("hide");
+			}
+		});
+		$('#smarthomelog').click(function(event){
+			var element = document.getElementById('smarthomediv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#smarthomediv').show();
+				$('#smarthomediv').removeClass("hide");
+			} else {
+				$('#smarthomediv').hide(); 
+				$('#smarthomediv').addClass("hide");
+			}
+		});
+
 	</script>
 </body>
 </html>

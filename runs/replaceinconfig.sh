@@ -30,4 +30,4 @@ if [ -e /var/www/html/openWB/openwb.conf.1 ]
 	 then cp /var/www/html/openWB/openwb.conf /var/www/html/openWB/openwb.conf.1
 fi
 
-sed -i "s,$1.*,$1=$2,g" /var/www/html/openWB/openwb.conf
+sed -i "s,$1.*,$1$2,g" /var/www/html/openWB/openwb.conf

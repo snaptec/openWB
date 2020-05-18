@@ -10,7 +10,6 @@
 #            dem Menüpunkt "Systeminformationen"
 #            Mit der Registrierungsnr. kann man sich dann in der 
 #            Rolle "installer" einloggen. 
-. /var/www/html/openWB/openwb.conf
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #
@@ -73,7 +72,8 @@ ekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_Feed_in' | sed 's/.*://' | tr
 #
 ## Daten in Ramdisk schreiben
 #
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pv1kwh_temp
+#echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo '-'$pcs_pv_total_power > /var/www/html/openWB/ramdisk/pvwatt
 echo '-'$pcs_pv_total_power

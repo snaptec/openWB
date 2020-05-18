@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -36,18 +36,13 @@
 	<body>
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line, 2);
-				}
 				if(strpos($line, "hook1einschaltverz=") !== false) {
 					list(, $hook1einschaltverzold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "hook2einschaltverz=") !== false) {
+					list(, $hook2einschaltverzold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "hook2_ausverz=") !== false) {
 					list(, $hook2_ausverzold) = explode("=", $line, 2);
@@ -182,6 +177,9 @@
 			$verbraucher2_urlwold = str_replace( "'", "", $verbraucher2_urlwold);
 			$verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savesmarthome.php" method="POST">
@@ -333,6 +331,13 @@
 						</div>
 						<div class="row">
 							Einschaltschwelle in Watt bei die unten stehende URL aufgerufen wird.
+						</div>
+						<div class="row">
+							<b><label for="hook2einschaltverz">Gerät 2 Einschaltverzögerung:</label></b>
+							<input type="text" name="hook2einschaltverz" id="hook2einschaltverz" value="<?php echo $hook2einschaltverzold ?>">
+						</div>
+						<div class="row">
+							Bestimmt die Dauer für die die Einschaltschwelle überschritten werden muss bevor eingeschaltet wird.<br><br>
 						</div>
 						<div class="row">
 							<b><label for="hook2ein_url">Gerät 2 Einschalturl:</label></b>
@@ -493,6 +498,7 @@
 								<option <?php if($verbraucher1_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
 								<option <?php if($verbraucher1_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
 								<option <?php if($verbraucher1_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
+								<option <?php if($verbraucher1_typold == "shelly\n") echo "selected" ?> value="shelly">Shelly 1PM</option>
 							</select>
 						</div>
 						<div class="row">
@@ -540,7 +546,7 @@
 								<input type="text" name="verbraucher1_ip" id="verbraucher1_ip" value="<?php echo $verbraucher1_ipold ?>">
 							</div>
 							<div class="row">
-								IP Adresse des Tasmota Sonoff Geräts.
+								IP Adresse des Geräts.
 							</div>
 						</div>
 					</div>
@@ -565,6 +571,10 @@
 							if($('#verbraucher1_typ').val() == 'tasmota') {
 								$('#v1tasmota').show();
 							}
+							if($('#verbraucher1_typ').val() == 'shelly') {
+								$('#v1tasmota').show();
+							}
+
 						}
 
 						display_verbraucher1();
@@ -723,7 +733,7 @@
 				<div class="row justify-content-center">
 					<div class="col text-center">
 						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
+						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
@@ -741,30 +751,16 @@
 			</div>
 		</footer>
 
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
 
-			var settingspwold = <?php echo $settingspwold ?>;
-			if ( settingspwaktold == 1 ) {
-			passWord();
-			}
-			function passWord() {
-			var testV = 1;
-			var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+		<script type="text/javascript">
 
-			while (testV < 3) {
-				if (!pass1)
-					history.go(-1);
-				if (pass1 == settingspwold) {
-					break;
-				}
-				testV+=1;
-				var pass1 = prompt('Passwort falsch','Password');
-			}
-			if (pass1!="password" & testV == 3)
-				history.go(-1);
-			return " ";
-			}
+			$.get("settings/navbar.html", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navSmartHome').addClass('disabled');
+			});
+
 		</script>
+
 	</body>
 </html>

@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div class="col-6 col-sm-3">
+				<div class="col-8 col-sm-6 col-md-5 col-lg-4">
 					<div class="input-group mb-3">
 						<i class="far fa-caret-square-left fa-lg vaRow mr-4" title="vorheriger Monat" id="prevmonth"></i>
 						<input class="form-control datepicker" id="theDate" type="text" readonly>
@@ -80,7 +80,8 @@
 
 		<!-- load Chart.js library -->
 		<script src="../js/Chart.bundle.js"></script>
-
+		<script src="../js/hammerjs@2.0.8"></script>
+		<script src="../js/chartjs-plugin-zoom@0.7.4"></script>
 		<!-- load Bootstrap-Datepicker library -->
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
@@ -166,7 +167,7 @@
 				});
 
 				// load graph
-				$.getScript("monthlychart.js");
+				$.getScript("monthlychart.js?ver=1.0");
 			})
 		</script>
 

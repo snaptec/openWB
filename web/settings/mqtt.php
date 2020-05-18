@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -37,27 +37,19 @@
 
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			$refreshDuration = 8;
 			foreach($lines as $line) {
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-
-			    if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-			    }
 			}
 
-			$settingspwsold = str_replace( "'", "", $settingspwold);
 			$lines = file('/etc/os-release');
 			$tlsv13Supported = empty(preg_grep('/VERSION_CODENAME=stretch/', $lines)) && empty(preg_grep('/VERSION_CODENAME=jessie/', $lines)) && empty(preg_grep('/VERSION_CODENAME=wheezy/', $lines));
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
@@ -234,7 +226,7 @@
 				<div class="row justify-content-center">
 					<div class="col text-center">
 						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
+						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
@@ -252,31 +244,14 @@
 			</div>
 		</footer>
 
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
+		<script type="text/javascript">
 
-			if ( settingspwaktold == 1 ) {
-				passWord();
-			}
+			$.get("settings/navbar.html", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navMqttBruecke').addClass('disabled');
+			});
 
-			function passWord() {
-				var testV = 1;
-				var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
-
-				while (testV < 3) {
-					if (!pass1)
-						history.go(-1);
-					if (pass1 == settingspwold) {
-						break;
-					}
-					testV+=1;
-					var pass1 = prompt('Passwort falsch','Password');
-				}
-				if (pass1!="password" & testV == 3)
-					history.go(-1);
-				return " ";
-			}
 		</script>
 
 	</body>

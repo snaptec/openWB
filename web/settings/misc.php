@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
@@ -37,8 +37,6 @@
 	<body>
 
 		<?php
-
-			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -525,9 +523,6 @@
 				if(strpos($line, "ledsofort=") !== false) {
 					list(, $ledsofortold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
 				if(strpos($line, "lednurpv=") !== false) {
 					list(, $lednurpvold) = explode("=", $line);
 				}
@@ -565,11 +560,7 @@
 				if(strpos($line, "ledsakt=") !== false) {
 					list(, $ledsaktold) = explode("=", $line);
 				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line);
-				}
 			}
-			$settingspwsold = str_replace( "'", "", $settingspwold);
 
 			$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
 			$bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
@@ -582,6 +573,8 @@
 			$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
 		?>
 
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savemisc.php" method="POST">
@@ -589,15 +582,12 @@
 						<b><label for="dspeed">Geschwindigkeit Regelintervall:</label></b>
 						<select name="dspeed" id="dspeed">
 							<option <?php if($dspeedold == 0) echo "selected" ?> value="0">Normal</option>
-							<option <?php if($dspeedold == 1) echo "selected" ?> value="1">Schnell</option>
 							<option <?php if($dspeedold == 2) echo "selected" ?> value="2">Langsam</option>
 							<option <?php if($dspeedold == 3) echo "selected" ?> value="3">Sehr Langsam</option>
 						</select>
 					</div>
 
 					<div class="row">
-						Durch Verdoppeln wird das Regelintervall von 10Sek auf 5Sek gesetzt. Voraussetzung ist, dass alle Module schnell genug antworten.<br>
-						Ebenso müssen die BEVs, die geladen werden, schnell genug auf die Ladestromänderung reagieren.<br>
 						Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
 						Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
 						!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
@@ -658,18 +648,6 @@
 					<div class="row">
 						Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>
 						Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.
-					</div>
-
-					<hr>
-
-					<div class="row">
-						<b><label for="settingspwakt">Passwortabfrage für Einstellseiten:</label></b>
-						<select name="settingspwakt" id="settingspwakt">
-							<option <?php if($settingspwaktold == 0) echo "selected" ?> value="0">Deaktiviert</option>
-							<option <?php if($settingspwaktold == 1) echo "selected" ?> value="1">Aktiviert</option>
-						</select><br>
-						Passwort:
-						<input type="password" name="settingspw" id="settingspw" value="<?php echo $settingspwsold ?>">
 					</div>
 
 					<hr>
@@ -780,7 +758,7 @@
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 						</div>
 						<div class="row">
-							<b><label for="rfidlp1start">Aktiviere Ladepunkt 1:</label></b><br>
+							<b><label for="rfidlp1start1">Aktiviere Ladepunkt 1:</label></b><br>
 							<input type="text" name="rfidlp1start1" id="rfidlp1start1" value="<?php echo $rfidlp1start1old ?>"><br>
 							<input type="text" name="rfidlp1start2" id="rfidlp1start2" value="<?php echo $rfidlp1start2old ?>"><br>
 							<input type="text" name="rfidlp1start3" id="rfidlp1start3" value="<?php echo $rfidlp1start3old ?>">
@@ -789,7 +767,7 @@
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 						</div>
 						<div class="row">
-							<b><label for="rfidlp1start">Aktiviere Ladepunkt 2:</label></b><br>
+						<b><label for="rfidlp2start1">Aktiviere Ladepunkt 2:</label></b><br>
 							<input type="text" name="rfidlp2start1" id="rfidlp2start1" value="<?php echo $rfidlp2start1old ?>"><br>
 							<input type="text" name="rfidlp2start2" id="rfidlp2start2" value="<?php echo $rfidlp2start2old ?>"><br>
 							<input type="text" name="rfidlp2start3" id="rfidlp2start3" value="<?php echo $rfidlp2start3old ?>">
@@ -1296,18 +1274,7 @@
 						</select>
 					</div>
 
-					<div class="row">
-						Wenn Interaktiver Graph auf der Haupseite deaktiviert: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>
-						Empfehlung maximal 60 Minuten.<br>
-						Beim interaktiven Graph bis 120 Minuten
-					</div>
-					<div class="row">
-						<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
-						<select name="graphliveam" id="graphliveam">
-							<option <?php if($graphliveamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphliveamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
+
 					<!--
 					<div class="row">
 						<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
@@ -1317,13 +1284,6 @@
 						</select>
 					</div>
 					-->
-					<div class="row">
-						<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
-						<select name="grapham" id="grapham">
-							<option <?php if($graphamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
 					<div id="nonintdaily">
 					<!--
 						<div class="row">
@@ -1383,31 +1343,18 @@
 				<small>Sie befinden sich hier: Verschiedenes</small>
 			</div>
 		</footer>
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
 
-			if ( settingspwaktold == 1 ) {
-				passWord();
-			}
 
-			function passWord() {
-				var testV = 1;
-				var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+		<script type="text/javascript">
 
-				while (testV < 3) {
-					if (!pass1)
-						history.go(-1);
-					if (pass1 == settingspwold) {
-						break;
-					}
-					testV+=1;
-					var pass1 = prompt('Passwort falsch','Password');
-				}
-				if (pass1!="password" & testV == 3)
-					history.go(-1);
-				return " ";
-			}
+			$.get("settings/navbar.html", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navVerschiedenes').addClass('disabled');
+			});
+
 		</script>
+
+
 	</body>
 </html>

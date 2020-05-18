@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 timer=$(</var/www/html/openWB/ramdisk/soctimer)
 #new variables
 lstate=$(</var/www/html/openWB/ramdisk/ladestatus)

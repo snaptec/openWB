@@ -2,7 +2,6 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
         <a class="navbar-brand" href="../index.php">
-            <img id="logo" class="d-inline-block" alt="Logo" src="../img/icons/heart-blue.png" style="height: 2.3rem;">
             <span>openWB</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

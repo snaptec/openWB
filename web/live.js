@@ -879,8 +879,10 @@ client.onMessageArrived = function (message) {
 var retries = 0;
 
 //Connect Options
+var isSSL = location.protocol == 'https:';
 var options = {
 	timeout: 5,
+	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		retries = 0;
@@ -915,98 +917,98 @@ function graphoptionclick() {
 
 function lp1enabledclick() {
 	if ( lp1enabled == 0 ) {
-		publish("1","openWB/set/lp1/ChargePointEnabled");
+		publish("1","openWB/set/lp/1/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp1/ChargePointEnabled");
+		publish("0","openWB/set/lp/1/ChargePointEnabled");
 	}
 }
 
 function lp2enabledclick() {
 	if ( lp2enabled == 0 ) {
-		publish("1","openWB/set/lp2/ChargePointEnabled");
+		publish("1","openWB/set/lp/2/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp2/ChargePointEnabled");
+		publish("0","openWB/set/lp/2/ChargePointEnabled");
 	}
 }
 
 function lp3enabledclick() {
 	if ( lp3enabled == 0 ) {
-		publish("1","openWB/set/lp3/ChargePointEnabled");
+		publish("1","openWB/set/lp/3/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp3/ChargePointEnabled");
+		publish("0","openWB/set/lp/3/ChargePointEnabled");
 	}
 }
 
 function lp4enabledclick() {
 	if ( lp4enabled == 0 ) {
-		publish("1","openWB/set/lp4/ChargePointEnabled");
+		publish("1","openWB/set/lp/4/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp4/ChargePointEnabled");
+		publish("0","openWB/set/lp/4/ChargePointEnabled");
 	}
 }
 
 function lp5enabledclick() {
 	if ( lp5enabled == 0 ) {
-		publish("1","openWB/set/lp5/ChargePointEnabled");
+		publish("1","openWB/set/lp/5/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp5/ChargePointEnabled");
+		publish("0","openWB/set/lp/5/ChargePointEnabled");
 	}
 }
 
 function lp6enabledclick() {
 	if ( lp6enabled == 0 ) {
-		publish("1","openWB/set/lp6/ChargePointEnabled");
+		publish("1","openWB/set/lp/6/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp6/ChargePointEnabled");
+		publish("0","openWB/set/lp/6/ChargePointEnabled");
 	}
 }
 
 function lp7enabledclick() {
 	if ( lp7enabled == 0 ) {
-		publish("1","openWB/set/lp7/ChargePointEnabled");
+		publish("1","openWB/set/lp/7/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp7/ChargePointEnabled");
+		publish("0","openWB/set/lp/7/ChargePointEnabled");
 	}
 }
 
 function lp8enabledclick() {
 	if ( lp8enabled == 0 ) {
-		publish("1","openWB/set/lp8/ChargePointEnabled");
+		publish("1","openWB/set/lp/8/ChargePointEnabled");
 	} else {
-		publish("0","openWB/set/lp8/ChargePointEnabled");
+		publish("0","openWB/set/lp/8/ChargePointEnabled");
 	}
 }
 
 function lp1DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/config/set/sofort/lp/1/current");
 }
 
 function lp2DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/set/lp2/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/config/set/sofort/lp/2/current");
 }
 
 function lp3DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/set/lp3/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/config/set/sofort/lp/3/current");
 }
 
 function lp4DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/set/lp4/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/config/set/sofort/lp/4/current");
 }
 
 function lp5DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/set/lp5/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/config/set/sofort/lp/5/current");
 }
 
 function lp6DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/set/lp6/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/config/set/sofort/lp/6/current");
 }
 
 function lp7DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/set/lp7/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/config/set/sofort/lp/7/current");
 }
 
 function lp8DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/config/set/sofort/lp/8/current");
 }
 
 function sofortclick() {

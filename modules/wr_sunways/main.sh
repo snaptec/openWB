@@ -1,6 +1,5 @@
 #!/bin/bash
 
-. /var/www/html/openWB/openwb.conf
 variable=$(curl --digest -u customer:$wrsunwayspw "http://$wrsunwaysip/data/ajax.txt?CAN=1&HASH=00200403&TYPE=1")
 count=0
 IFS=";"

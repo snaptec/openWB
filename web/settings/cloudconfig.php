@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -36,22 +36,14 @@
 	<body>
 		<?php
 
-			include '/var/www/html/openWB/web/settings/navbar.php';
-
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				
+
 				if(strpos($line, "clouduser=") !== false) {
 					list(, $clouduserold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "cloudpw=") !== false) {
 					list(, $cloudpwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspw=") !== false) {
-					list(, $settingspwold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "settingspwakt=") !== false) {
-					list(, $settingspwaktold) = explode("=", $line, 2);
 				}
 			}
 			$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
@@ -60,8 +52,7 @@
 			}
 
 			$firstLoopDone = false;
-			foreach($files as $currentFile)
-			{
+			foreach($files as $currentFile) {
 				$currentBridge = preg_replace('/^99-bridge-(.+)\.conf/', '${1}', $currentFile);
 				$bridgeEnabled = preg_match('/.*\.conf$/', $currentFile) === 1;
 				$bridgeLines = $currentFile != "" ? file($currentFile) : array();
@@ -70,23 +61,20 @@
 					if(is_null($remotePrefix) && preg_match('/^\s*topic\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+([^\s]+?)\s+/', $bridgeLine, $matches) === 1) {
 						// echo "Matches: " . var_dump($matches);
 						$remotePrefix = trim($matches[5]);
-					}
-					else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
+					} else if(preg_match('/^\s*connection\s+(.+)/', $bridgeLine, $matches) === 1) {
 						$connectionName = trim($matches[1]);
 					}
 				}
 			}
 
-
-
-
-				
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
-					<h3>Cloud Einstellungen</h3><br><br>
+					<h3>Cloud Einstellungen</h3>
 				</div>
 				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) {
 				echo '
@@ -107,8 +95,8 @@
 				'; } else { echo '
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="row">
-							<b><label for="username">Benutzername:</label></b>
-							<input type="text" name="username" id="username" value="">
+							<b><label for="connect_username">Benutzername:</label></b>
+							<input type="text" name="username" id="connect_username" value="">
 						</div>
 						<div class="row">
 							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
@@ -126,8 +114,8 @@
 					<hr>
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="row">
-							<b><label for="username">Benutzername:</label></b>
-							<input type="text" name="username" id="username" value="">
+							<b><label for="register_username">Benutzername:</label></b>
+							<input type="text" name="username" id="register_username" value="">
 						</div>
 						<div class="row">
 							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
@@ -146,7 +134,7 @@
 				<div class="row justify-content-center">
 					<div class="col text-center">
 						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
+						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
@@ -160,33 +148,20 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Einstellungen/Cloudeinstellungen</small>
+				<small>Sie befinden sich hier: Einstellungen/openWB Cloud</small>
 			</div>
 		</footer>
 
-		<script>
-			var settingspwaktold = <?php echo $settingspwaktold ?>;
-			var settingspwold = <?php echo $settingspwold ?>;
-			if ( settingspwaktold == 1 ) {
-			passWord();
-			}
-			function passWord() {
-			var testV = 1;
-			var pass1 = prompt('Einstellungen geschützt, bitte Password eingeben:','');
+		<script type="text/javascript">
 
-			while (testV < 3) {
-				if (!pass1)
-					history.go(-1);
-				if (pass1 == settingspwold) {
-					break;
-				}
-				testV+=1;
-				var pass1 = prompt('Passwort falsch','Password');
-			}
-			if (pass1!="password" & testV == 3)
-				history.go(-1);
-			return " ";
-			}
+			$.get("settings/navbar.html", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navOpenwbCloud').addClass('disabled');
+			});
+
 		</script>
+
+
 	</body>
 </html>
