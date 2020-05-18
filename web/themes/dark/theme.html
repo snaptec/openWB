@@ -68,20 +68,21 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" type="text/css" href="themes/' + themeCookie + '/style.css">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css">');
 	</script>
 </head>
 
 <body>
 	<!-- Preloader with Progress Bar -->
-	<div class="loader bg-white">
-		<div class="loader-container regularTextSize">
-		  	<div class="row text-black">
+	<!-- style instead of css due to async loading of theme css -->
+	<div id="preloader" style="background-color:white; position:fixed; top:0px; left:0px; width:100%; height:100%; z-index:999999;">
+		<div style="margin-top: 150px; text-align: center;">
+		  	<div class="row" style="color:black;">
 			  	<div class="mx-auto d-block justify-content-center">
 					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
 			  	</div>
 			</div>
-			<div class="row text-grey justify-content-center mt-2">
+			<div class="row justify-content-center mt-2" style="color:grey;">
 				<div class="col-10 col-sm-6">
 					Bitte warten, während die Seite aufgebaut wird.
 				</div>
@@ -1107,7 +1108,7 @@
 					landingpageShown = true;
 					setTimeout(function (){
 						// delay a little bit
-						$(".loader").fadeOut(1000);
+						$("#preloader").fadeOut(1000);
 					}, 500);
 				}
 			}

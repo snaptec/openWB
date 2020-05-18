@@ -47,13 +47,12 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/config\/get\/SmartHome\/Devices\//i) ) { processSmartHomeDevicesConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/pv\//i) ) { processPvConfigMessages(mqttmsg, mqttpayload); }
-
 }  // end handlevar
 
 
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
-
+	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
 		// sets button color in charge mode modal and sets icon in mode select button
 		switch (mqttpayload) {
@@ -806,7 +805,7 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/Watt$/i ) ) {
-		
+
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
 		var element = parent.find('.actualPowerDevice');  // now get parents respective child element
