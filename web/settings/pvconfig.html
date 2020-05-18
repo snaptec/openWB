@@ -135,11 +135,19 @@
 								Steigt der <b>Bezug</b> über die Abschaltschwelle, stoppt die Laderegelung.
 							</small>
 						</div>
-						<div class="form-row form-group mt-1">
-							<div class="col-4 col-sm-3 col-lg-2">
-								<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="100000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+						<div class="form-row vaRow mt-1">
+							<div class="col-auto">
+								<div class="form-check mb-2">
+									<input class="form-check-input" type="checkbox" id="maxPowerConsumptionBeforeStopPosNeg" data-topicprefix="openWB/config/get/pv/">
+									<label class="form-check-label" for="maxPowerConsumptionBeforeStopPosNeg">
+										&nbsp;negativ
+									</label>
+								</div>
 							</div>
-							<label class="col col-form-label" for="maxPowerConsumptionBeforeStop"><small>{0 - 100000 ganzzahlig}</small></label>
+							<div class="col-4 col-sm-3 col-lg-2">
+								<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="50000" value="" data-signcheckbox="maxPowerConsumptionBeforeStopPosNeg" data-default="0" data-topicprefix="openWB/config/get/pv/">
+							</div>
+							<label class="col col-form-label" for="maxPowerConsumptionBeforeStop"><small>{&plusmn;50000 ganzzahlig}</small></label>
 						</div>
 						<h6 class="mb-0">Abschaltverzögerung</h6>
 						<div>
