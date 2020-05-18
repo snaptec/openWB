@@ -379,7 +379,7 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 		 	firstcsvvar = csvvar;
 	 	}
 		oldfincsvvar=fincsvvar;
-		if ( csvvar != 0 && typeof csvvar !== 'undefined'){
+		if ( csvvar != 0 && typeof csvvar !== 'undefined' && csvvar >= 5 ){
 			vis=1;
 		}
 		counter++;
