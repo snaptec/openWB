@@ -170,7 +170,7 @@
 				});
 
 				// load graph
-				$.getScript("dailychart.js?ver=1.0");
+				$.getScript("dailychart.js?ver=1.1");
 			})
 		</script>
 

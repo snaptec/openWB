@@ -379,7 +379,7 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 		 	firstcsvvar = csvvar;
 	 	}
 		oldfincsvvar=fincsvvar;
-		if ( csvvar != 0 && typeof csvvar !== 'undefined'){
+		if ( csvvar != 0 && typeof csvvar !== 'undefined' && csvvar >= 5 ){
 			vis=1;
 		}
 		counter++;
@@ -588,8 +588,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: d1name + ' Import' + overalldevice1 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: "rgba(230, 40, 220, 0.7)",
+			backgroundColor: "rgba(230, 40, 220, 0.7)",
 			fill: false,
 			borderWidth: 2,
 			data: adevice1,
@@ -597,8 +597,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: d2name + ' Import' + overalldevice2 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: "rgba(230, 50, 220, 0.7)",
+			backgroundColor: "rgba(230, 50, 220, 0.7",
 			fill: false,
 			borderWidth: 2,
 			data: adevice2,
@@ -606,8 +606,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: d3name + ' Import' + overalldevice3 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: "rgba(230, 60, 220, 0.7",
+			backgroundColor: "rgba(230, 60, 220, 0.7",
 			fill: false,
 			borderWidth: 2,
 			data: adevice3,
@@ -615,8 +615,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: d4name + ' Import' + overalldevice4 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: "rgba(230, 70, 220, 0.7",
+			backgroundColor: "rgba(230, 50, 220, 0.7",
 			fill: false,
 			borderWidth: 2,
 			data: adevice4,
@@ -624,8 +624,8 @@ function loadgraph() {
 			yAxisID: 'y-axis-1'
 		} , {
 			label: d5name + ' Import' + overalldevice5 + ' kWh',
-			borderColor: "rgba(150, 150, 0, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			borderColor: "rgba(230, 50, 220, 0.7",
+			backgroundColor: "rgba(230, 50, 220, 0.7",
 			fill: false,
 			borderWidth: 2,
 			data: adevice5,

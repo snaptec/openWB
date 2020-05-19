@@ -10,8 +10,8 @@ ifconfig >> $debugFile
 echo "############################ version ##############" >> $debugFile
 echo "Version" >> $debugFile
 cat /var/www/html/openWB/web/version >> $debugFile
+echo "############################ openWB.log ##############" >> $debugFile
 echo "$(tail -1000 /var/www/html/openWB/ramdisk/openWB.log)" >> $debugFile
-
 echo "############################ mqtt ##############" >> $debugFile
 echo "$(tail -200 /var/www/html/openWB/ramdisk/mqtt.log)" >> $debugFile
 echo "############################ ladestatus.log ##############" >> $debugFile

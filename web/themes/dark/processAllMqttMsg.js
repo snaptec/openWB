@@ -177,7 +177,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 			boolDisplaySpeicher = false;
 			hidespeicher = 'foo';
 		} else {
-			hidespeicher = 'Speicherleistung';
+			hidespeicher = 'Speicher';
 			boolDisplaySpeicher = true;
 		}
 		checkgraphload();
