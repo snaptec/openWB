@@ -326,7 +326,7 @@ touch /var/www/html/openWB/ramdisk/yearly_pvkwhk2
 echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk2
 # SoC Speicher am WR 1
 touch /var/www/html/openWB/ramdisk/speichersoc
-echo 4 > /var/www/html/openWB/ramdisk/speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 # SoC Speicher am WR 2
 touch /var/www/html/openWB/ramdisk/speichersoc2
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc2
