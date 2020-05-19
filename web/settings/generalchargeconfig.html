@@ -174,7 +174,9 @@
 				// disable navbar entry for current page
 				$('#navGeneralLadeeinstellungen').addClass('disabled');
 			});
-
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity check here
+			}
 			function saveSettings() {
 				// sends all changed values by mqtt if valid
 				var formValid = $("#myForm")[0].checkValidity();
