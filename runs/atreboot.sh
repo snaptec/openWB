@@ -1989,6 +1989,14 @@ then
 	echo "rfidlp2start3=000" >> /var/www/html/openWB/openwb.conf
 
 fi
+if ! grep -Fq "rfidlp1start4=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1start4=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start5=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start4=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start5=000" >> /var/www/html/openWB/openwb.conf
+
+fi
 if ! grep -Fq "rfidstandby=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidstandby=000" >> /var/www/html/openWB/openwb.conf
