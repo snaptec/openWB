@@ -446,7 +446,7 @@
 					list(, $rfidlp1start4old) = explode("=", $line);
 				}
 				if(strpos($line, "rfidlp1start5=") !== false) {
-					list(, $rfidlp1start6old) = explode("=", $line);
+					list(, $rfidlp1start5old) = explode("=", $line);
 				}
 				if(strpos($line, "rfidlp2start1=") !== false) {
 					list(, $rfidlp2start1old) = explode("=", $line);
