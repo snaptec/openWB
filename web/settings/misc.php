@@ -874,7 +874,7 @@
 							Hier das Application Token von Pushover eintragen
 						</div>
 						<div class="row">
-							<hr>
+							
 							<b>Benachrichtigungseinstellungen:</b>
 						</div>
 						<div class="row">
