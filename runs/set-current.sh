@@ -68,6 +68,12 @@ function setChargingCurrentModbus () {
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
 }
+function setChargingCurrentBuchse () {
+	current=$1
+	# set desired charging current
+	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+	#Will be handled in buchsecontrol.py
+}
 # function for setting the current - IP modbusevse
 # Parameters:
 # 1: current
@@ -192,6 +198,9 @@ function setChargingCurrentnrgkick () {
 function setChargingCurrent () {
 	if [[ $evsecon == "dac" ]]; then
 		setChargingCurrentDAC $current $dacregister
+	fi
+	if [[ $evsecon == "buchse" ]]; then
+		setChargingCurrentBuchse $current
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
