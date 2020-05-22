@@ -112,7 +112,14 @@ foreach($lines as $line) {
 		$result .= 'rfidlp1start3='.$_POST['rfidlp1start3']."\n";
 		$writeit = '1';
 	}
-
+	if(strpos($line, "rfidlp1start4=") !== false) {
+		$result .= 'rfidlp1start4='.$_POST['rfidlp1start4']."\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "rfidlp1start5=") !== false) {
+		$result .= 'rfidlp1start5='.$_POST['rfidlp1start5']."\n";
+		$writeit = '1';
+	}
 	if(strpos($line, "rfidlp2start1=") !== false) {
 		$result .= 'rfidlp2start1='.$_POST['rfidlp2start1']."\n";
 		$writeit = '1';
@@ -125,6 +132,15 @@ foreach($lines as $line) {
 
 	if(strpos($line, "rfidlp2start3=") !== false) {
 		$result .= 'rfidlp2start3='.$_POST['rfidlp2start3']."\n";
+		$writeit = '1';
+	}
+	if(strpos($line, "rfidlp2start4=") !== false) {
+		$result .= 'rfidlp2start4='.$_POST['rfidlp2start4']."\n";
+		$writeit = '1';
+	}
+
+	if(strpos($line, "rfidlp2start5=") !== false) {
+		$result .= 'rfidlp2start5='.$_POST['rfidlp2start5']."\n";
 		$writeit = '1';
 	}
 

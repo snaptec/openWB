@@ -230,6 +230,7 @@ function requestdaygraph() {
 
 function putgraphtogether() {
 	if ( !allValuesPresent.includes(0) ) {
+		publish("0", "openWB/set/graph/RequestDayGraph");
 		var alldata = graphDataSegments[0] + "\n" + graphDataSegments[1] + "\n" + graphDataSegments[2] + "\n" + graphDataSegments[3] + "\n" + graphDataSegments[4] + "\n" + graphDataSegments[5] + "\n" + graphDataSegments[6] + "\n" + graphDataSegments[7] + "\n" + graphDataSegments[8] + "\n" + graphDataSegments[9] + "\n" + graphDataSegments[10] + "\n" + graphDataSegments[11];
 		graphdata = alldata.replace(/^\s*[\n]/gm, '');
 		//graphdata = graphDataSegments.join().replace(/^\s*[\n]/gm, '');
@@ -390,7 +391,6 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	} else {
 		window[hidevar] = hidevalue;
 	}
-	console.log(window[hidevar]);
 }
 
 function loadgraph() {

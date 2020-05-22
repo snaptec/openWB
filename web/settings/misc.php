@@ -442,6 +442,12 @@
 				if(strpos($line, "rfidlp1start3=") !== false) {
 					list(, $rfidlp1start3old) = explode("=", $line);
 				}
+				if(strpos($line, "rfidlp1start4=") !== false) {
+					list(, $rfidlp1start4old) = explode("=", $line);
+				}
+				if(strpos($line, "rfidlp1start5=") !== false) {
+					list(, $rfidlp1start5old) = explode("=", $line);
+				}
 				if(strpos($line, "rfidlp2start1=") !== false) {
 					list(, $rfidlp2start1old) = explode("=", $line);
 				}
@@ -450,6 +456,12 @@
 				}
 				if(strpos($line, "rfidlp2start3=") !== false) {
 					list(, $rfidlp2start3old) = explode("=", $line);
+				}
+				if(strpos($line, "rfidlp2start4=") !== false) {
+					list(, $rfidlp2start4old) = explode("=", $line);
+				}
+				if(strpos($line, "rfidlp2start5=") !== false) {
+					list(, $rfidlp2start5old) = explode("=", $line);
 				}
 
 				if(strpos($line, "rfidsofort=") !== false) {
@@ -759,18 +771,42 @@
 						</div>
 						<div class="row">
 							<b><label for="rfidlp1start1">Aktiviere Ladepunkt 1:</label></b><br>
-							<input type="text" name="rfidlp1start1" id="rfidlp1start1" value="<?php echo $rfidlp1start1old ?>"><br>
-							<input type="text" name="rfidlp1start2" id="rfidlp1start2" value="<?php echo $rfidlp1start2old ?>"><br>
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp1start1" id="rfidlp1start1" value="<?php echo $rfidlp1start1old ?>">
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp1start2" id="rfidlp1start2" value="<?php echo $rfidlp1start2old ?>">
+						</div>
+						<div class="row">
 							<input type="text" name="rfidlp1start3" id="rfidlp1start3" value="<?php echo $rfidlp1start3old ?>">
+						</div>
+						<div class="row">					
+							<input type="text" name="rfidlp1start4" id="rfidlp1start4" value="<?php echo $rfidlp1start4old ?>">
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp1start5" id="rfidlp1start5" value="<?php echo $rfidlp1start5old ?>">
 						</div>
 						<div class="row">
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 						</div>
 						<div class="row">
-						<b><label for="rfidlp2start1">Aktiviere Ladepunkt 2:</label></b><br>
-							<input type="text" name="rfidlp2start1" id="rfidlp2start1" value="<?php echo $rfidlp2start1old ?>"><br>
-							<input type="text" name="rfidlp2start2" id="rfidlp2start2" value="<?php echo $rfidlp2start2old ?>"><br>
+						<b><label for="rfidlp2start1">Aktiviere Ladepunkt 2:</label></b>
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp2start1" id="rfidlp2start1" value="<?php echo $rfidlp2start1old ?>">
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp2start2" id="rfidlp2start2" value="<?php echo $rfidlp2start2old ?>">
+						</div>
+						<div class="row">
 							<input type="text" name="rfidlp2start3" id="rfidlp2start3" value="<?php echo $rfidlp2start3old ?>">
+						</div>
+						<div class="row">					
+							<input type="text" name="rfidlp2start4" id="rfidlp2start4" value="<?php echo $rfidlp2start4old ?>">
+						</div>
+						<div class="row">
+							<input type="text" name="rfidlp2start5" id="rfidlp2start5" value="<?php echo $rfidlp2start5old ?>">
 						</div>
 						<div class="row">
 							RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
@@ -838,7 +874,7 @@
 							Hier das Application Token von Pushover eintragen
 						</div>
 						<div class="row">
-							<hr>
+							
 							<b>Benachrichtigungseinstellungen:</b>
 						</div>
 						<div class="row">
