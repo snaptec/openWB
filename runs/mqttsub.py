@@ -560,7 +560,7 @@ def on_message(client, userdata, msg):
             client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
             subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh")
     if (msg.topic == "openWB/config/set/releaseTrain"):
-        if ( msg.payload.decode("utf-8") == "stable17" or msg.payload.decode("utf-8") == "master" or msg.payload.decode("utf-8") == "beta"):
+        if ( msg.payload.decode("utf-8") == "stable17" or msg.payload.decode("utf-8") == "master" or msg.payload.decode("utf-8") == "beta" or msg.payload.decode("utf-8").startswith("yc/")):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/set/releaseTrain", "", qos=0, retain=True)
