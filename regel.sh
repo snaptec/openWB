@@ -182,6 +182,8 @@ if (( cpunterbrechunglp1 == 1 )); then
 					echo "CP Unterbrechung an LP1 durchgeführt"
 					if [[ $evsecon == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
+					elif [[ $evsecon == "ipevse" ]]; then
+						python runs/cpuremote.py $evseiplp1 4
 					else
                                        		sudo python runs/cpulp1.py
 					fi
@@ -204,6 +206,9 @@ if (( cpunterbrechunglp2 == 1 )); then
 				       echo "CP Unterbrechung an LP2 durchgeführt"
 					if [[ $evsecons1 == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+					elif [[ $evsecons1 == "ipevse" ]]; then
+						python runs/cpuremote.py $evseiplp2 7
+
 					else
                                        		sudo python runs/cpulp2.py
 			       		fi

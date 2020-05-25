@@ -138,7 +138,7 @@
 
 				<br>
 
-				<div class="card">
+				<div class="card hide lp2options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 2
 					</div>
@@ -185,7 +185,7 @@
 
 				<br>
 
-				<div class="card">
+				<div class="card hide lp3options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 3
 					</div>
@@ -221,7 +221,7 @@
 				</div>  <!-- end card Einstellungen Ladepunkt 3 -->
 
 				<br>
-				<div class="card">
+				<div class="card hide lp4options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 4
 					</div>
@@ -257,7 +257,7 @@
 				</div>  <!-- end card Einstellungen Ladepunkt 4 -->
 
 				<br>
-				<div class="card">
+				<div class="card hide lp5options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 5
 					</div>
@@ -293,7 +293,7 @@
 				</div>  <!-- end card Einstellungen Ladepunkt 5 -->
 
 				<br>
-				<div class="card">
+				<div class="card hide lp6options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 6
 					</div>
@@ -329,7 +329,7 @@
 				</div>  <!-- end card Einstellungen Ladepunkt 6 -->
 
 				<br>
-				<div class="card">
+				<div class="card hide lp7options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 7
 					</div>
@@ -365,7 +365,7 @@
 				</div>  <!-- end card Einstellungen Ladepunkt 7 -->
 
 				<br>
-				<div class="card">
+				<div class="card hide lp8options">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 8
 					</div>
@@ -510,7 +510,18 @@
 				// disable navbar entry for current page
 				$('#navSofortLadeeinstellungen').addClass('disabled');
 			});
-
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity check here
+				if ( elementId.match( /^boolChargePointConfiguredLp[1-9]*$/i ) ) {
+					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 1) {
+						$('.lp' + index + 'options').show();
+					} else {
+						$('.lp' + index + 'options').hide();
+					}
+				}
+			}
 			function saveSettings() {
 				// sends all changed values by mqtt if valid
 				var formValid = $("#myForm")[0].checkValidity();

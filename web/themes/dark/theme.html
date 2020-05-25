@@ -68,7 +68,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
 	</script>
 </head>
 
@@ -1137,15 +1137,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/dark/helperFunctions.js?ver=20200514-b',
+				'themes/dark/helperFunctions.js?ver=20200514-c',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20200514-e',
+				'themes/dark/processAllMqttMsg.js?ver=20200518-v',
 				// respective Chart.js definition live
-				'themes/dark/livechart.js?ver=20200506-b',
+				'themes/dark/livechart.js?ver=20200506-c',
 				// respective Chart.js definition awattar
-				'themes/dark/awattarchart.js?ver=20200331-b',
+				'themes/dark/awattarchart.js?ver=20200331-c',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20200506-b',
+				'themes/dark/setupMqttServices.js?ver=20200506-c',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1319,6 +1319,15 @@
 					all6 = 0;
 					all7 = 0;
 					all8 = 0;
+					all9 = 0;
+					all10 = 0;
+					all11 = 0;
+					all12 = 0;
+					all13 = 0;
+					all14 = 0;
+					all15 = 0;
+					all16 = 0;
+
 					subscribeMqttGraphSegments();
 				}
 			});

@@ -147,30 +147,34 @@
 
 				$('#prevday').click(function(e) {
 					// on click of prev day button
-					if ( parsedDate > earliestDate ) {
-						parsedDate.setDate(parsedDate.getDate() - 1);  // substract 1 day from currently selected date
-						let dd = String(parsedDate.getDate()).padStart(2, '0');
-						let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-						let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
-						window.location.href = "daily.php?date=" + dateToParseStr;
+					if ( initialread == 1 ) {
+						if ( parsedDate > earliestDate ) {
+							parsedDate.setDate(parsedDate.getDate() - 1);  // substract 1 day from currently selected date
+							let dd = String(parsedDate.getDate()).padStart(2, '0');
+							let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+							let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
+							window.location.href = "daily.php?date=" + dateToParseStr;
+						}
 					}
 				});
 
 				$('#nextday').click(function(e) {
 					// on click of next day button
-					let today = new Date();
-					today.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
-					if ( parsedDate < today ) {
-						parsedDate.setDate(parsedDate.getDate() + 1);  // add 1 day from currently selected date
-						let dd = String(parsedDate.getDate()).padStart(2, '0');
-						let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-						let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
-						window.location.href = "daily.php?date=" + dateToParseStr;
+					if ( initialread == 1 ) {
+						let today = new Date();
+						today.setHours(0,0,0,0);  // make sure time is all 0 for later comparisons
+						if ( parsedDate < today ) {
+							parsedDate.setDate(parsedDate.getDate() + 1);  // add 1 day from currently selected date
+							let dd = String(parsedDate.getDate()).padStart(2, '0');
+							let mm = String(parsedDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+							let dateToParseStr = parsedDate.getFullYear() + '-' + mm + '-' + dd;
+							window.location.href = "daily.php?date=" + dateToParseStr;
+						}
 					}
 				});
 
 				// load graph
-				$.getScript("dailychart.js?ver=1.0");
+				$.getScript("dailychart.js?ver=1.1");
 			})
 		</script>
 
