@@ -1088,7 +1088,10 @@
 						countTopicsReceived++;
 					}
 				};
-				var percentageReceived = (countTopicsReceived / topicsToSubscribe.length * 100).toFixed(0);
+				// countTopicsToBeReceived holds all topics flagged 1 and not only those for preloader
+				countTopicsReceived = countTopicsReceived - countTopicsNotForPreloader;
+				var countTopicsToBeReceived = topicsToSubscribe.length - countTopicsNotForPreloader;
+				var percentageReceived = (countTopicsReceived / countTopicsToBeReceived * 100).toFixed(0);
 				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
 				if ( timeBetweenTwoMesagges > 3000 ) {
 					// latest after 3 sec without new messages
