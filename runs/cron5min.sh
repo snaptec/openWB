@@ -102,7 +102,7 @@ fi
 if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
-pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+pvkwh=$pv
 
 pvdailyyieldstart=$(head -n 1 /var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv)
 pvyieldcount=0
