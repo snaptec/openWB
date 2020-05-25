@@ -14,7 +14,6 @@ if [[ $pv2wattmodul != "none" ]]; then
 else
 	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
 fi
-echo "$pv cron5min pv var"
 ll1=$(</var/www/html/openWB/ramdisk/llkwh)
 ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
@@ -121,6 +120,8 @@ ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
 echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
+echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
