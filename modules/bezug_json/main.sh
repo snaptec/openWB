@@ -3,6 +3,7 @@
 
 answer=$(curl --connect-timeout 5 -s $bezugjsonurl)
 evuwatt=$(echo $answer | jq -r $bezugjsonwatt | sed 's/\..*$//')
+evuwatt=$((evuwatt * -1))
 echo $evuwatt
 echo $evuwatt > /var/www/html/openWB/ramdisk/wattbezug
 evuikwh=$(echo $answer | jq -r $bezugjsonkwh)
