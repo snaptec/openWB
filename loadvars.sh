@@ -320,7 +320,6 @@ if [[ $pv2wattmodul != "none" ]]; then
 	pvwatt=$(( pvwatt + pv2watt ))
 	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 	pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
-
 	pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
 	#echo $pvallkwh > /var/www/html/openWB/ramdisk/pvkwh
 	echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh

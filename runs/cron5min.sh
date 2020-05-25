@@ -14,6 +14,7 @@ if [[ $pv2wattmodul != "none" ]]; then
 else
 	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
 fi
+echo "$pv cron5min pv var"
 ll1=$(</var/www/html/openWB/ramdisk/llkwh)
 ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
@@ -102,7 +103,7 @@ fi
 if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
-pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+pvkwh=$pv
 
 pvdailyyieldstart=$(head -n 1 /var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv)
 pvyieldcount=0
