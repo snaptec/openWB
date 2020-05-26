@@ -16,6 +16,11 @@ minundpvlademodus(){
 			fi
 		fi
 	fi
+	if [[ $speichervorhanden == "1" ]]; then 
+		if (( speicherleistung < 0 )); then 
+			uberschuss=$((uberschuss + speicherleistung)) 
+		fi 
+	fi
 	if (( speichersoc >= speichersochystminpv )); then
 		if (( ladestatus == 0 )); then
 			if (( speichersoc >= speichersocminpv )); then
