@@ -18,6 +18,7 @@ if [[ $schieflastaktiv == "1" ]]; then
 		u1p3pstat=$(<ramdisk/u1p3pstat)
 		if [[ $u1p3pstat == "1" ]]; then
 			maximalstromstaerke=$schieflastmaxa
+			echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
 		fi
 	fi
 fi
@@ -27,13 +28,15 @@ if (( stopchargeafterdisclp1 == 0 )); then
 			if [[ $lp1enabled == "1" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
+				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
+
 			fi
 		fi
 		if (( soc < stopchargepvpercentagelp1 )); then
 			if [[ $lp1enabled == "0" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
-
+				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
 			fi
 		fi
 	fi
@@ -44,14 +47,14 @@ if (( stopchargeafterdisclp2 == 0 )); then
 			if [[ $lp2enabled == "1" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
-
+				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
 			fi
 		fi
 		if (( soc1 < stopchargepvpercentagelp2 )); then
 			if [[ $lp2enabled == "0" ]]; then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "1"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
-
+				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
 			fi
 		fi
 	fi
@@ -96,8 +99,10 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 		echo "Überschuss $uberschuss; mindestens $mindestuberschussphasen"
 	fi
 	if (( mindestuberschussphasen <= uberschuss )); then
+		echo "$date Uberschuss $uberschuss ist größer als nötiger Überschuss, Wert: $mindestuberschussphasen" >> ramdisk/nurpv.log
 		pvecounter=$(cat /var/www/html/openWB/ramdisk/pvecounter)
 		if (( pvecounter < einschaltverzoegerung )); then
+			echo "$date Einschaltverzögerung aktiv, Aktuell: $pvecounter, Ziel: $einschaltverzoegerung" >> ramdisk/nurpv.log
 			pvecounter=$((pvecounter + 10))
 			echo $pvecounter > /var/www/html/openWB/ramdisk/pvecounter
 			if [[ $debug == "1" ]]; then
@@ -108,17 +113,22 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 			if [[ $debug == "1" ]]; then
 				echo "nur pv ladung auf $minimalapv starten"
 			fi
+			echo "$date Einschaltverzögerung erreicht, Aktuell: $pvecounter, Ziel: $einschaltverzoegerung" >> ramdisk/nurpv.log
 			if (( minimalapv == minimalalp2pv )); then
 				runs/set-current.sh $minimalapv all
+				echo "$date starte Ladung" >> ramdisk/nurpv.log
 				echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestartet mit $minimalapv Ampere" >> ramdisk/ladestatus.log
 			else
+				echo "$date starte Ladung LP1 mit $minimalapv" >> ramdisk/nurpv.log
 				runs/set-current.sh $minimalapv m
 				echo "$date LP1, Lademodus NurPV. Ladung gestartet mit $minimalapv Ampere" >> ramdisk/ladestatus.log
+				echo "$date starte Ladung LP2 mit $minimalalp2pv" >> ramdisk/nurpv.log
 				runs/set-current.sh $minimalalp2pv s1
 				echo "$date LP2, Lademodus NurPV. Ladung gestartet mit $minimalalp2pv Ampere" >> ramdisk/ladestatus.log
 			fi
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			echo 0 > /var/www/html/openWB/ramdisk/pvecounter
+			echo "$date setzte Soctimer hoch zum Abfragen des aktuellen SoC" >> ramdisk/nurpv.log
 			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			exit 0
 		fi
@@ -129,6 +139,7 @@ if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
 fi
 
 if (( ladeleistung < 300 )); then
+	echo "$date Keine Ladung aktiv" >> ramdisk/nurpv.log
 	if (( llalt > minimalapv )); then
 		llneu=$minimalapv
 		if (( minimalapv == minimalalp2pv )); then
@@ -178,6 +189,7 @@ if (( ladeleistung < 300 )); then
 				else
 					touch ramdisk/nurpvoff
 				fi
+				echo "$date Ladefreigabe aufgehoben da zu wenig Uberschuss vorhanden" >> ramdisk/nurpv.log
 			#fi
 		fi
 	fi
@@ -186,9 +198,10 @@ else
 		if (( speicherleistung < 0 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
-
+				echo "$date SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log
 			else
 				uberschuss=$((uberschuss + speicherleistung))
+				echo "$date SpeicherSoc ($speichersoc) unter konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log
 			fi
 		fi
 	fi
@@ -222,6 +235,7 @@ else
 		if (( llneu < minimalapv )); then
 			llneu=$minimalapv
 		fi
+		echo "$date Uberschuss ($uberschuss) ist größer als Schaltschwelle ($schaltschwelle), neuer Ladestromwert: $llneu" >> ramdisk/nurpv.log
 		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then
 			if (( minimalalp2pv > minimalapv )); then
 				minimalapv=$minimalalp2pv
@@ -268,7 +282,6 @@ else
 	fi
 	if (( uberschuss < pvregelungm )); then
 		if (( llalt > minimalapv )); then
-
 			llneu=$(( llalt - 1 + ( (uberschuss - pvregelungm) / 230 / anzahlphasen)))
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
@@ -329,6 +342,7 @@ else
 					fi
 				fi
 			fi
+			echo "$date Uberschuss ($uberschuss) geringer als herunterschaltschwelle ($pvregelungm), neuer Ladestromwert: $llneu" >> ramdisk/nurpv.log
 			echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 			exit 0
 		else
@@ -344,6 +358,7 @@ else
 			if [[ $debug == "1" ]]; then
 				echo Abschaltschwelle: $((-abschaltuberschuss)), Überschuss derzeit: $uberschuss
 			fi
+			
 			if (( uberschuss < -abschaltuberschuss )); then
 				pvcounter=$(cat /var/www/html/openWB/ramdisk/pvcounter)
 				if (( pvcounter < abschaltverzoegerung )); then
@@ -352,7 +367,9 @@ else
 					if [[ $debug == "1" ]]; then
 						echo "Nur PV auf Minimalstromstaerke, PV Counter auf $pvcounter erhöht"
 					fi
+					echo "$date Uberschuss ($uberschuss) kleiner als Abschwaltschwelle ($abschaltuberschuss), Verzögerung ($pvcounter) kleiner als Ziel $abschaltverzoegerung Sec" >> ramdisk/nurpv.log
 				else
+					echo "$date Abschaltverzögerung erreicht, stoppe Ladung" >> ramdisk/nurpv.log
 					runs/set-current.sh 0 all
 					echo "$date alle Ladepunkte, Lademodus NurPV. Ladung gestoppt zu wenig PV Leistung: $uberschuss" >>  ramdisk/ladestatus.log
 					if [[ $debug == "1" ]]; then
@@ -362,6 +379,7 @@ else
 				fi
 				exit 0
 			else
+				echo "$date Minimalstromstärke erreicht, Überschuss größer als Abschaltschwelle" >> ramdisk/nurpv.log
 				echo 0 > /var/www/html/openWB/ramdisk/pvcounter
 				exit 0
 			fi

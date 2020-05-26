@@ -2,7 +2,7 @@
 <html lang="de">
 
 <head>
-	<!-- theme for openWB layout for standard and dark, only css is different-->
+	<!-- theme with gauges for openWB -->
 	<!-- 2020 Michael Ortenstein -->
 
 	<title>openWB</title>
@@ -50,6 +50,11 @@
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	<script src="js/RGraph.common.core.js"></script>
+	<script src="js/RGraph.common.dynamic.js"></script>
+	<script src="js/RGraph.common.effects.js"></script>
+	<script src="js/RGraph.gauge.js"></script>
+
 	<script>
 		function getCookie(cname) {
 			var name = cname + '=';
@@ -65,6 +70,15 @@
 				}
 			}
 			return '';
+		}
+		function setCookie(name, value, days) {
+			var expires = '';
+			if ( days ) {
+				var date = new Date();
+				date.setDate(date.getDate() + days);
+				expires = '; expires=' + date.toUTCString();
+			}
+			document.cookie = name + '=' + (value || '')  + expires;
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
@@ -119,28 +133,38 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="col-sm bg-lightgreen">
-				PV: <span id="pvleistung">lade Daten</span><span id="pvdailyyield"></span>
+		<div class="row">
+			<div class="col-6 col-md-3 pvInfoStyle text-center">
+				<div class="">Photovoltaik</div>
+				<canvas id="pvData">
+					Sorry, no canvas support
+				</canvas>
 			</div>
-			<div id="evudiv" class="col-sm bg-rose">
-				EVU: <span id="bezug">lade Daten</span>
+			<div class="col-6 col-md-3 pvInfoStyle text-center">
+				<div>Speicher</div>
+				<canvas id="battData">
+					Sorry, no canvas support
+				</canvas>
+			</div>
+			<div class="col-6 col-md-3 pvInfoStyle text-center">
+				<div>Energienetz</div>
+				<canvas id="evuData">
+					Sorry, no canvas support
+				</canvas>
+			</div>
+			<div class="col-6 col-md-3 pvInfoStyle text-center">
+				<div>Hausverbrauch</div>
+				<canvas id="homeData">
+					Sorry, no canvas support
+				</canvas>
 			</div>
 		</div>
-
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="col-sm bg-apricot">
-				Hausverbrauch: <span id="hausverbrauch">lade Daten</span>
-			</div>
-			<div class="col-sm bg-lightgrey">
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-grey">
+			<div class="col bg-lightgrey">
 				Ladeleistung: <span id="powerAllLp">lade Daten</span>
 			</div>
 		</div>
-		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-			<div class="col-sm bg-orange">
-				Speicher: <span id="speicherleistung">lade Daten</span><span id="speichersoc"></span>
-			</div>
-		</div>
+
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
@@ -1060,6 +1084,7 @@
 
 	<!-- some scripts -->
 	<script>
+		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
 		// load navbar
 		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
@@ -1131,6 +1156,331 @@
 			};
 		})();
 
+		function getScaleCookie (cookie) {
+			// reads cookie for gauge-scale and returns default if not set
+			var cookieValue = getCookie(cookie);
+			if ( isNaN (parseInt(cookieValue)) ) {
+				return 1000;
+			} else {
+				return cookieValue;
+			}
+		}
+
+		function setGaugeInitialMinMax(gauge) {
+			gauge.max = getScaleCookie('GaugesScaleMax_' + gauge.id);
+			if ( gauge.isSymmetric ) {
+				gauge.min = gauge.max * -1;
+			}
+			// farbigen Rand anpassen
+			gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
+			// Labels in kW
+			gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
+			gauge.grow()
+		}
+
+		function updateGaugeValue(gauge, value, text) {
+		    // gauge: zu erneuernde Gauge
+		    // value: neuer Wert
+		    // text: ggf. neuer Text
+		    if( isNaN(parseFloat(value)) ){
+		        // es wurde keine Zahl als Wert übergeben
+			     return;  // gleich wieder zurück
+		    }
+		    var needsScaling = false;
+		    var newGaugeMax = Math.ceil((Math.abs(value) / gauge.scaleBase)) * gauge.scaleBase;
+		    if ( gauge.max < newGaugeMax ) {
+		        // benötigtes Maximum ist größer als Skala
+		        gauge.max = newGaugeMax;  // Skala positiv anpassen
+		        gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+		        needsScaling = true;
+		        if ( !gauge.autoRescale ) {
+		            // neues Maximum der Gauge als Cookie speichern
+					setCookie('GaugesScaleMax_' + gauge.id, newGaugeMax, 365);
+		        }
+		    } else if ( gauge.max > newGaugeMax ) {
+		        // Skala ist aktuell eigentlich zu groß
+		        if ( gauge.autoRescale ) {
+		            // und Anpassung soll automatisch erfolgen
+		            gauge.scaleCounter -= 1; // dann Counter reduzieren
+		            if ( gauge.scaleCounter == 0 ) {
+		                // wenn Zeit rum
+		                gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+		                gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / (2 * gauge.scaleBase)) * gauge.scaleBase);  // Skala anpassen
+		                needsScaling = true;
+		            }
+		        }
+		    } else {
+		        // Skala soll bleiben, keine automatische Anpassung
+		        if ( gauge.scaleCounter < defaultScaleCounter ) {
+		            // aber Zähler zum Wechsel ist schon angelaufen
+		            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+		        }
+		    }
+		    if ( needsScaling ) {
+		        // wenn Skala angepasst werden muss
+		        if ( gauge.isSymmetric ) {
+		            // bei symmetrischer Gauge die negative Skala angleichen
+		            gauge.min = gauge.max * -1;
+		        }
+		        // farbigen Rand anpassen
+		        gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
+		        // Labels in kW
+		        gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
+		    }
+		    // neuen Wert für Gauge setzen, ggf. Text im Label ändern
+		    gauge.value = value;
+		    if ( gauge.setText ) {
+		        gauge.set('titleBottom', text);
+		        // Farben der Schrift ggf. anpassen
+		        if ( value < 0 ) {
+		            gauge.set('titleBottomColor', 'red');
+		        } else {
+		            gauge.set('titleBottomColor', 'green');
+		        }
+		    }
+		    // und Anzeige erneuern
+		    gauge.grow();
+		}
+
+		function prepareGauges() {
+			// prepares all gauges and their settings for ui
+			responsiveGaugeSettings = [
+				{maxWidth: 400, width: 145, height: 145,
+					options: {
+						radius:65, marginTop: 30, shadowBlur: 3, titleTopPos: 0.28,
+						titleTopSize: 7, titleBottomSize: 6, labelsValueSize: 10, labelsSize: 8
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+	            	}
+				},
+				{maxWidth: 575, width: 155, height: 155,
+					options: {
+						radius: 70, marginTop: 30, shadowBlur: 3, titleTopPos: 0.3,
+						titleTopSize: 7, titleBottomSize: 7, labelsValueSize: 10, labelsSize: 8
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+	            	}
+				},
+				{maxWidth: 767, width: 220, height: 220,
+					options: {
+						radius: 95, marginTop: 20, shadowBlur: 5, titleTopPos: 0.4,
+						titleTopSize: 11, titleBottomSize: 8, labelsValueSize: 10, labelsSize: 11
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+	            	}
+				},
+				{maxWidth: 991, width: 150, height: 150,
+					options: {
+						radius: 72, marginTop: 35, shadowBlur: 4, titleTopPos: 0.30,
+						titleTopSize: 10, titleBottomSize: 8, labelsValueSize: 11, labelsSize: 9
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+	            	}
+				},
+				{maxWidth: 1199, width: 200, height: 200,
+					options: {
+						radius: 92, marginTop: 35, shadowBlur: 6, titleTopPos: 0.36,
+						titleTopSize: 12, titleBottomSize: 9, labelsValueSize: 12, labelsSize: 11
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+	            	}
+				},
+				{maxWidth: null, width: 220, height: 220,
+					options: {
+						radius: 102, marginTop: 35, shadowBlur: 6, titleTopPos: 0.38,
+						titleTopSize: 14, titleBottomSize: 10, labelsValueSize: 13, labelsSize: 13
+					},
+					callback: function (obj){
+						if ( obj.autoScale ) {
+							setGaugeInitialMinMax(obj);
+						}
+					}
+				}
+			];
+
+			gaugePV = new RGraph.Gauge({
+				id: 'pvData',
+				min: 0,
+				max: 1000,
+				value: 0,
+				options: {
+					marginLeft: 0,
+					marginRight: 0,
+					titleTop: 'kW',
+					labelsCount: 2,
+					labelsSpecific: ['0', '0.5', '1'],
+					tickmarksLarge: 4,
+					tickmarksSmall: 20,
+					shadow: true,
+					shadowColor: '#E9E9E9',
+					backgroundColor: 'Gradient(white:#BEFEBE)',
+					borderWidth: 1,
+					borderInner: '#739B73',
+					centerpinColor: '#8E8E8B',
+					labelsValue: true,
+					labelsValueBounding: false,
+					labelsValueUnitsPost: ' W',
+					labelsValueBold: true,
+					labelsValueItalic: true,
+					titleBottomPos: 0.61,
+					titleBottomBold: true,
+					adjustable: false,
+					textAccessible: false,
+					colorsRanges: [[0, 1000, 'green', 3]],
+					anglesStart: RGraph.PI - 0.55,
+					anglesEnd: RGraph.TWOPI + 0.55
+				}
+			}).draw().responsive(responsiveGaugeSettings);
+			gaugePV.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+			gaugePV.isSymmetric = false;  // nur Werte > 0
+			gaugePV.autoScale = true;  // Skalierung automatisch vergrößern
+			gaugePV.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
+			gaugePV.setText = false;  // Text und Farbe des Labels anpassen
+			gaugePV.scaleBase = 1000;  // 1000 W ist Basisgröße
+
+			gaugeBatt = new RGraph.Gauge({
+				id: 'battData',
+				min: -1000,
+				max: 1000,
+				value: 0,
+				options: {
+					marginLeft: 0,
+					marginRight: 0,
+					titleTop: 'kW',
+					labelsCount: 2,
+					labelsSpecific: ['-1', '0', '1'],
+					tickmarksLarge: 4,
+					tickmarksSmall: 20,
+					shadow: true,
+					shadowColor: '#E9E9E9',
+					backgroundColor: 'Gradient(white:#FCBE1E)',
+					borderWidth: 1,
+					borderInner: '#BA8C16',
+					centerpinColor: '#8E8E8B',
+					labelsValue: true,
+					labelsValueBounding: false,
+					labelsValueUnitsPost: ' W',
+					labelsValueBold: true,
+					labelsValueItalic: true,
+					titleBottomPos: 0.61,
+					titleBottomBold: true,
+					adjustable: false,
+					textAccessible: false,
+					colorsRanges: [[-1000, 0, 'red', 3], [0, 1000, 'green', 3]],
+					anglesStart: RGraph.PI - 0.55,
+					anglesEnd: RGraph.TWOPI + 0.55
+				}
+			}).draw().responsive(responsiveGaugeSettings);
+			gaugeBatt.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+			gaugeBatt.isSymmetric = true;  // Werte +-
+			gaugeBatt.autoScale = true;  // Skalierung automatisch vergrößern
+			gaugeBatt.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
+			gaugeBatt.setText = false;  // Text und Farbe des Labels anpassen
+			gaugeBatt.scaleBase = 1000;  // 1000 W ist Basisgröße
+
+			gaugeEVU = new RGraph.Gauge({
+				id: 'evuData',
+				min: -1000,
+				max: 1000,
+				value: 0,
+				options: {
+					marginLeft: 0,
+					marginRight: 0,
+					titleTop: 'kW',
+					labelsCount: 2,
+					labelsSpecific: ['-1', '0', '1'],
+					tickmarksLarge: 4,
+					tickmarksSmall: 20,
+					shadow: true,
+					shadowColor: '#E9E9E9',
+					backgroundColor: 'Gradient(white:#FEBEBE)',
+					borderWidth: 1,
+					borderInner: '#A07676',
+					centerpinColor: '#8E8E8B',
+					labelsValue: true,
+					labelsValueBounding: false,
+					labelsValueUnitsPost: ' W',
+					labelsValueBold: true,
+					labelsValueItalic: true,
+					labelsValueSize: 17,
+					titleBottomPos: 0.61,
+					titleBottomBold: true,
+					titleBottomSize: 11,
+					adjustable: false,
+					textAccessible: false,
+					colorsRanges: [[-1000, 0, 'red', 3], [0, 1000, 'green', 3]],
+					anglesStart: RGraph.PI - 0.55,
+					anglesEnd: RGraph.TWOPI + 0.55
+				}
+			}).draw().responsive(responsiveGaugeSettings);
+			gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+			gaugeEVU.isSymmetric = true;  // Werte +-
+			gaugeEVU.autoScale = true;  // Skalierung automatisch vergrößern
+			gaugeEVU.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
+			gaugeEVU.setText = true;  // Text und Farbe des Labels anpassen
+			gaugeEVU.scaleBase = 1000;  // 1000 W ist Basisgröße
+
+			gaugeHome = new RGraph.Gauge({
+				id: 'homeData',
+				min: 0,
+				max: 1000,
+				value: 0,
+				options: {
+					marginLeft: 0,
+					marginRight: 0,
+					titleTop: 'kW',
+					labelsCount: 2,
+					labelsSpecific: ['0', '0.5', '1'],
+					tickmarksLarge: 4,
+					tickmarksSmall: 20,
+					shadow: true,
+					shadowColor: '#E9E9E9',
+					backgroundColor: 'Gradient(white:#B5F1FF)',
+					borderWidth: 1,
+					borderInner: '#6E939B',
+					centerpinColor: '#8E8E8B',
+					labelsValue: true,
+					labelsValueBounding: false,
+					labelsValueUnitsPost: ' W',
+					labelsValueBold: true,
+					labelsValueItalic: true,
+					labelsValueSize: 17,
+					adjustable: false,
+					textAccessible: false,
+					colorsRanges: [[0, 1000, 'green', 3]],
+					colorsRedWidth: 0,
+					colorsYellowWidth: 0,
+					anglesStart: RGraph.PI - 0.55,
+					anglesEnd: RGraph.TWOPI + 0.55
+				}
+			}).draw().responsive(responsiveGaugeSettings);
+			gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
+			gaugeHome.isSymmetric = false;  // Werte > 0
+			gaugeHome.autoScale = true;  // Skalierung automatisch vergrößern
+			gaugeHome.autoRescale = true;  // neue Skalierung wird von selbst wieder verkleinert
+			gaugeHome.setText = false;  // Text und Farbe des Labels nicht anpassen
+			gaugeHome.scaleBase = 1000;  // 1000 W ist Basisgröße
+
+			setGaugeInitialMinMax(gaugePV);
+			setGaugeInitialMinMax(gaugeEVU);
+			setGaugeInitialMinMax(gaugeBatt);
+		}
+
 		$(document).ready(function(){
 
 			// load scripts synchronously in order specified
@@ -1140,15 +1490,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/dark/helperFunctions.js?ver=20200514-c',
+				'themes/Gauges/helperFunctions.js?ver=20200525-a',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20200518-v',
+				'themes/Gauges/processAllMqttMsg.js?ver=20200525-a',
 				// respective Chart.js definition live
-				'themes/dark/livechart.js?ver=20200506-c',
+				'themes/Gauges/livechart.js?ver=20200525-a',
 				// respective Chart.js definition awattar
-				'themes/dark/awattarchart.js?ver=20200331-c',
+				'themes/Gauges/awattarchart.js?ver=20200525-a',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20200506-c',
+				'themes/Gauges/setupMqttServices.js?ver=20200525-a'
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1157,10 +1507,12 @@
 				document.body.appendChild(script);
 			});
 
+			prepareGauges();
+
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
 				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
-				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
+				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
 					var isEnabled = $(this).hasClass("lpEnabledStyle")
 					if ( isEnabled ) {
 						publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
@@ -1175,7 +1527,7 @@
 				var dev = parseInt($(this).closest('[data-dev]').data('dev'));  // get attribute device-# of parent element
 				var isLocked = $(this).hasClass("locked");
 				if ( isLocked ) {
-					if ( !isNaN(parseInt(dev)) && dev > 0 && dev < 10 ) {
+					if ( !isNaN(dev) && dev > 0 && dev < 10 ) {
 						var isEnabled = $(this).hasClass("lpEnabledStyle")
 						if ( isEnabled ) {
 							publish("0", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
@@ -1288,7 +1640,7 @@
 						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
 						var element = parent.find('.progress-bar');  // now get parents progressbar
 						var actualCharged = element.data('actualCharged');  // get stored value
-						if ( isNaN(parseFloat(actualCharged)) ) {
+						if ( isNaN(actualCharged) ) {
 							actualCharged = 0;  // minimum value
 						}
 						var progress = (actualCharged / value * 100).toFixed(0);

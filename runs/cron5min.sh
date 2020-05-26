@@ -102,7 +102,7 @@ fi
 if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
-pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+pvkwh=$pv
 
 pvdailyyieldstart=$(head -n 1 /var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv)
 pvyieldcount=0
@@ -120,6 +120,8 @@ ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
 echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
+echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
