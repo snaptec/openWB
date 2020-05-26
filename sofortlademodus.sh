@@ -47,7 +47,7 @@ fi
 aktgeladen=$(<ramdisk/aktgeladen)
 #mit einem Ladepunkt
 if [[ $lastmanagement == "0" ]]; then
-	if (( sofortsocstatlp1 == "1" )); then
+	if (( msmoduslp1 == "2" )); then
 		if (( soc >= sofortsoclp1 )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 				runs/set-current.sh 0 all
@@ -60,7 +60,7 @@ if [[ $lastmanagement == "0" ]]; then
 		fi	
 	fi
 	if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		if (( lademstat == "1" )); then
+		if (( msmoduslp1 == "1" )); then
 			if (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 				if [[ $debug == "1" ]]; then
        	             			echo "Sofort ladung beendet da $lademkwh kWh lademenge erreicht"
@@ -82,7 +82,7 @@ if [[ $lastmanagement == "0" ]]; then
 		fi
 	fi
 	if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-		if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+		if (( msmoduslp1 == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 			runs/set-current.sh 0 m
 			echo "$date LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht" >> ramdisk/ladestatus.log
 
@@ -286,7 +286,7 @@ else
 		fi
 
 		#Ladepunkt 1
-		if (( sofortsocstatlp1 == "1" )); then
+		if (( msmoduslp1 == "2" )); then
 			if (( soc > sofortsoclp1 )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
@@ -371,7 +371,7 @@ else
 			fi
 
 		else	
-		if (( lademstat == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
+		if (( msmoduslp1 == "1" )) && (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 				runs/set-current.sh 0 m
 				echo "$date LP1, Lademodus Sofort. Ladung gestoppt da $lademkwh kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -454,7 +454,7 @@ else
 		fi
 	fi
 	#Ladepunkt 2
-	if (( sofortsocstatlp2 == 1 )); then
+	if (( msmoduslp2 == 2 )); then
 		if (( soc1 > sofortsoclp2 )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 				runs/set-current.sh 0 s1
@@ -536,7 +536,7 @@ else
 			fi
 		fi
 	else	
-		if (( lademstats1 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
+		if (( msmoduslp2 == "1" )) && (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 				runs/set-current.sh 0 s1
 				echo "$date LP2, Lademodus Sofort. Ladung gestoppt da $lademkwhs1 kWh erreicht" >> ramdisk/ladestatus.log
@@ -621,7 +621,7 @@ else
 	#Ladepunkt 3
 	if [[ $lastmanagements2 == "1" ]]; then
 		aktgeladens2=$(<ramdisk/aktgeladens2)
-		if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
+		if (( msmoduslp3 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 				runs/set-current.sh 0 s2
 			echo "$date LP3, Lademodus Sofort. Ladung gestoppt da $lademkwhs2 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -697,7 +697,7 @@ else
 	#Ladepunkt 4
 	if [[ $lastmanagementlp4 == "1" ]]; then
 		aktgeladenlp4=$(<ramdisk/aktgeladenlp4)
-		if (( lademstatlp4 == "1" )) && (( $(echo "$aktgeladenlp4 > $lademkwhlp4" |bc -l) )); then
+		if (( msmoduslp4 == "1" )) && (( $(echo "$aktgeladenlp4 > $lademkwhlp4" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp4"; then
 				runs/set-current.sh 0 lp4
 			echo "$date LP4, Lademodus Sofort. Ladung gestoppt da $lademkwhlp4 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -773,7 +773,7 @@ else
 	#Ladepunkt 5
 	if [[ $lastmanagementlp5 == "1" ]]; then
 		aktgeladenlp5=$(<ramdisk/aktgeladenlp5)
-		if (( lademstatlp5 == "1" )) && (( $(echo "$aktgeladenlp5 > $lademkwhlp5" |bc -l) )); then
+		if (( msmoduslp5 == "1" )) && (( $(echo "$aktgeladenlp5 > $lademkwhlp5" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp5"; then
 				runs/set-current.sh 0 lp5
 			echo "$date LP5, Lademodus Sofort. Ladung gestoppt da $lademkwhlp5 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -849,7 +849,7 @@ else
 	#Ladepunkt 6
 	if [[ $lastmanagementlp6 == "1" ]]; then
 		aktgeladenlp6=$(<ramdisk/aktgeladenlp6)
-		if (( lademstatlp6 == "1" )) && (( $(echo "$aktgeladenlp6 > $lademkwhlp6" |bc -l) )); then
+		if (( msmoduslp6 == "1" )) && (( $(echo "$aktgeladenlp6 > $lademkwhlp6" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp6"; then
 				runs/set-current.sh 0 lp6
 			echo "$date LP6, Lademodus Sofort. Ladung gestoppt da $lademkwhlp6 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -925,7 +925,7 @@ else
 	#Ladepunkt 7
 	if [[ $lastmanagementlp7 == "1" ]]; then
 		aktgeladenlp7=$(<ramdisk/aktgeladenlp7)
-		if (( lademstatlp7 == "1" )) && (( $(echo "$aktgeladenlp7 > $lademkwhlp7" |bc -l) )); then
+		if (( msmoduslp7 == "1" )) && (( $(echo "$aktgeladenlp7 > $lademkwhlp7" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp7"; then
 				runs/set-current.sh 0 lp7
 			echo "$date LP7, Lademodus Sofort. Ladung gestoppt da $lademkwhlp7 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -1001,7 +1001,7 @@ else
 	#Ladepunkt 8
 	if [[ $lastmanagementlp8 == "1" ]]; then
 		aktgeladenlp8=$(<ramdisk/aktgeladenlp8)
-		if (( lademstatlp8 == "1" )) && (( $(echo "$aktgeladenlp8 > $lademkwhlp8" |bc -l) )); then
+		if (( msmoduslp8 == "1" )) && (( $(echo "$aktgeladenlp8 > $lademkwhlp8" |bc -l) )); then
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp8"; then
 				runs/set-current.sh 0 lp8
 			echo "$date LP8, Lademodus Sofort. Ladung gestoppt da $lademkwhlp8 kWh Limit erreicht" >> ramdisk/ladestatus.log
@@ -1128,7 +1128,7 @@ else
 			fi
 		fi
 
-		if (( sofortsocstatlp1 == 1 )); then
+		if (( msmoduslp1 == 2 )); then
 			if (( soc >= sofortsoclp1)); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
@@ -1142,7 +1142,7 @@ else
 				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
-		if (( lademstat == 1 )); then
+		if (( msmoduslp1 == 1 )); then
 			if (( $(echo "$aktgeladen > $lademkwh" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
 					runs/set-current.sh 0 m
@@ -1156,11 +1156,11 @@ else
 				echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
-		if (( sofortsoctatlp1 == 0)) && (( lademstat == 0));then
+		if (( msmoduslp1 == 0));then
 			runs/set-current.sh "$llneu" m
 			echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 		fi
-		if (( sofortsocstatlp2 == 1 )); then
+		if (( msmoduslp2 == 2 )); then
 			if (( soc1 >= sofortsoclp2 )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/set-current.sh 0 s1
@@ -1174,7 +1174,7 @@ else
 				echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
-		if (( lademstats1 == 1 )); then	
+		if (( msmoduslp2 == 1 )); then	
 			if (( $(echo "$aktgeladens1 > $lademkwhs1" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
 					runs/set-current.sh 0 s1
@@ -1188,13 +1188,13 @@ else
 				echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 			fi
 		fi
-		if (( sofortsoctatlp2 == 0)) && (( lademstats1 == 0));then
+		if (( msmoduslp2 == 0)) ;then
 			runs/set-current.sh "$llneus1" s1
 			echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 		fi
 		if [[ $lastmanagements2 == "1" ]]; then
 			aktgeladens2=$(<ramdisk/aktgeladens2)
-			if (( lademstats2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
+			if (( msmoduslp2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
 					runs/set-current.sh 0 s2
 					echo "$date LP3, Lademodus Sofort. Ladung gestoppt da $lademkwhs2 kWh erreicht" >> ramdisk/ladestatus.log
@@ -1217,7 +1217,7 @@ else
 				fi
 			fi
 			aktgeladenlp4=$(<ramdisk/aktgeladenlp4)
-			if (( lademstatlp4 == "1" )) && (( $(echo "$aktgeladenlp4 > $lademkwhlp4" |bc -l) )); then
+			if (( msmoduslp4 == "1" )) && (( $(echo "$aktgeladenlp4 > $lademkwhlp4" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp4"; then
 					runs/set-current.sh 0 lp4
 					echo "$date LP4, Lademodus Sofort. Ladung gestoppt da $lademkwhlp4 kWh erreicht" >> ramdisk/ladestatus.log
@@ -1241,7 +1241,7 @@ else
 				fi
 			fi
 			aktgeladenlp5=$(<ramdisk/aktgeladenlp5)
-			if (( lademstatlp5 == "1" )) && (( $(echo "$aktgeladenlp5 > $lademkwhlp5" |bc -l) )); then
+			if (( msmoduslp5 == "1" )) && (( $(echo "$aktgeladenlp5 > $lademkwhlp5" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp5"; then
 					runs/set-current.sh 0 lp5
 					echo "$date LP5, Lademodus Sofort. Ladung gestoppt da $lademkwhlp5 kWh erreicht" >> ramdisk/ladestatus.log
@@ -1265,7 +1265,7 @@ else
 				fi
 			fi
 			aktgeladenlp6=$(<ramdisk/aktgeladenlp6)
-			if (( lademstatlp6 == "1" )) && (( $(echo "$aktgeladenlp6 > $lademkwhlp6" |bc -l) )); then
+			if (( msmoduslp6 == "1" )) && (( $(echo "$aktgeladenlp6 > $lademkwhlp6" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp6"; then
 					runs/set-current.sh 0 lp6
 					echo "$date LP6, Lademodus Sofort. Ladung gestoppt da $lademkwhlp6 kWh erreicht" >> ramdisk/ladestatus.log
@@ -1289,7 +1289,7 @@ else
 				fi
 			fi
 			aktgeladenlp7=$(<ramdisk/aktgeladenlp7)
-			if (( lademstatlp7 == "1" )) && (( $(echo "$aktgeladenlp7 > $lademkwhlp7" |bc -l) )); then
+			if (( msmoduslp7 == "1" )) && (( $(echo "$aktgeladenlp7 > $lademkwhlp7" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp7"; then
 					runs/set-current.sh 0 lp7
 					echo "$date LP7, Lademodus Sofort. Ladung gestoppt da $lademkwhlp7 kWh erreicht" >> ramdisk/ladestatus.log
@@ -1313,7 +1313,7 @@ else
 				fi
 			fi
 			aktgeladenlp8=$(<ramdisk/aktgeladenlp8)
-			if (( lademstatlp8 == "1" )) && (( $(echo "$aktgeladenlp8 > $lademkwhlp8" |bc -l) )); then
+			if (( msmoduslp8 == "1" )) && (( $(echo "$aktgeladenlp8 > $lademkwhlp8" |bc -l) )); then
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuslp8"; then
 					runs/set-current.sh 0 lp8
 					echo "$date LP8, Lademodus Sofort. Ladung gestoppt da $lademkwhlp8 kWh erreicht" >> ramdisk/ladestatus.log
