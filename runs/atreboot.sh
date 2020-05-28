@@ -37,6 +37,8 @@ echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 1 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -2711,3 +2713,5 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+
