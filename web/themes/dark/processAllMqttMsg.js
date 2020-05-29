@@ -245,20 +245,25 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    powerEvu += ' kW Bezug';
+	    	    var sign = 'Bezug: ';
+		    var einheit = ' kW';
 	    	} else {
-				powerEvu += ' W Bezug';
+			var sign = 'Bezug: ';
+			var einheit = ' W';
+
 			}
     	} else {
     	    powerEvu *= -1;
 			if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    powerEvu += ' kW Einspeisung';
+	    	    var sign = 'Einspeisung: ';
+		    var einheit = ' kW';
 	    	} else {
-				powerEvu += ' W Einspeisung';
+			    var sign = 'Einspeisung: ';
+			    var einheit = ' W';
 			}
     	}
-	    $('#bezug').text(powerEvu);
+	    $('#bezug').text(sign + powerEvu + einheit);
 	 }
 }
 
@@ -398,27 +403,32 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		} else if (speicherwatt > 0) {
 			if ( speicherwatt > 999 ) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW Ladung';
+				speicherwatt = speicherwatt + ' kW';
+				var sign= ' Beladung: ';
 			} else {
-				speicherwatt = speicherwatt + ' W Ladung';
+				speicherwatt = speicherwatt + ' W';
+				var sign= ' Entadung: ';
 			}
 		} else {
 	    	speicherwatt *= -1;
 			if (speicherwatt > 999) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW Entladung';
+				speicherwatt = speicherwatt + ' kW';
+				var sign='Entladung: ';
 			} else {
-				speicherwatt = speicherwatt + ' W Entladung';
+				speicherwatt = speicherwatt + ' W';
+				var sign='Entladung: ';
+
 			}
 		}
-		$('#speicherleistung').text(speicherwatt);
+		$('#speicherleistung').text(sign + speicherwatt);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/%Soc' ) {
 		var speicherSoc = parseInt(mqttpayload, 10);
 		if ( isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100 ) {
 			speicherSoc = '--';
 		}
-		speichersoc = ', ' + speicherSoc + ' % SoC';
+		speichersoc = speicherSoc + ' % SoC';
 		$('#speichersoc').text(speichersoc);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
