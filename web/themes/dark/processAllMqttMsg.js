@@ -245,10 +245,10 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    var sign = 'Bezug: ';
+	    	    var sign = ' Bezug: ';
 		    var einheit = ' kW';
 	    	} else {
-			var sign = 'Bezug: ';
+			var sign = ' Bezug: ';
 			var einheit = ' W';
 
 			}
@@ -256,10 +256,10 @@ function processEvuMessages(mqttmsg, mqttpayload) {
     	    powerEvu *= -1;
 			if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    var sign = 'Einspeisung: ';
+	    	    var sign = ' Einspeisung: ';
 		    var einheit = ' kW';
 	    	} else {
-			    var sign = 'Einspeisung: ';
+			    var sign = ' Einspeisung: ';
 			    var einheit = ' W';
 			}
     	}
