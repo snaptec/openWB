@@ -716,6 +716,7 @@ else
 	uberschuss=$((-pvwatt - hausbezugnone - ladeleistung))
 	echo $((-uberschuss)) > /var/www/html/openWB/ramdisk/wattbezug
 	wattbezugint=$((-uberschuss))
+	wattbezug=$wattbezugint
 fi
 
 #Soc ermitteln
