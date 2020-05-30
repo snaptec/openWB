@@ -169,15 +169,15 @@ def loadregelvars():
     global wattbezug
     try:
         with open('ramdisk/wattbezug', 'r') as value:
-            wattbezug = int(value.read()) * -1
+            wattbezug = int(float(value.read())) * -1
         with open('ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
         if ( speichervorhanden == 1):
             with open('ramdisk/speicherleistung', 'r') as value:
-                speicherleistung = int(value.read())
+                speicherleistung = int(float(value.read()))
                 uberschuss = wattbezug + speicherleistung
             with open('ramdisk/speichersoc', 'r') as value:
-                speichersoc = int(value.read())
+                speichersoc = int(float(value.read()))
         else:
             speicherleistung = 0
             speichersoc = 100
