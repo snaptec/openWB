@@ -241,7 +241,9 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	    var powerEvu = mqttpayload;
 	    var powerEvu = parseInt(powerEvu, 10);
 		if ( isNaN(powerEvu) || powerEvu == 0 ) {
-			powerEvu = '0 W';
+			var sign = ': ';
+			powerEvu = '0';
+			var einheit = ' W';
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
