@@ -409,7 +409,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 				var sign= ' Beladung: ';
 			} else {
 				speicherwatt = speicherwatt + ' W';
-				var sign= ' Entadung: ';
+				var sign= ' Beladung: ';
 			}
 		} else {
 	    	speicherwatt *= -1;
