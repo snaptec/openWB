@@ -241,7 +241,9 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	    var powerEvu = mqttpayload;
 	    var powerEvu = parseInt(powerEvu, 10);
 		if ( isNaN(powerEvu) || powerEvu == 0 ) {
-			powerEvu = '0 W';
+			var sign = ': ';
+			powerEvu = '0';
+			var einheit = ' W';
 		} else if (powerEvu > 0) {
 	    	if (powerEvu > 999) {
 		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -394,6 +396,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/housebattery/W' ) {
 		var speicherwatt = mqttpayload;
+var sign=  ': ';
 		var speicherwatt = parseInt(speicherwatt, 10);
 		if ( isNaN(speicherwatt) ) {
 			speicherwatt = 0;
@@ -404,20 +407,20 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			if ( speicherwatt > 999 ) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW';
-				var sign= ' Beladung: ';
+				sign= ' Beladung: ';
 			} else {
 				speicherwatt = speicherwatt + ' W';
-				var sign= ' Entadung: ';
+				sign= ' Beladung: ';
 			}
 		} else {
 	    	speicherwatt *= -1;
 			if (speicherwatt > 999) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 				speicherwatt = speicherwatt + ' kW';
-				var sign='Entladung: ';
+				sign='Entladung: ';
 			} else {
 				speicherwatt = speicherwatt + ' W';
-				var sign='Entladung: ';
+			sign='Entladung: ';
 
 			}
 		}
