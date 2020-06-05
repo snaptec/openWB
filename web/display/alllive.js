@@ -268,7 +268,7 @@ $.ajax({
         }
         });
   $.ajax({
-    url: "/openWB/ramdisk/pvwatt",
+    url: "/openWB/ramdisk/pvallwatt",
     complete: function(request){
 	    pvwatt = parseInt(request.responseText, 10);
 	if ( pvwatt <= 0){
