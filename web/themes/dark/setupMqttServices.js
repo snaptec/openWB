@@ -343,7 +343,9 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() {
+			client.connect(options);
+		}, 1000);
 	}
 };
 
@@ -357,7 +359,11 @@ $(document).ready(function(){
 
 //Gets  called if the websocket/mqtt connection gets disconnected for any reason
 client.onConnectionLost = function (responseObject) {
-	client.connect(options);
+	onFailure: function (message) {
+		setTimeout(function() {
+			client.connect(options);
+		}, 1000);
+	}
 };
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
