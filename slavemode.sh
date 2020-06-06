@@ -164,7 +164,12 @@ function computeAndSetCurrentForChargePoint() {
 			# newly calculated imbalance allows more than 1 A more current
 			imbalDiff=$(echo "scale=0; ($lastImbalance + $imbalDiff - 0.9999)/1" | bc)
 
-			$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: Can increase current even with imbalance compensation to imbalDiff=${imbalDiff} A"
+			if (( imbalDiff > 0 )); then
+				$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: No more limit contribution. Setting imbalDiff from ${imbalDiff} A to 0 A"
+				imbalDiff=0
+			else
+				$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: Can increase current even with imbalance compensation to imbalDiff=${imbalDiff} A"
+			fi
 		else
 
 			# else we keep on using the previous imbalance
