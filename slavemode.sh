@@ -1,8 +1,10 @@
 #!/bin/bash
 
+declare -r SlaveModeAllowedLoadImbalanceDefault=8.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
+declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
@@ -38,9 +40,15 @@ openwbisslave() {
 		elif (( currentCp == 2)) && (( lastmanagement == 0)); then
 			# CP2 does not actually exist
 			continue
+		elif (( currentCp == 2)) && (( lastmanagement > 0)); then
+			# CP2 does exist
+			:
 		elif (( currentCp == 3)) && (( lastmanagements2 == 0)); then
 			# CP3 does not actually exist
 			continue
+		elif (( currentCp == 3)) && (( lastmanagements2 > 0)); then
+			# CP3 does exist
+			:
 		elif (( currentCp >= 4)); then
 			local cpPresentVar="lastmanagementlp${currentCp}"
 			eval cpPresent=\$$cpPresentVar
@@ -78,7 +86,8 @@ function computeAndSetCurrentForChargePoint() {
 	if [ -f "ramdisk/FixedChargeCurrentCp${chargePoint}" ]; then
 		local fixedCurrent=$(<"ramdisk/FixedChargeCurrentCp${chargePoint}")
 		if (( fixedCurrent >= 0 )); then
-			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A"
+			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A, ignoring imbalance"
+			echo "0" > "${LastImbalanceFile}${chargePoint}"
 			callSetCurrent $fixedCurrent $chargePoint
 			return 0
 		fi
@@ -122,10 +131,60 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
+	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, before load imbalance compensation lldiff=${lldiff} A"
+
+	# load imbalance handling
+	local lastImbalance=0
+	if [ -f "${LastImbalanceFile}${chargePoint}" ]; then
+		lastImbalance=$(<${LastImbalanceFile}${chargePoint})
+	fi
+
+	local imbalDiff=$(echo "scale=3; ($SlaveModeAllowedLoadImbalance - $SystemLoadImbalance)" | bc)
+	$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: lastImbalance=$lastImbalance, SystemLoadImbalance=$SystemLoadImbalance - SlaveModeAllowedLoadImbalance=$SlaveModeAllowedLoadImbalance = imbalDiff=${imbalDiff} A"
+
+	#              are we contributing ?                                have we been compensating in last loop?           is imbalance limit newly exceeded?
+	if (( ChargingOnPhase[$PhaseWithMaximumTotalCurrent] == 1 )) && ( (( `echo "$lastImbalance != 0" | bc` == 1 )) || (( `echo "$imbalDiff < 0.0" | bc` == 1 )) ); then
+
+		# we're contributing to imbalance and imbalance actually needs adjustment, first calculate our part of the contribution
+		imbalDiff=$(echo "scale=3; ($imbalDiff / ${ChargingVehiclesOnPhase[$PhaseWithMaximumTotalCurrent]})" | bc)
+
+		$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: We're contributing! PhaseWithMaximumTotalCurrent=$PhaseWithMaximumTotalCurrent, ChargingVehiclesOnPhase[PhaseWithMaximumTotalCurrent]=${ChargingVehiclesOnPhase[$PhaseWithMaximumTotalCurrent]} ==> imbalDiff=${imbalDiff} A"
+
+		# calculate new imbalance adjustement value in integer Ampere steps
+		if (( `echo "$imbalDiff < 0.0" | bc` == 1 )); then
+
+			# newly calculated imbalance requires a reduction
+			imbalDiff=$(echo "scale=0; ($lastImbalance + $imbalDiff - 0.9999)/1" | bc)
+
+			$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: Need to reduce current for imbalance compensation to imbalDiff=${imbalDiff} A"
+		elif  (( `echo "$imbalDiff > 1.0" | bc` == 1 )); then
+
+			# newly calculated imbalance allows more than 1 A more current
+			imbalDiff=$(echo "scale=0; ($lastImbalance + $imbalDiff - 0.9999)/1" | bc)
+
+			$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: Can increase current even with imbalance compensation to imbalDiff=${imbalDiff} A"
+		else
+
+			# else we keep on using the previous imbalance
+			imbalDiff=${lastImbalance}
+			$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: No need to adjust imbalance compensation, keeping at lastImbalance as imbalDiff=${imbalDiff}"
+		fi
+	else
+
+		# no imbalance compensation needed at all
+		imbalDiff=0
+		$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: Not contributing to imbalance (not charging on critical phase) ==> resetting compensation to 0"
+	fi
+
+	echo "$imbalDiff" > "${LastImbalanceFile}${chargePoint}"
+
+	lldiff=$(echo "scale=3; ($lldiff + $imbalDiff)" | bc)
+
+	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, imbalDiff=${imbalDiff} A ==> lldiff=${lldiff}"
+
 	# new charge current in int but always rounded to the next _lower_ integer
 	llneu=$(echo "scale=0; ($PreviousExpectedChargeCurrent + $lldiff)/1" | bc)
 
-	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W"
     $dbgWrite "$NowItIs: Slave Mode: TotalCurrentOfChargingPhaseWithMaximumTotalCurrent=${TotalCurrentOfChargingPhaseWithMaximumTotalCurrent} A, ChargingVehiclesAdjustedForThisCp=${ChargingVehiclesAdjustedForThisCp}, PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent A, lldiff=$lldiff A"
 
 	# limit the change to +1, -1 or -3 if slow ramping is enabled,
@@ -258,7 +317,7 @@ function aggregateDataForChargePoint() {
 		echo "${chargingOnPhaseString//${IFS:0:1}/,}" > "${LastChargingPhaseFile}${chargePoint}"
 	fi
 
-	# if we're not charging at all, try smart fallback first: uses the phase(s) on which we have last charged or
+	# if we're not charging at all, try smart fallback first: use the phase(s) on which we have last charged
 	if (( ChargingPhaseWithMaximumTotalCurrent == 0 )); then
 
 		# check if "last charging phase" usage is enabled openwb.conf
@@ -346,10 +405,17 @@ function setVariablesFromRamdisk() {
 	else
 		TotalPowerConsumption=-1
 	fi
+	if [ -f "ramdisk/SlaveModeAllowedLoadImbalance" ]; then
+		SlaveModeAllowedLoadImbalance=$(<ramdisk/SlaveModeAllowedLoadImbalance)
+	else
+		SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalanceDefault}
+	fi
 
 	# phase with maximum current
 	PhaseWithMaximumTotalCurrent=0
+	PhaseWithMinimumTotalCurrent=0
 	MaximumTotalCurrent=0
+	MinimumTotalCurrent=999999
 
 	TotalCurrentConsumptionOnPhase=(0 0 0 0)
 	ChargingVehiclesOnPhase=(0 0 0 0)
@@ -362,9 +428,16 @@ function setVariablesFromRamdisk() {
 			MaximumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
 			PhaseWithMaximumTotalCurrent=${i}
 		fi
+
+		if (( `echo "${TotalCurrentConsumptionOnPhase[i]} < $MinimumTotalCurrent" | bc` == 1 )); then
+			MinimumTotalCurrent=${TotalCurrentConsumptionOnPhase[i]}
+			PhaseWithMinimumTotalCurrent=${i}
+		fi
 	done
 
-	$dbgWrite "$NowItIs: TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A"
+	SystemLoadImbalance=$(echo "scale=3; $MaximumTotalCurrent - $MinimumTotalCurrent" | bc)
+
+	$dbgWrite "$NowItIs: TotalCurrentConsumptionOnPhase=${TotalCurrentConsumptionOnPhase[@]:1}, Phase with max total current = ${PhaseWithMaximumTotalCurrent} @ ${MaximumTotalCurrent} A, min current = ${PhaseWithMinimumTotalCurrent} @ ${MinimumTotalCurrent} A, SlaveModeAllowedLoadImbalance=${SlaveModeAllowedLoadImbalance} A, current imbalance = ${SystemLoadImbalance} A"
 
 	# heartbeat
 	Heartbeat=$(<ramdisk/heartbeat)
