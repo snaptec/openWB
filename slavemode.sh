@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -r SlaveModeAllowedLoadImbalanceDefault=8.0
+declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
@@ -151,6 +151,8 @@ function computeAndSetCurrentForChargePoint() {
 		$dbgWrite "$NowItIs: Slave Mode: Load Imbalance: We're contributing! PhaseWithMaximumTotalCurrent=$PhaseWithMaximumTotalCurrent, ChargingVehiclesOnPhase[PhaseWithMaximumTotalCurrent]=${ChargingVehiclesOnPhase[$PhaseWithMaximumTotalCurrent]} ==> imbalDiff=${imbalDiff} A"
 
 		# calculate new imbalance adjustement value in integer Ampere steps
+		# Note: We need to do the rounding to next lower Ampere of imbalance in order to really enforce an adjustement.
+		#       Using the float values might not trigger an adjustment immediately.
 		if (( `echo "$imbalDiff < 0.0" | bc` == 1 )); then
 
 			# newly calculated imbalance requires a reduction
@@ -178,6 +180,7 @@ function computeAndSetCurrentForChargePoint() {
 
 	echo "$imbalDiff" > "${LastImbalanceFile}${chargePoint}"
 
+	# final calculation of required adjustement
 	lldiff=$(echo "scale=3; ($lldiff + $imbalDiff)" | bc)
 
 	$dbgWrite "$NowItIs: Slave Mode: AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase A, AllowedPeakPower=${AllowedPeakPower} W, TotalPowerConsumption=${TotalPowerConsumption} W, imbalDiff=${imbalDiff} A ==> lldiff=${lldiff}"
