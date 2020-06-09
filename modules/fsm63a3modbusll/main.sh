@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 ### TODO: The following variables need to be added to "openwb.conf":
 # fsm63a3modbusllsource=... (e.g. "/dev/ttyUSB0")

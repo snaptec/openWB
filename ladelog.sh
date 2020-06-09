@@ -1,6 +1,8 @@
 #!/bin/bash
-. openwb.conf
-
+monthlyfile="/var/www/html/openWB/web/logging/data/ladelog/$(date +%Y%m).csv"
+if [ ! -f $monthlyfile ]; then
+	    echo $monthlyfile
+fi
 ladeleistung=$(<ramdisk/llaktuell)
 llkwh=$(<ramdisk/llkwh)
 soc=$(<ramdisk/soc)
@@ -8,7 +10,9 @@ soc1=$(<ramdisk/soc1)
 nachtladenstate=$(</var/www/html/openWB/ramdisk/nachtladenstate)
 nachtladen2state=$(</var/www/html/openWB/ramdisk/nachtladen2state)
 rfidlp1=$(<ramdisk/rfidlp1)
+rfidlp1=$( cut -d ',' -f 1 <<< "$rfidlp1" )
 rfidlp2=$(<ramdisk/rfidlp2)
+rfidlp2=$( cut -d ',' -f 1 <<< "$rfidlp2" )
 if (( nachtladenstate == 0 )) || (( nachtladen2state == 0 )); then
 	lmodus=$(</var/www/html/openWB/ramdisk/lademodus)
 else
@@ -17,7 +21,7 @@ fi
 if [ -e ramdisk/loglademodus ]; then
 lademodus=$(</var/www/html/openWB/ramdisk/loglademodus)
 fi
-if (( soc > 0 )); then 
+if (( soc > 0 )); then
 	soctext=$(echo ", bei $soc %SoC")
 else
 	soctext=$(echo ".")
@@ -55,7 +59,7 @@ else
 			boolstopchargeafterdisclp1=$(<ramdisk/boolstopchargeafterdisclp1)
 			if (( boolstopchargeafterdisclp1 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp1
-				mosquitto_pub -r -t "openWB/set/lp1/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -121,7 +125,7 @@ else
 			if (( ladedauer > 60 )); then
 				ladedauerh=$((ladedauer / 60))
 				laderest=$((ladedauer % 60))
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lademodus,$rfidlp1 web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauerh' H '$laderest' Min,1',$lmodus,$rfidlp1 $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauerh H $laderest Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -129,7 +133,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1',$lademodus,$rfidlp1 web/ladelog
+				sed -i '1i'$start,$jetzt,$gelrlp1,$bishergeladen,$ladegeschw,$ladedauer' Min,1',$lmodus,$rfidlp1 $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp1name Ladung gestoppt. $bishergeladen kWh in $ladedauer Min mit durchschnittlich $ladegeschw kW geladen$soctext"
@@ -175,7 +179,7 @@ else
 			boolstopchargeafterdisclp2=$(<ramdisk/boolstopchargeafterdisclp2)
 			if (( boolstopchargeafterdisclp2 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp2
-				mosquitto_pub -r -t "openWB/set/lp2/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -243,14 +247,14 @@ else
 			if (( ladedauers1 > 60 )); then
 				ladedauerhs1=$((ladedauers1 / 60))
 				laderests1=$((ladedauers1 % 60))
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lademodus,$rfidlp2 web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauerhs1' H '$laderests1' Min,2',$lmodus,$rfidlp2 $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauerhs1 H $laderests1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
 					fi
 				fi
 			else
-				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$lademodus,$rfidlp2 web/ladelog
+				sed -i '1i'$starts1,$jetzts1,$gelrlp2,$bishergeladens1,$ladegeschws1,$ladedauers1' Min,2',$lmodus,$rfidlp2 $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp2name Ladung gestoppt. $bishergeladens1 kWh in $ladedauers1 Min mit durchschnittlich $ladegeschws1 kW geladen$soctext1"
@@ -299,7 +303,7 @@ else
 			boolstopchargeafterdisclp3=$(<ramdisk/boolstopchargeafterdisclp3)
 			if (( boolstopchargeafterdisclp3 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp3
-				mosquitto_pub -r -t "openWB/set/lp3/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/3/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -360,11 +364,11 @@ else
 			ladegeschws2=$(echo "scale=2;$bishergeladens2 * 60 * 60 / $ladedauerss2" |bc)
 			gelrlp3=$(echo "scale=2;$bishergeladens2 / $durchslp3 * 100" |bc)
 			gelrlp3=${gelrlp3%.*}
-	
+
 			if (( ladedauers2 > 60 )); then
 				ladedauerhs2=$((ladedauers2 / 60))
 				laderests2=$((ladedauers2 % 60))
-				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauerhs2' H '$laderests2' Min,3',$lademodus web/ladelog
+				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauerhs2' H '$laderests2' Min,3',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauerhs2 H $laderests2 Min mit durchschnittlich $ladegeschws2 kW geladen."
@@ -372,7 +376,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauers2' Min,3',$lademodus web/ladelog
+				sed -i '1i'$starts2,$jetzts2,$gelrlp3,$bishergeladens2,$ladegeschws2,$ladedauers2' Min,3',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp3name Ladung gestoppt. $bishergeladens2 kWh in $ladedauers2 Min mit durchschnittlich $ladegeschws2 kW geladen."
@@ -419,7 +423,7 @@ else
 			boolstopchargeafterdisclp4=$(<ramdisk/boolstopchargeafterdisclp4)
 			if (( boolstopchargeafterdisclp4 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp4
-				mosquitto_pub -r -t "openWB/set/lp4/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/4/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -481,11 +485,11 @@ else
 			ladegeschwlp4=$(echo "scale=2;$bishergeladenlp4 * 60 * 60 / $ladedauerslp4" |bc)
 			gelrlp4=$(echo "scale=2;$bishergeladenlp4 / $durchslp4 * 100" |bc)
 			gelrlp4=${gelrlp4%.*}
-	
+
 			if (( ladedauerlp4 > 60 )); then
 				ladedauerhlp4=$((ladedauerlp4 / 60))
 				laderestlp4=$((ladedauerlp4 % 60))
-				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerhlp4' H '$laderestlp4' Min,4',$lademodus web/ladelog
+				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerhlp4' H '$laderestlp4' Min,4',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerhlp4 H $laderestlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
@@ -493,7 +497,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerlp4' Min,4',$lademodus web/ladelog
+				sed -i '1i'$startlp4,$jetztlp4,$gelrlp4,$bishergeladenlp4,$ladegeschwlp4,$ladedauerlp4' Min,4',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp4name Ladung gestoppt. $bishergeladenlp4 kWh in $ladedauerlp4 Min mit durchschnittlich $ladegeschwlp4 kW geladen."
@@ -540,7 +544,7 @@ else
 			boolstopchargeafterdisclp5=$(<ramdisk/boolstopchargeafterdisclp5)
 			if (( boolstopchargeafterdisclp5 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp5
-				mosquitto_pub -r -t "openWB/set/lp5/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/5/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -600,11 +604,11 @@ else
 			ladegeschwlp5=$(echo "scale=2;$bishergeladenlp5 * 60 * 60 / $ladedauerslp5" |bc)
 			gelrlp5=$(echo "scale=2;$bishergeladenlp5 / $durchslp5 * 100" |bc)
 			gelrlp5=${gelrlp5%.*}
-	
+
 			if (( ladedauerlp5 > 60 )); then
 				ladedauerhlp5=$((ladedauerlp5 / 60))
 				laderestlp5=$((ladedauerlp5 % 60))
-				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerhlp5' H '$laderestlp5' Min,5',$lademodus web/ladelog
+				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerhlp5' H '$laderestlp5' Min,5',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerhlp5 H $laderestlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
@@ -612,7 +616,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerlp5' Min,5',$lademodus web/ladelog
+				sed -i '1i'$startlp5,$jetztlp5,$gelrlp5,$bishergeladenlp5,$ladegeschwlp5,$ladedauerlp5' Min,5',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp5name Ladung gestoppt. $bishergeladenlp5 kWh in $ladedauerlp5 Min mit durchschnittlich $ladegeschwlp5 kW geladen."
@@ -659,7 +663,7 @@ else
 			boolstopchargeafterdisclp6=$(<ramdisk/boolstopchargeafterdisclp6)
 			if (( boolstopchargeafterdisclp6 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp6
-				mosquitto_pub -r -t "openWB/set/lp6/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/6/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -719,11 +723,11 @@ else
 			ladegeschwlp6=$(echo "scale=2;$bishergeladenlp6 * 60 * 60 / $ladedauerslp6" |bc)
 			gelrlp6=$(echo "scale=2;$bishergeladenlp6 / $durchslp6 * 100" |bc)
 			gelrlp6=${gelrlp6%.*}
-	
+
 			if (( ladedauerlp6 > 60 )); then
 				ladedauerhlp6=$((ladedauerlp6 / 60))
 				laderestlp6=$((ladedauerlp6 % 60))
-				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerhlp6' H '$laderestlp6' Min,6',$lademodus web/ladelog
+				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerhlp6' H '$laderestlp6' Min,6',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerhlp6 H $laderestlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
@@ -731,7 +735,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerlp6' Min,6',$lademodus web/ladelog
+				sed -i '1i'$startlp6,$jetztlp6,$gelrlp6,$bishergeladenlp6,$ladegeschwlp6,$ladedauerlp6' Min,6',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp6name Ladung gestoppt. $bishergeladenlp6 kWh in $ladedauerlp6 Min mit durchschnittlich $ladegeschwlp6 kW geladen."
@@ -778,7 +782,7 @@ else
 			boolstopchargeafterdisclp7=$(<ramdisk/boolstopchargeafterdisclp7)
 			if (( boolstopchargeafterdisclp7 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp7
-				mosquitto_pub -r -t "openWB/set/lp7/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/7/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -838,11 +842,11 @@ else
 			ladegeschwlp7=$(echo "scale=2;$bishergeladenlp7 * 60 * 60 / $ladedauerslp7" |bc)
 			gelrlp7=$(echo "scale=2;$bishergeladenlp7 / $durchslp7 * 100" |bc)
 			gelrlp7=${gelrlp7%.*}
-	
+
 			if (( ladedauerlp7 > 60 )); then
 				ladedauerhlp7=$((ladedauerlp7 / 60))
 				laderestlp7=$((ladedauerlp7 % 60))
-				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerhlp7' H '$laderestlp7' Min,7',$lademodus web/ladelog
+				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerhlp7' H '$laderestlp7' Min,7',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerhlp7 H $laderestlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
@@ -850,7 +854,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerlp7' Min,7',$lademodus web/ladelog
+				sed -i '1i'$startlp7,$jetztlp7,$gelrlp7,$bishergeladenlp7,$ladegeschwlp7,$ladedauerlp7' Min,7',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp7name Ladung gestoppt. $bishergeladenlp7 kWh in $ladedauerlp7 Min mit durchschnittlich $ladegeschwlp7 kW geladen."
@@ -897,7 +901,7 @@ else
 			boolstopchargeafterdisclp8=$(<ramdisk/boolstopchargeafterdisclp8)
 			if (( boolstopchargeafterdisclp8 == 1 )); then
 				echo 0 > ramdisk/boolstopchargeafterdisclp8
-				mosquitto_pub -r -t "openWB/set/lp8/ChargePointEnabled" -m "0"
+				mosquitto_pub -r -t "openWB/set/lp/8/ChargePointEnabled" -m "0"
 			fi
 		fi
 	fi
@@ -957,11 +961,11 @@ else
 			ladegeschwlp8=$(echo "scale=2;$bishergeladenlp8 * 60 * 60 / $ladedauerslp8" |bc)
 			gelrlp8=$(echo "scale=2;$bishergeladenlp8 / $durchslp8 * 100" |bc)
 			gelrlp8=${gelrlp8%.*}
-	
+
 			if (( ladedauerlp8 > 60 )); then
 				ladedauerhlp8=$((ladedauerlp8 / 60))
 				laderestlp8=$((ladedauerlp8 % 60))
-				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerhlp8' H '$laderestlp8' Min,8',$lademodus web/ladelog
+				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerhlp8' H '$laderestlp8' Min,8',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerhlp8 H $laderestlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."
@@ -969,7 +973,7 @@ else
 				fi
 
 			else
-				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerlp8' Min,8',$lademodus web/ladelog
+				sed -i '1i'$startlp8,$jetztlp8,$gelrlp8,$bishergeladenlp8,$ladegeschwlp8,$ladedauerlp8' Min,8',$lademodus $monthlyfile
 				if ((pushbenachrichtigung == "1")) ; then
 					if ((pushbstopl == "1")) ; then
 						./runs/pushover.sh "$lp8name Ladung gestoppt. $bishergeladenlp8 kWh in $ladedauerlp8 Min mit durchschnittlich $ladegeschwlp8 kW geladen."

@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 if (( evukitversion == 1 )); then
 	sudo python /var/www/html/openWB/modules/bezug_ethmpm3pm/readlovato.py
 else

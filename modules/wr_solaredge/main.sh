@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 Solaredgebatwr="0"
 if [[ $solaredgespeicherip == $solaredgepvip ]]  ; then

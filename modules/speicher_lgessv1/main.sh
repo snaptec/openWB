@@ -10,7 +10,6 @@
 #            dem Menüpunkt "Systeminformationen"
 #            Mit der Registrierungsnr. kann man sich dann in der 
 #            Rolle "installer" einloggen. 
-. /var/www/html/openWB/openwb.conf
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #
@@ -19,7 +18,7 @@ ess_pass=$lgessv1pass
 if [ "$ess_api_ver" == "10.2019" ]; then
 	arr_pos="13"
 else 
-	arr_pos="0"
+	arr_pos="1"
 fi
 #
 ## Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
@@ -74,13 +73,16 @@ fi
 #
 jahr=$(date +%Y)
 year_of_stat='"'year'"':'"'$jahr'"'
+monat=$(date +%m)
+arr_pos=$($monat)
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/batt/year')
 speicherikwh=$(echo $json | jq '.loginfo['$arr_pos'].total_charge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 speicherekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_discharge' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 #
 ## Daten in Ramdisk schreiben
 #
-echo $speicherikwh > /var/www/html/openWB/ramdisk/speicherikwh
-echo $speicherekwh > /var/www/html/openWB/ramdisk/speicherekwh
+#echo $speicherikwh > /var/www/html/openWB/ramdisk/speicherikwh
+#echo $speicherekwh > /var/www/html/openWB/ramdisk/speicherekwh
+bat_user_soc=$(echo $bat_user_soc | sed 's/\..*$//')
 echo $bat_user_soc > /var/www/html/openWB/ramdisk/speichersoc
 echo $batconv_power > /var/www/html/openWB/ramdisk/speicherleistung

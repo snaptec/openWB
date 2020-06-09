@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
@@ -32,7 +31,7 @@ if [[ $evsewifiplugstatelp1 > "1" ]]; then
 else
         echo 0 > /var/www/html/openWB/ramdisk/plugstat
 fi
-if [[ $evsewifiplugstatelp1 > "2" ]] && [[ $ladestatuslp1 == "1" ]] && [[ $lp1enabled == "1" ]]; then
+if [[ $evsewifiplugstatelp1 > "2" ]] ; then
         echo 1 > /var/www/html/openWB/ramdisk/chargestat
 else
 	echo 0 > /var/www/html/openWB/ramdisk/chargestat

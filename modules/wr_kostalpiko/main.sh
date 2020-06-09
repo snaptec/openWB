@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #Auslesen eines Kostal Piko WR über die integrierte API des WR. Rückgabewert ist die aktuelle Wattleistung.
-. /var/www/html/openWB/openwb.conf
 
-pvwatttmp=$(curl --connect-timeout 5 -s $wrkostalpikoip/api/dxs.json?dxsEntries=67109120'&'dxsEntries=251658753)
+pvwatttmp=$(curl --connect-timeout 5 -s $wrkostalpikoip/api/dxs.json?dxsEntries=33556736'&'dxsEntries=251658753)
 
 #aktuelle Ausgangsleistung am WR [W]
 pvwatt=$(echo $pvwatttmp | jq '.dxsEntries[0].value' | sed 's/\..*$//')
@@ -17,8 +16,8 @@ echo $pvwatt
 #zur weiteren verwendung im webinterface
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
 #Gesamtzählerstand am WR [kWh]
-pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
-pvkwh=$(echo "$pvkwh*1000" |bc)
+#pvkwh=$(echo $pvwatttmp | jq '.dxsEntries[1].value' | sed 's/\..*$//')
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwhk
+#pvkwh=$(echo "$pvkwh*1000" |bc)
 #zur weiteren verwendung im webinterface
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh

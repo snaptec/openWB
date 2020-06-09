@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 re='^[-+]?[0-9]+\.?[0-9]*$'
 amps=$(curl --connect-timeout 3 -s "http://$twcmanagerlp1ip/index.php" |grep Charging | sed 's/^.*\(Charging at.*A\).*$/\1/' | cut -c 13- | tr -d A)
 

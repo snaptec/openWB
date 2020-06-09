@@ -27,7 +27,7 @@
 set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
-. openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 source minundpv.sh
 source nurpv.sh
 source auslademodus.sh
@@ -43,6 +43,7 @@ source u1p3p.sh
 source nrgkickcheck.sh
 source rfidtag.sh
 source leds.sh
+source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
 
@@ -96,9 +97,9 @@ fi
 
 #######################################
 # check rfid
-if [[ $rfidakt == "1" ]]; then
-	rfid
-fi
+#moved in loadvars
+
+
 #goe mobility check
 goecheck
 # nrgkick mobility check
@@ -178,9 +179,15 @@ if (( cpunterbrechunglp1 == 1 )); then
                        if (( ladeleistung < 200 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
                                if (( cpulp1waraktiv == 0 )); then
-				       echo "CP Unterbrechung an LP1 durchgeführt"
-                                       sudo python runs/cpulp1.py
-                                       echo 1 > ramdisk/cpulp1waraktiv
+					echo "CP Unterbrechung an LP1 durchgeführt"
+					if [[ $evsecon == "simpleevsewifi" ]]; then
+						curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
+					elif [[ $evsecon == "ipevse" ]]; then
+						python runs/cpuremote.py $evseiplp1 4
+					else
+                                       		sudo python runs/cpulp1.py
+					fi
+                               		echo 1 > ramdisk/cpulp1waraktiv
                                fi
                        else
                                echo 0 > ramdisk/cpulp1waraktiv
@@ -197,7 +204,14 @@ if (( cpunterbrechunglp2 == 1 )); then
                                cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
                                if (( cpulp2waraktiv == 0 )); then
 				       echo "CP Unterbrechung an LP2 durchgeführt"
-                                       sudo python runs/cpulp2.py
+					if [[ $evsecons1 == "simpleevsewifi" ]]; then
+						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
+					elif [[ $evsecons1 == "ipevse" ]]; then
+						python runs/cpuremote.py $evseiplp2 7
+
+					else
+                                       		sudo python runs/cpulp2.py
+			       		fi
                                        echo 1 > ramdisk/cpulp2waraktiv
                                fi
                        else
@@ -261,6 +275,12 @@ else
 	evsemodbustimer=0
 	echo $evsemodbustimer > ramdisk/evsemodbustimer
 	evsemodbuscheck
+fi
+
+# Slave Mode, openWB als Ladepunkt nutzen
+
+if (( slavemode == 1 )); then
+	openwbisslave
 fi
 #Lademodus 3 == Aus
 
@@ -333,6 +353,7 @@ if (( anzahlphasen > 9 )); then
 	anzahlphasen=1
 fi
 llphasentest=3
+echo "$date Alte Anzahl genutzter Phasen= $anzahlphasen" >> ramdisk/nurpv.log
 #Anzahl genutzter Phasen ermitteln, wenn ladestrom kleiner 3 (nicht vorhanden) nutze den letzten bekannten wert
 if (( llalt > 3 )); then
 	anzahlphasen=0
@@ -346,30 +367,71 @@ if (( llalt > 3 )); then
 		anzahlphasen=$((anzahlphasen + 1 ))
 	fi
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
-else
-	if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
-  	echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
-	fi
-	if (( u1p3paktiv == 1 )); then
-		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
-	else
-		anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+	echo $anzahlphasen > /var/www/html/openWB/ramdisk/lp1anzahlphasen
+	echo "$date LP1 Anzahl Phasen während Ladung= $anzahlphasen" >> ramdisk/nurpv.log
 
+else
+	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
+		if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
+			echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+		fi
+		if (( u1p3paktiv == 1 )); then
+			anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+		else
+			if [ ! -f /var/www/html/openWB/ramdisk/lp1anzahlphasen ]; then
+				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp1anzahlphasen)
+			else
+				anzahlphasen=$(cat /var/www/html/openWB/ramdisk/anzahlphasen)
+			fi
+		fi
+	else
+		anzahlphasen=0
 	fi
+	echo "$date LP1 Anzahl Phasen während keiner Ladung= $anzahlphasen" >> ramdisk/nurpv.log
+
 fi
 if (( lastmanagement == 1 )); then
 	if (( llas11 > 3 )); then
 		if [ "$llas11" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))
+			lp2anzahlphasen=1
 		fi
 		if [ "$llas12" -ge $llphasentest ]; then
-	  	anzahlphasen=$((anzahlphasen + 1 ))
+	  		anzahlphasen=$((anzahlphasen + 1 ))
+			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
+
 		fi
 		if [ "$llas13" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))
+			lp2anzahlphasen=$((lp2anzahlphasen + 1 ))
 		fi
 
 		echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
+		echo $lp2anzahlphasen > /var/www/html/openWB/ramdisk/lp2anzahlphasen
+		echo "$date LP2 Anzahl Phasen während Ladung= $lp2anzahlphasen" >> ramdisk/nurpv.log
+
+	else
+		if (( plugstatlp2 == 1 )) && (( lp2enabled == 1 )); then
+			if [ ! -f /var/www/html/openWB/ramdisk/anzahlphasen ]; then
+				echo 1 > /var/www/html/openWB/ramdisk/anzahlphasen
+			fi
+			if (( u1p3plp2aktiv == 1 )); then
+				lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/u1p3pstat)
+				anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
+			else
+				if [ ! -f /var/www/html/openWB/ramdisk/lp2anzahlphasen ]; then
+					echo 1 > /var/www/html/openWB/ramdisk/lp2anzahlphasen
+					anzahlphasen=$((anzahlphasen + 1 ))
+				else
+					lp2anzahlphasen=$(cat /var/www/html/openWB/ramdisk/lp2anzahlphasen)
+					anzahlphasen=$((lp2anzahlphasen + anzahlphasen))
+
+				fi
+
+			fi
+		fi
+		echo "$date LP2 Anzahl Phasen während keiner Ladung= $lp2anzahlphasen" >> ramdisk/nurpv.log
+
 	fi
 fi
 if (( lastmanagements2 == 1 )); then
@@ -393,11 +455,28 @@ if [ "$anzahlphasen" -ge "24" ]; then
 	anzahlphasen=1
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
 fi
+echo "$date Gesamt Anzahl Phasen= $anzahlphasen" >> ramdisk/nurpv.log
+
 ########################
 # Berechnung für PV Regelung
-mindestuberschussphasen=$(echo "($mindestuberschuss*$anzahlphasen)" | bc)
-wattkombiniert=$(echo "($ladeleistung+$uberschuss)" | bc)
-abschaltungw=$(echo "(($abschaltuberschuss-1320)*-1*$anzahlphasen)" | bc)
+if [[ $nurpv70dynact == "1" ]]; then
+	nurpv70status=$(<ramdisk/nurpv70dynstatus)
+	if [[ $nurpv70status == "1" ]]; then
+		uberschuss=$((uberschuss - nurpv70dynw))
+		# Schwelle zum Beginn der Ladung
+		mindestuberschuss=0
+		# Schwelle zum Beenden der Ladung
+		abschaltuberschuss=-1500
+		#abschaltuberschuss=$((minimalapv * 230 * anzahlphasen))
+ 		if [[ $debug == "1" ]]; then
+			echo "PV 70% aktiv! derzeit genutzter Überschuss $uberschuss"
+		fi
+		echo "$date 70% Grenze aktiv. Alter Überschuss: $((uberschuss + nurpv70dynw)), Neuer verfügbarer Uberschuss: $uberschuss" >> ramdisk/nurpv.log
+	fi
+fi
+
+mindestuberschussphasen=$((mindestuberschuss * anzahlphasen))
+wattkombiniert=$((ladeleistung + uberschuss))
 #PV Regelmodus
 if [[ $pvbezugeinspeisung == "0" ]]; then
 	pvregelungm="0"
@@ -411,13 +490,14 @@ if [[ $pvbezugeinspeisung == "2" ]]; then
 	pvregelungm=$offsetpv
 	schaltschwelle=$((schaltschwelle + offsetpv))
 fi
+echo "$date Schaltschwelle: $schaltschwelle, zum runterregeln: $pvregelungm" >> ramdisk/nurpv.log
 # Debug Ausgaben
 if [[ $debug == "1" ]]; then
 	echo anzahlphasen "$anzahlphasen"
 fi
 if [[ $debug == "2" ]]; then
 	echo "$date"
-	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "abschaltungw" $abschaltungw "schaltschwelle" $schaltschwelle
+	echo "uberschuss" $uberschuss "wattbezug" $wattbezug "ladestatus" $ladestatus "llsoll" $llalt "pvwatt" $pvwatt "mindestuberschussphasen" $mindestuberschussphasen "wattkombiniert" $wattkombiniert "schaltschwelle" $schaltschwelle
 fi
 ########################
 #Min Ladung + PV Uberschussregelung lademodus 1

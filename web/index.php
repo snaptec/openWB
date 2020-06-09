@@ -7,13 +7,20 @@
 	if ( $bootinprogress == 1 or $updateinprogress == 1) {
 		//atreboot.sh or update.sh still in progress, wait 5 seconds and retry
 		header( "refresh:5;url=index.php" );
-		echo '<html>
-			<center>
-				<h4>openWB ist noch nicht bereit</h4><br>
-				Der Vorgang kann länger dauern, bitte warten...<br><br>
- 				Die Seite aktualisiert sich automatisch neu
-			</center>
-		      </html>';
+		?>
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+	</head>
+	<body>
+		<h4 style="text-align:center;">openWB ist noch nicht bereit</h4>
+		<p style="text-align:center;">
+			Der Vorgang kann länger dauern, bitte warten...<br>
+ 			Die Seite aktualisiert sich automatisch neu.
+		</p>
+	</body>
+</html>
+		<?php
 	} else {
 		// check if forced theme is activated in config file
 		$simplemodeold = '';
@@ -25,6 +32,7 @@
 		}
 		if ( $simplemodeold == 1 ) {
 			// force hidden theme
+			?><!-- including themes/hidden/simplemode.php --><?php
 			include 'themes/hidden/simplemode.php';
 		} else {
 			// theme set by cookie
@@ -46,7 +54,8 @@
 				$_COOKIE['openWBTheme'] = 'standard';
 				$themeCookie = 'standard';
 			}
-			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.php';
+			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.html'; ?> --><?php
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
 		}
 	}
 

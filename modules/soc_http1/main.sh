@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Soc from http
-. /var/www/html/openWB/openwb.conf
 
 hsoc=$(curl --connect-timeout 15 -s $hsocip1 | cut -f1 -d".")
 

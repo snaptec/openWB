@@ -22,12 +22,12 @@
 	<body>
 
 		<header>
-		    <!-- Fixed navbar -->
-		    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-		        <div class="navbar-brand">
-		            openWB
-		        </div>
-		    </nav>
+			<!-- Fixed navbar -->
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+				<div class="navbar-brand">
+					openWB
+				</div>
+			</nav>
 		</header>
 
 		<div role="main" class="container" style="margin-top:20px">
@@ -41,7 +41,6 @@
 					<p id="infoText"></p>
 				</div>
 			</div>
-			<br>
 			<div class="row">
 				<div class="cssload-loader text-center">
 					<div class="cssload-inner cssload-one"></div>
@@ -52,22 +51,18 @@
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
-		  <div class="container text-center">
-		  </div>
+			<div class="container text-center">
+			</div>
 		</footer>
 
-		<script type="text/javascript">
-
+		<script>
 			$(document).ready(function(){
-				console.log("reboot initiated");
 				$("#infoText").text("Neustart der openWB angefordert...");
 				$.get("./tools/restart.php").always(function() {
 					$("#infoText").text("Neustart läuft... bitte warten, die Weiterleitung erfolgt automatisch.");
-					console.log("reboot in progress, waiting for main page to load");
 					setTimeout(function() { window.location.href = "./index.php"; }, 50000);
-	  			});
+				});
 			});
-
 		</script>
 
 	</body>

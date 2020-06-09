@@ -10,7 +10,6 @@
 #            dem Menüpunkt "Systeminformationen"
 #            Mit der Registrierungsnr. kann man sich dann in der 
 #            Rolle "installer" einloggen. 
-. /var/www/html/openWB/openwb.conf
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #
@@ -19,7 +18,7 @@ ess_pass=$lgessv1pass
 if [ "$ess_api_ver" == "10.2019" ]; then
 	arr_pos="13"
 else 
-	arr_pos="0"
+	arr_pos="1"
 fi
 #
 ## Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
@@ -67,13 +66,16 @@ pcs_pv_total_power=$(echo $json | jq '.statistics.pcs_pv_total_power' | sed 's/.
 #
 jahr=$(date +%Y)
 year_of_stat='"'year'"':'"'$jahr'"'
+monat=$(date +%m)
+arr_pos=$($monat)
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/pv/year')
 pvkwh=$(echo $json | jq '.loginfo['$arr_pos'].total_generation' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 ekwh=$(echo $json | jq '.loginfo['$arr_pos'].total_Feed_in' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')
 #
 ## Daten in Ramdisk schreiben
 #
-echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
-echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
+#echo $pvkwh > /var/www/html/openWB/ramdisk/pv1kwh_temp
+#echo $ekwh > /var/www/html/openWB/ramdisk/einspeisungkwh
 echo '-'$pcs_pv_total_power > /var/www/html/openWB/ramdisk/pvwatt
 echo '-'$pcs_pv_total_power

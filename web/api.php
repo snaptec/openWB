@@ -1,5 +1,4 @@
 <?php
-
 $lines = file('/var/www/html/openWB/openwb.conf');
 foreach($lines as $line) {
 	if(strpos($line, "minimalstromstaerke=") !== false) {
@@ -15,22 +14,20 @@ $maximalstromstaerkeold = intval($maximalstromstaerkeold);
 
 if(isset($_GET["lademodus"])) {
 	if($_GET["lademodus"] == "jetzt") {
-	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 0);
+		file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 0);
 	}
-
 	if($_GET["lademodus"] == "minundpv") {
-	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 1);
+		file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 1);
 	}
 	if($_GET["lademodus"] == "pvuberschuss") {
-	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 2);
+		file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 2);
 	}
 	if($_GET["lademodus"] == "stop") {
-	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 3);
+		file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 3);
 	}
 	if($_GET["lademodus"] == "standby") {
-	file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 4);
+		file_put_contents('/var/www/html/openWB/ramdisk/lademodus', 4);
 	}
-
 }
 if(isset($_GET["sofortlllp1"])) {
 	if($_GET["sofortlllp1"] >= $minimalstromstaerkeold && $_GET["sofortlllp1"] <= $maximalstromstaerkeold) {
@@ -38,22 +35,15 @@ if(isset($_GET["sofortlllp1"])) {
 	}
 }
 if(isset($_GET["sofortlllp2"])) {
-
 	if($_GET["sofortlllp2"] >= $minimalstromstaerkeold && $_GET["sofortlllp2"] <= $maximalstromstaerkeold) {
-
 		file_put_contents('/var/www/html/openWB/ramdisk/lp2sofortll', $_GET['sofortlllp2']);
-
 	}
 }
 if(isset($_GET["sofortlllp3"])) {
-
 	if($_GET["sofortlllp3"] >= $minimalstromstaerkeold && $_GET["sofortlllp3"] <= $maximalstromstaerkeold) {
-
 		file_put_contents('/var/www/html/openWB/ramdisk/lp3sofortll', $_GET['sofortlllp3']);
-
 	}
 }
-
 if(isset($_GET["speicher"])) {
 	if($_GET["speicher"]) {
 		file_put_contents('/var/www/html/openWB/ramdisk/speicher', $_GET['speicher']);
@@ -72,10 +62,10 @@ if(isset($_GET["get"])) {
 			"evuw"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/wattbezug'))[0] / 1000),
 			"pvw"	=>	(explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/pvwatt'))[0] / 1000),
 			"socLP2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/soc1'))[0]
-		
 		);
+		header("Content-type: application/json");
 		echo json_encode($json);
-	}	
+	}
 	if($_GET["get"] == "all") {
 		$json = array(
 			"date"	=>	date('Y:m:d-H:i:s'),
@@ -86,12 +76,12 @@ if(isset($_GET["get"])) {
 			"restzeitlp1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp1'))[0],
 			"restzeitlp2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp2'))[0],
 			"restzeitlp3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/restzeitlp3'))[0],
-			"gelkwhlp1"	=>      explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/aktgeladen'))[0],
+			"gelkwhlp1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/aktgeladen'))[0],
 			"gelkwhlp2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/aktgeladens1'))[0],
-			"gelkwhlp3"	=>      explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/aktgeladens2'))[0],
-			"gelrlp1"	=>      explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp1'))[0],
+			"gelkwhlp3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/aktgeladens2'))[0],
+			"gelrlp1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp1'))[0],
 			"gelrlp2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp2'))[0],
-			"gelrlp3"	=>      explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp3'))[0],
+			"gelrlp3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/gelrlp3'))[0],
 			"llgesamt"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llkombiniert'))[0],
 			"evua1"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga1'))[0],
 			"evua2"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/bezuga2'))[0],
@@ -140,14 +130,9 @@ if(isset($_GET["get"])) {
 			"lla1LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas21'))[0],
 			"lla2LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas22'))[0],
 			"lla3LP3"	=>	explode(PHP_EOL, file_get_contents('/var/www/html/openWB/ramdisk/llas23'))[0]
-
-
-
 		);
+		header("Content-type: application/json");
 		echo json_encode($json);
 	}
 }
-
-
-
 ?>

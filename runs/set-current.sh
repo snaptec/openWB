@@ -31,7 +31,6 @@
 # Example: ./set-current.sh 9 s1
 # sets charging current on point "s1" to 9A
 
-. /var/www/html/openWB/openwb.conf
 lp1enabled=$(<ramdisk/lp1enabled)
 lp2enabled=$(<ramdisk/lp2enabled)
 lp3enabled=$(<ramdisk/lp3enabled)
@@ -68,6 +67,12 @@ function setChargingCurrentModbus () {
 	modbusevseid=$3
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+}
+function setChargingCurrentBuchse () {
+	current=$1
+	# set desired charging current
+	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+	#Will be handled in buchsecontrol.py
 }
 # function for setting the current - IP modbusevse
 # Parameters:
@@ -108,22 +113,26 @@ function setChargingCurrentThirdeth () {
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
-		if [[ $current -eq 0 ]]; then
-			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
-			state=$(echo $output | jq '.list[] | .evseState')
-			if ((state == true)) ; then
-				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=false > /dev/null
+		if [[ $evsewifitimeoutlp1 -eq 4 ]]; then
+			if [[ $current -eq 0 ]]; then
+				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+				state=$(echo $output | jq '.list[] | .evseState')
+				if ((state == true)) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=false > /dev/null
+				fi
+			else
+				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+				state=$(echo $output | jq '.list[] | .evseState')
+				if ((state == false)) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
+				fi
+				oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
+				if (( oldcurrent != $current )) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+				fi
 			fi
 		else
-			output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
-			state=$(echo $output | jq '.list[] | .evseState')
-			if ((state == false)) ; then
-				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
-			fi
-			oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
-			if (( oldcurrent != $current )) ; then
-				curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
-			fi
+			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
 		fi
 	fi
 }
@@ -209,6 +218,9 @@ function setChargingCurrentnrgkick () {
 function setChargingCurrent () {
 	if [[ $evsecon == "dac" ]]; then
 		setChargingCurrentDAC $current $dacregister
+	fi
+	if [[ $evsecon == "buchse" ]]; then
+		setChargingCurrentBuchse $current
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then

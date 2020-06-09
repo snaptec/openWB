@@ -8,7 +8,6 @@
 openwb_home=/var/www/html/openWB
 target="$openwb_home/ramdisk"
 
-. "$openwb_home/openwb.conf"
 
 # Checks
 if [ -z "$solarview_hostname" ]; then

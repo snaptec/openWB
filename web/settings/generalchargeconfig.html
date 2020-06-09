@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+
+	<head>
+		<base href="/openWB/web/">
+
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>openWB Einstellungen</title>
+		<meta name="description" content="Control your charge" />
+		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
+		<!-- Favicons (created with http://realfavicongenerator.net/)-->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="manifest.json">
+		<link rel="shortcut icon" href="img/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#00a8ff">
+		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
+
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+	</head>
+
+	<body>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
+		<div role="main" class="container" style="margin-top:20px">
+
+			<form id="myForm">
+				<h1>Übergreifende Ladeeinstellungen</h1>
+
+				<div class="card">
+					<div class="card-header font-weight-bold text-white bg-secondary">
+	    				Allgemeine Einstellungen
+	  				</div>
+					<div class="card-body">
+						<h6 class="mb-0">Maximalstromstärke</h6>
+						<div>
+							<small>
+								Paramter in Ampere [A] für den maximalen Strom in allen Lademodi.
+								Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
+							</small>
+						</div>
+						<div class="form-row form-group mb-1 vaRow">
+							<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
+							<div class="col-6 col-sm-4">
+								<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" data-default="32" data-topicprefix="openWB/config/get/global/">
+							</div>
+							<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
+						</div>
+					</div>  <!-- end card body Allgemeine Einstellungen Übergreifendes -->
+				</div>  <!-- end card Allgemeine Einstellungen Übergreifendes -->
+
+				<br>
+
+				<div class="row justify-content-center">
+					<div class="col-3">
+						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
+					</div>
+					<div class="col-1">
+						&nbsp;
+					</div>
+					<div class="col-3">
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+					</div>
+				</div>
+			</form>
+
+			<br>
+
+			<!-- modal set-defaults-confirmation window -->
+			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-danger">
+							<h4 class="modal-title text-light">Achtung</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Sollen die übergreifenden Ladeeinstellungen wirklich auf Werkseinstellungen zurückgesetzt werden?
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn">Fortfahren</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- modal set-defaults-confirmation window -->
+			<div class="modal fade" id="formNotValidModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-danger">
+							<h4 class="modal-title text-light">Fehler</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Es wurden fehlerhafte Eingaben gefunden, speichern ist nicht möglich! Bitte überprüfen Sie alle Eingaben.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">Schließen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- modal no-values-changed window -->
+			<div class="modal fade" id="noValuesChangedInfoModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-info">
+							<h4 class="modal-title text-light">Info</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Es wurden keine geänderten Einstellungen gefunden.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>  <!-- container -->
+
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Ladeeinstellungen/Übergreifendes</small>
+			</div>
+		</footer>
+
+		<!-- load mqtt library -->
+		<script src = "js/mqttws31.js" ></script>
+		<!-- load topics -->
+		<script src = "settings/topicsToSubscribe_generalchargeconfig.js?ver=20200428-a" ></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<!-- load service -->
+		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
+		<!-- load mqtt handler-->
+		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
+
+		<script type="text/javascript">
+
+			$.get('settings/navbar.html', function(data){
+				$('#nav').replaceWith(data);
+				// disable navbar entry for current page
+				$('#navGeneralLadeeinstellungen').addClass('disabled');
+			});
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity check here
+			}
+			function saveSettings() {
+				// sends all changed values by mqtt if valid
+				var formValid = $("#myForm")[0].checkValidity();
+				if ( !formValid ) {
+					$('#formNotValidModal').modal();
+					return;
+				};
+				getChangedValues();
+				sendValues();
+			}
+
+			$(document).ready(function(){
+
+				$('input').blur(function(event) {
+					// check input field on blur if value is valid
+					if ( event.target.checkValidity() == false ) {
+						$(this).addClass('is-invalid');
+					} else {
+						$(this).removeClass('is-invalid');
+					}
+				});
+
+				$('#saveSettingsBtn').on("click",function() {
+					saveSettings();
+				});
+
+				$('#modalDefaultsBtn').on("click",function() {
+					$('#setDefaultsConfirmationModal').modal();
+				});
+
+				$('#saveDefaultsBtn').on("click",function() {
+					// shown in confirmation modal
+					// resets all values to defaults and sends all changed values by mqtt
+					setToDefaults();
+					getChangedValues();
+					sendValues();
+				});
+
+				$('input').on("paste",function(e) {
+					// prevent paste to input fields to avoid garbage
+					e.preventDefault();
+				});
+
+				$('.rangeInput').on('input', function() {
+					// show slider value in label of class valueLabel
+					updateLabel($(this).attr('id'));
+				});
+
+				$('input.naturalNumber').on('input', function() {
+					// on the fly input validation
+					formatToNaturalNumber(this);
+				});
+			});  // end document ready function
+
+		</script>
+
+	</body>
+</html>

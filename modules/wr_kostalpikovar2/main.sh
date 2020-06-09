@@ -3,7 +3,6 @@
 # modified by Kevin Wieland
 # based on Homematic Script v0.2 (c) 2018 by Alchy
 
-. /var/www/html/openWB/openwb.conf
 
 #Daten einlesen
 HTML=$(/usr/bin/curl -u $wr_piko2_user:$wr_piko2_pass --connect-timeout 10 -s -k $wr_piko2_url | /usr/bin/tr -d '\r' | /usr/bin/tr -d '\n' | /usr/bin/tr -d ' ' | /usr/bin/tr '#' ' ')
