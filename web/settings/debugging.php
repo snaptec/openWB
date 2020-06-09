@@ -102,6 +102,7 @@
 				<div class="col-lg-7">
 					Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
 					<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
+					Der Debug Modus muss nicht verstellt werden.
 				</div>
 			</div>
 			<br>

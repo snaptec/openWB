@@ -1216,6 +1216,7 @@
 								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 							</select>
 						</div>
@@ -1237,6 +1238,13 @@
 							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.
 						</div>
 					</div>
+					<div id="openwb12v2mid">
+						<div class="row bg-success">
+							Keine Konfiguration erforderlich.<br>
+							Dies ist die richtige Option, für fertige openWB series2 mit geeichtem Zähler und Addon Platine ab Mai 2020 (Standard+).
+						</div>
+					</div>
+
 					<div id="evsecondac">
 						<div class="row bg-success">
 							<b><label for="dacregister">Dacregister:</label></b>
@@ -1397,6 +1405,8 @@
 							$('#evseconkeba').hide();
 							$('#openwb12').hide();
 							$('#openwb12mid').hide();
+							$('#openwb12v2mid').hide();
+
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
 							if($('#evsecon').val() == 'ipevse') {
@@ -1435,6 +1445,10 @@
 							if($('#evsecon').val() == 'openwb12mid') {
 								$('#openwb12mid').show();
 							}
+							if($('#evsecon').val() == 'openwb12v2mid') {
+								$('#openwb12v2mid').show();
+							}
+
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 							}

@@ -73,7 +73,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
- 
+
     if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
@@ -229,7 +229,7 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/gelrlp'+str(devicenumb), 'w')
                 f.write("0")
                 f.close()
-            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True) 
+            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True)
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("socToChargeTo" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
@@ -254,7 +254,7 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/chargeLimitation", "", qos=0, retain=True)
- 
+
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
@@ -484,6 +484,11 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
         if (int(msg.payload) >= -1 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
@@ -890,7 +895,7 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
 
-    if (len(msg.payload) >= 1): 
+    if (len(msg.payload) >= 1):
         theTime = datetime.now()
         timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
         file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
