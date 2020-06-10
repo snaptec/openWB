@@ -117,6 +117,7 @@ if [[ $lastmanagement == "1" ]]; then
 		if [[ $evseplugstatelp2 > "0" ]] && [[ $evseplugstatelp2 < "7" ]] ; then
 			if [[ $evseplugstatelp2 > "1" ]]; then
 				plugstat2=$(</var/www/html/openWB/ramdisk/plugstats1)
+				
 				if [[ $plugstat2 == "0" ]] ; then
 					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
@@ -124,9 +125,11 @@ if [[ $lastmanagement == "1" ]]; then
 				fi
 				echo 1 > /var/www/html/openWB/ramdisk/plugstats1
 				plugstat2=1
+				plugstats1=$plugstat2
 			else
 				echo 0 > /var/www/html/openWB/ramdisk/plugstats1
 				plugstat2=0
+				plugstats1=$plugstat2
 			fi
 			if [[ $evseplugstatelp2 > "2" ]] && [[ $ladestatuss1 == "1" ]] ; then
 				echo 1 > /var/www/html/openWB/ramdisk/chargestats1
@@ -320,7 +323,6 @@ if [[ $pv2wattmodul != "none" ]]; then
 	pvwatt=$(( pvwatt + pv2watt ))
 	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 	pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
-
 	pvallwh=$(echo "$pvkwh + $pv2kwh" |bc)
 	#echo $pvallkwh > /var/www/html/openWB/ramdisk/pvkwh
 	echo $pvallwh > /var/www/html/openWB/ramdisk/pvallwh
@@ -331,6 +333,7 @@ if [[ $pv2wattmodul != "none" ]]; then
 else
 	pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 	echo $pvkwh > /var/www/html/openWB/ramdisk/pvallwh
+	echo $pvwatt > /var/www/html/openWB/ramdisk/pvallwatt
 fi
 
 #Speicher werte
@@ -367,6 +370,7 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla1=$(echo $lla1 | sed 's/\..*$//')
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
+	llv1=$(cat /var/www/html/openWB/ramdisk/llv1) 
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
@@ -717,6 +721,7 @@ else
 	uberschuss=$((-pvwatt - hausbezugnone - ladeleistung))
 	echo $((-uberschuss)) > /var/www/html/openWB/ramdisk/wattbezug
 	wattbezugint=$((-uberschuss))
+	wattbezug=$wattbezugint
 fi
 
 #Soc ermitteln
@@ -930,7 +935,7 @@ if [[ $debug == "1" ]]; then
 		echo speicherleistung $speicherleistung speichersoc $speichersoc
 	fi
 	echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-	echo lla1 "$lla1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
+	echo lla1 "$lla1" llv1 "$llv1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
 	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
 	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"

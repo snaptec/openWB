@@ -202,7 +202,7 @@ setLpPlugChangeState() {
 			echo "$NowItIs: LP 2 un-plugged"
 			unpluggedLps[2]=1
 		else
-			echo "$NowItIs: LP 2 unkown plug state '${plugstats1}'"
+			echo "$NowItIs: LP 2 unkown plug state '${lpsPlugStat[2]}'"
 		fi
 
 		echo ${lpsPlugStat[2]} > "ramdisk/accPlugstatChangeDetectLp2"
@@ -220,7 +220,7 @@ setLpPlugChangeState() {
 			echo "$NowItIs: LP 1 un-plugged"
 			unpluggedLps[1]=1
 		else
-			echo "$NowItIs: LP 1 unkown plug state '${plugstat}'"
+			echo "$NowItIs: LP 1 unkown plug state '${lpsPlugStat[1]}'"
 		fi
 
 		echo ${lpsPlugStat[1]} > "ramdisk/accPlugstatChangeDetectLp1"

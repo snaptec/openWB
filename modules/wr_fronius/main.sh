@@ -11,7 +11,7 @@ if ! [[ $pvwatt =~ $re ]] ; then
    pvwatt="0"
 fi
 
-pvkwh=$(echo $pvwatttmp | jq '.Body.Data.Site.E_Total')
+pvkwh=$(echo $pvwatttmp | jq '.Body.Data.Site.E_Total' | sed 's/\..*$//')
 
 if [[ $wrfronius2ip != "none" ]]; then
 	pv2watttmp=$(curl --connect-timeout 3 -s "$wrfronius2ip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")

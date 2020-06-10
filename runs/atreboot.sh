@@ -37,6 +37,8 @@ echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 1 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -145,12 +147,19 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
-echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
+echo 2 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 echo 3 > /var/www/html/openWB/ramdisk/mqttspeichersoc
 echo 2 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagement
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagements2
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp4
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp5
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp6
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp7
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp8
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp1
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp2
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp3
@@ -2711,3 +2720,5 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+

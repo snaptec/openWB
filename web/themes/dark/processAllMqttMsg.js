@@ -241,24 +241,30 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	    var powerEvu = mqttpayload;
 	    var powerEvu = parseInt(powerEvu, 10);
 		if ( isNaN(powerEvu) || powerEvu == 0 ) {
-			powerEvu = '0 W';
+			var sign = ': ';
+			powerEvu = '0';
+			var einheit = ' W';
 		} else if (powerEvu > 0) {
-	    	if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    powerEvu += ' kW Bezug';
-	    	} else {
-				powerEvu += ' W Bezug';
-			}
-    	} else {
-    	    powerEvu *= -1;
 			if (powerEvu > 999) {
-		    	powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    powerEvu += ' kW Einspeisung';
-	    	} else {
-				powerEvu += ' W Einspeisung';
+				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+				var sign = ' Bezug: ';
+				var einheit = ' kW';
+			} else {
+				var sign = ' Bezug: ';
+				var einheit = ' W';
 			}
-    	}
-	    $('#bezug').text(powerEvu);
+    		} else {
+    	    		powerEvu *= -1;
+			if (powerEvu > 999) {
+				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	    	    		var sign = ' Einspeisung: ';
+		    		var einheit = ' kW';
+	    		} else {
+		    		var sign = ' Einspeisung: ';
+		    		var einheit = ' W';
+			}
+    		}
+	 	$('#bezug').text(sign + powerEvu + einheit);
 	 }
 }
 
@@ -389,6 +395,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/housebattery/W' ) {
 		var speicherwatt = mqttpayload;
+var sign=  ': ';
 		var speicherwatt = parseInt(speicherwatt, 10);
 		if ( isNaN(speicherwatt) ) {
 			speicherwatt = 0;
@@ -398,27 +405,32 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 		} else if (speicherwatt > 0) {
 			if ( speicherwatt > 999 ) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW Ladung';
+				speicherwatt = speicherwatt + ' kW';
+				sign= ' Beladung: ';
 			} else {
-				speicherwatt = speicherwatt + ' W Ladung';
+				speicherwatt = speicherwatt + ' W';
+				sign= ' Beladung: ';
 			}
 		} else {
 	    	speicherwatt *= -1;
 			if (speicherwatt > 999) {
 				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW Entladung';
+				speicherwatt = speicherwatt + ' kW';
+				sign='Entladung: ';
 			} else {
-				speicherwatt = speicherwatt + ' W Entladung';
+				speicherwatt = speicherwatt + ' W';
+			sign='Entladung: ';
+
 			}
 		}
-		$('#speicherleistung').text(speicherwatt);
+		$('#speicherleistung').text(sign + speicherwatt);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/%Soc' ) {
 		var speicherSoc = parseInt(mqttpayload, 10);
 		if ( isNaN(speicherSoc) || speicherSoc < 0 || speicherSoc > 100 ) {
 			speicherSoc = '--';
 		}
-		speichersoc = ', ' + speicherSoc + ' % SoC';
+		speichersoc = speicherSoc + ' % SoC';
 		$('#speichersoc').text(speichersoc);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
