@@ -769,8 +769,14 @@ if (( hausverbrauch < 0 )); then
 	hausverbrauch=0
 fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
-
+usesimbezug=0
 if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+	usesimbezug=1
+fi
+if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
+	usesimbezug=1
+fi
+if [[ $usesimbezug == "1" ]]; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/wattbezug)
 	if [[ -e /var/www/html/openWB/ramdisk/bezugwatt0pos ]]; then
