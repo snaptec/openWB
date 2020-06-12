@@ -245,10 +245,10 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 			powerEvu = 0;
 		}
 		if ( powerEvu > 0 ) {
-			prefix = ' Bezug: ';
+			prefix = ' Imp: ';
 		} else if ( powerEvu < 0 ) {
 			powerEvu *= -1;
-			prefix = ' Einspeisung: ';
+			prefix = ' Exp: ';
 		}
 		if ( powerEvu > 999 ) {
 			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
