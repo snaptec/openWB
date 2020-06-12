@@ -238,33 +238,23 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/evu/W' ) {
-	    var powerEvu = mqttpayload;
-	    var powerEvu = parseInt(powerEvu, 10);
-		if ( isNaN(powerEvu) || powerEvu == 0 ) {
-			var sign = ': ';
-			powerEvu = '0';
-			var einheit = ' W';
-		} else if (powerEvu > 0) {
-			if (powerEvu > 999) {
-				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				var sign = ' Bezug: ';
-				var einheit = ' kW';
-			} else {
-				var sign = ' Bezug: ';
-				var einheit = ' W';
-			}
-    		} else {
-    	    		powerEvu *= -1;
-			if (powerEvu > 999) {
-				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    		var sign = ' Einspeisung: ';
-		    		var einheit = ' kW';
-	    		} else {
-		    		var sign = ' Einspeisung: ';
-		    		var einheit = ' W';
-			}
-    		}
-	 	$('#bezug').text(sign + powerEvu + einheit);
+		var prefix = ': ';
+		var unit = ' W';
+		var powerEvu = parseInt(mqttpayload, 10);
+		if ( isNaN(powerEvu) ) {
+			powerEvu = 0;
+		}
+		if ( powerEvu > 0 ) {
+			prefix = ' Bezug: ';
+		} else if ( powerEvu < 0 ) {
+			powerEvu *= -1;
+			prefix = ' Einspeisung: ';
+		}
+		if ( powerEvu > 999 ) {
+			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#bezug').text(prefix + powerEvu + unit);
 	 }
 	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
 		var evuiDailyYield = parseFloat(mqttpayload);
@@ -445,36 +435,23 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/housebattery/W' ) {
-		var speicherwatt = mqttpayload;
-		var sign=  ': ';
-		var speicherwatt = parseInt(speicherwatt, 10);
+		var prefix = ': ';
+		var unit = ' W';
+		var speicherwatt = parseInt(mqttpayload, 10);
 		if ( isNaN(speicherwatt) ) {
 			speicherwatt = 0;
 		}
-		if ( speicherwatt == 0 ) {
-			speicherwatt = '0 W';
-		} else if (speicherwatt > 0) {
-			if ( speicherwatt > 999 ) {
-				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW';
-				sign= '-Beladung: ';
-			} else {
-				speicherwatt = speicherwatt + ' W';
-				sign= '-Beladung: ';
-			}
-		} else {
-	    	speicherwatt *= -1;
-			if (speicherwatt > 999) {
-				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW';
-				sign='-Entladung: ';
-			} else {
-				speicherwatt = speicherwatt + ' W';
-			sign='-Entladung: ';
-
-			}
+		if ( speicherwatt > 0 ) {
+			prefix = '-Ladung: ';
+		} else if ( speicherwatt < 0 ) {
+			speicherwatt *= -1;
+			prefix = '-Entladung: ';
 		}
-		$('#speicherleistung').text(sign + speicherwatt);
+		if ( speicherwatt > 999 ) {
+			speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#speicherleistung').text(prefix + speicherwatt + unit);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/%Soc' ) {
 		var speicherSoc = parseInt(mqttpayload, 10);
