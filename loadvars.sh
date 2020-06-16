@@ -816,6 +816,9 @@ usesimpv=0
 if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_e3dc" ]]; then
 	usesimpv=1
 fi
+if [[ $pvwattmodul == "none" ]] && [[ $speichermodul == "speicher_alphaess" ]]; then
+	usesimpv=1
+fi
 if [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
 	usesimpv=1
 fi
