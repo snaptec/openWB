@@ -4250,18 +4250,18 @@
 					</div>
 					<div id="pvsolarview">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+							<b><label for="solarview_hostname">Hostname des SolarView TCP-Servers</label></b>
 							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP.
+							Gültige Werte Hostname oder IP-Adresse.
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_port">Port des Solarview</label></b>
+							<b><label for="solarview_port">Port des Solarview TCP-Servers</label></b>
 							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Port, z.B. 80.
+							Gültige Werte Port, z.B. 15000.
 						</div>
 					</div>
 					<div id="pvpowerwall">
