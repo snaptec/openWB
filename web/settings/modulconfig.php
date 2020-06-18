@@ -4850,13 +4850,13 @@
 					<div id="divspeichermqtt">
 						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
 						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhImported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhExported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/%Soc"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
