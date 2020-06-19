@@ -5,7 +5,7 @@ if(isset($_POST['evsecon'])) {
 	foreach($lines as $line) {
 		$writeit = '0';
 		if(strpos($line, "evsecon=") !== false) {
-			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid" or $_POST['evsecon'] == "openwb12v2mid") {
 				$result .= 'evsecon=modbusevse'."\n";
 			} else {
 				$result .= 'evsecon='.$_POST['evsecon']."\n";
@@ -84,13 +84,15 @@ if(isset($_POST['evsecon'])) {
 		if(strpos($line, "modbusevsesource=") !== false) {
 			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
 				$result .= 'modbusevsesource=/dev/ttyUSB0'."\n";
+			} elseif($_POST['evsecon'] == "openwb12v2mid") {
+				$result .= 'modbusevsesource=/dev/serial0'."\n";
 			} else {
 				$result .= 'modbusevsesource='.$_POST['modbusevsesource']."\n";
 			}
 			$writeit = '1';
 		}
 		if(strpos($line, "modbusevseid=") !== false) {
-			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 				$result .= 'modbusevseid=1'."\n";
 			} else {
 					$result .= 'modbusevseid='.$_POST['modbusevseid']."\n";
@@ -334,14 +336,14 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "ladeleistungmodul=") !== false) {
-			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 				if($_POST['evsecon'] == "goe") {
 					$result .= 'ladeleistungmodul=goelp1'."\n";
 				}
 				if($_POST['evsecon'] == "twcmanager") {
 					$result .= 'ladeleistungmodul=twcmanagerlp1'."\n";
 				}
-				if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
+				if($_POST['evsecon'] == "openwb12"  or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 					$result .= 'ladeleistungmodul=mpm3pmll'."\n";
 				}
 				if($_POST['evsecon'] == "keba") {
@@ -684,11 +686,14 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "mpm3pmllid=") !== false) {
-			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 				if($_POST['evsecon'] == "openwb12") {
 					$result .= 'mpm3pmllid=5'."\n";
 				}
 				if($_POST['evsecon'] == "openwb12mid") {
+					$result .= 'mpm3pmllid=105'."\n";
+				}
+				if($_POST['evsecon'] == "openwb12v2mid") {
 					$result .= 'mpm3pmllid=105'."\n";
 				}
 
@@ -700,6 +705,8 @@ if(isset($_POST['evsecon'])) {
 		if(strpos($line, "mpm3pmllsource=") !== false) {
 			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
 				$result .= 'mpm3pmllsource=/dev/ttyUSB0'."\n";
+			} elseif($_POST['evsecon'] == "openwb12v2mid") {
+				$result .= 'mpm3pmllsource=/dev/serial0'."\n";
 			} else {
 				$result .= 'mpm3pmllsource='.$_POST['mpm3pmllsource']."\n";
 			}

@@ -1,7 +1,10 @@
 #!/bin/bash
+
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
 . /var/www/html/openWB/loadconfig.sh
+. /var/www/html/openWB/runs/updatePersistence.sh
+
 sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
@@ -13,16 +16,11 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
+restorePersistedStatusOrDefaults
+
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
-echo 0 > /var/www/html/openWB/ramdisk/lp1phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp2phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp3phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp4phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp5phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp6phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp7phasen
-echo 0 > /var/www/html/openWB/ramdisk/lp8phasen
 echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
@@ -37,9 +35,10 @@ echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 1 > /var/www/html/openWB/ramdisk/mqttsoc1
-echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
 echo 0 > /var/www/html/openWB/ramdisk/device1_wh
 echo 0 > /var/www/html/openWB/ramdisk/device2_wh
 echo 0 > /var/www/html/openWB/ramdisk/device3_wh
@@ -56,13 +55,6 @@ echo 0 > /var/www/html/openWB/ramdisk/device1_temp2
 echo 0 > /var/www/html/openWB/ramdisk/device2_temp0
 echo 0 > /var/www/html/openWB/ramdisk/device2_temp1
 echo 0 > /var/www/html/openWB/ramdisk/device2_temp2
-echo 1 > /var/www/html/openWB/ramdisk/lp2enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp3enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp4enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp5enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp6enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp7enabled
-echo 1 > /var/www/html/openWB/ramdisk/lp8enabled
 echo 0 > /var/www/html/openWB/ramdisk/schieflast
 echo 0 > /var/www/html/openWB/ramdisk/renewmqtt
 echo 0 > /var/www/html/openWB/ramdisk/netzschutz
@@ -145,12 +137,19 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
-echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
+echo 2 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 echo 3 > /var/www/html/openWB/ramdisk/mqttspeichersoc
 echo 2 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagement
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagements2
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp4
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp5
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp6
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp7
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp8
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp1
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp2
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp3
@@ -193,14 +192,6 @@ echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_7
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_8
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_9
 touch /var/www/html/openWB/ramdisk/wattbezug
-echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp3sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp4sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp5sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp6sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp7sofortll
-echo 10 > /var/www/html/openWB/ramdisk/lp8sofortll
 echo 0 > /var/www/html/openWB/ramdisk/wattbezug
 echo 0 > /var/www/html/openWB/ramdisk/hook1akt
 echo 0 > /var/www/html/openWB/ramdisk/hook2akt
@@ -2711,3 +2702,4 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"

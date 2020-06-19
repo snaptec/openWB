@@ -1216,6 +1216,7 @@
 								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 							</select>
 						</div>
@@ -1237,6 +1238,13 @@
 							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.
 						</div>
 					</div>
+					<div id="openwb12v2mid">
+						<div class="row bg-success">
+							Keine Konfiguration erforderlich.<br>
+							Dies ist die richtige Option, für fertige openWB series2 mit geeichtem Zähler und Addon Platine ab Mai 2020 (Standard+).
+						</div>
+					</div>
+
 					<div id="evsecondac">
 						<div class="row bg-success">
 							<b><label for="dacregister">Dacregister:</label></b>
@@ -1397,6 +1405,8 @@
 							$('#evseconkeba').hide();
 							$('#openwb12').hide();
 							$('#openwb12mid').hide();
+							$('#openwb12v2mid').hide();
+
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
 							if($('#evsecon').val() == 'ipevse') {
@@ -1435,6 +1445,10 @@
 							if($('#evsecon').val() == 'openwb12mid') {
 								$('#openwb12mid').show();
 							}
+							if($('#evsecon').val() == 'openwb12v2mid') {
+								$('#openwb12v2mid').show();
+							}
+
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 							}
@@ -4236,18 +4250,18 @@
 					</div>
 					<div id="pvsolarview">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+							<b><label for="solarview_hostname">Hostname des SolarView TCP-Servers</label></b>
 							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP.
+							Gültige Werte Hostname oder IP-Adresse.
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_port">Port des Solarview</label></b>
+							<b><label for="solarview_port">Port des Solarview TCP-Servers</label></b>
 							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Port, z.B. 80.
+							Gültige Werte Port, z.B. 15000.
 						</div>
 					</div>
 					<div id="pvpowerwall">
@@ -4836,13 +4850,13 @@
 					<div id="divspeichermqtt">
 						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
 						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhImported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhExported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/%Soc"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">

@@ -337,7 +337,7 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/pvwatt",
+					url: "/openWB/ramdisk/pvallwatt",
 					complete: function(request){
 						// zur Anzeige Wert positiv darstellen
 						// (Erzeugung liegt als Negativwert vor)
@@ -346,7 +346,7 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/pvkwh",
+					url: "/openWB/ramdisk/pvallwh",
 					complete: function(request){
 						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
 					}
