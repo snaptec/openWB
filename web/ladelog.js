@@ -278,6 +278,9 @@ function putladelogtogether() {
 					if (cell == 2 && shownurpv == 1) {
 						writemodus = 1;
 					}
+					if (cell == 3) {
+						writemodus = 1;
+					}
 					if (cell == 4 && showstandby == 1) {
 						writemodus = 1;
 					}
@@ -334,6 +337,8 @@ function putladelogtogether() {
 					} else if (cell == 1) {
 						content += "<td>" + "Min und PV" + "</td>" ;
 					} else if (cell == 4) {
+						content += "<td>" + "Standby" + "</td>" ;
+					} else if (cell == 3) {
 						content += "<td>" + "Standby" + "</td>" ;
 					} else if (cell == 7) {
 						content += "<td>" + "Nachtladen" + "</td>" ;
