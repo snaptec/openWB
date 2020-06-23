@@ -1,6 +1,7 @@
 web/ladelog
 *.csv
 *.log
+*.pyc
 ramdisk/
 .DS_Store
 web/settings/.htaccess
