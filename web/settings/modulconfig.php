@@ -271,9 +271,6 @@
 					list(, $solarview_portold) = explode("=", $line);
 				}
 
-				if(strpos($line, "alphaessip=") !== false) {
-					list(, $alphaessipold) = explode("=", $line);
-				}
 				if(strpos($line, "soc_audi_username=") !== false) {
 					list(, $soc_audi_usernameold) = explode("=", $line);
 				}
@@ -4891,12 +4888,9 @@
 						</div>
 					</div>
 					<div id="divspeicheralphaess">
+
 						<div class="row" style="background-color:#fcbe1e">
-							<b><label for="alphaessip">Anbindung:</label></b>
-							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>">
-						</div>
-						<div class="row" style="background-color:#fcbe1e">
-							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1
+							Keine Konfiguration erforderlich
 						</div>
 					</div>
 					<div id="divspeicherpw">

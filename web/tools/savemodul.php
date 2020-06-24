@@ -1356,10 +1356,6 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'twcmanagerlp1phasen='.$_POST['twcmanagerlp1phasen']."\n";
 			$writeit = '1';
 		}
-		if(strpos($line, "alphaessip=") !== false) {
-			$result .= 'alphaessip='.$_POST['alphaessip']."\n";
-			$writeit = '1';
-		}
 		if(strpos($line, "solarview_hostname=") !== false) {
 			$result .= 'solarview_hostname='.$_POST['solarview_hostname']."\n";
 			$writeit = '1';
