@@ -238,34 +238,50 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/evu/W' ) {
-	    var powerEvu = mqttpayload;
-	    var powerEvu = parseInt(powerEvu, 10);
-		if ( isNaN(powerEvu) || powerEvu == 0 ) {
-			var sign = ': ';
-			powerEvu = '0';
-			var einheit = ' W';
-		} else if (powerEvu > 0) {
-			if (powerEvu > 999) {
-				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				var sign = ' Bezug: ';
-				var einheit = ' kW';
-			} else {
-				var sign = ' Bezug: ';
-				var einheit = ' W';
-			}
-    		} else {
-    	    		powerEvu *= -1;
-			if (powerEvu > 999) {
-				powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-	    	    		var sign = ' Einspeisung: ';
-		    		var einheit = ' kW';
-	    		} else {
-		    		var sign = ' Einspeisung: ';
-		    		var einheit = ' W';
-			}
-    		}
-	 	$('#bezug').text(sign + powerEvu + einheit);
+		var prefix = ': ';
+		var unit = ' W';
+		var powerEvu = parseInt(mqttpayload, 10);
+		if ( isNaN(powerEvu) ) {
+			powerEvu = 0;
+		}
+		if ( powerEvu > 0 ) {
+			prefix = ' Imp: ';
+		} else if ( powerEvu < 0 ) {
+			powerEvu *= -1;
+			prefix = ' Exp: ';
+		}
+		if ( powerEvu > 999 ) {
+			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#bezug').text(prefix + powerEvu + unit);
 	 }
+	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
+		var evuiDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(evuiDailyYield) ) {
+			evuiDailyYield = 0;
+		}
+		if ( evuiDailyYield >= 0 ) {
+			var evuiDailyYieldStr = ' (' + evuiDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh I)';
+			$('#evuidailyyield').text(evuiDailyYieldStr);
+		} else {
+			$('#evuidailyyield').text("");
+		}
+
+	}
+	else if ( mqttmsg == 'openWB/evu/DailyYieldExportKwh') {
+		var evueDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(evueDailyYield) ) {
+			evueDailyYield = 0;
+		}
+		if ( evueDailyYield >= 0 ) {
+			var evueDailyYieldStr = ' (' + evueDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh E)';
+			$('#evuedailyyield').text(evueDailyYieldStr);
+		} else {
+			$('#evuedailyyield').text("");
+		}
+
+	}
 }
 
 function processGlobalMessages(mqttmsg, mqttpayload) {
@@ -386,7 +402,32 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#priorityEvBatteryIcon').hide();
 		}
 	}
+	else if ( mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
+		var llaDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(llaDailyYield) ) {
+			llaDailyYield = 0;
+		}
+		if ( llaDailyYield >= 0 ) {
+			var llaDailyYieldStr = ' (' + llaDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#lladailyyield').text(llaDailyYieldStr);
+		} else {
+			$('#lladailyyield').text("");
+		}
 
+	}
+	else if ( mqttmsg == 'openWB/global/DailyYieldHausverbrauchKwh') {
+		var hausverbrauchDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(hausverbrauchDailyYield) ) {
+			hausverbrauchDailyYield = 0;
+		}
+		if ( hausverbrauchDailyYield >= 0 ) {
+			var hausverbrauchDailyYieldStr = ' (' + hausverbrauchDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#hausverbrauchdailyyield').text(hausverbrauchDailyYieldStr);
+		} else {
+			$('#hausverbrauchdailyyield').text("");
+		}
+
+	}
 }
 
 function processHousebatteryMessages(mqttmsg, mqttpayload) {
@@ -394,36 +435,23 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	// called by handlevar
 	processPreloader(mqttmsg);
 	if ( mqttmsg == 'openWB/housebattery/W' ) {
-		var speicherwatt = mqttpayload;
-var sign=  ': ';
-		var speicherwatt = parseInt(speicherwatt, 10);
+		var prefix = ': ';
+		var unit = ' W';
+		var speicherwatt = parseInt(mqttpayload, 10);
 		if ( isNaN(speicherwatt) ) {
 			speicherwatt = 0;
 		}
-		if ( speicherwatt == 0 ) {
-			speicherwatt = '0 W';
-		} else if (speicherwatt > 0) {
-			if ( speicherwatt > 999 ) {
-				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW';
-				sign= ' Beladung: ';
-			} else {
-				speicherwatt = speicherwatt + ' W';
-				sign= ' Beladung: ';
-			}
-		} else {
-	    	speicherwatt *= -1;
-			if (speicherwatt > 999) {
-				speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-				speicherwatt = speicherwatt + ' kW';
-				sign='Entladung: ';
-			} else {
-				speicherwatt = speicherwatt + ' W';
-			sign='Entladung: ';
-
-			}
+		if ( speicherwatt > 0 ) {
+			prefix = '-Ladung: ';
+		} else if ( speicherwatt < 0 ) {
+			speicherwatt *= -1;
+			prefix = '-Entladung: ';
 		}
-		$('#speicherleistung').text(sign + speicherwatt);
+		if ( speicherwatt > 999 ) {
+			speicherwatt = (speicherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#speicherleistung').text(prefix + speicherwatt + unit);
 	}
 	else if ( mqttmsg == 'openWB/housebattery/%Soc' ) {
 		var speicherSoc = parseInt(mqttpayload, 10);
@@ -446,6 +474,33 @@ var sign=  ': ';
 			$('#priorityEvBattery').hide();
 			$('#priorityModeBtns').hide();
 		}
+	}
+
+	else if ( mqttmsg == 'openWB/housebattery/DailyYieldExportKwh') {
+		var sieDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(sieDailyYield) ) {
+			sieDailyYield = 0;
+		}
+		if ( sieDailyYield >= 0 ) {
+			var sieDailyYieldStr = ' (' + sieDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh E)';
+			$('#siedailyyield').text(sieDailyYieldStr);
+		} else {
+			$('#siedailyyield').text("");
+		}
+
+	}
+	else if ( mqttmsg == 'openWB/housebattery/DailyYieldImportKwh') {
+		var siiDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(siiDailyYield) ) {
+			siiDailyYield = 0;
+		}
+		if ( siiDailyYield >= 0 ) {
+			var siiDailyYieldStr = ' (' + siiDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh I)';
+			$('#siidailyyield').text(siiDailyYieldStr);
+		} else {
+			$('#siidailyyield').text("");
+		}
+
 	}
 }
 
@@ -833,6 +888,23 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
+
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
+		var element = parent.find('.actualDailyYieldDevice');  // now get parents respective child element
+		var actualDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(actualDailyYield) ) {
+			siiDailyYield = 0;
+		}
+		if ( actualDailyYield >= 0 ) {
+			var actualDailyYieldStr = ' (' + actualDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			element.text(actualDailyYieldStr);
+		} else {
+			element.text("");
+		}
+
+		}
 	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device

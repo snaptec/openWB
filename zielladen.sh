@@ -45,6 +45,7 @@ else
 	if (( zuladendewh > moeglichewh )); then
 		if (( ladestatus == 0 )); then
 			runs/set-current.sh $zielladenalp1 m
+			echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 			echo 1 > ramdisk/ladungdurchziel
 			exit 0
 		else

@@ -245,11 +245,26 @@ var topicsToSubscribe = [
 	// housebattery values
 	["openWB/housebattery/W", 1],
 	["openWB/housebattery/%Soc", 1],
+	// Daily Yields
+	["openWB/housebattery/DailyYieldImportKwh", 1],
+	["openWB/housebattery/DailyYieldExportKwh", 1],
+	["openWB/global/DailyYieldHausverbrauchKwh", 1],
+	["openWB/global/DailyYieldAllChargePointsKwh", 1],
+	["openWB/evu/DailyYieldImportKwh", 1],
+	["openWB/evu/DailyYieldExportKwh", 1],
+
 	// hook status
 	["openWB/hook/1/boolHookStatus", 1],
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
+
 	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	["openWB/SmartHome/Devices/1/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/2/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/4/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/5/DailyYieldKwh", 1],
+
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],

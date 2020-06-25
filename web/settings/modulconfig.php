@@ -271,9 +271,6 @@
 					list(, $solarview_portold) = explode("=", $line);
 				}
 
-				if(strpos($line, "alphaessip=") !== false) {
-					list(, $alphaessipold) = explode("=", $line);
-				}
 				if(strpos($line, "soc_audi_username=") !== false) {
 					list(, $soc_audi_usernameold) = explode("=", $line);
 				}
@@ -4250,18 +4247,18 @@
 					</div>
 					<div id="pvsolarview">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+							<b><label for="solarview_hostname">Hostname des SolarView TCP-Servers</label></b>
 							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP.
+							Gültige Werte Hostname oder IP-Adresse.
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_port">Port des Solarview</label></b>
+							<b><label for="solarview_port">Port des Solarview TCP-Servers</label></b>
 							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Port, z.B. 80.
+							Gültige Werte Port, z.B. 15000.
 						</div>
 					</div>
 					<div id="pvpowerwall">
@@ -4850,13 +4847,13 @@
 					<div id="divspeichermqtt">
 						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
 						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhImported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhExported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/%Soc"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
@@ -4891,12 +4888,9 @@
 						</div>
 					</div>
 					<div id="divspeicheralphaess">
+
 						<div class="row" style="background-color:#fcbe1e">
-							<b><label for="alphaessip">Anbindung:</label></b>
-							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>">
-						</div>
-						<div class="row" style="background-color:#fcbe1e">
-							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1
+							Keine Konfiguration erforderlich
 						</div>
 					</div>
 					<div id="divspeicherpw">

@@ -26,4 +26,10 @@
 
 </p>
 <hr>
+<h4>Interface erklärt</h4>
+<p>
+	Was bedeuten die Zahlen in den Klammern?<br>
+	Die Zahlen in den Klammern stellen die jeweiligen Tageserträge bzw. Verbräuche dar.<br>
+	Bei Netz und Speicher steht das I für Import = bezogen und das E für Export = eingespeiste Energie<br>
+</p>
 <!-- <<< Erste Schritte -->

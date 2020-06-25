@@ -20,6 +20,10 @@ minundpvlademodus(){
 		if (( speicherleistung < 0 )); then 
 			uberschuss=$((uberschuss + speicherleistung)) 
 		fi 
+	else
+		speichersoc=0
+		speichersochystminpv=0
+		speichersocminpv=0
 	fi
 	if (( speichersoc >= speichersochystminpv )); then
 		if (( ladestatus == 0 )); then
