@@ -624,6 +624,19 @@
 			});
 		}
 		smarthomelog();
+		function nurpvlog() {
+			$.ajax({
+				url: "/openWB/ramdisk/nurpv.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#nurpvdiv").html(result);
+				}
+			});
+		}
+		nurpvlog();
 	</script>
 
 	<?php
@@ -1312,7 +1325,11 @@
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="nurpvlog"> <h4>Nur PV Log:</h4></span>
+		</div>
 
+		<div class="hide" style="white-space: pre-line; display: none;" id="nurpvdiv"></div>
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
@@ -1335,6 +1352,17 @@
 				$('#mqttdiv').addClass("hide");
 			}
 		});
+		$('#nurpvlog').click(function(event){
+			var element = document.getElementById('nurpvdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#nurpvdiv').show();
+				$('#nurpvdiv').removeClass("hide");
+			} else {
+				$('#nurpvdiv').hide(); 
+				$('#nurpvdiv').addClass("hide");
+			}
+		});
+
 		$('#ladestatuslog').click(function(event){
 			var element = document.getElementById('ladestatuslogdiv'); 
 			if ( element.classList.contains("hide") ) { 
