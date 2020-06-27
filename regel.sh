@@ -176,25 +176,33 @@ graphing
 if (( cpunterbrechunglp1 == 1 )); then
 	if (( plugstat == 1 )) && (( lp1enabled == 1 )); then
                if (( llalt > 5 )); then
-                       if (( ladeleistung < 200 )); then
+                       if (( ladeleistung < 100 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
-                               if (( cpulp1waraktiv == 0 )); then
-					echo "CP Unterbrechung an LP1 durchgeführt"
-					if [[ $evsecon == "simpleevsewifi" ]]; then
-						curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
-					elif [[ $evsecon == "ipevse" ]]; then
-						python runs/cpuremote.py $evseiplp1 4
-					else
-                                       		sudo python runs/cpulp1.py
-					fi
-                               		echo 1 > ramdisk/cpulp1waraktiv
-                               fi
+			       cpulp1counter=$(<ramdisk/cpulp1counter)
+			       if (( cpulp1counter > 3 )); then
+				       if (( cpulp1waraktiv == 0 )); then
+						echo "CP Unterbrechung an LP1 durchgeführt"
+						if [[ $evsecon == "simpleevsewifi" ]]; then
+							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
+						elif [[ $evsecon == "ipevse" ]]; then
+							python runs/cpuremote.py $evseiplp1 4
+						else
+							sudo python runs/cpulp1.py
+						fi
+						echo 1 > ramdisk/cpulp1waraktiv
+				       fi
+			       else
+				       cpulp1counter=$((cpulp1counter+1))
+				       echo $cpulp1counter > ramdisk/cpulp1counter
+			       fi
                        else
                                echo 0 > ramdisk/cpulp1waraktiv
+			       echo 0 > ramdisk/cpulp1counter
                        fi
                fi
        else
                echo 0 > ramdisk/cpulp1waraktiv
+	       echo 0 > ramdisk/cpulp1counter
        fi
 fi
 if (( cpunterbrechunglp2 == 1 )); then
