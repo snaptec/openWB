@@ -29,8 +29,8 @@ if ! [[ $a3ll =~ $re ]] ; then
 fi
 echo $a3ll > /var/www/html/openWB/ramdisk/lla3
 
-plugstat=$(curl --connect-timeout 2 -s $httpll_ip)
-chargestat=$(curl --connect-timeout 2 -s $httpll_ip)
+plugstat=$(curl --connect-timeout 2 -s $httpll_ip/plugstat)
+chargestat=$(curl --connect-timeout 2 -s $httpll_ip/chargestat)
 if ! [[ $plugstat =~ $r2e ]] ; then
 	   plugstat="0"
 fi
