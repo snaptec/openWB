@@ -352,6 +352,9 @@
 				if(strpos($line, "maximalstromstaerke=") !== false) {
 					list(, $maximalstromstaerkeold) = explode("=", $line);
 				}
+				if(strpos($line, "httpevseip=") !== false) {
+					list(, $httpevseipold) = explode("=", $line);
+				}
 				if(strpos($line, "evsecon=") !== false) {
 					list(, $evseconold) = explode("=", $line);
 				}
@@ -577,6 +580,9 @@
 				}
 				if(strpos($line, "httpll_w_url=") !== false) {
 					list(, $httpll_w_urlold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "httpll_ip=") !== false) {
+					list(, $httpll_ipold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "httpll_kwh_url=") !== false) {
 					list(, $httpll_kwh_urlold) = explode("=", $line, 2);
@@ -1215,6 +1221,7 @@
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
+								<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
 							</select>
 						</div>
 					</div>
@@ -1325,6 +1332,18 @@
 							Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
 						</div>
 					</div>
+					<div id="evseconhttp">
+						<div class="row bg-info">
+							<b><label for="httpevseip">IP Adresse:</label></b>
+							<input type="text" name="httpevseip" id="httpevseip" value="<?php echo $httpevseipold ?>">
+						</div>
+						<div class="row bg-info">
+							Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+							Der Ampere sollwert wird an http://$IP/setcurrent?current=$WERT gesendet.<br>
+							Für eine korrekte Funktion ist als Ladeleistungsmodul HTTP zu wählen.
+						</div>
+					</div>
+
 					<div id="evsecontwcmanager">
 						<div class="row bg-info">
 							<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
@@ -1403,7 +1422,7 @@
 							$('#openwb12').hide();
 							$('#openwb12mid').hide();
 							$('#openwb12v2mid').hide();
-
+							$('#evseconhttp').hide();
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
 							if($('#evsecon').val() == 'ipevse') {
@@ -1421,6 +1440,10 @@
 							if($('#evsecon').val() == 'simpleevsewifi') {
 								$('#evseconswifi').show();
 							}
+							if($('#evsecon').val() == 'httpevse') {
+								$('#evseconhttp).show();
+							}
+
 							if($('#evsecon').val() == 'goe') {
 								$('#evsecongoe').show();
 							}
@@ -1529,6 +1552,14 @@
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
+							</div>
+							<div class="row bg-info" >
+								<b><label for="httpll_ip">IP Adresse für Plug/Charge Status</label></b>
+								<input type="text" name="httpll_ip" id="httpll_ip" value="<?php echo htmlspecialchars($httpll_ipold) ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP. Abgerufene wird die Url http://$IP/plugstat und http://$IP/chargestat<br>
+								Rückgabe ist jeweils 0 oder 1. Plugstat gibt an ob ein Stecker steckt, Chargestat gibt an ob EVSEseitig die Ladung aktiv ist
 							</div>
 						</div>
 						<div id="llmpm3pm">
@@ -3793,6 +3824,7 @@
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
+
 					</div>
 					<div id="wattbezugsmartme">
 						<div class="row" style="background-color:#febebe">
