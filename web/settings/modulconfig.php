@@ -1340,7 +1340,8 @@
 						<div class="row bg-info">
 							Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 							Der Ampere sollwert wird an http://$IP/setcurrent?current=$WERT gesendet.<br>
-							Für eine korrekte Funktion ist als Ladeleistungsmodul HTTP zu wählen.
+							Für eine korrekte Funktion ist als Ladeleistungsmodul HTTP zu wählen.<br>
+							WERT kann sein: 0 = keine Ladung erlaubt, 6-32 = x Ampere erlaubt.
 						</div>
 					</div>
 
@@ -1441,7 +1442,8 @@
 								$('#evseconswifi').show();
 							}
 							if($('#evsecon').val() == 'httpevse') {
-								$('#evseconhttp).show();
+								$('#evseconhttp').show();
+								$('#llmodullp1').show();
 							}
 
 							if($('#evsecon').val() == 'goe') {
