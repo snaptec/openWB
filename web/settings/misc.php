@@ -1206,7 +1206,7 @@
 							<select name="displaytheme" id="displaytheme">
 								<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Gauges</option>
 								<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
-								<option <?php if($displaythemeold == 2) echo "selected" ?> value="1">Nur Ladeleistung, keine verstellmöglichkeit</option>
+								<option <?php if($displaythemeold == 2) echo "selected" ?> value="2">Nur Ladeleistung, keine verstellmöglichkeit</option>
 							</select>
 						</div>
 						<div id="displaygauge">
