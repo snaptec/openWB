@@ -86,7 +86,11 @@ if ( $simplemodeold == 1 ) {
 	include 'display/simple.html';
 } else {
 	// das gewählte Theme einbinden
-	include 'display/gauge.html';
+	if ( $displaythemeold == 2 ) {
+		include 'display/minimal.html';
+	} else {
+		include 'display/gauge.html';
+	}	
 }
 ?>
 	<!-- Scripts -->
