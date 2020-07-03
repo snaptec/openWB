@@ -620,6 +620,14 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'sdm120modbusllid2s1='.$_POST['sdm120modbusllid2s1']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "httpll_ip=") !== false) {
+			$result .= 'httpll_ip='.$_POST['httpll_ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "httpevseip=") !== false) {
+			$result .= 'httpevseip='.$_POST['httpevseip']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "sdm120modbusllid3s1=") !== false) {
 			$result .= 'sdm120modbusllid3s1='.$_POST['sdm120modbusllid3s1']."\n";
 			$writeit = '1';

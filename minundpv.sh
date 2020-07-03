@@ -29,6 +29,8 @@ minundpvlademodus(){
 		if (( ladestatus == 0 )); then
 			if (( speichersoc >= speichersocminpv )); then
 				runs/set-current.sh $minimalampv all
+				echo "$date setzte Soctimer hoch zum Abfragen des aktuellen SoC" >> ramdisk/nurpv.log
+				echo 20000 > /var/www/html/openWB/ramdisk/soctimer
 				echo "$date alle Ladepunkte, Lademodus Min und PV. Starte Ladung mit $minimalampv Ampere" >> ramdisk/ladestatus.log
 				if [[ $debug == "1" ]]; then
 					echo "starte min + pv ladung mit $minimalampv"

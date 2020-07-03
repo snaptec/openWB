@@ -15,6 +15,7 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
+echo 0 > /var/www/html/openWB/ramdisk/cpulp1counter
 echo 0 > /var/www/html/openWB/ramdisk/lp1phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp2phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp3phasen
@@ -1037,6 +1038,10 @@ if ! grep -Fq "twcmanagerlp1ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "twcmanagerlp1ip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "httpevseip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpevseip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "twcmanagerlp1phasen=" /var/www/html/openWB/openwb.conf
 then
 	  echo "twcmanagerlp1phasen=3" >> /var/www/html/openWB/openwb.conf
@@ -1954,6 +1959,10 @@ fi
 if ! grep -Fq "httpll_w_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_w_url='http://url'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpll_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_ip=192.168.0.22" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "httpll_kwh_url=" /var/www/html/openWB/openwb.conf
 then
