@@ -1398,6 +1398,13 @@ if [[ "$orfidlast" != "$arfidlast" ]]; then
 	echo $arfidlast > ramdisk/mqttrfidlasttag
 fi
 
+ouiplast=$(<ramdisk/mqttupdateinprogress)
+auiplast=$(<ramdisk/updateinprogress)
+if [[ "$ouiplast" != "$auiplast" ]]; then
+	tempPubList="${tempPubList}\nopenWB/system/updateInProgress=${auiplast}"
+	echo $arfidlast > ramdisk/mqttupdateinprogress
+fi
+
 declare -A mqttconfvar
 mqttconfvar["config/get/pv/minFeedinPowerBeforeStart"]=mindestuberschuss
 mqttconfvar["config/get/pv/maxPowerConsumptionBeforeStop"]=abschaltuberschuss
