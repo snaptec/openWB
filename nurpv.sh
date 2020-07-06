@@ -195,7 +195,7 @@ if (( ladeleistung < 300 )); then
 	fi
 else
 	if [[ $speichervorhanden == "1" ]]; then
-		if (( speicherleistung < 0 )); then
+		if (( speicherleistung < 10 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
 				echo "$date SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log
