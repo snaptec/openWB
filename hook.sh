@@ -188,8 +188,11 @@ if (( verbraucher1_aktiv == "1")); then
 	if [[ $verbraucher1_typ == "sdm120" ]]; then
 		if [[ $verbraucher1_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm120local.py 1 $verbraucher1_source $verbraucher1_id &
+			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 		else
 			sudo python modules/verbraucher/sdm120remote.py 1 $verbraucher1_source $verbraucher1_id &
+			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
+
 		fi
 	fi
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
