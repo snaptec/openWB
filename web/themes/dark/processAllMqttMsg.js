@@ -4,7 +4,7 @@
  * @author Kevin Wieland
  * @author Michael Ortenstein
  */
-
+var graphrefreshcounter = 0;
 function getCol(matrix, col){
 	var column = [];
 	for(var i=0; i<matrix.length; i++){
@@ -230,6 +230,29 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( initialread > 0) {
 			updateGraph(mqttpayload);
 		}
+		if (graphrefreshcounter > 60) {
+			// reload graph completety
+			initialread = 0;
+			all1 = 0;
+			all2 = 0;
+			all3 = 0;
+			all4 = 0;
+			all5 = 0;
+			all6 = 0;
+			all7 = 0;
+			all8 = 0;
+			all9 = 0;
+			all10 = 0;
+			all11 = 0;
+			all12 = 0;
+			all13 = 0;
+			all14 = 0;
+			all15 = 0;
+			all16 = 0;
+			graphrefreshcounter = 0;
+			subscribeMqttGraphSegments();
+		}
+		graphrefreshcounter += 1;
 	}
 }  // end processGraphMessages
 
