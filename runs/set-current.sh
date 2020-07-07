@@ -165,8 +165,8 @@ function setChargingCurrentgoe () {
 			if ((state == "0")) ; then
 				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 			fi
-			oldcurrent=$(echo $output | jq -r '.amp')
-			if (( oldcurrent != $current )) ; then
+			oldgoecurrent=$(echo $output | jq -r '.amp')
+			if (( oldgoecurrent != $current )) ; then
 				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
 			fi
 		fi
