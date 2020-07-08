@@ -194,6 +194,11 @@ if (( verbraucher1_aktiv == "1")); then
 			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 		fi
 	fi
+	if [[ $verbraucher1_typ == "abb-b23" ]]; then
+			sudo python modules/verbraucher/abb-23remote.py 1 $verbraucher1_source $verbraucher1_id &
+			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
+		fi
+	fi
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
 		verbraucher1_out=$(curl --connect-timeout 3 -s $verbraucher1_ip/cm?cmnd=Status%208 )
 		verbraucher1_watt=$(echo $verbraucher1_out | jq '.StatusSNS.ENERGY.Power')
@@ -238,13 +243,17 @@ if (( verbraucher2_aktiv == "1")); then
 			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		fi
 	fi
-
 	if [[ $verbraucher2_typ == "sdm120" ]]; then
 		if [[ $verbraucher2_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm120local.py 2 $verbraucher2_source $verbraucher2_id &
 			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		else
 			sudo python modules/verbraucher/sdm120remote.py 2 $verbraucher2_source $verbraucher2_id &
+			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
+		fi
+	fi
+	if [[ $verbraucher2_typ == "abb-b23" ]]; then
+			sudo python modules/verbraucher/abb-23remote.py 2 $verbraucher2_source $verbraucher2_id &
 			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		fi
 	fi
