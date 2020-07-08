@@ -91,6 +91,4 @@ f = open(vwhstring, 'w')
 f.write(str(vwh))
 f.close()
 
-#not sure if this sleep is needed
-time.sleep(1)
 client.close()
