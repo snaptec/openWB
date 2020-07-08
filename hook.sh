@@ -195,7 +195,7 @@ if (( verbraucher1_aktiv == "1")); then
 		fi
 	fi
 	if [[ $verbraucher1_typ == "abb-b23" ]]; then
-			python modules/verbraucher/abb-23remote.py 1 $verbraucher1_source $verbraucher1_id &
+			python modules/verbraucher/abb-b23v1remote.py 1 $verbraucher1_source $verbraucher1_id &
 			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
 		fi
 	fi
@@ -253,9 +253,8 @@ if (( verbraucher2_aktiv == "1")); then
 		fi
 	fi
 	if [[ $verbraucher2_typ == "abb-b23" ]]; then
-			python modules/verbraucher/abb-23remote.py 2 $verbraucher2_source $verbraucher2_id &
+			python modules/verbraucher/abb-b23v2remote.py 2 $verbraucher2_source $verbraucher2_id &
 			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
-		fi
 	fi
 	if [[ $verbraucher2_typ == "tasmota" ]]; then
 		verbraucher2_out=$(curl --connect-timeout 3 -s $verbraucher2_ip/cm?cmnd=Status%208 )
