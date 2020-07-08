@@ -701,7 +701,7 @@
 								$('#v2modbus').show();
 							}
 							if($('#verbraucher2_typ').val() == 'abb-b23') {
-								$('#v1modbus').show();
+								$('#v2modbus').show();
 							}
 							if($('#verbraucher2_typ').val() == 'tasmota') {
 								$('#v2tasmota').show();
