@@ -192,7 +192,6 @@ if (( verbraucher1_aktiv == "1")); then
 		else
 			sudo python modules/verbraucher/sdm120remote.py 1 $verbraucher1_source $verbraucher1_id &
 			verbraucher1_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher1_watt)
-
 		fi
 	fi
 	if [[ $verbraucher1_typ == "tasmota" ]]; then
@@ -233,16 +232,20 @@ if (( verbraucher2_aktiv == "1")); then
 	if [[ $verbraucher2_typ == "sdm630" ]]; then
 		if [[ $verbraucher2_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm630local.py 2 $verbraucher2_source $verbraucher2_id &
+			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		else
 			sudo python modules/verbraucher/sdm630remote.py 2 $verbraucher2_source $verbraucher2_id &
+			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		fi
 	fi
 
 	if [[ $verbraucher2_typ == "sdm120" ]]; then
 		if [[ $verbraucher2_source == *"dev"* ]]; then
 			sudo python modules/verbraucher/sdm120local.py 2 $verbraucher2_source $verbraucher2_id &
+			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		else
 			sudo python modules/verbraucher/sdm120remote.py 2 $verbraucher2_source $verbraucher2_id &
+			verbraucher2_watt=$(cat /var/www/html/openWB/ramdisk/verbraucher2_watt)
 		fi
 	fi
 	if [[ $verbraucher2_typ == "tasmota" ]]; then
