@@ -28,8 +28,8 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'bezug1_ip='.$_POST['bezug1_ip']."\n";
 			$writeit = '1';
 		}
-		if(strpos($line, "pv1_ip=") !== false) {
-			$result .= 'pv1_ip='.$_POST['pv1_ip']."\n";
+		if(strpos($line, "pv1_ipa=") !== false) {
+			$result .= 'pv1_ipa='.$_POST['pv1_ipa']."\n";
 			$writeit = '1';
 		}
 

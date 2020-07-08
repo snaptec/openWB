@@ -48,8 +48,8 @@
 				if(strpos($line, "pv2id=") !== false) {
 					list(, $pv2idold) = explode("=", $line);
 				}
-				if(strpos($line, "pv1_ip=") !== false) {
-					list(, $pv1_ipold) = explode("=", $line);
+				if(strpos($line, "pv1_ipa=") !== false) {
+					list(, $pv1_ipaold) = explode("=", $line);
 				}
 				if(strpos($line, "speicher1_ip=") !== false) {
 					list(, $speicher1_ipold) = explode("=", $line);
@@ -4211,8 +4211,8 @@
 					</div>
 					<div id="pvip">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="pv1_ip">IP Adresse:</label></b>
-							<input type="text" name="pv1_ip" id="pv1_ip" value="<?php echo htmlspecialchars($pv1_ipold) ?>">
+							<b><label for="pv1_ipa">IP Adresse:</label></b>
+							<input type="text" name="pv1_ipa" id="pv1_ipa" value="<?php echo htmlspecialchars($pv1_ipaold) ?>">
 						</div>
 					</div>
 
