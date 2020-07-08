@@ -569,7 +569,7 @@
 							if($('#verbraucher1_typ').val() == 'sdm120') {
 								$('#v1modbus').show();
 							}
-							if($('#verbraucher1_typ').val() == 'abb-23') {
+							if($('#verbraucher1_typ').val() == 'abb-b23') {
 								$('#v1modbus').show();
 							}
 							if($('#verbraucher1_typ').val() == 'tasmota') {
@@ -700,7 +700,7 @@
 							if($('#verbraucher2_typ').val() == 'sdm120') {
 								$('#v2modbus').show();
 							}
-							if($('#verbraucher2_typ').val() == 'abb-23') {
+							if($('#verbraucher2_typ').val() == 'abb-b23') {
 								$('#v1modbus').show();
 							}
 							if($('#verbraucher2_typ').val() == 'tasmota') {
