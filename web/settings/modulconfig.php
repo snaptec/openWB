@@ -3887,7 +3887,7 @@
 						</div>
 						<input type='hidden' value='0' name='froniuserzeugung'>
 						<input id="froniuserzeugung" name="froniuserzeugung" value="1" type="checkbox" <?php if ( $froniuserzeugungold == 1){ echo "checked"; } ?> >
-						<label for="froniuserzeugung">Erzeugungszähler statt Bezugszähler</label><br />
+						<label for="froniuserzeugung"> Meter mit ID 1 statt 0</label><br />
 						<input type='hidden' value='0' name='froniusprimo'>
 						<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
 						<label for="froniusprimo"> Kompatibilitätsmodus für die Primo Reihe</label>
