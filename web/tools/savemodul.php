@@ -1276,6 +1276,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'evuglaettungakt='.$_POST['evuglaettungakt']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "froniuserzeugung=") !== false) {
+			$result .= 'froniuserzeugung='.$_POST['froniuserzeugung']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "froniusprimo=") !== false) {
 			$result .= 'froniusprimo='.$_POST['froniusprimo']."\n";
 			$writeit = '1';

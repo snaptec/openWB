@@ -1833,6 +1833,10 @@ if ! grep -Fq "kostalplenticorebatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "kostalplenticorebatt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "froniuserzeugung=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniuserzeugung=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf

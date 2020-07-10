@@ -7,7 +7,7 @@
 
 
 # Fordere die Werte vom SmartMeter an.
-response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=0")
+response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung")
 
 # Überprüfe den Einbauort des SmartMeters.
 meter_location=$(echo $response_sm | jq '.Body.Data.Meter_Location_Current')
