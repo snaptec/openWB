@@ -3537,7 +3537,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
 							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo "selected" ?> value="bezug_smartme">Smartme</option>
 							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_ksem\n") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
@@ -3961,7 +3961,7 @@
 					</div>
 					<div id="wattbezugsbs25">
 						<div class="row" style="background-color:#febebe">
-							Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.
+							Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 						</div>
 					</div>
 
@@ -4836,11 +4836,11 @@
 							<option <?php if($speichermodulold == "speicher_bydhv\n") echo "selected" ?> value="speicher_bydhv">ByD HV</option>
 							<option <?php if($speichermodulold == "speicher_fronius\n") echo "selected" ?> value="speicher_fronius">Fronius Speicher</option>
 							<option <?php if($speichermodulold == "speicher_e3dc\n") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 							<option <?php if($speichermodulold == "speicher_solaredge\n") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
 							<option <?php if($speichermodulold == "speicher_powerwall\n") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
 							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 							<option <?php if($speichermodulold == "speicher_varta\n") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 							<option <?php if($speichermodulold == "speicher_alphaess\n") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
@@ -4982,11 +4982,11 @@
 					</div>
 					<div id="divspeichersbs25">
 						<div class="row" style="background-color:#fcbe1e">
-							<b><label for="sbs25ip">SBS 2.5 IP:</label></b>
+							<b><label for="sbs25ip">SBS IP:</label></b>
 							<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.
+							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage Speichers.
 						</div>
 					</div>
 					<div id="divspeichersunnyisland">
