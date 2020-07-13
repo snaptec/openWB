@@ -8,12 +8,13 @@ RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
 LOGFILE="$RAMDISKDIR/soc-tesla.log"
+CHARGEPOINT=$1
 
 socTeslaDebug=$debug
 # for developement only
 #socTeslaDebug=1
 
-case $1 in
+case $CHARGEPOINT in
 	2)
 		# second charge point
 		socintervallladen=$(( soc_teslalp2_intervallladen * 6 ))
@@ -22,7 +23,7 @@ case $1 in
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		socfile="$RAMDISKDIR/soc1"
 		username=$soc_teslalp2_username
-		password=$soc_teslalp2_password
+		passwordConfigText="soc_teslalp2_password"
 		carnumber=$soc_teslalp2_carnumber
 		tokensfile="$MODULEDIR/tokens.lp2"
 		;;
@@ -34,16 +35,18 @@ case $1 in
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		username=$soc_tesla_username
-		password=$soc_tesla_password
+		passwordConfigText="soc_tesla_password"
 		carnumber=$soc_tesla_carnumber
 		tokensfile="$MODULEDIR/tokens.lp1"
 		;;
 esac
 
+password="${!passwordConfigText}"
+
 socTeslaLog(){
 	if (( $socTeslaDebug > 0 )); then
 		timestamp=`date --rfc-3339=seconds`
-		echo "$timestamp: $@" >> $LOGFILE
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
 
@@ -71,12 +74,12 @@ incrementTimer(){
 
 clearPassword(){
 	socTeslaLog "Removing password from config."
-	sed -i "s/soc_tesla_password=.*/soc_tesla_password=''/" $CONFIGFILE
+	sed -i "s/$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
 }
 
 setTokenPassword(){
 	socTeslaLog "Writing token password to config."
-	sed -i "s/soc_tesla_password=.*/soc_tesla_password='$TOKENPASSWORD'/" $CONFIGFILE
+	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
 }
 
 checkToken(){
@@ -104,6 +107,7 @@ checkToken(){
 			# Request new token with user/pass.
 			socTeslaLog "Requesting new token..."
 			response=$(python $MODULEDIR/teslajson.py --email $username --password $password --tokens_file $tokensfile --json)
+			# password in response, so do not log it!
 			if [ -f $tokensfile ]; then
 				socTeslaLog "...all done, removing password from config file."
 				setTokenPassword
