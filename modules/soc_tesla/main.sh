@@ -125,7 +125,6 @@ wakeUpCar(){
 	socTeslaLog "Car state after wakeup: $state"
 }
 
-checkToken
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 1000 )); then
 	# car is charging
@@ -133,6 +132,7 @@ if (( ladeleistung > 1000 )); then
 		# waiting
 		incrementTimer
 	else
+		checkToken
 		# car cannot be asleep while charging
 		getAndWriteSoc
 	fi
@@ -142,6 +142,7 @@ else
 		# waiting
 		incrementTimer
 	else
+		checkToken
 		# todo: do not always wake car
 		wakeUpCar
 		getAndWriteSoc
