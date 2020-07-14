@@ -766,22 +766,22 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/W"):
+    if (msg.topic == "openWB/set/Housebattery/W"):
         if (float(msg.payload) >= -30000 and float(msg.payload) <= 30000):
             f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhImported"):
+    if (msg.topic == "openWB/set/Housebattery/WhImported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhExported"):
+    if (msg.topic == "openWB/set/Housebattery/WhExported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/%Soc"):
+    if (msg.topic == "openWB/set/Housebattery/%Soc"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
             f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
             f.write(msg.payload.decode("utf-8"))
