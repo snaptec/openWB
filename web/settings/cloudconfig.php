@@ -118,7 +118,7 @@
 							<input type="text" name="username" id="register_username" value="">
 						</div>
 						<div class="row">
-							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
+							Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
 						</div>
 						<div class="row">
 							<b><label for="email">Email Adresse:</label></b>
