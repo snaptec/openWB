@@ -1780,7 +1780,7 @@
 						<div class="row bg-info">
 						</div>
 						<div class="row bg-info">
-							<b><label for="teslasocuser">Tesla Benutzername:</label></b>
+							<b><label for="teslasocuser">Tesla E-Mail:</label></b>
 							<input type="text" name="teslasocuser" id="teslasocuser" value="<?php echo $socteslausernameold ?>">
 						</div>
 						<div class="row bg-info">
@@ -1791,7 +1791,9 @@
 							<input type="password" name="teslasocpw" id="teslasocpw" value="<?php echo $socteslapwold ?>">
 						</div>
 						<div class="row bg-info">
-							Password des Tesla Logins
+							Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
+							Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
+							Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasoccarnumber">Auto im Account:</label></b>
@@ -1805,14 +1807,17 @@
 							<input type="text" name="teslasocintervall" id="teslasocintervall" value="<?php echo $socteslaintervallold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
+							Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.<br>
+							Damit das Auto in den Standby gehen kann und die Energieverluste gering bleiben, sollte das Intervall mindestens eine Stunde ("60") betragen, besser 12 Stunden ("720") oder mehr.<br>
+							Zu Beginn einer Ladung wird das Auto immer geweckt, um den aktuellen SoC zu erhalten.
 						</div>
 						<div class="row bg-info">
 							<b><label for="teslasocintervallladen">Abfrageintervall Laden:</label></b>
 							<input type="text" name="teslasocintervallladen" id="teslasocintervallladen" value="<?php echo $socteslaintervallladenold ?>">
 						</div>
 						<div class="row bg-info">
-							Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
+							Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos während des Ladens abgefragt werden soll.<br>
+							Je nach Ladeleistung werden 5 - 10 Minuten empfohlen, damit eventuell eingestellte SoC-Grenzen rechtzeitig erkannt werden können.
 						</div>
 					</div>
 					<div id="socmbluelink">
@@ -2535,7 +2540,7 @@
 							<div class="row bg-info">
 							</div>
 							<div class="row bg-info">
-								<b><label for="teslasoclp2user">Tesla Benutzername:</label></b>
+								<b><label for="teslasoclp2user">Tesla E-Mail:</label></b>
 								<input type="text" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo $socteslalp2usernameold ?>">
 							</div>
 							<div class="row bg-info">
@@ -2546,7 +2551,9 @@
 								<input type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo $socteslalp2pwold ?>">
 							</div>
 							<div class="row bg-info">
-								Password des Tesla Logins
+								Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
+								Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
+								Wenn das Eingabefeld geleert wird, dann werden auch die Anmeldetoken komplett entfernt.
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2carnumber">Auto im Account:</label></b>
@@ -2560,14 +2567,17 @@
 								<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft der Tesla abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
+								Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.<br>
+								Damit das Auto in den Standby gehen kann und die Energieverluste gering bleiben, sollte das Intervall mindestens eine Stunde ("60") betragen, besser 12 Stunden ("720") oder mehr.<br>
+								Zu Beginn einer Ladung wird das Auto immer geweckt, um den aktuellen SoC zu erhalten.
 							</div>
 							<div class="row bg-info">
 								<b><label for="teslasoclp2intervallladen">Abfrageintervall Laden:</label></b>
 								<input type="text" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo $socteslalp2intervallladenold ?>">
 							</div>
 							<div class="row bg-info">
-								Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
+								Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos während des Ladens abgefragt werden soll.<br>
+								Je nach Ladeleistung werden 5 - 10 Minuten empfohlen, damit eventuell eingestellte SoC-Grenzen rechtzeitig erkannt werden können.
 							</div>
 						</div>
 						<div id="soccarnetlp2">
