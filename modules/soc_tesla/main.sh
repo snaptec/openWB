@@ -12,7 +12,7 @@ CHARGEPOINT=$1
 
 socTeslaDebug=$debug
 # for developement only
-#socTeslaDebug=1
+socTeslaDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -29,6 +29,8 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
 		socintervallladen=$(( soc_tesla_intervallladen * 6 ))
 		socintervall=$(( soc_tesla_intervall * 6 ))
 		ladeleistung=$(<$RAMDISKDIR/llaktuell)
@@ -48,6 +50,8 @@ socTeslaLog(){
 		timestamp=`date --rfc-3339=seconds`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
+	# limit logfile to 500 lines
+	mv $LOGFILE $LOGFILE.old; tail -n 500 $LOGFILE.old > $LOGFILE; rm $LOGFILE.old
 }
 
 getAndWriteSoc(){
@@ -64,7 +68,6 @@ getAndWriteSoc(){
 			echo $soclevel > $socfile
 		fi
 	fi
-	echo 0 > $soctimerfile
 }
 
 incrementTimer(){
@@ -83,6 +86,7 @@ setTokenPassword(){
 }
 
 checkToken(){
+	returnValue=0
 	case $password in
 		'')
 			# empty password tells us to remove a possible saved token
@@ -90,12 +94,16 @@ checkToken(){
 				socTeslaLog "Empty password set: removing tokensfile."
 				rm $tokensfile
 			fi
+			socTeslaLog "Empty Password - nothing to do."
+			returnValue=1
 			;;
 		$TOKENPASSWORD)
 			# check if token is present
 			if [ ! -f $tokensfile ]; then
 				socTeslaLog "Tokenpassword set but no token found: clearing password in config."
 				clearPassword
+				socTeslaLog "Tokenpassword without token - nothing to do."
+				returnValue=2
 			fi
 			;;
 		*)
@@ -113,9 +121,13 @@ checkToken(){
 				setTokenPassword
 			else
 				socTeslaLog "ERROR: Auth with user/pass failed!"
+				echo "Fehler: Anmeldung bei Tesla gescheitert!" > $RAMDISKDIR/lastregelungaktiv
+				returnValue=3
 			fi
 			;;
 	esac
+	socTeslaLog "CheckToken returnValue: $returnValue"
+	return "$returnValue"
 }
 
 wakeUpCar(){
@@ -132,9 +144,14 @@ if (( ladeleistung > 1000 )); then
 		# waiting
 		incrementTimer
 	else
+		# reset timer
+		echo 0 > $soctimerfile
 		checkToken
-		# car cannot be asleep while charging
-		getAndWriteSoc
+		checkResult=$?
+		if [ "$checkResult" == 0 ]; then
+			# car cannot be asleep while charging
+			getAndWriteSoc
+		fi
 	fi
 else
 	# car is not charging
@@ -142,9 +159,14 @@ else
 		# waiting
 		incrementTimer
 	else
+		# reset timer
+		echo 0 > $soctimerfile
 		checkToken
-		# todo: do not always wake car
-		wakeUpCar
-		getAndWriteSoc
+		checkResult=$?
+		if [ "$checkResult" == 0 ]; then
+			# todo: do not always wake car
+			wakeUpCar
+			getAndWriteSoc
+		fi
 	fi
 fi
