@@ -901,6 +901,17 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/lp/1/W"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
+            llaktuell=int(msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+            f.write(str(llaktuell))
+            f.close()
+    if (msg.topic == "openWB/set/lp/1/kWhCounter"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
     if (len(msg.payload) >= 1):
         theTime = datetime.now()

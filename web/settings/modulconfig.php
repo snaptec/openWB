@@ -1501,6 +1501,7 @@
 								<option <?php if($ladeleistungmodulold == "httpll\n") echo "selected" ?> value="httpll">HTTP</option>
 								<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
 								<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
+								<option <?php if($ladeleistungmodulold == "mqttll\n") echo "selected" ?> value="mqttll">MQTT</option>
 							</select>
 						</div>
 						<div id="mpm3pmlllp1div">
@@ -1676,6 +1677,13 @@
 								Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
 
 							</div>
+						<div id="mqttll">
+							<div class="row">Keine Konfiguration erforderlich</div>
+							<div class="row">Per MQTT zu schreiben:</div>
+							<div class="row"><b>"openWB/set/lp/1/W"</b></div>
+							<div class="row">Ladeleistung in Watt, int, positiv</div>
+							<div class="row"><b>"openWB/set/lp/1/kWhCounter"</b></div>
+							<div class="row">Zählerstand in Wh, float, Punkt als Trenner, nur positiv</div>
 						</div>
 					</div>
 
@@ -1729,6 +1737,9 @@
 							if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
 								$('#rs485lanlp1').show();
 								$('#llmfsm').show();
+							}
+							if($('#ladeleistungmodul').val() == 'mqttll') {
+								$('#mqttll').show();
 							}
 						}
 
