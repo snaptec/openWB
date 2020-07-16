@@ -69,6 +69,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'soc_bluelink_pin='.$_POST['soc_bluelink_pin']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "soc_vin=") !== false) {
+			$result .= 'soc_vin='.$_POST['soc_vin']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "solarworld_emanagerip=") !== false) {
 			$result .= 'solarworld_emanagerip='.$_POST['solarworld_emanagerip']."\n";
 			$writeit = '1';

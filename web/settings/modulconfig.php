@@ -80,6 +80,9 @@
 				if(strpos($line, "soc_bluelink_pin=") !== false) {
 					list(, $soc_bluelink_pinold) = explode("=", $line);
 				}
+				if(strpos($line, "soc_vin=") !== false) {
+					list(, $soc_vinold) = explode("=", $line);
+				}
 				if(strpos($line, "solarworld_emanagerip=") !== false) {
 					list(, $solarworld_emanageripold) = explode("=", $line);
 				}
@@ -1756,6 +1759,7 @@
 							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
 							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 							<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
+							<option <?php if($socmodulold == "soc_kia\n") echo "selected" ?> value="soc_kia">Kia</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1850,6 +1854,17 @@
 						</div>
 						<div class="row bg-info">
 							Wie oft abgefragt wird. Angabe in Minuten.
+						</div>
+					</div>
+					<div id="socmkia">
+						<div class="row bg-info">
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_vin">VIN:</label></b>
+							<input type="text" name="soc_vin" id="soc_vin" value="<?php echo $soc_vinold ?>">
+						</div>
+						<div class="row bg-info">
+							VIN des Autos.
 						</div>
 					</div>
 
@@ -2085,12 +2100,17 @@
 							$('#socmaudi').hide();
 							$('#socmqtt').hide();
 							$('#socmbluelink').hide();
+							$('#socmkia').hide();
 
 							$('#socmyrenault').hide();
 							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
+								$('#socmbluelink').show();
+							}
+							if($('#socmodul').val() == 'soc_kia') {
+								$('#socmkia').show();
 								$('#socmbluelink').show();
 							}
 
