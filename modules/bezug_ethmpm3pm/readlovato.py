@@ -74,34 +74,39 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(finalw))
 f.close()
 
-lla1=round(finalw1/voltage1,2)
-lla2=round(finalw2/voltage2,2)
-lla3=round(finalw3/voltage3,2)
 
 #ampere l1
-#resp = client.read_input_registers(0x0007, 2, unit=0x02)
-#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-#lla1 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+resp = client.read_input_registers(0x0007, 2, unit=0x02)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+lla1 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
-f.write(str(lla1))
+if finalw1 < 0:
+    f.write(str(-lla1))
+else:
+    f.write(str(lla1))
 f.close()
 
 #ampere l2
-#resp = client.read_input_registers(0x0009, 2, unit=0x02)
-#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-#lla2 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+resp = client.read_input_registers(0x0009, 2, unit=0x02)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+lla2 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
-f.write(str(lla2))
+if finalw2 < 0:
+    f.write(str(-lla2))
+else:
+    f.write(str(lla2))
 f.close()
 
 #ampere l3
-#resp = client.read_input_registers(0x000b, 2, unit=0x02)
-#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-#lla3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+resp = client.read_input_registers(0x000b, 2, unit=0x02)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+lla3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
-f.write(str(lla3))
+if finalw3 < 0:
+    f.write(str(-lla3))
+else:
+    f.write(str(lla3))
 f.close()
-
 
 #evuhz
 resp = client.read_input_registers(0x0031,2, unit=0x02)
