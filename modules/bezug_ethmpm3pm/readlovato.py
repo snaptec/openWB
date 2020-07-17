@@ -19,14 +19,14 @@ f = open('/var/www/html/openWB/ramdisk/evuv1', 'w')
 f.write(str(voltage1))
 f.close()
 resp = client.read_input_registers(0x0003,2, unit=0x02)
-voltage1 = float(resp.registers[1] / 100)
+voltage2 = float(resp.registers[1] / 100)
 f = open('/var/www/html/openWB/ramdisk/evuv2', 'w')
-f.write(str(voltage1))
+f.write(str(voltage2))
 f.close()
 resp = client.read_input_registers(0x0005,2, unit=0x02)
-voltage1 = float(resp.registers[1] / 100)
+voltage3 = float(resp.registers[1] / 100)
 f = open('/var/www/html/openWB/ramdisk/evuv3', 'w')
-f.write(str(voltage1))
+f.write(str(voltage3))
 f.close()
 
 #Counters
@@ -74,26 +74,30 @@ f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(finalw))
 f.close()
 
+lla1=round(finalw1/voltage1,2)
+lla2=round(finalw2/voltage2,2)
+lla3=round(finalw3/voltage3,2)
+
 #ampere l1
-resp = client.read_input_registers(0x0007, 2, unit=0x02)
-all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-lla1 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+#resp = client.read_input_registers(0x0007, 2, unit=0x02)
+#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+#lla1 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga1', 'w')
 f.write(str(lla1))
 f.close()
 
 #ampere l2
-resp = client.read_input_registers(0x0009, 2, unit=0x02)
-all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-lla2 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+#resp = client.read_input_registers(0x0009, 2, unit=0x02)
+#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+#lla2 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga2', 'w')
 f.write(str(lla2))
 f.close()
 
 #ampere l3
-resp = client.read_input_registers(0x000b, 2, unit=0x02)
-all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
-lla3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
+#resp = client.read_input_registers(0x000b, 2, unit=0x02)
+#all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+#lla3 = float(struct.unpack('>i', all.decode('hex'))[0]) / 10000
 f = open('/var/www/html/openWB/ramdisk/bezuga3', 'w')
 f.write(str(lla3))
 f.close()
