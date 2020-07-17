@@ -2513,6 +2513,10 @@ if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherkitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "speicherkitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf

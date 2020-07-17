@@ -111,6 +111,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'evukitversion='.$_POST['evukitversion']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "speicherkitversion=") !== false) {
+			$result .= 'speicherkitversion='.$_POST['speicherkitversion']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "pvkitversion=") !== false) {
 			$result .= 'pvkitversion='.$_POST['pvkitversion']."\n";
 			$writeit = '1';

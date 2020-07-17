@@ -101,6 +101,9 @@
 				if(strpos($line, "evukitversion=") !== false) {
 					list(, $evukitversionold) = explode("=", $line);
 				}
+				if(strpos($line, "speicherkitversion=") !== false) {
+					list(, $speicherkitversionold) = explode("=", $line);
+				}
 				if(strpos($line, "myrenault_userlp2=") !== false) {
 					list(, $myrenault_userlp2old) = explode("=", $line);
 				}
@@ -4909,8 +4912,12 @@
 					<div id="divspeichernone">
 					</div>
 					<div id="divspeicherkit">
-							<div class="row" style="background-color:#fcbe1e">
-							Keine Konfiguration erforderlich
+						<div class="row">
+							<b><label for="speicherkitversion">Version des openWB Speicher Kits:</label></b>
+							<select name="speicherkitversion" id="speicherkitversion">
+								<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
+								<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
+							</select>
 						</div>
 					</div>
 					<div id="divspeichermqtt">
