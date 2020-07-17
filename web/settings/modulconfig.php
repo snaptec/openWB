@@ -1683,7 +1683,7 @@
 							<div class="row"><b>"openWB/set/lp/1/W"</b></div>
 							<div class="row">Ladeleistung in Watt, int, positiv</div>
 							<div class="row"><b>"openWB/set/lp/1/kWhCounter"</b></div>
-							<div class="row">Zählerstand in Wh, float, Punkt als Trenner, nur positiv</div>
+							<div class="row">Zählerstand in kWh, float, Punkt als Trenner, nur positiv</div>
 						</div>
 					</div>
 
