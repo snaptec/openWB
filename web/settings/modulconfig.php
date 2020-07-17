@@ -1749,7 +1749,7 @@
 							<option <?php if($socmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
 							<option <?php if($socmodulold == "soc_http\n") echo "selected" ?> value="soc_http">SoC HTTP</option>
 							<option <?php if($socmodulold == "soc_leaf\n") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
-							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW i3</option>
+							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW & Mini</option>
 							<option <?php if($socmodulold == "soc_zoe\n") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
 							<option <?php if($socmodulold == "soc_myrenault\n") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
 							<option <?php if($socmodulold == "soc_evnotify\n") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
@@ -1832,7 +1832,7 @@
 							<input type="text" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo $soc_bluelink_emailold ?>">
 						</div>
 						<div class="row bg-info">
-							Email Adresse des Hyundai Bluelink Logins
+							Email Adresse des Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_bluelink_password">Passwort:</label></b>
@@ -2051,7 +2051,7 @@
 							<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>">
 						</div>
 						<div class="row bg-info">
-							BMW i3 VIN. Sie ist in voller Länge anzugeben.
+							BMW VIN. Sie ist in voller Länge anzugeben.
 						</div>
 						<div class="row bg-info">
 							<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
