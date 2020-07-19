@@ -912,7 +912,7 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-	if (msg.topic == "openWB/set/lp/2/W"):
+    if (msg.topic == "openWB/set/lp/2/W"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
             llaktuells1=int(msg.payload.decode("utf-8"))
             f = open('/var/www/html/openWB/ramdisk/llaktuells1', 'w')
@@ -923,8 +923,8 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/llkwhs1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-	if (msg.topic == "openWB/set/lp/3/W"):
-		if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
+    if (msg.topic == "openWB/set/lp/3/W"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
             llaktuells2=int(msg.payload.decode("utf-8"))
             f = open('/var/www/html/openWB/ramdisk/llaktuells2', 'w')
             f.write(str(llaktuells2))
