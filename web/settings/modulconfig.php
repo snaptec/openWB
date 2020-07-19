@@ -80,6 +80,9 @@
 				if(strpos($line, "soc_bluelink_pin=") !== false) {
 					list(, $soc_bluelink_pinold) = explode("=", $line);
 				}
+				if(strpos($line, "soc_vin=") !== false) {
+					list(, $soc_vinold) = explode("=", $line);
+				}
 				if(strpos($line, "solarworld_emanagerip=") !== false) {
 					list(, $solarworld_emanageripold) = explode("=", $line);
 				}
@@ -97,6 +100,9 @@
 				}
 				if(strpos($line, "evukitversion=") !== false) {
 					list(, $evukitversionold) = explode("=", $line);
+				}
+				if(strpos($line, "speicherkitversion=") !== false) {
+					list(, $speicherkitversionold) = explode("=", $line);
 				}
 				if(strpos($line, "myrenault_userlp2=") !== false) {
 					list(, $myrenault_userlp2old) = explode("=", $line);
@@ -1677,6 +1683,7 @@
 								Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
 
 							</div>
+						</div>
 						<div id="mqttll">
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
@@ -1698,6 +1705,7 @@
 							$('#llmfsm').hide();
 							$('#httpll').hide();
 							$('#mpm3pmlllp1div').hide();
+							$('#mqttll').hide();
 
 
 							if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
@@ -1757,7 +1765,7 @@
 							<option <?php if($socmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
 							<option <?php if($socmodulold == "soc_http\n") echo "selected" ?> value="soc_http">SoC HTTP</option>
 							<option <?php if($socmodulold == "soc_leaf\n") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
-							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW i3</option>
+							<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW & Mini</option>
 							<option <?php if($socmodulold == "soc_zoe\n") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
 							<option <?php if($socmodulold == "soc_myrenault\n") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
 							<option <?php if($socmodulold == "soc_evnotify\n") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
@@ -1767,6 +1775,7 @@
 							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
 							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 							<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
+							<option <?php if($socmodulold == "soc_kia\n") echo "selected" ?> value="soc_kia">Kia</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1839,7 +1848,7 @@
 							<input type="text" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo $soc_bluelink_emailold ?>">
 						</div>
 						<div class="row bg-info">
-							Email Adresse des Hyundai Bluelink Logins
+							Email Adresse des Logins
 						</div>
 						<div class="row bg-info">
 							<b><label for="soc_bluelink_password">Passwort:</label></b>
@@ -1861,6 +1870,17 @@
 						</div>
 						<div class="row bg-info">
 							Wie oft abgefragt wird. Angabe in Minuten.
+						</div>
+					</div>
+					<div id="socmkia">
+						<div class="row bg-info">
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_vin">VIN:</label></b>
+							<input type="text" name="soc_vin" id="soc_vin" value="<?php echo $soc_vinold ?>">
+						</div>
+						<div class="row bg-info">
+							VIN des Autos.
 						</div>
 					</div>
 
@@ -2047,7 +2067,7 @@
 							<input type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>">
 						</div>
 						<div class="row bg-info">
-							BMW i3 VIN. Sie ist in voller Länge anzugeben.
+							BMW VIN. Sie ist in voller Länge anzugeben.
 						</div>
 						<div class="row bg-info">
 							<b><label for="soci3intervall">Verkürztes Intervall beim Laden:</label></b>
@@ -2096,12 +2116,17 @@
 							$('#socmaudi').hide();
 							$('#socmqtt').hide();
 							$('#socmbluelink').hide();
+							$('#socmkia').hide();
 
 							$('#socmyrenault').hide();
 							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
+								$('#socmbluelink').show();
+							}
+							if($('#socmodul').val() == 'soc_kia') {
+								$('#socmkia').show();
 								$('#socmbluelink').show();
 							}
 
@@ -2387,6 +2412,7 @@
 									<option <?php if($ladeleistungs1modulold == "goelp2\n") echo "selected" ?> value="goelp2">Go-e</option>
 									<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
 									<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
+									<option <?php if($ladeleistungs1modulold == "mqttll2\n") echo "selected" ?> value="mqttll2">MQTT</option>
 								</select>
 							</div>
 							<div class="row">
@@ -2487,6 +2513,14 @@
 									Ist nur von belang wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant<br>
 									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
 								</div>
+							</div>
+							<div id="mqttll2">
+								<div class="row">Keine Konfiguration erforderlich</div>
+								<div class="row">Per MQTT zu schreiben:</div>
+								<div class="row"><b>"openWB/set/lp/2/W"</b></div>
+								<div class="row">Ladeleistung in Watt, int, positiv</div>
+								<div class="row"><b>"openWB/set/lp/2/kWhCounter"</b></div>
+								<div class="row">Zählerstand in kWh, float, Punkt als Trenner, nur positiv</div>
 							</div>
 						</div>
 
@@ -2759,6 +2793,7 @@
 								$('#mpm3pmlls1div').hide();
 								$('#rs485lanlp2').hide();
 								$('#mpm3pmlllp2div').hide();
+								$('#mqttll2').hide();
 								if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
 									$('#sdm630s1div').show();
 									$('#rs485lanlp2').show();
@@ -2781,6 +2816,9 @@
 								if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 									$('#mpm3pmlls1div').show();
 									$('#rs485lanlp2').show();
+								}
+								if($('#ladeleistungs1modul').val() == 'mqttll2') {
+								$('#mqttll2').show();
 								}
 							}
 
@@ -3043,6 +3081,7 @@
 									<option <?php if($ladeleistungs2modulold == "goelp3\n") echo "selected" ?> value="goelp3">Go-E</option>
 									<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
 									<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
+									<option <?php if($ladeleistungs2modulold == "mqttll3\n") echo "selected" ?> value="mqttll3">MQTT</option>
 								</select>
 							</div>
 							<div class="row">
@@ -3142,6 +3181,14 @@
 									Gültige Werte IP. Wenn ein LAN Konverter genutzt wird muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
 								</div>
 							</div>
+							<div id="mqttll3">
+								<div class="row">Keine Konfiguration erforderlich</div>
+								<div class="row">Per MQTT zu schreiben:</div>
+								<div class="row"><b>"openWB/set/lp/3/W"</b></div>
+								<div class="row">Ladeleistung in Watt, int, positiv</div>
+								<div class="row"><b>"openWB/set/lp/3/kWhCounter"</b></div>
+								<div class="row">Zählerstand in kWh, float, Punkt als Trenner, nur positiv</div>
+							</div>
 						</div>
 					</div>
 
@@ -3153,7 +3200,7 @@
 							$('#rs485lanlp3').hide();
 							$('#mpm3pmlls2div').hide();
 							$('#mpm3pmlllp3div').hide();
-
+							$('#mqttll3').hide();
 
 							if($('#ladeleistungss2modul').val() == 'mpm3pmlllp3') {
 								$('#mpm3pmlllp3div').show();
@@ -3178,7 +3225,9 @@
 								$('#mpm3pmlls2div').show();
 								$('#rs485lanlp3').show();
 							}
-
+							if($('#ladeleistungss2modul').val() == 'mqttll3') {
+								$('#mqttll3').show();
+							}
 						}
 
 						$(function() {
@@ -4900,8 +4949,12 @@
 					<div id="divspeichernone">
 					</div>
 					<div id="divspeicherkit">
-							<div class="row" style="background-color:#fcbe1e">
-							Keine Konfiguration erforderlich
+						<div class="row">
+							<b><label for="speicherkitversion">Version des openWB Speicher Kits:</label></b>
+							<select name="speicherkitversion" id="speicherkitversion">
+								<option <?php if($speicherkitversionold == 0) echo "selected" ?> value="0">Dreiphasig (MPM3PM)</option>
+								<option <?php if($speicherkitversionold == 1) echo "selected" ?> value="1">Einphasig (SDM120)</option>
+							</select>
 						</div>
 					</div>
 					<div id="divspeichermqtt">
