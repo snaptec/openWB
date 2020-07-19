@@ -112,6 +112,8 @@ f.close()
 resp = client.read_input_registers(0x0031,2, unit=0x02)
 evuhz= float(resp.registers[1])
 evuhz= float(evuhz / 100)
+if evuhz > 100:
+    evuhz=float(evuhz / 10)
 f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(evuhz))
 f.close()
