@@ -13,8 +13,17 @@ client = ModbusTcpClient('192.168.193.15', port=8899)
 
 #Counters
 resp = client.read_input_registers(0x1a1f,2, unit=0x08)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+finalbezug1 = int(struct.unpack('>i', all.decode('hex'))[0])
+resp = client.read_input_registers(0x1a21,2, unit=0x08)
+all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
+finalbezug2 = int(struct.unpack('>i', all.decode('hex'))[0])
+if ( finalbezug1 > finalbezug2 ):
+    finalbezug=finalbezug1
+else:
+    finalbezug=finalbezug2
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
-f.write(str(resp.registers[1]))
+f.write(str(finalbezug))
 f.close()
 
 #phasen watt
@@ -30,6 +39,9 @@ all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')
 finalw3 = int(struct.unpack('>i', all.decode('hex'))[0] / 100)
 
 finalw= finalw1 + finalw2 + finalw3
+if ( finalw > 10):
+    finalw=finalw*-1
+
 #total watt
 #resp = client.read_input_registers(0x0039,2, unit=0x08)
 #all = format(resp.registers[0], '04x') + format(resp.registers[1], '04x')

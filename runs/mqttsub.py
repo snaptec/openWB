@@ -434,7 +434,7 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/set/system/topicSender", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/GetRemoteSupport"):
-        if len(msg.payload) >= 5 and len(msg.payload) <=30:
+        if len(msg.payload) >= 5 and len(msg.payload) <=50:
             token=msg.payload.decode("utf-8")
             getsupport = ["/var/www/html/openWB/runs/startremotesupport.sh", token]
             subprocess.Popen(getsupport)
@@ -766,22 +766,22 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/W"):
+    if (msg.topic == "openWB/set/houseBattery/W"):
         if (float(msg.payload) >= -30000 and float(msg.payload) <= 30000):
             f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhImported"):
+    if (msg.topic == "openWB/set/houseBattery/WhImported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhExported"):
+    if (msg.topic == "openWB/set/houseBattery/WhExported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/%Soc"):
+    if (msg.topic == "openWB/set/houseBattery/%Soc"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
             f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
             f.write(msg.payload.decode("utf-8"))
@@ -899,6 +899,17 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/lp/8/AutolockStatus"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=3):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/lp/1/W"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
+            llaktuell=int(msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+            f.write(str(llaktuell))
+            f.close()
+    if (msg.topic == "openWB/set/lp/1/kWhCounter"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
 

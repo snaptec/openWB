@@ -29,6 +29,7 @@ if (( stopchargeafterdisclp1 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung (Limit: $stopchargepvpercentagelp1%) LP1 aktiv, LP gesperrt" > ramdisk/lastregelungaktiv
 
 			fi
 		fi
@@ -37,6 +38,8 @@ if (( stopchargeafterdisclp1 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP1 (Limit: $stopchargepvpercentagelp1%) unterschritten, LP entsperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 	fi
@@ -48,6 +51,8 @@ if (( stopchargeafterdisclp2 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP2 (Limit: $stopchargepvpercentagelp2%) aktiv, LP gesperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 		if (( soc1 < stopchargepvpercentagelp2 )); then
@@ -55,6 +60,8 @@ if (( stopchargeafterdisclp2 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "1"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP2 (Limit: $stopchargepvpercentagelp2%) unterschritten, LP entsperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 	fi
@@ -195,7 +202,7 @@ if (( ladeleistung < 300 )); then
 	fi
 else
 	if [[ $speichervorhanden == "1" ]]; then
-		if (( speicherleistung < 0 )); then
+		if (( speicherleistung < 10 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
 				echo "$date SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log

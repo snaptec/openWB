@@ -976,53 +976,7 @@
 				<div id="llkwhgesdiv"></div>
 			</div>
 		</div>
-		<hr>
-		<div class="row bg-info">
-			<div class="col-sm-4 text-center bg-info">
-				EVSE Modbus Test<br>siehe Hilfe -> Misc
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="evsedintestlp1div"></div>
-				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp1';
-				if (file_exists($filename)) {
-					echo "last check " . date("H:i", filemtime($filename));
-				}
-				?>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="evsedintestlp2div"></div>
-				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp2';
-				if (file_exists($filename)) {
-					echo "last check " . date("H:i", filemtime($filename));
-				}
-				?>
-			</div>
-			<div class="col-sm-2 text-center bg-info">
-				<div id="evsedintestlp3div"></div>
-				<?php
-				$filename = '/var/www/html/openWB/ramdisk/evsedintestlp3';
-				if (file_exists($filename)) {
-					echo "last check " . date("H:i", filemtime($filename));
-				}
-				?>
-			</div>
-		</div>
-		<form action="tools/evsedintest.php" method="post">
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center bg-info"></div>
-				<div class="col-sm-2 text-center bg-info">
-					<input type="submit" name="testlp1" value="Testen" >
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<input type="submit" name="testlp2" value="Testen" >
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<input type="submit" name="testlp3" value="Testen" >
-				</div>
-			</div>
-		</form>
+
 
 		<hr style="height:3px;border:none;color:#333;background-color:#333;" />
 		<div class="row" style="background-color:#BEFEBE">

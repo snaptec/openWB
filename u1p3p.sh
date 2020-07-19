@@ -186,6 +186,23 @@ if (( u1p3paktiv == 1 )); then
 							if [[ $schieflastaktiv == "1" ]]; then
 								maximalstromstaerke=$schieflastmaxa
 							fi
+							if (( ladeleistung < 100 )); then
+								if (( uberschuss > 7000 )); then
+									if (( debug == 1 )); then
+										echo "Nur PV Laden derzeit $u1p3pstat Phasen, auf NurPV Automatik konfiguriert, aendere auf 3 Phasen da viel Überschuss vorhanden..."
+									fi
+									echo 1 > ramdisk/blockall
+									runs/u1p3pcheck.sh stop
+									sleep 8
+									runs/u1p3pcheck.sh 3 
+									sleep 20
+									runs/u1p3pcheck.sh startslow
+									(sleep 25 && echo 0 > ramdisk/blockall)&
+									if (( debug == 1 )); then
+										echo "auf 3 Phasen NurPV Automatik geaendert"
+									fi
+								fi
+							fi
 							if (( oldll == maximalstromstaerke )); then
 								uhcounter=$(</var/www/html/openWB/ramdisk/uhcounter)
 								if (( uhcounter < 600 )); then
@@ -214,6 +231,22 @@ if (( u1p3paktiv == 1 )); then
 								echo 0 > /var/www/html/openWB/ramdisk/uhcounter
 							fi
 						else
+							if (( ladeleistung < 100 )); then
+								if (( uberschuss < 5000 )); then
+									echo 0 > /var/www/html/openWB/ramdisk/urcounter
+									echo 1 > ramdisk/blockall
+									runs/u1p3pcheck.sh stop
+									sleep 8
+									runs/u1p3pcheck.sh 1 
+									sleep 20
+									runs/u1p3pcheck.sh startslow
+									(sleep 25 && echo 0 > ramdisk/blockall)&
+									if (( debug == 1 )); then
+										echo "auf 1 Phasen NurPV Automatik geaendert da geringerer Überschuss"
+									fi
+								fi
+							fi
+
 							if (( oldll == minimalapv )); then
 								urcounter=$(</var/www/html/openWB/ramdisk/urcounter)
 								if (( urcounter < 500 )); then

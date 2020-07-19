@@ -28,8 +28,8 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'bezug1_ip='.$_POST['bezug1_ip']."\n";
 			$writeit = '1';
 		}
-		if(strpos($line, "pv1_ip=") !== false) {
-			$result .= 'pv1_ip='.$_POST['pv1_ip']."\n";
+		if(strpos($line, "pv1_ipa=") !== false) {
+			$result .= 'pv1_ipa='.$_POST['pv1_ipa']."\n";
 			$writeit = '1';
 		}
 
@@ -69,6 +69,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'soc_bluelink_pin='.$_POST['soc_bluelink_pin']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "soc_vin=") !== false) {
+			$result .= 'soc_vin='.$_POST['soc_vin']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "solarworld_emanagerip=") !== false) {
 			$result .= 'solarworld_emanagerip='.$_POST['solarworld_emanagerip']."\n";
 			$writeit = '1';
@@ -105,6 +109,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "evukitversion=") !== false) {
 			$result .= 'evukitversion='.$_POST['evukitversion']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "speicherkitversion=") !== false) {
+			$result .= 'speicherkitversion='.$_POST['speicherkitversion']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "pvkitversion=") !== false) {
@@ -1274,6 +1282,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "evuglaettungakt=") !== false) {
 			$result .= 'evuglaettungakt='.$_POST['evuglaettungakt']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "froniuserzeugung=") !== false) {
+			$result .= 'froniuserzeugung='.$_POST['froniuserzeugung']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "froniusprimo=") !== false) {

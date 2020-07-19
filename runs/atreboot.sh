@@ -626,6 +626,8 @@ if (( rseenabled == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
+	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
+
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
@@ -1833,6 +1835,10 @@ if ! grep -Fq "kostalplenticorebatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "kostalplenticorebatt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "froniuserzeugung=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniuserzeugung=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
@@ -2507,6 +2513,10 @@ if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherkitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "speicherkitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
@@ -2580,6 +2590,10 @@ then
 	echo "soc_bluelink_pin=1111" >> /var/www/html/openWB/openwb.conf
 	echo "soc_bluelink_interval=30" >> /var/www/html/openWB/openwb.conf
 
+fi
+if ! grep -Fq "soc_vin=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_vin=VIN" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
@@ -2729,5 +2743,6 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
+mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 
