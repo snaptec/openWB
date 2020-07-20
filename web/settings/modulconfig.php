@@ -1691,6 +1691,7 @@
 							<div class="row"><b>"openWB/set/lp/1/kWhCounter"</b></div>
 							<div class="row">Zählerstand in kWh, float, Punkt als Trenner, nur positiv</div>
 						</div>
+						</div>
 					</div>
 
 					<script>
