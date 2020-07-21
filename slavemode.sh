@@ -3,6 +3,7 @@
 declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
+declare -r MaxOffsetToAssumeFullChargePower=1.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
 declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
@@ -188,8 +189,12 @@ function computeAndSetCurrentForChargePoint() {
 		# The resulting value might get further limited to maximalstromstaerke below.
 		if (( `echo "$llneu > $AllowedTotalCurrentPerPhase" | bc` == 1 )); then
 
-			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase): Not changing allowed current."
-			llneu=$PreviousExpectedChargeCurrent
+			if (( $llneu > $PreviousExpectedChargeCurrent )); then
+				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu > PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Not changing allowed current."
+			else
+				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu <= PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Limiting allowed current to $AllowedTotalCurrentPerPhase A."
+				llneu=$AllowedTotalCurrentPerPhase
+			fi
 		else
 			$dbgWrite "$NowItIs: Slave Mode: Fast ramping: Setting llneu=$llneu A"
 		fi
