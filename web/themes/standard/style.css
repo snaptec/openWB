@@ -184,9 +184,9 @@ body > .container {
 	--evubgCol: rgba(255, 10, 13, 0.3);
 	--pvCol: rgba(0, 255, 0, 0.7);;
 	--pvbgCol: rgba(10, 255, 13, 0.3);
-	--speicherCol: orange;
+	--speicherCol: rgba(255, 153, 13, 0.7);
 	--speicherbgCol: rgba(200, 255, 13, 0.3);
-	--speicherSocCol: orange;
+	--speicherSocCol: rgba(255, 153, 13, 0.7);
 	--speicherSocbgCol: rgba(200, 255, 13, 0.3);
 	--lp1SocCol: rgba(0, 0, 255, 0.5);
 	--lp2SocCol: rgba(50, 50, 55, 0.5);
