@@ -39,6 +39,13 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "socuser=") !== false) {
+					list(, $socuserold) = explode("=", $line);
+				}
+				if(strpos($line, "socpass=") !== false) {
+					list(, $socpassold) = explode("=", $line);
+				}
+
 				if(strpos($line, "soclp1_vin=") !== false) {
 					list(, $soclp1_vinold) = explode("=", $line);
 				}
@@ -533,7 +540,7 @@
 				if(strpos($line, "fsm63a3modbusllsource=") !== false) {
 					list(, $fsm63a3modbusllsourceold) = explode("=", $line);
 				}
-				if(strpos($line, "sdm120modbusllsource=") !== false) {
+				if(strpos($line, "sdm12user0modbusllsource=") !== false) {
 					list(, $sdm120modbusllsourceold) = explode("=", $line);
 				}
 				if(strpos($line, "sdm630modbuslllanip=") !== false) {
@@ -719,7 +726,7 @@
 				if(strpos($line, "mpm3pmlls2id=") !== false) {
 					list(, $mpm3pmlls2idold) = explode("=", $line);
 				}
-
+user
 				if(strpos($line, "mpm3pmevuid=") !== false) {
 					list(, $mpm3pmevuidold) = explode("=", $line);
 				}
@@ -1196,6 +1203,7 @@
 			$lp8nameold = str_replace( "'", "", $lp8nameold);
 			$zoepasswortold = str_replace( "'", "", $zoepasswortold);
 			$zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
+			$socpassold = str_replace( "'", "", $socpassold);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -1775,6 +1783,8 @@
 							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 							<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 							<option <?php if($socmodulold == "soc_kia\n") echo "selected" ?> value="soc_kia">Kia</option>
+							<option <?php if($socmodulold == "soc_volvo\n") echo "selected" ?> value="soc_volvo">Volvo</option>
+
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1945,6 +1955,25 @@
 							Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
 						</div>
 					</div>
+					<div id="socmuser">
+						<div class="row bg-info">
+							<b><label for="socuser">Benutzername:</label></b>
+							<input type="text" name="socuser" id="socuser" value="<?php echo $socuserold ?>">
+						</div>
+						<div class="row bg-info">
+							Benutzername
+						</div>
+					</div>
+					<div id="socmpass">
+						<div class="row bg-info">
+							<b><label for="socpass">Passwort:</label></b>
+							<input type="socpass" name="socpass" id="socpass" value="<?php echo $socpassold ?>">
+						</div>
+						<div class="row bg-info">
+							Passwort
+						</div>
+					</div>
+
 					<div id="soczoe">
 						<div class="row bg-info">
 							<b><label for="zoeusername">Benutzername:</label></b>
@@ -2116,8 +2145,16 @@
 							$('#socmqtt').hide();
 							$('#socmbluelink').hide();
 							$('#socmkia').hide();
-
+							$('#socmuser').hide();
+							$('#socmpass').hide();
 							$('#socmyrenault').hide();
+
+							if($('#socmodul').val() == 'soc_volvo') {
+								$('#socmuser').show();
+								$('#socmpass').show();
+
+							}
+
 							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
 							}
