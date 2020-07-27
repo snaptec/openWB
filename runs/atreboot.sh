@@ -2707,6 +2707,22 @@ else
 	sudo apt-get -qq install -y python3-pip
 	sudo pip3 install paho-mqtt
 fi
+if python3 -c "import docopt" &> /dev/null; then
+	echo 'docopt installed...'
+else
+	sudo pip3 install docopt
+fi
+if python3 -c "import certifi" &> /dev/null; then
+	echo 'certifi installed...'
+else
+	sudo pip3 install certifi
+fi
+if python3 -c "import aiohttp" &> /dev/null; then
+	echo 'aiohttp installed...'
+else
+	sudo pip3 install aiohttp
+fi
+
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
