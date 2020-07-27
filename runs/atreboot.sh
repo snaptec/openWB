@@ -2412,6 +2412,14 @@ if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_audi_passwort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc2user=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc2user=demo@demo.de" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc2pass=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc2pass=passwort" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lgessv1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "lgessv1ip=youripaddress" >> /var/www/html/openWB/openwb.conf
