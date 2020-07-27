@@ -12,6 +12,7 @@ else
 		if (( $soclevel != 0 )) ; then
 			echo $soclevel > /var/www/html/openWB/ramdisk/soc
 		fi
+	echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	fi
 
 fi

@@ -36,10 +36,7 @@ Options:
   --utc                 Print timestamps in UTC (+00:00) instead of local time
   --version             Show version
 """
-try:
-    import docopt
-except ImportError:
-    os.system('pip3 install docopt')
+
 import docopt
 
 import logging
@@ -50,15 +47,7 @@ from sys import stderr
 from collections import OrderedDict
 from datetime import timezone
 import ssl
-try:
-    import certifi
-except ImportError:
-    os.system('pip3 install certifi')
 import certifi
-try:
-    from aiohttp import ClientSession, TCPConnector
-except ImportError:
-    os.system('pip3 install aiohttp')
 from aiohttp import ClientSession, TCPConnector
 
 from volvooncall import __version__, Connection
