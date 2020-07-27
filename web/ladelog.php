@@ -188,7 +188,7 @@
 </body>
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladelog</small>
+				<small>Sie befinden sich hier: Ladelog - <a href="ladelogexport.php">Ladelog Export</a></small>
 			</div>
 		</footer>
 </html>

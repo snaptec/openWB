@@ -27,7 +27,7 @@ if ( $response == "nomail" ) {
 	echo "Keine Email angegeben, dies ist eine Pflichtangabe! Weiterleitung erfolgt in 10 Sekunden...";
 	header( "refresh:10;url='../settings/cloudconfig.php" );
 } elseif ( $response == "usernamenotvalid" ) {
-	echo "Kein gültiger Benutzername, dieser darf nur Buchstaben und Zahlen enthalten, keine -,. oder Leerzeichen. Weiterleitung erfolgt in 10 Sekunden...";
+	echo "Kein gültiger Benutzername, dieser darf nur Buchstaben enthalten, keine -,. Zahlen oder Leerzeichen. Weiterleitung erfolgt in 10 Sekunden...";
 	header( "refresh:10;url='../settings/cloudconfig.php" );
 } elseif ( $response == "usernameempty" ) {
 	echo "Kein Benutzername angegeben. Weiterleitung erfolgt in 10 Sekunden...";

@@ -11,7 +11,7 @@ if ! [[ $pvwatt =~ $re ]] ; then
    pvwatt="0"
 fi
 
-pvkwh=$(echo $pvwatttmp | jq '.Body.Data.Site.E_Total')
+pvkwh=$(echo $pvwatttmp | jq '.Body.Data.Site.E_Total' | sed 's/\..*$//')
 
 if [[ $wrfronius2ip != "none" ]]; then
 	pv2watttmp=$(curl --connect-timeout 3 -s "$wrfronius2ip/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System")
@@ -25,7 +25,7 @@ if [[ $wrfronius2ip != "none" ]]; then
 	echo $pvwatt
 	# Zur weiteren Verwendung im Webinterface
 	echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-	pv2kwh=$(echo $pv2watttmp | jq '.Body.Data.Site.E_Total')
+	pv2kwh=$(echo $pv2watttmp | jq '.Body.Data.Site.E_Total' | sed 's/\..*$//')
 	pvgkwh=$(echo "$pvkwh + $pv2kwh" | bc)
 	if [[ $pvgkwh =~ $re ]] ; then
 		if (( pvgkwh > 0 )); then

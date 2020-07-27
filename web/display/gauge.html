@@ -759,7 +759,7 @@ if (displaytheme == 0) {
     }
   });
  $.ajax({
-    url: "/openWB/ramdisk/pvwatt",
+    url: "/openWB/ramdisk/pvallwatt",
     complete: function(request){
 	    var pvwatt = request.responseText;
 	    pvwatt = pvwatt * -1;
@@ -1116,9 +1116,9 @@ $(document).ready(function(){
 <script src="/openWB/web/livechart_chartjs.js"></script>
 <script src="/openWB/web/js/mqttws31.js"></script>
 <script src="js/Chart.bundle.js"></script>
-<script src="/openWB/web/display/alllive.js"></script>
+<script src="/openWB/web/display/alllive.js?vers=2"></script>
 <script src="./display/symbollive.js"></script>
-<script src="/openWB/web/live.js?vers=2"></script>
+<script src="/openWB/web/live.js?vers=4"></script>
 <div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 	<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">
 		<div class="row"><div class="col-xs-12">
@@ -1224,21 +1224,6 @@ $(document).ready(function(){
 </div>
 <div class="row col-xs-12 text-center" id="zielladenaktivlp1div" style="display: none;"></div>
 	<div class="row" id="sofortlmdiv2" style="font-size: 2vw; display: none">
-		<div class="col-xs-4 text-center">
-			<div id="lademstatdiv">
-				<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
-			</div>
-		</div>
-		<div id="ladepunkts11111div" class="col-xs-4 text-center">
-			<div id="lademstats1div">
-				<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
-			</div>
-		</div>
-		<div id="ladepunkts22222div" class="col-xs-4 text-center">
-			<div id="lademstats2div">
-				<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
-			</div>
-		</div>
 	</div>
 <div style="display: none;">
 	<div class="row" id="thegraph" style="display: none;">
@@ -1267,6 +1252,9 @@ $(document).ready(function(){
 		<div style="display: none;" id="sofortlllp6l"></div>
 		<div style="display: none;" id="sofortlllp7l"></div>
 		<div style="display: none;" id="sofortlllp8l"></div>
+		<div style="display: none;" id="lademstatdiv"></div>
+		<div style="display: none;" id="ladepunkts11111div"></div>
+		<div style="display: none;" id="ladepunkts22222div"></div>
 	</div>
 </div>
 </html>

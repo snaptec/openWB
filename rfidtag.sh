@@ -54,11 +54,11 @@ rfid() {
 		if [ "$lasttag" == "$rfidstandby" ] || [ "$lasttag" == "$rfidstandby2" ] || [ "$lasttag" == "$rfidstandby3" ] ; then
 			echo 4 > ramdisk/lademodus
 		fi
-		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] ; then
+		if [ "$lasttag" == "$rfidlp1start1" ] || [ "$lasttag" == "$rfidlp1start2" ] || [ "$lasttag" == "$rfidlp1start3" ] || [ "$lasttag" == "$rfidlp1start4" ] || [ "$lasttag" == "$rfidlp1start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"
 			lp1enabled=1
 		fi
-		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] ; then
+		if [ "$lasttag" == "$rfidlp2start1" ] || [ "$lasttag" == "$rfidlp2start2" ] || [ "$lasttag" == "$rfidlp2start3" ] || [ "$lasttag" == "$rfidlp2start4" ] || [ "$lasttag" == "$rfidlp2start5" ]; then
 			mosquitto_pub -r -t openWB/set/lp/2/ChargePointEnabled -m "1"
 			lp2enabled=1
 		fi
@@ -202,7 +202,7 @@ setLpPlugChangeState() {
 			echo "$NowItIs: LP 2 un-plugged"
 			unpluggedLps[2]=1
 		else
-			echo "$NowItIs: LP 2 unkown plug state '${plugstats1}'"
+			echo "$NowItIs: LP 2 unkown plug state '${lpsPlugStat[2]}'"
 		fi
 
 		echo ${lpsPlugStat[2]} > "ramdisk/accPlugstatChangeDetectLp2"
@@ -220,7 +220,7 @@ setLpPlugChangeState() {
 			echo "$NowItIs: LP 1 un-plugged"
 			unpluggedLps[1]=1
 		else
-			echo "$NowItIs: LP 1 unkown plug state '${plugstat}'"
+			echo "$NowItIs: LP 1 unkown plug state '${lpsPlugStat[1]}'"
 		fi
 
 		echo ${lpsPlugStat[1]} > "ramdisk/accPlugstatChangeDetectLp1"

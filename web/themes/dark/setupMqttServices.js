@@ -245,11 +245,26 @@ var topicsToSubscribe = [
 	// housebattery values
 	["openWB/housebattery/W", 1],
 	["openWB/housebattery/%Soc", 1],
+	// Daily Yields
+	["openWB/housebattery/DailyYieldImportKwh", 1],
+	["openWB/housebattery/DailyYieldExportKwh", 1],
+	["openWB/global/DailyYieldHausverbrauchKwh", 1],
+	["openWB/global/DailyYieldAllChargePointsKwh", 1],
+	["openWB/evu/DailyYieldImportKwh", 1],
+	["openWB/evu/DailyYieldExportKwh", 1],
+
 	// hook status
 	["openWB/hook/1/boolHookStatus", 1],
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
+
 	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	["openWB/SmartHome/Devices/1/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/2/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/4/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/5/DailyYieldKwh", 1],
+
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
@@ -311,24 +326,21 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
 
-
-        ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
-	["openWB/config/get/pv/nurpv70dynact", 1],
-
-
-
-
-
+	["openWB/config/get/pv/nurpv70dynact", 1]
 ];
+
+// holds number of topics flagged 1 initially
+var countTopicsNotForPreloader = topicsToSubscribe.filter(row => row[1] === 1).length;
 
 var retries = 0;
 

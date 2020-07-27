@@ -303,7 +303,7 @@
 							</div>
 							<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
-						<p class="soclp1options card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist.</p>
+						<p class="soclp1options card-text text-info">Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist. Ist diese Funktion aktiviert lässt sich der Ladepunkt nicht mehr manuell (de-)aktivieren sondern wird ausschließlich anhand des SoC de- oder aktiviert. Aktiv im Min+PV und PV Lademodus</p>
 						<div class="soclp1options form-row form-group mt-1">
 							<div class="col btn-group btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
 								<label class="btn btn-outline-info btn-toggle">
@@ -410,8 +410,8 @@
 						<div>
 							<small>
 								Parameter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden.
-								Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang" und wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde.
-								Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung trotz Speichervorrang zur Ladung des EV entladen werden darf.
+								Dieser Parameter ist nur wirksam wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde.
+								Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung zur Ladung des EV entladen werden darf.
 							</small>
 						</div>
 						<div class="form-row form-group mt-1">
@@ -425,7 +425,6 @@
 						<div>
 							<small>
 								Parameter in Prozent [%] für den minimalen Entlade-SoC des Speichers im Modus PV-Laden.
-								Dieser Parameter ist nur wirksam bei der Einstellung "Speichervorrang".
 								Definiert einen minimalen SoC, bis zu dem ein Speicher trotz Speichervorrang zur Ladung des EV höchstens entladen werden darf. Der Wert 100 schaltet die Funktion aus.
 							</small>
 						</div>
@@ -479,6 +478,7 @@
 							<small>
 								Parameter in Prozent [%] für den Einschalt-SoC der Laderegelung im Modus Min+PV-Laden.
 								Definiert einen Speicher-SoC, der überschritten werden muss, damit die Ladereglung startet. Der Wert 0 schaltet die Funktion aus.
+								Der Einschalt-SoC muss größer als der Ausschalt-SoC sein. Unterhalb des Ausschalt-SoC wird die Ladung nicht freigegeben
 							</small>
 						</div>
 						<div class="form-row form-group mb-1 vaRow">

@@ -1,8 +1,10 @@
 web/ladelog
 *.csv
 *.log
+*.pyc
 ramdisk/
 .DS_Store
 web/settings/.htaccess
 web/settings/.passwd
 web/lastcommit
+modules/soc_tesla/tokens.*

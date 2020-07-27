@@ -139,27 +139,3 @@ body > .container {
     vertical-align: middle;
 }
 
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #212529;
-        color: #ffffff;
-    }
-
-    .card {
-        background-color: #212529;
-        border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .bg-warning {
-        color: #212529;
-    }
-
-    .form-control {
-        background-color: #6c757d;
-        color: #ffffff;
-    }
-
-    .btn-outline-secondary {
-        color: #ffffff;
-    }
-}

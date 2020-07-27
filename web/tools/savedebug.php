@@ -24,7 +24,7 @@
 		// convert lines to key/value array for faster manipulation
 		foreach($settingsFile as $line) {
 			// split line at char '='
-			$splitLine = explode('=', $line);
+			$splitLine = explode('=', $line, 2);
 			// trim parts
 			$splitLine[0] = trim($splitLine[0]);
 			$splitLine[1] = trim($splitLine[1]);

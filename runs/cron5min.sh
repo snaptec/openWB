@@ -102,24 +102,70 @@ fi
 if (( awattaraktiv == 1 )); then
 	/var/www/html/openWB/runs/awattargetprices.sh
 fi
-pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
+pvkwh=$pv
 
 pvdailyyieldstart=$(head -n 1 /var/www/html/openWB/web/logging/data/daily/$(date +%Y%m%d).csv)
 pvyieldcount=0
 for i in ${pvdailyyieldstart//,/ }
 do
 	pvyieldcount=$((pvyieldcount + 1 ))
-	if (( pvyieldcount == 4 )); then
+	if (( pvyieldcount == 2 )); then
+		bezugdailyyield=$(echo "scale=2;($bezug - $i) / 1000" |bc)
+		echo $bezugdailyyield > /var/www/html/openWB/ramdisk/daily_bezugkwh
+	fi
 
+	if (( pvyieldcount == 3 )); then
+		einspeisungdailyyield=$(echo "scale=2;($einspeisung - $i) / 1000" |bc)
+		echo $einspeisungdailyyield > /var/www/html/openWB/ramdisk/daily_einspeisungkwh
+	fi
+	if (( pvyieldcount == 4 )); then
 		pvdailyyield=$(echo "scale=2;($pvkwh - $i) / 1000" |bc)
 		echo $pvdailyyield > /var/www/html/openWB/ramdisk/daily_pvkwhk
 	fi
+	if (( pvyieldcount == 8 )); then
+		lladailyyield=$(echo "scale=2;($llg - $i) / 1000" |bc)
+		echo $lladailyyield > /var/www/html/openWB/ramdisk/daily_llakwh
+	fi
+	if (( pvyieldcount == 9 )); then
+		sidailyyield=$(echo "scale=2;($speicheri - $i) / 1000" |bc)
+		echo $sidailyyield > /var/www/html/openWB/ramdisk/daily_sikwh
+	fi
+	if (( pvyieldcount == 10 )); then
+		sedailyyield=$(echo "scale=2;($speichere - $i) / 1000" |bc)
+		echo $sedailyyield > /var/www/html/openWB/ramdisk/daily_sekwh
+	fi
+	if (( pvyieldcount == 27 )); then
+		d1dailyyield=$(echo "scale=2;($d1 - $i) / 1000" |bc)
+		echo $d1dailyyield > /var/www/html/openWB/ramdisk/daily_d1kwh
+	fi
+	if (( pvyieldcount == 28 )); then
+		d2dailyyield=$(echo "scale=2;($d2 - $i) / 1000" |bc)
+		echo $d2dailyyield > /var/www/html/openWB/ramdisk/daily_d2kwh
+	fi
+	if (( pvyieldcount == 29 )); then
+		d3dailyyield=$(echo "scale=2;($d3 - $i) / 1000" |bc)
+		echo $d3dailyyield > /var/www/html/openWB/ramdisk/daily_d3kwh
+	fi
+	if (( pvyieldcount == 30 )); then
+		d4dailyyield=$(echo "scale=2;($d4 - $i) / 1000" |bc)
+		echo $d4dailyyield > /var/www/html/openWB/ramdisk/daily_d4kwh
+	fi
+	if (( pvyieldcount == 31 )); then
+		d5dailyyield=$(echo "scale=2;($d5 - $i) / 1000" |bc)
+		echo $d5dailyyield > /var/www/html/openWB/ramdisk/daily_d5kwh
+	fi
+
 done
+hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield" | bc)
+echo $hausdailyyield > /var/www/html/openWB/ramdisk/daily_hausverbrauchkwh
+
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
 echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
 echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
+echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
