@@ -816,7 +816,14 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'socuser='.$_POST['socuser']."\n";
 			$writeit = '1';
 		}
-
+		if(strpos($line, "soc2pass=") !== false) {
+			$result .= 'soc2pass=\''.$_POST['socpass']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "soc2user=") !== false) {
+			$result .= 'soc2user='.$_POST['socuser']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "zoelp2username=") !== false) {
 			$result .= 'zoelp2username='.$_POST['zoelp2username']."\n";
 			$writeit = '1';

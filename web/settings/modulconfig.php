@@ -45,7 +45,12 @@
 				if(strpos($line, "socpass=") !== false) {
 					list(, $socpassold) = explode("=", $line);
 				}
-
+				if(strpos($line, "soc2user=") !== false) {
+					list(, $soc2userold) = explode("=", $line);
+				}
+				if(strpos($line, "soc2pass=") !== false) {
+					list(, $soc2passold) = explode("=", $line);
+				}
 				if(strpos($line, "soclp1_vin=") !== false) {
 					list(, $soclp1_vinold) = explode("=", $line);
 				}
@@ -1203,6 +1208,7 @@
 			$zoepasswortold = str_replace( "'", "", $zoepasswortold);
 			$zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 			$socpassold = str_replace( "'", "", $socpassold);
+			$soc2passold = str_replace( "'", "", $soc2passold);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -2564,8 +2570,27 @@
 								<option <?php if($socmodul1old == "soc_carnetlp2\n") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
 								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
 								<option <?php if($socmodul1old == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
+								<option <?php if($socmodul1old == "soc_audilp2\n") echo "selected" ?> value="soc_audilp2">Audi</option>
 
 							</select>
+						</div>
+						<div id="socmuser2">
+							<div class="row bg-info">
+								<b><label for="soc2user">Benutzername:</label></b>
+								<input type="text" name="soc2user" id="soc2user" value="<?php echo $soc2userold ?>">
+							</div>
+							<div class="row bg-info">
+								Benutzername
+							</div>
+						</div>
+						<div id="socmpass2">
+							<div class="row bg-info">
+								<b><label for="soc2pass">Passwort:</label></b>
+								<input type="soc2pass" name="soc2pass" id="soc2pass" value="<?php echo $soc2passold ?>">
+							</div>
+							<div class="row bg-info">
+								Passwort
+							</div>
 						</div>
 						<div id="socmqtt1">
 							<div class="row">Keine Konfiguration erforderlich</div>
@@ -2853,6 +2878,9 @@
 
 							function display_socmodul1() {
 								$('#socmqtt1').hide();
+								$('#socmuser2').hide();
+								$('#socmpass2').hide();
+
 								$('#socmnone1').hide();
 								$('#socmhttp1').hide();
 								$('#socleaf1').hide();
@@ -2873,6 +2901,12 @@
 								if($('#socmodul1').val() == 'soc_http1') {
 									$('#socmhttp1').show();
 								}
+								if($('#socmodul1').val() == 'soc_audilp2') {
+									$('#socmuser2').show();
+									$('#socmpass2').show();
+
+								}
+
 								if($('#socmodul1').val() == 'soc_leafs1') {
 									$('#socleaf1').show();
 								}
