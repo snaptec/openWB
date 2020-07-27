@@ -540,7 +540,7 @@
 				if(strpos($line, "fsm63a3modbusllsource=") !== false) {
 					list(, $fsm63a3modbusllsourceold) = explode("=", $line);
 				}
-				if(strpos($line, "sdm12user0modbusllsource=") !== false) {
+				if(strpos($line, "sdm120modbusllsource=") !== false) {
 					list(, $sdm120modbusllsourceold) = explode("=", $line);
 				}
 				if(strpos($line, "sdm630modbuslllanip=") !== false) {
@@ -726,7 +726,6 @@
 				if(strpos($line, "mpm3pmlls2id=") !== false) {
 					list(, $mpm3pmlls2idold) = explode("=", $line);
 				}
-user
 				if(strpos($line, "mpm3pmevuid=") !== false) {
 					list(, $mpm3pmevuidold) = explode("=", $line);
 				}
