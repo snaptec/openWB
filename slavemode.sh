@@ -3,7 +3,6 @@
 declare -r SlaveModeAllowedLoadImbalanceDefault=20.0
 declare -r HeartbeatTimeout=35
 declare -r CurrentLimitAmpereForCpCharging=0.5
-declare -r MaxOffsetToAssumeFullChargePower=1.5
 declare -r LastChargingPhaseFile="ramdisk/lastChargingPhasesLp"
 declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
