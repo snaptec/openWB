@@ -1101,6 +1101,12 @@ if [[ $oversion != $version ]]; then
 	echo -n "$version" > ramdisk/mqttversion
 fi
 
+ocp1config=$(<ramdisk/mqttCp1Configured)
+if [[ "$ocp1config" != "1" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/1/boolChargePointConfigured=1"
+	echo 1 > ramdisk/mqttCp1Configured
+fi
+
 olastmanagement=$(<ramdisk/mqttlastmanagement)
 if [[ "$olastmanagement" != "$lastmanagement" ]]; then
 	tempPubList="${tempPubList}\nopenWB/lp/2/boolChargePointConfigured=${lastmanagement}"
