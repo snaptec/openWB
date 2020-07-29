@@ -1,9 +1,12 @@
 #!/bin/bash
+
 mosquitto_pub -t openWB/set/ChargeMode -r -m "3"
 mosquitto_pub -t openWB/system/updateInProgress -r -m "1"
 sleep 15
 cd /var/www/html/openWB
 . /var/www/html/openWB/loadconfig.sh
+. /var/www/html/openWB/runs/updatePersistence.sh
+
 echo 1 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/lastregelungaktiv
@@ -18,6 +21,9 @@ cp openwb.conf /tmp/openwb.conf
 #for i in /var/www/html/openWB/web/logging/data/daily/*; do cp "$i" /tmp/data/daily/; done
 #mkdir /tmp/data/monthly
 #for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
+
+persistStatus
+
 sudo git fetch origin
 if [[ "$releasetrain" == "stable" ]]
 then
@@ -30,14 +36,14 @@ else
 fi
 sudo git reset --hard origin/$train
 cd /var/www/html/
-sudo chown -R pi:pi openWB 
+sudo chown -R pi:pi openWB
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
 sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
 sudo chmod 777 /var/www/html/openWB/openwb.conf
-sudo chmod +x /var/www/html/openWB/modules/*                     
+sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
@@ -94,4 +100,3 @@ fi
 
 
 sudo /var/www/html/openWB/runs/atreboot.sh
-
