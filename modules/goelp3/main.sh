@@ -25,15 +25,15 @@ if [[ $? == "0" ]] ; then
 		echo $lla3 > /var/www/html/openWB/ramdisk/llas23
 	fi
 	llv1=$(echo $output | jq -r '.nrg[0]')
-	if [[ $lla1 =~ $re ]] ; then
+	if [[ $llv1 =~ $re ]] ; then
 		echo $llv1 > /var/www/html/openWB/ramdisk/llvs21
 	fi
 	llv2=$(echo $output | jq -r '.nrg[1]')
-	if [[ $lla2 =~ $re ]] ; then
+	if [[ $llv2 =~ $re ]] ; then
 		echo $llv2 > /var/www/html/openWB/ramdisk/llvs22
 	fi
 	llv3=$(echo $output | jq -r '.nrg[2]')
-	if [[ $lla3 =~ $re ]] ; then
+	if [[ $llv3 =~ $re ]] ; then
 		echo $llv3 > /var/www/html/openWB/ramdisk/llvs23
 	fi
 
