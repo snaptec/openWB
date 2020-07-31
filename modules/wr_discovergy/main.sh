@@ -3,7 +3,7 @@ output=$(curl --connect-timeout 5 -s -u $discovergyuser:$discovergypass "https:/
 
 pvwh=$(echo $output | jq .values.energyOut)
 pvwh=$(( bezugwh / 10000000 ))
-echo $bezugwh > /var/www/html/openWB/ramdisk/pvkwh
+echo $pvwh > /var/www/html/openWB/ramdisk/pvkwh
 
 watt=$(echo $output | jq .values.power)
 watt=$(( watt / 1000 ))
