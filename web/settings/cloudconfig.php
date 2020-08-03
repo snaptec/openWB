@@ -31,6 +31,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -72,76 +94,97 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="col-sm-12">
-				<div class="row">
-					<h3>Cloud Einstellungen</h3>
+			<div class="card">
+				<div class="card-header bg-secondary text-white font-weight-bold">
+					Cloud Anmeldedaten
 				</div>
-				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) {
-				echo '
-					<div class="row">
-						Cloud ist aktiv<br>
-						Benutzername: '.$clouduserold.'<br>
-						Passwort: '.$cloudpwold.'<br>
+				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
+					<div class="card-body">
+						<div class="row">
+							Cloud ist aktiv<br>
+							Benutzername: <?php echo $clouduserold; ?><br>
+							Passwort: <?php echo $cloudpwold; ?><br>
+						</div>
+						<div class="row">
+							Mit den Zugangsdaten auf web.openwb.de anmelden
+						</div>
 					</div>
-					<div class="row">
-						Mit den Zugangsdaten auf web.openwb.de anmelden
-					</div>
-					<form action="./tools/savemqtt.php?bridge='.urlencode($connectionName).'" method="POST">
-						<input type="hidden" name="ConnectionName" value="cloud"/>
-                                        	<div class="row justify-content-center py-1">
-                                        	        <button type="submit" class="btn btn-green" name="action" value="deleteBridge">Br&uuml;cke '.urlencode($connectionName).' l&ouml;schen</button>
-						</div>
-					</form>
-				'; } else { echo '
-					<form action="./tools/cloudregistrate.php" method="POST">
-						<div class="row">
-							<b><label for="connect_username">Benutzername:</label></b>
-							<input type="text" name="username" id="connect_username" value="">
-						</div>
-						<div class="row">
-							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
-						</div>
-						<div class="row">
-							<b><label for="cloudpass">Passwort:</label></b>
-							<input type="text" name="cloudpass" id="cloudpass" value="">
-						</div>
-						<div class="row">
-							Passwort des Cloud Accounts
-						</div>
-
-						<button type="submit" class="btn btn-green">Mit Account anmelden</button>
-					</form>
-					<hr>
-					<form action="./tools/cloudregistrate.php" method="POST">
-						<div class="row">
-							<b><label for="register_username">Benutzername:</label></b>
-							<input type="text" name="username" id="register_username" value="">
-						</div>
-						<div class="row">
-							Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
-						</div>
-						<div class="row">
-							<b><label for="email">Email Adresse:</label></b>
-							<input type="text" name="email" id="email" value="">
-						</div>
-						<div class="row">
-							Email Adresse angeben
-						</div>
-
-						<button type="submit" class="btn btn-green">Neuen Account erstellen und einrichten</button>
-					</form>
-				'; } ?>
-				<div class="row justify-content-center">
-					<div class="col text-center">
-						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick">
-							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
-							<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-							<img alt="" src="./img/pixel.gif" width="1" height="1">
+					<div class="card-footer">
+						<form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
+							<input type="hidden" name="ConnectionName" value="cloud"/>
+							<div class="row justify-content-center py-1">
+								<button type="submit" class="btn btn-green" name="action" value="deleteBridge">Brücke <?php echo urlencode($connectionName); ?> löschen</button>
+							</div>
 						</form>
 					</div>
+				<?php } else { ?>
+					<form action="./tools/cloudregistrate.php" method="POST">
+						<div class="card-body">
+							<div class="form-row form-group mb-0 vaRow">
+								<label for="connect_username" class="col-3 col-sm-2 col-form-label">Benutzername:</label>
+								<div class="col">
+									<input type="text" name="username" id="connect_username" value="">
+								</div>
+							</div>
+							<div>
+								<small>Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen</small>
+							</div>
+							<div class="form-row form-group mb-0 vaRow">
+								<label for="cloudpass" class="col-3 col-sm-2 col-form-label">Passwort:</label>
+								<div class="col">
+									<input type="text" name="cloudpass" id="cloudpass" value="">
+								</div>
+							</div>
+							<div>
+								<small>Passwort des Cloud Accounts</small>
+							</div>
+						</div>
+						<div class="card-footer text-center">
+							<button type="submit" class="btn btn-green">Mit Account anmelden</button>
+						</div>
+					</form>
+				</div> <!-- card 1 -->
+				<div class="card">
+					<form action="./tools/cloudregistrate.php" method="POST">
+						<div class="card-header bg-secondary text-white font-weight-bold">
+							Cloud neu einrichten
+						</div>
+						<div class="card-body">
+							<div class="form-row form-group mb-0 vaRow">
+								<label for="register_username" class="col-3 col-sm-2 col-form-label">Benutzername:</label>
+								<div class="col">
+									<input type="text" name="username" id="register_username" value="">
+								</div>
+							</div>
+							<div>
+								<small>Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen</small>
+							</div>
+							<div class="form-row form-group mb-0 vaRow">
+								<label for="email" class="col-3 col-sm-2 col-form-label">Email Adresse:</label>
+								<div class="col">
+									<input type="text" name="email" id="email" value="">
+								</div>
+							</div>
+							<div>
+								<small>Email Adresse angeben</small>
+							</div>
+						</div>
+						<div class="card-footer text-center">
+							<button type="submit" class="btn btn-green">Neuen Account erstellen und einrichten</button>
+						</div>
+					</form>
+				<?php } ?>
+			</div> <!-- card 1 or 2 -->
+			<div class="row justify-content-center">
+				<div class="col text-center">
+					Open Source made with love!<br>
+					Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
+					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
+						<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+						<img alt="" src="./img/pixel.gif" width="1" height="1">
+					</form>
 				</div>
 			</div>
 		</div>  <!-- container -->
@@ -152,7 +195,7 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
