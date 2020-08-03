@@ -23,6 +23,7 @@ body {
 	/* IE6-9 */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
 }
+
 body > .container {
 	padding: 55px 15px 0;
 }
