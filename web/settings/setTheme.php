@@ -38,6 +38,28 @@
 
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -62,29 +84,29 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-
-			<div class="row">
-				<div id="themeName" class="col text-center"></div>
-			</div>
-
-			<div class="row justify-content-center">
-				<div class="col-sm-10">
-					<div class="owl-carousel owl-theme">
-						<?php
-							foreach( $allThemes as $themeName ) {
-								echo '                        <div><img src="themes/'.$themeName.'/preview.png" title="'.$themeName.'"></div>'."\n";
-							}
-						?>
-					</div>
+			<div class="card">
+				<div class="card-header bg-secondary font-weight-bold text-white">
+					<div id="themeName" class="col text-center"></div>
 				</div>
-			</div>
-
-			<br>
-
-			<div class="row justify-content-center">
-				<button onclick="saveTheme()" class="btn btn-green">Theme übernehmen</button>
-			</div>
-
+				<div class="card-body">
+					<div class="row justify-content-center">
+						<div class="col-sm-10">
+							<div class="owl-carousel owl-theme">
+								<?php
+									foreach( $allThemes as $themeName ) {
+										echo '                        <div><img src="themes/'.$themeName.'/preview.png" title="'.$themeName.'"></div>'."\n";
+									}
+								?>
+							</div>
+						</div>
+					</div>
+				</div> <!-- card-body -->
+				<div class="card-footer">
+					<div class="row justify-content-center">
+						<button onclick="saveTheme()" class="btn btn-green">Theme übernehmen</button>
+					</div>
+				</div> <!-- card-footer -->
+			</div> <!-- card -->
 		</div>  <!-- end container -->
 
 		<footer class="footer bg-dark text-light font-small">
@@ -93,7 +115,7 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
@@ -126,7 +148,7 @@
 				// set theme name in div to img title
 				var activeImg = $('.owl-carousel').find('.active').find('img');
 				var title = activeImg.attr('title');
-				if(title) $('#themeName').html('<h1>'+title+'</h1>');
+				if(title) $('#themeName').text(title);
 			}
 		</script>
 
