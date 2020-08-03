@@ -31,6 +31,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -54,106 +76,110 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row">
-				<div class="col">
-					<h1>Debug-Modus</h1>
-				</div>
-			</div>
-			<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
-				<div class="form-row">
-					<div class="col-auto">
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
-								<label class="form-check-label" for="mode0RadioBtn">
-								    Mode 0 (aus)
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
-								<label class="form-check-label" for="mode1RadioBtn">
-									Mode 1 (Regelwerte)
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
-								<label class="form-check-label" for="mode2RadioBtn">
-									Mode 2 (Berechnungsgrundlage)
-								</label>
+			<div class="card">
+				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
+					<div class="card-header text-white font-weight-bold bg-secondary">
+						Debug-Modus
+					</div>
+					<div class="card-body">
+						<div class="form-row">
+							<div class="col-auto">
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
+										<label class="form-check-label" for="mode0RadioBtn">
+											Mode 0 (aus)
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
+										<label class="form-check-label" for="mode1RadioBtn">
+											Mode 1 (Regelwerte)
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
+										<label class="form-check-label" for="mode2RadioBtn">
+											Mode 2 (Berechnungsgrundlage)
+										</label>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-auto vaRow">
+					<div class="card-footer text-center">
 						<button type="submit" class="btn btn-green">Speichern</button>
 					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 
-			<div class="row">
-				<div class="col">
-					<h1>Debug-Meldung</h1>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
-					<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
-					Der Debug Modus muss nicht verstellt werden.
-				</div>
-			</div>
-			<br>
-			<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
-				<div class="form-row">
-					<div class="form-group col-lg-7">
-						<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
-						<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
+			<div class="card">
+				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
+					<div class="card-header bg-secondary text-white font-weight-bold">
+						Debug-Meldung
 					</div>
-				</div>
-				<div class="form-row form-row-inline">
-					<div class="col-7 col-lg-5">
-						<div class="input-group mb-2">
-							<div class="input-group-prepend">
-								<div class="input-group-text">@</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
+								<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
+								Der Debug Modus muss nicht verstellt werden.
 							</div>
-							<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
+						</div>
+						<div class="form-row">
+							<div class="form-group col">
+								<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
+								<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col">
+								<div class="input-group mb-2">
+									<div class="input-group-prepend">
+										<div class="input-group-text">@</div>
+									</div>
+									<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-auto">
+					<div class="card-footer text-center">
 						<button type="submit" class="btn btn-green mb-2">Absenden</button>
 					</div>
-				</div>
-			</form>
-			<div class="row">
-				<div class="col">
-					<h1>Remote Support</h1>
-				</div>
+				</form>
 			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt.
-					openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
-				</div>
-			</div>
-			<form class="form" id="sendDebugMessageForm" action="./tools/starttunnel.php" method="POST">
-				<div class="col-7 col-lg-5">
-					<div class="input-group mb-2">
-						<div class="input-group-prepend">
-							<div class="input-group-text">Token</div>
+			<br>
+
+			<div class="card">
+				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
+					<div class="card-header bg-secondary text-white font-weight-bold">
+						Remote Support
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt.
+								openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
 							</div>
-							<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
+						</div>
+						<div class="col">
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<div class="input-group-text">Token</div>
+								</div>
+								<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
+							</div>
 						</div>
 					</div>
-					<div class="col-auto">
+					<div class="card-footer text-center">
 						<button type="submit" class="btn btn-green mb-2">Tunnel herstellen</button>
 					</div>
-				</div>
-			</form>
-
-
+				</form>
+			</div>
 
 		</div>  <!-- container -->
 
@@ -163,7 +189,7 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
