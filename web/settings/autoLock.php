@@ -167,15 +167,15 @@
 					$elemValue = '';
 				}
 				echo <<<ECHOCHECKBOX
-													<div class="col-auto my-1">
-														<div class="form-check">
-															<input type="hidden" name="{$elemName}">
-															<input class="form-check-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-															<label class="form-check-label pl-10" for="{$elemId}">
-																{$label}
-															</label>
-														</div>
-													</div>
+									<div class="col-auto my-1">
+										<div class="form-check">
+											<input type="hidden" name="{$elemName}">
+											<input class="form-check-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+											<label class="form-check-label pl-10" for="{$elemId}">
+												{$label}
+											</label>
+										</div>
+									</div>
 
 ECHOCHECKBOX;
 			}
@@ -185,14 +185,14 @@ ECHOCHECKBOX;
 				global $elemName, $elemId, $elemValue;
 				buildElementProperties($elemType);
 				echo <<<ECHOCLOCKPICKER
-													<div class="col-sm-6 my-1">
-														<div class="input-group">
-															<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
-															<div class="input-group-append">
-																<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-															</div>
-														</div>
-													</div>\n
+									<div class="col-sm-6 my-1">
+										<div class="input-group">
+											<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
+											<div class="input-group-append">
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+											</div>
+										</div>
+									</div>\n
 ECHOCLOCKPICKER;
 			}
 
@@ -202,31 +202,31 @@ ECHOCLOCKPICKER;
 				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
 
 				echo <<<ECHODAYROWHEAD
-										<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
-											<div class="col-2">
-									            {$dayOfWeekString}
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+						<div class="row vaRow">  <!-- {$dayOfWeekString} -->
+							<div class="col-sm-3">
+								{$dayOfWeekString}
+							</div>
+							<div class="col-4">
+								<div class="form-row align-items-center">\n
 ECHODAYROWHEAD;
 
 				echoCheckboxDiv("lockBoxLp", "sperren");
 				echoClockpickerDiv("lockTimeLp");
 
 				echo <<<ECHODAYROWMIDDLE
-												</div>
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="form-row align-items-center">\n
 ECHODAYROWMIDDLE;
 
 				echoCheckboxDiv("unlockBoxLp", "entsperren");
 				echoClockpickerDiv("unlockTimeLp");
 
 				echo <<<ECHODAYROWTAIL
-												</div>
-									        </div>
-										</div>  <!-- end row {$dayOfWeekString} -->\n
+								</div>
+							</div>
+						</div>  <!-- end {$dayOfWeekString} -->\n
 ECHODAYROWTAIL;
 
 				if ( $dayOfWeek < 7 ) {
@@ -241,9 +241,7 @@ ECHODAYROWTAIL;
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row justify-content-center">
-
-				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
+			<form class="form" action="./tools/saveautolock.php" method="POST">
 
 				<?php
 
@@ -270,22 +268,20 @@ ECHODAYROWTAIL;
 						}
 
 						echo <<<ECHOFORMGROUPHEAD
-							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
-								<h1>LP {$lp} ({$nameLp})</h1>\n
+				<div class="card" style="{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+					<div class="card-header font-weight-bold bg-secondary text-white">
+						LP {$lp} ({$nameLp})
+					</div>
 
-								<div class="row mt-2">
-									<div class="col">
-										<div class="form-check">
-											<input type="hidden" name="{$elemName}">
-											<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-											<label class="form-check-label pl-10" for="{$elemId}">
-												sperren erst nach Ende lfd. Ladevorgang
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<hr>
+					<div class="card-body">
+						<div class="form-check">
+							<input type="hidden" name="{$elemName}">
+							<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+							<label class="form-check-label pl-10" for="{$elemId}">
+								sperren erst nach Ende lfd. Ladevorgang
+							</label>
+						</div>
+						<hr>
 ECHOFORMGROUPHEAD;
 
 						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
@@ -294,10 +290,11 @@ ECHOFORMGROUPHEAD;
 						}  // end all days
 
 						echo <<<ECHOFORMGROUPTAIL
-											<div class="row justify-content-center mt-2">
-												<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
-											</div>
-										</div>  <!-- end form-group charge point {$lp} -->
+					</div> <!-- card body -->
+					<div class="card-footer text-center">
+						<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
+					</div>
+				</div>  <!-- end form-group charge point {$lp} -->
 
 ECHOFORMGROUPTAIL;
 
@@ -305,12 +302,11 @@ ECHOFORMGROUPTAIL;
 
 				?>
 
-					<div class="row justify-content-center">
-						<button type="submit" class="btn btn-green">Einstellungen übernehmen</button>
-					</div>
+				<div class="row justify-content-center">
+					<button type="submit" class="btn btn-green">Einstellungen übernehmen</button>
+				</div>
 
-				</form>  <!-- end form -->
-			</div>
+			</form>  <!-- end form -->
 
 		</div>  <!-- end container -->
 
