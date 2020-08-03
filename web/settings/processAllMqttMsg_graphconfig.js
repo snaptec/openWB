@@ -4,87 +4,71 @@
  * @author Michael Ortenstein
  */
 
- function processMessages(mqttmsg, mqttpayload) {
+function switchToggleOn(elementName) {
+	document.getElementById(elementName).setAttribute('style', 'color: green;');
+	$("#"+elementName).removeClass('fa-toggle-off fa-question-circle');
+	$("#"+elementName).addClass('fa-toggle-on');
+}
+
+function switchToggleOff(elementName) {
+	document.getElementById(elementName).setAttribute('style', 'color: red;');
+	$("#"+elementName).removeClass('fa-toggle-on fa-question-circle');
+	$("#"+elementName).addClass('fa-toggle-off');
+}
+
+function processMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg == 'openWB/graph/boolDisplayHouseConsumption' ) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
 			hidehaus = 'foo';
-			document.getElementById('graphhausdiv').setAttribute('style', 'color: green;');
-			graphhausdiv.classList.remove('fa-toggle-off');
-			graphhausdiv.classList.add('fa-toggle-on');
-
+			switchToggleOn('graphhausdiv');
 		} else {
 			boolDisplayHouseConsumption = true;
-			document.getElementById('graphhausdiv').setAttribute('style', 'color: red;');
-			graphhausdiv.classList.remove('fa-toggle-on');
-			graphhausdiv.classList.add('fa-toggle-off');
 			hidehaus = 'Hausverbrauch';
+			switchToggleOff('graphhausdiv')
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayLegend' ) {
-		if ( mqttpayload == 0) {
-			boolDisplayLegend = false;
-			document.getElementById('graphlegenddiv').setAttribute('style', 'color: red;');
-			graphlegenddiv.classList.remove('fa-toggle-on');
-			graphlegenddiv.classList.add('fa-toggle-off');
-		} else {
+		if ( mqttpayload == 1) {
 			boolDisplayLegend = true;
-			document.getElementById('graphlegenddiv').setAttribute('style', 'color: green;');
-			graphlegenddiv.classList.remove('fa-toggle-off');
-			graphlegenddiv.classList.add('fa-toggle-on');
-
+			switchToggleOn('graphlegenddiv');
+		} else {
+			boolDisplayLegend = false;
+			switchToggleOff('graphlegenddiv');
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayLiveGraph' ) {
-		if ( mqttpayload == 0) {
-			$('#thegraph').hide();
-			boolDisplayLiveGraph = false;
-			document.getElementById('graphgraphdiv').setAttribute('style', 'color: red;');
-			graphgraphdiv.classList.remove('fa-toggle-on');
-			graphgraphdiv.classList.add('fa-toggle-off');
-		} else {
+		if ( mqttpayload == 1) {
 			$('#thegraph').show();
 			boolDisplayLiveGraph = true;
-			document.getElementById('graphgraphdiv').setAttribute('style', 'color: green;');
-			graphgraphdiv.classList.remove('fa-toggle-off');
-			graphgraphdiv.classList.add('fa-toggle-on');
+			switchToggleOn('graphgraphdiv');
+		} else {
+			$('#thegraph').hide();
+			boolDisplayLiveGraph = false;
+			switchToggleOff('graphgraphdiv');
 		}
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayEvu' ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
 			hideevu = 'foo';
-			document.getElementById('graphevudiv').setAttribute('style', 'color: green;');
-			graphevudiv.classList.remove('fa-toggle-off');
-			graphevudiv.classList.add('fa-toggle-on');
-
+			switchToggleOn('graphevudiv');
 		} else {
 			boolDisplayEvu = true;
 			hideevu = 'Bezug';
-			document.getElementById('graphevudiv').setAttribute('style', 'color: red;');
-			graphevudiv.classList.remove('fa-toggle-on');
-			graphevudiv.classList.add('fa-toggle-off');
-
+			switchToggleOff('graphevudiv');
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayPv' ) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
 			hidepv = 'foo';
-			document.getElementById('graphpvdiv').setAttribute('style', 'color: green;');
-			graphpvdiv.classList.remove('fa-toggle-off');
-			graphpvdiv.classList.add('fa-toggle-on');
+			switchToggleOn('graphpvdiv');
 		} else {
 			boolDisplayPv = true;
 			hidepv = 'PV';
-			document.getElementById('graphpvdiv').setAttribute('style', 'color: red;');
-			graphpvdiv.classList.remove('fa-toggle-on');
-			graphpvdiv.classList.add('fa-toggle-off');
+			switchToggleOff('graphpvdiv');
 		}
-
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplaylp[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing 'openwb/graph/booldisplaylp#'
@@ -95,70 +79,45 @@
 		if ( mqttpayload == 1) {
 			window['boolDisplayLp'+index] = false;
 			window['hidelp'+index] = 'foo';
-			document.getElementById('graphlp'+index+'div').setAttribute('style', 'color: green;');
-			window['graphlp'+index+'div'].classList.remove('fa-toggle-off');
-			window['graphlp'+index+'div'].classList.add('fa-toggle-on');
+			switchToggleOn('graphlp'+index+'div');
 		} else {
 			window['boolDisplayLp'+index] = true;
 			window['hidelp'+index] = 'Lp' + index;
-			document.getElementById('graphlp'+index+'div').setAttribute('style', 'color: red;');
-			window['graphlp'+index+'div'].classList.remove('fa-toggle-on');
-			window['graphlp'+index+'div'].classList.add('fa-toggle-off');
+			switchToggleOff('graphlp'+index+'div');
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplayLpAll' ) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
 			hidelpa = 'foo';
-			var element = document.getElementById('graphlpalldiv');
-			graphlpalldiv.classList.remove('fa-toggle-off');
-			graphlpalldiv.classList.add('fa-toggle-on');
-			element.setAttribute('style', 'color: green;');
+			switchToggleOn('graphlpalldiv');
 		} else {
 			boolDisplayLpAll = true;
 			hidelpa = 'LP Gesamt';
-			var element = document.getElementById('graphlpalldiv');
-			graphlpalldiv.classList.remove('fa-toggle-on');
-			graphlpalldiv.classList.add('fa-toggle-off');
-			element.setAttribute('style', 'color: red;');
-
+			switchToggleOff('graphlpalldiv');
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplaySpeicher' ) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
 			hidespeicher = 'foo';
-			document.getElementById('graphspeicherdiv').setAttribute('style', 'color: green;');
-			graphspeicherdiv.classList.remove('fa-toggle-off');
-			graphspeicherdiv.classList.add('fa-toggle-on');
+			switchToggleOn('graphspeicherdiv');
 		} else {
 			hidespeicher = 'Speicherleistung';
 			boolDisplaySpeicher = true;
-			document.getElementById('graphspeicherdiv').setAttribute('style', 'color: red;');
-			graphspeicherdiv.classList.remove('fa-toggle-on');
-			graphspeicherdiv.classList.add('fa-toggle-off');
-
+			switchToggleOff('graphspeicherdiv');
 		}
-
 	}
 	else if ( mqttmsg == 'openWB/graph/boolDisplaySpeicherSoc' ) {
 		if ( mqttpayload == 1) {
 			hidespeichersoc = 'foo';
 			boolDisplaySpeicherSoc = false;
-			document.getElementById('graphspeichersocdiv').setAttribute('style', 'color: green;');
-			graphspeichersocdiv.classList.remove('fa-toggle-off');
-			graphspeichersocdiv.classList.add('fa-toggle-on');
+			switchToggleOn('graphspeichersocdiv');
 		} else {
 			hidespeichersoc = 'Speicher SoC';
 			boolDisplaySpeicherSoc = true;
-			document.getElementById('graphspeichersocdiv').setAttribute('style', 'color: red;');
-			graphspeichersocdiv.classList.remove('fa-toggle-on');
-			graphspeichersocdiv.classList.add('fa-toggle-off');
-
+			switchToggleOff('graphspeichersocdiv');
 		}
-
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplaylp[1-9][0-9]*soc$/i ) ) {
 		// matches to all messages containing 'openwb/graph/booldisplaylp#soc'
@@ -169,18 +128,13 @@
 			$('#socenabledlp'+index).show();
 			window['boolDisplayLp'+index+'Soc'] = false;
 			window['hidelp'+index+'soc'] = 'foo';
-			document.getElementById('graphlp'+index+'socdiv').setAttribute('style', 'color: green;');
-			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-off');
-			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-on');
+			switchToggleOn('graphlp'+index+'socdiv');
 		} else {
 			$('#socenabledlp'+index).hide();
 			window['boolDisplayLp'+index+'Soc'] = true;
 			window['hidelp'+index+'soc'] = 'LP'+index+' SoC';
-			document.getElementById('graphlp'+index+'socdiv').setAttribute('style', 'color: red;');
-			window['graphlp'+index+'socdiv'].classList.remove('fa-toggle-on');
-			window['graphlp'+index+'socdiv'].classList.add('fa-toggle-off');
+			switchToggleOff('graphlp'+index+'socdiv');
 		}
-
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/booldisplayload[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing 'openwb/graph/booldisplayload#'
@@ -191,17 +145,12 @@
 		if ( mqttpayload == 1) {
 			window['hideload'+index] = 'foo';
 			window['boolDisplayLoad'+index] = false;
-			document.getElementById('graphload'+index+'div').setAttribute('style', 'color: green;');
-			window['graphload'+index+'div'].classList.remove('fa-toggle-off');
-			window['graphload'+index+'div'].classList.add('fa-toggle-on');
+			switchToggleOn('graphload'+index+'div');
 		} else {
 			window['hideload'+index] = 'Verbraucher ' + index;
 			window['boolDisplayLoad'+index] = true;
-			document.getElementById('graphload'+index+'div').setAttribute('style', 'color: red;');
-			window['graphload'+index+'div'].classList.remove('fa-toggle-on');
-			window['graphload'+index+'div'].classList.add('fa-toggle-off');
+			switchToggleOff('graphload'+index+'div');
 		}
-
 	}
 	else if ( mqttmsg.match( /^openwb\/graph\/[1-9][0-9]*alllivevalues$/i ) ) {
 		// matches to all messages containing 'openwb/graph/#alllivevalues'
