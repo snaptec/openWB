@@ -114,8 +114,6 @@
 					</div>  <!-- end card body Allgemeine Einstellungen PV und Min+PV -->
 				</div>  <!-- end card Allgemeine Einstellungen PV und Min+PV -->
 
-				<br>
-
 				<h1>Einstellungen für PV-Laden</h1>
 
 				<div class="card">
@@ -195,14 +193,14 @@
 						</div>
 						<div class="form-row form-group mb-0 vaRow">
 							<label for="minCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" name="minCurrent" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="minCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
 						<div class="lp2options form-row form-group mb-1 vaRow">
 							<label for="minCurrentLp2" class="col-3 col-sm-2 col-form-label">LP2:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" name="minCurrent" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 							</div>
 							<label for="minCurrentLp2" class="col col-form-label valueLabel" suffix="A"></label>
@@ -236,7 +234,7 @@
 						</div>
 						<div class="soclp12options form-row form-group mb-1 vaRow">
 							<label for="adaptiveChargingFactor" class="col-3 col-sm-2 col-form-label">Faktor:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" data-default="5" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="adaptiveChargingFactor" class="col col-form-label valueLabel" suffix=""></label>
@@ -275,8 +273,6 @@
 					</div>  <!-- end card body Allgemeine Einstellungen PV -->
 				</div>  <!-- end card Allgemeine Einstellungen PV -->
 
-				<br>
-
 				<div class="card">
 					<div class="card-header font-weight-bold bg-success">
 						EV-SoC-Ladung
@@ -291,7 +287,7 @@
 						</div>
 						<div class="onlysoclp1options form-row form-group mb-1 vaRow">
 							<label for="minSocAlwaysToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="minSocAlwaysToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
@@ -306,7 +302,7 @@
 						</div>
 						<div class="form-row onlysoclp1options form-group mb-1 vaRow">
 							<label for="minSocAlwaysToChargeToCurrentLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="minSocAlwaysToChargeToCurrentLp1" class="col col-form-label valueLabel" suffix="A"></label>
@@ -320,7 +316,7 @@
 						</div>
 						<div class="onlysoclp1options form-row form-group mb-1 vaRow">
 							<label for="maxSocToChargeToLp1" class="col-3 col-sm-2 col-form-label">LP1:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocToChargeToLp1" class="col col-form-label valueLabel" suffix="%"></label>
@@ -338,7 +334,7 @@
 						</div>
 						<div class="soclp1options form-row form-group mb-1 vaRow">
 							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
 							</div>
 							<label for="maxSocLp1" class="col col-form-label valueLabel" suffix="%"></label>
@@ -355,7 +351,7 @@
 						</div>
 						<div class="soclp2options form-row form-group mb-1 vaRow">
 							<label for="maxSoclp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
 							</div>
 							<label for="maxSocLp2" class="col col-form-label valueLabel" suffix="%"></label>
@@ -370,8 +366,6 @@
 
 					</div>  <!-- end card body EV-SoC-Steuerung PV -->
 				</div>  <!-- end card EV-SoC-Steuerung PV -->
-
-				<br>
 
 				<div class="card">
 					<div class="card-header font-weight-bold bg-success">
@@ -452,15 +446,13 @@
 						</div>
 						<div class="form-row form-group mb-0 vaRow">
 							<label for="minBatteryDischargeSocAtBattPriority" class="col-3 col-sm-2 col-form-label">Speicher:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="minBatteryDischargeSocAtBattPriority" class="col col-form-label valueLabel" suffix="%"></label>
 						</div>
 					</div>  <!-- end card Speicher-Beachtung PV -->
 				</div>  <!-- end card Speicher-Beachtung PV -->
-
-				<br>
 
 				<h1>Einstellungen für Min+PV-Laden</h1>
 
@@ -479,15 +471,13 @@
 						</div>
 						<div class="form-row form-group mb-1 vaRow">
 							<label for="minCurrentMinPv" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="minCurrentMinPv" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
 					</div>  <!-- end card Allgemeine Einstellungen Min+PV-->
 				</div>  <!-- end card Allgemeine Einstellungen Min+PV -->
-
-				<br>
 
 				<div class="card">
 					<div class="card-header font-weight-bold bg-warning">
@@ -505,7 +495,7 @@
 						</div>
 						<div class="form-row form-group mb-1 vaRow">
 							<label for="socStartChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" min="0" max="95" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="socStartChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
@@ -519,7 +509,7 @@
 						</div>
 						<div class="form-row form-group mb-0 vaRow">
 							<label for="socStopChargeAtMinPv" class="col-3 col-sm-2 col-form-label">Speicher:</label>
-							<div class="col-6 col-sm-4">
+							<div class="col-6">
 								<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" min="0" max="95" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
 							</div>
 							<label for="socStopChargeAtMinPv" class="col col-form-label valueLabel" suffix="%"></label>
@@ -527,8 +517,6 @@
 
 					</div>  <!-- end card Speicher-Beachtung -->
 				</div>  <!-- end card Speicher-Beachtung -->
-
-				<br>
 
 				<div class="row justify-content-center">
 					<div class="col-3">
@@ -542,8 +530,6 @@
 					</div>
 				</div>
 			</form>
-
-			<br>
 
 			<!-- modal set-defaults-confirmation window -->
 			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">

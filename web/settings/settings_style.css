@@ -9,11 +9,15 @@ html {
 }
 
 body {
-    margin-bottom: 30px;  /* margin bottom by footer height */
+    margin-bottom: 40px;  /* margin bottom by footer height and some more space */
 }
 
 body > .container {
     padding: 50px 15px 0;
+}
+
+.card {
+    margin-bottom: 1rem;
 }
 
 .footer > .container {
@@ -27,6 +31,10 @@ body > .container {
     width: 100%;
     height: 30px; /* fixed height of footer */
     line-height: 30px; /* vertically center the text there */
+}
+
+h1 {
+    margin: 0.67em 0 0 0;
 }
 
 .hide {
