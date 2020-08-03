@@ -30,6 +30,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -55,90 +77,82 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row">
-				<div class="col">
-					<h1>Versionsauswahl</h1>
-				</div>
+			<div class="col alert alert-secondary" role="alert">
+				installierte Version: <span id="installedVersionSpan" data-version=""></span>
 			</div>
-			<div class="row">
-				<div class="col">
-					<div>
-						<b>installierte Version: <span id="installedVersionSpan" data-version=""></span></b>
+			<div class="card">
+				<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
+					<div class="card-header bg-secondary text-white font-weight-bold">
+						Versionsauswahl
 					</div>
-				</div>
-			</div>
-			<br>
-			<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
-				<div class="form-row align-items-center">
-					<div class="col">
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
-								<label class="form-check-label vaRow" for="radioBtnStable">
-									Stable:
-									<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
-									<br>
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
-								<label class="form-check-label vaRow" for="radioBtnStableold">
-									Stable old:
-									<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
-									<br>
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
-								<label class="form-check-label vaRow" for="radioBtnBeta">
-									Beta:
-									<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
-									<br>
-								</label>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
-								<label class="form-check-label vaRow" for="radioBtnNightly">
-									Nightly:
-									<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
-									<br>
-								</label>
+					<div class="card-body">
+						<div class="form-row align-items-center">
+							<div class="col">
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
+										<label class="form-check-label vaRow" for="radioBtnStable">
+											Stable:
+											<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
+										<label class="form-check-label vaRow" for="radioBtnStableold">
+											Stable old:
+											<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
+										<label class="form-check-label vaRow" for="radioBtnBeta">
+											Beta:
+											<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
+										<label class="form-check-label vaRow" for="radioBtnNightly">
+											Nightly:
+											<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
+										</label>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="form-row ">
-					<div class="col-auto">
+					<div class="card-footer text-center">
 						<button type="button" class="btn btn-green" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
 					</div>
-				</div>
-				<br>
-			</form>
-
-			<div class="row">
-				<div class="col">
-					<h1>Versionserläuterung</h1>
-				</div>
+				</form>
 			</div>
-			<div class="row">
-				<div class="col">
-					<h2>Stable</h2>
-					<p>Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
-					<h2>Stable old</h2>
-					<p>Ist das letzte (ältere) Release. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
-					<h2>Beta</h2>
-					<p>Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.</p>
-					<h2>Nightly</h2>
-					<p>
-						Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.<br>
-						Alle Änderungen können auf <a href="https://github.com/snaptec/openWB/commits/master">GitHub</a> eingesehen werden.
-					</p>
+
+			<div class="card">
+				<div class="card-header bg-secondary text-white font-weight-bold">
+					Versionserläuterung
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<h2>Stable</h2>
+							<p>Die Stable-Version ist die empfohlene. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
+							<h2>Stable old</h2>
+							<p>Ist das letzte (ältere) Release. Sie wurde einschließlich aller Features ausgiebigen Tests unterzogen, dabei sind keine Fehler aufgefallen.</p>
+							<h2>Beta</h2>
+							<p>Die Beta-Version beinhaltet neue Features für zukünftige Stable-Versionen, befindet sich aber noch in der Testphase. Fehlverhalten ist nicht ausgeschlossen.</p>
+							<h2>Nightly</h2>
+							<p>
+								Die Nightly-Version beinhaltet Neuentwicklungen, die teils nur eingeschränkt getestet sind. Fehlverhalten ist wahrscheinlich.<br>
+								Alle Änderungen können auf <a href="https://github.com/snaptec/openWB/commits/master">GitHub</a> eingesehen werden.
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -183,7 +197,7 @@
 			</div>
 		</div>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
