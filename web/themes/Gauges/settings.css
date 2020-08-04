@@ -46,3 +46,16 @@ input[type="text"], input[type="password"], select {
 .modal-footer {
 	border-color: dimgrey;
 }
+
+.clockpicker-popover {
+	background-color: #343a40;
+}
+
+.clockpicker-popover .popover-title,
+.clockpicker-popover .popover-content {
+	background-color: transparent;
+}
+
+.clockpicker-plate {
+	background-color: black;
+}
