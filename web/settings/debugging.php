@@ -23,8 +23,9 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -76,37 +77,32 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+
 			<div class="card">
 				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
 					<div class="card-header text-white font-weight-bold bg-secondary">
 						Debug-Modus
 					</div>
 					<div class="card-body">
-						<div class="form-row">
-							<div class="col-auto">
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0" <?php if($debugmode == "0") echo checked?>>
-										<label class="form-check-label" for="mode0RadioBtn">
-											Mode 0 (aus)
-										</label>
-									</div>
+						<div class="form-group mb-0">
+							<div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0"<?php if($debugmode == "0") echo " checked"?>>
+									<label class="form-check-label" for="mode0RadioBtn">
+										Mode 0 (aus)
+									</label>
 								</div>
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1" <?php if($debugmode == "1") echo checked?>>
-										<label class="form-check-label" for="mode1RadioBtn">
-											Mode 1 (Regelwerte)
-										</label>
-									</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1"<?php if($debugmode == "1") echo " checked"?>>
+									<label class="form-check-label" for="mode1RadioBtn">
+										Mode 1 (Regelwerte)
+									</label>
 								</div>
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2" <?php if($debugmode == "2") echo checked?>>
-										<label class="form-check-label" for="mode2RadioBtn">
-											Mode 2 (Berechnungsgrundlage)
-										</label>
-									</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2"<?php if($debugmode == "2") echo " checked"?>>
+									<label class="form-check-label" for="mode2RadioBtn">
+										Mode 2 (Berechnungsgrundlage)
+									</label>
 								</div>
 							</div>
 						</div>
@@ -123,27 +119,19 @@
 						Debug-Meldung
 					</div>
 					<div class="card-body">
-						<div class="row">
-							<div class="col">
-								Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
-								<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
-								Der Debug Modus muss nicht verstellt werden.
-							</div>
+						<div class="form-group">
+							<span id="textareaHelpBlock" class="form-text">Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen. Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen! Der Debug Modus muss nicht verstellt werden.</span>
+							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500" required="required"></textarea>
+							<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
 						</div>
-						<div class="form-row">
-							<div class="form-group col">
-								<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
-								<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="col">
-								<div class="input-group mb-2">
-									<div class="input-group-prepend">
-										<div class="input-group-text">@</div>
+						<div class="form-group mb-0">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa fa-envelope"></i>
 									</div>
-									<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
 								</div>
+								<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required="required">
 							</div>
 						</div>
 					</div>
@@ -152,7 +140,6 @@
 					</div>
 				</form>
 			</div>
-			<br>
 
 			<div class="card">
 				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
@@ -160,18 +147,15 @@
 						Remote Support
 					</div>
 					<div class="card-body">
-						<div class="row">
-							<div class="col">
-								Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt.
-								openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.
-							</div>
-						</div>
-						<div class="col">
-							<div class="input-group mb-2">
+						<div class="form-group mb-0">
+							<span id="textHelpBlock" class="form-text">Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt. openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.</span>
+							<div class="input-group">
 								<div class="input-group-prepend">
-									<div class="input-group-text">Token</div>
+									<div class="input-group-text">
+										<i class="fa fa-key"></i>
+									</div>
 								</div>
-								<input type="text" class="form-control" id="token" name="token" placeholder="Token" required>
+								<input type="text" class="form-control" id="token" name="token" placeholder="Token" aria-describedby="textHelpBlock" required="required">
 							</div>
 						</div>
 					</div>
