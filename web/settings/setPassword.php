@@ -23,8 +23,9 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -130,23 +131,33 @@ AUTHEND
 						?>
 						<form action="./settings/setPassword.php" method="POST">
 							<div class="card-body">
-								<div class="form-row form-group mb-0 vaRow">
-									<label for="username" class="col-3 col-sm-2 col-form-label">Benutzername:</label>
-									<div class="col">
-										<input type="text" name="username" id="username" value="" required pattern="[A-Za-z0-9]*">
+								<div class="row form-group">
+									<label for="username" class="col-3 col-form-label">Benutzername</label>
+									<div class="col-9">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
+											</div> 
+											<input type="text" name="username" id="username" value="" placeholder="Benutzername" aria-describedby="usernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9]*">
+										</div>
+										<span id="usernameHelpBlock" class="form-text">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
 									</div>
 								</div>
-								<div>
-									<small>Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</small>
-								</div>
-								<div class="form-row form-group mb-0 vaRow">
-									<label for="password" class="col-3 col-sm-2 col-form-label">Passwort:</label>
-									<div class="col">
-										<input type="password" name="password" id="password" value="" required>
+								<div class="row form-group mb-0">
+									<label for="password" class="col-3 col-form-label">Passwort</label>
+									<div class="col-9">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-lock"></i>
+												</div>
+											</div> 
+											<input type="password" name="password" id="password" value="" placeholder="Passwort" class="form-control" aria-describedby="passwordHelpBlock" required="required">
+										</div>
+										<span id="passwordHelpBlock" class="form-text">Passwort des Accounts.</span>
 									</div>
-								</div>
-								<div>
-									<small>Passwort des Accounts.</small>
 								</div>
 							</div>
 							<div class="card-footer text-center">
@@ -197,7 +208,7 @@ AUTHEND
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
-				$('#navPasswort').addClass('disabled');
+				$('#navPasswortschutz').addClass('disabled');
 			});
 		</script>
 

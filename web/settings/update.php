@@ -23,7 +23,7 @@
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -85,45 +85,36 @@
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Versionsauswahl
 					</div>
+
 					<div class="card-body">
-						<div class="form-row align-items-center">
-							<div class="col">
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
-										<label class="form-check-label vaRow" for="radioBtnStable">
-											Stable:
-											<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
-										</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
-										<label class="form-check-label vaRow" for="radioBtnStableold">
-											Stable old:
-											<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
-										</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
-										<label class="form-check-label vaRow" for="radioBtnBeta">
-											Beta:
-											<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
-										</label>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
-										<label class="form-check-label vaRow" for="radioBtnNightly">
-											Nightly:
-											<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
-										</label>
-									</div>
-								</div>
+						<div class="form-group mb-0">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
+								<label class="form-check-label vaRow" for="radioBtnStable">
+									Stable:
+									<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
+								<label class="form-check-label vaRow" for="radioBtnStableold">
+									Stable old:
+									<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
+								<label class="form-check-label vaRow" for="radioBtnBeta">
+									Beta:
+									<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
+								<label class="form-check-label vaRow" for="radioBtnNightly">
+									Nightly:
+									<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
+								</label>
 							</div>
 						</div>
 					</div>
