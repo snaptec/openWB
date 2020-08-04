@@ -24,13 +24,11 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- important scripts to be loaded -->
-		<script  src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
-		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- Font Awesome, all styles -->
 		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
@@ -44,8 +42,7 @@
 		<!-- global variables -->
 		<script>
 			var oldClockpickerTime;  // holds old value of clockpicker during changing the time
-		</script>
-		<script>
+
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -202,11 +199,11 @@ ECHOCLOCKPICKER;
 				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
 
 				echo <<<ECHODAYROWHEAD
-						<div class="row vaRow">  <!-- {$dayOfWeekString} -->
-							<div class="col-sm-3">
+						<div class="row form-row vaRow">  <!-- {$dayOfWeekString} -->
+							<div class="col-sm">
 								{$dayOfWeekString}
 							</div>
-							<div class="col-4">
+							<div class="col-5">
 								<div class="form-row align-items-center">\n
 ECHODAYROWHEAD;
 
