@@ -104,7 +104,7 @@
 						<div class="row">
 							Cloud ist aktiv<br>
 							Benutzername: <?php echo $clouduserold; ?><br>
-							Passwort: <?php echo $cloudpwold; ?><br>
+							Passwort: <?php echo $cloudpwold; ?>
 						</div>
 						<div class="row">
 							Mit den Zugangsdaten auf web.openwb.de anmelden
@@ -122,8 +122,8 @@
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="card-body">
 							<div class="row form-group">
-								<label for="connect_username" class="col-3 col-form-label">Benutzername</label>
-								<div class="col-9">
+								<label for="connect_username" class="col-4 col-form-label">Benutzername</label>
+								<div class="col-8">
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<div class="input-group-text">
@@ -136,8 +136,8 @@
 								</div>
 							</div>
 							<div class="row form-group mb-0">
-								<label for="cloudpass" class="col-3 col-form-label">Passwort</label>
-								<div class="col-9">
+								<label for="cloudpass" class="col-4 col-form-label">Passwort</label>
+								<div class="col-8">
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<div class="input-group-text">
@@ -162,8 +162,8 @@
 						</div>
 						<div class="card-body">
 							<div class="row form-group">
-								<label for="register_username" class="col-3 col-form-label">Benutzername</label>
-								<div class="col-9">
+								<label for="register_username" class="col-4 col-form-label">Benutzername</label>
+								<div class="col-8">
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<div class="input-group-text">
@@ -176,8 +176,8 @@
 								</div>
 							</div>
 							<div class="row form-group mb-0">
-								<label for="email" class="col-3 col-form-label">Email Adresse</label>
-								<div class="col-9">
+								<label for="email" class="col-4 col-form-label">Email Adresse</label>
+								<div class="col-8">
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<div class="input-group-text">

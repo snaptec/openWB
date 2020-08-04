@@ -136,7 +136,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-green mb-2">Absenden</button>
+						<button type="submit" class="btn btn-green">Absenden</button>
 					</div>
 				</form>
 			</div>
@@ -160,7 +160,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-green mb-2">Tunnel herstellen</button>
+						<button type="submit" class="btn btn-green">Tunnel herstellen</button>
 					</div>
 				</form>
 			</div>
