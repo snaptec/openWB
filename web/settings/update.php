@@ -88,30 +88,30 @@
 
 					<div class="card-body">
 						<div class="form-group mb-0">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
-								<label class="form-check-label vaRow" for="radioBtnStable">
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStable" value="stable" disabled>
+								<label class="custom-control-label vaRow" for="radioBtnStable">
 									Stable:
 									<span class="mx-1" id="availStableVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableVersionSpinner"></span>
 								</label>
 							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
-								<label class="form-check-label vaRow" for="radioBtnStableold">
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="releasetrainRadioBtn" id="radioBtnStableold" value="stableold" disabled>
+								<label class="custom-control-label vaRow" for="radioBtnStableold">
 									Stable old:
 									<span class="mx-1" id="availStableoldVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availStableoldVersionSpinner"></span>
 								</label>
 							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
-								<label class="form-check-label vaRow" for="radioBtnBeta">
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="releasetrainRadioBtn" id="radioBtnBeta" value="beta" disabled>
+								<label class="custom-control-label vaRow" for="radioBtnBeta">
 									Beta:
 									<span class="mx-1" id="availBetaVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availBetaVersionSpinner"></span>
 								</label>
 							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
-								<label class="form-check-label vaRow" for="radioBtnNightly">
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="releasetrainRadioBtn" id="radioBtnNightly" value="master" disabled>
+								<label class="custom-control-label vaRow" for="radioBtnNightly">
 									Nightly:
 									<span class="mx-1" id="availNightlyVersionSpan" data-version=""></span><span class="spinner-grow spinner-grow-sm" id="availNightlyVersionSpinner"></span>
 								</label>
@@ -259,9 +259,9 @@
 				$(document).ajaxStop(function(){
 					// after all ajax requests are finished, set checkbox and enable update button
 					var releasetrains = [];
-					$(".form-check-input:enabled").each(function(){
+					$(".custom-control-input:enabled").each(function(){
 						// all enabled checkbox values
-					    releasetrains.push( $(this).val() );
+						releasetrains.push( $(this).val() );
 					});
 					if ( releasetrains.length > 0 ) {
 						// if there are any enabled checkBoxes ( equals available updates )
@@ -289,7 +289,7 @@
 
 				$('#updateConfirmationModal').on('show.bs.modal', function() {
 					// before the modal shows, fill in selected version
-					var choice = $(".form-check-input:checked").attr("value");
+					var choice = $(".custom-control-input:checked").attr("value");
 					// and set text
 					switch (choice) {
 						case "stable":

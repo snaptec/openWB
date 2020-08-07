@@ -85,25 +85,23 @@
 					</div>
 					<div class="card-body">
 						<div class="form-group mb-0">
-							<div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0"<?php if($debugmode == "0") echo " checked"?>>
-									<label class="form-check-label" for="mode0RadioBtn">
-										Mode 0 (aus)
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1"<?php if($debugmode == "1") echo " checked"?>>
-									<label class="form-check-label" for="mode1RadioBtn">
-										Mode 1 (Regelwerte)
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2"<?php if($debugmode == "2") echo " checked"?>>
-									<label class="form-check-label" for="mode2RadioBtn">
-										Mode 2 (Berechnungsgrundlage)
-									</label>
-								</div>
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode0RadioBtn" value="0"<?php if($debugmode == "0") echo " checked"?>>
+								<label class="custom-control-label" for="mode0RadioBtn">
+									Mode 0 (aus)
+								</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode1RadioBtn" value="1"<?php if($debugmode == "1") echo " checked"?>>
+								<label class="custom-control-label" for="mode1RadioBtn">
+									Mode 1 (Regelwerte)
+								</label>
+							</div>
+							<div class="custom-control custom-radio">
+								<input class="custom-control-input" type="radio" name="debugmodeRadioBtn" id="mode2RadioBtn" value="2"<?php if($debugmode == "2") echo " checked"?>>
+								<label class="custom-control-label" for="mode2RadioBtn">
+									Mode 2 (Berechnungsgrundlage)
+								</label>
 							</div>
 						</div>
 					</div>
