@@ -84,7 +84,7 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="card">
+			<div class="card border-secondary">
 				<div class="card-header bg-secondary font-weight-bold text-white">
 					<div id="themeName" class="col text-center"></div>
 				</div>

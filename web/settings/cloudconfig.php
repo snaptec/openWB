@@ -95,7 +95,7 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="card">
+			<div class="card border-secondary">
 				<div class="card-header bg-secondary text-white font-weight-bold">
 					Cloud Anmeldedaten
 				</div>
@@ -155,7 +155,7 @@
 						</div>
 					</form>
 				</div> <!-- card 1 -->
-				<div class="card">
+				<div class="card border-secondary">
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="card-header bg-secondary text-white font-weight-bold">
 							Cloud neu einrichten

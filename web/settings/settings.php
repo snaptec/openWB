@@ -535,7 +535,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<form action="./tools/savemain.php" method="POST">
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Awattar
 					</div>
@@ -566,7 +566,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Ladepunkte sperren nach Abstecken
 					</div>
@@ -704,7 +704,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Zielladen
 					</div>
@@ -787,7 +787,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-primary">
 					<div class="card-header bg-primary font-weight-bold">
 						EV Daten
 					</div>
@@ -887,7 +887,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-success">
 					<div class="card-header bg-success font-weight-bold">
 						Automatische Phasenumschaltung
 					</div>
@@ -999,7 +999,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-info">
 					<div class="card-header bg-info font-weight-bold">
 						Nachtlademodus
 					</div>
@@ -2104,7 +2104,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-warning">
 					<div class="card-header bg-warning font-weight-bold">
 						EVU basiertes Lastmanagement
 					</div>
@@ -2145,7 +2145,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary font-weight-bold">
 					Loadsharing
 					</div>

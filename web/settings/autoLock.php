@@ -265,7 +265,7 @@ ECHODAYROWTAIL;
 						}
 
 						echo <<<ECHOFORMGROUPHEAD
-				<div class="card" style="{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+				<div class="card border-secondary" style="{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
 					<div class="card-header font-weight-bold bg-secondary text-white">
 						LP {$lp} ({$nameLp})
 					</div>
@@ -313,7 +313,7 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
