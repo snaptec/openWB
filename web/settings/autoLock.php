@@ -165,10 +165,10 @@
 				}
 				echo <<<ECHOCHECKBOX
 									<div class="col-auto my-1">
-										<div class="form-check">
+										<div class="custom-control custom-checkbox">
 											<input type="hidden" name="{$elemName}">
-											<input class="form-check-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-											<label class="form-check-label pl-10" for="{$elemId}">
+											<input class="custom-control-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+											<label class="custom-control-label pl-10" for="{$elemId}">
 												{$label}
 											</label>
 										</div>
@@ -271,10 +271,10 @@ ECHODAYROWTAIL;
 					</div>
 
 					<div class="card-body">
-						<div class="form-check">
+						<div class="custom-control custom-checkbox">
 							<input type="hidden" name="{$elemName}">
-							<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-							<label class="form-check-label pl-10" for="{$elemId}">
+							<input class="custom-control-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+							<label class="custom-control-label pl-10" for="{$elemId}">
 								sperren erst nach Ende lfd. Ladevorgang
 							</label>
 						</div>
