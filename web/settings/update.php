@@ -80,7 +80,7 @@
 			<div class="col alert alert-secondary" role="alert">
 				installierte Version: <span id="installedVersionSpan" data-version=""></span>
 			</div>
-			<div class="card">
+			<div class="card border-secondary">
 				<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Versionsauswahl
@@ -124,7 +124,7 @@
 				</form>
 			</div>
 
-			<div class="card">
+			<div class="card border-secondary">
 				<div class="card-header bg-secondary text-white font-weight-bold">
 					Versionserläuterung
 				</div>

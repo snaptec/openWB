@@ -122,7 +122,7 @@ AUTHEND
 					}
 			} ?>
 
-			<div class="card">
+			<div class="card border-secondary">
 				<div class="card-header font-weight-bold text-white bg-secondary">
 					Passwortschutz
 				</div>

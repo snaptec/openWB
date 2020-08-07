@@ -78,7 +78,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-			<div class="card">
+			<div class="card border-secondary">
 				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
 					<div class="card-header text-white font-weight-bold bg-secondary">
 						Debug-Modus
@@ -111,7 +111,7 @@
 				</form>
 			</div>
 
-			<div class="card">
+			<div class="card border-secondary">
 				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Debug-Meldung
@@ -139,7 +139,7 @@
 				</form>
 			</div>
 
-			<div class="card">
+			<div class="card border-secondary">
 				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Remote Support

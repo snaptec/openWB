@@ -610,7 +610,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<form action="./tools/savemisc.php" method="POST">
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Allgemeine Funktionen
 					</div>
@@ -746,7 +746,7 @@
 					</div>
 				</div>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						RFID
 					</div>
@@ -1235,7 +1235,7 @@
 					</script>
 				</div>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Benachrichtigungen mit Pushover
 					</div>
@@ -1369,7 +1369,7 @@
 					</script>
 				</div>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						LED Ausgänge
 					</div>
@@ -1620,7 +1620,7 @@
 					</script>
 				</div>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						integriertes Display
 					</div>
@@ -1772,7 +1772,7 @@
 					</script>
 				</div>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header bg-secondary text-white font-weight-bold">
 						Theme Optionen
 					</div>
