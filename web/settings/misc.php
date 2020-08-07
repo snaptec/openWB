@@ -24,6 +24,7 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -610,264 +611,621 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<form action="./tools/savemisc.php" method="POST">
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						Allgemeine Funktionen
 					</div>
 					<div class="card-body">
-						<div class="row form-group">
-							<label for="dspeed" class="col-6 col-form-label">Geschwindigkeit Regelintervall:</label>
-							<div class="col-6">
-								<select name="dspeed" id="dspeed" class="form-control">
-									<option <?php if($dspeedold == 0) echo "selected" ?> value="0">Normal</option>
-									<option <?php if($dspeedold == 2) echo "selected" ?> value="2">Langsam</option>
-									<option <?php if($dspeedold == 3) echo "selected" ?> value="3">Sehr Langsam</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="dspeed" class="col col-form-label">Geschwindigkeit Regelintervall</label>
+							</div>
+							<div class="row col small mt-0 mb-0">
+								Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen. Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (20 Sekunden) herabsetzen. Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60 Sekunden.<br>
+								<span class="text-danger">Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger.</span>
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($dspeedold == 0) echo " active" ?>">
+										<input type="radio" name="dspeed" id="dspeed0" autocomplete="off" value="0"<?php if($dspeedold == 0) echo " checked=\"checked\"" ?>>Normal
+									</label>
+									<label class="btn btn-outline-info<?php if($dspeedold == 2) echo " active" ?>">
+										<input type="radio" name="dspeed" id="dspeed2" autocomplete="off" value="2"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Langsam
+									</label>
+									<label class="btn btn-outline-info<?php if($dspeedold == 3) echo " active" ?>">
+										<input type="radio" name="dspeed" id="dspeed3" autocomplete="off" value="3"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Sehr Langsam
+									</label>
+								</div>
 							</div>
 						</div>
-						<div class="row form-group">
-							Sollten Probleme, oder Fehlermeldungen, auftauchen, zunächst das Regelintervall auf "Normal" stellen.<br>
-							Werden Module genutzt, welche z.B. eine Online API zur Abfrage nutzen, oder möchte man weniger regeln, kann man das Regelintervall auf "Langsam" (=20Sekunden) herabsetzen. <br>
-							!Bitte beachten! Nicht nur die Regelung der PV geführten Ladung, sondern auch Ladestromänderung, beispielsweise “Stop“etc, werden dann nur noch alle 20 Sekunden ausgeführt. Die Regelung wird träger.<br>
-							Die Einstellungen „Sehr Langsam“ führt zu einer Regelzeit von 60Sek.
-						</div>
-						<div class="row form-group">
-							<label for="ladetaster" class="col-6 col-form-label">Ladetaster:</label>
-							<div class="col-6">
-								<select name="ladetaster" id="ladetaster" class="form-control">
-									<option <?php if($ladetasterold == 0) echo "selected" ?> value="0">Aus</option>
-									<option <?php if($ladetasterold == 1) echo "selected" ?> value="1">An</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="ladetaster" class="col col-form-label">Ladetaster</label>
+							</div>
+							<div class="row col small mt-0 mb-0">
+								Wenn aktiviert, sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($ladetasterold == 0) echo " active" ?>">
+										<input type="radio" name="ladetaster" id="ladetasterOff" autocomplete="off" value="0"<?php if($ladetasterold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($ladetasterold == 1) echo " active" ?>">
+										<input type="radio" name="ladetaster" id="ladetasterOn" autocomplete="off" value="1"<?php if($ladetasterold == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
 							</div>
 						</div>
-						<div class="row form-group">
-							Wenn aktiviert, sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.
-						</div>
-						<div class="row form-group">
-							<label for="bootmodus" class="col-6 col-form-label">Lademodus nach Start der openWB:</label>
-							<div class="col-6">
-								<select name="bootmodus" id="bootmodus" class="form-control">
-									<option <?php if($bootmodusold == 0) echo "selected" ?> value="0">Sofort Laden</option>
-									<option <?php if($bootmodusold == 1) echo "selected" ?> value="1">Min + PV</option>
-									<option <?php if($bootmodusold == 2) echo "selected" ?> value="2">Nur PV</option>
-									<option <?php if($bootmodusold == 3) echo "selected" ?> value="3">Stop</option>
-									<option <?php if($bootmodusold == 4) echo "selected" ?> value="4">Standby</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="bootmodus" class="col col-form-label">Lademodus nach Start der openWB</label>
+							</div>
+							<div class="row col small mt-0 mb-0">
+									Definiert den Lademodus nach Boot der openWB.
+							</div>
+							<div class="row">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<input type="radio" name="bootmodus" id="bootmodus3" autocomplete="off" value="3"<?php if($bootmodusold == 3) echo " checked=\"checked\"" ?>>Stop
+									</label>
+									<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
+										<input type="radio" name="bootmodus" id="bootmodus4" autocomplete="off" value="4"<?php if($bootmodusold == 4) echo " checked=\"checked\"" ?>>Standby
+									</label>
+									<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<input type="radio" name="bootmodus" id="bootmodus2" autocomplete="off" value="2"<?php if($bootmodusold == 2) echo " checked=\"checked\"" ?>>Nur PV
+									</label>
+									<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<input type="radio" name="bootmodus" id="bootmodus1" autocomplete="off" value="1"<?php if($bootmodusold == 1) echo " checked=\"checked\"" ?>>Min + PV
+									</label>
+									<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<input type="radio" name="bootmodus" id="bootmodus0" autocomplete="off" value="0"<?php if($bootmodusold == 0) echo " checked=\"checked\"" ?>>Sofort Laden
+									</label>
+								</div>
 							</div>
 						</div>
-						<div class="row form-group">
-							Definiert den Lademodus nach Boot der openWB.
-						</div>
-						<div class="row form-group">
-							<label for="netzabschaltunghz" class="col-6 col-form-label">Netzschutz:</label>
-							<div class="col-6">
-								<select name="netzabschaltunghz" id="netzabschaltunghz" class="form-control">
-									<option <?php if($netzabschaltunghzold == 0) echo "selected" ?> value="0">Deaktiviert</option>
-									<option <?php if($netzabschaltunghzold == 1) echo "selected" ?> value="1">Aktiviert</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="netzabschaltunghz" class="col col-form-label">Netzschutz</label>
+							</div>
+							<div class="row">
+								<div class="col small mt-0 mb-0">
+									Diese Option ist standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".
+									Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.
+									Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. Dies ist dann der Fall, wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet.
+									Die Erhöhung der Frequenz wird durchgeführt, um die PV Anlagen abzuschalten.<br>
+									<span class="text-danger">Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($netzabschaltunghzold == 0) echo " active" ?>">
+										<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOff" autocomplete="off" value="0"<?php if($netzabschaltunghzold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($netzabschaltunghzold == 1) echo " active" ?>">
+										<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOn" autocomplete="off" value="1"<?php if($netzabschaltunghzold == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
 							</div>
 						</div>
-						<div class="row form-group">
-							Diese Option ist standardmäßig aktiviert und sollte so belassen werden. Bei Unterschreitung einer kritischen Frequenz des Stromnetzes wird die Ladung nach einer zufälligen Zeit zwischen 1 und 90 Sekunden pausiert. Der Lademodus wechselt auf "Stop".<br>
-							Sobald die Frequenz wieder in einem normalen Bereich ist wird automatisch der zuletzt gewählte Lademodus wieder aktiviert.<br>
-							Ebenso wird die Ladung bei Überschreiten von 51,8 Hz unterbrochen. <br>
-							Dies ist dann der Fall, wenn der Energieversorger Wartungsarbeiten am (Teil-)Netz durchführt und auf einen vorübergehenden Generatorbetrieb umschaltet.<br>
-							Die Erhöhung der Frequenz wird durchgeführt, um die PV Anlagen abzuschalten.<br>
-							Die Option ist nur aktiv, wenn der Ladepunkt die Frequenz übermittelt. Jede openWB series1/2 tut dies.
-						</div>
-						<div class="row form-group">
-							<label for="cpunterbrechunglp1" class="col-6 col-form-label">CP Unterbrechung LP1:</label>
-							<div class="col-6">
-								<select name="cpunterbrechunglp1" id="cpunterbrechunglp1" class="form-control">
-									<option <?php if($cpunterbrechunglp1old == 0) echo "selected" ?> value="0">Deaktiviert</option>
-									<option <?php if($cpunterbrechunglp1old == 1) echo "selected" ?> value="1">Aktiviert</option>
-								</select>
+						<div class="form-group mb-0">
+							<div class="row col mb-0">
+								CP Unterbrechung
 							</div>
-						</div>
-						<div class="row form-group">
-							<label for="cpunterbrechunglp2" class="col-6 col-form-label">CP Unterbrechung LP2:</label>
-							<div class="col-6">
-								<select name="cpunterbrechunglp2" id="cpunterbrechunglp2" class="form-control">
-									<option <?php if($cpunterbrechunglp2old == 0) echo "selected" ?> value="0">Deaktiviert</option>
-									<option <?php if($cpunterbrechunglp2old == 1) echo "selected" ?> value="1">Aktiviert</option>
-								</select>
+							<div class="row">
+								<div class="col small mt-0 mb-0">
+									Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>
+									Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.
+								</div>
 							</div>
-						</div>
-						<div class="row form-group">
-							Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine.<br>
-							Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.
+							<div class="row mt-2 mb-0">
+								<div class="col-4">
+									<label for="cpunterbrechunglp1" class="col-form-label">LP1</label>
+								</div>
+								<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($cpunterbrechunglp1old == 0) echo " active" ?>">
+										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1Off" autocomplete="off" value="0"<?php if($cpunterbrechunglp1old == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($cpunterbrechunglp1old == 1) echo " active" ?>">
+										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1On" autocomplete="off" value="1"<?php if($cpunterbrechunglp1old == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div class="col-4">
+									<label for="cpunterbrechunglp2" class="col-form-label">LP2</label>
+								</div>
+								<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 0) echo " active" ?>">
+										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2Off" autocomplete="off" value="0"<?php if($cpunterbrechunglp2old == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 1) echo " active" ?>">
+										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2On" autocomplete="off" value="1"<?php if($cpunterbrechunglp2old == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						RFID
 					</div>
 					<div class="card-body">
-						<div class="row form-group">
-							<label for="rfidakt" class="col-6 col-form-label">RFID Lesung:</label>
-							<div class="col-6">
-								<select name="rfidakt" id="rfidakt" class="form-control">
-									<option <?php if($rfidaktold == 0) echo "selected" ?> value="0">Deaktiviert</option>
-									<option <?php if($rfidaktold == 1) echo "selected" ?> value="1">Aktiviert</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="rfidakt" class="col col-form-label">RFID Lesung</label>
+							</div>
+							<div class="row col small mt-0 mb-0">
+								Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br>
+								Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
+										<input type="radio" name="rfidakt" id="rfidaktOff" autocomplete="off" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
+										<input type="radio" name="rfidakt" id="rfidaktOn" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
 							</div>
 						</div>
 						<div id="rfidandiv">
 							<div class="row form-group">
-								Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br>
-								Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.
-							</div>
-							<div class="row form-group">
-								Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp1c1" class="col-6 col-form-label">Ladepunkt 1, Auto 1:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp1c1" id="rfidlp1c1" class="form-control" value="<?php echo trim( $rfidlp1c1old ) ?>">
+								<div class="col">
+									Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp1c2" class="col-6 col-form-label">Ladepunkt 1, Auto 2:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp1c2" id="rfidlp1c2" class="form-control" value="<?php echo trim( $rfidlp1c2old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ladepunkt 1
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp1c1" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 1
+												</div>
+											</div> 
+											<input type="text" name="rfidlp1c1" id="rfidlp1c1" class="form-control" value="<?php echo trim( $rfidlp1c1old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp1c2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 2
+												</div>
+											</div> 
+											<input type="text" name="rfidlp1c2" id="rfidlp1c2" class="form-control" value="<?php echo trim( $rfidlp1c2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp1c3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 3
+												</div>
+											</div> 
+											<input type="text" name="rfidlp1c3" id="rfidlp1c3" class="form-control" value="<?php echo trim( $rfidlp1c3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp1c3" class="col-6 col-form-label">Ladepunkt 1, Auto 3:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp1c3" id="rfidlp1c3" class="form-control" value="<?php echo trim( $rfidlp1c3old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ladepunkt 2
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp2c1" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 1
+												</div>
+											</div> 
+											<input type="text" name="rfidlp2c1" id="rfidlp2c1" class="form-control" value="<?php echo trim( $rfidlp2c1old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp2c2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 2
+												</div>
+											</div> 
+											<input type="text" name="rfidlp2c2" id="rfidlp2c2" class="form-control" value="<?php echo trim( $rfidlp2c2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp2c3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Auto 3
+												</div>
+											</div>
+											<input type="text" name="rfidlp2c3" id="rfidlp2c3" class="form-control" value="<?php echo trim( $rfidlp2c3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp2c1" class="col-6 col-form-label">Ladepunkt 2, Auto 1:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp2c1" id="rfidlp2c1" class="form-control" value="<?php echo trim( $rfidlp2c1old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ändere Lademodus auf Stop
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidstop" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div> 
+											<input type="text" name="rfidstop" id="rfidstop" class="form-control" value="<?php echo trim( $rfidstopold ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidstop2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div> 
+											<input type="text" name="rfidstop2" id="rfidstop2" class="form-control" value="<?php echo trim( $rfidstop2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidstop3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidstop3" id="rfidstop3" class="form-control" value="<?php echo trim( $rfidstop3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp2c2" class="col-6 col-form-label">Ladepunkt 2, Auto 2:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp2c2" id="rfidlp2c2" class="form-control" value="<?php echo trim( $rfidlp2c2old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ändere Lademodus auf Standby
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidstandby" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidstandby" id="rfidstandby" class="form-control" value="<?php echo trim( $rfidstandbyold ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidstandby2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidstandby2" id="rfidstandby2" class="form-control" value="<?php echo trim( $rfidstandby2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidstandby3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidstandby3" id="rfidstandby3" class="form-control" value="<?php echo trim( $rfidstandby3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp2c3" class="col-6 col-form-label">Ladepunkt 2, Auto 3:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp2c3" id="rfidlp2c3" class="form-control" value="<?php echo trim( $rfidlp2c3old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ändere Lademodus auf Sofort Laden
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidsofort" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidsofort" id="rfidsofort" class="form-control" value="<?php echo trim( $rfidsofortold ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidsofort2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidsofort2" id="rfidsofort2" class="form-control" value="<?php echo trim( $rfidsofort2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidsofort3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidsofort3" id="rfidsofort3" class="form-control" value="<?php echo trim( $rfidsofort3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="rfidstop" class="col-6 col-form-label">Ändere Lademodus auf Stop:</label>
-								<div class="col-6">
-									<input type="text" name="rfidstop" id="rfidstop" class="form-control" value="<?php echo trim( $rfidstopold ) ?>">
-									<input type="text" name="rfidstop2" id="rfidstop2" class="form-control" value="<?php echo trim( $rfidstop2old ) ?>">
-									<input type="text" name="rfidstop3" id="rfidstop3" class="form-control" value="<?php echo trim( $rfidstop3old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ändere Lademodus auf Min + PV Laden
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidminpv" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidminpv" id="rfidminpv" class="form-control" value="<?php echo trim( $rfidminpvold ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidminpv2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidminpv2" id="rfidminpv2" class="form-control" value="<?php echo trim( $rfidminpv2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidminpv3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidminpv3" id="rfidminpv3" class="form-control" value="<?php echo trim( $rfidminpv3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidstandby" class="col-6 col-form-label">Ändere Lademodus auf Standby:</label>
-								<div class="col-6">
-									<input type="text" name="rfidstandby" id="rfidstandby" class="form-control" value="<?php echo trim( $rfidstandbyold ) ?>">
-									<input type="text" name="rfidstandby2" id="rfidstandby2" class="form-control" value="<?php echo trim( $rfidstandby2old ) ?>">
-									<input type="text" name="rfidstandby3" id="rfidstandby3" class="form-control" value="<?php echo trim( $rfidstandby3old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Ändere Lademodus auf Nur PV
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidnurpv" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidnurpv" id="rfidnurpv" class="form-control" value="<?php echo trim( $rfidnurpvold ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidnurpv2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidnurpv2" id="rfidnurpv2" class="form-control" value="<?php echo trim( $rfidnurpv2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidnurpv3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidnurpv3" id="rfidnurpv3" class="form-control" value="<?php echo trim( $rfidnurpv3old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidsofort" class="col-6 col-form-label">Ändere Lademodus auf Sofort Laden:</label>
-								<div class="col-6">
-									<input type="text" name="rfidsofort" id="rfidsofort" class="form-control" value="<?php echo trim( $rfidsofortold ) ?>">
-									<input type="text" name="rfidsofort2" id="rfidsofort2" class="form-control" value="<?php echo trim( $rfidsofort2old ) ?>">
-									<input type="text" name="rfidsofort3" id="rfidsofort3" class="form-control" value="<?php echo trim( $rfidsofort3old ) ?>">
+							<div class="form-group mb-1">
+								<div class="row col">
+									Aktiviere Ladepunkt 1
+								</div>
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp1start1" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidlp1start1" id="rfidlp1start1" class="form-control" value="<?php echo trim( $rfidlp1start1old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp1start2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidlp1start2" id="rfidlp1start2" class="form-control" value="<?php echo trim( $rfidlp1start2old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp1start3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidlp1start3" id="rfidlp1start3" class="form-control" value="<?php echo trim( $rfidlp1start3old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp1start4" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 4
+												</div>
+											</div>
+											<input type="text" name="rfidlp1start4" id="rfidlp1start4" class="form-control" value="<?php echo trim( $rfidlp1start4old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp1start5" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 5
+												</div>
+											</div>
+											<input type="text" name="rfidlp1start5" id="rfidlp1start5" class="form-control" value="<?php echo trim( $rfidlp1start5old ) ?>">
+										</label>
+									</div>
 								</div>
 							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidminpv" class="col-6 col-form-label">Ändere Lademodus auf Min + PV Laden:</label>
-								<div class="col-6">
-									<input type="text" name="rfidminpv" id="rfidminpv" class="form-control" value="<?php echo trim( $rfidminpvold ) ?>">
-									<input type="text" name="rfidminpv2" id="rfidminpv2" class="form-control" value="<?php echo trim( $rfidminpv2old ) ?>">
-									<input type="text" name="rfidminpv3" id="rfidminpv3" class="form-control" value="<?php echo trim( $rfidminpv3old ) ?>">
+
+							<div class="form-group mb-1">
+								<div class="row col">
+									Aktiviere Ladepunkt 2
 								</div>
-							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidnurpv" class="col-6 col-form-label">Ändere Lademodus auf Nur PV:</label>
-								<div class="col-6">
-									<input type="text" name="rfidnurpv" id="rfidnurpv" class="form-control" value="<?php echo trim( $rfidnurpvold ) ?>">
-									<input type="text" name="rfidnurpv2" id="rfidnurpv2" class="form-control" value="<?php echo trim( $rfidnurpv2old ) ?>">
-									<input type="text" name="rfidnurpv3" id="rfidnurpv3" class="form-control" value="<?php echo trim( $rfidnurpv3old ) ?>">
+								<div class="row col small mt-0 mb-0">
+									RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
 								</div>
-							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp1start1" class="col-6 col-form-label">Aktiviere Ladepunkt 1:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp1start1" id="rfidlp1start1" class="form-control" value="<?php echo trim( $rfidlp1start1old ) ?>">
-									<input type="text" name="rfidlp1start2" id="rfidlp1start2" class="form-control" value="<?php echo trim( $rfidlp1start2old ) ?>">
-									<input type="text" name="rfidlp1start3" id="rfidlp1start3" class="form-control" value="<?php echo trim( $rfidlp1start3old ) ?>">
-									<input type="text" name="rfidlp1start4" id="rfidlp1start4" class="form-control" value="<?php echo trim( $rfidlp1start4old ) ?>">
-									<input type="text" name="rfidlp1start5" id="rfidlp1start5" class="form-control" value="<?php echo trim( $rfidlp1start5old ) ?>">
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp2start1" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 1
+												</div>
+											</div>
+											<input type="text" name="rfidlp2start1" id="rfidlp2start1" class="form-control" value="<?php echo trim( $rfidlp2start1old ) ?>">
+										</label>
+									</div>
 								</div>
-							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
-							</div>
-							<div class="row form-group">
-								<label for="rfidlp2start1" class="col-6 col-form-label">Aktiviere Ladepunkt 2:</label>
-								<div class="col-6">
-									<input type="text" name="rfidlp2start1" id="rfidlp2start1" class="form-control" value="<?php echo trim( $rfidlp2start1old ) ?>">
-									<input type="text" name="rfidlp2start2" id="rfidlp2start2" class="form-control" value="<?php echo trim( $rfidlp2start2old ) ?>">
-									<input type="text" name="rfidlp2start3" id="rfidlp2start3" class="form-control" value="<?php echo trim( $rfidlp2start3old ) ?>">
-									<input type="text" name="rfidlp2start4" id="rfidlp2start4" class="form-control" value="<?php echo trim( $rfidlp2start4old ) ?>">
-									<input type="text" name="rfidlp2start5" id="rfidlp2start5" class="form-control" value="<?php echo trim( $rfidlp2start5old ) ?>">
+								<div class="row mb-1">
+									<div class="col">
+										<label for="rfidlp2start2" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 2
+												</div>
+											</div>
+											<input type="text" name="rfidlp2start2" id="rfidlp2start2" class="form-control" value="<?php echo trim( $rfidlp2start2old ) ?>">
+										</label>
+									</div>
 								</div>
-							</div>
-							<div class="row form-group">
-								RFID Tag eintragen. Kann auch in Kombination mit einem RFID Tag zur Autozuweisung genutzt werden.
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp2start3" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 3
+												</div>
+											</div>
+											<input type="text" name="rfidlp2start3" id="rfidlp2start3" class="form-control" value="<?php echo trim( $rfidlp2start3old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp2start4" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 4
+												</div>
+											</div>
+											<input type="text" name="rfidlp2start4" id="rfidlp2start4" class="form-control" value="<?php echo trim( $rfidlp2start4old ) ?>">
+										</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<label for="rfidlp2start5" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													RFID-Tag 5
+												</div>
+											</div>
+											<input type="text" name="rfidlp2start5" id="rfidlp2start5" class="form-control" value="<?php echo trim( $rfidlp2start5old ) ?>">
+										</label>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<script>
 						$(function() {
-							if($('#rfidakt').val() == '0') {
+							if($('#rfidaktOff').prop("checked")) {
 								$('#rfidandiv').hide();
 							} else {
 								$('#rfidandiv').show();
 							}
-
-							$('#rfidakt').change(function(){
-								if($('#rfidakt').val() == '0') {
+							$('input[type=radio][name=rfidakt]').change(function(){
+								if(this.value == '0') {
 									$('#rfidandiv').hide();
 								} else {
 									$('#rfidandiv').show();
@@ -878,93 +1236,130 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						Benachrichtigungen mit Pushover
 					</div>
 					<div class="card-body">
-						<div class="row form-group">
-							<label for="pushbenachrichtigung" class="col-6 col-form-label">Pushover Benachrichtigungen:</label>
-							<div class="col-6">
-								<select name="pushbenachrichtigung" id="pushbenachrichtigung" class="form-control">
-									<option <?php if($pushbenachrichtigungold == 0) echo "selected" ?> value="0">Deaktiviert</option>
-									<option <?php if($pushbenachrichtigungold == 1) echo "selected" ?> value="1">Aktiviert</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="pushbenachrichtigung" class="col col-form-label">Pushover Benachrichtigungen</label>
+							</div>
+							<div class="row col small mt-0 mb-0">
+								Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($pushbenachrichtigungold == 0) echo " active" ?>">
+										<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOff" autocomplete="off" value="0"<?php if($pushbenachrichtigungold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($pushbenachrichtigungold == 1) echo " active" ?>">
+										<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOn" autocomplete="off" value="1"<?php if($pushbenachrichtigungold == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
 							</div>
 						</div>
 						<div id="pushban">
-							<div class="row form-group">
-								Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen.<br>
-								Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden.<br>
-								Der Token der App, sowie das User Token nachfolgend eintragen.
-							</div>
-							<div class="row form-group">
-								<label for="pushoveruser" class="col-6 col-form-label">Pushover User String:</label>
-								<div class="col-6">
-									<input type="text" name="pushoveruser" id="pushoveruser" class="form-control" value="<?php echo trim( $pushoveruserold ) ?>">
+							<div class="form-group">
+								<div class="row mb-0">
+									<label for="pushoveruser" class="col col-form-label">Pushover User String</label>
+								</div>
+								<div class="row col small mt-0 mb-0">
+									Hier das User Token von Pushover eintragen
+								</div>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<div class="input-group-text">
+											<i class="fa fa-user"></i>
+										</div>
+									</div> 
+									<input type="text" name="pushoveruser" id="pushoveruser" value="<?php echo trim( $pushoveruserold ) ?>" placeholder="User Token" class="form-control">
 								</div>
 							</div>
-							<div class="row form-group">
-								Hier das User Token von Pushover eintragen
-							</div>
-							<div class="row form-group">
-								<label for="pushovertoken" class="col-6 col-form-label">Pushover App Token:</label>
-								<div class="col-6">
-									<input type="text" name="pushovertoken" id="pushovertoken" class="form-control" value="<?php echo trim( $pushovertokenold ) ?>">
+
+							<div class="form-group">
+								<div class="row mb-0">
+									<label for="pushovertoken" class="col col-form-label">Pushover App Token</label>
+								</div>
+								<div class="row col small mt-0 mb-0">
+									Hier das Application Token von Pushover eintragen
+								</div>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<div class="input-group-text">
+											<i class="fa fa-lock"></i>
+										</div>
+									</div> 
+									<input type="text" name="pushovertoken" id="pushovertoken" value="<?php echo trim( $pushovertokenold ) ?>" placeholder="App Token" class="form-control">
 								</div>
 							</div>
-							<div class="row form-group">
-								Hier das Application Token von Pushover eintragen
-							</div>
-							<div class="row form-group">
-								<b>Benachrichtigungseinstellungen:</b>
-							</div>
-							<div class="row form-group">
-								<label for="pushbstartl" class="col-6 col-form-label">Beim Starten der Ladung:</label>
-								<div class="col-6">
-									<select name="pushbstartl" id="pushbstartl" class="form-control">
-										<option <?php if($pushbstartlold == 0) echo "selected" ?> value="0">Nein</option>
-										<option <?php if($pushbstartlold == 1) echo "selected" ?> value="1">Ja</option>
-									</select>
+							<div class="form-group mb-0">
+								<div class="row col mb-0">
+									Benachrichtigungseinstellungen
 								</div>
-							</div>
-							<div class="row form-group">
-								<label for="pushbstopl" class="col-6 col-form-label">Beim Stoppen der Ladung:</label>
-								<div class="col-6">
-									<select name="pushbstopl" id="pushbstopl" class="form-control">
-										<option <?php if($pushbstoplold == 0) echo "selected" ?> value="0">Nein</option>
-										<option <?php if($pushbstoplold == 1) echo "selected" ?> value="1">Ja</option>
-									</select>
+								<div class="row mt-2 mb-0">
+									<div class="col-4">
+										<label for="pushbstartl" class="col-form-label">Beim Starten der Ladung</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pushbstartlold == 0) echo " active" ?>">
+											<input type="radio" name="pushbstartl" id="pushbstartlOff" autocomplete="off" value="0"<?php if($pushbstartlold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pushbstartlold == 1) echo " active" ?>">
+											<input type="radio" name="pushbstartl" id="pushbstartlOn" autocomplete="off" value="1"<?php if($pushbstartlold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
 								</div>
-							</div>
-							<div class="row form-group">
-								<label for="pushbplug" class="col-6 col-form-label">Beim Einstecken des Fahrzeugs:</label>
-								<div class="col-6">
-									<select name="pushbplug" id="pushbplug" class="form-control">
-										<option <?php if($pushbplugold == 0) echo "selected" ?> value="0">Nein</option>
-										<option <?php if($pushbplugold == 1) echo "selected" ?> value="1">Ja</option>
-									</select>
+								<div class="row mt-2 mb-0">
+									<div class="col-4">
+										<label for="pushbstopl" class="col-form-label">Beim Stoppen der Ladung</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pushbstoplold == 0) echo " active" ?>">
+											<input type="radio" name="pushbstopl" id="pushbstoplOff" autocomplete="off" value="0"<?php if($pushbstoplold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pushbstoplold == 1) echo " active" ?>">
+											<input type="radio" name="pushbstopl" id="pushbstoplOn" autocomplete="off" value="1"<?php if($pushbstoplold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
 								</div>
-							</div>
-							<div class="row form-group">
-								<label for="pushbsmarthome" class="col-6 col-form-label">Bei Triggern von Smart Home Aktionen:</label>
-								<div class="col-6">
-									<select name="pushbsmarthome" id="pushbsmarthome" class="form-control">
-										<option <?php if($pushbsmarthomeold == 0) echo "selected" ?> value="0">Nein</option>
-										<option <?php if($pushbsmarthomeold == 1) echo "selected" ?> value="1">Ja</option>
-									</select>
+								<div class="row mt-2 mb-0">
+									<div class="col-4">
+										<label for="pushbplug" class="col-form-label">Beim Einstecken des Fahrzeugs</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pushbplugold == 0) echo " active" ?>">
+											<input type="radio" name="pushbplug" id="pushbplugOff" autocomplete="off" value="0"<?php if($pushbplugold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pushbplugold == 1) echo " active" ?>">
+											<input type="radio" name="pushbplug" id="pushbplugOn" autocomplete="off" value="1"<?php if($pushbplugold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+								</div>
+								<div class="row mt-2 mb-0">
+									<div class="col-4">
+										<label for="pushbsmarthome" class="col-form-label">Bei Triggern von Smart Home Aktionen</label>
+									</div>
+									<div class="btn-group btn-group-toggle col-8" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($pushbsmarthomeold == 0) echo " active" ?>">
+											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOff" autocomplete="off" value="0"<?php if($pushbsmarthomeold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($pushbsmarthomeold == 1) echo " active" ?>">
+											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOn" autocomplete="off" value="1"<?php if($pushbsmarthomeold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<script>
 						$(function() {
-							if($('#pushbenachrichtigung').val() == '0') {
+							if($('#pushbenachrichtigungOff').prop("checked")) {
 								$('#pushban').hide();
 							} else {
 								$('#pushban').show();
 							}
-							$('#pushbenachrichtigung').change(function(){
-								if($('#pushbenachrichtigung').val() == '0') {
+							$('input[type=radio][name=pushbenachrichtigung]').change(function(){
+								if(this.value == '0') {
 									$('#pushban').hide();
 								} else {
 									$('#pushban').show();
@@ -975,23 +1370,28 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						LED Ausgänge
 					</div>
 					<div class="card-body">
-						<div class="row form-group">
-							<label for="ledsakt" class="col-6 col-form-label">LED Ausgänge:</label>
-							<div class="col-6">
-								<select name="ledsakt" id="ledsakt" class="form-control">
-									<option <?php if($ledsaktold == 0) echo "selected" ?> value="0">Nein</option>
-									<option <?php if($ledsaktold == 1) echo "selected" ?> value="1">Ja</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="ledsakt" class="col col-form-label">LED Ausgänge</label>
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($ledsaktold == 0) echo " active" ?>">
+										<input type="radio" name="ledsakt" id="ledsaktOff" autocomplete="off" value="0"<?php if($ledsaktold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($ledsaktold == 1) echo " active" ?>">
+										<input type="radio" name="ledsakt" id="ledsaktOn" autocomplete="off" value="1"<?php if($ledsaktold == 1) echo " checked=\"checked\"" ?>>An
+									</label>
+								</div>
 							</div>
 						</div>
-
 						<div id="ledsan">
 							<div class="row form-group">
-								<label for="led0sofort" class="col-6 col-form-label">Ladung nicht freigegeben, Sofort Laden Modus:</label>
+								<label for="led0sofort" class="col-6 col-form-label">Ladung nicht freigegeben, Sofort Laden Modus</label>
 								<div class="col-6">
 									<select name="led0sofort" id="led0sofort" class="form-control">
 										<option <?php if($led0sofortold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1012,7 +1412,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="led0nurpv" class="col-6 col-form-label">Ladung nicht freigegeben, Nur PV Laden Modus:</label>
+								<label for="led0nurpv" class="col-6 col-form-label">Ladung nicht freigegeben, Nur PV Laden Modus</label>
 								<div class="col-6">
 									<select name="led0nurpv" id="led0nurpv" class="form-control">
 										<option <?php if($led0nurpvold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1033,7 +1433,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="led0minpv" class="col-6 col-form-label">Ladung nicht freigegeben, Min + PV Laden Modus:</label>
+								<label for="led0minpv" class="col-6 col-form-label">Ladung nicht freigegeben, Min + PV Laden Modus</label>
 								<div class="col-6">
 									<select name="led0minpv" id="led0minpv" class="form-control">
 										<option <?php if($led0minpvold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1054,7 +1454,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="led0standby" class="col-6 col-form-label">Ladung nicht freigegeben, Standby Modus:</label>
+								<label for="led0standby" class="col-6 col-form-label">Ladung nicht freigegeben, Standby Modus</label>
 								<div class="col-6">
 									<select name="led0standby" id="led0standby" class="form-control">
 										<option <?php if($led0standbyold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1075,7 +1475,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="led0stop" class="col-6 col-form-label">Ladung nicht freigegeben, Stop Modus:</label>
+								<label for="led0stop" class="col-6 col-form-label">Ladung nicht freigegeben, Stop Modus</label>
 								<div class="col-6">
 									<select name="led0stop" id="led0stop" class="form-control">
 										<option <?php if($led0stopold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1096,7 +1496,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="ledsofort" class="col-6 col-form-label">Ladung freigegeben, Sofort Laden Modus:</label>
+								<label for="ledsofort" class="col-6 col-form-label">Ladung freigegeben, Sofort Laden Modus</label>
 								<div class="col-6">
 									<select name="ledsofort" id="ledsofort" class="form-control">
 										<option <?php if($ledsofortold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1117,7 +1517,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="lednurpv" class="col-6 col-form-label">Ladung freigegeben, Nur PV Laden Modus:</label>
+								<label for="lednurpv" class="col-6 col-form-label">Ladung freigegeben, Nur PV Laden Modus</label>
 								<div class="col-6">
 									<select name="lednurpv" id="lednurpv" class="form-control">
 										<option <?php if($lednurpvold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1138,7 +1538,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="ledminpv" class="col-6 col-form-label">Ladung freigegeben, Min + PV Laden Modus:</label>
+								<label for="ledminpv" class="col-6 col-form-label">Ladung freigegeben, Min + PV Laden Modus</label>
 								<div class="col-6">
 									<select name="ledminpv" id="ledminpv" class="form-control">
 										<option <?php if($ledminpvold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1159,7 +1559,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="ledstandby" class="col-6 col-form-label">Ladung freigegeben, Standby Modus:</label>
+								<label for="ledstandby" class="col-6 col-form-label">Ladung freigegeben, Standby Modus</label>
 								<div class="col-6">
 									<select name="ledstandby" id="ledstandby" class="form-control">
 										<option <?php if($ledstandbyold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1180,7 +1580,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="ledstop" class="col-6 col-form-label">Ladung freigegeben, Stop Modus:</label>
+								<label for="ledstop" class="col-6 col-form-label">Ladung freigegeben, Stop Modus</label>
 								<div class="col-6">
 									<select name="ledstop" id="ledstop" class="form-control">
 										<option <?php if($ledstopold == "aus\n") echo "selected" ?> value="aus">Alle LEDs aus</option>
@@ -1204,13 +1604,13 @@
 					</div>
 					<script>
 						$(function() {
-							if($('#ledsakt').val() == '0') {
+							if($('#ledsaktOff').prop("checked")) {
 								$('#ledsan').hide();
 							} else {
 								$('#ledsan').show();
 							}
-							$('#ledsakt').change(function(){
-								if($('#ledsakt').val() == '0') {
+							$('input[type=radio][name=ledsakt]').change(function(){
+								if(this.value == '0') {
 									$('#ledsan').hide();
 								} else {
 									$('#ledsan').show();
@@ -1221,22 +1621,28 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						integriertes Display
 					</div>
 					<div class="card-body">
-						<div class="row form-group">
-							<label for="displayaktiv" class="col-6 col-form-label">Display installiert:</label>
-							<div class="col-6">
-								<select name="displayaktiv" id="displayaktiv" class="form-control">
-									<option <?php if($displayaktivold == 0) echo "selected" ?> value="0">Nein</option>
-									<option <?php if($displayaktivold == 1) echo "selected" ?> value="1">Ja</option>
-								</select>
+						<div class="form-group">
+							<div class="row mb-0">
+								<label for="displayaktiv" class="col col-form-label">Display installiert</label>
+							</div>
+							<div class="row mt-0">
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
+										<input type="radio" name="displayaktiv" id="displayaktivOff" autocomplete="off" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
+									</label>
+									<label class="btn btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
+										<input type="radio" name="displayaktiv" id="displayaktivOn" autocomplete="off" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
+									</label>
+								</div>
 							</div>
 						</div>
 						<div id="displayan">
 							<div class="row form-group">
-								<label for="displaytagesgraph" class="col-6 col-form-label">Tagesgraph anzeigbar (Ja vermindert die Performance):</label>
+								<label for="displaytagesgraph" class="col-6 col-form-label">Tagesgraph anzeigbar (Ja vermindert die Performance)</label>
 								<div class="col-6">
 									<select name="displaytagesgraph" id="displaytagesgraph" class="form-control">
 										<option <?php if($displaytagesgraphold == 0) echo "selected" ?> value="0">Nein</option>
@@ -1245,7 +1651,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="displaytheme" class="col-6 col-form-label">Theme des Displays:</label>
+								<label for="displaytheme" class="col-6 col-form-label">Theme des Displays</label>
 								<div class="col-6">
 									<select name="displaytheme" id="displaytheme" class="form-control">
 										<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Gauges</option>
@@ -1256,25 +1662,25 @@
 							</div>
 							<div id="displaygauge">
 								<div class="row form-group">
-									<label for="displayevumax" class="col-6 col-form-label">EVU Skala Min Max:</label>
+									<label for="displayevumax" class="col-6 col-form-label">EVU Skala Min Max</label>
 									<div class="col-6">
 										<input type="text" name="displayevumax" id="displayevumax" class="form-control" value="<?php echo trim( $displayevumaxold ) ?>">
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displaypvmax" class="col-6 col-form-label">PV Skala Max:</label>
+									<label for="displaypvmax" class="col-6 col-form-label">PV Skala Max</label>
 									<div class="col-6">
 										<input type="text" name="displaypvmax" id="displaypvmax" class="form-control" value="<?php echo trim( $displaypvmaxold ) ?>">
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displayspeichermax" class="col-6 col-form-label">Speicher Skala Min Max:</label>
+									<label for="displayspeichermax" class="col-6 col-form-label">Speicher Skala Min Max</label>
 									<div class="col-6">
 										<input type="text" name="displayspeichermax" id="displayspeichermax" class="form-control" value="<?php echo trim( $displayspeichermaxold ) ?>">
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displayhausanzeigen" class="col-6 col-form-label">Hausverbrauch anzeigen:</label>
+									<label for="displayhausanzeigen" class="col-6 col-form-label">Hausverbrauch anzeigen</label>
 									<div class="col-6">
 										<select name="displayhausanzeigen" id="displayhausanzeigen" class="form-control">
 											<option <?php if($displayhausanzeigenold == 0) echo "selected" ?> value="0">Nein</option>
@@ -1283,26 +1689,26 @@
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displayhausmax" class="col-6 col-form-label">Hausverbrauch Skala Max:</label>
+									<label for="displayhausmax" class="col-6 col-form-label">Hausverbrauch Skala Max</label>
 									<div class="col-6">
 										<input type="text" name="displayhausmax" id="displayhausmax" class="form-control" value="<?php echo trim( $displayhausmaxold ) ?>">
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displaylp1max" class="col-6 col-form-label">Ladepunkt 1 Skala Max:</label>
+									<label for="displaylp1max" class="col-6 col-form-label">Ladepunkt 1 Skala Max</label>
 									<div class="col-6">
 										<input type="text" name="displaylp1max" id="displaylp1max" class="form-control" value="<?php echo trim( $displaylp1maxold ) ?>">
 									</div>
 								</div>
 								<div class="row form-group">
-									<label for="displaylp2max" class="col-6 col-form-label">Ladepunkt 2 Skala Max:</label>
+									<label for="displaylp2max" class="col-6 col-form-label">Ladepunkt 2 Skala Max</label>
 									<div class="col-6">
 										<input type="text" name="displaylp2max" id="displaylp2max" class="form-control" value="<?php echo trim( $displaylp2maxold ) ?>">
 									</div>
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="displaypinaktiv" class="col-6 col-form-label">Pin nötig zum ändern des Lademodus:</label>
+								<label for="displaypinaktiv" class="col-6 col-form-label">Pin nötig zum ändern des Lademodus</label>
 								<div class="col-6">
 									<select name="displaypinaktiv" id="displaypinaktiv" class="form-control">
 										<option <?php if($displaypinaktivold == 0) echo "selected" ?> value="0">Nein</option>
@@ -1311,19 +1717,19 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="displaypincode" class="col-6 col-form-label">Pin (4-stellig, nur Zahlen erlaubt von 1-9):</label>
+								<label for="displaypincode" class="col-6 col-form-label">Pin (4-stellig, nur Zahlen erlaubt von 1-9)</label>
 								<div class="col-6">
 									<input type="text" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo trim( $displaypincodeold ) ?>">
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="displaysleep" class="col-6 col-form-label">Display ausschalten nach x Sekunden:</label>
+								<label for="displaysleep" class="col-6 col-form-label">Display ausschalten nach x Sekunden</label>
 								<div class="col-6">
 									<input type="text" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo trim( $displaysleepold ) ?>">
 								</div>
 							</div>
 							<div class="row form-group">
-								<label for="displayEinBeimAnstecken" class="col-6 col-form-label">Display beim Einstecken des Fahrzeugs einschalten<br/><small>(f&uuml;r oben konfigurierte Dauer):</small></label>
+								<label for="displayEinBeimAnstecken" class="col-6 col-form-label">Display beim Einstecken des Fahrzeugs einschalten</label>
 								<div class="col-6">
 									<select name="displayEinBeimAnstecken" id="displayEinBeimAnstecken" class="form-control">
 										<option <?php if($displayEinBeimAnsteckenOld == 0) echo "selected" ?> value="0">Nein</option>
@@ -1335,13 +1741,13 @@
 					</div>
 					<script>
 						$(function() {
-							if($('#displayaktiv').val() == '0') {
+							if($('#displayaktivOff').prop("checked")) {
 								$('#displayan').hide();
 							} else {
 								$('#displayan').show();
 							}
-							$('#displayaktiv').change(function(){
-								if($('#displayaktiv').val() == '0') {
+							$('input[type=radio][name=displayaktiv]').change(function(){
+								if(this.value == '0') {
 									$('#displayan').hide();
 								} else {
 									$('#displayan').show();
@@ -1367,12 +1773,12 @@
 				</div>
 
 				<div class="card">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary text-white font-weight-bold">
 						Theme Optionen
 					</div>
 					<div class="card-body">
 						<div class="form-group row">
-							<label for="hausverbrauchstat" class="col-6 col-form-label">Hausverbrauch auf der Hauptseite anzeigen:</label>
+							<label for="hausverbrauchstat" class="col-6 col-form-label">Hausverbrauch auf der Hauptseite anzeigen</label>
 							<div class="col-6">
 								<select name="hausverbrauchstat" id="hausverbrauchstat" class="form-control">
 									<option <?php if($hausverbrauchstatold == 0) echo "selected" ?> value="0">Aus</option>
@@ -1381,7 +1787,7 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="heutegeladen" class="col-6 col-form-label">Heute geladen auf der Hauptseite anzeigen:</label>
+							<label for="heutegeladen" class="col-6 col-form-label">Heute geladen auf der Hauptseite anzeigen</label>
 							<div class="col-6">
 								<select name="heutegeladen" id="heutegeladen" class="form-control">
 									<option <?php if($heutegeladenold == 0) echo "selected" ?> value="0">Aus</option>
@@ -1390,7 +1796,7 @@
 							</div>
 						</div>
 						<div class="form-group row mb-0">
-							<label for="livegraph" class="col-6 col-form-label">Zeitintervall für den Live Graphen der Hauptseite:</label>
+							<label for="livegraph" class="col-6 col-form-label">Zeitintervall für den Live Graphen der Hauptseite</label>
 							<div class="col-6">
 								<select name="livegraph" id="livegraph" class="form-control">
 									<option <?php if($livegraphold == 5) echo "selected" ?> value="5">5 Min</option>
