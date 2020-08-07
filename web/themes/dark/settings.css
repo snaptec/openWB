@@ -61,6 +61,10 @@ input[type="text"], input[type="password"], select {
 	border: 1px solid #ced4da;
 }
 
+hr {
+	border-top-color: white;
+}
+
 .modal-content,
 .modal-header,
 .modal-footer {
