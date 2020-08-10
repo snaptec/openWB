@@ -95,19 +95,23 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="card border-secondary">
-				<div class="card-header bg-secondary text-white font-weight-bold">
-					Cloud Anmeldedaten
-				</div>
-				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
+			<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary font-weight-bold">
+						Cloud Anmeldedaten
+					</div>
 					<div class="card-body">
-						<div class="row">
-							Cloud ist aktiv<br>
-							Benutzername: <?php echo $clouduserold; ?><br>
-							Passwort: <?php echo $cloudpwold; ?>
+						<div class="form-row mb-1">
+							<div class="col">
+								Cloud ist aktiv<br>
+								Benutzername: <?php echo $clouduserold; ?><br>
+								Passwort: <?php echo $cloudpwold; ?>
+							</div>
 						</div>
-						<div class="row">
-							Mit den Zugangsdaten auf web.openwb.de anmelden
+						<div class="form-row mb-1">
+							<div class="col">
+								Mit den Zugangsdaten auf web.openwb.de anmelden
+							</div>
 						</div>
 					</div>
 					<div class="card-footer">
@@ -118,35 +122,41 @@
 							</div>
 						</form>
 					</div>
-				<?php } else { ?>
+				</div> <!-- card -->
+			<?php } else { ?>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary font-weight-bold">
+						Cloud Anmeldedaten
+					</div>
 					<form action="./tools/cloudregistrate.php" method="POST">
 						<div class="card-body">
-							<div class="row form-group">
-								<label for="connect_username" class="col-4 col-form-label">Benutzername</label>
-								<div class="col-8">
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<div class="input-group-text">
-												<i class="fa fa-user"></i>
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="connect_username" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
 											</div>
+											<input type="text" name="username" id="connect_username" value="" aria-describedby="usernameHelpBlock" class="form-control" required="required">
 										</div>
-										<input type="text" name="username" id="connect_username" value="" aria-describedby="usernameHelpBlock" class="form-control" required="required">
+										<span id="usernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
 									</div>
-									<span id="usernameHelpBlock" class="form-text">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
 								</div>
-							</div>
-							<div class="row form-group mb-0">
-								<label for="cloudpass" class="col-4 col-form-label">Passwort</label>
-								<div class="col-8">
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<div class="input-group-text">
-												<i class="fa fa-lock"></i>
-											</div>
-										</div> 
-										<input type="text" name="cloudpass" id="cloudpass" value="" class="form-control" aria-describedby="passwordHelpBlock" required="required">
+								<div class="form-row mb-1">
+									<label for="cloudpass" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-lock"></i>
+												</div>
+											</div> 
+											<input type="text" name="cloudpass" id="cloudpass" value="" class="form-control" aria-describedby="passwordHelpBlock" required="required">
+										</div>
 									</div>
-									<span id="passwordHelpBlock" class="form-text">Passwort des Cloud Accounts.</span>
 								</div>
 							</div>
 						</div>
@@ -161,32 +171,33 @@
 							Cloud neu einrichten
 						</div>
 						<div class="card-body">
-							<div class="row form-group">
-								<label for="register_username" class="col-4 col-form-label">Benutzername</label>
-								<div class="col-8">
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<div class="input-group-text">
-												<i class="fa fa-user"></i>
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="register_username" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
 											</div>
+											<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required">
 										</div>
-										<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required">
+										<span id="registerUsernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen</span>
 									</div>
-									<span id="registerUsernameHelpBlock" class="form-text">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen</span>
 								</div>
-							</div>
-							<div class="row form-group mb-0">
-								<label for="email" class="col-4 col-form-label">Email Adresse</label>
-								<div class="col-8">
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<div class="input-group-text">
-												<i class="fa fa-envelope"></i>
+								<div class="form-row mb-1">
+									<label for="email" class="col-md-4 col-form-label">Email Adresse</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-envelope"></i>
+												</div>
 											</div>
+											<input type="text" name="email" id="email" value="" aria-describedby="registerPasswordHelpBlock" class="form-control" required="required">
 										</div>
-										<input type="text" name="email" id="email" value="" aria-describedby="registerPasswordHelpBlock" class="form-control" required="required">
 									</div>
-									<span id="registerPasswordHelpBlock" class="form-text">Email Adresse angeben</span>
 								</div>
 							</div>
 						</div>
@@ -194,8 +205,8 @@
 							<button type="submit" class="btn btn-green">Neuen Account erstellen und einrichten</button>
 						</div>
 					</form>
-				<?php } ?>
-			</div> <!-- card 1 or 2 -->
+				</div> <!-- card 2 -->
+			<?php } ?>
 			<div class="row justify-content-center">
 				<div class="col text-center">
 					Open Source made with love!<br>
