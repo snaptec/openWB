@@ -132,8 +132,8 @@ AUTHEND
 						<form action="./settings/setPassword.php" method="POST">
 							<div class="card-body">
 								<div class="row form-group">
-									<label for="username" class="col-3 col-form-label">Benutzername</label>
-									<div class="col-9">
+									<label for="username" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
@@ -142,12 +142,12 @@ AUTHEND
 											</div> 
 											<input type="text" name="username" id="username" value="" placeholder="Benutzername" aria-describedby="usernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z0-9]*">
 										</div>
-										<span id="usernameHelpBlock" class="form-text">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
+										<span id="usernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen.</span>
 									</div>
 								</div>
 								<div class="row form-group mb-0">
-									<label for="password" class="col-3 col-form-label">Passwort</label>
-									<div class="col-9">
+									<label for="password" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
@@ -156,7 +156,7 @@ AUTHEND
 											</div> 
 											<input type="password" name="password" id="password" value="" placeholder="Passwort" class="form-control" aria-describedby="passwordHelpBlock" required="required">
 										</div>
-										<span id="passwordHelpBlock" class="form-text">Passwort des Accounts.</span>
+										<span id="passwordHelpBlock" class="form-text small">Passwort des Accounts.</span>
 									</div>
 								</div>
 							</div>
