@@ -54,7 +54,7 @@ if [[ $lastmanagement == "1" ]]; then
 			if [[ $? == "0" ]] ; then
 				state=$(echo $output | jq -r '.alw')
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-					lp3enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
+					lp3enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
 					if ((state == "0"))  && (( lp3enabled == "1" ))  ; then
 						curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=1 > /dev/null
 					fi

@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+# -*- mode: python; coding: utf-8 -*-
+"""
+Retrieve information from VOC
+
+Usage:
+  voc (-h | --help)
+  voc --version
+  voc [-v|-vv] [options] list
+  voc [-v|-vv] [options] status
+  voc [-v|-vv] [options] trips [(--pretty|--json|--csv)]
+  voc [-v|-vv] [options] owntracks
+  voc [-v|-vv] [options] print [<attribute>]
+  voc [-v|-vv] [options] (lock | unlock)
+  voc [-v|-vv] [options] heater (start | stop)
+  voc [-v|-vv] [options] engine (start | stop)
+  voc [-v|-vv] [options] honk_and_blink
+  voc [-v|-vv] [options] call <method>
+  voc [-v|-vv] [options] mqtt
+  voc [-v|-vv] [options] dashboard
+
+Options:
+  -u <username>         VOC username
+  -p <password>         VOC password
+  -r <region>           VOC region (na, cn, etc.)
+  -s <url>              VOC service URL
+  -i <vin>              Vehicle VIN or registration number
+  -g                    Geolocate position
+  --owntracks_key=<key> Owntracks encryption password
+  -I <interval>         Polling interval (seconds) [default: 300]
+  -h --help             Show this message
+  --immutable           Read only mode
+  -v,-vv                Increase verbosity
+  -d                    More debugging
+  --scandinavian_miles  Report using Scandinavian miles instead of km ISO unit
+  --utc                 Print timestamps in UTC (+00:00) instead of local time
+  --version             Show version
+"""
+
+import docopt
+
+import logging
+import asyncio
+from time import time
+from json import dumps as to_json
+from sys import stderr
+from collections import OrderedDict
+from datetime import timezone
+import ssl
+import certifi
+from aiohttp import ClientSession, TCPConnector
+
+from volvooncall import __version__, Connection
+from volvooncall.util import read_config, json_serialize, owntracks_encrypt
+
+_LOGGER = logging.getLogger(__name__)
+
+LOGFMT = "%(asctime)s %(levelname)5s (%(threadName)s) [%(name)s] %(message)s"
+DATEFMT = "%y-%m-%d %H:%M.%S"
+
+SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+
+
+def lookup_position(lat, lon):
+    try:
+        import geopy.geocoders
+        from geopy.geocoders import Nominatim
+
+        geolocator = Nominatim(
+            user_agent="volvooncall/%s" % __version__,
+            timeout=10,
+            ssl_context=SSL_CONTEXT,
+        )
+        return geolocator.reverse((lat, lon))
+    except ImportError:
+        _LOGGER.warning(
+            "geopy or certifi not installed. position lookup not available"
+        )
+
+
+def print_vehicle(vehicle, geolocate=False):
+    def yes_or_no(boolean):
+        if boolean is None:
+            return "unknown"
+        return ("no", "yes")[boolean]
+
+    def on_or_off(boolean):
+        if boolean is None:
+            return "unknown"
+        return ("off", "on")[boolean]
+
+    s = "%s %dkm" % (vehicle, vehicle.odometer / 1000)
+
+    if vehicle.fuel_amount_level:
+        s += " (fuel %s%% %skm)" % (
+            vehicle.fuel_amount_level,
+            vehicle.distance_to_empty,
+        )
+
+    print(s)
+    try:
+        lat, lon = (
+            vehicle.position["latitude"],
+            vehicle.position["longitude"],
+        )
+        pos = lookup_position(lat, lon) if geolocate else None
+        if pos:
+            print("    position: %.14f,%.14f (%s)" % (lat, lon, pos.address))
+        else:
+            print("    position: %.14f,%.14f" % (lat, lon))
+    except AttributeError:
+        pass
+
+    print("    engine: %s" % on_or_off(vehicle.is_engine_running))
+    print("    locked: %s" % yes_or_no(vehicle.is_locked))
+    print("    heater: %s" % on_or_off(vehicle.is_heater_on))
+
+
+async def main(args):
+    """Command line interface."""
+
+    config = read_config()
+
+    if args["-u"] and args["-p"]:
+        config.update(username=args["-u"], password=args["-p"])
+    if args["-r"]:
+        config.update(region=args["-r"])
+    if args["-s"]:
+        config.update(service_url=args["-s"])
+    if args["-I"]:
+        config.update(interval=args["-I"])
+    if args["--owntracks_key"]:
+        config.update(owntracks_key=args["--owntracks_key"])
+    if args["--scandinavian_miles"] or "--scandinavian_miles" not in config:
+        config.update(scandinavian_miles=args["--scandinavian_miles"])
+    if args["--immutable"] or "--immutable" not in config:
+        config.update(mutable=not args["--immutable"])
+
+    async with ClientSession(
+        connector=TCPConnector(ssl=SSL_CONTEXT)
+    ) as session:
+
+        try:
+            connection = Connection(session, **config)
+        except TypeError as error:
+            exit("Missing configuration: %s" % error)
+
+        if args["mqtt"]:
+            from volvooncall import mqtt
+
+            return await mqtt.run(connection, config)
+
+        journal = args["trips"] or args["dashboard"] or args["mqtt"]
+        res = await connection.update(journal=journal)
+
+        if not res:
+            exit("Could not connect to the server.")
+
+        if args["list"]:
+            for vehicle in connection.vehicles:
+                print(vehicle)
+                exit()
+
+        if args["-i"]:
+            vehicle = connection.vehicle(args["-i"])
+        else:
+            vehicle = next(connection.vehicles, None)
+
+        if not vehicle:
+            exit("Vehicle not found")
+
+        if args["status"]:
+            print_vehicle(vehicle, args["-g"])
+        elif args["trips"]:
+            if args["--json"]:
+                print(to_json(vehicle.trips, indent=4, default=json_serialize))
+            else:
+
+                def fix_timezone(dt):
+                    return dt.astimezone(
+                        timezone.utc if args["--utc"] else None
+                    )
+
+                for trip in vehicle.trips:
+                    trip = trip["tripDetails"][0]
+                    print(
+                        "%.29s %25s %-10.10s %25s %10.10s %-10.10s"
+                        % (
+                            fix_timezone(trip["startTime"]),
+                            trip["startPosition"]["streetAddress"],
+                            trip["startPosition"]["city"],
+                            fix_timezone(trip["endTime"]),
+                            trip["endPosition"]["streetAddress"],
+                            trip["endPosition"]["city"],
+                        )
+                    )
+
+        elif args["print"]:
+            attr = args["<attribute>"]
+            if attr:
+                if not vehicle.has_attr(attr):
+                    exit("unknown attribute")
+                print(vehicle.get_attr(attr))
+            else:
+                print(vehicle.json)
+        elif args["owntracks"]:
+            msg = to_json(
+                dict(
+                    _type="location",
+                    tid="volvo",
+                    t="p",
+                    lat=vehicle.position["latitude"],
+                    lon=vehicle.position["longitude"],
+                    acc=1,
+                    tst=int(time()),
+                ),
+                indent=4,
+                default=json_serialize,
+            )
+            key = config.get("owntracks_key")
+            if key:
+                msg = to_json(
+                    dict(_type="encrypted", data=owntracks_encrypt(msg, key))
+                )
+            print(msg)
+        elif args["heater"]:
+            if args["start"]:
+                await vehicle.start_heater()
+            else:
+                await vehicle.stop_heater()
+        elif args["engine"]:
+            if args["start"]:
+                await vehicle.start_engine()
+            else:
+                await vehicle.stop_engine()
+        elif args["lock"]:
+            await vehicle.lock()
+        elif args["unlock"]:
+            await vehicle.unlock()
+        elif args["honk_and_blink"]:
+            await vehicle.honk_and_blink()
+        elif args["dashboard"]:
+            dashboard = vehicle.dashboard(**config)
+            for instrument in dashboard.instruments:
+                print("%-30s: %s" % (instrument, instrument.str_state))
+        elif args["call"]:
+            await vehicle.call(args["<method>"])
+
+
+if __name__ == "__main__":
+    args = docopt.docopt(__doc__, version=__version__)
+
+    debug = args["-d"]
+
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = [logging.ERROR, logging.INFO, logging.DEBUG][args["-v"]]
+
+    try:
+        import coloredlogs
+
+        coloredlogs.install(
+            level=log_level, stream=stderr, datefmt=DATEFMT, fmt=LOGFMT
+        )
+    except ImportError:
+        _LOGGER.debug("no colored logs. pip install coloredlogs?")
+        logging.basicConfig(
+            level=log_level, stream=stderr, datefmt=DATEFMT, format=LOGFMT
+        )
+
+    logging.captureWarnings(debug)
+
+    if debug:
+        _LOGGER.info("Debug is on")
+
+    try:
+        from asyncio import run
+    except ImportError:
+        # pre 3.7
+
+        def run(fut, debug=False):
+            loop = asyncio.get_event_loop()
+            loop.set_debug(debug)
+            loop.run_until_complete(fut)
+            loop.close()
+
+        asyncio.create_task = lambda coro: asyncio.get_event_loop().create_task(
+            coro
+        )
+
+    try:
+        run(main(args), debug=debug)
+    except KeyboardInterrupt:
+        exit()
