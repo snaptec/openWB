@@ -8,9 +8,9 @@
 	<title>openWB</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="openWB">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="openWB">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
@@ -45,8 +45,35 @@
 	<!-- Normalize -->
 	<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 	<!-- Font Awesome, all styles -->
-  	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
-
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
+	<!-- local css due to async loading of theme css -->
+	<style type="text/css">
+		#preloader {
+			background-color:white;
+			position:fixed;
+			top:0px;
+			left:0px;
+			width:100%;
+			height:100%;
+			z-index:999999;
+		}
+		#preloader-inner {
+			margin-top: 150px;
+			text-align: center;
+		}
+		#preloader-image {
+			max-width: 300px;
+		}
+		#preloader-info {
+			color:grey;
+		}
+		#thegraph > div {
+			height: 350px;
+		}
+		#awattarcanvasdiv {
+			height: 150px;
+		}
+	</style>
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
@@ -75,14 +102,14 @@
 <body>
 	<!-- Preloader with Progress Bar -->
 	<!-- style instead of css due to async loading of theme css -->
-	<div id="preloader" style="background-color:white; position:fixed; top:0px; left:0px; width:100%; height:100%; z-index:999999;">
-		<div style="margin-top: 150px; text-align: center;">
-		  	<div class="row" style="color:black;">
-			  	<div class="mx-auto d-block justify-content-center">
-					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
-			  	</div>
+	<div id="preloader">
+		<div id="preloader-inner">
+			<div class="row">
+				<div class="mx-auto d-block justify-content-center">
+					<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
+				</div>
 			</div>
-			<div class="row justify-content-center mt-2" style="color:grey;">
+			<div id="preloader-info" class="row justify-content-center mt-2">
 				<div class="col-10 col-sm-6">
 					Bitte warten, während die Seite aufgebaut wird.
 				</div>
@@ -94,7 +121,7 @@
 						</div>
 					</div>
 				</div>
-  			</div>
+			</div>
 		</div>
 	</div>
 
@@ -121,10 +148,10 @@
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="col-sm bg-lightgreen">
-				<span class="smallTextSize">PV: <span id="pvleistung">lade Daten</span><span class="verySmallTextSize" id="pvdailyyield"></span>
+				<span class="smallTextSize">PV: <span id="pvleistung">lade Daten</span></span><span class="verySmallTextSize" id="pvdailyyield"></span>
 			</div>
 			<div id="evudiv" class="col-sm bg-rose">
-				<span class="smallTextSize"> Netz<span id="bezug">: lade Daten</span></span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
+				<span class="smallTextSize">Netz<span id="bezug">: lade Daten</span></span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
 			</div>
 		</div>
 
@@ -183,7 +210,7 @@
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
-			<div class="col-sm-12 text-center smallTextSize" style="height: 350px;">
+			<div class="col-sm-12 text-center smallTextSize">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
 				</div>
@@ -219,22 +246,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp2-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="2">
@@ -242,22 +269,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp3-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="3">
@@ -265,22 +292,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp4-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="4">
@@ -288,22 +315,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp5-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="5">
@@ -311,22 +338,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp6-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="6">
@@ -334,22 +361,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp7-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="7">
@@ -357,22 +384,22 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp8-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="8">
@@ -380,40 +407,40 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span>
+			</div>
+		</div>
 
 		<div class="smartHome">
 			<hr color="white">
 
-            <!-- SmartHome info header -->
-	        <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
+			<!-- SmartHome info header -->
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
 				<div class="col-3 px-0">
-	                Gerät
-	            </div>
-	            <div class="col-3 px-0">
-	                Verbrauch
-	            </div>
-	            <div class="col-3 px-0">
-	                Modus
+					Gerät
 				</div>
 				<div class="col-3 px-0">
-	                Laufzeit
-	            </div>
+					Verbrauch
+				</div>
+				<div class="col-3 px-0">
+					Modus
+				</div>
+				<div class="col-3 px-0">
+					Laufzeit
+				</div>
 			</div>
 
 			<!-- SmartHome Device 1 data -->
@@ -565,7 +592,7 @@
 	</div>  <!-- and smarthome -->
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungen" class="hide">
+		<form id="sofortladenEinstellungen" class="hide">
 
 			<hr color="white">
 			<div class="row justify-content-center">
@@ -661,7 +688,7 @@
 					</div>
 				</div>
 				<div class="row justify-content-center my-2">
-					<div class="col text-center" style="height: 150px;">
+					<div id="awattarcanvasdiv" class="col text-center">
 						<canvas id="awattarcanvas"></canvas>
 					</div>
 				</div>
@@ -1230,31 +1257,31 @@
 			$('.btn[value="Reset"]').click(function(event){
 				var topic = getTopicToSendTo($(this).attr('id'));
 				publish("1", topic);
-    		});
+			});
 
 			$('.sofortladenLadezielSelektor').change(function(event){
-			    // switches the visibility of the settings-divs according to dropdown selection
-			    var selectorId = '#' + event.target.id;
-			    var divAusId = selectorId.slice(0, 8) + 'n' + selectorId.slice(8);
-			    var divSocId = selectorId.slice(0, 8) + 's' + selectorId.slice(8);
-			    var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
-			    switch ($(selectorId).val()) {
-			        case '0':
-			            $(divAusId).show();
-			            $(divSocId).hide();
-			            $(divMengeId).hide();
-			            break;
-			        case '1':
-			            $(divAusId).hide();
-			            $(divSocId).hide();
-			            $(divMengeId).show();
-			            break;
-			        case '2':
-			            $(divAusId).hide();
-			            $(divSocId).show();
-			            $(divMengeId).hide();
-			            break;
-			    }
+				// switches the visibility of the settings-divs according to dropdown selection
+				var selectorId = '#' + event.target.id;
+				var divAusId = selectorId.slice(0, 8) + 'n' + selectorId.slice(8);
+				var divSocId = selectorId.slice(0, 8) + 's' + selectorId.slice(8);
+				var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
+				switch ($(selectorId).val()) {
+					case '0':
+						$(divAusId).show();
+						$(divSocId).hide();
+						$(divMengeId).hide();
+						break;
+					case '1':
+						$(divAusId).hide();
+						$(divSocId).hide();
+						$(divMengeId).show();
+						break;
+					case '2':
+						$(divAusId).hide();
+						$(divSocId).show();
+						$(divMengeId).hide();
+						break;
+				}
 			});
 
 			$('.btn-group-toggle').change(function(event){
@@ -1283,7 +1310,7 @@
 					var topic = getTopicToSendTo(id);
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
-     				label.removeClass('text-danger');
+					label.removeClass('text-danger');
 					// if rangeInput is for chargeLimitation, recalc progress
 					if ( id.includes('/energyToCharge') ) {
 						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
@@ -1295,7 +1322,7 @@
 						var progress = (actualCharged / value * 100).toFixed(0);
 						element.width(progress+"%");
 					}
-  				}, 2000);
+				}, 2000);
 			});
 
 			// register an event listener for changes in visibility
