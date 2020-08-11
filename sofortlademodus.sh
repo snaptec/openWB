@@ -13,7 +13,7 @@ if (( awattaraktiv == 1 )); then
 	if (( $(echo "$actualprice < $awattarmaxprice" |bc -l) )); then
 		#price lower than max price, enable charging
 		if [[ $debug == "1" ]]; then
-			echo "Aktiviere preisbasierte Ladung"
+			echo "Aktiviere preisbasierte Ladung, Preis $actualprice, Max $awattarmaxprice"
 		fi
 		if (( lp1enabled == 0 )); then
 			mosquitto_pub -r -t openWB/set/lp/1/ChargePointEnabled -m "1"	
@@ -26,7 +26,7 @@ if (( awattaraktiv == 1 )); then
 		fi
 	else
 		if [[ $debug == "1" ]]; then
-			echo "Deaktiviere preisbasierte Ladung"
+			echo "Deaktiviere preisbasierte Ladung, Preis $actualprice, Max $awattarmaxprice"
 		fi
 		#price higher than max price, disable charging
 		if (( lp1enabled == 1 )); then
