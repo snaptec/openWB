@@ -23,9 +23,9 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -77,10 +77,11 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Debugging, Fehlermeldungen und Support</h1>
 
 			<div class="card border-secondary">
 				<form class="form" id="debugmodeForm" action="./tools/savedebug.php" method="POST">
-					<div class="card-header text-white font-weight-bold bg-secondary">
+					<div class="card-header bg-secondary">
 						Debug-Modus
 					</div>
 					<div class="card-body">
@@ -113,7 +114,7 @@
 
 			<div class="card border-secondary">
 				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						Debug-Meldung
 					</div>
 					<div class="card-body">
@@ -141,7 +142,7 @@
 
 			<div class="card border-secondary">
 				<form class="form" id="sendTokenForm" action="./tools/starttunnel.php" method="POST">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						Remote Support
 					</div>
 					<div class="card-body">

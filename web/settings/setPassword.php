@@ -25,7 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -66,6 +66,7 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Passwortschutz der Einstellungen</h1>
 			<?php if(array_key_exists( 'action', $_POST )){ // We need to do something... ?>
 				<?php
 					switch( $_POST['action'] ){
@@ -123,8 +124,8 @@ AUTHEND
 			} ?>
 
 			<div class="card border-secondary">
-				<div class="card-header font-weight-bold text-white bg-secondary">
-					Passwortschutz
+				<div class="card-header bg-secondary">
+					Anmeldedaten
 				</div>
 				<?php
 					if( !file_exists( $authfile )){ // show form to setup password protection
@@ -154,14 +155,13 @@ AUTHEND
 													<i class="fa fa-lock"></i>
 												</div>
 											</div> 
-											<input type="password" name="password" id="password" value="" placeholder="Passwort" class="form-control" aria-describedby="passwordHelpBlock" required="required">
+											<input type="password" name="password" id="password" value="" placeholder="Passwort" class="form-control" required="required">
 										</div>
-										<span id="passwordHelpBlock" class="form-text small">Passwort des Accounts.</span>
 									</div>
 								</div>
 							</div>
 							<div class="card-footer text-center">
-								<button type="submit" name="action" value="create" class="btn btn-green">Passwort einrichten</button>
+								<button type="submit" name="action" value="create" class="btn btn-success">Passwort einrichten</button>
 							</div>
 						</form>
 						<?php
@@ -172,7 +172,7 @@ AUTHEND
 						</div>
 						<div class="card-footer text-center">
 							<form action="./settings/setPassword.php" method="POST">
-								<button type="submit" name="action" value="delete" class="btn btn-red">Passwort löschen</button>
+								<button type="submit" name="action" value="delete" class="btn btn-danger">Passwort löschen</button>
 							</form>
 						</div>
 						<?php

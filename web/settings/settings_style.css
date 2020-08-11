@@ -20,6 +20,21 @@ body > .container {
     margin-bottom: 1rem;
 }
 
+.card .card-header {
+    font-weight: bold;
+}
+
+.bg-secondary,
+.bg-danger {
+    color: white;
+}
+
+.bg-primary,
+.bg-warning,
+.bg-info {
+    color: #212529;
+}
+
 .footer > .container {
     padding-right: 15px;
     padding-left: 15px;

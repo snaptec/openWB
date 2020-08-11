@@ -23,7 +23,7 @@
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -77,15 +77,17 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="col alert alert-secondary" role="alert">
+			<h1>Software-Update</h1>
+
+			<div class="col alert alert-info" role="alert">
 				installierte Version: <span id="installedVersionSpan" data-version=""></span>
 			</div>
+
 			<div class="card border-secondary">
 				<form class="form" id="releasetrainForm" action="./tools/saveupdate.php" method="POST">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						Versionsauswahl
 					</div>
-
 					<div class="card-body">
 						<div class="form-group mb-0">
 							<div class="custom-control custom-radio">
@@ -119,13 +121,13 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="button" class="btn btn-green" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
+						<button type="button" class="btn btn-success" data-toggle="modal" data-target="#updateConfirmationModal">Update</button>
 					</div>
 				</form>
 			</div>
 
 			<div class="card border-secondary">
-				<div class="card-header bg-secondary text-white font-weight-bold">
+				<div class="card-header bg-secondary">
 					Versionserläuterung
 				</div>
 				<div class="card-body">
@@ -161,7 +163,7 @@
 				<div class="modal-content">
 
 					<!-- modal header -->
-					<div class="modal-header btn-red">
+					<div class="modal-header btn-danger">
 						<h4 class="modal-title text-light">Achtung</h4>
 					</div>
 
@@ -180,8 +182,8 @@
 
 					<!-- modal footer -->
 					<div class="modal-footer d-flex justify-content-center">
-						<button type="button" id="updateBtn" class="btn btn-green" data-dismiss="modal">Update</button>
-						<button type="button" class="btn btn-red" data-dismiss="modal">Abbruch</button>
+						<button type="button" id="updateBtn" class="btn btn-success" data-dismiss="modal">Update</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 					</div>
 
 				</div>

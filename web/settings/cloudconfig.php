@@ -25,7 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
@@ -95,9 +95,10 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Einstellungen zur openWB Cloud</h1>
 			<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary">
 						Cloud Anmeldedaten
 					</div>
 					<div class="card-body">
@@ -125,7 +126,7 @@
 				</div> <!-- card -->
 			<?php } else { ?>
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary font-weight-bold">
+					<div class="card-header bg-secondary">
 						Cloud Anmeldedaten
 					</div>
 					<form action="./tools/cloudregistrate.php" method="POST">
@@ -167,7 +168,7 @@
 				</div> <!-- card 1 -->
 				<div class="card border-secondary">
 					<form action="./tools/cloudregistrate.php" method="POST">
-						<div class="card-header bg-secondary text-white font-weight-bold">
+						<div class="card-header bg-secondary">
 							Cloud neu einrichten
 						</div>
 						<div class="card-body">

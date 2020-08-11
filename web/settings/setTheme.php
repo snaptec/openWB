@@ -84,9 +84,10 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Theme-Auswahl</h1>
 			<div class="card border-secondary">
-				<div class="card-header bg-secondary font-weight-bold text-white">
-					<div id="themeName" class="col text-center"></div>
+				<div class="card-header bg-secondary">
+					<div id="themeName" class="col"></div>
 				</div>
 				<div class="card-body">
 					<div class="row justify-content-center">
@@ -94,7 +95,7 @@
 							<div class="owl-carousel owl-theme">
 								<?php
 									foreach( $allThemes as $themeName ) {
-										echo '                        <div><img src="themes/'.$themeName.'/preview.png" title="'.$themeName.'"></div>'."\n";
+										echo '								<div><img src="themes/'.$themeName.'/preview.png" title="'.$themeName.'"></div>'."\n";
 									}
 								?>
 							</div>
@@ -103,7 +104,7 @@
 				</div> <!-- card-body -->
 				<div class="card-footer">
 					<div class="row justify-content-center">
-						<button onclick="saveTheme()" class="btn btn-green">Theme übernehmen</button>
+						<button onclick="saveTheme()" class="btn btn-success">Theme übernehmen</button>
 					</div>
 				</div> <!-- card-footer -->
 			</div> <!-- card -->

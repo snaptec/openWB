@@ -29,6 +29,8 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- Font Awesome, all styles -->
 		<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
@@ -238,6 +240,7 @@ ECHODAYROWTAIL;
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Autolock Einstellungen</h1>
 			<form class="form" action="./tools/saveautolock.php" method="POST">
 
 				<?php
@@ -266,8 +269,8 @@ ECHODAYROWTAIL;
 
 						echo <<<ECHOFORMGROUPHEAD
 				<div class="card border-secondary" style="{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
-					<div class="card-header font-weight-bold bg-secondary text-white">
-						LP {$lp} ({$nameLp})
+					<div class="card-header bg-secondary">
+						Ladepunkt {$lp} ({$nameLp})
 					</div>
 
 					<div class="card-body">

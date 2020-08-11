@@ -24,6 +24,8 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
@@ -611,10 +613,11 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Verschiedene Einstellungen</h1>
 			<form action="./tools/savemisc.php" method="POST">
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						Allgemeine Funktionen
 					</div>
 					<div class="card-body">
@@ -714,8 +717,10 @@
 						<hr class="border-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row mb-0">
-								<div class="col">
+								<div class="col-md-4">
 									CP Unterbrechung
+								</div>
+								<div class="col">
 									<span class="form-text small">Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine. Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.</span>
 								</div>
 							</div>
@@ -750,7 +755,7 @@
 				</div>
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						RFID
 					</div>
 					<div class="card-body">
@@ -759,19 +764,16 @@
 								<div class="col-md-4">
 									<label for="rfidakt" class="col-form-label">RFID Leser</label>
 								</div>
-								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-									<label class="btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
-										<input type="radio" name="rfidakt" id="rfidaktOff" autocomplete="off" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
-									</label>
-									<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-										<input type="radio" name="rfidakt" id="rfidaktOn" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An
-									</label>
-								</div>
-							</div>
-							<div class="form-row mt-0 mb-0">
-								<div class="col small">
-									Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1.<br>
-									Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
+											<input type="radio" name="rfidakt" id="rfidaktOff" autocomplete="off" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
+										</label>
+										<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
+											<input type="radio" name="rfidakt" id="rfidaktOn" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An
+										</label>
+									</div>
+									<span class="form-text small">Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1. Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.</span>
 								</div>
 							</div>
 						</div>
@@ -1220,7 +1222,7 @@
 				</div>
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						Benachrichtigungen mit Pushover
 					</div>
 					<div class="card-body">
@@ -1355,7 +1357,7 @@
 				</div>
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						LED Ausgänge
 					</div>
 					<div class="card-body">
@@ -1622,7 +1624,7 @@
 				</div>
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
+					<div class="card-header bg-secondary">
 						integriertes Display
 					</div>
 					<div class="card-body">
@@ -1761,18 +1763,24 @@
 									</div>
 								</div>
 								<div class="form-row vaRow mb-1">
-									<label for="displaysleep" class="col-md-4 col-form-label">Display ausschalten nach x Sekunden</label>
+									<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
 									<div class="col">
 										<input type="text" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo trim( $displaysleepold ) ?>">
 									</div>
 								</div>
-								<div class="form-row vaRow mb-1">
-									<label for="displayEinBeimAnstecken" class="col-md-4 col-form-label">Display beim Einstecken des Fahrzeugs einschalten</label>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label for="displayEinBeimAnstecken" class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
+									</div>
 									<div class="col">
-										<select name="displayEinBeimAnstecken" id="displayEinBeimAnstecken" class="form-control">
-											<option <?php if($displayEinBeimAnsteckenOld == 0) echo "selected" ?> value="0">Nein</option>
-											<option <?php if($displayEinBeimAnsteckenOld == 1) echo "selected" ?> value="1">Ja</option>
-										</select>
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenOld == 0) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" autocomplete="off" value="0"<?php if($displayEinBeimAnsteckenOld == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenOld == 1) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" autocomplete="off" value="1"<?php if($displayEinBeimAnsteckenOld == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1812,8 +1820,8 @@
 				</div>
 
 				<div class="card border-secondary">
-					<div class="card-header bg-secondary text-white font-weight-bold">
-						Theme Optionen
+					<div class="card-header bg-secondary">
+						Web-Theme Optionen
 					</div>
 					<div class="card-body">
 						<div class="form-group">

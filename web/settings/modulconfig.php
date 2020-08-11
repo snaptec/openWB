@@ -23,6 +23,9 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
@@ -1235,10 +1238,11 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<h1>Modulkonfiguration</h1>
 			<form action="./tools/savemodul.php" method="POST">
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Erster Ladepunkt
 					</div>
 					<div class="card-body">
@@ -2230,7 +2234,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Zweiter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -2989,7 +2993,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Dritter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3332,7 +3336,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Vierter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3407,7 +3411,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Fünfter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3482,7 +3486,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Sechster Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3556,7 +3560,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Siebter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3631,7 +3635,7 @@
 				</div>
 
 				<div class="card border-primary">
-					<div class="card-header bg-primary text-white font-weight-bold">
+					<div class="card-header bg-primary">
 						Achter Ladepunkt
 					</div>
 					<div class="card-body">
@@ -3706,7 +3710,7 @@
 				</div>
 
 				<div class="card border-danger">
-					<div class="card-header bg-danger text-white font-weight-bold">
+					<div class="card-header bg-danger">
 						Strombezugsmessmodul (EVU-Übergabepunkt)
 					</div>
 					<div class="card-body">
@@ -4357,7 +4361,7 @@
 				</div>
 
 				<div class="card border-success">
-					<div class="card-header bg-success text-white font-weight-bold">
+					<div class="card-header bg-success">
 						PV-Module
 					</div>
 					<div class="card-body">
@@ -5023,7 +5027,7 @@
 				</div>
 
 				<div class="card border-warning">
-					<div class="card-header bg-warning font-weight-bold">
+					<div class="card-header bg-warning">
 						Speicher-Modul
 					</div>
 					<div class="card-body">
@@ -5407,7 +5411,7 @@
 				</div>
 
 				<div class="col-sm-12">
-					<button type="submit" class="btn btn-green" onclick="enable_pv_selector()">Save</button>
+					<button type="submit" class="btn btn-success" onclick="enable_pv_selector()">Save</button>
 				</div>
 			</form>
 
