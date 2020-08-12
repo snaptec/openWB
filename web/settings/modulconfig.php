@@ -98,6 +98,9 @@
 				if(strpos($line, "solarworld_emanagerip=") !== false) {
 					list(, $solarworld_emanageripold) = explode("=", $line);
 				}
+				if(strpos($line, "femskacopw=") !== false) {
+					list(, $femskacopwold) = explode("=", $line);
+				}
 				if(strpos($line, "femsip=") !== false) {
 					list(, $femsipold) = explode("=", $line);
 				}
@@ -3665,7 +3668,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_lgessv1\n") echo "selected" ?> value="bezug_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
-							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
+							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 							<option <?php if($wattbezugmodulold == "bezug_siemens\n") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 						</select>
@@ -3752,6 +3755,13 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP. IP Adresse des Fenecon FEMS.
+						</div>
+						<div class="row" style="background-color:#febebe">
+							<b><label for="femskacopw">Passwort:</label></b>
+							<input type="text" name="femskacopw" id="femskacopw" value="<?php echo $femskacopwold ?>">
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Bei Nutzung von Fenecon FEMS ist das Passwort im Normalfall user, bei Kaco mit Hy-Control ist das Passwort meist admin.
 						</div>
 					</div>
 					<div id="wattbezugsolarworld">
@@ -4308,7 +4318,7 @@
 							<option <?php if($pvwattmodulold == "wr_lgessv1\n") echo "selected" ?> value="wr_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
 							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
-							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">Fenecon FEMS</option>
+							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 							<option <?php if($pvwattmodulold == "wr_siemens\n") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 						</select>
@@ -4962,7 +4972,7 @@
 							<option <?php if($speichermodulold == "speicher_victron\n") echo "selected" ?> value="speicher_victron">Victron Speicher (GX o.ä.)</option>
 							<option <?php if($speichermodulold == "speicher_lgessv1\n") echo "selected" ?> value="speicher_lgessv1">LG ESS 1.0VI</option>
 							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
-							<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">Fenecon FEMS</option>
+							<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($speichermodulold == "speicher_siemens\n") echo "selected" ?> value="speicher_siemens">Siemens</option>
 						</select>
 					</div>

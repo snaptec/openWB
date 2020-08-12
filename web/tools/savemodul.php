@@ -85,6 +85,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'femsip='.$_POST['femsip']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "femskacopw=") !== false) {
+			$result .= 'femskacopw='.$_POST['femskacopw']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "modbusevsesource=") !== false) {
 			if($_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12mid") {
 				$result .= 'modbusevsesource=/dev/ttyUSB0'."\n";
