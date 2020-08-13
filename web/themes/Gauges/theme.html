@@ -1626,13 +1626,12 @@
 
 			$('#resetGaugeLimitsBtn').click(function(event){
 				var gaugeID = $("#resetGaugeLimitsBtn").data("gaugeID");
-				console.log(gaugeID);
 				if ( gaugeID == 'pvData' ) {
 					setCookie('GaugesScaleMax_pvData', gaugePV.scaleBase, 365);
-					setGaugeInitialMinMax(gaugePV);
+					document.location.reload(true);
 				} else if ( gaugeID == 'evuData' ) {
-					setCookie('GaugesScaleMax_evuData', gaugePV.scaleBase, 365);
-					setGaugeInitialMinMax(gaugeEVU);
+					setCookie('GaugesScaleMax_evuData', gaugeEVU.scaleBase, 365);
+					document.location.reload(true);
 				}
     		});
 
