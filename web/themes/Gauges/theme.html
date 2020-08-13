@@ -1082,6 +1082,29 @@
 		</div>
 	</div>
 
+	<!-- modal reset-gauge-limits-window -->
+	<div class="modal fade" id="resetGaugeLimitsModal" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<!-- modal header -->
+				<div class="modal-header bg-danger">
+					<h4 class="modal-title text-light">Achtung</h4>
+				</div>
+				<!-- modal body -->
+				<div class="modal-body text-center text-black">
+					<p>
+						Sollen die Limits für diese Gauge wirklich zurückgesetzt werden?
+					</p>
+				</div>
+				<!-- modal footer -->
+				<div class="modal-footer d-flex justify-content-center">
+					<button type="button" class="btn btn-success" data-dismiss="modal" id="resetGaugeLimitsBtn" data-gaugeID="">Fortfahren</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="resetGaugeLimitsCancelBtn">Abbruch</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- some scripts -->
 	<script>
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
@@ -1353,6 +1376,18 @@
 			gaugePV.setText = false;  // Text und Farbe des Labels anpassen
 			gaugePV.scaleBase = 1000;  // 1000 W ist Basisgröße
 
+			// Add the context menu click listener
+		    gaugePV.canvas.oncontextmenu = function (e)
+		    {
+				e.stopPropagation();  // Stops the window.onclick event from firing
+				var gaugeID = e.srcElement.__object__.id;
+				if ( gaugeID == 'pvData' ) {
+					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
+					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
+					return (false);  // prevent standard context menu
+				}
+		    }
+
 			gaugeBatt = new RGraph.Gauge({
 				id: 'battData',
 				min: -1000,
@@ -1434,6 +1469,17 @@
 			gaugeEVU.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
 			gaugeEVU.setText = true;  // Text und Farbe des Labels anpassen
 			gaugeEVU.scaleBase = 1000;  // 1000 W ist Basisgröße
+
+			gaugeEVU.canvas.oncontextmenu = function (e)
+			{
+				e.stopPropagation();  // Stops the window.onclick event from firing
+				var gaugeID = e.srcElement.__object__.id;
+				if ( gaugeID == 'evuData' ) {
+					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
+					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
+					return (false);  // prevent standard context menu
+				}
+			}
 
 			gaugeHome = new RGraph.Gauge({
 				id: 'homeData',
@@ -1576,6 +1622,22 @@
 				} else {
 					publish("1", "openWB/set/pv/NurPV70Status");
 				}
+			});
+
+			$('#resetGaugeLimitsBtn').click(function(event){
+				var gaugeID = $("#resetGaugeLimitsBtn").data("gaugeID");
+				console.log(gaugeID);
+				if ( gaugeID == 'pvData' ) {
+					setCookie('GaugesScaleMax_pvData', gaugePV.scaleBase, 365);
+					setGaugeInitialMinMax(gaugePV);
+				} else if ( gaugeID == 'evuData' ) {
+					setCookie('GaugesScaleMax_evuData', gaugePV.scaleBase, 365);
+					setGaugeInitialMinMax(gaugeEVU);
+				}
+    		});
+
+			$('#resetGaugeLimitsCancelBtn').click(function(event){
+				$("#resetGaugeLimitsBtn").data("gaugeID", "");
 			});
 
 			$('.btn[value="Reset"]').click(function(event){
