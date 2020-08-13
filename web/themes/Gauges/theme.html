@@ -1377,14 +1377,13 @@
 			gaugePV.scaleBase = 1000;  // 1000 W ist Basisgröße
 
 			// Add the context menu click listener
-		    gaugePV.canvas.oncontextmenu = function (e)
+		    gaugePV.canvas.ondblclick = function (e)
 		    {
-				e.stopPropagation();  // Stops the window.onclick event from firing
+				e.stopPropagation();  // Stops the window.dblclick event from firing
 				var gaugeID = e.srcElement.__object__.id;
 				if ( gaugeID == 'pvData' ) {
 					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
 					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
-					return (false);  // prevent standard context menu
 				}
 		    }
 
@@ -1470,14 +1469,13 @@
 			gaugeEVU.setText = true;  // Text und Farbe des Labels anpassen
 			gaugeEVU.scaleBase = 1000;  // 1000 W ist Basisgröße
 
-			gaugeEVU.canvas.oncontextmenu = function (e)
+			gaugeEVU.canvas.ondblclick = function (e)
 			{
-				e.stopPropagation();  // Stops the window.onclick event from firing
+				e.stopPropagation();  // Stops the window.ondblclick event from firing
 				var gaugeID = e.srcElement.__object__.id;
 				if ( gaugeID == 'evuData' ) {
 					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
 					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
-					return (false);  // prevent standard context menu
 				}
 			}
 
