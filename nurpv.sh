@@ -356,7 +356,7 @@ else
 			if [[ $nurpv70dynact == "1" ]]; then
 				nurpv70status=$(<ramdisk/nurpv70dynstatus)
 				if [[ $nurpv70status == "1" ]]; then
-					abschaltuberschuss=1500
+					abschaltuberschuss=$(( 1500 * anzahlphasen ))
 					if [[ $debug == "1" ]]; then
 						echo "Setze neue Abschwaltschwelle"
 					fi
