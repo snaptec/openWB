@@ -1,0 +1,85 @@
+html{
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	color: white;
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+	/* Old browsers */
+	background: rgb(125,126,125);
+	/* FF3.6-15 */
+	background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	/* IE6-9 */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+}
+
+.bg-warning, .bg-info, .bg-success {
+	color: #212529;
+}
+
+.btn-outline-secondary {
+	color: #ffffff;
+}
+
+.card {
+	background-color: #212529;
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.form-control, .form-control[readonly], .form-control:focus {
+	background-color: #343a40;
+	border: 1px solid #ced4da;
+	color: #ffffff;
+}
+
+.input-group-text {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+.modal-content {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+body {
+	background-color: #212529;
+	color: #ffffff;
+}
+
+input, select {
+	background-color: #6c757d;
+	color: #ffffff;
+}
+
+input[type="text"], input[type="password"], select {
+	border: 1px solid #ced4da;
+}
+
+hr {
+	border-top-color: white;
+}
+
+.modal-content,
+.modal-header,
+.modal-footer {
+	border-color: dimgrey;
+}
+
+.clockpicker-popover {
+	background-color: #343a40;
+}
+
+.clockpicker-popover .popover-title,
+.clockpicker-popover .popover-content {
+	background-color: transparent;
+}
+
+.clockpicker-plate {
+	background-color: black;
+}
