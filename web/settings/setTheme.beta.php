@@ -127,12 +127,12 @@
 				<div class="card-body">
 					<div class="row justify-content-center">
 						<!-- Left control -->
-						<div class="col">
+						<div class="col-1">
 							<a class="carousel-control-prev" href="#themeselect" data-slide="prev">
 								<span class="carousel-control-prev-icon"></span>
 							</a>
 						</div>
-						<div class="col-10">
+						<div class="col-9">
 							<div id="themeselect" class="carousel slide" data-ride="carousel" data-interval="false">
 								<!-- The slideshow -->
 								<?php echo getCarouselItems( $allThemes, $themeCookie ); ?>
@@ -141,7 +141,7 @@
 							</div>
 						</div>
 						<!-- Right control -->
-						<div class="col">
+						<div class="col-1">
 							<a class="carousel-control-next" href="#themeselect" data-slide="next">
 								<span class="carousel-control-next-icon"></span>
 							</a>
