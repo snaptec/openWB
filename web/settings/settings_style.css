@@ -159,13 +159,6 @@ h1 {
     }
 }
 
-.owl-carousel .owl-item img {
-    width: 100%;
-    height: 30vh;
-    object-fit: scale-down;
-    max-width: initial;
-}
-
 .vaRow {
     /* vertical alignment of content in rows */
   display: flex;
@@ -178,4 +171,50 @@ h1 {
 
 input:invalid {
     border-bottom: 2px solid red !important;
+}
+
+/* Bootstrap carousel */
+.carousel-item img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 450px;
+}
+
+.carousel-caption,
+.carousel-indicators {
+    position: initial;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    width: 100%;
+}
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+    color: #212529;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+    filter:invert(1);
+}
+
+.carousel-indicators li {
+    width: 2rem;
+    height: 1rem;
+    border: transparent;
+    border-radius: .5rem;
+    background-color: #212529;
+}
+
+/* owl carousel script */
+.owl-carousel .owl-item img {
+    width: 100%;
+    height: 30vh;
+    object-fit: scale-down;
+    max-width: initial;
 }
