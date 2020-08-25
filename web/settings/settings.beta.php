@@ -538,7 +538,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Allgemeine Einstellungen</h1>
-			<form action="./tools/savemain.php" method="POST">
+			<form action="./tools/debugrequest.php" method="POST">
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
@@ -862,13 +862,13 @@
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($zielladenaktivlp1old == 1) echo " active" ?>">
-												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp11" value="0"<?php if($zielladenphasenlp1old == 1) echo " checked=\"checked\"" ?>>1
+												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp11" value="1"<?php if($zielladenphasenlp1old == 1) echo " checked=\"checked\"" ?>>1
 											</label>
 											<label class="btn btn-outline-info<?php if($zielladenaktivlp1old == 2) echo " active" ?>">
-												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp12" value="1"<?php if($zielladenphasenlp1old == 2) echo " checked=\"checked\"" ?>>2
+												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp12" value="2"<?php if($zielladenphasenlp1old == 2) echo " checked=\"checked\"" ?>>2
 											</label>
 											<label class="btn btn-outline-info<?php if($zielladenaktivlp1old == 3) echo " active" ?>">
-												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp13" value="1"<?php if($zielladenphasenlp1old == 3) echo " checked=\"checked\"" ?>>3
+												<input type="radio" name="zielladenphasenlp1" id="zielladenphasenlp13" value="3"<?php if($zielladenphasenlp1old == 3) echo " checked=\"checked\"" ?>>3
 											</label>
 										</div>
 										<span class="form-text small">Nur für Zielladen relevant.</span>
@@ -960,10 +960,10 @@
 									<label for="u1p3psofort" class="col-md-4 col-form-label">Sofort Laden</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3psofortold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3psofort" id="u1p3psofort1" value="0"<?php if($u1p3psofortold == 1) echo " checked=\"checked\"" ?>>einphasig
+											<input type="radio" name="u1p3psofort" id="u1p3psofort1" value="1"<?php if($u1p3psofortold == 1) echo " checked=\"checked\"" ?>>einphasig
 										</label>
 										<label class="btn btn-outline-info<?php if($u1p3psofortold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3psofort" id="u1p3psofort3" value="1"<?php if($u1p3psofortold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+											<input type="radio" name="u1p3psofort" id="u1p3psofort3" value="3"<?php if($u1p3psofortold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 										</label>
 									</div>
 								</div>
@@ -971,10 +971,10 @@
 									<label for="u1p3pstandby" class="col-md-4 col-form-label">Standby</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3pstandbyold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3pstandby" id="u1p3pstandby1" value="0"<?php if($u1p3pstandbyold == 1) echo " checked=\"checked\"" ?>>einphasig
+											<input type="radio" name="u1p3pstandby" id="u1p3pstandby1" value="1"<?php if($u1p3pstandbyold == 1) echo " checked=\"checked\"" ?>>einphasig
 										</label>
 										<label class="btn btn-outline-info<?php if($u1p3pstandbyold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3pstandby" id="u1p3pstandby3" value="1"<?php if($u1p3pstandbyold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+											<input type="radio" name="u1p3pstandby" id="u1p3pstandby3" value="3"<?php if($u1p3pstandbyold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 										</label>
 									</div>
 								</div>
@@ -982,10 +982,10 @@
 									<label for="u1p3pminundpv" class="col-md-4 col-form-label">Min + PV Laden</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv1" value="0"<?php if($u1p3pminundpvold == 1) echo " checked=\"checked\"" ?>>einphasig
+											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv1" value="1"<?php if($u1p3pminundpvold == 1) echo " checked=\"checked\"" ?>>einphasig
 										</label>
 										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv3" value="1"<?php if($u1p3pminundpvold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv3" value="3"<?php if($u1p3pminundpvold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 										</label>
 									</div>
 								</div>
@@ -994,13 +994,13 @@
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($u1p3pnurpvold == 1) echo " active" ?>">
-												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv1" value="0"<?php if($u1p3pnurpvold == 1) echo " checked=\"checked\"" ?>>einphasig
+												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv1" value="1"<?php if($u1p3pnurpvold == 1) echo " checked=\"checked\"" ?>>einphasig
 											</label>
 											<label class="btn btn-outline-info<?php if($u1p3pnurpvold == 3) echo " active" ?>">
-												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv3" value="1"<?php if($u1p3pnurpvold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv3" value="3"<?php if($u1p3pnurpvold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 											</label>
 											<label class="btn btn-outline-info<?php if($u1p3pnurpvold == 4) echo " active" ?>">
-												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv4" value="1"<?php if($u1p3pnurpvold == 4) echo " checked=\"checked\"" ?>>Automatikmodus
+												<input type="radio" name="u1p3pnurpv" id="u1p3pnurpv4" value="4"<?php if($u1p3pnurpvold == 4) echo " checked=\"checked\"" ?>>Automatikmodus
 											</label>
 										</div>
 										<span class="form-text small">Im Automatikmodus wird die PV Ladung einphasig begonnen. Ist für durchgehend 10 Minuten die Maximalstromstärke erreicht, wird die Ladung auf dreiphasige Ladung umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt der Counter für die Umschaltung erneut. Ist die Ladung im dreiphasigen Modus für 8 Minuten bei der Minimalstromstärke, wird wieder auf einphasige Ladung gewechselt.</span>
@@ -1010,10 +1010,10 @@
 									<label for="u1p3pnl" class="col-md-4 col-form-label">Nachtladen</label>
 									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($u1p3pnlold == 1) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="0"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
+											<input type="radio" name="u1p3pnl" id="u1p3pnl1" value="1"<?php if($u1p3pnlold == 1) echo " checked=\"checked\"" ?>>einphasig
 										</label>
 										<label class="btn btn-outline-info<?php if($u1p3pnlold == 3) echo " active" ?>">
-											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="1"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
+											<input type="radio" name="u1p3pnl" id="u1p3pnl3" value="3"<?php if($u1p3pnlold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 										</label>
 									</div>
 								</div>
@@ -1071,27 +1071,51 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
-								<div class="col-md-4 mb-1">
+								<div class="col">
 									Aktivierung je Lademodus
 								</div>
-								<div class="btn-group-toggle col-md-2 mb-1" data-toggle="buttons">
-									<label class="btn btn-block btn-outline-info active">
-										<input type="checkbox" id="nlakt_sofort" name="nlakt_sofort"<?php if ( $nlakt_sofortold == 1){ echo " checked=\"checked\""; } ?>> Sofort
+							</div>
+							<div class="form-row vaRow mb-1">
+								<label for="nlakt_sofort" class="col-md-4 col-form-label">Sofort</label>
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($nlakt_sofortold == 0) echo " active" ?>">
+										<input type="radio" name="nlakt_sofort" id="nlakt_sofortOff" value="0"<?php if($nlakt_sofortold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($nlakt_sofortold == 1) echo " active" ?>">
+										<input type="radio" name="nlakt_sofort" id="nlakt_sofortOn" value="1"<?php if($nlakt_sofortold == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
-								<div class="btn-group-toggle col-md-2 mb-1" data-toggle="buttons">
-									<label class="btn btn-block btn-outline-info active">
-										<input type="checkbox" id="nlakt_minpv" name="nlakt_minpv"<?php if ( $nlakt_minpvold == 1){ echo " checked=\"checked\""; } ?>> Min+PV
+							</div>
+							<div class="form-row vaRow mb-1">
+								<label for="nlakt_minpv" class="col-md-4 col-form-label">Min+PV</label>
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($nlakt_minpvold == 0) echo " active" ?>">
+										<input type="radio" name="nlakt_minpv" id="nlakt_minpvOff" value="0"<?php if($nlakt_minpvold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($nlakt_minpvold == 1) echo " active" ?>">
+										<input type="radio" name="nlakt_minpv" id="nlakt_minpvOn" value="1"<?php if($nlakt_minpvold == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
-								<div class="btn-group-toggle col-md-2 mb-1" data-toggle="buttons">
-									<label class="btn btn-block btn-outline-info active">
-										<input type="checkbox" id="nlakt_nurpv" name="nlakt_nurpv"<?php if ( $nlakt_nurpvold == 1){ echo " checked=\"checked\""; } ?>> Nur PV
+							</div>
+							<div class="form-row vaRow mb-1">
+								<label for="nlakt_nurpv" class="col-md-4 col-form-label">Nur PV</label>
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($nlakt_nurpvold == 0) echo " active" ?>">
+										<input type="radio" name="nlakt_nurpv" id="nlakt_nurpvOff" value="0"<?php if($nlakt_nurpvold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($nlakt_nurpvold == 1) echo " active" ?>">
+										<input type="radio" name="nlakt_nurpv" id="nlakt_nurpvOn" value="1"<?php if($nlakt_nurpvold == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
-								<div class="btn-group-toggle col-md-2 mb-1" data-toggle="buttons">
-									<label class="btn btn-block btn-outline-info active">
-										<input type="checkbox" id="nlakt_standby" name="nlakt_standby"<?php if ( $nlakt_standbyold == 1){ echo " checked=\"checked\""; } ?>> Standby
+							</div>
+							<div class="form-row vaRow mb-1">
+								<label for="nlakt_standby" class="col-md-4 col-form-label">Standby</label>
+								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
+									<label class="btn btn-outline-info<?php if($nlakt_standbyold == 0) echo " active" ?>">
+										<input type="radio" name="nlakt_standby" id="nlakt_standbyOff" value="0"<?php if($nlakt_standbyold == 0) echo " checked=\"checked\"" ?>>Aus
+									</label>
+									<label class="btn btn-outline-info<?php if($nlakt_standbyold == 1) echo " active" ?>">
+										<input type="radio" name="nlakt_standby" id="nlakt_standbyOn" value="1"<?php if($nlakt_standbyold == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
 							</div>
@@ -1215,7 +1239,7 @@
 									<label for="mollp1moll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
-											<label for="mollp1moll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($nachtllold); ?> A</label>
+											<label for="mollp1moll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1mollold); ?> A</label>
 											<div class="col-10">
 												<input type="range" class="form-control-range rangeInput" name="mollp1moll" id="mollp1moll" min="6" max="32" step="1" value="<?php echo trim($mollp1mollold); ?>">
 											</div>
@@ -2137,38 +2161,13 @@
 																</div>
 															</div> 
 															<select name="nachtladen2abuhrs1" id="nachtladen2abuhrs1" class="form-control">
-																<option <?php if($nachtladen2abuhrs1old == "03:00\n") echo "selected" ?> value="03:00">03:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "03:15\n") echo "selected" ?> value="03:15">03:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "03:30\n") echo "selected" ?> value="03:30">03:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "03:45\n") echo "selected" ?> value="03:45">03:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "04:00\n") echo "selected" ?> value="04:00">04:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "04:15\n") echo "selected" ?> value="04:15">04:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "04:30\n") echo "selected" ?> value="04:30">04:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "04:45\n") echo "selected" ?> value="04:45">04:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "05:00\n") echo "selected" ?> value="05:00">05:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "05:15\n") echo "selected" ?> value="05:15">05:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "05:30\n") echo "selected" ?> value="05:30">05:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "05:45\n") echo "selected" ?> value="05:45">05:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "06:00\n") echo "selected" ?> value="06:00">06:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "06:15\n") echo "selected" ?> value="06:15">06:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "06:30\n") echo "selected" ?> value="06:30">06:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "06:45\n") echo "selected" ?> value="06:45">06:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "07:00\n") echo "selected" ?> value="07:00">07:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "07:15\n") echo "selected" ?> value="07:15">07:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "07:30\n") echo "selected" ?> value="07:30">07:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "07:45\n") echo "selected" ?> value="07:45">07:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "08:00\n") echo "selected" ?> value="08:00">08:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "08:15\n") echo "selected" ?> value="08:15">08:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "08:30\n") echo "selected" ?> value="08:30">08:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "08:45\n") echo "selected" ?> value="08:45">08:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "09:00\n") echo "selected" ?> value="09:00">09:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "09:15\n") echo "selected" ?> value="09:15">09:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "09:30\n") echo "selected" ?> value="09:30">09:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "09:45\n") echo "selected" ?> value="09:45">09:45</option>
-																<option <?php if($nachtladen2abuhrs1old == "10:00\n") echo "selected" ?> value="10:00">10:00</option>
-																<option <?php if($nachtladen2abuhrs1old == "10:15\n") echo "selected" ?> value="10:15">10:15</option>
-																<option <?php if($nachtladen2abuhrs1old == "10:30\n") echo "selected" ?> value="10:30">10:30</option>
-																<option <?php if($nachtladen2abuhrs1old == "10:45\n") echo "selected" ?> value="10:45">10:45</option>
+																<option <?php if($nachtladen2abuhrs1old == 3) echo "selected" ?> value="3">03:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 4) echo "selected" ?> value="4">04:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 5) echo "selected" ?> value="5">05:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 6) echo "selected" ?> value="6">06:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 7) echo "selected" ?> value="7">07:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 8) echo "selected" ?> value="8">08:00</option>
+																<option <?php if($nachtladen2abuhrs1old == 9) echo "selected" ?> value="9">09:00</option>
 															</select>
 														</label>
 													</div>
@@ -2180,39 +2179,13 @@
 																</div>
 															</div> 
 															<select name="nachtladen2bisuhrs1" id="nachtladen2bisuhrs1" class="form-control">
-																<option <?php if($nachtladen2bisuhrs1old == "03:00\n") echo "selected" ?> value="03:00">03:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "03:15\n") echo "selected" ?> value="03:15">03:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "03:30\n") echo "selected" ?> value="03:30">03:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "03:45\n") echo "selected" ?> value="03:45">03:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "04:00\n") echo "selected" ?> value="04:00">04:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "04:15\n") echo "selected" ?> value="04:15">04:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "04:30\n") echo "selected" ?> value="04:30">04:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "04:45\n") echo "selected" ?> value="04:45">04:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "05:00\n") echo "selected" ?> value="05:00">05:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "05:15\n") echo "selected" ?> value="05:15">05:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "05:30\n") echo "selected" ?> value="05:30">05:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "05:45\n") echo "selected" ?> value="05:45">05:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "06:00\n") echo "selected" ?> value="06:00">06:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "06:15\n") echo "selected" ?> value="06:15">06:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "06:30\n") echo "selected" ?> value="06:30">06:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "06:45\n") echo "selected" ?> value="06:45">06:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "07:00\n") echo "selected" ?> value="07:00">07:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "07:15\n") echo "selected" ?> value="07:15">07:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "07:30\n") echo "selected" ?> value="07:30">07:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "07:45\n") echo "selected" ?> value="07:45">07:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "08:00\n") echo "selected" ?> value="08:00">08:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "08:15\n") echo "selected" ?> value="08:15">08:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "08:30\n") echo "selected" ?> value="08:30">08:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "08:45\n") echo "selected" ?> value="08:45">08:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "09:00\n") echo "selected" ?> value="09:00">09:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "09:15\n") echo "selected" ?> value="09:15">09:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "09:30\n") echo "selected" ?> value="09:30">09:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "09:45\n") echo "selected" ?> value="09:45">09:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "10:00\n") echo "selected" ?> value="10:00">10:00</option>
-																<option <?php if($nachtladen2bisuhrs1old == "10:15\n") echo "selected" ?> value="10:15">10:15</option>
-																<option <?php if($nachtladen2bisuhrs1old == "10:30\n") echo "selected" ?> value="10:30">10:30</option>
-																<option <?php if($nachtladen2bisuhrs1old == "10:45\n") echo "selected" ?> value="10:45">10:45</option>
-																<option <?php if($nachtladen2bisuhrs1old == "11:00\n") echo "selected" ?> value="11:00">11:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 4) echo "selected" ?> value="4">04:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 5) echo "selected" ?> value="5">05:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 6) echo "selected" ?> value="6">06:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 7) echo "selected" ?> value="7">07:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 8) echo "selected" ?> value="8">08:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 9) echo "selected" ?> value="9">09:00</option>
+																<option <?php if($nachtladen2bisuhrs1old == 10) echo "selected" ?> value="10">10:00</option>
 															</select>
 														</label>
 													</div>
@@ -2353,25 +2326,25 @@
 									<div class="col">
 										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 16) echo " active" ?>">
-												<input type="radio" name="loadsharingalp12" id="loadsharingalp1216" value="0"<?php if($loadsharingalp12old == 16) echo " checked=\"checked\"" ?>>16 Ampere
+												<input type="radio" name="loadsharingalp12" id="loadsharingalp1216" value="16"<?php if($loadsharingalp12old == 16) echo " checked=\"checked\"" ?>>16 Ampere
 											</label>
 											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 32) echo " active" ?>">
-												<input type="radio" name="loadsharingalp12" id="loadsharingalp1232" value="1"<?php if($loadsharingalp12old == 32) echo " checked=\"checked\"" ?>>32 Ampere
+												<input type="radio" name="loadsharingalp12" id="loadsharingalp1232" value="32"<?php if($loadsharingalp12old == 32) echo " checked=\"checked\"" ?>>32 Ampere
 											</label>
 										</div>
 										<span class="form-text small">
 											<p class="text-danger">Der richtige Anschluss ist zu gewährleisten.</p>
 											<p>Ladepunkt 1:</p>
 											<ul>
-												<li>Phase 1 Zuleitung = Phase 1 Ladepunkt 1</li>
-												<li>Phase 2 Zuleitung = Phase 2 Ladepunkt 1</li>
-												<li>Phase 3 Zuleitung = Phase 3 Ladepunkt 1</li>
+												<li>Zuleitung Phase 1 = Phase 1</li>
+												<li>Zuleitung Phase 2 = Phase 2</li>
+												<li>Zuleitung Phase 3 = Phase 3</li>
 											</ul>
 											<p>Ladepunkt 2:</p>
 											<ul>
-												<li>Phase 1 Zuleitung = Phase 2 Ladepunkt 2</li>
-												<li>Phase 2 Zuleitung = Phase 3 Ladepunkt 2</li>
-												<li>Phase 3 Zuleitung = Phase 1 Ladepunkt 2</li>
+												<li>Zuleitung Phase 1 = <span class="text-danger">Phase 2</span></li>
+												<li>Zuleitung Phase 2 = <span class="text-danger">Phase 3</span></li>
+												<li>Zuleitung Phase 3 = <span class="text-danger">Phase 1</span></li>
 											</ul>
 											<p>Durch das Drehen der Phasen ist sichergestellt, dass 2 einphasige Autos mit voller Geschwindigkeit laden können.</p>
 										</span>
@@ -2385,7 +2358,7 @@
 
 				<div class="form-row text-center">
 					<div class="col">
-						<button type="submit" class="btn btn-success" disabled="disabled">Speichern</button>
+						<button type="submit" class="btn btn-success">Speichern</button>
 					</div>
 				</div>
 			</form>
