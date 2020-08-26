@@ -538,7 +538,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Allgemeine Einstellungen</h1>
-			<form action="./tools/debugrequest.php" method="POST">
+			<form action="./tools/savemain.php" method="POST">
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
@@ -2358,7 +2358,7 @@
 
 				<div class="form-row text-center">
 					<div class="col">
-						<button type="submit" class="btn btn-success">Speichern</button>
+						<button type="submit" class="btn btn-success" disabled="disabled">Speichern</button>
 					</div>
 				</div>
 			</form>
