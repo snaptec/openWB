@@ -497,6 +497,10 @@
 				if(strpos($line, "stopchargeafterdisclp8=") !== false) {
 					list(, $stopchargeafterdisclp8old) = explode("=", $line, 2);
 				}
+				if(strpos($line, "isss=") !== false) {
+					list(, $isssold) = explode("=", $line, 2);
+				}
+
 			}
 			$speichervorhanden = file_get_contents('/var/www/html/openWB/ramdisk/speichervorhanden');
 			$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
@@ -513,6 +517,17 @@
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savemain.php" method="POST">
+					<div class="row ">
+						<b><label for="isss">openWB ist nur ein Ladepunkt:</label></b>
+						<select name="isss" id="isss">
+							<option <?php if($isssold == 0) echo "selected" ?> value="0">Nein</option>
+							<option <?php if($isssold == 1) echo "selected" ?> value="1">Ja</option>
+						</select>
+					</div>
+					<div class="row">
+						<p>Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.<br>Hier ist Ja zu wählen wenn bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll. <br> Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.<br> An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen</p>
+					</div>
+					<hr>
 					<div class="row ">
 						<b><label for="awattaraktiv">Awattar aktivieren:</label></b>
 						<select name="awattaraktiv" id="awattaraktiv">
