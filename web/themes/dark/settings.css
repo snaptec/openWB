@@ -83,3 +83,18 @@ hr {
 .clockpicker-plate {
 	background-color: black;
 }
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+	color: #ffffff;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+	filter: none;
+}
+
+.carousel-indicators li {
+	background-color: #ffffff;
+}
