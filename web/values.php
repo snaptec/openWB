@@ -14,6 +14,9 @@ foreach($lines as $line) {
 	if(strpos($line, "maximalstromstaerke=") !== false) {
 		list(, $maximalstromstaerkeold) = explode("=", $line);
 	}
+	if(strpos($line, "isss=") !== false) {
+		list(, $isssold) = explode("=", $line);
+	}
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}

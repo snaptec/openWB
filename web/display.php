@@ -82,15 +82,19 @@
 	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
 	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
 <?php
-if ( $simplemodeold == 1 ) {
-	include 'display/simple.html';
+if ( $isssold == 1 ) {
+	include 'display/minimal.html';
 } else {
-	// das gewählte Theme einbinden
-	if ( $displaythemeold == 2 ) {
-		include 'display/minimal.html';
+	if ( $simplemodeold == 1 ) {
+		include 'display/simple.html';
 	} else {
-		include 'display/gauge.html';
-	}	
+		// das gewählte Theme einbinden
+		if ( $displaythemeold == 2 ) {
+			include 'display/minimal.html';
+		} else {
+			include 'display/gauge.html';
+		}	
+	}
 }
 ?>
 	<!-- Scripts -->
