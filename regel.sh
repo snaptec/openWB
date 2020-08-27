@@ -46,7 +46,9 @@ source leds.sh
 source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
-
+if [[ $isss == "1" ]]; then
+       exit 0
+fi
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then

@@ -190,4 +190,11 @@ else
 	sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
 
 fi
-
+if (( isss == 1 )); then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/isss.py &
+       fi
+fi

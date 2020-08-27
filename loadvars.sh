@@ -109,7 +109,12 @@ if [[ $evsecon == "ipevse" ]]; then
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
 fi
-
+if [[ $evsecon == "extopenwb" ]]; then
+	evseplugstatelp1=$(mosquitto_sub -C 1 -h $lp1ip -t openWB/lp/1/boolPlugStat)
+	ladestatuslp1=$(mosquitto_sub -C 1 -h $lp1ip -t openWB/lp/1/boolChargeStat)
+	echo $evseplugstatelp1  > /var/www/html/openWB/ramdisk/plugstat
+	echo $ladestatuslp1 > /var/www/html/openWB/ramdisk/chargestat
+fi
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
@@ -138,6 +143,12 @@ if [[ $lastmanagement == "1" ]]; then
 			fi
 
 		fi
+	fi
+	if [[ $evsecons1 == "extopenwb" ]]; then
+		evseplugstatelp2=$(mosquitto_sub -C 1 -h $lp2ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp2=$(mosquitto_sub -C 1 -h $lp2ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp2  > /var/www/html/openWB/ramdisk/plugstats1
+		echo $ladestatuslp2 > /var/www/html/openWB/ramdisk/chargestats1
 	fi
 	if [[ $evsecons1 == "slaveeth" ]]; then
 		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
@@ -192,6 +203,13 @@ if [[ $lastmanagements2 == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 	fi
+	if [[ $evsecons2 == "extopenwb" ]]; then
+		evseplugstatelp3=$(mosquitto_sub -C 1 -h $lp3ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp3=$(mosquitto_sub -C 1 -h $lp3ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstats2
+		echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestats2
+	fi
+
 	if [[ $evsecons2 == "modbusevse" ]]; then
 	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
 	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
@@ -360,6 +378,7 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
 llphaset=3
+
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
 	timeout 10 modules/$ladeleistungmodul/main.sh || true
@@ -409,6 +428,7 @@ else
 	llkwh=0
 	llkwhges=$llkwh
 fi
+
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then

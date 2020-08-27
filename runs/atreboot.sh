@@ -2616,6 +2616,49 @@ if ! grep -Fq "soc_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_vin=VIN" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "isss=" /var/www/html/openWB/openwb.conf
+then
+	echo "isss=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lp1ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "lp2ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp3ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp4ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp5ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp6ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp7ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "lp8ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "lp8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
@@ -2751,6 +2794,14 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
+if (( isss == 1 )); then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/isss.py &
+       fi
+fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
