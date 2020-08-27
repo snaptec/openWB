@@ -58,12 +58,12 @@ function setChargingCurrentDAC () {
 # function for setting the current - extopenwb
 # Parameters:
 # 1: current
-# 2: lp1ip
+# 2: chargep1ip
 function setChargingCurrentExtopenwb () {
 	current=$1
-	lp1ip=$2
+	chargep1ip=$2
 	# set desired charging current
-	mosquitto_pub -r -t openWB/set/isss/Current -h $lp1ip -m "$current"
+	mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$current"
 }
 # function for setting the current - modbusevse
 # Parameters:
@@ -240,7 +240,7 @@ function setChargingCurrent () {
 		setChargingCurrenthttp $current
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
-		setChargingCurrentExtopenwb $current $lp1ip
+		setChargingCurrentExtopenwb $current $chargep1ip
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
@@ -420,7 +420,7 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkickpwlp1=$nrgkickpwlp2
 		evseip=$evseiplp2
 		ipevseid=$evseidlp2
-		lp1ip=$lp2ip
+		chargep1ip=$chargep2ip
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
 			oldcurrent=$current
@@ -450,7 +450,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		goetimeoutlp1=$goetimeoutlp3
 		evseip=$evseiplp3
 		ipevseid=$evseidlp3
-		lp1ip=$lp3ip
+		chargep1ip=$chargep3ip
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -470,7 +470,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		evsecon=$evseconlp4
 		evseip=$evseiplp4
 		ipevseid=$evseidlp4
-		lp1ip=$lp4ip
+		chargep1ip=$chargep4ip
 		if (( lp4enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -490,7 +490,7 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 		evsecon=$evseconlp5
 		evseip=$evseiplp5
 		ipevseid=$evseidlp5
-		lp1ip=$lp5ip
+		chargep1ip=$chargep5ip
 
 		if (( lp5enabled == 0 )); then
 			oldcurrent=$current
@@ -511,7 +511,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 		evsecon=$evseconlp6
 		evseip=$evseiplp6
 		ipevseid=$evseidlp6
-		lp1ip=$lp6ip
+		chargep1ip=$chargep6ip
 		if (( lp6enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -531,7 +531,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 		evsecon=$evseconlp7
 		evseip=$evseiplp7
 		ipevseid=$evseidlp7
-		lp1ip=$lp7ip
+		chargep1ip=$chargep7ip
 		if (( lp7enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -551,7 +551,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		evsecon=$evseconlp8
 		evseip=$evseiplp8
 		ipevseid=$evseidlp8
-		lp1ip=$lp8ip
+		chargep1ip=$chargep8ip
 		if (( lp8enabled == 0 )); then
 			oldcurrent=$current
 			current=0

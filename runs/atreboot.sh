@@ -2620,43 +2620,43 @@ if ! grep -Fq "isss=" /var/www/html/openWB/openwb.conf
 then
 	echo "isss=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "lp1ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep1ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "lp2ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep2ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
-fi
-
-if ! grep -Fq "lp3ip=" /var/www/html/openWB/openwb.conf
-then
-	echo "lp3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "lp4ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep3ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "lp5ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep4ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "lp6ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep5ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "lp7ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep6ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "lp8ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargep7ip=" /var/www/html/openWB/openwb.conf
 then
-	echo "lp8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargep7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep8ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf

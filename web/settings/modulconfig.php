@@ -208,7 +208,30 @@
 				if(strpos($line, "mpmlp1ip=") !== false) {
 					list(, $mpmlp1ipold) = explode("=", $line);
 				}
-
+				if(strpos($line, "chargep1ip=") !== false) {
+				list(, $chargep1ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep2ip=") !== false) {
+					list(, $chargep2ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep3ip=") !== false) {
+					list(, $chargep3ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep4ip=") !== false) {
+					list(, $chargep4ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep5ip=") !== false) {
+					list(, $chargep5ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep6ip=") !== false) {
+					list(, $chargep6ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep7ip=") !== false) {
+					list(, $chargep7ipold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep8ip=") !== false) {
+					list(, $chargep8ipold) = explode("=", $line);
+				}
 				if(strpos($line, "evseiplp4=") !== false) {
 					list(, $evseiplp4old) = explode("=", $line);
 				}
@@ -1247,6 +1270,7 @@
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 								<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
+								<option <?php if($evseconold == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
 							</select>
 						</div>
 					</div>
@@ -1286,7 +1310,7 @@
 					<div id="evseconswifi">
 						<div class="row bg-info">
 							<div class="col">
-								<b><label for="evsewifiiplp1">Simple EVSE Wifi IP Adressee:</label></b>
+								<b><label for="evsewifiiplp1">Simple EVSE Wifi IP Adresse:</label></b>
 								<input type="text" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo $evsewifiiplp1old ?>">
 							</div>
 						</div>
@@ -1305,6 +1329,19 @@
 							<div class="col">
 								Gültige Werte Zahl. Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.<br>
 								Zulange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
+							</div>
+						</div>
+					</div>
+					<div id="evseconextopenwb">
+						<div class="row bg-info">
+							<div class="col">
+								<b><label for="lp1id">IP Adresse der externen openWB:</label></b>
+								<input type="text" name="chargep1ip" id="chargep1ip" value="<?php echo $chargep1ipold ?>">
+							</div>
+						</div>
+						<div class="row bg-info">
+							<div class="col">
+								Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
 							</div>
 						</div>
 					</div>
@@ -1451,9 +1488,13 @@
 							$('#evseconhttp').hide();
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
+							$('#evseconextopenwb').hide();
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 								$('#llmodullp1').show();
+							}
+							if($('#evsecon').val() == 'extopenwb') {
+								$('#evseconextopenwb').show();
 							}
 							if($('#evsecon').val() == 'dac') {
 								$('#evsecondac').show();
@@ -2251,7 +2292,21 @@
 								<option <?php if($evsecons1old == "keba\n") echo "selected" ?> value="keba">Keba</option>
 								<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo "selected" ?> value="openwb12s1">openWB series1/2 Duo</option>
 								<option <?php if($evsecons1old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evsecons1old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
 							</select>
+						</div>
+						<div id="evseconextopenwblp2">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="lp2id">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep2ip" id="chargep2ip" value="<?php echo $chargep2ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
 						</div>
 						<div id="evseconipevselp2">
 							<div class="row bg-info">
@@ -2360,7 +2415,7 @@
 						</div>
 						<div id="evseconswifis1">
 							<div class="row bg-info">
-								<b><label for="evsewifiiplp2">Simple EVSE Wifi IP Adressee:</label></b>
+								<b><label for="evsewifiiplp2">Simple EVSE Wifi IP Adresse:</label></b>
 								<input type="text" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo $evsewifiiplp2old ?>">
 							</div>
 							<div class="row bg-info">
@@ -2377,7 +2432,7 @@
 						</div>
 						<div id="evsecongoes1">
 							<div class="row bg-info">
-								<b><label for="goeiplp2">Go-e IP Adressee:</label></b>
+								<b><label for="goeiplp2">Go-e IP Adresse:</label></b>
 								<input type="text" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>">
 							</div>
 							<div class="row bg-info">
@@ -2404,6 +2459,7 @@
 								$('#evseconkebas1').hide();
 								$('#evseconnrgkicks1').hide();
 								$('#openwb12s1').hide();
+								$('#evseconextopenwblp2').hide();
 								$('#evseconipevselp2').hide();
 								if($('#evsecons1').val() == 'ipevse') {
 									$('#evseconipevselp2').show();
@@ -2419,6 +2475,9 @@
 								}
 								if($('#evsecons1').val() == 'simpleevsewifi') {
 									$('#evseconswifis1').show();
+								}
+								if($('#evsecons1').val() == 'extopenwb') {
+									$('#evseconextopenwblp2').show();
 								}
 								if($('#evsecons1').val() == 'goe') {
 									$('#evsecongoes1').show();
@@ -3001,7 +3060,21 @@
 								<option <?php if($evsecons2old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 								<option <?php if($evsecons2old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
 								<option <?php if($evsecons2old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evsecons2old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
 							</select>
+						</div>
+						<div id="evseconextopenwblp3">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep3ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep3ip" id="chargep3ip" value="<?php echo $chargep3ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
 						</div>
 						<div id="evseconipevselp3">
 							<div class="row bg-info">
@@ -3058,7 +3131,7 @@
 							</div>
 							<div id="evseconswifis2">
 								<div class="row bg-info">
-									<b><label for="evsewifiiplp3">Simple EVSE Wifi IP Adressee:</label></b>
+									<b><label for="evsewifiiplp3">Simple EVSE Wifi IP Adresse:</label></b>
 									<input type="text" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo $evsewifiiplp3old ?>">
 								</div>
 								<div class="row bg-info">
@@ -3075,7 +3148,7 @@
 							</div>
 						<div id="evsecongoes2">
 							<div class="row bg-info">
-								<b><label for="goeiplp3">Go-e IP Adressee:</label></b>
+								<b><label for="goeiplp3">Go-e IP Adresse:</label></b>
 								<input type="text" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>">
 							</div>
 							<div class="row bg-info">
@@ -3099,7 +3172,7 @@
 								$('#llmodullp3').hide();
 								$('#evsecongoes2').hide();
 								$('#evseconipevselp3').hide();
-
+								$('#evseconextopenwblp3').hide();
 
 								if($('#evsecons2').val() == 'dac') {
 									$('#evsecondacs2').show();
@@ -3111,6 +3184,9 @@
 								}
 								if($('#evsecons2').val() == 'simpleevsewifi') {
 									$('#evseconswifis2').show();
+								}
+								if($('#evsecons2').val() == 'extopenwb') {
+									$('#evseconextopenwblp3').show();
 								}
 								if($('#evsecons2').val() == 'goe') {
 									$('#evsecongoes2').show();
@@ -3320,7 +3396,7 @@
 					</div>
 					<div id="lastlp4mman" style="margin:5em;">
 						<div class="row">
-							<b><label for="lp3name">Name Ladepunkt 4:</label></b>
+							<b><label for="lp4name">Name Ladepunkt 4:</label></b>
 							<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>">
 						</div>
 						<div class="row bg-info">
