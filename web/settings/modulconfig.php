@@ -3747,6 +3747,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 							<option <?php if($wattbezugmodulold == "bezug_siemens\n") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_powerdog\n") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3795,7 +3796,11 @@
 							IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
 						</div>
 					</div>
-
+					<div id="wattbezugpowerdog">
+						<div class="row">
+							IP Adresse des Powerdog eingeben. Im Powerdog muss die Schnittstelle ModbusTCP aktiviert werden.
+						</div>
+					</div>
 					<div id="wattbezugethmpm3pm">
 						<div class="row">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
@@ -4246,6 +4251,7 @@
 							$('#wattbezugsonneneco').hide();
 							$('#wattbezugfems').hide();
 							$('#wattbezugsiemens').hide();
+							$('#wattbezugpowerdog').hide();
 							$('#wattbezugip').hide();
 
 							// Auswahl PV-Modul generell erlauben
@@ -4258,7 +4264,11 @@
 								$('#wattbezugip').show();
 
 							}
+							if($('#wattbezugmodul').val() == 'bezug_powerdog') {
+								$('#wattbezugpowerdog').show();
+								$('#wattbezugip').show();
 
+							}
 							if($('#wattbezugmodul').val() == 'bezug_fems') {
 								$('#wattbezugfems').show();
 							}
@@ -4397,6 +4407,7 @@
 							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 							<option <?php if($pvwattmodulold == "wr_siemens\n") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
+							<option <?php if($pvwattmodulold == "wr_powerdog\n") echo "selected" ?> value="wr_powerdog">Powerdog</option>
 						</select>
 					</div>
 
@@ -4427,7 +4438,11 @@
 							IP Adresse des Siemens Speichers.
 						</div>
 					</div>
-
+					<div id="pvpowerdog">
+						<div class="row">
+							Konfiguration im zugehörigen EVU Modul.
+						</div>
+					</div>
 					<div id="pvfems">
 						<div class="row">
 							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
@@ -4855,9 +4870,13 @@
 							$('#pvsolarworld').hide();
 							$('#pvip').hide();
 							$('#pvsiemens').hide();
+							$('#pvpowerdog').hide();
 							if($('#pvwattmodul').val() == 'wr_siemens') {
 								$('#pvip').show();
 								$('#pvsiemens').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_powerdog') {
+								$('#pvpowerdog').show();
 							}
 							if($('#pvwattmodul').val() == 'wr_fems') {
 								$('#pvfems').show();
