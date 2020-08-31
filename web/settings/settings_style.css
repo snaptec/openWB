@@ -211,6 +211,10 @@ input:invalid {
     background-color: #212529;
 }
 
+.carousel-indicators li:hover {
+	opacity: 1;
+}
+
 /* owl carousel script */
 .owl-carousel .owl-item img {
     width: 100%;
