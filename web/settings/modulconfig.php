@@ -3748,6 +3748,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 							<option <?php if($wattbezugmodulold == "bezug_siemens\n") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 							<option <?php if($wattbezugmodulold == "bezug_powerdog\n") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
+							<option <?php if($wattbezugmodulold == "bezug_rct\n") echo "selected" ?> value="bezug_rct">RCT</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3794,6 +3795,11 @@
 					<div id="wattbezugsiemens">
 						<div class="row">
 							IP Adresse des Siemens Speichers eingeben. Im Siemens Speicher muss die Schnittstelle openWB gewählt werden.
+						</div>
+					</div>
+					<div id="wattbezugrct">
+						<div class="row">
+							IP Adresse des RCT Speichers eingeben.
 						</div>
 					</div>
 					<div id="wattbezugpowerdog">
@@ -4252,6 +4258,7 @@
 							$('#wattbezugfems').hide();
 							$('#wattbezugsiemens').hide();
 							$('#wattbezugpowerdog').hide();
+							$('#wattbezugrct').hide();
 							$('#wattbezugip').hide();
 
 							// Auswahl PV-Modul generell erlauben
@@ -4261,6 +4268,11 @@
 							}
 							if($('#wattbezugmodul').val() == 'bezug_siemens') {
 								$('#wattbezugsiemens').show();
+								$('#wattbezugip').show();
+
+							}
+							if($('#wattbezugmodul').val() == 'bezug_rct') {
+								$('#wattbezugrct').show();
 								$('#wattbezugip').show();
 
 							}
@@ -4408,6 +4420,7 @@
 							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 							<option <?php if($pvwattmodulold == "wr_siemens\n") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 							<option <?php if($pvwattmodulold == "wr_powerdog\n") echo "selected" ?> value="wr_powerdog">Powerdog</option>
+							<option <?php if($pvwattmodulold == "wr_rct\n") echo "selected" ?> value="wr_rct">RCT</option>
 						</select>
 					</div>
 
@@ -4439,6 +4452,11 @@
 						</div>
 					</div>
 					<div id="pvpowerdog">
+						<div class="row">
+							Konfiguration im zugehörigen EVU Modul.
+						</div>
+					</div>
+					<div id="pvrct">
 						<div class="row">
 							Konfiguration im zugehörigen EVU Modul.
 						</div>
@@ -4870,6 +4888,7 @@
 							$('#pvsolarworld').hide();
 							$('#pvip').hide();
 							$('#pvsiemens').hide();
+							$('#pvrct').hide();
 							$('#pvpowerdog').hide();
 							if($('#pvwattmodul').val() == 'wr_siemens') {
 								$('#pvip').show();
@@ -4877,6 +4896,9 @@
 							}
 							if($('#pvwattmodul').val() == 'wr_powerdog') {
 								$('#pvpowerdog').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_rct') {
+								$('#pvrct').show();
 							}
 							if($('#pvwattmodul').val() == 'wr_fems') {
 								$('#pvfems').show();
@@ -5069,6 +5091,7 @@
 							<option <?php if($speichermodulold == "speicher_mqtt\n") echo "selected" ?> value="speicher_mqtt">MQTT</option>
 							<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 							<option <?php if($speichermodulold == "speicher_siemens\n") echo "selected" ?> value="speicher_siemens">Siemens</option>
+							<option <?php if($speichermodulold == "speicher_rct\n") echo "selected" ?> value="speicher_rct">RCT</option>
 						</select>
 					</div>
 
@@ -5140,7 +5163,11 @@
 							IP Adresse des Siemens Speichers. Im Siemens Speicher muss als Schnittstelle openWB gewählt werden.
 						</div>
 					</div>
-
+					<div id="divspeicherrct">
+							<div class="row" style="background-color:#fcbe1e">
+							Konfiguration im zugehörigen EVU Modul.
+						</div>
+					</div>
 					<div id="divspeichervarta">
 						<div class="row" style="background-color:#fcbe1e">
 							<b><label for="vartaspeicherip">Varta IP:</label></b>
@@ -5347,10 +5374,14 @@
 							$('#divspeicherlgessv1').hide();
 							$('#divspeicherfems').hide();
 							$('#divspeicherip').hide();
+							$('#divspeicherrct').hide();
 							$('#divspeichersiemens').hide();
 
 							if($('#speichermodul').val() == 'speicher_fems') {
 								$('#divspeicherfems').show();
+							}
+							if($('#speichermodul').val() == 'speicher_rct') {
+								$('#divspeicherrct').show();
 							}
 							if($('#speichermodul').val() == 'speicher_siemens') {
 								$('#divspeicherip').show();
