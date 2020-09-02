@@ -119,6 +119,14 @@ def getmeter():
         f.close()
         try:
             time.sleep(0.1)
+            rq = client.read_holding_registers(1000,1,unit=1) 
+            ll = rq.registers[0]
+
+        except:
+            ll = 0
+
+        try:
+            time.sleep(0.1)
             rq = client.read_holding_registers(1002,1,unit=1) 
             var = rq.registers[0]
         except Exception as e:
@@ -133,15 +141,13 @@ def getmeter():
         elif ( var == 2):
             Values.update({'plugstat' : 1})
             Values.update({'chargestat' : 0})
-        elif ( var == 3):
+        elif ( var == 3 and ll > 0 ):
             Values.update({'plugstat' : 1})
             Values.update({'chargestat' : 1})
-        try:
-            rq = client.read_holding_registers(1000,1,unit=1) 
-            ll = rq.registers[0]
+        elif ( var == 3 and ll == 0 ):
+            Values.update({'plugstat' : 1})
+            Values.update({'chargestat' : 0})
 
-        except:
-            ll = 0
         Values.update({'evsell' : ll})
         logDebug("0", "EVSE plugstat: " + str(var) + " EVSE LL: " + str(ll))
         

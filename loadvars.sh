@@ -206,8 +206,8 @@ if [[ $lastmanagements2 == "1" ]]; then
 	if [[ $evsecons2 == "extopenwb" ]]; then
 		evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
 		ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
-		echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstats2
-		echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestats2
+		echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
+		echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
 	fi
 
 	if [[ $evsecons2 == "modbusevse" ]]; then
@@ -224,9 +224,11 @@ if [[ $lastmanagements2 == "1" ]]; then
                         echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
                 fi
         fi
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 else
-	plugstatlp3=$(<ramdisk/plugstats2)
-	chargestatlp3=$(<ramdisk/chargestats2)
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
 	if [[ $evseconlp4 == "ipevse" ]]; then
