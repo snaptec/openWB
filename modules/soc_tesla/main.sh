@@ -56,7 +56,7 @@ socTeslaLog(){
 
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
-	response=$(python $MODULEDIR/teslajson.py --email $username --tokens_file $tokensfile --vid $carnumber --json get data)
+	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
 	# current state of car
 	state=$(echo $response | jq .response.state)
 	socTeslaLog "State: $state"
@@ -114,7 +114,7 @@ checkToken(){
 			fi
 			# Request new token with user/pass.
 			socTeslaLog "Requesting new token..."
-			response=$(python $MODULEDIR/teslajson.py --email $username --password $password --tokens_file $tokensfile --json)
+			response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
 			# password in response, so do not log it!
 			if [ -f $tokensfile ]; then
 				socTeslaLog "...all done, removing password from config file."
@@ -132,7 +132,7 @@ checkToken(){
 
 wakeUpCar(){
 	socTeslaLog "Waking up car."
-	response=$(python $MODULEDIR/teslajson.py --email $username --tokens_file $tokensfile --vid $carnumber --json do wake_up)
+	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
 	state=$(echo $response | jq .response.state)
 	socTeslaLog "Car state after wakeup: $state"
 }
