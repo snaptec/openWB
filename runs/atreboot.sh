@@ -2795,12 +2795,13 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get -qq install -y php-curl
 #  fi
 if (( isss == 1 )); then
-       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
-       then
-               echo "test" > /dev/null
-       else
-               python3 /var/www/html/openWB/runs/isss.py &
-       fi
+	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/isss.py &
+    fi
 fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
