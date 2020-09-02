@@ -181,7 +181,7 @@ if (( cpunterbrechunglp1 == 1 )); then
                        if (( ladeleistung < 100 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
 			       cpulp1counter=$(<ramdisk/cpulp1counter)
-			       if (( cpulp1counter > 3 )); then
+			       if (( cpulp1counter > 5 )); then
 				       if (( cpulp1waraktiv == 0 )); then
 						echo "CP Unterbrechung an LP1 durchgeführt"
 						if [[ $evsecon == "simpleevsewifi" ]]; then
