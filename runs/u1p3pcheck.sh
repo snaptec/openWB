@@ -5,7 +5,7 @@ if [[ "$1" == "1" ]]; then
 		sudo python runs/trigopen.py
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
-		sudo python runs/u1p3premote.py -h $chargep1ip $evseiplp1 $u1p3plp2id 1
+		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 1
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
