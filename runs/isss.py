@@ -9,6 +9,13 @@ import socket
 import struct 
 import binascii 
 import RPi.GPIO as GPIO
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(37, GPIO.OUT)
+GPIO.setup(13, GPIO.OUT)
+GPIO.setup(22, GPIO.OUT)
+GPIO.setup(29, GPIO.OUT)
+GPIO.setup(11, GPIO.OUT)
 DeviceValues = { }
 Values = { }
 DeviceValues.update({'voltage1' : str(5)})
@@ -32,10 +39,6 @@ sdmid=105
 Values = { }
 actorstat=0
 loglevel=1
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(11, GPIO.OUT)
 from pymodbus.client.sync import ModbusSerialClient
 client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, 
     stopbits=1, bytesize=8, timeout=1)
@@ -236,6 +239,8 @@ def controlact(action):
 def loadregelvars():
     global actorstat
     global solla
+    global u1p3pstat
+    global u1p3ptmpstat
     try:
         with open('ramdisk/buchsestatus', 'r') as value:
             actorstat = int(value.read())
@@ -251,6 +256,36 @@ def loadregelvars():
     logDebug("0", "LL Soll: " + str(solla) + " ActorStatus: " + str(actorstat))
     if ( Values["evsell"] != solla ):
         writeevse(solla);
+    try:
+        with open('ramdisk/u1p3pstat', 'r') as value:
+            u1p3ptmpstat = int(value.read())
+    except:
+        pass
+        u1p3ptmpstat = 3
+    try:
+        u1p3pstat
+    except:
+        u1p3pstat = 3
+    if ( u1p3pstat != u1p3ptmpstat ):
+        if ( u1p3ptmpstat == 1 ):
+            GPIO.output(22, GPIO.HIGH)
+            GPIO.output(29, GPIO.HIGH)
+            GPIO.output(11, GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(29, GPIO.LOW)
+            GPIO.output(11, GPIO.LOW)
+            time.sleep(2)
+            GPIO.output(22, GPIO.LOW)
+        if ( u1p3ptmpstat == 3 ):
+            GPIO.output(22, GPIO.HIGH)
+            GPIO.output(37, GPIO.HIGH)
+            GPIO.output(13, GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(37, GPIO.LOW)
+            GPIO.output(13, GPIO.LOW)
+            time.sleep(2)
+            GPIO.output(22, GPIO.LOW)
+        u1p3pstat = u1p3ptmpstat
 def writeevse(lla):
     client.write_registers(1000, lla, unit=1)
     logDebug("1", "Write to EVSE" + str(lla))
