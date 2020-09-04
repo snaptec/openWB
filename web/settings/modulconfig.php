@@ -3811,8 +3811,9 @@
 						<div class="row">
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
 							<select name="evukitversion" id="evukitversion">
-								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit</option>
-								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit v2</option>
+								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
+								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit v2 Lovato</option>
+								<option <?php if($evukitversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
 							</select>
 						</div>
 					</div>
