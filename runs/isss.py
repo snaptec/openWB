@@ -32,7 +32,7 @@ DeviceValues.update({'chargestat' : str(5)})
 DeviceValues.update({'plugstat' : str(5)})
 Values.update({'plugstat' : str(5)})
 Values.update({'chargestat' : str(5)})
-
+Values.update({'evsell' : str(1)})
 os.chdir('/var/www/html/openWB')
 seradd = "/dev/serial0" 
 sdmid=105
