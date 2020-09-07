@@ -186,6 +186,7 @@ if [[ $lastmanagement == "1" ]]; then
 else
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)
+	ConfiguredChargePoints=1
 
 fi
 if [[ $lastmanagements2 == "1" ]]; then
@@ -322,7 +323,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		fi
 	fi
 fi
-
+echo $ConfiguredChargePoints > ramdisk/ConfiguredChargePoints
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
        echo " " > ramdisk/lastregelungaktiv
