@@ -116,6 +116,7 @@ if [[ $evsecon == "extopenwb" ]]; then
 	echo $ladestatuslp1 > /var/www/html/openWB/ramdisk/chargestat
 fi
 if [[ $lastmanagement == "1" ]]; then
+	ConfiguredChargePoints=2
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
@@ -188,6 +189,7 @@ else
 
 fi
 if [[ $lastmanagements2 == "1" ]]; then
+	ConfiguredChargePoints=3
 	if [[ $evsecons2 == "ipevse" ]]; then
 		evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
 		ladestatuslp3=$(</var/www/html/openWB/ramdisk/ladestatuss2)
@@ -231,6 +233,7 @@ else
 	chargestatlp3=$(<ramdisk/chargestatlp3)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
+	ConfiguredChargePoints=4
 	if [[ $evseconlp4 == "ipevse" ]]; then
 		evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
 		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
@@ -248,6 +251,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp5 == "1" ]]; then
+	ConfiguredChargePoints=5
 	if [[ $evseconlp5 == "ipevse" ]]; then
 		evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
 		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
@@ -265,6 +269,7 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp6 == "1" ]]; then
+	ConfiguredChargePoints=6
 	if [[ $evseconlp6 == "ipevse" ]]; then
 		evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
 		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
@@ -282,6 +287,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp7 == "1" ]]; then
+	ConfiguredChargePoints=7
 	if [[ $evseconlp7 == "ipevse" ]]; then
 		evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
 		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
@@ -299,6 +305,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp8 == "1" ]]; then
+	ConfiguredChargePoints=8
 	if [[ $evseconlp8 == "ipevse" ]]; then
 		evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
 		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
