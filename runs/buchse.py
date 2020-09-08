@@ -311,8 +311,9 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(29, GPIO.LOW)
             GPIO.output(11, GPIO.LOW)
-            time.sleep(2)
+            time.sleep(7)
             GPIO.output(22, GPIO.LOW)
+            time.sleep(1)
         if ( u1p3ptmpstat == 3 ):
             GPIO.output(22, GPIO.HIGH)
             GPIO.output(37, GPIO.HIGH)
@@ -320,8 +321,9 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(37, GPIO.LOW)
             GPIO.output(13, GPIO.LOW)
-            time.sleep(2)
+            time.sleep(7)
             GPIO.output(22, GPIO.LOW)
+            time.sleep(1)
         u1p3pstat = u1p3ptmpstat
 def writeevse(lla):
     client.write_registers(1000, lla, unit=1)
