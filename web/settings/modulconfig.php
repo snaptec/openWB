@@ -1271,6 +1271,7 @@
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 								<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
 								<option <?php if($evseconold == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+								<option <?php if($evseconold == "buchse\n") echo "selected" ?> value="buchse">openWB mit Buchse</option>
 							</select>
 						</div>
 					</div>
@@ -1285,6 +1286,13 @@
 							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
 						</div>
 					</div>
+					<div id="openwbbuchse">
+						<div class="row bg-success">
+							Keine Konfiguration erforderlich.<br>
+							Dies ist die richtige Option die openWB mit Buchse.
+						</div>
+					</div>
+
 					<div id="openwb12mid">
 						<div class="row bg-success">
 							Keine Konfiguration erforderlich.<br>
@@ -1488,6 +1496,7 @@
 							$('#evseconhttp').hide();
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
+							$('#openwbbuchse').hide();
 							$('#evseconextopenwb').hide();
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
@@ -1496,6 +1505,10 @@
 							if($('#evsecon').val() == 'extopenwb') {
 								$('#evseconextopenwb').show();
 							}
+							if($('#evsecon').val() == 'buchse') {
+								$('#openwbbuchse').show();
+							}
+
 							if($('#evsecon').val() == 'dac') {
 								$('#evsecondac').show();
 								$('#llmodullp1').show();

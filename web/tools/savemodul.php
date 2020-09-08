@@ -380,10 +380,14 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "ladeleistungmodul=") !== false) {
-			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "openwbext" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "buchse" or $_POST['evsecon'] == "openwbext" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 				if($_POST['evsecon'] == "goe") {
 					$result .= 'ladeleistungmodul=goelp1'."\n";
 				}
+				if($_POST['evsecon'] == "buchse") {
+					$result .= 'ladeleistungmodul=llbuchse'."\n";
+				}
+
 				if($_POST['evsecon'] == "twcmanager") {
 					$result .= 'ladeleistungmodul=twcmanagerlp1'."\n";
 				}
