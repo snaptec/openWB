@@ -2726,6 +2726,7 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+
 if ! [ -x "$(command -v sshpass)" ];then
 	apt-get -qq update
 	sleep 1
@@ -2777,7 +2778,11 @@ if python3 -c "import aiohttp" &> /dev/null; then
 else
 	sudo pip3 install aiohttp
 fi
-
+if python3 -c "import pymodbus" &> /dev/null; then
+	echo 'pymodbus installed...'
+else
+	sudo pip3 install pymodbus
+fi
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
