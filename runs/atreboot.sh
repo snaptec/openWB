@@ -2808,6 +2808,15 @@ if (( isss == 1 )); then
     	python3 /var/www/html/openWB/runs/isss.py &
     fi
 fi
+if (( evsecon == "buchse" )); then
+	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/buchse.py &
+    fi
+fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly

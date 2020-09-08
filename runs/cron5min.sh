@@ -198,3 +198,11 @@ if (( isss == 1 )); then
                python3 /var/www/html/openWB/runs/isss.py &
        fi
 fi
+if (( evsecon == "buchse" )); then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/buchse.py &
+       fi
+fi
