@@ -2166,7 +2166,7 @@
 
 		<script type="text/javascript">
 
-			$.get("settings/navbar.html", function(data){
+			$.get("settings/navbar.html?vers=b", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navAllgemein').addClass('disabled');
