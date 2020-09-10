@@ -807,6 +807,9 @@ fi
 if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
 	usesimbezug=1
 fi
+if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "2" ]]; then
+	usesimbezug=1
+fi
 if [[ $usesimbezug == "1" ]]; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/wattbezug)
