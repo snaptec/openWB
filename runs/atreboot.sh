@@ -2808,7 +2808,7 @@ if (( isss == 1 )); then
     	python3 /var/www/html/openWB/runs/isss.py &
     fi
 fi
-if (( evsecon == "buchse" )); then
+if [[ "$evsecon" == "buchse" ]]; then
 	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
     if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
     then
