@@ -40,6 +40,7 @@ os.chdir('/var/www/html/openWB')
 try:
         f = open('/dev/ttyUSB0')
         seradd = "/dev/ttyUSB0"
+        f.close()
 except:
         seradd = "/dev/serial0"
 sdmid=105
