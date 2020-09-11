@@ -2315,12 +2315,8 @@
 						Loadsharing
 					</div>
 					<div class="card-body">
-						<div id="loadsharingoffdiv">
-							<div class="form-row">
-								<div class="col">
-									Diese Einstellungen sind nur verfügbar, wenn mindestens zwei Ladepunkte konfiguriert sind.
-								</div>
-							</div>
+						<div id="loadsharingoffdiv" class="card-text alert alert-info">
+							Diese Einstellungen sind nur verfügbar, wenn mindestens zwei Ladepunkte konfiguriert sind.
 						</div>
 						<div id="loadsharingdiv">
 							<div class="form-group">

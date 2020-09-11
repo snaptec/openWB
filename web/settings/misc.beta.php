@@ -622,7 +622,7 @@
 					</div>
 					<div class="card-body">
 						<div class="form-group">
-							<div class="form-row mb-0">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									<label for="dspeed" class="col-form-label">Geschwindigkeit Regelintervall</label>
 								</div>
@@ -646,7 +646,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="form-row mb-0">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									<label for="ladetaster" class="col-form-label">Ladetaster</label>
 								</div>
@@ -664,7 +664,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="form-row mb-0">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									<label for="bootmodus" class="col-form-label">Lademodus nach Start der openWB</label>
 								</div>
@@ -691,7 +691,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="form-row mb-0">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									<label for="netzabschaltunghz" class="col-form-label">Netzschutz</label>
 								</div>
@@ -715,8 +715,8 @@
 							</div>
 						</div>
 						<hr class="border-secondary">
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
+						<div class="form-group">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									CP Unterbrechung
 								</div>
@@ -724,7 +724,7 @@
 									<span class="form-text small">Diese Option erfordert die verbaute Addon Platine und die korrekte Verdrahtung des CP Signals durch die Addon Platine. Sie ist für Fahrzeuge, die nach einer gewissen Zeit einer pausierten Ladung nicht von alleine die Ladung wieder beginnen. Nur aktivieren, wenn es ohne die Option Probleme gibt.</span>
 								</div>
 							</div>
-							<div class="form-row mt-2 mb-0">
+							<div class="form-row mt-2 mb-1">
 								<div class="col-4">
 									<label for="cpunterbrechunglp1" class="col-form-label">Ladepunkt 1</label>
 								</div>
@@ -1362,7 +1362,7 @@
 					</div>
 					<div class="card-body">
 						<div class="form-group">
-							<div class="form-row mb-0">
+							<div class="form-row mb-1">
 								<div class="col-md-4">
 									<label for="ledsakt" class="col-form-label">LED Ausgänge</label>
 								</div>
