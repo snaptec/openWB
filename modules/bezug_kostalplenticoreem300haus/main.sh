@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Konfigurationsdatei einbinden
-. /var/www/html/openWB/openwb.conf
 
 #########################################################
 #

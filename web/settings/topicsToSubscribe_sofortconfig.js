@@ -36,5 +36,14 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/7/energyToCharge", 0],
 	["openWB/config/get/sofort/lp/8/energyToCharge", 0],
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 0],
-	["openWB/config/get/sofort/lp/2/socToChargeTo", 0]
+	["openWB/config/get/sofort/lp/2/socToChargeTo", 0],
+	["openWB/lp/1/boolChargePointConfigured", 0],
+	["openWB/lp/2/boolChargePointConfigured", 0],
+	["openWB/lp/3/boolChargePointConfigured", 0],
+	["openWB/lp/4/boolChargePointConfigured", 0],
+	["openWB/lp/5/boolChargePointConfigured", 0],
+	["openWB/lp/6/boolChargePointConfigured", 0],
+	["openWB/lp/7/boolChargePointConfigured", 0],
+	["openWB/lp/8/boolChargePointConfigured", 0]
+
 ];

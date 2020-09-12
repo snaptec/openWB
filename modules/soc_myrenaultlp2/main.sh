@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 timer=$(</var/www/html/openWB/ramdisk/soctimer1)
 if (( timer < 60 )); then
 	timer=$((timer+1))

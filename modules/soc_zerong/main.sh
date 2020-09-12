@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 zintervallladen=$(( soc_zerong_intervallladen * 6 ))
 zintervall=$(( soc_zerong_intervall * 6 ))
 zerotimer=$(</var/www/html/openWB/ramdisk/soctimer)

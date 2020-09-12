@@ -497,6 +497,7 @@
 								<option <?php if($verbraucher1_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
 								<option <?php if($verbraucher1_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
 								<option <?php if($verbraucher1_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher1_typold == "abb-b23\n") echo "selected" ?> value="abb-b23">ABB-B23</option>
 								<option <?php if($verbraucher1_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
 								<option <?php if($verbraucher1_typold == "shelly\n") echo "selected" ?> value="shelly">Shelly 1PM</option>
 							</select>
@@ -568,6 +569,9 @@
 							if($('#verbraucher1_typ').val() == 'sdm120') {
 								$('#v1modbus').show();
 							}
+							if($('#verbraucher1_typ').val() == 'abb-b23') {
+								$('#v1modbus').show();
+							}
 							if($('#verbraucher1_typ').val() == 'tasmota') {
 								$('#v1tasmota').show();
 							}
@@ -625,6 +629,7 @@
 								<option <?php if($verbraucher2_typold == "mpm3pm\n") echo "selected" ?> value="mpm3pm">MPM3PM</option>
 								<option <?php if($verbraucher2_typold == "sdm120\n") echo "selected" ?> value="sdm120">SDM120</option>
 								<option <?php if($verbraucher2_typold == "sdm630\n") echo "selected" ?> value="sdm630">SDM630</option>
+								<option <?php if($verbraucher2_typold == "abb-b23\n") echo "selected" ?> value="abb-b23">ABB-B23</option>
 								<option <?php if($verbraucher2_typold == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
 							</select>
 						</div>
@@ -695,6 +700,9 @@
 							if($('#verbraucher2_typ').val() == 'sdm120') {
 								$('#v2modbus').show();
 							}
+							if($('#verbraucher2_typ').val() == 'abb-b23') {
+								$('#v2modbus').show();
+							}
 							if($('#verbraucher2_typ').val() == 'tasmota') {
 								$('#v2tasmota').show();
 							}
@@ -733,7 +741,7 @@
 				<div class="row justify-content-center">
 					<div class="col text-center">
 						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
+						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">

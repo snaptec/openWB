@@ -2,6 +2,7 @@
 
 declare -A mqttvar
 mqttvar["system/IpAddress"]=ipaddress
+mqttvar["system/ConfiguredChargePoints"]=ConfiguredChargePoints
 mqttvar["evu/APhase1"]=bezuga1
 mqttvar["evu/APhase2"]=bezuga2
 mqttvar["evu/APhase3"]=bezuga3
@@ -167,6 +168,17 @@ mqttvar["lp/6/AutolockConfigured"]=autolockconfiguredlp6
 mqttvar["lp/7/AutolockConfigured"]=autolockconfiguredlp7
 mqttvar["lp/8/AutolockConfigured"]=autolockconfiguredlp8
 mqttvar["pv/DailyYieldKwh"]=daily_pvkwhk
+mqttvar["evu/DailyYieldImportKwh"]=daily_bezugkwh
+mqttvar["evu/DailyYieldExportKwh"]=daily_einspeisungkwh
+mqttvar["global/DailyYieldAllChargePointsKwh"]=daily_llakwh
+mqttvar["global/DailyYieldHausverbrauchKwh"]=daily_hausverbrauchkwh
+mqttvar["housebattery/DailyYieldImportKwh"]=daily_sikwh
+mqttvar["housebattery/DailyYieldExportKwh"]=daily_sekwh
+mqttvar["SmartHome/Devices/1/DailyYieldKwh"]=daily_d1kwh
+mqttvar["SmartHome/Devices/2/DailyYieldKwh"]=daily_d2kwh
+mqttvar["SmartHome/Devices/3/DailyYieldKwh"]=daily_d3kwh
+mqttvar["SmartHome/Devices/4/DailyYieldKwh"]=daily_d4kwh
+mqttvar["SmartHome/Devices/5/DailyYieldKwh"]=daily_d5kwh
 mqttvar["global/boolRse"]=rsestatus
 mqttvar["hook/1/boolHookStatus"]=hook1akt
 mqttvar["hook/2/boolHookStatus"]=hook2akt
@@ -197,7 +209,11 @@ mqttvar["config/get/SmartHome/Devices/6/mode"]=smarthome_device_manual_6
 mqttvar["config/get/SmartHome/Devices/7/mode"]=smarthome_device_manual_7
 mqttvar["config/get/SmartHome/Devices/8/mode"]=smarthome_device_manual_8
 mqttvar["config/get/SmartHome/Devices/9/mode"]=smarthome_device_manual_9
-
+mqttvar["lp/4/TimeRemaining"]=restzeitlp4
+mqttvar["lp/5/TimeRemaining"]=restzeitlp5
+mqttvar["lp/6/TimeRemaining"]=restzeitlp6
+mqttvar["lp/7/TimeRemaining"]=restzeitlp7
+mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do

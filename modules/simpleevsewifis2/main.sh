@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 output=$(curl --connect-timeout $evsewifitimeoutlp3 -s http://$evsewifiiplp3/getParameters)
@@ -9,6 +8,8 @@ if ! [ -z "$output" ]; then
 	lla2=$(echo $output | jq '.list[] | .currentP2')
 	lla3=$(echo $output | jq '.list[] | .currentP3')
 	llkwh=$(echo $output | jq '.list[] | .meterReading')
+	evsewifiplugstatelp3=$(echo $output | jq '.list[] | .vehicleState') 
+
 	watt=$(echo "scale=0;$watt * 1000 /1" |bc)
 	if [[ $watt =~ $re ]] ; then
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuells2
@@ -24,5 +25,15 @@ if ! [ -z "$output" ]; then
 	fi
 	if [[ $llkwh =~ $rekwh ]] ; then
 		echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs2
+	fi
+	if [[ $evsewifiplugstatelp3 > "1" ]]; then
+		echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/plugstatlp3
+	fi
+	if [[ $evsewifiplugstatelp3 > "2" ]] ; then
+		echo 1 > /var/www/html/openWB/ramdisk/chargestatlp3
+	else
+		echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 	fi
 fi

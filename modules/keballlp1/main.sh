@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
 counter=0

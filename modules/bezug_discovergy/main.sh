@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 output=$(curl --connect-timeout 3 -s -u $discovergyuser:$discovergypass "https://api.discovergy.com/public/v1/last_reading?meterId=$discovergyevuid")
 
 einspeisungwh=$(echo $output | jq .values.energyOut)
@@ -31,13 +30,23 @@ echo $wattl2 > /var/www/html/openWB/ramdisk/bezugw2
 wattl3=$(echo $output | jq .values.power3)
 wattl3=$(( wattl3 / 1000 ))
 echo $wattl3 > /var/www/html/openWB/ramdisk/bezugw3
-al1=$(( wattl1 / vl1 ))
-echo $al1 > /var/www/html/openWB/ramdisk/bezuga1
-al2=$(( wattl2 / vl2 ))
-echo $al2 > /var/www/html/openWB/ramdisk/bezuga2
-al3=$(( wattl3 / vl3 ))
+if (( vl1 > 150 )); then
+	al1=$(( wattl1 / vl1 ))
+else
+	al1=$(( wattl1 / 230 ))
+fi
+echo $al1 > /var/www/html/openWB/ramdisk/bezuga1 
+if (( vl2 > 150 )); then 
+	al2=$(( wattl2 / vl2 )) 
+else 
+	al2=$(( wattl2 / 230 )) 
+fi 
+echo $al2 > /var/www/html/openWB/ramdisk/bezuga2 
+if (( vl3 > 150 )); then 
+	al3=$(( wattl3 / vl3 )) 
+else 
+	al3=$(( wattl3 / 230 )) 
+fi 
 echo $al3 > /var/www/html/openWB/ramdisk/bezuga3
-
-
 echo $watt
 

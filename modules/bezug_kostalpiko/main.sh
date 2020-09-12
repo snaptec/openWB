@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Auslesen eines Kostal Piko WR über die integrierte API des WR mit angeschlossenem Eigenverbrauchssensor.
-. /var/www/html/openWB/openwb.conf
 
 pvwatttmp=$(curl --connect-timeout 3 -s $wrkostalpikoip/api/dxs.json?dxsEntries=33556736'&'dxsEntries=251658753'&'dxsEntries=83887106'&'dxsEntries=83887362'&'dxsEntries=83887618)
 

@@ -1,12 +1,11 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
-soc=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
-#leistung=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/ActivePower" | jq .value)
-grid=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/GridActivePower" | jq .value)
-pv=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
-haus=$(curl -s "http://x:user@$femsip:8084/rest/channel/_sum/ConsumptionActivePower" | jq .value)
-speicheriwh=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/ActiveChargeEnergy" | jq .value)
-speicherewh=$(curl -s "http://x:user@$femsip:8084/rest/channel/ess0/ActiveDischargeEnergy" | jq .value)
+soc=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/Soc" | jq .value)
+#leistung=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActivePower" | jq .value)
+grid=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/GridActivePower" | jq .value)
+pv=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ProductionActivePower" | jq .value)
+haus=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/ConsumptionActivePower" | jq .value)
+speicheriwh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActiveChargeEnergy" | jq .value)
+speicherewh=$(curl -s "http://x:$femskacopw@$femsip:8084/rest/channel/ess0/ActiveDischargeEnergy" | jq .value)
 leistung=$(( grid + pv - haus ))
 
 

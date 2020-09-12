@@ -10,7 +10,6 @@
 #            dem Menüpunkt "Systeminformationen"
 #            Mit der Registrierungsnr. kann man sich dann in der 
 #            Rolle "installer" einloggen. 
-. /var/www/html/openWB/openwb.conf
 ess_url="https://$lgessv1ip"
 ess_pass=$lgessv1pass
 #
@@ -19,7 +18,7 @@ ess_pass=$lgessv1pass
 if [ "$ess_api_ver" == "10.2019" ]; then
 	arr_pos="13"
 else 
-	arr_pos="0"
+	arr_pos="1"
 fi
 #
 ## Prüfen, ob ein Sessionkey in der Ramdisk vorhanden ist. Wenn nicht,
@@ -71,6 +70,8 @@ fi
 ## Daten für Langzeitlog holen
 #
 jahr=$(date +%Y)
+monat=$(date +%m)
+arr_pos=$(($monat))
 year_of_stat='"'year'"':'"'$jahr'"'
 json=$(curl -s -k --connect-timeout 5 -d '{"auth_key":'$session_key', '$year_of_stat'}' -H "Content-Type: application/json" -X POST $ess_url'/v1/user/graph/load/year')
 ikwh=$(echo $json | jq '.loginfo['$arr_pos'].total_purchase' | sed 's/.*://' | tr -d '\n' | sed 's/\"//' | sed 's/\"//' | sed 's/kwh//' | sed 's/\.//')

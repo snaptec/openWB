@@ -169,15 +169,15 @@ def loadregelvars():
     global wattbezug
     try:
         with open('ramdisk/wattbezug', 'r') as value:
-            wattbezug = int(value.read()) * -1
+            wattbezug = int(float(value.read())) * -1
         with open('ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
         if ( speichervorhanden == 1):
             with open('ramdisk/speicherleistung', 'r') as value:
-                speicherleistung = int(value.read())
+                speicherleistung = int(float(value.read()))
                 uberschuss = wattbezug + speicherleistung
             with open('ramdisk/speichersoc', 'r') as value:
-                speichersoc = int(value.read())
+                speichersoc = int(float(value.read()))
         else:
             speicherleistung = 0
             speichersoc = 100
@@ -336,28 +336,108 @@ def getdevicevalues():
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "http"):
                 watt = int(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)), timeout=3).read().decode("utf-8")))
                 DeviceValues.update( {str(numberOfDevices) : watt})
+            if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "tasmota"):
+                try:
+                    answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices))+"/cm?cmnd=Status%208", timeout=3).read().decode("utf-8")))
+                    watt = int(answer['StatusSNS']['ENERGY']['Power'])
+                    if ( int(answer['StatusSNS']['ENERGY']['Voltage']) > 50 ):
+                        relais=1
+                    else:
+                        relais=0
+                    DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
+                    DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
+                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
+                    f.write(str(watt))
+                    f.close()
+                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
+                    f.write(str(relais))
+                    f.close()
+                    try:
+                        with open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
+                            importtemp = int(value.read())
+                        simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
+                        importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"])
+                    except Exception as e: 
+                        importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
+                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
+                        f.write(str(importtemp))
+                        f.close()
+                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
+                        f.write(str("0"))
+                        f.close()
+                    #Update Einschaltdauer Timer
+                    if ( relais == 1):
+                        newtime = int(time.time())
+                        try:
+                            if str(numberOfDevices)+"oldstampeinschaltdauer" in DeviceCounters:
+                                timediff = newtime - DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
+                                try:
+                                    DeviceValues[str(numberOfDevices)+"runningtime"]= DeviceValues[str(numberOfDevices)+"runningtime"] + int(timediff)
+                                except Exception as e:
+                                    DeviceValues.update( {str(numberOfDevices) + "runningtime" : int(0)})
+                                DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
+                            else:
+                                DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
+                        except Exception as e:
+                            print(str(e))
+                    else:
+                        try:
+                            del DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
+                        except:
+                            pass
+                    #Einschaltzeit des Relais setzen
+                    if str(numberOfDevices)+"relais" in DeviceValues:
+                        if ( DeviceValues[str(numberOfDevices)+"relais"] == 0 ):
+                            if ( relais == 1 ):
+                                DeviceCounters.update( {str(numberOfDevices) + "eintime" : time.time()})
+                        else:
+                            if ( relais == 0 ):
+                                if str(numberOfDevices) + "eintime" in DeviceCounters:
+                                    del DeviceCounters[str(numberOfDevices) + "eintime"]
+                    DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
+                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))
+                except Exception as e:
+                    DeviceValues.update( {str(numberOfDevices) : "error"})
+                    logDebug("2", "Device Shelly " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
+
     publishmqtt("1")
 def turndevicerelais(nummer, zustand):
-    if ( zustand == 1):
-        try:
-            urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/relay/0?turn=on", timeout=3)
-            logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
-            DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
-        except Exception as e:
-            logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
-    if ( zustand == 0):
-        try:
-            urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/relay/0?turn=off", timeout=3)
-            logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
-        except Exception as e:
-            logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+    if ( config.get('smarthomedevices', 'device_type_'+str(nummer)) == "shelly"):
+        if ( zustand == 1):
+            try:
+                urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/relay/0?turn=on", timeout=3)
+                logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
+                DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
+            except Exception as e:
+                logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+        if ( zustand == 0):
+            try:
+                urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/relay/0?turn=off", timeout=3)
+                logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
+            except Exception as e:
+                logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+    if ( config.get('smarthomedevices', 'device_type_'+str(nummer)) == "tasmota"):
+        if ( zustand == 1):
+            try:
+                urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/cm?cmnd=Power%20on", timeout=3)
+                logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
+                DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
+            except Exception as e:
+                logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+        if ( zustand == 0):
+            try:
+                urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(nummer))+"/cm?cmnd=Power%20off", timeout=3)
+                logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
+            except Exception as e:
+                logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+
 def conditions(nummer):
     try:
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
     except:
         speichersocbeforestop = 0
     einschwelle = int(config.get('smarthomedevices', 'device_einschaltschwelle_'+str(nummer)))
-    ausschwelle = int(config.get('smarthomedevices', 'device_ausschaltschwelle_'+str(nummer)))
+    ausschwelle = int(config.get('smarthomedevices', 'device_ausschaltschwelle_'+str(nummer))) * -1
     einverz = int(config.get('smarthomedevices', 'device_einschaltverzoegerung_'+str(nummer))) * 60
     ausverz = int(config.get('smarthomedevices', 'device_ausschaltverzoegerung_'+str(nummer))) * 60
     mineinschaltdauer = int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(nummer))) * 60
@@ -383,7 +463,7 @@ def conditions(nummer):
             if  str(nummer)+"einverz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
                 if ( einverz < timesince ):
-                    logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Einschaltverzögerung erreicht, schalte ein")
+                    logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Einschaltverzögerung erreicht, schalte ein bei " + str(einschwelle))
                     turndevicerelais(nummer, 1)
                     del DeviceCounters[str(nummer)+"einverz"]
                 else:
@@ -416,7 +496,7 @@ def conditions(nummer):
                         if  str(nummer)+"eintime" in DeviceCounters:
                             timestart = int(time.time()) - int(DeviceCounters[str(nummer)+"eintime"])
                             if ( mineinschaltdauer < timestart):
-                                logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Ausschaltverzögerung & Mindesteinschaltdauer erreicht, schalte aus")
+                                logDebug("1","Device: " + str(nummer) + " " + str(name)  + " Ausschaltverzögerung & Mindesteinschaltdauer erreicht, schalte aus bei " + str(ausschwelle))
                                 turndevicerelais(nummer, 0)
                                 del DeviceCounters[str(nummer)+"ausverz"]
                             else:
@@ -477,9 +557,12 @@ while True:
                             turndevicerelais(i, 1)
                     logDebug("0","Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, führe keine Regelung durch")
                 else:
-                    conditions(int(i))
+                    try:
+                        conditions(int(i))
+                    except Exception as e:
+                        logDebug("2", "Conditions Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
         except Exception as e:
-            logDebug("2", "Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
+            logDebug("2", "Main routine Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
     #conditions(2)
     #if "2eintime" in DeviceCounters:
     #    print(DeviceCounters["2eintime"])

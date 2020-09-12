@@ -29,7 +29,25 @@
 			if( strpos($line, "simplemode=") !== false ) {
 				list(, $simplemodeold) = explode("=", $line);
 			}
-		}
+			if( strpos($line, "isss=") !== false ) {
+				list(, $isssold) = explode("=", $line);
+			}
+		} 
+		if ( $isssold == 1 ) {
+		?>
+			<html lang="de">
+				<head>
+				</head>
+				<body>
+					<h4 style="text-align:center;">openWB ist nur als Ladepunkt konfiguriert</h4>
+					<p style="text-align:center;">
+						Einstellungen erfolgen über die Haupt openWB<br>
+						Für die Einstellungen (zum deaktivieren des "nur Ladepunkt Modus") <a href="./settings/settings.php">Hier Klicken!</a>
+					</p>
+				</body>
+			</html>
+		<?php
+		} else {
 		if ( $simplemodeold == 1 ) {
 			// force hidden theme
 			?><!-- including themes/hidden/simplemode.php --><?php
@@ -54,8 +72,9 @@
 				$_COOKIE['openWBTheme'] = 'standard';
 				$themeCookie = 'standard';
 			}
-			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.php'; ?> --><?php
-			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.php';
+			?><!-- including <?php echo 'themes/'.$_COOKIE['openWBTheme'].'/theme.html'; ?> --><?php
+			include 'themes/'.$_COOKIE['openWBTheme'].'/theme.html';
+		}
 		}
 	}
 

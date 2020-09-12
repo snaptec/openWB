@@ -95,39 +95,6 @@
 
 			<div class="row">
 				<div class="col">
-					<h1>Debug-Meldung</h1>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen.
-					<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b>
-				</div>
-			</div>
-			<br>
-			<form class="form" id="sendDebugMessageForm" action="./settings/senddebug.php" method="POST">
-				<div class="form-row">
-					<div class="form-group col-lg-7">
-						<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
-						<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
-					</div>
-				</div>
-				<div class="form-row form-row-inline">
-					<div class="col-7 col-lg-5">
-						<div class="input-group mb-2">
-							<div class="input-group-prepend">
-								<div class="input-group-text">@</div>
-							</div>
-							<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
-						</div>
-					</div>
-					<div class="col-auto">
-						<button type="submit" class="btn btn-green mb-2">Absenden</button>
-					</div>
-				</div>
-			</form>
-			<div class="row">
-				<div class="col">
 					<h1>Remote Support</h1>
 				</div>
 			</div>

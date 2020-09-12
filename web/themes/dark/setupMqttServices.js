@@ -44,9 +44,13 @@ var topicsToSubscribe = [
 	["openWB/config/get/SmartHome/Devices/8/device_name", 1],
 	["openWB/config/get/SmartHome/Devices/9/device_name", 1],
 
-	// graph topcis
+	// awattar topcis
+	["openWB/global/awattar/boolAwattarEnabled", 1],
 	["openWB/global/awattar/MaxPriceForCharging", 1],
+	["openWB/global/awattar/ActualPriceForCharging", 1],
 	["openWB/global/awattar/pricelist", 1],
+	// graph topcis
+	//
 	["openWB/graph/lastlivevalues", 1],
 	["openWB/graph/1alllivevalues", 1],
 	["openWB/graph/2alllivevalues", 1],
@@ -90,7 +94,7 @@ var topicsToSubscribe = [
 	["openWB/global/ChargeMode", 1],
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
-	["openWB/global/priorityModeEVBattery", 1],
+	["openWB/config/get/pv/priorityModeEVBattery", 1],
 	// system topics
 	["openWB/system/Timestamp", 1],
 	// pv topics
@@ -110,6 +114,15 @@ var topicsToSubscribe = [
 	["openWB/lp/6/kWhChargedSincePlugged", 1],
 	["openWB/lp/7/kWhChargedSincePlugged", 1],
 	["openWB/lp/8/kWhChargedSincePlugged", 1],
+	// geladene kWh seit Reset Lademengenbegrenzung
+	["openWB/lp/1/kWhActualCharged", 1],
+	["openWB/lp/2/kWhActualCharged", 1],
+	["openWB/lp/3/kWhActualCharged", 1],
+	["openWB/lp/4/kWhActualCharged", 1],
+	["openWB/lp/5/kWhActualCharged", 1],
+	["openWB/lp/6/kWhActualCharged", 1],
+	["openWB/lp/7/kWhActualCharged", 1],
+	["openWB/lp/8/kWhActualCharged", 1],
 	// Durchschnittsverbrauch
 	["openWB/lp/1/energyConsumptionPer100km", 1],
 	["openWB/lp/2/energyConsumptionPer100km", 1],
@@ -169,6 +182,11 @@ var topicsToSubscribe = [
 	["openWB/lp/1/TimeRemaining", 1],
 	["openWB/lp/2/TimeRemaining", 1],
 	["openWB/lp/3/TimeRemaining", 1],
+	["openWB/lp/4/TimeRemaining", 1],
+	["openWB/lp/5/TimeRemaining", 1],
+	["openWB/lp/6/TimeRemaining", 1],
+	["openWB/lp/7/TimeRemaining", 1],
+	["openWB/lp/8/TimeRemaining", 1],
 
 	["openWB/lp/1/boolDirectChargeMode_none_kwh_soc", 1],
 	["openWB/lp/2/boolDirectChargeMode_none_kwh_soc", 1],
@@ -227,11 +245,26 @@ var topicsToSubscribe = [
 	// housebattery values
 	["openWB/housebattery/W", 1],
 	["openWB/housebattery/%Soc", 1],
+	// Daily Yields
+	["openWB/housebattery/DailyYieldImportKwh", 1],
+	["openWB/housebattery/DailyYieldExportKwh", 1],
+	["openWB/global/DailyYieldHausverbrauchKwh", 1],
+	["openWB/global/DailyYieldAllChargePointsKwh", 1],
+	["openWB/evu/DailyYieldImportKwh", 1],
+	["openWB/evu/DailyYieldExportKwh", 1],
+
 	// hook status
 	["openWB/hook/1/boolHookStatus", 1],
 	["openWB/hook/2/boolHookStatus", 1],
 	["openWB/hook/3/boolHookStatus", 1],
+
 	// Smart Home Devices, only configured is definately set, other values only set if configured, assume they are there!
+	["openWB/SmartHome/Devices/1/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/2/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/4/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/5/DailyYieldKwh", 1],
+
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
@@ -274,23 +307,40 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/6/current", 1],
 	["openWB/config/get/sofort/lp/7/current", 1],
 	["openWB/config/get/sofort/lp/8/current", 1],
-        ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
+	["openWB/config/get/sofort/lp/1/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/2/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/3/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/4/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/5/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/6/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/7/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/8/chargeLimitation", 1],
+	["openWB/config/get/sofort/lp/1/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/2/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/3/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/4/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/5/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/6/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/7/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/8/energyToCharge", 1],
+	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
+	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
+
+    ["openWB/SmartHome/Devices/1/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/2/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/3/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/4/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/5/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/6/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/7/RunningTimeToday", 1],
 	["openWB/SmartHome/Devices/8/RunningTimeToday", 1],
-        ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
+    ["openWB/SmartHome/Devices/9/RunningTimeToday", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
-
-
-
-
-
-
+	["openWB/config/get/pv/nurpv70dynact", 1]
 ];
+
+// holds number of topics flagged 1 initially
+var countTopicsNotForPreloader = topicsToSubscribe.filter(row => row[1] === 1).length;
 
 var retries = 0;
 
@@ -333,6 +383,11 @@ client.onMessageArrived = function (message) {
 function publish(payload, topic) {
 	var message = new Messaging.Message(payload);
 	message.destinationName = topic;
+	message.qos = 2;
+	message.retained = true;
+	client.send(message);
+	var message = new Messaging.Message("local client uid: " + clientuid + " sent: " + topic);
+	message.destinationName = "openWB/set/system/topicSender";
 	message.qos = 2;
 	message.retained = true;
 	client.send(message);

@@ -1,14 +1,13 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
-watt=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/ActivePower" | jq .value)
-iwh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/_sum/GridBuyActiveEnergy" | jq .value)
-ewh=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/_sum/GridSellActiveEnergy" | jq .value)
-evuv1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL1" | jq .value)
-evuv2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL2" | jq .value)
-evuv3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/VoltageL3" | jq .value)
-evua1=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL1" | jq .value)
-evua2=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL2" | jq .value)
-evua3=$(curl --connect-timeout 2 -s "http://x:user@$femsip:8084/rest/channel/meter0/CurrentL3" | jq .value)
+watt=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/ActivePower" | jq .value)
+iwh=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/GridBuyActiveEnergy" | jq .value)
+ewh=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/_sum/GridSellActiveEnergy" | jq .value)
+evuv1=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/VoltageL1" | jq .value)
+evuv2=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/VoltageL2" | jq .value)
+evuv3=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/VoltageL3" | jq .value)
+evua1=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/CurrentL1" | jq .value)
+evua2=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/CurrentL2" | jq .value)
+evua3=$(curl --connect-timeout 2 -s "http://x:$femskacopw@$femsip:8084/rest/channel/meter0/CurrentL3" | jq .value)
 
 
 echo $watt > /var/www/html/openWB/ramdisk/wattbezug

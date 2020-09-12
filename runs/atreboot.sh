@@ -1,7 +1,7 @@
 #!/bin/bash
 (sleep 600; sudo kill $(ps aux |grep '[a]treboot.sh' | awk '{print $2}'); echo 0 > /var/www/html/openWB/ramdisk/bootinprogress) &
 #Ramdisk mit initialen Werten befüllen nach neustart
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 sleep 5
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
@@ -15,6 +15,7 @@ sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
+echo 0 > /var/www/html/openWB/ramdisk/cpulp1counter
 echo 0 > /var/www/html/openWB/ramdisk/lp1phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp2phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp3phasen
@@ -37,6 +38,8 @@ echo 0 > /var/www/html/openWB/ramdisk/awattarprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarprice
 echo 0 > /var/www/html/openWB/ramdisk/awattarmaxprice
 echo 1 > /var/www/html/openWB/ramdisk/mqttawattarmaxprice
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp2
+echo 0 > /var/www/html/openWB/ramdisk/mqttdurchslp3
 echo 1 > /var/www/html/openWB/ramdisk/mqtt.log
 echo 1 > /var/www/html/openWB/ramdisk/mqttsoc1
 echo 1 > /var/www/html/openWB/ramdisk/lp1enabled
@@ -145,12 +148,19 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestat
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastchargestats1
 echo 0 > /var/www/html/openWB/ramdisk/mqttlastplugstats1
-echo 0 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
+echo 2 > /var/www/html/openWB/ramdisk/mqttspeichervorhanden
 echo 3 > /var/www/html/openWB/ramdisk/mqttspeichersoc
 echo 2 > /var/www/html/openWB/ramdisk/mqttspeicherleistung
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagement
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagements2
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp4
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp5
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp6
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp7
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp8
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp1
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp2
 echo 0 > /var/www/html/openWB/ramdisk/autolockstatuslp3
@@ -326,7 +336,7 @@ touch /var/www/html/openWB/ramdisk/yearly_pvkwhk2
 echo 0 > /var/www/html/openWB/ramdisk/yearly_pvkwhk2
 # SoC Speicher am WR 1
 touch /var/www/html/openWB/ramdisk/speichersoc
-echo 4 > /var/www/html/openWB/ramdisk/speichersoc
+echo 0 > /var/www/html/openWB/ramdisk/speichersoc
 # SoC Speicher am WR 2
 touch /var/www/html/openWB/ramdisk/speichersoc2
 echo 0 > /var/www/html/openWB/ramdisk/speichersoc2
@@ -509,6 +519,11 @@ echo 0 > /var/www/html/openWB/ramdisk/llkwh
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp1
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp2
 echo "--" > /var/www/html/openWB/ramdisk/restzeitlp3
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp4
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp5
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp6
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp7
+echo "--" > /var/www/html/openWB/ramdisk/restzeitlp8
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp1m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp2m
 echo "0" > /var/www/html/openWB/ramdisk/restzeitlp3m
@@ -589,7 +604,7 @@ if ! grep -Fq "rseenabled=" /var/www/html/openWB/openwb.conf
 then
 	  echo "rseenabled=0" >> /var/www/html/openWB/openwb.conf
 fi
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 if (( ladetaster == 1 )); then
 	if ! [ -x "$(command -v nmcli)" ]; then
 		if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
@@ -611,6 +626,8 @@ if (( rseenabled == 1 )); then
 	fi
 fi
 if (( rfidakt == 1 )); then
+	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
+
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
@@ -967,6 +984,15 @@ if ! grep -Fq "zoepasswort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "zoepasswort='passwort'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "socpass=" /var/www/html/openWB/openwb.conf
+then
+	  echo "socpass='passwort'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "socuser=" /var/www/html/openWB/openwb.conf
+then
+	  echo "socuser=username" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "zoelp2username=" /var/www/html/openWB/openwb.conf
 then
 	  echo "zoelp2username=username" >> /var/www/html/openWB/openwb.conf
@@ -1022,6 +1048,10 @@ fi
 if ! grep -Fq "twcmanagerlp1ip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "twcmanagerlp1ip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "httpevseip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpevseip='192.168.0.15'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "twcmanagerlp1phasen=" /var/www/html/openWB/openwb.conf
 then
@@ -1119,6 +1149,12 @@ fi
 if ! grep -Fq "speichersoc_http=" /var/www/html/openWB/openwb.conf
 then
 	  echo "speichersoc_http=192.168.0.10/soc" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "speicherekwh_http=" /var/www/html/openWB/openwb.conf
+then
+	  echo "speicherekwh_http=192.168.0.10/eWh" >> /var/www/html/openWB/openwb.conf
+	  echo "speicherikwh_http=192.168.0.10/iWh" >> /var/www/html/openWB/openwb.conf
+
 fi
 if ! grep -Fq "soc_tesla_username=" /var/www/html/openWB/openwb.conf
 then
@@ -1808,6 +1844,10 @@ if ! grep -Fq "kostalplenticorebatt=" /var/www/html/openWB/openwb.conf
 then
 	  echo "kostalplenticorebatt=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "froniuserzeugung=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniuserzeugung=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
@@ -1935,6 +1975,10 @@ if ! grep -Fq "httpll_w_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_w_url='http://url'" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "httpll_ip=" /var/www/html/openWB/openwb.conf
+then
+	  echo "httpll_ip=192.168.0.22" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "httpll_kwh_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "httpll_kwh_url='http://url'" >> /var/www/html/openWB/openwb.conf
@@ -1976,6 +2020,14 @@ then
 	echo "rfidlp2start1=000" >> /var/www/html/openWB/openwb.conf
 	echo "rfidlp2start2=000" >> /var/www/html/openWB/openwb.conf
 	echo "rfidlp2start3=000" >> /var/www/html/openWB/openwb.conf
+
+fi
+if ! grep -Fq "rfidlp1start4=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlp1start4=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp1start5=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start4=000" >> /var/www/html/openWB/openwb.conf
+	echo "rfidlp2start5=000" >> /var/www/html/openWB/openwb.conf
 
 fi
 if ! grep -Fq "rfidstandby=" /var/www/html/openWB/openwb.conf
@@ -2360,6 +2412,14 @@ if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_audi_passwort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc2user=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc2user=demo@demo.de" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soc2pass=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc2pass=passwort" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lgessv1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "lgessv1ip=youripaddress" >> /var/www/html/openWB/openwb.conf
@@ -2470,6 +2530,10 @@ if ! grep -Fq "evukitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "evukitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "speicherkitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "speicherkitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
@@ -2523,6 +2587,10 @@ if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "femskacopw=" /var/www/html/openWB/openwb.conf
+then
+	echo "femskacopw=user" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "pv2wattmodul=" /var/www/html/openWB/openwb.conf
 then
 	echo "pv2wattmodul=none" >> /var/www/html/openWB/openwb.conf
@@ -2544,6 +2612,53 @@ then
 	echo "soc_bluelink_interval=30" >> /var/www/html/openWB/openwb.conf
 
 fi
+if ! grep -Fq "soc_vin=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_vin=VIN" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "isss=" /var/www/html/openWB/openwb.conf
+then
+	echo "isss=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "chargep1ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "chargep2ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep3ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep4ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep5ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep6ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep7ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep8ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
@@ -2553,7 +2668,7 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	echo "test" > /dev/null
 else
-	python3 /var/www/html/openWB/runs/smarthomehandler.py &
+	su -c "python3 /var/www/html/openWB/runs/smarthomehandler.py &" pi
 fi
 sudo kill $(ps aux |grep '[m]qttsub.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
@@ -2611,6 +2726,7 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+
 if ! [ -x "$(command -v sshpass)" ];then
 	apt-get -qq update
 	sleep 1
@@ -2626,7 +2742,7 @@ then
 
 fi
 
-. /var/www/html/openWB/openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 /var/www/html/openWB/runs/transferladelog.sh
 if (( ledsakt == 1 )); then
 	sudo python /var/www/html/openWB/runs/leds.py startup
@@ -2647,6 +2763,26 @@ else
 	sudo apt-get -qq install -y python3-pip
 	sudo pip3 install paho-mqtt
 fi
+if python3 -c "import docopt" &> /dev/null; then
+	echo 'docopt installed...'
+else
+	sudo pip3 install docopt
+fi
+if python3 -c "import certifi" &> /dev/null; then
+	echo 'certifi installed...'
+else
+	sudo pip3 install certifi
+fi
+if python3 -c "import aiohttp" &> /dev/null; then
+	echo 'aiohttp installed...'
+else
+	sudo pip3 install aiohttp
+fi
+if python3 -c "import pymodbus" &> /dev/null; then
+	echo 'pymodbus installed...'
+else
+	sudo pip3 install pymodbus
+fi
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
@@ -2663,6 +2799,24 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
+if (( isss == 1 )); then
+	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/isss.py &
+    fi
+fi
+if [[ "$evsecon" == "buchse" ]]; then
+	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/buchse.py &
+    fi
+fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
@@ -2692,3 +2846,6 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthome.log
 chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
+mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+

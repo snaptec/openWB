@@ -6,7 +6,6 @@
 # In fact Kostal is not developing own single phase inverter anymore but is sourcing them from Steca
 # If you have the chance to test this module for the latest three phase inverter from Kostal (Plenticore) or Steca (coolcept3 or coolcept XL) let us know if it works
 
-. /var/www/html/openWB/openwb.conf
 
 # call for XML file and parse it for current PV power
 power_kostal_piko_MP=$(curl --connect-timeout 5 -s $pv2ip/measurements.xml | grep -Po "Value=\'\K[^\']*" | sed -n 3p)

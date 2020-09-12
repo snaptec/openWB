@@ -1,6 +1,6 @@
 #!/bin/bash
 #set -e
-. ../../openwb.conf
+. /var/www/html/openWB/loadconfig.sh
 
 cd /var/www/html/openWB
 

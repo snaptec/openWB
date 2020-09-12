@@ -65,6 +65,7 @@ mqtt_broker_ip = "localhost"
 client = mqtt.Client("openWB-mqttsub-" + getserial())
 ipallowed='^[0-9.]+$'
 nameallowed='^[a-zA-Z ]+$'
+namenumballowed='^[0-9a-zA-Z ]+$'
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
@@ -73,7 +74,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
- 
+
     if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
@@ -198,9 +199,6 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/energyToCharge", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/energyToCharge", "", qos=0, retain=True)
-            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("resetEnergyToCharge" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and int(msg.payload) == 1):
@@ -232,7 +230,7 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/gelrlp'+str(devicenumb), 'w')
                 f.write("0")
                 f.close()
-            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True) 
+            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True)
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("socToChargeTo" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
@@ -245,6 +243,7 @@ def on_message(client, userdata, msg):
         if ( 3 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp"+str(devicenumb)+"=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
+            time.sleep(0.4)
             if (int(msg.payload) == 1):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstatlp"+str(devicenumb)+"=", "1"]
                 subprocess.Popen(sendcommand)
@@ -256,7 +255,7 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/chargeLimitation", "", qos=0, retain=True)
- 
+
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
@@ -294,27 +293,12 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/1/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/1/maxSoc", "", qos=0, retain=True)
-            sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", "1"]
-                subprocess.Popen(sendcommand)
     if (msg.topic == "openWB/config/set/pv/lp/2/maxSoc"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 100):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvpercentagelp2=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/2/maxSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/2/maxSoc", "", qos=0, retain=True)
-            time.sleep(0.1)
-            if (int(msg.payload) == 100):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "0"]
-                subprocess.Popen(sendcommand)
-            else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp2=", "1"]
-                subprocess.Popen(sendcommand)
-
     if (msg.topic == "openWB/config/set/pv/lp/1/socLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "stopchargepvatpercentlp1=", msg.payload.decode("utf-8")]
@@ -340,6 +324,42 @@ def on_message(client, userdata, msg):
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/pv/lp/2/minCurrent", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/pv/lp/2/minCurrent", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/standbyPhases"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pstandby=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/standbyPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/standbyPhases", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/sofortPhases"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3psofort=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/sofortPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/sofortPhases", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/nachtPhases"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pnl=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/nachtPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/nachtPhases", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/minundpvPhases"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pminundpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/minundpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/minundpvPhases", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/nurpvPhases"):
+        if (int(msg.payload) >= 1 and int(msg.payload) <= 3):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3pnurpv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/nurpvPhases", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/nurpvPhases", "", qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/u1p3p/isConfigured"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 1):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "u1p3paktiv=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/u1p3p/isConfigured", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/u1p3p/isConfigured", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/global/minEVSECurrentAllowed"):
         if (int(msg.payload) >= 6 and int(msg.payload) <= 32):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minimalstromstaerke=", msg.payload.decode("utf-8")]
@@ -445,9 +465,12 @@ def on_message(client, userdata, msg):
 
 
 
+    if (msg.topic == "openWB/set/system/topicSender"):
+        if len(msg.payload) >= 3 and len(msg.payload) <=100:
 
+            client.publish("openWB/set/system/topicSender", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/GetRemoteSupport"):
-        if len(msg.payload) >= 5 and len(msg.payload) <=30:
+        if len(msg.payload) >= 5 and len(msg.payload) <=50:
             token=msg.payload.decode("utf-8")
             getsupport = ["/var/www/html/openWB/runs/startremotesupport.sh", token]
             subprocess.Popen(getsupport)
@@ -498,6 +521,11 @@ def on_message(client, userdata, msg):
     if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
         if (int(msg.payload) >= -1 and int(msg.payload) <=32):
             f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+    if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
@@ -563,21 +591,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
-    if (msg.topic == "openWB/set/system/ChangeVar"):
-        if msg.payload:
-            splitvar=msg.payload.decode("utf-8").split("=", 1)
-            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", splitvar[0]+"=", splitvar[1]]
-            subprocess.Popen(sendcommand)
-            client.publish("openWB/set/system/ChangeVar", "", qos=0, retain=True)
-    if (msg.topic == "openWB/set/system/GetVar"):
-        if msg.payload:
-            with open('/var/www/html/openWB/openwb.conf') as f:
-                datafile = f.readlines()
-            for line in datafile:
-                if msg.payload.decode("utf-8") in line:
-                    if "pass" not in line:
-                        client.publish("openWB/set/system/AskedVar", line, qos=0, retain=True)
-            client.publish("openWB/set/system/GetVar", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/system/SimulateRFID"):
+        if len(str(msg.payload)) >= 1 and bool(re.match(namenumballowed, msg.payload.decode("utf-8"))):
+            f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/set/system/SimulateRFID", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/PerformUpdate"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
@@ -586,6 +605,11 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
             subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh")
+    if (msg.topic == "openWB/config/set/releaseTrain"):
+        if ( msg.payload.decode("utf-8") == "stable17" or msg.payload.decode("utf-8") == "master" or msg.payload.decode("utf-8") == "beta" or msg.payload.decode("utf-8").startswith("yc/")):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "releasetrain=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/set/releaseTrain", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/graph/RequestLiveGraph"):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendlivegraphdata.sh")
@@ -595,15 +619,23 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             subprocess.Popen("/var/www/html/openWB/runs/sendllivegraphdata.sh")
         else:
-            client.publish("openWB/system/LiveGraphData1", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData2", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData3", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData4", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData5", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData6", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData7", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData8", "empty", qos=0, retain=True)
-            client.publish("openWB/system/LiveGraphData9", "empty", qos=0, retain=True)
+            client.publish("openWB/system/1alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/2alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/3alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/4alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/5alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/6alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/7alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/8alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/9alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/10alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/11alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/12alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/13alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/14alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/15alllivevalues", "empty", qos=0, retain=True)
+            client.publish("openWB/system/16alllivevalues", "empty", qos=0, retain=True)
+
     if (msg.topic == "openWB/set/graph/RequestDayGraph"):
         if (int(msg.payload) >= 1 and int(msg.payload) <= 20501231):
             sendcommand = ["/var/www/html/openWB/runs/senddaygraphdata.sh", msg.payload]
@@ -665,7 +697,7 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/nurpv70dynstatus', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-            client.publish("openWB/set/pv/bool70PVDynStatus", "", qos=0, retain=True)
+            client.publish("openWB/set/pv/NurPV70Status", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/RenewMQTT"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/RenewMQTT", "0", qos=0, retain=True)
@@ -680,50 +712,34 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
             client.publish("openWB/global/ChargeMode", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/set/ChargeMode", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/sofort/lp/1/chargeLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=2):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp1=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             if (int(msg.payload) == 1):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstat=", "1"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/1/boolDirectModeChargekWh", msg.payload.decode("utf-8"), qos=0, retain=True)
             else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstat=", "0"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/1/boolDirectModeChargekWh", "0", qos=0, retain=True)
             if (int(msg.payload) == 2):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "sofortsocstatlp1=", "1"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/1/boolDirectChargeModeSoc", "1", qos=0, retain=True)
             else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "sofortsocstatlp1=", "0"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/1/boolDirectChargeModeSoc", "0", qos=0, retain=True)
-            client.publish("openWB/config/set/sofort/lp/1/chargeLimitation", " ", qos=0, retain=True)
+            client.publish("openWB/config/set/sofort/lp/1/chargeLimitation", "", qos=0, retain=True)
             client.publish("openWB/config/get/sofort/lp/1/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
-
     if (msg.topic == "openWB/config/set/sofort/lp/2/chargeLimitation"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=2):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "msmoduslp2=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             if (int(msg.payload) == 1):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstats1=", "1"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/2/boolDirectModeChargekWh", msg.payload.decode("utf-8"), qos=0, retain=True)
             else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "lademstats1=", "0"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/2/boolDirectModeChargekWh", "0", qos=0, retain=True)
             if (int(msg.payload) == 2):
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "sofortsocstatlp2=", "1"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/2/boolDirectChargeModeSoc", "1", qos=0, retain=True)
             else:
-                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "sofortsocstatlp2=", "0"]
-                subprocess.Popen(sendcommand)
                 client.publish("openWB/lp/2/boolDirectChargeModeSoc", "0", qos=0, retain=True)
-            client.publish("openWB/config/set/sofort/lp/2/chargeLimitation", " ", qos=0, retain=True)
+            client.publish("openWB/config/set/sofort/lp/2/chargeLimitation", "", qos=0, retain=True)
             client.publish("openWB/config/get/sofort/lp/2/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
     if (msg.topic == "openWB/set/lp/1/DirectChargeSubMode"):
         if (int(msg.payload) == 0):
@@ -781,28 +797,45 @@ def on_message(client, userdata, msg):
         if (int(msg.payload) == 1):
             replaceAll("lademstatlp8=",msg.payload.decode("utf-8"))
 
-
+    if (msg.topic == "openWB/set/isss/Current"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=32):
+            f = open('/var/www/html/openWB/ramdisk/llsoll', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/set/isss/Current", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/isss/U1p3p"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=5):
+            f = open('/var/www/html/openWB/ramdisk/u1p3pstat', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/set/isss/U1p3p", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/isss/Cpulp1"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=5):
+            f = open('/var/www/html/openWB/ramdisk/extcpulp1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+        client.publish("openWB/set/isss/Cpulp1", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
         if (float(msg.payload) >= -8 and float(msg.payload) <=50):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/W"):
+    if (msg.topic == "openWB/set/houseBattery/W"):
         if (float(msg.payload) >= -30000 and float(msg.payload) <= 30000):
             f = open('/var/www/html/openWB/ramdisk/speicherleistung', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhImported"):
+    if (msg.topic == "openWB/set/houseBattery/WhImported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/WhExported"):
+    if (msg.topic == "openWB/set/houseBattery/WhExported"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 9000000):
             f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
-    if (msg.topic == "openWB/set/HouseBattery/%Soc"):
+    if (msg.topic == "openWB/set/houseBattery/%Soc"):
         if (float(msg.payload) >= 0 and float(msg.payload) <= 100):
             f = open('/var/www/html/openWB/ramdisk/speichersoc', 'w')
             f.write(msg.payload.decode("utf-8"))
@@ -922,14 +955,25 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/lp/1/W"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
+            llaktuell=int(msg.payload.decode("utf-8"))
+            f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+            f.write(str(llaktuell))
+            f.close()
+    if (msg.topic == "openWB/set/lp/1/kWhCounter"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
+            f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
 
-
-    theTime = datetime.now()
-    timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
-    file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
-    sys.stdout = file
-    print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
-    file.close()
+    if (len(msg.payload) >= 1):
+        theTime = datetime.now()
+        timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
+        file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
+        sys.stdout = file
+        print(timestamp + " Topic: " + msg.topic + "\nMessage: " + str(msg.payload.decode("utf-8")))
+        file.close()
 
 client.on_connect = on_connect
 client.on_message = on_message

@@ -31,7 +31,6 @@
 # Example: ./set-current.sh 9 s1
 # sets charging current on point "s1" to 9A
 
-. /var/www/html/openWB/openwb.conf
 lp1enabled=$(<ramdisk/lp1enabled)
 lp2enabled=$(<ramdisk/lp2enabled)
 lp3enabled=$(<ramdisk/lp3enabled)
@@ -56,7 +55,16 @@ function setChargingCurrentDAC () {
 	# INFO: needs new dac.py to accept current and use translation table 
 	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
 }
-
+# function for setting the current - extopenwb
+# Parameters:
+# 1: current
+# 2: chargep1ip
+function setChargingCurrentExtopenwb () {
+	current=$1
+	chargep1ip=$2
+	# set desired charging current
+	mosquitto_pub -r -t openWB/set/isss/Current -h $chargep1ip -m "$current"
+}
 # function for setting the current - modbusevse
 # Parameters:
 # 1: current
@@ -68,6 +76,12 @@ function setChargingCurrentModbus () {
 	modbusevseid=$3
 	# set desired charging current
 	sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+}
+function setChargingCurrentBuchse () {
+	current=$1
+	# set desired charging current
+	#sudo python /var/www/html/openWB/runs/evsewritemodbus.py $modbusevsesource $modbusevseid $current
+	#Will be handled in buchsecontrol.py
 }
 # function for setting the current - IP modbusevse
 # Parameters:
@@ -108,12 +122,37 @@ function setChargingCurrentThirdeth () {
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
-		curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+		if [[ $evsewifitimeoutlp1 -eq 4 ]]; then
+			if [[ $current -eq 0 ]]; then
+				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+				state=$(echo $output | jq '.list[] | .evseState')
+				if ((state == true)) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=false > /dev/null
+				fi
+			else
+				output=$(curl --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/getParameters)
+				state=$(echo $output | jq '.list[] | .evseState')
+				if ((state == false)) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setStatus?active=true > /dev/null
+				fi
+				oldcurrent=$(echo $output | jq '.list[] | .actualCurrent')
+				if (( oldcurrent != $current )) ; then
+					curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+				fi
+			fi
+		else
+			curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/setCurrent?current=$current > /dev/null
+		fi
 	fi
 }
 function setChargingCurrenttwcmanager () {
 	if [[ $evsecon == "twcmanager" ]]; then
 		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
+	fi
+}
+function setChargingCurrenthttp () {
+	if [[ $evsecon == "httpevse" ]]; then
+		curl -s --connect-timeout 3 "http://$httpevseip/setcurrent?current=$current" > /dev/null
 	fi
 }
 # function for setting the current - go-e charger
@@ -135,8 +174,8 @@ function setChargingCurrentgoe () {
 			if ((state == "0")) ; then
 				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 			fi
-			oldcurrent=$(echo $output | jq -r '.amp')
-			if (( oldcurrent != $current )) ; then
+			oldgoecurrent=$(echo $output | jq -r '.amp')
+			if (( oldgoecurrent != $current )) ; then
 				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
 			fi
 		fi
@@ -193,6 +232,15 @@ function setChargingCurrentnrgkick () {
 function setChargingCurrent () {
 	if [[ $evsecon == "dac" ]]; then
 		setChargingCurrentDAC $current $dacregister
+	fi
+	if [[ $evsecon == "buchse" ]]; then
+		setChargingCurrentBuchse $current
+	fi
+	if [[ $evsecon == "http" ]]; then
+		setChargingCurrenthttp $current
+	fi
+	if [[ $evsecon == "extopenwb" ]]; then
+		setChargingCurrentExtopenwb $current $chargep1ip
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
@@ -372,7 +420,7 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkickpwlp1=$nrgkickpwlp2
 		evseip=$evseiplp2
 		ipevseid=$evseidlp2
-
+		chargep1ip=$chargep2ip
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then
 			oldcurrent=$current
@@ -402,7 +450,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		goetimeoutlp1=$goetimeoutlp3
 		evseip=$evseiplp3
 		ipevseid=$evseidlp3
-
+		chargep1ip=$chargep3ip
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -422,6 +470,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 		evsecon=$evseconlp4
 		evseip=$evseiplp4
 		ipevseid=$evseidlp4
+		chargep1ip=$chargep4ip
 		if (( lp4enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -441,6 +490,8 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 		evsecon=$evseconlp5
 		evseip=$evseiplp5
 		ipevseid=$evseidlp5
+		chargep1ip=$chargep5ip
+
 		if (( lp5enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -460,6 +511,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 		evsecon=$evseconlp6
 		evseip=$evseiplp6
 		ipevseid=$evseidlp6
+		chargep1ip=$chargep6ip
 		if (( lp6enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -479,6 +531,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 		evsecon=$evseconlp7
 		evseip=$evseiplp7
 		ipevseid=$evseidlp7
+		chargep1ip=$chargep7ip
 		if (( lp7enabled == 0 )); then
 			oldcurrent=$current
 			current=0
@@ -498,6 +551,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		evsecon=$evseconlp8
 		evseip=$evseiplp8
 		ipevseid=$evseidlp8
+		chargep1ip=$chargep8ip
 		if (( lp8enabled == 0 )); then
 			oldcurrent=$current
 			current=0

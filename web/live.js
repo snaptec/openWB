@@ -192,14 +192,15 @@ var thevalues = [
 	["openWB/lp/6/strChargePointName", "#lp6name"],
 	["openWB/lp/7/strChargePointName", "#lp7name"],
 	["openWB/lp/8/strChargePointName", "#lp8name"],
-	["openWB/lp/1/ADirectModeAmps", "#"],
-	["openWB/lp/2/ADirectModeAmps", "#"],
-	["openWB/lp/3/ADirectModeAmps", "#"],
-	["openWB/lp/4/ADirectModeAmps", "#"],
-	["openWB/lp/5/ADirectModeAmps", "#"],
-	["openWB/lp/6/ADirectModeAmps", "#"],
-	["openWB/lp/7/ADirectModeAmps", "#"],
-	["openWB/lp/8/ADirectModeAmps", "#"]
+	["openWB/config/get/sofort/lp/1/current", "#"],
+	["openWB/config/get/sofort/lp/2/current", "#"],
+	["openWB/config/get/sofort/lp/3/current", "#"],
+	["openWB/config/get/sofort/lp/4/current", "#"],
+	["openWB/config/get/sofort/lp/5/current", "#"],
+	["openWB/config/get/sofort/lp/6/current", "#"],
+	["openWB/config/get/sofort/lp/7/current", "#"],
+	["openWB/config/get/sofort/lp/8/current", "#"]
+
 ];
 
 function getCol(matrix, col){
@@ -839,7 +840,7 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 		loaddivs();
 	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/adirectmodeamps$/i ) ) {
+	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\/[1-9][0-9]*\/current$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/adirectmodeamps"
 		// where # is an integer > 0
 		// search is case insensitive
@@ -980,35 +981,35 @@ function lp8enabledclick() {
 }
 
 function lp1DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp/1/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/config/set/sofort/lp/1/current");
 }
 
 function lp2DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/set/lp/2/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/config/set/sofort/lp/2/current");
 }
 
 function lp3DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/set/lp/3/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/config/set/sofort/lp/3/current");
 }
 
 function lp4DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/set/lp/4/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/config/set/sofort/lp/4/current");
 }
 
 function lp5DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/set/lp/5/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/config/set/sofort/lp/5/current");
 }
 
 function lp6DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/set/lp/6/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/config/set/sofort/lp/6/current");
 }
 
 function lp7DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/set/lp/7/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/config/set/sofort/lp/7/current");
 }
 
 function lp8DirectChargeAmpsClick() {
-	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp/8/DirectChargeAmps");
+	publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/config/set/sofort/lp/8/current");
 }
 
 function sofortclick() {
