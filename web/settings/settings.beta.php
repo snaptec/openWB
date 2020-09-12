@@ -546,7 +546,7 @@
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						Awattar
+						Übergreifendes
 					</div>
 					<div class="card-body">
 						<div class="form-group">
@@ -565,6 +565,14 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Awattar
+					</div>
+					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<label for="awattaraktiv" class="col-md-4 col-form-label">Awattar aktivieren</label>
