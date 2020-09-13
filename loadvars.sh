@@ -401,6 +401,8 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
 	llv1=$(cat /var/www/html/openWB/ramdisk/llv1) 
+	llv2=$(cat /var/www/html/openWB/ramdisk/llv2) 
+	llv3=$(cat /var/www/html/openWB/ramdisk/llv3) 
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
@@ -987,12 +989,13 @@ if [[ $debug == "1" ]]; then
 		echo awattarprice "$awattarprice" awattarmaxprice "$awattarmaxprice"
 	fi
 	echo pv1watt $pv1watt pv2watt $pv2watt pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-	echo lla1 "$lla1" llv1 "$llv1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
-	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
+	echo -e lla1 "$lla1"'\t'llv1 "$llv1"'\t'llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
+	echo -e lla2 "$lla2"'\t'llv2 "$llv2"'\t'llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo -e lla3 "$lla3"'\t'llv3 "$llv3"'\t'llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"
-	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
-	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
+	echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled"
+	echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3"
+	echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3"
 fi
 
 tempPubList=""
