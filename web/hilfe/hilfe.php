@@ -48,6 +48,9 @@
 			<div id="indexDiv" style="display: none;">
 				<?php include '/var/www/html/openWB/web/hilfe/hilfe_index.php';?>
 			</div>
+			<div id="datenschutzDiv" style="display: none;">
+				<?php include '/var/www/html/openWB/web/hilfe/hilfe_datenschutz.php';?>
+			</div>
 
 		</div>  <!-- container -->
 

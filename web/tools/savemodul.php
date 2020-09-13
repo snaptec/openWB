@@ -1045,6 +1045,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'solaredgepvslave3='.$_POST['solaredgepvslave3']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "solaredgepvslave4=") !== false) {
+			$result .= 'solaredgepvslave4='.$_POST['solaredgepvslave4']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "lllaniplp2=") !== false) {
 			$result .= 'lllaniplp2='.$_POST['lllaniplp2']."\n";
 			$writeit = '1';

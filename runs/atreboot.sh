@@ -1204,6 +1204,10 @@ if ! grep -Fq "solaredgepvslave3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgepvslave3=none" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solaredgepvslave4=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave4=none" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then
 		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf

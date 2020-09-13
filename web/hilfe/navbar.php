@@ -20,7 +20,9 @@
 				<li class="nav-item">
 					<a class="nav-link" data-select="index">Index</a>
 				</li>
-
+				<li class="nav-item">
+					<a class="nav-link" data-select="datenschutz">Datenschutz</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -42,6 +44,13 @@
 					$("#indexDiv").show();
 					$("#helpFooterText").text("Sie befinden sich hier: Hilfe/Index");
 					break;
+				case "datenschutz":
+					$("#ersteSchritteDiv").hide();
+					$("#indexDiv").hide();
+					$("#datenschutzDiv").show();
+					$("#helpFooterText").text("Sie befinden sich hier: Hilfe/Datenschutz");
+					break;
+
 			}
 		});
 	});
