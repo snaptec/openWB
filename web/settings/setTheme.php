@@ -163,7 +163,7 @@
 		</footer>
 
 		<script>
-			$.get("settings/navbar.html", function(data){
+			$.get("settings/navbar.html?vers=2", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navSetThemeBeta').addClass('disabled');

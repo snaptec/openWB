@@ -2393,7 +2393,7 @@
 				updateLabel($(this).attr('id'));
 			});
 
-			$.get("settings/navbar.html", function(data){
+			$.get("settings/navbar.html?vers=2?vers=2", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
 				$('#navAllgemeinBeta').addClass('disabled');
