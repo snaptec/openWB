@@ -827,7 +827,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="zielladenalp1" class="col-4 col-md-4 col-form-label">Stromstärke</label>
+									<label for="zielladenalp1" class="col-md-4 col-form-label">Stromstärke</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="zielladenalp1" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($zielladenalp1old); ?> A</label>
@@ -903,7 +903,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="zielladenmaxalp1" class="col-4 col-md-4 col-form-label">maximale Stromstärke</label>
+									<label for="zielladenmaxalp1" class="col-md-4 col-form-label">maximale Stromstärke</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="zielladenmaxalp1" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($zielladenmaxalp1old); ?> A</label>
@@ -1168,7 +1168,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="nachtll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="nachtll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="nachtll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($nachtllold); ?> A</label>
@@ -1229,7 +1229,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="nachtsoc" class="col-4 col-sm-4 col-form-label">SoC Sonntag bis Donnerstag</label>
+									<label for="nachtsoc" class="col-md-4 col-form-label">SoC Sonntag bis Donnerstag</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="nachtsoc" class="col-2 col-form-label valueLabel" suffix="%"><?php echo trim($nachtsocold); ?> %</label>
@@ -1241,7 +1241,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="nachtsoc1" class="col-4 col-sm-4 col-form-label">SoC Freitag bis Sonntag</label>
+									<label for="nachtsoc1" class="col-md-4 col-form-label">SoC Freitag bis Sonntag</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="nachtsoc1" class="col-2 col-form-label valueLabel" suffix="%"><?php echo trim($nachtsoc1old); ?> %</label>
@@ -1264,7 +1264,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1moll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1moll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1moll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1mollold); ?> A</label>
@@ -1377,7 +1377,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1dill" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1dill" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1dill" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1dillold); ?> A</label>
@@ -1490,7 +1490,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1mill" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1mill" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1mill" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1millold); ?> A</label>
@@ -1603,7 +1603,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1doll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1doll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1doll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1dollold); ?> A</label>
@@ -1716,7 +1716,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1frll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1frll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1frll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1frllold); ?> A</label>
@@ -1829,7 +1829,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1sall" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1sall" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1sall" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1sallold); ?> A</label>
@@ -1942,7 +1942,7 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="mollp1soll" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+									<label for="mollp1soll" class="col-md-4 col-form-label">Stromstärke in A</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="mollp1soll" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($mollp1sollold); ?> A</label>
@@ -2074,7 +2074,7 @@
 											</div>
 										</div>
 										<div class="form-row mb-1">
-											<label for="nachtlls1" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+											<label for="nachtlls1" class="col-md-4 col-form-label">Stromstärke in A</label>
 											<div class="col-md-8">
 												<div class="form-row vaRow mb-1">
 													<label for="nachtlls1" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($nachtlls1old); ?> A</label>
@@ -2135,7 +2135,7 @@
 											</div>
 										</div>
 										<div class="form-row mb-1">
-											<label for="nachtsocs1" class="col-4 col-sm-4 col-form-label">SoC Sonntag bis Donnerstag</label>
+											<label for="nachtsocs1" class="col-md-4 col-form-label">SoC Sonntag bis Donnerstag</label>
 											<div class="col-md-8">
 												<div class="form-row vaRow mb-1">
 													<label for="nachtsocs1" class="col-2 col-form-label valueLabel" suffix="%"><?php echo trim($nachtsocs1old); ?> %</label>
@@ -2147,7 +2147,7 @@
 											</div>
 										</div>
 										<div class="form-row mb-1">
-											<label for="nachtsoc1s1" class="col-4 col-sm-4 col-form-label">SoC Freitag bis Sonntag</label>
+											<label for="nachtsoc1s1" class="col-md-4 col-form-label">SoC Freitag bis Sonntag</label>
 											<div class="col-md-8">
 												<div class="form-row vaRow mb-1">
 													<label for="nachtsoc1s1" class="col-2 col-form-label valueLabel" suffix="%"><?php echo trim($nachtsoc1s1old); ?> %</label>
@@ -2165,7 +2165,7 @@
 											</div>
 										</div>
 										<div class="form-row mb-1">
-											<label for="nacht2lls1" class="col-4 col-sm-4 col-form-label">Stromstärke in A</label>
+											<label for="nacht2lls1" class="col-md-4 col-form-label">Stromstärke in A</label>
 											<div class="col-md-8">
 												<div class="form-row vaRow mb-1">
 													<label for="nacht2lls1" class="col-2 col-form-label valueLabel" suffix="A"><?php echo trim($nacht2lls1old); ?> A</label>

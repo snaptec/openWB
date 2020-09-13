@@ -725,7 +725,7 @@
 								</div>
 							</div>
 							<div class="form-row mt-2 mb-1">
-								<div class="col-4">
+								<div class="col-md-4">
 									<label for="cpunterbrechunglp1" class="col-form-label">Ladepunkt 1</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
@@ -738,7 +738,7 @@
 								</div>
 							</div>
 							<div class="form-row mt-2">
-								<div class="col-4">
+								<div class="col-md-4">
 									<label for="cpunterbrechunglp2" class="col-form-label">Ladepunkt 2</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
@@ -1852,7 +1852,7 @@
 								</div>
 							</div>
 							<div class="form-row mb-1">
-								<label for="livegraph" class="col-4 col-sm-4 col-form-label">Zeitintervall für den Live Graphen der Hauptseite</label>
+								<label for="livegraph" class="col-md-4 col-form-label">Zeitintervall für den Live Graphen der Hauptseite</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
 										<label for="livegraph" class="col-2 col-form-label valueLabel" suffix="Min"><?php echo trim($livegraphold); ?> Min</label>
