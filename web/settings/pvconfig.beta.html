@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="de">
+
+	<head>
+		<base href="/openWB/web/">
+
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>openWB Einstellungen</title>
+		<meta name="description" content="Control your charge" />
+		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
+		<!-- Favicons (created with http://realfavicongenerator.net/)-->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="manifest.json">
+		<link rel="shortcut icon" href="img/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#00a8ff">
+		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- include settings-style -->
+		<link rel="stylesheet" type="text/css" href="settings/settings_style.css?ver=20200416-a">
+
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
+		<div role="main" class="container" style="margin-top:20px">
+
+			<form id="myForm">
+				<h1>Einstellungen für PV- und Min+PV-Laden</h1>
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Allgemeine Einstellungen
+					</div>
+					<div class="card-body">
+						<div class="form-row mb-1">
+							<label for="chargeSubmode" class="col-md-4 col-form-label">Regelmodus</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="chargeSubmode" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="chargeSubmode" autocomplete="off" data-option="0"> Einspeisung
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="chargeSubmode" autocomplete="off" data-option="1"> Bezug
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="chargeSubmode" autocomplete="off" data-option="2"> manueller Regelpunkt
+									</label>
+								</div>
+								<span class="form-text small">Auswahl des Regelmodus in beiden Lademodi. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.</span>
+							</div>
+						</div>
+						<div class="form-row mb-1">
+							<label for="chargeSubmode" class="col-md-4 col-form-label">manueller Regelpunkt</label>
+							<div class="col">
+								<div class="form-row vaRow">
+									<div class="col-auto">
+										<div class="custom-control custom-checkbox">
+											<input class="custom-control-input" type="checkbox" id="regulationPointPosNeg" data-topicprefix="openWB/config/get/pv/">
+											<label class="custom-control-label" for="regulationPointPosNeg">
+												negativ
+											</label>
+										</div>
+									</div>
+									<div class="col">
+										<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="50000" value="" data-signcheckbox="regulationPointPosNeg" data-default="0" data-topicprefix="openWB/config/get/pv/">
+									</div>
+								</div>
+								<span class="form-text small">Parameter in Watt [W] für den manuellen Regelpunkt in beiden Lademodi. Dieser Parameter ist nur wirksam bei der Einstellung "manueller Regelpunkt". Die dem EV zur Verfügung stehende Ladeleistung berechnet sich bei dieser Option aus der Differenz zwischen der Einspeiseleistung und dem eingegebenen Wert.</span>
+							</div>
+						</div>
+						<!-- Test to replace checkbox >>>
+						<div class="form-row mb-1">
+							<label for="chargeSubmode" class="col-md-4 col-form-label">manueller Regelpunkt</label>
+							<div class="col">
+								<div class="input-group">
+									<div class="input-group-prepend btn-group btn-group-toggle" id="regulationPointPosNeg" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										<label class="btn btn-outline-info btn-toggle active">
+											<input type="radio" name="regulationPointPosNeg" autocomplete="off" data-option="0"> positiv
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="regulationPointPosNeg" autocomplete="off" data-option="1"> negativ
+										</label>
+									</div>
+									<input id="regulationPoint" class="form-control naturalNumber" type="number" inputmode="decimal" required="" min="0" max="50000" value="" data-signcheckbox="regulationPointPosNeg" data-default="0" data-topicprefix="openWB/config/get/pv/">
+								</div>
+								<span class="form-text small">Parameter in Watt [W] für den manuellen Regelpunkt in beiden Lademodi. Dieser Parameter ist nur wirksam bei der Einstellung "manueller Regelpunkt". Die dem EV zur Verfügung stehende Ladeleistung berechnet sich bei dieser Option aus der Differenz zwischen der Einspeiseleistung und dem eingegebenen Wert.</span>
+							</div>
+						</div>
+						<<< Test to replacce checkbox -->
+					</div>  <!-- end card body Allgemeine Einstellungen PV und Min+PV -->
+				</div>  <!-- end card Allgemeine Einstellungen PV und Min+PV -->
+
+				<h1>Einstellungen für PV-Laden</h1>
+
+				<div class="card border-success">
+					<div class="card-header bg-success">
+						Allgemeine PV-Laden-Einstellungen
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="minFeedinPowerBeforeStart" class="col-md-4 col-form-label">Einschaltschwelle</label>
+								<div class="col">
+									<input id="minFeedinPowerBeforeStart" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="100000" value="" data-default="1320" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Watt [W] pro genutzter Phase für das Einschalten der Laderegelung im Modus PV-Laden. Steigt die <b>Einspeisung</b> über den Wert Einschaltschwelle multipliziert mit der Anzahl genutzter Phasen, startet die Laderegelung.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="startDelay" class="col-md-4 col-form-label">Einschaltverzögerung</label>
+								<div class="col">
+									<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="" data-default="10" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden. Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt. Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="maxPowerConsumptionBeforeStop" class="col-md-4 col-form-label">Abschaltschwelle</label>
+								<div class="col">
+									<div class="form-row vaRow">
+										<div class="col-auto">
+											<div class="custom-control custom-checkbox">
+												<input class="custom-control-input" type="checkbox" id="maxPowerConsumptionBeforeStopPosNeg" data-topicprefix="openWB/config/get/pv/">
+												<label class="custom-control-label" for="maxPowerConsumptionBeforeStopPosNeg">
+													negativ
+												</label>
+											</div>
+										</div>
+										<div class="col">
+											<input id="maxPowerConsumptionBeforeStop" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="50000" value="" data-signcheckbox="maxPowerConsumptionBeforeStopPosNeg" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Watt [W] für das Ausschalten der Laderegelung im Modus PV-Laden. Steigt der Bezug über die Abschaltschwelle, stoppt die Laderegelung. Ein negativer Wert führt zu einer Abschaltung während Einspeisung vorhanden ist.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="stopDelay" class="col-md-4 col-form-label">Abschaltverzögerung</label>
+								<div class="col">
+									<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="" data-default="10" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Sekunden [s] für die Verzögerung bis Ladestop im Modus PV-Laden. Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt. Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.</span>
+								</div>
+							</div>
+						</div>
+						<hr class="border-success">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									Mindeststromstärke
+								</div>
+								<div class="col">
+									<span class="form-text small">Parameter in Ampere [A] für den minimalen Strom im Modus PV-Laden. Definiert den minimalen Ladestrom am Ladepunkt. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="minCurrentLp1" class="col-md-4 col-form-label">Ladepunkt 1</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minCurrentLp1" class="col-2 col-form-label valueLabel" suffix="A"> A</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minCurrentLp1" name="minCurrent" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1 lp2options">
+								<label for="minCurrentLp2" class="col-md-4 col-form-label">Ladepunkt 2</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minCurrentLp2" class="col-2 col-form-label valueLabel" suffix="A"> A</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minCurrentLp2" name="minCurrent" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group soclp12options">
+							<hr class="border-success">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="boolAdaptiveCharging" class="col-form-label">adaptive Ladung</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolAdaptiveCharging" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="boolAdaptiveCharging" id="boolAdaptiveChargingOff" autocomplete="off" data-option="0">ausgeschaltet
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="boolAdaptiveCharging" id="boolAdaptiveChargingOn" autocomplete="off" data-option="1">eingeschaltet
+										</label>
+									</div>
+									<span class="form-text small">Auswahl der adaptiven Ladung im Modus PV-Laden. Die adaptive Ladung versucht, die zur Verfügung stehende Ladeleistung so aufzuteilen, dass bei zwei ladenden EV demjenigen mit dem geringeren SoC eine größere Ladeleistung zugewiesen wird. Die Gewichtung der Ladeleistung ist abhängig von der Einstellung "adaptiver Regelfaktor". Diese Einstellung beinflusst die Regelung nur dann, wenn zwei EV gleichzeitig laden, für beide ein SoC verfügbar ist und beide EV mit derselben Anzahl an Phasen laden.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="adaptiveChargingFactor" class="col-md-4 col-form-label">adaptiver Regelfaktor</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="adaptiveChargingFactor" class="col-2 col-form-label valueLabel" suffix=""> </label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="adaptiveChargingFactor" min="1" max="10" step="1" value="" data-default="5" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter für die Gewichtung bei adaptiver Ladung im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "adaptive Ladung eingeschaltet". Je höher der Faktor, desto stärker wird das EV mit dem kleineren SoC bei der Aufteilung der Ladeleistung bevorzugt.</span>
+								</div>
+							</div>
+						</div>
+						<hr class="border-success">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="nurpv70dynact" class="col-form-label">70%-Regelung</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="nurpv70dynact" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="nurpv70dynact" id="nurpv70dynactOff" autocomplete="off" data-option="0">ausgeschaltet
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="nurpv70dynact" id="nurpv70dynactOn" autocomplete="off" data-option="1">eingeschaltet
+										</label>
+									</div>
+									<span class="form-text small">Auswahl zur Nutzung der 70%-Regelung im Modus PV-Laden. Diese Option dient der einfachen Konfiguration einer optimierten Eigenverbrauchssteuerung.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="nurpv70dynw" class="col-md-4 col-form-label">70%-Regelpunkt</label>
+								<div class="col">
+									<input id="nurpv70dynw" class="form-control naturalNumber" type="number" required min="2000" max="50000" value="" data-default="2000" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Watt [W] für den 70%-Regelpunkt im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "70%-Regelung eingeschaltet". Der hier eingetragene Wert sollte zur optimalen Eigenverbrauchssteuerung 70 % der installierten kWp betragen.</span>
+								</div>
+							</div>
+						</div>
+					</div>  <!-- end card body Allgemeine Einstellungen PV -->
+				</div>  <!-- end card Allgemeine Einstellungen PV -->
+
+				<div class="card border-success">
+					<div class="card-header bg-success">
+						EV-SoC-Ladung
+					</div>
+					<div class="card-body">
+						<div class="form-group onlysoclp1options">
+							<div class="form-row mb-1">
+								<label for="minSocAlwaysToChargeToLp1" class="col-md-4 col-form-label">Mindest-SoC</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minSocAlwaysToChargeToLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToLp1" name="minSocAlwaysToChargeTo" min="0" max="80" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Prozent [%] für den Mindest-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Mindest-SoC, bis zu dem <b>unabhängig von der PV-Leistung immer</b> geladen wird. Der Wert 0 schaltet die Funktion aus.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="minSocAlwaysToChargeToCurrentLp1" class="col-md-4 col-form-label">Mindest-SoC-Stromstärke</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minSocAlwaysToChargeToCurrentLp1" class="col-2 col-form-label valueLabel" suffix="A"> A</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minSocAlwaysToChargeToCurrentLp1" name="minSocAlwaysToChargeToCurrent" min="6" max="32" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Ampere [A] für den minimalen Strom bei Mindest-SoC-Ladung im Modus PV-Laden. Definiert den minimalen Ladestrom am Ladepunkt bis zur Erreichung des Mindest-SoC. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke am LP1.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="maxSocToChargeToLp1" class="col-md-4 col-form-label">Maximal-SoC</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="maxSocToChargeToLp1" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="maxSocToChargeToLp1" name="maxSocToChargeTo" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Prozent [%] für den Maximal-SoC am LP1 im Modus PV-Laden. Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group soclp1options">
+							<hr class="border-success">
+							<div class="form-row">
+								<div class="col">
+									SoC-Begrenzung
+								</div>
+								<div class="col-md-8 form-text small text-info">
+									Diese Funktion ist nur aktiv, wenn mehrere Ladepunkte jeweils mit SoC-Modul konfiguriert sind und "Ladepunkt sperren nach Abstecken" deaktiviert ist. Ist diese Funktion aktiviert lässt sich der Ladepunkt nicht mehr manuell (de-)aktivieren sondern wird ausschließlich anhand des SoC de- oder aktiviert. Aktiv im Min+PV und PV Lademodus.
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="socLimitationLp1" class="col-form-label">Ladepunkt 1</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp1" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/1/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="socLimitationLp1" id="socLimitationLp1Off" autocomplete="off" data-option="0">ausgeschaltet
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="socLimitationLp1" id="socLimitationLp1On" autocomplete="off" data-option="1">eingeschaltet
+										</label>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="form-group soclp2options">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="socLimitationLp2" class="col-form-label">Ladepunkt 2</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="socLimitationLp2" name="socLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/"  data-topicsubgroup="lp/2/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2Off" autocomplete="off" data-option="0">ausgeschaltet
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="socLimitationLp2" id="socLimitationLp2On" autocomplete="off" data-option="1">eingeschaltet
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="soclp1options form-row form-group mb-1 vaRow">
+							<label for="maxSoclp1" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP1:</label>
+							<div class="col-6">
+								<input type="range" class="form-control-range rangeInput" id="maxSocLp1" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/1/">
+							</div>
+							<label for="maxSocLp1" class="col col-form-label valueLabel" suffix="%"></label>
+						</div>
+						<div class="soclp2options form-row form-group mb-1 vaRow">
+							<label for="maxSoclp2" class="col-3 col-sm-2 col-form-label">Maximal-SoC LP2:</label>
+							<div class="col-6">
+								<input type="range" class="form-control-range rangeInput" id="maxSocLp2" name="maxSoc" min="50" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/" data-topicsubgroup="lp/2/">
+							</div>
+							<label for="maxSocLp2" class="col col-form-label valueLabel" suffix="%"></label>
+						</div>
+						<div class="soclp1options">
+							<small>
+								Parameter in Prozent [%] für den Maximal-SoC am LP1 bzw. LP2 im Modus PV-Laden.
+								Definiert einen EV-Maximal-SoC, bis zu dem höchstens geladen wird. Diese Funktion ist nur dafür gedacht wenn mehree Ladepunkte aktiv sind. Setzen auf 100% deaktiviert sie.
+							</small>
+						</div>
+					</div>  <!-- end card body EV-SoC-Steuerung PV -->
+				</div>  <!-- end card EV-SoC-Steuerung PV -->
+
+				<div class="card border-success">
+					<div class="card-header bg-success">
+						Speicher-Beachtung
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info nohousebattery">
+							Diese Funktionen sind nur aktiv, wenn ein Speicher konfiguriert wurde.
+						</div>
+						<div class="form-group housebatteryoptions">
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="boolShowPriorityIconInTheme" class="col-form-label">Vorrang-Steuerung</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="priorityModeEVBattery" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="priorityModeEVBattery" id="priorityModeEVBatteryOff" autocomplete="off" data-option="0">Speichervorrang
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="priorityModeEVBattery" id="priorityModeEVBatteryOn" autocomplete="off" data-option="1">EV-Vorrang
+										</label>
+									</div>
+									<span class="form-text small">Auswahl der Vorrang-Steuerung im Modus PV-Laden. Bei Speichervorrang wird die Ladung des Speichers vorrangig vor der EV-Ladung geregelt. Bei EV-Vorrang wird ungeachtet des Speicher-SoC die Ladung des EV vorrangig geregelt.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label for="boolShowPriorityIconInTheme" class="col-form-label">Anzeige</label>
+								</div>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolShowPriorityIconInTheme" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="boolShowPriorityIconInTheme" id="boolShowPriorityIconInThemeOff" autocomplete="off" data-option="0">nicht anzeigen
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="boolShowPriorityIconInTheme" id="boolShowPriorityIconInThemeOn" autocomplete="off" data-option="1">anzeigen
+										</label>
+									</div>
+									<span class="form-text small">Auswahl der Vorrang-Anzeige im Modus PV-Laden. In einigen Themes kann die Anzeige des gewählten Vorrang-Modes angezeigt oder versteckt werden.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="minBatteryChargePowerAtEvPriority" class="col-md-4 col-form-label">Ladeleistung-Reserve</label>
+								<div class="col">
+									<input id="minBatteryChargePowerAtEvPriority" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Watt [W] für die Ladeleistung-Reserve des Speichers im Modus PV-Laden. Dieser Parameter ist nur wirksam bei der Einstellung "EV-Vorrang". Trotz vorrangiger Regelung der Ladeleistung des EV wird der hier eingestellte Wert immer für die Ladung des Speichers vorgehalten.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="batteryDischargePowerAtBattPriority" class="col-md-4 col-form-label">erlaubte Entladeleistung</label>
+								<div class="col">
+									<input id="batteryDischargePowerAtBattPriority" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="10000" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+									<span class="form-text small">Parameter in Watt [W] für die Entladeleistung Speichers im Modus PV-Laden. Dieser Parameter ist nur wirksam wenn bei "minimaler Entlade-SoC" ein Wert kleiner 100 % gewählt wurde. Definiert eine Entladeleistung, mit der der Speicher bei PV-Ladung zur Ladung des EV entladen werden darf.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="minBatteryDischargeSocAtBattPriority" class="col-md-4 col-form-label">minimaler Entlade-SoC</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minBatteryDischargeSocAtBattPriority" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minBatteryDischargeSocAtBattPriority" name="minBatteryDischargeSocAtBattPriority" min="5" max="100" step="5" value="" data-default="100" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Prozent [%] für den minimalen Entlade-SoC des Speichers im Modus PV-Laden. Definiert einen minimalen SoC, bis zu dem ein Speicher trotz Speichervorrang zur Ladung des EV höchstens entladen werden darf. Der Wert 100 schaltet die Funktion aus.</span>
+								</div>
+							</div>
+						</div>
+					</div>  <!-- end card Speicher-Beachtung PV -->
+				</div>  <!-- end card Speicher-Beachtung PV -->
+
+				<h1>Einstellungen für Min+PV-Laden</h1>
+
+				<div class="card border-warning">
+					<div class="card-header bg-warning">
+						Allgemeine Einstellungen
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="minCurrentMinPv" class="col-md-4 col-form-label">Mindeststromstärke</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="minCurrentMinPv" class="col-2 col-form-label valueLabel" suffix="A"> A</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" name="minCurrentMinPv" min="6" max="16" step="1" value="" data-default="6" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Ampere [A] für den minimalen Strom im Modus Min+PV-Laden. Definiert den minimalen Ladestrom an den Ladepunkten. Einige EV benötigen einen Mindestladestrom, da ansonsten die Ladung nicht startet. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A.</span>
+								</div>
+							</div>
+						</div>
+					</div>  <!-- end card Allgemeine Einstellungen Min+PV-->
+				</div>  <!-- end card Allgemeine Einstellungen Min+PV -->
+
+				<div class="card border-warning">
+					<div class="card-header bg-warning">
+						Speicher-Beachtung
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info nohousebattery">
+							Diese Funktionen sind nur aktiv, wenn ein Speicher konfiguriert wurde.
+						</div>
+						<div class="form-group housebatteryoptions">
+							<div class="form-row mb-1">
+								<label for="socStartChargeAtMinPv" class="col-md-4 col-form-label">Einschalt-SoC</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="socStartChargeAtMinPv" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="socStartChargeAtMinPv" name="socStartChargeAtMinPv" min="0" max="95" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Prozent [%] für den Einschalt-SoC der Laderegelung im Modus Min+PV-Laden. Definiert einen Speicher-SoC, der überschritten werden muss, damit die Ladereglung startet. Der Wert 0 schaltet die Funktion aus. Der Einschalt-SoC muss größer als der Ausschalt-SoC sein. Unterhalb des Ausschalt-SoC wird die Ladung nicht freigegeben.</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="socStopChargeAtMinPv" class="col-md-4 col-form-label">Ausschalt-SoC</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="socStopChargeAtMinPv" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="socStopChargeAtMinPv" name="socStopChargeAtMinPv" min="0" max="95" step="5" value="" data-default="0" data-topicprefix="openWB/config/get/pv/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in Prozent [%] für den Ausschalt-SoC der Laderegelung im Modus Min+PV-Laden. Definiert einen Speicher-SoC, bei dessen Unterschreitung die Ladereglung stoppt. Der Wert 0 schaltet die Funktion aus.</span>
+								</div>
+							</div>
+						</div>
+					</div>  <!-- end card Speicher-Beachtung -->
+				</div>  <!-- end card Speicher-Beachtung -->
+
+				<div class="row justify-content-center">
+					<div class="col-3">
+						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled="disabled">speichern</button>
+					</div>
+					<div class="col-1">
+						&nbsp;
+					</div>
+					<div class="col-3">
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+					</div>
+				</div>
+			</form>
+
+			<!-- modal set-defaults-confirmation window -->
+			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-danger">
+							<h4 class="modal-title text-light">Achtung</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Sollen für die Lademodi PV-Laden & Min+PV-Laden wirklich die Werkseinstellungen eingestellt werden?
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn" disabled="disabled">Fortfahren</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- modal form-not-valid window -->
+			<div class="modal fade" id="formNotValidModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-danger">
+							<h4 class="modal-title text-light">Fehler</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Es wurden fehlerhafte Eingaben gefunden, speichern ist nicht möglich! Bitte überprüfen Sie alle Eingaben.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">Schließen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- modal no-values-changed window -->
+			<div class="modal fade" id="noValuesChangedInfoModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-info">
+							<h4 class="modal-title text-light">Info</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Es wurden keine geänderten Einstellungen gefunden.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>  <!-- container -->
+
+		<footer class="footer bg-dark text-light font-small">
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Ladeeinstellungen/PV & Min+PV-Laden</small>
+			</div>
+		</footer>
+
+		<!-- load mqtt library -->
+		<script src = "js/mqttws31.js" ></script>
+		<!-- load topics -->
+		<script src = "settings/topicsToSubscribe_pvconfig.js?ver=20200911" ></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<!-- load service -->
+		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
+		<!-- load mqtt handler-->
+		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
+
+		<script>
+			var soc1vis
+			var soc2vis
+			var lp1vis
+			var lp2vis
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity on buttons
+				
+				if ( elementId == "boolHouseBatteryConfigured") {
+					if ( mqttpayload == 0 ) {
+						$('.housebatteryoptions').hide();
+						$('.nohousebattery').show();
+					} else {
+						$('.housebatteryoptions').show();
+						$('.nohousebattery').hide();
+					}
+				}
+				if ( elementId == "boolSocConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp1options').hide();
+						soc1vis = 0;
+					} else {
+						$('.soclp1options').show();
+						soc1vis = 1;
+					}
+				}
+				if ( elementId == "boolSocConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp2options').hide();
+						soc2vis = 0;
+					} else {
+						$('.soclp2options').show();
+						soc2vis = 1;
+					}
+				}
+				if ( soc1vis == 1 && soc2vis == 0){
+					$('.onlysoclp1options').show();
+					$('.soclp1options').hide();
+
+				} else {
+					$('.onlysoclp1options').hide();
+				}
+				if ( soc1vis == 1 && soc2vis == 1){
+					$('.soclp12options').show();
+
+				} else {
+					$('.soclp12options').hide();
+				}
+
+				if ( elementId == "boolChargePointConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.lp1options').hide();
+						lp1vis = 0;
+					} else {
+						$('.lp1options').show();
+						lp1vis = 1;
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.lp2options').hide();
+						lp2vis = 0;
+					} else {
+						$('.lp1options').show();
+						lp2vis = 1;
+					}
+				}	
+			}
+			$.get('settings/navbar.html', function(data){
+				$('#nav').replaceWith(data);
+				// disable navbar entry for current page
+				$('#navPVLadeeinstellungenBeta').addClass('disabled');
+			});
+
+			function saveSettings() {
+				// sends all changed values by mqtt if valid
+				var formValid = $("#myForm")[0].checkValidity();
+				if ( !formValid ) {
+					$('#formNotValidModal').modal();
+					return;
+				};
+				getChangedValues();
+				sendValues();
+			}
+
+			$(document).ready(function(){
+
+				$('input').blur(function(event) {
+					// check input field on blur if value is valid
+					if ( event.target.checkValidity() == false ) {
+						$(this).addClass('is-invalid');
+					} else {
+						$(this).removeClass('is-invalid');
+					}
+				});
+
+				$('#saveSettingsBtn').on("click",function() {
+					saveSettings();
+				});
+
+				$('#modalDefaultsBtn').on("click",function() {
+					$('#setDefaultsConfirmationModal').modal();
+				});
+
+				$('#saveDefaultsBtn').on("click",function() {
+					// shown in confirmation modal
+					// resets all values to defaults and sends all changed values by mqtt
+					setToDefaults();
+					getChangedValues();
+					sendValues();
+				});
+
+				$('input').on("paste",function(e) {
+					// prevent paste to input fields to avoid garbage
+					e.preventDefault();
+				});
+
+				$('.rangeInput').on('input', function() {
+					// show slider value in label of class valueLabel
+					updateLabel($(this).attr('id'));
+				});
+
+				$('input.naturalNumber').on('input', function() {
+					// on the fly input validation
+					formatToNaturalNumber(this);
+				});
+			});  // end document ready function
+
+		</script>
+
+	</body>
+</html>

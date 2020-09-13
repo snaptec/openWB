@@ -2,6 +2,7 @@
 
 declare -A mqttvar
 mqttvar["system/IpAddress"]=ipaddress
+mqttvar["system/ConfiguredChargePoints"]=ConfiguredChargePoints
 mqttvar["evu/APhase1"]=bezuga1
 mqttvar["evu/APhase2"]=bezuga2
 mqttvar["evu/APhase3"]=bezuga3

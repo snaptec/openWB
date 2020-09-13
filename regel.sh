@@ -46,7 +46,9 @@ source leds.sh
 source slavemode.sh
 date=$(date)
 re='^-?[0-9]+$'
-
+if [[ $isss == "1" ]]; then
+       exit 0
+fi
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then
@@ -179,13 +181,15 @@ if (( cpunterbrechunglp1 == 1 )); then
                        if (( ladeleistung < 100 )); then
                                cpulp1waraktiv=$(<ramdisk/cpulp1waraktiv)
 			       cpulp1counter=$(<ramdisk/cpulp1counter)
-			       if (( cpulp1counter > 3 )); then
+			       if (( cpulp1counter > 5 )); then
 				       if (( cpulp1waraktiv == 0 )); then
 						echo "CP Unterbrechung an LP1 durchgeführt"
 						if [[ $evsecon == "simpleevsewifi" ]]; then
 							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
 						elif [[ $evsecon == "ipevse" ]]; then
 							python runs/cpuremote.py $evseiplp1 4
+						elif [[ $evsecon == "extopenwb" ]]; then
+							mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep1ip -m "1"
 						else
 							sudo python runs/cpulp1.py
 						fi
@@ -216,7 +220,8 @@ if (( cpunterbrechunglp2 == 1 )); then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
 					elif [[ $evsecons1 == "ipevse" ]]; then
 						python runs/cpuremote.py $evseiplp2 7
-
+					elif [[ $evsecons1 == "extopenwb" ]]; then
+						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
 					else
                                        		sudo python runs/cpulp2.py
 			       		fi

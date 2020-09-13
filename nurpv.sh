@@ -17,8 +17,10 @@ if [[ $schieflastaktiv == "1" ]]; then
 	if [[ $u1p3paktiv == "1" ]]; then
 		u1p3pstat=$(<ramdisk/u1p3pstat)
 		if [[ $u1p3pstat == "1" ]]; then
-			maximalstromstaerke=$schieflastmaxa
-			echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
+			if (( schieflastmax < maximalstromstaerke )); then
+				maximalstromstaerke=$schieflastmaxa
+				echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
+			fi
 		fi
 	fi
 fi
@@ -356,7 +358,7 @@ else
 			if [[ $nurpv70dynact == "1" ]]; then
 				nurpv70status=$(<ramdisk/nurpv70dynstatus)
 				if [[ $nurpv70status == "1" ]]; then
-					abschaltuberschuss=1500
+					abschaltuberschuss=$(( 1500 * anzahlphasen ))
 					if [[ $debug == "1" ]]; then
 						echo "Setze neue Abschwaltschwelle"
 					fi

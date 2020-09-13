@@ -1,5 +1,7 @@
 <!-- Hilfe Index >>> -->
 <p>
-	Inhalt noch nicht fertig
+	Inhalt in Bearbeitung
 </p>
+
+
 <!-- <<< Hilfe Index -->

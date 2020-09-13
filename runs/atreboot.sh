@@ -1204,6 +1204,10 @@ if ! grep -Fq "solaredgepvslave3=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgepvslave3=none" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "solaredgepvslave4=" /var/www/html/openWB/openwb.conf
+then
+		  echo "solaredgepvslave4=none" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
 then
 		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
@@ -2587,6 +2591,10 @@ if ! grep -Fq "femsip=" /var/www/html/openWB/openwb.conf
 then
 	echo "femsip=192.168.1.23" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "femskacopw=" /var/www/html/openWB/openwb.conf
+then
+	echo "femskacopw=user" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "pv2wattmodul=" /var/www/html/openWB/openwb.conf
 then
 	echo "pv2wattmodul=none" >> /var/www/html/openWB/openwb.conf
@@ -2611,6 +2619,52 @@ fi
 if ! grep -Fq "soc_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_vin=VIN" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "isss=" /var/www/html/openWB/openwb.conf
+then
+	echo "isss=0" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "chargep1ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "chargep2ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep3ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep4ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep5ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep6ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep7ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+
+if ! grep -Fq "chargep8ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "datenschutzack=" /var/www/html/openWB/openwb.conf
+then
+	echo "datenschutzack=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
@@ -2679,6 +2733,7 @@ if python -c "import evdev" &> /dev/null; then
 else
 	sudo pip install evdev
 fi
+
 if ! [ -x "$(command -v sshpass)" ];then
 	apt-get -qq update
 	sleep 1
@@ -2730,7 +2785,11 @@ if python3 -c "import aiohttp" &> /dev/null; then
 else
 	sudo pip3 install aiohttp
 fi
-
+if python3 -c "import pymodbus" &> /dev/null; then
+	echo 'pymodbus installed...'
+else
+	sudo pip3 install pymodbus
+fi
 uuid=$(</sys/class/net/eth0/address)
 owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
@@ -2747,6 +2806,24 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
+if (( isss == 1 )); then
+	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/isss.py &
+    fi
+fi
+if [[ "$evsecon" == "buchse" ]]; then
+	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
+    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+    then
+    	echo "test" > /dev/null
+    else
+    	python3 /var/www/html/openWB/runs/buchse.py &
+    fi
+fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly

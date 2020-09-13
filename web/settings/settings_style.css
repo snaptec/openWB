@@ -9,11 +9,32 @@ html {
 }
 
 body {
-    margin-bottom: 30px;  /* margin bottom by footer height */
+    margin-bottom: 40px;  /* margin bottom by footer height and some more space */
 }
 
 body > .container {
     padding: 50px 15px 0;
+}
+
+.card {
+    margin-bottom: 1rem;
+}
+
+.card .card-header {
+    font-weight: bold;
+}
+
+.bg-primary,
+.bg-secondary,
+.bg-danger,
+.bg-success {
+    color: white;
+}
+
+
+.bg-warning,
+.bg-info {
+    color: #212529;
 }
 
 .footer > .container {
@@ -27,6 +48,11 @@ body > .container {
     width: 100%;
     height: 30px; /* fixed height of footer */
     line-height: 30px; /* vertically center the text there */
+    z-index: 1030; /* same as menue */
+}
+
+h1 {
+    margin: 0.67em 0 0.2em 0;
 }
 
 .hide {
@@ -86,11 +112,22 @@ body > .container {
 
 /* very Small devices (up to 575.98px) */
 @media screen and (max-width: 575.98px) {
-    .navbar-collapse a {
+    .navbar-collapse a,
+    .navbar-collapse .dropdown-header {
         font-size: 1.8em;
     }
     .navbar-brand {
         font-size: 2.0em;
+    }
+}
+
+/* Devices with limited height */
+@media screen and (max-height: 1024px) {
+    .scrollable-menu {
+        height: auto;
+        overflow-x: hidden;
+        max-height: 250px;
+        overflow-y: scroll;
     }
 }
 
@@ -122,13 +159,6 @@ body > .container {
     }
 }
 
-.owl-carousel .owl-item img {
-    width: 100%;
-    height: 30vh;
-    object-fit: scale-down;
-    max-width: initial;
-}
-
 .vaRow {
     /* vertical alignment of content in rows */
   display: flex;
@@ -139,3 +169,56 @@ body > .container {
     vertical-align: middle;
 }
 
+input:invalid {
+    border-bottom: 2px solid red !important;
+}
+
+/* Bootstrap carousel */
+.carousel-item img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 450px;
+}
+
+.carousel-caption,
+.carousel-indicators {
+    position: initial;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    width: 100%;
+}
+
+.carousel-caption,
+.carousel-control-next,
+.carousel-control-prev {
+    color: #212529;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+    filter:invert(1);
+}
+
+.carousel-indicators li {
+    width: 2rem;
+    height: 1rem;
+    border: transparent;
+    border-radius: .5rem;
+    background-color: #212529;
+}
+
+.carousel-indicators li:hover {
+	opacity: 1;
+}
+
+/* owl carousel script */
+.owl-carousel .owl-item img {
+    width: 100%;
+    height: 30vh;
+    object-fit: scale-down;
+    max-width: initial;
+}

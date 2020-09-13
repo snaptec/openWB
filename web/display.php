@@ -82,17 +82,55 @@
 	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
 	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
 <?php
-if ( $simplemodeold == 1 ) {
-	include 'display/simple.html';
-} else {
-	// das gewählte Theme einbinden
-	if ( $displaythemeold == 2 ) {
+if (isset($_POST['loadsite'])) {
+	if ( $isssold == 1 ) {
 		include 'display/minimal.html';
 	} else {
-		include 'display/gauge.html';
-	}	
+		if ( $simplemodeold == 1 ) {
+			include 'display/simple.html';
+		} else {
+			// das gewählte Theme einbinden
+			if ( $displaythemeold == 2 ) {
+				include 'display/minimal.html';
+			} else {
+				include 'display/gauge.html';
+			}	
+		}
+	}
+} else {
+?>
+<style>
+body {
+  height: 100vh;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Open Sans;
+}
+</style>
+<form action="" method="post">
+	<div id="preload" style="color: white;font-size: 48px;position: absolute;left: 110px;top: 200px;"> 
+		openWB startet... bitte warten
+	</div>
+	<div id="loaded" style="visibility: hidden">
+		<button type="submit" name="loadsite" value="Lade Interface" style="position:absolute;left: 250px;top: 165px;width:300px;height:150px;background-color: #4CAF50;border: none;color: white;border-radius: 12px;font-size: 24px;">Lade Interface</button>
+	</div>
+</form>
+<script type="text/javascript">
+	function changevis(){
+		document.getElementById("preload").style.visibility = "hidden";
+		document.getElementById("loaded").style.visibility = "visible";
+	}
+	setTimeout(changevis, 30000);
+</script>
+
+
+<?php
 }
 ?>
+<!--  -->
+
 	<!-- Scripts -->
 </body>
 </html>

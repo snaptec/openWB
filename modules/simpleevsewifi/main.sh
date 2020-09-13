@@ -10,17 +10,16 @@ lla3=$(echo $output | jq '.list[] | .currentP3')
 evsewifiplugstatelp1=$(echo $output | jq '.list[] | .vehicleState') 
 llkwh=$(echo $output | jq '.list[] | .meterReading')
 watt=$(echo "scale=0;$watt * 1000 /1" |bc)
-
 if [[ $watt =~ $re ]] ; then
 	echo $watt > /var/www/html/openWB/ramdisk/llaktuell
 fi
-if [[ $lla1 =~ $re ]] ; then
+if [[ $lla1 =~ $rekwh ]] ; then
 	echo $lla1 > /var/www/html/openWB/ramdisk/lla1
 fi
-if [[ $lla2 =~ $re ]] ; then
+if [[ $lla2 =~ $rekwh ]] ; then
 	echo $lla2 > /var/www/html/openWB/ramdisk/lla2
 fi
-if [[ $lla3 =~ $re ]] ; then
+if [[ $lla3 =~ $rekwh ]] ; then
 	echo $lla3 > /var/www/html/openWB/ramdisk/lla3
 fi
 if [[ $llkwh =~ $rekwh ]] ; then

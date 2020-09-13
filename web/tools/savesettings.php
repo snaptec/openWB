@@ -9,6 +9,10 @@ if(isset($_POST['minimalstromstaerke'])) {
 			$result .= 'schieflastmaxa='.$_POST['schieflastmaxa']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "isss=") !== false) {
+			$result .= 'isss='.$_POST['isss']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "schieflastaktiv=") !== false) {
 			$result .= 'schieflastaktiv='.$_POST['schieflastaktiv']."\n";
 			$writeit = '1';

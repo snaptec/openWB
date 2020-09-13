@@ -109,8 +109,14 @@ if [[ $evsecon == "ipevse" ]]; then
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
 fi
-
+if [[ $evsecon == "extopenwb" ]]; then
+	evseplugstatelp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolPlugStat)
+	ladestatuslp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolChargeStat)
+	echo $evseplugstatelp1  > /var/www/html/openWB/ramdisk/plugstat
+	echo $ladestatuslp1 > /var/www/html/openWB/ramdisk/chargestat
+fi
 if [[ $lastmanagement == "1" ]]; then
+	ConfiguredChargePoints=2
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
@@ -138,6 +144,12 @@ if [[ $lastmanagement == "1" ]]; then
 			fi
 
 		fi
+	fi
+	if [[ $evsecons1 == "extopenwb" ]]; then
+		evseplugstatelp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp2  > /var/www/html/openWB/ramdisk/plugstats1
+		echo $ladestatuslp2 > /var/www/html/openWB/ramdisk/chargestats1
 	fi
 	if [[ $evsecons1 == "slaveeth" ]]; then
 		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
@@ -174,9 +186,11 @@ if [[ $lastmanagement == "1" ]]; then
 else
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)
+	ConfiguredChargePoints=1
 
 fi
 if [[ $lastmanagements2 == "1" ]]; then
+	ConfiguredChargePoints=3
 	if [[ $evsecons2 == "ipevse" ]]; then
 		evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
 		ladestatuslp3=$(</var/www/html/openWB/ramdisk/ladestatuss2)
@@ -192,6 +206,13 @@ if [[ $lastmanagements2 == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 	fi
+	if [[ $evsecons2 == "extopenwb" ]]; then
+		evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
+		echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
+	fi
+
 	if [[ $evsecons2 == "modbusevse" ]]; then
 	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
 	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
@@ -206,11 +227,14 @@ if [[ $lastmanagements2 == "1" ]]; then
                         echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
                 fi
         fi
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 else
-	plugstatlp3=$(<ramdisk/plugstats2)
-	chargestatlp3=$(<ramdisk/chargestats2)
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
+	ConfiguredChargePoints=4
 	if [[ $evseconlp4 == "ipevse" ]]; then
 		evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
 		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
@@ -228,6 +252,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp5 == "1" ]]; then
+	ConfiguredChargePoints=5
 	if [[ $evseconlp5 == "ipevse" ]]; then
 		evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
 		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
@@ -245,6 +270,7 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp6 == "1" ]]; then
+	ConfiguredChargePoints=6
 	if [[ $evseconlp6 == "ipevse" ]]; then
 		evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
 		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
@@ -262,6 +288,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp7 == "1" ]]; then
+	ConfiguredChargePoints=7
 	if [[ $evseconlp7 == "ipevse" ]]; then
 		evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
 		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
@@ -279,6 +306,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp8 == "1" ]]; then
+	ConfiguredChargePoints=8
 	if [[ $evseconlp8 == "ipevse" ]]; then
 		evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
 		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
@@ -295,7 +323,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		fi
 	fi
 fi
-
+echo $ConfiguredChargePoints > ramdisk/ConfiguredChargePoints
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
        echo " " > ramdisk/lastregelungaktiv
@@ -360,6 +388,7 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
 llphaset=3
+
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
 	timeout 10 modules/$ladeleistungmodul/main.sh || true
@@ -372,6 +401,8 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
 	llv1=$(cat /var/www/html/openWB/ramdisk/llv1) 
+	llv2=$(cat /var/www/html/openWB/ramdisk/llv2) 
+	llv3=$(cat /var/www/html/openWB/ramdisk/llv3) 
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
@@ -409,6 +440,7 @@ else
 	llkwh=0
 	llkwhges=$llkwh
 fi
+
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then
@@ -771,10 +803,13 @@ if (( hausverbrauch < 0 )); then
 fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 usesimbezug=0
-if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
 	usesimbezug=1
 fi
 if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
+	usesimbezug=1
+fi
+if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "2" ]]; then
 	usesimbezug=1
 fi
 if [[ $usesimbezug == "1" ]]; then
@@ -823,10 +858,13 @@ fi
 if [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
 	usesimpv=1
 fi
+if [[ $speichermodul == "speicher_solaredge" ]] && [[ $pvwattmodul == "wr_solaredge" ]]; then
+	usesimpv=1
+fi
 if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
 	usesimpv=1
 fi
-if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 	usesimpv=1
 fi
 if [[ $usesimpv == "1" ]]; then
@@ -942,7 +980,7 @@ fi
 date=$(date)
 H=$(date +%H)
 if [[ $debug == "1" ]]; then
-	echo "$(tail -20000 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
+	echo "$(tail -1500 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
 	date
 	if [[ $speichermodul != "none" ]] ; then
 		echo speicherleistung $speicherleistung speichersoc $speichersoc
@@ -951,12 +989,13 @@ if [[ $debug == "1" ]]; then
 		echo awattarprice "$awattarprice" awattarmaxprice "$awattarmaxprice"
 	fi
 	echo pv1watt $pv1watt pv2watt $pv2watt pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-	echo lla1 "$lla1" llv1 "$llv1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
-	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
+	echo -e lla1 "$lla1"'\t'llv1 "$llv1"'\t'llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
+	echo -e lla2 "$lla2"'\t'llv2 "$llv2"'\t'llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo -e lla3 "$lla3"'\t'llv3 "$llv3"'\t'llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"
-	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
-	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
+	echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled"
+	echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3"
+	echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3"
 fi
 
 tempPubList=""
@@ -1440,6 +1479,12 @@ mqttconfvar["config/get/pv/nurpv70dynact"]=nurpv70dynact
 mqttconfvar["config/get/pv/nurpv70dynw"]=nurpv70dynw
 mqttconfvar["config/get/global/maxEVSECurrentAllowed"]=maximalstromstaerke
 mqttconfvar["config/get/global/minEVSECurrentAllowed"]=minimalstromstaerke
+mqttconfvar["config/get/u1p3p/sofortPhases"]=u1p3psofort
+mqttconfvar["config/get/u1p3p/standbyPhases"]=u1p3pstandby
+mqttconfvar["config/get/u1p3p/nurpvPhases"]=u1p3pnurpv
+mqttconfvar["config/get/u1p3p/minundpvPhases"]=u1p3pminundpv
+mqttconfvar["config/get/u1p3p/nachtPhases"]=u1p3pnl
+mqttconfvar["config/get/u1p3p/isConfigured"]=u1p3paktiv
 mqttconfvar["config/get/sofort/lp/1/energyToCharge"]=lademkwh
 mqttconfvar["config/get/sofort/lp/2/energyToCharge"]=lademkwhs1
 mqttconfvar["config/get/sofort/lp/3/energyToCharge"]=lademkwhs2

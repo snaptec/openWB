@@ -401,13 +401,13 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
 		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show info-div
-			$('#speicher').show();
+			$('#battDataDiv').show();
 			// and outer element for priority icon in pv mode
 			$('#priorityEvBattery').show();
 			// priority buttons in modal
 			$('#priorityModeBtns').show();
 		} else {
-			$('#speicher').hide();
+			$('#battDataDiv').hide();
 			$('#priorityEvBattery').hide();
 			$('#priorityModeBtns').hide();
 		}
