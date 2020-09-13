@@ -25,12 +25,35 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -54,45 +77,35 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			
-			<div class="row">
-				<div class="col">
-					<h1>Fehlerbericht senden</h1>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-7">
-					Das Sammeln der Systemparameter für den Fehlerbericht kann einige Zeit in Anspruch nehmen.
-					<b>Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen!</b><br>
-					Bitte das Fehlverhalten möglichst exakt beschreiben und den Fehlerbericht senden wenn das Problem aktuell besteht.
-				</div>
-			</div>
-			<br>
-			<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
-				<div class="form-row">
-					<div class="form-group col-lg-7">
-						<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500"></textarea>
-						<small id="textareaTextLength" class="form-text text-muted text-right">0/500</small>
+			<h1>Fehlermeldungen</h1>
+
+			<div class="card border-secondary">
+				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
+					<div class="card-header bg-secondary">
+						Debug-Meldung
 					</div>
-				</div>
-				<div class="form-row form-row-inline">
-					<div class="col-7 col-lg-5">
-						<div class="input-group mb-2">
-							<div class="input-group-prepend">
-								<div class="input-group-text">@</div>
+					<div class="card-body">
+						<div class="form-group">
+							<span id="textareaHelpBlock" class="form-text">Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen. Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen! Der Debug Modus muss nicht verstellt werden.</span>
+							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500" required="required"></textarea>
+							<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
+						</div>
+						<div class="form-group mb-0">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa fa-envelope"></i>
+									</div>
+								</div>
+								<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required="required">
 							</div>
-							<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email-Adresse notwendig für Rückfragen" required>
 						</div>
 					</div>
-					<div class="col-auto">
-						<button type="submit" class="btn btn-green mb-2">Absenden</button>
+					<div class="card-footer text-center">
+						<button type="submit" class="btn btn-success">Absenden</button>
 					</div>
-				</div>
-			</form>
-
-
-			
-
+				</form>
+			</div>
 
 		</div>  <!-- container -->
 
@@ -102,12 +115,12 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
 			$.get("settings/navbar.html", function(data){
 				$("#nav").replaceWith(data);
 				// disable navbar entry for current page
-				$('#navFehlerbericht').addClass('disabled');
+				$('#navFehlerberichtBeta').addClass('disabled');
 			});
 
 			$(document).ready(function(){

@@ -916,6 +916,9 @@
 				if(strpos($line, "solaredgepvslave3=") !== false) {
 					list(, $solaredgeipslave3old) = explode("=", $line);
 				}
+				if(strpos($line, "solaredgepvslave4=") !== false) {
+					list(, $solaredgeipslave4old) = explode("=", $line);
+				}
 				if(strpos($line, "solaredgeip=") !== false) {
 					list(, $solaredgeipold) = explode("=", $line);
 				}
@@ -4739,6 +4742,13 @@
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn nur ein oder zwei WRs genutzt werden auf none setzen.
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="solaredgepvslave4">WR 4 Solaredge ID:</label></b>
+							<input type="text" name="solaredgepvslave4" id="solaredgepvslave4" value="<?php echo $solaredgeipslave4old ?>">
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							Gültige Werte Zahl oder none. ID des vierten SolarEdge Wechselrichters. Wenn nur ein, zwei oder drei WRs genutzt werden auf none setzen.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgewr2ip">WR 2 Solaredge IP:</label></b>
