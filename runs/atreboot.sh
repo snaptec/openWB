@@ -2662,7 +2662,10 @@ if ! grep -Fq "chargep8ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargep8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "datenschutzack=" /var/www/html/openWB/openwb.conf
+then
+	echo "datenschutzack=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
