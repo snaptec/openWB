@@ -162,7 +162,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Mit Account anmelden</button>
+							<button type="submit" class="btn btn-success">Mit Account anmelden</button>
 						</div>
 					</form>
 				</div> <!-- card 1 -->
@@ -203,7 +203,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Neuen Account erstellen und einrichten</button>
+							<button type="submit" class="btn btn-success">Neuen Account erstellen und einrichten</button>
 						</div>
 					</form>
 				</div> <!-- card 2 -->
@@ -230,11 +230,14 @@
 
 		<script>
 
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navOpenwbCloudBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false},
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navOpenwbCloud').addClass('disabled');
+				}
+			);
 
 		</script>
 
