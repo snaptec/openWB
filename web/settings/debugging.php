@@ -65,6 +65,9 @@
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugmode) = explode("=", $line);
 				}
+				if(strpos($line, "datenschutzack=") !== false) {
+					list(, $datenschutzackold) = explode("=", $line, 2);
+				}
 			}
 			$debugmode = trim($debugmode);
 			if ( $debugmode == "" ) {
@@ -118,6 +121,15 @@
 						Remote Support
 					</div>
 					<div class="card-body">
+						<?php if ( $datenschutzackold != 1 ) { ?>
+						<div class="alert alert-danger">
+							Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
+						</div>
+						<?php } else { ?>
+						<div class="alert alert-success">
+							Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
+						</div>
+						<?php } ?>
 						<div class="form-group mb-0">
 							<span id="textHelpBlock" class="form-text">Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt. openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.</span>
 							<div class="input-group">
@@ -131,7 +143,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success">Tunnel herstellen</button>
+						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Tunnel herstellen</button>
 					</div>
 				</form>
 			</div>
@@ -146,11 +158,14 @@
 
 		<script>
 
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navDebuggingBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navDebugging').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 

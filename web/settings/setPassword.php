@@ -130,7 +130,7 @@ AUTHEND
 				<?php
 					if( !file_exists( $authfile )){ // show form to setup password protection
 						?>
-						<form action="./settings/setPassword.beta.php" method="POST">
+						<form action="./settings/setPassword.php" method="POST">
 							<div class="card-body">
 								<div class="row form-group">
 									<label for="username" class="col-md-4 col-form-label">Benutzername</label>
@@ -205,11 +205,14 @@ AUTHEND
 				$('#navPasswortschutz').addClass('disabled');
 			});
 
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navPasswortschutzBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false},
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navPasswortschutz').addClass('disabled');
+				}
+			);
 		</script>
 
 	</body>

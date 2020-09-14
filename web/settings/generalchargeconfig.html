@@ -81,7 +81,7 @@
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="maxEVSECurrentAllowed" class="col-4 col-sm-4 col-form-label">alle Ladepunkte</label>
+							<label for="maxEVSECurrentAllowed" class="col-md-4 col-form-label">alle Ladepunkte</label>
 							<div class="col-md-8">
 								<div class="form-row vaRow mb-1">
 									<label for="maxEVSECurrentAllowed" class="col-2 col-form-label valueLabel" suffix="A">A</label>
@@ -193,13 +193,16 @@
 		<!-- load mqtt handler-->
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get('settings/navbar.html?vers=2', function(data){
-				$('#nav').replaceWith(data);
-				// disable navbar entry for current page
-				$('#navGeneralLadeeinstellungen').addClass('disabled');
-			});
+			$.get(
+				{ url: 'settings/navbar.html', cache: false },
+				function(data){
+					$('#nav').replaceWith(data);
+					// disable navbar entry for current page
+					$('#navGeneralLadeeinstellungen').addClass('disabled');
+				}
+			);
 			function visibiltycheck(elementId, mqttpayload) {
 				// do visiblity check here
 			}

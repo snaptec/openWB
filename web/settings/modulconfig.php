@@ -5501,16 +5501,18 @@
 			</div>
 		</footer>
 
+		<script>
 
-		<script type="text/javascript">
-
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navModulkonfiguration').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false},
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navModulkonfiguration').addClass('disabled');
+				}
+			);
 
 		</script>
 
-
+	</body>
 </html>
