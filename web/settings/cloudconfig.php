@@ -162,7 +162,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Mit Account anmelden</button>
+							<button type="submit" class="btn btn-success">Mit Account anmelden</button>
 						</div>
 					</form>
 				</div> <!-- card 1 -->
@@ -203,7 +203,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Neuen Account erstellen und einrichten</button>
+							<button type="submit" class="btn btn-success">Neuen Account erstellen und einrichten</button>
 						</div>
 					</form>
 				</div> <!-- card 2 -->
