@@ -78,6 +78,10 @@
 			<div class="alert alert-danger">
 				Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um eine Fehlermeldung senden zu können.
 			</div>
+			<?php } else { ?>
+			<div class="alert alert-success">
+				Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können Fehlermeldungen senden.
+			</div>
 			<?php } ?>
 
 			<div class="card border-secondary">
