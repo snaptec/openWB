@@ -62,14 +62,9 @@
 			// read selected debug mode from config file
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugmode) = explode("=", $line);
+				if(strpos($line, "datenschutzack=") !== false) {
+					list(, $datenschutzackold) = explode("=", $line, 2);
 				}
-			}
-			$debugmode = trim($debugmode);
-			if ( $debugmode == "" ) {
-				// if no debug mode set, set 0 = off
-				$debugmode="0";
 			}
 
 		?>
@@ -78,6 +73,12 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Fehlermeldungen</h1>
+
+			<?php if ( $datenschutzackold != 1 ) { ?>
+			<div class="alert alert-danger">
+				Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um eine Fehlermeldung senden zu können.
+			</div>
+			<?php } ?>
 
 			<div class="card border-secondary">
 				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
@@ -102,7 +103,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success">Absenden</button>
+						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Absenden</button>
 					</div>
 				</form>
 			</div>
@@ -118,7 +119,7 @@
 		<script>
 
 			$.get(
-				{ url: "settings/navbar.html", cache: false},
+				{ url: "settings/navbar.html", cache: false },
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
