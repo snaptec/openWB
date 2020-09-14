@@ -230,11 +230,14 @@
 
 		<script>
 
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navOpenwbCloudBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false},
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navOpenwbCloud').addClass('disabled');
+				}
+			);
 
 		</script>
 
