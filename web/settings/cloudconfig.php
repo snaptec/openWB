@@ -103,6 +103,10 @@
 				<div class="alert alert-danger">
 					Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
 				</div>
+			<?php } else { ?>
+				<div class="alert alert-success">
+					Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
+				</div>
 			<?php }
 			if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
 				<div class="card border-secondary">

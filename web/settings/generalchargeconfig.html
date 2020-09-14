@@ -81,7 +81,7 @@
 							</div>
 						</div>
 						<div class="form-row mb-1">
-							<label for="maxEVSECurrentAllowed" class="col-4 col-sm-4 col-form-label">alle Ladepunkte</label>
+							<label for="maxEVSECurrentAllowed" class="col-md-4 col-form-label">alle Ladepunkte</label>
 							<div class="col-md-8">
 								<div class="form-row vaRow mb-1">
 									<label for="maxEVSECurrentAllowed" class="col-2 col-form-label valueLabel" suffix="A">A</label>
@@ -196,7 +196,7 @@
 		<script>
 
 			$.get(
-				{ url: 'settings/navbar.html', cache: false},
+				{ url: 'settings/navbar.html', cache: false },
 				function(data){
 					$('#nav').replaceWith(data);
 					// disable navbar entry for current page

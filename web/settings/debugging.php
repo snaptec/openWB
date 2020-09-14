@@ -125,6 +125,10 @@
 						<div class="alert alert-danger">
 							Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um den Online-Support nutzen zu können.
 						</div>
+						<?php } else { ?>
+						<div class="alert alert-success">
+							Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können den Online-Support nutzen.
+						</div>
 						<?php } ?>
 						<div class="form-group mb-0">
 							<span id="textHelpBlock" class="form-text">Durch Angabe des Tokens und mit Klick auf "Tunnel herstellen" wird eine Verbindung von der lokalen openWB zum openWB Support hergestellt. openWB erhält damit Vollzugriff auf diese Installation. Diese Schnittstelle nur nach Aufforderung mit dem entsprechenden Token aktivieren.</span>
