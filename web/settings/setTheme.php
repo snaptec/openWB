@@ -163,11 +163,14 @@
 		</footer>
 
 		<script>
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navSetThemeBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false},
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navSetTheme').addClass('disabled');
+				}
+			);
 
 			function saveTheme() {
 				var selectedTheme = $('.carousel-item.active').find('img').attr('title');  // get theme name from active carousel item

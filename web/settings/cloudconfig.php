@@ -68,6 +68,9 @@
 				if(strpos($line, "cloudpw=") !== false) {
 					list(, $cloudpwold) = explode("=", $line, 2);
 				}
+				if(strpos($line, "datenschutzack=") !== false) {
+					list(, $datenschutzackold) = explode("=", $line, 2);
+				}
 			}
 			$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
 			if (count($files) == 0) {
@@ -96,7 +99,16 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Einstellungen zur openWB Cloud</h1>
-			<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
+			<?php if ( $datenschutzackold != 1 ) { ?>
+				<div class="alert alert-danger">
+					Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
+				</div>
+			<?php } else { ?>
+				<div class="alert alert-success">
+					Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
+				</div>
+			<?php }
+			if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						Cloud Anmeldedaten
@@ -162,7 +174,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Mit Account anmelden</button>
+							<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Mit Account anmelden</button>
 						</div>
 					</form>
 				</div> <!-- card 1 -->
@@ -203,7 +215,7 @@
 							</div>
 						</div>
 						<div class="card-footer text-center">
-							<button type="submit" class="btn btn-success" disabled="disabled">Neuen Account erstellen und einrichten</button>
+							<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Neuen Account erstellen und einrichten</button>
 						</div>
 					</form>
 				</div> <!-- card 2 -->
@@ -230,11 +242,14 @@
 
 		<script>
 
-			$.get("settings/navbar.html?vers=2", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navOpenwbCloudBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navOpenwbCloud').addClass('disabled');
+				}
+			);
 
 		</script>
 

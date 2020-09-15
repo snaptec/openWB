@@ -59,7 +59,7 @@
 		<script>
 			$(document).ready(function(){
 				$("#infoText").text("Update der openWB angefordert...");
-				$.get("./tools/updatePerformNow.php").done(function() {
+				$.get({ url: "./tools/updatePerformNow.php", cache: false }).done(function() {
 					setTimeout(function() { window.location.href = "./index.php"; }, 20000);
 				})
 			});
