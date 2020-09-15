@@ -5026,6 +5026,7 @@
 							<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 							<option <?php if($pv2wattmodulold == "wr2_kostalsteca\n") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 							<option <?php if($pv2wattmodulold == "wr2_victron\n") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
+							<option <?php if($pv2wattmodulold == "wr2_ethsdm120\n") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
 
 						</select>
 					</div>
@@ -5037,11 +5038,11 @@
 					</div>
 					<div id="pv2ipdiv">
 						<div class="row" style="background-color:#BEFEBE">
-							<b><label for="pv2ip">Wechselrichter IP:</label></b>
+							<b><label for="pv2ip">IP:</label></b>
 							<input type="text" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte: IPs. IP Adresse des Wechselrichters, ggf. muss modbusTCP im WR noch aktiviert werden.
+							Gültige Werte: IPs.
 						</div>
 					</div>
 					<div id="pv2iddiv">
@@ -5080,7 +5081,10 @@
 								$('#pv2ipdiv').show();
 								$('#pv2iddiv').show();
 							}
-
+							if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
+								$('#pv2ipdiv').show();
+								$('#pv2iddiv').show();
+							}
 						}
 						$(function() {
 							display_pv2wattmodul();
