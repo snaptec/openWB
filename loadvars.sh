@@ -775,8 +775,11 @@ if [[ $socmodul != "none" ]]; then
 	else
 		timeout 10 modules/$socmodul/main.sh || true
 		soc=$(</var/www/html/openWB/ramdisk/soc)
+		tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 		if ! [[ $soc =~ $re ]] ; then
-			soc="0"
+			soc=$tmpsoc
+		else
+			echo $soc > /var/www/html/openWB/ramdisk/tmpsoc
 		fi
 	fi
 else
