@@ -114,7 +114,7 @@ body {
 		openWB startet... bitte warten
 	</div>
 	<div id="loaded" style="visibility: hidden">
-		<button type="submit" name="loadsite" value="Lade Interface" style="position:absolute;left: 250px;top: 165px;width:300px;height:150px;background-color: #4CAF50;border: none;color: white;border-radius: 12px;font-size: 24px;">Lade Interface</button>
+		<button type="submit" name="loadsite" value="Lade Interface" style="position:absolute;left: 250px;top: 165px;width:300px;height:150px;background-color: #4CAF50;border: none;color: white;border-radius: 12px;font-size: 24px;">Klicken zum Interface laden</button>
 	</div>
 </form>
 <script type="text/javascript">
