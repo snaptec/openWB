@@ -51,6 +51,9 @@
 				if(strpos($line, "soc2pass=") !== false) {
 					list(, $soc2passold) = explode("=", $line);
 				}
+				if(strpos($line, "soc2pin=") !== false) {
+					list(, $soc2pinold) = explode("=", $line);
+				}
 				if(strpos($line, "soclp1_vin=") !== false) {
 					list(, $soclp1_vinold) = explode("=", $line);
 				}
@@ -2651,7 +2654,7 @@
 								<option <?php if($socmodul1old == "soc_zeronglp2\n") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
 								<option <?php if($socmodul1old == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
 								<option <?php if($socmodul1old == "soc_audilp2\n") echo "selected" ?> value="soc_audilp2">Audi</option>
-
+								<option <?php if($socmodul1old == "soc_bluelinklp2\n") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 							</select>
 						</div>
 						<div id="socmuser2">
@@ -2672,6 +2675,16 @@
 								Passwort
 							</div>
 						</div>
+						<div id="socmpin2">
+							<div class="row bg-info">
+								<b><label for="soc2pin">Pin:</label></b>
+								<input type="soc2pin" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
+							</div>
+							<div class="row bg-info">
+								Pin
+							</div>
+						</div>
+
 						<div id="socmqtt1">
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
@@ -2960,7 +2973,7 @@
 								$('#socmqtt1').hide();
 								$('#socmuser2').hide();
 								$('#socmpass2').hide();
-
+								$('#socmpin2').hide();
 								$('#socmnone1').hide();
 								$('#socmhttp1').hide();
 								$('#socleaf1').hide();
@@ -2984,6 +2997,13 @@
 								if($('#socmodul1').val() == 'soc_audilp2') {
 									$('#socmuser2').show();
 									$('#socmpass2').show();
+
+								}
+								if($('#socmodul1').val() == 'soc_bluelinklp2') {
+									$('#socmuser2').show();
+									$('#socmpass2').show();
+									$('#socmpin2').show();
+
 
 								}
 

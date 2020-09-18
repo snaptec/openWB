@@ -2430,6 +2430,10 @@ if ! grep -Fq "soc2pass=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc2pass=passwort" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc2pin=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc2pin=pin" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "lgessv1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "lgessv1ip=youripaddress" >> /var/www/html/openWB/openwb.conf

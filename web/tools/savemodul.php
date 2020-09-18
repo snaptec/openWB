@@ -869,6 +869,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'soc2pass=\''.$_POST['socpass']."'\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "soc2pin=") !== false) {
+			$result .= 'soc2pin=\''.$_POST['soc2pin']."'\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "soc2user=") !== false) {
 			$result .= 'soc2user='.$_POST['socuser']."\n";
 			$writeit = '1';
