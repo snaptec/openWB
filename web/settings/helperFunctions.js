@@ -107,7 +107,7 @@ function sendValues() {
         // then send changed values
 
         Object.keys(changedValues).forEach(function(topic, index) {
-	var value = this[topic].toString();
+        var value = this[topic].toString();
             setTimeout(function () {
                 publish(value, topic);
             }, index * intervall);
