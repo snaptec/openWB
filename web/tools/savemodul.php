@@ -866,15 +866,15 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "soc2pass=") !== false) {
-			$result .= 'soc2pass=\''.$_POST['socpass']."'\n";
+			$result .= 'soc2pass=\''.$_POST['soc2pass']."'\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "soc2pin=") !== false) {
-			$result .= 'soc2pin=\''.$_POST['soc2pin']."'\n";
+			$result .= 'soc2pin='.$_POST['soc2pin']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "soc2user=") !== false) {
-			$result .= 'soc2user='.$_POST['socuser']."\n";
+			$result .= 'soc2user='.$_POST['soc2user']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "zoelp2username=") !== false) {
