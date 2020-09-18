@@ -12,7 +12,8 @@ slave1id = int(sys.argv[2])
 slave2id = int(sys.argv[3])
 slave3id = int(sys.argv[4])
 batwrsame = int(sys.argv[5])
-extprodakt = int(sys.argv[6])
+slave4id = int(sys.argv[6])
+extprodakt = int(sys.argv[7])
 
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
@@ -74,6 +75,33 @@ value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final3 = int(struct.unpack('>i', all.decode('hex'))[0])
 
+#wr4
+resp= client.read_holding_registers(40084,2,unit=slave4id)
+multipli = resp.registers[0]
+multiplint = format(multipli, '04x')
+fmultiplint = int(struct.unpack('>h', multiplint.decode('hex'))[0])
+
+respw= client.read_holding_registers(40083,2,unit=slave4id)
+value1w = respw.registers[0]
+allw = format(value1w, '04x')
+rawprod4w = finalw = int(struct.unpack('>h', allw.decode('hex'))[0]) * -1
+if fmultiplint == 0:
+    rawprod4w = rawprod4w
+if fmultiplint == -1:
+    rawprod4w = rawprod4w / 10 
+if fmultiplint == -2:
+    rawprod4w = rawprod4w / 100
+if fmultiplint == -3:
+    rawprod4w = rawprod4w / 1000
+if fmultiplint == -4:
+    rawprod4w = rawprod4w / 10000
+
+resp= client.read_holding_registers(40093,2,unit=slave4id)
+value1 = resp.registers[0]
+value2 = resp.registers[1]
+all = format(value1, '04x') + format(value2, '04x')
+final4 = int(struct.unpack('>i', all.decode('hex'))[0])
+
 #wr2
 resp= client.read_holding_registers(40084,2,unit=slave2id)
 multipli = resp.registers[0]
@@ -94,6 +122,7 @@ if fmultiplint == -3:
     rawprod2w = rawprod2w / 1000
 if fmultiplint == -4:
     rawprod2w = rawprod2w / 10000
+    
 
 if extprodakt == 1:    
 	resp= client.read_holding_registers(40380,1,unit=slave1id)
@@ -102,7 +131,8 @@ if extprodakt == 1:
 	extprod = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
 else:
 	extprod = 0
-realrawprodw = rawprodw + rawprod2w + rawprod3w + extprod - storagepower    
+
+realrawprodw = rawprodw + rawprod2w + rawprod3w +rawprod4w + extprod - storagepower    
 f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(realrawprodw))
 f.close()
@@ -112,7 +142,7 @@ value1 = resp.registers[0]
 value2 = resp.registers[1]
 all = format(value1, '04x') + format(value2, '04x')
 final2 = int(struct.unpack('>i', all.decode('hex'))[0])
-rfinal = final + final2 + final3
+rfinal = final + final2 + final3 + final4
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(rfinal))
 f.close()

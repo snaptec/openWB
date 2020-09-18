@@ -569,6 +569,11 @@ ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
 mkdir -p /var/www/html/openWB/web/logging/data/monthly
 sudo chmod -R 777 /var/www/html/openWB/web/logging/data/
+if ! grep -Fq "wr1extprod=" /var/www/html/openWB/openwb.conf
+then
+  echo "wr1extprod=0" >> /var/www/html/openWB/openwb.conf
+fi
+
 if ! grep -Fq "hook1einschaltverz=" /var/www/html/openWB/openwb.conf
 then
   echo "hook1einschaltverz=20" >> /var/www/html/openWB/openwb.conf

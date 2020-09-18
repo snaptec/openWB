@@ -903,7 +903,9 @@
 				if(strpos($line, "wrkostalpikoip=") !== false) {
 					list(, $wrkostalpikoipold) = explode("=", $line);
 				}
-
+				if(strpos($line, "wr1extprod=") !== false) {
+					list(, $wr1extprodold) = explode("=", $line);
+				}
 				if(strpos($line, "solaredgepvip=") !== false) {
 					list(, $solaredgepvipold) = explode("=", $line);
 				}
@@ -4172,13 +4174,14 @@
 					</div>
 					<div id="wattbezugsolaredge">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solaredgeip">IP Adresse des SolarEdge</label></b>
+							<b><label for="solaredgeip">IP Adresse des SolarEdge:</label></b>
 							<input type="text" name="solaredgeip" id="solaredgeip" value="<?php echo htmlspecialchars($solaredgeipold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP.<br>
 							Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
-							Ebenso muss ModbusTCP am Wechselrichter aktiviert werden
+							Ebenso muss ModbusTCP am Wechselrichter aktiviert werden.<br>
+							Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.
 						</div>
 					</div>
 					<div id="wattbezuge3dc">
@@ -4721,6 +4724,14 @@
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							Gültige Werte IP. IP Adresse des SolarEdge Wechselrichters.Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
+						</div>
+						<b><label for="wr1extprod">Externes Meter mit auslesen:</label></b>
+						<select name="wr1extprod" id="wr1extprod">
+							<option <?php if($wr1extprodold == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($wr1extprodold == "1\n") echo "selected" ?> value="1">Ja</option>
+						</select>
+						<div class="row" style="background-color:#BEFEBE">
+							Diese Option aktivieren wenn ein Solaredge SmartMeter verbaut ist welches vorhandene Bestands PV Anlagen erfasst. Das Meter muss an Position 2 konfiguriert sein.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="solaredgepvslave1">WR 1 Solaredge ID:</label></b>
