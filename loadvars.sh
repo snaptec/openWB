@@ -446,8 +446,11 @@ if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then
 		timeout 10 modules/$socmodul1/main.sh || true
 		soc1=$(</var/www/html/openWB/ramdisk/soc1)
+		tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 		if ! [[ $soc1 =~ $re ]] ; then
-		 soc1="0"
+			soc1=$tmpsoc1
+		else
+			echo $soc1 > /var/www/html/openWB/ramdisk/tmpsoc1
 		fi
 		soc1vorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/soc1vorhanden
