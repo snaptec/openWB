@@ -349,11 +349,14 @@
 <?php } ?>
 			});
 
-			$.get('settings/navbar.html', function(data){
-				$('#nav').replaceWith(data);
-				// disable navbar entry for current page
-				$('#navSmartHomeBeta').addClass('disabled');
-			});
+			$.get(
+				{ url: 'settings/navbar.html', cache: false },
+				function(data){
+					$('#nav').replaceWith(data);
+					// disable navbar entry for current page
+					$('#navSmartHomeBeta2').addClass('disabled');
+				}
+			);
 
 			function saveSettings() {
 				// sends all changed values by mqtt if valid
