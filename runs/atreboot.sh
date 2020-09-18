@@ -2824,6 +2824,13 @@ if (( isss == 1 )); then
     	echo "test" > /dev/null
     else
     	python3 /var/www/html/openWB/runs/isss.py &
+	ethstate=$(</sys/class/net/eth0/carrier)
+	if (( ethstate == 1 )); then
+		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+	else
+		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+	fi
+
     fi
 fi
 if [[ "$evsecon" == "buchse" ]]; then
