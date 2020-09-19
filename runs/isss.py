@@ -26,7 +26,7 @@ DeviceValues.update({'lla2' : str(5)})
 DeviceValues.update({'lla3' : str(5)})
 
 DeviceValues.update({'llkwh' : str(5)})
-
+DeviceValues.update({'rfidtag' : str(5)})
 DeviceValues.update({'watt' : str(5)})
 DeviceValues.update({'chargestat' : str(5)})
 DeviceValues.update({'plugstat' : str(5)})
@@ -38,6 +38,7 @@ seradd = "/dev/serial0"
 sdmid=105
 Values = { }
 actorstat=0
+rfidtag=0
 loglevel=1
 from pymodbus.client.sync import ModbusSerialClient
 client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, 
@@ -153,7 +154,9 @@ def getmeter():
 
         Values.update({'evsell' : ll})
         logDebug("0", "EVSE plugstat: " + str(var) + " EVSE LL: " + str(ll))
-        
+        try:
+            with open('ramdisk/readtag', 'r') as value:
+                rfidtag = str(value.read())
         parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
         parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
         parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
@@ -214,6 +217,11 @@ def getmeter():
                     mclient.publish("openWB/lp/1/boolChargeStat", payload=Values["chargestat"], qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'chargestat' : Values["chargestat"]})
+            if ( "rfidtag" in key):
+                if ( DeviceValues[str(key)] != str(rfidtag)):
+                    mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
+                    mclient.loop(timeout=2.0)
+                    DeviceValues.update({'rfidtag' : str(rfidtag)})
 
 
         mclient.disconnect()
