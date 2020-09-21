@@ -71,15 +71,15 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="awattaraktiv" class="col-md-4 col-form-label">Nachtladen im Modus Sofortladen</label>
+								<label class="col-md-4 col-form-label">Nachtladen im Modus Sofortladen</label>
 								<div class="col">
 									<!-- TODO: create proper MQTT Topic -->
 									<div class="btn-group btn-group-toggle btn-block" id="nachtladenLp1" name="nachtladen" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
 										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="nachtladen" autocomplete="off" data-option="0">ausgeschaltet
+											<input type="radio" name="nachtladen" data-option="0">ausgeschaltet
 										</label>
 										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="nachtladen" autocomplete="off" data-option="1">eingeschaltet
+											<input type="radio" name="nachtladen" data-option="1">eingeschaltet
 										</label>
 									</div>
 											<span class="form-text small">Auswahl der Funktion Nachladen im Modus Sofortladen. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.</span>
@@ -191,7 +191,7 @@
 		<script>
 
 			$.get(
-				{ url: 'settings/navbar.html', cache: false},
+				{ url: 'settings/navbar.html', cache: false },
 				function(data){
 					$('#nav').replaceWith(data);
 					// disable navbar entry for current page

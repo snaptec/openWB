@@ -67,14 +67,14 @@
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<label class="col-4 col-form-label">Gerät <?php echo $devicenum; ?></label>
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Gerät <?php echo $devicenum; ?></div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_configuredDevices<?php echo $devicenum; ?>" name="device_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<label class="btn btn-outline-info">
+										<label class="btn btn-sm btn-outline-info">
 											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>Off" data-option="0">Aus
 										</label>
-										<label class="btn btn-outline-info">
+										<label class="btn btn-sm btn-outline-info">
 											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>On" data-option="1">An
 										</label>
 									</div>
