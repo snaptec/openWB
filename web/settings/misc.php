@@ -627,18 +627,18 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="dspeed" class="col-form-label">Geschwindigkeit Regelintervall</label>
+									<label class="col-form-label">Geschwindigkeit Regelintervall</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($dspeedold == 0) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed0" autocomplete="off" value="0"<?php if($dspeedold == 0) echo " checked=\"checked\"" ?>>Normal
+											<input type="radio" name="dspeed" id="dspeed0" value="0"<?php if($dspeedold == 0) echo " checked=\"checked\"" ?>>Normal
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 2) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed2" autocomplete="off" value="2"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Langsam
+											<input type="radio" name="dspeed" id="dspeed2" value="2"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Langsam
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 3) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed3" autocomplete="off" value="3"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Sehr Langsam
+											<input type="radio" name="dspeed" id="dspeed3" value="3"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Sehr Langsam
 										</label>
 									</div>
 									<span class="form-text small">
@@ -651,15 +651,15 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="ladetaster" class="col-form-label">Ladetaster</label>
+									<label class="col-form-label">Ladetaster</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($ladetasterold == 0) echo " active" ?>">
-											<input type="radio" name="ladetaster" id="ladetasterOff" autocomplete="off" value="0"<?php if($ladetasterold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="ladetaster" id="ladetasterOff" value="0"<?php if($ladetasterold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($ladetasterold == 1) echo " active" ?>">
-											<input type="radio" name="ladetaster" id="ladetasterOn" autocomplete="off" value="1"<?php if($ladetasterold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="ladetaster" id="ladetasterOn" value="1"<?php if($ladetasterold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 									<span class="form-text small">Wenn aktiviert, sind nach einem Neustart die externen Taster aktiv. Wenn keine verbaut sind, diese Option ausschalten.</span>
@@ -669,24 +669,24 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="bootmodus" class="col-form-label">Lademodus nach Start der openWB</label>
+									<label class="col-form-label">Lademodus nach Start der openWB</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
-											<input type="radio" name="bootmodus" id="bootmodus3" autocomplete="off" value="3"<?php if($bootmodusold == 3) echo " checked=\"checked\"" ?>>Stop
+											<input type="radio" name="bootmodus" id="bootmodus3" value="3"<?php if($bootmodusold == 3) echo " checked=\"checked\"" ?>>Stop
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
-											<input type="radio" name="bootmodus" id="bootmodus4" autocomplete="off" value="4"<?php if($bootmodusold == 4) echo " checked=\"checked\"" ?>>Standby
+											<input type="radio" name="bootmodus" id="bootmodus4" value="4"<?php if($bootmodusold == 4) echo " checked=\"checked\"" ?>>Standby
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
-											<input type="radio" name="bootmodus" id="bootmodus2" autocomplete="off" value="2"<?php if($bootmodusold == 2) echo " checked=\"checked\"" ?>>Nur PV
+											<input type="radio" name="bootmodus" id="bootmodus2" value="2"<?php if($bootmodusold == 2) echo " checked=\"checked\"" ?>>Nur PV
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
-											<input type="radio" name="bootmodus" id="bootmodus1" autocomplete="off" value="1"<?php if($bootmodusold == 1) echo " checked=\"checked\"" ?>>Min + PV
+											<input type="radio" name="bootmodus" id="bootmodus1" value="1"<?php if($bootmodusold == 1) echo " checked=\"checked\"" ?>>Min + PV
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
-											<input type="radio" name="bootmodus" id="bootmodus0" autocomplete="off" value="0"<?php if($bootmodusold == 0) echo " checked=\"checked\"" ?>>Sofort Laden
+											<input type="radio" name="bootmodus" id="bootmodus0" value="0"<?php if($bootmodusold == 0) echo " checked=\"checked\"" ?>>Sofort Laden
 										</label>
 									</div>
 									<span class="form-text small">Definiert den Lademodus nach Boot der openWB.</span>
@@ -696,15 +696,15 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="netzabschaltunghz" class="col-form-label">Netzschutz</label>
+									<label class="col-form-label">Netzschutz</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($netzabschaltunghzold == 0) echo " active" ?>">
-											<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOff" autocomplete="off" value="0"<?php if($netzabschaltunghzold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOff" value="0"<?php if($netzabschaltunghzold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($netzabschaltunghzold == 1) echo " active" ?>">
-											<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOn" autocomplete="off" value="1"<?php if($netzabschaltunghzold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="netzabschaltunghz" id="netzabschaltunghzOn" value="1"<?php if($netzabschaltunghzold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 									<span class="form-text small">
@@ -729,27 +729,27 @@
 							</div>
 							<div class="form-row mt-2 mb-1">
 								<div class="col-md-4">
-									<label for="cpunterbrechunglp1" class="col-form-label">Ladepunkt 1</label>
+									<label class="col-form-label">Ladepunkt 1</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($cpunterbrechunglp1old == 0) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1Off" autocomplete="off" value="0"<?php if($cpunterbrechunglp1old == 0) echo " checked=\"checked\"" ?>>Aus
+										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1Off" value="0"<?php if($cpunterbrechunglp1old == 0) echo " checked=\"checked\"" ?>>Aus
 									</label>
 									<label class="btn btn-outline-info<?php if($cpunterbrechunglp1old == 1) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1On" autocomplete="off" value="1"<?php if($cpunterbrechunglp1old == 1) echo " checked=\"checked\"" ?>>An
+										<input type="radio" name="cpunterbrechunglp1" id="cpunterbrechunglp1On" value="1"<?php if($cpunterbrechunglp1old == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
 							</div>
 							<div class="form-row mt-2">
 								<div class="col-md-4">
-									<label for="cpunterbrechunglp2" class="col-form-label">Ladepunkt 2</label>
+									<label class="col-form-label">Ladepunkt 2</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 0) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2Off" autocomplete="off" value="0"<?php if($cpunterbrechunglp2old == 0) echo " checked=\"checked\"" ?>>Aus
+										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2Off" value="0"<?php if($cpunterbrechunglp2old == 0) echo " checked=\"checked\"" ?>>Aus
 									</label>
 									<label class="btn btn-outline-info<?php if($cpunterbrechunglp2old == 1) echo " active" ?>">
-										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2On" autocomplete="off" value="1"<?php if($cpunterbrechunglp2old == 1) echo " checked=\"checked\"" ?>>An
+										<input type="radio" name="cpunterbrechunglp2" id="cpunterbrechunglp2On" value="1"<?php if($cpunterbrechunglp2old == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
 							</div>
@@ -765,12 +765,12 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="rfidakt" class="col-form-label">RFID Leser</label>
+									<label class="col-form-label">RFID Leser</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOff" autocomplete="off" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
 											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
@@ -836,34 +836,34 @@
 								</div>
 								<div class="form-row">
 									<div class="col-lg-4">
-										<label for="rfidlp1c1" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 1
 												</div>
 											</div> 
 											<input type="text" name="rfidlp1c1" id="rfidlp1c1" class="form-control" value="<?php echo trim( $rfidlp1c1old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1c2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 2
 												</div>
 											</div> 
 											<input type="text" name="rfidlp1c2" id="rfidlp1c2" class="form-control" value="<?php echo trim( $rfidlp1c2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1c3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 3
 												</div>
 											</div> 
 											<input type="text" name="rfidlp1c3" id="rfidlp1c3" class="form-control" value="<?php echo trim( $rfidlp1c3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -875,34 +875,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidlp2c1" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 1
 												</div>
 											</div> 
 											<input type="text" name="rfidlp2c1" id="rfidlp2c1" class="form-control" value="<?php echo trim( $rfidlp2c1old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2c2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 2
 												</div>
 											</div> 
 											<input type="text" name="rfidlp2c2" id="rfidlp2c2" class="form-control" value="<?php echo trim( $rfidlp2c2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2c3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Auto 3
 												</div>
 											</div>
 											<input type="text" name="rfidlp2c3" id="rfidlp2c3" class="form-control" value="<?php echo trim( $rfidlp2c3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -923,34 +923,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidstop" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div> 
 											<input type="text" name="rfidstop" id="rfidstop" class="form-control" value="<?php echo trim( $rfidstopold ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidstop2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div> 
 											<input type="text" name="rfidstop2" id="rfidstop2" class="form-control" value="<?php echo trim( $rfidstop2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidstop3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidstop3" id="rfidstop3" class="form-control" value="<?php echo trim( $rfidstop3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -962,34 +962,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidstandby" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidstandby" id="rfidstandby" class="form-control" value="<?php echo trim( $rfidstandbyold ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidstandby2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidstandby2" id="rfidstandby2" class="form-control" value="<?php echo trim( $rfidstandby2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidstandby3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidstandby3" id="rfidstandby3" class="form-control" value="<?php echo trim( $rfidstandby3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1001,34 +1001,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidsofort" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidsofort" id="rfidsofort" class="form-control" value="<?php echo trim( $rfidsofortold ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidsofort2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidsofort2" id="rfidsofort2" class="form-control" value="<?php echo trim( $rfidsofort2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidsofort3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidsofort3" id="rfidsofort3" class="form-control" value="<?php echo trim( $rfidsofort3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1040,34 +1040,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidminpv" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidminpv" id="rfidminpv" class="form-control" value="<?php echo trim( $rfidminpvold ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidminpv2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidminpv2" id="rfidminpv2" class="form-control" value="<?php echo trim( $rfidminpv2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidminpv3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidminpv3" id="rfidminpv3" class="form-control" value="<?php echo trim( $rfidminpv3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1079,34 +1079,34 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidnurpv" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidnurpv" id="rfidnurpv" class="form-control" value="<?php echo trim( $rfidnurpvold ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidnurpv2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidnurpv2" id="rfidnurpv2" class="form-control" value="<?php echo trim( $rfidnurpv2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidnurpv3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidnurpv3" id="rfidnurpv3" class="form-control" value="<?php echo trim( $rfidnurpv3old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1127,54 +1127,54 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidlp1start1" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidlp1start1" id="rfidlp1start1" class="form-control" value="<?php echo trim( $rfidlp1start1old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1start2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidlp1start2" id="rfidlp1start2" class="form-control" value="<?php echo trim( $rfidlp1start2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1start3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidlp1start3" id="rfidlp1start3" class="form-control" value="<?php echo trim( $rfidlp1start3old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1start4" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 4
 												</div>
 											</div>
 											<input type="text" name="rfidlp1start4" id="rfidlp1start4" class="form-control" value="<?php echo trim( $rfidlp1start4old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp1start5" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 5
 												</div>
 											</div>
 											<input type="text" name="rfidlp1start5" id="rfidlp1start5" class="form-control" value="<?php echo trim( $rfidlp1start5old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1186,54 +1186,54 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-lg-4">
-										<label for="rfidlp2start1" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 1
 												</div>
 											</div>
 											<input type="text" name="rfidlp2start1" id="rfidlp2start1" class="form-control" value="<?php echo trim( $rfidlp2start1old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2start2" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 2
 												</div>
 											</div>
 											<input type="text" name="rfidlp2start2" id="rfidlp2start2" class="form-control" value="<?php echo trim( $rfidlp2start2old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2start3" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 3
 												</div>
 											</div>
 											<input type="text" name="rfidlp2start3" id="rfidlp2start3" class="form-control" value="<?php echo trim( $rfidlp2start3old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2start4" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 4
 												</div>
 											</div>
 											<input type="text" name="rfidlp2start4" id="rfidlp2start4" class="form-control" value="<?php echo trim( $rfidlp2start4old ) ?>">
-										</label>
+										</div>
 									</div>
 									<div class="col-lg-4">
-										<label for="rfidlp2start5" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Tag 5
 												</div>
 											</div>
 											<input type="text" name="rfidlp2start5" id="rfidlp2start5" class="form-control" value="<?php echo trim( $rfidlp2start5old ) ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1281,15 +1281,15 @@
 						<div class="form-group">
 							<div class="form-row">
 								<div class="col-md-4">
-									<label for="pushbenachrichtigung" class="col-form-label">Pushover Benachrichtigungen</label>
+									<label class="col-form-label">Pushover Benachrichtigungen</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($pushbenachrichtigungold == 0) echo " active" ?>">
-											<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOff" autocomplete="off" value="0"<?php if($pushbenachrichtigungold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOff" value="0"<?php if($pushbenachrichtigungold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($pushbenachrichtigungold == 1) echo " active" ?>">
-											<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOn" autocomplete="off" value="1"<?php if($pushbenachrichtigungold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="pushbenachrichtigung" id="pushbenachrichtigungOn" value="1"<?php if($pushbenachrichtigungold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 									<span class="form-text small">Zur Nutzung von Pushover muss ein Konto auf Pushover.net bestehen. Nach dem Registrieren bei Pushover muss dort im Webinterface eine Applikation erstellt werden. Der Token der App, sowie das User Token nachfolgend eintragen.</span>
@@ -1337,53 +1337,53 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="pushbstartl" class="col-form-label">Beim Starten der Ladung</label>
+										<label class="col-form-label">Beim Starten der Ladung</label>
 									</div>
 									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($pushbstartlold == 0) echo " active" ?>">
-											<input type="radio" name="pushbstartl" id="pushbstartlOff" autocomplete="off" value="0"<?php if($pushbstartlold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="pushbstartl" id="pushbstartlOff" value="0"<?php if($pushbstartlold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($pushbstartlold == 1) echo " active" ?>">
-											<input type="radio" name="pushbstartl" id="pushbstartlOn" autocomplete="off" value="1"<?php if($pushbstartlold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="pushbstartl" id="pushbstartlOn" value="1"<?php if($pushbstartlold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="pushbstopl" class="col-form-label">Beim Stoppen der Ladung</label>
+										<label class="col-form-label">Beim Stoppen der Ladung</label>
 									</div>
 									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($pushbstoplold == 0) echo " active" ?>">
-											<input type="radio" name="pushbstopl" id="pushbstoplOff" autocomplete="off" value="0"<?php if($pushbstoplold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="pushbstopl" id="pushbstoplOff" value="0"<?php if($pushbstoplold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($pushbstoplold == 1) echo " active" ?>">
-											<input type="radio" name="pushbstopl" id="pushbstoplOn" autocomplete="off" value="1"<?php if($pushbstoplold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="pushbstopl" id="pushbstoplOn" value="1"<?php if($pushbstoplold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="pushbplug" class="col-form-label">Beim Einstecken des Fahrzeugs</label>
+										<label class="col-form-label">Beim Einstecken des Fahrzeugs</label>
 									</div>
 									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($pushbplugold == 0) echo " active" ?>">
-											<input type="radio" name="pushbplug" id="pushbplugOff" autocomplete="off" value="0"<?php if($pushbplugold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="pushbplug" id="pushbplugOff" value="0"<?php if($pushbplugold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($pushbplugold == 1) echo " active" ?>">
-											<input type="radio" name="pushbplug" id="pushbplugOn" autocomplete="off" value="1"<?php if($pushbplugold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="pushbplug" id="pushbplugOn" value="1"<?php if($pushbplugold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="pushbsmarthome" class="col-form-label">Bei Triggern von Smart Home Aktionen</label>
+										<label class="col-form-label">Bei Triggern von Smart Home Aktionen</label>
 									</div>
 									<div class="btn-group btn-group-toggle col-md-8" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($pushbsmarthomeold == 0) echo " active" ?>">
-											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOff" autocomplete="off" value="0"<?php if($pushbsmarthomeold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOff" value="0"<?php if($pushbsmarthomeold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($pushbsmarthomeold == 1) echo " active" ?>">
-											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOn" autocomplete="off" value="1"<?php if($pushbsmarthomeold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="pushbsmarthome" id="pushbsmarthomeOn" value="1"<?php if($pushbsmarthomeold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
@@ -1416,14 +1416,14 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label for="ledsakt" class="col-form-label">LED Ausgänge</label>
+									<label class="col-form-label">LED Ausgänge</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($ledsaktold == 0) echo " active" ?>">
-										<input type="radio" name="ledsakt" id="ledsaktOff" autocomplete="off" value="0"<?php if($ledsaktold == 0) echo " checked=\"checked\"" ?>>Aus
+										<input type="radio" name="ledsakt" id="ledsaktOff" value="0"<?php if($ledsaktold == 0) echo " checked=\"checked\"" ?>>Aus
 									</label>
 									<label class="btn btn-outline-info<?php if($ledsaktold == 1) echo " active" ?>">
-										<input type="radio" name="ledsakt" id="ledsaktOn" autocomplete="off" value="1"<?php if($ledsaktold == 1) echo " checked=\"checked\"" ?>>An
+										<input type="radio" name="ledsakt" id="ledsaktOn" value="1"<?php if($ledsaktold == 1) echo " checked=\"checked\"" ?>>An
 									</label>
 								</div>
 							</div>
@@ -1683,14 +1683,14 @@
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
 								<div class="col-md-4">
-									<label for="displayaktiv" class="col-form-label">Display installiert</label>
+									<label class="col-form-label">Display installiert</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
-										<input type="radio" name="displayaktiv" id="displayaktivOff" autocomplete="off" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
+										<input type="radio" name="displayaktiv" id="displayaktivOff" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
 									</label>
 									<label class="btn btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
-										<input type="radio" name="displayaktiv" id="displayaktivOn" autocomplete="off" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
+										<input type="radio" name="displayaktiv" id="displayaktivOn" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
 									</label>
 								</div>
 							</div>
@@ -1700,15 +1700,15 @@
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="displaytagesgraph" class="col-form-label">Tagesgraph anzeigen</label>
+										<label class="col-form-label">Tagesgraph anzeigen</label>
 									</div>
 									<div class="col">
 										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($displaytagesgraphold == 0) echo " active" ?>">
-												<input type="radio" name="displaytagesgraph" id="displaytagesgraphOff" autocomplete="off" value="0"<?php if($displaytagesgraphold == 0) echo " checked=\"checked\"" ?>>Nein
+												<input type="radio" name="displaytagesgraph" id="displaytagesgraphOff" value="0"<?php if($displaytagesgraphold == 0) echo " checked=\"checked\"" ?>>Nein
 											</label>
 											<label class="btn btn-outline-info<?php if($displaytagesgraphold == 1) echo " active" ?>">
-												<input type="radio" name="displaytagesgraph" id="displaytagesgraphOn" autocomplete="off" value="1"<?php if($displaytagesgraphold == 1) echo " checked=\"checked\"" ?>>Ja
+												<input type="radio" name="displaytagesgraph" id="displaytagesgraphOn" value="1"<?php if($displaytagesgraphold == 1) echo " checked=\"checked\"" ?>>Ja
 											</label>
 										</div>
 										<span class="form-text small text-danger">Ja vermindert die Performance</span>
@@ -1745,15 +1745,15 @@
 									</div>
 									<div class="form-row mb-1">
 										<div class="col-md-4">
-											<label for="displayhausanzeigen" class="col-form-label">Hausverbrauch anzeigen</label>
+											<label class="col-form-label">Hausverbrauch anzeigen</label>
 										</div>
 										<div class="col">
 											<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 												<label class="btn btn-outline-info<?php if($displayhausanzeigenold == 0) echo " active" ?>">
-													<input type="radio" name="displayhausanzeigen" id="displayhausanzeigenOff" autocomplete="off" value="0"<?php if($displayhausanzeigenold == 0) echo " checked=\"checked\"" ?>>Nein
+													<input type="radio" name="displayhausanzeigen" id="displayhausanzeigenOff" value="0"<?php if($displayhausanzeigenold == 0) echo " checked=\"checked\"" ?>>Nein
 												</label>
 												<label class="btn btn-outline-info<?php if($displayhausanzeigenold == 1) echo " active" ?>">
-													<input type="radio" name="displayhausanzeigen" id="displayhausanzeigenOn" autocomplete="off" value="1"<?php if($displayhausanzeigenold == 1) echo " checked=\"checked\"" ?>>Ja
+													<input type="radio" name="displayhausanzeigen" id="displayhausanzeigenOn" value="1"<?php if($displayhausanzeigenold == 1) echo " checked=\"checked\"" ?>>Ja
 												</label>
 											</div>
 										</div>
@@ -1787,15 +1787,15 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="displaypinaktiv" class="col-form-label">Pin nötig zum ändern des Lademodus</label>
+										<label class="col-form-label">Pin nötig zum ändern des Lademodus</label>
 									</div>
 									<div class="col">
 										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($displaypinaktivold == 0) echo " active" ?>">
-												<input type="radio" name="displaypinaktiv" id="displaypinaktivOff" autocomplete="off" value="0"<?php if($displaypinaktivold == 0) echo " checked=\"checked\"" ?>>Nein
+												<input type="radio" name="displaypinaktiv" id="displaypinaktivOff" value="0"<?php if($displaypinaktivold == 0) echo " checked=\"checked\"" ?>>Nein
 											</label>
 											<label class="btn btn-outline-info<?php if($displaypinaktivold == 1) echo " active" ?>">
-												<input type="radio" name="displaypinaktiv" id="displaypinaktivOn" autocomplete="off" value="1"<?php if($displaypinaktivold == 1) echo " checked=\"checked\"" ?>>Ja
+												<input type="radio" name="displaypinaktiv" id="displaypinaktivOn" value="1"<?php if($displaypinaktivold == 1) echo " checked=\"checked\"" ?>>Ja
 											</label>
 										</div>
 									</div>
@@ -1822,15 +1822,15 @@
 								</div>
 								<div class="form-row mb-1">
 									<div class="col-md-4">
-										<label for="displayEinBeimAnstecken" class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
+										<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
 									</div>
 									<div class="col">
 										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenOld == 0) echo " active" ?>">
-												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" autocomplete="off" value="0"<?php if($displayEinBeimAnsteckenOld == 0) echo " checked=\"checked\"" ?>>Nein
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenOld == 0) echo " checked=\"checked\"" ?>>Nein
 											</label>
 											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenOld == 1) echo " active" ?>">
-												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" autocomplete="off" value="1"<?php if($displayEinBeimAnsteckenOld == 1) echo " checked=\"checked\"" ?>>Ja
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenOld == 1) echo " checked=\"checked\"" ?>>Ja
 											</label>
 										</div>
 									</div>
@@ -1879,27 +1879,27 @@
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
 								<div class="col-md-4">
-									<label for="hausverbrauchstat" class="col-form-label">Hausverbrauch auf der Hauptseite anzeigen</label>
+									<label class="col-form-label">Hausverbrauch auf der Hauptseite anzeigen</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($hausverbrauchstatold == 0) echo " active" ?>">
-										<input type="radio" name="hausverbrauchstat" id="hausverbrauchstatOff" autocomplete="off" value="0"<?php if($hausverbrauchstatold == 0) echo " checked=\"checked\"" ?>>Nein
+										<input type="radio" name="hausverbrauchstat" id="hausverbrauchstatOff" value="0"<?php if($hausverbrauchstatold == 0) echo " checked=\"checked\"" ?>>Nein
 									</label>
 									<label class="btn btn-outline-info<?php if($hausverbrauchstatold == 1) echo " active" ?>">
-										<input type="radio" name="hausverbrauchstat" id="hausverbrauchstatOn" autocomplete="off" value="1"<?php if($hausverbrauchstatold == 1) echo " checked=\"checked\"" ?>>Ja
+										<input type="radio" name="hausverbrauchstat" id="hausverbrauchstatOn" value="1"<?php if($hausverbrauchstatold == 1) echo " checked=\"checked\"" ?>>Ja
 									</label>
 								</div>
 							</div>
 							<div class="form-row vaRow mb-1">
 								<div class="col-md-4">
-									<label for="heutegeladen" class="col-form-label">Heute geladen auf der Hauptseite anzeigen</label>
+									<label class="col-form-label">Heute geladen auf der Hauptseite anzeigen</label>
 								</div>
 								<div class="btn-group btn-group-toggle col" data-toggle="buttons">
 									<label class="btn btn-outline-info<?php if($heutegeladenold == 0) echo " active" ?>">
-										<input type="radio" name="heutegeladen" id="heutegeladenOff" autocomplete="off" value="0"<?php if($heutegeladenold == 0) echo " checked=\"checked\"" ?>>Nein
+										<input type="radio" name="heutegeladen" id="heutegeladenOff" value="0"<?php if($heutegeladenold == 0) echo " checked=\"checked\"" ?>>Nein
 									</label>
 									<label class="btn btn-outline-info<?php if($heutegeladenold == 1) echo " active" ?>">
-										<input type="radio" name="heutegeladen" id="heutegeladenOn" autocomplete="off" value="1"<?php if($heutegeladenold == 1) echo " checked=\"checked\"" ?>>Ja
+										<input type="radio" name="heutegeladen" id="heutegeladenOn" value="1"<?php if($heutegeladenold == 1) echo " checked=\"checked\"" ?>>Ja
 									</label>
 								</div>
 							</div>
@@ -1939,7 +1939,7 @@
 			});
 
 			$.get(
-				{ url: "settings/navbar.html", cache: false},
+				{ url: "settings/navbar.html", cache: false },
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
