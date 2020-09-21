@@ -4461,6 +4461,7 @@
 							<option <?php if($pvwattmodulold == "wr_siemens\n") echo "selected" ?> value="wr_siemens">Siemens Speicher</option>
 							<option <?php if($pvwattmodulold == "wr_powerdog\n") echo "selected" ?> value="wr_powerdog">Powerdog</option>
 							<option <?php if($pvwattmodulold == "wr_rct\n") echo "selected" ?> value="wr_rct">RCT</option>
+							<option <?php if($pvwattmodulold == "wr_huawei\n") echo "selected" ?> value="wr_huawei">Huawei</option>
 						</select>
 					</div>
 
@@ -4948,6 +4949,9 @@
 							if($('#pvwattmodul').val() == 'wr_siemens') {
 								$('#pvip').show();
 								$('#pvsiemens').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_huawei') {
+								$('#pvip').show();
 							}
 							if($('#pvwattmodul').val() == 'wr_powerdog') {
 								$('#pvpowerdog').show();
