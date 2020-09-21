@@ -5058,7 +5058,7 @@
 							<option <?php if($pv2wattmodulold == "wr2_kostalsteca\n") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 							<option <?php if($pv2wattmodulold == "wr2_victron\n") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 							<option <?php if($pv2wattmodulold == "wr2_ethsdm120\n") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
-
+							<option <?php if($pv2wattmodulold == "wr2_solaredge\n") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
 						</select>
 					</div>
 
@@ -5112,6 +5112,11 @@
 								$('#pv2ipdiv').show();
 								$('#pv2iddiv').show();
 							}
+							if($('#pv2wattmodul').val() == 'wr2_solaredge') {
+								$('#pv2ipdiv').show();
+								$('#pv2iddiv').show();
+							}
+
 							if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
 								$('#pv2ipdiv').show();
 								$('#pv2iddiv').show();
