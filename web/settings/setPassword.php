@@ -206,7 +206,7 @@ AUTHEND
 			});
 
 			$.get(
-				{ url: "settings/navbar.html", cache: false},
+				{ url: "settings/navbar.html", cache: false },
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
