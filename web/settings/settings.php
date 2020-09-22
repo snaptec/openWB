@@ -845,10 +845,15 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="zielladenuhrzeitlp1" class="col-md-4 col-form-label">Zielladenuhrzeit an Ladepunkt 1</label>
+									<label for="zielladenuhrzeitlp1" class="col-md-4 col-form-label">Ziel-Zeitpunkt</label>
 									<div class="col">
-										<input class="form-control" type="text" name="zielladenuhrzeitlp1" id="zielladenuhrzeitlp1" value="<?php echo trim($zielladenuhrzeitlp1old); ?>">
+										<input class="form-control" type="text" pattern="20[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31)) (0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9])" name="zielladenuhrzeitlp1" id="zielladenuhrzeitlp1" value="<?php echo trim($zielladenuhrzeitlp1old); ?>">
 										<span class="form-text small">Gültige Werte YYYY-MM-DD HH:MM, z.B. 2018-12-16 06:15. Ende der gewünschten Ladezeit. Das Datum muss exakt in diesem Format mit Leerzeichen zwischen Monat und Stunde eingegeben werden.</span>
+										<!--
+											test datetime input (not supported by all Browsers)
+											value format: YYY-MM-DDTHH:MM needs to be handled before passing to config file!
+										<input class="form-control" type="datetime-local" name="zielladenuhrzeitlp1_test" id="zielladenuhrzeitlp1_test" value="<?php echo trim( str_replace( ' ', 'T', $zielladenuhrzeitlp1old ) ); ?>">
+										-->
 									</div>
 								</div>
 								<div class="form-row mb-1">
