@@ -5,17 +5,18 @@ html{
 
 body {
 	color: white;
-	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+	/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#5a5a5a+0,0e0e0e+100;Black+3D */
 	/* Old browsers */
-	background: rgb(125,126,125);
+	background: rgb(90,90,90);
 	/* FF3.6-15 */
-	background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+	background: -moz-linear-gradient(top,  rgba(90,90,90,1) 0%, rgba(14,14,14,1) 100%);
 	/* Chrome10-25,Safari5.1-6 */
-	background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: -webkit-linear-gradient(top,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
 	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	background: linear-gradient(to bottom,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: linear-gradient(to bottom,  rgba(90,90,90,1) 0%,rgba(14,14,14,1) 100%);
 	/* IE6-9 */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#0e0e0e',GradientType=0 );
+	background-attachment: fixed;
 }
 
 .bg-warning, .bg-info, .bg-success {
@@ -29,6 +30,20 @@ body {
 .card {
 	background-color: #212529;
 	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
+    background-color: #212529;
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+    box-shadow: 0 0 0 0.2rem rgba(23,162,184,.5);
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+    border-color: #212529;
 }
 
 .form-control, .form-control[readonly], .form-control:focus {
