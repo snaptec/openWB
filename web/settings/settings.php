@@ -570,35 +570,56 @@
 
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						Awattar
-					</div>
-					<div class="card-body">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">Awattar aktivieren</label>
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Awattar</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($awattaraktivold == 0) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 0) echo " active" ?>">
 											<input type="radio" name="awattaraktiv" id="awattaraktivOff" value="0"<?php if($awattaraktivold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($awattaraktivold == 1) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($awattaraktivold == 1) echo " active" ?>">
 											<input type="radio" name="awattaraktiv" id="awattaraktivOn" value="1"<?php if($awattaraktivold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
-									<span class="form-text small">Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler. Die Awattar Funktion ist nur im SofortLaden Modus aktiv!</span>
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
-								<div class="col">
-									<select name="awattarlocation" id="awattarlocation" class="form-control">
-										<option <?php if($awattarlocationold == 0) echo "selected" ?> value="de">Deutschland</option>
-										<option <?php if($awattarlocationold == 1) echo "selected" ?> value="at">Österreich</option>
-									</select>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info">
+							Ermöglicht Laden nach Strompreis. Hierfür benötigt wird der Awattar Hourly Tarif sowie ein Discovergy Zähler. Die Awattar Funktion ist nur im SofortLaden Modus aktiv!
+						</div>
+						<div id="awattardiv">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
+									<div class="col">
+										<select name="awattarlocation" id="awattarlocation" class="form-control">
+											<option <?php if($awattarlocationold == 0) echo "selected" ?> value="de">Deutschland</option>
+											<option <?php if($awattarlocationold == 1) echo "selected" ?> value="at">Österreich</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script>
+						$(function() {
+							if($('#awattaraktivOff').prop("checked")) {
+								$('#awattardiv').hide();
+							} else {
+								$('#awattardiv').show();
+							}
+							$('input[type=radio][name=awattaraktiv]').change(function(){
+								if(this.value == '0') {
+									$('#awattardiv').hide();
+								} else {
+									$('#awattardiv').show();
+								}
+							});
+						});
+					</script>
 				</div>
 
 				<div class="card border-secondary">
@@ -606,10 +627,8 @@
 						Ladepunkte sperren nach Abstecken
 					</div>
 					<div class="card-body">
-						<div class="form-group form-row justify-content-end">
-							<div class="col-md-8 small">
-								Nachdem der Stecker gezogen wird, wird der entsprechende Ladepunkt gesperrt. Ein manuelles aktivieren des Ladepunktes ist erforderlich. Nach aktivieren bleibt der Ladepunkt solange aktiv bis ein Stecker eingesteckt und wieder abgezogen wird. Ist unabhängig davon ob geladen wird.
-							</div>
+						<div class="card-text alert alert-info">
+							Nachdem der Stecker gezogen wird, wird der entsprechende Ladepunkt gesperrt. Ein manuelles aktivieren des Ladepunktes ist erforderlich. Nach aktivieren bleibt der Ladepunkt solange aktiv bis ein Stecker eingesteckt und wieder abgezogen wird. Ist unabhängig davon ob geladen wird.
 						</div>
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
@@ -746,16 +765,20 @@
 									$('#loadsharingdiv').hide();
 									$('#loadsharingoffdiv').show();
 									$('#nachtladenlp2div').hide();
+									$('#durchslp2div').hide();
 								} else {
 									$('#lp2aktdiv').show();
 									$('#loadsharingdiv').show();
 									$('#loadsharingoffdiv').hide();
 									$('#nachtladenlp2div').show();
+									$('#durchslp2div').show();
 								}
 								if(lp3akt == '0') {
 									$('#lp3aktdiv').hide();
+									$('#durchslp3div').hide();
 								} else {
 									$('#lp3aktdiv').show();
+									$('#durchslp3div').show();
 								}
 								if(lp4akt == '0') {
 									$('#lp4aktdiv').hide();
@@ -806,11 +829,8 @@
 								</div>
 							</div>
 							<div id="zielladenaktivlp1div">
-								<hr class="border-secondary">
-								<div class="form-row mb-1">
-									<div class="col">
-										Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen. Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.
-									</div>
+								<div class="card-text alert alert-info">
+									Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen. Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.
 								</div>
 								<div class="form-row mb-1">
 									<label for="zielladensoclp1" class="col-md-4 col-form-label">SoC Sonntag bis Donnerstag</label>
@@ -967,27 +987,27 @@
 
 				<div class="card border-success">
 					<div class="card-header bg-success">
-						Automatische Phasenumschaltung
-					</div>
-					<div class="card-body">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">Phasenumschaltung Aktiv</label>
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Automatische Phasenumschaltung</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($u1p3paktivold == 0) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($u1p3paktivold == 0) echo " active" ?>">
 											<input type="radio" name="u1p3paktiv" id="u1p3paktivOff" value="0"<?php if($u1p3paktivold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($u1p3paktivold == 1) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($u1p3paktivold == 1) echo " active" ?>">
 											<input type="radio" name="u1p3paktiv" id="u1p3paktivOn" value="1"<?php if($u1p3paktivold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
-									<span class="form-text small">Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Je nach gekaufter Hardwareoption gültig für alle Ladepunkte!</span>
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info">
+							Automatisierte Umschaltung von 1- und 3-phasiger Ladung. Nur aktivieren, wenn diese Option in der OpenWB verbaut ist. Je nach gekaufter Hardwareoption gültig für alle Ladepunkte!
+						</div>
 						<div id="u1p3pan">
-							<hr class="border-success">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">Sofort Laden</label>
@@ -2337,7 +2357,7 @@
 						<div id="loadsharingdiv">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Loadsharing LP 1 / LP 2</label>
+									<label class="col-md-4 col-form-label">Loadsharing für Ladepunkte 1 und 2</label>
 									<div class="col">
 										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
 											<label class="btn btn-outline-info<?php if($loadsharinglp12old == 0) echo " active" ?>">
@@ -2348,42 +2368,69 @@
 											</label>
 										</div>
 										<span class="form-text small">
-											Wenn Ladepunkt 1 und Ladepunkt 2 sich eine Zuleitung teilen, diese Option aktivieren. Sie stellt in jedem Lademodus sicher, dass nicht mehr als 16 bzw. 32A je Phase in der Summe von LP 1 und LP 2 genutzt werden.
+											Wenn Ladepunkt 1 und 2 sich eine Zuleitung teilen, diese Option aktivieren. Sie stellt in jedem Lademodus sicher, dass nicht mehr als 16 bzw. 32A je Phase in der Summe von Ladepunkt 1 und 2 genutzt werden.
 											<span class="text-danger">Bei der OpenWB Duo muss diese Option aktiviert werden!</span>
 										</span>
 									</div>
 								</div>
-								<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Loadsharing Ampere LP 1 / LP 2</label>
-									<div class="col">
-										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 16) echo " active" ?>">
-												<input type="radio" name="loadsharingalp12" id="loadsharingalp1216" value="16"<?php if($loadsharingalp12old == 16) echo " checked=\"checked\"" ?>>16 Ampere
-											</label>
-											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 32) echo " active" ?>">
-												<input type="radio" name="loadsharingalp12" id="loadsharingalp1232" value="32"<?php if($loadsharingalp12old == 32) echo " checked=\"checked\"" ?>>32 Ampere
-											</label>
+								<div id="loadsharinglp12div">
+									<div class="form-row mb-2">
+										<label class="col-md-4 col-form-label">Maximaler Strom</label>
+										<div class="col">
+											<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($loadsharingalp12old == 16) echo " active" ?>">
+													<input type="radio" name="loadsharingalp12" id="loadsharingalp1216" value="16"<?php if($loadsharingalp12old == 16) echo " checked=\"checked\"" ?>>16 Ampere
+												</label>
+												<label class="btn btn-outline-info<?php if($loadsharingalp12old == 32) echo " active" ?>">
+													<input type="radio" name="loadsharingalp12" id="loadsharingalp1232" value="32"<?php if($loadsharingalp12old == 32) echo " checked=\"checked\"" ?>>32 Ampere
+												</label>
+											</div>
 										</div>
-										<p class="form-text small text-danger">Der richtige Anschluss ist zu gewährleisten.</p>
-										<p class="form-text small">Ladepunkt 1:</p>
-										<ul class="form-text small">
-											<li>Zuleitung Phase 1 = Phase 1</li>
-											<li>Zuleitung Phase 2 = Phase 2</li>
-											<li>Zuleitung Phase 3 = Phase 3</li>
-										</ul>
-										<p class="form-text small">Ladepunkt 2:</p>
-										<ul class="form-text small">
-											<li>Zuleitung Phase 1 = <span class="text-danger">Phase 2</span></li>
-											<li>Zuleitung Phase 2 = <span class="text-danger">Phase 3</span></li>
-											<li>Zuleitung Phase 3 = <span class="text-danger">Phase 1</span></li>
-										</ul>
-										<p class="form-text small">Durch das Drehen der Phasen ist sichergestellt, dass 2 einphasige Autos mit voller Geschwindigkeit laden können.</p>
+									</div>
+									<div class="alert alert-warning">
+										<p class="text-danger">Der richtige Anschluss ist zu gewährleisten.</p>
+										<div class="row">
+											<div class="col-md-4">Ladepunkt 1:</div>
+											<div class="col">
+												<ul>
+													<li>Zuleitung Phase 1 = Phase 1</li>
+													<li>Zuleitung Phase 2 = Phase 2</li>
+													<li>Zuleitung Phase 3 = Phase 3</li>
+												</ul>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">Ladepunkt 2:</div>
+											<div class="col">
+												<ul>
+													<li>Zuleitung Phase 1 = <span class="text-danger">Phase 2</span></li>
+													<li>Zuleitung Phase 2 = <span class="text-danger">Phase 3</span></li>
+													<li>Zuleitung Phase 3 = <span class="text-danger">Phase 1</span></li>
+												</ul>
+											</div>
+										</div>
+										<p>Durch das Drehen der Phasen ist sichergestellt, dass 2 einphasige Autos mit voller Geschwindigkeit laden können.</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
+					<script>
+						$(function() {
+							if($('#loadsharinglp12Off').prop("checked")) {
+								$('#loadsharinglp12div').hide();
+							} else {
+								$('#loadsharinglp12div').show();
+							}
+							$('input[type=radio][name=loadsharinglp12]').change(function(){
+								if(this.value == '0') {
+									$('#loadsharinglp12div').hide();
+								} else {
+									$('#loadsharinglp12div').show();
+								}
+							});
+						});
+					</script>
 				</div>
 
 				<div class="form-row text-center">
