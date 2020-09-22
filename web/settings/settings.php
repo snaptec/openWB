@@ -833,7 +833,7 @@
 									Gewünschten SoC, Ziel Uhrzeit sowie Ladegeschwindigkeit einstellen. Sicherstellen das die Akkugröße wie auch die richtige Anzahl der Phasen konfiguriert sind.
 								</div>
 								<div class="form-row mb-1">
-									<label for="zielladensoclp1" class="col-md-4 col-form-label">SoC Sonntag bis Donnerstag</label>
+									<label for="zielladensoclp1" class="col-md-4 col-form-label">Ziel-SoC</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
 											<label for="zielladensoclp1" class="col-2 col-form-label valueLabel" suffix="%"><?php echo trim($zielladensoclp1old); ?> %</label>
