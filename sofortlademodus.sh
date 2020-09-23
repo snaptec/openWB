@@ -281,7 +281,7 @@ else
 		done
 		maxdiff=$((maxdiff - 1 ))
 		maxdiffw=$(( lastmmaxw - wattbezug ))
-		maxdiffwa=$(( maxdiffw / 230 ))
+		maxdiffwa=$(( maxdiffw / 230 / anzahlphasen))
 		maxdiffwa=$(( maxdiffwa - 2 ))
 
 		if (( maxdiffwa > maxdiff )); then

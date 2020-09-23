@@ -353,12 +353,6 @@ fi
 
 prenachtlademodus
 
-########################
-# Sofort Laden
-if (( lademodus == 0 )); then
-	sofortlademodus
-fi
-
 #######################
 #Ladestromstarke berechnen
 anzahlphasen=$(</var/www/html/openWB/ramdisk/anzahlphasen)
@@ -469,6 +463,12 @@ if [ "$anzahlphasen" -ge "24" ]; then
 	echo $anzahlphasen > /var/www/html/openWB/ramdisk/anzahlphasen
 fi
 echo "$date Gesamt Anzahl Phasen= $anzahlphasen" >> ramdisk/nurpv.log
+########################
+# Sofort Laden
+if (( lademodus == 0 )); then
+	sofortlademodus
+fi
+
 
 ########################
 # Berechnung für PV Regelung

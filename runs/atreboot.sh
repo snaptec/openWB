@@ -26,7 +26,6 @@ echo 0 > /var/www/html/openWB/ramdisk/lp5phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp6phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp7phasen
 echo 0 > /var/www/html/openWB/ramdisk/lp8phasen
-echo 0 > /var/www/html/openWB/ramdisk/rfidlist
 echo 0 > /var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL1
 echo 0 > /var/www/html/openWB/ramdisk/ChargingVehiclesOnL2
@@ -2639,6 +2638,17 @@ if ! grep -Fq "chargep1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargep1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "chargep1cp=" /var/www/html/openWB/openwb.conf
+then
+	echo "chargep1cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep2cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep3cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep4cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep5cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep6cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep7cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargep8cp=1" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "chargep2ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargep2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
@@ -2680,6 +2690,10 @@ fi
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "rfidlist=" /var/www/html/openWB/openwb.conf
+then
+	echo "rfidlist=0" >> /var/www/html/openWB/openwb.conf
 fi
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
@@ -2806,7 +2820,7 @@ owbv=$(</var/www/html/openWB/web/version)
 curl -d "update="$releasetrain$uuid"vers"$owbv"" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://openwb.de/tools/update.php
 echo $verbraucher1_name > /var/www/html/openWB/ramdisk/verbraucher1_name
 echo $verbraucher2_name > /var/www/html/openWB/ramdisk/verbraucher2_name
-
+echo $rfidlist > /var/www/html/openWB/ramdisk/rfidlist
 
 echo "" > /var/www/html/openWB/ramdisk/lastregelungaktiv
 echo "" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
@@ -2817,7 +2831,9 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 #	  sudo apt-get update
 #	  sudo apt-get -qq install -y php-curl
 #  fi
+
 if (( isss == 1 )); then
+	echo $lastmanagement > /var/www/html/openWB/ramdisk/issslp2act
 	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
     if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
     then
@@ -2841,6 +2857,14 @@ if [[ "$evsecon" == "buchse" ]]; then
     else
     	python3 /var/www/html/openWB/runs/buchse.py &
     fi
+fi
+if [[ "$rfidakt" == "2" ]]; then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/rfid.py &
+       fi
 fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress

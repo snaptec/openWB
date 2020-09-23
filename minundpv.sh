@@ -3,7 +3,17 @@
 #Min Ladung + PV Uberschussregelung lademodus 1
 minundpvlademodus(){
 
-
+	if [[ $schieflastaktiv == "1" ]]; then
+		if [[ $u1p3paktiv == "1" ]]; then
+			u1p3pstat=$(<ramdisk/u1p3pstat)
+			if [[ $u1p3pstat == "1" ]]; then
+				if (( schieflastmax < maximalstromstaerke )); then
+					maximalstromstaerke=$schieflastmaxa
+					echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
+				fi
+			fi
+		fi
+	fi
 	if (( stopchargeafterdisclp1 == 0 )); then
 		if [[ $stopchargepvatpercentlp1 == "1" ]]; then
 			if (( soc > stopchargepvpercentagelp1 )); then

@@ -99,6 +99,10 @@ foreach($lines as $line) {
 		$result .= 'rfidakt='.$_POST['rfidakt']."\n";
 		$writeit = '1';
 	}
+	if(strpos($line, "rfidlist=") !== false) {
+		$result .= 'rfidlist='.$_POST['rfidlist']."\n";
+		$writeit = '1';
+	}
 	if(strpos($line, "rfidlp1start1=") !== false) {
 		$result .= 'rfidlp1start1='.$_POST['rfidlp1start1']."\n";
 		$writeit = '1';

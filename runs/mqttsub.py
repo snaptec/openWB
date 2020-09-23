@@ -809,6 +809,12 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
             client.publish("openWB/set/isss/Current", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/isss/Lp2Current"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <=32):
+            f = open('/var/www/html/openWB/ramdisk/llsolls1', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/set/isss/Lp2Current", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/isss/U1p3p"):
         if (int(msg.payload) >= 0 and int(msg.payload) <=5):
             f = open('/var/www/html/openWB/ramdisk/u1p3pstat', 'w')

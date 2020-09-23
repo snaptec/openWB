@@ -1015,6 +1015,9 @@
 										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 3) echo " active" ?>">
 											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv3" value="3"<?php if($u1p3pminundpvold == 3) echo " checked=\"checked\"" ?>>dreiphasig
 										</label>
+										<label class="btn btn-outline-info<?php if($u1p3pminundpvold == 4) echo " active" ?>">
+											<input type="radio" name="u1p3pminundpv" id="u1p3pminundpv4" value="4"<?php if($u1p3pminundpvold == 4) echo " checked=\"checked\"" ?>>Automatikmodus
+										</label>
 									</div>
 								</div>
 								<div class="form-row mb-1">

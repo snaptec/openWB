@@ -35,9 +35,12 @@
 			if( strpos($line, "datenschutzack=") !== false ) {
 				list(, $datenschutzackold) = explode("=", $line);
 			}
-
+			if( strpos($line, "clouduser=") !== false ) {
+				list(, $clouduserold) = explode("=", $line);
+			}
 		}
-	       	if ( $datenschutzackold == 0 ) {
+		if ( $datenschutzackold == 0 && $clouduserold !== "leer\n") {
+
 			include 'tools/datenschutz.html';
 		} else {	
 			if ( $isssold == 1 ) {

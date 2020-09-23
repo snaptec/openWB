@@ -18,28 +18,55 @@ GPIO.setup(29, GPIO.OUT)
 GPIO.setup(11, GPIO.OUT)
 DeviceValues = { }
 Values = { }
-DeviceValues.update({'voltage1' : str(5)})
-DeviceValues.update({'voltage2' : str(5)})
-DeviceValues.update({'voltage3' : str(5)})
-DeviceValues.update({'lla1' : str(5)})
-DeviceValues.update({'lla2' : str(5)})
-DeviceValues.update({'lla3' : str(5)})
-
-DeviceValues.update({'llkwh' : str(5)})
+DeviceValues.update({'lp1voltage1' : str(5)})
+DeviceValues.update({'lp1voltage2' : str(5)})
+DeviceValues.update({'lp1voltage3' : str(5)})
+DeviceValues.update({'lp1lla1' : str(5)})
+DeviceValues.update({'lp1lla2' : str(5)})
+DeviceValues.update({'lp1lla3' : str(5)})
+DeviceValues.update({'lp1llkwh' : str(5)})
 DeviceValues.update({'rfidtag' : str(5)})
-DeviceValues.update({'watt' : str(5)})
-DeviceValues.update({'chargestat' : str(5)})
-DeviceValues.update({'plugstat' : str(5)})
-Values.update({'plugstat' : str(5)})
-Values.update({'chargestat' : str(5)})
-Values.update({'evsell' : str(1)})
+DeviceValues.update({'lp1watt' : str(5)})
+DeviceValues.update({'lp1chargestat' : str(5)})
+DeviceValues.update({'lp1plugstat' : str(5)})
+Values.update({'lp1plugstat' : str(5)})
+Values.update({'lp1chargestat' : str(5)})
+Values.update({'lp1evsell' : str(1)})
 os.chdir('/var/www/html/openWB')
-seradd = "/dev/serial0" 
+DeviceValues.update({'lp2voltage1' : str(5)})
+DeviceValues.update({'lp2voltage2' : str(5)})
+DeviceValues.update({'lp2voltage3' : str(5)})
+DeviceValues.update({'lp2lla1' : str(5)})
+DeviceValues.update({'lp2lla2' : str(5)})
+DeviceValues.update({'lp2lla3' : str(5)})
+DeviceValues.update({'lp2llkwh' : str(5)})
+DeviceValues.update({'rfidtag' : str(5)})
+DeviceValues.update({'lp2watt' : str(5)})
+DeviceValues.update({'lp2chargestat' : str(5)})
+DeviceValues.update({'lp2plugstat' : str(5)})
+Values.update({'lp2plugstat' : str(5)})
+Values.update({'lp2chargestat' : str(5)})
+Values.update({'lp2evsell' : str(1)})
+try:
+    f = open('/dev/ttyUSB0')
+    seradd = "/dev/ttyUSB0"
+    f.close()
+except:
+    seradd = "/dev/serial0"
+sdm2id=106
 sdmid=105
 Values = { }
 actorstat=0
 rfidtag=0
 loglevel=1
+try:
+    with open('ramdisk/issslp2act', 'r') as value:
+        if (int(value.read()) == 1 ):
+            lp2installed=2
+        else:
+            lp2installed=1
+except:
+    lp2installed=1
 from pymodbus.client.sync import ModbusSerialClient
 client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, 
     stopbits=1, bytesize=8, timeout=1)
@@ -56,64 +83,65 @@ def logDebug(level, msg):
             file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n') 
         file.close()
 def getmeter():
+    global lp2installed
     try:
         global client
         resp = client.read_input_registers(0x0C,2, unit=sdmid)
-        llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        llw1 = int(llw1)
+        lp1llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        lp1llw1 = int(lp1llw1)
         resp = client.read_input_registers(0x0E,2, unit=sdmid)
-        llw2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        llw2 = int(llw2)
+        lp1llw2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        lp1llw2 = int(lp1llw2)
         resp = client.read_input_registers(0x10,2, unit=sdmid)
-        llw3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        llw3 = int(llw3)
-        llg= llw1 + llw2 + llw3
-        if llg < 10:
-            llg = 0
+        lp1llw3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        lp1llw3 = int(lp1llw3)
+        lp1llg= lp1llw1 + lp1llw2 + lp1llw3
+        if lp1llg < 10:
+            lp1llg = 0
         f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
-        f.write(str(llg))
+        f.write(str(lp1llg))
         f.close()
         resp = client.read_input_registers(0x00,2, unit=sdmid)
         voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        voltage1 = float("%.1f" % voltage)
+        lp1voltage1 = float("%.1f" % voltage)
         f = open('/var/www/html/openWB/ramdisk/llv1', 'w')
-        f.write(str(voltage1))
+        f.write(str(lp1voltage1))
         f.close()
         resp = client.read_input_registers(0x06,2, unit=sdmid)
-        lla1 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
-        lla1 = float("%.1f" % lla1)
+        lp1lla1 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+        lp1lla1 = float("%.1f" % lp1lla1)
         f = open('/var/www/html/openWB/ramdisk/lla1', 'w')
-        f.write(str(lla1))
+        f.write(str(lp1lla1))
         f.close()
         resp = client.read_input_registers(0x08,2, unit=sdmid)
-        lla2 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
-        lla2 = float("%.1f" % lla2)
+        lp1lla2 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+        lp1lla2 = float("%.1f" % lp1lla2)
         f = open('/var/www/html/openWB/ramdisk/lla2', 'w')
-        f.write(str(lla2))
+        f.write(str(lp1lla2))
         f.close()
         resp = client.read_input_registers(0x0A,2, unit=sdmid)
-        lla3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        lla3 = float("%.1f" % lla3)
+        lp1lla3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        lp1lla3 = float("%.1f" % lp1lla3)
         f = open('/var/www/html/openWB/ramdisk/lla3', 'w')
-        f.write(str(lla3))
+        f.write(str(lp1lla3))
         f.close()
         resp = client.read_input_registers(0x0156,2, unit=sdmid)
-        llkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        llkwh = float("%.3f" % llkwh)
+        lp1llkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+        lp1llkwh = float("%.3f" % lp1llkwh)
         f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
-        f.write(str(llkwh))
+        f.write(str(lp1llkwh))
         f.close()
         resp = client.read_input_registers(0x02,2, unit=sdmid)
         voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        voltage2 = float("%.1f" % voltage)
+        lp1voltage2 = float("%.1f" % voltage)
         f = open('/var/www/html/openWB/ramdisk/llv2', 'w')
-        f.write(str(voltage2))
+        f.write(str(lp1voltage2))
         f.close() 
         resp = client.read_input_registers(0x04,2, unit=sdmid)
         voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
-        voltage3 = float("%.1f" % voltage)
+        lp1voltage3 = float("%.1f" % voltage)
         f = open('/var/www/html/openWB/ramdisk/llv3', 'w')
-        f.write(str(voltage3))
+        f.write(str(lp1voltage3))
         f.close()
         resp = client.read_input_registers(0x46,2, unit=sdmid)
         hz = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
@@ -121,39 +149,135 @@ def getmeter():
         f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
         f.write(str(hz))
         f.close()
+        if ( lp2installed == 1 ):
+            try:
+                resp = client.read_input_registers(0x0C,2, unit=sdmid)
+                lp2llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2llw1 = int(lp2llw1)
+                resp = client.read_input_registers(0x0E,2, unit=sdmid)
+                lp2llw2 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2llw2 = int(lp2llw2)
+                resp = client.read_input_registers(0x10,2, unit=sdmid)
+                lp2llw3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2llw3 = int(lp2llw3)
+                lp2llg= lp2llw1 + lp2llw2 + lp2llw3
+                if lp2llg < 10:
+                    lp2llg = 0
+                f = open('/var/www/html/openWB/ramdisk/llaktuells1', 'w')
+                f.write(str(lp2llg))
+                f.close()
+                resp = client.read_input_registers(0x00,2, unit=sdmid)
+                voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2voltage1 = float("%.1f" % voltage)
+                f = open('/var/www/html/openWB/ramdisk/llvs11', 'w')
+                f.write(str(lp2voltage1))
+                f.close()
+                resp = client.read_input_registers(0x06,2, unit=sdmid)
+                lp2lla1 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+                lp2lla1 = float("%.1f" % lp2lla1)
+                f = open('/var/www/html/openWB/ramdisk/llas11', 'w')
+                f.write(str(lp2lla1))
+                f.close()
+                resp = client.read_input_registers(0x08,2, unit=sdmid)
+                lp2lla2 = float(struct.unpack('>f',struct.pack('>HH',*resp.registers))[0])
+                lp2lla2 = float("%.1f" % lp2lla2)
+                f = open('/var/www/html/openWB/ramdisk/llas12', 'w')
+                f.write(str(lp2lla2))
+                f.close()
+                resp = client.read_input_registers(0x0A,2, unit=sdmid)
+                lp2lla3 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2lla3 = float("%.1f" % lp2lla3)
+                f = open('/var/www/html/openWB/ramdisk/llas13', 'w')
+                f.write(str(lp2lla3))
+                f.close()
+                resp = client.read_input_registers(0x0156,2, unit=sdmid)
+                lp2llkwh = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2llkwh = float("%.3f" % lp2llkwh)
+                f = open('/var/www/html/openWB/ramdisk/llkwhs1', 'w')
+                f.write(str(lp2llkwh))
+                f.close()
+                resp = client.read_input_registers(0x02,2, unit=sdmid)
+                voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2voltage2 = float("%.1f" % voltage)
+                f = open('/var/www/html/openWB/ramdisk/llvs12', 'w')
+                f.write(str(lp2voltage2))
+                f.close() 
+                resp = client.read_input_registers(0x04,2, unit=sdmid)
+                voltage = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
+                lp2voltage3 = float("%.1f" % voltage)
+                f = open('/var/www/html/openWB/ramdisk/llvs13', 'w')
+                f.write(str(lp2voltage3))
+                f.close()
+                try:
+                    time.sleep(0.1)
+                    rq = client.read_holding_registers(1000,1,unit=2) 
+                    lp2ll = rq.registers[0]
+
+                except:
+                    lp2ll = 0
+                try:
+                    time.sleep(0.1)
+                    rq = client.read_holding_registers(1002,1,unit=2) 
+                    lp2var = rq.registers[0]
+                except Exception as e:
+                    logDebug("2", "Fehler:" + str(e))
+                    lp2var = 5
+                if ( var == 5 ):
+                    Values.update({'lp2plugstat' : 0})
+                    Values.update({'lp2chargestat' : 0})
+                elif ( lp2var == 1):
+                    Values.update({'lp2plugstat' : 0})
+                    Values.update({'lp2chargestat' : 0})
+                elif ( lp2var == 2):
+                    Values.update({'lp2plugstat' : 1})
+                    Values.update({'lp2chargestat' : 0})
+                elif ( lp2var == 3 and lp2ll > 0 ):
+                    Values.update({'lp2plugstat' : 1})
+                    Values.update({'lp2chargestat' : 1})
+                elif ( lp2var == 3 and lp2ll == 0 ):
+                    Values.update({'lp2plugstat' : 1})
+                    Values.update({'lp2chargestat' : 0})
+
+                Values.update({'lp2evsell' : lp2ll})
+                logDebug("0", "EVSE lp2plugstat: " + str(lp2var) + " EVSE lp2LL: " + str(lp2ll))
+
+            except:
+                pass
+
+
         try:
             time.sleep(0.1)
             rq = client.read_holding_registers(1000,1,unit=1) 
-            ll = rq.registers[0]
+            lp1ll = rq.registers[0]
 
         except:
-            ll = 0
+            lp1ll = 0
 
         try:
             time.sleep(0.1)
             rq = client.read_holding_registers(1002,1,unit=1) 
-            var = rq.registers[0]
+            lp1var = rq.registers[0]
         except Exception as e:
             logDebug("2", "Fehler:" + str(e))
-            var = 5
+            lp1var = 5
         if ( var == 5 ):
-            Values.update({'plugstat' : 0})
-            Values.update({'chargestat' : 0})
-        elif ( var == 1):
-            Values.update({'plugstat' : 0})
-            Values.update({'chargestat' : 0})
-        elif ( var == 2):
-            Values.update({'plugstat' : 1})
-            Values.update({'chargestat' : 0})
-        elif ( var == 3 and ll > 0 ):
-            Values.update({'plugstat' : 1})
-            Values.update({'chargestat' : 1})
-        elif ( var == 3 and ll == 0 ):
-            Values.update({'plugstat' : 1})
-            Values.update({'chargestat' : 0})
+            Values.update({'lp1plugstat' : 0})
+            Values.update({'lp1chargestat' : 0})
+        elif ( lp1var == 1):
+            Values.update({'lp1plugstat' : 0})
+            Values.update({'lp1chargestat' : 0})
+        elif ( lp1var == 2):
+            Values.update({'lp1plugstat' : 1})
+            Values.update({'lp1chargestat' : 0})
+        elif ( lp1var == 3 and lp1ll > 0 ):
+            Values.update({'lp1plugstat' : 1})
+            Values.update({'lp1chargestat' : 1})
+        elif ( lp1var == 3 and lp1ll == 0 ):
+            Values.update({'lp1plugstat' : 1})
+            Values.update({'lp1chargestat' : 0})
 
-        Values.update({'evsell' : ll})
-        logDebug("0", "EVSE plugstat: " + str(var) + " EVSE LL: " + str(ll))
+        Values.update({'lp1evsell' : lp1ll})
+        logDebug("0", "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
         try:
             with open('ramdisk/readtag', 'r') as value:
                 rfidtag = str(value.read())
@@ -166,63 +290,119 @@ def getmeter():
         mclient.connect("localhost")
         mclient.loop(timeout=2.0)
         for key in DeviceValues:
-            if ( "watt" in key):
-                if ( DeviceValues[str(key)] != str(llg)):
-                    mclient.publish("openWB/lp/1/W", payload=str(llg), qos=0, retain=True)
+            if ( "lp1watt" in key):
+                if ( DeviceValues[str(key)] != str(lp1llg)):
+                    mclient.publish("openWB/lp/1/W", payload=str(lp1llg), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'watt' : str(llg)})
-            if ( "voltage1" in key):
-                if ( DeviceValues[str(key)] != str(voltage1)):
-                    mclient.publish("openWB/lp/1/VPhase1", payload=str(voltage1), qos=0, retain=True)
+                    DeviceValues.update({'lp1watt' : str(lp1llg)})
+            if ( "lp1voltage1" in key):
+                if ( DeviceValues[str(key)] != str(lp1voltage1)):
+                    mclient.publish("openWB/lp/1/VPhase1", payload=str(lp1voltage1), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'voltage1' : str(voltage1)})
-            if ( "voltage2" in key):
-                if ( DeviceValues[str(key)] != str(voltage2)):
-                    mclient.publish("openWB/lp/1/VPhase2", payload=str(voltage2), qos=0, retain=True)
+                    DeviceValues.update({'lp1voltage1' : str(lp1voltage1)})
+            if ( "lp1voltage2" in key):
+                if ( DeviceValues[str(key)] != str(lp1voltage2)):
+                    mclient.publish("openWB/lp/1/VPhase2", payload=str(lp1voltage2), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'voltage2' : str(voltage2)})
-            if ( "voltage3" in key):
-                if ( DeviceValues[str(key)] != str(voltage3)):
-                    mclient.publish("openWB/lp/1/VPhase3", payload=str(voltage3), qos=0, retain=True)
+                    DeviceValues.update({'lp1voltage2' : str(lp1voltage2)})
+            if ( "lp1voltage3" in key):
+                if ( DeviceValues[str(key)] != str(lp1voltage3)):
+                    mclient.publish("openWB/lp/1/VPhase3", payload=str(lp1voltage3), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'voltage3' : str(voltage3)})
-            if ( "lla1" in key):
-                if ( DeviceValues[str(key)] != str(lla1)):
-                    mclient.publish("openWB/lp/1/APhase1", payload=str(lla1), qos=0, retain=True)
+                    DeviceValues.update({'lp1voltage3' : str(lp1voltage3)})
+            if ( "lp1lla1" in key):
+                if ( DeviceValues[str(key)] != str(lp1lla1)):
+                    mclient.publish("openWB/lp/1/APhase1", payload=str(lp1lla1), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'lla1' : str(lla1)})
-            if ( "lla2" in key):
-                if ( DeviceValues[str(key)] != str(lla2)):
-                    mclient.publish("openWB/lp/1/APhase2", payload=str(lla2), qos=0, retain=True)
+                    DeviceValues.update({'lp1lla1' : str(lp1lla1)})
+            if ( "lp1lla2" in key):
+                if ( DeviceValues[str(key)] != str(lp1lla2)):
+                    mclient.publish("openWB/lp/1/APhase2", payload=str(lp1lla2), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'lla2' : str(lla2)})
-            if ( "lla3" in key):
-                if ( DeviceValues[str(key)] != str(lla3)):
-                    mclient.publish("openWB/lp/1/APhase3", payload=str(lla3), qos=0, retain=True)
+                    DeviceValues.update({'lp1lla2' : str(lp1lla2)})
+            if ( "lp1lla3" in key):
+                if ( DeviceValues[str(key)] != str(lp1lla3)):
+                    mclient.publish("openWB/lp/1/APhase3", payload=str(lp1lla3), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'lla3' : str(lla3)})
+                    DeviceValues.update({'lp1lla3' : str(lp1lla3)})
 
-            if ( "llkwh" in key):
-                if ( DeviceValues[str(key)] != str(llkwh)):
-                    mclient.publish("openWB/lp/1/kWhCounter", payload=str(llkwh), qos=0, retain=True)
+            if ( "lp1llkwh" in key):
+                if ( DeviceValues[str(key)] != str(lp1llkwh)):
+                    mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp1llkwh), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'llkwh' : str(llkwh)})
-            if ( "plugstat" in key):
-                if ( DeviceValues[str(key)] != Values["plugstat"]):
-                    mclient.publish("openWB/lp/1/boolPlugStat", payload=Values["plugstat"], qos=0, retain=True)
+                    DeviceValues.update({'lp1llkwh' : str(lp1llkwh)})
+            if ( "lp1plugstat" in key):
+                if ( DeviceValues[str(key)] != Values["lp1plugstat"]):
+                    mclient.publish("openWB/lp/1/boolPlugStat", payload=Values["lp1plugstat"], qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'plugstat' : Values["plugstat"]})
-            if ( "chargestat" in key):
-                if ( DeviceValues[str(key)] != Values["chargestat"]):
-                    mclient.publish("openWB/lp/1/boolChargeStat", payload=Values["chargestat"], qos=0, retain=True)
+                    DeviceValues.update({'lp1plugstat' : Values["lp1plugstat"]})
+            if ( "lp1chargestat" in key):
+                if ( DeviceValues[str(key)] != Values["lp1chargestat"]):
+                    mclient.publish("openWB/lp/1/boolChargeStat", payload=Values["lp1chargestat"], qos=0, retain=True)
                     mclient.loop(timeout=2.0)
-                    DeviceValues.update({'chargestat' : Values["chargestat"]})
+                    DeviceValues.update({'lp1chargestat' : Values["lp1chargestat"]})
             if ( "rfidtag" in key):
                 if ( DeviceValues[str(key)] != str(rfidtag)):
                     mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'rfidtag' : str(rfidtag)})
+            if ( lp2installed == 1 ):
+                if ( "lp2watt" in key):
+                    if ( DeviceValues[str(key)] != str(lp2llg)):
+                        mclient.publish("openWB/lp/1/W", payload=str(lp2llg), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2watt' : str(lp2llg)})
+                if ( "lp2voltage1" in key):
+                    if ( DeviceValues[str(key)] != str(lp2voltage1)):
+                        mclient.publish("openWB/lp/1/VPhase1", payload=str(lp2voltage1), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2voltage1' : str(lp2voltage1)})
+                if ( "lp2voltage2" in key):
+                    if ( DeviceValues[str(key)] != str(lp2voltage2)):
+                        mclient.publish("openWB/lp/1/VPhase2", payload=str(lp2voltage2), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2voltage2' : str(lp2voltage2)})
+                if ( "lp2voltage3" in key):
+                    if ( DeviceValues[str(key)] != str(lp2voltage3)):
+                        mclient.publish("openWB/lp/1/VPhase3", payload=str(lp2voltage3), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2voltage3' : str(lp2voltage3)})
+                if ( "lp2lla1" in key):
+                    if ( DeviceValues[str(key)] != str(lp2lla1)):
+                        mclient.publish("openWB/lp/1/APhase1", payload=str(lp2lla1), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2lla1' : str(lp2lla1)})
+                if ( "lp2lla2" in key):
+                    if ( DeviceValues[str(key)] != str(lp2lla2)):
+                        mclient.publish("openWB/lp/1/APhase2", payload=str(lp2lla2), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2lla2' : str(lp2lla2)})
+                if ( "lp2lla3" in key):
+                    if ( DeviceValues[str(key)] != str(lp2lla3)):
+                        mclient.publish("openWB/lp/1/APhase3", payload=str(lp2lla3), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2lla3' : str(lp2lla3)})
 
+                if ( "lp2llkwh" in key):
+                    if ( DeviceValues[str(key)] != str(lp2llkwh)):
+                        mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp2llkwh), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2llkwh' : str(lp2llkwh)})
+                if ( "lp2plugstat" in key):
+                    if ( DeviceValues[str(key)] != Values["lp2plugstat"]):
+                        mclient.publish("openWB/lp/1/boolPlugStat", payload=Values["lp2plugstat"], qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2plugstat' : Values["lp2plugstat"]})
+                if ( "lp2chargestat" in key):
+                    if ( DeviceValues[str(key)] != Values["lp2chargestat"]):
+                        mclient.publish("openWB/lp/1/boolChargeStat", payload=Values["lp2chargestat"], qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'lp2chargestat' : Values["lp2chargestat"]})
+                if ( "rfidtag" in key):
+                    if ( DeviceValues[str(key)] != str(rfidtag)):
+                        mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
+                        mclient.loop(timeout=2.0)
+                        DeviceValues.update({'rfidtag' : str(rfidtag)})
 
         mclient.disconnect()
 
@@ -246,9 +426,10 @@ def controlact(action):
 
 def loadregelvars():
     global actorstat
-    global solla
+    global lp1solla
     global u1p3pstat
     global u1p3ptmpstat
+    global lp2installed
     try:
         with open('ramdisk/buchsestatus', 'r') as value:
             actorstat = int(value.read())
@@ -257,13 +438,13 @@ def loadregelvars():
         pass
     try:
         with open('ramdisk/llsoll', 'r') as value:
-            solla = int(value.read())
+            lp1solla = int(value.read())
     except:
         pass
-        solla = 0
-    logDebug("0", "LL Soll: " + str(solla) + " ActorStatus: " + str(actorstat))
-    if ( Values["evsell"] != solla ):
-        writeevse(solla);
+        lp1solla = 0
+    logDebug("0", "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
+    if ( Values["lp1evsell"] != lp1solla ):
+        writelp1evse(lp1solla);
     try:
         with open('ramdisk/u1p3pstat', 'r') as value:
             u1p3ptmpstat = int(value.read())
@@ -294,21 +475,37 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(22, GPIO.LOW)
         u1p3pstat = u1p3ptmpstat
-def writeevse(lla):
+    if ( lp2installed == 1 ):
+        try:
+            with open('ramdisk/llsolls1', 'r') as value:
+                lp2solla = int(value.read())
+        except:
+            pass
+            lp2solla = 0
+        logDebug("0", "LL lp2 Soll: " + str(lp2solla) + " ActorStatus: " + str(actorstat))
+        if ( Values["lp2evsell"] != lp2solla ):
+            writelp2evse(lp2solla);
+
+
+def writelp2evse(lla):
+    client.write_registers(1000, lla, unit=2)
+    logDebug("1", "Write to EVSE lp2" + str(lla))
+
+def writelp1evse(lla):
     client.write_registers(1000, lla, unit=1)
-    logDebug("1", "Write to EVSE" + str(lla))
+    logDebug("1", "Write to EVSE lp1" + str(lla))
 def conditions():
-    if ( Values["plugstat"] == 1):
+    if ( Values["lp1plugstat"] == 1):
         if ( actorstat == 0 ):
             controlact("zu")
-    if ( Values["plugstat"] == 0):
+    if ( Values["lp1plugstat"] == 0):
         if ( actorstat == 1 ):
             controlact("auf")
     if ( actorstat == 1 ):
-        if ( Values["evsell"] != solla ):
-            writeevse(solla)
+        if ( Values["lp1evsell"] != lp1solla ):
+            writeevse(lp1solla)
     else:
-        if ( Values["evsell"] != 0 ):
+        if ( Values["lp1evsell"] != 0 ):
             writeevse(0)
 
 while True:

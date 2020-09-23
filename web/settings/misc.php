@@ -451,6 +451,9 @@
 				if(strpos($line, "rfidakt=") !== false) {
 					list(, $rfidaktold) = explode("=", $line);
 				}
+				if(strpos($line, "rfidlist=") !== false) {
+					list(, $rfidlistold) = explode("=", $line);
+				}
 				if(strpos($line, "rfidstop=") !== false) {
 					list(, $rfidstopold) = explode("=", $line);
 				}
@@ -770,14 +773,47 @@
 											<input type="radio" name="rfidakt" id="rfidaktOff" autocomplete="off" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
+										<label class="btn btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
+											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
+										</label>
+
 									</div>
 									<span class="form-text small">Durch scannen von RFID Tags lässt sich die Ladung einem RFID Tag zuweisen. Derzeit unterstützt werden openWB RFID Leser und go-e an LP1. Wenn die Option RFID mitgekauft wurde befindet sich dieser unten mittig. Das Scannen wird durch einen Piepton sowie das angehen des Displays (sofern vorhanden) signalisiert.</span>
 								</div>
 							</div>
 						</div>
-						<div id="rfidandiv">
+						<div id="rfidan2div">
+						<span class="form-text small">Im Modus 2 wird eine Kommaseparierte Liste mit gültigen RFID Tags hinterlegt. Gescannt werden kann an jedem möglichen RFID Leser. Heißt auch bei mehreren Ladepunkten kann an einem zentralen RFID Leser gescannt werden. Der gescannte Tag wird dem zuletzt angeschlossenenen Auto zugewiesen, schaltet den Ladepunkt frei und vermerkt dies für das Ladelog. Wird erst gescannt und dann ein Auto angeschlossen wird der Tag dem Auto zugewiesen das als nächstes ansteckt. Wird 5 Minuten nach Scannen kein Auto angeschlossen wird der Tag verworfen. Jeder Ladepunkt wird nach abstecken automatisch wieder gesperrt. </span>
+							<hr class="border-secondary">
+							<div class="form-row form-group">
+								<div class="col small">
+									Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-group mb-1">
+								<div class="form-row">
+									<div class="col">
+										Erlaubte Tags als Kommaseparierte Liste ohne Leerzeichen
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-lg-12">
+										<label for="rfidlist" class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													Liste
+												</div>
+											</div> 
+											<input type="text" name="rfidlist" id="rfidlist" class="form-control" value="<?php echo trim( $rfidlistold ) ?>">
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="rfidan1div">
 							<hr class="border-secondary">
 							<div class="form-row form-group">
 								<div class="col small">
@@ -1206,15 +1242,31 @@
 					<script>
 						$(function() {
 							if($('#rfidaktOff').prop("checked")) {
-								$('#rfidandiv').hide();
+								$('#rfidan1div').hide();
+								$('#rfidan2div').hide();
 							} else {
-								$('#rfidandiv').show();
+								if($('#rfidaktOn1').prop("checked")) {
+									$('#rfidan1div').show();
+									$('#rfidan2div').hide();
+
+								} else {
+									$('#rfidan2div').show();
+									$('#rfidan1div').hide();
+								}
 							}
 							$('input[type=radio][name=rfidakt]').change(function(){
+								$('#rfidan1div').hide();
+								$('#rfidan2div').hide();
 								if(this.value == '0') {
-									$('#rfidandiv').hide();
+									$('#rfidan1div').hide();
+									$('#rfidan2div').hide();
+
 								} else {
-									$('#rfidandiv').show();
+									if(this.value == '1') {
+										$('#rfidan1div').show();
+									} else {
+										$('#rfidan2div').show();
+									}
 								}
 							});
 						});

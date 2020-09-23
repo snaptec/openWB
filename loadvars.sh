@@ -531,7 +531,11 @@ else
 fi
 #vierter ladepunkt
 if [[ $lastmanagementlp4 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp4/main.sh || true
+	if [[ "$evseconlp4" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 4 $chargep4ip $chargep4cp || true
+	else
+		timeout 3 modules/mpm3pmlllp4/main.sh || true
+	fi
 	llkwhlp4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
 	llkwhges=$(echo "$llkwhges + $llkwhlp4" |bc)
 	llaltlp4=$(cat /var/www/html/openWB/ramdisk/llsolllp4)
@@ -563,7 +567,11 @@ else
 fi
 #fünfter ladepunkt
 if [[ $lastmanagementlp5 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp5/main.sh || true
+	if [[ "$evseconlp5" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 5 $chargep5ip $chargep5cp || true
+	else
+		timeout 3 modules/mpm3pmlllp5/main.sh || true
+	fi
 	llkwhlp5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
 	llkwhges=$(echo "$llkwhges + $llkwhlp5" |bc)
 	llaltlp5=$(cat /var/www/html/openWB/ramdisk/llsolllp5)
@@ -595,7 +603,11 @@ else
 fi
 #sechster ladepunkt
 if [[ $lastmanagementlp6 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp6/main.sh || true
+	if [[ "$evseconlp6" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 6 $chargep6ip $chargep6cp || true
+	else
+		timeout 3 modules/mpm3pmlllp6/main.sh || true
+	fi
 	llkwhlp6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
 	llkwhges=$(echo "$llkwhges + $llkwhlp6" |bc)
 	llaltlp6=$(cat /var/www/html/openWB/ramdisk/llsolllp6)
@@ -627,7 +639,11 @@ else
 fi
 #siebter ladepunkt
 if [[ $lastmanagementlp7 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp7/main.sh || true
+	if [[ "$evseconlp7" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 7 $chargep7ip $chargep7cp || true
+	else
+		timeout 3 modules/mpm3pmlllp7/main.sh || true
+	fi
 	llkwhlp7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
 	llkwhges=$(echo "$llkwhges + $llkwhlp7" |bc)
 	llaltlp7=$(cat /var/www/html/openWB/ramdisk/llsolllp7)
@@ -659,7 +675,12 @@ else
 fi
 #achter ladepunkt
 if [[ $lastmanagementlp8 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp8/main.sh || true
+	if [[ "$evseconlp8" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 8 $chargep8ip $chargep8cp || true
+	else
+		timeout 3 modules/mpm3pmlllp8/main.sh || true
+	fi
+
 	llkwhlp8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
 	llkwhges=$(echo "$llkwhges + $llkwhlp8" |bc)
 	llaltlp8=$(cat /var/www/html/openWB/ramdisk/llsolllp8)

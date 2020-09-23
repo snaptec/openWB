@@ -211,6 +211,30 @@
 				if(strpos($line, "mpmlp1ip=") !== false) {
 					list(, $mpmlp1ipold) = explode("=", $line);
 				}
+				if(strpos($line, "chargep1cp=") !== false) {
+				list(, $chargep1cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep2cp=") !== false) {
+					list(, $chargep2cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep3cp=") !== false) {
+					list(, $chargep3cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep4cp=") !== false) {
+					list(, $chargep4cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep5cp=") !== false) {
+					list(, $chargep5cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep6cp=") !== false) {
+					list(, $chargep6cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep7cp=") !== false) {
+					list(, $chargep7cpold) = explode("=", $line);
+				}
+				if(strpos($line, "chargep8cp=") !== false) {
+					list(, $chargep8cpold) = explode("=", $line);
+				}
 				if(strpos($line, "chargep1ip=") !== false) {
 				list(, $chargep1ipold) = explode("=", $line);
 				}
@@ -405,6 +429,22 @@
 				if(strpos($line, "evsecon=") !== false) {
 					list(, $evseconold) = explode("=", $line);
 				}
+				if(strpos($line, "evseconlp4=") !== false) {
+					list(, $evseconlp4old) = explode("=", $line);
+				}
+				if(strpos($line, "evseconlp5=") !== false) {
+					list(, $evseconlp5old) = explode("=", $line);
+				}
+				if(strpos($line, "evseconlp6=") !== false) {
+					list(, $evseconlp6old) = explode("=", $line);
+				}
+				if(strpos($line, "evseconlp7=") !== false) {
+					list(, $evseconlp7old) = explode("=", $line);
+				}
+				if(strpos($line, "evseconlp8=") !== false) {
+					list(, $evseconlp8old) = explode("=", $line);
+				}
+
 				if(strpos($line, "twcmanagerlp1ip=") !== false) {
 					list(, $twcmanagerlp1ipold) = explode("=", $line);
 				}
@@ -1360,6 +1400,20 @@
 								Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
 							</div>
 						</div>
+						<div class="row">
+							<b><label for="chargep1cp">Ladepunkt an der externen openWB:</label></b>
+							<select name="chargep1cp" id="chargep1cp">
+								<option <?php if($chargep1cpold == 1) echo "selected" ?> value="1">1</option>
+								<option <?php if($chargep1cpold == 2) echo "selected" ?> value="2">2</option>
+							</select>
+						</div>
+						<div class="row">
+							<div class="col">
+								Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+							</div>
+						</div>
+
+
 					</div>
 					<div id="evseconmod">
 						<div class="row bg-info">
@@ -2328,6 +2382,20 @@
 									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
 								</div>
 							</div>
+							<div class="row">
+								<b><label for="chargep2cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep2cp" id="chargep2cp">
+									<option <?php if($chargep2cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep2cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
 						</div>
 						<div id="evseconipevselp2">
 							<div class="row bg-info">
@@ -3113,6 +3181,20 @@
 									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
 								</div>
 							</div>
+							<div class="row">
+								<b><label for="chargep3cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep3cp" id="chargep3cp">
+									<option <?php if($chargep3cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep3cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
 						</div>
 						<div id="evseconipevselp3">
 							<div class="row bg-info">
@@ -3437,35 +3519,95 @@
 							<b><label for="lp4name">Name Ladepunkt 4:</label></b>
 							<input type="text" name="lp4name" id="lp4name" value="<?php echo $lp4nameold ?>">
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseiplp4">EVSE IP:</label></b>
-							<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>">
+						<div class="row">
+							<b><label for="evseconlp4">Anbindung der EVSE an Ladepunkt 4:</label></b>
+							<select name="evseconlp4" id="evseconlp4">
+								<option <?php if($evseconlp4old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evseconlp4old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+							</select>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse.
+						<div id="evseconextopenwblp4">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep4ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep4ip" id="chargep4ip" value="<?php echo $chargep4ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
+							<div class="row">
+								<b><label for="chargep4cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep4cp" id="chargep4cp">
+									<option <?php if($chargep4cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep4cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseidlp4">EVSE ID:</label></b>
-							<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>">
+						<div id="evseconipevselp4">
+
+							<div class="row bg-info">
+								<b><label for="evseiplp4">EVSE IP:</label></b>
+								<input type="text" name="evseiplp4" id="evseiplp4" value="<?php echo $evseiplp4old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse.
+							</div>
+							<div class="row bg-info">
+								<b><label for="evseidlp4">EVSE ID:</label></b>
+								<input type="text" name="evseidlp4" id="evseidlp4" value="<?php echo $evseidlp4old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID der EVSE.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp4ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+								<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp4id">MPM3PM Modbus Ladeleistung ID:</label></b>
+								<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
+							</div>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp4ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp4ip" id="mpmlp4ip" value="<?php echo $mpmlp4ipold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp4id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp4id" id="mpmlp4id" value="<?php echo $mpmlp4idold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.
-						</div>
+
+
+
 					</div>
+					<script>
+						function display_lp4 () {
+							$('#evseconipevselp4').hide();
+							$('#evseconextopenwblp4').hide();
+
+							if($('#evseconlp4').val() == 'extopenwb') {
+								$('#evseconextopenwblp4').show();
+							}
+							if($('#evseconlp4').val() == 'ipevse') {
+								$('#evseconipevselp4').show();
+							}
+						}
+
+						$(function() {
+							display_lp4();
+							$('#evseconlp4').change( function(){
+								display_lp4();
+							});
+						});
+					</script>
 
 					<script>
 						function display_lastmanagementlp4() {
@@ -3501,39 +3643,133 @@
 					<div id="lastlp5mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp5name">Name Ladepunkt 5:</label></b>
-									<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>">
+							<input type="text" name="lp5name" id="lp5name" value="<?php echo $lp5nameold ?>">
+						</div>
+
+						<div class="row">
+							<b><label for="evseconlp5">Anbindung der EVSE an Ladepunkt 5:</label></b>
+							<select name="evseconlp5" id="evseconlp5">
+								<option <?php if($evseconlp5old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evseconlp5old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+							</select>
+						</div>
+						<div id="evseconextopenwblp5">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep5ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep5ip" id="chargep5ip" value="<?php echo $chargep5ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
+							<div class="row">
+								<b><label for="chargep5cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep5cp" id="chargep4cp">
+									<option <?php if($chargep5cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep5cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
+						</div>
+						<div id="evseconipevselp5">
+							<div class="row bg-info">
+								<b><label for="evseiplp5">EVSE IP:</label></b>
+								<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse.
+							</div>
+							<div class="row bg-info">
+								<b><label for="evseidlp5">EVSE ID:</label></b>
+								<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID der EVSE.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp5ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+								<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp5id">MPM3PM Modbus Ladeleistung ID:</label></b>
+								<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
+							</div>
+						</div>
+
+
+
+					</div>
+					<script>
+						function display_lp5 () {
+							$('#evseconipevselp5').hide();
+							$('#evseconextopenwblp5').hide();
+
+							if($('#evseconlp5').val() == 'extopenwb') {
+								$('#evseconextopenwblp5').show();
+							}
+							if($('#evseconlp5').val() == 'ipevse') {
+								$('#evseconipevselp5').show();
+							}
+						}
+
+						$(function() {
+							display_lp5();
+							$('#evseconlp5').change( function(){
+								display_lp5();
+							});
+						});
+					</script>
+					<script><div id="lastlp8mman" style="margin:5em;">
+						<div class="row">
+							<b><label for="lp8name">Name Ladepunkt 8:</label></b>
+									<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>">
 						</div>
 						<div class="row bg-info">
-							<b><label for="evseiplp5">EVSE IP:</label></b>
-							<input type="text" name="evseiplp5" id="evseiplp5" value="<?php echo $evseiplp5old ?>">
+							<b><label for="evseiplp8">EVSE IP:</label></b>
+							<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>">
 						</div>
 						<div class="row bg-info">
 							Gültige Werte IP Adresse.
 						</div>
 						<div class="row bg-info">
-							<b><label for="evseidlp5">EVSE ID:</label></b>
-							<input type="text" name="evseidlp5" id="evseidlp5" value="<?php echo $evseidlp5old ?>">
+							<b><label for="evseidlp8">EVSE ID:</label></b>
+							<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>">
 						</div>
 						<div class="row bg-info">
 							Gültige Werte 1-254. Modbus ID der EVSE.
 						</div>
 						<div class="row bg-info">
-							<b><label for="mpmlp5ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp5ip" id="mpmlp5ip" value="<?php echo $mpmlp5ipold ?>">
+							<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+							<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>">
 						</div>
 						<div class="row bg-info">
 							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
 						</div>
 						<div class="row bg-info">
-							<b><label for="mpmlp5id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp5id" id="mpmlp5id" value="<?php echo $mpmlp5idold ?>">
+							<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
+							<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>">
 						</div>
 						<div class="row bg-info">
 							Gültige Werte 1-254. Modbus ID des MPM3PM.
 						</div>
 					</div>
 
-					<script>
+
 						function display_lastmanagementlp5() {
 							if($('#lastmanagementlp5').val() == '0') {
 								$('#lastlp5mmaus').show();
@@ -3567,37 +3803,97 @@
 					<div id="lastlp6mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp6name">Name Ladepunkt 6:</label></b>
-									<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>">
+							<input type="text" name="lp6name" id="lp6name" value="<?php echo $lp6nameold ?>">
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseiplp6">EVSE IP:</label></b>
-							<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>">
+
+						<div class="row">
+							<b><label for="evseconlp6">Anbindung der EVSE an Ladepunkt 6:</label></b>
+							<select name="evseconlp6" id="evseconlp6">
+								<option <?php if($evseconlp6old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evseconlp6old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+							</select>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse.
+						<div id="evseconextopenwblp6">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep6ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep6ip" id="chargep6ip" value="<?php echo $chargep6ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
+							<div class="row">
+								<b><label for="chargep6cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep6cp" id="chargep6cp">
+									<option <?php if($chargep6cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep6cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseidlp6">EVSE ID:</label></b>
-							<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>">
+						<div id="evseconipevselp6">
+							<div class="row bg-info">
+								<b><label for="evseiplp6">EVSE IP:</label></b>
+								<input type="text" name="evseiplp6" id="evseiplp6" value="<?php echo $evseiplp6old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse.
+							</div>
+							<div class="row bg-info">
+								<b><label for="evseidlp6">EVSE ID:</label></b>
+								<input type="text" name="evseidlp6" id="evseidlp6" value="<?php echo $evseidlp6old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID der EVSE.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp6ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+								<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp6id">MPM3PM Modbus Ladeleistung ID:</label></b>
+								<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
+							</div>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp6ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp6ip" id="mpmlp6ip" value="<?php echo $mpmlp6ipold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp6id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp6id" id="mpmlp6id" value="<?php echo $mpmlp6idold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.
-						</div>
+
+
+
 					</div>
+					<script>
+						function display_lp6 () {
+							$('#evseconipevselp6').hide();
+							$('#evseconextopenwblp6').hide();
+
+							if($('#evseconlp6').val() == 'extopenwb') {
+								$('#evseconextopenwblp6').show();
+							}
+							if($('#evseconlp6').val() == 'ipevse') {
+								$('#evseconipevselp6').show();
+							}
+						}
+
+						$(function() {
+							display_lp6();
+							$('#evseconlp6').change( function(){
+								display_lp6();
+							});
+						});
+					</script>
 
 					<script>
 						function display_lastmanagementlp6() {
@@ -3632,37 +3928,97 @@
 					<div id="lastlp7mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp7name">Name Ladepunkt 7:</label></b>
-									<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>">
+							<input type="text" name="lp7name" id="lp7name" value="<?php echo $lp7nameold ?>">
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseiplp7">EVSE IP:</label></b>
-							<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>">
+
+						<div class="row">
+							<b><label for="evseconlp7">Anbindung der EVSE an Ladepunkt 7:</label></b>
+							<select name="evseconlp7" id="evseconlp7">
+								<option <?php if($evseconlp7old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evseconlp7old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+							</select>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse.
+						<div id="evseconextopenwblp7">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep7ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep7ip" id="chargep7ip" value="<?php echo $chargep7ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
+							<div class="row">
+								<b><label for="chargep7cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep7cp" id="chargep7cp">
+									<option <?php if($chargep7cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep7cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseidlp7">EVSE ID:</label></b>
-							<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>">
+						<div id="evseconipevselp7">
+							<div class="row bg-info">
+								<b><label for="evseiplp7">EVSE IP:</label></b>
+								<input type="text" name="evseiplp7" id="evseiplp7" value="<?php echo $evseiplp7old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse.
+							</div>
+							<div class="row bg-info">
+								<b><label for="evseidlp7">EVSE ID:</label></b>
+								<input type="text" name="evseidlp7" id="evseidlp7" value="<?php echo $evseidlp7old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID der EVSE.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp7ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+								<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp7id">MPM3PM Modbus Ladeleistung ID:</label></b>
+								<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
+							</div>
 						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp7ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp7ip" id="mpmlp7ip" value="<?php echo $mpmlp7ipold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp7id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp7id" id="mpmlp7id" value="<?php echo $mpmlp7idold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.
-						</div>
+
+
+
 					</div>
+					<script>
+						function display_lp7 () {
+							$('#evseconipevselp7').hide();
+							$('#evseconextopenwblp7').hide();
+
+							if($('#evseconlp7').val() == 'extopenwb') {
+								$('#evseconextopenwblp7').show();
+							}
+							if($('#evseconlp7').val() == 'ipevse') {
+								$('#evseconipevselp7').show();
+							}
+						}
+
+						$(function() {
+							display_lp7();
+							$('#evseconlp7').change( function(){
+								display_lp7();
+							});
+						});
+					</script>
 
 					<script>
 						function display_lastmanagementlp7() {
@@ -3698,38 +4054,97 @@
 					<div id="lastlp8mman" style="margin:5em;">
 						<div class="row">
 							<b><label for="lp8name">Name Ladepunkt 8:</label></b>
-									<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>">
+							<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>">
 						</div>
-						<div class="row bg-info">
-							<b><label for="evseiplp8">EVSE IP:</label></b>
-							<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse.
-						</div>
-						<div class="row bg-info">
-							<b><label for="evseidlp8">EVSE ID:</label></b>
-							<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.
-						</div>
-					</div>
 
+						<div class="row">
+							<b><label for="evseconlp8">Anbindung der EVSE an Ladepunkt 8:</label></b>
+							<select name="evseconlp8" id="evseconlp8">
+								<option <?php if($evseconlp8old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+								<option <?php if($evseconlp8old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+							</select>
+						</div>
+						<div id="evseconextopenwblp8">
+							<div class="row bg-info">
+								<div class="col">
+									<b><label for="chargep8ip">IP Adresse der externen openWB:</label></b>
+									<input type="text" name="chargep8ip" id="chargep8ip" value="<?php echo $chargep8ipold ?>">
+								</div>
+							</div>
+							<div class="row bg-info">
+								<div class="col">
+									Gültige Werte IP Adresse im Format: 192.168.0.12 . Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
+								</div>
+							</div>
+							<div class="row">
+								<b><label for="chargep8cp">Ladepunkt an der externen openWB:</label></b>
+								<select name="chargep8cp" id="chargep8cp">
+									<option <?php if($chargep8cpold == 1) echo "selected" ?> value="1">1</option>
+									<option <?php if($chargep8cpold == 2) echo "selected" ?> value="2">2</option>
+								</select>
+							</div>
+							<div class="row">
+								<div class="col">
+									Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.
+								</div>
+							</div>
+
+
+						</div>
+						<div id="evseconipevselp8">
+							<div class="row bg-info">
+								<b><label for="evseiplp8">EVSE IP:</label></b>
+								<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse.
+							</div>
+							<div class="row bg-info">
+								<b><label for="evseidlp8">EVSE ID:</label></b>
+								<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID der EVSE.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
+								<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP Adresse des Modbus Ethernet Konverters.
+							</div>
+							<div class="row bg-info">
+								<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
+								<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte 1-254. Modbus ID des MPM3PM.
+							</div>
+						</div>
+
+
+
+					</div>
+					<script>
+						function display_lp8 () {
+							$('#evseconipevselp8').hide();
+							$('#evseconextopenwblp8').hide();
+
+							if($('#evseconlp8').val() == 'extopenwb') {
+								$('#evseconextopenwblp8').show();
+							}
+							if($('#evseconlp8').val() == 'ipevse') {
+								$('#evseconipevselp8').show();
+							}
+						}
+
+						$(function() {
+							display_lp8();
+							$('#evseconlp8').change( function(){
+								display_lp8();
+							});
+						});
+					</script>
 					<script>
 						function display_lastmanagementlp8() {
 							if($('#lastmanagementlp8').val() == '0') {

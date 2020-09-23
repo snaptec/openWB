@@ -211,6 +211,38 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'mpmlp1ip='.$_POST['mpmlp1ip']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "chargep1cp=") !== false) {
+			$result .= 'chargep1cp='.$_POST['chargep1cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep2cp=") !== false) {
+			$result .= 'chargep2cp='.$_POST['chargep2cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep3cp=") !== false) {
+			$result .= 'chargep3cp='.$_POST['chargep3cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep4cp=") !== false) {
+			$result .= 'chargep4cp='.$_POST['chargep4cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep5cp=") !== false) {
+			$result .= 'chargep5cp='.$_POST['chargep5cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep6cp=") !== false) {
+			$result .= 'chargep6cp='.$_POST['chargep6cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep7cp=") !== false) {
+			$result .= 'chargep7cp='.$_POST['chargep7cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep8cp=") !== false) {
+			$result .= 'chargep8cp='.$_POST['chargep8cp']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "chargep1ip=") !== false) {
 			$result .= 'chargep1ip='.$_POST['chargep1ip']."\n";
 			$writeit = '1';
@@ -486,6 +518,27 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'evsecons2='.$_POST['evsecons2']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "evseconlp4=") !== false) {
+			$result .= 'evseconlp4='.$_POST['evseconlp4']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp5=") !== false) {
+			$result .= 'evseconlp5='.$_POST['evseconlp5']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp6=") !== false) {
+			$result .= 'evseconlp6='.$_POST['evseconlp6']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp7=") !== false) {
+			$result .= 'evseconlp7='.$_POST['evseconlp7']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp8=") !== false) {
+			$result .= 'evseconlp8='.$_POST['evseconlp8']."\n";
+			$writeit = '1';
+		}
+
 		if(strpos($line, "evsesources1=") !== false) {
 			if($_POST['evsecons1'] == "openwb12s1" or $_POST['evsecons1'] == "openwb12s1mid") {
 				$result .= 'evsesources1=/dev/ttyUSB1'."\n";
