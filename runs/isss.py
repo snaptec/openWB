@@ -55,7 +55,6 @@ except:
     seradd = "/dev/serial0"
 sdm2id=106
 sdmid=105
-Values = { }
 actorstat=0
 rfidtag=0
 loglevel=1
@@ -281,6 +280,8 @@ def getmeter():
         try:
             with open('ramdisk/readtag', 'r') as value:
                 rfidtag = str(value.read())
+        except:
+            pass
         parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
         parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
         parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
