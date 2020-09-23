@@ -457,7 +457,7 @@ if [[ $lastmanagements2 == "1" ]]; then
 		evseip=$evseiplp3
 		ipevseid=$evseidlp3
 		chargep1ip=$chargep3ip
-		chargep1ip=$chargep3cp
+		chargep1cp=$chargep3cp
 		if (( lp3enabled == 0 )); then
 			oldcurrent=$current
 			current=0
