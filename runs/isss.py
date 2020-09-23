@@ -221,7 +221,7 @@ def getmeter():
                 except Exception as e:
                     logDebug("2", "Fehler:" + str(e))
                     lp2var = 5
-                if ( var == 5 ):
+                if ( lp2var == 5 ):
                     Values.update({'lp2plugstat' : 0})
                     Values.update({'lp2chargestat' : 0})
                 elif ( lp2var == 1):
@@ -259,7 +259,7 @@ def getmeter():
         except Exception as e:
             logDebug("2", "Fehler:" + str(e))
             lp1var = 5
-        if ( var == 5 ):
+        if ( lp1var == 5 ):
             Values.update({'lp1plugstat' : 0})
             Values.update({'lp1chargestat' : 0})
         elif ( lp1var == 1):
