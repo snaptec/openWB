@@ -4586,7 +4586,7 @@
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden.
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="bezugjsonkwh">Json Abfrage für Bezug kWh:</label></b>
+							<b><label for="bezugjsonkwh">Json Abfrage für Bezug Wh:</label></b>
 							<input type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo $bezugjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
@@ -4595,7 +4595,7 @@
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerProduced - ohne die - - eingetragen werden
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung kWh:</label></b>
+							<b><label for="bezugjsonkwh">Json Abfrage für Einspeisung Wh:</label></b>
 							<input type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo $einspeisungjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
@@ -5108,7 +5108,7 @@
 							Ist die Json Antwort z.B."{"PowerInstalledPeak":4655,"PowerProduced":132,"PowerOut":897.08172362555717,"PowerSelfSupplied":234.9182763744428}" So muss hier - .PowerOut - ohne die - - eingetragen werden
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							<b><label for="wrjsonkwh">Json Abfrage für kWh:</label></b>
+							<b><label for="wrjsonkwh">Json Abfrage für Wh:</label></b>
 							<input type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
