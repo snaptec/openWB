@@ -83,6 +83,9 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 			break;
 		}
 	}
+	else if ( mqttmsg == 'openWB/config/get/pv/minCurrentMinPv' ) {
+		setInputValue('minCurrentMinPv', mqttpayload);
+	}
 }
 
 function processSofortConfigMessages(mqttmsg, mqttpayload) {
@@ -387,6 +390,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').show();  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').show();
 				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '1':
 				// mode min+pv
@@ -396,6 +401,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').show();
+
 				break;
 			case '2':
 				// mode pv
@@ -405,6 +412,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').show();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '3':
 				// mode stop
@@ -414,6 +423,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '4':
 				// mode standby
@@ -423,6 +434,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {

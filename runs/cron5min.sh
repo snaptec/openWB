@@ -207,3 +207,12 @@ if [[ "$evsecon" == "buchse" ]]; then
                python3 /var/www/html/openWB/runs/buchse.py &
        fi
 fi
+if [[ "$rfidakt" == "2" ]]; then
+	echo $rfidlist > /var/www/html/openWB/ramdisk/rfidlist
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/rfid.py &
+       fi
+fi

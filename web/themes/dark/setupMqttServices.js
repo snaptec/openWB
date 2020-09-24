@@ -95,6 +95,7 @@ var topicsToSubscribe = [
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
 	["openWB/config/get/pv/priorityModeEVBattery", 1],
+	["openWB/config/get/pv/minCurrentMinPv", 1],
 	// system topics
 	["openWB/system/Timestamp", 1],
 	// pv topics

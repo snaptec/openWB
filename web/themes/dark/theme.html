@@ -590,7 +590,22 @@
 
 
 	</div>  <!-- and smarthome -->
+		<form id="minundpvladenEinstellungen" class="hide">
+			<hr color="white">
+			<div class="row justify-content-center">
+				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
+			</div>
 
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+				<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
+				<div class="col">
+
+					<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
+				</div>
+				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
+			</div>
+		</form>
 		<!-- depending on charge mode show options -->
 		<form id="sofortladenEinstellungen" class="hide">
 
@@ -1170,13 +1185,13 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20200526-c',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20200616-a',
+				'themes/dark/processAllMqttMsg.js?ver=20200924-a',
 				// respective Chart.js definition live
 				'themes/dark/livechart.js?ver=20200530-b',
 				// respective Chart.js definition awattar
 				'themes/dark/awattarchart.js?ver=20200331-c',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20200526-a',
+				'themes/dark/setupMqttServices.js?ver=20200924-a',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
