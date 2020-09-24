@@ -93,457 +93,115 @@
 					</div>  <!-- end card body Allgemeine Einstellungen Sofort -->
 				</div>  <!-- end card Allgemeine Einstellungen Sofort -->
 
-				<div class="card border-primary">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 1
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp1" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp1" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp1" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+				<?php for( $chargepoint = 1; $chargepoint < 9; $chargepoint++ ){ // begin chargepoint loop ?>
+					<div class="card border-primary lp<?php echo $chargepoint; ?>options<?php if( $chargepoint > 1 ) echo " hide"; ?>">
+						<div class="card-header bg-primary">
+							Einstellungen Ladepunkt <?php echo $chargepoint; ?>
+						</div>
+						<div class="card-body">
+							<div class="form-row mb-1">
+								<label for="currentLp<?php echo $chargepoint; ?>" class="col-md-4 col-form-label">Ladestrom</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="currentLp<?php echo $chargepoint; ?>" class="col-2 col-form-label valueLabel" suffix="A">A</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" name="current" id="currentLp<?php echo $chargepoint; ?>" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/<?php echo $chargepoint; ?>/">
+										</div>
 									</div>
+									<span class="form-text small">Parameter in Ampere [A] für den Ladestrom im Modus Sofortladen. Definiert den Ladestrom am Ladepunkt. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke an den Ladepunkten.</span>
 								</div>
-								<span class="form-text small">Parameter in Ampere [A] für den Ladestrom im Modus Sofortladen. Definiert den Ladestrom am Ladepunkt. Der kleinste einstellbare Wert liegt aus technischen Gründen bei 6 A, der größte bei 32 A. Er kann nie kleiner sein als die eingestellte Mindeststromstärke an den Ladepunkten.</span>
 							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp1" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp1" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp1" data-option="1"> Energiemenge
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp1" data-option="2"> EV-SoC
-									</label>
-								</div>
-								<span class="form-text small">Auswahl der Lademengen-Begrenzung im Modus Sofortladen.
-									<span class="text-danger">
-										Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
-									</span>
-								</span>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Begrenzung</label>
 								<div class="col">
-									<span class="form-text small">
-										Parameter in Kilowattstunden [kWh] oder Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert die Energiemenge oder den EV-SoC, auf die/den der Ladevorgang begrenzt werden soll. Der Parameter ist nur wirksam, wenn die jweilige Option unter "Begrenzung" gewählt wird.
+									<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp<?php echo $chargepoint; ?>" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/<?php echo $chargepoint; ?>/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="0" value="0"> keine
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="2" value="2"> EV-SoC
+										</label>
+									</div>
+									<span class="form-text small">Auswahl der Lademengen-Begrenzung im Modus Sofortladen.
 										<span class="text-danger">
 											Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
 										</span>
 									</span>
 								</div>
 							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp1" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp1" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp1" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+							<div class="form-group mb-0 lp<?php echo $chargepoint; ?>limitenergy hide">
+								<div class="form-row mb-1">
+									<label for="energyToChargeLp<?php echo $chargepoint; ?>" class="col-md-4 col-form-label">Energie</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="energyToChargeLp<?php echo $chargepoint; ?>" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp<?php echo $chargepoint; ?>" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/<?php echo $chargepoint; ?>/">
+											</div>
+										</div>
+										<span class="form-text small">
+											Parameter in Kilowattstunden [kWh] für die Lademengenbegrenzung im Modus Sofortladen. Definiert die Energiemenge, auf die der Ladevorgang begrenzt werden soll.
+											<span class="text-danger">
+												Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
+											</span>
+										</span>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="socToChargeToLp1" class="col-md-4 col-form-label">SoC</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="socToChargeToLp1" class="col-2 col-form-label valueLabel" suffix="%">%</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="socToChargeTo" id="socToChargeToLp1" min="5" max="100" step="5" value="90" data-default="90" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+							<div class="form-group mb-0 lp<?php echo $chargepoint; ?>limitsoc hide">
+								<div class="form-row mb-1">
+									<label for="socToChargeToLp<?php echo $chargepoint; ?>" class="col-md-4 col-form-label">SoC</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="socToChargeToLp<?php echo $chargepoint; ?>" class="col-2 col-form-label valueLabel" suffix="%">%</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" name="socToChargeTo" id="socToChargeToLp<?php echo $chargepoint; ?>" min="5" max="100" step="5" value="90" data-default="90" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/<?php echo $chargepoint; ?>/">
+											</div>
+										</div>
+										<span class="form-text small">
+											Parameter in Prozent [%] für die Lademengenbegrenzung im Modus Sofortladen. Definiert den EV-SoC, auf den der Ladevorgang begrenzt werden soll.
+											<span class="text-danger">
+												Dieser Parameter kann auf der Hauptseite der openWB per Sofortzugriff im Modus Sofortladen jederzeit geändert werden.
+											</span>
+										</span>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 1 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 1 -->
+						</div>  <!-- end card body Einstellungen Ladepunkt <?php echo $chargepoint; ?> -->
+						<script>
+							$(document).ready(function(){
+								$('input[type=radio][name=chargeLimitationLp<?php echo $chargepoint; ?>]').change(function(){
+									if(this.value == '0') {
+										$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+										$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+									} else {
+										if(this.value == 1) {
+											$('.lp<?php echo $chargepoint; ?>limitenergy').show();
+											$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+										} else {
+											$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+											$('.lp<?php echo $chargepoint; ?>limitsoc').show();
+										}
+									}
+								})
+							});
+						</script>
+					</div>  <!-- end card Einstellungen Ladepunkt <?php echo $chargepoint; ?> -->
 
-				<div class="card border-primary hide lp2options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 2
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp2" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp2" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp2" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp2" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp2" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp2" data-option="1"> Energiemenge
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp2" data-option="2"> EV-SoC
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp2" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp2" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp2" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="socToChargeToLp2" class="col-md-4 col-form-label">SoC</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="socToChargeToLp2" class="col-2 col-form-label valueLabel" suffix="%">%</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="socToChargeTo" id="socToChargeToLp2" min="5" max="100" step="5" value="90" data-default="90" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/2/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 2 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 2 -->
-
-				<div class="card border-primary hide lp3options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 3
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp3" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp3" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp3" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp3" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp3" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp3" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp3" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp3" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp3" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 3 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 3 -->
-
-				<div class="card border-primary hide lp4options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 4
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp4" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp4" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp4" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp4" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp4" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp4" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp4" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp4" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp4" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/4/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 4 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 4 -->
-
-				<div class="card border-primary hide lp5options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 5
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp5" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp5" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp5" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp5" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp5" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp5" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp5" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp5" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp5" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/5/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 5 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 5 -->
-
-				<div class="card border-primary hide lp6options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 6
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp6" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp6" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp6" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp6" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp6" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp6" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp6" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp6" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp6" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/6/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 6 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 6 -->
-
-				<div class="card border-primary hide lp7options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 7
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp7" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp7" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp7" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp7" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp7" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp7" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp7" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp7" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp7" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/7/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 7 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 7 -->
-
-				<div class="card border-primary hide lp8options">
-					<div class="card-header bg-primary">
-						 Einstellungen Ladepunkt 8
-					</div>
-					<div class="card-body">
-						<div class="form-row mb-1">
-							<label for="currentLp8" class="col-md-4 col-form-label">Ladestrom</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="currentLp8" class="col-2 col-form-label valueLabel" suffix="A">A</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="current" id="currentLp8" min="6" max="32" step="1" value="16" data-default="16" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label class="col-md-4 col-form-label">Begrenzung</label>
-							<div class="col">
-								<div class="btn-group btn-block btn-group-toggle" id="chargeLimitationLp8" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp8" data-option="0"> keine
-									</label>
-									<label class="btn btn-outline-info btn-toggle">
-										<input type="radio" name="chargeLimitationLp8" data-option="1"> Energiemenge
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group mb-0">
-							<div class="form-row mb-0">
-								<div class="col-md-4">
-									Begrenzungs-Parameter
-								</div>
-							</div>
-						</div>
-						<div class="form-row mb-1">
-							<label for="energyToChargeLp8" class="col-md-4 col-form-label">Energie</label>
-							<div class="col-md-8">
-								<div class="form-row vaRow mb-1">
-									<label for="energyToChargeLp8" class="col-2 col-form-label valueLabel" suffix="kWh">kWh</label>
-									<div class="col-10">
-										<input type="range" class="form-control-range rangeInput" name="energyToCharge" id="energyToChargeLp8" min="2" max="100" step="2" value="30" data-default="30" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/8/">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>  <!-- end card body Einstellungen Ladepunkt 8 -->
-				</div>  <!-- end card Einstellungen Ladepunkt 8 -->
+				<?php } // end chargepoint loop ?>
 
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled="disabled">speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger" disabled="disabled">Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
@@ -653,6 +311,22 @@
 						$('.lp' + index + 'options').show();
 					} else {
 						$('.lp' + index + 'options').hide();
+					}
+				}
+				if ( elementId.match( /^chargeLimitationLp[1-9]*$/i ) ) {
+					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 0) {
+						$('.lp' + index + 'limitenergy').hide();
+						$('.lp' + index + 'limitsoc').hide();
+					} else {
+						if ( mqttpayload == 1 ) {
+							$('.lp' + index + 'limitenergy').show();
+							$('.lp' + index + 'limitsoc').hide();
+						} else {
+							$('.lp' + index + 'limitenergy').hide();
+							$('.lp' + index + 'limitsoc').show();
+						}
 					}
 				}
 			}
