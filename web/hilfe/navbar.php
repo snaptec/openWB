@@ -37,11 +37,13 @@
 				case "firstSteps":
 					$("#ersteSchritteDiv").show();
 					$("#indexDiv").hide();
+					$("#datenschutzDiv").hide();
 					$("#helpFooterText").text("Sie befinden sich hier: Hilfe/Erste Schritte");
 					break;
 				case "index":
 					$("#ersteSchritteDiv").hide();
 					$("#indexDiv").show();
+					$("#datenschutzDiv").hide();
 					$("#helpFooterText").text("Sie befinden sich hier: Hilfe/Index");
 					break;
 				case "datenschutz":
