@@ -786,7 +786,6 @@
 									Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
 								</div>
 							</div>
-							<hr class="border-secondary">
 							<div class="form-group mb-1">
 								<div class="form-row">
 									<div class="col">
