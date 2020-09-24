@@ -167,7 +167,7 @@
 													<i class="fa fa-lock"></i>
 												</div>
 											</div> 
-											<input type="password" name="cloudpass" id="cloudpass" value="" class="form-control" aria-describedby="passwordHelpBlock" required="required">
+											<input type="password" name="cloudpass" id="cloudpass" value="" class="form-control" required="required">
 										</div>
 									</div>
 								</div>
@@ -208,7 +208,7 @@
 													<i class="fa fa-envelope"></i>
 												</div>
 											</div>
-											<input type="email" name="email" id="email" value="" aria-describedby="registerPasswordHelpBlock" class="form-control" required="required">
+											<input type="email" name="email" id="email" value="" class="form-control" required="required">
 										</div>
 									</div>
 								</div>

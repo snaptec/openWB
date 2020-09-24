@@ -36,8 +36,18 @@ body > .container {
     color: #212529;
 }
 
-.card-header.bg-secondary .btn-outline-info {
-    background-color: darkslategray;
+.card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
+    background-color: white;
+}
+
+.card-header.bg-success .btn-outline-info.focus {
+    box-shadow: 0 0 0 0.2rem white;
+}
+
+.card-header.bg-success .btn-outline-info.active,
+.card-header.bg-success .btn-outline-info:hover {
+    border-color: white;
 }
 
 .footer > .container {
