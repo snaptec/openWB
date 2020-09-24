@@ -48,6 +48,9 @@
 				if(strpos($line, "soc2user=") !== false) {
 					list(, $soc2userold) = explode("=", $line);
 				}
+				if(strpos($line, "bezug_id=") !== false) {
+					list(, $bezug_idold) = explode("=", $line);
+				}
 				if(strpos($line, "soc2pass=") !== false) {
 					list(, $soc2passold) = explode("=", $line);
 				}
@@ -4287,6 +4290,13 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP. IP Adresse des Victron, z.B. GX.
+						</div>
+						<div class="row" style="background-color:#febebe">
+							<b><label for="bezug_id">ID:</label></b>
+							<input type="text" name="bezug_id" id="bezug_id" value="<?php echo $bezug_idold ?>">
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte ID. ID Adresse
 						</div>
 					</div>
 					<div id="wattbezugfems">
