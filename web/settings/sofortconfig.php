@@ -195,13 +195,13 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled="disabled">speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="button" class="btn btn-danger" disabled="disabled">Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
