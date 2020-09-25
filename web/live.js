@@ -907,7 +907,9 @@ var publish = function (payload, topic) {
 }
 
 client.connect(options);
-
+function sendrfidtag(thetag) {
+		publish(thetag,"openWB/set/system/SimulateRFID");
+}
 function graphoptionclick() {
 	if ( document.getElementById("graphoptiondiv").style.display === "none") {
 		document.getElementById("graphoptiondiv").style.display = "block";
