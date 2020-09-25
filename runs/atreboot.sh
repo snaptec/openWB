@@ -637,6 +637,12 @@ if (( rfidakt == 1 )); then
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
 	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
 fi
+if (( rfidakt == 2 )); then
+	sudo kill $(ps aux |grep '[r]eadrfid.py' | awk '{print $2}')
+
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid.py $displayaktiv) &
+	(sleep 10; sudo python /var/www/html/openWB/runs/readrfid2.py $displayaktiv) &
+fi
 if [[ $evsecon == twcmanager ]]; then
 	if [[ $twcmanagerlp1ip == "localhost/TWC" ]]; then
 		su - pi -c "screen -dm -S TWCManager /var/www/html/TWC/TWCManager.py" &
