@@ -1092,7 +1092,7 @@
 										</label>
 									</div>
 								</div>
-								<div class="form-row mb-1">
+								<div class="form-row mb-1" id="schieflastan">
 									<label for="schieflastmaxa" class="col-md-4 col-form-label">Schieflastbegrenzung</label>
 									<div class="col-md-8">
 										<div class="form-row vaRow mb-1">
@@ -1119,6 +1119,19 @@
 									$('#u1p3pan').hide();
 								} else {
 									$('#u1p3pan').show();
+								}
+							});
+
+							if($('#schieflastaktivOff').prop("checked")) {
+								$('#schieflastan').hide();
+							} else {
+								$('#schieflastan').show();
+							}
+							$('input[type=radio][name=schieflastaktiv]').change(function(){
+								if(this.value == '0') {
+									$('#schieflastan').hide();
+								} else {
+									$('#schieflastan').show();
 								}
 							});
 						});
