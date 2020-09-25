@@ -740,7 +740,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-row mt-2">
+							<div class="form-row mt-2" id="lp2cpdiv">
 								<div class="col-md-4">
 									<label class="col-form-label">Ladepunkt 2</label>
 								</div>
@@ -755,6 +755,17 @@
 							</div>
 						</div>
 					</div>
+					<script>
+						$(function() {
+							var lp2akt = <?php echo $lastmanagementold ?>;
+
+							if(lp2akt == '0') {
+								$('#lp2cpdiv').hide();
+							} else {
+								$('#lp2cpdiv').show();
+							}
+						});
+					</script>
 				</div>
 
 				<div class="card border-secondary">
@@ -767,10 +778,10 @@
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 0) echo " active" ?>">
 											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
 											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
-										<label class="btn btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
+										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
 											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
 										</label>
 
@@ -778,13 +789,16 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="card-body" id="rfidandiv">
+						<div class="form-row form-group">
+							<div class="col">
+								Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
+							</div>
+						</div>
 						<div id="rfidan2div">
-						<span class="form-text small">Im Modus 2 wird eine Kommaseparierte Liste mit gültigen RFID Tags hinterlegt. Gescannt werden kann an jedem möglichen RFID Leser. Heißt auch bei mehreren Ladepunkten kann an einem zentralen RFID Leser gescannt werden. Der gescannte Tag wird dem zuletzt angeschlossenenen Auto zugewiesen, schaltet den Ladepunkt frei und vermerkt dies für das Ladelog. Wird erst gescannt und dann ein Auto angeschlossen wird der Tag dem Auto zugewiesen das als nächstes ansteckt. Wird 5 Minuten nach Scannen kein Auto angeschlossen wird der Tag verworfen. Jeder Ladepunkt wird nach abstecken automatisch wieder gesperrt. </span>
-							<hr class="border-secondary">
-							<div class="form-row form-group">
-								<div class="col small">
-									Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
-								</div>
+							<div class="alert alert-info">
+								Im Modus 2 wird eine Kommaseparierte Liste mit gültigen RFID Tags hinterlegt. Gescannt werden kann an jedem möglichen RFID Leser. Heißt auch bei mehreren Ladepunkten kann an einem zentralen RFID Leser gescannt werden. Der gescannte Tag wird dem zuletzt angeschlossenenen Auto zugewiesen, schaltet den Ladepunkt frei und vermerkt dies für das Ladelog. Wird erst gescannt und dann ein Auto angeschlossen wird der Tag dem Auto zugewiesen das als nächstes ansteckt. Wird 5 Minuten nach Scannen kein Auto angeschlossen wird der Tag verworfen. Jeder Ladepunkt wird nach abstecken automatisch wieder gesperrt.
 							</div>
 							<div class="form-group mb-1">
 								<div class="form-row">
@@ -808,11 +822,6 @@
 						</div>
 						<div id="rfidan1div">
 							<hr class="border-secondary">
-							<div class="form-row form-group">
-								<div class="col small">
-									Zuletzt gescannter RFID Tag: <?php echo trim( $lastrfid ) ?>
-								</div>
-							</div>
 							<div class="form-group mb-1">
 								<div class="form-row">
 									<div class="col">
@@ -1238,29 +1247,35 @@
 					<script>
 						$(function() {
 							if($('#rfidaktOff').prop("checked")) {
+								$('#rfidandiv').hide();
 								$('#rfidan1div').hide();
 								$('#rfidan2div').hide();
 							} else {
 								if($('#rfidaktOn1').prop("checked")) {
+									$('#rfidandiv').show();
 									$('#rfidan1div').show();
 									$('#rfidan2div').hide();
 
 								} else {
+									$('#rfidandiv').show();
 									$('#rfidan2div').show();
 									$('#rfidan1div').hide();
 								}
 							}
 							$('input[type=radio][name=rfidakt]').change(function(){
+								$('#rfidandiv').hide();
 								$('#rfidan1div').hide();
 								$('#rfidan2div').hide();
 								if(this.value == '0') {
+									$('#rfidandiv').hide();
 									$('#rfidan1div').hide();
 									$('#rfidan2div').hide();
-
 								} else {
 									if(this.value == '1') {
+										$('#rfidandiv').show();
 										$('#rfidan1div').show();
 									} else {
+										$('#rfidandiv').show();
 										$('#rfidan2div').show();
 									}
 								}
