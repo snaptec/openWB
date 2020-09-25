@@ -13,6 +13,14 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp3
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp4
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp5
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp6
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp7
+echo 0 > /var/www/html/openWB/ramdisk/rfidlp8
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/nurpv70dynstatus
 echo 0 > /var/www/html/openWB/ramdisk/cpulp1counter
