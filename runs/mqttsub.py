@@ -828,7 +828,7 @@ def on_message(client, userdata, msg):
             f.close()
         client.publish("openWB/set/isss/Cpulp1", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/awattar/MaxPriceForCharging"):
-        if (float(msg.payload) >= -8 and float(msg.payload) <=50):
+        if (float(msg.payload) >= -50 and float(msg.payload) <=50):
             f = open('/var/www/html/openWB/ramdisk/awattarmaxprice', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
