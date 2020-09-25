@@ -57,32 +57,18 @@
 	</head>
 
 	<body>
-		<?php
-
-			// read selected debug mode from config file
-			$lines = file('/var/www/html/openWB/openwb.conf');
-			foreach($lines as $line) {
-				if(strpos($line, "datenschutzack=") !== false) {
-					list(, $datenschutzackold) = explode("=", $line, 2);
-				}
-			}
-
-		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Fehlermeldungen</h1>
 
-			<?php if ( $datenschutzackold != 1 ) { ?>
-			<div class="alert alert-danger">
+			<div class="alert alert-danger datenschutznotack hide">
 				Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um eine Fehlermeldung senden zu können.
 			</div>
-			<?php } else { ?>
-			<div class="alert alert-success">
+			<div class="alert alert-success datenschutzack hide">
 				Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können Fehlermeldungen senden.
 			</div>
-			<?php } ?>
 
 			<div class="card border-secondary">
 				<form class="form" id="sendDebugMessageForm" action="./tools/senddebug.php" method="POST">
@@ -106,8 +92,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Absenden</button>
+					<div class="card-footer text-center datenschutzack hide">
+						<button type="submit" class="btn btn-success">Absenden</button>
 					</div>
 				</form>
 			</div>
@@ -120,6 +106,17 @@
 			</div>
 		</footer>
 
+		<!-- load mqtt library -->
+		<script src = "js/mqttws31.js" ></script>
+		<!-- load topics -->
+		<script src = "settings/topicsToSubscribe_fehlerbericht.js?ver=20200925-a" ></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<!-- load service -->
+		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
+		<!-- load mqtt handler-->
+		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
+
 		<script>
 
 			$.get(
@@ -130,6 +127,21 @@
 					$('#navFehlerbericht').addClass('disabled');
 				}
 			);
+
+			function visibiltycheck(elementId, mqttpayload) {
+				// do visiblity check here
+				if ( elementId == "dataProtectionAcknoledged" ) {
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 1) {
+						$('.datenschutznotack').hide();
+						$('.datenschutzack').show();
+
+					} else {
+						$('.datenschutzack').hide();
+						$('.datenschutznotack').show();
+					}
+				}
+			}
 
 			$(document).ready(function(){
 
