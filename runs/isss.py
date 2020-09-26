@@ -148,7 +148,7 @@ def getmeter():
         f = open('/var/www/html/openWB/ramdisk/llhz', 'w')
         f.write(str(hz))
         f.close()
-        if ( lp2installed == 1 ):
+        if ( lp2installed == 2 ):
             try:
                 resp = client.read_input_registers(0x0C,2, unit=sdmid)
                 lp2llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
@@ -347,7 +347,7 @@ def getmeter():
                     mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'rfidtag' : str(rfidtag)})
-            if ( lp2installed == 1 ):
+            if ( lp2installed == 2 ):
                 if ( "lp2watt" in key):
                     if ( DeviceValues[str(key)] != str(lp2llg)):
                         mclient.publish("openWB/lp/1/W", payload=str(lp2llg), qos=0, retain=True)
@@ -476,7 +476,7 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(22, GPIO.LOW)
         u1p3pstat = u1p3ptmpstat
-    if ( lp2installed == 1 ):
+    if ( lp2installed == 2 ):
         try:
             with open('ramdisk/llsolls1', 'r') as value:
                 lp2solla = int(value.read())
