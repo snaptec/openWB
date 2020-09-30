@@ -1,4 +1,3 @@
-<?php exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf /var/www/html/openWB/web/backup/backup.tar.gz /var/www/html/"); ?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -8,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Backup erstellen</title>
+		<title>Backup wiederherstellen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -62,28 +61,86 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-		<div class="alert alert-info">
-			Backup erfoglreich erstellt.
-		</div>
+<?php
+// Returns a file size limit in bytes based on the PHP upload_max_filesize
+// and post_max_size
+function file_upload_max_size() {
+	static $max_size = -1;
 
-		<div class="card border-secondary">
-			<div class="card-header bg-secondary">
-				Backup herunterladen
-			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/backup.tar.gz">Download</a>
-					</div>
-				</div>
-			</div>
-		</div>
+	if ($max_size < 0) {
+		// Start with post_max_size.
+		$post_max_size = parse_size(ini_get('post_max_size'));
+		if ($post_max_size > 0) {
+			$max_size = $post_max_size;
+		}
 
+		// If upload_max_size is less, then reduce. Except if upload_max_size is
+		// zero, which indicates no limit.
+		$upload_max = parse_size(ini_get('upload_max_filesize'));
+		if ($upload_max > 0 && $upload_max < $max_size) {
+			$max_size = $upload_max;
+		}
+	}
+	return $max_size;
+}
+
+function parse_size($size) {
+	$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+	$size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
+	if ($unit) {
+		// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+		return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+	} else {
+		return round($size);
+	}
+}
+
+$target_dir = $_SERVER['DOCUMENT_ROOT'] . "/openWB/web/tools/upload/";
+$target_file = $target_dir . basename( $_FILES["fileToUpload"]["name"] );
+$uploadOk = true;
+$doUpdate = false;
+$imageFileType = strtolower( pathinfo( $target_file, PATHINFO_EXTENSION ) );
+?>
+			<div class="alert alert-info">
+				Maximale Dateigröße: <?php echo file_upload_max_size(); ?>
+			</div>
+<?php
+if ( $_FILES["fileToUpload"]["size"] > file_upload_max_size() ) {
+	$uploadOk = false;
+	?>
+			<div class="alert alert-danger">
+				Die Datei ist zu groß. (max. <?php echo file_upload_max_size(); ?> Bytes)
+			</div>
+	<?php
+}
+if ($uploadOk !== true) {
+	?>
+			<div class="alert alert-danger">
+				Die Datei konnte nicht hochgeladen werden.
+			</div>
+	<?php
+} else {
+	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+		$doUpdate = true;
+		?>
+			<div class="alert alert-info">
+				Wiederherstellung wird durchgeführt, bitte warten!
+			</div>
+		<?php
+	} else {
+		?>
+			<div class="alert alert-danger">
+				Es gab einen Fehler beim Hochladen der Datei. Ist diese eventuell zu groß? (max. <?php echo file_upload_max_size(); ?> Bytes)
+			</div>
+		<?php
+	}
+}
+?>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Backup erstellen</small>
+				<small>Sie befinden sich hier: System/Backup wiederherstellen</small>
 			</div>
 		</footer>
 
@@ -94,11 +151,22 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					$('#navBackup').addClass('disabled');
+					$('#navWiederherstellen').addClass('disabled');
 				}
 			);
 
 		</script>
+<?php
+if($doUpdate === true) {
+	sleep(5);
+	exec($_SERVER['DOCUMENT_ROOT']."/openWB/runs/restore.sh >> ".$_SERVER['DOCUMENT_ROOT']."/openWB/web/tools/upload/restore.log");
+	?>
+		<script>
+			setTimeout(function() { window.location = "index.php"; }, 15000);
+		</script>
+	<?php
+}
+?>
 
 	</body>
 </html>

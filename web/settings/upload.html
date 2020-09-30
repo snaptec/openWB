@@ -1,4 +1,3 @@
-<?php exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf /var/www/html/openWB/web/backup/backup.tar.gz /var/www/html/"); ?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -8,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Backup erstellen</title>
+		<title>Backup wiederherstellen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -62,28 +61,44 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-		<div class="alert alert-info">
-			Backup erfoglreich erstellt.
-		</div>
+			<div class="alert alert-warning">
+				Wiederherstellen der Einstellungen von openWB und Log Daten von Zählern. Die Backupdatei muss den Namen backup.tar.gz haben.<br>
+				Sollte das Wiedereinspielen nicht funktionieren bitte ein Update durchführen. Im Anschluss neustarten und erneut einspielen.
+			</div>
 
-		<div class="card border-secondary">
-			<div class="card-header bg-secondary">
-				Backup herunterladen
-			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/backup.tar.gz">Download</a>
+			<div class="card border-secondary">
+				<form action="settings/upload.php" method="POST" enctype="multipart/form-data">
+					<div class="card-header bg-secondary">
+						Backup wiederherstellen
 					</div>
-				</div>
+					<div class="card-body">
+						<input type="hidden" name="MAX_FILE_SIZE" value="300000000">
+						<div class="input-group">
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" name="fileToUpload" id="fileToUpload" required="required">
+								<label class="custom-file-label" for="fileToUpload">Datei auswählen</label>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer text-center">
+						<button type="submit" class="btn btn-success" value="Upload Backup" name="submit">Upload Backup</button>
+					</div>
+				</form>
+				<script>
+					$('#fileToUpload').on('change',function(e){
+						//get the file name without path
+						var fileName = e.target.files[0].name;
+						//replace the "Choose a file" label
+						$(this).next('.custom-file-label').html(fileName);
+					})
+				</script>
 			</div>
-		</div>
 
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Backup erstellen</small>
+				<small>Sie befinden sich hier: System/Backup wiederherstellen</small>
 			</div>
 		</footer>
 
@@ -94,7 +109,7 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					$('#navBackup').addClass('disabled');
+					$('#navWiederherstellen').addClass('disabled');
 				}
 			);
 
