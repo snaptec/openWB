@@ -85,7 +85,7 @@ if ($_POST['action'] === 'deleteBridge') {
 	exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
-			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
+			setTimeout(function() { window.location = "../index.php"; }, 8000);
 		</script>
 	</body>
 </html>
@@ -326,7 +326,7 @@ echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom
 exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
-			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
+			setTimeout(function() { window.location = "../index.php"; }, 8000);
 		</script>
 	</body>
 </html>
