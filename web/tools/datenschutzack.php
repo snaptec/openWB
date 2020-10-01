@@ -88,7 +88,7 @@
 		</script>
 
 <?php
-//print_r($_POST); 
+//print_r($_POST);
 
 $result = '';
 $lines = file($_SERVER["DOCUMENT_ROOT"].'/openWB/openwb.conf');
