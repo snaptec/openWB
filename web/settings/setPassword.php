@@ -172,7 +172,7 @@ AUTHEND
 						</div>
 						<div class="card-footer text-center">
 							<form action="./settings/setPassword.php" method="POST">
-								<button type="submit" name="action" value="delete" class="btn btn-danger" disabled="disabled">Passwort löschen</button>
+								<button type="submit" name="action" value="delete" class="btn btn-danger">Passwort löschen</button>
 							</form>
 						</div>
 						<?php
