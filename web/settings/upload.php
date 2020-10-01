@@ -102,14 +102,14 @@ $doUpdate = false;
 $imageFileType = strtolower( pathinfo( $target_file, PATHINFO_EXTENSION ) );
 ?>
 			<div class="alert alert-info">
-				Maximale Dateigröße: <?php echo file_upload_max_size(); ?>
+				Maximale Dateigröße: <?php echo file_upload_max_size(); ?> Bytes
 			</div>
 <?php
 if ( $_FILES["fileToUpload"]["size"] > file_upload_max_size() ) {
 	$uploadOk = false;
 	?>
 			<div class="alert alert-danger">
-				Die Datei ist zu groß. (max. <?php echo file_upload_max_size(); ?> Bytes)
+				Die Datei ist zu groß.
 			</div>
 	<?php
 }
@@ -124,13 +124,13 @@ if ($uploadOk !== true) {
 		$doUpdate = true;
 		?>
 			<div class="alert alert-info">
-				Wiederherstellung wird durchgeführt, bitte warten!
+				Wiederherstellung wird durchgeführt, bitte warten! <i class="fas fa-cog fa-spin"></i>
 			</div>
 		<?php
 	} else {
 		?>
 			<div class="alert alert-danger">
-				Es gab einen Fehler beim Hochladen der Datei. Ist diese eventuell zu groß? (max. <?php echo file_upload_max_size(); ?> Bytes)
+				Es gab einen Fehler beim Hochladen der Datei. Ist diese eventuell zu groß?
 			</div>
 		<?php
 	}

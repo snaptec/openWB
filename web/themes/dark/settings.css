@@ -46,7 +46,10 @@ body {
     border-color: #212529;
 }
 
-.form-control, .form-control[readonly], .form-control:focus {
+.form-control,
+.form-control[readonly],
+.form-control:focus,
+.custom-file-label {
 	background-color: #343a40;
 	border: 1px solid #ced4da;
 	color: #ffffff;

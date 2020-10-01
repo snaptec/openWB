@@ -74,14 +74,20 @@
 					<div class="card-body">
 						<input type="hidden" name="MAX_FILE_SIZE" value="300000000">
 						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-file-archive"></i></span>
+							</div>
 							<div class="custom-file">
-								<input type="file" class="custom-file-input" name="fileToUpload" id="fileToUpload" required="required">
-								<label class="custom-file-label" for="fileToUpload">Datei auswählen</label>
+								<input type="file" class="custom-file-input" name="fileToUpload" id="fileToUpload" accept="application/gzip" required="required">
+								<label class="custom-file-label" for="fileToUpload"><i class="fas fa-search"></i> Datei auswählen</label>
 							</div>
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success" value="Upload Backup" name="submit">Upload Backup</button>
+						<button type="submit" class="btn btn-success" value="Upload Backup" name="submit">
+							<i class="fas fa-upload"></i>
+							Upload Backup
+						</button>
 					</div>
 				</form>
 				<script>

@@ -73,7 +73,7 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/backup.tar.gz">Download</a>
+						<a class="btn btn-success" href="/openWB/web/backup/backup.tar.gz"><i class="fas fa-download"></i> Download</a>
 					</div>
 				</div>
 			</div>
