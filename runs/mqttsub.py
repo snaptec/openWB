@@ -371,6 +371,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "maximalstromstaerke=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/global/maxEVSECurrentAllowed", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/global/dataProtectionAcknoledged"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "datenschutzack=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/global/dataProtectionAcknoledged", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/global/dataProtectionAcknoledged", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/pv/lp/1/minSocAlwaysToChargeTo"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 80):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minnurpvsoclp1=", msg.payload.decode("utf-8")]
