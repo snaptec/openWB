@@ -2897,9 +2897,9 @@ do
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
 done
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m " "
+mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
-mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
+mosquitto_pub -t openWB/global/strLastmanagementActive -r -m ""
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
