@@ -190,6 +190,7 @@ function computeAndSetCurrentForChargePoint() {
 
 			if (( $llneu > $PreviousExpectedChargeCurrent )); then
 				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu > PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Not changing allowed current."
+				llneu=$PreviousExpectedChargeCurrent
 			else
 				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu <= PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Limiting allowed current to $AllowedTotalCurrentPerPhase A."
 				llneu=$AllowedTotalCurrentPerPhase
