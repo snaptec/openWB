@@ -121,9 +121,11 @@
 										<label class="btn btn-outline-info btn-toggle">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="1" value="1"> Energiemenge
 										</label>
+										<?php if( $chargepoint <= 2 ){ ?>
 										<label class="btn btn-outline-info btn-toggle">
 											<input type="radio" name="chargeLimitationLp<?php echo $chargepoint; ?>" data-option="2" value="2"> EV-SoC
 										</label>
+										<?php } ?>
 									</div>
 									<span class="form-text small">Auswahl der Lademengen-Begrenzung im Modus Sofortladen.
 										<span class="text-danger">
@@ -151,6 +153,7 @@
 									</div>
 								</div>
 							</div>
+							<?php if( $chargepoint <= 2 ){ ?>
 							<div class="form-group mb-0 lp<?php echo $chargepoint; ?>limitsoc hide">
 								<div class="form-row mb-1">
 									<label for="socToChargeToLp<?php echo $chargepoint; ?>" class="col-md-4 col-form-label">SoC</label>
@@ -170,20 +173,27 @@
 									</div>
 								</div>
 							</div>
+							<?php } ?>
 						</div>  <!-- end card body Einstellungen Ladepunkt <?php echo $chargepoint; ?> -->
 						<script>
 							$(document).ready(function(){
 								$('input[type=radio][name=chargeLimitationLp<?php echo $chargepoint; ?>]').change(function(){
 									if(this.value == '0') {
 										$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+										<?php if( $chargepoint <= 2 ){ ?>
 										$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+										<?php } ?>
 									} else {
 										if(this.value == 1) {
 											$('.lp<?php echo $chargepoint; ?>limitenergy').show();
+											<?php if( $chargepoint <= 2 ){ ?>
 											$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+											<?php } ?>
 										} else {
 											$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+											<?php if( $chargepoint <= 2 ){ ?>
 											$('.lp<?php echo $chargepoint; ?>limitsoc').show();
+											<?php } ?>
 										}
 									}
 								})
@@ -313,7 +323,7 @@
 						$('.lp' + index + 'options').hide();
 					}
 				}
-				if ( elementId.match( /^chargeLimitationLp[1-9]*$/i ) ) {
+				if ( elementId.match( /^chargeLimitationLp[1-2]*$/i ) ) {
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 0) {
@@ -327,6 +337,15 @@
 							$('.lp' + index + 'limitenergy').hide();
 							$('.lp' + index + 'limitsoc').show();
 						}
+					}
+				}
+				if ( elementId.match( /^chargeLimitationLp[3-8]*$/i ) ) {
+					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
+					// now call functions or set variables corresponding to the index
+					if ( mqttpayload == 0) {
+						$('.lp' + index + 'limitenergy').hide();
+					} else {
+						$('.lp' + index + 'limitenergy').show();
 					}
 				}
 			}
