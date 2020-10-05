@@ -32,7 +32,11 @@ count1=count1+1
 # aktuelle Leistung lesen
 start = 1000
 #start = 3524 test
+<<<<<<< Updated upstream
 #client = ModbusTcpClient(ipadr, port=502)
+=======
+client = ModbusTcpClient(ipadr, port=502)
+>>>>>>> Stashed changes
 resp=client.read_holding_registers(start,10,unit=1)
 #resp=client.read_input_registers(start,10,unit=1)
 value1 = resp.registers[0]
