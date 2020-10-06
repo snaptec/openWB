@@ -107,6 +107,9 @@
 										<label class="btn btn-outline-info">
 											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Tasmota" data-option="tasmota">Tasmota
 										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Pyt" data-option="pyt"> Pyt
+										</label>
 									</div>
 								</div>
 							</div>
