@@ -3737,40 +3737,7 @@
 							});
 						});
 					</script>
-					<script><div id="lastlp8mman" style="margin:5em;">
-						<div class="row">
-							<b><label for="lp8name">Name Ladepunkt 8:</label></b>
-									<input type="text" name="lp8name" id="lp8name" value="<?php echo $lp8nameold ?>">
-						</div>
-						<div class="row bg-info">
-							<b><label for="evseiplp8">EVSE IP:</label></b>
-							<input type="text" name="evseiplp8" id="evseiplp8" value="<?php echo $evseiplp8old ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse.
-						</div>
-						<div class="row bg-info">
-							<b><label for="evseidlp8">EVSE ID:</label></b>
-							<input type="text" name="evseidlp8" id="evseidlp8" value="<?php echo $evseidlp8old ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID der EVSE.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp8ip">MPM3PM Modbus Ladeleistung IP:</label></b>
-							<input type="text" name="mpmlp8ip" id="mpmlp8ip" value="<?php echo $mpmlp8ipold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte IP Adresse des Modbus Ethernet Konverters.
-						</div>
-						<div class="row bg-info">
-							<b><label for="mpmlp8id">MPM3PM Modbus Ladeleistung ID:</label></b>
-							<input type="text" name="mpmlp8id" id="mpmlp8id" value="<?php echo $mpmlp8idold ?>">
-						</div>
-						<div class="row bg-info">
-							Gültige Werte 1-254. Modbus ID des MPM3PM.
-						</div>
-					</div>
+					<script>
 
 
 						function display_lastmanagementlp5() {
