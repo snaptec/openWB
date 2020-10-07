@@ -9,15 +9,17 @@ import argparse
 import re
 import getopt
 import subprocess
-os.chdir('/var/www/html/openWB')
+
+basePath = '/var/www/html/openWB'
+os.chdir(basePath)
 config = configparser.ConfigParser()
-config.read('/var/www/html/openWB/smarthome.ini')
-prefixpy = '/var/www/html/openWB/modules/smart_'
+config.read(basePath+'/smarthome.ini')
+prefixpy = basePath+'/modules/smart_'
 loglevel=2
 DeviceValues = { }
 DeviceTempValues = { }
 DeviceCounters = { }
-for i in range(0, 10):
+for i in range(1, 11):
     DeviceTempValues.update({'oldw'+str(i) : '2'})
     DeviceTempValues.update({'oldwh'+str(i) : '2'})
     DeviceTempValues.update({'oldtemp'+str(i) : '2'})
@@ -26,11 +28,11 @@ for i in range(0, 10):
     DeviceValues.update({ str(i)+"runningtime" : int(0)})
     DeviceValues.update( {str(i)+"WHImported_tmp" : int(0)})
 
-
 global numberOfDevices
+
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
-        file = open('/var/www/html/openWB/ramdisk/smarthome.log', 'a')
+        file = open(basePath+'/ramdisk/smarthome.log', 'a')
         if (int(level) == 0):
             file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 1):
@@ -38,29 +40,30 @@ def logDebug(level, msg):
         if (int(level) == 2):
             file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
         file.close()
+
 def simcount(watt2, pref, importfn, exportfn, nummer):
     # emulate import  export
     seconds2= time.time()
     watt1=0
     seconds1=0.0
-    if os.path.isfile('/var/www/html/openWB/ramdisk/'+pref+'sec0'): 
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'sec0', 'r')
+    if os.path.isfile(basePath+'/ramdisk/'+pref+'sec0'): 
+        f = open(basePath+'/ramdisk/'+pref+'sec0', 'r')
         seconds1=float(f.read())
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'wh0', 'r')
+        f = open(basePath+'/ramdisk/'+pref+'wh0', 'r')
         watt1=int(f.read())
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0pos', 'r')
+        f = open(basePath+'/ramdisk/'+pref+'watt0pos', 'r')
         wattposh=int(f.read())
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0neg', 'r')
+        f = open(basePath+'/ramdisk/'+pref+'watt0neg', 'r')
         wattnegh=int(f.read())
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'sec0', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'sec0', 'w')
         value1 = "%22.6f" % seconds2
         f.write(str(value1))
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'wh0', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'wh0', 'w')
         f.write(str(watt2))
         f.close()
         seconds1=seconds1+1
@@ -88,49 +91,49 @@ def simcount(watt2, pref, importfn, exportfn, nummer):
                 wattposh= wattposh + watt1
         wattposkh=wattposh/3600
         wattnegkh=(wattnegh*-1)/3600
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0pos', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'watt0pos', 'w')
         f.write(str(wattposh))
         f.close()
         DeviceValues.update( {str(nummer) + "wpos" : wattposh})
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'watt0neg', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'watt0neg', 'w')
         f.write(str(wattnegh))
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+ importfn,'w')
-        #    f = open('/var/www/html/openWB/ramdisk/speicherikwh', 'w')
+        f = open(basePath+'/ramdisk/'+ importfn,'w')
+        #    f = open(basePath+'/ramdisk/speicherikwh', 'w')
         DeviceValues.update( {str(nummer) + "wh" : round(wattposkh, 2)})
         f.write(str(round(wattposkh, 2)))
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/' +exportfn , 'w')
-        #   f = open('/var/www/html/openWB/ramdisk/speicherekwh', 'w')
+        f = open(basePath+'/ramdisk/' +exportfn , 'w')
+        #   f = open(basePath+'/ramdisk/speicherekwh', 'w')
         f.write(str(wattnegkh))
         f.close()
     else: 
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'sec0', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'sec0', 'w')
         value1 = "%22.6f" % seconds2
         f.write(str(value1))
         f.close()
-        f = open('/var/www/html/openWB/ramdisk/'+pref+'wh0', 'w')
+        f = open(basePath+'/ramdisk/'+pref+'wh0', 'w')
         f.write(str(watt2))
         f.close()
 
-def publishmqtt(case):
+def publishmqtt():
+    """ arg parser not used here
+    TODO remove lines
     parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
     parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
     parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
     parser.set_defaults(retain=False)
     args = parser.parse_args()
+    """
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key in DeviceValues:
-
         if ( "relais" in key):
             nummer = int(list(filter(str.isdigit, key))[0])
-
             if ( DeviceValues[str(key)] != DeviceTempValues['oldrelais' + str(nummer)]):
                 client.publish("openWB/SmartHome/Devices/"+str(nummer)+"/RelayStatus", payload=DeviceValues[str(key)], qos=0, retain=True)
                 client.loop(timeout=2.0)
                 DeviceTempValues.update({'oldrelais'+str(nummer) : DeviceValues[str(key)]})
-
         if ( "time" in key):
             nummer = str(list(filter(str.isdigit, key))[0])
             if ( DeviceValues[str(key)] != DeviceTempValues['oldtime' + str(nummer)]):   
@@ -196,32 +199,28 @@ def loadregelvars():
             loglevel = int(value.read())
     except:
             loglevel=2
-            f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')
+            f = open(basePath+'/ramdisk/smarthomehandlerloglevel', 'w')
             f.write(str(2))
             f.close()
-
     try:
         with open('ramdisk/rereadsmarthomedevices', 'r') as value:
             reread = int(value.read())
     except:
         reread = 1
-        config.read('/var/www/html/openWB/smarthome.ini')
+        config.read(basePath+'/smarthome.ini')
     if ( reread == 1):
-        config.read('/var/www/html/openWB/smarthome.ini')
-        f = open('/var/www/html/openWB/ramdisk/rereadsmarthomedevices', 'w')
+        config.read(basePath+'/smarthome.ini')
+        f = open(basePath+'/ramdisk/rereadsmarthomedevices', 'w')
         f.write(str(0))
         f.close()
         logDebug("2", "Config reRead")
-
-
-
-    for i in range(1, 10):
+    for i in range(1, 11):
         try:
             with open('ramdisk/smarthome_device_manual_' + str(i), 'r') as value:
                 DeviceValues.update( {str(i) + "manual": int(value.read())}) 
         except:
             DeviceValues.update( {str(i) + "manual": 0})
-    for i in range(1, 10):
+    for i in range(1, 11):
         try:
             with open('ramdisk/smarthome_device_manual_control_' + str(i), 'r') as value:
                 DeviceValues.update( {str(i) + "manualmodevar": int(value.read())}) 
@@ -231,19 +230,18 @@ def loadregelvars():
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
+
 def on_message(client, userdata, msg):
     if (( "openWB/SmartHome/Device" in msg.topic) and ("WHImported_temp" in msg.topic)):
-        devicenumb=re.sub('\D', '', msg.topic)
+        devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 ):
             DeviceValues.update( {str(devicenumb)+"WHImported_tmp": int(msg.payload)})
     if (( "openWB/SmartHome/Device" in msg.topic) and ("RunningTimeToday" in msg.topic)):
-        devicenumb=re.sub('\D', '', msg.topic)
+        devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 10 ):
             DeviceValues.update( {str(devicenumb)+"runningtime": int(msg.payload)})
 
-
 client = mqtt.Client("openWB-mqttsmarthome")
-
 client.on_connect = on_connect
 client.on_message = on_message
 startTime = time.time()
@@ -256,6 +254,7 @@ while True:
     if elapsedTime > waitTime:
         client.disconnect()
         break
+
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
     DeviceList = [config.get('smarthomedevices', 'device_configured_1'), config.get('smarthomedevices', 'device_configured_2'), config.get('smarthomedevices', 'device_configured_3'), config.get('smarthomedevices', 'device_configured_4'), config.get('smarthomedevices', 'device_configured_5'), config.get('smarthomedevices', 'device_configured_6'), config.get('smarthomedevices', 'device_configured_7'), config.get('smarthomedevices', 'device_configured_8'), config.get('smarthomedevices', 'device_configured_9'), config.get('smarthomedevices', 'device_configured_10')] 
@@ -274,30 +273,30 @@ def getdevicevalues():
                             for i in range(anzahltemp):
                                 temp = str(answer['ext_temperature'][str(i)]['tC'])
                                 DeviceValues.update( {str(numberOfDevices) + "temp" + str(i) : temp })
-                                f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_temp'+ str(i), 'w')
+                                f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_temp'+ str(i), 'w')
                                 f.write(str(temp))
                                 f.close()
                     except:
                         pass
                     DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
+                    f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
                     f.write(str(watt))
                     f.close()
-                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
+                    f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
                     f.write(str(relais))
                     f.close()
                     try:
-                        with open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
+                        with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                             importtemp = int(value.read())
                         simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
-                        importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"])
+                        #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                     except Exception as e: 
                         importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
-                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
+                        f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
                         f.write(str(importtemp))
                         f.close()
-                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
+                        f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
                         f.write(str("0"))
                         f.close()
                     #Update Einschaltdauer Timer
@@ -348,23 +347,23 @@ def getdevicevalues():
                         relais=0
                     DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
+                    f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
                     f.write(str(watt))
                     f.close()
-                    f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
+                    f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
                     f.write(str(relais))
                     f.close()
                     try:
-                        with open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
+                        with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                             importtemp = int(value.read())
                         simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
-                        importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"])
+                        #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                     except Exception as e: 
                         importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
-                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
+                        f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
                         f.write(str(importtemp))
                         f.close()
-                        f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
+                        f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
                         f.write(str("0"))
                         f.close()
                     #Update Einschaltdauer Timer
@@ -401,18 +400,18 @@ def getdevicevalues():
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device tasmota " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
-# pyt start
+            # pyt start
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "pyt"):
                 try:
                     pyname0 = config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))
                     pyname = prefixpy + pyname0.lower()+ "/watt.py"
-                    if os.path.isfile( pyname  ): 
+                    if os.path.isfile(pyname):
                        proc=subprocess.Popen( ['python3',pyname,str(numberOfDevices),config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)),str(uberschuss)])
-                       procout= proc.communicate()                     
-                       f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
+                       procout= proc.communicate() # TODO unused variable?
+                       f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
                        answerj=json.load(f1)
                        f1.close()
-                       answer =  json.loads(answerj)             
+                       answer = json.loads(answerj)
                        watt = int(answer['power'])
                        if (int(answer['on']) == 1):
                           relais=1
@@ -420,23 +419,23 @@ def getdevicevalues():
                           relais=0
                        DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                        DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                       f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
+                       f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
                        f.write(str(watt))
                        f.close()
-                       f = open('/var/www/html/openWB/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
+                       f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_relais', 'w')
                        f.write(str(relais))
                        f.close()
                        try:
-                          with open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
+                          with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                               importtemp = int(value.read())
                           simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
-                          importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"])
+                          #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                        except Exception as e: 
                           importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
-                          f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
+                          f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'w')
                           f.write(str(importtemp))
                           f.close()
-                          f = open('/var/www/html/openWB/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
+                          f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
                           f.write(str("0"))
                           f.close()
                       #Update Einschaltdauer Timer
@@ -473,8 +472,9 @@ def getdevicevalues():
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device pyt " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
-# pyt end
-    publishmqtt("1")
+            # pyt end
+    publishmqtt()
+
 def turndevicerelais(nummer, zustand):
     if ( config.get('smarthomedevices', 'device_type_'+str(nummer)) == "shelly"):
         if ( zustand == 1):
@@ -504,7 +504,7 @@ def turndevicerelais(nummer, zustand):
                 logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
             except Exception as e:
                 logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
-#pyt start
+    #pyt start
     if ( config.get('smarthomedevices', 'device_type_'+str(nummer)) == "pyt"):
         if ( zustand == 1):
             try:
@@ -514,7 +514,7 @@ def turndevicerelais(nummer, zustand):
                   logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
                   DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
                   proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
-                  procout= proc.communicate()
+                  procout= proc.communicate() # TODO unused variable?
             except Exception as e:
                 logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
         if ( zustand == 0):
@@ -528,8 +528,8 @@ def turndevicerelais(nummer, zustand):
                   logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
             except Exception as e:
                 logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+    #pyt ende
 
-#pyt ende
 def conditions(nummer):
     try:
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
@@ -624,6 +624,7 @@ def conditions(nummer):
                 del DeviceCounters[str(nummer)+"ausverz"]
             except:
                 pass
+
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
 
@@ -631,19 +632,20 @@ def resetmaxeinschaltdauerfunc():
     if (int(hour) == 0):
         try:
             if (int(resetmaxeinschaltdauer) == 0):
-                for i in range(0, 10):
+                for i in range(1, 11):
                     DeviceValues.update({str(i) + "runningtime" : '0'})
                 resetmaxeinschaltdauer=1
         except:
             resetmaxeinschaltdauer=0
     if (int(hour) == 2):
         resetmaxeinschaltdauer=0
+
 while True:
-    config.read('/var/www/html/openWB/smarthome.ini')
+    config.read(basePath+'/smarthome.ini')
     loadregelvars()
     getdevicevalues()
     resetmaxeinschaltdauerfunc()
-    for i in range(1,11):
+    for i in range(1, 11):
         try:
             configured = config.get('smarthomedevices', 'device_configured_' + str(i))
             if (configured == "1"):
