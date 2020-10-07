@@ -117,7 +117,7 @@ def simcount(watt2, pref, importfn, exportfn, nummer):
         f.close()
 
 def publishmqtt():
-    """ arg parser nor used here
+    """ arg parser not used here
     TODO remove lines
     parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
     parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
