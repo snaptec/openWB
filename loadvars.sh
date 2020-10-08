@@ -1537,6 +1537,7 @@ mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1
 mqttconfvar["config/get/pv/lp/2/maxSoc"]=stopchargepvpercentagelp2
 mqttconfvar["global/rfidConfigured"]=rfidakt
 
+
 for mq in "${!mqttconfvar[@]}"; do
 	theval=${!mqttconfvar[$mq]}
 	declare o${mqttconfvar[$mq]}
