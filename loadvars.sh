@@ -61,8 +61,16 @@ lp7enabled=$(<ramdisk/lp7enabled)
 lp8enabled=$(<ramdisk/lp8enabled)
 version=$(<web/version)
 # EVSE DIN Plug State
+declare -r IsNumberRegex='^[0-9]+$'
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
+	if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
+	    # EVSE read returned empty or non-numeric value --> use last state for this loop
+		evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
+		echo "$(date +%s) Modbus EVSE read CP1 issue - using previous state '${evseplugstate}'"
+	else
+	    echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
+	fi
 	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
 		if [[ $evseplugstate > "1" ]]; then
@@ -97,6 +105,12 @@ else
 fi
 if [[ $evsecon == "ipevse" ]]; then
 	evseplugstatelp1=$(sudo python runs/readipmodbus.py $evseiplp1 $evseidlp1 1002 1)
+	if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
+		evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
+		echo "$(date +%s) IP EVSE read CP1 issue - using previous state '${evseplugstate}'"
+	else
+	    echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
+	fi
 	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [[ $evseplugstatelp1 > "1" ]]; then
 		echo 1 > /var/www/html/openWB/ramdisk/plugstat
@@ -119,11 +133,17 @@ if [[ $lastmanagement == "1" ]]; then
 	ConfiguredChargePoints=2
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) Modbus EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 		if [[ $evseplugstatelp2 > "0" ]] && [[ $evseplugstatelp2 < "7" ]] ; then
 			if [[ $evseplugstatelp2 > "1" ]]; then
 				plugstat2=$(</var/www/html/openWB/ramdisk/plugstats1)
-				
+
 				if [[ $plugstat2 == "0" ]] ; then
 					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
@@ -153,6 +173,12 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	if [[ $evsecons1 == "slaveeth" ]]; then
 		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) Slaveeth EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
 		if [[ $evseplugstatelp2 > "1" ]]; then
@@ -168,6 +194,12 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	if [[ $evsecons1 == "ipevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readipmodbus.py $evseiplp2 $evseidlp2 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) IP EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuslp2=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
 		if [[ $evseplugstatelp2 > "1" ]]; then
@@ -193,6 +225,12 @@ if [[ $lastmanagements2 == "1" ]]; then
 	ConfiguredChargePoints=3
 	if [[ $evsecons2 == "ipevse" ]]; then
 		evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
+		if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
+			echo "$(date +%s) IP EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
+		else
+			echo $evseplugstatelp3 > /var/www/html/openWB/ramdisk/evseplugstatelp3
+		fi
 		ladestatuslp3=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 
 		if [[ $evseplugstatelp3 > "1" ]]; then
@@ -215,6 +253,12 @@ if [[ $lastmanagements2 == "1" ]]; then
 
 	if [[ $evsecons2 == "modbusevse" ]]; then
 	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
+			if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
+				evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
+				echo "$(date +%s) Modbus EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
+			else
+				echo $evseplugstatelp3 > /var/www/html/openWB/ramdisk/evseplugstatelp3
+			fi
 	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 	        if [[ $evseplugstatelp3 > "1" ]]; then
 	                echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
@@ -237,6 +281,13 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	ConfiguredChargePoints=4
 	if [[ $evseconlp4 == "ipevse" ]]; then
 		evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
+		if [ -z "${evseplugstatelp4}" ] || ! [[ "${evseplugstatelp4}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp4=$(</var/www/html/openWB/ramdisk/evseplugstatelp4)
+			echo "$(date +%s) IP EVSE read CP4 issue - using previous state '${evseplugstatelp4}'"
+		else
+			echo $evseplugstatelp4 > /var/www/html/openWB/ramdisk/evseplugstatelp4
+		fi
 		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
 
 		if [[ $evseplugstatelp4 > "1" ]]; then
@@ -255,6 +306,13 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	ConfiguredChargePoints=5
 	if [[ $evseconlp5 == "ipevse" ]]; then
 		evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
+		if [ -z "${evseplugstatelp5}" ] || ! [[ "${evseplugstatelp5}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp5=$(</var/www/html/openWB/ramdisk/evseplugstatelp5)
+			echo "$(date +%s) IP EVSE read CP5 issue - using previous state '${evseplugstatelp5}'"
+		else
+			echo $evseplugstatelp5 > /var/www/html/openWB/ramdisk/evseplugstatelp5
+		fi
 		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
 
 		if [[ $evseplugstatelp5 > "1" ]]; then
@@ -273,6 +331,13 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	ConfiguredChargePoints=6
 	if [[ $evseconlp6 == "ipevse" ]]; then
 		evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
+		if [ -z "${evseplugstatelp6}" ] || ! [[ "${evseplugstatelp6}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp6=$(</var/www/html/openWB/ramdisk/evseplugstatelp6)
+			echo "$(date +%s) IP EVSE read CP6 issue - using previous state '${evseplugstatelp6}'"
+		else
+			echo $evseplugstatelp6 > /var/www/html/openWB/ramdisk/evseplugstatelp6
+		fi
 		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
 
 		if [[ $evseplugstatelp6 > "1" ]]; then
@@ -291,6 +356,13 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	ConfiguredChargePoints=7
 	if [[ $evseconlp7 == "ipevse" ]]; then
 		evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
+		if [ -z "${evseplugstatelp7}" ] || ! [[ "${evseplugstatelp7}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp7=$(</var/www/html/openWB/ramdisk/evseplugstatelp7)
+			echo "$(date +%s) IP EVSE read CP7 issue - using previous state '${evseplugstatelp7}'"
+		else
+			echo $evseplugstatelp7 > /var/www/html/openWB/ramdisk/evseplugstatelp7
+		fi
 		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
 
 		if [[ $evseplugstatelp7 > "1" ]]; then
@@ -309,6 +381,13 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 	ConfiguredChargePoints=8
 	if [[ $evseconlp8 == "ipevse" ]]; then
 		evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
+		if [ -z "${evseplugstatelp8}" ] || ! [[ "${evseplugstatelp8}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp4=$(</var/www/html/openWB/ramdisk/evseplugstatelp8)
+			echo "$(date +%s) IP EVSE read CP8 issue - using previous state '${evseplugstatelp8}'"
+		else
+			echo $evseplugstatelp8 > /var/www/html/openWB/ramdisk/evseplugstatelp8
+		fi
 		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
 
 		if [[ $evseplugstatelp8 > "1" ]]; then
@@ -400,9 +479,9 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla1=$(echo $lla1 | sed 's/\..*$//')
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
-	llv1=$(cat /var/www/html/openWB/ramdisk/llv1) 
-	llv2=$(cat /var/www/html/openWB/ramdisk/llv2) 
-	llv3=$(cat /var/www/html/openWB/ramdisk/llv3) 
+	llv1=$(cat /var/www/html/openWB/ramdisk/llv1)
+	llv2=$(cat /var/www/html/openWB/ramdisk/llv2)
+	llv3=$(cat /var/www/html/openWB/ramdisk/llv3)
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
