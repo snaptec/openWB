@@ -244,21 +244,15 @@ def getmeter():
                 pass
 
 
-        try:
-            time.sleep(0.1)
-            rq = client.read_holding_registers(1000,1,unit=1) 
-            lp1ll = rq.registers[0]
+        time.sleep(0.1)
+        rq = client.read_holding_registers(1000,1,unit=1) 
+        lp1ll = rq.registers[0]
 
-        except:
-            lp1ll = 0
 
-        try:
-            time.sleep(0.1)
-            rq = client.read_holding_registers(1002,1,unit=1) 
-            lp1var = rq.registers[0]
-        except Exception as e:
-            logDebug("2", "Fehler:" + str(e))
-            lp1var = 5
+        time.sleep(0.1)
+        rq = client.read_holding_registers(1002,1,unit=1) 
+        lp1var = rq.registers[0]
+
         if ( lp1var == 5 ):
             Values.update({'lp1plugstat' : 0})
             Values.update({'lp1chargestat' : 0})
