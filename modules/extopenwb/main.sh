@@ -29,7 +29,6 @@ kWhCounter=$(grep kWhCounter /var/www/html/openWB/ramdisk/$outputname |head -1 |
 LastScannedRfidTag=$(grep LastScannedRfidTag /var/www/html/openWB/ramdisk/$outputname |head -1 | awk '{print $2}')
 
 
-
 if (( chargep == "1" ));then
 	echo $VPhase1 > /var/www/html/openWB/ramdisk/llv1
 	echo $VPhase2 > /var/www/html/openWB/ramdisk/llv2
@@ -41,6 +40,8 @@ if (( chargep == "1" ));then
 	echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwh
 	echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstat
 	echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestat
+	soc=$(</var/www/html/openWB/ramdisk/soc)
+	mosquitto_pub -h $ip -r -t openWB/set/lp/$chargepcp/%Soc -m "$soc"
 
 
 fi
@@ -55,6 +56,9 @@ if (( chargep == "2" ));then
 	echo $kWhCounter > /var/www/html/openWB/ramdisk/llkwhs1
 	echo $boolPlugStat > /var/www/html/openWB/ramdisk/plugstats1
 	echo $boolChargeStat > /var/www/html/openWB/ramdisk/chargestats1
+	soc=$(</var/www/html/openWB/ramdisk/soc1)
+	mosquitto_pub -h $ip -r -t openWB/set/lp/$chargepcp/%Soc -m "$soc"
+
 fi
 if (( chargep == "3" ));then
 	echo $VPhase1 > /var/www/html/openWB/ramdisk/llvs21
