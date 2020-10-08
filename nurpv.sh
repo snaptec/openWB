@@ -84,7 +84,8 @@ if [[ $lastmanagement == "0" ]]; then
 					runs/set-current.sh $minnurpvsocll all
 					echo "$date LP1, Lademodus NurPV. Ladung geändert auf $minnurpvsocll Ampere, $soc % SoC noch nicht erreicht" >> ramdisk/ladestatus.log
 				fi
-			fi 
+			fi
+			echo "Ladung mit $minnurpvsocll Ampere, da $soc % SoC noch nicht erreicht" > ramdisk/lastregelungaktiv
 		exit 0
 		fi
 		if (( soc > maxnurpvsoclp1 )); then
