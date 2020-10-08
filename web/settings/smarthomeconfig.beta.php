@@ -63,7 +63,7 @@
 
 			<form id="myForm">
 				<h1>Einstellungen für SmartHome Geräte</h1>
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
@@ -106,6 +106,9 @@
 										</label>
 										<label class="btn btn-outline-info">
 											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Tasmota" data-option="tasmota">Tasmota
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Pyt" data-option="pyt"> Pyt
 										</label>
 									</div>
 								</div>

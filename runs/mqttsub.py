@@ -104,8 +104,8 @@ def on_message(client, userdata, msg):
             client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_name", "", qos=0, retain=True)
     if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6):
-            if ( msg.payload.decode("utf-8") == "tasmota" or msg.payload.decode("utf-8") == "shelly"):
+        if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 2):
+            if ( msg.payload.decode("utf-8") == "tasmota" or msg.payload.decode("utf-8") == "shelly" or msg.payload.decode("utf-8") == "pyt"):
                 writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_type", "", qos=0, retain=True)
@@ -371,6 +371,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "maximalstromstaerke=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/config/get/global/maxEVSECurrentAllowed", msg.payload.decode("utf-8"), qos=0, retain=True)
+    if (msg.topic == "openWB/config/set/global/dataProtectionAcknoledged"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+            sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "datenschutzack=", msg.payload.decode("utf-8")]
+            subprocess.Popen(sendcommand)
+            client.publish("openWB/config/get/global/dataProtectionAcknoledged", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/global/dataProtectionAcknoledged", "", qos=0, retain=True)
     if (msg.topic == "openWB/config/set/pv/lp/1/minSocAlwaysToChargeTo"):
         if (int(msg.payload) >= 0 and int(msg.payload) <= 80):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "minnurpvsoclp1=", msg.payload.decode("utf-8")]

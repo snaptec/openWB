@@ -8,7 +8,7 @@ if ! [ -x "$(command -v vim)" ]; then
 	apt-get -qq install -y vim
 	echo "... installed"
 else
-	    echo "...ok"
+	echo "...ok"
 fi
 echo "check for timezone"
 if  grep -Fxq "Europe/Berlin" /etc/timezone
@@ -32,14 +32,14 @@ fi
 echo "check for apache"
 if ! [ -x "$(command -v apachectl)" ]; then
 	apt-get -qq install -y apache2
-        sleep 2
+	sleep 2
 	apt-get -qq install -y php
 	sleep 1
 	apt-get -qq install -y php-gd
 	sleep 1
 	apt-get -qq install -y php7.0-xml
 	sleep 2
-        apt-get -qq install -y php-curl
+	apt-get -qq install -y php-curl
 	sleep 1	
 	apt-get -qq install -y libapache2-mod-php7.0
 	sleep 2
@@ -72,7 +72,6 @@ else
 fi
 
 echo "check for git"
-
 if ! [ -x "$(command -v git)" ]; then
 	apt-get -qq install -y git
 	echo "... installed"
@@ -104,7 +103,6 @@ else
 	echo "...created"
 fi
 
-
 echo "check for crontab"
 if grep -Fxq "@reboot /var/www/html/openWB/runs/atreboot.sh &" /var/spool/cron/crontabs/root
 then
@@ -128,7 +126,6 @@ else
 	echo "...ok"
 fi
 
-
 echo "check for socat"
 if ! [ -x "$(command -v socat)" ]; then
 	apt-get -qq install -y socat
@@ -137,7 +134,6 @@ else
 	echo "...ok"
 fi
 
-
 echo "disable cronjob logging"
 if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
 then
@@ -145,13 +141,14 @@ then
 else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
-sudo /bin/su -c "echo 'upload_max_filesize = 30M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
 
 chmod 777 /var/www/html/openWB/openwb.conf
-chmod +x /var/www/html/openWB/modules/*                     
+chmod +x /var/www/html/openWB/modules/*
 chmod +x /var/www/html/openWB/runs/*
 touch /var/log/openWB.log
 chmod 777 /var/log/openWB.log

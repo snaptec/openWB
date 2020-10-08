@@ -183,7 +183,7 @@ if (( cpunterbrechunglp1 == 1 )); then
 			       cpulp1counter=$(<ramdisk/cpulp1counter)
 			       if (( cpulp1counter > 5 )); then
 				       if (( cpulp1waraktiv == 0 )); then
-						echo "CP Unterbrechung an LP1 durchgeführt"
+						echo "$(date +%s) CP Unterbrechung an LP1 durchgeführt"
 						if [[ $evsecon == "simpleevsewifi" ]]; then
 							curl --silent --connect-timeout $evsewifitimeoutlp1 -s http://$evsewifiiplp1/interruptCp > /dev/null
 						elif [[ $evsecon == "ipevse" ]]; then
@@ -215,7 +215,7 @@ if (( cpunterbrechunglp2 == 1 )); then
                        if (( ladeleistunglp2 < 200 )); then
                                cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
                                if (( cpulp2waraktiv == 0 )); then
-				       echo "CP Unterbrechung an LP2 durchgeführt"
+				       echo "$(date +%s) CP Unterbrechung an LP2 durchgeführt"
 					if [[ $evsecons1 == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
 					elif [[ $evsecons1 == "ipevse" ]]; then

@@ -211,6 +211,7 @@ echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_6
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_7
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_8
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_9
+echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_10
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
@@ -2897,9 +2898,9 @@ do
 		mosquitto_pub -r -t openWB/config/get/SmartHome/Devices/$i/device_configured -m "0"
 	fi
 done
-mosquitto_pub -r -t openWB/global/awattar/pricelist -m " "
+mosquitto_pub -r -t openWB/global/awattar/pricelist -m ""
 mosquitto_pub -r -t openWB/graph/boolDisplayLiveGraph -m "1"
-mosquitto_pub -t openWB/strLastmanagementActive -r -m " "
+mosquitto_pub -t openWB/global/strLastmanagementActive -r -m ""
 mosquitto_pub -t openWB/lp/1/W -r -m "0"
 mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
@@ -2915,4 +2916,4 @@ echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
 sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-
+sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
