@@ -137,7 +137,7 @@
 							<div class="form-row mb-1">
 								<label for="startDelay" class="col-md-4 col-form-label">Einschaltverzögerung</label>
 								<div class="col">
-									<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="10" data-default="10" data-topicprefix="openWB/config/get/pv/">
+									<input id="startDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="20" data-default="20" data-topicprefix="openWB/config/get/pv/">
 									<span class="form-text small">Parameter in Sekunden [s] für die Verzögerung bis Ladebeginn im Modus PV-Laden. Die Ladung startet erst, wenn für die hier eingestellte Zeit die <b>Einspeisung dauerhaft</b> über der Einschaltschwelle liegt. Fällt die Einspeisung innerhalb der Zeitspanne unter die Einschaltschwelle, zählt die Zeit von vorne.</span>
 								</div>
 							</div>
@@ -165,7 +165,7 @@
 							<div class="form-row mb-1">
 								<label for="stopDelay" class="col-md-4 col-form-label">Abschaltverzögerung</label>
 								<div class="col">
-									<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="10" data-default="10" data-topicprefix="openWB/config/get/pv/">
+									<input id="stopDelay" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="2400" value="60" data-default="60" data-topicprefix="openWB/config/get/pv/">
 									<span class="form-text small">Parameter in Sekunden [s] für die Verzögerung bis Ladestop im Modus PV-Laden. Die Ladung stoppt erst, wenn wenn für die hier eingestellte Zeit der <b>Bezug dauerhaft</b> über der Abschaltschwelle liegt. Fällt der Bezug innerhalb der Zeitspanne unter die Abschaltschwelle, zählt die Zeit von vorne.</span>
 								</div>
 							</div>
