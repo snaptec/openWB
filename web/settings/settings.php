@@ -2326,7 +2326,7 @@
 														Phase 1
 													</div>
 												</div> 
-												<input type="number" min="7" max="64" step="1" name="lastmaxap1" id="lastmaxap1" class="form-control" value="<?php echo trim( $lastmaxap1old ) ?>">
+												<input type="number" min="7" max="125" step="1" name="lastmaxap1" id="lastmaxap1" class="form-control" value="<?php echo trim( $lastmaxap1old ) ?>">
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -2336,7 +2336,7 @@
 														Phase 2
 													</div>
 												</div> 
-												<input type="number" min="7" max="64" step="1" name="lastmaxap2" id="lastmaxap2" class="form-control" value="<?php echo trim( $lastmaxap2old ) ?>">
+												<input type="number" min="7" max="125" step="1" name="lastmaxap2" id="lastmaxap2" class="form-control" value="<?php echo trim( $lastmaxap2old ) ?>">
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -2346,11 +2346,11 @@
 														Phase 3
 													</div>
 												</div> 
-												<input type="number" min="7" max="64" step="1" name="lastmaxap3" id="lastmaxap3" class="form-control" value="<?php echo trim( $lastmaxap3old ) ?>">
+												<input type="number" min="7" max="125" step="1" name="lastmaxap3" id="lastmaxap3" class="form-control" value="<?php echo trim( $lastmaxap3old ) ?>">
 											</div>
 										</div>
 									</div>
-									<span class="form-text small">Gültige Werte 7-64. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.</span>
+									<span class="form-text small">Gültige Werte 7-125. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
