@@ -8,14 +8,13 @@ import socket
 import struct
 import codecs
 from pymodbus.client.sync import ModbusTcpClient
-
 named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S elwa off.py", named_tuple)
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S acthor off.py", named_tuple)
 devicenumber=str(sys.argv[1])
 ipadr=str(sys.argv[2])
 uberschuss=int(sys.argv[3])
 # standard
-file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_elwa.log'
+file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_acthor.log'
 file_stringpv= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_pv'
 file_stringcount= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_count'
 if os.path.isfile(file_string):
@@ -26,7 +25,7 @@ print ('%s devicenr %s ipadr %s ueberschuss %6d try to connect (modbus)' % (time
 client = ModbusTcpClient(ipadr, port=502)
 start = 1000
 resp=client.read_holding_registers(start,10,unit=1)
-#start = 3524 test
+#start = 3524
 #resp=client.read_input_registers(start,10,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
@@ -36,8 +35,16 @@ all = format(value1, '04x')
 status= int(struct.unpack('>h',codecs.decode(all, 'hex') )[0])
 print ('%s devicenr %s ipadr %s Akt Leistung  %6d Status %2d' % (time_string,devicenumber,ipadr,aktpower,status),file=f)
 f.close()
+pvmodus = 0
+if os.path.isfile(file_stringpv):
+   f = open( file_stringpv , 'r')
+   pvmodus =int(f.read())
+   f.close()
+#wenn vorher pvmodus an, dann watt.py signaliseren einmalig 0 ueberschuss zu schicken
+if pvmodus == 1:
+   pvmodus = 99
 f = open( file_stringpv , 'w')
-f.write(str(0))
+f.write(str(pvmodus))
 f.close()
 count1 = 999
 f = open( file_stringcount , 'w')
