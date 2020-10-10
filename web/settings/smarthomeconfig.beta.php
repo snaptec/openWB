@@ -189,6 +189,20 @@
 						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
+								<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Einschalten</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
 								<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Ausschalten</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
