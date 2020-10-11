@@ -50,7 +50,7 @@ else:
    if uberschuss > 10000:
       neupower = 10000
    else:
-      neupower = uberschuss
+      neupower = uberschuss + aktpower
 # status nach handbuch Thor
 #0.. Aus
 #1-8 Geraetestart
