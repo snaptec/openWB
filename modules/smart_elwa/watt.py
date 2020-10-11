@@ -101,7 +101,7 @@ if count1 > 400:
 # counter schreiben
 # modbus write
 if modbuswrite == 1:
-   rq = client.write_register(1000, aktpower, unit=1)
+   rq = client.write_register(1000, neupower, unit=1)
    if count1==0:
       f = open( file_string , 'a')
       print ('%s devicenr %s ipadr %s device written by modbus ' % (time_string,devicenumber,ipadr),file=f)
