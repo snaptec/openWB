@@ -259,6 +259,7 @@ while True:
 def getdevicevalues():
     DeviceList = [config.get('smarthomedevices', 'device_configured_1'), config.get('smarthomedevices', 'device_configured_2'), config.get('smarthomedevices', 'device_configured_3'), config.get('smarthomedevices', 'device_configured_4'), config.get('smarthomedevices', 'device_configured_5'), config.get('smarthomedevices', 'device_configured_6'), config.get('smarthomedevices', 'device_configured_7'), config.get('smarthomedevices', 'device_configured_8'), config.get('smarthomedevices', 'device_configured_9'), config.get('smarthomedevices', 'device_configured_10')] 
     numberOfDevices = 0
+    totalwatt = 0
     for n in DeviceList:
         numberOfDevices += 1
         if ( n == "1" ):
@@ -278,6 +279,7 @@ def getdevicevalues():
                                 f.close()
                     except:
                         pass
+                    totalwatt = totalwatt + watt
                     DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                     f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -336,6 +338,7 @@ def getdevicevalues():
             #für später...
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "http"):
                 watt = int(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)), timeout=3).read().decode("utf-8")))
+                totalwatt = totalwatt + watt
                 DeviceValues.update( {str(numberOfDevices) : watt})
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "tasmota"):
                 try:
@@ -345,6 +348,7 @@ def getdevicevalues():
                         relais=1
                     else:
                         relais=0
+                    totalwatt = totalwatt + watt
                     DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                     f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -407,7 +411,7 @@ def getdevicevalues():
                     pyname = prefixpy + pyname0.lower()+ "/watt.py"
                     if os.path.isfile(pyname):
                        proc=subprocess.Popen( ['python3',pyname,str(numberOfDevices),config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)),str(uberschuss)])
-                       procout= proc.communicate() # TODO unused variable?
+                       proc.communicate() 
                        f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
                        answerj=json.load(f1)
                        f1.close()
@@ -417,6 +421,7 @@ def getdevicevalues():
                           relais=1
                        else:
                           relais=0
+                       totalwatt = totalwatt + watt
                        DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
                        DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
                        f = open(basePath+'/ramdisk/device' + str(numberOfDevices) + '_watt', 'w')
@@ -473,6 +478,10 @@ def getdevicevalues():
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device pyt " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
             # pyt end
+    f = open(basePath+'/ramdisk/devicetotal_watt', 'w')
+    f.write(str(totalwatt))
+    f.close()
+    logDebug("0", "Total Watt alle smarthomedevices: " + str(totalwatt))
     publishmqtt()
 
 def turndevicerelais(nummer, zustand):
@@ -514,7 +523,7 @@ def turndevicerelais(nummer, zustand):
                   logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
                   DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
                   proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
-                  procout= proc.communicate() # TODO unused variable?
+                  proc.communicate() 
             except Exception as e:
                 logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
         if ( zustand == 0):
@@ -535,6 +544,10 @@ def conditions(nummer):
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
     except:
         speichersocbeforestop = 0
+    try:
+        speichersocbeforestart = int(config.get('smarthomedevices', 'device_speichersocbeforestart_'+str(nummer)))
+    except:
+        speichersocbeforestart = 0
     einschwelle = int(config.get('smarthomedevices', 'device_einschaltschwelle_'+str(nummer)))
     ausschwelle = int(config.get('smarthomedevices', 'device_ausschaltschwelle_'+str(nummer))) * -1
     einverz = int(config.get('smarthomedevices', 'device_einschaltverzoegerung_'+str(nummer))) * 60
@@ -559,6 +572,13 @@ def conditions(nummer):
             pass
         logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer)))+ " Überschuss größer Einschaltschwelle")
         if ( DeviceValues[str(nummer)+"relais"] == 0 ):
+             #speichersocbeforestart
+            if ( speichersoc < speichersocbeforestart ):
+                logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC kleiner als Einschalt SoC, schalte Gerät nicht ein")
+                return
+            else:
+                logDebug("1","Device: " + str(nummer) + " " + str(name)+ " SoC grösser gleich als Einschalt SoC, prüfe weitere Bedingungen")            
+            #speichersocbeforestart
             if  str(nummer)+"einverz" in DeviceCounters:
                 timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"einverz"])
                 if ( einverz < timesince ):
@@ -587,7 +607,7 @@ def conditions(nummer):
                 return
             else:
                 logDebug("0","Device: " + str(nummer) + " " + str(name)+ " SoC niedriger als Abschalt SoC, prüfe weitere Bedingungen")
-            logDebug("0","Device: " + str(nummer) + " " + str(name)+ "Überschuss kleiner Ausschaltschwelle")
+            logDebug("0","Device: " + str(nummer) + " " + str(name)+ " Überschuss kleiner Ausschaltschwelle")
             if ( DeviceValues[str(nummer)+"relais"] == 1 ):
                 if  str(nummer)+"ausverz" in DeviceCounters:
                     timesince = int(time.time()) - int(DeviceCounters[str(nummer)+"ausverz"])
