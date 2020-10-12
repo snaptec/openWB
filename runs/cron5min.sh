@@ -134,6 +134,26 @@ do
 		sedailyyield=$(echo "scale=2;($speichere - $i) / 1000" |bc)
 		echo $sedailyyield > /var/www/html/openWB/ramdisk/daily_sekwh
 	fi
+	if (( pvyieldcount == 11 )); then
+		verbraucher1dailyyield=$(echo "scale=2;($verbraucher1 - $i) / 1000" |bc)
+		echo $verbraucher1dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher1ikwh
+	fi
+	if (( pvyieldcount == 12 )); then
+		verbrauchere1dailyyield=$(echo "scale=2;($verbrauchere1 - $i) / 1000" |bc)
+		echo $verbrauchere1dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher1ekwh
+	fi
+	if (( pvyieldcount == 13 )); then
+		verbraucher2dailyyield=$(echo "scale=2;($verbraucher2 - $i) / 1000" |bc)
+		echo $verbraucher2dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher2ikwh
+	fi
+	if (( pvyieldcount == 14 )); then
+		verbrauchere2dailyyield=$(echo "scale=2;($verbrauchere2 - $i) / 1000" |bc)
+		echo $verbrauchere2dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher2ekwh
+	fi
+	if (( pvyieldcount == 15 )); then
+		verbraucher3dailyyield=$(echo "scale=2;($verbraucher3 - $i) / 1000" |bc)
+		echo $verbraucher3dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher3ikwh
+	fi
 	if (( pvyieldcount == 27 )); then
 		d1dailyyield=$(echo "scale=2;($d1 - $i) / 1000" |bc)
 		echo $d1dailyyield > /var/www/html/openWB/ramdisk/daily_d1kwh
@@ -156,7 +176,7 @@ do
 	fi
 
 done
-hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield" | bc)
+hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > /var/www/html/openWB/ramdisk/daily_hausverbrauchkwh
 
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress

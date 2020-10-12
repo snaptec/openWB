@@ -615,6 +615,44 @@ function processVerbraucherMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
 	processPreloader(mqttmsg);
+	var index = getIndex(mqttmsg);  // extract number between two / /
+	if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Configured$/i ) ) {
+		if ( mqttpayload == 1 ) {
+			// if at least one device is configured, show info-div
+			$('#verbraucher').removeClass("hide");
+			// now show info-div for this device
+			$('#verbraucher'+index).removeClass("hide");
+		} else {
+			$('#verbraucher'+index).addClass("hide");
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Name$/i ) ) {
+		if ( mqttpayload != "Name" ){
+			$('#verbraucher'+index+'name').text(mqttpayload);
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Watt$/i ) ) {
+		var unit = ' W';
+		var verbraucherwatt = parseInt(mqttpayload, 10);
+		if ( isNaN(verbraucherwatt) ) {
+			verbraucherwatt = 0;
+		}
+		if ( verbraucherwatt > 999 ) {
+			verbraucherwatt = (verbraucherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#verbraucher'+index+'leistung').text(verbraucherwatt + unit);
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/DailyYieldImportkWh$/i ) ) {
+		var verbraucherDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(verbraucherDailyYield) ) {
+			verbraucherDailyYield = 0;
+		}
+		if ( verbraucherDailyYield >= 0 ) {
+			var verbraucherDailyYieldStr = ' (' + verbraucherDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#verbraucher'+index+'dailyyield').text(verbraucherDailyYieldStr);
+		} else {
+			$('#verbraucher'+index+'dailyyield').text("");
+		}
+
+	}
 }
 
 function processLpMessages(mqttmsg, mqttpayload) {
