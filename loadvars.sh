@@ -59,6 +59,7 @@ lp5enabled=$(<ramdisk/lp5enabled)
 lp6enabled=$(<ramdisk/lp6enabled)
 lp7enabled=$(<ramdisk/lp7enabled)
 lp8enabled=$(<ramdisk/lp8enabled)
+
 version=$(<web/version)
 # EVSE DIN Plug State
 declare -r IsNumberRegex='^[0-9]+$'
@@ -1563,8 +1564,15 @@ fi
 ouiplast=$(<ramdisk/mqttupdateinprogress)
 auiplast=$(<ramdisk/updateinprogress)
 if [[ "$ouiplast" != "$auiplast" ]]; then
-	tempPubList="${tempPubList}\nopenWB/system/updateInProgress=${auiplast}"
-	echo $arfidlast > ramdisk/mqttupdateinprogress
+		tempPubList="${tempPubList}\nopenWB/system/updateInProgress=${auiplast}"
+		echo $auiplast > ramdisk/mqttupdateinprogress
+fi
+
+arandomSleep=$(<ramdisk/randomSleepValue)
+orandomSleepValue=$(<ramdisk/mqttRandomSleepValue)
+if [[ "$orandomSleepValue" != "$arandomSleep" ]]; then
+		tempPubList="${tempPubList}\nopenWB/system/randomSleep=${arandomSleep}"
+		echo $arandomSleep > ramdisk/mqttRandomSleepValue
 fi
 
 declare -A mqttconfvar
