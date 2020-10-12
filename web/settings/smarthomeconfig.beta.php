@@ -344,7 +344,7 @@
 		<script>
 			
 			function visibiltycheck(elementId, mqttpayload) {
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
 					if ( mqttpayload == 0 ) {
 						$('#device<?php echo $devicenum; ?>options').hide();
@@ -355,7 +355,7 @@
 <?php } ?>
 			}
 			$(function() {
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
 					if ($('#device<?php echo $devicenum; ?>options').is(":hidden")) {
 						$('#device<?php echo $devicenum; ?>options').show();
