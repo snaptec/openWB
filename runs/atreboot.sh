@@ -108,17 +108,17 @@ echo 0 > /var/www/html/openWB/ramdisk/chargestatlp5
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp6
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp7
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp8
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_wh
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/evseausgelesen
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp1
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp2
@@ -565,6 +565,11 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
 echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
 echo 0 > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher1ikwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher1ekwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher2ikwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher2ekwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher3ikwh
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
