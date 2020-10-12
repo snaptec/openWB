@@ -1145,7 +1145,7 @@ if [[ "$ollkombiniert" != "$ladeleistung" ]]; then
 fi
 if [[ "$ospeicherleistung" != "$speicherleistung" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/W=${speicherleistung}"
-	echo $speichersoc > ramdisk/mqttspeicherleistung
+	echo $speicherleistung > ramdisk/mqttspeicherleistung
 fi
 if [[ "$ospeichersoc" != "$speichersoc" ]]; then
 	tempPubList="${tempPubList}\nopenWB/housebattery/%Soc=${speichersoc}"
