@@ -63,7 +63,7 @@
 
 			<form id="myForm">
 				<h1>Einstellungen für SmartHome Geräte</h1>
-<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { // Limited to devices 1-9 as device 10 is not properly implemented in various parts of the code ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
