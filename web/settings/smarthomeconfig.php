@@ -68,7 +68,7 @@
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Gerät <?php echo $devicenum; ?></div>
+								<div class="col-4" id="deviceHeader<?php echo $devicenum; ?>">Gerät <?php echo $devicenum; ?></div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_configuredDevices<?php echo $devicenum; ?>" name="device_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-sm btn-outline-info">
@@ -352,6 +352,13 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					}
 				}
+				if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
+					if ( mqttpayload != "Name" ) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+					}
+				}
 <?php } ?>
 			}
 			$(function() {
@@ -361,6 +368,13 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>options').hide();
+					}
+				});
+				$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
+					if (($(this).val() != "Name") && ($(this).val().length > 0)) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
 					}
 				})
 <?php } ?>
