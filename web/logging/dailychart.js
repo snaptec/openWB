@@ -250,9 +250,9 @@ function putgraphtogether() {
 function getCol(matrix, col){
 	var column = [];
 	for(var i=0; i<matrix.length; i++){
-        column.push(matrix[i][col]);
-    }
-    return column;
+		column.push(matrix[i][col]);
+	}
+	return column;
 }
 
 function formdata(graphdata){
@@ -307,11 +307,11 @@ function formdata(graphdata){
 
 	for (i = 0; i < abezug.length; i += 1) {
 
-		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i] - adevice1[i] - adevice2[i] - adevice3[i] - adevice4[i] - adevice5[i] - adevice6[i] - adevice7[i] - adevice8[i] - adevice9[i] - adevice10[i];
+		var hausverbrauch = abezug[i] + apv[i] - alpa[i] + aspeichere[i] - aspeicheri[i] - aeinspeisung[i] - adevice1[i] - adevice2[i] - adevice3[i] - adevice4[i] - adevice5[i] - adevice6[i] - adevice7[i] - adevice8[i] - adevice9[i] - adevice10[i] - averbraucher1i[i] + averbraucher1e[i] - averbraucher2i[i] + averbraucher2e[i];
 
 		if ( hausverbrauch >= 0) {
-		    ahausverbrauch.push(hausverbrauch);
-		    overallhausverbrauch += hausverbrauch;
+			ahausverbrauch.push(hausverbrauch);
+			overallhausverbrauch += hausverbrauch;
 		} else {
 			ahausverbrauch.push('0');
 		}
@@ -335,7 +335,7 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 			}
 			if (fincsvvar < -0){
 				fincsvvar=oldfincsvvar;
-	 		}
+			}
 			if (!isNaN(fincsvvar)) {
 				pushdataset.push(fincsvvar);
 			} else {
@@ -343,14 +343,14 @@ function convertdata(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 				pushdataset.push(fincsvvar);
 
 			}
-	 	} else {
+		} else {
 			if (!isNaN(csvvar)) {
-		 		firstcsvvar = csvvar;
+				firstcsvvar = csvvar;
 			} else {
 				firstcsvvar = 0;
 			}
 
-	 	}
+		}
 		oldfincsvvar=fincsvvar;
 		counter++;
 		if (csvvar > 100 ) {
@@ -375,10 +375,10 @@ function convertsoc(csvData,csvrow,pushdataset,hidevar,hidevalue,overall) {
 	var vis=0;
 	getCol(csvData, csvrow).forEach(function(csvvar){
 		if (counter > 0) {
-	 		pushdataset.push(csvvar);
-	 	} else {
-		 	firstcsvvar = csvvar;
-	 	}
+			pushdataset.push(csvvar);
+		} else {
+			firstcsvvar = csvvar;
+		}
 		oldfincsvvar=fincsvvar;
 		if ( csvvar != 0 && typeof csvvar !== 'undefined' && csvvar >= 5 ){
 			vis=1;
@@ -758,39 +758,39 @@ function loadgraph() {
 			tooltips: {
 				enabled: false
 			},
-			 plugins: {
-				    zoom: {
+			plugins: {
+					zoom: {
 					// Container for pan options
 					pan: {
-					    // Boolean to enable panning
-					    enabled: true,
+						// Boolean to enable panning
+						enabled: true,
 
-					    // Panning directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow panning in the y direction
-					    mode: 'x',
-					    rangeMin: {
-						    x: null
-					    },
-					    rangeMax: {
-						    x: null
-					    },
-					    speed: 1000
+						// Panning directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow panning in the y direction
+						mode: 'x',
+						rangeMin: {
+							x: null
+						},
+						rangeMax: {
+							x: null
+						},
+						speed: 1000
 					},
 
 					// Container for zoom options
 					zoom: {
-					    // Boolean to enable zooming
-					    enabled: true,
+						// Boolean to enable zooming
+						enabled: true,
 
-					    // Zooming directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow zooming in the y direction
-					    mode: 'x',
+						// Zooming directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow zooming in the y direction
+						mode: 'x',
 
-					    sensitivity: 0.01
+						sensitivity: 0.01
 
 					}
-				    }
-			 },
+				}
+			},
 			elements: {
 				point: {
 					radius: 0
@@ -806,7 +806,7 @@ function loadgraph() {
 				display: boolDisplayLegend,
 				position: 'bottom',
 				labels: {
-			        filter: function(item, chart) {
+					filter: function(item, chart) {
 						if ( item.text.includes(hidelpa) || item.text.includes(hideload2) || item.text.includes(hidespeicheri) || item.text.includes(hidespeichere) || item.text.includes(hidespeichersoc) || item.text.includes(hidesoc) || item.text.includes(hidesoc1) || item.text.includes(hidelp1) || item.text.includes(hidelp2)|| item.text.includes(hidelp3)|| item.text.includes(hidelp4)|| item.text.includes(hidelp5)|| item.text.includes(hidelp6)|| item.text.includes(hidelp7)|| item.text.includes(hidelp8)|| item.text.includes(hideload2i)|| item.text.includes(hideload2e)|| item.text.includes(hideload1i)|| item.text.includes(hideload1e)|| item.text.includes(hidedevice3)|| item.text.includes(hidedevice4)|| item.text.includes(hidedevice5)|| item.text.includes(hidedevice6)|| item.text.includes(hidedevice7)|| item.text.includes(hidedevice8)|| item.text.includes(hidedevice9)|| item.text.includes(hidedevice10)|| item.text.includes(hidedevice1)|| item.text.includes(hidedevice2)|| item.text.includes(hidetemp1)|| item.text.includes(hidetemp2)|| item.text.includes(hidetemp3)|| item.text.includes(hidetemp4)|| item.text.includes(hidetemp5)|| item.text.includes(hidetemp6)) {
 							return false
 						} else {
