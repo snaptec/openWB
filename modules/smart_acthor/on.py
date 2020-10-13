@@ -20,6 +20,8 @@ uberschuss=int(sys.argv[3])
 file_string= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_acthor.log'
 file_stringpv= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_pv'
 file_stringcount= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_count'
+file_stringcount5= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_count5'
+file_stringold= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_oldpower'
 if os.path.isfile(file_string):
    f = open( file_string , 'a')
 else:
@@ -44,4 +46,11 @@ f.close()
 count1 = 999
 f = open( file_stringcount , 'w')
 f.write(str(count1))
+f.close()
+count5= 999
+f = open( file_stringcount5 , 'w')
+f.write(str(count5))
+f.close()   
+f = open( file_stringold , 'w')
+f.write(str(1000))
 f.close()

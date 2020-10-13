@@ -31,10 +31,11 @@ if os.path.isfile(file_stringcount):
 count1=count1+1
 # aktuelle Leistung lesen
 client = ModbusTcpClient(ipadr, port=502)
-#start = 3524 test
-#resp=client.read_input_registers(start,10,unit=1)
+#
+#start = 3524
+#resp=client.read_input_registers(start,20,unit=1)
 start = 1000
-resp=client.read_holding_registers(start,10,unit=1)
+resp=client.read_holding_registers(start,20,unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 #aktpower= int(struct.unpack('>h', all.decode('hex'))[0])
@@ -42,15 +43,24 @@ aktpower= int(struct.unpack('>h',codecs.decode(all, 'hex'))[0])
 value1 = resp.registers[3]
 all = format(value1, '04x')
 status= int(struct.unpack('>h',codecs.decode(all, 'hex') )[0])
+value1 = resp.registers[14]
+all = format(value1, '04x')
+fuse= int(struct.unpack('>h',codecs.decode(all, 'hex') )[0])
 # logik
-modbuswrite = 0
-if uberschuss < 0:
-   neupower = 0
+if fuse == 13:
+   faktor = 1.2
 else:
-   if uberschuss > 10000:
-      neupower = 10000
-   else:
-      neupower = uberschuss + aktpower
+   faktor = 1
+modbuswrite = 0
+# weiche Anpassung bei negativem ueberschuss
+if uberschuss < 0:
+   neupower = aktpower + uberschuss
+else:
+   neupower = (uberschuss * faktor) + aktpower
+if neupower < 0:
+   neupower = 0
+if neupower > 4000:
+   neupower = 4000
 # status nach handbuch
 #
 #2 Heat
@@ -82,6 +92,12 @@ else:
       if pvmodus == 1:
          modbuswrite = 1
 #Sonst nichts schicken
+# test only faken aktpower
+#if pvmodus == 1:
+#   aktpower = neupower
+#else:
+#   aktpower = 0
+# test only
 #json return power = aktuelle Leistungsaufnahme in Watt, on = 1 pvmodus
 #answer = '{"power":225,"on":0} '
 answer = '{"power":' + str(aktpower) + ',"on":' + str(pvmodus) + '} '
@@ -91,6 +107,8 @@ f1.close()
 # logschreiben
 if count1 > 400:
    count1=0
+#mehr log schreiben 
+if count1 < 3:
    if os.path.isfile(file_string):
       f = open( file_string , 'a')
    else:
@@ -98,11 +116,10 @@ if count1 > 400:
    print ('%s devicenr %s ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d' % (time_string,devicenumber,ipadr,uberschuss,aktpower,status),file=f)
    print ('%s devicenr %s ipadr %s Neu Leistung %6d pvmodus %1d modbuswrite %1d  ' % (time_string,devicenumber,ipadr,neupower,pvmodus,modbuswrite),file=f)
    f.close()
-# counter schreiben
 # modbus write
 if modbuswrite == 1:
    rq = client.write_register(1000, neupower, unit=1)
-   if count1==0:
+   if count1 < 3:
       f = open( file_string , 'a')
       print ('%s devicenr %s ipadr %s device written by modbus ' % (time_string,devicenumber,ipadr),file=f)
       f.close()
