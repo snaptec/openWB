@@ -1886,6 +1886,10 @@ if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "froniusvar2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniusvar2=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "kebaiplp1=" /var/www/html/openWB/openwb.conf
 then
 	  echo "kebaiplp1=192.168.25.25" >> /var/www/html/openWB/openwb.conf

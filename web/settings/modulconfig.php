@@ -1211,6 +1211,9 @@
 				if(strpos($line, "froniusprimo=") !== false) {
 					list(, $froniusprimoold) = explode("=", $line);
 				}
+				if(strpos($line, "froniuspvar2=") !== false) {
+					list(, $froniusvar2old) = explode("=", $line);
+				}
 				if(strpos($line, "nrgkickiplp2=") !== false) {
 					list(, $nrgkickiplp2old) = explode("=", $line);
 				}
@@ -4534,6 +4537,9 @@
 						<input type='hidden' value='0' name='froniusprimo'>
 						<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
 						<label for="froniusprimo"> Kompatibilitätsmodus für die Primo Reihe</label>
+						<input type='hidden' value='0' name='froniusvar2'>
+						<input id="froniusvar2" name="froniusvar2" value="1" type="checkbox" <?php if ( $froniusvar2old == 1){ echo "checked"; } ?> >
+						<label for="froniusvar2"> Kompatibilitätsmodus für Gen24 / neuere Symo (ggf. auch alte mit Update)</label>
 					</div>
 					<div id="wattbezugjson">
 						<div class="row" style="background-color:#febebe">

@@ -1426,6 +1426,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'froniusprimo='.$_POST['froniusprimo']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "froniusvar2=") !== false) {
+			$result .= 'froniusvar2='.$_POST['froniusvar2']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "kebaiplp1=") !== false) {
 			$result .= 'kebaiplp1='.$_POST['kebaiplp1']."\n";
 			$writeit = '1';
