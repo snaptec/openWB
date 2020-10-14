@@ -63,12 +63,12 @@
 
 			<form id="myForm">
 				<h1>Einstellungen für SmartHome Geräte</h1>
-<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { // Limited to devices 1-9 as device 10 is not properly implemented in various parts of the code ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Gerät <?php echo $devicenum; ?></div>
+								<div class="col-4" id="deviceHeader<?php echo $devicenum; ?>">Gerät <?php echo $devicenum; ?></div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_configuredDevices<?php echo $devicenum; ?>" name="device_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-sm btn-outline-info">
@@ -189,6 +189,20 @@
 						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
+								<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Einschalten</label>
+								<div class="col-md-8">
+									<div class="form-row vaRow mb-1">
+										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<div class="col-10">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										</div>
+									</div>
+									<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
 								<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Ausschalten</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
@@ -230,13 +244,13 @@
 
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled="disabled">speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="button" class="btn btn-danger" disabled="disabled">Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
@@ -330,7 +344,7 @@
 		<script>
 			
 			function visibiltycheck(elementId, mqttpayload) {
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
 					if ( mqttpayload == 0 ) {
 						$('#device<?php echo $devicenum; ?>options').hide();
@@ -338,15 +352,29 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					}
 				}
+				if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
+					if ( mqttpayload != "Name" ) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+					}
+				}
 <?php } ?>
 			}
 			$(function() {
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
 					if ($('#device<?php echo $devicenum; ?>options').is(":hidden")) {
 						$('#device<?php echo $devicenum; ?>options').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>options').hide();
+					}
+				});
+				$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
+					if (($(this).val() != "Name") && ($(this).val().length > 0)) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
 					}
 				})
 <?php } ?>
@@ -357,7 +385,7 @@
 				function(data){
 					$('#nav').replaceWith(data);
 					// disable navbar entry for current page
-					$('#navSmartHomeBeta2').addClass('disabled');
+					$('#navSmartHomeBeta').addClass('disabled');
 				}
 			);
 

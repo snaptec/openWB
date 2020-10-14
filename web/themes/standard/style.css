@@ -392,3 +392,8 @@ h3 {
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
 }
+
+.openwb-devices {
+	color: #ccffff;
+	background-color: #009696;
+}
