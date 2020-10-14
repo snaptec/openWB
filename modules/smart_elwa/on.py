@@ -26,7 +26,8 @@ else:
    f = open( file_string , 'w')
 print ('%s devicenr %s ipadr %s ueberschuss %6d try to connect (modbus)' % (time_string,devicenumber,ipadr,uberschuss),file=f)
 client = ModbusTcpClient(ipadr, port=502)
-#start = 3524 test
+#
+#start = 3524 
 #resp=client.read_input_registers(start,10,unit=1)
 start = 1000
 resp=client.read_holding_registers(start,10,unit=1)
