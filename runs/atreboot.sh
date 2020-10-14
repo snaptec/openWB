@@ -2894,6 +2894,10 @@ if [[ "$rfidakt" == "2" ]]; then
                python3 /var/www/html/openWB/runs/rfid.py &
        fi
 fi
+if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" /home/pi/.config/lxsession/LXDE-pi/autostart
+then
+	sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
+fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
