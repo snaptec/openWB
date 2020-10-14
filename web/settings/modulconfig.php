@@ -1211,7 +1211,7 @@
 				if(strpos($line, "froniusprimo=") !== false) {
 					list(, $froniusprimoold) = explode("=", $line);
 				}
-				if(strpos($line, "froniuspvar2=") !== false) {
+				if(strpos($line, "froniusvar2=") !== false) {
 					list(, $froniusvar2old) = explode("=", $line);
 				}
 				if(strpos($line, "nrgkickiplp2=") !== false) {
@@ -1321,7 +1321,7 @@
 								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
-								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler var 2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
 								<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
 								<option <?php if($evseconold == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
@@ -4238,7 +4238,7 @@
 							<b><label for="evukitversion">Version des openWB evu Kits:</label></b>
 							<select name="evukitversion" id="evukitversion">
 								<option <?php if($evukitversionold == 0) echo "selected" ?> value="0">EVU Kit MPM3PM</option>
-								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit v2 Lovato</option>
+								<option <?php if($evukitversionold == 1) echo "selected" ?> value="1">EVU Kit var 2 Lovato</option>
 								<option <?php if($evukitversionold == 2) echo "selected" ?> value="2">EVU Kit SDM</option>
 							</select>
 						</div>
@@ -4536,7 +4536,7 @@
 						<label for="froniuserzeugung"> Meter mit ID 1 statt 0</label><br />
 						<input type='hidden' value='0' name='froniusprimo'>
 						<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
-						<label for="froniusprimo"> Kompatibilitätsmodus für die Primo Reihe</label>
+						<label for="froniusprimo"> Kompatibilitätsmodus für die Primo Reihe</label><br />
 						<input type='hidden' value='0' name='froniusvar2'>
 						<input id="froniusvar2" name="froniusvar2" value="1" type="checkbox" <?php if ( $froniusvar2old == 1){ echo "checked"; } ?> >
 						<label for="froniusvar2"> Kompatibilitätsmodus für Gen24 / neuere Symo (ggf. auch alte mit Update)</label>
@@ -4983,7 +4983,7 @@
 							<b><label for="pvkitversion">Version des openWB PV Kits:</label></b>
 							<select name="pvkitversion" id="pvkitversion">
 								<option <?php if($pvkitversionold == 0) echo "selected" ?> value="0">PV Kit</option>
-								<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit v2</option>
+								<option <?php if($pvkitversionold == 1) echo "selected" ?> value="1">PV Kit var2</option>
 							</select>
 						</div>
 					</div>
