@@ -31,14 +31,16 @@ cd /var/www/html/openWB/
 
 declare -r IsFloatingNumberRegex='^-?[0-9.]+$'
 
-randomSleep=$(<ramdisk/randomSleepValue)
-if [[ -z $randomSleep ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
-    randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
-    echo $(date +%s): ramdisk/randomSleepValue missing - creating new one containing $randomSleep
-    echo $randomSleep > ramdisk/randomSleepValue
-fi
+if (( slavemode == 1)); then
+	randomSleep=$(<ramdisk/randomSleepValue)
+	if [[ -z $randomSleep ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
+		randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
+		echo $(date +%s): ramdisk/randomSleepValue missing - creating new one containing $randomSleep
+		echo $randomSleep > ramdisk/randomSleepValue
+	fi
 
-sleep $randomSleep
+	sleep $randomSleep
+fi
 
 source minundpv.sh
 source nurpv.sh
