@@ -444,7 +444,7 @@
 										<div class="form-row mb-1">
 											<label for="verbraucher<?php echo $deviceNum; ?>_ip" class="col-md-4 col-form-label">Source</label>
 											<div class="col">
-												<input class="form-control" type="text" name="verbraucher<?php echo $deviceNum; ?>_ip" id="verbraucher<?php echo $deviceNum; ?>_ip" value="<?php echo trim(${"verbraucher" . $deviceNum . "_ip"}) ?>">
+												<input class="form-control" type="text" name="verbraucher<?php echo $deviceNum; ?>_ip" id="verbraucher<?php echo $deviceNum; ?>_ip" value="<?php echo trim(${"verbraucher" . $deviceNum . "_ipold"}) ?>">
 												<span class="form-text small">IP Adresse des Geräts.</span>
 											</div>
 										</div>
