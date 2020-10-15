@@ -388,6 +388,13 @@
 								</div>
 								<div id="verbraucher<?php echo $deviceNum; ?>andiv">
 									<div class="form-row mb-1">
+										<label for="verbraucher<?php echo $deviceNum; ?>_name" class="col-md-4 col-form-label">Name</label>
+										<div class="col">
+											<input class="form-control" type="text" name="verbraucher<?php echo $deviceNum; ?>_name" id="verbraucher<?php echo $deviceNum; ?>_name" value="<?php echo trim(${"verbraucher" . $deviceNum . "_nameold"}) ?>">
+											<span class="form-text small">Name des Verbrauchers.</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="verbraucher<?php echo $deviceNum; ?>_typ" class="col-md-4 col-form-label">Anbindung</label>
 										<div class="col">
 											<select name="verbraucher<?php echo $deviceNum; ?>_typ" id="verbraucher<?php echo $deviceNum; ?>_typ" class="form-control">
@@ -399,13 +406,6 @@
 												<option <?php if(${"verbraucher" . $deviceNum . "_typold"} == "tasmota\n") echo "selected" ?> value="tasmota">Sonoff mit Tasmota FW</option>
 												<option <?php if(${"verbraucher" . $deviceNum . "_typold"} == "shelly\n") echo "selected" ?> value="shelly">Shelly 1PM</option>
 											</select>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="verbraucher<?php echo $deviceNum; ?>_name" class="col-md-4 col-form-label">Name</label>
-										<div class="col">
-											<input class="form-control" type="text" name="verbraucher<?php echo $deviceNum; ?>_name" id="verbraucher<?php echo $deviceNum; ?>_name" value="<?php echo trim(${"verbraucher" . $deviceNum . "_nameold"}) ?>">
-											<span class="form-text small">Name des Verbrauchers.</span>
 										</div>
 									</div>
 									<div id="v<?php echo $deviceNum; ?>http">
@@ -441,6 +441,10 @@
 										</div>
 									</div>
 									<div id="v<?php echo $deviceNum; ?>tasmota">
+										<div class="card-text alert alert-danger">
+											Die Einstellungen für Tasmota und Shelly Geräte werden an dieser Stelle demnächst entfernt. Bitte benutzen Sie die Einstellungen unter "SmartHome 2.0", um solch ein Gerät einzubinden.
+										</div>
+
 										<div class="form-row mb-1">
 											<label for="verbraucher<?php echo $deviceNum; ?>_ip" class="col-md-4 col-form-label">Source</label>
 											<div class="col">
