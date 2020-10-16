@@ -1353,13 +1353,11 @@
 					<div id="openwb12mid">
 						<div class="row bg-success">
 							Keine Konfiguration erforderlich.<br>
-							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.
 						</div>
 					</div>
 					<div id="openwb12v2mid">
 						<div class="row bg-success">
 							Keine Konfiguration erforderlich.<br>
-							Dies ist die richtige Option, für fertige openWB series2 mit geeichtem Zähler und Addon Platine ab Mai 2020 (Standard+).
 						</div>
 					</div>
 
