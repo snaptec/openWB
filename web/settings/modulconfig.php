@@ -977,6 +977,9 @@
 				if(strpos($line, "solaredgespeicherip=") !== false) {
 					list(, $solaredgespeicheripold) = explode("=", $line);
 				}
+				if(strpos($line, "usevartamodbus=") !== false) {
+					list(, $usevartamodbusold) = explode("=", $line);
+				}
 				if(strpos($line, "vartaspeicherip=") !== false) {
 					list(, $vartaspeicheripold) = explode("=", $line);
 				}
@@ -4175,6 +4178,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_siemens\n") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
 							<option <?php if($wattbezugmodulold == "bezug_powerdog\n") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 							<option <?php if($wattbezugmodulold == "bezug_rct\n") echo "selected" ?> value="bezug_rct">RCT</option>
+							<option <?php if($wattbezugmodulold == "bezug_varta\n") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -4182,6 +4186,12 @@
 							Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
 						</div>
 					</div>
+					<div id="wattbezugvarta">
+						<div class="row">
+							Keine Konfiguration erforderlich. Es muss beim Speicher Varta ausgewählt werden.
+						</div>
+					</div>
+
 					<div id="wattbezugmqtt">
 						<div class="row">Keine Konfiguration erforderlich</div>
 						<div class="row">Per MQTT zu schreiben:</div>
@@ -4693,6 +4703,7 @@
 							$('#wattbezuglgessv1').hide();
 							$('#wattbezugmqtt').hide();
 							$('#wattbezugsonneneco').hide();
+							$('#wattbezugvarta').hide();
 							$('#wattbezugfems').hide();
 							$('#wattbezugsiemens').hide();
 							$('#wattbezugpowerdog').hide();
@@ -4703,6 +4714,9 @@
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 								$('#wattbezugsonneneco').show();
+							}
+							if($('#wattbezugmodul').val() == 'bezug_varta') {
+								$('#wattbezugvarta').show();
 							}
 							if($('#wattbezugmodul').val() == 'bezug_siemens') {
 								$('#wattbezugsiemens').show();
@@ -5642,6 +5656,11 @@
 						<div class="row" style="background-color:#fcbe1e">
 							Gültige Werte IP. IP Adresse des Varta Speichers.
 						</div>
+						<b><label for="usevartamodbus">Ausleseart Modbus (für z.B. Pulse, Element, Neo):</label></b>
+						<select name="usevartamodbus" id="usevartamodbus">
+							<option <?php if($usevartamodbusold == "0\n") echo "selected" ?> value="0">Nein</option>
+							<option <?php if($usevartamodbusold == "1\n") echo "selected" ?> value="1">Ja</option>
+						</select>
 					</div>
 					<div id="divspeicheralphaess">
 

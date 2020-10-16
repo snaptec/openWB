@@ -1350,6 +1350,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'vartaspeicherip='.$_POST['vartaspeicherip']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "usevartamodbus=") !== false) {
+			$result .= 'usevartamodbus='.$_POST['usevartamodbus']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "lgessv1ip=") !== false) {
 			$result .= 'lgessv1ip='.$_POST['lgessv1ip']."\n";
 			$writeit = '1';

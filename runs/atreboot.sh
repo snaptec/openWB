@@ -1837,6 +1837,10 @@ if ! grep -Fq "vartaspeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "vartaspeicherip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "usevartamodbus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "usevartamodbus=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf
