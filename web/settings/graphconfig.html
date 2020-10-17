@@ -406,132 +406,132 @@
 				// PV
 				if ( elementId == "boolPVConfigured") {
 					if ( mqttpayload == 0 ) {
-						$('.pvoptions').hide();
+						$('.pvoptions').addClass("hide");
 					} else {
-						$('.pvoptions').show();
+						$('.pvoptions').removeClass("hide");
 					}
 				}
 				// House Battery
 				if ( elementId == "boolHouseBatteryConfigured") {
 					if ( mqttpayload == 0 ) {
-						$('.housebatteryoptions').hide();
-						$('.nohousebattery').show();
+						$('.housebatteryoptions').addClass("hide");
+						$('.nohousebattery').removeClass("hide");
 						publish("0", "openWB/graph/boolDisplaySpeicher");
 						publish("0", "openWB/graph/boolDisplaySpeicherSoc");
 					} else {
-						$('.housebatteryoptions').show();
-						$('.nohousebattery').hide();
+						$('.housebatteryoptions').removeClass("hide");
+						$('.nohousebattery').addClass("hide");
 					}
 				}
 				// Chargepoint SoC
 				if ( elementId == "boolSocConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp1options').hide();
+						$('.soclp1options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp1Soc");
 					} else {
-						$('.soclpoptions').show();
-						$('.soclp1options').show();
+						$('.soclpoptions').removeClass("hide");
+						$('.soclp1options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp2options').hide();
+						$('.soclp2options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp2Soc");
 					} else {
-						$('.soclpoptions').show();
-						$('.soclp2options').show();
+						$('.soclpoptions').removeClass("hide");
+						$('.soclp2options').removeClass("hide");
 					}
 				}
 				// Chargepoints
 				if ( elementId == "ConfiguredChargePoints") {
 					if ( mqttpayload < 2 ) {
-						$('.alllpoptions').hide();
+						$('.alllpoptions').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLpAll");
 					} else {
-						$('.alllpoptions').show();
+						$('.alllpoptions').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.lp1options').hide();
+						$('.lp1options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp1");
 					} else {
-						$('.lp1options').show();
+						$('.lp1options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.lp2options').hide();
+						$('.lp2options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp2");
 					} else {
-						$('.lp2options').show();
+						$('.lp2options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp3") {
 					if ( mqttpayload == 0 ) {
-						$('.lp3options').hide();
+						$('.lp3options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp3");
 					} else {
-						$('.lp3options').show();
+						$('.lp3options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp4") {
 					if ( mqttpayload == 0 ) {
-						$('.lp4options').hide();
+						$('.lp4options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp4");
 					} else {
-						$('.lp4options').show();
+						$('.lp4options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp5") {
 					if ( mqttpayload == 0 ) {
-						$('.lp5options').hide();
+						$('.lp5options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp5");
 					} else {
-						$('.lp5options').show();
+						$('.lp5options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp6") {
 					if ( mqttpayload == 0 ) {
-						$('.lp6options').hide();
+						$('.lp6options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp6");
 					} else {
-						$('.lp6options').show();
+						$('.lp6options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp7") {
 					if ( mqttpayload == 0 ) {
-						$('.lp7options').hide();
+						$('.lp7options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp7");
 					} else {
-						$('.lp7options').show();
+						$('.lp7options').removeClass("hide");
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp8") {
 					if ( mqttpayload == 0 ) {
-						$('.lp8options').hide();
+						$('.lp8options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLp8");
 					} else {
-						$('.lp8options').show();
+						$('.lp8options').removeClass("hide");
 					}
 				}
 				// Verbraucher
 				if ( elementId == "ConfiguredVerbraucher1") {
 					if ( mqttpayload == 0 ) {
-						$('.verbraucher1options').hide();
+						$('.verbraucher1options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLoad1");
 					} else {
-						$('.verbraucher1options').show();
-						$('.noverbraucher').hide();
+						$('.verbraucher1options').removeClass("hide");
+						$('.noverbraucher').addClass("hide");
 					}
 				}
 				if ( elementId == "ConfiguredVerbraucher2") {
 					if ( mqttpayload == 0 ) {
-						$('.verbraucher2options').hide();
+						$('.verbraucher2options').addClass("hide");
 						publish("0", "openWB/graph/boolDisplayLoad2");
 					} else {
-						$('.verbraucher2options').show();
-						$('.noverbraucher').hide();
+						$('.verbraucher2options').removeClass("hide");
+						$('.noverbraucher').addClass("hide");
 					}
 				}
 			}
