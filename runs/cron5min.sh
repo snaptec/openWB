@@ -236,3 +236,9 @@ if [[ "$rfidakt" == "2" ]]; then
                python3 /var/www/html/openWB/runs/rfid.py &
        fi
 fi
+if ps ax |grep -v grep |grep "sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py" > /dev/null
+then
+       echo "test" > /dev/null
+else
+       sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py &
+fi
