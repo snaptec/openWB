@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>openWB Einstellungen</title>
-		<meta name="author" content="Michael Ortenstein">
+		<meta name="author" content="Michael Ortenstein, Lutz Bender">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
@@ -32,6 +32,28 @@
 
 		<!-- include settings-style -->
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -39,90 +61,318 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
+			<form id="myForm">
+				<h1>Graph-Einstellungen</h1>
 
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1')"><i id="graphlp1div" class="fa"></i> Ladepunkt 1</span>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Allgemeine Optionen
+					</div>
+					<div class="card-body">
+						<div class="form-row mb-1">
+							<label class="col-md-4 col-form-label">Graph Anzeige</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLiveGraph" name="boolDisplayLiveGraph" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLiveGraph" id="boolDisplayLiveGraphOff" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLiveGraph" id="boolDisplayLiveGraphOn" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1">
+							<label class="col-md-4 col-form-label">Legende</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLegend" name="boolDisplayLegend" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLegend" id="boolDisplayLegendOff" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLegend" id="boolDisplayLegendOn" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<hr class="border-secondary">
+						<div class="form-row mb-1">
+							<label class="col-md-4 col-form-label">EVU Bezug/Einspeisung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayEvu" name="boolDisplayEvu" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayEvu" id="boolDisplayEvuOff" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayEvu" id="boolDisplayEvuOn" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1">
+							<label class="col-md-4 col-form-label">Hausverbrauch</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayHouseConsumption" name="boolDisplayHouseConsumption" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayHouseConsumption" id="boolDisplayHouseConsumptionOff" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayHouseConsumption" id="boolDisplayHouseConsumptionOn" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 pvoptions">
+							<label class="col-md-4 col-form-label">PV Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayPv" name="boolDisplayPv" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayPv" id="boolDisplayPvOff" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayPv" id="boolDisplayPvOn" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end card body Allgemeine Optionen -->
 				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2')"><i id="graphlp2div" class="fa"></i> Ladepunkt 2</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp3')"><i id="graphlp3div" class="fa"></i> Ladepunkt 3</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp4')"><i id="graphlp4div" class="fa"></i> Ladepunkt 4</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp5')"><i id="graphlp5div" class="fa"></i> Ladepunkt 5</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp6')"><i id="graphlp6div" class="fa"></i> Ladepunkt 6</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp7')"><i id="graphlp7div" class="fa"></i> Ladepunkt 7</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp8')"><i id="graphlp8div" class="fa"></i> Ladepunkt 8</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLpAll')"><i id="graphlpalldiv" class="fa"></i> Alle Ladepunkte</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayHouseConsumption')"><i id="graphhausdiv" class="fa"></i>Hausverbrauch</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayEvu')"><i id="graphevudiv" class="fa"></i> EVU</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayPv')"><i id="graphpvdiv" class="fa"></i> PV</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicher')"><i id="graphspeicherdiv" class="fa"></i> Speicher</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplaySpeicherSoc')"><i id="graphspeichersocdiv" class="fa"></i> Speicher SoC</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp1Soc')"><i id="graphlp1socdiv" class="fa"></i> Ladepunkt 1 SoC</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLp2Soc')"><i id="graphlp2socdiv" class="fa"></i> Ladepunkt 2 SoC</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad1')"><i id="graphload1div" class="fa"></i>Verbraucher 1</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidedataset('boolDisplayLoad2')"><i id="graphload2div" class="fa"></i>Verbraucher 2</span>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLegend')"><i id="graphlegenddiv" class="fa"></i>Legende</span>
-				</div>
-				<div class="col-4">
-					<span style="cursor: pointer;" onclick="showhidelegend('boolDisplayLiveGraph')"><i id="graphgraphdiv" class="fa"></i> Graph Anzeige</span>
-				</div>
-			</div>
-			<br>
 
-		</div>  <!-- end container -->
+				<div class="card border-primary">
+					<div class="card-header bg-primary">
+						Ladepunkte
+					</div>
+					<div class="card-body">
+						<div class="alllpoptions hide">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Summe aller Ladepunktleistungen</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLpAll" name="boolDisplayLpAll" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLpAll" id="boolDisplayLpAllOff" data-option="0" value="0">Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLpAll" id="boolDisplayLpAllOn" data-option="1" value="1">An
+										</label>
+									</div>
+								</div>
+							</div>
+							<hr class="border-primary">
+						</div>
+						<div class="form-row mb-1 lp1options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 1 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp1" name="boolDisplayLp1" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp1" id="boolDisplayLp1Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp1" id="boolDisplayLp1On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp2options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 2 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp2" name="boolDisplayLp2" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp2" id="boolDisplayLp2Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp2" id="boolDisplayLp2On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp3options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 3 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp3" name="boolDisplayLp3" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp3" id="boolDisplayLp3Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp3" id="boolDisplayLp3On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp4options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 4 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp4" name="boolDisplayLp4" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp4" id="boolDisplayLp4Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp4" id="boolDisplayLp4On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp5options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 5 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp5" name="boolDisplayLp5" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp5" id="boolDisplayLp5Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp5" id="boolDisplayLp5On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp6options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 6 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp6" name="boolDisplayLp6" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp6" id="boolDisplayLp6Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp6" id="boolDisplayLp6On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp7options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 7 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp7" name="boolDisplayLp7" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp7" id="boolDisplayLp7Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp7" id="boolDisplayLp7On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 lp8options hide">
+							<label class="col-md-4 col-form-label">Ladepunkt 8 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp8" name="boolDisplayLp8" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp8" id="boolDisplayLp8Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLp8" id="boolDisplayLp8On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="soclpoptions">
+							<hr class="border-primary">
+							<div class="form-row mb-1 soclp1options hide">
+								<label class="col-md-4 col-form-label">Ladepunkt 1 SoC</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp1Soc" name="boolDisplayLp1Soc" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLp1Soc" id="boolDisplayLp1SocOff" data-option="0" value="0">Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLp1Soc" id="boolDisplayLp1SocOn" data-option="1" value="1">An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1 soclp2options hide">
+								<label class="col-md-4 col-form-label">Ladepunkt 2 SoC</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLp2Soc" name="boolDisplayLp2Soc" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLp2Soc" id="boolDisplayLp2SocOff" data-option="0" value="0">Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplayLp2Soc" id="boolDisplayLp2SocOn" data-option="1" value="1">An
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end card body Ladepunkte -->
+				</div>
+
+				<div class="card border-warning">
+					<div class="card-header bg-warning">
+						Speicher
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info nohousebattery">
+							Diese Optionen sind nur verfügbar, wenn ein Speicher konfiguriert wurde.
+						</div>
+						<div class="housebatteryoptions hide">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">(Ent-)Lade-Leistung</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolDisplaySpeicher" name="boolDisplaySpeicher" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplaySpeicher" id="boolDisplaySpeicherOff" data-option="0" value="0">Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplaySpeicher" id="boolDisplaySpeicherOn" data-option="1" value="1">An
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">SoC</label>
+								<div class="col">
+									<div class="btn-group btn-block btn-group-toggle" id="boolDisplaySpeicherSoc" name="boolDisplaySpeicherSoc" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplaySpeicherSoc" id="boolDisplaySpeicherSocOff" data-option="0" value="0">Aus
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="boolDisplaySpeicherSoc" id="boolDisplaySpeicherSocOn" data-option="1" value="1">An
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end card body Speicher -->
+				</div>
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Verbraucher
+					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info noverbraucher">
+							Diese Optionen sind nur verfügbar, wenn ein Verbraucher konfiguriert wurde.
+						</div>
+						<div class="form-row mb-1 verbraucher1options hide">
+							<label class="col-md-4 col-form-label">Verbraucher 1 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLoad1" name="boolDisplayLoad1" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLoad1" id="boolDisplayLoad1Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLoad1" id="boolDisplayLoad1On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-row mb-1 verbraucher2options hide">
+							<label class="col-md-4 col-form-label">Verbraucher 2 Leistung</label>
+							<div class="col">
+								<div class="btn-group btn-block btn-group-toggle" id="boolDisplayLoad2" name="boolDisplayLoad2" data-toggle="buttons" data-default="0" data-topicprefix="openWB/graph/">
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLoad2" id="boolDisplayLoad2Off" data-option="0" value="0">Aus
+									</label>
+									<label class="btn btn-outline-info btn-toggle">
+										<input type="radio" name="boolDisplayLoad2" id="boolDisplayLoad2On" data-option="1" value="1">An
+									</label>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end card body Verbraucher -->
+				</div>
+
+			</form>
+		</div> <!-- end main container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
@@ -134,10 +384,12 @@
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_graphconfig.js?ver=20200415-a" ></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200415-a" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg_graphconfig.js?ver=20200415-a" ></script>
+		<script src = "settings/processAllMqttMsg.js?ver=20201016-a" ></script>
 
 		<script>
 
@@ -150,24 +402,149 @@
 				}
 			);
 
-			function showhidedataset(thedataset) {
-				if ( window[thedataset] == true ) {
-					publish("1","openWB/graph/"+thedataset);
-				} else if ( window[thedataset] == false ) {
-					publish("0","openWB/graph/"+thedataset);
-				} else {
-					publish("1","openWB/graph/"+thedataset);
+			function visibiltycheck(elementId, mqttpayload) {
+				// PV
+				if ( elementId == "boolPVConfigured") {
+					if ( mqttpayload == 0 ) {
+						$('.pvoptions').addClass("hide");
+					} else {
+						$('.pvoptions').removeClass("hide");
+					}
+				}
+				// House Battery
+				if ( elementId == "boolHouseBatteryConfigured") {
+					if ( mqttpayload == 0 ) {
+						$('.housebatteryoptions').addClass("hide");
+						$('.nohousebattery').removeClass("hide");
+						publish("0", "openWB/graph/boolDisplaySpeicher");
+						publish("0", "openWB/graph/boolDisplaySpeicherSoc");
+					} else {
+						$('.housebatteryoptions').removeClass("hide");
+						$('.nohousebattery').addClass("hide");
+					}
+				}
+				// Chargepoint SoC
+				if ( elementId == "boolSocConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp1options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp1Soc");
+					} else {
+						$('.soclpoptions').removeClass("hide");
+						$('.soclp1options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolSocConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.soclp2options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp2Soc");
+					} else {
+						$('.soclpoptions').removeClass("hide");
+						$('.soclp2options').removeClass("hide");
+					}
+				}
+				// Chargepoints
+				if ( elementId == "ConfiguredChargePoints") {
+					if ( mqttpayload < 2 ) {
+						$('.alllpoptions').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLpAll");
+					} else {
+						$('.alllpoptions').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp1") {
+					if ( mqttpayload == 0 ) {
+						$('.lp1options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp1");
+					} else {
+						$('.lp1options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp2") {
+					if ( mqttpayload == 0 ) {
+						$('.lp2options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp2");
+					} else {
+						$('.lp2options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp3") {
+					if ( mqttpayload == 0 ) {
+						$('.lp3options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp3");
+					} else {
+						$('.lp3options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp4") {
+					if ( mqttpayload == 0 ) {
+						$('.lp4options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp4");
+					} else {
+						$('.lp4options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp5") {
+					if ( mqttpayload == 0 ) {
+						$('.lp5options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp5");
+					} else {
+						$('.lp5options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp6") {
+					if ( mqttpayload == 0 ) {
+						$('.lp6options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp6");
+					} else {
+						$('.lp6options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp7") {
+					if ( mqttpayload == 0 ) {
+						$('.lp7options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp7");
+					} else {
+						$('.lp7options').removeClass("hide");
+					}
+				}
+				if ( elementId == "boolChargePointConfiguredLp8") {
+					if ( mqttpayload == 0 ) {
+						$('.lp8options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLp8");
+					} else {
+						$('.lp8options').removeClass("hide");
+					}
+				}
+				// Verbraucher
+				if ( elementId == "ConfiguredVerbraucher1") {
+					if ( mqttpayload == 0 ) {
+						$('.verbraucher1options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLoad1");
+					} else {
+						$('.verbraucher1options').removeClass("hide");
+						$('.noverbraucher').addClass("hide");
+					}
+				}
+				if ( elementId == "ConfiguredVerbraucher2") {
+					if ( mqttpayload == 0 ) {
+						$('.verbraucher2options').addClass("hide");
+						publish("0", "openWB/graph/boolDisplayLoad2");
+					} else {
+						$('.verbraucher2options').removeClass("hide");
+						$('.noverbraucher').addClass("hide");
+					}
 				}
 			}
-			function showhidelegend(thedataset) {
-				if ( window[thedataset] == true ) {
-					publish("0","openWB/graph/"+thedataset);
-				} else if ( window[thedataset] == false ) {
-					publish("1","openWB/graph/"+thedataset);
-				} else {
-					publish("0","openWB/graph/"+thedataset);
-				}
-			}
+
+			$(document).ready(function(){
+				$('input[type=radio]').change(function(){
+					me = $(this);
+					value = me.val();
+					topic = $('#'+me.attr("name")).attr("data-topicprefix")+me.attr("name");
+					console.log("Value: "+value+" Topic: "+topic);
+					publish(value, topic)
+				})
+			});
 
 		</script>
 
