@@ -418,12 +418,16 @@ llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
 llaltlp1=$llalt
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
+	pvvorhanden="1"
+	echo 1 > /var/www/html/openWB/ramdisk/pvvorhanden
 	pvwatt=$(modules/$pvwattmodul/main.sh || true)
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
 	pv1watt=$pvwatt
 else
+	pvvorhanden="0"
+	echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
 if [[ $pv2wattmodul != "none" ]]; then
@@ -1372,6 +1376,11 @@ ospeichervorhanden=$(<ramdisk/mqttspeichervorhanden)
 if (( ospeichervorhanden != speichervorhanden )); then
 	tempPubList="${tempPubList}\nopenWB/housebattery/boolHouseBatteryConfigured=${speichervorhanden}"
 	echo $speichervorhanden > ramdisk/mqttspeichervorhanden
+fi
+opvvorhanden=$(<ramdisk/mqttpvvorhanden)
+if (( opvvorhanden != pvvorhanden )); then
+	tempPubList="${tempPubList}\nopenWB/pv/boolPVConfigured=${pvvorhanden}"
+	echo $pvvorhanden > ramdisk/mqttpvvorhanden
 fi
 olp1name=$(<ramdisk/mqttlp1name)
 if [[ "$olp1name" != "$lp1name" ]]; then

@@ -28,5 +28,20 @@ var topicsToSubscribe = [
 	["openWB/graph/boolDisplayEvu", 0],
 	["openWB/graph/boolDisplayLegend", 0],
 	["openWB/graph/boolDisplayLiveGraph", 0],
-	["openWB/graph/boolDisplayPv", 0]
+	["openWB/graph/boolDisplayPv", 0],
+	["openWB/housebattery/boolHouseBatteryConfigured", 0],
+	["openWB/pv/boolPVConfigured", 0],
+	["openWB/Verbraucher/1/Configured", 0],
+	["openWB/Verbraucher/2/Configured", 0],
+	["openWB/system/ConfiguredChargePoints", 0],
+	["openWB/lp/1/boolChargePointConfigured", 0],
+	["openWB/lp/2/boolChargePointConfigured", 0],
+	["openWB/lp/3/boolChargePointConfigured", 0],
+	["openWB/lp/4/boolChargePointConfigured", 0],
+	["openWB/lp/5/boolChargePointConfigured", 0],
+	["openWB/lp/6/boolChargePointConfigured", 0],
+	["openWB/lp/7/boolChargePointConfigured", 0],
+	["openWB/lp/8/boolChargePointConfigured", 0],
+	["openWB/lp/1/boolSocConfigured", 0],
+	["openWB/lp/2/boolSocConfigured", 0]
 ];

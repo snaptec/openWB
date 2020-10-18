@@ -293,7 +293,7 @@ echo 0 > /var/www/html/openWB/ramdisk/pv2kwh
 echo 0 > /var/www/html/openWB/ramdisk/pv2a1
 echo 0 > /var/www/html/openWB/ramdisk/pv2a2
 echo 0 > /var/www/html/openWB/ramdisk/pv2a3
-
+echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
 
 
 # Gesamtleistung AC PV-Module WR 1 + 2
