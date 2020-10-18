@@ -23,7 +23,7 @@ if os.path.isfile(file_stringcount5):
    count5 =int(f.read())
    f.close()
 count5=count5+1
-if count5 > 13:
+if count5 > 6:
    count5=0
 if count5==0:
    # pv modus
