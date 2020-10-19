@@ -91,3 +91,10 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /v
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
+randomSleep=$(<ramdisk/randomSleepValue)
+if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
+    echo $(date +%s): Deleting ramdisk/randomSleepValue to force new randomization
+    rm /var/www/html/openWB/ramdisk/randomSleepValue
+else
+    echo "Not deleting randomSleepValue"
+fi
