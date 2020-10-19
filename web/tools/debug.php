@@ -96,6 +96,8 @@
 			</div>
 		</footer>
 
+		<?php exec("/var/www/html/openWB/runs/senddebuginit.sh"); ?>
+
 		<script>
 			window.setTimeout( function() {
 				window.location = "index.php";
@@ -103,5 +105,3 @@
 		</script>
 	</body>
 </html>
-
-<?php exec("/var/www/html/openWB/runs/senddebuginit.sh"); ?>
