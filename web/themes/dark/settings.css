@@ -116,3 +116,15 @@ hr {
 .carousel-indicators li {
 	background-color: #ffffff;
 }
+
+.cssload-inner.cssload-one {
+	border-bottom: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-two {
+	border-right: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-three {
+	border-top: 5px solid #ffffff;
+}
