@@ -209,7 +209,7 @@ function setChargingCurrentnrgkick () {
 		if [[ $current -eq 0 ]]; then
 			output=$(curl --connect-timeout 3 -s http://$nrgkickiplp1/api/settings/$nrgkickmaclp1)
 			state=$(echo $output | jq -r '.Values.ChargingStatus.Charging')
-			if [[ $state == "false" ]] ; then
+			if [[ $state == "true" ]] ; then
 				curl --connect-timeout 2 -s -X PUT -H "Content-Type: application/json" --data "{ "Values": {"ChargingStatus": { "Charging": false }, "ChargingCurrent": { "Value": "6" }, "DeviceMetadata":{"Password": $nrgkickpwlp1}}}" $nrgkickiplp1/api/settings/$nrgkickmaclp1 > /dev/null
 			fi
 		else
