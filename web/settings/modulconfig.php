@@ -4872,6 +4872,7 @@
 							<option <?php if($pvwattmodulold == "wr_powerdog\n") echo "selected" ?> value="wr_powerdog">Powerdog</option>
 							<option <?php if($pvwattmodulold == "wr_rct\n") echo "selected" ?> value="wr_rct">RCT</option>
 							<option <?php if($pvwattmodulold == "wr_huawei\n") echo "selected" ?> value="wr_huawei">Huawei</option>
+							<option <?php if($pvwattmodulold == "wr_victron\n") echo "selected" ?> value="wr_victron">Victron</option>
 						</select>
 					</div>
 
@@ -4891,7 +4892,7 @@
 						</div>
 					</div>
 					<div id="pvip">
-						<div class="row" style="background-color:#febebe">
+						<div class="row">
 							<b><label for="pv1_ipa">IP Adresse:</label></b>
 							<input type="text" name="pv1_ipa" id="pv1_ipa" value="<?php echo htmlspecialchars($pv1_ipaold) ?>">
 						</div>
@@ -5361,6 +5362,9 @@
 								$('#pvsiemens').show();
 							}
 							if($('#pvwattmodul').val() == 'wr_huawei') {
+								$('#pvip').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_victron') {
 								$('#pvip').show();
 							}
 							if($('#pvwattmodul').val() == 'wr_powerdog') {
