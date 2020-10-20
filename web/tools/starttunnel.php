@@ -79,11 +79,9 @@ if (isset($_POST['token'])) {
 					Remote Sitzung
 				</div>
 				<div class="card-body">
-					<div class="row">
-						<div id="infoText" class="col alert alert-danger">
-							Keine Token angegeben!<br>
-							Weiterleitung in 10 Sekunden...
-						</div>
+					<div id="infoText" class="alert alert-danger">
+						Keine Token angegeben!<br>
+						Weiterleitung in 10 Sekunden...
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">

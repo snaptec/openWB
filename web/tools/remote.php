@@ -71,10 +71,8 @@
 					Remote Sitzung
 				</div>
 				<div class="card-body">
-					<div class="row">
-						<div id="infoText" class="col alert alert-info">
-							Remote Sitzung wird gestartet...
-						</div>
+					<div id="infoText" class="alert alert-info">
+						Remote Sitzung wird gestartet...
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">

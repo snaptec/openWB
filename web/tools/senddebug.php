@@ -80,11 +80,9 @@ if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['
 					Fehlermeldung senden
 				</div>
 				<div class="card-body">
-					<div class="row">
-						<div class="col alert alert-warning">
-							Keine gültige Email angegeben oder Fehlerbeschreibung zu kurz.<br>
-							Weiterleitung in 10 Sekunden...
-						</div>
+					<div class="alert alert-warning">
+						Keine gültige Email angegeben oder Fehlerbeschreibung zu kurz.<br>
+						Weiterleitung in 10 Sekunden...
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">
