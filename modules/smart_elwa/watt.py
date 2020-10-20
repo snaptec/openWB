@@ -25,6 +25,9 @@ if os.path.isfile(file_stringcount5):
 count5=count5+1
 if count5 > 6:
    count5=0
+f = open( file_stringcount5 , 'w')
+f.write(str(count5))
+f.close()
 if count5==0:
    # pv modus
    pvmodus = 0
@@ -66,7 +69,7 @@ if count5==0:
    if uberschuss < 0:
       neupower = aktpower + uberschuss
    else:
-      neupower = (uberschuss * faktor) + aktpower
+      neupower = int(uberschuss * faktor) + aktpower
    if neupower < 0:
       neupower = 0
    if neupower > 4000:
@@ -136,6 +139,3 @@ if count5==0:
          f = open( file_string , 'a')
          print ('%s devicenr %s ipadr %s device written by modbus ' % (time_string,devicenumber,ipadr),file=f)
          f.close()
-f = open( file_stringcount5 , 'w')
-f.write(str(count5))
-f.close()

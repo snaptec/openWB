@@ -28,6 +28,20 @@ set -o pipefail
 cd /var/www/html/openWB/
 #config file einlesen
 . /var/www/html/openWB/loadconfig.sh
+
+declare -r IsFloatingNumberRegex='^-?[0-9.]+$'
+
+if (( slavemode == 1)); then
+	randomSleep=$(<ramdisk/randomSleepValue)
+	if [[ -z $randomSleep ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
+		randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
+		echo $(date +%s): ramdisk/randomSleepValue missing - creating new one containing $randomSleep
+		echo $randomSleep > ramdisk/randomSleepValue
+	fi
+
+	sleep $randomSleep
+fi
+
 source minundpv.sh
 source nurpv.sh
 source auslademodus.sh
@@ -49,6 +63,7 @@ re='^-?[0-9]+$'
 if [[ $isss == "1" ]]; then
        exit 0
 fi
+
 #doppelte Ausfuehrungsgeschwindigkeit
 if [[ $dspeed == "1" ]]; then
 	if [ -e ramdisk/5sec ]; then

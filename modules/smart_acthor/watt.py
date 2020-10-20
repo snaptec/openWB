@@ -26,6 +26,9 @@ if os.path.isfile(file_stringcount5):
 count5=count5+1
 if count5 > 6:
    count5=0
+f = open( file_stringcount5 , 'w')
+f.write(str(count5))
+f.close()
 if count5==0:
    # pv modus
    pvmodus = 0
@@ -129,6 +132,3 @@ if count5==0:
    f = open( file_stringold , 'w')
    f.write(str(int(neupower + 1000)))
    f.close()
-f = open( file_stringcount5 , 'w')
-f.write(str(count5))
-f.close()

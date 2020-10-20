@@ -3674,7 +3674,7 @@
 							</div>
 							<div class="row">
 								<b><label for="chargep5cp">Ladepunkt an der externen openWB:</label></b>
-								<select name="chargep5cp" id="chargep4cp">
+								<select name="chargep5cp" id="chargep5cp">
 									<option <?php if($chargep5cpold == 1) echo "selected" ?> value="1">1</option>
 									<option <?php if($chargep5cpold == 2) echo "selected" ?> value="2">2</option>
 								</select>
