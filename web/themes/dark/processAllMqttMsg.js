@@ -724,6 +724,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			soc = '--';
 		}
 		element.text(soc + ' %');
+		var spinner = parent.find('.reloadLpSoc');
+		if ( spinner.hasClass('fa-spin') ) {
+			spinner.removeClass('fa-spin');
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
