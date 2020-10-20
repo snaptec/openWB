@@ -870,7 +870,7 @@ if [[ $socmodul != "none" ]]; then
 	echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 	if (( stopsocnotpluggedlp1 == 1 )); then
 		if (( plugstat == 1 )); then
-			timeout 10 modules/$socmodul/main.sh || true
+			timeout 20 modules/$socmodul/main.sh || true
 			soc=$(</var/www/html/openWB/ramdisk/soc)
 			if ! [[ $soc =~ $re ]] ; then
 				soc="0"
