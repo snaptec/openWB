@@ -72,11 +72,9 @@
 					Debug Daten senden
 				</div>
 				<div class="card-body">
-					<div class="row">
-						<div class="col alert alert-info">
-							Debugdaten werden gesammelt. Dieser Vorgang dauert etwa eine Minute.<br>
-							Die Daten werden automatisch verschickt. Danach werden Sie auf die Hauptseite weitergeleitet.
-						</div>
+					<div class="alert alert-info">
+						Debugdaten werden gesammelt. Dieser Vorgang dauert etwa eine Minute.<br>
+						Die Daten werden automatisch verschickt. Danach werden Sie auf die Hauptseite weitergeleitet.
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">
