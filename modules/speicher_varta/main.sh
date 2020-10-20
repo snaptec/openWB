@@ -2,7 +2,7 @@
 
 #Auslesen eines Varta Speicher über die integrierte XML-API der Batteroe.
 
-if [[ "$uservartamodbus" != "1" ]]; then
+if [[ "$usevartamodbus" != "1" ]]; then
 
 	speicherwatt=$(curl --connect-timeout 5 -s "$vartaspeicherip/cgi/ems_data.xml" | grep 'P' | sed 's/.*value=//' |tr -d "'/>")
 	#wenn WR aus bzw. im standby (keine Antwort) ersetze leeren Wert durch eine 0
