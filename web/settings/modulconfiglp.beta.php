@@ -72,9 +72,6 @@
 				if(strpos($line, "soc2user=") !== false) {
 					list(, $soc2userold) = explode("=", $line);
 				}
-				if(strpos($line, "bezug_id=") !== false) {
-					list(, $bezug_idold) = explode("=", $line);
-				}
 				if(strpos($line, "soc2pass=") !== false) {
 					list(, $soc2passold) = explode("=", $line);
 				}
@@ -84,32 +81,9 @@
 				if(strpos($line, "soclp1_vin=") !== false) {
 					list(, $soclp1_vinold) = explode("=", $line);
 				}
-				if(strpos($line, "pv2wattmodul=") !== false) {
-					list(, $pv2wattmodulold) = explode("=", $line);
+				if(strpos($line, "soclp2_vin=") !== false) {
+					list(, $soclp2_vinold) = explode("=", $line);
 				}
-				if(strpos($line, "pv2id=") !== false) {
-					list(, $pv2idold) = explode("=", $line);
-				}
-				if(strpos($line, "pv1_ipa=") !== false) {
-					list(, $pv1_ipaold) = explode("=", $line);
-				}
-				if(strpos($line, "speicher1_ip=") !== false) {
-					list(, $speicher1_ipold) = explode("=", $line);
-				}
-				if(strpos($line, "bezug1_ip=") !== false) {
-					list(, $bezug1_ipold) = explode("=", $line);
-				}
-
-				if(strpos($line, "pv2ip=") !== false) {
-					list(, $pv2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "pv2user=") !== false) {
-					list(, $pv2userold) = explode("=", $line);
-				}
-				if(strpos($line, "pv2pass=") !== false) {
-					list(, $pv2passold) = explode("=", $line);
-				}
-
 				if(strpos($line, "soc_bluelink_interval=") !== false) {
 					list(, $soc_bluelink_intervalold) = explode("=", $line);
 				}
@@ -125,30 +99,6 @@
 				if(strpos($line, "soc_vin=") !== false) {
 					list(, $soc_vinold) = explode("=", $line);
 				}
-				if(strpos($line, "solarworld_emanagerip=") !== false) {
-					list(, $solarworld_emanageripold) = explode("=", $line);
-				}
-				if(strpos($line, "femskacopw=") !== false) {
-					list(, $femskacopwold) = explode("=", $line);
-				}
-				if(strpos($line, "femsip=") !== false) {
-					list(, $femsipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsunwaysip=") !== false) {
-					list(, $wrsunwaysipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsunwayspw=") !== false) {
-					list(, $wrsunwayspwold) = explode("=", $line);
-				}
-				if(strpos($line, "pvkitversion=") !== false) {
-					list(, $pvkitversionold) = explode("=", $line);
-				}
-				if(strpos($line, "evukitversion=") !== false) {
-					list(, $evukitversionold) = explode("=", $line);
-				}
-				if(strpos($line, "speicherkitversion=") !== false) {
-					list(, $speicherkitversionold) = explode("=", $line);
-				}
 				if(strpos($line, "myrenault_userlp2=") !== false) {
 					list(, $myrenault_userlp2old) = explode("=", $line);
 				}
@@ -161,7 +111,6 @@
 				if(strpos($line, "myrenault_countrylp2=") !== false) {
 					list(, $myrenault_countrylp2old) = explode("=", $line);
 				}
-
 				if(strpos($line, "myrenault_userlp1=") !== false) {
 					list(, $myrenault_userlp1old) = explode("=", $line);
 				}
@@ -173,9 +122,6 @@
 				}
 				if(strpos($line, "myrenault_countrylp1=") !== false) {
 					list(, $myrenault_countrylp1old) = explode("=", $line);
-				}
-				if(strpos($line, "wryoulessip=") !== false) {
-					list(, $wryoulessipold) = explode("=", $line);
 				}
 				if(strpos($line, "lastmanagementlp4=") !== false) {
 					list(, $lastmanagementlp4old) = explode("=", $line);
@@ -339,36 +285,12 @@
 				if(strpos($line, "mpmlp8ip=") !== false) {
 					list(, $mpmlp8ipold) = explode("=", $line);
 				}
-				if(strpos($line, "discovergyuser=") !== false) {
-					list(, $discovergyuserold) = explode("=", $line);
-				}
-				if(strpos($line, "discovergypass=") !== false) {
-					list(, $discovergypassold) = explode("=", $line);
-				}
-				if(strpos($line, "discovergyevuid=") !== false) {
-					list(, $discovergyevuidold) = explode("=", $line);
-				}
-				if(strpos($line, "discovergypvid=") !== false) {
-					list(, $discovergypvidold) = explode("=", $line);
-				}
-				if(strpos($line, "ksemip=") !== false) {
-                                        list(, $ksemipold) = explode("=", $line);
-                                }
-
-				if(strpos($line, "solarview_hostname=") !== false) {
-					list(, $solarview_hostnameold) = explode("=", $line);
-				}
-				if(strpos($line, "solarview_port=") !== false) {
-					list(, $solarview_portold) = explode("=", $line);
-				}
-
 				if(strpos($line, "soc_audi_username=") !== false) {
 					list(, $soc_audi_usernameold) = explode("=", $line);
 				}
 				if(strpos($line, "soc_audi_passwort=") !== false) {
 					list(, $soc_audi_passwortold) = explode("=", $line);
 				}
-
 				if(strpos($line, "soc_zerong_username=") !== false) {
 					list(, $soc_zerong_usernameold) = explode("=", $line);
 				}
@@ -393,55 +315,17 @@
 				if(strpos($line, "soc_zeronglp2_intervallladen=") !== false) {
 					list(, $soc_zeronglp2_intervallladenold) = explode("=", $line);
 				}
-				if(strpos($line, "bezug_victronip=") !== false) {
-					list(, $bezug_victronipold) = explode("=", $line);
-				}
-				if(strpos($line, "sonnenecoip=") !== false) {
-					list(, $sonnenecoipold) = explode("=", $line);
-				}
-				if(strpos($line, "sonnenecoalternativ=") !== false) {
-					list(, $sonnenecoalternativold) = explode("=", $line);
-				}
-				if(strpos($line, "wr_sdm120id=") !== false) {
-					list(, $wr_sdm120idold) = explode("=", $line);
-				}
-				if(strpos($line, "wr_sdm120ip=") !== false) {
-					list(, $wr_sdm120ipold) = explode("=", $line);
-				}
 				if(strpos($line, "debug=") !== false) {
 					list(, $debugold) = explode("=", $line);
 				}
-
 				if(strpos($line, "wakeupmyrenaultlp1=") !== false) {
 					list(, $wakeupmyrenaultlp1old) = explode("=", $line);
 				}
 				if(strpos($line, "wakeupmyrenaultlp2=") !== false) {
 					list(, $wakeupmyrenaultlp2old) = explode("=", $line);
 				}
-				if(strpos($line, "pvbezugeinspeisung=") !== false) {
-					list(, $pvbezugeinspeisungold) = explode("=", $line);
-				}
-				if(strpos($line, "sofortll=") !== false) {
-					list(, $sofortllold) = explode("=", $line);
-				}
-				if(strpos($line, "dspeed=") !== false) {
-					list(, $dspeedold) = explode("=", $line);
-				}
-
 				if(strpos($line, "sdmids1=") !== false) {
 					list(, $sdmids1old) = explode("=", $line);
-				}
-				if(strpos($line, "minimalampv=") !== false) {
-					list(, $minimalampvold) = explode("=", $line);
-				}
-				if(strpos($line, "minimalapv=") !== false) {
-					list(, $minimalapvold) = explode("=", $line);
-				}
-				if(strpos($line, "minimalstromstaerke=") !== false) {
-					list(, $minimalstromstaerkeold) = explode("=", $line);
-				}
-				if(strpos($line, "maximalstromstaerke=") !== false) {
-					list(, $maximalstromstaerkeold) = explode("=", $line);
 				}
 				if(strpos($line, "httpevseip=") !== false) {
 					list(, $httpevseipold) = explode("=", $line);
@@ -464,28 +348,24 @@
 				if(strpos($line, "evseconlp8=") !== false) {
 					list(, $evseconlp8old) = explode("=", $line);
 				}
-
 				if(strpos($line, "twcmanagerlp1ip=") !== false) {
 					list(, $twcmanagerlp1ipold) = explode("=", $line);
 				}
 				if(strpos($line, "twcmanagerlp1phasen=") !== false) {
 					list(, $twcmanagerlp1phasenold) = explode("=", $line);
 				}
-
 				if(strpos($line, "dacregister=") !== false) {
 					list(, $dacregisterold) = explode("=", $line);
 				}
 				if(strpos($line, "dacregisters2=") !== false) {
 					list(, $dacregisters2old) = explode("=", $line);
 				}
-
 				if(strpos($line, "dacregisters1=") !== false) {
 					list(, $dacregisters1old) = explode("=", $line);
 				}
 				if(strpos($line, "modbusevsesource=") !== false) {
 					list(, $modbusevsesourceold) = explode("=", $line);
 				}
-
 				if(strpos($line, "modbusevseid=") !== false) {
 					list(, $modbusevseidold) = explode("=", $line);
 				}
@@ -528,33 +408,18 @@
 				if(strpos($line, "evseids2=") !== false) {
 					list(, $evseids2old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evselanips1=") !== false) {
 					list(, $evselanips1old) = explode("=", $line);
 				}
 				if(strpos($line, "lastmanagement=") !== false) {
 					list(, $lastmanagementold) = explode("=", $line);
 				}
-				if(strpos($line, "durchslp1=") !== false) {
-					list(, $durchslp1old) = explode("=", $line);
-				}
-				if(strpos($line, "durchslp2=") !== false) {
-					list(, $durchslp2old) = explode("=", $line);
-				}
-				if(strpos($line, "durchslp3=") !== false) {
-					list(, $durchslp3old) = explode("=", $line);
-				}
 				if(strpos($line, "lastmanagements2=") !== false) {
 					list(, $lastmanagements2old) = explode("=", $line);
 				}
-				if(strpos($line, "lastmmaxw=") !== false) {
-					list(, $lastmmaxwold) = explode("=", $line);
-				}
-
 				if(strpos($line, "evsecons1=") !== false) {
 					list(, $evsecons1old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evsecons2=") !== false) {
 					list(, $evsecons2old) = explode("=", $line);
 				}
@@ -572,52 +437,6 @@
 				}
 				if(strpos($line, "ladeleistungs2modul=") !== false) {
 					list(, $ladeleistungs2modulold) = explode("=", $line);
-				}
-				if(strpos($line, "wattbezugmodul=") !== false) {
-					list(, $wattbezugmodulold) = explode("=", $line);
-				}
-
-				if(strpos($line, "vzloggerip=") !== false) {
-					list(, $vzloggeripold) = explode("=", $line);
-				}
-				if(strpos($line, "vzloggerline=") !== false) {
-					list(, $vzloggerlineold) = explode("=", $line);
-				}
-				if(strpos($line, "vzloggerkwhline=") !== false) {
-					list(, $vzloggerkwhlineold) = explode("=", $line);
-				}
-				if(strpos($line, "vzloggerekwhline=") !== false) {
-					list(, $vzloggerekwhlineold) = explode("=", $line);
-				}
-				if(strpos($line, "vzloggerpvip=") !== false) {
-					list(, $vzloggerpvipold) = explode("=", $line);
-				}
-				if(strpos($line, "vzloggerpvline=") !== false) {
-					list(, $vzloggerpvlineold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbusbezugid=") !== false) {
-					list(, $sdm630modbusbezugidold) = explode("=", $line);
-				}
-
-				if(strpos($line, "sdm630modbusbezuglanip=") !== false) {
-					list(, $sdm630modbusbezuglanipold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbusbezugsource=") !== false) {
-					list(, $sdm630modbusbezugsourceold) = explode("=", $line);
-				}
-
-
-				if(strpos($line, "pvwattmodul=") !== false) {
-					list(, $pvwattmodulold) = explode("=", $line);
-				}
-				if(strpos($line, "wrfroniusip=") !== false) {
-					list(, $wrfroniusipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrfronius2ip=") !== false) {
-					list(, $wrfronius2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrkostalpikoip=") !== false) {
-					list(, $wrkostalpikoipold) = explode("=", $line);
 				}
 				if(strpos($line, "ladeleistungmodul=") !== false) {
 					list(, $ladeleistungmodulold) = explode("=", $line);
@@ -640,15 +459,6 @@
 				if(strpos($line, "sdm630modbuslllanip=") !== false) {
 					list(, $sdm630modbuslllanipold) = explode("=", $line);
 				}
-				if(strpos($line, "sdm630modbuswrid=") !== false) {
-					list(, $sdm630modbuswridold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbuswrsource=") !== false) {
-					list(, $sdm630modbuswrsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbuswrlanip=") !== false) {
-					list(, $sdm630modbuswrlanipold) = explode("=", $line);
-				}
 				if(strpos($line, "socmodul=") !== false) {
 					list(, $socmodulold) = explode("=", $line);
 				}
@@ -660,30 +470,6 @@
 				}
 				if(strpos($line, "hsocip1=") !== false) {
 					list(, $hsocip1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtladen=") !== false) {
-					list(, $nachtladenold) = explode("=", $line);
-				}
-				if(strpos($line, "nachtll=") !== false) {
-					list(, $nachtllold) = explode("=", $line);
-				}
-				if(strpos($line, "nachtladens1=") !== false) {
-					list(, $nachtladens1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtlls1=") !== false) {
-					list(, $nachtlls1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtsocs1=") !== false) {
-					list(, $nachtsocs1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtsoc1s1=") !== false) {
-					list(, $nachtsoc1s1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtladenabuhrs1=") !== false) {
-					list(, $nachtladenabuhrs1old) = explode("=", $line);
-				}
-				if(strpos($line, "nachtladenbisuhrs1=") !== false) {
-					list(, $nachtladenbisuhrs1old) = explode("=", $line);
 				}
 				if(strpos($line, "httpll_w_url=") !== false) {
 					list(, $httpll_w_urlold) = explode("=", $line, 2);
@@ -703,74 +489,12 @@
 				if(strpos($line, "httpll_a3_url=") !== false) {
 					list(, $httpll_a3_urlold) = explode("=", $line, 2);
 				}
-
-				if(strpos($line, "wr_http_w_url=") !== false) {
-					list(, $wr_http_w_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_http_kwh_url=") !== false) {
-					list(, $wr_http_kwh_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_w_url=") !== false) {
-					list(, $bezug_http_w_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_l1_url=") !== false) {
-					list(, $bezug_http_l1_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_l2_url=") !== false) {
-					list(, $bezug_http_l2_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_l3_url=") !== false) {
-					list(, $bezug_http_l3_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_ikwh_url=") !== false) {
-					list(, $bezug_http_ikwh_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_http_ekwh_url=") !== false) {
-					list(, $bezug_http_ekwh_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "nachtladenabuhr=") !== false) {
-					list(, $nachtladenabuhrold) = explode("=", $line);
-				}
-				if(strpos($line, "nachtladenbisuhr=") !== false) {
-					list(, $nachtladenbisuhrold) = explode("=", $line);
-				}
-				if(strpos($line, "nachtsoc=") !== false) {
-					list(, $nachtsocold) = explode("=", $line);
-				}
-				if(strpos($line, "nachtsoc1=") !== false) {
-					list(, $nachtsoc1old) = explode("=", $line);
-				}
-				if(strpos($line, "mindestuberschuss=") !== false) {
-					list(, $mindestuberschussold) = explode("=", $line);
-				}
-				if(strpos($line, "abschaltuberschuss=") !== false) {
-					list(, $abschaltuberschussold) = explode("=", $line);
-				}
 				if(strpos($line, "ladeleistungs1modul=") !== false) {
 					list(, $ladeleistungs1modulold) = explode("=", $line);
-				}
-				if(strpos($line, "lastmaxap1=") !== false) {
-					list(, $lastmaxap1old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmaxap2=") !== false) {
-					list(, $lastmaxap2old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmaxap3=") !== false) {
-					list(, $lastmaxap3old) = explode("=", $line);
-				}
-				if(strpos($line, "smaemdbezugid=") !== false) {
-					list(, $smaemdbezugidold) = explode("=", $line);
 				}
 				if(strpos($line, "smaemdllid=") !== false) {
 					list(, $smaemdllidold) = explode("=", $line);
 				}
-				if(strpos($line, "smaemdpvid=") !== false) {
-					list(, $smaemdpvidold) = explode("=", $line);
-				}
-				if(strpos($line, "abschaltverzoegerung=") !== false) {
-					list(, $abschaltverzoegerungold) = explode("=", $line);
-				}
-
 				if(strpos($line, "evsewifiiplp1=") !== false) {
 					list(, $evsewifiiplp1old) = explode("=", $line);
 				}
@@ -780,15 +504,12 @@
 				if(strpos($line, "evsewifiiplp3=") !== false) {
 					list(, $evsewifiiplp3old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evsewifitimeoutlp1=") !== false) {
 					list(, $evsewifitimeoutlp1old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evsewifitimeoutlp2=") !== false) {
 					list(, $evsewifitimeoutlp2old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evsewifitimeoutlp3=") !== false) {
 					list(, $evsewifitimeoutlp3old) = explode("=", $line);
 				}
@@ -801,16 +522,6 @@
 				if(strpos($line, "mpm3pmlls2source=") !== false) {
 					list(, $mpm3pmlls2sourceold) = explode("=", $line);
 				}
-
-				if(strpos($line, "mpm3pmpvid=") !== false) {
-					list(, $mpm3pmpvidold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmpvsource=") !== false) {
-					list(, $mpm3pmpvsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmpvlanip=") !== false) {
-					list(, $mpm3pmpvlanipold) = explode("=", $line);
-				}
 				if(strpos($line, "mpm3pmllid=") !== false) {
 					list(, $mpm3pmllidold) = explode("=", $line);
 				}
@@ -819,12 +530,6 @@
 				}
 				if(strpos($line, "mpm3pmlls2id=") !== false) {
 					list(, $mpm3pmlls2idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmevuid=") !== false) {
-					list(, $mpm3pmevuidold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmevusource=") !== false) {
-					list(, $mpm3pmevusourceold) = explode("=", $line);
 				}
 				if(strpos($line, "leafusername=") !== false) {
 					list(, $leafusernameold) = explode("=", $line);
@@ -880,7 +585,6 @@
 				if(strpos($line, "wakeupzoelp2=") !== false) {
 					list(, $wakeupzoelp2old) = explode("=", $line);
 				}
-
 				if(strpos($line, "evnotifytoken=") !== false) {
 					list(, $evnotifytokenold) = explode("=", $line);
 				}
@@ -892,45 +596,6 @@
 				}
 				if(strpos($line, "evnotifyakeylp2=") !== false) {
 					list(, $evnotifyakeylp2old) = explode("=", $line);
-				}
-				if(strpos($line, "wrjsonurl=") !== false) {
-					list(, $wrjsonurlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wrjsonwatt=") !== false) {
-					list(, $wrjsonwattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wrjsonkwh=") !== false) {
-					list(, $wrjsonkwhold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "hausbezugnone=") !== false) {
-					list(, $hausbezugnoneold) = explode("=", $line);
-				}
-				if(strpos($line, "bezugjsonurl=") !== false) {
-					list(, $bezugjsonurlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezugjsonwatt=") !== false) {
-					list(, $bezugjsonwattold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezugjsonkwh=") !== false) {
-					list(, $bezugjsonkwhold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "einspeisungjsonkwh=") !== false) {
-					list(, $einspeisungjsonkwhold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_solarlog_speicherv=") !== false) {
-					list(, $bezug_solarlog_speichervold) = explode("=", $line);
-				}
-				if(strpos($line, "bezug_solarlog_ip=") !== false) {
-					list(, $bezug_solarlog_ipold) = explode("=", $line);
-				}
-				if(strpos($line, "speichermodul=") !== false) {
-					list(, $speichermodulold) = explode("=", $line);
-				}
-				if(strpos($line, "speicherleistung_http=") !== false) {
-					list(, $speicherleistung_httpold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "speichersoc_http=") !== false) {
-					list(, $speichersoc_httpold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "soc_tesla_username=") !== false) {
 					list(, $socteslausernameold) = explode("=", $line);
@@ -962,56 +627,6 @@
 				if(strpos($line, "soc_teslalp2_intervallladen=") !== false) {
 					list(, $socteslalp2intervallladenold) = explode("=", $line);
 				}
-
-				if(strpos($line, "wrkostalpikoip=") !== false) {
-					list(, $wrkostalpikoipold) = explode("=", $line);
-				}
-				if(strpos($line, "wr1extprod=") !== false) {
-					list(, $wr1extprodold) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgepvip=") !== false) {
-					list(, $solaredgepvipold) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgepvslave1=") !== false) {
-					list(, $solaredgeipslave1old) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgepvslave2=") !== false) {
-					list(, $solaredgeipslave2old) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgepvslave3=") !== false) {
-					list(, $solaredgeipslave3old) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgepvslave4=") !== false) {
-					list(, $solaredgeipslave4old) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgeip=") !== false) {
-					list(, $solaredgeipold) = explode("=", $line);
-				}
-				if(strpos($line, "solaredgewr2ip=") !== false) {
-					list(, $solaredgewr2ipold) = explode("=", $line);
-				}
-
-				if(strpos($line, "solaredgespeicherip=") !== false) {
-					list(, $solaredgespeicheripold) = explode("=", $line);
-				}
-				if(strpos($line, "usevartamodbus=") !== false) {
-					list(, $usevartamodbusold) = explode("=", $line);
-				}
-				if(strpos($line, "vartaspeicherip=") !== false) {
-					list(, $vartaspeicheripold) = explode("=", $line);
-				}
-				if(strpos($line, "lgessv1ip=") !== false) {
-					list(, $lgessv1ipold) = explode("=", $line);
-				}
-				if(strpos($line, "lgessv1pass=") !== false) {
-					list(, $lgessv1passold) = explode("=", $line);
-				}
-				if(strpos($line, "ess_api_ver=") !== false) {
-					list(, $ess_api_ver_old) = explode("=", $line);
-				}
-				if(strpos($line, "lllaniplp2=") !== false) {
-					list(, $lllaniplp2old) = explode("=", $line);
-				}
 				if(strpos($line, "sdm630lp2source=") !== false) {
 					list(, $sdm630lp2sourceold) = explode("=", $line);
 				}
@@ -1023,6 +638,9 @@
 				}
 				if(strpos($line, "sdm120lp3source=") !== false) {
 					list(, $sdm120lp3sourceold) = explode("=", $line);
+				}
+				if(strpos($line, "lllaniplp2=") !== false) {
+					list(, $lllaniplp2old) = explode("=", $line);
 				}
 				if(strpos($line, "lllaniplp3=") !== false) {
 					list(, $lllaniplp3old) = explode("=", $line);
@@ -1075,37 +693,6 @@
 				if(strpos($line, "goetimeoutlp3=") !== false) {
 					list(, $goetimeoutlp3old) = explode("=", $line);
 				}
-				if(strpos($line, "smashmbezugid=") !== false) {
-					list(, $smashmbezugidold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmspeicherpv=") !== false) {
-					list(, $mpm3pmspeicherpvold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmspeicherid=") !== false) {
-					list(, $mpm3pmspeicheridold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmspeicherlanip=") !== false) {
-					list(, $mpm3pmspeicherlanipold) = explode("=", $line);
-				}
-
-				if(strpos($line, "mpm3pmspeichersource=") !== false) {
-					list(, $mpm3pmspeichersourceold) = explode("=", $line);
-				}
-				if(strpos($line, "speicherekwh_http=") !== false) {
-					list(, $speicherekwh_httpold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "speicherikwh_http=") !== false) {
-					list(, $speicherikwh_httpold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_smartme_user=") !== false) {
-					list(, $bezug_smartme_userold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_smartme_pass=") !== false) {
-					list(, $bezug_smartme_passold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "bezug_smartme_url=") !== false) {
-					list(, $bezug_smartme_urlold) = explode("=", $line, 2);
-				}
 				if(strpos($line, "carnetuser=") !== false) {
 					list(, $carnetuserold) = explode("=", $line);
 				}
@@ -1124,89 +711,6 @@
 				if(strpos($line, "soccarnetlp2intervall=") !== false) {
 					list(, $soccarnetlp2intervallold) = explode("=", $line);
 				}
-
-				if(strpos($line, "bydhvuser=") !== false) {
-					list(, $bydhvuserold) = explode("=", $line);
-				}
-				if(strpos($line, "bydhvpass=") !== false) {
-					list(, $bydhvpassold) = explode("=", $line);
-				}
-				if(strpos($line, "bydhvip=") !== false) {
-					list(, $bydhvipold) = explode("=", $line);
-				}
-				if(strpos($line, "wr_smartme_user=") !== false) {
-					list(, $wr_smartme_userold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_smartme_pass=") !== false) {
-					list(, $wr_smartme_passold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_smartme_url=") !== false) {
-					list(, $wr_smartme_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_piko2_user=") !== false) {
-					list(, $wr_piko2_userold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_piko2_pass=") !== false) {
-					list(, $wr_piko2_passold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "wr_piko2_url=") !== false) {
-					list(, $wr_piko2_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "e3dcip=") !== false) {
-					list(, $e3dcipold) = explode("=", $line);
-				}
-				if(strpos($line, "e3dcextprod=") !== false) {
-					list(, $e3dcextprodold) = explode("=", $line);
-				}
-				if(strpos($line, "e3dc2ip=") !== false) {
-					list(, $e3dc2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "speicherpwip=") !== false) {
-					list(, $speicherpwipold) = explode("=", $line);
-				}
-				if(strpos($line, "sbs25ip=") !== false) {
-					list(, $sbs25ipold) = explode("=", $line);
-				}
-				if(strpos($line, "tri9000ip=") !== false) {
-					list(, $tri9000ipold) = explode("=", $line);
-				}
-				if(strpos($line, "bezug_smartfox_ip=") !== false) {
-					list(, $bezug_smartfox_ipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsmawebbox=") !== false) {
-					list(, $wrsmawebboxold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsma2ip=") !== false) {
-					list(, $wrsma2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsma3ip=") !== false) {
-					list(, $wrsma3ipold) = explode("=", $line);
-				}
-				if(strpos($line, "wrsma4ip=") !== false) {
-					list(, $wrsma4ipold) = explode("=", $line);
-				}
-				if(strpos($line, "kostalplenticoreip=") !== false) {
-					list(, $kostalplenticoreipold) = explode("=", $line);
-				}
-				if(strpos($line, "kostalplenticoreip2=") !== false) {
-					list(, $kostalplenticoreip2old) = explode("=", $line);
-				}
-				if(strpos($line, "name_wechselrichter1=") !== false) {
-					list(, $name_wechselrichter1old) = explode("=", $line);
-				}
-				if(strpos($line, "name_wechselrichter2=") !== false) {
-					list(, $name_wechselrichter2old) = explode("=", $line);
-				}
-
-				if(strpos($line, "mpm3pmevuhaus=") !== false) {
-					list(, $mpm3pmevuhausold) = explode("=", $line);
-				}
-				if(strpos($line, "evuglaettung=") !== false) {
-					list(, $evuglaettungold) = explode("=", $line);
-				}
-				if(strpos($line, "evuglaettungakt=") !== false) {
-					list(, $evuglaettungaktold) = explode("=", $line);
-				}
 				if(strpos($line, "nrgkickiplp1=") !== false) {
 					list(, $nrgkickiplp1old) = explode("=", $line);
 				}
@@ -1218,21 +722,6 @@
 				}
 				if(strpos($line, "nrgkickpwlp1=") !== false) {
 					list(, $nrgkickpwlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "kostalplenticorehaus=") !== false) {
-					list(, $kostalplenticorehausold) = explode("=", $line);
-				}
-				if(strpos($line, "kostalplenticorebatt=") !== false) {
-					list(, $kostalplenticorebattold) = explode("=", $line);
-				}
-				if(strpos($line, "froniuserzeugung=") !== false) {
-					list(, $froniuserzeugungold) = explode("=", $line);
-				}
-				if(strpos($line, "froniusprimo=") !== false) {
-					list(, $froniusprimoold) = explode("=", $line);
-				}
-				if(strpos($line, "froniusvar2=") !== false) {
-					list(, $froniusvar2old) = explode("=", $line);
 				}
 				if(strpos($line, "nrgkickiplp2=") !== false) {
 					list(, $nrgkickiplp2old) = explode("=", $line);
@@ -1246,19 +735,8 @@
 				if(strpos($line, "nrgkickpwlp2=") !== false) {
 					list(, $nrgkickpwlp2old) = explode("=", $line);
 				}
-				if(strpos($line, "sunnyislandip=") !== false) {
-					list(, $sunnyislandipold) = explode("=", $line);
-				}
 			}
 			$twcmanagerlp1ipold = str_replace( "'", "", $twcmanagerlp1ipold);
-			$bezug_http_l1_urlold = str_replace( "'", "", $bezug_http_l1_urlold);
-			$bezug_http_l2_urlold = str_replace( "'", "", $bezug_http_l2_urlold);
-			$bezug_http_l3_urlold = str_replace( "'", "", $bezug_http_l3_urlold);
-			$bezug_http_w_urlold = str_replace( "'", "", $bezug_http_w_urlold);
-			$bezug_http_ikwh_urlold = str_replace( "'", "", $bezug_http_ikwh_urlold);
-			$bezug_http_ekwh_urlold = str_replace( "'", "", $bezug_http_ekwh_urlold);
-			$wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
-			$wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 			$httpevseipold = str_replace( "'", "", $httpevseipold);
 			$httpll_kwh_urlold = str_replace( "'", "", $httpll_kwh_urlold);
 			$httpll_w_urlold = str_replace( "'", "", $httpll_w_urlold);
@@ -1266,38 +744,12 @@
 			$httpll_a2_urlold = str_replace( "'", "", $httpll_a2_urlold);
 			$httpll_a3_urlold = str_replace( "'", "", $httpll_a3_urlold);
 			$hsocipold = str_replace( "'", "", $hsocipold);
-			$wrjsonurlold = str_replace( "'", "", $wrjsonurlold);
-			$wrjsonwattold = str_replace( "'", "", $wrjsonwattold);
-			$wrjsonkwhold = str_replace( "'", "", $wrjsonkwhold);
-			$bezugjsonurlold = str_replace( "'", "", $bezugjsonurlold);
-			$bezugjsonwattold = str_replace( "'", "", $bezugjsonwattold);
-			$bezugjsonkwhold = str_replace( "'", "", $bezugjsonkwhold);
-			$einspeisungjsonkwhold = str_replace( "'", "", $einspeisungjsonkwhold);
-			$bezug_solarlog_ipold = str_replace( "'", "", $bezug_solarlog_ipold);
-			$speichersoc_httpold = str_replace( "'", "", $speichersoc_httpold);
-			$speicherleistung_httpold = str_replace( "'", "", $speicherleistung_httpold);
-			$speicherikwh_httpold = str_replace( "'", "", $speicherikwh_httpold);
-			$speicherekwh_httpold = str_replace( "'", "", $speicherekwh_httpold);
-			$bezug_smartme_userold = str_replace( "'", "", $bezug_smartme_userold);
-			$bezug_smartme_passold = str_replace( "'", "", $bezug_smartme_passold);
-			$bezug_smartme_urlold = str_replace( "'", "", $bezug_smartme_urlold);
 			$carnetuserold = str_replace( "'", "", $carnetuserold);
 			$carnetpassold = str_replace( "'", "", $carnetpassold);
-			$wr_smartme_userold = str_replace( "'", "", $wr_smartme_userold);
-			$wr_smartme_passold = str_replace( "'", "", $wr_smartme_passold);
-			$wr_smartme_urlold = str_replace( "'", "", $wr_smartme_urlold);
 			$socteslapwold = str_replace( "'", "", $socteslapwold);
 			$socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
 			$carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
 			$carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
-			$wr_piko2_userold = str_replace( "'", "", $wr_piko2_userold);
-			$wr_piko2_passold = str_replace( "'", "", $wr_piko2_passold);
-			$wr_piko2_urlold = str_replace( "'", "", $wr_piko2_urlold);
-
-			$solaredgepvipold = str_replace( "'", "", $solaredgepvipold);
-			$solaredgeipold = str_replace( "'", "", $solaredgeipold);
-			$solaredgewr2ipold = str_replace( "'", "", $solaredgewr2ipold);
-			$solaredgespeicheripold = str_replace( "'", "", $solaredgespeicheripold);
 			$lp1nameold = str_replace( "'", "", $lp1nameold);
 			$lp2nameold = str_replace( "'", "", $lp2nameold);
 			$lp3nameold = str_replace( "'", "", $lp3nameold);
@@ -3927,11 +3379,11 @@
 									<div class="col-4">Ladepunkt <?php echo $chargepointNum; ?></div>
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-											<label class="btn btn-sm btn-outline-info<?php if(${lastmanagementlp.$chargepointNum.old} == 0) echo " active" ?>">
-												<input type="radio" name="lastmanagementlp<?php echo $chargepointNum; ?>" id="lastmanagementlp<?php echo $chargepointNum; ?>Off" value="0"<?php if(${lastmanagementlp.$chargepointNum.old} == 0) echo " checked=\"checked\"" ?>>Aus
+											<label class="btn btn-sm btn-outline-info<?php if(${'lastmanagementlp'.$chargepointNum.'old'} == 0) echo " active" ?>">
+												<input type="radio" name="lastmanagementlp<?php echo $chargepointNum; ?>" id="lastmanagementlp<?php echo $chargepointNum; ?>Off" value="0"<?php if(${'lastmanagementlp'.$chargepointNum.'old'} == 0) echo " checked=\"checked\"" ?>>Aus
 											</label>
-											<label class="btn btn-sm btn-outline-info<?php if(${lastmanagementlp.$chargepointNum.old} == 1) echo " active" ?>">
-												<input type="radio" name="lastmanagementlp<?php echo $chargepointNum; ?>" id="lastmanagementlp<?php echo $chargepointNum; ?>On" value="1"<?php if(${lastmanagementlp.$chargepointNum.old} == 1) echo " checked=\"checked\"" ?>>An
+											<label class="btn btn-sm btn-outline-info<?php if(${'lastmanagementlp'.$chargepointNum.'old'} == 1) echo " active" ?>">
+												<input type="radio" name="lastmanagementlp<?php echo $chargepointNum; ?>" id="lastmanagementlp<?php echo $chargepointNum; ?>On" value="1"<?php if(${'lastmanagementlp'.$chargepointNum.'old'} == 1) echo " checked=\"checked\"" ?>>An
 											</label>
 										</div>
 									</div>
@@ -3943,7 +3395,7 @@
 								<div class="form-row mb-1">
 									<label for="lp<?php echo $chargepointNum; ?>name" class="col-md-4 col-form-label">Name</label>
 									<div class="col">
-										<input class="form-control" type="text" name="lp<?php echo $chargepointNum; ?>name" id="lp<?php echo $chargepointNum; ?>name" value="<?php echo trim(${lp.$chargepointNum.nameold}) ?>">
+										<input class="form-control" type="text" name="lp<?php echo $chargepointNum; ?>name" id="lp<?php echo $chargepointNum; ?>name" value="<?php echo trim(${'lp'.$chargepointNum.'nameold'}) ?>">
 									</div>
 								</div>
 							</div>
@@ -3952,8 +3404,8 @@
 								<label for="evseconlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Anbindung</label>
 								<div class="col">
 									<select name="evseconlp<?php echo $chargepointNum; ?>" id="evseconlp<?php echo $chargepointNum; ?>" class="form-control">
-										<option <?php if(${evseconlp.$chargepointNum.old} == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
-										<option <?php if(${evseconlp.$chargepointNum.old} == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
+										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
 									</select>
 								</div>
 							</div>
@@ -3962,7 +3414,7 @@
 									<div class="form-row mb-1">
 										<label for="chargep<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep<?php echo $chargepointNum; ?>ip" id="chargep<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${chargep.$chargepointNum.ipold}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep<?php echo $chargepointNum; ?>ip" id="chargep<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${'chargep'.$chargepointNum.'ipold'}) ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 												Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -3972,7 +3424,7 @@
 									<div class="form-row mb-1">
 										<label for="chargep<?php echo $chargepointNum; ?>cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="2" step="1" name="chargep<?php echo $chargepointNum; ?>cp" id="chargep<?php echo $chargepointNum; ?>cp" value="<?php echo trim(${chargep.$chargepointNum.cpold}) ?>">
+											<input class="form-control" type="number" min="1" max="2" step="1" name="chargep<?php echo $chargepointNum; ?>cp" id="chargep<?php echo $chargepointNum; ?>cp" value="<?php echo trim(${'chargep'.$chargepointNum.'cpold'}) ?>">
 											<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 										</div>
 									</div>
@@ -3983,7 +3435,7 @@
 									<div class="form-row mb-1">
 										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo trim(${evseiplp.$chargepointNum.old}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo trim(${'evseiplp'.$chargepointNum.'old'}) ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12
 											</span>
@@ -3992,14 +3444,14 @@
 									<div class="form-row mb-1">
 										<label for="evseidlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp<?php echo $chargepointNum; ?>" id="evseidlp<?php echo $chargepointNum; ?>" value="<?php echo trim(${evseidlp.$chargepointNum.old}) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp<?php echo $chargepointNum; ?>" id="evseidlp<?php echo $chargepointNum; ?>" value="<?php echo trim(${'evseidlp'.$chargepointNum.'old'}) ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mpmlp<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">Ladeleistung IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp<?php echo $chargepointNum; ?>ip" id="mpmlp<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${mpmlp.$chargepointNum.ipold}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp<?php echo $chargepointNum; ?>ip" id="mpmlp<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${'mpmlp'.$chargepointNum.'ipold'}) ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Modbus Ethernet Konverters.
 											</span>
@@ -4008,7 +3460,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp<?php echo $chargepointNum; ?>id" class="col-md-4 col-form-label">Ladeleistung ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp<?php echo $chargepointNum; ?>id" id="mpmlp<?php echo $chargepointNum; ?>id" value="<?php echo trim(${mpmlp.$chargepointNum.idold}) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp<?php echo $chargepointNum; ?>id" id="mpmlp<?php echo $chargepointNum; ?>id" value="<?php echo trim(${'mpmlp'.$chargepointNum.'idold'}) ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
