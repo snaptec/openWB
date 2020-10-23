@@ -33,7 +33,8 @@ body {
 }
 
 .card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
-.card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
     background-color: #212529;
 }
 
