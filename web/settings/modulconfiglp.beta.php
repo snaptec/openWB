@@ -34,6 +34,32 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script>
+			/**
+			 * hideSection
+			 * add class 'hide' to element with id 'section'
+			 * disables all contained input and select elements if 'disableChildren' is not set to false
+			**/
+			function hideSection(section, disableChildren=true) {
+				$('#'+section).addClass('hide');
+				if (disableChildren) {
+					$('#'+section).find('input').prop("disabled", true);
+					$('#'+section).find('select').prop("disabled", true);
+				}
+			}
+
+			/**
+			 * showSection
+			 * remove class 'hide' from element with id 'section'
+			 * enables all contained input and select elements if 'enableChildren' is not set to false
+			**/
+			function showSection(section, enableChildren=true) {
+				$('#'+section).removeClass('hide');
+				if (enableChildren) {
+					$('#'+section).find('input').prop("disabled", false);
+					$('#'+section).find('select').prop("disabled", false);
+				}
+			}
+
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -1781,20 +1807,6 @@
 						</div>
 					</div>
 					<script>
-						function hideSection(section, disableChildren=true) {
-							$('#'+section).addClass('hide');
-							if (disableChildren) {
-								$('#'+section).find('input').prop("disabled", true);
-								$('#'+section).find('select').prop("disabled", true);
-							}
-						}
-						function showSection(section, enableChildren=true) {
-							$('#'+section).removeClass('hide');
-							if (enableChildren) {
-								$('#'+section).find('input').prop("disabled", false);
-								$('#'+section).find('select').prop("disabled", false);
-							}
-						}
 						// visibility of charge point types
 						function display_lp1() {
 							hideSection('llmodullp1');
@@ -1816,7 +1828,8 @@
 
 							if($('#evsecon').val() == 'ipevse') {
 								showSection('evseconipevse');
-								showSection('llmodullp1', false);
+								showSection('llmodullp1');
+								display_llmp1();
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('evseconextopenwb');
@@ -1826,18 +1839,21 @@
 							}
 							if($('#evsecon').val() == 'dac') {
 								showSection('evsecondac');
-								showSection('llmodullp1', false);
+								showSection('llmodullp1');
+								display_llmp1();
 							}
 							if($('#evsecon').val() == 'modbusevse') {
 								showSection('evseconmod');
-								showSection('llmodullp1', false);
+								showSection('llmodullp1');
+								display_llmp1();
 							}
 							if($('#evsecon').val() == 'simpleevsewifi') {
 								showSection('evseconswifi');
 							}
 							if($('#evsecon').val() == 'httpevse') {
 								showSection('evseconhttp');
-								showSection('llmodullp1', false);
+								showSection('llmodullp1');
+								display_llmp1();
 							}
 							if($('#evsecon').val() == 'goe') {
 								showSection('evsecongoe');
@@ -2801,14 +2817,17 @@
 							if($('#evsecons1').val() == 'ipevse') {
 								showSection('evseconipevselp2');
 								showSection('llmodullp2');
+								display_llmp2();
 							}
 							if($('#evsecons1').val() == 'dac') {
 								showSection('evsecondacs1');
 								showSection('llmodullp2');
+								display_llmp2();
 							}
 							if($('#evsecons1').val() == 'modbusevse') {
 								showSection('evseconmbs1');
 								showSection('llmodullp2');
+								display_llmp2();
 							}
 							if($('#evsecons1').val() == 'simpleevsewifi') {
 								showSection('evseconswifis1');
@@ -3286,10 +3305,12 @@
 							if($('#evsecons2').val() == 'dac') {
 								showSection('evsecondacs2');
 								showSection('llmodullp3');
+								display_llmp3();
 							}
 							if($('#evsecons2').val() == 'modbusevse') {
 								showSection('evseconmbs2');
 								showSection('llmodullp3');
+								display_llmp3();
 							}
 							if($('#evsecons2').val() == 'simpleevsewifi') {
 								showSection('evseconswifis2');
@@ -3303,6 +3324,7 @@
 							if($('#evsecons2').val() == 'ipevse') {
 								showSection('evseconipevselp3');
 								showSection('llmodullp3');
+								display_llmp3();
 							}
 						}
 
@@ -3353,7 +3375,7 @@
 						$(function() {
 							display_lp3();
 							display_lastmanagement2();
-							display_llmp3 ();
+							display_llmp3();
 
 							$('#evsecons2').change( function(){
 								display_lp3();
@@ -3466,42 +3488,41 @@
 									</div>
 								</div>
 							</div>
-
-							<script>
-								function display_lp<?php echo $chargepointNum; ?> () {
-									hideSection('evseconipevselp<?php echo $chargepointNum; ?>');
-									hideSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
-
-									if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'extopenwb') {
-										showSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
-									}
-									if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
-										showSection('evseconipevselp<?php echo $chargepointNum; ?>');
-									}
-								}
-
-								function display_lastmanagementlp<?php echo $chargepointNum; ?>() {
-									if($('#lastmanagementlp<?php echo $chargepointNum; ?>Off').prop("checked")) {
-										hideSection('lastlp<?php echo $chargepointNum; ?>mman');
-									}
-									else {
-										showSection('lastlp<?php echo $chargepointNum; ?>mman');
-										display_lp<?php echo $chargepointNum; ?>();
-									}
-								}
-
-								$(function() {
-									display_lastmanagementlp<?php echo $chargepointNum; ?>();
-
-									$('#evseconlp<?php echo $chargepointNum; ?>').change( function(){
-										display_lp<?php echo $chargepointNum; ?>();
-									});
-									$('input[type=radio][name=lastmanagementlp<?php echo $chargepointNum; ?>]').change(function() {
-										display_lastmanagementlp<?php echo $chargepointNum; ?>();
-									});
-								});
-							</script>
 						</div>
+						<script>
+							function display_lp<?php echo $chargepointNum; ?> () {
+								hideSection('evseconipevselp<?php echo $chargepointNum; ?>');
+								hideSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+
+								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'extopenwb') {
+									showSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+								}
+								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
+									showSection('evseconipevselp<?php echo $chargepointNum; ?>');
+								}
+							}
+
+							function display_lastmanagementlp<?php echo $chargepointNum; ?>() {
+								if($('#lastmanagementlp<?php echo $chargepointNum; ?>Off').prop("checked")) {
+									hideSection('lastlp<?php echo $chargepointNum; ?>mman');
+								}
+								else {
+									showSection('lastlp<?php echo $chargepointNum; ?>mman');
+									display_lp<?php echo $chargepointNum; ?>();
+								}
+							}
+
+							$(function() {
+								display_lastmanagementlp<?php echo $chargepointNum; ?>();
+
+								$('#evseconlp<?php echo $chargepointNum; ?>').change( function(){
+									display_lp<?php echo $chargepointNum; ?>();
+								});
+								$('input[type=radio][name=lastmanagementlp<?php echo $chargepointNum; ?>]').change(function() {
+									display_lastmanagementlp<?php echo $chargepointNum; ?>();
+								});
+							});
+						</script>
 					</div>
 				<?php } ?>
 
