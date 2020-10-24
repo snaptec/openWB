@@ -87,7 +87,7 @@
 
 		<?php
 
-			$lines = file('/var/www/html/openWB/openwb.conf');
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
 				if(strpos($line, "socuser=") !== false) {
 					list(, $socuserold) = explode("=", $line);
@@ -2957,12 +2957,15 @@
 								showSection('lastmman');
 								showSection('durchslp2');
 								showSection('nachtls1div');
+								display_socmodul1();
+								display_llmp2 ();
+								display_lp2();
 							}
 						}
 
 						$(function() {
-							display_socmodul1();
 							display_lastmanagement();
+							display_socmodul1();
 							display_llmp2 ();
 							display_lp2();
 
@@ -3369,12 +3372,14 @@
 							else {
 								showSection('lasts2mman');
 								showSection('durchslp3');
+								display_lp3();
+								display_llmp3();
 							}
 						}
 
 						$(function() {
-							display_lp3();
 							display_lastmanagement2();
+							display_lp3();
 							display_llmp3();
 
 							$('#evsecons2').change( function(){
