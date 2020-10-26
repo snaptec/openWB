@@ -3296,6 +3296,16 @@
 						</div>
 					</div>
 					<script>
+						function display_lastmanagement2() {
+							if($('#lastmanagements2Off').prop("checked")) {
+								hideSection('lasts2mman');
+							}
+							else {
+								showSection('lasts2mman');
+								display_lp3();
+							}
+						}
+
 						function display_lp3 () {
 							hideSection('evsecondacs2');
 							hideSection('evseconmbs2');
@@ -3364,23 +3374,8 @@
 							}
 						}
 
-						function display_lastmanagement2() {
-							if($('#lastmanagements2Off').prop("checked")) {
-								hideSection('lasts2mman');
-								hideSection('durchslp3');
-							}
-							else {
-								showSection('lasts2mman');
-								showSection('durchslp3');
-								display_lp3();
-								display_llmp3();
-							}
-						}
-
 						$(function() {
 							display_lastmanagement2();
-							display_lp3();
-							display_llmp3();
 
 							$('#evsecons2').change( function(){
 								display_lp3();
