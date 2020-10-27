@@ -1084,7 +1084,7 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "wr1extprod=") !== false) {
-			$result .= 'wr1extprod=\''.$_POST['wr1extprod']."'\n";
+			$result .= 'wr1extprod='.$_POST['wr1extprod']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "solaredgewr2ip=") !== false) {
