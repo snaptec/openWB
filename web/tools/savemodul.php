@@ -706,6 +706,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'bezug_id='.$_POST['bezug_id']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "speicher_ip=") !== false) {
+			$result .= 'speicher_ip='.$_POST['speicher_ip']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "bezug_http_l1_url=") !== false) {
 			$result .= 'bezug_http_l1_url=\''.$_POST['bezug_http_l1_url']."'\n";
 			$writeit = '1';
