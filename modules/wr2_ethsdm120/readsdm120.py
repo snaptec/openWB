@@ -35,10 +35,10 @@ if vwh1 > v1wh1:
     finalwh=vwh1
 else:
     finalwh=v1wh1
-    vwh2 = float(finalwh) * int(1000)
-    vwh3 = str(vwh2)
-    f = open("/var/www/html/openWB/ramdisk/pv2kwh", 'w')
-    f.write(str(vwh3))
-    f.close()
+vwh2 = float(finalwh) * int(1000)
+vwh3 = str(vwh2)
+f = open("/var/www/html/openWB/ramdisk/pv2kwh", 'w')
+f.write(str(vwh3))
+f.close()
 
 
