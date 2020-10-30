@@ -1375,6 +1375,7 @@
 									<option <?php if($speichermodulold == "speicher_fems\n") echo "selected" ?> value="speicher_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 									<option <?php if($speichermodulold == "speicher_siemens\n") echo "selected" ?> value="speicher_siemens">Siemens</option>
 									<option <?php if($speichermodulold == "speicher_rct\n") echo "selected" ?> value="speicher_rct">RCT</option>
+									<option <?php if($speichermodulold == "speicher_sungrow\n") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
 								</select>
 							</div>
 						</div>
@@ -1464,6 +1465,12 @@
 						<div id="divspeichersiemens" class="hide">
 							<div class="alert alert-info">
 								Im Siemens Speicher muss als Schnittstelle <span class="text-info">openWB</span> gewählt werden.
+							</div>
+						</div>
+
+						<div id="divspeichersungrow" class="hide">
+							<div class="alert alert-info">
+								Es muss Sungrow als PV und EVU Modul gewählt werden.
 							</div>
 						</div>
 
@@ -1756,8 +1763,9 @@
 								hideSection('divspeicherlgessv1');
 								hideSection('divspeicherfems');
 								hideSection('divspeicherip');
-								hideSection('divspeicherrct');
 								hideSection('divspeichersiemens');
+								hideSection('divspeicherrct');
+								hideSection('divspeichersungrow');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
 									showSection('divspeicherfems');
@@ -1768,6 +1776,10 @@
 								if($('#speichermodul').val() == 'speicher_siemens') {
 									showSection('divspeicherip');
 									showSection('divspeichersiemens');
+								}
+								if($('#speichermodul').val() == 'speicher_sungrow') {
+									showSection('divspeicherip');
+									showSection('divspeichersungrow');
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
 									showSection('divspeicheralphaess');
