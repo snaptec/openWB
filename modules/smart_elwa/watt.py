@@ -64,7 +64,7 @@ if count5==0:
       faktor = 1.2
    else:
       faktor = 1
-      modbuswrite = 0
+   modbuswrite = 0
    # weiche Anpassung bei negativem ueberschuss
    if uberschuss < 0:
       neupower = aktpower + uberschuss
