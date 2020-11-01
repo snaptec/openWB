@@ -547,7 +547,7 @@ def turndevicerelais(nummer, zustand):
                 if os.path.isfile( pyname  ): 
                   logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " angeschaltet")
                   DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
-                  subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
+                  proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
                   proc.communicate() 
             except Exception as e:
                 logDebug("2", "Fehler beim Einschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
@@ -556,7 +556,7 @@ def turndevicerelais(nummer, zustand):
                 pyname0 = config.get('smarthomedevices', 'device_name_'+str(nummer))
                 pyname = prefixpy + pyname0.lower()+ "/off.py"
                 if os.path.isfile( pyname  ): 
-                  subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
+                  proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss)])
                   proc.communicate()
                   logDebug("1", "Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " ausgeschaltet")
             except Exception as e:
