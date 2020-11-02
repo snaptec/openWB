@@ -647,7 +647,10 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
                 subprocess.Popen("/var/www/html/openWB/runs/update.sh")
         if (msg.topic == "openWB/set/system/SendDebug"):
-            if (int(msg.payload) == 1):
+            if len(msg.payload) >= 20 and len(msg.payload) <=1000:
+                f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
                 client.publish("openWB/set/system/SendDebug", "0", qos=0, retain=True)
                 subprocess.Popen("/var/www/html/openWB/runs/senddebuginit.sh")
         if (msg.topic == "openWB/config/set/releaseTrain"):
