@@ -205,6 +205,13 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/smarthome_device_manual_'+str(devicenumb), 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
+        if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+            f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/config/get/SmartHome/logLevel", msg.payload.decode("utf-8"), qos=0, retain=True)
+            client.publish("openWB/config/set/SmartHome/logLevel", "", qos=0, retain=True)
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("current" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and 6 <= int(msg.payload) <= 32):
