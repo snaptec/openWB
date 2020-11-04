@@ -236,7 +236,10 @@ if [[ "$rfidakt" == "2" ]]; then
                python3 /var/www/html/openWB/runs/rfid.py &
        fi
 else
-	sudo kill $(ps aux |grep 'runs/[r]fid.py' | awk '{print $2}')       
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+       	then
+		sudo kill $(ps aux |grep 'runs/[r]fid.py' | awk '{print $2}')       
+	fi
 fi
 if ps ax |grep -v grep |grep "sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py" > /dev/null
 then
