@@ -1786,7 +1786,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug_smartme_user" class="col-md-4 col-form-label">Smartme Benutzername</label>
 								<div class="col">
-									<input class="form-control" type="email" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars(trim($bezug_smartme_userold)) ?>">
+									<input class="form-control" type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars(trim($bezug_smartme_userold)) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
@@ -1866,9 +1866,6 @@
 												<input type="radio" name="froniusprimo" id="froniusprimoOn" value="1"<?php if($froniusprimoold == 1) echo " checked=\"checked\"" ?>>An
 											</label>
 										</div>
-										<span class="form-text small">
-											Hausverbrauchs-Zweig = Pos. 1 oder Netzanschluss-Zweig = Pos. 2
-										</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
