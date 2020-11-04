@@ -174,9 +174,24 @@ do
 		d5dailyyield=$(echo "scale=2;($d5 - $i) / 1000" |bc)
 		echo $d5dailyyield > /var/www/html/openWB/ramdisk/daily_d5kwh
 	fi
-
+	if (( pvyieldcount == 32 )); then
+		d6dailyyield=$(echo "scale=2;($d6 - $i) / 1000" |bc)
+		echo $d6dailyyield > /var/www/html/openWB/ramdisk/daily_d6kwh
+	fi
+	if (( pvyieldcount == 33 )); then
+		d7dailyyield=$(echo "scale=2;($d7 - $i) / 1000" |bc)
+		echo $d7dailyyield > /var/www/html/openWB/ramdisk/daily_d7kwh
+	fi
+	if (( pvyieldcount == 34 )); then
+		d8dailyyield=$(echo "scale=2;($d8 - $i) / 1000" |bc)
+		echo $d8dailyyield > /var/www/html/openWB/ramdisk/daily_d8kwh
+	fi
+	if (( pvyieldcount == 35 )); then
+		d9dailyyield=$(echo "scale=2;($d9 - $i) / 1000" |bc)
+		echo $d9dailyyield > /var/www/html/openWB/ramdisk/daily_d9kwh
+	fi
 done
-hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
+hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $d6dailyyield - $d7dailyyield - $d8dailyyield - $d9dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > /var/www/html/openWB/ramdisk/daily_hausverbrauchkwh
 
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
