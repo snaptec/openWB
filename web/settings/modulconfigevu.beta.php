@@ -2075,6 +2075,8 @@
 								if($('#wattbezugmodul').val() != 'none') {
 									showSection('evuglaettungdiv');
 									display_evuglaettung();
+								} else {
+									showSection('wattbezugnone');
 								}
 								if($('#wattbezugmodul').val() == 'bezug_alphaess') {
 									showSection('wattbezugalphaess');
