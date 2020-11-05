@@ -1384,6 +1384,7 @@
 									<option <?php if($pvwattmodulold == "wr_powerdog\n") echo "selected" ?> value="wr_powerdog">Powerdog</option>
 									<option <?php if($pvwattmodulold == "wr_rct\n") echo "selected" ?> value="wr_rct">RCT</option>
 									<option <?php if($pvwattmodulold == "wr_huawei\n") echo "selected" ?> value="wr_huawei">Huawei</option>
+									<option <?php if($pvwattmodulold == "wr_shelly\n") echo "selected" ?> value="wr_shelly">Shelly</option>
 								</select>
 							</div>
 						</div>
@@ -1971,6 +1972,10 @@
 								if($('#pvwattmodul').val() == 'wr_huawei') {
 									showSection('pvip');
 								}
+								if($('#pvwattmodul').val() == 'wr_shelly') {
+									showSection('pvip');
+								}
+
 								if($('#pvwattmodul').val() == 'wr_powerdog') {
 									showSection('pvpowerdog');
 								}
