@@ -1990,6 +1990,11 @@
 												<input type="radio" name="evuglaettungakt" id="evuglaettungaktOn" value="1"<?php if($evuglaettungaktold == 1) echo " checked=\"checked\"" ?>>An
 											</label>
 										</div>
+										<span class="form-text small">
+											Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert.
+											Sinnvoll, wenn öfter kurze Lastspitzen auftreten.
+											Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.
+										</span>
 									</div>
 								</div>
 								<div id="evuglaettungandiv">
@@ -1998,10 +2003,7 @@
 										<div class="col">
 											<input class="form-control" type="number" min="10" step="10" name="evuglaettung" id="evuglaettung" value="<?php echo trim($evuglaettungold) ?>">
 											<span class="form-text small">
-												Gültige Werte: Zeit in Sekunden, z.B. 30,50,200.<br>
-												Kombiniert die EVU Werte der letzten x Sekunden und bildet einen Mittelwert darüber.
-												Sinnvoll, wenn öfter kurze Lastspitzen auftreten.
-												Der Durchschnittswert wird auf der Hauptseite in Klammern angezeigt.
+												Gültige Werte: Zeit in Sekunden, z.B. 30,50,200
 											</span>
 										</div>
 									</div>
