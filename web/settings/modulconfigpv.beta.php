@@ -1367,7 +1367,7 @@
 							<div class="col">
 								<select name="pvwattmodul" id="pvwattmodul" class="form-control">
 									<option <?php if($pvwattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo "selected" ?> value="wr_ethmpm3pmaevu">MPM3PM an openWB EVU Kit</option>
+									<option <?php if($pvwattmodulold == "wr_ethmpm3pmaevu\n") echo "selected" ?> value="wr_ethmpm3pmaevu">Zähler an openWB EVU Kit</option>
 									<option <?php if($pvwattmodulold == "wr_ethsdm120\n") echo "selected" ?> value="wr_ethsdm120">SDM120 an openWB Modbus Lan Konverter</option>
 									<option <?php if($pvwattmodulold == "wr_fronius\n") echo "selected" ?> value="wr_fronius">Fronius WR</option>
 									<option <?php if($pvwattmodulold == "sdm630modbuswr\n") echo "selected" ?> value="sdm630modbuswr">SDM 630 Modbus</option>
