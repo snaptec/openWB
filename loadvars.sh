@@ -124,12 +124,7 @@ if [[ $evsecon == "ipevse" ]]; then
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
 fi
-if [[ $evsecon == "extopenwb" ]]; then
-	evseplugstatelp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolPlugStat)
-	ladestatuslp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolChargeStat)
-	echo $evseplugstatelp1  > /var/www/html/openWB/ramdisk/plugstat
-	echo $ladestatuslp1 > /var/www/html/openWB/ramdisk/chargestat
-fi
+
 if [[ $lastmanagement == "1" ]]; then
 	ConfiguredChargePoints=2
 	if [[ $evsecons1 == "modbusevse" ]]; then
@@ -165,12 +160,6 @@ if [[ $lastmanagement == "1" ]]; then
 			fi
 
 		fi
-	fi
-	if [[ $evsecons1 == "extopenwb" ]]; then
-		evseplugstatelp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolPlugStat)
-		ladestatuslp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolChargeStat)
-		echo $evseplugstatelp2  > /var/www/html/openWB/ramdisk/plugstats1
-		echo $ladestatuslp2 > /var/www/html/openWB/ramdisk/chargestats1
 	fi
 	if [[ $evsecons1 == "slaveeth" ]]; then
 		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
