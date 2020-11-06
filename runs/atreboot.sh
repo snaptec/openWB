@@ -1068,6 +1068,18 @@ if ! grep -Fq "wrjsonurl=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wrjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wr2jsonwatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr2jsonkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonkwh=.kwh" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr2jsonurl=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
 	  echo "hausbezugnone=200" >> /var/www/html/openWB/openwb.conf

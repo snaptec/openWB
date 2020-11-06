@@ -971,6 +971,18 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'wrjsonkwh=\''.$_POST['wrjsonkwh']."'\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "wr2jsonurl=") !== false) {
+			$result .= 'wr2jsonurl=\''.$_POST['wr2jsonurl']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "wr2jsonwatt=") !== false) {
+			$result .= 'wr2jsonwatt=\''.$_POST['wr2jsonwatt']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "wr2jsonkwh=") !== false) {
+			$result .= 'wr2jsonkwh=\''.$_POST['wr2jsonkwh']."'\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "hausbezugnone=") !== false) {
 			$result .= 'hausbezugnone='.$_POST['hausbezugnone']."\n";
 			$writeit = '1';

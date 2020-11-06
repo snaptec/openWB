@@ -928,6 +928,15 @@
 				if(strpos($line, "wrjsonkwh=") !== false) {
 					list(, $wrjsonkwhold) = explode("=", $line, 2);
 				}
+				if(strpos($line, "wr2jsonurl=") !== false) {
+					list(, $wr2jsonurlold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "wr2jsonwatt=") !== false) {
+					list(, $wr2jsonwattold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "wr2jsonkwh=") !== false) {
+					list(, $wr2jsonkwhold) = explode("=", $line, 2);
+				}
 				if(strpos($line, "hausbezugnone=") !== false) {
 					list(, $hausbezugnoneold) = explode("=", $line);
 				}
@@ -2088,6 +2097,7 @@
 									<option <?php if($pv2wattmodulold == "wr2_victron\n") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
 									<option <?php if($pv2wattmodulold == "wr2_ethsdm120\n") echo "selected" ?> value="wr2_ethsdm120">SDM120 an Netzwerk Modbus Adapter</option>
 									<option <?php if($pv2wattmodulold == "wr2_solaredge\n") echo "selected" ?> value="wr2_solaredge">Solaredge</option>
+									<option <?php if($pv2wattmodulold == "wr2_json\n") echo "selected" ?> value="wr2_json">Json Abfrage</option>
 								</select>
 							</div>
 						</div>
@@ -2116,13 +2126,47 @@
 								</div>
 							</div>
 						</div>
-
+						<div id="pv2wrjsondiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="wr2jsonurl" class="col-md-4 col-form-label">WR URL</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2jsonurl" id="wr2jsonurl" value="<?php echo trim($wr2jsonurlold) ?>">
+									<span class="form-text small">
+										Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2jsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2jsonwatt" id="wr2jsonwatt" value="<?php echo htmlspecialchars(trim($wr2jsonwattold)) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="wr2jsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
+								<div class="col">
+									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo trim($wr2jsonkwhold) ?>">
+									<span class="form-text small">
+										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
+										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
+									</span>
+								</div>
+							</div>
+						</div>
 						<script>
 							function display_pv2wattmodul() {
 								hideSection('pv2noconfig');
 								hideSection('pv2ipdiv');
 								hideSection('pv2iddiv');
-
+								hideSection('pv2wrjsondiv');
+								
+								if($('#pv2wattmodul').val() == 'wr2_json') {
+									showSection('pv2wrjsondiv');
+								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
 									showSection('pv2noconfig');
 								}
