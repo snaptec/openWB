@@ -2597,6 +2597,10 @@ if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pv2kitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "pv2kitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wrsunwayspw=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsunwayspw=passwort" >> /var/www/html/openWB/openwb.conf

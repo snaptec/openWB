@@ -123,6 +123,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'pvkitversion='.$_POST['pvkitversion']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "pv2kitversion=") !== false) {
+			$result .= 'pv2kitversion='.$_POST['pv2kitversion']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "evseidlp3=") !== false) {
 			$result .= 'evseidlp3='.$_POST['evseidlp3']."\n";
 			$writeit = '1';

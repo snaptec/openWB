@@ -169,6 +169,9 @@
 				if(strpos($line, "pvkitversion=") !== false) {
 					list(, $pvkitversionold) = explode("=", $line);
 				}
+				if(strpos($line, "pv2kitversion=") !== false) {
+					list(, $pv2kitversionold) = explode("=", $line);
+				}
 				if(strpos($line, "evukitversion=") !== false) {
 					list(, $evukitversionold) = explode("=", $line);
 				}
@@ -2090,8 +2093,8 @@
 							<div class="col">
 								<select name="pv2wattmodul" id="pv2wattmodul" class="form-control">
 									<option <?php if($pv2wattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu\n") echo "selected" ?> value="wr2_ethlovatoaevu">Lovato an openWB EVU Kit</option>
-									<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit v2</option>
+									<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu\n") echo "selected" ?> value="wr2_ethlovatoaevu">PV Zähler an openWB EVU Kit</option>
+									<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit</option>
 									<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
 									<option <?php if($pv2wattmodulold == "wr2_kostalsteca\n") echo "selected" ?> value="wr2_kostalsteca">Kostal Piko MP oder Steca Grid Coolcept</option>
 									<option <?php if($pv2wattmodulold == "wr2_victron\n") echo "selected" ?> value="wr2_victron">Victron MPPT</option>
@@ -2104,6 +2107,17 @@
 						<div id="pv2noconfig" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
+							</div>
+						</div>
+						<div id="pv2kitdiv" class="hide">
+							<div class="form-row mb-1">
+								<label for="pv2kitversion" class="col-md-4 col-form-label">Version des openWB PV Kits</label>
+								<div class="col">
+									<select name="pv2kitversion" id="pvkitversion" class="form-control">
+										<option <?php if($pv2kitversionold == 0) echo "selected" ?> value="0">Lovato Zähler</option>
+										<option <?php if($pv2kitversionold == 1) echo "selected" ?> value="1">Eastron SDM630 Zähler</option>
+									</select>
+								</div>
 							</div>
 						</div>
 						<div id="pv2ipdiv" class="hide">
@@ -2162,16 +2176,17 @@
 								hideSection('pv2noconfig');
 								hideSection('pv2ipdiv');
 								hideSection('pv2iddiv');
+								hideSection('pv2kitdiv');
 								hideSection('pv2wrjsondiv');
 								
 								if($('#pv2wattmodul').val() == 'wr2_json') {
 									showSection('pv2wrjsondiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
-									showSection('pv2noconfig');
+									showSection('pv2kitdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovato') {
-									showSection('pv2noconfig');
+									showSection('pv2kitdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
 									showSection('pv2ipdiv');
