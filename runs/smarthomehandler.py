@@ -468,37 +468,37 @@ def getdevicevalues():
                           f = open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0neg', 'w')
                           f.write(str("0"))
                           f.close()
-                      #Update Einschaltdauer Timer
-                          if ( relais == 1):
-                              newtime = int(time.time())
-                              try:
-                                  if str(numberOfDevices)+"oldstampeinschaltdauer" in DeviceCounters:
-                                      timediff = newtime - DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
-                                      try:
-                                          DeviceValues[str(numberOfDevices)+"runningtime"]= DeviceValues[str(numberOfDevices)+"runningtime"] + int(timediff)
-                                      except Exception as e:
-                                          DeviceValues.update( {str(numberOfDevices) + "runningtime" : int(0)})
-                                      DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
-                                  else:
-                                      DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
-                              except Exception as e:
-                                  print(str(e))
-                          else:
-                              try:
-                                  del DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
-                              except:
-                                  pass
-                    #Einschaltzeit des Relais setzen
-                          if str(numberOfDevices)+"relais" in DeviceValues:
-                              if ( DeviceValues[str(numberOfDevices)+"relais"] == 0 ):
-                                  if ( relais == 1 ):
-                                      DeviceCounters.update( {str(numberOfDevices) + "eintime" : time.time()})
+                       #Update Einschaltdauer Timer
+                       if ( relais == 1):
+                          newtime = int(time.time())
+                          try:
+                              if str(numberOfDevices)+"oldstampeinschaltdauer" in DeviceCounters:
+                                  timediff = newtime - DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
+                                  try:
+                                      DeviceValues[str(numberOfDevices)+"runningtime"]= DeviceValues[str(numberOfDevices)+"runningtime"] + int(timediff)
+                                  except Exception as e:
+                                      DeviceValues.update( {str(numberOfDevices) + "runningtime" : int(0)})
+                                  DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
                               else:
-                                  if ( relais == 0 ):
-                                      if str(numberOfDevices) + "eintime" in DeviceCounters:
-                                          del DeviceCounters[str(numberOfDevices) + "eintime"]
-                          DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                          logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))                      
+                                  DeviceCounters.update( {str(numberOfDevices) + "oldstampeinschaltdauer" : newtime})
+                          except Exception as e:
+                              print(str(e))
+                       else:
+                          try:
+                              del DeviceCounters[str(numberOfDevices)+"oldstampeinschaltdauer"]
+                          except:
+                              pass
+                       #Einschaltzeit des Relais setzen
+                       if str(numberOfDevices)+"relais" in DeviceValues:
+                          if ( DeviceValues[str(numberOfDevices)+"relais"] == 0 ):
+                              if ( relais == 1 ):
+                                  DeviceCounters.update( {str(numberOfDevices) + "eintime" : time.time()})
+                          else:
+                              if ( relais == 0 ):
+                                  if str(numberOfDevices) + "eintime" in DeviceCounters:
+                                      del DeviceCounters[str(numberOfDevices) + "eintime"]
+                       DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
+                       logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))                      
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device pyt " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
