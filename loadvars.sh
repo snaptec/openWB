@@ -853,6 +853,11 @@ else
 	wattbezugint=$((-uberschuss))
 	wattbezug=$wattbezugint
 fi
+# Abschaltbare Smartdevices zum Ueberschuss rechnen
+echo $uberschuss > /var/www/html/openWB/ramdisk/ueberschuss_org
+wattabs=$(cat /var/www/html/openWB/ramdisk/devicetotal_watt)
+uberschuss=$((uberschuss + wattabs))
+echo $uberschuss > /var/www/html/openWB/ramdisk/ueberschuss_mitsmart
 
 #Soc ermitteln
 if [[ $socmodul != "none" ]]; then
