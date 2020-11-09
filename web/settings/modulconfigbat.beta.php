@@ -140,14 +140,14 @@
 								<div class="form-row mb-1">
 									<label for="lgessv1ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lgessv1ip" id="lgessv1ip" value="<?php echo trim($lgessv1ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lgessv1ip" id="lgessv1ip" value="<?php echo $lgessv1ipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="lgessv1pass" class="col-md-4 col-form-label">Password</label>
 									<div class="col">
-										<input class="form-control" type="password" name="lgessv1pass" id="lgessv1pass" value="<?php echo trim($lgessv1passold) ?>">
+										<input class="form-control" type="password" name="lgessv1pass" id="lgessv1pass" value="<?php echo $lgessv1passold ?>">
 										<span class="form-text small">
 											Standardmäßig ist hier die Registrierungsnummer des LG ESS 1.0VI anzugeben.
 										</span>
@@ -210,7 +210,7 @@
 								<div class="form-row mb-1">
 									<label for="speicher1_ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip" id="speicher1_ip" value="<?php echo trim($speicher1_ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicher1_ip" id="speicher1_ip" value="<?php echo $speicher1_ipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -240,7 +240,7 @@
 								<div class="form-row mb-1">
 									<label for="vartaspeicherip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo trim($vartaspeicheripold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="vartaspeicherip" id="vartaspeicherip" value="<?php echo $vartaspeicheripold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -268,7 +268,7 @@
 								<div class="form-row mb-1">
 									<label for="speicherpwip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicherpwip" id="speicherpwip" value="<?php echo trim($speicherpwipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="speicherpwip" id="speicherpwip" value="<?php echo $speicherpwipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -280,7 +280,7 @@
 								<div class="form-row mb-1">
 									<label for="sonnenecoip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sonnenecoip" id="sonnenecoip" value="<?php echo trim($sonnenecoipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sonnenecoip" id="sonnenecoip" value="<?php echo $sonnenecoipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -309,7 +309,7 @@
 								<div class="form-row mb-1">
 									<label for="e3dcip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^(none)|((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="e3dcip" id="e3dcip" value="<?php echo trim($e3dcipold) ?>">
+										<input class="form-control" type="text" pattern="^(none)|((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="e3dcip" id="e3dcip" value="<?php echo $e3dcipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -325,7 +325,7 @@
 								<div class="form-row mb-1">
 									<label for="e3dc2ip" class="col-md-4 col-form-label">2. IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^(none)|((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="e3dc2ip" id="e3dc2ip" value="<?php echo trim($e3dc2ipold) ?>">
+										<input class="form-control" type="text" pattern="^(none)|((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="e3dc2ip" id="e3dc2ip" value="<?php echo $e3dc2ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Wenn nicht vorhanden none eintragen.
@@ -340,7 +340,7 @@
 								<div class="form-row mb-1">
 									<label for="sbs25ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sbs25ip" id="sbs25ip" value="<?php echo trim($sbs25ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -352,7 +352,7 @@
 								<div class="form-row mb-1">
 									<label for="sunnyislandip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sunnyislandip" id="sunnyislandip" value="<?php echo trim($sunnyislandipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sunnyislandip" id="sunnyislandip" value="<?php echo $sunnyislandipold ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
@@ -364,7 +364,7 @@
 								<div class="form-row mb-1">
 									<label for="solaredgespeicherip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo trim($solaredgespeicheripold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgespeicherip" id="solaredgespeicherip" value="<?php echo $solaredgespeicheripold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Solaredge Wechselrichters an dem der Speicher angeschlossen ist.
@@ -392,7 +392,7 @@
 								<div class="form-row mb-1">
 									<label for="speicherleistung_http" class="col-md-4 col-form-label">Leistung URL</label>
 									<div class="col">
-										<input class="form-control" type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo htmlspecialchars(trim($speicherleistung_httpold)) ?>">
+										<input class="form-control" type="text" name="speicherleistung_http" id="speicherleistung_http" value="<?php echo htmlspecialchars($speicherleistung_httpold) ?>">
 										<span class="form-text small">
 											Gültige Werte URL. Vollständige URL die den aktuellen Leistungswert in Watt wiedergibt.
 											Erwartet wird eine Ganzzahl. Positiv heißt Speicher wird geladen und eine negative Zahl bedeutet das der Speicher entladen wird.
@@ -403,7 +403,7 @@
 								<div class="form-row mb-1">
 									<label for="speichersoc_http" class="col-md-4 col-form-label">SoC URL</label>
 									<div class="col">
-										<input class="form-control" type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo htmlspecialchars(trim($speichersoc_httpold)) ?>">
+										<input class="form-control" type="text" name="speichersoc_http" id="speichersoc_http" value="<?php echo htmlspecialchars($speichersoc_httpold) ?>">
 										<span class="form-text small">
 											Gültige Werte URL. Vollständige URL die den aktuellen SoC wiedergibt.
 										</span>
@@ -412,7 +412,7 @@
 								<div class="form-row mb-1">
 									<label for="speicherikwh_http" class="col-md-4 col-form-label">Import Wh URL</label>
 									<div class="col">
-										<input class="form-control" type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo htmlspecialchars(trim($speicherikwh_httpold)) ?>">
+										<input class="form-control" type="text" name="speicherikwh_http" id="speicherikwh_http" value="<?php echo htmlspecialchars($speicherikwh_httpold) ?>">
 										<span class="form-text small">
 											Gültige Werte URL. Wenn nicht vorhanden, none eintragen.
 											Vollständige URL die den Zählerstand der Batterieladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
@@ -422,7 +422,7 @@
 								<div class="form-row mb-1">
 									<label for="speicherekwh_http" class="col-md-4 col-form-label">Export Wh URL</label>
 									<div class="col">
-										<input class="form-control" type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo htmlspecialchars(trim($speicherekwh_httpold)) ?>">
+										<input class="form-control" type="text" name="speicherekwh_http" id="speicherekwh_http" value="<?php echo htmlspecialchars($speicherekwh_httpold) ?>">
 										<span class="form-text small">
 											Gültige Werte URL. Wenn nicht vorhanden, none eintragen.
 											Vollständige URL die den Zählerstand der Batterieentladung in WattStunden wiedergibt. Erwartet wird eine Ganzzahl.
@@ -437,21 +437,21 @@
 								<div class="form-row mb-1">
 									<label for="bydhvuser" class="col-md-4 col-form-label">Benutzername</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bydhvuser" id="bydhvuser" value="<?php echo trim($bydhvuserold) ?>">
+										<input class="form-control" type="text" name="bydhvuser" id="bydhvuser" value="<?php echo $bydhvuserold ?>">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="bydhvpass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="bydhvpass" id="bydhvpass" value="<?php echo trim($bydhvpassold) ?>">
+											<input class="form-control" type="password" name="bydhvpass" id="bydhvpass" value="<?php echo $bydhvpassold ?>">
 										</div>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="bydhvip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bydhvip" id="bydhvip" value="<?php echo trim($bydhvipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bydhvip" id="bydhvip" value="<?php echo $bydhvipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
@@ -465,14 +465,14 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmspeichersource" class="col-md-4 col-form-label">Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo trim($mpm3pmspeichersourceold) ?>">
+										<input class="form-control" type="text" name="mpm3pmspeichersource" id="mpm3pmspeichersource" value="<?php echo $mpm3pmspeichersourceold ?>">
 										<span class="form-text small">Gültige Werte /dev/ttyUSBx , /dev/virtualcomX bei Verwendung mit Ethernet Modbus.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="mpm3pmspeicherid" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo trim($mpm3pmspeicheridold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmspeicherid" id="mpm3pmspeicherid" value="<?php echo $mpm3pmspeicheridold ?>">
 										<span class="form-text small">Gültige Werte 1-254.</span>
 									</div>
 								</div>
@@ -488,7 +488,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmspeicherlanip" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo trim($mpm3pmspeicherlanipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpm3pmspeicherlanip" id="mpm3pmspeicherlanip" value="<?php echo $mpm3pmspeicherlanipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
