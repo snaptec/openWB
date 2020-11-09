@@ -86,715 +86,18 @@
 	<body>
 
 		<?php
-
 			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
 			foreach($lines as $line) {
-				if(strpos($line, "socuser=") !== false) {
-					list(, $socuserold) = explode("=", $line);
-				}
-				if(strpos($line, "socpass=") !== false) {
-					list(, $socpassold) = explode("=", $line);
-				}
-				if(strpos($line, "soc2user=") !== false) {
-					list(, $soc2userold) = explode("=", $line);
-				}
-				if(strpos($line, "soc2pass=") !== false) {
-					list(, $soc2passold) = explode("=", $line);
-				}
-				if(strpos($line, "soc2pin=") !== false) {
-					list(, $soc2pinold) = explode("=", $line);
-				}
-				if(strpos($line, "soclp1_vin=") !== false) {
-					list(, $soclp1_vinold) = explode("=", $line);
-				}
-				if(strpos($line, "soclp2_vin=") !== false) {
-					list(, $soclp2_vinold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_bluelink_interval=") !== false) {
-					list(, $soc_bluelink_intervalold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_bluelink_email=") !== false) {
-					list(, $soc_bluelink_emailold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_bluelink_password=") !== false) {
-					list(, $soc_bluelink_passwordold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_bluelink_pin=") !== false) {
-					list(, $soc_bluelink_pinold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_vin=") !== false) {
-					list(, $soc_vinold) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_userlp2=") !== false) {
-					list(, $myrenault_userlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_passlp2=") !== false) {
-					list(, $myrenault_passlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_locationlp2=") !== false) {
-					list(, $myrenault_locationlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_countrylp2=") !== false) {
-					list(, $myrenault_countrylp2old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_userlp1=") !== false) {
-					list(, $myrenault_userlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_passlp1=") !== false) {
-					list(, $myrenault_passlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_locationlp1=") !== false) {
-					list(, $myrenault_locationlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "myrenault_countrylp1=") !== false) {
-					list(, $myrenault_countrylp1old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagementlp4=") !== false) {
-					list(, $lastmanagementlp4old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagementlp5=") !== false) {
-					list(, $lastmanagementlp5old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagementlp6=") !== false) {
-					list(, $lastmanagementlp6old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagementlp7=") !== false) {
-					list(, $lastmanagementlp7old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagementlp8=") !== false) {
-					list(, $lastmanagementlp8old) = explode("=", $line);
-				}
-				if(strpos($line, "stopsocnotpluggedlp1=") !== false) {
-					list(, $stopsocnotpluggedlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp3=") !== false) {
-					list(, $evseiplp3old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp3=") !== false) {
-					list(, $evseidlp3old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp3id=") !== false) {
-					list(, $mpmlp3idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp3ip=") !== false) {
-					list(, $mpmlp3ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp2=") !== false) {
-					list(, $evseiplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp2=") !== false) {
-					list(, $evseidlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp2id=") !== false) {
-					list(, $mpmlp2idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp2ip=") !== false) {
-					list(, $mpmlp2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp1=") !== false) {
-					list(, $evseiplp1old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp1=") !== false) {
-					list(, $evseidlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp1id=") !== false) {
-					list(, $mpmlp1idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp1ip=") !== false) {
-					list(, $mpmlp1ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep1cp=") !== false) {
-				list(, $chargep1cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep2cp=") !== false) {
-					list(, $chargep2cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep3cp=") !== false) {
-					list(, $chargep3cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep4cp=") !== false) {
-					list(, $chargep4cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep5cp=") !== false) {
-					list(, $chargep5cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep6cp=") !== false) {
-					list(, $chargep6cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep7cp=") !== false) {
-					list(, $chargep7cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep8cp=") !== false) {
-					list(, $chargep8cpold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep1ip=") !== false) {
-				list(, $chargep1ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep2ip=") !== false) {
-					list(, $chargep2ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep3ip=") !== false) {
-					list(, $chargep3ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep4ip=") !== false) {
-					list(, $chargep4ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep5ip=") !== false) {
-					list(, $chargep5ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep6ip=") !== false) {
-					list(, $chargep6ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep7ip=") !== false) {
-					list(, $chargep7ipold) = explode("=", $line);
-				}
-				if(strpos($line, "chargep8ip=") !== false) {
-					list(, $chargep8ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp4=") !== false) {
-					list(, $evseiplp4old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp4=") !== false) {
-					list(, $evseidlp4old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp4id=") !== false) {
-					list(, $mpmlp4idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp4ip=") !== false) {
-					list(, $mpmlp4ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp5=") !== false) {
-					list(, $evseiplp5old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp5=") !== false) {
-					list(, $evseidlp5old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp5id=") !== false) {
-					list(, $mpmlp5idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp5ip=") !== false) {
-					list(, $mpmlp5ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp6=") !== false) {
-					list(, $evseiplp6old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp6=") !== false) {
-					list(, $evseidlp6old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp6id=") !== false) {
-					list(, $mpmlp6idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp6ip=") !== false) {
-					list(, $mpmlp6ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp7=") !== false) {
-					list(, $evseiplp7old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp7=") !== false) {
-					list(, $evseidlp7old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp7id=") !== false) {
-					list(, $mpmlp7idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp7ip=") !== false) {
-					list(, $mpmlp7ipold) = explode("=", $line);
-				}
-				if(strpos($line, "evseiplp8=") !== false) {
-					list(, $evseiplp8old) = explode("=", $line);
-				}
-				if(strpos($line, "evseidlp8=") !== false) {
-					list(, $evseidlp8old) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp8id=") !== false) {
-					list(, $mpmlp8idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpmlp8ip=") !== false) {
-					list(, $mpmlp8ipold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_audi_username=") !== false) {
-					list(, $soc_audi_usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_audi_passwort=") !== false) {
-					list(, $soc_audi_passwortold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zerong_username=") !== false) {
-					list(, $soc_zerong_usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zerong_password=") !== false) {
-					list(, $soc_zerong_passwordold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zerong_intervall=") !== false) {
-					list(, $soc_zerong_intervallold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zerong_intervallladen=") !== false) {
-					list(, $soc_zerong_intervallladenold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zeronglp2_username=") !== false) {
-					list(, $soc_zeronglp2_usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zeronglp2_password=") !== false) {
-					list(, $soc_zeronglp2_passwordold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zeronglp2_intervall=") !== false) {
-					list(, $soc_zeronglp2_intervallold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_zeronglp2_intervallladen=") !== false) {
-					list(, $soc_zeronglp2_intervallladenold) = explode("=", $line);
-				}
-				if(strpos($line, "debug=") !== false) {
-					list(, $debugold) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupmyrenaultlp1=") !== false) {
-					list(, $wakeupmyrenaultlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupmyrenaultlp2=") !== false) {
-					list(, $wakeupmyrenaultlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdmids1=") !== false) {
-					list(, $sdmids1old) = explode("=", $line);
-				}
-				if(strpos($line, "httpevseip=") !== false) {
-					list(, $httpevseipold) = explode("=", $line);
-				}
-				if(strpos($line, "evsecon=") !== false) {
-					list(, $evseconold) = explode("=", $line);
-				}
-				if(strpos($line, "evseconlp4=") !== false) {
-					list(, $evseconlp4old) = explode("=", $line);
-				}
-				if(strpos($line, "evseconlp5=") !== false) {
-					list(, $evseconlp5old) = explode("=", $line);
-				}
-				if(strpos($line, "evseconlp6=") !== false) {
-					list(, $evseconlp6old) = explode("=", $line);
-				}
-				if(strpos($line, "evseconlp7=") !== false) {
-					list(, $evseconlp7old) = explode("=", $line);
-				}
-				if(strpos($line, "evseconlp8=") !== false) {
-					list(, $evseconlp8old) = explode("=", $line);
-				}
-				if(strpos($line, "twcmanagerlp1ip=") !== false) {
-					list(, $twcmanagerlp1ipold) = explode("=", $line);
-				}
-				if(strpos($line, "twcmanagerlp1phasen=") !== false) {
-					list(, $twcmanagerlp1phasenold) = explode("=", $line);
-				}
-				if(strpos($line, "dacregister=") !== false) {
-					list(, $dacregisterold) = explode("=", $line);
-				}
-				if(strpos($line, "dacregisters2=") !== false) {
-					list(, $dacregisters2old) = explode("=", $line);
-				}
-				if(strpos($line, "dacregisters1=") !== false) {
-					list(, $dacregisters1old) = explode("=", $line);
-				}
-				if(strpos($line, "modbusevsesource=") !== false) {
-					list(, $modbusevsesourceold) = explode("=", $line);
-				}
-				if(strpos($line, "modbusevseid=") !== false) {
-					list(, $modbusevseidold) = explode("=", $line);
-				}
-				if(strpos($line, "modbusevselanip=") !== false) {
-					list(, $modbusevselanipold) = explode("=", $line);
-				}
-				if(strpos($line, "evsesources1=") !== false) {
-					list(, $evsesources1old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid1s1=") !== false) {
-					list(, $sdm120modbusllid1s1old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid2s1=") !== false) {
-					list(, $sdm120modbusllid2s1old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid3s1=") !== false) {
-					list(, $sdm120modbusllid3s1old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid1s2=") !== false) {
-					list(, $sdm120modbusllid1s2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid2s2=") !== false) {
-					list(, $sdm120modbusllid2s2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid3s2=") !== false) {
-					list(, $sdm120modbusllid3s2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid1=") !== false) {
-					list(, $sdm120modbusllid1old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid2=") !== false) {
-					list(, $sdm120modbusllid2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllid3=") !== false) {
-					list(, $sdm120modbusllid3old) = explode("=", $line);
-				}
-				if(strpos($line, "evseids1=") !== false) {
-					list(, $evseids1old) = explode("=", $line);
-				}
-				if(strpos($line, "evseids2=") !== false) {
-					list(, $evseids2old) = explode("=", $line);
-				}
-				if(strpos($line, "evselanips1=") !== false) {
-					list(, $evselanips1old) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagement=") !== false) {
-					list(, $lastmanagementold) = explode("=", $line);
-				}
-				if(strpos($line, "lastmanagements2=") !== false) {
-					list(, $lastmanagements2old) = explode("=", $line);
-				}
-				if(strpos($line, "evsecons1=") !== false) {
-					list(, $evsecons1old) = explode("=", $line);
-				}
-				if(strpos($line, "evsecons2=") !== false) {
-					list(, $evsecons2old) = explode("=", $line);
-				}
-				if(strpos($line, "evsesources2=") !== false) {
-					list(, $evsesources2old) = explode("=", $line);
-				}
-				if(strpos($line, "evseids1=") !== false) {
-					list(, $evseids1old) = explode("=", $line);
-				}
-				if(strpos($line, "evselanips2=") !== false) {
-					list(, $evselanips2old) = explode("=", $line);
-				}
-				if(strpos($line, "sdmids2=") !== false) {
-					list(, $sdmids2old) = explode("=", $line);
-				}
-				if(strpos($line, "ladeleistungs2modul=") !== false) {
-					list(, $ladeleistungs2modulold) = explode("=", $line);
-				}
-				if(strpos($line, "ladeleistungmodul=") !== false) {
-					list(, $ladeleistungmodulold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbusllid=") !== false) {
-					list(, $sdm630modbusllidold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbusllsource=") !== false) {
-					list(, $sdm630modbusllsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "fsm63a3modbusllid=") !== false) {
-					list(, $fsm63a3modbusllidold) = explode("=", $line);
-				}
-				if(strpos($line, "fsm63a3modbusllsource=") !== false) {
-					list(, $fsm63a3modbusllsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120modbusllsource=") !== false) {
-					list(, $sdm120modbusllsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630modbuslllanip=") !== false) {
-					list(, $sdm630modbuslllanipold) = explode("=", $line);
-				}
-				if(strpos($line, "socmodul=") !== false) {
-					list(, $socmodulold) = explode("=", $line);
-				}
-				if(strpos($line, "hsocip=") !== false) {
-					list(, $hsocipold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "socmodul1=") !== false) {
-					list(, $socmodul1old) = explode("=", $line);
-				}
-				if(strpos($line, "hsocip1=") !== false) {
-					list(, $hsocip1old) = explode("=", $line);
-				}
-				if(strpos($line, "httpll_w_url=") !== false) {
-					list(, $httpll_w_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "httpll_ip=") !== false) {
-					list(, $httpll_ipold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "httpll_kwh_url=") !== false) {
-					list(, $httpll_kwh_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "httpll_a1_url=") !== false) {
-					list(, $httpll_a1_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "httpll_a2_url=") !== false) {
-					list(, $httpll_a2_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "httpll_a3_url=") !== false) {
-					list(, $httpll_a3_urlold) = explode("=", $line, 2);
-				}
-				if(strpos($line, "ladeleistungs1modul=") !== false) {
-					list(, $ladeleistungs1modulold) = explode("=", $line);
-				}
-				if(strpos($line, "smaemdllid=") !== false) {
-					list(, $smaemdllidold) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifiiplp1=") !== false) {
-					list(, $evsewifiiplp1old) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifiiplp2=") !== false) {
-					list(, $evsewifiiplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifiiplp3=") !== false) {
-					list(, $evsewifiiplp3old) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifitimeoutlp1=") !== false) {
-					list(, $evsewifitimeoutlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifitimeoutlp2=") !== false) {
-					list(, $evsewifitimeoutlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "evsewifitimeoutlp3=") !== false) {
-					list(, $evsewifitimeoutlp3old) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmllsource=") !== false) {
-					list(, $mpm3pmllsourceold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmlls1source=") !== false) {
-					list(, $mpm3pmlls1sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmlls2source=") !== false) {
-					list(, $mpm3pmlls2sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmllid=") !== false) {
-					list(, $mpm3pmllidold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmlls1id=") !== false) {
-					list(, $mpm3pmlls1idold) = explode("=", $line);
-				}
-				if(strpos($line, "mpm3pmlls2id=") !== false) {
-					list(, $mpm3pmlls2idold) = explode("=", $line);
-				}
-				if(strpos($line, "leafusername=") !== false) {
-					list(, $leafusernameold) = explode("=", $line);
-				}
-				if(strpos($line, "leafpasswort=") !== false) {
-					list(, $leafpasswortold) = explode("=", $line);
-				}
-				if(strpos($line, "leafusernames1=") !== false) {
-					list(, $leafusernames1old) = explode("=", $line);
-				}
-				if(strpos($line, "leafpassworts1=") !== false) {
-					list(, $leafpassworts1old) = explode("=", $line);
-				}
-				if(strpos($line, "i3passworts1=") !== false) {
-					list(, $i3passworts1old) = explode("=", $line);
-				}
-				if(strpos($line, "i3passwort=") !== false) {
-					list(, $i3passwortold) = explode("=", $line);
-				}
-				if(strpos($line, "soci3intervall=") !== false) {
-					list(, $soci3intervallold) = explode("=", $line);
-				}
-				if(strpos($line, "soci3intervall1=") !== false) {
-					list(, $soci3intervall1old) = explode("=", $line);
-				}
-				if(strpos($line, "i3username=") !== false) {
-					list(, $i3usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "i3usernames1=") !== false) {
-					list(, $i3usernames1old) = explode("=", $line);
-				}
-				if(strpos($line, "i3vin=") !== false) {
-					list(, $i3vinold) = explode("=", $line);
-				}
-				if(strpos($line, "i3vins1=") !== false) {
-					list(, $i3vins1old) = explode("=", $line);
-				}
-				if(strpos($line, "zoeusername=") !== false) {
-					list(, $zoeusernameold) = explode("=", $line);
-				}
-				if(strpos($line, "zoepasswort=") !== false) {
-					list(, $zoepasswortold) = explode("=", $line);
-				}
-				if(strpos($line, "zoelp2username=") !== false) {
-					list(, $zoelp2usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "zoelp2passwort=") !== false) {
-					list(, $zoelp2passwortold) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupzoelp1=") !== false) {
-					list(, $wakeupzoelp1old) = explode("=", $line);
-				}
-				if(strpos($line, "wakeupzoelp2=") !== false) {
-					list(, $wakeupzoelp2old) = explode("=", $line);
-				}
-				if(strpos($line, "evnotifytoken=") !== false) {
-					list(, $evnotifytokenold) = explode("=", $line);
-				}
-				if(strpos($line, "evnotifyakey=") !== false) {
-					list(, $evnotifyakeyold) = explode("=", $line);
-				}
-				if(strpos($line, "evnotifytokenlp2=") !== false) {
-					list(, $evnotifytokenlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "evnotifyakeylp2=") !== false) {
-					list(, $evnotifyakeylp2old) = explode("=", $line);
-				}
-				if(strpos($line, "soc_tesla_username=") !== false) {
-					list(, $socteslausernameold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_tesla_carnumber=") !== false) {
-					list(, $socteslacarnumberold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_tesla_password=") !== false) {
-					list(, $socteslapwold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_tesla_intervall=") !== false) {
-					list(, $socteslaintervallold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_tesla_intervallladen=") !== false) {
-					list(, $socteslaintervallladenold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_teslalp2_username=") !== false) {
-					list(, $socteslalp2usernameold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_teslalp2_carnumber=") !== false) {
-					list(, $socteslalp2carnumberold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_teslalp2_password=") !== false) {
-					list(, $socteslalp2pwold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_teslalp2_intervall=") !== false) {
-					list(, $socteslalp2intervallold) = explode("=", $line);
-				}
-				if(strpos($line, "soc_teslalp2_intervallladen=") !== false) {
-					list(, $socteslalp2intervallladenold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630lp2source=") !== false) {
-					list(, $sdm630lp2sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120lp2source=") !== false) {
-					list(, $sdm120lp2sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm630lp3source=") !== false) {
-					list(, $sdm630lp3sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "sdm120lp3source=") !== false) {
-					list(, $sdm120lp3sourceold) = explode("=", $line);
-				}
-				if(strpos($line, "lllaniplp2=") !== false) {
-					list(, $lllaniplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "lllaniplp3=") !== false) {
-					list(, $lllaniplp3old) = explode("=", $line);
-				}
-				if(strpos($line, "lp1name=") !== false) {
-					list(, $lp1nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp2name=") !== false) {
-					list(, $lp2nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp3name=") !== false) {
-					list(, $lp3nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp4name=") !== false) {
-					list(, $lp4nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp5name=") !== false) {
-					list(, $lp5nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp6name=") !== false) {
-					list(, $lp6nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp7name=") !== false) {
-					list(, $lp7nameold) = explode("=", $line);
-				}
-				if(strpos($line, "lp8name=") !== false) {
-					list(, $lp8nameold) = explode("=", $line);
-				}
-				if(strpos($line, "goeiplp1=") !== false) {
-					list(, $goeiplp1old) = explode("=", $line);
-				}
-				if(strpos($line, "kebaiplp1=") !== false) {
-					list(, $kebaiplp1old) = explode("=", $line);
-				}
-				if(strpos($line, "kebaiplp2=") !== false) {
-					list(, $kebaiplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "goetimeoutlp1=") !== false) {
-					list(, $goetimeoutlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "goeiplp2=") !== false) {
-					list(, $goeiplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "goetimeoutlp2=") !== false) {
-					list(, $goetimeoutlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "goeiplp3=") !== false) {
-					list(, $goeiplp3old) = explode("=", $line);
-				}
-				if(strpos($line, "goetimeoutlp3=") !== false) {
-					list(, $goetimeoutlp3old) = explode("=", $line);
-				}
-				if(strpos($line, "carnetuser=") !== false) {
-					list(, $carnetuserold) = explode("=", $line);
-				}
-				if(strpos($line, "carnetpass=") !== false) {
-					list(, $carnetpassold) = explode("=", $line);
-				}
-				if(strpos($line, "soccarnetintervall=") !== false) {
-					list(, $soccarnetintervallold) = explode("=", $line);
-				}
-				if(strpos($line, "carnetlp2user=") !== false) {
-					list(, $carnetlp2userold) = explode("=", $line);
-				}
-				if(strpos($line, "carnetlp2pass=") !== false) {
-					list(, $carnetlp2passold) = explode("=", $line);
-				}
-				if(strpos($line, "soccarnetlp2intervall=") !== false) {
-					list(, $soccarnetlp2intervallold) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickiplp1=") !== false) {
-					list(, $nrgkickiplp1old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkicktimeoutlp1=") !== false) {
-					list(, $nrgkicktimeoutlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickmaclp1=") !== false) {
-					list(, $nrgkickmaclp1old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickpwlp1=") !== false) {
-					list(, $nrgkickpwlp1old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickiplp2=") !== false) {
-					list(, $nrgkickiplp2old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkicktimeoutlp2=") !== false) {
-					list(, $nrgkicktimeoutlp2old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickmaclp2=") !== false) {
-					list(, $nrgkickmaclp2old) = explode("=", $line);
-				}
-				if(strpos($line, "nrgkickpwlp2=") !== false) {
-					list(, $nrgkickpwlp2old) = explode("=", $line);
-				}
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
-			$twcmanagerlp1ipold = str_replace( "'", "", $twcmanagerlp1ipold);
-			$httpevseipold = str_replace( "'", "", $httpevseipold);
-			$httpll_kwh_urlold = str_replace( "'", "", $httpll_kwh_urlold);
-			$httpll_w_urlold = str_replace( "'", "", $httpll_w_urlold);
-			$httpll_a1_urlold = str_replace( "'", "", $httpll_a1_urlold);
-			$httpll_a2_urlold = str_replace( "'", "", $httpll_a2_urlold);
-			$httpll_a3_urlold = str_replace( "'", "", $httpll_a3_urlold);
-			$hsocipold = str_replace( "'", "", $hsocipold);
-			$carnetuserold = str_replace( "'", "", $carnetuserold);
-			$carnetpassold = str_replace( "'", "", $carnetpassold);
-			$socteslapwold = str_replace( "'", "", $socteslapwold);
-			$socteslalp2pwold = str_replace( "'", "", $socteslalp2pwold);
-			$carnetlp2userold = str_replace( "'", "", $carnetlp2userold);
-			$carnetlp2passold = str_replace( "'", "", $carnetlp2passold);
-			$lp1nameold = str_replace( "'", "", $lp1nameold);
-			$lp2nameold = str_replace( "'", "", $lp2nameold);
-			$lp3nameold = str_replace( "'", "", $lp3nameold);
-			$lp4nameold = str_replace( "'", "", $lp4nameold);
-			$lp5nameold = str_replace( "'", "", $lp5nameold);
-			$lp6nameold = str_replace( "'", "", $lp6nameold);
-			$lp7nameold = str_replace( "'", "", $lp7nameold);
-			$lp8nameold = str_replace( "'", "", $lp8nameold);
-			$zoepasswortold = str_replace( "'", "", $zoepasswortold);
-			$zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
-			$socpassold = str_replace( "'", "", $socpassold);
-			$soc2passold = str_replace( "'", "", $soc2passold);
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration</h1>
-			<form action="./tools/debugrequest.php" method="POST">
+			<form action="./tools/savemodul.beta.php" method="POST">
 
 				<!-- Ladepunkt 1 -->
 				<div class="card border-primary">
@@ -806,7 +109,7 @@
 							<div class="form-row mb-1">
 								<label for="lp1name" class="col-md-4 col-form-label">Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="lp1name" id="lp1name" value="<?php echo trim($lp1nameold) ?>">
+									<input class="form-control" type="text" name="lp1name" id="lp1name" value="<?php echo $lp1nameold ?>">
 								</div>
 							</div>
 						</div>
@@ -815,47 +118,65 @@
 							<label for="evsecon" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
-									<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
-									<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
-									<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
-									<option <?php if($evseconold == "buchse\n") echo "selected" ?> value="buchse">openWB mit Buchse</option>
-									<option <?php if($evseconold == "masterethframer\n") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
-									<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
-									<option <?php if($evseconold == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evseconold == "dac\n") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
-									<option <?php if($evseconold == "modbusevse\n" && !($ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && ($mpm3pmllidold == "5\n" || $mpm3pmllidold == "105\n"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
-									<option <?php if($evseconold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evseconold == "goe\n") echo "selected" ?> value="goe">Go-e</option>
-									<option <?php if($evseconold == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
-									<option <?php if($evseconold == "twcmanager\n") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
-									<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
+									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse">openWB series1/2</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler v2</option>
+									<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">openWB mit Buchse</option>
+									<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
+									<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit </option>
+									<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
+									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
+									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
+									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+									<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
+									<option <?php if($evseconold == "keba") echo "selected" ?> value="keba">Keba</option>
 								</select>
 							</div>
 						</div>
 						<div id="evseconmastereth" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmethllframer">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="openwb12" class="hide">
+							<!-- default values for openwb12 -->
+							<input type="hidden" name="modbusevseid" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
+							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
+							<input type="hidden" name="mpm3pmllid" value="5">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
 							</div>
 						</div>
 						<div id="openwbbuchse" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="llbuchse">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option für die openWB mit Buchse.
 							</div>
 						</div>
 						<div id="openwb12mid" class="hide">
+							<!-- default values for openwb12mid -->
+							<input type="hidden" name="modbusevseid" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
+							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
+							<input type="hidden" name="mpm3pmllid" value="105">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="openwb12v2mid" class="hide">
+							<!-- default values for openwb12v2mid -->
+							<input type="hidden" name="modbusevseid" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
+							<input type="hidden" name="mpm3pmllsource" value="/dev/serial0">
+							<input type="hidden" name="mpm3pmllid" value="105">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
@@ -865,7 +186,7 @@
 								<div class="form-row mb-1">
 									<label for="dacregister" class="col-md-4 col-form-label">Dacregister</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregister" id="dacregister" value="<?php echo trim($dacregisterold) ?>">
+										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregister" id="dacregister" value="<?php echo $dacregisterold ?>">
 										<span class="form-text small">
 											Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP.
 											Der benötigte Wert sollte <a href="/openWB/ramdisk/i2csearch">HIER</a> zu finden sein.
@@ -876,18 +197,19 @@
 							</div>
 						</div>
 						<div id="evseconswifi" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="simpleevsewifi">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evsewifiiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo trim($evsewifiiplp1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp1" id="evsewifiiplp1" value="<?php echo $evsewifiiplp1old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evsewifitimeoutlp1" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp1" id="evsewifitimeoutlp1" value="<?php echo trim($evsewifitimeoutlp1old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp1" id="evsewifitimeoutlp1" value="<?php echo $evsewifitimeoutlp1old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
@@ -897,11 +219,12 @@
 							</div>
 						</div>
 						<div id="evseconextopenwb" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="extopenwblp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="chargep1ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep1ip" id="chargep1ip" value="<?php echo trim($chargep1ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep1ip" id="chargep1ip" value="<?php echo $chargep1ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -911,7 +234,7 @@
 								<div class="form-row mb-1">
 									<label for="chargep1cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep1cp" id="chargep1cp" value="<?php echo trim($chargep1cpold) ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep1cp" id="chargep1cp" value="<?php echo $chargep1cpold ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
@@ -922,21 +245,21 @@
 								<div class="form-row mb-1">
 									<label for="modbusevsesource" class="col-md-4 col-form-label">Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo trim($modbusevsesourceold) ?>">
+										<input class="form-control" type="text" name="modbusevsesource" id="modbusevsesource" value="<?php echo $modbusevsesourceold ?>">
 										<span class="form-text small">Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="modbusevseid" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="modbusevseid" id="modbusevseid" value="<?php echo trim($modbusevseidold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="modbusevseid" id="modbusevseid" value="<?php echo $modbusevseidold ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="modbusevselanip" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="modbusevselanip" id="modbusevselanip" value="<?php echo trim($modbusevselanipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="modbusevselanip" id="modbusevselanip" value="<?php echo $modbusevselanipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.
@@ -950,7 +273,7 @@
 								<div class="form-row mb-1">
 									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo trim($evseiplp1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -960,18 +283,19 @@
 								<div class="form-row mb-1">
 									<label for="evseidlp1" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp1" id="evseidlp1" value="<?php echo trim($evseidlp1old) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp1" id="evseidlp1" value="<?php echo $evseidlp1old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div id="evseconkeba" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="keballlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="kebaiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kebaiplp1" id="kebaiplp1" value="<?php echo trim($kebaiplp1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kebaiplp1" id="kebaiplp1" value="<?php echo $kebaiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
@@ -985,7 +309,7 @@
 								<div class="form-row mb-1">
 									<label for="httpevseip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="httpevseip" id="httpevseip" value="<?php echo trim($httpevseipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="httpevseip" id="httpevseip" value="<?php echo $httpevseipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Der Ampere sollwert wird an http://$IP/setcurrent?current=$WERT gesendet.
@@ -997,11 +321,12 @@
 							</div>
 						</div>
 						<div id="evsecontwcmanager" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="twcmanagerlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo trim($twcmanagerlp1ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="twcmanagerlp1ip" id="twcmanagerlp1ip" value="<?php echo $twcmanagerlp1ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
@@ -1010,18 +335,19 @@
 								<div class="form-row mb-1">
 									<label for="twcmanagerlp1phasen" class="col-md-4 col-form-label">Anzahl Phasen</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo trim($twcmanagerlp1phasenold) ?>">
+										<input class="form-control" type="number" min="1" max="3" step="1" name="twcmanagerlp1phasen" id="twcmanagerlp1phasen" value="<?php echo $twcmanagerlp1phasenold ?>">
 										<span class="form-text small">Definiert die genutzte Anzahl der Phasen zur korrekten Errechnung der Ladeleistung (BETA).</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div id="evsecongoe" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="goeiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp1" id="goeiplp1" value="<?php echo trim($goeiplp1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp1" id="goeiplp1" value="<?php echo $goeiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
@@ -1030,7 +356,7 @@
 								<div class="form-row mb-1">
 									<label for="goetimeoutlp1" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo trim($goetimeoutlp1old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp1" id="goetimeoutlp1" value="<?php echo $goetimeoutlp1old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
@@ -1040,11 +366,12 @@
 							</div>
 						</div>
 						<div id="evseconnrgkick" class="hide">
+							<input type="hidden" name="ladeleistungmodul" value="nrgkicklp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="nrgkickiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo trim($nrgkickiplp1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="nrgkickiplp1" id="nrgkickiplp1" value="<?php echo $nrgkickiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.
@@ -1054,7 +381,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkicktimeoutlp1" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo trim($nrgkicktimeoutlp1old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="nrgkicktimeoutlp1" id="nrgkicktimeoutlp1" value="<?php echo $nrgkicktimeoutlp1old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der NRGKick z.B. gerade unterwegs genutzt wird.
@@ -1064,7 +391,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkickmaclp1" class="col-md-4 col-form-label">MAC Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo trim($nrgkickmaclp1old) ?>">
+										<input class="form-control" type="text" pattern="^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$" name="nrgkickmaclp1" id="nrgkickmaclp1" value="<?php echo $nrgkickmaclp1old ?>">
 										<span class="form-text small">
 											Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC<br>
 											Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.
@@ -1074,7 +401,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkickpwlp1" class="col-md-4 col-form-label">Password</label>
 									<div class="col">
-										<input class="form-control" type="password" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo trim($nrgkickpwlp1old) ?>">
+										<input class="form-control" type="password" name="nrgkickpwlp1" id="nrgkickpwlp1" value="<?php echo $nrgkickpwlp1old ?>">
 										<span class="form-text small">
 											Password, welches in der NRGKick App festgelegt wurde.
 										</span>
@@ -1089,17 +416,17 @@
 								<label for="ladeleistungmodul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
 									<select name="ladeleistungmodul" id="ladeleistungmodul" class="form-control">
-										<option <?php if($ladeleistungmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
-										<option <?php if($ladeleistungmodulold == "sdm630modbusll\n") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "smaemd_ll\n") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
-										<option <?php if($ladeleistungmodulold == "sdm120modbusll\n") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmll\n") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
-										<option <?php if($ladeleistungmodulold == "fsm63a3modbusll\n") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
-										<option <?php if($ladeleistungmodulold == "httpll\n") echo "selected" ?> value="httpll">HTTP</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmtripple\n") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
-										<option <?php if($ladeleistungmodulold == "mpm3pmlllp1\n") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
-										<option <?php if($ladeleistungmodulold == "mqttll\n") echo "selected" ?> value="mqttll">MQTT</option>
+										<option <?php if($ladeleistungmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
+										<option <?php if($ladeleistungmodulold == "sdm630modbusll") echo "selected" ?> value="sdm630modbusll">SDM 630 Modbus</option>
+										<option <?php if($ladeleistungmodulold == "smaemd_ll") echo "selected" ?> value="smaemd_ll">SMA Energy Meter</option>
+										<option <?php if($ladeleistungmodulold == "sdm120modbusll") echo "selected" ?> value="sdm120modbusll">SDM 120 Modbus</option>
+										<option <?php if($ladeleistungmodulold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">Simple EVSE Wifi</option>
+										<option <?php if($ladeleistungmodulold == "mpm3pmll") echo "selected" ?> value="mpm3pmll">MPM3PM</option>
+										<option <?php if($ladeleistungmodulold == "fsm63a3modbusll") echo "selected" ?> value="fsm63a3modbusll">FSM63A3 Modbus</option>
+										<option <?php if($ladeleistungmodulold == "httpll") echo "selected" ?> value="httpll">HTTP</option>
+										<option <?php if($ladeleistungmodulold == "mpm3pmtripple") echo "selected" ?> value="mpm3pmtripple">openWB Tripple</option>
+										<option <?php if($ladeleistungmodulold == "mpm3pmlllp1") echo "selected" ?> value="mpm3pmlllp1">openWB Satellit</option>
+										<option <?php if($ladeleistungmodulold == "mqttll") echo "selected" ?> value="mqttll">MQTT</option>
 									</select>
 								</div>
 							</div>
@@ -1110,7 +437,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo trim($mpmlp1ipold) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp1ip" id="mpmlp1ip" value="<?php echo $mpmlp1ipold ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse des Modbus Ethernet Konverters im Format: 192.168.0.12
 											</span>
@@ -1119,7 +446,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp1id" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp1id" id="mpmlp1id" value="<?php echo trim($mpmlp1idold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp1id" id="mpmlp1id" value="<?php echo $mpmlp1idold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -1130,7 +457,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_w_url" class="col-md-4 col-form-label">URL Ladeleistung in Watt</label>
 										<div class="col">
-											<input class="form-control" type="text" name="httpll_w_url" id="httpll_w_url" value="<?php echo htmlspecialchars(trim($httpll_w_urlold)) ?>">
+											<input class="form-control" type="text" name="httpll_w_url" id="httpll_w_url" value="<?php echo htmlspecialchars($httpll_w_urlold) ?>">
 											<span class="form-text small">
 												Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf null gesetzt.
 												Der Wert muss in Watt sein.
@@ -1140,7 +467,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_kwh_url" class="col-md-4 col-form-label">URL Zählerstand in kWh</label>
 										<div class="col">
-											<input class="form-control" type="text" name="httpll_kwh_url" id="httpll_kwh_url" value="<?php echo htmlspecialchars(trim($httpll_kwh_urlold)) ?>">
+											<input class="form-control" type="text" name="httpll_kwh_url" id="httpll_kwh_url" value="<?php echo htmlspecialchars($httpll_kwh_urlold) ?>">
 											<span class="form-text small">
 												Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf null gesetzt.
 												Der Wert muss in kWh mit einem Punkt als Trennzeichen für Nachkommastellen sein.
@@ -1150,7 +477,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_a1_url" class="col-md-4 col-form-label">URL Stromstärke Phase 1</label>
 										<div class="col">
-											<input class="form-control" type="text" name="httpll_a1_url" id="httpll_a1_url" value="<?php echo htmlspecialchars(trim($httpll_a1_urlold)) ?>">
+											<input class="form-control" type="text" name="httpll_a1_url" id="httpll_a1_url" value="<?php echo htmlspecialchars($httpll_a1_urlold) ?>">
 											<span class="form-text small">
 												Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf null gesetzt.
 												Der Wert muss in Ampere mit einem Punkt als Trennzeichen für Nachkommastellen sein.
@@ -1160,7 +487,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_a2_url" class="col-md-4 col-form-label">URL Stromstärke Phase 2</label>
 										<div class="col">
-											<input class="form-control" type="text" name="httpll_a2_url" id="httpll_a2_url" value="<?php echo htmlspecialchars(trim($httpll_a2_urlold)) ?>">
+											<input class="form-control" type="text" name="httpll_a2_url" id="httpll_a2_url" value="<?php echo htmlspecialchars($httpll_a2_urlold) ?>">
 											<span class="form-text small">
 												Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf null gesetzt.
 												Der Wert muss in Ampere mit einem Punkt als Trennzeichen für Nachkommastellen sein.
@@ -1170,7 +497,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_a3_url" class="col-md-4 col-form-label">URL Stromstärke Phase 3</label>
 										<div class="col">
-											<input class="form-control" type="text" name="httpll_a3_url" id="httpll_a3_url" value="<?php echo htmlspecialchars(trim($httpll_a3_urlold)) ?>">
+											<input class="form-control" type="text" name="httpll_a3_url" id="httpll_a3_url" value="<?php echo htmlspecialchars($httpll_a3_urlold) ?>">
 											<span class="form-text small">
 												Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes, wird der Wert auf null gesetzt.
 												Der Wert muss in Ampere mit einem Punkt als Trennzeichen für Nachkommastellen sein.
@@ -1180,7 +507,7 @@
 									<div class="form-row mb-1">
 										<label for="httpll_ip" class="col-md-4 col-form-label">IP Adresse Plug/Charge Status</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="httpll_ip" id="httpll_ip" value="<?php echo trim($httpll_ipold) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="httpll_ip" id="httpll_ip" value="<?php echo $httpll_ipold ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 												Abgerufene werden die Urls <span class="text-info">http://IP/plugstat</span> und <span class="text-info">http://IP/chargestat</span>.
@@ -1195,7 +522,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmllsource" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo trim($mpm3pmllsourceold) ?>">
+											<input class="form-control" type="text" name="mpm3pmllsource" id="mpm3pmllsource" value="<?php echo $mpm3pmllsourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das MPM3PM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -1205,7 +532,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmllid" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmllid" id="mpm3pmllid" value="<?php echo trim($mpm3pmllidold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmllid" id="mpm3pmllid" value="<?php echo $mpm3pmllidold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -1216,7 +543,7 @@
 									<div class="form-row mb-1">
 										<label for="fsm63a3modbusllsource" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="fsm63a3modbusllsource" id="fsm63a3modbusllsource" value="<?php echo trim($fsm63a3modbusllsourceold) ?>">
+											<input class="form-control" type="text" name="fsm63a3modbusllsource" id="fsm63a3modbusllsource" value="<?php echo $fsm63a3modbusllsourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das fsm63a3 angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -1226,7 +553,7 @@
 									<div class="form-row mb-1">
 										<label for="fsm63a3modbusllid" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="fsm63a3modbusllid" id="fsm63a3modbusllid" value="<?php echo trim($fsm63a3modbusllidold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="fsm63a3modbusllid" id="fsm63a3modbusllid" value="<?php echo $fsm63a3modbusllidold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des fsm63a3.</span>
 										</div>
 									</div>
@@ -1237,7 +564,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm630modbusllsource" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo trim($sdm630modbusllsourceold) ?>">
+											<input class="form-control" type="text" name="sdm630modbusllsource" id="sdm630modbusllsource" value="<?php echo $sdm630modbusllsourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -1247,7 +574,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm630modbusllid" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo trim($sdm630modbusllidold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbusllid" id="sdm630modbusllid" value="<?php echo $sdm630modbusllidold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.</span>
 										</div>
 									</div>
@@ -1258,7 +585,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllsource" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm120modbusllsource" id="sdm120modbusllsource" value="<?php echo trim($sdm120modbusllsourceold) ?>">
+											<input class="form-control" type="text" name="sdm120modbusllsource" id="sdm120modbusllsource" value="<?php echo $sdm120modbusllsourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -1268,21 +595,21 @@
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid1" class="col-md-4 col-form-label">ID Phase 1</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1" id="sdm120modbusllid1" value="<?php echo trim($sdm120modbusllid1old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1" id="sdm120modbusllid1" value="<?php echo $sdm120modbusllid1old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der ersten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid2" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo trim($sdm120modbusllid2old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo $sdm120modbusllid2old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid3" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo trim($sdm120modbusllid3old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
 										</div>
 									</div>
@@ -1293,7 +620,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm630modbuslllanip" class="col-md-4 col-form-label">IP Adresse RS485/Lan-Konverter</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo trim($sdm630modbuslllanipold) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbuslllanip" id="sdm630modbuslllanip" value="<?php echo $sdm630modbuslllanipold ?>">
 											<span class="form-text small">
 												Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
 												Gültige Werte IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
@@ -1312,7 +639,7 @@
 									<div class="form-row mb-1">
 										<label for="smaemdllid" class="col-md-4 col-form-label">Seriennummer</label>
 										<div class="col">
-											<input class="form-control" type="text" name="smaemdllid" id="smaemdllid" value="<?php echo trim($smaemdllidold) ?>">
+											<input class="form-control" type="text" name="smaemdllid" id="smaemdllid" value="<?php echo $smaemdllidold ?>">
 											<span class="form-text small">
 												Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für die Ladeleistung angeben.
 											</span>
@@ -1335,21 +662,21 @@
 							<label for="socmodul" class="col-md-4 col-form-label">SOC Modul</label>
 							<div class="col">
 								<select name="socmodul" id="socmodul" class="form-control">
-									<option <?php if($socmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodulold == "soc_http\n") echo "selected" ?> value="soc_http">SoC HTTP</option>
-									<option <?php if($socmodulold == "soc_leaf\n") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
-									<option <?php if($socmodulold == "soc_i3\n") echo "selected" ?> value="soc_i3">SoC BMW & Mini</option>
-									<option <?php if($socmodulold == "soc_zoe\n") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
-									<option <?php if($socmodulold == "soc_myrenault\n") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
-									<option <?php if($socmodulold == "soc_evnotify\n") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
-									<option <?php if($socmodulold == "soc_tesla\n") echo "selected" ?> value="soc_tesla">SoC Tesla</option>
-									<option <?php if($socmodulold == "soc_carnet\n") echo "selected" ?> value="soc_carnet">SoC VW Carnet</option>
-									<option <?php if($socmodulold == "soc_zerong\n") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
-									<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
-									<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
-									<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
-									<option <?php if($socmodulold == "soc_kia\n") echo "selected" ?> value="soc_kia">Kia</option>
-									<option <?php if($socmodulold == "soc_volvo\n") echo "selected" ?> value="soc_volvo">Volvo</option>
+									<option <?php if($socmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
+									<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">SoC HTTP</option>
+									<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
+									<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">SoC BMW & Mini</option>
+									<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
+									<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
+									<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
+									<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">SoC Tesla</option>
+									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">SoC VW Carnet</option>
+									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
+									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">SoC Audi</option>
+									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
+									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
+									<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 								</select>
 							</div>
 						</div>
@@ -1387,18 +714,18 @@
 							<div id="socmtesla" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="teslasocuser" class="col-md-4 col-form-label">E-Mail</label>
+										<label for="soc_tesla_username" class="col-md-4 col-form-label">E-Mail</label>
 										<div class="col">
-											<input class="form-control" type="email" name="teslasocuser" id="teslasocuser" value="<?php echo trim($socteslausernameold) ?>">
+											<input class="form-control" type="email" name="soc_tesla_username" id="soc_tesla_username" value="<?php echo $soc_tesla_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Tesla Logins.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasocpw" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_tesla_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="teslasocpw" id="teslasocpw" value="<?php echo trim($socteslapwold) ?>">
+											<input class="form-control" type="password" name="soc_tesla_password" id="soc_tesla_password" value="<?php echo $soc_tesla_passwordold ?>">
 											<span class="form-text small">
 												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
 												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
@@ -1407,18 +734,18 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasoccarnumber" class="col-md-4 col-form-label">Auto im Account</label>
+										<label for="soc_tesla_carnumber" class="col-md-4 col-form-label">Auto im Account</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasoccarnumber" id="teslasoccarnumber" value="<?php echo trim($socteslacarnumberold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tesla_carnumber" id="soc_tesla_carnumber" value="<?php echo $soc_tesla_carnumberold ?>">
 											<span class="form-text small">
 												Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasocintervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_tesla_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasocintervall" id="teslasocintervall" value="<?php echo trim($socteslaintervallold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tesla_intervall" id="soc_tesla_intervall" value="<?php echo $soc_tesla_intervallold ?>">
 											<span class="form-text small">
 												Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.<br>
 												Damit das Auto in den Standby gehen kann und die Energieverluste gering bleiben, sollte das Intervall mindestens eine Stunde ("60") betragen, besser 12 Stunden ("720") oder mehr.<br>
@@ -1427,9 +754,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasocintervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
+										<label for="soc_tesla_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasocintervallladen" id="teslasocintervallladen" value="<?php echo trim($socteslaintervallladenold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_tesla_intervallladen" id="soc_tesla_intervallladen" value="<?php echo $soc_tesla_intervallladenold ?>">
 											<span class="form-text small">
 												Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos während des Ladens abgefragt werden soll.<br>
 												Je nach Ladeleistung werden 5 - 10 Minuten empfohlen, damit eventuell eingestellte SoC-Grenzen rechtzeitig erkannt werden können.
@@ -1443,7 +770,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_email" class="col-md-4 col-form-label">E-Mail</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo trim($soc_bluelink_emailold) ?>">
+											<input class="form-control" type="email" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo $soc_bluelink_emailold ?>">
 											<span class="form-text small">
 												Email Adresse des Logins.
 											</span>
@@ -1452,7 +779,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_bluelink_password" id="soc_bluelink_password" value="<?php echo trim($soc_bluelink_passwordold) ?>">
+											<input class="form-control" type="password" name="soc_bluelink_password" id="soc_bluelink_password" value="<?php echo $soc_bluelink_passwordold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
@@ -1461,7 +788,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo trim($soc_bluelink_pinold) ?>">
+											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -1470,7 +797,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_interval" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_bluelink_interval" id="soc_bluelink_interval" value="<?php echo trim($soc_bluelink_intervalold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_bluelink_interval" id="soc_bluelink_interval" value="<?php echo $soc_bluelink_intervalold ?>">
 											<span class="form-text small">
 												Wie oft abgefragt wird. Angabe in Minuten.
 											</span>
@@ -1483,7 +810,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_vin" id="soc_vin" value="<?php echo trim($soc_vinold) ?>">
+											<input class="form-control" type="text" name="soc_vin" id="soc_vin" value="<?php echo $soc_vinold ?>">
 											<span class="form-text small">
 												VIN des Autos.
 											</span>
@@ -1496,7 +823,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zerong_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo trim($soc_zerong_usernameold) ?>">
+											<input class="form-control" type="email" name="soc_zerong_username" id="soc_zerong_username" value="<?php echo $soc_zerong_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Zero Logins
 											</span>
@@ -1505,7 +832,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zerong_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo trim($soc_zerong_passwordold) ?>">
+											<input class="form-control" type="password" name="soc_zerong_password" id="soc_zerong_password" value="<?php echo $soc_zerong_passwordold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
@@ -1514,7 +841,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zerong_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo trim($soc_zerong_intervallold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_zerong_intervall" id="soc_zerong_intervall" value="<?php echo $soc_zerong_intervallold ?>">
 											<span class="form-text small">
 												Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 											</span>
@@ -1523,7 +850,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zerong_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo trim($soc_zerong_intervallladenold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_zerong_intervallladen" id="soc_zerong_intervallladen" value="<?php echo $soc_zerong_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
 											</span>
@@ -1536,7 +863,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_audi_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_audi_username" id="soc_audi_username" value="<?php echo trim($soc_audi_usernameold) ?>">
+											<input class="form-control" type="email" name="soc_audi_username" id="soc_audi_username" value="<?php echo $soc_audi_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Logins.
 											</span>
@@ -1545,7 +872,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_audi_passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo trim($soc_audi_passwortold) ?>">
+											<input class="form-control" type="password" name="soc_audi_passwort" id="soc_audi_passwort" value="<?php echo $soc_audi_passwortold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
@@ -1558,7 +885,7 @@
 									<div class="form-row mb-1">
 										<label for="hsocip" class="col-md-4 col-form-label">Abfrage URL</label>
 										<div class="col">
-											<input class="form-control" type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars(trim($hsocipold)) ?>">
+											<input class="form-control" type="text" name="hsocip" id="hsocip" value="<?php echo htmlspecialchars($hsocipold) ?>">
 											<span class="form-text small">
 												Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
 											</span>
@@ -1571,7 +898,7 @@
 									<div class="form-row mb-1">
 										<label for="socuser" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="socuser" id="socuser" value="<?php echo trim($socuserold) ?>">
+											<input class="form-control" type="text" name="socuser" id="socuser" value="<?php echo $socuserold ?>">
 										</div>
 									</div>
 								</div>
@@ -1581,7 +908,7 @@
 									<div class="form-row mb-1">
 										<label for="socpass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="socpass" id="socpass" value="<?php echo trim($socpassold) ?>">
+											<input class="form-control" type="password" name="socpass" id="socpass" value="<?php echo $socpassold ?>">
 										</div>
 									</div>
 								</div>
@@ -1591,7 +918,7 @@
 									<div class="form-row mb-1">
 										<label for="zoeusername" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="zoeusername" id="zoeusername" value="<?php echo trim($zoeusernameold) ?>">
+											<input class="form-control" type="text" name="zoeusername" id="zoeusername" value="<?php echo $zoeusernameold ?>">
 											<span class="form-text small">
 												Renault Zoe Benutzername
 											</span>
@@ -1600,7 +927,7 @@
 									<div class="form-row mb-1">
 										<label for="zoepasswort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="zoepasswort" id="zoepasswort" value="<?php echo trim($zoepasswortold) ?>">
+											<input class="form-control" type="password" name="zoepasswort" id="zoepasswort" value="<?php echo $zoepasswortold ?>">
 											<span class="form-text small">
 											Renault Zoe Passwort
 											</span>
@@ -1629,7 +956,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_userlp1" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_userlp1" id="myrenault_userlp1" value="<?php echo trim($myrenault_userlp1old) ?>">
+											<input class="form-control" type="text" name="myrenault_userlp1" id="myrenault_userlp1" value="<?php echo $myrenault_userlp1old ?>">
 											<span class="form-text small">
 												MyRenault Benutzername
 											</span>
@@ -1638,7 +965,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_passlp1" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="myrenault_passlp1" id="myrenault_passlp1" value="<?php echo trim($myrenault_passlp1old) ?>">
+											<input class="form-control" type="password" name="myrenault_passlp1" id="myrenault_passlp1" value="<?php echo $myrenault_passlp1old ?>">
 											<span class="form-text small">
 												MyRenault Passwort
 											</span>
@@ -1647,7 +974,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_locationlp1" class="col-md-4 col-form-label">Standort</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_locationlp1" id="myrenault_locationlp1" value="<?php echo trim($myrenault_locationlp1old) ?>">
+											<input class="form-control" type="text" name="myrenault_locationlp1" id="myrenault_locationlp1" value="<?php echo $myrenault_locationlp1old ?>">
 											<span class="form-text small">
 												MyRenault Standort, z.B. de_DE
 											</span>
@@ -1656,7 +983,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_countrylp1" class="col-md-4 col-form-label">Land</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_countrylp1" id="myrenault_countrylp1" value="<?php echo trim($myrenault_countrylp1old) ?>">
+											<input class="form-control" type="text" name="myrenault_countrylp1" id="myrenault_countrylp1" value="<?php echo $myrenault_countrylp1old ?>">
 											<span class="form-text small">
 												MyRenault Land, z.B. CH, AT, DE
 											</span>
@@ -1665,7 +992,7 @@
 									<div class="form-row mb-1">
 										<label for="soclp1_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soclp1_vin" id="soclp1_vin" value="<?php echo trim($soclp1_vinold) ?>">
+											<input class="form-control" type="text" name="soclp1_vin" id="soclp1_vin" value="<?php echo $soclp1_vinold ?>">
 											<span class="form-text small">
 												VIN des Autos. Ist nur nötig wenn es sich um ein Importfahrzeug handelt. Kann auf none belassen werden wenn die Auslesung funktioniert.
 											</span>
@@ -1694,7 +1021,7 @@
 									<div class="form-row mb-1">
 										<label for="evnotifyakey" class="col-md-4 col-form-label">Akey</label>
 										<div class="col">
-											<input class="form-control" type="text" name="evnotifyakey" id="evnotifyakey" value="<?php echo trim($evnotifyakeyold) ?>">
+											<input class="form-control" type="text" name="evnotifyakey" id="evnotifyakey" value="<?php echo $evnotifyakeyold ?>">
 											<span class="form-text small">
 												Akey des EVNotify Kontos
 											</span>
@@ -1703,7 +1030,7 @@
 									<div class="form-row mb-1">
 										<label for="evnotifytoken" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
-											<input class="form-control" type="text" name="evnotifytoken" id="evnotifytoken" value="<?php echo trim($evnotifytokenold) ?>">
+											<input class="form-control" type="text" name="evnotifytoken" id="evnotifytoken" value="<?php echo $evnotifytokenold ?>">
 											<span class="form-text small">
 												Token des Kontos
 											</span>
@@ -1716,7 +1043,7 @@
 									<div class="form-row mb-1">
 										<label for="leafusername" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="leafusername" id="leafusername" value="<?php echo trim($leafusernameold) ?>">
+											<input class="form-control" type="text" name="leafusername" id="leafusername" value="<?php echo $leafusernameold ?>">
 											<span class="form-text small">
 												Nissan Connect Benutzername
 											</span>
@@ -1725,7 +1052,7 @@
 									<div class="form-row mb-1">
 										<label for="leafpasswort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="leafpasswort" id="leafpasswort" value="<?php echo trim($leafpasswortold) ?>">
+											<input class="form-control" type="password" name="leafpasswort" id="leafpasswort" value="<?php echo $leafpasswortold ?>">
 											<span class="form-text small">
 												Nissan Connect Passwort
 											</span>
@@ -1738,7 +1065,7 @@
 									<div class="form-row mb-1">
 										<label for="i3username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="i3username" id="i3username" value="<?php echo trim($i3usernameold) ?>">
+											<input class="form-control" type="text" name="i3username" id="i3username" value="<?php echo $i3usernameold ?>">
 											<span class="form-text small">
 												BMW Services Benutzername
 											</span>
@@ -1747,7 +1074,7 @@
 									<div class="form-row mb-1">
 										<label for="i3passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="i3passwort" id="i3passwort" value="<?php echo trim($i3passwortold) ?>">
+											<input class="form-control" type="password" name="i3passwort" id="i3passwort" value="<?php echo $i3passwortold ?>">
 											<span class="form-text small">
 												BMW Services Passwort
 											</span>
@@ -1756,7 +1083,7 @@
 									<div class="form-row mb-1">
 										<label for="i3vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="i3vin" id="i3vin" value="<?php echo trim($i3vinold) ?>">
+											<input class="form-control" type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>">
 											<span class="form-text small">
 												BMW VIN. Sie ist in voller Länge anzugeben.
 											</span>
@@ -1765,7 +1092,7 @@
 									<div class="form-row mb-1">
 										<label for="soci3intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo trim($soci3intervallold) ?>">
+											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
 											<span class="form-text small">
 												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
@@ -1778,7 +1105,7 @@
 									<div class="form-row mb-1">
 										<label for="carnetuser" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="carnetuser" id="carnetuser" value="<?php echo trim($carnetuserold) ?>">
+											<input class="form-control" type="text" name="carnetuser" id="carnetuser" value="<?php echo $carnetuserold ?>">
 											<span class="form-text small">
 												VW Carnet Benutzername. Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden.
 											</span>
@@ -1787,7 +1114,7 @@
 									<div class="form-row mb-1">
 										<label for="carnetpass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="carnetpass" id="carnetpass" value="<?php echo trim($carnetpassold) ?>">
+											<input class="form-control" type="password" name="carnetpass" id="carnetpass" value="<?php echo $carnetpassold ?>">
 											<span class="form-text small">
 												VW Carnet Passwort
 											</span>
@@ -1796,7 +1123,7 @@
 									<div class="form-row mb-1">
 										<label for="soccarnetintervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo trim($soccarnetintervallold) ?>">
+											<input class="form-control" type="text" name="soccarnetintervall" id="soccarnetintervall" value="<?php echo $soccarnetintervallold ?>">
 											<span class="form-text small">
 												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
@@ -1826,6 +1153,23 @@
 							hideSection('openwbbuchse');
 							hideSection('evseconextopenwb');
 
+							if($('#evsecon').val() == 'modbusevse') {
+								switch( $("#evsecon option:selected" ).text() ){
+									case "openWB series1/2":
+										showSection('openwb12');
+									break;
+									case "openWB series1/2 mit geeichtem Zähler":
+										showSection('openwb12mid');
+									break;
+									case "openWB series1/2 mit geeichtem Zähler v2":
+										showSection('openwb12v2mid');
+									break;
+									default:
+										showSection('evseconmod');
+										showSection('llmodullp1');
+										display_llmp1();
+								}
+							}
 							if($('#evsecon').val() == 'ipevse') {
 								showSection('evseconipevse');
 								showSection('llmodullp1');
@@ -1839,11 +1183,6 @@
 							}
 							if($('#evsecon').val() == 'dac') {
 								showSection('evsecondac');
-								showSection('llmodullp1');
-								display_llmp1();
-							}
-							if($('#evsecon').val() == 'modbusevse') {
-								showSection('evseconmod');
 								showSection('llmodullp1');
 								display_llmp1();
 							}
@@ -1869,15 +1208,6 @@
 							}
 							if($('#evsecon').val() == 'twcmanager') {
 								showSection('evsecontwcmanager');
-							}
-							if($('#evsecon').val() == 'openwb12') {
-								showSection('openwb12');
-							}
-							if($('#evsecon').val() == 'openwb12mid') {
-								showSection('openwb12mid');
-							}
-							if($('#evsecon').val() == 'openwb12v2mid') {
-								showSection('openwb12v2mid');
 							}
 							if($('#evsecon').val() == 'ipevse') {
 								showSection('evseconipevse');
@@ -2053,7 +1383,7 @@
 							<div class="form-row mb-1">
 								<label for="lp2name" class="col-md-4 col-form-label">Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="lp2name" id="lp2name" value="<?php echo trim($lp2nameold) ?>">
+									<input class="form-control" type="text" name="lp2name" id="lp2name" value="<?php echo $lp2nameold ?>">
 								</div>
 							</div>
 						</div>
@@ -2062,25 +1392,27 @@
 							<label for="evsecons1" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecons1" id="evsecons1" class="form-control">
-									<option <?php if($evsecons1old == "modbusevse\n" && $ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n") echo "selected" ?> value="openwb12s1">openWB series1/2 Duo</option>
-									<option <?php if($evsecons1old == "slaveeth\n") echo "selected" ?> value="slaveeth">openWB Slave</option>
-									<option <?php if($evsecons1old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
-									<option <?php if($evsecons1old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons1old == "modbusevse\n" && !($ladeleistungs1modulold == "mpm3pmlls1\n" && $mpm3pmlls1sourceold == "/dev/ttyUSB1\n" && $mpm3pmlls1idold == "6\n")) echo "selected" ?> value="modbusevse">Modbus</option>
-									<option <?php if($evsecons1old == "dac\n") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evsecons1old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evsecons1old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
-									<option <?php if($evsecons1old == "nrgkick\n") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
-									<option <?php if($evsecons1old == "keba\n") echo "selected" ?> value="keba">Keba</option>
+									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
+									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse">openWB series1/2 Duo</option>
+									<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">openWB Slave</option>
+									<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
+									<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+									<option <?php if($evsecons1old == "modbusevse" && !($ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6")) echo "selected" ?> value="modbusevse">Modbus</option>
+									<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
+									<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
+									<option <?php if($evsecons1old == "keba") echo "selected" ?> value="keba">Keba</option>
 								</select>
 							</div>
 						</div>
 						<div id="evseconextopenwblp2" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="extopenwblp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="lp2id" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lp2id" id="lp2id" value="<?php echo trim($chargep2ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lp2id" id="lp2id" value="<?php echo $chargep2ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -2090,7 +1422,7 @@
 								<div class="form-row mb-1">
 									<label for="chargep2cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep2cp" id="chargep2cp" value="<?php echo trim($chargep2cpold) ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep2cp" id="chargep2cp" value="<?php echo $chargep2cpold ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
@@ -2101,7 +1433,7 @@
 								<div class="form-row mb-1">
 									<label for="evseiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" id="evseiplp2" value="<?php echo trim($evseiplp2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -2111,24 +1443,29 @@
 								<div class="form-row mb-1">
 									<label for="evseidlp2" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp2" id="evseidlp2" value="<?php echo trim($evseidlp2old) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp2" id="evseidlp2" value="<?php echo $evseidlp2old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div id="openwb12s1" class="hide">
+							<input type="hidden" name="evseids1" value="1">
+							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmlls1">
+							<input type="hidden" name="mpm3pmlls1source" value="/dev/ttyUSB1">
+							<input type="hidden" name="mpm3pmlls1id" value="6">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
 								Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
 							</div>
 						</div>
 						<div id="evseconnrgkicks1" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="nrgkicklp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="nrgkickiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo trim($nrgkickiplp2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="nrgkickiplp2" id="nrgkickiplp2" value="<?php echo $nrgkickiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Zu finden in der NRGKick App unter Einstellungen -> Info -> NRGkick Connect Infos.
@@ -2138,7 +1475,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkicktimeoutlp2" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo trim($nrgkicktimeoutlp2old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="nrgkicktimeoutlp2" id="nrgkicktimeoutlp2" value="<?php echo $nrgkicktimeoutlp2old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des NRGKick Connect gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der NRGKick z.B. gerade unterwegs genutzt wird.
@@ -2148,7 +1485,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkickmaclp2" class="col-md-4 col-form-label">MAC Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo trim($nrgkickmaclp2old) ?>">
+										<input class="form-control" type="text" pattern="^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$" name="nrgkickmaclp2" id="nrgkickmaclp2" value="<?php echo $nrgkickmaclp2old ?>">
 										<span class="form-text small">
 											Gültige Werte MAC Adresse im Format: 11:22:33:AA:BB:CC<br>
 											Zu finden In der NRGKick App unter Einstellungen -> BLE-Mac.
@@ -2158,7 +1495,7 @@
 								<div class="form-row mb-1">
 									<label for="nrgkickpwlp2" class="col-md-4 col-form-label">Password</label>
 									<div class="col">
-										<input class="form-control" type="password" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo trim($nrgkickpwlp2old) ?>">
+										<input class="form-control" type="password" name="nrgkickpwlp2" id="nrgkickpwlp2" value="<?php echo $nrgkickpwlp2old ?>">
 										<span class="form-text small">
 											Password, welches in der NRGKick App festgelegt wurde.
 										</span>
@@ -2167,11 +1504,12 @@
 							</div>
 						</div>
 						<div id="evseconkebas1" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="keballlp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="kebaiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kebaiplp2" id="kebaiplp2" value="<?php echo trim($kebaiplp2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kebaiplp2" id="kebaiplp2" value="<?php echo $kebaiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
@@ -2185,21 +1523,21 @@
 								<div class="form-row mb-1">
 									<label for="evsesources1" class="col-md-4 col-form-label">Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="evsesources1" id="evsesources1" value="<?php echo trim($evsesources1old) ?>">
+										<input class="form-control" type="text" name="evsesources1" id="evsesources1" value="<?php echo $evsesources1old ?>">
 										<span class="form-text small">Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evseids1" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseids1" id="evseids1" value="<?php echo trim($evseids1old) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evseids1" id="evseids1" value="<?php echo $evseids1old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evselanips1" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evselanips1" id="evselanips1" value="<?php echo trim($evselanips1old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evselanips1" id="evselanips1" value="<?php echo $evselanips1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.
@@ -2213,7 +1551,7 @@
 								<div class="form-row mb-1">
 									<label for="dacregisters1" class="col-md-4 col-form-label">Dacregister</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisters1" id="dacregisters1" value="<?php echo trim($dacregisters1old) ?>">
+										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisters1" id="dacregisters1" value="<?php echo $dacregisters1old ?>">
 										<span class="form-text small">
 											Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP.
 											Der benötigte Wert sollte <a href="/openWB/ramdisk/i2csearch">HIER</a> zu finden sein.
@@ -2224,23 +1562,25 @@
 							</div>
 						</div>
 						<div id="evsecoslaveeth" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmethll">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
 						<div id="evseconswifis1" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="simpleevsewifis1">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evsewifiiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo trim($evsewifiiplp2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp2" id="evsewifiiplp2" value="<?php echo $evsewifiiplp2old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evsewifitimeoutlp2" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo trim($evsewifitimeoutlp2old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp2" id="evsewifitimeoutlp2" value="<?php echo $evsewifitimeoutlp2old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
@@ -2250,11 +1590,12 @@
 							</div>
 						</div>
 						<div id="evsecongoes1" class="hide">
+							<input type="hidden" name="ladeleistungs1modul" value="goelp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="goeiplp2" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp2" id="goeiplp2" value="<?php echo trim($goeiplp2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp2" id="goeiplp2" value="<?php echo $goeiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
@@ -2263,7 +1604,7 @@
 								<div class="form-row mb-1">
 									<label for="goetimeoutlp2" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo trim($goetimeoutlp2old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp2" id="goetimeoutlp2" value="<?php echo $goetimeoutlp2old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
@@ -2279,13 +1620,13 @@
 								<label for="ladeleistungs1modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
 									<select name="ladeleistungs1modul" id="ladeleistungs1modul" class="form-control">
-										<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1\n") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1\n") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "simpleevsewifis1\n") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs1modulold == "mpm3pmlls1\n") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
-										<option <?php if($ladeleistungs1modulold == "goelp2\n") echo "selected" ?> value="goelp2">Go-e</option> <!-- BUG go-E als LL-Modul? -->
-										<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2\n") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
-										<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2\n") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
+										<option <?php if($ladeleistungs1modulold == "sdm630modbuslls1") echo "selected" ?> value="sdm630modbuslls1">SDM 630 Modbus</option>
+										<option <?php if($ladeleistungs1modulold == "sdm120modbuslls1") echo "selected" ?> value="sdm120modbuslls1">SDM 120 Modbus</option>
+										<option <?php if($ladeleistungs1modulold == "simpleevsewifis1") echo "selected" ?> value="simpleevsewifis1">Simple EVSE Wifi</option>
+										<option <?php if($ladeleistungs1modulold == "mpm3pmlls1") echo "selected" ?> value="mpm3pmlls1">MPM3PM Modbus</option>
+										<option <?php if($ladeleistungs1modulold == "goelp2") echo "selected" ?> value="goelp2">Go-e</option> <!-- BUG go-E als LL-Modul? -->
+										<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
+										<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
 									</select>
 								</div>
 							</div>
@@ -2294,7 +1635,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp2ip" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo trim($mpmlp2ipold) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp2ip" id="mpmlp2ip" value="<?php echo $mpmlp2ipold ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse des Modbus Ethernet Konverters im Format: 192.168.0.12
 											</span>
@@ -2303,7 +1644,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp2id" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp2id" id="mpmlp2id" value="<?php echo trim($mpmlp2idold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp2id" id="mpmlp2id" value="<?php echo $mpmlp2idold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -2314,7 +1655,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmlls1source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="mpm3pmlls1source" id="mpm3pmlls1source" value="<?php echo trim($mpm3pmlls1sourceold) ?>">
+											<input class="form-control" type="text" name="mpm3pmlls1source" id="mpm3pmlls1source" value="<?php echo $mpm3pmlls1sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das MPM3PM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2324,7 +1665,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmlls1id" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmlls1id" id="mpm3pmlls1id" value="<?php echo trim($mpm3pmlls1idold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmlls1id" id="mpm3pmlls1id" value="<?php echo $mpm3pmlls1idold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -2340,7 +1681,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm630lp2source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm630lp2source" id="sdm630lp2source" value="<?php echo trim($sdm630lp2sourceold) ?>">
+											<input class="form-control" type="text" name="sdm630lp2source" id="sdm630lp2source" value="<?php echo $sdm630lp2sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2350,7 +1691,7 @@
 									<div class="form-row mb-1">
 										<label for="sdmids1" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdmids1" id="sdmids1" value="<?php echo trim($sdmids1old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdmids1" id="sdmids1" value="<?php echo $sdmids1old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.</span>
 										</div>
 									</div>
@@ -2361,7 +1702,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm120lp2source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm120lp2source" id="sdm120lp2source" value="<?php echo trim($sdm120lp2sourceold) ?>">
+											<input class="form-control" type="text" name="sdm120lp2source" id="sdm120lp2source" value="<?php echo $sdm120lp2sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2371,21 +1712,21 @@
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid1s1" class="col-md-4 col-form-label">ID Phase 1</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1s1" id="sdm120modbusllid1s1" value="<?php echo trim($sdm120modbusllid1s1old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1s1" id="sdm120modbusllid1s1" value="<?php echo $sdm120modbusllid1s1old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der ersten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid2s1" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo trim($sdm120modbusllid2s1old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo $sdm120modbusllid2s1old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid3s1" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo trim($sdm120modbusllid3s1old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo $sdm120modbusllid3s1old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
 										</div>
 									</div>
@@ -2396,7 +1737,7 @@
 									<div class="form-row mb-1">
 										<label for="lllaniplp2" class="col-md-4 col-form-label">IP Adresse RS485/Lan-Konverter</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lllaniplp2" id="lllaniplp2" value="<?php echo trim($lllaniplp2old) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lllaniplp2" id="lllaniplp2" value="<?php echo $lllaniplp2old ?>">
 											<span class="form-text small">
 												Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
 												Gültige Werte IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
@@ -2412,19 +1753,19 @@
 							<label for="socmodul1" class="col-md-4 col-form-label">SOC Modul</label>
 							<div class="col">
 								<select name="socmodul1" id="socmodul1" class="form-control">
-									<option <?php if($socmodul1old == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodul1old == "soc_http1\n") echo "selected" ?> value="soc_http1">SoC HTTP</option>
-									<option <?php if($socmodul1old == "soc_leafs1\n") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
-									<option <?php if($socmodul1old == "soc_i3s1\n") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
-									<option <?php if($socmodul1old == "soc_evnotifys1\n") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
-									<option <?php if($socmodul1old == "soc_zoelp2\n") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
-									<option <?php if($socmodul1old == "soc_myrenaultlp2\n") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
-									<option <?php if($socmodul1old == "soc_teslalp2\n") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
-									<option <?php if($socmodul1old == "soc_carnetlp2\n") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
-									<option <?php if($socmodul1old == "soc_zeronglp2\n") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
-									<option <?php if($socmodul1old == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
-									<option <?php if($socmodul1old == "soc_audilp2\n") echo "selected" ?> value="soc_audilp2">Audi</option>
-									<option <?php if($socmodul1old == "soc_bluelinklp2\n") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
+									<option <?php if($socmodul1old == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
+									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">SoC HTTP</option>
+									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
+									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
+									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
+									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
+									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
+									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
+									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
+									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
+									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
+									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 								</select>
 							</div>
 						</div>
@@ -2438,7 +1779,7 @@
 									<div class="form-row mb-1">
 										<label for="soc2user" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc2user" id="soc2user" value="<?php echo trim($soc2userold) ?>">
+											<input class="form-control" type="text" name="soc2user" id="soc2user" value="<?php echo $soc2userold ?>">
 										</div>
 									</div>
 								</div>
@@ -2448,7 +1789,7 @@
 									<div class="form-row mb-1">
 										<label for="soc2pass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc2pass" id="soc2pass" value="<?php echo trim($soc2passold) ?>">
+											<input class="form-control" type="password" name="soc2pass" id="soc2pass" value="<?php echo $soc2passold ?>">
 										</div>
 									</div>
 								</div>
@@ -2465,7 +1806,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zeronglp2_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo trim($soc_zeronglp2_usernameold) ?>">
+											<input class="form-control" type="email" name="soc_zeronglp2_username" id="soc_zeronglp2_username" value="<?php echo $soc_zeronglp2_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Zero Logins
 											</span>
@@ -2474,7 +1815,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zeronglp2_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo trim($soc_zeronglp2_passwordold) ?>">
+											<input class="form-control" type="password" name="soc_zeronglp2_password" id="soc_zeronglp2_password" value="<?php echo $soc_zeronglp2_passwordold ?>">
 											<span class="form-text small">
 												Password des Logins.
 											</span>
@@ -2483,7 +1824,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zeronglp2_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo trim($soc_zeronglp2_intervallold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_zeronglp2_intervall" id="soc_zeronglp2_intervall" value="<?php echo $soc_zeronglp2_intervallold ?>">
 											<span class="form-text small">
 												Wie oft die Zero abgefragt wird wenn nicht geladen wird. Angabe in Minuten.
 											</span>
@@ -2492,7 +1833,7 @@
 									<div class="form-row mb-1">
 										<label for="soc_zeronglp2_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo trim($soc_zeronglp2_intervallladenold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_zeronglp2_intervallladen" id="soc_zeronglp2_intervallladen" value="<?php echo $soc_zeronglp2_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft die Zero abgefragt wird während geladen wird. Angabe in Minuten.
 											</span>
@@ -2503,18 +1844,18 @@
 							<div id="socmteslalp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="teslasoclp2user" class="col-md-4 col-form-label">E-Mail</label>
+										<label for="soc_teslalp2_username" class="col-md-4 col-form-label">E-Mail</label>
 										<div class="col">
-											<input class="form-control" type="email" name="teslasoclp2user" id="teslasoclp2user" value="<?php echo trim($socteslalp2usernameold) ?>">
+											<input class="form-control" type="email" name="soc_teslalp2_username" id="soc_teslalp2_username" value="<?php echo $soc_teslalp2_usernameold ?>">
 											<span class="form-text small">
 												Email Adresse des Tesla Logins.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasoclp2pw" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_teslalp2_password" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="teslasoclp2pw" id="teslasoclp2pw" value="<?php echo trim($socteslalp2pwold) ?>">
+											<input class="form-control" type="password" name="soc_teslalp2_password" id="soc_teslalp2_password" value="<?php echo $soc_teslalp2_passwordold ?>">
 											<span class="form-text small">
 												Password des Tesla Logins. Das Passwort wird nur bei der ersten Einrichtung verwendet. Sobald die Anmeldung erfolgreich war, wird die Anmeldung über Token geregelt und das Passwort durch "#TokenInUse#" ersetzt.<br>
 												Wird bei Tesla direkt das Passwort geändert, kann die WB sich nicht mehr anmelden und es muss hier wieder einmalig das aktuelle Passwort eingetragen werden.<br>
@@ -2523,18 +1864,18 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasoclp2carnumber" class="col-md-4 col-form-label">Auto im Account</label>
+										<label for="soc_teslalp2_carnumber" class="col-md-4 col-form-label">Auto im Account</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasoclp2carnumber" id="teslasoclp2carnumber" value="<?php echo trim($socteslalp2carnumberold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_teslalp2_carnumber" id="soc_teslalp2_carnumber" value="<?php echo $soc_teslalp2_carnumberold ?>">
 											<span class="form-text small">
 												Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasoclp2intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_teslalp2_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo trim($socteslalp2intervallold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_teslalp2_intervall" id="soc_teslalp2_intervall" value="<?php echo $soc_teslalp2_intervallold ?>">
 											<span class="form-text small">
 												Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos abgefragt werden soll, wenn nicht geladen wird.<br>
 												Damit das Auto in den Standby gehen kann und die Energieverluste gering bleiben, sollte das Intervall mindestens eine Stunde ("60") betragen, besser 12 Stunden ("720") oder mehr.<br>
@@ -2543,9 +1884,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="teslasoclp2intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
+										<label for="soc_teslalp2_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Laden</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="teslasoclp2intervallladen" id="teslasoclp2intervallladen" value="<?php echo trim($socteslalp2intervallladenold) ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_teslalp2_intervallladen" id="soc_teslalp2_intervallladen" value="<?php echo $soc_teslalp2_intervallladenold ?>">
 											<span class="form-text small">
 												Gibt an, in welchem Intervall (in Minuten bei normaler Regelgeschwindigkeit) der Ladestand des Autos während des Ladens abgefragt werden soll.<br>
 												Je nach Ladeleistung werden 5 - 10 Minuten empfohlen, damit eventuell eingestellte SoC-Grenzen rechtzeitig erkannt werden können.
@@ -2559,7 +1900,7 @@
 									<div class="form-row mb-1">
 										<label for="carnetlp2user" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo trim($carnetlp2userold) ?>">
+											<input class="form-control" type="text" name="carnetlp2user" id="carnetlp2user" value="<?php echo $carnetlp2userold ?>">
 											<span class="form-text small">
 												VW Carnet Benutzername. Wenn der SoC nicht korrekt angezeigt wird, z.B. weil AGB von VW geändert wurden, ist es nötig sich auf https://www.portal.volkswagen-we.com anzumelden.
 											</span>
@@ -2568,7 +1909,7 @@
 									<div class="form-row mb-1">
 										<label for="carnetlp2pass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo trim($carnetlp2passold) ?>">
+											<input class="form-control" type="password" name="carnetlp2pass" id="carnetlp2pass" value="<?php echo $carnetlp2passold ?>">
 											<span class="form-text small">
 												VW Carnet Passwort
 											</span>
@@ -2577,7 +1918,7 @@
 									<div class="form-row mb-1">
 										<label for="soccarnetlp2intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo trim($soccarnetlp2intervallold) ?>">
+											<input class="form-control" type="text" name="soccarnetlp2intervall" id="soccarnetlp2intervall" value="<?php echo $soccarnetlp2intervallold ?>">
 											<span class="form-text small">
 												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
@@ -2590,7 +1931,7 @@
 									<div class="form-row mb-1">
 										<label for="zoelp2username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="zoelp2username" id="zoelp2username" value="<?php echo trim($zoelp2usernameold) ?>">
+											<input class="form-control" type="text" name="zoelp2username" id="zoelp2username" value="<?php echo $zoelp2usernameold ?>">
 											<span class="form-text small">
 												Renault Zoe Benutzername
 											</span>
@@ -2599,7 +1940,7 @@
 									<div class="form-row mb-1">
 										<label for="zoelp2passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="zoelp2passwort" id="zoelp2passwort" value="<?php echo trim($zoelp2passwortold) ?>">
+											<input class="form-control" type="password" name="zoelp2passwort" id="zoelp2passwort" value="<?php echo $zoelp2passwortold ?>">
 											<span class="form-text small">
 											Renault Zoe Passwort
 											</span>
@@ -2628,7 +1969,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_userlp2" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_userlp2" id="myrenault_userlp2" value="<?php echo trim($myrenault_userlp2old) ?>">
+											<input class="form-control" type="text" name="myrenault_userlp2" id="myrenault_userlp2" value="<?php echo $myrenault_userlp2old ?>">
 											<span class="form-text small">
 												MyRenault Benutzername
 											</span>
@@ -2637,7 +1978,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_passlp2" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="myrenault_passlp2" id="myrenault_passlp2" value="<?php echo trim($myrenault_passlp2old) ?>">
+											<input class="form-control" type="password" name="myrenault_passlp2" id="myrenault_passlp2" value="<?php echo $myrenault_passlp2old ?>">
 											<span class="form-text small">
 												MyRenault Passwort
 											</span>
@@ -2646,7 +1987,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_locationlp2" class="col-md-4 col-form-label">Standort</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_locationlp2" id="myrenault_locationlp2" value="<?php echo trim($myrenault_locationlp2old) ?>">
+											<input class="form-control" type="text" name="myrenault_locationlp2" id="myrenault_locationlp2" value="<?php echo $myrenault_locationlp2old ?>">
 											<span class="form-text small">
 												MyRenault Standort, z.B. de_DE
 											</span>
@@ -2655,7 +1996,7 @@
 									<div class="form-row mb-1">
 										<label for="myrenault_countrylp2" class="col-md-4 col-form-label">Land</label>
 										<div class="col">
-											<input class="form-control" type="text" name="myrenault_countrylp2" id="myrenault_countrylp2" value="<?php echo trim($myrenault_countrylp2old) ?>">
+											<input class="form-control" type="text" name="myrenault_countrylp2" id="myrenault_countrylp2" value="<?php echo $myrenault_countrylp2old ?>">
 											<span class="form-text small">
 												MyRenault Land, z.B. CH, AT, DE
 											</span>
@@ -2664,7 +2005,7 @@
 									<div class="form-row mb-1">
 										<label for="soclp2_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soclp2_vin" id="soclp2_vin" value="<?php echo trim($soclp2_vinold) ?>">
+											<input class="form-control" type="text" name="soclp2_vin" id="soclp2_vin" value="<?php echo $soclp2_vinold ?>">
 											<span class="form-text small">
 												VIN des Autos. Ist nur nötig wenn es sich um ein Importfahrzeug handelt. Kann auf none belassen werden wenn die Auslesung funktioniert.
 											</span>
@@ -2693,7 +2034,7 @@
 									<div class="form-row mb-1">
 										<label for="evnotifyakeylp2" class="col-md-4 col-form-label">Akey</label>
 										<div class="col">
-											<input class="form-control" type="text" name="evnotifyakeylp2" id="evnotifyakeylp2" value="<?php echo trim($evnotifyakeylp2old) ?>">
+											<input class="form-control" type="text" name="evnotifyakeylp2" id="evnotifyakeylp2" value="<?php echo $evnotifyakeylp2old ?>">
 											<span class="form-text small">
 												Akey des EVNotify Kontos
 											</span>
@@ -2702,7 +2043,7 @@
 									<div class="form-row mb-1">
 										<label for="evnotifytokenlp2" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
-											<input class="form-control" type="text" name="evnotifytokenlp2" id="evnotifytokenlp2" value="<?php echo trim($evnotifytokenlp2old) ?>">
+											<input class="form-control" type="text" name="evnotifytokenlp2" id="evnotifytokenlp2" value="<?php echo $evnotifytokenlp2old ?>">
 											<span class="form-text small">
 												Token des Kontos
 											</span>
@@ -2715,7 +2056,7 @@
 									<div class="form-row mb-1">
 										<label for="hsocip1" class="col-md-4 col-form-label">Abfrage URL</label>
 										<div class="col">
-											<input class="form-control" type="text" name="hsocip1" id="hsocip1" value="<?php echo htmlspecialchars(trim($hsocip1old)) ?>">
+											<input class="form-control" type="text" name="hsocip1" id="hsocip1" value="<?php echo htmlspecialchars($hsocip1old) ?>">
 											<span class="form-text small">
 												Gültige Werte none, "url". URL für die Abfrage des Soc, Antwort muss der reine Zahlenwert sein.
 											</span>
@@ -2728,7 +2069,7 @@
 									<div class="form-row mb-1">
 										<label for="leafusernames1" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="leafusernames1" id="leafusernames1" value="<?php echo trim($leafusernames1old) ?>">
+											<input class="form-control" type="text" name="leafusernames1" id="leafusernames1" value="<?php echo $leafusernames1old ?>">
 											<span class="form-text small">
 												Nissan Connect Benutzername
 											</span>
@@ -2737,7 +2078,7 @@
 									<div class="form-row mb-1">
 										<label for="leafpassworts1" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo trim($leafpassworts1old) ?>">
+											<input class="form-control" type="password" name="leafpassworts1" id="leafpassworts1" value="<?php echo $leafpassworts1old ?>">
 											<span class="form-text small">
 												Nissan Connect Passwort
 											</span>
@@ -2750,7 +2091,7 @@
 									<div class="form-row mb-1">
 										<label for="i3usernames1" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="text" name="i3usernames1" id="i3usernames1" value="<?php echo trim($i3usernames1old) ?>">
+											<input class="form-control" type="text" name="i3usernames1" id="i3usernames1" value="<?php echo $i3usernames1old ?>">
 											<span class="form-text small">
 												BMW Services Benutzername
 											</span>
@@ -2759,7 +2100,7 @@
 									<div class="form-row mb-1">
 										<label for="i3passworts1" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="password" name="i3passworts1" id="i3passworts1" value="<?php echo trim($i3passworts1old) ?>">
+											<input class="form-control" type="password" name="i3passworts1" id="i3passworts1" value="<?php echo $i3passworts1old ?>">
 											<span class="form-text small">
 												BMW Services Passwort
 											</span>
@@ -2768,7 +2109,7 @@
 									<div class="form-row mb-1">
 										<label for="i3vins1" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="i3vins1" id="i3vins1" value="<?php echo trim($i3vins1old) ?>">
+											<input class="form-control" type="text" name="i3vins1" id="i3vins1" value="<?php echo $i3vins1old ?>">
 											<span class="form-text small">
 												BMW VIN. Sie ist in voller Länge anzugeben.
 											</span>
@@ -2777,7 +2118,7 @@
 									<div class="form-row mb-1">
 										<label for="soci3intervall1" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo trim($soci3intervall1old) ?>">
+											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
 											<span class="form-text small">
 												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
 											</span>
@@ -2790,7 +2131,7 @@
 									<div class="form-row mb-1">
 										<label for="soc2pin" class="col-md-4 col-form-label">Pin</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc2pin" id="soc2pin" value="<?php echo trim($soc2pinold) ?>">
+											<input class="form-control" type="text" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
 												PIN des Accounts.
 											</span>
@@ -2814,6 +2155,17 @@
 							hideSection('evseconextopenwblp2');
 							hideSection('evseconipevselp2');
 
+							if($('#evsecons1').val() == 'modbusevse') {
+								switch( $("#evsecons1 option:selected" ).text() ){
+									case "openWB series1/2 Duo":
+										showSection('openwb12s1');
+									break;
+									default:
+										showSection('evseconmbs1');
+										showSection('llmodullp2');
+										display_llmp2();
+								}
+							}
 							if($('#evsecons1').val() == 'ipevse') {
 								showSection('evseconipevselp2');
 								showSection('llmodullp2');
@@ -2821,11 +2173,6 @@
 							}
 							if($('#evsecons1').val() == 'dac') {
 								showSection('evsecondacs1');
-								showSection('llmodullp2');
-								display_llmp2();
-							}
-							if($('#evsecons1').val() == 'modbusevse') {
-								showSection('evseconmbs1');
 								showSection('llmodullp2');
 								display_llmp2();
 							}
@@ -2846,9 +2193,6 @@
 							}
 							if($('#evsecons1').val() == 'nrgkick') {
 								showSection('evseconnrgkicks1');
-							}
-							if($('#evsecon').val() == 'openwb12s1') {
-								showSection('openwb12s1');
 							}
 						}
 
@@ -3012,7 +2356,7 @@
 							<div class="form-row mb-1">
 								<label for="lp3name" class="col-md-4 col-form-label">Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="lp3name" id="lp3name" value="<?php echo trim($lp3nameold) ?>">
+									<input class="form-control" type="text" name="lp3name" id="lp3name" value="<?php echo $lp3nameold ?>">
 								</div>
 							</div>
 						</div>
@@ -3021,22 +2365,29 @@
 							<label for="evsecons2" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecons2" id="evsecons2" class="form-control">
-									<option <?php if($evsecons2old == "thirdeth\n") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkte</option>
-									<option <?php if($evsecons2old == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
-									<option <?php if($evsecons2old == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons2old == "modbusevse\n") echo "selected" ?> value="modbusevse">Modbus</option>
-									<option <?php if($evsecons2old == "dac\n") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evsecons2old == "simpleevsewifi\n") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evsecons2old == "goe\n") echo "selected" ?> value="goe">Go-e</option>
+									<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkt</option>
+									<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
+									<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+									<option <?php if($evsecons2old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
+									<option <?php if($evsecons2old == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evsecons2old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
 								</select>
 							</div>
 						</div>
+						<div id="evseconthirdeth" class="hide">
+							<input type="hidden" name="ladeleistungs2modul" value="mpm3pmethlls2">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.
+							</div>
+						</div>
 						<div id="evseconextopenwblp3" class="hide">
+							<input type="hidden" name="ladeleistungs2modul" value="extopenwblp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="chargep3ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep3ip" id="chargep3ip" value="<?php echo trim($chargep3ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep3ip" id="chargep3ip" value="<?php echo $chargep3ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -3046,7 +2397,7 @@
 								<div class="form-row mb-1">
 									<label for="chargep3cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep3cp" id="chargep3cp" value="<?php echo trim($chargep3cpold) ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep3cp" id="chargep3cp" value="<?php echo $chargep3cpold ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
@@ -3057,7 +2408,7 @@
 								<div class="form-row mb-1">
 									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo trim($evseiplp3old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -3067,7 +2418,7 @@
 								<div class="form-row mb-1">
 									<label for="evseidlp3" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp3" id="evseidlp3" value="<?php echo trim($evseidlp3old) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp3" id="evseidlp3" value="<?php echo $evseidlp3old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Aufgedruckt auf dem Label der openWB.</span>
 									</div>
 								</div>
@@ -3078,21 +2429,21 @@
 								<div class="form-row mb-1">
 									<label for="evsesources2" class="col-md-4 col-form-label">Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="evsesources2" id="evsesources2" value="<?php echo trim($evsesources2old) ?>">
+										<input class="form-control" type="text" name="evsesources2" id="evsesources2" value="<?php echo $evsesources2old ?>">
 										<span class="form-text small">Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evseids2" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseids2" id="evseids2" value="<?php echo trim($evseids2old) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="evseids2" id="evseids2" value="<?php echo $evseids2old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evselanips2" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evselanips2" id="evselanips2" value="<?php echo trim($evselanips2old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.
@@ -3106,7 +2457,7 @@
 								<div class="form-row mb-1">
 									<label for="dacregisters2" class="col-md-4 col-form-label">Dacregister</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisters2" id="dacregisters2" value="<?php echo trim($dacregisters2old) ?>">
+										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisters2" id="dacregisters2" value="<?php echo $dacregisters2old ?>">
 										<span class="form-text small">
 											Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP.
 											Der benötigte Wert sollte <a href="/openWB/ramdisk/i2csearch">HIER</a> zu finden sein.
@@ -3117,18 +2468,19 @@
 							</div>
 						</div>
 						<div id="evseconswifis2" class="hide">
+							<input type="hidden" name="ladeleistungs2modul" value="simpleevsewifis2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evsewifiiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo trim($evsewifiiplp3old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evsewifiiplp3" id="evsewifiiplp3" value="<?php echo $evsewifiiplp3old ?>">
 										<span class="form-text small">Gültige Werte IP Adresse im Format: 192.168.0.12</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
 									<label for="evsewifitimeoutlp3" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo trim($evsewifitimeoutlp3old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="evsewifitimeoutlp3" id="evsewifitimeoutlp3" value="<?php echo $evsewifitimeoutlp3old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort der Simple EVSE gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn die SimpleEVSE z.B. gerade unterwegs genutzt wird.
@@ -3138,11 +2490,12 @@
 							</div>
 						</div>
 						<div id="evsecongoes2" class="hide">
+							<input type="hidden" name="ladeleistungs2modul" value="goelp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="goeiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp3" id="goeiplp3" value="<?php echo trim($goeiplp3old) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="goeiplp3" id="goeiplp3" value="<?php echo $goeiplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12
 										</span>
@@ -3151,7 +2504,7 @@
 								<div class="form-row mb-1">
 									<label for="goetimeoutlp3" class="col-md-4 col-form-label">Timeout</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo trim($goetimeoutlp3old) ?>">
+										<input class="form-control" type="number" min="0" max="10" step="1" name="goetimeoutlp3" id="goetimeoutlp3" value="<?php echo $goetimeoutlp3old ?>">
 										<span class="form-text small">
 											Gibt die Zeit in Sekunden an wie lange auf Antwort des Go-echargers gewartet wird. Bei gutem Wlan reichen 2 Sekunden aus.
 											Zu lange Wartezeit zieht einen Verzug der Regellogik von openWB mit sich wenn der Go-echarger z.B. gerade unterwegs genutzt wird.
@@ -3167,13 +2520,13 @@
 								<label for="ladeleistungss2modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
 									<select name="ladeleistungss2modul" id="ladeleistungss2modul" class="form-control">
-										<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2\n") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2\n") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlls2\n") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2\n") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs2modulold == "goelp3\n") echo "selected" ?> value="goelp3">Go-E</option> <!-- BUG go-E als LL-Modul? -->
-										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3\n") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3\n") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
+										<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
+										<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+										<option <?php if($ladeleistungs2modulold == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
+										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
+										<option <?php if($ladeleistungs2modulold == "goelp3") echo "selected" ?> value="goelp3">Go-E</option> <!-- BUG go-E als LL-Modul? -->
+										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
 									</select>
 								</div>
 							</div>
@@ -3182,7 +2535,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp3ip" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo trim($mpmlp3ipold) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse des Modbus Ethernet Konverters im Format: 192.168.0.12
 											</span>
@@ -3191,7 +2544,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp3id" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp3id" id="mpmlp3id" value="<?php echo trim($mpmlp3idold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -3202,7 +2555,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmlls2source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo trim($mpm3pmlls2sourceold) ?>">
+											<input class="form-control" type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das MPM3PM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -3212,7 +2565,7 @@
 									<div class="form-row mb-1">
 										<label for="mpm3pmlls2id" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo trim($mpm3pmlls2idold) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -3228,7 +2581,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm630lp3source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm630lp3source" id="sdm630lp3source" value="<?php echo trim($sdm630lp3sourceold) ?>">
+											<input class="form-control" type="text" name="sdm630lp3source" id="sdm630lp3source" value="<?php echo $sdm630lp3sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -3238,7 +2591,7 @@
 									<div class="form-row mb-1">
 										<label for="sdmids2" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdmids2" id="sdmids2" value="<?php echo trim($sdmids2old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdmids2" id="sdmids2" value="<?php echo $sdmids2old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.</span>
 										</div>
 									</div>
@@ -3249,7 +2602,7 @@
 									<div class="form-row mb-1">
 										<label for="sdm120lp3source" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm120lp3source" id="sdm120lp3source" value="<?php echo trim($sdm120lp3sourceold) ?>">
+											<input class="form-control" type="text" name="sdm120lp3source" id="sdm120lp3source" value="<?php echo $sdm120lp3sourceold ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -3259,21 +2612,21 @@
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid1s2" class="col-md-4 col-form-label">ID Phase 1</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo trim($sdm120modbusllid1s2old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo $sdm120modbusllid1s2old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der ersten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid2s2" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo trim($sdm120modbusllid2s2old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo $sdm120modbusllid2s2old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid3s2" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo trim($sdm120modbusllid3s2old) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
 										</div>
 									</div>
@@ -3284,7 +2637,7 @@
 									<div class="form-row mb-1">
 										<label for="lllaniplp3" class="col-md-4 col-form-label">IP Adresse RS485/Lan-Konverter</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lllaniplp3" id="lllaniplp3" value="<?php echo trim($lllaniplp3old) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>">
 											<span class="form-text small">
 												Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
 												Gültige Werte IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
@@ -3314,7 +2667,11 @@
 							hideSection('evsecongoes2');
 							hideSection('evseconipevselp3');
 							hideSection('evseconextopenwblp3');
+							hideSection('evseconthirdeth');
 
+							if($('#evsecons2').val() == 'thirdeth') {
+								showSection('evseconthirdeth');
+							}
 							if($('#evsecons2').val() == 'dac') {
 								showSection('evsecondacs2');
 								showSection('llmodullp3');
@@ -3417,7 +2774,7 @@
 								<div class="form-row mb-1">
 									<label for="lp<?php echo $chargepointNum; ?>name" class="col-md-4 col-form-label">Name</label>
 									<div class="col">
-										<input class="form-control" type="text" name="lp<?php echo $chargepointNum; ?>name" id="lp<?php echo $chargepointNum; ?>name" value="<?php echo trim(${'lp'.$chargepointNum.'nameold'}) ?>">
+										<input class="form-control" type="text" name="lp<?php echo $chargepointNum; ?>name" id="lp<?php echo $chargepointNum; ?>name" value="<?php echo ${'lp'.$chargepointNum.'nameold'} ?>">
 									</div>
 								</div>
 							</div>
@@ -3426,8 +2783,8 @@
 								<label for="evseconlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Anbindung</label>
 								<div class="col">
 									<select name="evseconlp<?php echo $chargepointNum; ?>" id="evseconlp<?php echo $chargepointNum; ?>" class="form-control">
-										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit</option>
-										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb\n") echo "selected" ?> value="extopenwb">externe openWB</option>
+										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
+										<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 									</select>
 								</div>
 							</div>
@@ -3436,7 +2793,7 @@
 									<div class="form-row mb-1">
 										<label for="chargep<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep<?php echo $chargepointNum; ?>ip" id="chargep<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${'chargep'.$chargepointNum.'ipold'}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep<?php echo $chargepointNum; ?>ip" id="chargep<?php echo $chargepointNum; ?>ip" value="<?php echo ${'chargep'.$chargepointNum.'ipold'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 												Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -3446,7 +2803,7 @@
 									<div class="form-row mb-1">
 										<label for="chargep<?php echo $chargepointNum; ?>cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="2" step="1" name="chargep<?php echo $chargepointNum; ?>cp" id="chargep<?php echo $chargepointNum; ?>cp" value="<?php echo trim(${'chargep'.$chargepointNum.'cpold'}) ?>">
+											<input class="form-control" type="number" min="1" max="2" step="1" name="chargep<?php echo $chargepointNum; ?>cp" id="chargep<?php echo $chargepointNum; ?>cp" value="<?php echo ${'chargep'.$chargepointNum.'cpold'} ?>">
 											<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 										</div>
 									</div>
@@ -3457,7 +2814,7 @@
 									<div class="form-row mb-1">
 										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo trim(${'evseiplp'.$chargepointNum.'old'}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12
 											</span>
@@ -3466,14 +2823,14 @@
 									<div class="form-row mb-1">
 										<label for="evseidlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp<?php echo $chargepointNum; ?>" id="evseidlp<?php echo $chargepointNum; ?>" value="<?php echo trim(${'evseidlp'.$chargepointNum.'old'}) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="evseidlp<?php echo $chargepointNum; ?>" id="evseidlp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseidlp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="mpmlp<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">Ladeleistung IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp<?php echo $chargepointNum; ?>ip" id="mpmlp<?php echo $chargepointNum; ?>ip" value="<?php echo trim(${'mpmlp'.$chargepointNum.'ipold'}) ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp<?php echo $chargepointNum; ?>ip" id="mpmlp<?php echo $chargepointNum; ?>ip" value="<?php echo ${'mpmlp'.$chargepointNum.'ipold'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Modbus Ethernet Konverters.
 											</span>
@@ -3482,7 +2839,7 @@
 									<div class="form-row mb-1">
 										<label for="mpmlp<?php echo $chargepointNum; ?>id" class="col-md-4 col-form-label">Ladeleistung ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp<?php echo $chargepointNum; ?>id" id="mpmlp<?php echo $chargepointNum; ?>id" value="<?php echo trim(${'mpmlp'.$chargepointNum.'idold'}) ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp<?php echo $chargepointNum; ?>id" id="mpmlp<?php echo $chargepointNum; ?>id" value="<?php echo ${'mpmlp'.$chargepointNum.'idold'} ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
