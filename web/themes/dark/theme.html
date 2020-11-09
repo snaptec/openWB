@@ -267,9 +267,9 @@
 			<div class="col-2 px-0 socNotConfiguredLp text-center">
 				--
 			</div>
-			<div class="col-2 px-0 hide socConfiguredLp text-center">
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
 				<span class="socLp"></span>
-				<i class="cursor-pointer small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 			</div>
 		</div>
 
@@ -291,9 +291,9 @@
 			<div class="col-2 px-0 socNotConfiguredLp text-center">
 				--
 			</div>
-			<div class="col-2 px-0 hide socConfiguredLp text-center">
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
 				<span class="socLp"></span>
-				<i class="cursor-pointer small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 			</div>
 		</div>
 
@@ -1224,13 +1224,14 @@
 				}
 			});
 
-			$('.reloadLpSoc').click(function(event){
+			$('.socConfiguredLp').click(function(event){
 				// send mqtt set to force reload of charge point SoC after click
 				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
 				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
-					var isRunning = $(this).hasClass("fa-spin");
+					var spinner = $(this).find('.reloadLpSoc');
+					var isRunning = spinner.hasClass("fa-spin");
 					if ( !isRunning ) {
-						$(this).addClass("fa-spin");
+						spinner.addClass("fa-spin");
 						publish("1", "openWB/set/lp/" + lp + "/ForceSoCUpdate");
 					}
 				}
