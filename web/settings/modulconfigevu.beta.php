@@ -185,7 +185,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug1_ip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug1_ip" id="bezug1_ip" value="<?php echo trim($bezug1_ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug1_ip" id="bezug1_ip" value="<?php echo $bezug1_ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -233,7 +233,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug_victronip" class="col-md-4 col-form-label">Victron IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_victronip" id="bezug_victronip" value="<?php echo trim($bezug_victronipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_victronip" id="bezug_victronip" value="<?php echo $bezug_victronipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 										IP Adresse des Victron, z.B. GX.
@@ -243,7 +243,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug_id" class="col-md-4 col-form-label">ID</label>
 								<div class="col">
-									<input class="form-control" type="text" name="bezug_id" id="bezug_id" value="<?php echo trim($bezug_idold) ?>">
+									<input class="form-control" type="text" name="bezug_id" id="bezug_id" value="<?php echo $bezug_idold ?>">
 									<span class="form-text small">Gültige Werte ID. ID Adresse</span>
 								</div>
 							</div>
@@ -252,7 +252,7 @@
 							<div class="form-row mb-1">
 								<label for="femsip" class="col-md-4 col-form-label">Fenecon IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="femsip" id="femsip" value="<?php echo trim($femsipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="femsip" id="femsip" value="<?php echo $femsipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 										IP Adresse des Fenecon FEMS.
@@ -262,7 +262,7 @@
 							<div class="form-row mb-1">
 								<label for="femskacopw" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="femskacopw" id="femskacopw" value="<?php echo htmlspecialchars(trim($femskacopwold)) ?>">
+									<input class="form-control" type="password" name="femskacopw" id="femskacopw" value="<?php echo htmlspecialchars($femskacopwold) ?>">
 									<span class="form-text small">
 										Bei Nutzung von Fenecon FEMS ist das Passwort im Normalfall user, bei Kaco mit Hy-Control ist das Passwort meist admin.
 									</span>
@@ -273,7 +273,7 @@
 							<div class="form-row mb-1">
 								<label for="solarworld_emanagerip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo trim($solarworld_emanageripold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo $solarworld_emanageripold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 										IP Adresse des Solarworld eManager.
@@ -285,19 +285,19 @@
 							<div class="form-row mb-1">
 								<label for="discovergyuser" class="col-md-4 col-form-label">Discovergy Username (Email)</label>
 								<div class="col">
-									<input class="form-control" type="email" name="discovergyuser" id="discovergyuser" value="<?php echo htmlspecialchars(trim($discovergyuserold)) ?>">
+									<input class="form-control" type="email" name="discovergyuser" id="discovergyuser" value="<?php echo htmlspecialchars($discovergyuserold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="discovergypass" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="discovergypass" id="discovergypass" value="<?php echo htmlspecialchars(trim($discovergypassold)) ?>">
+									<input class="form-control" type="password" name="discovergypass" id="discovergypass" value="<?php echo htmlspecialchars($discovergypassold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="discovergyevuid" class="col-md-4 col-form-label">Meter ID</label>
 								<div class="col">
-									<input class="form-control" type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo trim($discovergyevuidold) ?>">
+									<input class="form-control" type="text" name="discovergyevuid" id="discovergyevuid" value="<?php echo $discovergyevuidold ?>">
 									<span class="form-text small">
 										Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben.
 										Hier wird nun u.a. die ID des Zählers angezeigt.
@@ -309,7 +309,7 @@
 							<div class="form-row mb-1">
 								<label for="ksemip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="ksemip" id="ksemip" value="<?php echo trim($ksemipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="ksemip" id="ksemip" value="<?php echo $ksemipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -353,7 +353,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmevusource" class="col-md-4 col-form-label">MPM3PM Zähler EVU Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo trim($mpm3pmevusourceold) ?>">
+										<input class="form-control" type="text" name="mpm3pmevusource" id="mpm3pmevusource" value="<?php echo $mpm3pmevusourceold ?>">
 										<span class="form-text small">
 											Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
 											Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -363,7 +363,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmevuid" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo trim($mpm3pmevuidold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmevuid" id="mpm3pmevuid" value="<?php echo $mpm3pmevuidold ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 									</div>
 								</div>
@@ -395,7 +395,7 @@
 							<div class="form-row mb-1">
 								<label for="hausbezugnone" class="col-md-4 col-form-label">Angenommener Hausverbrauch</label>
 								<div class="col">
-									<input class="form-control" type="number" min="0" step="100" name="hausbezugnone" id="hausbezugnone" value="<?php echo htmlspecialchars(trim($hausbezugnoneold)) ?>">
+									<input class="form-control" type="number" min="0" step="100" name="hausbezugnone" id="hausbezugnone" value="<?php echo htmlspecialchars($hausbezugnoneold) ?>">
 									<span class="form-text small">
 										Gültige Werte Zahl. Wenn keine EVU Messung vorhanden ist kann hier ein Hausgrundverbrauch festgelegt werden.
 										Daraus resultierend agiert die PV Regelung bei vorhandenem PV-Modul
@@ -408,7 +408,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbusbezugsource" class="col-md-4 col-form-label">SDM Zähler EVU Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo trim($sdm630modbusbezugsourceold) ?>">
+										<input class="form-control" type="text" name="sdm630modbusbezugsource" id="sdm630modbusbezugsource" value="<?php echo $sdm630modbusbezugsourceold ?>">
 										<span class="form-text small">
 											Gültige Werte /dev/ttyUSBx, /dev/virtualcomx. Das "x" steht für den Adapter. Dies kann 0,1,2, usw sein. Serieller Port an dem der SDM angeschlossen ist.
 										</span>
@@ -417,7 +417,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbusbezugid" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo trim($sdm630modbusbezugidold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbusbezugid" id="sdm630modbusbezugid" value="<?php echo $sdm630modbusbezugidold ?>">
 										<span class="form-text small">
 											Gültige Werte 1-254. Modbus ID des SDM. Getestet sind SDM230 & SDM630v2.
 										</span>
@@ -426,7 +426,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbusbezuglanip" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo trim($sdm630modbusbezuglanipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbusbezuglanip" id="sdm630modbusbezuglanip" value="<?php echo $sdm630modbusbezuglanipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Ist die Source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
@@ -440,7 +440,7 @@
 								<div class="form-row mb-1">
 									<label for="vzloggerip" class="col-md-4 col-form-label">Vzlogger IP Adresse inkl Port</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):[0-9]+$" name="vzloggerip" id="vzloggerip" value="<?php echo trim($vzloggeripold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):[0-9]+$" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>">
 										<span class="form-text small">
 											Gültige Werte IP:Port z.B. 192.168.0.12:8080
 										</span>
@@ -449,7 +449,7 @@
 								<div class="form-row mb-1">
 									<label for="vzloggerline" class="col-md-4 col-form-label">Vzlogger Watt Zeile</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" step="1" name="vzloggerline" id="vzloggerline" value="<?php echo trim($vzloggerlineold) ?>">
+										<input class="form-control" type="number" min="1" step="1" name="vzloggerline" id="vzloggerline" value="<?php echo $vzloggerlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 											Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.
@@ -459,7 +459,7 @@
 								<div class="form-row mb-1">
 									<label for="vzloggerkwhline" class="col-md-4 col-form-label">Vzlogger Bezug kWh Zeile</label>
 									<div class="col">
-										<input class="form-control" type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo trim($vzloggerkwhlineold) ?>">
+										<input class="form-control" type="text" name="vzloggerkwhline" id="vzloggerkwhline" value="<?php echo $vzloggerkwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 											Nun zählen in welcher Zeile die Gesamt kWh stehen und diesen hier eintragen. Der Wert dient rein dem Logging.
@@ -470,7 +470,7 @@
 								<div class="form-row mb-1">
 									<label for="vzloggerekwhline" class="col-md-4 col-form-label">Vzlogger Einspeisung kWh Zeile</label>
 									<div class="col">
-										<input class="form-control" type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo trim($vzloggerekwhlineold) ?>">
+										<input class="form-control" type="text" name="vzloggerekwhline" id="vzloggerekwhline" value="<?php echo $vzloggerekwhlineold ?>">
 										<span class="form-text small">
 											Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 											Nun zählen in welcher Zeile die Gesamt eingespeisten kWh stehen und diesen hier eintragen.
@@ -484,7 +484,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_w_url" class="col-md-4 col-form-label">Vollständige URL für den Watt Bezug</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars(trim($bezug_http_w_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_w_url" id="bezug_http_w_url" value="<?php echo htmlspecialchars($bezug_http_w_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 										</span>
@@ -493,7 +493,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_ikwh_url" class="col-md-4 col-form-label">Vollständige URL für den kWh Bezug</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars(trim($bezug_http_ikwh_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_ikwh_url" id="bezug_http_ikwh_url" value="<?php echo htmlspecialchars($bezug_http_ikwh_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 										</span>
@@ -502,7 +502,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_ekwh_url" class="col-md-4 col-form-label">Vollständige URL für die kWh Einspeisung</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars(trim($bezug_http_ekwh_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_ekwh_url" id="bezug_http_ekwh_url" value="<?php echo htmlspecialchars($bezug_http_ekwh_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 										</span>
@@ -511,7 +511,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_l1_url" class="col-md-4 col-form-label">Vollständige URL für die Ampere Phase 1</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_l1_url" id="bezug_http_l1_url" value="<?php echo htmlspecialchars(trim($bezug_http_l1_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_l1_url" id="bezug_http_l1_url" value="<?php echo htmlspecialchars($bezug_http_l1_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 										</span>
@@ -520,7 +520,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_l2_url" class="col-md-4 col-form-label">Vollständige URL für die Ampere Phase 2</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_l2_url" id="bezug_http_l2_url" value="<?php echo htmlspecialchars(trim($bezug_http_l2_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_l2_url" id="bezug_http_l2_url" value="<?php echo htmlspecialchars($bezug_http_l2_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 										</span>
@@ -529,7 +529,7 @@
 								<div class="form-row mb-1">
 									<label for="bezug_http_l3_url" class="col-md-4 col-form-label">Vollständige URL für die Ampere Phase 3</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezug_http_l3_url" id="bezug_http_l3_url" value="<?php echo htmlspecialchars(trim($bezug_http_l3_urlold)) ?>">
+										<input class="form-control" type="text" name="bezug_http_l3_url" id="bezug_http_l3_url" value="<?php echo htmlspecialchars($bezug_http_l3_urlold) ?>">
 										<span class="form-text small">
 											Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 										</span>
@@ -541,19 +541,19 @@
 							<div class="form-row mb-1">
 								<label for="bezug_smartme_user" class="col-md-4 col-form-label">Smartme Benutzername</label>
 								<div class="col">
-									<input class="form-control" type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars(trim($bezug_smartme_userold)) ?>">
+									<input class="form-control" type="text" name="bezug_smartme_user" id="bezug_smartme_user" value="<?php echo htmlspecialchars($bezug_smartme_userold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="bezug_smartme_pass" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars(trim($bezug_smartme_passold)) ?>">
+									<input class="form-control" type="password" name="bezug_smartme_pass" id="bezug_smartme_pass" value="<?php echo htmlspecialchars($bezug_smartme_passold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="bezug_smartme_url" class="col-md-4 col-form-label">Smartme Url</label>
 								<div class="col">
-									<input class="form-control" type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo trim($bezug_smartme_urlold) ?>">
+									<input class="form-control" type="text" name="bezug_smartme_url" id="bezug_smartme_url" value="<?php echo $bezug_smartme_urlold ?>">
 								</div>
 							</div>
 						</div>
@@ -561,7 +561,7 @@
 							<div class="form-row mb-1">
 								<label for="smaeshmbezugid" class="col-md-4 col-form-label">Seriennummer</label>
 								<div class="col">
-									<input class="form-control" type="text" name="smaeshmbezugid" id="smaeshmbezugid" value="<?php echo trim($smashmbezugidold) ?>">
+									<input class="form-control" type="text" name="smaeshmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
 									<span class="form-text small">
 										Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben.
 										Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten none eintragen. Funktioniert auch mit Energy Meter statt Home Manager.
@@ -573,7 +573,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug_smartfox_ip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo trim($bezug_smartfox_ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_smartfox_ip" id="bezug_smartfox_ip" value="<?php echo $bezug_smartfox_ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -584,7 +584,7 @@
 							<div class="form-row mb-1">
 								<label for="smaemdbezugid" class="col-md-4 col-form-label">Seriennummer des SMA Energy Meter</label>
 								<div class="col">
-									<input class="form-control" type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo trim($smaemdbezugidold) ?>">
+									<input class="form-control" type="text" name="smaemdbezugid" id="smaemdbezugid" value="<?php echo $smaemdbezugidold ?>">
 									<span class="form-text small">
 										Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung angeben<br>
 										Infos zum SMA Energy Meter <a href="https://github.com/snaptec/openWB#extras">HIER</a>
@@ -646,7 +646,7 @@
 								<div class="form-row mb-1">
 									<label for="bezugjsonurl" class="col-md-4 col-form-label">Bezug URL</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo htmlspecialchars(trim($bezugjsonurlold)) ?>">
+										<input class="form-control" type="text" name="bezugjsonurl" id="bezugjsonurl" value="<?php echo htmlspecialchars($bezugjsonurlold) ?>">
 										<span class="form-text small">
 											Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 										</span>
@@ -655,7 +655,7 @@
 								<div class="form-row mb-1">
 									<label for="bezugjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo htmlspecialchars(trim($bezugjsonwattold)) ?>">
+										<input class="form-control" type="text" name="bezugjsonwatt" id="bezugjsonwatt" value="<?php echo htmlspecialchars($bezugjsonwattold) ?>">
 										<span class="form-text small">
 											Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 											Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> so muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
@@ -665,7 +665,7 @@
 								<div class="form-row mb-1">
 									<label for="bezugjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Bezug kWh</label>
 									<div class="col">
-										<input class="form-control" type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo htmlspecialchars(trim($bezugjsonkwhold)) ?>">
+										<input class="form-control" type="text" name="bezugjsonkwh" id="bezugjsonkwh" value="<?php echo htmlspecialchars($bezugjsonkwhold) ?>">
 										<span class="form-text small">
 											Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 											Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> so muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
@@ -675,7 +675,7 @@
 								<div class="form-row mb-1">
 									<label for="einspeisungjsonkwh" class="col-md-4 col-form-label">Json Abfrage für Einspeisung kWh</label>
 									<div class="col">
-										<input class="form-control" type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo htmlspecialchars(trim($einspeisungjsonkwhold)) ?>">
+										<input class="form-control" type="text" name="einspeisungjsonkwh" id="einspeisungjsonkwh" value="<?php echo htmlspecialchars($einspeisungjsonkwhold) ?>">
 										<span class="form-text small">
 											Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 											Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> so muss hier <span class="text-info">.PowerSelfSupplied</span> eingetragen werden.
@@ -708,7 +708,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgeip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgeip" id="solaredgeip" value="<?php echo trim($solaredgeipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgeip" id="solaredgeip" value="<?php echo $solaredgeipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP.<br>
 										Hierfür muss ein EVU Zähler am SolarEdge Wechselrichter per Modbus angebunden sein.<br>
@@ -756,7 +756,7 @@
 									<div class="form-row mb-1">
 										<label for="evuglaettung" class="col-md-4 col-form-label">Zeitspanne</label>
 										<div class="col">
-											<input class="form-control" type="number" min="10" step="10" name="evuglaettung" id="evuglaettung" value="<?php echo trim($evuglaettungold) ?>">
+											<input class="form-control" type="number" min="10" step="10" name="evuglaettung" id="evuglaettung" value="<?php echo $evuglaettungold ?>">
 											<span class="form-text small">
 												Gültige Werte: Zeit in Sekunden, z.B. 30,50,200
 											</span>

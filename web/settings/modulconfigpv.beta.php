@@ -160,7 +160,7 @@
 							<div class="form-row mb-1">
 								<label for="pv1_ipa" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv1_ipa" id="pv1_ipa" value="<?php echo trim($pv1_ipaold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv1_ipa" id="pv1_ipa" value="<?php echo $pv1_ipaold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -194,7 +194,7 @@
 							<div class="form-row mb-1">
 								<label for="wryoulessip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wryoulessip" id="wryoulessip" value="<?php echo trim($wryoulessipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wryoulessip" id="wryoulessip" value="<?php echo $wryoulessipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -205,7 +205,7 @@
 							<div class="form-row mb-1">
 								<label for="wrsunwaysip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo trim($wrsunwaysipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrsunwaysip" id="wrsunwaysip" value="<?php echo $wrsunwaysipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -214,7 +214,7 @@
 							<div class="form-row mb-1">
 								<label for="wrsunwayspw" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars(trim($wrsunwayspwold)) ?>">
+									<input class="form-control" type="password" name="wrsunwayspw" id="wrsunwayspw" value="<?php echo htmlspecialchars($wrsunwayspwold) ?>">
 								</div>
 							</div>
 						</div>
@@ -222,7 +222,7 @@
 							<div class="form-row mb-1">
 								<label for="bezug_solarlog_ip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo trim($bezug_solarlog_ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="bezug_solarlog_ip" id="bezug_solarlog_ip" value="<?php echo $bezug_solarlog_ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 										Wenn ein Eigenverbrauchszähler installiert ist bitte EVU SolarLog Modul nutzen. Wenn nicht dann dieses Modul.
@@ -234,7 +234,7 @@
 							<div class="form-row mb-1">
 								<label for="discovergypvid" class="col-md-4 col-form-label">Meter ID des Zählers</label>
 								<div class="col">
-									<input class="form-control" type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars(trim($discovergypvidold)) ?>">
+									<input class="form-control" type="text" name="discovergypvid" id="discovergypvid" value="<?php echo htmlspecialchars($discovergypvidold) ?>">
 									<span class="form-text small">
 										Gültige Werte ID. Um die ID herauszufinden mit dem Browser die Adresse "https://api.discovergy.com/public/v1/meters" aufrufen und dort Benutzername und Passwort eingeben. Hier wird nun u.a. die ID des Zählers angezeigt.<br>
 										Die Benutzerdaten werden im Discovergy EVU Modul konfiguriert.
@@ -246,7 +246,7 @@
 							<div class="form-row mb-1">
 								<label for="solarview_hostname" class="col-md-4 col-form-label">Hostname/IP des SolarView TCP-Servers</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|[a-zA-Z0-9.\-_]+$" name="solarview_hostname" id="solarview_hostname" value="<?php echo trim($solarview_hostnameold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|[a-zA-Z0-9.\-_]+$" name="solarview_hostname" id="solarview_hostname" value="<?php echo $solarview_hostnameold ?>">
 									<span class="form-text small">
 										Gültige Werte Hostname oder IP-Adresse.
 									</span>
@@ -255,7 +255,7 @@
 							<div class="form-row mb-1">
 								<label for="solarview_port" class="col-md-4 col-form-label">Port des Solarview TCP-Servers</label>
 								<div class="col">
-									<input class="form-control" type="number" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars(trim($solarview_portold)) ?>">
+									<input class="form-control" type="number" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 									<span class="form-text small">
 										Gültige Werte Port, z.B. 15000.
 									</span>
@@ -284,7 +284,7 @@
 							<div class="form-row mb-1">
 								<label for="kostalplenticoreip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo trim($kostalplenticoreipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein.
 										Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
@@ -294,7 +294,7 @@
 							<div class="form-row mb-1">
 								<label for="name_wechselrichter1" class="col-md-4 col-form-label">Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo trim($name_wechselrichter1old) ?>">
+									<input class="form-control" type="text" name="name_wechselrichter1" id="name_wechselrichter1" value="<?php echo $name_wechselrichter1old ?>">
 									<span class="form-text small">
 										Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
@@ -303,7 +303,7 @@
 							<div class="form-row mb-1">
 								<label for="kostalplenticoreip2" class="col-md-4 col-form-label">WR 2 IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo trim($kostalplenticoreip2old) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>">
 									<span class="form-text small">
 										Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein.
 										Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
@@ -313,7 +313,7 @@
 							<div class="form-row mb-1">
 								<label for="name_wechselrichter2" class="col-md-4 col-form-label">WR 2 Name</label>
 								<div class="col">
-									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo trim($name_wechselrichter2old) ?>">
+									<input class="form-control" type="text" name="name_wechselrichter2" id="name_wechselrichter2" value="<?php echo $name_wechselrichter2old ?>">
 									<span class="form-text small">
 										Freie Bezeichnung des zweiten Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 									</span>
@@ -324,19 +324,19 @@
 							<div class="form-row mb-1">
 								<label for="wr_smartme_user" class="col-md-4 col-form-label">Smartme Benutzername</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo trim($wr_smartme_userold) ?>">
+									<input class="form-control" type="text" name="wr_smartme_user" id="wr_smartme_user" value="<?php echo $wr_smartme_userold ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="wr_smartme_pass" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars(trim($wr_smartme_passold)) ?>">
+									<input class="form-control" type="password" name="wr_smartme_pass" id="wr_smartme_pass" value="<?php echo htmlspecialchars($wr_smartme_passold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="wr_smartme_url" class="col-md-4 col-form-label">Smartme URL</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo trim($wr_smartme_urlold) ?>">
+									<input class="form-control" type="text" name="wr_smartme_url" id="wr_smartme_url" value="<?php echo $wr_smartme_urlold ?>">
 								</div>
 							</div>
 						</div>
@@ -344,19 +344,19 @@
 							<div class="form-row mb-1">
 								<label for="wr_piko2_user" class="col-md-4 col-form-label">Benutzername</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo trim($wr_piko2_userold) ?>">
+									<input class="form-control" type="text" name="wr_piko2_user" id="wr_piko2_user" value="<?php echo $wr_piko2_userold ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="wr_piko2_pass" class="col-md-4 col-form-label">Passwort</label>
 								<div class="col">
-									<input class="form-control" type="password" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars(trim($wr_piko2_passold)) ?>">
+									<input class="form-control" type="password" name="wr_piko2_pass" id="wr_piko2_pass" value="<?php echo htmlspecialchars($wr_piko2_passold) ?>">
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<label for="wr_piko2_url" class="col-md-4 col-form-label">URL</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo trim($wr_piko2_urlold) ?>">
+									<input class="form-control" type="text" name="wr_piko2_url" id="wr_piko2_url" value="<?php echo $wr_piko2_urlold ?>">
 								</div>
 							</div>
 						</div>
@@ -364,7 +364,7 @@
 							<div class="form-row mb-1">
 								<label for="wrjsonurl" class="col-md-4 col-form-label">WR URL</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo trim($wrjsonurlold) ?>">
+									<input class="form-control" type="text" name="wrjsonurl" id="wrjsonurl" value="<?php echo $wrjsonurlold ?>">
 									<span class="form-text small">
 										Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 									</span>
@@ -373,7 +373,7 @@
 							<div class="form-row mb-1">
 								<label for="wrjsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo htmlspecialchars(trim($wrjsonwattold)) ?>">
+									<input class="form-control" type="text" name="wrjsonwatt" id="wrjsonwatt" value="<?php echo htmlspecialchars($wrjsonwattold) ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
@@ -383,7 +383,7 @@
 							<div class="form-row mb-1">
 								<label for="wrjsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo trim($wrjsonkwhold) ?>">
+									<input class="form-control" type="text" name="wrjsonkwh" id="wrjsonkwh" value="<?php echo $wrjsonkwhold ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
@@ -395,7 +395,7 @@
 							<div class="form-row mb-1">
 								<label for="wrkostalpikoip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo trim($wrkostalpikoipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrkostalpikoip" id="wrkostalpikoip" value="<?php echo $wrkostalpikoipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -406,7 +406,7 @@
 							<div class="form-row mb-1">
 								<label for="tri9000ip" class="col-md-4 col-form-label">WR 1 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="tri9000ip" id="tri9000ip" value="<?php echo trim($tri9000ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="tri9000ip" id="tri9000ip" value="<?php echo $tri9000ipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IPs. IP Adresse des SMA WR, ggf. muss der modbusTCP im WR noch aktiviert werden (normalerweise deaktiviert, entweder direkt am Wechselrichter, per Sunny Portal oder über das Tool "Sunny Explorer").
 									</span>
@@ -432,7 +432,7 @@
 							<div class="form-row mb-1">
 								<label for="wrsma2ip" class="col-md-4 col-form-label">WR 2 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma2ip" id="wrsma2ip" value="<?php echo trim($wrsma2ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma2ip" id="wrsma2ip" value="<?php echo $wrsma2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IP Adresse oder "none". IP des zweiten SMA Wechselrichters. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden.
 									</span>
@@ -441,7 +441,7 @@
 							<div class="form-row mb-1">
 								<label for="wrsma3ip" class="col-md-4 col-form-label">WR 3 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma3ip" id="wrsma3ip" value="<?php echo trim($wrsma3ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma3ip" id="wrsma3ip" value="<?php echo $wrsma3ipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IP Adresse oder "none". IP des dritten SMA Wechselrichters. Wenn weniger WR genutzt werden, muss der Wert "none" gesetzt werden.
 									</span>
@@ -450,7 +450,7 @@
 							<div class="form-row mb-1">
 								<label for="wrsma4ip" class="col-md-4 col-form-label">WR 4 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma4ip" id="wrsma4ip" value="<?php echo trim($wrsma4ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrsma4ip" id="wrsma4ip" value="<?php echo $wrsma4ipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IP Adresse oder "none". IP des vierten SMA Wechselrichters. Wenn weniger WR genutzt werden, muss der Wert "none" gesetzt werden.
 									</span>
@@ -461,7 +461,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvip" class="col-md-4 col-form-label">WR Solaredge IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgepvip" id="solaredgepvip" value="<?php echo trim($solaredgepvipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaredgepvip" id="solaredgepvip" value="<?php echo $solaredgepvipold ?>">
 									<span class="form-text small">
 										Gültige Werte: IPs. IP Adresse des SolarEdge Wechselrichters. Modbus TCP muss am WR aktiviert werden, der Port ist auf 502 zu stellen.
 									</span>
@@ -487,7 +487,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvslave1" class="col-md-4 col-form-label">WR 1 Solaredge ID</label>
 								<div class="col">
-									<input class="form-control" type="number" min="0" step="1" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo trim($solaredgepvslave1old) ?>">
+									<input class="form-control" type="number" min="0" step="1" name="solaredgepvslave1" id="solaredgepvslave1" value="<?php echo $solaredgepvslave1old ?>">
 									<span class="form-text small">
 										Gültige Werte Zahl. ID des SolarEdge Wechselrichters. Normalerweise 1.
 									</span>
@@ -496,7 +496,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvslave2" class="col-md-4 col-form-label">WR 2 Solaredge ID</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo trim($solaredgepvslave2old) ?>">
+									<input class="form-control" type="text" name="solaredgepvslave2" id="solaredgepvslave2" value="<?php echo $solaredgepvslave2old ?>">
 									<span class="form-text small">
 										Gültige Werte Zahl oder none. ID des zweiten SolarEdge Wechselrichters. Wenn nur ein WR genutzt wird auf none setzen.
 									</span>
@@ -505,7 +505,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvslave3" class="col-md-4 col-form-label">WR 3 Solaredge ID</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo trim($solaredgepvslave3old) ?>">
+									<input class="form-control" type="text" name="solaredgepvslave3" id="solaredgepvslave3" value="<?php echo $solaredgepvslave3old ?>">
 									<span class="form-text small">
 										Gültige Werte Zahl oder none. ID des dritten SolarEdge Wechselrichters. Wenn weniger WR genutzt werden auf none setzen.
 									</span>
@@ -514,7 +514,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgepvslave4" class="col-md-4 col-form-label">WR 4 Solaredge ID</label>
 								<div class="col">
-									<input class="form-control" type="text" name="solaredgepvslave4" id="solaredgepvslave4" value="<?php echo trim($solaredgepvslave4old) ?>">
+									<input class="form-control" type="text" name="solaredgepvslave4" id="solaredgepvslave4" value="<?php echo $solaredgepvslave4old ?>">
 									<span class="form-text small">
 										Gültige Werte Zahl oder none. ID des vierten SolarEdge Wechselrichters. Wenn weniger WR genutzt werden auf none setzen.
 									</span>
@@ -523,7 +523,7 @@
 							<div class="form-row mb-1">
 								<label for="solaredgewr2ip" class="col-md-4 col-form-label">WR 2 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo trim($solaredgewr2ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="solaredgewr2ip" id="solaredgewr2ip" value="<?php echo $solaredgewr2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP oder none. IP des zweiten SolarEdge Wechselrichters. Ist nur nötig, wenn 2 Wechselrichter genutzt werden die nicht per Modbus miteinander verbunden sind.
 									</span>
@@ -534,7 +534,7 @@
 							<div class="form-row mb-1">
 								<label for="wrfroniusip" class="col-md-4 col-form-label">WR Fronius IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo trim($wrfroniusipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wrfroniusip" id="wrfroniusip" value="<?php echo $wrfroniusipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Fronius Wechselrichters. Werden hier und im Feld unten zwei verschiedene Adressen eingetragen, muss hier die Adresse des Wechselrichters stehen, an dem das SmartMeter angeschlossen ist.
 									</span>
@@ -543,7 +543,7 @@
 							<div class="form-row mb-1">
 								<label for="wrfronius2ip" class="col-md-4 col-form-label">WR Fronius 2 IP</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo trim($wrfronius2ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])|none$" name="wrfronius2ip" id="wrfronius2ip" value="<?php echo $wrfronius2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des zweiten Fronius Wechselrichters. Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM miteinander verbunden sind, reicht die Angabe der Adresse eines Wechselrichters im ersten Feld. Sind aber z.B. Symo und Symo Hybrid im Einsatz, müssen diese beide angegeben werden (hier dann die Adresse des Wechselrichters, an dem das SmartMeter NICHT angeschlossen ist). Ist kein zweiter Wechselrichter vorhanden, dann bitte hier "none" eintragen.
 									</span>
@@ -555,7 +555,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmpvsource" class="col-md-4 col-form-label">MPM3PM Wechselrichterleistung Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo trim($mpm3pmpvsourceold) ?>">
+										<input class="form-control" type="text" name="mpm3pmpvsource" id="mpm3pmpvsource" value="<?php echo $mpm3pmpvsourceold ?>">
 										<span class="form-text small">
 											Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der MPM3PM angeschlossen ist. Meist /dev/ttyUSB0<br>
 											Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -565,7 +565,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmpvid" class="col-md-4 col-form-label">MPM3PM Wechselrichterleistung ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo trim($mpm3pmpvidold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmpvid" id="mpm3pmpvid" value="<?php echo $mpm3pmpvidold ?>">
 										<span class="form-text small">
 											Gültige Werte 1-254. Modbus ID des MPM3PM.
 										</span>
@@ -574,7 +574,7 @@
 								<div class="form-row mb-1">
 									<label for="mpm3pmpvlanip" class="col-md-4 col-form-label">IP des Modbus/Lan Konverter</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo trim($mpm3pmpvlanipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpm3pmpvlanip" id="mpm3pmpvlanip" value="<?php echo $mpm3pmpvlanipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Ist die Source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
@@ -588,7 +588,7 @@
 								<div class="form-row mb-1">
 									<label for="wr_sdm120ip" class="col-md-4 col-form-label">SDM Modbus IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo trim($wr_sdm120ipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="wr_sdm120ip" id="wr_sdm120ip" value="<?php echo $wr_sdm120ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP. IP Adresse des ModbusLAN Konverters.
 										</span>
@@ -597,7 +597,7 @@
 								<div class="form-row mb-1">
 									<label for="wr_sdm120id" class="col-md-4 col-form-label">SDM Modbus ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo trim($wr_sdm120idold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="wr_sdm120id" id="wr_sdm120id" value="<?php echo $wr_sdm120idold ?>">
 										<span class="form-text small">
 											Gültige Werte 1-254. Modbus ID des SDM.
 										</span>
@@ -610,7 +610,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbuswrsource" class="col-md-4 col-form-label">SDM Modbus Wechselrichterleistung Source</label>
 									<div class="col">
-										<input class="form-control" type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo trim($sdm630modbuswrsourceold) ?>">
+										<input class="form-control" type="text" name="sdm630modbuswrsource" id="sdm630modbuswrsource" value="<?php echo $sdm630modbuswrsourceold ?>">
 										<span class="form-text small">
 											Gültige Werte /dev/ttyUSB0, /dev/virtualcomX. Serieller Port an dem der SDM in der Wallbox angeschlossen ist. Meist /dev/ttyUSB0<br>
 											Nach ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -620,7 +620,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbuswrid" class="col-md-4 col-form-label">SDM Modbus Wechselrichterleistung ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo trim($sdm630modbuswridold) ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbuswrid" id="sdm630modbuswrid" value="<?php echo $sdm630modbuswridold ?>">
 										<span class="form-text small">
 											Gültige Werte 1-254. Modbus ID des SDM. Getestet SDM230 & SDM630v2.
 										</span>
@@ -629,7 +629,7 @@
 								<div class="form-row mb-1">
 									<label for="sdm630modbuswrlanip" class="col-md-4 col-form-label">IP des Modbus/Lan Konverter</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo trim($sdm630modbuswrlanipold) ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbuswrlanip" id="sdm630modbuswrlanip" value="<?php echo $sdm630modbuswrlanipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Ist die Source "virtualcomX" wird automatisch ein Lan Konverter genutzt.
@@ -642,7 +642,7 @@
 							<div class="form-row mb-1">
 								<label for="vzloggerpvip" class="col-md-4 col-form-label">IP Adresse und Port</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):[1-9][0-9]*$" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo trim($vzloggerpvipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):[1-9][0-9]*$" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 									</span>
@@ -651,7 +651,7 @@
 							<div class="form-row mb-1">
 								<label for="vzloggerpvline" class="col-md-4 col-form-label">Vzloggerpv Zeile</label>
 								<div class="col">
-									<input class="form-control" type="number" min="1" step="1" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo trim($vzloggerpvlineold) ?>">
+									<input class="form-control" type="number" min="1" step="1" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>">
 									<span class="form-text small">
 										Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
 										Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.
@@ -663,7 +663,7 @@
 							<div class="form-row mb-1">
 								<label for="wr_http_w_url" class="col-md-4 col-form-label">Vollständige URL für die Wechselrichter Watt</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars(trim($wr_http_w_urlold)) ?>">
+									<input class="form-control" type="text" name="wr_http_w_url" id="wr_http_w_url" value="<?php echo htmlspecialchars($wr_http_w_urlold) ?>">
 									<span class="form-text small">
 										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Watt sein.
 									</span>
@@ -672,7 +672,7 @@
 							<div class="form-row mb-1">
 								<label for="wr_http_kwh_url" class="col-md-4 col-form-label">Vollständige URL für die Wechselrichter absolut kWh</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars(trim($wr_http_kwh_urlold)) ?>">
+									<input class="form-control" type="text" name="wr_http_kwh_url" id="wr_http_kwh_url" value="<?php echo htmlspecialchars($wr_http_kwh_urlold) ?>">
 									<span class="form-text small">
 										Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Der Wert muss in WattStunden sein. Der Wert dient rein dem Logging. Wird dieses nicht genutzt oder ist der Wert nicht verfügbar bitte auf "none" setzen, dann wird die Abfrage nicht ausgeführt.
 									</span>
@@ -683,7 +683,7 @@
 							<div class="form-row mb-1">
 								<label for="smaemdpvid" class="col-md-4 col-form-label">Seriennummer des SMA Energy Meter</label>
 								<div class="col">
-									<input class="form-control" type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo trim($smaemdpvidold) ?>">
+									<input class="form-control" type="text" name="smaemdpvid" id="smaemdpvid" value="<?php echo $smaemdpvidold ?>">
 									<span class="form-text small">
 									Gültige Werte Seriennummer. Hier die Seriennummer des SMA Meter für die PV angeben.
 									</span>
@@ -869,7 +869,7 @@
 							<div class="form-row mb-1">
 								<label for="pv2ip" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo trim($pv2ipold) ?>">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
 									<span class="form-text small">
 										Gültige Werte IP Adresse im Format: 192.168.0.12
 									</span>
@@ -880,7 +880,7 @@
 							<div class="form-row mb-1">
 								<label for="pv2id" class="col-md-4 col-form-label">Modbus ID</label>
 								<div class="col">
-									<input class="form-control" type="number" min="0" step="1" name="pv2id" id="pv2id" value="<?php echo trim($pv2idold) ?>">
+									<input class="form-control" type="number" min="0" step="1" name="pv2id" id="pv2id" value="<?php echo $pv2idold ?>">
 									<span class="form-text small">Gültige Werte ID. ID Adresse</span>
 								</div>
 							</div>
@@ -889,7 +889,7 @@
 							<div class="form-row mb-1">
 								<label for="wr2jsonurl" class="col-md-4 col-form-label">WR URL</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr2jsonurl" id="wr2jsonurl" value="<?php echo trim($wr2jsonurlold) ?>">
+									<input class="form-control" type="text" name="wr2jsonurl" id="wr2jsonurl" value="<?php echo $wr2jsonurlold ?>">
 									<span class="form-text small">
 										Gültige Werte URL. Vollständige URL die die Json Antwort enthält.
 									</span>
@@ -898,7 +898,7 @@
 							<div class="form-row mb-1">
 								<label for="wr2jsonwatt" class="col-md-4 col-form-label">Json Abfrage für Watt</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr2jsonwatt" id="wr2jsonwatt" value="<?php echo htmlspecialchars(trim($wr2jsonwattold)) ?>">
+									<input class="form-control" type="text" name="wr2jsonwatt" id="wr2jsonwatt" value="<?php echo htmlspecialchars($wr2jsonwattold) ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerOut</span> eingetragen werden.
@@ -908,7 +908,7 @@
 							<div class="form-row mb-1">
 								<label for="wr2jsonkwh" class="col-md-4 col-form-label">Json Abfrage für kWh</label>
 								<div class="col">
-									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo trim($wr2jsonkwhold) ?>">
+									<input class="form-control" type="text" name="wr2jsonkwh" id="wr2jsonkwh" value="<?php echo $wr2jsonkwhold ?>">
 									<span class="form-text small">
 										Der hier eingetragene Befehl reduziert die Json Abfrage auf das wesentliche. Im Hintergrund wird der Befehl jq benutzt.<br>
 										Ist die Json Antwort z.B. <span class="text-info">{"PowerInstalledPeak":4655, "PowerProduced":132, "PowerOut":897.08172362555717, "PowerSelfSupplied":234.9182763744428}</span> So muss hier <span class="text-info">.PowerProduced</span> eingetragen werden.
