@@ -134,6 +134,22 @@ if (( u1p3paktiv == 1 )); then
 
 				fi		
 			fi
+			if (( lademodus == 3 )); then
+				if (( u1p3pstat != u1p3pstandby )); then
+					if (( debug == 1 )); then
+						echo "Stop Laden derzeit $u1p3pstat Phasen, auf $u1p3pstandby konfiguriert, aendere..."
+					fi
+					if (( u1p3pstandby == 3 )); then
+						runs/u1p3pcheck.sh 3 
+					else
+						runs/u1p3pcheck.sh 1
+					fi
+					if (( debug == 1 )); then
+						echo "auf $u1p3pstandby Phasen geaendert"
+					fi
+
+				fi		
+			fi
 		fi
 	else
 		if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
