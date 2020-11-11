@@ -120,6 +120,43 @@
 			fwrite($fp, $key."=".$value."\n");
 		}
 		fclose($fp);
+
+		// update display process if in POST data
+		if( array_key_exists( 'displayaktiv', $_POST ) ){
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/reloaddisplay', "1");
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
+		}
+
+		// update smashm.conf if in POST data
+		if( array_key_exists( 'smashmbezugid', $_POST ) ){
+			$result = '';
+			$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/web/files/smashm.conf');
+			foreach($lines as $line) {
+				if( (strpos($line, "serials=") !== false) and (strpos($line, "serials=") == 0) ) {
+						$result .= 'serials='.$_POST['smashmbezugid']."\n";
+				} else {
+					$result .= $line;
+				}
+			}
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/web/files/smashm.conf', $result);
+		}
+
+		// update i3 SoC auth files if in POST data
+		if( array_key_exists( 'i3username', $_POST ) ){
+			// charge point 1
+			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3/auth.json";
+			$i3auth_fp = fopen($i3authfile, 'w');
+			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3username'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passwort'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vin'].'"'.PHP_EOL."}".PHP_EOL);
+			fclose($i3auth_fp);
+		}
+		if( array_key_exists( 'i3usernames1', $_POST ) ){
+			// charge point 2
+			$i3authfile = $_SERVER['DOCUMENT_ROOT']."/openWB/modules/soc_i3s1/auth.json";
+			$i3auth_fp = fopen($i3authfile, 'w');
+			fwrite($i3auth_fp,"{".PHP_EOL.'"username": "'.$settingsArray['i3usernames1'].'",'.PHP_EOL.'"password": "'.$settingsArray['i3passworts1'].'",'.PHP_EOL.'"vehicle": "'.$settingsArray['i3vins1'].'"'.PHP_EOL."}".PHP_EOL);
+			fclose($i3auth_fp);
+		}
+
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
 		echo "<script>alert('$msg');</script>";
