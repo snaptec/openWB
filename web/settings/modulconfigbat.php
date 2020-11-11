@@ -96,8 +96,8 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<h1>Modulkonfiguration</h1>
-			<form action="./tools/savemodul.beta.php" method="POST">
+			<h1>Modulkonfiguration Batteriespeicher</h1>
+			<form action="./tools/saveconfig.php" method="POST">
 
 				<!-- Speicher -->
 				<div class="card border-warning">
@@ -634,7 +634,7 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					$('#navModulkonfigurationBatBeta').addClass('disabled');
+					$('#navModulkonfigurationBat').addClass('disabled');
 				}
 			);
 

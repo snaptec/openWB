@@ -2740,6 +2740,10 @@ if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soclp2_vin=" /var/www/html/openWB/openwb.conf
+then
+	echo "soclp2_vin=none" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "rfidlist=" /var/www/html/openWB/openwb.conf
 then
 	echo "rfidlist=0" >> /var/www/html/openWB/openwb.conf
@@ -2884,36 +2888,36 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 if (( isss == 1 )); then
 	echo $lastmanagement > /var/www/html/openWB/ramdisk/issslp2act
 	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
-    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
-    then
-    	echo "test" > /dev/null
-    else
-    	python3 /var/www/html/openWB/runs/isss.py &
-	ethstate=$(</sys/class/net/eth0/carrier)
-	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+	then
+		echo "test" > /dev/null
 	else
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+		python3 /var/www/html/openWB/runs/isss.py &
+		# second IP already set up !
+		ethstate=$(</sys/class/net/eth0/carrier)
+		if (( ethstate == 1 )); then
+			sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+		else
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+		fi
 	fi
-
-    fi
 fi
 if [[ "$evsecon" == "buchse" ]]; then
 	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
-    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
-    then
-    	echo "test" > /dev/null
-    else
-    	python3 /var/www/html/openWB/runs/buchse.py &
-    fi
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		python3 /var/www/html/openWB/runs/buchse.py &
+	fi
 fi
 if [[ "$rfidakt" == "2" ]]; then
-       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
-       then
-               echo "test" > /dev/null
-       else
-               python3 /var/www/html/openWB/runs/rfid.py &
-       fi
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		python3 /var/www/html/openWB/runs/rfid.py &
+	fi
 fi
 if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" /home/pi/.config/lxsession/LXDE-pi/autostart
 then
