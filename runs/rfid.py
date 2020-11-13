@@ -10,6 +10,7 @@ import socket
 import struct 
 import binascii 
 import RPi.GPIO as GPIO
+os.chdir('/var/www/html/openWB/')
 loglevel=1
 counter=0
 Values = { }
