@@ -631,11 +631,14 @@
 												<input type="radio" name="froniusvar2" id="froniusvar2Off" value="0"<?php if($froniusvar2old == 0) echo " checked=\"checked\"" ?>>Aus
 											</label>
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 1) echo " active" ?>">
-												<input type="radio" name="froniusvar2" id="froniusvar2On" value="1"<?php if($froniusvar2old == 1) echo " checked=\"checked\"" ?>>An
+												<input type="radio" name="froniusvar2" id="froniusvar2On" value="1"<?php if($froniusvar2old == 1) echo " checked=\"checked\"" ?>>Variante 1
+											</label>
+											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
+												<input type="radio" name="froniusvar2" id="froniusvar2On" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
 											</label>
 										</div>
 										<span class="form-text small">
-											Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich.
+											Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich. Fronius hat derzeit keine Konsistente Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten nach etwa 10-20 Sekunden Daten angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.
 										</span>
 									</div>
 								</div>

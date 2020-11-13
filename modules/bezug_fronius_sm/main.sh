@@ -7,7 +7,7 @@
 
 
 # Fordere die Werte vom SmartMeter an.
-if [[ $froniusvar2 != "1" ]]; then
+if [[ $froniusvar2 == "0" ]]; then
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung")
 
 	# Überprüfe den Einbauort des SmartMeters.
@@ -71,7 +71,7 @@ if [[ $froniusvar2 != "1" ]]; then
 	    #ekwh=$(echo $response_fi | jq '.Body.Data.Site.E_Total')
 	    ekwh=0
 	fi
-else
+elif [[ $froniusvar2 == "1" ]]; then
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
 	    # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
 	    wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data."1".PowerReal_P_Sum')/1" | bc)
@@ -93,6 +93,28 @@ else
 	    ikwh=$(echo $response_sm | jq '.Body.Data."1".EnergyReal_WAC_Sum_Consumed')
 	    ekwh=$(echo $response_sm | jq '.Body.Data."1".EnergyReal_WAC_Sum_Produced')
 	# ... ansonsten, wenn das SmartMeter im Verbrauchszweig sitzt, kombiniere dessen Werte mit denen des Wechselrichters.
+elif [[ $froniusvar2 == "2" ]]; then
+	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
+	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
+	wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_POWERACTIVE_MEAN_SUM_F64')/1" | bc)
+	evuv1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_VOLTAGE_01_F64')/1" | bc)
+	evuv2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_VOLTAGE_02_F64')/1" | bc)
+	evuv3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_VOLTAGE_03_F64')/1" | bc)
+	bezugw1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_POWERACTIVE_MEAN_01_F64')/1" | bc)
+	bezugw2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_POWERACTIVE_MEAN_02_F64')/1" | bc)
+	bezugw3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_POWERACTIVE_MEAN_03_F64')/1" | bc)
+	# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
+	# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
+	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
+	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
+	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
+	evuhz=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".Frequency_Phase_Average')/1" | bc)
+	evupf1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_FACTOR_POWER_01_F64')/1" | bc)
+	evupf2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_FACTOR_POWER_02_F64')/1" | bc)
+	evupf3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."0".SMARTMETER_FACTOR_POWER_03_F64')/1" | bc)
+	ikwh=$(echo $response_sm | jq '.Body.Data."0".SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64')
+	ekwh=$(echo $response_sm | jq '.Body.Data."0".SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
+
 fi
 # Gib den wichtigsten Wert direkt zurück (auch sinnvoll beim Debuggen).
 echo $wattbezug
