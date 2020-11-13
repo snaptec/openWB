@@ -2352,6 +2352,9 @@
 											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 16) echo " active" ?>">
 												<input type="radio" name="loadsharingalp12" id="loadsharingalp1216" value="16"<?php if($loadsharingalp12old == 16) echo " checked=\"checked\"" ?>>16 Ampere
 											</label>
+											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 20) echo " active" ?>">
+												<input type="radio" name="loadsharingalp12" id="loadsharingalp1220" value="20"<?php if($loadsharingalp12old == 20) echo " checked=\"checked\"" ?>>20 Ampere
+											</label>
 											<label class="btn btn-outline-info<?php if($loadsharingalp12old == 32) echo " active" ?>">
 												<input type="radio" name="loadsharingalp12" id="loadsharingalp1232" value="32"<?php if($loadsharingalp12old == 32) echo " checked=\"checked\"" ?>>32 Ampere
 											</label>
