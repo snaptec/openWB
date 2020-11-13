@@ -45,7 +45,7 @@ def getplugstat():
 
     
     try:
-        with open('ramdisk/plug1stat', 'r') as value:
+        with open('ramdisk/plugstat', 'r') as value:
             Values.update({'newplugstatlp1' : int(value.read())})
         if ( Values["oldplugstatlp1"] != Values["newplugstatlp1"] ):
             if ( Values["newplugstatlp1"] == 1 ):
@@ -53,11 +53,14 @@ def getplugstat():
                 logDebug(1, str("Angesteckt an LP1"))
             else:
                 logDebug(1, str("Abgesteckt, Sperre LP1"))
+                f = open('ramdisk/lp1enabled', 'w')
+                f.write(str("0"))
+                f.close()
             Values.update({"oldplugstatlp1" : Values["newplugstatlp1"]})
     except:
         pass
     try:
-        with open('ramdisk/plug2stat', 'r') as value:
+        with open('ramdisk/plugstats1', 'r') as value:
             Values.update({'newplugstatlp2' : int(value.read())})
         if ( Values["oldplugstatlp2"] != Values["newplugstatlp2"] ):
             if ( Values["newplugstatlp2"] == 1 ):
@@ -65,11 +68,15 @@ def getplugstat():
                 logDebug(1, str("Angesteckt an LP2"))
             else:
                 logDebug(1, str("Abgesteckt, Sperre LP2"))
+                f = open('ramdisk/lp2enabled', 'w')
+                f.write(str("0"))
+                f.close()
+
             Values.update({"oldplugstatlp2" : Values["newplugstatlp2"]})
     except:
         pass
     try:
-        with open('ramdisk/plug3stat', 'r') as value:
+        with open('ramdisk/plugstatlp3', 'r') as value:
             Values.update({'newplugstatlp3' : int(value.read())})
         if ( Values["oldplugstatlp3"] != Values["newplugstatlp3"] ):
             if ( Values["newplugstatlp3"] == 1 ):
@@ -77,11 +84,15 @@ def getplugstat():
                 logDebug(1, str("Angesteckt an LP3"))
             else:
                 logDebug(1, str("Abgesteckt, Sperre LP3"))
+                f = open('ramdisk/lp3enabled', 'w')
+                f.write(str("0"))
+                f.close()
+
             Values.update({"oldplugstatlp3" : Values["newplugstatlp3"]})
     except:
         pass
     try:
-        with open('ramdisk/plug4stat', 'r') as value:
+        with open('ramdisk/plugstatlp4', 'r') as value:
             Values.update({'newplugstatlp4' : int(value.read())})
         if ( Values["oldplugstatlp4"] != Values["newplugstatlp4"] ):
             if ( Values["newplugstatlp4"] == 1 ):
@@ -89,6 +100,10 @@ def getplugstat():
                 logDebug(1, str("Angesteckt an LP4"))
             else:
                 logDebug(1, str("Abgesteckt, Sperre LP4"))
+                f = open('ramdisk/lp4enabled', 'w')
+                f.write(str("0"))
+                f.close()
+
             Values.update({"oldplugstatlp4" : Values["newplugstatlp4"]})
     except:
         pass
@@ -98,20 +113,26 @@ def conditions():
         logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
         try:
             with open('ramdisk/readtag', 'r') as value:
-                Values.update({'lastscannedtag' : int(value.read())})
+                Values.update({'lastscannedtag' : int(value.read().rstrip())})
             if ( Values["lastscannedtag"] != "0"):
                 for i in rfidlist:
                     if (str(i) == str(Values["lastscannedtag"])):
                         logDebug(1, str("Schalte Ladepunkt: ") + str(Values["lastpluggedlp"]) + str("frei"))
+
+                        f = open('ramdisk/lp'+str(Values["lastpluggedlp"])+'enabled', 'w')
+                        f.write(str("1"))
+                        f.close()
+
                         f = open('/var/www/html/openWB/ramdisk/rfidlp' + str(Values["lastpluggedlp"]), 'w')
                         f.write(str(Values["lastscannedtag"]))
                         f.close()
-                        logDebug(1, str("Schreibe Tag zu Ladepunkt"))
+                        logDebug(1, str("Schreibe Tag: ")+str(Values["lastscannedtag"])+str(" zu Ladepunkt"))
                         Values.update({'lastpluggedlp' : "0"})
                         f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
                         f.write(str(0))
                         f.close()
-        except:
+        except Exception as e:
+            logDebug(1, str(e))
             pass     
 def clearoldrfidtag():
     t = os.path.getmtime('/var/www/html/openWB/ramdisk/readtag')

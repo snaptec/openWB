@@ -200,6 +200,8 @@ ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
 echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
 echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/isss.log
+echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/rfid.log
 
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null

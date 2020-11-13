@@ -89,6 +89,7 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 	fi
 	if ! [ -z $LastScannedRfidTag ] && [ $LastScannedRfidTag -ge "3" ]; then
 		echo $LastScannedRfidTag > /var/www/html/openWB/ramdisk/readtag
+		mosquitto_pub -h $ip -r -t openWB/set/isss/ClearRfid -m "1"
 	fi
 
 fi

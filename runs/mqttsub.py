@@ -848,7 +848,7 @@ def on_message(client, userdata, msg):
         if (msg.topic == "openWB/set/isss/ClearRfid"):
             if (int(msg.payload) > 0 and int(msg.payload) <=1):
                 f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
-                f.write(msg.payload.decode("utf-8"))
+                f.write("0")
                 f.close()
                 client.publish("openWB/set/isss/ClearRfid", "", qos=0, retain=True)
         if (msg.topic == "openWB/set/isss/Current"):
