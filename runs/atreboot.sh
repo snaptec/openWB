@@ -213,6 +213,7 @@ echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_7
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_8
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_9
 echo 0 > /var/www/html/openWB/ramdisk/smarthome_device_manual_10
+echo 0 > /var/www/html/openWB/ramdisk/devicetotal_watt
 touch /var/www/html/openWB/ramdisk/wattbezug
 echo 10 > /var/www/html/openWB/ramdisk/lp1sofortll
 echo 10 > /var/www/html/openWB/ramdisk/lp2sofortll
