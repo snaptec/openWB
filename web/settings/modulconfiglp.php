@@ -2517,14 +2517,13 @@
 						<div id="llmodullp3" class="hide">
 							<hr class="border-primary">
 							<div class="form-row mb-1">
-								<label for="ladeleistungss2modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
+								<label for="ladeleistungs2modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
-									<select name="ladeleistungss2modul" id="ladeleistungss2modul" class="form-control">
+									<select name="ladeleistungs2modul" id="ladeleistungs2modul" class="form-control">
 										<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
 										<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
 										<option <?php if($ladeleistungs2modulold == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
 										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs2modulold == "goelp3") echo "selected" ?> value="goelp3">Go-E</option> <!-- BUG go-E als LL-Modul? -->
 										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
 										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
 									</select>
@@ -2707,25 +2706,25 @@
 							hideSection('mpm3pmlllp3div');
 
 
-							if($('#ladeleistungss2modul').val() == 'mpm3pmlllp3') {
+							if($('#ladeleistungs2modul').val() == 'mpm3pmlllp3') {
 								showSection('mpm3pmlllp3div');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungss2modul').val() == 'sdm630modbuslls2') {
+							if($('#ladeleistungs2modul').val() == 'sdm630modbuslls2') {
 								showSection('sdm630s2div');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungss2modul').val() == 'sdm120modbuslls2') {
+							if($('#ladeleistungs2modul').val() == 'sdm120modbuslls2') {
 								showSection('sdm120s2div');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungss2modul').val() == 'simpleevsewifis2') {
+							if($('#ladeleistungs2modul').val() == 'simpleevsewifis2') {
 								showSection('swifis2div');
 							}
-							if($('#ladeleistungss2modul').val() == 'goelp3') {
+							if($('#ladeleistungs2modul').val() == 'goelp3') {
 								showSection('swifis2div');
 							}
-							if($('#ladeleistungss2modul').val() == 'mpm3pmlls2') {
+							if($('#ladeleistungs2modul').val() == 'mpm3pmlls2') {
 								showSection('mpm3pmlls2div');
 								showSection('rs485lanlp3');
 							}
@@ -2742,7 +2741,7 @@
 								display_lastmanagement2();
 							});
 
-							$('#ladeleistungss2modul').change( function(){
+							$('#ladeleistungs2modul').change( function(){
 								display_llmp3();
 							});
 						});
