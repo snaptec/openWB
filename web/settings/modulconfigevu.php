@@ -631,10 +631,10 @@
 												<input type="radio" name="froniusvar2" id="froniusvar2Off" value="0"<?php if($froniusvar2old == 0) echo " checked=\"checked\"" ?>>Aus
 											</label>
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 1) echo " active" ?>">
-												<input type="radio" name="froniusvar2" id="froniusvar2On" value="1"<?php if($froniusvar2old == 1) echo " checked=\"checked\"" ?>>Variante 1
+												<input type="radio" name="froniusvar2" id="froniusvar2v1" value="1"<?php if($froniusvar2old == 1) echo " checked=\"checked\"" ?>>Variante 1
 											</label>
 											<label class="btn btn-outline-info<?php if($froniusvar2old == 2) echo " active" ?>">
-												<input type="radio" name="froniusvar2" id="froniusvar2On" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
+												<input type="radio" name="froniusvar2" id="froniusvar2v2" value="2"<?php if($froniusvar2old == 2) echo " checked=\"checked\"" ?>>Variante 2
 											</label>
 										</div>
 										<span class="form-text small">
