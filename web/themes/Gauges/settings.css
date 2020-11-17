@@ -19,7 +19,7 @@ body {
 	background-attachment: fixed;
 }
 
-.bg-warning, .bg-info, .bg-success {
+.bg-warning, .bg-info, .bg-success, .bg-light {
 	color: #212529;
 }
 
