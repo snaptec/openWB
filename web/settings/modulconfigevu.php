@@ -97,7 +97,7 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Modulkonfiguration EVU</h1>
-			<form action="./tools/saveconfig.php" method="POST">
+			<form action="tools/saveconfig.php" method="POST">
 
 				<!-- EVU -->
 				<div class="card border-danger">
@@ -968,9 +968,16 @@
 					</div>
 				</div>
 
-				<div class="form-row text-center">
-					<div class="col">
-						<button type="submit" class="btn btn-success">Speichern</button>
+				<div class="row justify-content-center">
+					<div class="col-3 text-center">
+						<input type="hidden" name="wizzarddone" id="wizzarddoneInput" value="<?php echo $wizzarddoneold+1; ?>" disabled>
+						<button class="btn btn-success" type="submit" id="saveBtn">Speichern</button>
+					</div>
+					<div class="col-1 wizzard hide">
+						&nbsp;
+					</div>
+					<div class="col-3 text-center wizzard hide">
+						<button class="btn btn-danger" id="abortWizzardBtn" type="button">Assistent beenden</button>
 					</div>
 				</div>
 			</form>
@@ -989,13 +996,58 @@
 			</div>
 		</div>  <!-- container -->
 
+		<!-- modal abort confirmation window -->
+		<div class="modal fade" id="abortWizzardConfirmationModal" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<!-- modal header -->
+					<div class="modal-header bg-danger">
+						<h4 class="modal-title text-light">Achtung</h4>
+					</div>
+					<!-- modal body -->
+					<div class="modal-body text-center">
+						<p>
+							Wollen Sie den Assistenten wirklich beenden?<br>
+							Die Einrichtung eines <span class="text-danger">EVU</span>-Moduls ist für den Betrieb von openWB zwingend erforderlich.
+							<span class="text-success">PV</span>- und <span class="text-warning">BAT</span>-Module sind optional, ermöglichen aber weitere Einstellungen der Regelung.
+						</p>
+					</div>
+					<!-- modal footer -->
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="button" class="btn btn-success" data-dismiss="modal">Zurück zum Assistenten</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="abortWizzardConfirmationBtn">Assistent beenden</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- hidden form to save wizzard done to config on abort -->
+		<form id="wizzarddoneForm" action="tools/saveconfig.php" method="POST">
+			<input type="hidden" name="wizzarddone" value="100">
+		</form>
+
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
 
 		<script>
+			// wizzard specific code
+			$(document).ready(function(){
+
+				$('#abortWizzardBtn').on("click",function() {
+					$('#abortWizzardConfirmationModal').modal();
+				});
+
+				// shown in confirmation modal
+				$('#abortWizzardConfirmationBtn').on("click",function() {
+					$('#wizzarddoneForm').submit();
+				});
+
+			});
+
+			var wizzarddone = <?php if(isset($wizzarddoneold)){ echo $wizzarddoneold; } else { echo 100; } ?>
 
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
@@ -1003,6 +1055,20 @@
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
 					$('#navModulkonfigurationEvu').addClass('disabled');
+
+					// check if wizzard is running
+					if( wizzarddone < 100 ){
+						// remove navbar entries
+						$('#collapsibleNavbar').remove();
+						// remove link from logo
+						$('.navbar-brand').removeAttr('href');
+						// enable hidden wizzarddone input
+						$('#wizzarddoneInput').removeAttr('disabled');
+						// change text of submit button
+						$('#saveBtn').html("Speichern und weiter...");
+						// display wizzard specific elements
+						$('.wizzard').removeClass('hide');
+					}
 				}
 			);
 
