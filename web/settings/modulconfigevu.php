@@ -559,9 +559,9 @@
 						</div>
 						<div id="wattbezugshm" class="hide">
 							<div class="form-row mb-1">
-								<label for="smaeshmbezugid" class="col-md-4 col-form-label">Seriennummer</label>
+								<label for="smashmbezugid" class="col-md-4 col-form-label">Seriennummer</label>
 								<div class="col">
-									<input class="form-control" type="text" name="smaeshmbezugid" id="smaeshmbezugid" value="<?php echo $smashmbezugidold ?>">
+									<input class="form-control" type="text" name="smashmbezugid" id="smashmbezugid" value="<?php echo $smashmbezugidold ?>">
 									<span class="form-text small">
 										Gültige Werte: Seriennummer. Hier die Seriennummer des SMA Meter für Bezug/Einspeisung anzugeben.
 										Ist nur erforderlich wenn mehrere SMA HomeManager in Betrieb sind, ansonsten none eintragen. Funktioniert auch mit Energy Meter statt Home Manager.
