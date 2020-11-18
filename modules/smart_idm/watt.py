@@ -63,8 +63,8 @@ if count5==0:
    modbuswrite = 0
    if pvmodus == 1:
       modbuswrite = 1
-   # weiche Anpassung bei auch negativem ueberschuss
-   neupower = aktpower + uberschuss
+   # Nur positiven Uberschuss schicken, nicht aktuelle Leistung 
+   neupower = uberschuss
    if neupower < 0:
       neupower = 0
    if neupower > 40000:
@@ -85,8 +85,8 @@ if count5==0:
          f = open( file_string , 'a')
       else:
          f = open( file_string , 'w')
-      print ('%s devicenr %s ipadr %s ueberschuss %6d Akt Leistung  %6d' % (time_string,devicenumber,ipadr,uberschuss,aktpower),file=f)
-      print ('%s devicenr %s ipadr %s Neu Leistung %6d pvmodus %1d modbuswrite %1d  ' % (time_string,devicenumber,ipadr,neupower,pvmodus,modbuswrite),file=f)
+      print ('%s devicenr %s ipadr %s ueberschuss (openWb) %6d Akt Leistung  %6d' % (time_string,devicenumber,ipadr,uberschuss,aktpower),file=f)
+      print ('%s devicenr %s ipadr %s ueberschuss (IDM)    %6d pvmodus %1d modbuswrite %1d  ' % (time_string,devicenumber,ipadr,neupower,pvmodus,modbuswrite),file=f)
       f.close()
    # modbus write
    if modbuswrite == 1:
