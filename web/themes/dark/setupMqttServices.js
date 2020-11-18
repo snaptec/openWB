@@ -368,7 +368,7 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() { client.conect(options); }, 5000);
 	}
 };
 

@@ -1,6 +1,7 @@
 var initialladelogread = 1;
 var ConfiguredChargePoints = 0;
-
+var PriceForKWh = 0.30;
+var gotprice = 0;
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host,9001, clientuid);
@@ -23,6 +24,12 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 			document.getElementById("chargep3").style.display = 'block';
 
 		}
+
+	}
+	if ( mqttmsg =="openWB/system/priceForKWh" ) {
+		PriceForKWh = mqttpayload;
+		gotprice = 1;
+		putladelogtogether();
 
 	}
 
@@ -136,6 +143,9 @@ var thevalues = [
 	["openWB/system/MonthLadelogData11", "#"],
 	["openWB/system/MonthLadelogData12", "#"],
 	["openWB/system/ConfiguredChargePoints", "#"],
+	["openWB/system/priceForKWh", "#"],
+
+
 ];
 var options = {
 	        timeout: 5,
@@ -202,7 +212,7 @@ function selectladelogclick(newdate){
 	        publish(newdate, "openWB/set/graph/RequestMonthLadelog");
 }
 function putladelogtogether() {
-	if ( (ladelog1 == 1) && (ladelog2 == 1) && (ladelog3 == 1) && (ladelog4 == 1) && (ladelog5 == 1) && (ladelog6 == 1) && (ladelog7 == 1) && (ladelog8 == 1) && (ladelog9 == 1) && (ladelog10 == 1) && (ladelog11 == 1) && (ladelog12 == 1) ){
+	if ( (ladelog1 == 1) && (ladelog2 == 1) && (ladelog3 == 1) && (ladelog4 == 1) && (ladelog5 == 1) && (ladelog6 == 1) && (ladelog7 == 1) && (ladelog8 == 1) && (ladelog9 == 1) && (ladelog10 == 1) && (ladelog11 == 1) && (ladelog12 == 1) && (gotprice == 1) ){
 		 var ladelogdata = ladelog1p + "\n" + ladelog2p + "\n" + ladelog3p + "\n" + ladelog4p + "\n" + ladelog5p + "\n" + ladelog6p + "\n" + ladelog7p + "\n" + ladelog8p + "\n" + ladelog9p + "\n" + ladelog10p + "\n" + ladelog11p + "\n" + ladelog12p;
 		ladelogdata = ladelogdata.replace(/^\s*[\n]/gm, '');
 		initialladelogread = 1 ;
@@ -330,11 +340,12 @@ function putladelogtogether() {
 			});
 		});
 		if ( testout.length >= 1 ) {
-		var content = '<table class="table"> <thead><tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col">geladene km</th><th scope="col">kWh</th><th scope="col">mit kW</th><th scope="col">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th></tr></thead> <tbody>';
+		var content = '<table class="table"> <thead><tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col">geladene km</th><th scope="col">kWh</th><th scope="col">mit kW</th><th scope="col">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th><th scope="col">Preis</th></tr></thead> <tbody>';
 		var rowcount=0;
 		var avgkw="0";
-		
+		var totalprice="0";	
 		testout.forEach(function(row) {
+			var price = "0"
 			rowcount+=1;
 			content += "<tr>";
 			var cellcount=0;
@@ -346,6 +357,8 @@ function putladelogtogether() {
 				}
 				if ( cellcount == 4 ) {
 					totalkwh = parseFloat(totalkwh) + parseFloat(cell);
+					price = parseFloat(cell) * PriceForKWh;
+					totalprice = parseFloat(totalprice) + parseFloat(price);
 				}
 				if ( cellcount == 5 ) {
 					avgkw = parseFloat(avgkw) + parseFloat(cell);
@@ -371,9 +384,10 @@ function putladelogtogether() {
 					content += "<td>" + cell + "</td>" ;
 				}
 			});
+			content += "<td>" + price.toFixed(2) + " €</td>" ;
 			content += "</tr>";
 		});
-	content += '<tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col">' + totalkm.toFixed(0) + ' geladene km</th><th scope="col">' + totalkwh.toFixed(2) + ' kWh </th><th scope="col">mit ' + (avgkw / rowcount).toFixed(2) + ' kW</th><th scope="col">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th></tr></thead>';
+	content += '<tr><th scope="col">Startzeit</th><th scope="col">Endzeit</th><th scope="col">' + totalkm.toFixed(0) + ' geladene km</th><th scope="col">' + totalkwh.toFixed(2) + ' kWh </th><th scope="col">mit ' + (avgkw / rowcount).toFixed(2) + ' kW</th><th scope="col">Ladedauer</th><th scope="col">Ladepunkt</th><th scope="col">Lademodus</th><th scope="col">RFID Tag</th><th scope="col">' + totalprice.toFixed(2) + ' € Preis</th></tr></thead>';
 		content += "</tbody></table>";
 		document.getElementById("ladelogtablediv").innerHTML = content;
 		} else {

@@ -1411,7 +1411,23 @@
 						</div>
 					</div>
 				</div>
-
+				<!-- Ladelog Optionen -->
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Ladelog
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="0.01" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
+									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.28. Dient zur Berechnung der Ladekosten im Ladelog.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="form-row text-center">
 					<div class="col">
 						<button id="saveSettingsBtn" type="submit" class="btn btn-success">Speichern</button>

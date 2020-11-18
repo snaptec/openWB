@@ -2753,7 +2753,10 @@ if ! grep -Fq "wizzarddone=" /var/www/html/openWB/openwb.conf
 then
 	echo "wizzarddone=100" >> /var/www/html/openWB/openwb.conf
 fi
-
+if ! grep -Fq "preisjekwh=" /var/www/html/openWB/openwb.conf
+then
+	echo "preisjekwh=0.30" >> /var/www/html/openWB/openwb.conf
+fi
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
 then
