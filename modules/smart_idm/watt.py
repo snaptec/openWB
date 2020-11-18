@@ -69,6 +69,16 @@ if count5==0:
       neupower = 0
    if neupower > 40000:
       neupower = 40000
+   # wurde IDM gerade ausgeschaltet ?    (pvmodus == 99 ?)
+   # dann 0 schicken wenn kein pvmodus mehr
+   # und pv modus ausschalten
+   if pvmodus == 99:
+      modbuswrite = 1
+      neupower = 0
+      f = open( file_stringpv , 'w')
+      pvmodus = 0
+      f.write(str(pvmodus))
+      f.close()
    lkwneu=float(neupower)
    lkwneu=lkwneu/1000
    builder = BinaryPayloadBuilder(byteorder=Endian.Big,wordorder=Endian.Little)
