@@ -93,7 +93,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center datenschutzack hide">
-						<button type="submit" class="btn btn-success">Absenden</button>
+						<button id="sendDebugBtn" type="submit" class="btn btn-success">Absenden</button>
 					</div>
 				</form>
 			</div>
@@ -151,6 +151,10 @@
 					$('#textareaTextLength').text(length+"/500");
 				});
 
+				$('#sendDebugBtn').on('click', function(){
+					$(this).prop("disabled", true);
+					$(this).append( ' <i class="fas fa-cog fa-spin"></i>' );
+				});
 			});
 
 		</script>
