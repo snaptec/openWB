@@ -128,7 +128,7 @@
 									<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
 									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
-									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
+									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
 									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
 									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
@@ -148,6 +148,7 @@
 							<input type="hidden" name="modbusevseid" value="1">
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
 							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
+							<input type="hidden" name="modbusevsesource" value="/dev/ttyUSB0">
 							<input type="hidden" name="mpm3pmllid" value="5">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
@@ -166,7 +167,10 @@
 							<input type="hidden" name="modbusevseid" value="1">
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
 							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
+							<input type="hidden" name="modbusevsesource" value="/dev/ttyUSB0">
 							<input type="hidden" name="mpm3pmllid" value="105">
+							<input type="hidden" name="evsecon" value="modbusevse">
+
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
@@ -176,6 +180,8 @@
 							<input type="hidden" name="modbusevseid" value="1">
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
 							<input type="hidden" name="mpm3pmllsource" value="/dev/serial0">
+							<input type="hidden" name="modbusevsesource" value="/dev/serial0">
+							<input type="hidden" name="evsecon" value="modbusevse">
 							<input type="hidden" name="mpm3pmllid" value="105">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
