@@ -37,8 +37,16 @@ lkw= float(struct.unpack('>f', raw)[0])
 aktpower = int(lkw*1000)
 print ('%s devicenr %s ipadr %s Akt Leistung  %6d' % (time_string,devicenumber,ipadr,aktpower),file=f)
 f.close()
+pvmodus = 0
+if os.path.isfile(file_stringpv):
+   f = open( file_stringpv , 'r')
+   pvmodus =int(f.read())
+   f.close()
+#wenn vorher pvmodus an, dann watt.py signaliseren einmalig 0 ueberschuss zu schicken
+if pvmodus == 1:
+   pvmodus = 99
 f = open( file_stringpv , 'w')
-f.write(str(0))
+f.write(str(pvmodus))
 f.close()
 count1 = 999
 f = open( file_stringcount , 'w')
