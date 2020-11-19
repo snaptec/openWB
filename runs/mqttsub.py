@@ -110,12 +110,30 @@ def on_message(client, userdata, msg):
                 writetoconfig(shconfigfile,'smarthomedevices','device_configured_'+str(devicenumb),msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_configured", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_configured", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_canSwitch" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
+                writetoconfig(shconfigfile,'smarthomedevices','device_canSwitch_'+str(devicenumb),msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_canSwitch", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_canSwitch", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_differentMeasurement" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 1):
+                writetoconfig(shconfigfile,'smarthomedevices','device_differentMeasurement_'+str(devicenumb),msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_differentMeasurement", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_differentMeasurement", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_ip" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
             if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
                 writetoconfig(shconfigfile,'smarthomedevices','device_ip_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_ip", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_ip", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureip" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measureip_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureip", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureip", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_name" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
             if ( 1 <= int(devicenumb) <= 10 and  3 <= len(str(msg.payload)) <= 12 and bool(re.match(nameallowed, msg.payload.decode("utf-8")))):
@@ -129,6 +147,13 @@ def on_message(client, userdata, msg):
                     writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
                     client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_type", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 2):
+                if ( msg.payload.decode("utf-8") == "http" or msg.payload.decode("utf-8") == "shelly" or msg.payload.decode("utf-8") == "sdm630"):
+                    writetoconfig(shconfigfile,'smarthomedevices','device_measureType_'+str(devicenumb), msg.payload.decode("utf-8"))
+                    client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureType", msg.payload.decode("utf-8"), qos=0, retain=True)
+                    client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureType", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_temperatur_configured" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
             if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 3):
@@ -165,6 +190,12 @@ def on_message(client, userdata, msg):
                 writetoconfig(shconfigfile,'smarthomedevices','device_einschaltverzoegerung_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_einschaltverzoegerung", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_einschaltverzoegerung", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureid" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 and 1 <= int(msg.payload) <= 255):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measureid_'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureid", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureid", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_speichersocbeforestart" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
             if ( 1 <= int(devicenumb) <= 10 and 0 <= int(msg.payload) <= 100):

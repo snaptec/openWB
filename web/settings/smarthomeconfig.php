@@ -114,6 +114,22 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Gerät kann schalten</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" id="device_canSwitchDevices<?php echo $devicenum; ?>" name="device_canSwitch" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>0" data-option="0">Nein
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>1" data-option="1">Ja
+										</label>
+									</div>
+									<span class="form-text small">Gibt an ob der Aktor schalten können soll (entsprechend Überschuss oder manuell). (!!Nightly Feature!!)</span>
+								</div>
+							</div>
+						</div>
 						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
@@ -256,6 +272,53 @@
 								</div>
 							</div>
 						</div>
+						<hr class="border-secondary">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Separate Leistungsmessung für das Gerät</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" id="device_differentMeasurementDevices<?php echo $devicenum; ?>" name="device_differentMeasurement" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>0" data-option="0">Nein
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1">Ja
+										</label>
+									</div>
+									<span class="form-text small">Gibt an ob die Leistungserfassung für dieses Gerät von einer anderen Quelle erfolgen soll. (!!Nightly Feature!!)</span>
+								</div>
+							</div>
+						</div>
+						<div id="device<?php echo $devicenum; ?>differentMeasurement" style="display: none;">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Gerätetyp</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" id="device_measureTypeDevices<?php echo $devicenum; ?>" name="device_measureType" data-toggle="buttons" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<!-- <label class="btn btn-outline-info">
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">HTTP
+										</label> -->
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>SDM630" data-option="sdm630"> SDM630
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+								</div>
+							</div>
+							<div class="form-row mb-1">
+								<label for="device_measureidDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">ID des Zählers am Netzwerk/Modbus Wandler</label>
+								<div class="col">
+									<input id="device_measureidDevices<?php echo $devicenum; ?>" name="device_measureid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="255" data-default="1" value="1"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+								</div>
+							</div>
+						</div>
 					</div>  <!-- end card body Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
 				</div>  <!-- end card Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
 <?php } ?>
@@ -370,6 +433,20 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					}
 				}
+				if ( elementId == 'device_differentMeasurementDevices<?php echo $devicenum; ?>') {
+					if ( mqttpayload == 0 ) {
+						$('#device<?php echo $devicenum; ?>differentMeasurement').hide();
+					} else {
+						$('#device<?php echo $devicenum; ?>differentMeasurement').show();
+					}
+				}
+				/*if ( elementId == 'device_canSwitchDevices<?php echo $devicenum; ?>') {
+					if ( mqttpayload == 0 ) {
+						$('#device<?php echo $devicenum; ?>canSwitch').hide();
+					} else {
+						$('#device<?php echo $devicenum; ?>canSwitch').show();
+					}
+				}*/
 				if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
 					if ( mqttpayload != "Name" ) {
 						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
@@ -388,6 +465,21 @@
 						$('#device<?php echo $devicenum; ?>options').hide();
 					}
 				});
+				$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
+					if ($('#device<?php echo $devicenum; ?>differentMeasurement').is(":hidden")) {
+						$('#device<?php echo $devicenum; ?>differentMeasurement').show();
+					} else {
+						$('#device<?php echo $devicenum; ?>differentMeasurement').hide();
+					}
+				});
+
+				/*$('#device_canSwitchDevices<?php echo $devicenum; ?>').change(function(){
+					if ($('#device<?php echo $devicenum; ?>canSwitch').is(":hidden")) {
+						$('#device<?php echo $devicenum; ?>canSwitch').show();
+					} else {
+						$('#device<?php echo $devicenum; ?>canSwitch').hide();
+					}
+				});*/
 				$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
 					if (($(this).val() != "Name") && ($(this).val().length > 0)) {
 						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
