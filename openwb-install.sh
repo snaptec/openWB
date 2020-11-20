@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 echo "update system"
 apt-get update
