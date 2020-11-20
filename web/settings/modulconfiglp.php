@@ -120,8 +120,8 @@
 								<select name="evsecon" id="evsecon" class="form-control">
 									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse">openWB series1/2</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler v2</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler Variante 1</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler Variante 2</option>
 									<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">openWB mit Buchse</option>
 									<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
 									<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit </option>
@@ -129,7 +129,7 @@
 									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
 									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
 									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
-									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
 									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
 									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 									<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
@@ -669,16 +669,16 @@
 							<div class="col">
 								<select name="socmodul" id="socmodul" class="form-control">
 									<option <?php if($socmodulold == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">SoC HTTP</option>
-									<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">SoC Nissan Leaf</option>
-									<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">SoC BMW & Mini</option>
-									<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">SoC Renault Zoe alt</option>
-									<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">SoC Renault Zoe MyRenault</option>
-									<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">SoC EVNotify</option>
-									<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">SoC Tesla</option>
-									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">SoC VW Carnet</option>
-									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
-									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">SoC Audi</option>
+									<option <?php if($socmodulold == "soc_http") echo "selected" ?> value="soc_http">HTTP</option>
+									<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
+									<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW & Mini</option>
+									<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+									<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">Renault Zoe MyRenault</option>
+									<option <?php if($socmodulold == "soc_evnotify") echo "selected" ?> value="soc_evnotify">EVNotify</option>
+									<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
+									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
+									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
+									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
 									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
