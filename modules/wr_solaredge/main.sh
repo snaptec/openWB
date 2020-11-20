@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 Solaredgebatwr="0"
 if [[ $solaredgespeicherip == $solaredgepvip ]]  ; then
 	Solaredgebatwr="1"  
