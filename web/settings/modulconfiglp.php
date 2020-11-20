@@ -687,7 +687,7 @@
 							</div>
 						</div>
 						<div id="socmodullp1" class="hide">
-							<div class="form-group">
+							<div id="stopsocnotpluggedlp1" class="form-group hide">
 								<div class="form-row mb-1">
 									<label class="col-md-4 col-form-label">SoC nur Abfragen wenn Auto angesteckt</label>
 									<div class="col">
@@ -1298,6 +1298,7 @@
 								showSection('socmnone');
 							} else {
 								showSection('socmodullp1', false); // do not enable all input child-elements!
+								showSection('stopsocnotpluggedlp1');
 							}
 							if($('#socmodul').val() == 'soc_volvo') {
 								showSection('socmuser');
