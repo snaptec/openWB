@@ -126,7 +126,7 @@
 											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>1" data-option="1">Ja
 										</label>
 									</div>
-									<span class="form-text small">Gibt an ob der Aktor schalten können soll (entsprechend Überschuss oder manuell). (!!Nightly Feature!!)</span>
+									<span class="form-text small">Gibt an ob der Aktor schalten können soll (entsprechend Überschuss oder manuell). (!!Nightly Feature, noch nicht implementiert!!)</span>
 								</div>
 							</div>
 						</div>
@@ -285,7 +285,7 @@
 											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1">Ja
 										</label>
 									</div>
-									<span class="form-text small">Gibt an ob die Leistungserfassung für dieses Gerät von einer anderen Quelle erfolgen soll. (!!Nightly Feature!!)</span>
+									<span class="form-text small">Gibt an ob die Leistungserfassung für dieses Gerät von einer anderen Quelle erfolgen soll. (!!Nightly Feature, noch nicht implementiert!!)</span>
 								</div>
 							</div>
 						</div>
