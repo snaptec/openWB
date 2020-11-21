@@ -20,7 +20,7 @@ Falsch zusammengebaute Hardware kann lebensgefährlich sein. Im Zweifel diesen P
 Keine Gewährleistung für die Software - use at your own RISK!
 
 # Wofür?
-Steuerung einer EVSE DIN oder anderer Ladepunkte für sofortiges laden, überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
+Steuerung einer EVSE DIN oder anderer Ladepunkte für sofortiges laden, Überwachung der Ladung, PV Überschussladung und Lastmanagement mehrerer WB.
 
 Unterstützt wird jedes EV das den AC Ladestandard mit Typ 1 oder Typ 2 Stecker unterstützt.
 
