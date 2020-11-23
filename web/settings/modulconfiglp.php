@@ -609,14 +609,14 @@
 										<label for="sdm120modbusllid2" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2" id="sdm120modbusllid2" value="<?php echo $sdm120modbusllid2old ?>">
-											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
+											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase. Wenn nicht vorhanden 254 eintragen.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid3" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3" id="sdm120modbusllid3" value="<?php echo $sdm120modbusllid3old ?>">
-											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
+											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase. Wenn nicht vorhanden 254 eintragen.</span>
 										</div>
 									</div>
 								</div>
@@ -1727,14 +1727,14 @@
 										<label for="sdm120modbusllid2s1" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s1" id="sdm120modbusllid2s1" value="<?php echo $sdm120modbusllid2s1old ?>">
-											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
+											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase. Wenn nicht vorhanden 254 eintragen.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
 										<label for="sdm120modbusllid3s1" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
 											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s1" id="sdm120modbusllid3s1" value="<?php echo $sdm120modbusllid3s1old ?>">
-											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
+											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase. Wenn nicht vorhanden 254 eintragen.</span>
 										</div>
 									</div>
 								</div>
