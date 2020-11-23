@@ -36,6 +36,11 @@ DeviceValues.update({'plugstat' : str(5)})
 Values.update({'plugstat' : str(5)})
 Values.update({'chargestat' : str(5)})
 Values.update({'evsell' : str(1)})
+try:
+    with open('/home/pi/ppbuchse', 'r') as value:
+        pp = int(value.read())
+except:
+    pp = 32
 os.chdir('/var/www/html/openWB')
 try:
         f = open('/dev/ttyUSB0')
@@ -327,6 +332,8 @@ def loadregelvars():
             time.sleep(1)
         u1p3pstat = u1p3ptmpstat
 def writeevse(lla):
+    if (lla > pp):
+        lla=pp
     client.write_registers(1000, lla, unit=1)
     logDebug("1", "Write to EVSE" + str(lla))
 while True:
