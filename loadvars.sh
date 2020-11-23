@@ -1645,7 +1645,7 @@ loadvars(){
 	mqttconfvar["config/get/pv/lp/2/maxSoc"]=stopchargepvpercentagelp2
 	mqttconfvar["global/rfidConfigured"]=rfidakt
 	mqttconfvar["system/priceForKWh"]=preisjekwh
-
+	mqttconfvar["system/wizzarddone"]=wizzarddone
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}
 		declare o${mqttconfvar[$mq]}
