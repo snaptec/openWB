@@ -76,3 +76,27 @@ function setToggleBtnGroup(groupId, option) {
     });
     chargeLimitationOptionsShowHide($('#' + $.escapeSelector(groupId)), option)
 }
+
+// check if a reload of the display is requested
+// TODO: quick hack, should be moved to mqtt
+function checkReloadDisplay() {
+    $.get(
+        { url: "/openWB/ramdisk/reloaddisplay", cache: false },
+        function(data){
+            console.log("reloadDisplay: "+data);
+            if ( data == 1 ) {
+                $.get(
+                    {
+                        url: "./tools/reloaddisplay.php",
+                        type: "post",
+                        success: function( result ) {
+                            location.reload();
+                        }
+                    }
+                )
+            }
+        }
+    );
+}
+// set timer to check every 5 seconds for reload request
+setInterval( checkReloadDisplay, 5000 );
