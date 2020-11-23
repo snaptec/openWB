@@ -1,3 +1,8 @@
+<?php
+	include ("values.php");
+	if ( $displaythemeold == 0 ) {
+		include ("display2/display.html");
+	} else { ?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -59,8 +64,6 @@
 	<script src="livefunctions.js"></script>
 </head>
 
-<?php include ("values.php"); ?>
-
 <body>
 	<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 	<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
@@ -93,7 +96,7 @@ if (isset($_POST['loadsite'])) {
 			if ( $displaythemeold == 2 ) {
 				include 'display/minimal.html';
 			} else {
-				include 'display/gauge.html';
+				include 'display/gauge.html'; // displaythemeold == 3
 			}	
 		}
 	}
@@ -134,3 +137,6 @@ body {
 	<!-- Scripts -->
 </body>
 </html>
+<?php
+	}
+?>
