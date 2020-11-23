@@ -24,8 +24,13 @@
 }
 
 /* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
+/* .sidenav a:hover {
     color: #f1f1f1;
+} */
+
+.sidenav .btn:hover {
+    background-color: inherit;
+    color: #818181;
 }
 
 /* Style page content */

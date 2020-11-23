@@ -83,7 +83,6 @@ function checkReloadDisplay() {
     $.get(
         { url: "/openWB/ramdisk/reloaddisplay", cache: false },
         function(data){
-            console.log("reloadDisplay: "+data);
             if ( data == 1 ) {
                 $.get(
                     {
