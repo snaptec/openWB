@@ -139,6 +139,7 @@
 									<option <?php if($wattbezugmodulold == "bezug_fems") echo "selected" ?> value="bezug_fems">openEMS / Fenecon FEMS / Kaco Hy-Control</option>
 									<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 									<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+									<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
 									<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 									<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
 									<option <?php if($wattbezugmodulold == "bezug_varta") echo "selected" ?> value="bezug_varta">Varta Speicher</option>
@@ -150,6 +151,12 @@
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
+						<div id="wattbezugsungrow" class="hide">
+							<div class="card-text alert alert-info">
+								Konfiguration erfolgt im Sungrow Speichermodul.
+							</div>
+						</div>
+
 						<div id="wattbezugsonneneco" class="hide">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich. Es muss beim Speicher die alternative Methode ausgewählt werden, da die Daten nur von der JSON-API übergeben werden.
@@ -826,6 +833,7 @@
 								hideSection('wattbezugrct');
 								hideSection('wattbezugip');
 								hideSection('wattbezugalphaess');
+								hideSection('wattbezugsungrow');
 
 								// Auswahl PV-Modul generell erlauben
 								//enable_pv_selector();
@@ -838,6 +846,10 @@
 								if($('#wattbezugmodul').val() == 'bezug_alphaess') {
 									showSection('wattbezugalphaess');
 								}
+								if($('#wattbezugmodul').val() == 'bezug_sungrow') {
+									showSection('wattbezugsungrow');
+								}
+
 								if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
 									showSection('wattbezugsonneneco');
 								}
