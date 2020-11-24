@@ -527,12 +527,16 @@
                         $('#ladepunktConfigModal').find('[data-config-lp]').addClass('hide');
                         $('#ladepunktConfigModal').find('[data-config-lp="'+currentConfigureLp+'"]').removeClass('hide');
                         $('#ladepunktConfigModal').modal("show");
+                    } else {
+                        $("#lockInfoModal").modal("show");
                     }
                 });
 
                 $('.chargeModeSelectBtn').click(function(event){
                     if( displaylocked == false ){
                         $("#chargeModeModal").modal("show");
+                    } else {
+                        $("#lockInfoModal").modal("show");
                     }
                 });
 
@@ -552,6 +556,8 @@
                                 publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
                             }
                         }
+                    } else {
+                        $("#lockInfoModal").modal("show");
                     }
                 });
             </script>
@@ -1273,6 +1279,35 @@
                     }
                 });
             </script>
+        </div>
+
+        <!-- modal lock-info-window -->
+        <div class="modal" id="lockInfoModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- modal header -->
+                    <div class="modal-header bg-warning justify-content-center">
+                        <div class="modal-title text-center">Display gesperrt</div>
+                    </div>
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <h4 class="text-light text-center">
+                            Das Display ist mit einem PIN-Code gesperrt.<br>
+                            Bitte tippen Sie links oben auf das <i class="fas fa-lock text-success"></i> und geben den richtigen PIN ein.
+                        </h4>
+                    </div>
+                    <!-- modal footer -->
+                    <div class="modal-footer justify-content-center">
+                        <div class="row">
+                            <div class="col text-center">
+                                <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal">
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
