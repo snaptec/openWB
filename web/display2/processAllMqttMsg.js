@@ -5,41 +5,60 @@
  * @author Michael Ortenstein
  */
 
+ // global object to store values from mqtt
+var lastSparklineValues = [];
+// stores data as array of js objects: { chartElement: null, value: 0 }
+
+function storeSparklineValue( element, value ) {
+	console.log("storing Sparkline value: element: "+element.attr('data-chartName')+" value: "+value);
+	var done = false;
+	for ( index = 0; (index < lastSparklineValues.length) && !done; index++ ) {
+		if( lastSparklineValues[index].chartElement.attr('data-chartName') == element.attr('data-chartName') ){
+			lastSparklineValues[index].value = value;
+			done = true;
+		}
+	}
+	if ( !done ) {
+		lastSparklineValues.push( { "chartElement": element, "value": value } );
+	}
+}
+
+setInterval( updateSparklines, 15000);
+
+function updateSparklines(){
+	console.log("updating Sparklines...");
+	for ( index = 0; index < lastSparklineValues.length; index++ ) {
+		var chartElement = lastSparklineValues[index].chartElement;
+		console.log("chartElement: "+chartElement.attr('data-chartName'));
+		var chartdata = lastSparklineValues[index].chartElement.attr('values');
+		var chartdataarray = chartdata.split(',');
+		// add new value
+		chartdataarray.push( lastSparklineValues[index].value );
+		// limit data length to 57 values
+		chartdataarray = chartdataarray.slice(-57);
+		// store values
+		chartElement.attr('values', chartdataarray.join(','));
+		// update chart
+		chartElement.sparkline( chartdataarray, {
+			// global settings
+			//	width: '100%', // problem with hidden sparklines!
+			width: '280px',
+			height: '60px',
+			disableInteraction: true,
+			type: 'bar',
+			enableTagOptions: true
+		});
+	}
+	console.log("done updating Sparklines");
+}
+
 function updateDashboardElement(elementText, elementChart, text, value){
 	// update text
 	if(elementText != null){
 		elementText.text(text);
 	}
-	// get last values
-	if(elementChart != null){
-		var chartdata = elementChart.attr('values');
-		var chartdataarray = chartdata.split(',');
-		// add new value
-		chartdataarray.push( value );
-		// limit data length to 100 values
-		chartdataarray = chartdataarray.slice(-57);
-		// store values
-		elementChart.attr('values', chartdataarray.join(','));
-		// update chart
-		elementChart.sparkline( chartdataarray, {
-			// global settings
-			//	width: '100%', // problem with hidden sparklines!
-			width: '280px',
-			height: '40px',
-			disableInteraction: true,
-			// test with line type
-			// highlightSpotColor: 'green',
-			// fillColor: 'green',
-			// lineColor: 'green',
-			// spotColor: 'white',
-			// spotRadius: '5',
-			// minSpotColor: '',
-			// maxSpotColor: ''
-			// test with bar type
-			type: 'bar',
-			enableTagOptions: true
-		});
-	}
+	// store value for sparklines
+	storeSparklineValue( elementChart, value );
 }
 
 function getCol(matrix, col){
