@@ -114,7 +114,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- <div class="form-group">
+						<div class="form-group">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Gerät kann schalten</label>
 								<div class="col">
@@ -129,7 +129,7 @@
 									<span class="form-text small">Gibt an ob der Aktor schalten können soll (entsprechend Überschuss oder manuell). (!!Nightly Feature, noch nicht implementiert!!)</span>
 								</div>
 							</div>
-						</div> -->
+						</div>
 						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
@@ -272,7 +272,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- <hr class="border-secondary">
+						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Separate Leistungsmessung für das Gerät</label>
@@ -288,7 +288,7 @@
 									<span class="form-text small">Gibt an ob die Leistungserfassung für dieses Gerät von einer anderen Quelle erfolgen soll. (!!Nightly Feature, noch nicht implementiert!!)</span>
 								</div>
 							</div>
-						</div> -->
+						</div>
 						<div id="device<?php echo $devicenum; ?>differentMeasurement" style="display: none;">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
