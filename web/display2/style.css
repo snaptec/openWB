@@ -148,10 +148,6 @@ hr {
     border-color: dimgrey;
 }
 
-.modal-content {
-    font-size: medium;
-}
-
 .clockpicker-popover {
     background-color: #343a40;
 }
@@ -205,6 +201,11 @@ hr {
 .lpDisabledStyle {
     color: #A30000;
     text-decoration: line-through;
+}
+
+.ladepunktConfig,
+.modal-title {
+    font-size: medium;
 }
 
 @keyframes alertPulsation {

@@ -64,7 +64,7 @@
 <canvas id="lp1" style="height: 200px; top: 120px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="lp1t" style="font-size: 15px; height: 200px; top: 270px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 ';
-if ( $displaythemeold == 0 ) { echo '
+if ( $displaythemeold == 3 ) { echo '
 <div style="font-size: 15px; height: 200px; top: 250px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;"><span id="lp1enableddiv" class="fa" style="cursor: pointer; outline:none;" onclick="lp1checkenabledclick()"></span>'.$lp1nameold.'<span id="plugstatlp1div"></div>
 <canvas id="lp1s" style="height: 200px; top: 120px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="lp1st" style="font-size: 15px; height: 200px; top: 230px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
@@ -87,7 +87,7 @@ if ( $displaythemeold == 0 ) { echo '
 <canvas id="lp1" style="height: 200px; top: 120px; left: 397px; position: absolute; width: 265px;"></canvas>
 <div id="lp1t" style="font-size: 15px; height: 200px; top: 270px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 ';
-if ( $displaythemeold == 0 ) { echo '
+if ( $displaythemeold == 3 ) { echo '
 
 <div style="font-size: 15px; height: 200px; top: 250px; left: 397px; text-align:center; position: absolute; width: 265px; color: white;"><span id="lp1enableddiv" class="fa" style="cursor: pointer; outline:none;" onclick="lp1checkenabledclick()"></span>'.$lp1nameold.'<span id="plugstatlp1div"></div>
 <canvas id="lp1s" style="height: 200px; top: 120px; left: 397px; position: absolute; width: 265px;"></canvas>
@@ -114,7 +114,7 @@ if ( $displaythemeold == 0 ) { echo '
 <canvas id="lp1" style="height: 200px; top: 120px; left: 132px; position: absolute; width: 265px;"></canvas>
 <div id="lp1t" style="font-size: 15px; height: 200px; top: 270px; left: 132px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 ';
-if ( $displaythemeold == 0 ) { echo '
+if ( $displaythemeold == 3 ) { echo '
 
 <div style="font-size: 15px; height: 200px; top: 250px; left: 132px; text-align:center; position: absolute; width: 265px; color: white;"><span id="lp1enableddiv" class="fa" style="cursor: pointer; outline:none;" onclick="lp1checkenabledclick()"></span>'.$lp1nameold.'<span id="plugstatlp1div"></div>
 <canvas id="lp1s" style="height: 200px; top: 120px; left: 132px; position: absolute; width: 265px;"></canvas>
@@ -137,7 +137,7 @@ echo '
 <canvas id="lp1" style="height: 200px; top: 120px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="lp1t" style="font-size: 15px; height: 200px; top: 270px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
 ';
-if ( $displaythemeold == 0 ) { echo '
+if ( $displaythemeold == 3 ) { echo '
 <div style="font-size: 15px; height: 200px; top: 250px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;"><span id="lp1enableddiv" class="fa" style="cursor: pointer; outline:none;" onclick="lp1checkenabledclick()"></span>'.$lp1nameold.'<span id="plugstatlp1div"></div>
 <canvas id="lp1s" style="height: 200px; top: 120px; left: 265px; position: absolute; width: 265px;"></canvas>
 <div id="lp1st" style="font-size: 15px; height: 200px; top: 230px; left: 265px; text-align:center; position: absolute; width: 265px; color: white;">0</div>
@@ -727,7 +727,7 @@ var displaylock = 1;
 	}
 </script>
 <?php 
-	 if ( $displaythemeold == 0 ) { 
+	 if ( $displaythemeold == 3 ) { 
 	 echo '
 	 <script src="/openWB/web/display/graphgauge.js"></script>
 '; } ?>
@@ -737,7 +737,7 @@ var displaytheme = <?php echo $displaythemeold ?>;
 
 var doInterval;
 function getfile() {
-if (displaytheme == 0) {
+if (displaytheme == 3) {
 	$.ajaxSetup({ cache: false});
  $.ajax({
     url: "/openWB/ramdisk/wattbezug",
@@ -850,7 +850,7 @@ $('#symboldiv').hide();
 		$('#einstellungen').hide();
 		$('#sofortll').hide();
 		$('#sofortllbtn').hide();
-		if ( displaytheme == 0 ) {
+		if ( displaytheme == 3 ) {
 	   	$('#gaugediv').show();
 		}
 		if ( displaytheme == 1 ) {
