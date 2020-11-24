@@ -1200,7 +1200,8 @@
 								<label for="displaytheme" class="col-md-4 col-form-label">Theme des Displays</label>
 								<div class="col">
 									<select name="displaytheme" id="displaytheme" class="form-control">
-										<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Gauges</option>
+										<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Cards</option>
+										<option <?php if($displaythemeold == 3) echo "selected" ?> value="3">Gauges</option>
 										<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
 										<option <?php if($displaythemeold == 2) echo "selected" ?> value="2">Nur Ladeleistung, keine verstellmöglichkeit</option>
 									</select>
@@ -1340,7 +1341,7 @@
 							}
 
 							function visibility_displaytheme() {
-								if($('#displaytheme').val() == '0') {
+								if($('#displaytheme').val() == '3') {
 									showSection('displaygauge');
 								} else {
 									hideSection('displaygauge');
