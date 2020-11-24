@@ -45,96 +45,108 @@
                 <!-- EVU data -->
                 <div class=" col-xs-6 card evu">
                     <div class="card-header bg-danger">
-                        EVU
+                        <div class="row">
+                            <div class="col pr-0">
+                                EVU
+                            </div>
+                            <div id="evul" class="col-7 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="evul">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="evulchart" values="" sparkBarColor="#dc3545" sparkNegBarColor="green">Lade Daten</span>
+                            <span class="sparkline" id="evulchart" values="" data-chartName="evulchart" sparkBarColor="#dc3545" sparkNegBarColor="green">Lade Daten</span>
                         </div>
                     </div>
                 </div>
                 <!-- Hausverbrauch data -->
                 <div class=" col-xs-6 card hausverbrauch">
                     <div class="card-header bg-secondary">
-                        Hausverbrauch
+                        <div class="row">
+                            <div class="col pr-0">
+                                Hausverbrauch
+                            </div>
+                            <div id="hausverbrauchl" class="col-4 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="hausverbrauchl">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="hausverbrauchlchart" values="" sparkBarColor="#6c757d" sparkChartRangeMin="0">Lade Daten</span>
+                            <span class="sparkline" id="hausverbrauchlchart" values="" data-chartName="hausverbrauchlchart" sparkBarColor="#6c757d" sparkChartRangeMin="0">Lade Daten</span>
                         </div>
                     </div>
                 </div>
                 <!-- Speicherleistung data -->
                 <div class=" col-xs-6 card hausbatterie">
                     <div class="card-header bg-warning">
-                        Speicherleistung
+                        <div class="row">
+                            <div class="col pr-0">
+                                Speicher
+                            </div>
+                            <div id="hausbatteriell" class="col-8 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="hausbatteriell">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="hausbatteriellchart" values="" sparkBarColor="#ffc107" sparkNegBarColor="orange">Lade Daten</span>
+                            <span class="sparkline" id="hausbatteriellchart" values="" data-chartName="hausbatteriellchart" sparkBarColor="#ffc107" sparkNegBarColor="orange">Lade Daten</span>
                         </div>
                     </div>
                 </div>
                 <!-- SpeicherSoC data -->
                 <div class="col-xs-6 card hausbatterie">
                     <div class="card-header bg-warning">
-                        Speicher Ladezustand
+                        <div class="row">
+                            <div class="col pr-0">
+                                Speicher SoC
+                            </div>
+                            <div id="hausbatteriesoc" class="col-5 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="hausbatteriesoc">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="hausbatteriesocchart" values="" sparkBarColor="#ffc107" sparkChartRangeMin="0">Lade Daten</span>
+                            <span class="sparkline" id="hausbatteriesocchart" values="" data-chartName="hausbatteriesocchart" sparkBarColor="#ffc107" sparkChartRangeMin="0" sparkChartRangeMax="100">Lade Daten</span>
                         </div>
                     </div>
                 </div>
                 <!-- Ladeleistung gesamt data -->
                 <div class="col-xs-6 card gesamtll">
                     <div class="card-header bg-primary">
-                        Ladeleistung Gesamt
+                        <div class="row">
+                            <div class="col pr-0">
+                                Ladeleistung Ges.
+                            </div>
+                            <div id="gesamtll" class="col-5 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="gesamtll">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="gesamtllchart" values="" sparkBarColor="#007bff" sparkChartRangeMin="0">Lade Daten</span>
+                            <span class="sparkline" id="gesamtllchart" values="" data-chartName="gesamtllchart" sparkBarColor="#007bff" sparkChartRangeMin="0">Lade Daten</span>
                         </div>
                     </div>
                 </div>
                 <!-- PV data -->
                 <div class="col-xs-6 card pv">
                     <div class="card-header bg-success">
-                        PV
+                        <div class="row">
+                            <div class="col pr-0">
+                                PV
+                            </div>
+                            <div id="pvl" class="col-7 pl-0 text-right">
+                                --
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-row mb-1">
-                            <p class="text-xs-right" id="pvl">
-                                Lade Daten
-                            </p>
-                        </div>
-                        <div class="form-row mb-1">
-                            <span class="sparkline" id="pvlchart" values="" sparkBarColor="#28a745" sparkChartRangeMin="0">Lade Daten</span>
+                            <span class="sparkline" id="pvlchart" values="" data-chartName="pvlchart" sparkBarColor="#28a745" sparkChartRangeMin="0">Lade Daten</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +186,7 @@
                                     </div>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <div class="col sparkline ladepunktllchart" values="" sparkBarColor="#007bff" sparkChartRangeMin="0"></div>
+                                    <div class="col sparkline ladepunktllchart" data-chartName="ladepunkt1llchart" values="" sparkBarColor="#007bff" sparkChartRangeMin="0"></div>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -226,7 +238,7 @@
                                     </div>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <div class="col sparkline ladepunktllchart" values="" sparkBarColor="#007bff" sparkChartRangeMin="0"></div>
+                                    <div class="col sparkline ladepunktllchart" values="" data-chartName="ladepunkt2llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></div>
                                 </div>
                             </div>
                             <!-- charge mode button -->
@@ -273,7 +285,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt3llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -318,7 +330,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt4llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -363,7 +375,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt5llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -408,7 +420,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt6llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -453,7 +465,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt7llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -498,7 +510,7 @@
                                     <span class="targetCurrentLp"></span>
                                 </div>
                                 <div class="form-row mb-1">
-                                    <span class="sparkline ladepunktllchart" values=""></span>
+                                    <span class="sparkline ladepunktllchart" values="" data-chartName="ladepunkt8llchart" sparkBarColor="#007bff" sparkChartRangeMin="0"></span>
                                 </div>
                             </div>
                             <div class="col-sm-4 d-flex align-items-stretch">
@@ -1380,11 +1392,11 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display2/helperFunctions.js?ver=20201120',
+                    'display2/helperFunctions.js?ver=20201124',
                     // functions for processing messages
-                    'display2/processAllMqttMsg.js?ver=20201120',
+                    'display2/processAllMqttMsg.js?ver=20201124',
                     // functions performing mqtt and start mqtt-service
-                    'display2/setupMqttServices.js?ver=20201120',
+                    'display2/setupMqttServices.js?ver=20201124',
                 ];
 
                 scriptsToLoad.forEach(function(src) {
