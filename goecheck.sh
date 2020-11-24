@@ -7,7 +7,8 @@ if [[ $evsecon == "goe" ]]; then
 	if [[ $? == "0" ]] ; then
 		state=$(echo $output | jq -r '.alw')
 		if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatus"; then
-			if ((state == "0")) ; then
+			lp1enabled=$(</var/www/html/openWB/ramdisk/lp1enabled)
+			if ((state == "0")) && (( lp1enabled == "1" )) ; then
 				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 			fi
 		fi
@@ -29,7 +30,9 @@ if [[ $lastmanagement == "1" ]]; then
 		if [[ $? == "0" ]] ; then
 			state=$(echo $output | jq -r '.alw')
 			if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
-				if ((state == "0")) ; then
+				lp2enabled=$(</var/www/html/openWB/ramdisk/lp2enabled)
+
+				if ((state == "0"))  && (( lp2enabled == "1" )) ; then
 					curl --silent --connect-timeout $goetimeoutlp2 -s http://$goeiplp2/mqtt?payload=alw=1 > /dev/null
 				fi
 			fi
@@ -51,7 +54,8 @@ if [[ $lastmanagement == "1" ]]; then
 			if [[ $? == "0" ]] ; then
 				state=$(echo $output | jq -r '.alw')
 				if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
-					if ((state == "0")) ; then
+					lp3enabled=$(</var/www/html/openWB/ramdisk/lp3enabled)
+					if ((state == "0"))  && (( lp3enabled == "1" ))  ; then
 						curl --silent --connect-timeout $goetimeoutlp3 -s http://$goeiplp3/mqtt?payload=alw=1 > /dev/null
 					fi
 				fi

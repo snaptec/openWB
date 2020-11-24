@@ -187,7 +187,7 @@ class Battery_API {
         //$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 
         $stateOfCharge = number_format( round( $attributes->soc, 2 ), 2, ',', '.');
-        $stateOfChargeMax = number_format( round( $attributes->socMax, 2 ), 2, ',', '.');
+        $stateOfChargeMax = number_format( round( $attributes->socmax, 2 ), 2, ',', '.');
 
         // Send Header
         //header('Access-Control-Allow-Origin: https://' . $_SERVER['SERVER_NAME'] );

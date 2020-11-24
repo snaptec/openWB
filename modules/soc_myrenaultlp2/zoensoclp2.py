@@ -105,21 +105,21 @@ kamereon_per = json.loads(responsetext)
 kamereonaccountid = kamereon_per['accounts'][0]['accountId']
 #print(time_string,'kamereonaccountid',kamereonaccountid)
 #
-payload = {'country': country} 
-headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
-data = urllib.urlencode(payload) 
-data = data.encode('Big5')
-reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereon/token?'  + data)
-reg.add_header('x-gigya-id_token',gigya_jwttoken)
-reg.add_header('apikey', kamereonapikey)
+#payload = {'country': country} 
+#headers = {'x-gigya-id_token': gigya_jwttoken, 'apikey': kamereonapikey} 
+#data = urllib.urlencode(payload) 
+#data = data.encode('Big5')
+#reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereon/token?'  + data)
+#reg.add_header('x-gigya-id_token',gigya_jwttoken)
+#reg.add_header('apikey', kamereonapikey)
 #print('c6',reg)
-response= urllib2.urlopen(reg)
-responsetext  = response.read()
-f = open('/var/www/html/openWB/ramdisk/zoereply6lp2', 'w')
-f.write(str(responsetext))
-f.close()
-kamereon_token = json.loads(responsetext)
-kamereonaccesstoken = kamereon_token['accessToken']
+#response= urllib2.urlopen(reg)
+#responsetext  = response.read()
+#f = open('/var/www/html/openWB/ramdisk/zoereply6lp2', 'w')
+#f.write(str(responsetext))
+#f.close()
+#kamereon_token = json.loads(responsetext)
+#kamereonaccesstoken = kamereon_token['accessToken']
 #print(time_string,'kamereonaccesstoken',kamereonaccesstoken)
 #
 payload = {'country': country} 
@@ -129,7 +129,7 @@ data = data.encode('Big5')
 reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/vehicles?'  + data)
 reg.add_header('x-gigya-id_token',gigya_jwttoken)
 reg.add_header('apikey', kamereonapikey)
-reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
+#reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
 response= urllib2.urlopen(reg)
 responsetext  = response.read()
 vehic = json.loads(responsetext)
@@ -145,7 +145,7 @@ data = data.encode('Big5')
 reg = urllib2.Request(kamereonrooturl + '/commerce/v1/accounts/' + kamereonaccountid + '/kamereon/kca/car-adapter/v2/cars/' + vin + '/battery-status?'  + data)
 reg.add_header('x-gigya-id_token',gigya_jwttoken)
 reg.add_header('apikey', kamereonapikey)
-reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
+#reg.add_header('x-kamereon-authorization', ' Bearer ' + kamereonaccesstoken)
 #print('c7',reg)
 response= urllib2.urlopen(reg)
 responsetext  = response.read()

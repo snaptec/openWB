@@ -1,3 +1,8 @@
+<?php
+	include ("values.php");
+	if ( $displaythemeold == 0 ) {
+		include ("display2/display.html");
+	} else { ?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -59,8 +64,6 @@
 	<script src="livefunctions.js"></script>
 </head>
 
-<?php include ("values.php"); ?>
-
 <body>
 	<input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
 	<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
@@ -82,13 +85,58 @@
 	<input hidden name="sofortlm" id="sofortlm" value="<?php echo $lademodusold ; ?>" />
 	<input hidden name="heutegeladen" id="heutegeladen" value="<?php echo $heutegeladenold ; ?>" />
 <?php
-if ( $simplemodeold == 1 ) {
-	include 'display/simple.html';
+if (isset($_POST['loadsite'])) {
+	if ( $isssold == 1 ) {
+		include 'display/minimal.html';
+	} else {
+		if ( $simplemodeold == 1 ) {
+			include 'display/simple.html';
+		} else {
+			// das gewählte Theme einbinden
+			if ( $displaythemeold == 2 ) {
+				include 'display/minimal.html';
+			} else {
+				include 'display/gauge.html'; // displaythemeold == 3
+			}	
+		}
+	}
 } else {
-	// das gewählte Theme einbinden
-	include 'display/gauge.html';
+?>
+<style>
+body {
+  height: 100vh;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Open Sans;
+}
+</style>
+<form action="" method="post">
+	<div id="preload" style="color: white;font-size: 48px;position: absolute;left: 110px;top: 200px;"> 
+		openWB startet... bitte warten
+	</div>
+	<div id="loaded" style="visibility: hidden">
+		<button type="submit" name="loadsite" value="Lade Interface" style="position:absolute;left: 250px;top: 165px;width:300px;height:150px;background-color: #4CAF50;border: none;color: white;border-radius: 12px;font-size: 24px;">Klicken zum Interface laden</button>
+	</div>
+</form>
+<script type="text/javascript">
+	function changevis(){
+		document.getElementById("preload").style.visibility = "hidden";
+		document.getElementById("loaded").style.visibility = "visible";
+	}
+	setTimeout(changevis, 30000);
+</script>
+
+
+<?php
 }
 ?>
+<!--  -->
+
 	<!-- Scripts -->
 </body>
 </html>
+<?php
+	}
+?>

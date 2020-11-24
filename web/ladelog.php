@@ -56,9 +56,9 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<label class="checkbox-inline"><input type="checkbox" id="showlp1" value="" checked>Ladepunkt 1</label>
-				<label class="checkbox-inline"><input type="checkbox" id="showlp2" value="" checked>Ladepunkt 2</label>
-				<label class="checkbox-inline"><input type="checkbox" id="showlp3" value="" checked>Ladepunkt 3</label>
+				<label id="chargep1" style="display: none;" class="checkbox-inline"><input type="checkbox" id="showlp1" value="" checked>Ladepunkt 1</label>
+				<label id="chargep2" style="display: none;" class="checkbox-inline"><input type="checkbox" id="showlp2" value="" checked>Ladepunkt 2</label>
+				<label id="chargep3" style="display: none;" class="checkbox-inline"><input type="checkbox" id="showlp3" value="" checked>Ladepunkt 3</label>
 			</div>
 			<div class="row justify-content-center">
 				<label class="checkbox-inline"><input type="checkbox" id="showsofort" value="" checked>Sofort Laden</label>
@@ -188,7 +188,7 @@
 </body>
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladelog</small>
+				<small>Sie befinden sich hier: Ladelog - <a href="ladelogexport.php">Ladelog Export</a></small>
 			</div>
 		</footer>
 </html>

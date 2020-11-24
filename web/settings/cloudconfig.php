@@ -23,6 +23,7 @@
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 		<!-- include settings-style -->
@@ -31,6 +32,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -44,6 +67,9 @@
 				}
 				if(strpos($line, "cloudpw=") !== false) {
 					list(, $cloudpwold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "datenschutzack=") !== false) {
+					list(, $datenschutzackold) = explode("=", $line, 2);
 				}
 			}
 			$files = glob('/etc/mosquitto/conf.d/99-bridge-*.conf*');
@@ -72,76 +98,138 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="col-sm-12">
-				<div class="row">
-					<h3>Cloud Einstellungen</h3>
+			<h1>Einstellungen zur openWB Cloud</h1>
+			<?php if ( $datenschutzackold != 1 ) { ?>
+				<div class="alert alert-danger">
+					Sie müssen der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zustimmen, um die Cloudanbindung nutzen zu können.
 				</div>
-				<?php if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) {
-				echo '
-					<div class="row">
-						Cloud ist aktiv<br>
-						Benutzername: '.$clouduserold.'<br>
-						Passwort: '.$cloudpwold.'<br>
+			<?php } else { ?>
+				<div class="alert alert-success">
+					Sie haben der <a href="tools/datenschutz.html">Datenschutzerklärung</a> zugestimmt und können die Cloudanbindung nutzen.
+				</div>
+			<?php }
+			if (( $connectionName == "cloud") && ( $bridgeEnabled == "1")) { ?>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Cloud Anmeldedaten
 					</div>
-					<div class="row">
-						Mit den Zugangsdaten auf web.openwb.de anmelden
+					<div class="card-body">
+						<div class="form-row mb-1">
+							<div class="col">
+								Cloud ist aktiv<br>
+								Benutzername: <?php echo $clouduserold; ?><br>
+								Passwort: <?php echo $cloudpwold; ?>
+							</div>
+						</div>
+						<div class="form-row mb-1">
+							<div class="col">
+								Mit den Zugangsdaten auf web.openwb.de anmelden
+							</div>
+						</div>
 					</div>
-					<form action="./tools/savemqtt.php?bridge='.urlencode($connectionName).'" method="POST">
-						<input type="hidden" name="ConnectionName" value="cloud"/>
-                                        	<div class="row justify-content-center py-1">
-                                        	        <button type="submit" class="btn btn-green" name="action" value="deleteBridge">Br&uuml;cke '.urlencode($connectionName).' l&ouml;schen</button>
-						</div>
-					</form>
-				'; } else { echo '
-					<form action="./tools/cloudregistrate.php" method="POST">
-						<div class="row">
-							<b><label for="connect_username">Benutzername:</label></b>
-							<input type="text" name="username" id="connect_username" value="">
-						</div>
-						<div class="row">
-							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
-						</div>
-						<div class="row">
-							<b><label for="cloudpass">Passwort:</label></b>
-							<input type="text" name="cloudpass" id="cloudpass" value="">
-						</div>
-						<div class="row">
-							Passwort des Cloud Accounts
-						</div>
-
-						<button type="submit" class="btn btn-green">Mit Account anmelden</button>
-					</form>
-					<hr>
-					<form action="./tools/cloudregistrate.php" method="POST">
-						<div class="row">
-							<b><label for="register_username">Benutzername:</label></b>
-							<input type="text" name="username" id="register_username" value="">
-						</div>
-						<div class="row">
-							Der Benutzername darf nur Buchstaben und Zahlen enthalten. Keine Umlaute, Sonderzeichen oder Leerzeilen
-						</div>
-						<div class="row">
-							<b><label for="email">Email Adresse:</label></b>
-							<input type="text" name="email" id="email" value="">
-						</div>
-						<div class="row">
-							Email Adresse angeben
-						</div>
-
-						<button type="submit" class="btn btn-green">Neuen Account erstellen und einrichten</button>
-					</form>
-				'; } ?>
-				<div class="row justify-content-center">
-					<div class="col text-center">
-						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick">
-							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
-							<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-							<img alt="" src="./img/pixel.gif" width="1" height="1">
+					<div class="card-footer">
+						<form action="./tools/savemqtt.php?bridge=<?php echo urlencode($connectionName); ?>" method="POST">
+							<input type="hidden" name="ConnectionName" value="cloud"/>
+							<div class="row justify-content-center py-1">
+								<button type="submit" class="btn btn-success" name="action" value="deleteBridge">Brücke <?php echo urlencode($connectionName); ?> löschen</button>
+							</div>
 						</form>
 					</div>
+				</div> <!-- card -->
+			<?php } else { ?>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Cloud Anmeldedaten
+					</div>
+					<form action="./tools/cloudregistrate.php" method="POST">
+						<div class="card-body">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="connect_username" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
+											</div>
+											<input type="text" name="username" id="connect_username" value="" aria-describedby="usernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]*">
+										</div>
+										<span id="usernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Zahlen, Sonderzeichen oder Leerzeichen.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="cloudpass" class="col-md-4 col-form-label">Passwort</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-lock"></i>
+												</div>
+											</div> 
+											<input type="password" name="cloudpass" id="cloudpass" value="" class="form-control" required="required">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer text-center">
+							<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Mit Account anmelden</button>
+						</div>
+					</form>
+				</div> <!-- card 1 -->
+				<div class="card border-secondary">
+					<form action="./tools/cloudregistrate.php" method="POST">
+						<div class="card-header bg-secondary">
+							Cloud neu einrichten
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="register_username" class="col-md-4 col-form-label">Benutzername</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-user"></i>
+												</div>
+											</div>
+											<input type="text" name="username" id="register_username" value="" aria-describedby="registerUsernameHelpBlock" class="form-control" required="required" pattern="[A-Za-z]*">
+										</div>
+										<span id="registerUsernameHelpBlock" class="form-text small">Der Benutzername darf nur Buchstaben enthalten. Keine Umlaute, Zahlen, Sonderzeichen oder Leerzeichen</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="email" class="col-md-4 col-form-label">Email Adresse</label>
+									<div class="col">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="fa fa-envelope"></i>
+												</div>
+											</div>
+											<input type="email" name="email" id="email" value="" class="form-control" required="required">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer text-center">
+							<button type="submit" class="btn btn-success"<?php if( $datenschutzackold != 1 ) echo ' disabled="disabled"'; ?>>Neuen Account erstellen und einrichten</button>
+						</div>
+					</form>
+				</div> <!-- card 2 -->
+			<?php } ?>
+			<div class="row justify-content-center">
+				<div class="col text-center">
+					Open Source made with love!<br>
+					Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
+					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
+						<input type="image" src="./img/btn_donate_SM.gif" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+						<img alt="" src="./img/pixel.gif" width="1" height="1">
+					</form>
 				</div>
 			</div>
 		</div>  <!-- container -->
@@ -152,13 +240,16 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get("settings/navbar.html", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navOpenwbCloud').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navOpenwbCloud').addClass('disabled');
+				}
+			);
 
 		</script>
 

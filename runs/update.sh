@@ -1,12 +1,38 @@
 #!/bin/bash
-mosquitto_pub -t openWB/set/ChargeMode -r -m "3"
-sleep 15
 cd /var/www/html/openWB
 . /var/www/html/openWB/loadconfig.sh
+mosquitto_pub -t openWB/set/ChargeMode -r -m "3"
+mosquitto_pub -t openWB/system/updateInProgress -r -m "1"
+if [[ "$releasetrain" == "stable" ]]
+then
+	train=stable17
+elif [[ "$releasetrain" == "stableold" ]]
+then
+	train=stable
+else
+	train=$releasetrain
+fi
+if [[ "$evsecon" == "extopenwb" ]]
+then
+	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep1ip -m "$releasetrain"
+    mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep1ip -m "1"
+fi
+if [[ "$evsecons1" == "extopenwb" ]]
+then
+	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep2ip -m "$releasetrain"
+	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep2ip -m "1"
+fi
+if [[ "$evsecons2" == "extopenwb" ]]
+then
+	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep3ip -m "$releasetrain"
+	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep3ip -m "1"
+fi
+sleep 15
+
 echo 1 > /var/www/html/openWB/ramdisk/updateinprogress
 echo 1 > /var/www/html/openWB/ramdisk/bootinprogress
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/lastregelungaktiv
-mosquitto_pub -t "openWB/strLastmanagementActive" -r -m "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist"
+mosquitto_pub -t "openWB/global/strLastmanagementActive" -r -m "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist"
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 cp modules/soc_i3/auth.json /tmp/auth.json
@@ -18,15 +44,6 @@ cp openwb.conf /tmp/openwb.conf
 #mkdir /tmp/data/monthly
 #for i in /var/www/html/openWB/web/logging/data/monthly/*; do cp "$i" /tmp/data/monthly/; done
 sudo git fetch origin
-if [[ "$releasetrain" == "stable" ]]
-then
-	train=stable17
-elif [[ "$releasetrain" == "stableold" ]]
-then
-	train=stable
-else
-	train=$releasetrain
-fi
 sudo git reset --hard origin/$train
 cd /var/www/html/
 sudo chown -R pi:pi openWB 

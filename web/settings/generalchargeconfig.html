@@ -31,6 +31,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -42,29 +64,35 @@
 			<form id="myForm">
 				<h1>Übergreifende Ladeeinstellungen</h1>
 
-				<div class="card">
-					<div class="card-header font-weight-bold text-white bg-secondary">
-	    				Allgemeine Einstellungen
-	  				</div>
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Allgemeine Einstellungen
+					</div>
 					<div class="card-body">
-						<h6 class="mb-0">Maximalstromstärke</h6>
-						<div>
-							<small>
-								Paramter in Ampere [A] für den maximalen Strom in allen Lademodi.
-								Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
-							</small>
-						</div>
-						<div class="form-row form-group mb-1 vaRow">
-							<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-							<div class="col-6 col-sm-4">
-								<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" data-default="32" data-topicprefix="openWB/config/get/global/">
+						<div class="form-group mb-0">
+							<div class="form-row mb-0">
+								<div class="col-md-4">
+									Maximalstromstärke
+								</div>
+								<div class="col">
+									<span class="form-text small">Paramter in Ampere [A] für den maximalen Strom in allen Lademodi.
+										Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.</span>
+								</div>
 							</div>
-							<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
+						</div>
+						<div class="form-row mb-1">
+							<label for="maxEVSECurrentAllowed" class="col-md-4 col-form-label">alle Ladepunkte</label>
+							<div class="col-md-8">
+								<div class="form-row vaRow mb-1">
+									<label for="maxEVSECurrentAllowed" class="col-2 col-form-label valueLabel" suffix="A">A</label>
+									<div class="col-10">
+										<input type="range" class="form-control-range rangeInput" name="maxEVSECurrentAllowed" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="32" data-default="32" data-topicprefix="openWB/config/get/global/">
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>  <!-- end card body Allgemeine Einstellungen Übergreifendes -->
 				</div>  <!-- end card Allgemeine Einstellungen Übergreifendes -->
-
-				<br>
 
 				<div class="row justify-content-center">
 					<div class="col-3">
@@ -78,8 +106,6 @@
 					</div>
 				</div>
 			</form>
-
-			<br>
 
 			<!-- modal set-defaults-confirmation window -->
 			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">
@@ -167,13 +193,16 @@
 		<!-- load mqtt handler-->
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get('settings/navbar.html', function(data){
-				$('#nav').replaceWith(data);
-				// disable navbar entry for current page
-				$('#navGeneralLadeeinstellungen').addClass('disabled');
-			});
+			$.get(
+				{ url: 'settings/navbar.html', cache: false },
+				function(data){
+					$('#nav').replaceWith(data);
+					// disable navbar entry for current page
+					$('#navGeneralLadeeinstellungen').addClass('disabled');
+				}
+			);
 			function visibiltycheck(elementId, mqttpayload) {
 				// do visiblity check here
 			}
