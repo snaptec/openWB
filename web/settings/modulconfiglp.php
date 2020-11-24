@@ -119,9 +119,9 @@
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
 									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse">openWB series1/2</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler Variante 1</option>
-									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse">openWB series1/2 mit geeichtem Zähler Variante 2</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">openWB series1/2</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">openWB series1/2 mit geeichtem Zähler Variante 1</option>
+									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">openWB series1/2 mit geeichtem Zähler Variante 2</option>
 									<option <?php if($evseconold == "buchse") echo "selected" ?> value="buchse">openWB mit Buchse</option>
 									<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">openWB Ladepunkt in Verbindung mit Standalone</option>
 									<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit </option>
@@ -1160,14 +1160,14 @@
 							hideSection('evseconextopenwb');
 
 							if($('#evsecon').val() == 'modbusevse') {
-								switch( $("#evsecon option:selected" ).text() ){
-									case "openWB series1/2":
+								switch( $("#evsecon option:selected").attr('data-id') ){
+									case "openwb series1/2":
 										showSection('openwb12');
 									break;
-									case "openWB series1/2 mit geeichtem Zähler":
+									case "openwb series1/2 mid v1":
 										showSection('openwb12mid');
 									break;
-									case "openWB series1/2 mit geeichtem Zähler v2":
+									case "openwb series1/2 mid v2":
 										showSection('openwb12v2mid');
 									break;
 									default:
@@ -1400,7 +1400,7 @@
 							<div class="col">
 								<select name="evsecons1" id="evsecons1" class="form-control">
 									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
-									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse">openWB series1/2 Duo</option>
+									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo">openWB series1/2 Duo</option>
 									<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">openWB Slave</option>
 									<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
 									<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
@@ -2163,8 +2163,8 @@
 							hideSection('evseconipevselp2');
 
 							if($('#evsecons1').val() == 'modbusevse') {
-								switch( $("#evsecons1 option:selected" ).text() ){
-									case "openWB series1/2 Duo":
+								switch( $("#evsecons1 option:selected").attr('data-id') ){
+									case "openwb series1/2 duo":
 										showSection('openwb12s1');
 									break;
 									default:
