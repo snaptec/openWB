@@ -15,6 +15,13 @@ if [[ $? == "0" ]] ; then
 	if [[ $watt =~ $re ]] ; then
 		echo $watt > /var/www/html/openWB/ramdisk/llaktuells1
 	fi
+       if (( watt > 50 )); then
+               echo 1 > /var/www/html/openWB/ramdisk/plugstats1
+               echo 1 > /var/www/html/openWB/ramdisk/chargestats1
+       else
+               echo 0 > /var/www/html/openWB/ramdisk/plugstats1
+               echo 0 > /var/www/html/openWB/ramdisk/chargestats1
+       fi
 	lla1=$(echo $output | jq -r '.ChargingCurrentPhase[0]')
 	lla1=$(echo "scale=0;$lla1 / 1" |bc)
 	if [[ $lla1 =~ $re ]] ; then

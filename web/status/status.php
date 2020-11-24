@@ -611,6 +611,19 @@
 			});
 		}
 		mqttlog();
+		function debuglog() {
+			$.ajax({
+				url: "/openWB/ramdisk/openWB.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#debugdiv").html(result);
+				}
+			});
+		}
+		debuglog();
 		function smarthomelog() {
 			$.ajax({
 				url: "/openWB/ramdisk/smarthome.log",
@@ -1280,6 +1293,12 @@
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
 		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="debuglog"> <h4>Debug Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="debugdiv"></div>
+
+		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="nurpvlog"> <h4>Nur PV Log:</h4></span>
 		</div>
 
@@ -1325,6 +1344,16 @@
 			} else {
 				$('#ladestatuslogdiv').hide(); 
 				$('#ladestatuslogdiv').addClass("hide");
+			}
+		});
+		$('#debuglog').click(function(event){
+			var element = document.getElementById('debugdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#debugdiv').show();
+				$('#debugdiv').removeClass("hide");
+			} else {
+				$('#debugdiv').hide(); 
+				$('#debugdiv').addClass("hide");
 			}
 		});
 		$('#smarthomelog').click(function(event){

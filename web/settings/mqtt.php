@@ -155,7 +155,7 @@
 					<div style="margin-top: 15px;">
 						Entfernter Pr&auml;fix:&nbsp;<input type="text" size="55" name="RemotePrefix" id="RemotePrefix" value="<?php echo $remotePrefix; ?>" /><br/>
 						<small>MQTT-Thema Pr&auml;fix welches dem 'openWB/...' vorangestellt wird.<br/>
-						Beispiel: Wenn in diesem Feld 'pfx' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</small>
+						Beispiel: Wenn in diesem Feld 'pfx/' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</small>
 					</div>
 					<div style="margin-top: 15px;">
 						MQTT Protokoll:<br/>
@@ -247,7 +247,7 @@
 		<script>
 
 			$.get(
-				{ url: "settings/navbar.html", cache: false},
+				{ url: "settings/navbar.html", cache: false },
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page

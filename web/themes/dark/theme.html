@@ -169,6 +169,15 @@
 			</div>
 		</div>
 
+		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
+			<div id="verbraucher1" class="col-sm hide">
+				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
+			</div>
+			<div id="verbraucher2" class="col-sm hide">
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+			</div>
+		</div>
+
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
 				<span class="actualTemp0Device"></span>
@@ -258,8 +267,9 @@
 			<div class="col-2 px-0 socNotConfiguredLp text-center">
 				--
 			</div>
-			<div class="col-2 px-0 hide socConfiguredLp text-center">
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
 				<span class="socLp"></span>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 			</div>
 		</div>
 
@@ -281,8 +291,9 @@
 			<div class="col-2 px-0 socNotConfiguredLp text-center">
 				--
 			</div>
-			<div class="col-2 px-0 hide socConfiguredLp text-center">
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
 				<span class="socLp"></span>
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
 			</div>
 		</div>
 
@@ -590,7 +601,22 @@
 
 
 	</div>  <!-- and smarthome -->
+		<form id="minundpvladenEinstellungen" class="hide">
+			<hr color="white">
+			<div class="row justify-content-center">
+				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
+			</div>
 
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+				<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
+				<div class="col">
+
+					<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
+				</div>
+				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
+			</div>
+		</form>
 		<!-- depending on charge mode show options -->
 		<form id="sofortladenEinstellungen" class="hide">
 
@@ -695,7 +721,7 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize">
 					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-8" max="12" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="25" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
@@ -1170,13 +1196,13 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20200526-c',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20200616-a',
+				'themes/dark/processAllMqttMsg.js?ver=20200924-a',
 				// respective Chart.js definition live
 				'themes/dark/livechart.js?ver=20200530-b',
 				// respective Chart.js definition awattar
 				'themes/dark/awattarchart.js?ver=20200331-c',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20200526-a',
+				'themes/dark/setupMqttServices.js?ver=20200924-a',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1194,6 +1220,19 @@
 						publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
 					} else {
 						publish("1", "openWB/set/lp/" + lp + "/ChargePointEnabled");
+					}
+				}
+			});
+
+			$('.socConfiguredLp').click(function(event){
+				// send mqtt set to force reload of charge point SoC after click
+				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
+				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
+					var spinner = $(this).find('.reloadLpSoc');
+					var isRunning = spinner.hasClass("fa-spin");
+					if ( !isRunning ) {
+						spinner.addClass("fa-spin");
+						publish("1", "openWB/set/lp/" + lp + "/ForceSoCUpdate");
 					}
 				}
 			});

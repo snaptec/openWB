@@ -47,7 +47,7 @@ class KSEM:
         voltage3 = self.ReadUInt32(142) * 0.001
         self.write('/var/www/html/openWB/ramdisk/evuv3', voltage3)
 
-        bezugkwh = self.ReadUInt64(512) * 0.1 * 0.001
+        bezugkwh = self.ReadUInt64(512) * 0.1
         self.write('/var/www/html/openWB/ramdisk/bezugkwh', bezugkwh)
 
         bezugw1p = self.ReadUInt32(40) * 0.1
@@ -80,7 +80,7 @@ class KSEM:
         finalwattbezug = int(wattbezug)
         self.write('/var/www/html/openWB/ramdisk/wattbezug', finalwattbezug)
 
-        einspeisungkwh = self.ReadUInt64(516) * 0.1 * 0.001
+        einspeisungkwh = self.ReadUInt64(516) * 0.1
         self.write('/var/www/html/openWB/ramdisk/einspeisungkwh', einspeisungkwh)
 
         evuhz = self.ReadUInt32(26) * 0.001

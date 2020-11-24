@@ -52,9 +52,6 @@ function processMessages(mqttmsg, mqttpayload) {
     } else if ( element.hasClass('btn-group-toggle') ) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
-
-
-
     } else {
         console.log(elementId + ' not found');
     }

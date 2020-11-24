@@ -128,7 +128,7 @@ body > .container {
 }
 
 .text-lightgrey {
-	color: rgba(255, 255, 255, 0.82);
+	color: rgba(0, 0, 0, 0.82);
 }
 
 .bg-darkgrey {
@@ -391,4 +391,9 @@ h3 {
 	--d8bgCol: blue;
 	--d9Col: rgba(230, 50, 220, 0.7);
 	--d9bgCol: blue;
+}
+
+.openwb-devices {
+	color: #ccffff;
+	background-color: #009696;
 }
