@@ -368,14 +368,14 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			// if housebattery is configured, show info-cards
 			$('.hausbatterie').show();
 			// and outer element for priority icon in pv mode
-			$('#priorityEvBattery').show();
+			$('.priorityEvBattery').show();
 			// priority buttons in modal
 			$('#priorityModeBtns').show();
 			// update sparklines
 			$.sparkline_display_visible();
 		} else {
 			$('.hausbatterie').hide();
-			$('#priorityEvBattery').hide();
+			$('.priorityEvBattery').hide();
 			$('#priorityModeBtns').hide();
 		}
 	}
