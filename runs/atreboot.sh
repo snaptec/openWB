@@ -2933,7 +2933,6 @@ if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localh
 then
 	sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
 fi
-(sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
