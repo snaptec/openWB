@@ -99,7 +99,47 @@ function handlevar(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/lp\//i) ) { processLpMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/sofort\/lp\//i) ) { processSofortConfigMessages(mqttmsg, mqttpayload); }
 	else if ( mqttmsg.match( /^openwb\/config\/get\/pv\//i) ) { processPvConfigMessages(mqttmsg, mqttpayload); }
+	else if ( mqttmsg.match( /^openwb\/config\/get\/display\//i) ) { processDisplayConfigMessages(mqttmsg, mqttpayload); }
 }  // end handlevar
+
+function processDisplayConfigMessages(mqttmsg, mqttpayload) {
+	console.log("Msg: "+mqttmsg+": "+mqttpayload);
+	if ( mqttmsg == 'openWB/config/get/display/showHouseConsumption' ) {
+		switch (mqttpayload) {
+			case '0':
+				// hide house consumption
+				$('.hausverbrauch').addClass('hide');
+				break;
+			case '1':
+				// show house consumption
+				$('.hausverbrauch').removeClass('hide');
+				break;
+		}
+	}
+	else if ( mqttmsg == 'openWB/config/get/display/chartHouseConsumptionMax' ) {
+		var chartElement = $('.sparkline[data-chartname=hausverbrauchlchart]');
+		chartElement.attr('sparkChartRangeMax', mqttpayload);
+	}
+	else if ( mqttmsg == 'openWB/config/get/display/chartEvuMinMax' ) {
+		var chartElement = $('.sparkline[data-chartname=evulchart]');
+		chartElement.attr('sparkChartRangeMax', mqttpayload);
+		chartElement.attr('sparkChartRangeMin', mqttpayload*-1);
+	}
+	else if ( mqttmsg == 'openWB/config/get/display/chartBatteryMinMax' ) {
+		var chartElement = $('.sparkline[data-chartname=hausbatteriellchart]');
+		chartElement.attr('sparkChartRangeMax', mqttpayload);
+		chartElement.attr('sparkChartRangeMin', mqttpayload*-1);
+	}
+	else if ( mqttmsg == 'openWB/config/get/display/chartPvMax' ) {
+		var chartElement = $('.sparkline[data-chartname=pvlchart]');
+		chartElement.attr('sparkChartRangeMax', mqttpayload);
+	}
+	else if ( mqttmsg.match( /^openwb\/config\/get\/display\/chartLp\/[1-9][0-9]*\/max$/i ) ) {
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		var chartElement = $('.sparkline[data-chartname=ladepunkt'+index+'llchart]');
+		chartElement.attr('sparkChartRangeMax', mqttpayload);
+	}
+}
 
 function processPvConfigMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg == 'openWB/config/get/pv/priorityModeEVBattery' ) {
@@ -116,7 +156,7 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 				$('#evPriorityBtn').addClass('btn-success');
 				$('#batteryPriorityBtn').removeClass('btn-success');
 				$('.priorityEvBatteryIcon').removeClass('fa-car-battery').addClass('fa-car')
-			break;
+				break;
 		}
 	}
 	else if ( mqttmsg == 'openWB/config/get/pv/nurpv70dynact' ) {
@@ -129,7 +169,7 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 			case '1':
 				// activiert
 				$('#70ModeBtn').show();
-			break;
+				break;
 		}
 	}
 	else if ( mqttmsg == 'openWB/config/get/pv/minCurrentMinPv' ) {
@@ -273,6 +313,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.priorityEvBatteryIcon').hide();
 				$('.ladepunktConfig').addClass('hide'); // modal chargepoint config
 				$('.ladepunktConfigStandby').removeClass('hide'); // modal chargepoint config
+				break;
 		}
 	}
 }
@@ -327,14 +368,14 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			// if housebattery is configured, show info-cards
 			$('.hausbatterie').show();
 			// and outer element for priority icon in pv mode
-			$('#priorityEvBattery').show();
+			$('.priorityEvBattery').show();
 			// priority buttons in modal
 			$('#priorityModeBtns').show();
 			// update sparklines
 			$.sparkline_display_visible();
 		} else {
 			$('.hausbatterie').hide();
-			$('#priorityEvBattery').hide();
+			$('.priorityEvBattery').hide();
 			$('#priorityModeBtns').hide();
 		}
 	}

@@ -141,6 +141,7 @@
 									<option <?php if($pvwattmodulold == "wr_rct") echo "selected" ?> value="wr_rct">RCT</option>
 									<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
 									<option <?php if($pvwattmodulold == "wr_shelly") echo "selected" ?> value="wr_shelly">Shelly</option>
+									<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
 								</select>
 							</div>
 						</div>
