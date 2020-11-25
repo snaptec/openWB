@@ -1646,6 +1646,19 @@ loadvars(){
 	mqttconfvar["global/rfidConfigured"]=rfidakt
 	mqttconfvar["system/priceForKWh"]=preisjekwh
 	mqttconfvar["system/wizzardDone"]=wizzarddone
+	mqttconfvar["config/get/display/chartEvuMinMax"]=displayevumax
+	mqttconfvar["config/get/display/chartBatteryMinMax"]=displayspeichermax
+	mqttconfvar["config/get/display/chartPvMax"]=displaypvmax
+	mqttconfvar["config/get/display/showHouseConsumption"]=displayhausanzeigen
+	mqttconfvar["config/get/display/chartHouseConsumptionMax"]=displayhausmax
+	mqttconfvar["config/get/display/chartLp/1/max"]=displaylp1max
+	mqttconfvar["config/get/display/chartLp/2/max"]=displaylp2max
+	mqttconfvar["config/get/display/chartLp/3/max"]=displaylp3max
+	mqttconfvar["config/get/display/chartLp/4/max"]=displaylp4max
+	mqttconfvar["config/get/display/chartLp/5/max"]=displaylp5max
+	mqttconfvar["config/get/display/chartLp/6/max"]=displaylp6max
+	mqttconfvar["config/get/display/chartLp/7/max"]=displaylp7max
+	mqttconfvar["config/get/display/chartLp/8/max"]=displaylp8max
 
 	for mq in "${!mqttconfvar[@]}"; do
 		theval=${!mqttconfvar[$mq]}

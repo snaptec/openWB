@@ -2758,6 +2758,31 @@ if ! grep -Fq "preisjekwh=" /var/www/html/openWB/openwb.conf
 then
 	echo "preisjekwh=0.30" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "displaylp3max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp3max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp4max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp4max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp5max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp5max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp6max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp6max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp7max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp7max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "displaylp8max=" /var/www/html/openWB/openwb.conf
+then
+	echo "displaylp8max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
 then
@@ -2933,7 +2958,6 @@ if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localh
 then
 	sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
 fi
-(sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /var/www/html/openWB/ramdisk/vnightly
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta

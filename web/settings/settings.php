@@ -161,8 +161,8 @@
 									<label for="awattarlocation" class="col-md-4 col-form-label">Land</label>
 									<div class="col">
 										<select name="awattarlocation" id="awattarlocation" class="form-control">
-											<option <?php if($awattarlocationold == 0) echo "selected" ?> value="de">Deutschland</option>
-											<option <?php if($awattarlocationold == 1) echo "selected" ?> value="at">Österreich</option>
+											<option <?php if($awattarlocationold == "de") echo "selected" ?> value="de">Deutschland</option>
+											<option <?php if($awattarlocationold == "at") echo "selected" ?> value="at">Österreich</option>
 										</select>
 									</div>
 								</div>

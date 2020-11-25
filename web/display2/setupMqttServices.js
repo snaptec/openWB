@@ -184,7 +184,22 @@ var topicsToSubscribe = [
 	["openWB/config/get/sofort/lp/1/socToChargeTo", 1],
 	["openWB/config/get/sofort/lp/2/socToChargeTo", 1],
 	["openWB/pv/bool70PVDynStatus", 1],
-	["openWB/config/get/pv/nurpv70dynact", 1]
+	["openWB/config/get/pv/nurpv70dynact", 1],
+	// Display configuration
+	["openWB/config/get/display/chartEvuMinMax", 1],
+	["openWB/config/get/display/chartBatteryMinMax", 1],
+	["openWB/config/get/display/chartPvMax", 1],
+	["openWB/config/get/display/showHouseConsumption", 1],
+	["openWB/config/get/display/chartHouseConsumptionMax", 1],
+	["openWB/config/get/display/chartLp/1/max", 1],
+	["openWB/config/get/display/chartLp/2/max", 1],
+	["openWB/config/get/display/chartLp/3/max", 1],
+	["openWB/config/get/display/chartLp/4/max", 1],
+	["openWB/config/get/display/chartLp/5/max", 1],
+	["openWB/config/get/display/chartLp/6/max", 1],
+	["openWB/config/get/display/chartLp/7/max", 1],
+	["openWB/config/get/display/chartLp/8/max", 1]
+
 ];
 
 // holds number of topics flagged 1 initially
