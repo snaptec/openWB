@@ -1,6 +1,6 @@
 <?php
 	include ("values.php");
-	if ( $displaythemeold == 0 ) {
+	if ( ($displaythemeold == 0) && ($isssold == 0) ) {
 		include ("display2/display.html");
 	} else { ?>
 <!DOCTYPE html>
