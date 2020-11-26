@@ -94,7 +94,7 @@
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
 
-			$lastrfid = trim( file_get_contents( '/var/www/html/openWB/ramdisk/rfidlasttag' ) );
+			$lastrfid = explode(',',trim( file_get_contents( '/var/www/html/openWB/ramdisk/rfidlasttag' )))[0];
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
