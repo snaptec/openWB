@@ -985,7 +985,7 @@ loadvars(){
 	if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
 		usesimpv=1
 	fi
-	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+	if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_solarwatt" ]] || [[ $pvwattmodul == "wr_shelly" ]] || [[ $pvwattmodul == "wr_sungrow" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 		usesimpv=1
 	fi
 	if [[ $usesimpv == "1" ]]; then
