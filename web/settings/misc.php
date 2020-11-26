@@ -1253,10 +1253,48 @@
 										<input type="number" min="1000" step="100" name="displaylp1max" id="displaylp1max" class="form-control" value="<?php echo $displaylp1maxold ?>">
 									</div>
 								</div>
-								<div class="form-row vaRow mb-1">
+								<div class="form-row vaRow mb-1" id="displaylp2">
 									<label for="displaylp2max" class="col-md-4 col-form-label">Ladepunkt 2 Skala Max</label>
 									<div class="col">
 										<input type="number" min="1000" step="100" name="displaylp2max" id="displaylp2max" class="form-control" value="<?php echo $displaylp2maxold ?>">
+									</div>
+								</div>
+							</div>
+							<div id="displaycards" class="hide">
+								<div class="form-row vaRow mb-1" id="displaylp3">
+									<label for="displaylp3max" class="col-md-4 col-form-label">Ladepunkt 3 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp3max" id="displaylp3max" class="form-control" value="<?php echo $displaylp3maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp4">
+									<label for="displaylp4max" class="col-md-4 col-form-label">Ladepunkt 4 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp4max" id="displaylp4max" class="form-control" value="<?php echo $displaylp4maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp5">
+									<label for="displaylp5max" class="col-md-4 col-form-label">Ladepunkt 5 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp5max" id="displaylp5max" class="form-control" value="<?php echo $displaylp5maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp6">
+									<label for="displaylp6max" class="col-md-4 col-form-label">Ladepunkt 6 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp6max" id="displaylp6max" class="form-control" value="<?php echo $displaylp6maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp7">
+									<label for="displaylp7max" class="col-md-4 col-form-label">Ladepunkt 7 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp7max" id="displaylp7max" class="form-control" value="<?php echo $displaylp7maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp8">
+									<label for="displaylp8max" class="col-md-4 col-form-label">Ladepunkt 8 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp8max" id="displaylp8max" class="form-control" value="<?php echo $displaylp8maxold ?>">
 									</div>
 								</div>
 							</div>
@@ -1341,10 +1379,18 @@
 							}
 
 							function visibility_displaytheme() {
-								if($('#displaytheme').val() == '3') {
-									showSection('displaygauge');
-								} else {
+								switch ($('#displaytheme').val()) {
+									case '0': // Cards
+										showSection('displaygauge');
+										showSection('displaycards');
+										break;
+									case '3': // Gauges
+										showSection('displaygauge');
+										hideSection('displaycards');
+										break;
+									default:
 									hideSection('displaygauge');
+									hideSection('displaycards');
 								}
 							}
 
