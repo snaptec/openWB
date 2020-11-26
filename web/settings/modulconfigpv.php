@@ -142,6 +142,7 @@
 									<option <?php if($pvwattmodulold == "wr_huawei") echo "selected" ?> value="wr_huawei">Huawei</option>
 									<option <?php if($pvwattmodulold == "wr_shelly") echo "selected" ?> value="wr_shelly">Shelly</option>
 									<option <?php if($pvwattmodulold == "wr_sungrow") echo "selected" ?> value="wr_sungrow">Sungrow</option>
+									<option <?php if($pvwattmodulold == "wr_victron") echo "selected" ?> value="wr_victron">Victron</option>
 								</select>
 							</div>
 						</div>
@@ -727,6 +728,9 @@
 								if($('#pvwattmodul').val() == 'wr_siemens') {
 									showSection('pvip');
 									showSection('pvsiemens');
+								}
+								if($('#pvwattmodul').val() == 'wr_victron') {
+									showSection('pvip');
 								}
 								if($('#pvwattmodul').val() == 'wr_huawei') {
 									showSection('pvip');
