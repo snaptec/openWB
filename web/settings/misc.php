@@ -1180,22 +1180,6 @@
 					</div>
 					<div class="card-body hide" id="displayan">
 						<div class="form-group">
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">Tagesgraph anzeigen</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($displaytagesgraphold == 0) echo " active" ?>">
-											<input type="radio" name="displaytagesgraph" id="displaytagesgraphOff" value="0"<?php if($displaytagesgraphold == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($displaytagesgraphold == 1) echo " active" ?>">
-											<input type="radio" name="displaytagesgraph" id="displaytagesgraphOn" value="1"<?php if($displaytagesgraphold == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
-									</div>
-									<span class="form-text small text-danger">Ja vermindert die Performance</span>
-								</div>
-							</div>
 							<div class="form-row vaRow mb-1">
 								<label for="displaytheme" class="col-md-4 col-form-label">Theme des Displays</label>
 								<div class="col">

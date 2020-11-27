@@ -86,7 +86,7 @@ function checkReloadDisplay() {
             if ( data == 1 ) {
                 $.get(
                     {
-                        url: "./tools/reloaddisplay.php",
+                        url: "/openWB/web/tools/reloaddisplay.php",
                         type: "post",
                         success: function( result ) {
                             location.reload();

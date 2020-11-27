@@ -1179,10 +1179,6 @@ if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
-then
-	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
-fi
 if ! grep -Fq "displayEinBeimAnstecken=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displayEinBeimAnstecken=1" >> /var/www/html/openWB/openwb.conf
