@@ -1417,9 +1417,9 @@
 							<input type="hidden" name="ladeleistungs1modul" value="extopenwblp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="lp2id" class="col-md-4 col-form-label">IP Adresse</label>
+									<label for="chargep2ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lp2id" id="lp2id" value="<?php echo $chargep2ipold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep2ip" id="chargep2ip" value="<?php echo $chargep2ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
