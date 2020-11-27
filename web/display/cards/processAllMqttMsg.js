@@ -10,7 +10,7 @@ var lastSparklineValues = [];
 // stores data as array of js objects: { chartElement: null, value: 0 }
 
 function storeSparklineValue( element, value ) {
-	console.log("storing Sparkline value: element: "+element.attr('data-chartName')+" value: "+value);
+	//console.log("storing Sparkline value: element: "+element.attr('data-chartName')+" value: "+value);
 	var done = false;
 	for ( index = 0; (index < lastSparklineValues.length) && !done; index++ ) {
 		if( lastSparklineValues[index].chartElement.attr('data-chartName') == element.attr('data-chartName') ){
@@ -26,10 +26,10 @@ function storeSparklineValue( element, value ) {
 setInterval( updateSparklines, 15000);
 
 function updateSparklines(){
-	console.log("updating Sparklines...");
+	//console.log("updating Sparklines...");
 	for ( index = 0; index < lastSparklineValues.length; index++ ) {
 		var chartElement = lastSparklineValues[index].chartElement;
-		console.log("chartElement: "+chartElement.attr('data-chartName'));
+		//console.log("chartElement: "+chartElement.attr('data-chartName'));
 		var chartdata = lastSparklineValues[index].chartElement.attr('values');
 		var chartdataarray = chartdata.split(',');
 		// add new value
@@ -49,7 +49,7 @@ function updateSparklines(){
 			enableTagOptions: true
 		});
 	}
-	console.log("done updating Sparklines");
+	//console.log("done updating Sparklines");
 }
 
 function updateDashboardElement(elementText, elementChart, text, value){
@@ -103,7 +103,7 @@ function handlevar(mqttmsg, mqttpayload) {
 }  // end handlevar
 
 function processDisplayConfigMessages(mqttmsg, mqttpayload) {
-	console.log("Msg: "+mqttmsg+": "+mqttpayload);
+	//console.log("Msg: "+mqttmsg+": "+mqttpayload);
 	if ( mqttmsg == 'openWB/config/get/display/showHouseConsumption' ) {
 		switch (mqttpayload) {
 			case '0':

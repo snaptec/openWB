@@ -1,7 +1,7 @@
 <?php
 
 $result = '';
-$lines = file('/var/www/html/openWB/openwb.conf');
+$lines = file($_SERVER['DOCUMENT_ROOT'].'/openWB/openwb.conf');
 foreach($lines as $line) {
  	if(strpos($line, "displayaktiv=") !== false) {
 		list(, $displayaktivold) = explode("=", $line);
@@ -30,14 +30,12 @@ foreach($lines as $line) {
 	if(strpos($line, "displaypinaktiv=") !== false) {
 		list(, $displaypinaktivold) = explode("=", $line);
 	}
-
 	if(strpos($line, "displaypincode=") !== false) {
 		list(, $displaypincodeold) = explode("=", $line);
 	}
 	if(strpos($line, "displaytheme=") !== false) {
 		list(, $displaythemeold) = explode("=", $line);
 	}
-
 }
-$displaypincodeold = str_replace("\n", '', $displaypincodeold);
+$displaypincodeold = trim($displaypincodeold);
 ?>
