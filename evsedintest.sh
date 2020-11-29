@@ -4,7 +4,7 @@ evsedintest() {
 	evsedintestlp1=$(<ramdisk/evsedintestlp1)
 	if [[ $evsedintestlp1 == "ausstehend" ]]; then
 		if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer" ]; then
-			if [[ $evsecon == "modbusevse" ]]; then 
+			if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $modbusevsesource = *virtual* ]]; then
 					if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesource,raw tcp:$modbusevselanip:26" > /dev/null; then
 						echo "test" > /dev/null
@@ -51,20 +51,20 @@ evsedintest() {
 	fi
 	evsedintestlp2=$(<ramdisk/evsedintestlp2)
 	if [[ $evsedintestlp2 == "ausstehend" ]]; then
-		if [[ $evsecons1 == "modbusevse" ]]; then
-			if [[ $evsesources1 = *virtual* ]]; then
-				if ps ax |grep -v grep |grep "socat pty,link=$evsesources1,raw tcp:$evselanips1:26" > /dev/null; then
+		if [[ $evseconlp2 == "modbusevse" ]]; then
+			if [[ $modbusevsesourcelp2 = *virtual* ]]; then
+				if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26" > /dev/null; then
 					echo "test" > /dev/null
 				else
-					sudo socat pty,link=$evsesources1,raw tcp:$evselanips1:26 &
+					sudo socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26 &
 				fi
 			else
 				echo "echo" > /dev/null
 			fi
 			sleep 1
-			sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 9
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 1000 9
 			sleep 1
-			evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
+			evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesourcelp2 $modbusevseidlp2 1000 1)
 			if [[ $evsedinstat == "9" ]]; then
 				echo "EVSE LP2 Prüfung erfolgreich"
 				echo "erfolgreich" > ramdisk/evsedintestlp2
@@ -73,10 +73,10 @@ evsedintest() {
 				echo "Fehler" > ramdisk/evsedintestlp2
 			fi
 			sleep 1
-			sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 0
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 1000 0
 			sleep 1
 		else
-			echo "$evsecons1 konfiguriert" > ramdisk/evsedintestlp2
+			echo "$evseconlp2 konfiguriert" > ramdisk/evsedintestlp2
 		fi
 		exit 0
 	fi
@@ -115,7 +115,7 @@ evsedintest() {
 	evseausgelesen=$(<ramdisk/evseausgelesen)
 	if [[ $evseausgelesen == "0" ]]; then
 		if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer" ]; then
-			if [[ $evsecon == "modbusevse" ]]; then 
+			if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $modbusevsesource = *virtual* ]]; then
 					if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesource,raw tcp:$modbusevselanip:26" > /dev/null; then
 						echo "test" > /dev/null
@@ -127,39 +127,39 @@ evsedintest() {
 				fi
 				sleep 1
 				evselp12000=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 2000 1)
-				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000		
+				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000
 				sleep 1
 				evselp12007=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 2007 1)
-				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007		
+				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007
 				sleep 1
 			fi
 			if [[ $evsecon == "masterethframer" ]]; then
 				sleep 1
 				evselp12000=$(sudo python runs/readmodbusethframer.py 192.168.193.18 1 2000 1)
-				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000		
+				echo $evselp12000 > /var/www/html/openWB/ramdisk/progevsedinlp12000
 				sleep 1
 				evselp12007=$(sudo python runs/readmodbusethframer.py 192.168.193.18 1 2007 1)
-				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007		
+				echo $evselp12007 > /var/www/html/openWB/ramdisk/progevsedinlp12007
 				sleep 1
 			fi
 		fi
 
-		if [[ $evsecons1 == "modbusevse" ]]; then
-			if [[ $evsesources1 = *virtual* ]]; then
-				if ps ax |grep -v grep |grep "socat pty,link=$evsesources1,raw tcp:$evselanips1:26" > /dev/null; then
+		if [[ $evseconlp2 == "modbusevse" ]]; then
+			if [[ $modbusevsesourcelp2 = *virtual* ]]; then
+				if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26" > /dev/null; then
 					echo "test" > /dev/null
 				else
-					sudo socat pty,link=$evsesources1,raw tcp:$evselanips1:26 &
+					sudo socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26 &
 				fi
 			else
 				echo "echo" > /dev/null
 			fi
 			sleep 1
 
-			evselp22000=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 2000 1)
+			evselp22000=$(sudo python runs/readmodbus.py $modbusevsesourcelp2 $modbusevseidlp2 2000 1)
 			echo $evselp22000 > ramdisk/progevsedinlp22000
 			sleep 1
-			evselp22007=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 2007 1)
+			evselp22007=$(sudo python runs/readmodbus.py $modbusevsesourcelp2 $modbusevseidlp2 2007 1)
 			echo $evselp22007 > ramdisk/progevsedinlp22007
 			sleep 1
 		fi
@@ -168,7 +168,7 @@ evsedintest() {
 	progevselp1=$(<ramdisk/progevsedinlp1)
 	if [[ $progevselp1 == "1" ]]; then
 		if [ $evsecon == "modbusevse" ] || [ $evsecon == "masterethframer" ]; then
-			if [[ $evsecon == "modbusevse" ]]; then 
+			if [[ $evsecon == "modbusevse" ]]; then
 				if [[ $modbusevsesource = *virtual* ]]; then
 					if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesource,raw tcp:$modbusevselanip:26" > /dev/null
 					then
@@ -198,22 +198,22 @@ evsedintest() {
 	fi
 	progevselp2=$(<ramdisk/progevsedinlp2)
 	if [[ $progevselp2 == "1" ]]; then
-		if [[ $evsecons1 == "modbusevse" ]]; then 
+		if [[ $evseconlp2 == "modbusevse" ]]; then
 			if [[ $modbusevsesource = *virtual* ]]; then
-				if ps ax |grep -v grep |grep "socat pty,link=$evsesources1,raw tcp:$modbusevselanips1:26" > /dev/null; then
+				if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusmodbusevselaniplp2:26" > /dev/null; then
 					echo "test" > /dev/null
 				else
-					sudo socat pty,link=$evsesources1,raw tcp:$modbusevselanips1:26 &
+					sudo socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusmodbusevselaniplp2:26 &
 				fi
 			else
 				echo "echo" > /dev/null
 			fi
 			sleep 1
 			lp22000=$(<ramdisk/progevsedinlp22000)
-			sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 2000 $lp22000
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 2000 $lp22000
 			sleep 1
 			lp22007=$(<ramdisk/progevsedinlp22007)
-			sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 2007 $lp22007
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 2007 $lp22007
 		fi
 		echo 0 > ramdisk/progevsedinlp2
 	fi
@@ -243,18 +243,18 @@ evsemodbuscheck() {
 			sudo python runs/evsewritembusdev.py $modbusevsesource $modbusevseid 1000 $llalt
 		fi
 	fi
-	if (( lastmanagement == 1 )); then 
-		if [[ $evsecons1 == "modbusevse" ]]; then
-			if [[ $evsesources1 = *virtual* ]]; then
-				if ps ax |grep -v grep |grep "socat pty,link=$evsesources1,raw tcp:$evselanips1:26" > /dev/null; then
+	if (( lastmanagement == 1 )); then
+		if [[ $evseconlp2 == "modbusevse" ]]; then
+			if [[ $modbusevsesourcelp2 = *virtual* ]]; then
+				if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26" > /dev/null; then
 					echo "test" > /dev/null
 				else
-					sudo socat pty,link=$evsesources1,raw tcp:$evselanips1:26 &
+					sudo socat pty,link=$modbusevsesourcelp2,raw tcp:$modbusevselaniplp2:26 &
 				fi
 			else
 				echo "echo" > /dev/null
 			fi
-			evsedinstat=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1000 1)
+			evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesourcelp2 $modbusevseidlp2 1000 1)
 			sleep 1
 			if [[ $evsedinstat == "$llalts1" ]]; then
 				if [[ $debug == "1" ]]; then
@@ -264,7 +264,7 @@ evsemodbuscheck() {
 				if [[ $debug == "1" ]]; then
 					echo "LP2 Modbus $llalts1 nichtkorrekt"
 				fi
-				sudo python runs/evsewritembusdev.py $evsesources1 $evseids1 1000 $llalts1
+				sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 1000 $llalts1
 			fi
 		fi
 		if (( lastmanagements2 == 1 )); then

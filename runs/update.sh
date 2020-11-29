@@ -18,10 +18,10 @@ then
     mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep1ip -m "1"
 fi
 if [[ $lastmanagement == "1" ]]; then
-	if [[ "$evsecons1" == "extopenwb" ]]
+	if [[ "$evseconlp2" == "extopenwb" ]]
 	then
-		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep2ip -m "$releasetrain"
-		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep2ip -m "1"
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargiplp2 -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargiplp2 -m "1"
 	fi
 fi
 if [[ $lastmanagements2 == "1" ]]; then
@@ -50,14 +50,14 @@ cp openwb.conf /tmp/openwb.conf
 sudo git fetch origin
 sudo git reset --hard origin/$train
 cd /var/www/html/
-sudo chown -R pi:pi openWB 
+sudo chown -R pi:pi openWB
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
 sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
 sudo chmod 777 /var/www/html/openWB/openwb.conf
-sudo chmod +x /var/www/html/openWB/modules/*                     
+sudo chmod +x /var/www/html/openWB/modules/*
 sudo chmod +x /var/www/html/openWB/runs/*
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/lade.log
@@ -68,17 +68,17 @@ if ! grep -Fq "wr_http_w_url=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wr_http_w_url=http://192.168.0.17/pvwatt.txt" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "hsocip1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "hsociplp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "hsocip1=http://10.0.0.110/soc.txt" >> /var/www/html/openWB/openwb.conf
+	  echo "hsociplp2=http://10.0.0.110/soc.txt" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "socmodul1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "socmodullp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "socmodul1=soc_http1" >> /var/www/html/openWB/openwb.conf
+	  echo "socmodullp2=soc_http1" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "dacregisters1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "dacregisterlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "dacregisters1=12" >> /var/www/html/openWB/openwb.conf
+	  echo "dacregisterlp2=12" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "wr_http_kwh_url=" /var/www/html/openWB/openwb.conf

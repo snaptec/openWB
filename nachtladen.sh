@@ -150,7 +150,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -176,7 +176,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -202,7 +202,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -228,7 +228,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -254,7 +254,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -280,7 +280,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -306,7 +306,7 @@ nachtlademodus(){
 				fi
 				if [ -z "$llnachtneu" ]; then
 					llnachtneu=$llalt
-				fi	
+				fi
 			else
 				nachtladen2state=0
 			fi
@@ -328,9 +328,9 @@ nachtlademodus(){
 			else
 				diesersocs1=$nachtsoc1s1
 			fi
-			if [[ $socmodul1 != "none" ]]; then
+			if [[ $socmodullp2 != "none" ]]; then
 				if [[ $debug == "1" ]]; then
-						echo nachtladen mit socmodul $socmodul1
+						echo nachtladen mit socmodul $socmodullp2
 				fi
 				if (( soc1 <= diesersocs1 )); then
 					if grep -q 0 "/var/www/html/openWB/ramdisk/ladestatuss1"; then
@@ -415,7 +415,7 @@ nachtlademodus(){
 	echo $nachtladen2states1 > /var/www/html/openWB/ramdisk/nachtladen2states1
 	if (( nachtladenstate == 1 )) || (( nachtladenstates1 == 1 )) || (( nachtladen2state == 1 )) || (( nachtladen2states1 == 1 )); then
 		if (( nachtladenstate == 1 )) || (( nachtladen2state == 1 )); then
-			lastmnacht $llalt $llnachtneu 
+			lastmnacht $llalt $llnachtneu
 			if (( llnachtreturn != llalt )); then
 				runs/set-current.sh $llnachtreturn m
 				echo "$date LP1, Lademodus Nachtladen. Ladung mit $llnachtreturn Ampere, $diesersoc % SoC" >> ramdisk/ladestatus.log

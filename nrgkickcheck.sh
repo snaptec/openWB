@@ -26,7 +26,7 @@ nrgkickcheck(){
 			fi
 		fi
 	fi
-	if [[ $evsecons1 == "nrgkick" ]]; then
+	if [[ $evseconlp2 == "nrgkick" ]]; then
 		output=$(curl --connect-timeout 3 -s http://$nrgkickiplp2/api/settings/$nrgkickmaclp2)
 		current=$(</var/www/html/openWB/ramdisk/llsolls1)
 		if [[ $? == "0" ]] ; then

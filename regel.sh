@@ -236,12 +236,12 @@ if (( cpunterbrechunglp2 == 1 )); then
 				cpulp2waraktiv=$(<ramdisk/cpulp2waraktiv)
 				if (( cpulp2waraktiv == 0 )); then
 					echo "$(date +%s) CP Unterbrechung an LP2 durchgeführt"
-					if [[ $evsecons1 == "simpleevsewifi" ]]; then
+					if [[ $evseconlp2 == "simpleevsewifi" ]]; then
 						curl --silent --connect-timeout $evsewifitimeoutlp2 -s http://$evsewifiiplp2/interruptCp > /dev/null
-					elif [[ $evsecons1 == "ipevse" ]]; then
+					elif [[ $evseconlp2 == "ipevse" ]]; then
 						python runs/cpuremote.py $evseiplp2 7
-					elif [[ $evsecons1 == "extopenwb" ]]; then
-						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargep2ip -m "1"
+					elif [[ $evseconlp2 == "extopenwb" ]]; then
+						mosquitto_pub -r -t openWB/set/isss/Cpulp1 -h $chargiplp2 -m "1"
 					else
 						sudo python runs/cpulp2.py
 					fi

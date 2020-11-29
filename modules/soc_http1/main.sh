@@ -2,7 +2,7 @@
 
 #Soc from http
 
-hsoc=$(curl --connect-timeout 15 -s $hsocip1 | cut -f1 -d".")
+hsoc=$(curl --connect-timeout 15 -s $hsociplp2 | cut -f1 -d".")
 
 #wenn SOC nicht verfügbar (keine Antwort) ersetze leeren Wert durch eine 0
 re='^[0-9]+$'

@@ -832,17 +832,17 @@ if ! grep -Fq "sdm120modbusllid3=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllid3=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid1s1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid1lp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid1s1=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid1lp2=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid2s1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid2lp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid2s1=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid2lp2=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid3s1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid3lp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid3s1=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid3lp2=10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "sdm120modbusllid1s2=" /var/www/html/openWB/openwb.conf
 then
@@ -963,13 +963,13 @@ if ! grep -Fq "leafpasswort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "leafpasswort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "leafusernames1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "leafusernamelp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "leafusernames1=username" >> /var/www/html/openWB/openwb.conf
+	  echo "leafusernamelp2=username" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "leafpassworts1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "leafpasswortlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "leafpassworts1=passwort" >> /var/www/html/openWB/openwb.conf
+	  echo "leafpasswortlp2=passwort" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "i3username=" /var/www/html/openWB/openwb.conf
 then
@@ -979,9 +979,9 @@ if ! grep -Fq "soci3intervall=" /var/www/html/openWB/openwb.conf
 then
 	  echo "soci3intervall=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soci3intervall1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soci3intervalllp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soci3intervall1=10" >> /var/www/html/openWB/openwb.conf
+	  echo "soci3intervalllp2=10" >> /var/www/html/openWB/openwb.conf
 fi
 
 
@@ -989,17 +989,17 @@ if ! grep -Fq "i3passwort=" /var/www/html/openWB/openwb.conf
 then
 	  echo "i3passwort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "i3usernames1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "i3usernamelp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "i3usernames1=username" >> /var/www/html/openWB/openwb.conf
+	  echo "i3usernamelp2=username" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "i3passworts1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "i3passwortlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "i3passworts1=passwort" >> /var/www/html/openWB/openwb.conf
+	  echo "i3passwortlp2=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "i3vins1=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "i3vinlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "i3vins1=VIN" >> /var/www/html/openWB/openwb.conf
+	  echo "i3vinlp2=VIN" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "i3vin=" /var/www/html/openWB/openwb.conf
 then
@@ -1022,13 +1022,13 @@ then
 	  echo "socuser=username" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "zoelp2username=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "zoeusernamelp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "zoelp2username=username" >> /var/www/html/openWB/openwb.conf
+	  echo "zoeusernamelp2=username" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "zoelp2passwort=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "zoepasswortlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "zoelp2passwort='passwort'" >> /var/www/html/openWB/openwb.conf
+	  echo "zoepasswortlp2='passwort'" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "minnurpvsocll=" /var/www/html/openWB/openwb.conf
 then
@@ -1127,13 +1127,13 @@ if ! grep -Fq "bezugjsonurl=" /var/www/html/openWB/openwb.conf
 then
 	  echo "bezugjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "mpm3pmlls1source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "mpm3pmllsourcelp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "mpm3pmlls1source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+	  echo "mpm3pmllsourcelp2=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "mpm3pmlls1id=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "mpm3pmllidlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "mpm3pmlls1id=1" >> /var/www/html/openWB/openwb.conf
+	  echo "mpm3pmllidlp2=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "mpm3pmlls2source=" /var/www/html/openWB/openwb.conf
 then
@@ -1249,17 +1249,17 @@ if ! grep -Fq "solaredgepvslave4=" /var/www/html/openWB/openwb.conf
 then
 		  echo "solaredgepvslave4=none" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "lllaniplp2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm630modbuslllaniplp2=" /var/www/html/openWB/openwb.conf
 then
-		  echo "lllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm630modbuslllaniplp2=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm630lp2source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm630modbusllsourcelp2=" /var/www/html/openWB/openwb.conf
 then
-		  echo "sdm630lp2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm630modbusllsourcelp2=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120lp2source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllsourcelp2=" /var/www/html/openWB/openwb.conf
 then
-		  echo "sdm120lp2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm120modbusllsourcelp2=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "sdm120lp3source=" /var/www/html/openWB/openwb.conf
 then
@@ -1764,37 +1764,37 @@ if ! grep -Fq "mpm3pmevuhaus=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmevuhaus=0" >> /var/www/html/openWB/openwb.conf
   fi
-if ! grep -Fq "carnetlp2user=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "carnetuserlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "carnetlp2user='user'" >> /var/www/html/openWB/openwb.conf
+	  echo "carnetuserlp2='user'" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "carnetlp2pass=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "carnetpasslp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "carnetlp2pass='pass'" >> /var/www/html/openWB/openwb.conf
+	  echo "carnetpasslp2='pass'" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soccarnetlp2intervall=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soccarnetintervalllp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soccarnetlp2intervall=10" >> /var/www/html/openWB/openwb.conf
+	  echo "soccarnetintervalllp2=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_teslalp2_username=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_tesla_usernamelp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_teslalp2_username=deine@email.com" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_tesla_usernamelp2=deine@email.com" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_teslalp2_carnumber=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_tesla_carnumberlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_teslalp2_carnumber=0" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_tesla_carnumberlp2=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_teslalp2_password=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_tesla_passwordlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_teslalp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_tesla_passwordlp2=daspasswort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_teslalp2_intervallladen=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_tesla_intervallladenlp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_teslalp2_intervallladen=20" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_tesla_intervallladenlp2=20" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_teslalp2_intervall=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_tesla_intervalllp2=" /var/www/html/openWB/openwb.conf
 then
-	  echo "soc_teslalp2_intervall=20" >> /var/www/html/openWB/openwb.conf
+	  echo "soc_tesla_intervalllp2=20" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "wrsma2ip=" /var/www/html/openWB/openwb.conf
 then
@@ -2321,21 +2321,21 @@ if ! grep -Fq "soc_zerong_intervall=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_zerong_intervall=20" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_zeronglp2_username=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_zerong_usernamelp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc_zeronglp2_username=" >> /var/www/html/openWB/openwb.conf
+	echo "soc_zerong_usernamelp2=" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_zeronglp2_password=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_zerong_passwordlp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc_zeronglp2_password=daspasswort" >> /var/www/html/openWB/openwb.conf
+	echo "soc_zerong_passwordlp2=daspasswort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_zeronglp2_intervallladen=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_zerong_intervallladenlp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc_zeronglp2_intervallladen=10" >> /var/www/html/openWB/openwb.conf
+	echo "soc_zerong_intervallladenlp2=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc_zeronglp2_intervall=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_zerong_intervalllp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc_zeronglp2_intervall=20" >> /var/www/html/openWB/openwb.conf
+	echo "soc_zerong_intervalllp2=20" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "alphaessip=" /var/www/html/openWB/openwb.conf
 then
@@ -2465,17 +2465,17 @@ if ! grep -Fq "soc_audi_passwort=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc_audi_passwort=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc2user=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "socuserlp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc2user=demo@demo.de" >> /var/www/html/openWB/openwb.conf
+	echo "socuserlp2=demo@demo.de" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc2pass=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "socpasslp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc2pass=passwort" >> /var/www/html/openWB/openwb.conf
+	echo "socpasslp2=passwort" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soc2pin=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_bluelink_pinlp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soc2pin=pin" >> /var/www/html/openWB/openwb.conf
+	echo "soc_bluelink_pinlp2=pin" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lgessv1ip=" /var/www/html/openWB/openwb.conf
 then
@@ -2543,10 +2543,10 @@ then
 	echo "evseiplp2=192.168.193.42" >> /var/www/html/openWB/openwb.conf
 	echo "evseiplp3=192.168.193.43" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp1ip=192.168.193.51" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp2ip=192.168.193.52" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp2=192.168.193.52" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp3ip=192.168.193.53" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp1id=11" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp2id=12" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp2=12" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp3id=13" >> /var/www/html/openWB/openwb.conf
 	echo "lp4name=LP4" >> /var/www/html/openWB/openwb.conf
 	echo "lp5name=LP5" >> /var/www/html/openWB/openwb.conf
@@ -2700,9 +2700,9 @@ then
 	echo "chargep7cp=1" >> /var/www/html/openWB/openwb.conf
 	echo "chargep8cp=1" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "chargep2ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargiplp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep2ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargiplp2=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
 if ! grep -Fq "chargep3ip=" /var/www/html/openWB/openwb.conf

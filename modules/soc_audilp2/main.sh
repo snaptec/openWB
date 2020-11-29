@@ -9,7 +9,7 @@ if (( auditimer < 180 )); then
 	fi
 	echo $auditimer > /var/www/html/openWB/ramdisk/soctimer1
 else
-	answer=$(sudo python3 /var/www/html/openWB/modules/soc_audilp2/Run.py $soc2user $soc2pass)
+	answer=$(sudo python3 /var/www/html/openWB/modules/soc_audilp2/Run.py $socuserlp2 $socpasslp2)
 	vin=$(echo $answer  | sed 's/.*: //' | head -c-3 | cut -c 2-)
 	acctoken=$(cat token.json | jq -r .access_token)
 	battsoc=$(curl -s --header "Accept: application/json" --header "X-App-Name: eRemote" --header "X-App-Version: 1.0.0" --header "User-Agent: okhttp/2.3.0" --header "Authorization: AudiAuth 1 $acctoken" https://msg.audi.de/fs-car/bs/batterycharge/v1/Audi/DE/vehicles/$vin/charger)

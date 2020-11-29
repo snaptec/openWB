@@ -420,10 +420,10 @@ fi
 # set charging current - second charging point
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $points == "all" ]] || [[ $points == "s1" ]]; then
-		evsecon=$evsecons1
-		dacregister=$dacregisters1
-		modbusevsesource=$evsesources1
-		modbusevseid=$evseids1
+		evsecon=$evseconlp2
+		dacregister=$dacregisterlp2
+		modbusevsesource=$modbusevsesourcelp2
+		modbusevseid=$modbusevseidlp2
 		evsewifitimeoutlp1=$evsewifitimeoutlp2
 		evsewifiiplp1=$evsewifiiplp2
 		goeiplp1=$goeiplp2
@@ -435,7 +435,7 @@ if [[ $lastmanagement == "1" ]]; then
 		nrgkickpwlp1=$nrgkickpwlp2
 		evseip=$evseiplp2
 		ipevseid=$evseidlp2
-		chargep1ip=$chargep2ip
+		chargep1ip=$chargiplp2
 		chargep1cp=$chargep2cp
 		# dirty call (no parameters, all is set above...)
 		if (( lp2enabled == 0 )); then

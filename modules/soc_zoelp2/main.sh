@@ -9,7 +9,7 @@ if (( timer < 60 )); then
 	timer=$((timer+1))
 	echo $timer > /var/www/html/openWB/ramdisk/soctimer1
 else
-	request=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username":"'$zoelp2username'","password":"'$zoelp2passwort'"}' https://www.services.renault-ze.com/api/user/login)
+	request=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username":"'$zoeusernamelp2'","password":"'$zoepasswortlp2'"}' https://www.services.renault-ze.com/api/user/login)
 	token=$(echo $request | jq -r .token)
 	vin=$(echo $request | jq -r .user.vehicle_details.VIN)
     request1=$(curl -s -H "Authorization: Bearer $token" https://www.services.renault-ze.com/api/vehicle/$vin/battery)
@@ -31,7 +31,7 @@ else
               echo $request3 > /var/www/html/openWB/ramdisk/zoerequest3lp2
 #             else
 #              echo " $dtime zoe p2 laedt nicht, warte... "
-#              echo " $dtime zoe p2 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "                    
+#              echo " $dtime zoe p2 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
 #              echo 6 > /var/www/html/openWB/ramdisk/zoestatuslp2
 #             fi
     else

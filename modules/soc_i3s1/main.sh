@@ -16,16 +16,16 @@ else
 		fi
 	fi
 
-#Abfrage Ladung aktiv. Setzen des soctimers. 
+#Abfrage Ladung aktiv. Setzen des soctimers.
 	charging=$(echo $abfrage | jq '.chargingActive')
 	if [[ $charging != 0 ]] ; then
-		soctimer1=$((60 * (10 - $soci3intervall1) / 10))
+		soctimer1=$((60 * (10 - $soci3intervalllp2) / 10))
 		echo $soctimer1 > /var/www/html/openWB/ramdisk/soctimer1
 	else
 		echo 1 > /var/www/html/openWB/ramdisk/soctimer1
 	fi
 
-#Benachrichtigung bei Ladeabbruch 
+#Benachrichtigung bei Ladeabbruch
 	error=$(echo $abfrage | jq '.chargingError')
     	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
@@ -39,7 +39,7 @@ else
 			#dokumetieren des Fehlers in der Ramdisk
 			echo 1 > /var/www/html/openWB/ramdisk/chargingerror
 		fi
-	else 
+	else
 		echo 0 > /var/www/html/openWB/ramdisk/chargingerror
 	fi
 fi

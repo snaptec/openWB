@@ -124,8 +124,8 @@ loadvars(){
 
 	if [[ $lastmanagement == "1" ]]; then
 		ConfiguredChargePoints=2
-		if [[ $evsecons1 == "modbusevse" ]]; then
-			evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
+		if [[ $evseconlp2 == "modbusevse" ]]; then
+			evseplugstatelp2=$(sudo python runs/readmodbus.py $modbusevsesourcelp2 $modbusevseidlp2 1002 1)
 			if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
 				echo "$(date +%s) Modbus EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
@@ -158,7 +158,7 @@ loadvars(){
 
 			fi
 		fi
-		if [[ $evsecons1 == "slaveeth" ]]; then
+		if [[ $evseconlp2 == "slaveeth" ]]; then
 			evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
 			if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
@@ -179,7 +179,7 @@ loadvars(){
 				echo 0 > /var/www/html/openWB/ramdisk/chargestats1
 			fi
 		fi
-		if [[ $evsecons1 == "ipevse" ]]; then
+		if [[ $evseconlp2 == "ipevse" ]]; then
 			evseplugstatelp2=$(sudo python runs/readipmodbus.py $evseiplp2 $evseidlp2 1002 1)
 			if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
@@ -520,8 +520,8 @@ loadvars(){
 
 	#zweiter ladepunkt
 	if [[ $lastmanagement == "1" ]]; then
-		if [[ $socmodul1 != "none" ]]; then
-			timeout 10 modules/$socmodul1/main.sh || true
+		if [[ $socmodullp2 != "none" ]]; then
+			timeout 10 modules/$socmodullp2/main.sh || true
 			soc1=$(</var/www/html/openWB/ramdisk/soc1)
 			tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 			if ! [[ $soc1 =~ $re ]] ; then
@@ -536,7 +536,7 @@ loadvars(){
 			soc1=0
 			soc1vorhanden=0
 		fi
-		timeout 10 modules/$ladeleistungs1modul/main.sh || true
+		timeout 10 modules/$ladeleistungmodullp2/main.sh || true
 		llkwhs1=$(</var/www/html/openWB/ramdisk/llkwhs1)
 		llkwhges=$(echo "$llkwhges + $llkwhs1" |bc)
 		llalts1=$(cat /var/www/html/openWB/ramdisk/llsolls1)

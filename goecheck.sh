@@ -25,7 +25,7 @@ if [[ $evsecon == "goe" ]]; then
 	fi
 fi
 if [[ $lastmanagement == "1" ]]; then
-	if [[ $evsecons1 == "goe" ]]; then
+	if [[ $evseconlp2 == "goe" ]]; then
 		output=$(curl --connect-timeout 1 -s http://$goeiplp2/status)
 		if [[ $? == "0" ]] ; then
 			state=$(echo $output | jq -r '.alw')

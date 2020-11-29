@@ -17,14 +17,14 @@ socTeslaDebug=1
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		socintervallladen=$(( soc_teslalp2_intervallladen * 6 ))
-		socintervall=$(( soc_teslalp2_intervall * 6 ))
+		socintervallladen=$(( soc_tesla_intervallladenlp2 * 6 ))
+		socintervall=$(( soc_tesla_intervalllp2 * 6 ))
 		ladeleistung=$(<$RAMDISKDIR/llaktuells1)
 		soctimerfile="$RAMDISKDIR/soctimer1"
 		socfile="$RAMDISKDIR/soc1"
-		username=$soc_teslalp2_username
-		passwordConfigText="soc_teslalp2_password"
-		carnumber=$soc_teslalp2_carnumber
+		username=$soc_tesla_usernamelp2
+		passwordConfigText="soc_tesla_passwordlp2"
+		carnumber=$soc_tesla_carnumberlp2
 		tokensfile="$MODULEDIR/tokens.lp2"
 		;;
 	*)
