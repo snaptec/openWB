@@ -134,6 +134,7 @@
 									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 									<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 									<option <?php if($evseconold == "keba") echo "selected" ?> value="keba">Keba</option>
+									<option <?php if($evseconold == "ipphoenix") echo "selected" ?> value="ipphoenix">Phoenix Contact EV</option>
 								</select>
 							</div>
 						</div>
@@ -415,6 +416,20 @@
 								</div>
 							</div>
 						</div>
+						<div id="evseconphoenix" class="hide">
+                            <input type="hidden" name="ladeleistungmodul" value="phoenixlllp1">
+                            <div class="form-group">
+                                <div class="form-row mb-1">
+                                    <label for="phoenixlp1ip" class="col-md-4 col-form-label">IP Adresse</label>
+                                    <div class="col">
+                                        <input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="phoenixlp1ip" id="phoenixlp1ip" value="<?php echo $phoenixlp1ipold ?>">
+                                        <span class="form-text small">
+                                            Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 						<div id="llmodullp1" class="hide">
 							<hr class="border-primary">
@@ -1233,6 +1248,7 @@
 							hideSection('httpll');
 							hideSection('mpm3pmlllp1div');
 							hideSection('mqttll');
+							hideSection('evseconphoenix');
 
 							if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
 								showSection('mpm3pmlllp1div');
@@ -1272,6 +1288,10 @@
 							if($('#ladeleistungmodul').val() == 'mqttll') {
 								showSection('mqttll');
 							}
+							if($('#evsecon').val() == 'ipphoenix') {
+                                showSection('evseconphoenix');
+                            }
+
 						}
 
 						// visibility of soc modules
