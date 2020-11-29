@@ -2685,6 +2685,10 @@ if ! grep -Fq "chargep1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargep1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "phoenixlp1ip=" /var/www/html/openWB/openwb.conf
+then
+	echo "phoenixlp1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "chargep1cp=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargep1cp=1" >> /var/www/html/openWB/openwb.conf
