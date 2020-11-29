@@ -17,15 +17,19 @@ then
 	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep1ip -m "$releasetrain"
     mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep1ip -m "1"
 fi
-if [[ "$evsecons1" == "extopenwb" ]]
-then
-	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep2ip -m "$releasetrain"
-	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep2ip -m "1"
+if [[ $lastmanagement == "1" ]]; then
+	if [[ "$evsecons1" == "extopenwb" ]]
+	then
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep2ip -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep2ip -m "1"
+	fi
 fi
-if [[ "$evsecons2" == "extopenwb" ]]
-then
-	mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep3ip -m "$releasetrain"
-	mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep3ip -m "1"
+if [[ $lastmanagements2 == "1" ]]; then
+	if [[ "$evsecons2" == "extopenwb" ]]
+	then
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep3ip -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep3ip -m "1"
+	fi
 fi
 sleep 15
 
