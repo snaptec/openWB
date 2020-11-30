@@ -415,7 +415,8 @@ def receive(sock, id = 0, timeout = receive_timeout):
                 i = response.consume(buf)
                 if response.FrameComplete and response.CRCOk == True:
                     if id > 0 and id != response.id:
-                        errlog('response id', id, 'doesn\'t fit to the requested id')
+                        eror=1
+                        #ierrlog('response id', id, 'doesn\'t fit to the requested id')
                     else:
                         return response
         else:
