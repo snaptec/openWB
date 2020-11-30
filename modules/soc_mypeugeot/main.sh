@@ -1,8 +1,35 @@
 #!/bin/bash
-timer=$(</var/www/html/openWB/ramdisk/soctimer)
+
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+CHARGEPOINT=$1
+
+case $CHARGEPOINT in
+	2)
+		# second charge point
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		username=$mypeugeot_userlp2
+		password=$mypeugeot_passlp2
+		clientId=$mypeugeot_clientidlp2
+		clientSecret=$mypeugeot_clientsecretlp2
+		;;
+	*)
+		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
+		soctimerfile="$RAMDISKDIR/soctimer"
+		username=$mypeugeot_userlp1
+		password=$mypeugeot_passlp1
+		clientId=$mypeugeot_clientidlp1
+		clientSecret=$mypeugeot_clientsecretlp1
+		;;
+esac
+
+timer=$(<$RAMDISKDIR/soctimer)
 if (( timer < 60 )); then
 	timer=$((timer+1))
-	echo $timer > /var/www/html/openWB/ramdisk/soctimer
+	echo $timer > $soctimerfile
 else
- sudo python /var/www/html/openWB/modules/soc_mypeugeot/peugeotsoc.py $soc_1_username $soc_1_password $soc_1_clientid $soc_1_clientsecret
- echo 0 > /var/www/html/openWB/ramdisk/soctimer
+	sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
+	echo 0 > $soctimerfile
