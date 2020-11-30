@@ -33,3 +33,4 @@ if (( timer < 60 )); then
 else
 	sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 	echo 0 > $soctimerfile
+fi
