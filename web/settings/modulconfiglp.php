@@ -134,7 +134,7 @@
 									<option <?php if($evseconold == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
 									<option <?php if($evseconold == "twcmanager") echo "selected" ?> value="twcmanager">Tesla TWC mit TWCManager</option>
 									<option <?php if($evseconold == "keba") echo "selected" ?> value="keba">Keba</option>
-									<option <?php if($evseconold == "ipphoenix") echo "selected" ?> value="ipphoenix">Phoenix Contact EV</option>
+<!--									<option <?php if($evseconold == "ipphoenix") echo "selected" ?> value="ipphoenix">Phoenix Contact EV</option> -->
 								</select>
 							</div>
 						</div>
