@@ -683,6 +683,7 @@
 									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
 									<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
+									<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 								</select>
 							</div>
 						</div>
@@ -1137,6 +1138,34 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmypeugeot" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_userlp1" id="mypeugeot_userlp1" value="<?php echo $mypeugeot_userlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_passlp1" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="mypeugeot_passlp1" id="mypeugeot_passlp1" value="<?php echo $mypeugeot_passlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_clientidlp1" id="mypeugeot_clientidlp1" value="<?php echo $mypeugeot_clientidlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_clientsecretlp1" id="mypeugeot_clientsecretlp1" value="<?php echo $mypeugeot_clientsecretlp1old ?>">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -1293,6 +1322,7 @@
 							hideSection('socmuser');
 							hideSection('socmpass');
 							hideSection('socmyrenault');
+							hideSection('socmypeugeot');
 
 							if($('#socmodul').val() == 'none') {
 								showSection('socmnone');
@@ -1343,6 +1373,9 @@
 							}
 							if($('#socmodul').val() == 'soc_carnet') {
 								showSection('soccarnet');
+							}
+							if($('#socmodul').val() == 'soc_mypeugeot') {
+								showSection('socmypeugeot');
 							}
 						}
 
@@ -1417,9 +1450,9 @@
 							<input type="hidden" name="ladeleistungs1modul" value="extopenwblp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="lp2id" class="col-md-4 col-form-label">IP Adresse</label>
+									<label for="chargep2ip" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lp2id" id="lp2id" value="<?php echo $chargep2ipold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep2ip" id="chargep2ip" value="<?php echo $chargep2ipold ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -1773,6 +1806,7 @@
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
+									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 								</select>
 							</div>
 						</div>
@@ -2146,6 +2180,34 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmypeugeotlp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_userlp2" id="mypeugeot_userlp2" value="<?php echo $mypeugeot_userlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_passlp2" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="mypeugeot_passlp2" id="mypeugeot_passlp2" value="<?php echo $mypeugeot_passlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_clientidlp2" id="mypeugeot_clientidlp2" value="<?php echo $mypeugeot_clientidlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="mypeugeot_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="mypeugeot_clientsecretlp2" id="mypeugeot_clientsecretlp2" value="<?php echo $mypeugeot_clientsecretlp2old ?>">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -2251,6 +2313,7 @@
 							hideSection('socmyrenaultlp2');
 							hideSection('soccarnetlp2');
 							hideSection('socmzeronglp2');
+							hideSection('socmypeugeotlp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('socmnone1');
@@ -2295,6 +2358,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_zeronglp2') {
 								showSection('socmzeronglp2');
+							}
+							if($('#socmodul1').val() == 'soc_mypeugeotlp2') {
+								showSection('socmypeugeotlp2');
 							}
 						}
 

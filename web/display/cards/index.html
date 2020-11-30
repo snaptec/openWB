@@ -11,10 +11,10 @@
         <link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
         <!-- important scripts to be loaded -->
         <script src="js/jquery-3.4.1.min.js"></script>
-        <script src="display2/jquery.sparkline.js"></script>
+        <script src="display/cards/jquery.sparkline.js"></script>
         <script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
         <!-- display style -->
-        <link rel="stylesheet" type="text/css" href="display2/style.css">
+        <link rel="stylesheet" type="text/css" href="display/cards/style.css">
     </head>
 
     <body>
@@ -1132,7 +1132,7 @@
 
                 function submitLockForm(e) {
                     $.get(
-                        { url: "display2/checklock.php?pin="+$('#Lockbox').val(), cache: false },
+                        { url: "display/cards/checklock.php?pin="+$('#Lockbox').val(), cache: false },
                         function(data){
                             if( data == 1 ){
                                 lockDisplay(false);
@@ -1345,7 +1345,7 @@
 
             window.setInterval(function(){
                 $.get(
-                    { url: "display2/checklock.php?lock=1", cache: false },
+                    { url: "display/cards/checklock.php?lock=1", cache: false },
                     function(data){
                         if( data == "1" ){
                             displaypinaktiv = 1;
@@ -1392,11 +1392,11 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display2/helperFunctions.js?ver=20201124',
+                    'display/cards/helperFunctions.js?ver=20201124',
                     // functions for processing messages
-                    'display2/processAllMqttMsg.js?ver=20201124',
+                    'display/cards/processAllMqttMsg.js?ver=20201124',
                     // functions performing mqtt and start mqtt-service
-                    'display2/setupMqttServices.js?ver=20201124',
+                    'display/cards/setupMqttServices.js?ver=20201124',
                 ];
 
                 scriptsToLoad.forEach(function(src) {
@@ -1408,7 +1408,7 @@
 
                 // display lock
                 $.get(
-                    { url: "display2/checklock.php?lock=1", cache: false },
+                    { url: "display/cards/checklock.php?lock=1", cache: false },
                     function(data){
                         if( data == "1" ){
                             displaypinaktiv = 1;

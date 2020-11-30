@@ -1179,10 +1179,6 @@ if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
-then
-	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
-fi
 if ! grep -Fq "displayEinBeimAnstecken=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displayEinBeimAnstecken=1" >> /var/www/html/openWB/openwb.conf
@@ -2781,6 +2777,17 @@ fi
 if ! grep -Fq "displaylp8max=" /var/www/html/openWB/openwb.conf
 then
 	echo "displaylp8max=22000" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "mypeugeot_userlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "mypeugeot_userlp1=User" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_passlp1=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientidlp1=ID" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientsecretlp1=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_userlp2=User" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_passlp2=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
 fi
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
