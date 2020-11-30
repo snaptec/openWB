@@ -294,10 +294,10 @@
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_measureTypeDevices<?php echo $devicenum; ?>" name="device_measureType" data-toggle="buttons" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<!-- <label class="btn btn-outline-info">
+										<label class="btn btn-outline-info">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
 										</label>
-										<label class="btn btn-outline-info">
+										<!--<label class="btn btn-outline-info">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">HTTP
 										</label> -->
 										<label class="btn btn-outline-info btn-toggle">
