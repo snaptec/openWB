@@ -2789,6 +2789,17 @@ then
 	echo "mypeugeot_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
 	echo "mypeugeot_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "myopel_userlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "myopel_userlp1=User" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_passlp1=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientidlp1=ID" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientsecretlp1=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_userlp2=User" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_passlp2=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
+fi
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
