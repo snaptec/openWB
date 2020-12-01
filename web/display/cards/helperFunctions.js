@@ -2,6 +2,7 @@
  * helper functions for setup-pages
  *
  * @author Michael Ortenstein
+ * @author Lutz Bender
  */
 
 function updateLabel(elementId) {
@@ -55,15 +56,15 @@ function getTopicToSendTo (elementId) {
     var topic = element.data('topicprefix') + elementId;
     topic = topic.replace('/get/', '/set/');
     if (topic.includes('MaxPriceForCharging')) {
-	    topic = 'openWB/set/awattar/MaxPriceForCharging'
+        topic = 'openWB/set/awattar/MaxPriceForCharging'
     }
     return topic;
 }
 
 function setToggleBtnGroup(groupId, option) {
-    /** @function setInputValue
-     * sets the value-label (if exists) attached to the element to the element value
-     * @param {string} elementId - the id of the button group
+    /** @function setToggleBtnGroup
+     * sets the state of a button group
+     * @param {string} groupId - the id of the button group
      * @param {string} option - the option the group btns will be set to
      * @requires data-attribute 'option' (unique for group) assigned to every radio-btn
      */
@@ -76,26 +77,3 @@ function setToggleBtnGroup(groupId, option) {
     });
     chargeLimitationOptionsShowHide($('#' + $.escapeSelector(groupId)), option)
 }
-
-// check if a reload of the display is requested
-// TODO: quick hack, should be moved to mqtt
-function checkReloadDisplay() {
-    $.get(
-        { url: "/openWB/ramdisk/reloaddisplay", cache: false },
-        function(data){
-            if ( data == 1 ) {
-                $.get(
-                    {
-                        url: "/openWB/web/tools/reloaddisplay.php",
-                        type: "post",
-                        success: function( result ) {
-                            location.reload();
-                        }
-                    }
-                )
-            }
-        }
-    );
-}
-// set timer to check every 5 seconds for reload request
-setInterval( checkReloadDisplay, 5000 );

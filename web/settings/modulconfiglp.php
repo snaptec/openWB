@@ -684,6 +684,7 @@
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
 									<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 									<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
+									<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
 								</select>
 							</div>
 						</div>
@@ -1166,6 +1167,34 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmyopel" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_userlp1" id="myopel_userlp1" value="<?php echo $myopel_userlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_passlp1" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="myopel_passlp1" id="myopel_passlp1" value="<?php echo $myopel_passlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_clientidlp1" id="myopel_clientidlp1" value="<?php echo $myopel_clientidlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_clientsecretlp1" id="myopel_clientsecretlp1" value="<?php echo $myopel_clientsecretlp1old ?>">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -1323,6 +1352,7 @@
 							hideSection('socmpass');
 							hideSection('socmyrenault');
 							hideSection('socmypeugeot');
+							hideSection('socmyopel');
 
 							if($('#socmodul').val() == 'none') {
 								showSection('socmnone');
@@ -1376,6 +1406,9 @@
 							}
 							if($('#socmodul').val() == 'soc_mypeugeot') {
 								showSection('socmypeugeot');
+							}
+							if($('#socmodul').val() == 'soc_myopel') {
+								showSection('socmyopel');
 							}
 						}
 
@@ -1807,6 +1840,7 @@
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
+									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
 								</select>
 							</div>
 						</div>
@@ -2208,6 +2242,34 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmyopellp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_userlp2" id="myopel_userlp2" value="<?php echo $myopel_userlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_passlp2" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="myopel_passlp2" id="myopel_passlp2" value="<?php echo $myopel_passlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_clientidlp2" id="myopel_clientidlp2" value="<?php echo $myopel_clientidlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="myopel_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="myopel_clientsecretlp2" id="myopel_clientsecretlp2" value="<?php echo $myopel_clientsecretlp2old ?>">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -2314,6 +2376,7 @@
 							hideSection('soccarnetlp2');
 							hideSection('socmzeronglp2');
 							hideSection('socmypeugeotlp2');
+							hideSection('socmyopellp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('socmnone1');
@@ -2361,6 +2424,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_mypeugeotlp2') {
 								showSection('socmypeugeotlp2');
+							}
+							if($('#socmodul1').val() == 'soc_myopellp2') {
+								showSection('socmyopellp2');
 							}
 						}
 

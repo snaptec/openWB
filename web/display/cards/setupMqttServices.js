@@ -31,6 +31,7 @@ var topicsToSubscribe = [
 	["openWB/system/Timestamp", 1],
 	["openWB/system/IpAddress", 1],
 	["openWB/system/wizzardDone", 1],
+	["openWB/system/reloadDisplay", 1],
 	// pv topics
 	["openWB/pv/W", 1],
 	["openWB/pv/DailyYieldKwh", 1],

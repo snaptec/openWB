@@ -34,19 +34,19 @@ client_id=str(sys.argv[4])
 client_secret=str(sys.argv[5])
 
 named_tuple = time.localtime() # get struct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S peugeotsoc lp"+chargepoint, named_tuple)
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S opelsoc lp"+chargepoint, named_tuple)
 
 userpass = client_id + ':' + client_secret 
 encoded_u = base64.b64encode(userpass.encode()).decode() 
 header1 = str('Basic %s' % encoded_u)
 scope = 'openid profile'
-brand = 'peugeot.com'
-realm = 'clientsB2CPeugeot'
+brand = 'opel.com'
+realm = 'clientsB2COpel'
 vin='?'
 data = {'realm': realm,'grant_type':'password','password':password,'username': userID,'scope': scope}
 headers = {'Content-Type':'application/x-www-form-urlencoded','Authorization': 'Basic %s' % encoded_u}
 reg = 'https://idpcvs.' + brand + '/am/oauth2/access_token'
-f = open('/var/www/html/openWB/ramdisk/peugeotreq1lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreq1lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
@@ -54,7 +54,7 @@ f.close()
 response=requests.post(reg,  data=data, headers=headers )
 responsetext  = response.text
 responestatus = response.status_code
-f = open('/var/www/html/openWB/ramdisk/peugeotreply1lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreply1lp'+chargepoint, 'w')
 f.write(str(responsetext))
 f.write(str(responestatus))
 f.close()
@@ -65,13 +65,13 @@ data = urllib.urlencode(payload)
 data = data.encode('Big5')
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles?' + data
 headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
-f = open('/var/www/html/openWB/ramdisk/peugeotreq2lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreq2lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
 f.close()
 response=requests.get(reg,headers=headers )
-f = open('/var/www/html/openWB/ramdisk/peugeotreply2lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreply2lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
 f.write(str(responsetext))
@@ -86,13 +86,13 @@ data = data.encode('Big5')
 '/user/vehicles/{id}/status'
 reg = 'https://api.groupe-psa.com/connectedcar/v4/user/vehicles/'  + vin_id + '/status?' + data
 headers = {'Accept':'application/hal+json','Authorization': 'Bearer %s' % acc_token,'x-introspect-realm ': realm}
-f = open('/var/www/html/openWB/ramdisk/peugeotreq3lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreq3lp'+chargepoint, 'w')
 f.write(str(reg))
 f.write(str(data))
 f.write(str(headers))
 f.close()
 response=requests.get(reg,headers=headers )
-f = open('/var/www/html/openWB/ramdisk/peugeotreply3lp'+chargepoint, 'w')
+f = open('/var/www/html/openWB/ramdisk/opelreply3lp'+chargepoint, 'w')
 responsetext  = response.text
 responestatus = response.status_code
 f.write(str(responsetext))

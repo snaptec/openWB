@@ -45,7 +45,7 @@
 		<!-- Main style -->
 		<link rel="stylesheet" type="text/css" href="css/cardio.css">
 		<!-- Data refresher -->
-		<script src="livefunctions.js"></script>
+		<script src="livefunctions.js?ver=20201201"></script>
 	</head>
 	<body>
 		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
@@ -159,7 +159,29 @@
 			var lastmanagement = <?php echo trim($lastmanagementold); ?>;
 			var soc1vorhanden = <?php echo trim($soc1vorhanden); ?>;
 		</script>
-		<script src="js/mqttws31.js"></script>
-		<script src="display/minimal/alllive.js?vers=2"></script>
+		<script src="display/minimal/alllive.js?vers=20201201"></script>
+		<script>
+			// ************** beginning of MQTT code *************
+			$(document).ready(function(){
+
+				// load scripts synchronously in order specified
+				var scriptsToLoad = [
+					// load mqtt library
+					'js/mqttws31.js',
+					// functions for processing messages
+					'display/minimal/processAllMqttMsg.js?ver=20201201',
+					// functions performing mqtt and start mqtt-service
+					'display/minimal/setupMqttServices.js?ver=20201201',
+				];
+
+				scriptsToLoad.forEach(function(src) {
+					var script = document.createElement('script');
+					script.src = src;
+					script.async = false;
+					document.body.appendChild(script);
+				});
+
+			});
+		</script>
 	</body>
 </html>
