@@ -78,7 +78,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<span id="textareaHelpBlock" class="form-text">Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen. Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen! Der Debug Modus muss nicht verstellt werden.</span>
-							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500" required="required"></textarea>
+							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" minlength="20" maxlength="500" required="required"></textarea>
 							<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
 						</div>
 						<div class="form-group mb-0">
@@ -151,9 +151,9 @@
 					$('#textareaTextLength').text(length+"/500");
 				});
 
-				$('#sendDebugBtn').on('click', function(){
-					$(this).prop("disabled", true);
-					$(this).append( ' <i class="fas fa-cog fa-spin"></i>' );
+				$('#sendDebugMessageForm').submit(function(){
+					$('#sendDebugBtn').prop("disabled", true);
+					$('#sendDebugBtn').append( ' <i class="fas fa-cog fa-spin"></i>' );
 				});
 			});
 
