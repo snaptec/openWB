@@ -199,8 +199,8 @@ var thevalues = [
 	["openWB/config/get/sofort/lp/5/current", "#"],
 	["openWB/config/get/sofort/lp/6/current", "#"],
 	["openWB/config/get/sofort/lp/7/current", "#"],
-	["openWB/config/get/sofort/lp/8/current", "#"]
-
+	["openWB/config/get/sofort/lp/8/current", "#"],
+	["openWB/system/reloadDisplay", "#"]
 ];
 
 function getCol(matrix, col){
@@ -209,6 +209,21 @@ function getCol(matrix, col){
 		column.push(matrix[i][col]);
 	}
 	return column;
+}
+
+function reloadDisplay() {
+	/** @function reloadDisplay
+	 * triggers a reload of the current page
+	 */
+	// wait some seconds to allow other instances receive this message
+	console.log("reloading display...");
+	setTimeout(function(){
+		publish( "0", "openWB/set/system/reloadDisplay" );
+		// wait again to give the broker some time and avoid a reload loop
+		setTimeout(function(){
+			location.reload();
+		}, 2000);
+	}, 2000);
 }
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
@@ -858,7 +873,9 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		}
 	}
 	else if ( mqttmsg == "openWB/system/reloadDisplay" ) {
-		reloadDisplay();
+		if ( mqttpayload == "1" ) {
+			reloadDisplay();
+		}
 	}
 	else {
 		thevalues.forEach(function(thevar){

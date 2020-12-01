@@ -123,7 +123,7 @@
 
 		// update display process if in POST data
 		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/reloaddisplay', "1");
+			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
 		}
 
