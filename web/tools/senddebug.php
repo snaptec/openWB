@@ -81,7 +81,7 @@
 						<div class="card-body">
 							<div class="alert alert-info">
 								Debugdaten werden im Hintergrund gesammelt und verschickt. Dieser Vorgang dauert etwa eine Minute.<br>
-								Sie werden jetzt auf die Hauptseite weitergeleitet.
+								Sie werden danach auf die Hauptseite weitergeleitet.
 							</div>
 							<div class="row">
 								<div class="cssload-loader text-center">
@@ -95,7 +95,7 @@
 						<script>
 							window.setTimeout( function() {
 								window.location = "index.php";
-							}, 5000);
+							}, 60000);
 						</script>
 						<?php
 					} else {
