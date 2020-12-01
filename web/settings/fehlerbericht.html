@@ -118,6 +118,7 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script>
+			var enableSubmit = true;
 
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
@@ -151,9 +152,14 @@
 					$('#textareaTextLength').text(length+"/500");
 				});
 
-				$('#sendDebugMessageForm').submit(function(){
-					$('#sendDebugBtn').prop("disabled", true);
-					$('#sendDebugBtn').append( ' <i class="fas fa-cog fa-spin"></i>' );
+				$('#sendDebugMessageForm').submit(function( event ){
+					if( enableSubmit == true ){
+						$('#sendDebugBtn').append( ' <i class="fas fa-cog fa-spin"></i>' );
+						enableSubmit = false;
+					} else {
+						event.preventDefault();
+						console.log("dupplicate submit of form detected, preventing submit");
+					}
 				});
 			});
 
