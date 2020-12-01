@@ -30,6 +30,53 @@ for i in range(1, 11):
 
 global numberOfDevices
 
+def sepwatt(oldwatt,nummer):
+    try:
+         difmes = int(config.get('smarthomedevices', 'device_differentmeasurement_'+str(nummer)))
+    except:
+         difmes = 0
+    if difmes == 0:
+       logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " keine separate Leistungsmessung")
+       newwatt = oldwatt
+       # simcount verwenden wenn newwattk = 0
+       newwattk = 0
+       return (newwatt,newwattk)
+    logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " hat separate Leistungsmessung")
+    try:
+       meastyp=str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
+    except:
+       meastyp = "undef"
+    logDebug("0", "Device: " + str(nummer) + " Leistungsmessung durch " +  meastyp)
+    if meastyp == "sdm630":
+       pyname = basePath+'/modules/smart/sdm630.py'
+       try:    
+          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)) ,config.get('smarthomedevices', 'device_measureid_'+str(nummer))])
+          proc.communicate() 
+          f1 = open(basePath+'/ramdisk/smarthome_device_rets' +str(nummer) , 'r')
+          answerj=json.load(f1)
+          f1.close()
+          answer = json.loads(answerj)
+          newwatt = int(answer['power'])
+          newwattk = int(answer['wattk'])
+       except Exception as e1:
+          DeviceValues.update( {str(nummer) : "error"})
+          logDebug("2", "Device Leistungsmessung sdm630 " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
+          raise Exception("error in sepwatt")
+       return (newwatt,newwattk)
+    if meastyp == "shelly": 
+       try:
+          answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_measureip_'+str(nummer))+"/status", timeout=3).read().decode("utf-8")))
+          newwatt = int(answer['meters'][0]['power'])
+          newwattk = 0
+       except Exception as e1:
+          DeviceValues.update( {str(nummer) : "error"})
+          logDebug("2", "Device Leistungsmessung Shelly " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
+          raise Exception("error in sepwatt")
+       return (newwatt,newwattk)
+    else:
+       newwatt = oldwatt
+       newwattk = 0
+    return (newwatt,newwattk)
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
         file = open(basePath+'/ramdisk/smarthome.log', 'a')
@@ -41,7 +88,30 @@ def logDebug(level, msg):
             file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
         file.close()
 
-def simcount(watt2, pref, importfn, exportfn, nummer):
+def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
+    # Zaehler mitgeliefert in KWH , zurueckrechnen fuer simcount
+    if wattks > 0:
+        wattposkh=wattks
+        wattnegkh=0
+        wattposh=wattks * 3600
+        wattnegh= 0
+        f = open(basePath+'/ramdisk/'+pref+'watt0pos', 'w')
+        f.write(str(wattposh))
+        f.close()
+        DeviceValues.update( {str(nummer) + "wpos" : wattposh})
+        f = open(basePath+'/ramdisk/'+pref+'watt0neg', 'w')
+        f.write(str(wattnegh))
+        f.close()
+        f = open(basePath+'/ramdisk/'+ importfn,'w')
+        #    f = open(basePath+'/ramdisk/speicherikwh', 'w')
+        DeviceValues.update( {str(nummer) + "wh" : round(wattposkh, 2)})
+        f.write(str(round(wattposkh, 2)))
+        f.close()
+        f = open(basePath+'/ramdisk/' +exportfn , 'w')
+        #   f = open(basePath+'/ramdisk/speicherekwh', 'w')
+        f.write(str(wattnegkh))
+        f.close()    
+        return
     # emulate import  export
     seconds2= time.time()
     watt1=0
@@ -286,7 +356,7 @@ def getdevicevalues():
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "shelly"):
                 try:
                     answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices))+"/status", timeout=3).read().decode("utf-8")))
-                    watt = int(answer['meters'][0]['power'])
+                    wattstart = int(answer['meters'][0]['power'])
                     relais = int(answer['relays'][0]['ison'])
                     try:
                         anzahltemp = int(config.get('smarthomedevices', 'device_temperatur_configured_'+str(numberOfDevices)))
@@ -299,6 +369,8 @@ def getdevicevalues():
                                 f.close()
                     except:
                         pass
+                    # Separate Leistungs messung ?    
+                    (watt,wattk) = sepwatt(wattstart,numberOfDevices)
                     # nur abschaltbare devices
                     if abschalt == 1:
                        totalwatt = totalwatt + watt
@@ -313,7 +385,7 @@ def getdevicevalues():
                     try:
                         with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                             importtemp = int(value.read())
-                        simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
+                        simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices),wattk)
                         #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                     except Exception as e: 
                         importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
@@ -353,24 +425,29 @@ def getdevicevalues():
                                 if str(numberOfDevices) + "eintime" in DeviceCounters:
                                     del DeviceCounters[str(numberOfDevices) + "eintime"]
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))
+                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt) + " Zaehler Hw: " + str(wattk))
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device Shelly " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
             #für später...
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "http"):
-                watt = int(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)), timeout=3).read().decode("utf-8")))
+                wattstart = int(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)), timeout=3).read().decode("utf-8")))
+                # Separate Leistungs messung ?    
+                (watt,wattk) = sepwatt(wattstart,numberOfDevices)
                 if abschalt == 1:
                    totalwatt = totalwatt + watt
                 DeviceValues.update( {str(numberOfDevices) : watt})
             if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "tasmota"):
                 try:
                     answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices))+"/cm?cmnd=Status%208", timeout=3).read().decode("utf-8")))
-                    watt = int(answer['StatusSNS']['ENERGY']['Power'])
+                    wattstart = int(answer['StatusSNS']['ENERGY']['Power'])
                     if ( int(answer['StatusSNS']['ENERGY']['Voltage']) > 50 ):
                         relais=1
                     else:
                         relais=0
+                        
+                    # Separate Leistungs messung ?    
+                    (watt,wattk) = sepwatt(wattstart,numberOfDevices)
                     if abschalt == 1:
                        totalwatt = totalwatt + watt
                     DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
@@ -384,7 +461,7 @@ def getdevicevalues():
                     try:
                         with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                             importtemp = int(value.read())
-                        simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
+                        simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices),wattk)
                         #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                     except Exception as e: 
                         importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
@@ -424,7 +501,7 @@ def getdevicevalues():
                                 if str(numberOfDevices) + "eintime" in DeviceCounters:
                                     del DeviceCounters[str(numberOfDevices) + "eintime"]
                     DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))
+                    logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt) + " Zaehler Hw: " + str(wattk) )
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device tasmota " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
@@ -440,11 +517,13 @@ def getdevicevalues():
                        answerj=json.load(f1)
                        f1.close()
                        answer = json.loads(answerj)
-                       watt = int(answer['power'])
+                       wattstart = int(answer['power'])
                        if (int(answer['on']) == 1):
                           relais=1
                        else:
                           relais=0
+                       # Separate Leistungs messung ?    
+                       (watt,wattk) = sepwatt(wattstart,numberOfDevices)
                        if abschalt == 1:
                           totalwatt = totalwatt + watt
                        DeviceValues.update( {str(numberOfDevices) + "watt" : watt})
@@ -458,7 +537,7 @@ def getdevicevalues():
                        try:
                           with open(basePath+'/ramdisk/smarthome_device_' + str(numberOfDevices) + 'watt0pos', 'r') as value:
                               importtemp = int(value.read())
-                          simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices))
+                          simcount(watt, "smarthome_device_"+ str(numberOfDevices), "device"+ str(numberOfDevices)+"_wh" ,"device"+ str(numberOfDevices)+"_whe", str(numberOfDevices),wattk)
                           #importtemp1 = int(DeviceValues[str(numberOfDevices)+"wpos"]) # unused variable
                        except Exception as e: 
                           importtemp = int(DeviceValues[str(numberOfDevices)+"WHImported_tmp"])
@@ -498,7 +577,7 @@ def getdevicevalues():
                                   if str(numberOfDevices) + "eintime" in DeviceCounters:
                                       del DeviceCounters[str(numberOfDevices) + "eintime"]
                        DeviceValues.update( {str(numberOfDevices) + "relais" : relais})
-                       logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt))                      
+                       logDebug("0", "Device: " + str(numberOfDevices) + " " + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " relais: " + str(relais)  + " aktuell: " + str(watt) + " Zaehler Hw: " + str(wattk))                      
                 except Exception as e:
                     DeviceValues.update( {str(numberOfDevices) : "error"})
                     logDebug("2", "Device pyt " + str(numberOfDevices) + str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices))) + " Fehlermeldung: " + str(e)) 
@@ -744,7 +823,12 @@ while True:
                     logDebug("0","Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + " manueller Modus aktiviert, führe keine Regelung durch")
                 else:
                     try:
-                        conditions(int(i))
+                       canswitch = int(config.get('smarthomedevices', 'device_canswitch_'+str(i)))
+                    except:
+                       canswitch = 1
+                    try:
+                        if canswitch == 1:
+                            conditions(int(i))
                     except Exception as e:
                         logDebug("2", "Conditions Device: " + str(i) + " " + str(config.get('smarthomedevices', 'device_name_'+str(i))) + str(e))
         except Exception as e:
