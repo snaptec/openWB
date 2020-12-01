@@ -46,7 +46,7 @@
 		<!-- Main style -->
 		<link rel="stylesheet" type="text/css" href="css/cardio.css">
 		<!-- Data refresher -->
-		<script src="livefunctions.js"></script>
+		<script src="livefunctions.js?ver=20201201"></script>
 	</head>
 	<body>
 		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
@@ -728,32 +728,12 @@
 				});
 			})();
 
-			function reldisp() {
-				$.ajax({
-					url: "/openWB/ramdisk/reloaddisplay",
-					complete: function(request){
-						if (request.responseText == 1) {
-							$.ajax({
-								url:"./tools/reloaddisplay.php",
-								type: "post", 
-								success:function(result){
-									location.reload();
-								}
-							});
-						}
-					}
-				});
-			}
-
-			do3Interval = setInterval(reldisp,2000);
-			reldisp();
-
 			var lastmanagements2 = <?php echo trim($lastmanagements2old); ?>;
 			var lastmanagement = <?php echo trim($lastmanagementold); ?>;
 			var soc1vorhanden = <?php echo trim($soc1vorhanden); ?>;
 			var speichervorhanden = <?php echo trim($speichervorhanden); ?>;
 		</script>
-		<script src="live.js"></script>
+		<script src="display/simple/live.js?ver=20201201"></script>
 
 		<div id="graphsettings" style="position: fixed; display: none; width: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2; cursor: pointer;">
 			<div style="  position: absolute; top: 50%; left: 50%; width: 80%; font-size: 12px; color: black; text-align: center; background-color: white; border-radius: 6px 6px 6px 6px; transform: translate(-50%,-50%); -ms-transform: translate(-50%,-50%); ">

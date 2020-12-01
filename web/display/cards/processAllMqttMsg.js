@@ -3,6 +3,7 @@
  *
  * @author Kevin Wieland
  * @author Michael Ortenstein
+ * @author Lutz Bender
  */
 
  // global object to store values from mqtt
@@ -59,6 +60,20 @@ function updateDashboardElement(elementText, elementChart, text, value){
 	}
 	// store value for sparklines
 	storeSparklineValue( elementChart, value );
+}
+
+function reloadDisplay() {
+    /** @function reloadDisplay
+     * triggers a reload of the current page
+     */
+    // wait some seconds to allow other instances receive this message
+    setTimeout(function(){
+        publish( "0", "openWB/set/system/reloadDisplay" );
+        // wait again to give the broker some time and avoid a reload loop
+        setTimeout(function(){
+            location.reload();
+        }, 2000);
+    }, 2000);
 }
 
 function getCol(matrix, col){
@@ -407,6 +422,10 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 			$("#wizzardModal").modal("hide");
 		} else {
 			$("#wizzardModal").modal("show");
+		}
+	} else if ( mqttmsg == 'openWB/system/reloadDisplay' ) {
+		if( mqttpayload == '1' ){
+			reloadDisplay();
 		}
 	}
 

@@ -1,243 +1,237 @@
 function refresharrows() {
-	var lp1arrow = document.getElementById("arrowlp1");
-	var lp1speed = document.getElementById("speedlp1");
+	var lp1arrow = $("#arrowlp1");
+	var lp1speed = $("#speedlp1");
 
-	lp1arrow.classList.remove("arrowrightblue");
-	lp1speed.classList.remove("arrowSlidingRightMid");
+	lp1arrow.removeClass("arrowrightblue");
+	lp1speed.removeClass("arrowSlidingRightMid");
 
 	if (llaktuellarrow > 99) {
-		lp1speed.classList.add("arrowSlidingRightMid");
-		lp1arrow.classList.add("arrowrightblue");
+		lp1speed.addClass("arrowSlidingRightMid");
+		lp1arrow.addClass("arrowrightblue");
 	}
 
 	if (lastmanagementold == 1 ) {
-		var lp2arrow = document.getElementById("arrowlp2");
-		var lp2speed = document.getElementById("speedlp2");
-		lp2arrow.classList.remove("arrowrightblue");
-		lp2speed.classList.remove("arrowSlidingRightMid");
+		var lp2arrow = $("#arrowlp2");
+		var lp2speed = $("#speedlp2");
+		lp2arrow.removeClass("arrowrightblue");
+		lp2speed.removeClass("arrowSlidingRightMid");
 		if (llaktuelllp2arrow > 99) {
-			lp2speed.classList.add("arrowSlidingRightMid");
-			lp2arrow.classList.add("arrowrightblue");
+			lp2speed.addClass("arrowSlidingRightMid");
+			lp2arrow.addClass("arrowrightblue");
 		}
-		var e2lement = document.getElementById("socstatlp2div");
+		var e2lement = $("#socstatlp2div");
 		if (lp2soc >= 0 && lp2soc < 25) {
-			e2lement.classList.add("fa-battery-empty");
-			e2lement.classList.remove("fa-battery-quarter");
-			e2lement.classList.remove("fa-battery-half");
-			e2lement.classList.remove("fa-battery-three-quarters");
-			e2lement.classList.remove("fa-battery-full");
+			e2lement.addClass("fa-battery-empty");
+			e2lement.removeClass("fa-battery-quarter");
+			e2lement.removeClass("fa-battery-half");
+			e2lement.removeClass("fa-battery-three-quarters");
+			e2lement.removeClass("fa-battery-full");
 		}
 		if (lp2soc > 24 && lp2soc < 50) {
-			e2lement.classList.remove("fa-battery-empty");
-			e2lement.classList.add("fa-battery-quarter");
-			e2lement.classList.remove("fa-battery-half");
-			e2lement.classList.remove("fa-battery-three-quarters");
-			e2lement.classList.remove("fa-battery-full");
+			e2lement.removeClass("fa-battery-empty");
+			e2lement.addClass("fa-battery-quarter");
+			e2lement.removeClass("fa-battery-half");
+			e2lement.removeClass("fa-battery-three-quarters");
+			e2lement.removeClass("fa-battery-full");
 		}
 		if (lp2soc > 49 && lp2soc < 75) {
-			e2lement.classList.remove("fa-battery-empty");
-			e2lement.classList.remove("fa-battery-quarter");
-			e2lement.classList.add("fa-battery-half");
-			e2lement.classList.remove("fa-battery-three-quarters");
-			e2lement.classList.remove("fa-battery-full");
+			e2lement.removeClass("fa-battery-empty");
+			e2lement.removeClass("fa-battery-quarter");
+			e2lement.addClass("fa-battery-half");
+			e2lement.removeClass("fa-battery-three-quarters");
+			e2lement.removeClass("fa-battery-full");
 		}
 		if (lp2soc > 74 && lp2soc < 95) {
-			e2lement.classList.remove("fa-battery-empty");
-			e2lement.classList.remove("fa-battery-quarter");
-			e2lement.classList.remove("fa-battery-half");
-			e2lement.classList.add("fa-battery-three-quarters");
-			e2lement.classList.remove("fa-battery-full");
+			e2lement.removeClass("fa-battery-empty");
+			e2lement.removeClass("fa-battery-quarter");
+			e2lement.removeClass("fa-battery-half");
+			e2lement.addClass("fa-battery-three-quarters");
+			e2lement.removeClass("fa-battery-full");
 		}
 		if (lp2soc > 94 && lp2soc < 101) {
-			e2lement.classList.remove("fa-battery-empty");
-			e2lement.classList.remove("fa-battery-quarter");
-			e2lement.classList.remove("fa-battery-half");
-			e2lement.classList.remove("fa-battery-three-quarters");
-			e2lement.classList.add("fa-battery-full");
+			e2lement.removeClass("fa-battery-empty");
+			e2lement.removeClass("fa-battery-quarter");
+			e2lement.removeClass("fa-battery-half");
+			e2lement.removeClass("fa-battery-three-quarters");
+			e2lement.addClass("fa-battery-full");
 		}
 		$.ajax({
 			url: "/openWB/ramdisk/ladestatuss1",
 			complete: function(request){
-				var element = document.getElementById("stationlp2");	
 				if (request.responseText == 1) {
-					element.setAttribute("style", "color: #00FF00;");
+					$("#stationlp2").css("color", "#00FF00");
 				} else {
-					element.setAttribute("style", "color: white;");
+					$("#stationlp2").css("color", "white");
 				}
 			}
 		});
 	}
 
-	var lpgarrow = document.getElementById("arrowlpg");
-	var lpgspeed = document.getElementById("speedlpg");
+	var lpgarrow = $("#arrowlpg");
+	var lpgspeed = $("#speedlpg");
 
-	lpgarrow.classList.remove("arrowdownblue");
-	lpgspeed.classList.remove("arrowSlidingDowngMid");
+	lpgarrow.removeClass("arrowdownblue");
+	lpgspeed.removeClass("arrowSlidingDowngMid");
 
 	if (llaktuellgarrow > 99) {
-		lpgspeed.classList.add("arrowSlidingDowngMid");
-		lpgarrow.classList.add("arrowdownblue");
+		lpgspeed.addClass("arrowSlidingDowngMid");
+		lpgarrow.addClass("arrowdownblue");
 	}
-	var evuarrow = document.getElementById("arrowevu");
-	var evuspeed = document.getElementById("speedevu");
-	evuarrow.classList.remove("arrowleft");
-	evuarrow.classList.remove("arrowrightred");
-	evuspeed.classList.remove("arrowSlidingLeftMid");
-	evuspeed.classList.remove("arrowSlidingRightMid");
+	var evuarrow = $("#arrowevu");
+	var evuspeed = $("#speedevu");
+	evuarrow.removeClass("arrowleft");
+	evuarrow.removeClass("arrowrightred");
+	evuspeed.removeClass("arrowSlidingLeftMid");
+	evuspeed.removeClass("arrowSlidingRightMid");
 	if (intbezugarrow < -30) {
-		evuspeed.classList.add("arrowSlidingLeftMid");
-		evuarrow.classList.add("arrowleft");
+		evuspeed.addClass("arrowSlidingLeftMid");
+		evuarrow.addClass("arrowleft");
 	}
 	if (intbezugarrow > 30) {
-		evuspeed.classList.add("arrowSlidingRightMid");
-		evuarrow.classList.add("arrowrightred");
+		evuspeed.addClass("arrowSlidingRightMid");
+		evuarrow.addClass("arrowrightred");
 	}
-	var pvarrow = document.getElementById("arrowpv");
-	var pvspeed = document.getElementById("speedpv");
-	pvarrow.classList.remove("arrowdown");
-	pvspeed.classList.remove("arrowSlidingDownMid");
+	var pvarrow = $("#arrowpv");
+	var pvspeed = $("#speedpv");
+	pvarrow.removeClass("arrowdown");
+	pvspeed.removeClass("arrowSlidingDownMid");
 	if (pvwattarrow > 50) {
-		pvspeed.classList.add("arrowSlidingDownMid");
-		pvarrow.classList.add("arrowdown");
+		pvspeed.addClass("arrowSlidingDownMid");
+		pvarrow.addClass("arrowdown");
 	}
-	var speicherarrow = document.getElementById("arrowspeicher");
-	var speicherspeed = document.getElementById("speedspeicher");
-	speicherarrow.classList.remove("arrowleftyellow");
-	speicherarrow.classList.remove("arrowright");
-	speicherspeed.classList.remove("arrowSlidingLeftMid");
-	speicherspeed.classList.remove("arrowSlidingRightMid");
+	var speicherarrow = $("#arrowspeicher");
+	var speicherspeed = $("#speedspeicher");
+	speicherarrow.removeClass("arrowleftyellow");
+	speicherarrow.removeClass("arrowright");
+	speicherspeed.removeClass("arrowSlidingLeftMid");
+	speicherspeed.removeClass("arrowSlidingRightMid");
 	if (intspeicherarrow < -19) {
-		speicherspeed.classList.add("arrowSlidingLeftMid");
-		speicherarrow.classList.add("arrowleftyellow");
+		speicherspeed.addClass("arrowSlidingLeftMid");
+		speicherarrow.addClass("arrowleftyellow");
 	}
 	if (intspeicherarrow > 19) {
-		speicherspeed.classList.add("arrowSlidingRightMid");
-		speicherarrow.classList.add("arrowright");
+		speicherspeed.addClass("arrowSlidingRightMid");
+		speicherarrow.addClass("arrowright");
 	}
-	var element = document.getElementById("speichersocstatdiv");
+	var element = $("#speichersocstatdiv");
 	if (speichersoc >= 0 && speichersoc < 25) {
-		element.classList.add("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.addClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (speichersoc > 24 && speichersoc < 50) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.add("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.addClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (speichersoc > 49 && speichersoc < 75) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.add("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.addClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (speichersoc > 74 && speichersoc < 95) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.add("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.addClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (speichersoc > 94 && speichersoc < 101) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.add("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.addClass("fa-battery-full");
 	}
-	var element = document.getElementById("socstatlp1div");
+	var element = $("#socstatlp1div");
 	if (lp1soc >= 0 && lp1soc < 25) {
-		element.classList.add("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.addClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if ( lp1soc > 24 && lp1soc < 50) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.add("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.addClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (lp1soc > 49 && lp1soc < 75) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.add("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.addClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (lp1soc > 74 && lp1soc < 95) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.add("fa-battery-three-quarters");
-		element.classList.remove("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.addClass("fa-battery-three-quarters");
+		element.removeClass("fa-battery-full");
 	}
 	if (lp1soc > 94 && lp1soc < 101) {
-		element.classList.remove("fa-battery-empty");
-		element.classList.remove("fa-battery-quarter");
-		element.classList.remove("fa-battery-half");
-		element.classList.remove("fa-battery-three-quarters");
-		element.classList.add("fa-battery-full");
+		element.removeClass("fa-battery-empty");
+		element.removeClass("fa-battery-quarter");
+		element.removeClass("fa-battery-half");
+		element.removeClass("fa-battery-three-quarters");
+		element.addClass("fa-battery-full");
 	}
 	$.ajax({
 		url: "/openWB/ramdisk/plugstats1",
 		complete: function(request){
-			var element = document.getElementById("carlp2");
 			if (request.responseText == 1) {
-				element.setAttribute("style", "color: blue;");
+				$("#carlp2").css("color", "blue");
 			} else {
-				element.setAttribute("style", "color: white;");
+				$("#carlp2").css("color", "white");
 			}
 		}
 	});
 	$.ajax({
 		url: "/openWB/ramdisk/plugstat",
 		complete: function(request){
-			var element = document.getElementById("carlp1");
 			if (request.responseText == 1) {
-				element.setAttribute("style", "color: blue;");
+				$("#carlp1").css("color", "blue");
 			} else {
-				element.setAttribute("style", "color: white;");
+				$("#carlp1").css("color", "white");
 			}
 		}
 	});
 	$.ajax({
 		url: "/openWB/ramdisk/ladestatus",
 		complete: function(request){
-			var element = document.getElementById("stationlp1");	
 			if (request.responseText == 1) {
-				element.setAttribute("style", "color: #00FF00;");
+				$("#stationlp1").css("color", "#00FF00");
 			} else {
-				element.setAttribute("style", "color: white;");
+				$("#stationlp1").css("color", "white");
 			}
 		}
 	});
 	$.ajax({
 		url: "/openWB/ramdisk/chargestat",
 		complete: function(request){
-			var element = document.getElementById("socstatlp1div");	
 			if (request.responseText == 1) {
-				element.setAttribute("style", "color: #00FF00;");
+				$("#socstatlp1div").css("color", "#00FF00");
 			} else {
-				element.setAttribute("style", "color: white;");
+				$("#socstatlp1div").css("color", "white");
 			}
 		}
 	});
 	$.ajax({
 		url: "/openWB/ramdisk/chargestats1",
 		complete: function(request){
-			var element = document.getElementById("socstatlp2div");	
 			if (request.responseText == 1) {
-				element.setAttribute("style", "color: #00FF00;");
+				$("#socstatlp2div").css("color", "#00FF00");
 			} else {
-				element.setAttribute("style", "color: white;");
+				$("#socstatlp2div").css("color", "white");
 			}
 		}
 	});
