@@ -105,12 +105,9 @@
 				<!-- Übergreifendes -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
-						Übergreifendes
-					</div>
-					<div class="card-body">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label class="col-md-4 col-form-label">openWB ist nur ein Ladepunkt</label>
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">openWB ist nur ein Ladepunkt</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($isssold == 0) echo " active" ?>">
@@ -120,16 +117,48 @@
 											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
-									<span class="form-text small">
-										Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
-										Hier ist Ja zu wählen wenn bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
-										<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
-										An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
-									</span>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="card-body">
+						<div class="card-text alert alert-info">
+							Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt und übernimmt keine eigene Regelung.
+							Hier ist Ja zu wählen wenn bereits eine openWB vorhanden ist und diese nur ein weiterer Ladepunkt der vorhandenen openWB sein soll.
+							<span class="text-danger">Alle in dieser openWB getätigten Einstellungen werden NICHT beachtet.</span>
+							An der Haupt openWB wird als Ladepunkt "externe openWB" gewählt und die IP Adresse eingetragen.
+						</div>
+						<div id="isssdiv" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="ssdisplay" class="col-md-4 col-form-label">Display-Theme</label>
+									<div class="col">
+										<select name="ssdisplay" id="ssdisplay" class="form-control">
+											<option <?php if($ssdisplayold == 0) echo "selected" ?> value="0">Normal</option>
+											<option <?php if($ssdisplayold == 1) echo "selected" ?> value="1">Display der übergeordneten openWB</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script>
+						$(function() {
+							function visibility_isss() {
+								if($('#isssOff').prop("checked")) {
+									hideSection('isssdiv');
+								} else {
+									showSection('isssdiv');
+								}
+							}
+
+							$('input[type=radio][name=isss]').change(function(){
+								visibility_isss();
+							});
+
+							visibility_isss();
+						});
+					</script>
 				</div>
 
 				<!-- Awattar -->
