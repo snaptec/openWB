@@ -155,6 +155,9 @@ foreach($lines as $line) {
 	if(strpos($line, "hook3_aktiv=") !== false) {
 		list(, $hook3_aktivold) = explode("=", $line);
 	}
+	if(strpos($line, "ssdisplay=") !== false) {
+		list(, $ssdisplayold) = explode("=", $line);
+	}
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);
 $themeold = preg_replace('~[\r\n]+~', '', $themeold);
