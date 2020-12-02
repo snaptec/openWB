@@ -274,7 +274,10 @@ var topicsToSubscribe = [
 	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/4/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/5/DailyYieldKwh", 1],
-
+	["openWB/SmartHome/Devices/6/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/7/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/8/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/9/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],

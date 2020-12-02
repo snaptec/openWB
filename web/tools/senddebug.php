@@ -1,12 +1,4 @@
 <!DOCTYPE html>
-<?php
-$result = '';
-
-if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
-	$result = $_POST['debugMessage'] . "\n" . $_POST['emailAddress'] . "\n";
-	file_put_contents('/var/www/html/openWB/ramdisk/debuguser', $result);
-	header("Location: ./debug.php");
-} else { ?>
 <html lang="de">
 
 	<head>
@@ -79,10 +71,39 @@ if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['
 				<div class="card-header bg-secondary">
 					Fehlermeldung senden
 				</div>
+				<?php
+					$result = '';
+					if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['debugMessage'])>20) {
+						$result = $_POST['debugMessage'] . "\n" . $_POST['emailAddress'] . "\n";
+						file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/debuguser', $result);
+						// header("Location: ./debug.php");
+						?>
+						<div class="card-body">
+							<div class="alert alert-info">
+								Debugdaten werden im Hintergrund gesammelt und verschickt. Dieser Vorgang dauert etwa eine Minute.<br>
+								Sie werden danach auf die Hauptseite weitergeleitet.
+							</div>
+							<div class="row">
+								<div class="cssload-loader text-center">
+									<div class="cssload-inner cssload-one"></div>
+									<div class="cssload-inner cssload-two"></div>
+									<div class="cssload-inner cssload-three"></div>
+								</div>
+							</div>
+						</div>
+						<?php exec("/var/www/html/openWB/runs/senddebuginit.sh > /dev/null &"); // exec in background ?>
+						<script>
+							window.setTimeout( function() {
+								window.location = "index.php";
+							}, 60000);
+						</script>
+						<?php
+					} else {
+				?>
 				<div class="card-body">
 					<div class="alert alert-warning">
 						Keine gültige Email angegeben oder Fehlerbeschreibung zu kurz.<br>
-						Weiterleitung in 10 Sekunden...
+						Weiterleitung in 5 Sekunden...
 					</div>
 					<div class="row">
 						<div class="cssload-loader text-center">
@@ -92,21 +113,23 @@ if (filter_var($_POST['emailAddress'], FILTER_VALIDATE_EMAIL) && strlen($_POST['
 						</div>
 					</div>
 				</div>
+				<script>
+					window.setTimeout( function() {
+						window.history.back();
+					}, 5000);
+				</script>
+				<?php
+					}
+				?>
 			</div>
 
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: System/Update</small>
+				<small>Sie befinden sich hier: System/Fehlerbericht</small>
 			</div>
 		</footer>
 
-		<script>
-			window.setTimeout( function() {
-				window.history.back();
-			}, 10000);
-		</script>
 	</body>
 </html>
-<?php } ?>

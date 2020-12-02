@@ -226,9 +226,9 @@
 								<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Einschalten</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
-										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">0 %</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										</div>
 									</div>
 									<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
@@ -240,9 +240,9 @@
 								<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Ausschalten</label>
 								<div class="col-md-8">
 									<div class="form-row vaRow mb-1">
-										<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%"> %</label>
+										<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">100 %</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										</div>
 									</div>
 									<span class="form-text small">Parameter in % Ladezustand. Überhalb dieses Wertes wird das Gerät nicht abgeschaltet. 100% deaktiviert die Funktion.</span>
@@ -294,10 +294,10 @@
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_measureTypeDevices<?php echo $devicenum; ?>" name="device_measureType" data-toggle="buttons" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<!-- <label class="btn btn-outline-info">
+										<label class="btn btn-outline-info">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
 										</label>
-										<label class="btn btn-outline-info">
+										<!--<label class="btn btn-outline-info">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">HTTP
 										</label> -->
 										<label class="btn btn-outline-info btn-toggle">
@@ -459,14 +459,14 @@
 			$(function() {
 <?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 				$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device<?php echo $devicenum; ?>options').is(":hidden")) {
+					if ($('#device_configuredDevices<?php echo $devicenum; ?>On').prop("checked")) {
 						$('#device<?php echo $devicenum; ?>options').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>options').hide();
 					}
 				});
 				$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device<?php echo $devicenum; ?>differentMeasurement').is(":hidden")) {
+					if ($('#device_differentMeasurement<?php echo $devicenum; ?>1').prop("checked")) {
 						$('#device<?php echo $devicenum; ?>differentMeasurement').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>differentMeasurement').hide();
@@ -474,7 +474,7 @@
 				});
 
 				/*$('#device_canSwitchDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device<?php echo $devicenum; ?>canSwitch').is(":hidden")) {
+					if ($('#device_canSwitch<?php echo $devicenum; ?>1').prop("checked")) {
 						$('#device<?php echo $devicenum; ?>canSwitch').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>canSwitch').hide();

@@ -134,7 +134,7 @@ echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlasttag
 echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlasttag
-echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
+# echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp1
@@ -1178,10 +1178,6 @@ fi
 if ! grep -Fq "displaytheme=" /var/www/html/openWB/openwb.conf
 then
 	  echo "displaytheme=0" >> /var/www/html/openWB/openwb.conf
-fi
-if ! grep -Fq "displaytagesgraph=" /var/www/html/openWB/openwb.conf
-then
-	  echo "displaytagesgraph=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "displayEinBeimAnstecken=" /var/www/html/openWB/openwb.conf
 then
@@ -2782,6 +2778,28 @@ if ! grep -Fq "displaylp8max=" /var/www/html/openWB/openwb.conf
 then
 	echo "displaylp8max=22000" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "mypeugeot_userlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "mypeugeot_userlp1=User" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_passlp1=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientidlp1=ID" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientsecretlp1=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_userlp2=User" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_passlp2=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
+	echo "mypeugeot_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "myopel_userlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "myopel_userlp1=User" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_passlp1=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientidlp1=ID" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientsecretlp1=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_userlp2=User" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_passlp2=Pass" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
+	echo "myopel_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
+fi
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
@@ -2987,5 +3005,6 @@ chmod 777 /var/www/html/openWB/ramdisk/smarthomehandlerloglevel
 echo 0 > /var/www/html/openWB/ramdisk/bootinprogress
 echo 0 > /var/www/html/openWB/ramdisk/updateinprogress
 mosquitto_pub -t openWB/system/updateInProgress -r -m "0"
+mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
 sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
