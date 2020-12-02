@@ -1,18 +1,18 @@
 #!/bin/bash
 
-if [[ $sdm630lp3source = *virtual* ]]
+if [[ $sdm630modbusllsourcelp3 = *virtual* ]]
 then
-	if ps ax |grep -v grep |grep "socat pty,link=$sdm630lp3source,raw tcp:$lllaniplp3:26" > /dev/null
+	if ps ax |grep -v grep |grep "socat pty,link=$sdm630modbusllsourcelp3,raw tcp:$sdm630modbuslllaniplp3:26" > /dev/null
 	then
 		echo "test" > /dev/null
 	else
-		sudo socat pty,link=$sdm630lp3source,raw tcp:$lllaniplp3:26 &
+		sudo socat pty,link=$sdm630modbusllsourcelp3,raw tcp:$sdm630modbuslllaniplp3:26 &
 	fi
 else
 	echo "echo" > /dev/null
 fi
 n=0
-output=$(sudo python /var/www/html/openWB/modules/sdm630modbuslls2/readsdm.py $sdm630lp3source $sdmids2)
+output=$(sudo python /var/www/html/openWB/modules/sdm630modbuslls2/readsdm.py $sdm630modbusllsourcelp3 $sdm630modbusllidlp3)
 while read -r line; do
 	if (( $n == 0 )); then
 		llas21=$(echo "$line" |  cut -c2- )
@@ -41,7 +41,7 @@ while read -r line; do
 		llkwhs2=$(echo "$line" |  cut -c2- )
 		llkwhs2=${llkwhs2%??}
 		rekwh='^[-+]?[0-9]+\.?[0-9]*$'
-		if [[ $llkwhs2 =~ $rekwh ]]; then 
+		if [[ $llkwhs2 =~ $rekwh ]]; then
 			echo "scale=3; $llkwhs2/1" | bc -l > /var/www/html/openWB/ramdisk/llkwhs2
 		fi
 	fi
@@ -55,13 +55,13 @@ while read -r line; do
 	n=$((n + 1))
     done <<< "$output"
 
-	
+
 re='^-?[0-9]+$'
 if [[ $wl1 =~ $re ]] && [[ $wl2 =~ $re ]] && [[ $wl3 =~ $re ]]; then
 	llaktuells2=`echo "($wl1+$wl2+$wl3)" |bc`
 	echo $llaktuells2 > /var/www/html/openWB/ramdisk/llaktuells2
 fi
 
-									
+
 
 

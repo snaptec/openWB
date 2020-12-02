@@ -457,7 +457,7 @@ if (( lastmanagement == 1 )); then
 		echo "$date LP2 Anzahl Phasen während keiner Ladung= $lp2anzahlphasen" >> ramdisk/nurpv.log
 	fi
 fi
-if (( lastmanagements2 == 1 )); then
+if (( lastmanagementlp3 == 1 )); then
 	if (( llas21 > 3 )); then
 		if [ "$llas21" -ge $llphasentest ]; then
 			anzahlphasen=$((anzahlphasen + 1 ))

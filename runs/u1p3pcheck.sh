@@ -16,11 +16,11 @@ if [[ "$1" == "1" ]]; then
 	if [[ $lastmanagement == 1 && $evseconlp2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargiplp2 -m "1"
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
-		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "1"
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "extopenwb" ]]; then
+		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargeiplp3 -m "1"
 	fi
 
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 1
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
@@ -50,8 +50,8 @@ if [[ "$1" == "3" ]]; then
 	if [[ $lastmanagement == 1 && $evseconlp2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargiplp2 -m "3"
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
-		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep3ip -m "3"
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "extopenwb" ]]; then
+		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargeiplp3 -m "3"
 	fi
 	if [[ $evsecon == "ipevse" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 3
@@ -59,7 +59,7 @@ if [[ "$1" == "3" ]]; then
 	if [[ $lastmanagement == 1 && $evseconlp2 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp2 $u1p3plp2id 3
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 3
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
@@ -95,10 +95,10 @@ if [[ "$1" == "stop" ]]; then
 		echo $oldlls1 > ramdisk/tmpllsolls1
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargiplp2 -m "0"
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "extopenwb" ]]; then
 		oldlls2=$(<ramdisk/llsolls2)
 		echo $oldlls2 > ramdisk/tmpllsolls2
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "0"
+		mosquitto_pub -r -t openWB/set/isss/Current -h $chargeiplp3 -m "0"
 	fi
 
 	if [[ $evsecon == "ipevse" ]]; then
@@ -116,7 +116,7 @@ if [[ "$1" == "stop" ]]; then
 		echo $oldlls1 > ramdisk/tmpllsolls1
 		runs/set-current.sh 0 s1
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		oldlls2=$(<ramdisk/llsolls2)
 		echo $oldlls2 > ramdisk/tmpllsolls2
 		runs/set-current.sh 0 s2
@@ -165,9 +165,9 @@ if [[ "$1" == "start" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargiplp2 -m "$oldlls1"
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "extopenwb" ]]; then
 		oldlls2=$(<ramdisk/tmpllsolls2)
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "$oldlls1"
+		mosquitto_pub -r -t openWB/set/isss/Current -h $chargeiplp3 -m "$oldlls1"
 	fi
 
 	if [[ $lastmanagement == 1 && $evseconlp2 == "modbusevse" && $u1p3plp2aktiv == "1" ]]; then
@@ -179,7 +179,7 @@ if [[ "$1" == "start" ]]; then
 		oldlls1=$(<ramdisk/tmpllsolls1)
 		runs/set-current.sh $oldlls1 s1
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		oldlls2=$(<ramdisk/tmpllsolls2)
 		runs/set-current.sh $oldlls2 s2
 	fi
@@ -214,8 +214,8 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $lastmanagement == 1 && $evseconlp2 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/Current -h $chargiplp2 -m "$minimalapv"
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "extopenwb" ]]; then
-		mosquitto_pub -r -t openWB/set/isss/Current -h $chargep3ip -m "$minimalapv"
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "extopenwb" ]]; then
+		mosquitto_pub -r -t openWB/set/isss/Current -h $chargeiplp3 -m "$minimalapv"
 	fi
 
 	if [[ $evsecon == "ipevse" ]]; then
@@ -227,7 +227,7 @@ if [[ "$1" == "startslow" ]]; then
 	if [[ $lastmanagement == 1 && $evseconlp2 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv s1
 	fi
-	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
+	if [[ $lastmanagementlp3 == 1 && $evseconlp3 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		runs/set-current.sh $minimalapv s2
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then

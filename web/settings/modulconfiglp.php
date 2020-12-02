@@ -138,7 +138,7 @@
 								</select>
 							</div>
 						</div>
-						<div id="evseconmastereth" class="hide">
+						<div id="wbmastereth" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmethllframer">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
@@ -188,7 +188,7 @@
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
-						<div id="evsecondac" class="hide">
+						<div id="wbdac" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="dacregister" class="col-md-4 col-form-label">Dacregister</label>
@@ -203,7 +203,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconswifi" class="hide">
+						<div id="wbswifi" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="simpleevsewifi">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -225,7 +225,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconextopenwb" class="hide">
+						<div id="wbextopenwb" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="extopenwblp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -239,15 +239,15 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="chargep1cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
+									<label for="chargecplp1" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep1cp" id="chargep1cp" value="<?php echo $chargep1cpold ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargecplp1" id="chargecplp1" value="<?php echo $chargecplp1old ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div id="evseconmod" class="hide">
+						<div id="wbmod" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="modbusevsesource" class="col-md-4 col-form-label">Source</label>
@@ -275,7 +275,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconipevse" class="hide">
+						<div id="wbipevse" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
@@ -296,7 +296,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconkeba" class="hide">
+						<div id="wbkeba" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="keballlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -311,7 +311,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconhttp" class="hide">
+						<div id="wbhttp" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="httpevseip" class="col-md-4 col-form-label">IP Adresse</label>
@@ -327,7 +327,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecontwcmanager" class="hide">
+						<div id="wbtwcmanager" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="twcmanagerlp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -348,7 +348,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecongoe" class="hide">
+						<div id="wbgoe" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="goelp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -372,7 +372,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconnrgkick" class="hide">
+						<div id="wbnrgkick" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="nrgkicklp1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -416,7 +416,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconphoenix" class="hide">
+						<div id="wbphoenix" class="hide">
                             <input type="hidden" name="ladeleistungmodul" value="phoenixlllp1">
                             <div class="form-group">
                                 <div class="form-row mb-1">
@@ -1011,9 +1011,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soclp1_vin" class="col-md-4 col-form-label">VIN</label>
+										<label for="soc_vinlp1" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soclp1_vin" id="soclp1_vin" value="<?php echo $soclp1_vinold ?>">
+											<input class="form-control" type="text" name="soc_vinlp1" id="soc_vinlp1" value="<?php echo $soc_vinlp1old ?>">
 											<span class="form-text small">
 												VIN des Autos. Ist nur nötig wenn es sich um ein Importfahrzeug handelt. Kann auf none belassen werden wenn die Auslesung funktioniert.
 											</span>
@@ -1158,21 +1158,21 @@
 						// visibility of charge point types
 						function display_lp1() {
 							hideSection('llmodullp1');
-							hideSection('evsecondac');
-							hideSection('evseconmod');
-							hideSection('evseconswifi');
-							hideSection('evsecongoe');
-							hideSection('evseconnrgkick');
-							hideSection('evseconmastereth');
-							hideSection('evseconkeba');
+							hideSection('wbdac');
+							hideSection('wbmod');
+							hideSection('wbswifi');
+							hideSection('wbgoe');
+							hideSection('wbnrgkick');
+							hideSection('wbmastereth');
+							hideSection('wbkeba');
 							hideSection('openwb12');
 							hideSection('openwb12mid');
 							hideSection('openwb12v2mid');
-							hideSection('evseconhttp');
-							hideSection('evsecontwcmanager');
-							hideSection('evseconipevse');
+							hideSection('wbhttp');
+							hideSection('wbtwcmanager');
+							hideSection('wbipevse');
 							hideSection('openwbbuchse');
-							hideSection('evseconextopenwb');
+							hideSection('wbextopenwb');
 
 							if($('#evsecon').val() == 'modbusevse') {
 								switch( $("#evsecon option:selected").attr('data-id') ){
@@ -1186,53 +1186,57 @@
 										showSection('openwb12v2mid');
 									break;
 									default:
-										showSection('evseconmod');
+										showSection('wbmod');
 										showSection('llmodullp1');
 										display_llmp1();
 								}
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('evseconipevse');
+								showSection('wbipevse');
 								showSection('llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'extopenwb') {
-								showSection('evseconextopenwb');
+								showSection('wbextopenwb');
 							}
 							if($('#evsecon').val() == 'buchse') {
 								showSection('openwbbuchse');
 							}
 							if($('#evsecon').val() == 'dac') {
-								showSection('evsecondac');
+								showSection('wbdac');
 								showSection('llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'simpleevsewifi') {
-								showSection('evseconswifi');
+								showSection('wbswifi');
 							}
 							if($('#evsecon').val() == 'httpevse') {
-								showSection('evseconhttp');
+								showSection('wbhttp');
 								showSection('llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'goe') {
-								showSection('evsecongoe');
+								showSection('wbgoe');
 							}
 							if($('#evsecon').val() == 'masterethframer') {
-								showSection('evseconmastereth');
+								showSection('wbmastereth');
 							}
 							if($('#evsecon').val() == 'nrgkick') {
-								showSection('evseconnrgkick');
+								showSection('wbnrgkick');
 							}
 							if($('#evsecon').val() == 'keba') {
-								showSection('evseconkeba');
+								showSection('wbkeba');
 							}
 							if($('#evsecon').val() == 'twcmanager') {
-								showSection('evsecontwcmanager');
+								showSection('wbtwcmanager');
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('evseconipevse');
+								showSection('wbipevse');
 							}
+							if($('#evsecon').val() == 'ipphoenix') {
+                                showSection('wbphoenix');
+                            }
+
 						}
 
 						// visibility of meter modules
@@ -1248,7 +1252,7 @@
 							hideSection('httpll');
 							hideSection('mpm3pmlldivlp1');
 							hideSection('mqttll');
-							hideSection('evseconphoenix');
+							hideSection('wbphoenix');
 
 							if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
 								showSection('mpm3pmlldivlp1');
@@ -1288,9 +1292,6 @@
 							if($('#ladeleistungmodul').val() == 'mqttll') {
 								showSection('mqttll');
 							}
-							if($('#evsecon').val() == 'ipphoenix') {
-                                showSection('evseconphoenix');
-                            }
 
 						}
 
@@ -1433,7 +1434,7 @@
 								</select>
 							</div>
 						</div>
-						<div id="evseconextopenwblp2" class="hide">
+						<div id="wbextopenwblp2" class="hide">
 							<input type="hidden" name="ladeleistungmodullp2" value="extopenwblp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -1447,15 +1448,15 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="chargep2cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
+									<label for="chargecplp2" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep2cp" id="chargep2cp" value="<?php echo $chargep2cpold ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargecplp2" id="chargecplp2" value="<?php echo $chargecplp2old ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div id="evseconipevselp2" class="hide">
+						<div id="wbipevselp2" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evseiplp2" class="col-md-4 col-form-label">IP Adresse</label>
@@ -1486,7 +1487,7 @@
 								Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
 							</div>
 						</div>
-						<div id="evseconnrgkicklp2" class="hide">
+						<div id="wbnrgkicklp2" class="hide">
 							<input type="hidden" name="ladeleistungmodullp2" value="nrgkicklp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -1530,7 +1531,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconkebalp2" class="hide">
+						<div id="wbkebalp2" class="hide">
 							<input type="hidden" name="ladeleistungmodullp2" value="keballlp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -1545,7 +1546,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconmodlp2" class="hide">
+						<div id="wbmodlp2" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="modbusevsesourcelp2" class="col-md-4 col-form-label">Source</label>
@@ -1573,7 +1574,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecondaclp2" class="hide">
+						<div id="wbdaclp2" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="dacregisterlp2" class="col-md-4 col-form-label">Dacregister</label>
@@ -1594,7 +1595,7 @@
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
-						<div id="evseconswifilp2" class="hide">
+						<div id="wbswifilp2" class="hide">
 							<input type="hidden" name="ladeleistungmodullp2" value="simpleevsewifis1">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -1616,7 +1617,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecongoelp2" class="hide">
+						<div id="wbgoelp2" class="hide">
 							<input type="hidden" name="ladeleistungmodullp2" value="goelp2">
 							<div class="form-group">
 								<div class="form-row mb-1">
@@ -1698,7 +1699,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="swifidiv" class="hide">
+							<div id="swifidivlp2" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.
 								</div>
@@ -2030,9 +2031,9 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soclp2_vin" class="col-md-4 col-form-label">VIN</label>
+										<label for="soc_vinlp2" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soclp2_vin" id="soclp2_vin" value="<?php echo $soclp2_vinold ?>">
+											<input class="form-control" type="text" name="soc_vinlp2" id="soc_vinlp2" value="<?php echo $soc_vinlp2old ?>">
 											<span class="form-text small">
 												VIN des Autos. Ist nur nötig wenn es sich um ein Importfahrzeug handelt. Kann auf none belassen werden wenn die Auslesung funktioniert.
 											</span>
@@ -2170,17 +2171,17 @@
 					</div>
 					<script>
 						function display_lp2() {
-							hideSection('evsecondaclp2');
-							hideSection('evseconmodlp2');
-							hideSection('evseconswifilp2');
+							hideSection('wbdaclp2');
+							hideSection('wbmodlp2');
+							hideSection('wbswifilp2');
 							hideSection('llmodullp2');
-							hideSection('evsecongoelp2');
+							hideSection('wbgoelp2');
 							hideSection('evsecoslaveethlp2');
-							hideSection('evseconkebalp2');
-							hideSection('evseconnrgkicklp2');
+							hideSection('wbkebalp2');
+							hideSection('wbnrgkicklp2');
 							hideSection('openwb12lp2');
-							hideSection('evseconextopenwblp2');
-							hideSection('evseconipevselp2');
+							hideSection('wbextopenwblp2');
+							hideSection('wbipevselp2');
 
 							if($('#evseconlp2').val() == 'modbusevse') {
 								switch( $("#evseconlp2 option:selected").attr('data-id') ){
@@ -2188,45 +2189,45 @@
 										showSection('openwb12lp2');
 									break;
 									default:
-										showSection('evseconmodlp2');
+										showSection('wbmodlp2');
 										showSection('llmodullp2');
 										display_llmp2();
 								}
 							}
 							if($('#evseconlp2').val() == 'ipevse') {
-								showSection('evseconipevselp2');
+								showSection('wbipevselp2');
 								showSection('llmodullp2');
 								display_llmp2();
 							}
 							if($('#evseconlp2').val() == 'dac') {
-								showSection('evsecondaclp2');
+								showSection('wbdaclp2');
 								showSection('llmodullp2');
 								display_llmp2();
 							}
 							if($('#evseconlp2').val() == 'simpleevsewifi') {
-								showSection('evseconswifilp2');
+								showSection('wbswifilp2');
 							}
 							if($('#evseconlp2').val() == 'extopenwb') {
-								showSection('evseconextopenwblp2');
+								showSection('wbextopenwblp2');
 							}
 							if($('#evseconlp2').val() == 'goe') {
-								showSection('evsecongoelp2');
+								showSection('wbgoelp2');
 							}
 							if($('#evseconlp2').val() == 'slaveeth') {
 								showSection('evsecoslaveethlp2');
 							}
 							if($('#evseconlp2').val() == 'keba') {
-								showSection('evseconkebalp2');
+								showSection('wbkebalp2');
 							}
 							if($('#evseconlp2').val() == 'nrgkick') {
-								showSection('evseconnrgkicklp2');
+								showSection('wbnrgkicklp2');
 							}
 						}
 
 						function display_llmp2() {
 							hideSection('sdm630divlp2');
 							hideSection('sdm120divlp2');
-							hideSection('swifidiv');
+							hideSection('swifidivlp2');
 							hideSection('mpm3pmlldivlp2');
 							hideSection('rs485lanlp2');
 							hideSection('mpm3pmlllp2');
@@ -2240,10 +2241,10 @@
 								showSection('rs485lanlp2');
 							}
 							if($('#ladeleistungmodullp2').val() == 'simpleevsewifis1') {
-								showSection('swifidiv');
+								showSection('swifidivlp2');
 							}
 							if($('#ladeleistungmodullp2').val() == 'goelp2') {
-								showSection('swifidiv');
+								showSection('swifidivlp2');
 							}
 							if($('#ladeleistungmodullp2').val() == 'mpm3pmlllp2') {
 								showSection('mpm3pmlllp2');
@@ -2367,18 +2368,18 @@
 								<div class="col-4">Ladepunkt 3</div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($lastmanagements2old == 0) echo " active" ?>">
-											<input type="radio" name="lastmanagements2" id="lastmanagements2Off" value="0"<?php if($lastmanagements2old == 0) echo " checked=\"checked\"" ?>>Aus
+										<label class="btn btn-sm btn-outline-info<?php if($lastmanagementlp3old == 0) echo " active" ?>">
+											<input type="radio" name="lastmanagementlp3" id="lastmanagementlp3Off" value="0"<?php if($lastmanagementlp3old == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($lastmanagements2old == 1) echo " active" ?>">
-											<input type="radio" name="lastmanagements2" id="lastmanagements2On" value="1"<?php if($lastmanagements2old == 1) echo " checked=\"checked\"" ?>>An
+										<label class="btn btn-sm btn-outline-info<?php if($lastmanagementlp3old == 1) echo " active" ?>">
+											<input type="radio" name="lastmanagementlp3" id="lastmanagementlp3On" value="1"<?php if($lastmanagementlp3old == 1) echo " checked=\"checked\"" ?>>An
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="card-body hide" id="lasts2mman">
+					<div class="card-body hide" id="lastmmanlp3">
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<label for="lp3name" class="col-md-4 col-form-label">Name</label>
@@ -2389,32 +2390,32 @@
 						</div>
 						<hr class="border-primary">
 						<div class="form-row mb-1">
-							<label for="evsecons2" class="col-md-4 col-form-label">Anbindung</label>
+							<label for="evseconlp3" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
-								<select name="evsecons2" id="evsecons2" class="form-control">
-									<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkt</option>
-									<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
-									<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons2old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
-									<option <?php if($evsecons2old == "dac") echo "selected" ?> value="dac">DAC</option>
-									<option <?php if($evsecons2old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
-									<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
+								<select name="evseconlp3" id="evseconlp3" class="form-control">
+									<option <?php if($evseconlp3old == "thirdeth") echo "selected" ?> value="thirdeth">openWB dritter Ladepunkt</option>
+									<option <?php if($evseconlp3old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
+									<option <?php if($evseconlp3old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
+									<option <?php if($evseconlp3old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
+									<option <?php if($evseconlp3old == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evseconlp3old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
+									<option <?php if($evseconlp3old == "goe") echo "selected" ?> value="goe">Go-e</option>
 								</select>
 							</div>
 						</div>
-						<div id="evseconthirdeth" class="hide">
-							<input type="hidden" name="ladeleistungs2modul" value="mpm3pmethlls2">
+						<div id="wbthirdethlp3" class="hide">
+							<input type="hidden" name="ladeleistungmodullp3" value="mpm3pmethlls2">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
 						</div>
-						<div id="evseconextopenwblp3" class="hide">
-							<input type="hidden" name="ladeleistungs2modul" value="extopenwblp3">
+						<div id="wbextopenwblp3" class="hide">
+							<input type="hidden" name="ladeleistungmodullp3" value="extopenwblp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="chargep3ip" class="col-md-4 col-form-label">IP Adresse</label>
+									<label for="chargeiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep3ip" id="chargep3ip" value="<?php echo $chargep3ipold ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargeiplp3" id="chargeiplp3" value="<?php echo $chargeiplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -2422,15 +2423,15 @@
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="chargep3cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
+									<label for="chargecplp3" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="2" step="1" name="chargep3cp" id="chargep3cp" value="<?php echo $chargep3cpold ?>">
+										<input class="form-control" type="number" min="1" max="2" step="1" name="chargecplp3" id="chargecplp3" value="<?php echo $chargecplp3old ?>">
 										<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div id="evseconipevselp3" class="hide">
+						<div id="wbipevselp3" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
@@ -2451,26 +2452,41 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconmbs2" class="hide">
+						<div id="wbkebalp3" class="hide">
+							<input type="hidden" name="ladeleistungmodullp3" value="keballlp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="evsesources2" class="col-md-4 col-form-label">Source</label>
+									<label for="kebaiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" name="evsesources2" id="evsesources2" value="<?php echo $evsesources2old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="kebaiplp2" id="kebaiplp3" value="<?php echo $kebaiplp3old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="wbmodlp3" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="modbusevsesourcelp3" class="col-md-4 col-form-label">Source</label>
+									<div class="col">
+										<input class="form-control" type="text" name="modbusevsesourcelp3" id="modbusevsesourcelp3" value="<?php echo $modbusevsesourcelp3old ?>">
 										<span class="form-text small">Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus der EVSE angeschlossen ist.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="evseids2" class="col-md-4 col-form-label">ID</label>
+									<label for="modbusevseidlp3" class="col-md-4 col-form-label">ID</label>
 									<div class="col">
-										<input class="form-control" type="number" min="1" max="254" step="1" name="evseids2" id="evseids2" value="<?php echo $evseids2old ?>">
+										<input class="form-control" type="number" min="1" max="254" step="1" name="modbusevseidlp3" id="modbusevseidlp3" value="<?php echo $modbusevseidlp3old ?>">
 										<span class="form-text small">Gültige Werte 1-254. Modbus ID der EVSE.</span>
 									</div>
 								</div>
 								<div class="form-row mb-1">
-									<label for="evselanips2" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
+									<label for="modbusevselaniplp3" class="col-md-4 col-form-label">RS485/Lan-Konverter IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evselanips2" id="evselanips2" value="<?php echo $evselanips2old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="modbusevselaniplp3" id="modbusevselaniplp3" value="<?php echo $modbusevselaniplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											IP Adresse des Modbus/Lan Konverter. Vermutlich gleich der IP des SDM Zählers in der WB.
@@ -2479,12 +2495,12 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecondacs2" class="hide">
+						<div id="wbdaclp3" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="dacregisters2" class="col-md-4 col-form-label">Dacregister</label>
+									<label for="dacregisterlp3" class="col-md-4 col-form-label">Dacregister</label>
 									<div class="col">
-										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisters2" id="dacregisters2" value="<?php echo $dacregisters2old ?>">
+										<input class="form-control" type="number" min="0" max="99" step="1" name="dacregisterlp3" id="dacregisterlp3" value="<?php echo $dacregisterlp3old ?>">
 										<span class="form-text small">
 											Gültige Werte 0-99. Bei EVSE Anbindung per DAC (MCP 4725) Standardwert meist 62, oft auch 60 oder 48. Abhängig vom verbauten MCP.
 											Der benötigte Wert sollte <a href="/openWB/ramdisk/i2csearch">HIER</a> zu finden sein.
@@ -2494,8 +2510,8 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconswifis2" class="hide">
-							<input type="hidden" name="ladeleistungs2modul" value="simpleevsewifis2">
+						<div id="wbswifilp3" class="hide">
+							<input type="hidden" name="ladeleistungmodullp3" value="simpleevsewifis2">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evsewifiiplp3" class="col-md-4 col-form-label">IP Adresse</label>
@@ -2516,8 +2532,8 @@
 								</div>
 							</div>
 						</div>
-						<div id="evsecongoes2" class="hide">
-							<input type="hidden" name="ladeleistungs2modul" value="goelp3">
+						<div id="wbgoelp3" class="hide">
+							<input type="hidden" name="ladeleistungmodullp3" value="goelp3">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="goeiplp3" class="col-md-4 col-form-label">IP Adresse</label>
@@ -2544,44 +2560,44 @@
 						<div id="llmodullp3" class="hide">
 							<hr class="border-primary">
 							<div class="form-row mb-1">
-								<label for="ladeleistungs2modul" class="col-md-4 col-form-label">Ladeleistungmodul</label>
+								<label for="ladeleistungmodullp3" class="col-md-4 col-form-label">Ladeleistungmodul</label>
 								<div class="col">
-									<select name="ladeleistungs2modul" id="ladeleistungs2modul" class="form-control">
-										<option <?php if($ladeleistungs2modulold == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
-										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
-										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
+									<select name="ladeleistungmodullp3" id="ladeleistungmodullp3" class="form-control">
+										<option <?php if($ladeleistungmodullp3old == "sdm630modbuslls2") echo "selected" ?> value="sdm630modbuslls2">SDM 630 Modbus</option>
+										<option <?php if($ladeleistungmodullp3old == "sdm120modbuslls2") echo "selected" ?> value="sdm120modbuslls2">SDM 120 Modbus</option>
+										<option <?php if($ladeleistungmodullp3old == "mpm3pmlls2") echo "selected" ?> value="mpm3pmlls2">MPM3PM Modbus</option>
+										<option <?php if($ladeleistungmodullp3old == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
+										<option <?php if($ladeleistungmodullp3old == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
+										<option <?php if($ladeleistungmodullp3old == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
 									</select>
 								</div>
 							</div>
-							<div id="mpm3pmlllp3div" class="hide">
+							<div id="mpm3pmlllp3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="mpmlp3ip" class="col-md-4 col-form-label">IP Adresse</label>
+										<label for="mpmiplp3" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp3ip" id="mpmlp3ip" value="<?php echo $mpmlp3ipold ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmiplp3" id="mpmiplp3" value="<?php echo $mpmiplp3old ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse des Modbus Ethernet Konverters im Format: 192.168.0.12
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="mpmlp3id" class="col-md-4 col-form-label">ID</label>
+										<label for="mpmidlp3" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp3id" id="mpmlp3id" value="<?php echo $mpmlp3idold ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmidlp3" id="mpmidlp3" value="<?php echo $mpmidlp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div id="mpm3pmlls2div" class="hide">
+							<div id="mpm3pmlldivlp3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="mpm3pmlls2source" class="col-md-4 col-form-label">Source</label>
+										<label for="mpm3pmllsourcelp3" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="mpm3pmlls2source" id="mpm3pmlls2source" value="<?php echo $mpm3pmlls2sourceold ?>">
+											<input class="form-control" type="text" name="mpm3pmllsourcelp3" id="mpm3pmllsourcelp3" value="<?php echo $mpm3pmllsourcelp3old ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das MPM3PM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2589,25 +2605,25 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="mpm3pmlls2id" class="col-md-4 col-form-label">ID</label>
+										<label for="mpm3pmllidlp3" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmlls2id" id="mpm3pmlls2id" value="<?php echo $mpm3pmlls2idold ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpm3pmllidlp3" id="mpm3pmllidlp3" value="<?php echo $mpm3pmllidlp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div id="swifis2div" class="hide">
+							<div id="swifidivlp3" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.
 								</div>
 							</div>
-							<div id="sdm630s2div" class="hide">
+							<div id="sdm630divlp3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="sdm630lp3source" class="col-md-4 col-form-label">Source</label>
+										<label for="sdm630modbusllsourcelp3" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm630lp3source" id="sdm630lp3source" value="<?php echo $sdm630lp3sourceold ?>">
+											<input class="form-control" type="text" name="sdm630modbusllsourcelp3" id="sdm630modbusllsourcelp3" value="<?php echo $sdm630modbusllsourcelp3old ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2615,20 +2631,20 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="sdmids2" class="col-md-4 col-form-label">ID</label>
+										<label for="sdm630modbusllidlp3" class="col-md-4 col-form-label">ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdmids2" id="sdmids2" value="<?php echo $sdmids2old ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm630modbusllidlp3" id="sdm630modbusllidlp3" value="<?php echo $sdm630modbusllidlp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM. Für SDM230 & SDM630v2.</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div id="sdm120s2div" class="hide">
+							<div id="sdm120divlp3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="sdm120lp3source" class="col-md-4 col-form-label">Source</label>
+										<label for="sdm120modbusllsourcelp3" class="col-md-4 col-form-label">Source</label>
 										<div class="col">
-											<input class="form-control" type="text" name="sdm120lp3source" id="sdm120lp3source" value="<?php echo $sdm120lp3sourceold ?>">
+											<input class="form-control" type="text" name="sdm120modbusllsourcelp3" id="sdm120modbusllsourcelp3" value="<?php echo $sdm120modbusllsourcelp3old ?>">
 											<span class="form-text small">
 												Gültige Werte z. B. /dev/ttyUSB0, /dev/virtualcom0. Serieller Port an dem der Modbus das SDM angeschlossen ist.
 												Nach Ändern der Einstellung von ttyUSB auf virtualcom0 ist ein Neustart erforderlich.
@@ -2636,23 +2652,23 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="sdm120modbusllid1s2" class="col-md-4 col-form-label">ID Phase 1</label>
+										<label for="sdm120modbusllid1lp3" class="col-md-4 col-form-label">ID Phase 1</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1s2" id="sdm120modbusllid1s2" value="<?php echo $sdm120modbusllid1s2old ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid1lp3" id="sdm120modbusllid1lp3" value="<?php echo $sdm120modbusllid1lp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der ersten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="sdm120modbusllid2s2" class="col-md-4 col-form-label">ID Phase 2</label>
+										<label for="sdm120modbusllid2lp3" class="col-md-4 col-form-label">ID Phase 2</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2s2" id="sdm120modbusllid2s2" value="<?php echo $sdm120modbusllid2s2old ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid2lp3" id="sdm120modbusllid2lp3" value="<?php echo $sdm120modbusllid2lp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der zweiten Phase.</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="sdm120modbusllid3s2" class="col-md-4 col-form-label">ID Phase 3</label>
+										<label for="sdm120modbusllid3lp3" class="col-md-4 col-form-label">ID Phase 3</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3s2" id="sdm120modbusllid3s2" value="<?php echo $sdm120modbusllid3s2old ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="sdm120modbusllid3lp3" id="sdm120modbusllid3lp3" value="<?php echo $sdm120modbusllid3lp3old ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des SDM der dritten Phase.</span>
 										</div>
 									</div>
@@ -2661,9 +2677,9 @@
 							<div id="rs485lanlp3" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="lllaniplp3" class="col-md-4 col-form-label">IP Adresse RS485/Lan-Konverter</label>
+										<label for="sdm630modbuslllaniplp3" class="col-md-4 col-form-label">IP Adresse RS485/Lan-Konverter</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="lllaniplp3" id="lllaniplp3" value="<?php echo $lllaniplp3old ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="sdm630modbuslllaniplp3" id="sdm630modbuslllaniplp3" value="<?php echo $sdm630modbuslllaniplp3old ?>">
 											<span class="form-text small">
 												Ist nur von Belang, wenn die Source auf /dev/virtualcomX steht. Ansonsten irrelevant.<br>
 												Gültige Werte IPs. Wenn ein LAN Konverter genutzt wird, muss die Source auf /dev/virtualcomx (z.B. /dev/virtualcom0) gesetzt werden.
@@ -2675,100 +2691,104 @@
 						</div>
 					</div>
 					<script>
-						function display_lastmanagement2() {
-							if($('#lastmanagements2Off').prop("checked")) {
-								hideSection('lasts2mman');
+						function display_lastmanagementlp3() {
+							if($('#lastmanagementlp3Off').prop("checked")) {
+								hideSection('lastmmanlp3');
 							}
 							else {
-								showSection('lasts2mman');
+								showSection('lastmmanlp3');
 								display_lp3();
 							}
 						}
 
 						function display_lp3 () {
-							hideSection('evsecondacs2');
-							hideSection('evseconmbs2');
-							hideSection('evseconswifis2');
+							hideSection('wbdaclp3');
+							hideSection('wbmodlp3');
+							hideSection('wbswifilp3');
 							hideSection('llmodullp3');
-							hideSection('evsecongoes2');
-							hideSection('evseconipevselp3');
-							hideSection('evseconextopenwblp3');
-							hideSection('evseconthirdeth');
+							hideSection('wbgoelp3');
+							hideSection('wbkebalp2');
+							hideSection('wbipevselp3');
+							hideSection('wbextopenwblp3');
+							hideSection('wbthirdethlp3');
 
-							if($('#evsecons2').val() == 'thirdeth') {
-								showSection('evseconthirdeth');
+							if($('#evseconlp3').val() == 'thirdeth') {
+								showSection('wbthirdethlp3');
 							}
-							if($('#evsecons2').val() == 'dac') {
-								showSection('evsecondacs2');
+							if($('#evseconlp3').val() == 'dac') {
+								showSection('wbdaclp3');
 								showSection('llmodullp3');
 								display_llmp3();
 							}
-							if($('#evsecons2').val() == 'modbusevse') {
-								showSection('evseconmbs2');
+							if($('#evseconlp3').val() == 'modbusevse') {
+								showSection('wbmodlp3');
 								showSection('llmodullp3');
 								display_llmp3();
 							}
-							if($('#evsecons2').val() == 'simpleevsewifi') {
-								showSection('evseconswifis2');
+							if($('#evseconlp3').val() == 'simpleevsewifi') {
+								showSection('wbswifilp3');
 							}
-							if($('#evsecons2').val() == 'extopenwb') {
-								showSection('evseconextopenwblp3');
+							if($('#evseconlp3').val() == 'extopenwb') {
+								showSection('wbextopenwblp3');
 							}
-							if($('#evsecons2').val() == 'goe') {
-								showSection('evsecongoes2');
+							if($('#evseconlp3').val() == 'goe') {
+								showSection('wbgoelp3');
 							}
-							if($('#evsecons2').val() == 'ipevse') {
-								showSection('evseconipevselp3');
+							if($('#evseconlp3').val() == 'keba') {
+								showSection('wbkebalp3');
+							}
+							if($('#evseconlp3').val() == 'ipevse') {
+								showSection('wbipevselp3');
 								showSection('llmodullp3');
 								display_llmp3();
 							}
 						}
 
 						function display_llmp3 () {
-							hideSection('sdm630s2div');
-							hideSection('sdm120s2div');
-							hideSection('swifis2div');
+							hideSection('sdm630divlp3');
+							hideSection('sdm120divlp3');
+							hideSection('swifidivlp3');
 							hideSection('rs485lanlp3');
-							hideSection('mpm3pmlls2div');
-							hideSection('mpm3pmlllp3div');
+							hideSection('mpm3pmlldivlp3');
+							hideSection('mpm3pmlllp3');
 
 
-							if($('#ladeleistungs2modul').val() == 'mpm3pmlllp3') {
-								showSection('mpm3pmlllp3div');
+							if($('#ladeleistungmodullp3').val() == 'mpm3pmlllp3') {
+								showSection('mpm3pmlllp3');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungs2modul').val() == 'sdm630modbuslls2') {
-								showSection('sdm630s2div');
+							if($('#ladeleistungmodullp3').val() == 'sdm630modbuslls2') {
+								showSection('sdm630divlp3');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungs2modul').val() == 'sdm120modbuslls2') {
-								showSection('sdm120s2div');
+							if($('#ladeleistungmodullp3').val() == 'sdm120modbuslls2') {
+								showSection('sdm120divlp3');
 								showSection('rs485lanlp3');
 							}
-							if($('#ladeleistungs2modul').val() == 'simpleevsewifis2') {
-								showSection('swifis2div');
+							if($('#ladeleistungmodullp3').val() == 'simpleevsewifis2') {
+								showSection('swifidivlp3');
 							}
-							if($('#ladeleistungs2modul').val() == 'goelp3') {
-								showSection('swifis2div');
+							if($('#ladeleistungmodullp3').val() == 'goelp3') {
+								showSection('swifidivlp3');
 							}
-							if($('#ladeleistungs2modul').val() == 'mpm3pmlls2') {
-								showSection('mpm3pmlls2div');
+							if($('#ladeleistungmodullp3').val() == 'mpm3pmlls2') {
+								showSection('mpm3pmlldivlp3');
 								showSection('rs485lanlp3');
 							}
 						}
 
 						$(function() {
-							display_lastmanagement2();
+							display_lastmanagementlp3();
 
-							$('#evsecons2').change( function(){
+							$('#evseconlp3').change( function(){
 								display_lp3();
 							});
 
-							$('input[type=radio][name=lastmanagements2]').change(function() {
-								display_lastmanagement2();
+							$('input[type=radio][name=lastmanagementlp3]').change(function() {
+								display_lastmanagementlp3();
 							});
 
-							$('#ladeleistungs2modul').change( function(){
+							$('#ladeleistungmodullp3').change( function(){
 								display_llmp3();
 							});
 						});
@@ -2814,12 +2834,12 @@
 									</select>
 								</div>
 							</div>
-							<div id="evseconextopenwblp<?php echo $chargepointNum; ?>" class="hide">
+							<div id="wbextopenwblp<?php echo $chargepointNum; ?>" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="chargep<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">IP Adresse</label>
+										<label for="chargeiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargep<?php echo $chargepointNum; ?>ip" id="chargep<?php echo $chargepointNum; ?>ip" value="<?php echo ${'chargep'.$chargepointNum.'ipold'} ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="chargeiplp<?php echo $chargepointNum; ?>" id="chargeiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'chargeiplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 												Die externe openWB muss die Option "openWB ist nur ein Ladepunkt" aktiv haben!
@@ -2827,15 +2847,15 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="chargep<?php echo $chargepointNum; ?>cp" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
+										<label for="chargecplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Ladepunkt an der externen openWB</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="2" step="1" name="chargep<?php echo $chargepointNum; ?>cp" id="chargep<?php echo $chargepointNum; ?>cp" value="<?php echo ${'chargep'.$chargepointNum.'cpold'} ?>">
+											<input class="form-control" type="number" min="1" max="2" step="1" name="chargecplp<?php echo $chargepointNum; ?>" id="chargecplp<?php echo $chargepointNum; ?>" value="<?php echo ${'chargecplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">Ist die externe openWB eine Duo gibt diese Option an ob Ladepunkt 1 oder 2 angesprochen werden soll.</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div id="evseconipevselp<?php echo $chargepointNum; ?>" class="hide">
+							<div id="wbipevselp<?php echo $chargepointNum; ?>" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
@@ -2854,18 +2874,18 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="mpmlp<?php echo $chargepointNum; ?>ip" class="col-md-4 col-form-label">Ladeleistung IP Adresse</label>
+										<label for="mpmiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Ladeleistung IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmlp<?php echo $chargepointNum; ?>ip" id="mpmlp<?php echo $chargepointNum; ?>ip" value="<?php echo ${'mpmlp'.$chargepointNum.'ipold'} ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="mpmiplp<?php echo $chargepointNum; ?>" id="mpmiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'mpmiplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12. IP Adresse des Modbus Ethernet Konverters.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="mpmlp<?php echo $chargepointNum; ?>id" class="col-md-4 col-form-label">Ladeleistung ID</label>
+										<label for="mpmidlp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">Ladeleistung ID</label>
 										<div class="col">
-											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmlp<?php echo $chargepointNum; ?>id" id="mpmlp<?php echo $chargepointNum; ?>id" value="<?php echo ${'mpmlp'.$chargepointNum.'idold'} ?>">
+											<input class="form-control" type="number" min="1" max="254" step="1" name="mpmidlp<?php echo $chargepointNum; ?>" id="mpmidlp<?php echo $chargepointNum; ?>" value="<?php echo ${'mpmidlp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">Gültige Werte 1-254. Modbus ID des MPM3PM.</span>
 										</div>
 									</div>
@@ -2874,14 +2894,14 @@
 						</div>
 						<script>
 							function display_lp<?php echo $chargepointNum; ?> () {
-								hideSection('evseconipevselp<?php echo $chargepointNum; ?>');
-								hideSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+								hideSection('wbipevselp<?php echo $chargepointNum; ?>');
+								hideSection('wbextopenwblp<?php echo $chargepointNum; ?>');
 
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'extopenwb') {
-									showSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+									showSection('wbextopenwblp<?php echo $chargepointNum; ?>');
 								}
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
-									showSection('evseconipevselp<?php echo $chargepointNum; ?>');
+									showSection('wbipevselp<?php echo $chargepointNum; ?>');
 								}
 							}
 

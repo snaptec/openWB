@@ -645,7 +645,7 @@ sofortlademodus(){
 			fi
 
 			#Ladepunkt 3
-			if [[ $lastmanagements2 == "1" ]]; then
+			if [[ $lastmanagementlp3 == "1" ]]; then
 				aktgeladens2=$(<ramdisk/aktgeladens2)
 				if (( msmoduslp3 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then
@@ -1130,7 +1130,7 @@ sofortlademodus(){
 			fi
 			llneu=$((llalt - maxdiff))
 			llneus1=$((llalts1 - maxdiff))
-			if [[ $lastmanagements2 == "1" ]]; then
+			if [[ $lastmanagementlp3 == "1" ]]; then
 				llneus2=$((llalts2 - maxdiff))
 			fi
 			if (( llneu < minimalstromstaerke )); then
@@ -1145,7 +1145,7 @@ sofortlademodus(){
 					echo Ladepunkt 2 Differenz groesser als minimalstromstaerke, setze auf minimal A $minimalstromstaerke
 				fi
 			fi
-			if [[ $lastmanagements2 == "1" ]]; then
+			if [[ $lastmanagementlp3 == "1" ]]; then
 				if (( llneus2 < minimalstromstaerke )); then
 					llneus2=$minimalstromstaerke
 					if [[ $debug == "1" ]]; then
@@ -1218,7 +1218,7 @@ sofortlademodus(){
 				runs/set-current.sh "$llneus1" s1
 				echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 			fi
-			if [[ $lastmanagements2 == "1" ]]; then
+			if [[ $lastmanagementlp3 == "1" ]]; then
 				aktgeladens2=$(<ramdisk/aktgeladens2)
 				if (( msmoduslp2 == "1" )) && (( $(echo "$aktgeladens2 > $lademkwhs2" |bc -l) )); then
 					if grep -q 1 "/var/www/html/openWB/ramdisk/ladestatuss2"; then

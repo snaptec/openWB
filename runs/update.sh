@@ -24,11 +24,11 @@ if [[ $lastmanagement == "1" ]]; then
 		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargiplp2 -m "1"
 	fi
 fi
-if [[ $lastmanagements2 == "1" ]]; then
-	if [[ "$evsecons2" == "extopenwb" ]]
+if [[ $lastmanagementlp3 == "1" ]]; then
+	if [[ "$evseconlp3" == "extopenwb" ]]
 	then
-		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargep3ip -m "$releasetrain"
-		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargep3ip -m "1"
+		mosquitto_pub -t openWB/set/system/releaseTrain -r -h $chargeiplp3 -m "$releasetrain"
+		mosquitto_pub -t openWB/set/system/PerformUpdate -r -h $chargeiplp3 -m "1"
 	fi
 fi
 sleep 15

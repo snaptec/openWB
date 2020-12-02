@@ -105,7 +105,7 @@
 			// due to inconsitent variable naming need individual lines
 			$isConfiguredLp[1] = 1;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
-			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
+			$isConfiguredLp[3] = ($settingsArray['lastmanagementlp3'] == 1) ? 1 : 0;
 			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
 				$isConfiguredLp[$lp] = ($settingsArray['lastmanagementlp'.$lp] == 1) ? 1 : 0;
 			}

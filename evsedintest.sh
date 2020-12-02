@@ -82,20 +82,20 @@ evsedintest() {
 	fi
 	evsedintestlp3=$(<ramdisk/evsedintestlp3)
 	if [[ $evsedintestlp3 == "ausstehend" ]]; then
-		if [[ $evsecons2 == "modbusevse" ]]; then
-			if [[ $evsesources2 = *virtual* ]]; then
-				if ps ax |grep -v grep |grep "socat pty,link=$evsesources2,raw tcp:$evselanips2:26" > /dev/null; then
+		if [[ $evseconlp3 == "modbusevse" ]]; then
+			if [[ $modbusevsesourcelp3 = *virtual* ]]; then
+				if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp3,raw tcp:$modbusevselaniplp3:26" > /dev/null; then
 					echo "test" > /dev/null
 				else
-					sudo socat pty,link=$evsesources2,raw tcp:$evselanips2:26 &
+					sudo socat pty,link=$modbusevsesourcelp3,raw tcp:$modbusevselaniplp3:26 &
 				fi
 			else
 				echo "echo" > /dev/null
 			fi
 			sleep 1
-			sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 9
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp3 $modbusevseidlp3 1000 9
 			sleep 1
-			evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
+			evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesourcelp3 $modbusevseidlp3 1000 1)
 			if [[ $evsedinstat == "9" ]]; then
 				echo "EVSE LP3 Prüfung erfolgreich"
 				echo "erfolgreich" > ramdisk/evsedintestlp3
@@ -104,10 +104,10 @@ evsedintest() {
 				echo "Fehler" > ramdisk/evsedintestlp3
 			fi
 			sleep 1
-			sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 0
+			sudo python runs/evsewritembusdev.py $modbusevsesourcelp3 $modbusevseidlp3 1000 0
 			sleep 1
 		else
-			echo "$evsecons2 konfiguriert" > ramdisk/evsedintestlp3
+			echo "$evseconlp3 konfiguriert" > ramdisk/evsedintestlp3
 		fi
 		exit 0
 	fi
@@ -267,18 +267,18 @@ evsemodbuscheck() {
 				sudo python runs/evsewritembusdev.py $modbusevsesourcelp2 $modbusevseidlp2 1000 $llalts1
 			fi
 		fi
-		if (( lastmanagements2 == 1 )); then
-			if [[ $evsecons2 == "modbusevse" ]]; then
-				if [[ $evsesources2 = *virtual* ]]; then
-					if ps ax |grep -v grep |grep "socat pty,link=$evsesources2,raw tcp:$evselanips2:26" > /dev/null; then
+		if (( lastmanagementlp3 == 1 )); then
+			if [[ $evseconlp3 == "modbusevse" ]]; then
+				if [[ $modbusevsesourcelp3 = *virtual* ]]; then
+					if ps ax |grep -v grep |grep "socat pty,link=$modbusevsesourcelp3,raw tcp:$modbusevselaniplp3:26" > /dev/null; then
 						echo "test" > /dev/null
 					else
-						sudo socat pty,link=$evsesources2,raw tcp:$evselanips2:26 &
+						sudo socat pty,link=$modbusevsesourcelp3,raw tcp:$modbusevselaniplp3:26 &
 					fi
 				else
 					echo "echo" > /dev/null
 				fi
-				evsedinstat=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1000 1)
+				evsedinstat=$(sudo python runs/readmodbus.py $modbusevsesourcelp3 $modbusevseidlp3 1000 1)
 				if [[ $evsedinstat == "$llalts2" ]]; then
 					if [[ $debug == "1" ]]; then
 						echo "LP3 Modbus $llalts2 korrekt"
@@ -287,7 +287,7 @@ evsemodbuscheck() {
 					if [[ $debug == "1" ]]; then
 						echo "LP3 Modbus $llalts2 nicht korrekt"
 					fi
-					sudo python runs/evsewritembusdev.py $evsesources2 $evseids2 1000 $llalts2
+					sudo python runs/evsewritembusdev.py $modbusevsesourcelp3 $modbusevseidlp3 1000 $llalts2
 				fi
 			fi
 		fi

@@ -48,8 +48,8 @@ if [[ $lastmanagement == "1" ]]; then
 			fi
 		fi
 	fi
-	if [[ $lastmanagements2 == "1" ]]; then
-		if [[ $evsecons2 == "goe" ]]; then
+	if [[ $lastmanagementlp3 == "1" ]]; then
+		if [[ $evseconlp3 == "goe" ]]; then
 			output=$(curl --connect-timeout 1 -s http://$goeiplp3/status)
 			if [[ $? == "0" ]] ; then
 				state=$(echo $output | jq -r '.alw')

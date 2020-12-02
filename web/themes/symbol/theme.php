@@ -102,7 +102,7 @@
 </script>
 
 <input hidden name="lastmanagement" id="lastmanagement" value="<?php echo $lastmanagementold ; ?>" />
-<input hidden name="lastmanagements2" id="lastmanagements2" value="<?php echo $lastmanagements2old ; ?>" />
+<input hidden name="lastmanagementlp3" id="lastmanagementlp3" value="<?php echo $lastmanagementlp3old ; ?>" />
 <input hidden name="speicherstat" id="speicherstat" value="<?php echo $speicherstatold ; ?>" />
 <input hidden name="lademlp1stat" id="lademlp1stat" value="<?php echo $lademstatold ; ?>" />
 <input hidden name="lademlp2stat" id="lademlp2stat" value="<?php echo $lademstats1old ; ?>" />

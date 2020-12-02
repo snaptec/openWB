@@ -166,7 +166,7 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs1
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistungs2
 echo 0 > /var/www/html/openWB/ramdisk/mqttladeleistunglp1
 echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagement
-echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagements2
+echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp3
 echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp4
 echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp5
 echo 3 > /var/www/html/openWB/ramdisk/mqttlastmanagementlp6
@@ -695,33 +695,33 @@ if ! grep -Fq "pvbezugeinspeisung=" /var/www/html/openWB/openwb.conf
 then
 	  echo "pvbezugeinspeisung=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evsecons2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "evseconlp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evsecons2=dac" >> /var/www/html/openWB/openwb.conf
+	  echo "evseconlp3=dac" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evsesources2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "modbusevsesourcelp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evsesources2=dac" >> /var/www/html/openWB/openwb.conf
+	  echo "modbusevsesourcelp3=dac" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evseids2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "modbusevseidlp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evseids2=3" >> /var/www/html/openWB/openwb.conf
+	  echo "modbusevseidlp3=3" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "evselanips2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "modbusevselaniplp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "evselanips2=192.168.14.2" >> /var/www/html/openWB/openwb.conf
+	  echo "modbusevselaniplp3=192.168.14.2" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "ladeleistungs2modul=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "ladeleistungmodullp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "ladeleistungs2modul=sdm630modbuslls2" >> /var/www/html/openWB/openwb.conf
+	  echo "ladeleistungmodullp3=sdm630modbuslls2" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdmids2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm630modbusllidlp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdmids2=4" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm630modbusllidlp3=4" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "lastmanagements2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "lastmanagementlp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "lastmanagements2=0" >> /var/www/html/openWB/openwb.conf
+	  echo "lastmanagementlp3=0" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "sofortlls1=" /var/www/html/openWB/openwb.conf
 then
@@ -844,17 +844,17 @@ if ! grep -Fq "sdm120modbusllid3lp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "sdm120modbusllid3lp2=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid1s2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid1lp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid1s2=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid1lp3=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid2s2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid2lp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid2s2=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid2lp3=10" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120modbusllid3s2=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllid3lp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "sdm120modbusllid3s2=10" >> /var/www/html/openWB/openwb.conf
+	  echo "sdm120modbusllid3lp3=10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "evsewifiiplp1=" /var/www/html/openWB/openwb.conf
 then
@@ -1135,13 +1135,13 @@ if ! grep -Fq "mpm3pmllidlp2=" /var/www/html/openWB/openwb.conf
 then
 	  echo "mpm3pmllidlp2=1" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "mpm3pmlls2source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "mpm3pmllsourcelp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "mpm3pmlls2source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+	  echo "mpm3pmllsourcelp3=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "mpm3pmlls2id=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "mpm3pmllidlp3=" /var/www/html/openWB/openwb.conf
 then
-	  echo "mpm3pmlls2id=5" >> /var/www/html/openWB/openwb.conf
+	  echo "mpm3pmllidlp3=5" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "mpm3pmevusource=" /var/www/html/openWB/openwb.conf
 then
@@ -1261,17 +1261,17 @@ if ! grep -Fq "sdm120modbusllsourcelp2=" /var/www/html/openWB/openwb.conf
 then
 		  echo "sdm120modbusllsourcelp2=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm120lp3source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm120modbusllsourcelp3=" /var/www/html/openWB/openwb.conf
 then
-		  echo "sdm120lp3source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm120modbusllsourcelp3=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "sdm630lp3source=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm630modbusllsourcelp3=" /var/www/html/openWB/openwb.conf
 then
-		  echo "sdm630lp3source=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm630modbusllsourcelp3=/dev/ttyUSB0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "lllaniplp3=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "sdm630modbuslllaniplp3=" /var/www/html/openWB/openwb.conf
 then
-		  echo "lllaniplp3=192.168.0.10" >> /var/www/html/openWB/openwb.conf
+		  echo "sdm630modbuslllaniplp3=192.168.0.10" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "lp1name=" /var/www/html/openWB/openwb.conf
 then
@@ -2489,18 +2489,18 @@ if ! grep -Fq "ess_api_ver=" /var/www/html/openWB/openwb.conf
 then
 	echo "ess_api_ver=01.2020" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "mpmlp4ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "mpmiplp4=" /var/www/html/openWB/openwb.conf
 then
-	echo "mpmlp4ip=192.168.193.54" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp5ip=192.168.193.55" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp6ip=192.168.193.56" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp7ip=192.168.193.57" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp8ip=192.168.193.58" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp4id=14" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp5id=15" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp6id=16" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp7id=17" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp8id=18" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp4=192.168.193.54" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp5=192.168.193.55" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp6=192.168.193.56" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp7=192.168.193.57" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp8=192.168.193.58" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp4=14" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp5=15" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp6=16" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp7=17" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp8=18" >> /var/www/html/openWB/openwb.conf
 	echo "lastmanagementlp4=0" >> /var/www/html/openWB/openwb.conf
 	echo "lastmanagementlp5=0" >> /var/www/html/openWB/openwb.conf
 	echo "lastmanagementlp6=0" >> /var/www/html/openWB/openwb.conf
@@ -2544,10 +2544,10 @@ then
 	echo "evseiplp3=192.168.193.43" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp1ip=192.168.193.51" >> /var/www/html/openWB/openwb.conf
 	echo "mpmiplp2=192.168.193.52" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp3ip=192.168.193.53" >> /var/www/html/openWB/openwb.conf
+	echo "mpmiplp3=192.168.193.53" >> /var/www/html/openWB/openwb.conf
 	echo "mpmlp1id=11" >> /var/www/html/openWB/openwb.conf
 	echo "mpmidlp2=12" >> /var/www/html/openWB/openwb.conf
-	echo "mpmlp3id=13" >> /var/www/html/openWB/openwb.conf
+	echo "mpmidlp3=13" >> /var/www/html/openWB/openwb.conf
 	echo "lp4name=LP4" >> /var/www/html/openWB/openwb.conf
 	echo "lp5name=LP5" >> /var/www/html/openWB/openwb.conf
 	echo "lp6name=LP6" >> /var/www/html/openWB/openwb.conf
@@ -2689,62 +2689,62 @@ if ! grep -Fq "phoenixlp1ip=" /var/www/html/openWB/openwb.conf
 then
 	echo "phoenixlp1ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "chargep1cp=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargecplp1=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep1cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep2cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep3cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep4cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep5cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep6cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep7cp=1" >> /var/www/html/openWB/openwb.conf
-	echo "chargep8cp=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp1=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp2=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp3=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp4=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp5=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp6=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp7=1" >> /var/www/html/openWB/openwb.conf
+	echo "chargecplp8=1" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "chargiplp2=" /var/www/html/openWB/openwb.conf
 then
 	echo "chargiplp2=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep3ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp3=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep3ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp3=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep4ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp4=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep4ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp4=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep5ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp5=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep5ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp5=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep6ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp6=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep6ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp6=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep7ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp7=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep7ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp7=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 
-if ! grep -Fq "chargep8ip=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "chargeiplp8=" /var/www/html/openWB/openwb.conf
 then
-	echo "chargep8ip=192.168.1.100" >> /var/www/html/openWB/openwb.conf
+	echo "chargeiplp8=192.168.1.100" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "datenschutzack=" /var/www/html/openWB/openwb.conf
 then
 	echo "datenschutzack=0" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_vinlp1=" /var/www/html/openWB/openwb.conf
 then
-	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
+	echo "soc_vinlp1=none" >> /var/www/html/openWB/openwb.conf
 fi
-if ! grep -Fq "soclp2_vin=" /var/www/html/openWB/openwb.conf
+if ! grep -Fq "soc_vinlp2=" /var/www/html/openWB/openwb.conf
 then
-	echo "soclp2_vin=none" >> /var/www/html/openWB/openwb.conf
+	echo "soc_vinlp2=none" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "rfidlist=" /var/www/html/openWB/openwb.conf
 then

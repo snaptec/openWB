@@ -266,7 +266,7 @@ if (( lastmanagement == 1 )); then
 	fi
 fi
 
-if (( lastmanagements2 == 1 )); then
+if (( lastmanagementlp3 == 1 )); then
 	ladeleistungs2=$(<ramdisk/llaktuells2)
 	llkwhs2=$(<ramdisk/llkwhs2)
 	plugstatlp3=$(<ramdisk/plugstatlp3)

@@ -2,21 +2,21 @@
 re='^-?[0-9]+$'
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 
-if [[ $sdm120lp3source = *virtual* ]]
+if [[ $sdm120modbusllsourcelp3 = *virtual* ]]
 then
-	if ps ax |grep -v grep |grep "socat pty,link=$sdm120lp3source,raw tcp:$lllaniplp3:26" > /dev/null
+	if ps ax |grep -v grep |grep "socat pty,link=$sdm120modbusllsourcelp3,raw tcp:$sdm630modbuslllaniplp3:26" > /dev/null
 	then
 		echo "test" > /dev/null
 	else
-		sudo socat pty,link=$sdm120lp3source,raw tcp:$lllaniplp3:26 &
+		sudo socat pty,link=$sdm120modbusllsourcelp3,raw tcp:$sdm630modbuslllaniplp3:26 &
 	fi
 else
 	echo "echo" > /dev/null
 fi
 
-if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] && [[ $sdm120modbusllid3s2 != "none" ]] ; then
+if [[ $sdm120modbusllid1lp3 != "none" ]] && [[ $sdm120modbusllid2lp3 != "none" ]] && [[ $sdm120modbusllid3lp3 != "none" ]] ; then
 	n=0
-	output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2 $sdm120modbusllid2s2 $sdm120modbusllid3s2)
+	output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120modbusllsourcelp3 $sdm120modbusllid1lp3 $sdm120modbusllid2lp3 $sdm120modbusllid3lp3)
 	while read -r line; do
 		if (( $n == 0 )); then
 			llv1=$(echo "$line" |  cut -c2- )
@@ -96,9 +96,9 @@ if [[ $sdm120modbusllid1s2 != "none" ]] && [[ $sdm120modbusllid2s2 != "none" ]] 
 	fi
 
 else
-	if [[ $sdm120modbusllid2s2 != "none" ]] ; then
+	if [[ $sdm120modbusllid2lp3 != "none" ]] ; then
 		n=0
-		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120lp3source $sdm120modbusllid1s2 $sdm120modbusllid2s2)
+		output=$(sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm3.py $sdm120modbusllsourcelp3 $sdm120modbusllid1lp3 $sdm120modbusllid2lp3)
 		while read -r line; do
 			if (( $n == 0 )); then
 				llv1=$(echo "$line" |  cut -c2- )
@@ -155,7 +155,7 @@ else
 			echo $llaktuell > /var/www/html/openWB/ramdisk/llaktuells2
 		fi
 	else
-		sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm1.py $sdm120lp3source $sdm120modbusllid1s2
+		sudo python /var/www/html/openWB/modules/sdm120modbuslls2/readsdm1.py $sdm120modbusllsourcelp3 $sdm120modbusllid1lp3
 	fi
 fi
 

@@ -43,10 +43,10 @@ openwbisslave() {
 		elif (( currentCp == 2)) && (( lastmanagement > 0)); then
 			# CP2 does exist
 			:
-		elif (( currentCp == 3)) && (( lastmanagements2 == 0)); then
+		elif (( currentCp == 3)) && (( lastmanagementlp3 == 0)); then
 			# CP3 does not actually exist
 			continue
-		elif (( currentCp == 3)) && (( lastmanagements2 > 0)); then
+		elif (( currentCp == 3)) && (( lastmanagementlp3 > 0)); then
 			# CP3 does exist
 			:
 		elif (( currentCp >= 4)); then

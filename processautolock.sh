@@ -37,7 +37,7 @@ powerLp7=$(<ramdisk/llaktuelllp7)
 powerLp8=$(<ramdisk/llaktuelllp8)
 isConfiguredLp1="1"
 isConfiguredLp2=$lastmanagement
-isConfiguredLp3=$lastmanagements2
+isConfiguredLp3=$lastmanagementlp3
 isConfiguredLp4=$lastmanagementlp4
 isConfiguredLp5=$lastmanagementlp5
 isConfiguredLp6=$lastmanagementlp6
@@ -134,7 +134,7 @@ do
 			echo "1" > $configuredFlagFilename  # set flag in ramdisk
 		else
 			echo "0" > $configuredFlagFilename  # set flag in ramdisk
-			if [ "$statusFlag" != "0" ]; then			
+			if [ "$statusFlag" != "0" ]; then
 				# and set flag "standby" id not already set
 				mqttTopic="openWB/set/lp/$chargePoint/AutolockStatus"
 				mosquitto_pub -r -t $mqttTopic -m 0

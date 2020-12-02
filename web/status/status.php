@@ -669,8 +669,8 @@
 			if (strpos($line, "lastmanagement=") !== false) {
 				list(, $lastmanagementold) = explode("=", $line);
 			}
-			if (strpos($line, "lastmanagements2=") !== false) {
-				list(, $lastmanagements2old) = explode("=", $line);
+			if (strpos($line, "lastmanagementlp3=") !== false) {
+				list(, $lastmanagementlp3old) = explode("=", $line);
 			}
 			if (strpos($line, "simplemode=") !== false) {
 				list(, $simplemodeold) = explode("=", $line);
@@ -702,8 +702,8 @@
 <script>
 	$(function() {
 		var lp2akt = <?php echo $lastmanagementold ?>;
-		var lp3akt = <?php echo $lastmanagements2old ?>;
-		
+		var lp3akt = <?php echo $lastmanagementlp3old ?>;
+
 		if(lp2akt == '0') {
 			$('#ladepunkt2div').hide();
 		} else {
@@ -1280,13 +1280,13 @@
 			<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
 		</div>
 		<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
-		
+
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
-		
+
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
 		</div>
@@ -1316,53 +1316,53 @@
 			}
 		});
 		$('#mqttlog').click(function(event){
-			var element = document.getElementById('mqttdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('mqttdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#mqttdiv').show();
 				$('#mqttdiv').removeClass("hide");
 			} else {
-				$('#mqttdiv').hide(); 
+				$('#mqttdiv').hide();
 				$('#mqttdiv').addClass("hide");
 			}
 		});
 		$('#nurpvlog').click(function(event){
-			var element = document.getElementById('nurpvdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('nurpvdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#nurpvdiv').show();
 				$('#nurpvdiv').removeClass("hide");
 			} else {
-				$('#nurpvdiv').hide(); 
+				$('#nurpvdiv').hide();
 				$('#nurpvdiv').addClass("hide");
 			}
 		});
 
 		$('#ladestatuslog').click(function(event){
-			var element = document.getElementById('ladestatuslogdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('ladestatuslogdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#ladestatuslogdiv').show();
 				$('#ladestatuslogdiv').removeClass("hide");
 			} else {
-				$('#ladestatuslogdiv').hide(); 
+				$('#ladestatuslogdiv').hide();
 				$('#ladestatuslogdiv').addClass("hide");
 			}
 		});
 		$('#debuglog').click(function(event){
-			var element = document.getElementById('debugdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('debugdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#debugdiv').show();
 				$('#debugdiv').removeClass("hide");
 			} else {
-				$('#debugdiv').hide(); 
+				$('#debugdiv').hide();
 				$('#debugdiv').addClass("hide");
 			}
 		});
 		$('#smarthomelog').click(function(event){
-			var element = document.getElementById('smarthomediv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('smarthomediv');
+			if ( element.classList.contains("hide") ) {
 				$('#smarthomediv').show();
 				$('#smarthomediv').removeClass("hide");
 			} else {
-				$('#smarthomediv').hide(); 
+				$('#smarthomediv').hide();
 				$('#smarthomediv').addClass("hide");
 			}
 		});

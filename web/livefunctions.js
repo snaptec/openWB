@@ -373,7 +373,7 @@ $(function() {
 
 });
 $(function() {
-    if($('#lastmanagements2').val() == '0') {
+    if($('#lastmanagementlp3').val() == '0') {
         $('#ladepunkts2ndiv').show();
         $('#ladepunkts2div').hide();
         $('#ladepunkts22div').hide();

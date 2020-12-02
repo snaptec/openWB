@@ -29,8 +29,8 @@ foreach($lines as $line) {
 	if(strpos($line, "lastmanagement=") !== false) {
 		list(, $lastmanagementold) = explode("=", $line);
 	}
-	if(strpos($line, "lastmanagements2=") !== false) {
-		list(, $lastmanagements2old) = explode("=", $line);
+	if(strpos($line, "lastmanagementlp3=") !== false) {
+		list(, $lastmanagementlp3old) = explode("=", $line);
 	}
 	if(strpos($line, "lademstat=") !== false) {
 		list(, $lademstatold) = explode("=", $line);
@@ -195,7 +195,7 @@ $isConfiguredLp = array_fill(1, 8, false); // holds boolean for configured lp
 // due to inconsitent variable naming need individual lines
 $isConfiguredLp[1] = 1;  // lp1 always configured
 $isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
-$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
+$isConfiguredLp[3] = ($settingsArray['lastmanagementlp3'] == 1) ? 1 : 0;
 for ( $lp = 4  ; $lp <= 8; $lp++) {
 	$isConfiguredLp[$lp] = ($settingsArray['lastmanagementlp'.$lp] == 1) ? 1 : 0;
 }

@@ -208,9 +208,9 @@ loadvars(){
 		ConfiguredChargePoints=1
 	fi
 
-	if [[ $lastmanagements2 == "1" ]]; then
+	if [[ $lastmanagementlp3 == "1" ]]; then
 		ConfiguredChargePoints=3
-		if [[ $evsecons2 == "ipevse" ]]; then
+		if [[ $evseconlp3 == "ipevse" ]]; then
 			evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
 			if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
@@ -231,15 +231,15 @@ loadvars(){
 				echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 			fi
 		fi
-		if [[ $evsecons2 == "extopenwb" ]]; then
-			evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
-			ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
+		if [[ $evseconlp3 == "extopenwb" ]]; then
+			evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargeiplp3 -t openWB/lp/1/boolPlugStat)
+			ladestatuslp3=$(mosquitto_sub -C 1 -h $chargeiplp3 -t openWB/lp/1/boolChargeStat)
 			echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
 			echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 
-		if [[ $evsecons2 == "modbusevse" ]]; then
-			evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
+		if [[ $evseconlp3 == "modbusevse" ]]; then
+			evseplugstatelp3=$(sudo python runs/readmodbus.py $modbusevsesourcelp3 $modbusevseidlp3 1002 1)
 			if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
 				evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
 				echo "$(date +%s) Modbus EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
@@ -572,8 +572,8 @@ loadvars(){
 	fi
 
 	#dritter ladepunkt
-	if [[ $lastmanagements2 == "1" ]]; then
-		timeout 10 modules/$ladeleistungs2modul/main.sh || true
+	if [[ $lastmanagementlp3 == "1" ]]; then
+		timeout 10 modules/$ladeleistungmodullp3/main.sh || true
 		llkwhs2=$(</var/www/html/openWB/ramdisk/llkwhs2)
 		llkwhges=$(echo "$llkwhges + $llkwhs2" |bc)
 		llalts2=$(cat /var/www/html/openWB/ramdisk/llsolls2)
@@ -611,7 +611,7 @@ loadvars(){
 	#vierter ladepunkt
 	if [[ $lastmanagementlp4 == "1" ]]; then
 		if [[ "$evseconlp4" == "extopenwb" ]]; then
-			timeout 3 modules/extopenwb/main.sh 4 $chargep4ip $chargep4cp || true
+			timeout 3 modules/extopenwb/main.sh 4 $chargeiplp4 $chargecplp4 || true
 		else
 			timeout 3 modules/mpm3pmlllp4/main.sh || true
 		fi
@@ -648,7 +648,7 @@ loadvars(){
 	#fünfter ladepunkt
 	if [[ $lastmanagementlp5 == "1" ]]; then
 		if [[ "$evseconlp5" == "extopenwb" ]]; then
-			timeout 3 modules/extopenwb/main.sh 5 $chargep5ip $chargep5cp || true
+			timeout 3 modules/extopenwb/main.sh 5 $chargeiplp5 $chargecplp5 || true
 		else
 			timeout 3 modules/mpm3pmlllp5/main.sh || true
 		fi
@@ -685,7 +685,7 @@ loadvars(){
 	#sechster ladepunkt
 	if [[ $lastmanagementlp6 == "1" ]]; then
 		if [[ "$evseconlp6" == "extopenwb" ]]; then
-			timeout 3 modules/extopenwb/main.sh 6 $chargep6ip $chargep6cp || true
+			timeout 3 modules/extopenwb/main.sh 6 $chargeiplp6 $chargecplp6 || true
 		else
 			timeout 3 modules/mpm3pmlllp6/main.sh || true
 		fi
@@ -722,7 +722,7 @@ loadvars(){
 	#siebter ladepunkt
 	if [[ $lastmanagementlp7 == "1" ]]; then
 		if [[ "$evseconlp7" == "extopenwb" ]]; then
-			timeout 3 modules/extopenwb/main.sh 7 $chargep7ip $chargep7cp || true
+			timeout 3 modules/extopenwb/main.sh 7 $chargeiplp7 $chargecplp7 || true
 		else
 			timeout 3 modules/mpm3pmlllp7/main.sh || true
 		fi
@@ -758,7 +758,7 @@ loadvars(){
 	#achter ladepunkt
 	if [[ $lastmanagementlp8 == "1" ]]; then
 		if [[ "$evseconlp8" == "extopenwb" ]]; then
-			timeout 3 modules/extopenwb/main.sh 8 $chargep8ip $chargep8cp || true
+			timeout 3 modules/extopenwb/main.sh 8 $chargeiplp8 $chargecplp8 || true
 		else
 			timeout 3 modules/mpm3pmlllp8/main.sh || true
 		fi
@@ -1286,10 +1286,10 @@ loadvars(){
 		echo $socvorhanden > ramdisk/mqttsocvorhanden
 	fi
 
-	olastmanagements2=$(<ramdisk/mqttlastmanagements2)
-	if [[ "$olastmanagements2" != "$lastmanagements2" ]]; then
-		tempPubList="${tempPubList}\nopenWB/lp/3/boolChargePointConfigured=${lastmanagements2}"
-		echo $lastmanagements2 > ramdisk/mqttlastmanagements2
+	olastmanagementlp3=$(<ramdisk/mqttlastmanagementlp3)
+	if [[ "$olastmanagementlp3" != "$lastmanagementlp3" ]]; then
+		tempPubList="${tempPubList}\nopenWB/lp/3/boolChargePointConfigured=${lastmanagementlp3}"
+		echo $lastmanagementlp3 > ramdisk/mqttlastmanagementlp3
 	fi
 	olastmanagementlp4=$(<ramdisk/mqttlastmanagementlp4)
 	if [[ "$olastmanagementlp4" != "$lastmanagementlp4" ]]; then
