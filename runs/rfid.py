@@ -10,6 +10,7 @@ import socket
 import struct 
 import binascii 
 import RPi.GPIO as GPIO
+
 os.chdir('/var/www/html/openWB/')
 loglevel=1
 counter=0
@@ -24,9 +25,11 @@ Values.update({'oldplugstatlp3' : str(0)})
 Values.update({'oldplugstatlp4' : str(0)})
 Values.update({'lastpluggedlp' : str(0)})
 Values.update({'lastscannedtag' : str(0)})
+Values.update({'rfidlasttag' : str(0)})
+
 def logDebug(level, msg): 
     if (int(level) >= int(loglevel)): 
-        file = open('/var/www/html/openWB/ramdisk/rfid.log', 'a') 
+        file = open('ramdisk/rfid.log', 'a') 
         if (int(level) == 0): 
             file.write(time.ctime() + ': ' + str(msg)+ '\n') 
         if (int(level) == 1): 
@@ -40,10 +43,8 @@ def readrfidlist():
     with open('ramdisk/rfidlist', 'r') as value:
         rfidstring = str(value.read())
     rfidlist=rfidstring.rstrip().split(",") 
-readrfidlist()
-def getplugstat():
 
-    
+def getplugstat():
     try:
         with open('ramdisk/plugstat', 'r') as value:
             Values.update({'newplugstatlp1' : int(value.read())})
@@ -71,7 +72,6 @@ def getplugstat():
                 f = open('ramdisk/lp2enabled', 'w')
                 f.write(str("0"))
                 f.close()
-
             Values.update({"oldplugstatlp2" : Values["newplugstatlp2"]})
     except:
         pass
@@ -87,7 +87,6 @@ def getplugstat():
                 f = open('ramdisk/lp3enabled', 'w')
                 f.write(str("0"))
                 f.close()
-
             Values.update({"oldplugstatlp3" : Values["newplugstatlp3"]})
     except:
         pass
@@ -103,11 +102,11 @@ def getplugstat():
                 f = open('ramdisk/lp4enabled', 'w')
                 f.write(str("0"))
                 f.close()
-
             Values.update({"oldplugstatlp4" : Values["newplugstatlp4"]})
     except:
         pass
-    logDebug(1, str("Plugstat:" + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) + str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"])))
+    logDebug(1, str("Plugstat: " + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) + str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"])))
+
 def conditions():
     if ( Values["lastpluggedlp"] != "0"):
         logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
@@ -117,35 +116,47 @@ def conditions():
             if ( Values["lastscannedtag"] != "0"):
                 for i in rfidlist:
                     if (str(i) == str(Values["lastscannedtag"])):
-                        logDebug(1, str("Schalte Ladepunkt: ") + str(Values["lastpluggedlp"]) + str("frei"))
-
+                        logDebug(1, str("Schalte Ladepunkt: ") + str(Values["lastpluggedlp"]) + str(" frei"))
                         f = open('ramdisk/lp'+str(Values["lastpluggedlp"])+'enabled', 'w')
                         f.write(str("1"))
                         f.close()
-
-                        f = open('/var/www/html/openWB/ramdisk/rfidlp' + str(Values["lastpluggedlp"]), 'w')
+                        f = open('ramdisk/rfidlp' + str(Values["lastpluggedlp"]), 'w')
                         f.write(str(Values["lastscannedtag"]))
                         f.close()
                         logDebug(1, str("Schreibe Tag: ")+str(Values["lastscannedtag"])+str(" zu Ladepunkt"))
                         Values.update({'lastpluggedlp' : "0"})
-                        f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
+                        f = open('ramdisk/readtag', 'w')
                         f.write(str(0))
                         f.close()
         except Exception as e:
             logDebug(1, str(e))
-            pass     
+            pass
+
+def savelastrfidtag():
+    with open('ramdisk/readtag', 'r') as readtagfile:
+        readtag = int( readtagfile.read().rstrip() )
+    if ( ( str(readtag) != Values["rfidlasttag"] ) and ( str(readtag) != "0" ) ):
+        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk"))
+        f = open('ramdisk/rfidlasttag', 'w')
+        f.write(str(readtag) + str(",") + str(os.path.getmtime('ramdisk/readtag')))
+        f.close()
+        Values.update({'rfidlasttag' : str(readtag)})
+
 def clearoldrfidtag():
-    t = os.path.getmtime('/var/www/html/openWB/ramdisk/readtag')
+    t = os.path.getmtime('ramdisk/readtag')
     timediff = time.time() - t
     if timediff > 300:
-        logDebug(1, str("Verwerfe Tag") + str(timediff))
-        f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
+        logDebug(1, str("Verwerfe Tag nach ") + str(timediff) + str(" Sekunden"))
+        f = open('ramdisk/readtag', 'w')
         f.write(str("0"))
         f.close()
 
+readrfidlist()
+
 while True:
     getplugstat()
-    conditions()    
+    conditions()
+    savelastrfidtag()
     clearoldrfidtag()
     counter= counter + 1
     if ( counter > 10 ):
