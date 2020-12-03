@@ -77,7 +77,7 @@ def on_connect(client, userdata, flags, rc):
 # handle each set topic
 def on_message(client, userdata, msg):
     # log all messages before any error forces this process to die
-    if (len(msg.payload) >= 1):
+    if (len(msg.payload.decode("utf-8")) >= 1):
         theTime = datetime.now()
         timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
         file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')
@@ -124,13 +124,13 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_differentMeasurement", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_ip" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload.decode("utf-8"))) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
                 writetoconfig(shconfigfile,'smarthomedevices','device_ip_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_ip", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_ip", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureip" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload.decode("utf-8"))) > 6 and bool(re.match(ipallowed, msg.payload.decode("utf-8")))):
                 writetoconfig(shconfigfile,'smarthomedevices','device_measureip_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureip", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureip", "", qos=0, retain=True)
@@ -142,14 +142,14 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_name", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 2):
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload.decode("utf-8"))) > 2):
                 if ( msg.payload.decode("utf-8") == "tasmota" or msg.payload.decode("utf-8") == "shelly" or msg.payload.decode("utf-8") == "pyt"):
                     writetoconfig(shconfigfile,'smarthomedevices','device_type_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_type", msg.payload.decode("utf-8"), qos=0, retain=True)
                     client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_type", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureType" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload)) > 2):
+            if ( 1 <= int(devicenumb) <= 10 and len(str(msg.payload.decode("utf-8"))) > 2):
                 if ( msg.payload.decode("utf-8") == "http" or msg.payload.decode("utf-8") == "shelly" or msg.payload.decode("utf-8") == "sdm630"):
                     writetoconfig(shconfigfile,'smarthomedevices','device_measureType_'+str(devicenumb), msg.payload.decode("utf-8"))
                     client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureType", msg.payload.decode("utf-8"), qos=0, retain=True)
@@ -441,6 +441,7 @@ def on_message(client, userdata, msg):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "maximalstromstaerke=", msg.payload.decode("utf-8")]
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/global/maxEVSECurrentAllowed", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/global/maxEVSECurrentAllowed", "", qos=0, retain=True)
         if (msg.topic == "openWB/config/set/global/dataProtectionAcknoledged"):
             if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                 sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "datenschutzack=", msg.payload.decode("utf-8")]
@@ -542,11 +543,10 @@ def on_message(client, userdata, msg):
 
 
         if (msg.topic == "openWB/set/system/topicSender"):
-            if len(msg.payload) >= 3 and len(msg.payload) <=100:
-
+            if ( 3 <= len(msg.payload.decode("utf-8")) <=100 ):
                 client.publish("openWB/set/system/topicSender", "", qos=0, retain=True)
         if (msg.topic == "openWB/set/system/GetRemoteSupport"):
-            if len(msg.payload) >= 5 and len(msg.payload) <=50:
+            if ( 5 <= len(msg.payload.decode("utf-8")) <=50 ):
                 token=msg.payload.decode("utf-8")
                 getsupport = ["/var/www/html/openWB/runs/startremotesupport.sh", token]
                 subprocess.Popen(getsupport)
@@ -668,7 +668,7 @@ def on_message(client, userdata, msg):
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
         if (msg.topic == "openWB/set/system/SimulateRFID"):
-            if len(str(msg.payload)) >= 1 and bool(re.match(namenumballowed, msg.payload.decode("utf-8"))):
+            if len(str(msg.payload.decode("utf-8"))) >= 1 and bool(re.match(namenumballowed, msg.payload.decode("utf-8"))):
                 f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -678,7 +678,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
                 subprocess.Popen("/var/www/html/openWB/runs/update.sh")
         if (msg.topic == "openWB/set/system/SendDebug"):
-            if len(msg.payload) >= 20 and len(msg.payload) <=1000:
+            if ( 20 <= len(msg.payload.decode("utf-8")) <=1000 ):
                 f = open('/var/www/html/openWB/ramdisk/debuguser', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
