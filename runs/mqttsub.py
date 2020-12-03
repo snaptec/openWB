@@ -136,7 +136,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureip", "", qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_name" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 10 and  3 <= len(str(msg.payload)) <= 12 and bool(re.match(nameallowed, msg.payload.decode("utf-8")))):
+            if ( 1 <= int(devicenumb) <= 10 and  3 <= len(str(msg.payload.decode("utf8"))) <= 12 and bool(re.match(nameallowed, msg.payload.decode("utf-8")))):
                 writetoconfig(shconfigfile,'smarthomedevices','device_name_'+str(devicenumb), msg.payload.decode("utf-8"))
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_name", msg.payload.decode("utf-8"), qos=0, retain=True)
                 client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_name", "", qos=0, retain=True)

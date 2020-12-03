@@ -107,7 +107,7 @@ function sendValues() {
         // then send changed values
 
         Object.keys(changedValues).forEach(function(topic, index) {
-        var value = this[topic].toString();
+            var value = this[topic].toString();
             setTimeout(function () {
                 publish(value, topic);
             }, index * intervall);
@@ -126,7 +126,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"], input[type="text"], input[type="range"]').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="range"]:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {
@@ -140,7 +140,9 @@ function getChangedValues() {
             var topicIdentifier = $(this).attr('name');
         }
         if ( $(this).hasClass('btn-group-toggle') ) {
-            var value = $('input[name="' + $(this).attr('id') + '"]:checked').data('option');
+            if ( $('input[name="' + $(this).attr('id') + '"]:checked').attr('disabled') != 'disabled' ) {
+                var value = $('input[name="' + $(this).attr('id') + '"]:checked').data('option');
+            }
         } else {
             var value = $(this).val();
             if ( $(this).attr('type') == 'number' || $(this).attr('type') == 'text' ) {
@@ -154,7 +156,7 @@ function getChangedValues() {
             }
         }
         var topic = topicPrefix + topicSubGroup + topicIdentifier;
-        if ( originalValues[topic] != value ) {
+        if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
             topic = topic.replace('/get/', '/set/');
             changedValues[topic] = value;
         }
