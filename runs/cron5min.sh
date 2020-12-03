@@ -197,13 +197,6 @@ echo $hausdailyyield > /var/www/html/openWB/ramdisk/daily_hausverbrauchkwh
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
-#echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
-#echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
-#echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
-#echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/isss.log
-#echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/rfid.log
-
-
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
 then
 	echo "test" > /dev/null
@@ -265,3 +258,9 @@ else
        sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py &
 fi
 	/var/www/html/openWB/runs/cleanup.sh >> /var/www/html/openWB/ramdisk/cleanup.log 2>&1
+ethstate=$(</sys/class/net/eth0/carrier)
+if (( ethstate == 1 )); then
+		sudo ifconfig wlan0 down
+else
+		sudo ifconfig wlan0 up
+fi
