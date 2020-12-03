@@ -165,6 +165,7 @@ var thevalues = [
 	["openWB/lp/8/kWhChargedSincePlugged", "#pluggedladungbishergeladenlp8div"],
 	["openWB/global/ChargeMode", "#"],
 	["openWB/global/WAllChargePoints", "#"],
+	["openWB/global/rfidConfigured", "#"],
 	["openWB/housebattery/W", "#speicherleistungdiv"],
 	["openWB/housebattery/%Soc", "#"],
 	["openWB/global/strLastmanagementActive", "#lastregelungaktivdiv"],
@@ -875,6 +876,13 @@ function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	else if ( mqttmsg == "openWB/system/reloadDisplay" ) {
 		if ( mqttpayload == "1" ) {
 			reloadDisplay();
+		}
+	}
+	else if ( mqttmsg == "openWB/global/rfidConfigured" ) {
+		if ( mqttpayload == "0" ) {
+			$('#pinpad').addClass('hide');
+		} else {
+			$('#pinpad').removeClass('hide');
 		}
 	}
 	else {

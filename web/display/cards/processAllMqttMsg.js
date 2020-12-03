@@ -331,6 +331,15 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				break;
 		}
 	}
+	else if ( mqttmsg == 'openWB/global/rfidConfigured' ) {
+		if ( mqttpayload == '0' ) {
+			// disable manuel Rfid Code
+			$('#rfidCodeBtn').addClass('hide');
+		} else {
+			// enable manuel Rfid Code
+			$('#rfidCodeBtn').removeClass('hide');
+		}
+	}
 }
 
 function processHousebatteryMessages(mqttmsg, mqttpayload) {
