@@ -339,6 +339,10 @@ def getdevicevalues():
         except:
             deactivatewhileevcharging = 0
         try:
+            canswitch = int(config.get('smarthomedevices', 'device_canswitch_'+str(numberOfDevices)))
+        except:
+            canswitch = 1   
+        try:
             mineinschaltdauer = int(config.get('smarthomedevices', 'device_mineinschaltdauer_'+str(numberOfDevices))) * 60
         except:
             mineinschaltdauer = 0
@@ -352,15 +356,20 @@ def getdevicevalues():
            else:
               abschalt = 1
         # prepare end
-        if ( n == "1" ):
-            if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "shelly"):
+        if ( n == "1" ):        
+            # Nicht schaltbare Devices laufen generell hier durch wegen sepwatt
+            if ( config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)) == "shelly") or (canswitch == 0):
                 try:
-                    answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices))+"/status", timeout=3).read().decode("utf-8")))
-                    wattstart = int(answer['meters'][0]['power'])
-                    relais = int(answer['relays'][0]['ison'])
+                    if canswitch == 1:
+                       answer = json.loads(str(urllib.request.urlopen("http://"+config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices))+"/status", timeout=3).read().decode("utf-8")))
+                       wattstart = int(answer['meters'][0]['power'])
+                       relais = int(answer['relays'][0]['ison'])
+                    else:
+                       wattstart = 0
+                       relais = 0
                     try:
                         anzahltemp = int(config.get('smarthomedevices', 'device_temperatur_configured_'+str(numberOfDevices)))
-                        if ( anzahltemp > 0):
+                        if ( anzahltemp > 0) and ( canswitch == 1 ):
                             for i in range(anzahltemp):
                                 temp = str(answer['ext_temperature'][str(i)]['tC'])
                                 DeviceValues.update( {str(numberOfDevices) + "temp" + str(i) : temp })
