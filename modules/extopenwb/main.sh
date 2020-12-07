@@ -4,6 +4,7 @@ ip=$2
 chargepcp=$3
 outputname="extopenwb"$chargep"temp"
 timeout 1 mosquitto_sub -v -h $ip -t openWB/lp/$chargepcp/# > /var/www/html/openWB/ramdisk/$outputname
+myipaddress=$(</var/www/html/openWB/ramdisk/ipaddress)
 #values=$(</var/www/html/openWB/ramdisk/extopenwb$chargeptemp)
 #echo -e $values
 #watt=$(mosquitto_sub -C 1 -h $ip -t openWB/lp/1/W) 
@@ -91,6 +92,8 @@ if [[ $(wc -l </var/www/html/openWB/ramdisk/$outputname) -ge 5 ]]; then
 		echo $LastScannedRfidTag > /var/www/html/openWB/ramdisk/readtag
 		mosquitto_pub -h $ip -r -t openWB/set/isss/ClearRfid -m "1"
 	fi
+
+	mosquitto_pub -h $ip -r -t openWB/set/isss/parentWB -m "$myipaddress"
 
 fi
 

@@ -35,7 +35,7 @@
             <!-- nav elements -->
             <a class="btn btn-outline-info btn-toggle active" href="#dashboard" onclick="return false;">Dashboard</a><br>
             <a class="btn btn-outline-info" href="#ladepunkte" onclick="return false;">Ladepunkte</a><br>
-            <a class="btn btn-outline-info" href="#code" onclick="return false;">Code</a><br>
+            <a class="btn btn-outline-info hide" id="rfidCodeBtn" href="#code" onclick="return false;">Code</a><br>
             <a class="btn btn-outline-danger text-danger hide" id="lastmanagementShowBtn" onclick="return false;">Warnungen</a><br>
         </div>
 
@@ -1394,9 +1394,9 @@
                     // some helper functions
                     'display/cards/helperFunctions.js?ver=20201201',
                     // functions for processing messages
-                    'display/cards/processAllMqttMsg.js?ver=20201201',
+                    'display/cards/processAllMqttMsg.js?ver=20201203',
                     // functions performing mqtt and start mqtt-service
-                    'display/cards/setupMqttServices.js?ver=20201201',
+                    'display/cards/setupMqttServices.js?ver=20201203',
                 ];
 
                 scriptsToLoad.forEach(function(src) {

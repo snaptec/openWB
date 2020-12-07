@@ -32,6 +32,32 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script>
+			/**
+			 * hideSection
+			 * add class 'hide' to element with id 'section'
+			 * disables all contained input and select elements if 'disableChildren' is not set to false
+			**/
+			function hideSection(section, disableChildren=true) {
+				$('#'+section).addClass('hide');
+				if (disableChildren) {
+					$('#'+section).find('input').prop("disabled", true);
+					$('#'+section).find('select').prop("disabled", true);
+				}
+			}
+
+			/**
+			 * showSection
+			 * remove class 'hide' from element with id 'section'
+			 * enables all contained input and select elements if 'enableChildren' is not set to false
+			**/
+			function showSection(section, enableChildren=true) {
+				$('#'+section).removeClass('hide');
+				if (enableChildren) {
+					$('#'+section).find('input').prop("disabled", false);
+					$('#'+section).find('select').prop("disabled", false);
+				}
+			}
+
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -82,7 +108,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="card-body" id="device<?php echo $devicenum; ?>options" style="display: none;">
+					<div class="card-body hide" id="device<?php echo $devicenum; ?>options">
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
@@ -228,7 +254,7 @@
 									<div class="form-row vaRow mb-1">
 										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">0 %</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										</div>
 									</div>
 									<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
@@ -242,7 +268,7 @@
 									<div class="form-row vaRow mb-1">
 										<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">100 %</label>
 										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										</div>
 									</div>
 									<span class="form-text small">Parameter in % Ladezustand. Überhalb dieses Wertes wird das Gerät nicht abgeschaltet. 100% deaktiviert die Funktion.</span>
@@ -289,7 +315,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="device<?php echo $devicenum; ?>differentMeasurement" style="display: none;">
+						<div id="device<?php echo $devicenum; ?>differentMeasurement" class="hide">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
@@ -425,69 +451,69 @@
 		<script>
 			
 			function visibiltycheck(elementId, mqttpayload) {
-<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
-				if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
-					if ( mqttpayload == 0 ) {
-						$('#device<?php echo $devicenum; ?>options').hide();
-					} else {
-						$('#device<?php echo $devicenum; ?>options').show();
+				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+					if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
+						if ( mqttpayload == 0 ) {
+							hideSection('device<?php echo $devicenum; ?>options');
+						} else {
+							showSection('device<?php echo $devicenum; ?>options');
+						}
 					}
-				}
-				if ( elementId == 'device_differentMeasurementDevices<?php echo $devicenum; ?>') {
-					if ( mqttpayload == 0 ) {
-						$('#device<?php echo $devicenum; ?>differentMeasurement').hide();
-					} else {
-						$('#device<?php echo $devicenum; ?>differentMeasurement').show();
+					if ( elementId == 'device_differentMeasurementDevices<?php echo $devicenum; ?>') {
+						if ( mqttpayload == 0 ) {
+							hideSection('device<?php echo $devicenum; ?>differentMeasurement');
+						} else {
+							showSection('device<?php echo $devicenum; ?>differentMeasurement');
+						}
 					}
-				}
-				/*if ( elementId == 'device_canSwitchDevices<?php echo $devicenum; ?>') {
-					if ( mqttpayload == 0 ) {
-						$('#device<?php echo $devicenum; ?>canSwitch').hide();
-					} else {
-						$('#device<?php echo $devicenum; ?>canSwitch').show();
+					/*if ( elementId == 'device_canSwitchDevices<?php echo $devicenum; ?>') {
+						if ( mqttpayload == 0 ) {
+							hideSection('device<?php echo $devicenum; ?>canSwitch');
+						} else {
+							showSection('device<?php echo $devicenum; ?>canSwitch');
+						}
+					}*/
+					if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
+						if ( mqttpayload != "Name" ) {
+							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
+						} else {
+							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+						}
 					}
-				}*/
-				if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
-					if ( mqttpayload != "Name" ) {
-						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
-					} else {
-						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
-					}
-				}
-<?php } ?>
+				<?php } ?>
 			}
 			$(function() {
-<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
-				$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device_configuredDevices<?php echo $devicenum; ?>On').prop("checked")) {
-						$('#device<?php echo $devicenum; ?>options').show();
-					} else {
-						$('#device<?php echo $devicenum; ?>options').hide();
-					}
-				});
-				$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device_differentMeasurement<?php echo $devicenum; ?>1').prop("checked")) {
-						$('#device<?php echo $devicenum; ?>differentMeasurement').show();
-					} else {
-						$('#device<?php echo $devicenum; ?>differentMeasurement').hide();
-					}
-				});
+				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+					$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
+						if ($('#device_configuredDevices<?php echo $devicenum; ?>On').prop("checked")) {
+							showSection('device<?php echo $devicenum; ?>options');
+						} else {
+							hideSection('device<?php echo $devicenum; ?>options');
+						}
+					});
+					$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
+						if ($('#device_differentMeasurement<?php echo $devicenum; ?>1').prop("checked")) {
+							showSection('device<?php echo $devicenum; ?>differentMeasurement');
+						} else {
+							hideSection('device<?php echo $devicenum; ?>differentMeasurement');
+						}
+					});
 
-				/*$('#device_canSwitchDevices<?php echo $devicenum; ?>').change(function(){
-					if ($('#device_canSwitch<?php echo $devicenum; ?>1').prop("checked")) {
-						$('#device<?php echo $devicenum; ?>canSwitch').show();
-					} else {
-						$('#device<?php echo $devicenum; ?>canSwitch').hide();
-					}
-				});*/
-				$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
-					if (($(this).val() != "Name") && ($(this).val().length > 0)) {
-						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
-					} else {
-						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
-					}
-				})
-<?php } ?>
+					/*$('#device_canSwitchDevices<?php echo $devicenum; ?>').change(function(){
+						if ($('#device_canSwitch<?php echo $devicenum; ?>1').prop("checked")) {
+							showSection('device<?php echo $devicenum; ?>canSwitch');
+						} else {
+							hideSection('device<?php echo $devicenum; ?>canSwitch');
+						}
+					});*/
+					$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
+						if (($(this).val() != "Name") && ($(this).val().length > 0)) {
+							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
+						} else {
+							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+						}
+					})
+				<?php } ?>
 			});
 
 			$.get(
