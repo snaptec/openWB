@@ -654,6 +654,20 @@ def on_message(client, userdata, msg):
 
 
 
+        if (msg.topic == "openWB/config/set/global/lp/1/cpInterrupt"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                einbeziehen=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "cpunterbrechunglp1=", einbeziehen]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/global/lp/1/cpInterrupt", einbeziehen, qos=0, retain=True)
+                client.publish("openWB/config/set/global/lp/1/cpInterrupt", "", qos=0, retain=True)
+        if (msg.topic == "openWB/config/set/global/lp/2/cpInterrupt"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                einbeziehen=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "cpunterbrechunglp2=", einbeziehen]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/global/lp/2/cpInterrupt", einbeziehen, qos=0, retain=True)
+                client.publish("openWB/config/set/global/lp/2/cpInterrupt", "", qos=0, retain=True)
 
         if (msg.topic == "openWB/config/set/pv/priorityModeEVBattery"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=1):
