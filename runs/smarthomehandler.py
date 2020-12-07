@@ -80,7 +80,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     if meastyp == "shelly": 
        try:
           pyname = prefixpy + 'shelly/watt.py'
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(0)])
+          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(0)])
           proc.communicate() 
           #no separate return file for shelly, we will use the standard (without s)
           f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
