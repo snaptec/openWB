@@ -454,11 +454,11 @@ function aggregateDataForChargePoint() {
 			NumberOfChargingPhases=$previousNumberOfChargingPhases
 			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase #${ChargingPhaseWithMaximumTotalCurrent} has highest current and will be used for load management"
 		fi
+	fi
 
-		# if we have no charging vehicles at all, assume ourself as charging (and avoid dev/0 error)
-		if (( ChargingVehiclesAdjustedForThisCp == 0 )); then
-			ChargingVehiclesAdjustedForThisCp=1
-		fi
+	# if we have no charging vehicles at all, assume ourself as charging (and avoid dev/0 error)
+	if (( ChargingVehiclesAdjustedForThisCp == 0 )); then
+		ChargingVehiclesAdjustedForThisCp=1
 	fi
 
 	# we must make sure that we don't leave NumberOfChargingPhases at 0 if we couldn't count it up to here
