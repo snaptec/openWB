@@ -1589,36 +1589,6 @@ loadvars(){
 			echo $arandomSleep > ramdisk/mqttRandomSleepValue
 	fi
 
-	for i in $(seq 1 8);
-	do
-		for f in \
-			"pluggedladunglp${i}startkwh:openWB/lp/${i}/plugStartkWh" \
-			"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt"
-		do
-			IFS=':' read -r -a tuple <<< "$f"
-			local currentRamdiskFileVar="\"ramdisk/${tuple[0]}\""
-			local mqttRamdiskFileVar="\"ramdisk/mqtt${tuple[0]}\""
-			#echo "Working on currentRamdiskFile='$currentRamdiskFileVar', mqttRamdiskFile='$mqttRamdiskFileVar'"
-			eval currentRamdiskFile=\$$currentRamdiskFileVar
-			eval mqttRamdiskFile=\$$mqttRamdiskFileVar
-			if [ -r $currentRamdiskFile ]; then
-
-				aramdiskValue=$(<$currentRamdiskFile)
-				if [ -r $mqttRamdiskFile ]; then
-					oramdikValue=$(<$mqttRamdiskFile)
-				else
-					oramdikValue=0
-				fi
-
-				if [[ "$oramdikValue" != "$aramdiskValue" ]]; then
-					#echo "'$currentRamdiskFile' found changed: Fowarding value '$aramdiskValue' to MQTT topic '${tuple[1]}'"
-					tempPubList="${tempPubList}\n${tuple[1]}=${aramdiskValue}"
-					echo $aramdiskValue > $mqttRamdiskFile
-				fi
-			fi
-		done
-	done
-
 	declare -A mqttconfvar
 	mqttconfvar["config/get/pv/minFeedinPowerBeforeStart"]=mindestuberschuss
 	mqttconfvar["config/get/pv/maxPowerConsumptionBeforeStop"]=abschaltuberschuss
