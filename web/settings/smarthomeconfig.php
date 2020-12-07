@@ -34,27 +34,27 @@
 		<script>
 			/**
 			 * hideSection
-			 * add class 'hide' to element with id 'section'
+			 * add class 'hide' to element with selector 'section' in JQuery syntax
 			 * disables all contained input and select elements if 'disableChildren' is not set to false
 			**/
 			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
+				$(section).addClass('hide');
 				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
+					$(section).find('input').prop("disabled", true);
+					$(section).find('select').prop("disabled", true);
 				}
 			}
 
 			/**
 			 * showSection
-			 * remove class 'hide' from element with id 'section'
+			 * remove class 'hide' from element with selector 'section' in JQuery syntax
 			 * enables all contained input and select elements if 'enableChildren' is not set to false
 			**/
 			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
+				$(section).removeClass('hide');
 				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
+					$(section).find('input').prop("disabled", false);
+					$(section).find('select').prop("disabled", false);
 				}
 			}
 
@@ -126,17 +126,43 @@
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
-									<div class="btn-group btn-group-toggle btn-block" id="device_typeDevices<?php echo $devicenum; ?>" name="device_type" data-toggle="buttons" data-default="shelly" value="shelly" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<label class="btn btn-outline-info">
-											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
-										</label>
-										<label class="btn btn-outline-info">
-											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Tasmota" data-option="tasmota">Tasmota
-										</label>
-										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="device_typeDevices<?php echo $devicenum; ?>" id="device_typeDevices<?php echo $devicenum; ?>Pyt" data-option="pyt"> Pyt
-										</label>
-									</div>
+									<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="shelly" value="shelly" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<option value = "shelly" data-option="shelly">Shelly</option>
+										<option value = "tasmota" data-option="tasmota">Tasmota</option>
+										<option value = "acthor" data-option="acthor">Acthor</option>
+										<option value = "elwa" data-option="elwa">Elwa</option>
+										<option value = "idm" data-option="idm">Idm</option>
+										<option value = "stiebel" data-option="stiebel">Stiebel</option>
+										<option value = "pyt" data-option="pyt" disabled="disabled">Pyt (veraltet, bitte andere Option wählen)</option>
+									</select>
+									<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
+										Heizstab Acthor der Firma my-PV<br>
+										Im Web Frontend vom Heizstab muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP" und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden.
+										Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen (in 1000 Watt Schritten)
+										Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
+										Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
+									</span>
+									<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
+										Heizstab ELWA-E  der Firma my-PV<br>
+										Im Web Frontend vom Heizstab muss unter Steuerungs-Einstellungen der Parameter "Ansteuerungs-Typ = Modbus TCP" und "Power Timeout = 120 Sek" gesetzt werden.
+										Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
+										Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
+										Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Elwa nicht zu stören.
+										Die Warmwassersicherstellung in Elwa kann genutzt werden. OpenWB erkennt dieses am Status und überträgt dann keinen Überschuss.
+									</span>
+									<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
+										Wärmepumpe der Firma IDM mit Navigatorregelung 2.0<br>
+										Im Web Frontend muss unter "Heizungsbauerebene / Konfiguration / PV-Signal": Auswahl "Gebäudeleittechnik / Smartfox" und unter "Heizungsbauerebene / Gebäudeleittechnik" der Parameter "Modbus TCP = Ein" und unter "Einstellungen / Photovoltaik" der Parameter "PV Überschuss = 0" gesetzt werden
+										Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen
+										Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
+										Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von IDM nicht zu stören.
+									</span>
+									<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-stiebel hide">
+										Wärmepumpe der Firma Stiebel mit ISG Web (Servicewelt über Modbus) und SG Ready Eingang.<br>
+										Im ISG web muss unter "Einstellungen / Energiemanagement" der Parameter "SGREADY = Ein" gesetzt werden.
+										Wenn die Einschaltbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 2 auf Betriebszustand 3 geschaltet.
+										Wenn die Ausbedingung erreicht ist wird der Sg Ready Eingang von Betriebszustand 3 auf Betriebszustand 2 geschaltet.
+									</span>
 								</div>
 							</div>
 						</div>
@@ -152,7 +178,7 @@
 											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>1" data-option="1">Ja
 										</label>
 									</div>
-									<span class="form-text small">Gibt an ob der Aktor schalten können soll (entsprechend Überschuss oder manuell). (!!Nightly Feature, noch nicht implementiert!!)</span>
+									<span class="form-text small">Ist diese Option aktiviert, dann wird das Gerät anhand des Überschusses automatisch oder manuell geschaltet.</span>
 								</div>
 							</div>
 						</div>
@@ -186,7 +212,7 @@
 											<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1">Ja
 										</label>
 									</div>
-									<span class="form-text small">Gibt an ob der Aktor deaktiviert werden soll um mehr Überschuss für die EV Ladung zu erhalten. ACHTUNG! Nightly Feature!</span>
+									<span class="form-text small">Diese Option sorgt dafür, dass das Gerät gezielt abgeschaltet wird, wenn ein Auto geladen wird. Dem Auto steht somit entweder mehr PV-Überschuss zur Verfügung oder der Bezug verringert sich.</span>
 								</div>
 							</div>
 						</div>
@@ -246,37 +272,39 @@
 								</div>
 							</div>
 						</div>
-						<hr class="border-secondary">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Einschalten</label>
-								<div class="col-md-8">
-									<div class="form-row vaRow mb-1">
-										<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">0 %</label>
-										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+						<div class="device-option-housebattery hide">
+							<hr class="border-secondary">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Einschalten</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">0 %</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestartDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestart" min="0" max="100" step="5" data-default="0" value="0" data-default="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											</div>
 										</div>
+										<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
 									</div>
-									<span class="form-text small">Parameter in % Ladezustand. Unterhalb dieses Wertes wird das Gerät nicht eingeschaltet. 0% deaktiviert die Funktion.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Ausschalten</label>
+									<div class="col-md-8">
+										<div class="form-row vaRow mb-1">
+											<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">100 %</label>
+											<div class="col-10">
+												<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											</div>
+										</div>
+										<span class="form-text small">Parameter in % Ladezustand. Überhalb dieses Wertes wird das Gerät nicht abgeschaltet. 100% deaktiviert die Funktion.</span>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Speicherbeachtung beim Ausschalten</label>
-								<div class="col-md-8">
-									<div class="form-row vaRow mb-1">
-										<label for="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" class="col-2 col-form-label valueLabel" suffix="%">100 %</label>
-										<div class="col-10">
-											<input type="range" class="form-control-range rangeInput" id="device_speichersocbeforestopDevices<?php echo $devicenum; ?>" name="device_speichersocbeforestop" min="0" max="100" step="5" data-default="100" value="100" data-default="100" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										</div>
-									</div>
-									<span class="form-text small">Parameter in % Ladezustand. Überhalb dieses Wertes wird das Gerät nicht abgeschaltet. 100% deaktiviert die Funktion.</span>
-								</div>
-							</div>
-						</div>
-						<hr class="border-secondary">
-						<div class="form-group">
+						<div class="form-group device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly hide">
+							<hr class="border-secondary">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Temperatursensoren</label>
 								<div class="col">
@@ -311,7 +339,7 @@
 											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1">Ja
 										</label>
 									</div>
-									<span class="form-text small">Gibt an ob die Leistungserfassung für dieses Gerät von einer anderen Quelle erfolgen soll. (!!Nightly Feature, noch nicht implementiert!!)</span>
+									<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung einseparates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
 								</div>
 							</div>
 						</div>
@@ -338,7 +366,7 @@
 									<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
-							<div class="form-row mb-1">
+							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630">
 								<label for="device_measureidDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">ID des Zählers am Netzwerk/Modbus Wandler</label>
 								<div class="col">
 									<input id="device_measureidDevices<?php echo $devicenum; ?>" name="device_measureid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="255" data-default="1" value="1"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
@@ -348,6 +376,26 @@
 					</div>  <!-- end card body Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
 				</div>  <!-- end card Allgemeine Einstellungen Gerät <?php echo $devicenum; ?> -->
 <?php } ?>
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Übergreifende Einstellungen
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="logLevel" class="col-md-4 col-form-label">SmartHome Loglevel</label>
+								<div class="col">
+									<select name="logLevel" id="logLevel" class="form-control" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/">
+										<option value="0" data-option="0">0</option>
+										<option value="1" data-option="1">1</option>
+										<option value="2" data-option="2">2</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="row justify-content-center">
 					<div class="col-3">
@@ -449,69 +497,145 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script>
+			<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+				function visibility_device_configuredDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_configuredDevices: data: "+data);
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_configuredDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					// console.log("device_configuredDevices: data: "+data);
+					if( data == 0 ){
+						hideSection('#device<?php echo $devicenum; ?>options');
+					} else {
+						showSection('#device<?php echo $devicenum; ?>options');
+						// update visibility of direct child sections
+						visibility_device_typeDevices<?php echo $devicenum; ?>();
+						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
+						visibility_device_canSwitchDevices<?php echo $devicenum; ?>();
+					}
+				}
+
+				function visibility_device_typeDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_typeDevices: data: "+data);
+					if( typeof data == 'undefined' ){
+						data = $('#device_typeDevices<?php echo $devicenum; ?>').val();
+					}
+					// console.log("device_typeDevices: data: "+data);
+					hideSection(".device<?php echo $devicenum; ?>-option");
+					showSection(".device<?php echo $devicenum; ?>-option-"+data);
+				}
+
+				function visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_differentMeasurementDevices: data: "+data);
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_differentMeasurementDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					// console.log("device_differentMeasurementDevices: data: "+data);
+					if( data == 0 ){
+						hideSection('#device<?php echo $devicenum; ?>differentMeasurement');
+					} else {
+						showSection('#device<?php echo $devicenum; ?>differentMeasurement');
+						// update visibility if direct child sections
+						visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
+					}
+				}
+
+				function visibility_device_measureTypeDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_measureTypeDevices: data: "+data);
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_measureTypeDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					// console.log("device_measureTypeDevices: data: "+data);
+					hideSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option");
+					showSection(".deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-"+data);
+				}
+
+				function visibility_device_canSwitchDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_canSwitchDevices: data: "+data);
+					if( typeof data == 'undefined' ){
+						data = $('input[name=device_canSwitchDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
+					}
+					// console.log("device_canSwitchDevices: data: "+data);
+					if( data == 0 ){
+						hideSection('#device<?php echo $devicenum; ?>canSwitch');
+					} else {
+						showSection('#device<?php echo $devicenum; ?>canSwitch');
+					}
+				}
+
+				function visibility_device_nameDevices<?php echo $devicenum; ?>( data ){
+					if ( data != "Name" ) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+data+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+					}
+				}
+			<?php } ?>
 			
+			function visibility_housebatteryConfigured( data ) {
+				if ( data == 1 ) {
+					showSection('.device-option-housebattery');
+				} else {
+					hideSection('.device-option-housebattery');
+				}
+			}
+
 			function visibiltycheck(elementId, mqttpayload) {
 				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+					if ( elementId == 'boolHouseBatteryConfigured' ) {
+						visibility_housebatteryConfigured( mqttpayload );
+					}
+
 					if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
-						if ( mqttpayload == 0 ) {
-							hideSection('device<?php echo $devicenum; ?>options');
-						} else {
-							showSection('device<?php echo $devicenum; ?>options');
-						}
+						visibility_device_configuredDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
+
+					if ( elementId == 'device_typeDevices<?php echo $devicenum; ?>') {
+						visibility_device_typeDevices<?php echo $devicenum; ?>( mqttpayload );
+					}
+
 					if ( elementId == 'device_differentMeasurementDevices<?php echo $devicenum; ?>') {
-						if ( mqttpayload == 0 ) {
-							hideSection('device<?php echo $devicenum; ?>differentMeasurement');
-						} else {
-							showSection('device<?php echo $devicenum; ?>differentMeasurement');
-						}
+						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
+
+					if ( elementId == 'device_measureTypeDevices<?php echo $devicenum; ?>') {
+						visibility_device_measureTypeDevices<?php echo $devicenum; ?>( mqttpayload );
+					}
+
 					/*if ( elementId == 'device_canSwitchDevices<?php echo $devicenum; ?>') {
-						if ( mqttpayload == 0 ) {
-							hideSection('device<?php echo $devicenum; ?>canSwitch');
-						} else {
-							showSection('device<?php echo $devicenum; ?>canSwitch');
-						}
+						visibility_device_canSwitchDevices<?php echo $devicenum; ?>( mqttpayload );
 					}*/
+
 					if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
-						if ( mqttpayload != "Name" ) {
-							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
-						} else {
-							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
-						}
+						visibility_device_nameDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
 				<?php } ?>
 			}
+
 			$(function() {
 				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
 					$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
-						if ($('#device_configuredDevices<?php echo $devicenum; ?>On').prop("checked")) {
-							showSection('device<?php echo $devicenum; ?>options');
-						} else {
-							hideSection('device<?php echo $devicenum; ?>options');
-						}
+						visibility_device_configuredDevices<?php echo $devicenum; ?>();
 					});
+
+					$('#device_typeDevices<?php echo $devicenum; ?>').change(function(){
+						visibility_device_typeDevices<?php echo $devicenum; ?>();
+					});
+
 					$('#device_differentMeasurementDevices<?php echo $devicenum; ?>').change(function(){
-						if ($('#device_differentMeasurement<?php echo $devicenum; ?>1').prop("checked")) {
-							showSection('device<?php echo $devicenum; ?>differentMeasurement');
-						} else {
-							hideSection('device<?php echo $devicenum; ?>differentMeasurement');
-						}
+						visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
+					});
+
+					$('#device_measureTypeDevices<?php echo $devicenum; ?>').change(function(){
+						visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 					});
 
 					/*$('#device_canSwitchDevices<?php echo $devicenum; ?>').change(function(){
-						if ($('#device_canSwitch<?php echo $devicenum; ?>1').prop("checked")) {
-							showSection('device<?php echo $devicenum; ?>canSwitch');
-						} else {
-							hideSection('device<?php echo $devicenum; ?>canSwitch');
-						}
+						visibility_device_canSwitchDevices<?php echo $devicenum; ?>( mqttpayload );
 					});*/
+
 					$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
-						if (($(this).val() != "Name") && ($(this).val().length > 0)) {
-							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
-						} else {
-							$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
-						}
+						visibility_device_nameDevices<?php echo $devicenum; ?>( $(this).val() );
 					})
 				<?php } ?>
 			});

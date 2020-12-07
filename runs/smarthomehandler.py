@@ -10,9 +10,10 @@ import getopt
 import subprocess
 
 basePath = '/var/www/html/openWB'
+shconfigfile = basePath+'/smarthome.ini'
 os.chdir(basePath)
 config = configparser.ConfigParser()
-config.read(basePath+'/smarthome.ini')
+config.read(shconfigfile)
 prefixpy = basePath+'/modules/smarthome/'
 loglevel=2
 DeviceValues = { }
@@ -98,6 +99,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
        newwatt = oldwatt
        newwattk = oldwattk
     return (newwatt,newwattk)
+
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
         file = open(basePath+'/ramdisk/smarthome.log', 'a')
@@ -298,9 +300,9 @@ def loadregelvars():
             reread = int(value.read())
     except:
         reread = 1
-        config.read(basePath+'/smarthome.ini')
+        config.read(shconfigfile)
     if ( reread == 1):
-        config.read(basePath+'/smarthome.ini')
+        config.read(shconfigfile)
         f = open(basePath+'/ramdisk/rereadsmarthomedevices', 'w')
         f.write(str(0))
         f.close()
@@ -672,7 +674,7 @@ def resetmaxeinschaltdauerfunc():
         resetmaxeinschaltdauer=0
 
 while True:
-    config.read(basePath+'/smarthome.ini')
+    config.read(shconfigfile)
     loadregelvars()
     getdevicevalues()
     resetmaxeinschaltdauerfunc()
