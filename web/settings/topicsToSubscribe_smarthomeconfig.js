@@ -9,6 +9,10 @@
 // line[1] = load counter (if needed)
 
 var topicsToSubscribe = [
+	// global settings
+	["openWB/housebattery/boolHouseBatteryConfigured", 0],
+	["openWB/config/get/SmartHome/logLevel", 0],
+	// SmartHome configuration
 	["openWB/config/get/SmartHome/Devices/1/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/2/device_configured", 0],
 	["openWB/config/get/SmartHome/Devices/3/device_configured", 0],
