@@ -240,15 +240,24 @@ for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
 	declare ${mqttvar[$mq]}
 	tempnewname=${mqttvar[$mq]}
-
 	tempoldname=o${mqttvar[$mq]}
-	tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
-	tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
-	if [[ "$tempoldname" != "$tempnewname" ]]; then
-		tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
-		echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+
+	if [ -r ramdisk/"${mqttvar[$mq]}" ]; then
+
+		tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
+
+		if [ -r ramdisk/mqtt"${mqttvar[$mq]}" ]; then
+			tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
+		else
+			tempoldname=""
+		fi
+
+		if [[ "$tempoldname" != "$tempnewname" ]]; then
+			tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
+			echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+		fi
+		#echo ${mqttvar[$mq]} $mq
 	fi
-	#echo ${mqttvar[$mq]} $mq
 done
 
 
