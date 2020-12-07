@@ -488,13 +488,13 @@
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20200424-a" ></script>
+		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20201207" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200918-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201207" ></script>
 		<!-- load service -->
-		<script src = "settings/setupMqttServices.js?ver=20200505-a" ></script>
+		<script src = "settings/setupMqttServices.js?ver=20201207" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
+		<script src = "settings/processAllMqttMsg.js?ver=20201207" ></script>
 
 		<script>
 			<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
