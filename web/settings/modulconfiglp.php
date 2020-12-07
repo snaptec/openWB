@@ -685,6 +685,8 @@
 									<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 									<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 									<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
+									<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
+
 								</select>
 							</div>
 						</div>
@@ -886,6 +888,38 @@
 											</span>
 										</div>
 									</div>
+								</div>
+							</div>
+							<div id="socmid" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
+											<span class="form-text small">
+												Email Adresse des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
+											<span class="form-text small">
+												Password des Logins.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
+											<span class="form-text small">
+												Vollständige VIN des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+
 								</div>
 							</div>
 							<div id="socmhttp" class="hide">
@@ -1345,6 +1379,7 @@
 							hideSection('soccarnet');
 							hideSection('socmzerong');
 							hideSection('socmaudi');
+							hideSection('socmid');
 							hideSection('socmqtt');
 							hideSection('socmbluelink');
 							hideSection('socmkia');
@@ -1370,6 +1405,10 @@
 							if($('#socmodul').val() == 'soc_bluelink') {
 								showSection('socmbluelink');
 							}
+							if($('#socmodul').val() == 'soc_id') {
+								showSection('socmid');
+							}
+
 							if($('#socmodul').val() == 'soc_kia') {
 								showSection('socmkia');
 								showSection('socmbluelink');
@@ -1466,7 +1505,7 @@
 							<div class="col">
 								<select name="evsecons1" id="evsecons1" class="form-control">
 									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
-									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo">openWB series1/2 Duo</option>
+									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo">openWB series1/2 Duo erste Variante</option>
 									<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">openWB Slave</option>
 									<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
 									<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
