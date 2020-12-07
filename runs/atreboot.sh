@@ -137,12 +137,8 @@ echo 0 > /var/www/html/openWB/ramdisk/mqttrfidlasttag
 # echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
 echo 0 > /var/www/html/openWB/ramdisk/ledstatus
 echo 1 > /var/www/html/openWB/ramdisk/execdisplay
-echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp1
-echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp1startkwh
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladen
 echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer1
-echo 0 > /var/www/html/openWB/ramdisk/pluggedladungaktlp2
-echo 0 > /var/www/html/openWB/ramdisk/pluggedladunglp2startkwh
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedtimer2
 echo 0 > /var/www/html/openWB/ramdisk/pluggedladungbishergeladenlp3
@@ -579,8 +575,27 @@ sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 
-
-
+for i in $(seq 1 8);
+do
+	for f in \
+		"pluggedladunglp${i}startkwh:openWB/lp/${i}/plugStartkWh" \
+		"pluggedladungaktlp${i}:openWB/lp/${i}/pluggedladungakt"
+	do
+		IFS=':' read -r -a tuple <<< "$f"
+		currentRamdiskFileVar="\"/var/www/html/openWB/ramdisk/${tuple[0]}\""
+		eval currentRamdiskFile=\$$currentRamdiskFileVar
+		if ! [ -f $currentRamdiskFile ]; then
+			mqttValue=$(timeout 1 mosquitto_sub -C 1 -t ${tuple[1]})
+			if [[ ! -z "$mqttValue" ]]; then
+				echo "'$currentRamdiskFile' missing: Setting from MQTT topic '${tuple[0]}' to value '$mqttValue'"
+				echo "$mqttValue" > $currentRamdiskFile
+			else
+				echo "'$currentRamdiskFile' missing: MQTT topic '${tuple[0]}' can also not provide any value: Setting to 0"
+				echo 0 > $currentRamdiskFile
+			fi
+		fi
+	done
+done
 
 ln -s /var/log/openWB.log /var/www/html/openWB/ramdisk/openWB.log
 mkdir -p /var/www/html/openWB/web/logging/data/daily
