@@ -1878,6 +1878,7 @@
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
+									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
 									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
 								</select>
@@ -2253,6 +2254,19 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmvin2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2vin" id="soc2vin" value="<?php echo $soc2vinold ?>">
+											<span class="form-text small">
+												VIN des Autos.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="socmypeugeotlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2305,6 +2319,19 @@
 										<label for="myopel_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
 										<div class="col">
 											<input class="form-control" type="text" name="myopel_clientsecretlp2" id="myopel_clientsecretlp2" value="<?php echo $myopel_clientsecretlp2old ?>">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmintervall2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2intervall" id="soc2intervall" value="<?php echo $soc2intervallold ?>">
+											<span class="form-text small">
+												Wie oft abgefragt wird. Angabe in Minuten.
+											</span>
 										</div>
 									</div>
 								</div>
@@ -2416,6 +2443,8 @@
 							hideSection('socmzeronglp2');
 							hideSection('socmypeugeotlp2');
 							hideSection('socmyopellp2');
+							hideSection('socmvin2');
+							hideSection('socmintervall2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('socmnone1');
@@ -2436,6 +2465,13 @@
 								showSection('socmuser2');
 								showSection('socmpass2');
 								showSection('socmpin2');
+							}
+							if($('#socmodul1').val() == 'soc_kialp2') {
+								showSection('socmuser2');
+								showSection('socmpass2');
+								showSection('socmpin2');
+								showSection('socmvin2');
+								showSection('socmintervall2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('socleaf1');

@@ -223,20 +223,41 @@ mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
+for i in $(seq 1 8);
+do
+	for f in \
+		"lp/${i}/plugStartkWh:pluggedladunglp${i}startkwh" \
+		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}"
+	do
+		IFS=':' read -r -a tuple <<< "$f"
+		#echo "Setting mqttvar[${tuple[0]}]=${tuple[1]}"
+		mqttvar["${tuple[0]}"]=${tuple[1]}
+	done
+done
+
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
 	declare ${mqttvar[$mq]}
 	tempnewname=${mqttvar[$mq]}
-
 	tempoldname=o${mqttvar[$mq]}
-	tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
-	tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
-	if [[ "$tempoldname" != "$tempnewname" ]]; then
-		tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
-		echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+
+	if [ -r ramdisk/"${mqttvar[$mq]}" ]; then
+
+		tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
+
+		if [ -r ramdisk/mqtt"${mqttvar[$mq]}" ]; then
+			tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
+		else
+			tempoldname=""
+		fi
+
+		if [[ "$tempoldname" != "$tempnewname" ]]; then
+			tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
+			echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+		fi
+		#echo ${mqttvar[$mq]} $mq
 	fi
-	#echo ${mqttvar[$mq]} $mq 
 done
 
 
