@@ -2980,6 +2980,10 @@ if (( isss == 1 )); then
 	fi
 fi
 if [[ "$evsecon" == "buchse" ]]; then
+  # ppbuchse is used in issss.py to detect "openWB Buchse"
+  if [ ! -f /home/pi/ppbuchse ]; then
+    echo "32" > /home/pi/ppbuchse
+  fi
 	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
 	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
 	then

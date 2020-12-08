@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import argparse
+#import argparse
 import paho.mqtt.client as mqtt
 import sys
 import os 
@@ -9,6 +9,8 @@ import socket
 import struct 
 import binascii 
 import RPi.GPIO as GPIO
+from pymodbus.client.sync import ModbusSerialClient
+
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(37, GPIO.OUT)
@@ -16,8 +18,18 @@ GPIO.setup(13, GPIO.OUT)
 GPIO.setup(22, GPIO.OUT)
 GPIO.setup(29, GPIO.OUT)
 GPIO.setup(11, GPIO.OUT)
+# GPIOs for socket
+GPIO.setup(23, GPIO.OUT)
+GPIO.setup(26, GPIO.OUT)
+GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 DeviceValues = { }
 Values = { }
+
+# gloabl values
+DeviceValues.update({'rfidtag' : str(5)})
+
+# values LP1
 DeviceValues.update({'lp1voltage1' : str(5)})
 DeviceValues.update({'lp1voltage2' : str(5)})
 DeviceValues.update({'lp1voltage3' : str(5)})
@@ -25,14 +37,14 @@ DeviceValues.update({'lp1lla1' : str(5)})
 DeviceValues.update({'lp1lla2' : str(5)})
 DeviceValues.update({'lp1lla3' : str(5)})
 DeviceValues.update({'lp1llkwh' : str(5)})
-DeviceValues.update({'rfidtag' : str(5)})
 DeviceValues.update({'lp1watt' : str(5)})
 DeviceValues.update({'lp1chargestat' : str(5)})
 DeviceValues.update({'lp1plugstat' : str(5)})
 Values.update({'lp1plugstat' : str(5)})
 Values.update({'lp1chargestat' : str(5)})
 Values.update({'lp1evsell' : str(1)})
-os.chdir('/var/www/html/openWB')
+
+# values LP2
 DeviceValues.update({'lp2voltage1' : str(5)})
 DeviceValues.update({'lp2voltage2' : str(5)})
 DeviceValues.update({'lp2voltage3' : str(5)})
@@ -40,24 +52,40 @@ DeviceValues.update({'lp2lla1' : str(5)})
 DeviceValues.update({'lp2lla2' : str(5)})
 DeviceValues.update({'lp2lla3' : str(5)})
 DeviceValues.update({'lp2llkwh' : str(5)})
-DeviceValues.update({'rfidtag' : str(5)})
 DeviceValues.update({'lp2watt' : str(5)})
 DeviceValues.update({'lp2chargestat' : str(5)})
 DeviceValues.update({'lp2plugstat' : str(5)})
 Values.update({'lp2plugstat' : str(5)})
 Values.update({'lp2chargestat' : str(5)})
 Values.update({'lp2evsell' : str(1)})
+
+# check for "openWB Buchse"
+try:
+    with open('/home/pi/ppbuchse', 'r') as value:
+        pp = int(value.read())
+        buchseconfigured = 1
+except:
+    pp = 32
+    buchseconfigured = 0
+
+os.chdir('/var/www/html/openWB')
+
+# guess USB/modbus device name
 try:
     f = open('/dev/ttyUSB0')
     seradd = "/dev/ttyUSB0"
     f.close()
 except:
     seradd = "/dev/serial0"
-sdm2id=106
-sdmid=105
-actorstat=0
-rfidtag=0
-loglevel=1
+
+loglevel = 1
+sdmid = 105
+sdm2id = 106
+actorstat = 0
+evsefailure = 0
+rfidtag = 0
+
+# check for openWB DUO in slave mode
 try:
     with open('ramdisk/issslp2act', 'r') as value:
         if (int(value.read()) == 1 ):
@@ -66,25 +94,29 @@ try:
             lp2installed=1
 except:
     lp2installed=1
-from pymodbus.client.sync import ModbusSerialClient
-client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, 
-    stopbits=1, bytesize=8, timeout=1)
 
+# connect with USB/modbus device
+client = ModbusSerialClient(method = "rtu", port=seradd, baudrate=9600, stopbits=1, bytesize=8, timeout=1)
 
+# handling of all logging statements
 def logDebug(level, msg): 
     if (int(level) >= int(loglevel)): 
-        file = open('/var/www/html/openWB/ramdisk/isss.log', 'a') 
+        file = open('/var/www/html/openWB/ramdisk/isss.log', 'a')
         if (int(level) == 0): 
-            file.write(time.ctime() + ': ' + str(msg)+ '\n') 
+            file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 1): 
-            file.write(time.ctime() + ': ' + str(msg)+ '\n') 
+            file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 2): 
-            file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n') 
+            file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
         file.close()
+
+# read all meter values and publish to mqtt broker
 def getmeter():
+    global evsefailure
+    global client
     global lp2installed
+
     try:
-        global client
         resp = client.read_input_registers(0x0C,2, unit=sdmid)
         lp1llw1 = struct.unpack('>f',struct.pack('>HH',*resp.registers))[0]
         lp1llw1 = int(lp1llw1)
@@ -211,7 +243,6 @@ def getmeter():
                     time.sleep(0.1)
                     rq = client.read_holding_registers(1000,1,unit=2) 
                     lp2ll = rq.registers[0]
-
                 except:
                     lp2ll = 0
                 try:
@@ -236,23 +267,28 @@ def getmeter():
                 elif ( lp2var == 3 and lp2ll == 0 ):
                     Values.update({'lp2plugstat' : 1})
                     Values.update({'lp2chargestat' : 0})
-
                 Values.update({'lp2evsell' : lp2ll})
                 logDebug("0", "EVSE lp2plugstat: " + str(lp2var) + " EVSE lp2LL: " + str(lp2ll))
-
             except:
                 pass
 
-
-        time.sleep(0.1)
-        rq = client.read_holding_registers(1000,1,unit=1) 
-        lp1ll = rq.registers[0]
-
-
-        time.sleep(0.1)
-        rq = client.read_holding_registers(1002,1,unit=1) 
-        lp1var = rq.registers[0]
-
+        try:
+            time.sleep(0.1)
+            rq = client.read_holding_registers(1000,1,unit=1)
+            lp1ll = rq.registers[0]
+            evsefailure = 0
+        except:
+            lp1ll = 0
+            evsefailure = 1
+        try:
+            time.sleep(0.1)
+            rq = client.read_holding_registers(1002,1,unit=1)
+            lp1var = rq.registers[0]
+            evsefailure = 0
+        except Exception as e:
+            logDebug("2", "Fehler:" + str(e))
+            lp1var = 5
+            evsefailure = 1
         if ( lp1var == 5 ):
             Values.update({'lp1plugstat' : 0})
             Values.update({'lp1chargestat' : 0})
@@ -268,7 +304,12 @@ def getmeter():
         elif ( lp1var == 3 and lp1ll == 0 ):
             Values.update({'lp1plugstat' : 1})
             Values.update({'lp1chargestat' : 0})
-
+        f = open('/var/www/html/openWB/ramdisk/plugstat', 'w')
+        f.write(str(Values["lp1plugstat"]))
+        f.close()
+        f = open('/var/www/html/openWB/ramdisk/chargestat', 'w')
+        f.write(str(Values["lp1chargestat"]))
+        f.close()
         Values.update({'lp1evsell' : lp1ll})
         logDebug("0", "EVSE lp1plugstat: " + str(lp1var) + " EVSE lp1LL: " + str(lp1ll))
         try:
@@ -276,11 +317,13 @@ def getmeter():
                 rfidtag = str(value.read())
         except:
             pass
-        parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
-        parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
-        parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
-        parser.set_defaults(retain=False)
-        args = parser.parse_args()
+
+        # CLI args not used here
+        # parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
+        # parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
+        # parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
+        # parser.set_defaults(retain=False)
+        # args = parser.parse_args()
         mclient = mqtt.Client("openWB-isss-bulkpublisher-" + str(os.getpid()))
         mclient.connect("localhost")
         mclient.loop(timeout=2.0)
@@ -320,7 +363,6 @@ def getmeter():
                     mclient.publish("openWB/lp/1/APhase3", payload=str(lp1lla3), qos=0, retain=True)
                     mclient.loop(timeout=2.0)
                     DeviceValues.update({'lp1lla3' : str(lp1lla3)})
-
             if ( "lp1llkwh" in key):
                 if ( DeviceValues[str(key)] != str(lp1llkwh)):
                     mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp1llkwh), qos=0, retain=True)
@@ -377,7 +419,6 @@ def getmeter():
                         mclient.publish("openWB/lp/1/APhase3", payload=str(lp2lla3), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'lp2lla3' : str(lp2lla3)})
-
                 if ( "lp2llkwh" in key):
                     if ( DeviceValues[str(key)] != str(lp2llkwh)):
                         mclient.publish("openWB/lp/1/kWhCounter", payload=str(lp2llkwh), qos=0, retain=True)
@@ -398,36 +439,41 @@ def getmeter():
                         mclient.publish("openWB/lp/1/LastScannedRfidTag", payload=str(rfidtag), qos=0, retain=True)
                         mclient.loop(timeout=2.0)
                         DeviceValues.update({'rfidtag' : str(rfidtag)})
-
         mclient.disconnect()
-
-
-
     except Exception as e:
         pass
+
+# crontol of socket lock
+# GPIO 23: control direction of lock motor
+# GPIO 26: power to lock motor
 def controlact(action):
     if action == "auf":
-        GPIO.output(11, GPIO.LOW)
-        GPIO.output(7, GPIO.HIGH)
-        time.sleep(3)
-        GPIO.output(7, GPIO.LOW)
+        GPIO.output(23, GPIO.LOW)
+        GPIO.output(26, GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(26, GPIO.LOW)
         logDebug("1", "Aktor auf")
     if action == "zu":
-        GPIO.output(11, GPIO.HIGH)
-        GPIO.output(7, GPIO.HIGH)
+        GPIO.output(23, GPIO.HIGH)
+        GPIO.output(26, GPIO.HIGH)
         time.sleep(3)
-        GPIO.output(7, GPIO.LOW)
+        GPIO.output(26, GPIO.LOW)
         logDebug("1", "Aktor zu")
 
+# get all values to control our chargepoints
 def loadregelvars():
     global actorstat
     global lp1solla
     global u1p3pstat
     global u1p3ptmpstat
+    global evsefailure
     global lp2installed
+
     try:
-        with open('ramdisk/buchsestatus', 'r') as value:
-            actorstat = int(value.read())
+        if GPIO.input(19) == False:
+            actorstat=1
+        if GPIO.input(19) == True:
+            actorstat=0
     except:
         actorstat = 0
         pass
@@ -438,8 +484,24 @@ def loadregelvars():
         pass
         lp1solla = 0
     logDebug("0", "LL Soll: " + str(lp1solla) + " ActorStatus: " + str(actorstat))
-    if ( Values["lp1evsell"] != lp1solla ):
-        writelp1evse(lp1solla);
+    if ( buchseconfigured == 1 ):
+        if ( evsefailure == 0 ):
+            if ( Values["lp1plugstat"] == 1):
+                if ( actorstat == 0 ):
+                    controlact("zu")
+            if ( Values["lp1plugstat"] == 0):
+                if ( actorstat == 1 ):
+                    writelp1evse(0)
+                    controlact("auf")
+            if ( actorstat == 1 ):
+                if ( Values["lp1evsell"] != lp1solla and Values["lp1plugstat"] == 1 ):
+                    writelp1evse(lp1solla)
+            else:
+                if ( Values["lp1evsell"] != 0 ):
+                    writelp1evse(0)
+    else:
+        if ( Values["lp1evsell"] != lp1solla ):
+            writelp1evse(lp1solla)
     try:
         with open('ramdisk/u1p3pstat', 'r') as value:
             u1p3ptmpstat = int(value.read())
@@ -458,8 +520,9 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(29, GPIO.LOW)
             GPIO.output(11, GPIO.LOW)
-            time.sleep(2)
+            time.sleep(5)
             GPIO.output(22, GPIO.LOW)
+            time.sleep(1)
         if ( u1p3ptmpstat == 3 ):
             GPIO.output(22, GPIO.HIGH)
             GPIO.output(37, GPIO.HIGH)
@@ -467,8 +530,9 @@ def loadregelvars():
             time.sleep(2)
             GPIO.output(37, GPIO.LOW)
             GPIO.output(13, GPIO.LOW)
-            time.sleep(2)
+            time.sleep(5)
             GPIO.output(22, GPIO.LOW)
+            time.sleep(1)
         u1p3pstat = u1p3ptmpstat
     if ( lp2installed == 2 ):
         try:
@@ -479,33 +543,20 @@ def loadregelvars():
             lp2solla = 0
         logDebug("0", "LL lp2 Soll: " + str(lp2solla) + " ActorStatus: " + str(actorstat))
         if ( Values["lp2evsell"] != lp2solla ):
-            writelp2evse(lp2solla);
+            writelp2evse(lp2solla)
 
 
 def writelp2evse(lla):
     client.write_registers(1000, lla, unit=2)
-    logDebug("1", "Write to EVSE lp2" + str(lla))
+    logDebug("1", "Write to EVSE lp2 " + str(lla))
 
 def writelp1evse(lla):
+    if (lla > pp):
+        lla=pp
     client.write_registers(1000, lla, unit=1)
-    logDebug("1", "Write to EVSE lp1" + str(lla))
-def conditions():
-    if ( Values["lp1plugstat"] == 1):
-        if ( actorstat == 0 ):
-            controlact("zu")
-    if ( Values["lp1plugstat"] == 0):
-        if ( actorstat == 1 ):
-            controlact("auf")
-    if ( actorstat == 1 ):
-        if ( Values["lp1evsell"] != lp1solla ):
-            writeevse(lp1solla)
-    else:
-        if ( Values["lp1evsell"] != 0 ):
-            writeevse(0)
+    logDebug("1", "Write to EVSE lp1 " + str(lla))
 
 while True:
     getmeter()
     loadregelvars()
-
-    #conditions()
     time.sleep(1)
