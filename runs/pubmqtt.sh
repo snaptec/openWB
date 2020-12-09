@@ -227,7 +227,8 @@ for i in $(seq 1 8);
 do
 	for f in \
 		"lp/${i}/plugStartkWh:pluggedladunglp${i}startkwh" \
-		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}"
+		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}" \
+		"lp/${i}/lmStatus:lmStatusLp${i}"
 	do
 		IFS=':' read -r -a tuple <<< "$f"
 		#echo "Setting mqttvar[${tuple[0]}]=${tuple[1]}"
