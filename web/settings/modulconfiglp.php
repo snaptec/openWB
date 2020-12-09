@@ -1866,21 +1866,23 @@
 							<div class="col">
 								<select name="socmodul1" id="socmodul1" class="form-control">
 									<option <?php if($socmodul1old == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">SoC HTTP</option>
-									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
-									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
-									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
-									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
-									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
-									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
-									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
-									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
+									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW i3</option>
+									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
+									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Zoe alt</option>
+									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
+									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
+									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
+									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
 									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
+									<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+
 								</select>
 							</div>
 						</div>
@@ -1909,6 +1911,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div id="socmqtt1" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.<br>
@@ -2472,6 +2475,11 @@
 								showSection('socmpin2');
 								showSection('socmvin2');
 								showSection('socmintervall2');
+							}
+							if($('#socmodul1').val() == 'soc_idlp2') {
+								showSection('socmuser2');
+								showSection('socmpass2');
+								showSection('socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('socleaf1');
