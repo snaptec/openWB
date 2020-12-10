@@ -80,7 +80,7 @@ body {
     color: #ffffff;
 }
 .btn-block {
-    font-size: 30px;
+    font-size: 24px;
 }
 .card {
     background-color: rgba(0, 0, 0, 0)!important;
@@ -142,10 +142,19 @@ hr {
     border-top-color: white;
 }
 
+.modal-dialog {
+    max-width: 600px;
+}
+
 .modal-content,
 .modal-header,
 .modal-footer {
     border-color: dimgrey;
+    font-size: 2rem;
+}
+
+.modal-content label {
+    font-weight: normal;
 }
 
 .clockpicker-popover {
@@ -201,11 +210,6 @@ hr {
 .lpDisabledStyle {
     color: #A30000;
     text-decoration: line-through;
-}
-
-.ladepunktConfig,
-.modal-title {
-    font-size: medium;
 }
 
 @keyframes alertPulsation {
@@ -337,7 +341,7 @@ hr {
     color: #7e7e7e;
     border: none;
     border-radius: 3px;
-    font-size: 3.5em;
+    font-size: 36px;
     text-align: center;
     width: 90px;
     height: 65px;
@@ -352,10 +356,6 @@ hr {
 
 .PINbutton.enter {
     background-color: green;
-}
-
-.clear, .enter {
-    font-size: 3.5em;
 }
 
 .PINbutton:hover {
