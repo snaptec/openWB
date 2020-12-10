@@ -127,13 +127,14 @@
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
 									<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="shelly" value="shelly" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<option value = "shelly" data-option="shelly">Shelly</option>
-										<option value = "tasmota" data-option="tasmota">Tasmota</option>
-										<option value = "acthor" data-option="acthor">Acthor</option>
-										<option value = "elwa" data-option="elwa">Elwa</option>
-										<option value = "idm" data-option="idm">Idm</option>
-										<option value = "stiebel" data-option="stiebel">Stiebel</option>
-										<option value = "pyt" data-option="pyt" disabled="disabled">Pyt (veraltet, bitte andere Option wählen)</option>
+										<option value="shelly" data-option="shelly">Shelly</option>
+										<option value="tasmota" data-option="tasmota">Tasmota</option>
+										<option value="acthor" data-option="acthor">Acthor</option>
+										<option value="elwa" data-option="elwa">Elwa</option>
+										<option value="idm" data-option="idm">Idm</option>
+										<option value="stiebel" data-option="stiebel">Stiebel</option>
+										<option disabled="disabled" value="http" data-option="http">Http</option>
+										<option value="pyt" data-option="pyt" disabled="disabled">Pyt (veraltet, bitte andere Option wählen)</option>
 									</select>
 									<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
 										Heizstab Acthor der Firma my-PV<br>
@@ -179,6 +180,32 @@
 										</label>
 									</div>
 									<span class="form-text small">Ist diese Option aktiviert, dann wird das Gerät anhand des Überschusses automatisch oder manuell geschaltet.</span>
+								</div>
+							</div>
+						</div>
+						<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
+							<hr class="border-secondary">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="device_einschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Einschalt-URL</label>
+									<div class="col">
+										<input id="device_einschalturlDevices<?php echo $devicenum; ?>" name="device_einschalturl" class="form-control" type="text" required data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät einzuschalten.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="device_ausschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschalt-URL</label>
+									<div class="col">
+										<input id="device_ausschalturlDevices<?php echo $devicenum; ?>" name="device_ausschalturl" class="form-control" type="text" required data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät auszuschalten.</span>
+									</div>
+								</div>
+								<div class="form-row mb-1 device<?php echo $devicenum; ?>noDifferentMeasurement">
+									<label for="device_leistungurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
+									<div class="col">
+										<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" required data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -343,7 +370,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="device<?php echo $devicenum; ?>differentMeasurement" class="hide">
+						<div class="device<?php echo $devicenum; ?>differentMeasurement hide">
 							<div class="form-row mb-1">
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
@@ -351,9 +378,11 @@
 										<label class="btn btn-outline-info">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
 										</label>
-										<!--<label class="btn btn-outline-info">
-											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">HTTP
-										</label> -->
+										<!--
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">Http
+										</label>
+										-->
 										<label class="btn btn-outline-info btn-toggle">
 											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>SDM630" data-option="sdm630"> SDM630
 										</label>
@@ -366,10 +395,16 @@
 									<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
-							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630">
+							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
 								<label for="device_measureidDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">ID des Zählers am Netzwerk/Modbus Wandler</label>
 								<div class="col">
 									<input id="device_measureidDevices<?php echo $devicenum; ?>" name="device_measureid" class="form-control naturalNumber" type="number" inputmode="decimal" required min="1" max="255" data-default="1" value="1"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+								</div>
+							</div>
+							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-http hide">
+								<label for="device_measureurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
+								<div class="col">
+									<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurld" class="form-control" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
 						</div>
@@ -523,6 +558,7 @@
 					// console.log("device_typeDevices: data: "+data);
 					hideSection(".device<?php echo $devicenum; ?>-option");
 					showSection(".device<?php echo $devicenum; ?>-option-"+data);
+					visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
 				}
 
 				function visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>( data ){
@@ -532,12 +568,14 @@
 					}
 					// console.log("device_differentMeasurementDevices: data: "+data);
 					if( data == 0 ){
-						hideSection('#device<?php echo $devicenum; ?>differentMeasurement');
+						hideSection('.device<?php echo $devicenum; ?>differentMeasurement');
+						showSection('.device<?php echo $devicenum; ?>noDifferentMeasurement');
 					} else {
-						showSection('#device<?php echo $devicenum; ?>differentMeasurement');
+						showSection('.device<?php echo $devicenum; ?>differentMeasurement');
+						hideSection('.device<?php echo $devicenum; ?>noDifferentMeasurement');
 						// update visibility if direct child sections
-						visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 					}
+					visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 				}
 
 				function visibility_device_measureTypeDevices<?php echo $devicenum; ?>( data ){

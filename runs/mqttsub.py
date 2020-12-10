@@ -243,6 +243,30 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/smarthome_device_manual_'+str(devicenumb), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_einschalturl" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_einschalturl'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_einschalturl", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_einschalturl", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_ausschalturl" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_ausschalturl'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_ausschalturl", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_ausschalturl", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_leistungurl" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_leistungurl'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_leistungurl", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_leistungurl", "", qos=0, retain=True)
+        if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_measureurl" in msg.topic)):
+            devicenumb=re.sub(r'\D', '', msg.topic)
+            if ( 1 <= int(devicenumb) <= 10 ):
+                writetoconfig(shconfigfile,'smarthomedevices','device_measureurl'+str(devicenumb), msg.payload.decode("utf-8"))
+                client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_measureurl", msg.payload.decode("utf-8"), qos=0, retain=True)
+                client.publish("openWB/config/set/SmartHome/Devices/"+str(devicenumb)+"/device_measureurl", "", qos=0, retain=True)
         if (msg.topic == "openWB/config/set/SmartHome/logLevel"):
             if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
                 f = open('/var/www/html/openWB/ramdisk/smarthomehandlerloglevel', 'w')
