@@ -112,7 +112,7 @@ def conditions():
         logDebug(1, str(Values["lastpluggedlp"]) + str("prüfe auf rfid scan"))
         try:
             with open('ramdisk/readtag', 'r') as value:
-                Values.update({'lastscannedtag' : int(value.read().rstrip())})
+                Values.update({'lastscannedtag' : str(value.read().rstrip())})
             if ( Values["lastscannedtag"] != "0"):
                 for i in rfidlist:
                     if (str(i) == str(Values["lastscannedtag"])):
@@ -134,13 +134,13 @@ def conditions():
 
 def savelastrfidtag():
     with open('ramdisk/readtag', 'r') as readtagfile:
-        readtag = int( readtagfile.read().rstrip() )
-    if ( ( str(readtag) != Values["rfidlasttag"] ) and ( str(readtag) != "0" ) ):
+        readtag = str( readtagfile.read().rstrip() )
+    if ( ( readtag != Values["rfidlasttag"] ) and ( readtag != "0" ) ):
         logDebug(1, str("savelastrfidtag: change detected, updating ramdisk"))
         f = open('ramdisk/rfidlasttag', 'w')
-        f.write(str(readtag) + str(",") + str(os.path.getmtime('ramdisk/readtag')))
+        f.write(readtag + str(",") + str(os.path.getmtime('ramdisk/readtag')))
         f.close()
-        Values.update({'rfidlasttag' : str(readtag)})
+        Values.update({'rfidlasttag' : readtag})
 
 def clearoldrfidtag():
     t = os.path.getmtime('ramdisk/readtag')

@@ -118,7 +118,6 @@
 							<label for="evsecon" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecon" id="evsecon" class="form-control">
-									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "5") echo "selected" ?> value="modbusevse" data-id="openwb series1/2">openWB series1/2</option>
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/ttyUSB0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v1">openWB series1/2 mit geeichtem Zähler Variante 1</option>
 									<option <?php if($evseconold == "modbusevse" && $ladeleistungmodulold == "mpm3pmll" && $mpm3pmllsourceold == "/dev/serial0" && $mpm3pmllidold == "105") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 mid v2">openWB series1/2 mit geeichtem Zähler Variante 2</option>
@@ -169,8 +168,6 @@
 							<input type="hidden" name="mpm3pmllsource" value="/dev/ttyUSB0">
 							<input type="hidden" name="modbusevsesource" value="/dev/ttyUSB0">
 							<input type="hidden" name="mpm3pmllid" value="105">
-							<input type="hidden" name="evsecon" value="modbusevse">
-
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
 							</div>
@@ -181,7 +178,6 @@
 							<input type="hidden" name="ladeleistungmodul" value="mpm3pmll">
 							<input type="hidden" name="mpm3pmllsource" value="/dev/serial0">
 							<input type="hidden" name="modbusevsesource" value="/dev/serial0">
-							<input type="hidden" name="evsecon" value="modbusevse">
 							<input type="hidden" name="mpm3pmllid" value="105">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.
@@ -1504,12 +1500,15 @@
 							<label for="evsecons1" class="col-md-4 col-form-label">Anbindung</label>
 							<div class="col">
 								<select name="evsecons1" id="evsecons1" class="form-control">
-									<!-- WARNING: the text value of the "openWB series1/2 XXX" options is checked later in the script section -->
-									<option <?php if($evsecons1old == "modbusevse" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo">openWB series1/2 Duo erste Variante</option>
+									<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v1">openWB series1/2 Duo 1. Version</option>
+									<option <?php if($evsecons1old == "modbusevse" && $evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0") echo "selected" ?> value="modbusevse" data-id="openwb series1/2 duo v2">openWB series1/2 Duo (ab Herbst 2020)</option>
 									<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">openWB Slave</option>
 									<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">openWB Satellit</option>
 									<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
-									<option <?php if($evsecons1old == "modbusevse" && !($ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6")) echo "selected" ?> value="modbusevse">Modbus</option>
+									<option <?php if($evsecons1old == "modbusevse"
+														&& !($evseids1old == "1" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB1" && $mpm3pmlls1idold == "6" && $evsesources1old == "/dev/ttyUSB1")
+														&& !($evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0")
+													) echo "selected" ?> value="modbusevse">Modbus</option>
 									<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
 									<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 									<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -1561,14 +1560,26 @@
 								</div>
 							</div>
 						</div>
-						<div id="openwb12s1" class="hide">
+						<div id="openwb12s1v1" class="hide">
 							<input type="hidden" name="evseids1" value="1">
 							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmlls1">
 							<input type="hidden" name="mpm3pmlls1source" value="/dev/ttyUSB1">
 							<input type="hidden" name="mpm3pmlls1id" value="6">
+							<input type="hidden" name="evsesources1" value="/dev/ttyUSB1">
 							<div class="card-text alert alert-info">
 								Keine Konfiguration erforderlich.<br>
-								Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2.
+								Dies ist die richtige Option sowohl für den Bausatz als auch für fertige openWB series1 oder series2.
+							</div>
+						</div>
+						<div id="openwb12s1v2" class="hide">
+							<input type="hidden" name="evseids1" value="2">
+							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmlls1">
+							<input type="hidden" name="mpm3pmlls1source" value="/dev/ttyUSB0">
+							<input type="hidden" name="mpm3pmlls1id" value="106">
+							<input type="hidden" name="evsesources1" value="/dev/ttyUSB0">
+							<div class="card-text alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Dies ist die richtige Option sowohl für den Bausatz als auch für fertige openWB series1 oder series2, wenn Sie diese ab Herbst 2020 erworben haben.
 							</div>
 						</div>
 						<div id="evseconnrgkicks1" class="hide">
@@ -1866,21 +1877,23 @@
 							<div class="col">
 								<select name="socmodul1" id="socmodul1" class="form-control">
 									<option <?php if($socmodul1old == "none") echo "selected" ?> value="none">Nicht vorhanden</option>
-									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">SoC HTTP</option>
-									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">SoC Nissan Leaf</option>
-									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">SoC BMW i3</option>
-									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">SoC EVNotify</option>
-									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">SoC Zoe alt</option>
-									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">SoC MyRenault</option>
-									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">SoC Tesla</option>
-									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">SoC VW Carnet</option>
-									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">SoC Zero NG</option>
+									<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+									<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+									<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW i3</option>
+									<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
+									<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Zoe alt</option>
+									<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
+									<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
+									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
+									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
 									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
+									<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
+
 								</select>
 							</div>
 						</div>
@@ -1909,6 +1922,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div id="socmqtt1" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.<br>
@@ -2348,14 +2362,18 @@
 							hideSection('evsecoslaveeth');
 							hideSection('evseconkebas1');
 							hideSection('evseconnrgkicks1');
-							hideSection('openwb12s1');
+							hideSection('openwb12s1v1');
+							hideSection('openwb12s1v2');
 							hideSection('evseconextopenwblp2');
 							hideSection('evseconipevselp2');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
-									case "openwb series1/2 duo":
-										showSection('openwb12s1');
+									case "openwb series1/2 duo v1":
+										showSection('openwb12s1v1');
+									break;
+									case "openwb series1/2 duo v2":
+										showSection('openwb12s1v2');
 									break;
 									default:
 										showSection('evseconmbs1');
@@ -2472,6 +2490,11 @@
 								showSection('socmpin2');
 								showSection('socmvin2');
 								showSection('socmintervall2');
+							}
+							if($('#socmodul1').val() == 'soc_idlp2') {
+								showSection('socmuser2');
+								showSection('socmpass2');
+								showSection('socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
 								showSection('socleaf1');
