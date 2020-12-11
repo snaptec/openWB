@@ -204,7 +204,7 @@ def savelastrfidtag():
     with open('ramdisk/readtag', 'r') as readtagfile:
         readtag = str( readtagfile.read().rstrip() )
     if ( ( readtag != Values["rfidlasttag"] ) and ( readtag != "0" ) ):
-        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk: ") + str(Values["rfidlasttag"]))
+        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk: ") + str(readtag))
         f = open('ramdisk/rfidlasttag', 'w')
         f.write(readtag + str(",") + str(os.path.getmtime('ramdisk/readtag')))
         f.close()
