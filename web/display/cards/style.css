@@ -28,27 +28,17 @@
     color: #f1f1f1;
 } */
 
+.sidenav .btn {
+    margin-bottom: 0.5rem;
+}
+
 .sidenav .btn:hover {
     background-color: inherit;
     color: #818181;
 }
 
 /* Style page content */
-.dashboard {
-    margin-left: 190px; /* Same as the width of the sidebar */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
-}
-.code {
-    margin-left: 190px; /* Same as the width of the sidebar */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
-}
-.ladepunkte {
+.resume {
     margin-left: 190px; /* Same as the width of the sidebar */
     margin-right: 10px;
     padding-right: 10px;
