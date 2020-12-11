@@ -611,6 +611,19 @@
 			});
 		}
 		mqttlog();
+		function rfidlog() {
+			$.ajax({
+				url: "/openWB/ramdisk/rfid.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#rfiddiv").html(result);
+				}
+			});
+		}
+		rfidlog();
 		function debuglog() {
 			$.ajax({
 				url: "/openWB/ramdisk/openWB.log",
@@ -1286,7 +1299,11 @@
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
-		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="rfidlog"> <h4>RFID Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="rfiddiv"></div>
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
 		</div>
@@ -1323,6 +1340,16 @@
 			} else {
 				$('#mqttdiv').hide(); 
 				$('#mqttdiv').addClass("hide");
+			}
+		});
+		$('#rfidlog').click(function(event){
+			var element = document.getElementById('rfiddiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#rfiddiv').show();
+				$('#rfiddiv').removeClass("hide");
+			} else {
+				$('#rfiddiv').hide(); 
+				$('#rfiddiv').addClass("hide");
 			}
 		});
 		$('#nurpvlog').click(function(event){
