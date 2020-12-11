@@ -34,10 +34,11 @@
             </div>
             <hr class="border-info mt-1">
             <!-- nav elements -->
-            <a class="btn btn-outline-info btn-toggle active" href="#dashboard" onclick="return false;">Dashboard</a><br>
-            <a class="btn btn-outline-info" href="#ladepunkte" onclick="return false;">Ladepunkte</a><br>
-            <a class="btn btn-outline-info hide" id="rfidCodeBtn" href="#code" onclick="return false;">Code</a><br>
-            <a class="btn btn-outline-danger text-danger hide" id="lastmanagementShowBtn" onclick="return false;">Warnungen</a><br>
+            <a class="btn btn-outline-info btn-toggle active" href="#dashboard" onclick="return false;">Dashboard</a>
+            <a class="btn btn-outline-info" href="#ladepunkte" onclick="return false;">Ladepunkte</a>
+            <a class="btn btn-outline-info hide" id="rfidCodeBtn" href="#code" onclick="return false;">Code</a>
+            <a class="btn btn-outline-info" id="statusBtn" href="#status" onclick="return false;">Status</a>
+            <a class="btn btn-outline-danger text-danger hide" id="lastmanagementShowBtn" onclick="return false;">Warnungen</a>
         </div>
 
         <!-- Dashboard -->
@@ -706,6 +707,88 @@
                 };
             </script>
         </div>
+
+        <!-- Status -->
+        <div id="status" class="status resume">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    Systeminformationen
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-4">
+                            Version:
+                        </div>
+                        <div class="col">
+                            <span class='systemVersion'>-</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-4">
+                            IP Adresse:
+                        </div>
+                        <div class="col">
+                            <span class="systemIpAddress"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-4">
+                            Betriebszeit:
+                        </div>
+                        <div class="col">
+                            <span class='systemUptime'>--</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-4">
+                            Prozessor:
+                        </div>
+                        <div class="col">
+                            <meter id="cpu" high="85" min="0" max="100" value="0"></meter> <span id='cpuuse'>--</span>%
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-4">
+                            Arbeitsspeicher:
+                        </div>
+                        <div class="col">
+                            <span id='memtot'>--</span> MB <meter id="mem" min="0" value="0"></meter> (<span id='memfree'>--</span> MB frei)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-4">
+                            SD-Karte:
+                        </div>
+                        <div class="col">
+                            <span id='diskuse'>--</span>, <span id='diskfree'>--</span> verfügbar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // TODO: replace by MQTT topics
+            function updateit() {
+                $.getJSON('tools/programmloggerinfo.php', function(data){
+                    json = eval(data);
+                    // console.log(json);
+                    $('#cpu').val(json.cpuuse);
+                    $('#cpuuse').html(json.cpuuse);
+                    $('#memtot').html(json.memtot);
+                    $('#mem').prop('max',json.memtot);
+                    $('#mem').val(json.memuse);
+                    $('#mem').prop('high',json.memtot*0.85);
+                    $('#memfree').html(json.memfree);
+                    $('#diskuse').html(json.diskuse);
+                    $('#diskfree').html(json.diskfree);
+                })
+            };
+            $(document).ready(function() {
+                updateit();
+                setInterval(updateit, 10000);
+            });
+        </script>
+    </div>
 
         <!-- modal chargepoint-info-window -->
         <div class="modal" id="ladepunktInfoModal">
@@ -1833,7 +1916,7 @@
                             Sie werden mit einem Assistenten durch die Einrichtung der Module geführt.
                         </h4>
                         <h4 class="text-warning text-center">
-                            Die IP lautet: <span id="systemIpAddress">&nbsp;</span>
+                            Die IP lautet: <span class="systemIpAddress">&nbsp;</span>
                         </h4>
                     </div> <!-- /modal body -->
                 </div>
@@ -1901,7 +1984,7 @@
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-sm-8 py-1">
-                                    <button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary">
+                                    <button id="70PvBtn" type="button" class="70PvBtn btn btn-lg btn-block btn-secondary">
                                         70 % beachten
                                     </button>
                                 </div>
@@ -1931,7 +2014,7 @@
                 $('.70PvBtn').click(function(event){
                     // 0 deaktiviert, 1 aktiviert
                     if( displaylocked == false ){
-                        var element = document.getElementById('70PvBtn');
+                        var element = $('#70PvBtn');
                         if ( element.classList.contains("btn-success") ) {
                             publish("0", "openWB/set/pv/NurPV70Status");
                         } else {
@@ -2052,11 +2135,11 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display/cards/helperFunctions.js?ver=20201210',
+                    'display/cards/helperFunctions.js?ver=20201211',
                     // functions for processing messages
-                    'display/cards/processAllMqttMsg.js?ver=20201210',
+                    'display/cards/processAllMqttMsg.js?ver=20201211',
                     // functions performing mqtt and start mqtt-service
-                    'display/cards/setupMqttServices.js?ver=20201210',
+                    'display/cards/setupMqttServices.js?ver=20201211',
                 ];
 
                 scriptsToLoad.forEach(function(src) {

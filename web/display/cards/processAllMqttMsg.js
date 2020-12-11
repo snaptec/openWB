@@ -410,6 +410,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 function processSystemMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/system
 	// called by handlevar
+	// console.log(mqttmsg+': '+mqttpayload);
 	if ( mqttmsg == 'openWB/system/Timestamp') {
 		var dateObject = new Date(mqttpayload * 1000);  // Unix timestamp to date-object
 		var time = '&nbsp;';
@@ -427,7 +428,7 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 		$('#time').text(time);
 		$('#date').text(date);
 	} else if ( mqttmsg == 'openWB/system/IpAddress') {
-		$('#systemIpAddress').text(mqttpayload);
+		$('.systemIpAddress').text(mqttpayload);
 	} else if ( mqttmsg == 'openWB/system/wizzardDone' ) {
 		if( mqttpayload == '100' ){
 			$("#wizzardModal").modal("hide");
@@ -438,6 +439,10 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 		if( mqttpayload == '1' ){
 			reloadDisplay();
 		}
+	} else if ( mqttmsg == 'openWB/system/Uptime' ) {
+		$('.systemUptime').text(mqttpayload);
+	} else if ( mqttmsg =='openWB/system/Version' ) {
+		$('.systemVersion').text(mqttpayload);
 	}
 
 }
