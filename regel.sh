@@ -33,9 +33,9 @@ declare -r IsFloatingNumberRegex='^-?[0-9.]+$'
 
 if (( slavemode == 1)); then
 	randomSleep=$(<ramdisk/randomSleepValue)
-	if [[ -z $randomSleep ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
+	if [[ -z $randomSleep ]] || [[ "${randomSleep}" == "0" ]] || ! [[ "${randomSleep}" =~ $IsFloatingNumberRegex ]]; then
 		randomSleep=`shuf --random-source=/dev/urandom -i 0-8 -n 1`.`shuf --random-source=/dev/urandom -i 0-9 -n 1`
-		echo $(date +%s): ramdisk/randomSleepValue missing - creating new one containing $randomSleep
+		echo "$(date +%s): slavemode=$slavemode: ramdisk/randomSleepValue missing or 0 - creating new one containing $randomSleep"
 		echo $randomSleep > ramdisk/randomSleepValue
 	fi
 
