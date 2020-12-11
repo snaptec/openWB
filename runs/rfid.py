@@ -173,7 +173,7 @@ def getplugstat():
             Values.update({"oldplugstatlp8" : Values["newplugstatlp8"]})
     except:
         pass
-    logDebug(1, str("Plugstat: " + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) + str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"]) + str(Values["newplugstatlp5"]) + str(Values["newplugstatlp6"]) + str(Values["newplugstatlp7"]) + str(Values["newplugstatlp8"])))
+    #logDebug(1, str("Plugstat: " + str(Values["newplugstatlp1"]) + str(Values["newplugstatlp2"]) + str(Values["newplugstatlp3"]) + str(Values["newplugstatlp4"]) + str(Values["newplugstatlp5"]) + str(Values["newplugstatlp6"]) + str(Values["newplugstatlp7"]) + str(Values["newplugstatlp8"])))
 
 def conditions():
     if ( Values["lastpluggedlp"] != "0"):
@@ -204,7 +204,7 @@ def savelastrfidtag():
     with open('ramdisk/readtag', 'r') as readtagfile:
         readtag = str( readtagfile.read().rstrip() )
     if ( ( readtag != Values["rfidlasttag"] ) and ( readtag != "0" ) ):
-        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk"))
+        logDebug(1, str("savelastrfidtag: change detected, updating ramdisk: ") + str(Values["rfidlasttag"]))
         f = open('ramdisk/rfidlasttag', 'w')
         f.write(readtag + str(",") + str(os.path.getmtime('ramdisk/readtag')))
         f.close()
