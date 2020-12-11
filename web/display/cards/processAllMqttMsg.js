@@ -659,6 +659,22 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			$(elementIsConfigured).addClass('hide');
 		}
 	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
+		console.log(mqttmsg+': '+mqttpayload);
+		// manual soc-module configured for respective charge point
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
+		var elementIsConfigured = $(parent).find('.socConfiguredLp');  // now get parents respective child element
+		if (mqttpayload == 1) {
+			$(elementIsConfigured).addClass('manualSoC');
+			$(elementIsConfigured).find('.manualSocSymbol').removeClass('hide');
+			$(elementIsConfigured).find('.socSymbol').addClass('hide');
+		} else {
+			$(elementIsConfigured).removeClass('manualSoC');
+			$(elementIsConfigured).find('.manualSocSymbol').addClass('hide');
+			$(elementIsConfigured).find('.socSymbol').removeClass('hide');
+		}
+	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i ) ) {
 		// respective charge point configured
 		var index = getIndex(mqttmsg);  // extract number between two / /
