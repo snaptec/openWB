@@ -31,6 +31,8 @@ var topicsToSubscribe = [
 	// system topics
 	["openWB/system/Timestamp", 1],
 	["openWB/system/IpAddress", 1],
+	["openWB/system/Uptime", 1],
+	["openWB/system/Version", 1],
 	["openWB/system/wizzardDone", 1],
 	["openWB/system/reloadDisplay", 1],
 	// pv topics
@@ -42,6 +44,28 @@ var topicsToSubscribe = [
 	// lp topics
 	["openWB/lp/1/%Soc", 1],
 	["openWB/lp/2/%Soc", 1],
+	// geladene kWh seit anstecken des EV
+	["openWB/lp/1/kWhChargedSincePlugged", 1],
+	["openWB/lp/2/kWhChargedSincePlugged", 1],
+	["openWB/lp/3/kWhChargedSincePlugged", 1],
+	["openWB/lp/4/kWhChargedSincePlugged", 1],
+	["openWB/lp/5/kWhChargedSincePlugged", 1],
+	["openWB/lp/6/kWhChargedSincePlugged", 1],
+	["openWB/lp/7/kWhChargedSincePlugged", 1],
+	["openWB/lp/8/kWhChargedSincePlugged", 1],
+	// geladene kWh seit Reset Lademengenbegrenzung
+	["openWB/lp/1/kWhActualCharged", 1],
+	["openWB/lp/2/kWhActualCharged", 1],
+	["openWB/lp/3/kWhActualCharged", 1],
+	["openWB/lp/4/kWhActualCharged", 1],
+	["openWB/lp/5/kWhActualCharged", 1],
+	["openWB/lp/6/kWhActualCharged", 1],
+	["openWB/lp/7/kWhActualCharged", 1],
+	["openWB/lp/8/kWhActualCharged", 1],
+	// Durchschnittsverbrauch
+	["openWB/lp/1/energyConsumptionPer100km", 1],
+	["openWB/lp/2/energyConsumptionPer100km", 1],
+	["openWB/lp/3/energyConsumptionPer100km", 1],
 	// Ladeleistung am LP
 	["openWB/lp/1/W", 1],
 	["openWB/lp/2/W", 1],
@@ -93,7 +117,16 @@ var topicsToSubscribe = [
 	["openWB/lp/5/AConfigured", 1],
 	["openWB/lp/6/AConfigured", 1],
 	["openWB/lp/7/AConfigured", 1],
-	//
+	// Restzeit
+	["openWB/lp/1/TimeRemaining", 1],
+	["openWB/lp/2/TimeRemaining", 1],
+	["openWB/lp/3/TimeRemaining", 1],
+	["openWB/lp/4/TimeRemaining", 1],
+	["openWB/lp/5/TimeRemaining", 1],
+	["openWB/lp/6/TimeRemaining", 1],
+	["openWB/lp/7/TimeRemaining", 1],
+	["openWB/lp/8/TimeRemaining", 1],
+	// Freigabe
 	["openWB/lp/1/ChargePointEnabled", 1],
 	["openWB/lp/2/ChargePointEnabled", 1],
 	["openWB/lp/3/ChargePointEnabled", 1],
@@ -129,6 +162,7 @@ var topicsToSubscribe = [
 	["openWB/lp/6/AutolockStatus", 1],
 	["openWB/lp/7/AutolockStatus", 1],
 	["openWB/lp/8/AutolockStatus", 1],
+	// Sofortladen Stromstärke
 	["openWB/lp/1/ADirectModeAmps", 1],
 	["openWB/lp/2/ADirectModeAmps", 1],
 	["openWB/lp/3/ADirectModeAmps", 1],
@@ -139,15 +173,6 @@ var topicsToSubscribe = [
 	["openWB/lp/8/ADirectModeAmps", 1],
 	// Zielladen
 	["openWB/lp/1/boolFinishAtTimeChargeActive", 1],
-	// Sofortladen Stromstärke
-	["openWB/lp/1/ADirectModeAmps", 1],
-	["openWB/lp/2/ADirectModeAmps", 1],
-	["openWB/lp/3/ADirectModeAmps", 1],
-	["openWB/lp/4/ADirectModeAmps", 1],
-	["openWB/lp/5/ADirectModeAmps", 1],
-	["openWB/lp/6/ADirectModeAmps", 1],
-	["openWB/lp/7/ADirectModeAmps", 1],
-	["openWB/lp/8/ADirectModeAmps", 1],
 	// housebattery values
 	["openWB/housebattery/W", 1],
 	["openWB/housebattery/%Soc", 1],
@@ -223,7 +248,7 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() { client.conect(options); }, 5000);
 	}
 };
 
