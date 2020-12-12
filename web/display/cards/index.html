@@ -15,7 +15,7 @@
         <script src="display/cards/jquery.sparkline.js"></script>
         <script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
         <!-- display style -->
-        <link rel="stylesheet" type="text/css" href="display/cards/style.css?ver=20201211">
+        <link rel="stylesheet" type="text/css" href="display/cards/style.css?ver=20201211a">
     </head>
 
     <body>
@@ -184,7 +184,7 @@
                                         <span class="targetCurrentLp"></span>
                                     </div>
                                     <div class="col text-right socConfiguredLp">
-                                        <i class="fas fa-car-battery"></i> <span class="socLp">--</span>
+                                        <i class="manualSocSymbol fas fa-edit hide"></i><i class="socSymbol fas fa-car-battery"></i> <span class="socLp">--</span>
                                     </div>
                                 </div>
                                 <div class="form-row mb-1">
@@ -247,7 +247,7 @@
                                         <span class="targetCurrentLp"></span>
                                     </div>
                                     <div class="col text-right socConfiguredLp">
-                                        <i class="fas fa-car-battery"></i> <span class="socLp">--</span>
+                                        <i class="manualSocSymbol fas fa-edit hide"></i><i class="socSymbol fas fa-car-battery"></i> <span class="socLp">--</span>
                                     </div>
                                 </div>
                                 <div class="form-row mb-1">
@@ -667,6 +667,18 @@
                         $("#lockInfoModal").modal("show");
                     }
                 });
+
+                $('.socConfiguredLp').click(function(event){
+                    if ( $(this).hasClass('manualSoC') ) {
+                        if( displaylocked == false ){
+                            currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
+                            $('#socModal').find('.socLp').text(currentLp);
+                            $('#socModal').modal("show");
+                        } else {
+                            $("#lockInfoModal").modal("show");
+                        }
+                    }
+                });
             </script>
         </div>
 
@@ -710,85 +722,86 @@
 
         <!-- Status -->
         <div id="status" class="status resume">
-            <div class="card">
-                <div class="card-header bg-secondary">
-                    Systeminformationen
-                </div>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="col-4">
-                            Version:
-                        </div>
-                        <div class="col">
-                            <span class='systemVersion'>-</span>
-                        </div>
+            <div class="row">
+                <div class="col-xs-12 card">
+                    <div class="card-header bg-secondary">
+                        Systeminformationen
                     </div>
-                    <div class="form-row">
-                        <div class="col-4">
-                            IP Adresse:
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-4">
+                                Version:
+                            </div>
+                            <div class="col">
+                                <span class='systemVersion'>-</span>
+                            </div>
                         </div>
-                        <div class="col">
-                            <span class="systemIpAddress"></span>
+                        <div class="form-row">
+                            <div class="col-4">
+                                IP Adresse:
+                            </div>
+                            <div class="col">
+                                <span class="systemIpAddress"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-4">
-                            Betriebszeit:
+                        <div class="form-row">
+                            <div class="col-4">
+                                Betriebszeit:
+                            </div>
+                            <div class="col">
+                                <span class='systemUptime'>--</span>
+                            </div>
                         </div>
-                        <div class="col">
-                            <span class='systemUptime'>--</span>
+                        <div class="form-row">
+                            <div class="col-4">
+                                Prozessor:
+                            </div>
+                            <div class="col">
+                                <meter id="cpu" high="85" min="0" max="100" value="0"></meter> <span id='cpuuse'>--</span>%
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-4">
-                            Prozessor:
+                        <div class="form-row">
+                            <div class="col-4">
+                                Arbeitsspeicher:
+                            </div>
+                            <div class="col">
+                                <span id='memtot'>--</span> MB <meter id="mem" min="0" value="0"></meter> (<span id='memfree'>--</span> MB frei)
+                            </div>
                         </div>
-                        <div class="col">
-                            <meter id="cpu" high="85" min="0" max="100" value="0"></meter> <span id='cpuuse'>--</span>%
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-4">
-                            Arbeitsspeicher:
-                        </div>
-                        <div class="col">
-                            <span id='memtot'>--</span> MB <meter id="mem" min="0" value="0"></meter> (<span id='memfree'>--</span> MB frei)
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-4">
-                            SD-Karte:
-                        </div>
-                        <div class="col">
-                            <span id='diskuse'>--</span>, <span id='diskfree'>--</span> verfügbar.
+                        <div class="form-row">
+                            <div class="col-4">
+                                SD-Karte:
+                            </div>
+                            <div class="col">
+                                <span id='diskuse'>--</span>, <span id='diskfree'>--</span> verfügbar.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <script>
+                // TODO: replace by MQTT topics
+                function updateit() {
+                    $.getJSON('tools/programmloggerinfo.php', function(data){
+                        json = eval(data);
+                        // console.log(json);
+                        $('#cpu').val(json.cpuuse);
+                        $('#cpuuse').html(json.cpuuse);
+                        $('#memtot').html(json.memtot);
+                        $('#mem').prop('max',json.memtot);
+                        $('#mem').val(json.memuse);
+                        $('#mem').prop('high',json.memtot*0.85);
+                        $('#memfree').html(json.memfree);
+                        $('#diskuse').html(json.diskuse);
+                        $('#diskfree').html(json.diskfree);
+                    })
+                };
+                $(document).ready(function() {
+                    updateit();
+                    setInterval(updateit, 10000);
+                });
+            </script>
         </div>
-        <script>
-            // TODO: replace by MQTT topics
-            function updateit() {
-                $.getJSON('tools/programmloggerinfo.php', function(data){
-                    json = eval(data);
-                    // console.log(json);
-                    $('#cpu').val(json.cpuuse);
-                    $('#cpuuse').html(json.cpuuse);
-                    $('#memtot').html(json.memtot);
-                    $('#mem').prop('max',json.memtot);
-                    $('#mem').val(json.memuse);
-                    $('#mem').prop('high',json.memtot*0.85);
-                    $('#memfree').html(json.memfree);
-                    $('#diskuse').html(json.diskuse);
-                    $('#diskfree').html(json.diskfree);
-                })
-            };
-            $(document).ready(function() {
-                updateit();
-                setInterval(updateit, 10000);
-            });
-        </script>
-    </div>
 
         <!-- modal chargepoint-info-window -->
         <div class="modal" id="ladepunktInfoModal">
@@ -1873,6 +1886,71 @@
             </script>
         </div>
 
+        <!-- modal SoC-window -->
+        <div class="modal" id="socModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- modal header -->
+                    <div class="modal-header bg-warning">
+                        <div class="col-1">&nbsp;</div>
+                        <div class="col justify-content-center">
+                            <div class="modal-title text-dark text-center">Manuelle SoC-Eingabe - Ladepunkt <span class="socLp"></span></div>
+                        </div>
+                        <div class="col-1 pr-0">
+                            <button type="button" class="btn btn-dark btn-lg" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <div id="manualSocInput" class="text-center display-4">
+                            <input id="manualSocBox" type="number" min="0" max="100" step="1" value="0" name="socBox" class="text-right">&nbsp;%<br>
+                            <input type="button" class="PINbutton" name="1" value="1" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="2" value="2" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="3" value="3" onclick="addSocNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton" name="4" value="4" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="5" value="5" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="6" value="6" onclick="addSocNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton" name="7" value="7" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="8" value="8" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton" name="9" value="9" onclick="addSocNumber(this);">
+                            <br>
+                            <input type="button" class="PINbutton clear" name="-" value="clear" onclick="clearSocForm();">
+                            <input type="button" class="PINbutton" name="0" value="0" onclick="addSocNumber(this);">
+                            <input type="button" class="PINbutton enter" name="+" value="enter" onclick="submitSocForm();" data-dismiss="modal">
+                        </div>
+                    </div> <!-- /modal body -->
+                </div>
+            </div>
+            <script>
+                function addSocNumber(e){
+                    var newValue = parseInt($("#manualSocBox").val()) * 10 + parseInt(e.value);
+                    if (newValue >= 0 && newValue <= 100) {
+                        $("#manualSocBox").val(newValue);
+                    } else {
+                        $('#manualSocBox').addClass('bg-danger');
+                        setTimeout(function() {
+                            $('#manualSocBox').removeClass('bg-danger');
+                        }, 1500);
+                    }
+                }
+
+                function clearSocForm(){
+                    $("#manualSocBox").val("0");
+                }
+
+                function submitSocForm() {
+                    var currentLp = $('#socModal').find('.socLp').text();
+                    var manualSoc = $("#manualSocBox").val();
+                    console.log("SoC for LP"+currentLp+": "+manualSoc);
+                    // publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
+                    // reset input after publishing
+                    clearSocForm();
+                };
+            </script>
+        </div>
+
         <!-- modal alert-window -->
         <div class="modal" id="lastregelungModal">
             <div class="modal-dialog">
@@ -2135,11 +2213,11 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display/cards/helperFunctions.js?ver=20201211',
+                    'display/cards/helperFunctions.js?ver=20201211a',
                     // functions for processing messages
-                    'display/cards/processAllMqttMsg.js?ver=20201211',
+                    'display/cards/processAllMqttMsg.js?ver=20201211a',
                     // functions performing mqtt and start mqtt-service
-                    'display/cards/setupMqttServices.js?ver=20201211',
+                    'display/cards/setupMqttServices.js?ver=20201211a',
                 ];
 
                 scriptsToLoad.forEach(function(src) {
