@@ -265,3 +265,26 @@ else
        sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py &
 fi
 	/var/www/html/openWB/runs/cleanup.sh >> /var/www/html/openWB/ramdisk/cleanup.log 2>&1
+	
+if [[ "$socmodul" == "soc_manual_lp1" ]]; then
+	re='^[0-9]+([.][0-9]+)?$'
+	tmpsoc=$(cat /var/www/html/openWB/ramdisk/lp1_manual_soc)
+	tmpll1=$(cat /var/www/html/openWB/ramdisk/lp1_manual_soc_tmpkwh)
+	if ! [[ $tmpll1 =~ $re ]] ; then
+		   tmpll1=$ll1
+	fi
+
+	diffwh=$(echo "scale=5;$ll1 - $tmpll1" |bc)
+	if (( $(echo "$diffwh > 20" |bc -l) )); then
+		diffwh=0
+	fi
+
+	diffperc=$(echo "scale=5;100 / $akkuglp1 * $diffwh" | bc)
+	echo $ll1 > /var/www/html/openWB/ramdisk/lp1_manual_soc_tmpkwh
+	newsoc=$(echo "$tmpsoc + $diffperc" |bc)
+	if (( $(echo "$newsoc > 100" |bc -l) )); then
+		newsoc=100
+	fi
+	echo $newsoc > /var/www/html/openWB/ramdisk/lp1_manual_soc
+fi 
+	
