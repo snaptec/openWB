@@ -140,6 +140,7 @@
 									<option <?php if($wattbezugmodulold == "bezug_solarwatt") echo "selected" ?> value="bezug_solarwatt">Solarwatt / My Reserve Speicher</option>
 									<option <?php if($wattbezugmodulold == "bezug_solarworld") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 									<option <?php if($wattbezugmodulold == "bezug_siemens") echo "selected" ?> value="bezug_siemens">Siemens Speicher</option>
+									<option <?php if($wattbezugmodulold == "bezug_solax") echo "selected" ?> value="bezug_solax">Solax</option>
 									<option <?php if($wattbezugmodulold == "bezug_sungrow") echo "selected" ?> value="bezug_sungrow">Sungrow Speicher</option>
 									<option <?php if($wattbezugmodulold == "bezug_powerdog") echo "selected" ?> value="bezug_powerdog">Powerdog</option>
 									<option <?php if($wattbezugmodulold == "bezug_rct") echo "selected" ?> value="bezug_rct">RCT</option>
@@ -859,6 +860,10 @@
 								}
 								if($('#wattbezugmodul').val() == 'bezug_siemens') {
 									showSection('wattbezugsiemens');
+									showSection('wattbezugip');
+
+								}
+								if($('#wattbezugmodul').val() == 'bezug_solax') {
 									showSection('wattbezugip');
 
 								}
