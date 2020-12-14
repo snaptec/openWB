@@ -33,7 +33,7 @@ def signed32(result, addr):
     return val
 
 ipaddress = str(sys.argv[1])
-client = ModbusTcpClient(ipadress, port=502)
+client = ModbusTcpClient(ipaddress, port=502)
 
 resp=client.read_input_registers(0, 114)
 
