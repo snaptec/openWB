@@ -15,7 +15,7 @@
         <script src="display/cards/jquery.sparkline.js"></script>
         <script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
         <!-- display style -->
-        <link rel="stylesheet" type="text/css" href="display/cards/style.css?ver=20201211a">
+        <link rel="stylesheet" type="text/css" href="display/cards/style.css?ver=20201215">
     </head>
 
     <body>
@@ -622,8 +622,8 @@
                 $('.ladepunktInfoBtn').click(function(event){
                     currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
                     $('#ladepunktInfoModal').find('.infoLp').text(currentLp);
-                    $('#ladepunktInfoModal').find('[data-info-lp]').addClass('hide');
-                    $('#ladepunktInfoModal').find('[data-info-lp="'+currentLp+'"]').removeClass('hide');
+                    $('#ladepunktInfoModal').find('[data-lp]').addClass('hide');
+                    $('#ladepunktInfoModal').find('[data-lp="'+currentLp+'"]').removeClass('hide');
                     $('#ladepunktInfoModal').modal("show");
                 });
 
@@ -820,7 +820,7 @@
                     <!-- modal body -->
                     <div class="modal-body">
                         <!-- chargepoint 1 -->
-                        <div data-info-lp="1" class="hide">
+                        <div data-lp="1" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -833,20 +833,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 2 -->
-                        <div data-info-lp="2" class="hide">
+                        <div data-lp="2" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -859,20 +876,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 3 -->
-                        <div data-info-lp="3" class="hide">
+                        <div data-lp="3" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -885,20 +919,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 4 -->
-                        <div data-info-lp="4" class="hide">
+                        <div data-lp="4" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -911,20 +962,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 5 -->
-                        <div data-info-lp="5" class="hide">
+                        <div data-lp="5" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -937,20 +1005,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 6 -->
-                        <div data-info-lp="6" class="hide">
+                        <div data-lp="6" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -963,20 +1048,37 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 7 -->
-                        <div data-info-lp="7" class="hide">
+                        <div data-lp="7" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -989,7 +1091,7 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
@@ -998,11 +1100,28 @@
                                             <span class="restzeitLp">--</span>
                                         </div>
                                     </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div> <!-- end info limit energy -->
                             </div> <!-- end charge mode Sofort -->
                         </div>
                         <!-- chargepoint 8 -->
-                        <div data-info-lp="8" class="hide">
+                        <div data-lp="8" class="hide">
                             <!-- general information -->
                             <div class="form-row">
                                 <div class="col-4">
@@ -1015,13 +1134,30 @@
                             <!-- info specific for charge mode Sofort -->
                             <div class="chargeMode chargeModeSofort hide">
                                 <!-- info if limit is set to energy (1) -->
-                                <div data-limit="1">
+                                <div data-option-limit="1">
                                     <div class="form-row">
                                         <div class="col-4">
                                             Restzeit:
                                         </div>
                                         <div class="col">
                                             <span class="restzeitLp">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            Fortschritt:
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-row vaRow">
+                                                <div class="col-2 limit-progress-label">
+                                                    --
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress mb-0 bg-secondary">
+                                                        <div class="progress-bar bg-warning limit-progress-bar" role="progressbar" data-actualCharged="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> <!-- end info limit energy -->
@@ -2201,9 +2337,9 @@
                 $(parent).find('.form-row[data-option=' + option + ']').show();  // now show option elements for selected option
                 $(parent).find('.form-row[data-option]').not('[data-option=' + option + ']').hide();  // hide all other option elements
                 // now show/hide elements in modal info dialog
-                var parentInfo = $('[data-info-lp=' + index + ']');  // get main div for our current chargepoint
-                parentInfo.find('[data-limit=' + option + ']').show();  // show info element for selected option
-                parentInfo.find('[data-limit]').not('[data-limit=' + option + ']').hide(); // hide all other options
+                var dataLpElements = $('[data-lp=' + index + ']');  // get main divs for our current chargepoint
+                dataLpElements.find('[data-option-limit=' + option + ']').show();  // show info element for selected option
+                dataLpElements.find('[data-option-limit]').not('[data-option-limit=' + option + ']').hide(); // hide all other options
             }
 
             $(document).ready(function(){
@@ -2213,11 +2349,11 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display/cards/helperFunctions.js?ver=20201211a',
+                    'display/cards/helperFunctions.js?ver=20201215',
                     // functions for processing messages
-                    'display/cards/processAllMqttMsg.js?ver=20201211a',
+                    'display/cards/processAllMqttMsg.js?ver=20201215',
                     // functions performing mqtt and start mqtt-service
-                    'display/cards/setupMqttServices.js?ver=20201211a',
+                    'display/cards/setupMqttServices.js?ver=20201215',
                 ];
 
                 scriptsToLoad.forEach(function(src) {
@@ -2278,7 +2414,9 @@
                     var topic = getTopicToSendTo(elementId);
                     publish(option, topic);
                     // show/hide respective option-values and progress
-                    chargeLimitationOptionsShowHide(this, option);
+                    if (elementId.includes("chargeLimitation")) {
+                        chargeLimitationOptionsShowHide(this, option);
+                    }
                 });
 
                 $('.rangeInput').on('input', function() {
