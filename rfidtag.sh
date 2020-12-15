@@ -69,6 +69,7 @@ rfid() {
 		done
 
 		echo "${lasttag},${NowItIs}" > "ramdisk/rfidlasttag"
+		echo "${lasttag},${NowItIs}" > "ramdisk/rfid.log" 
 		echo 0 > "ramdisk/readtag"
 	fi
 
