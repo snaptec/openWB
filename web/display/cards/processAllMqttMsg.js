@@ -520,7 +520,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// energy charged since ev was plugged in
 		// also calculates and displays km charged
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-info-lp="' + index + '"]');  // get parent row element for charge point
+		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.energyChargedLp');  // now get parents respective child element
 		var energyCharged = parseFloat(mqttpayload, 10);
 		if ( isNaN(energyCharged) ) {
@@ -544,8 +544,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(mqttpayload) ) {
 			mqttpayload = 0;
 		}
-		var parent = $('[data-info-lp="' + index + '"]');  // get parent div element for charge limitation
-		var element = parent.find('.progress-bar');  // now get parents progressbar
+		var parent = $('[data-lp="' + index + '"]');  // get parent div element for charge limitation
+		var element = parent.find('.limit-progress-bar');  // now get parents progressbar
 		element.data('actualCharged', mqttpayload);  // store value received
 		var limitElementId = 'lp/' + index + '/energyToCharge';
 		var limit = $('#' + $.escapeSelector(limitElementId)).val();  // slider value
@@ -554,6 +554,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		}
 		var progress = (mqttpayload / limit * 100).toFixed(0);
 		element.width(progress+"%");
+		parent.find('.limit-progress-label').text(progress+"%");
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
 		// soc of ev at respective charge point
@@ -569,7 +570,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-info-lp="' + index + '"]');  // get parent div element for charge limitation
+		var parent = $('[data-lp="' + index + '"]');  // get parent div element for charge limitation
 		var element = parent.find('.restzeitLp');  // get element
 		element.text(mqttpayload);
 	}
@@ -737,7 +738,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// store configured value in element attribute
 		// to calculate charged km upon receipt of charged energy
 		var index = getIndex(mqttmsg);  // extract number between two / /
-		var parent = $('[data-info-lp="' + index + '"]');  // get parent row element for charge point
+		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.kmChargedLp');  // now get parents respective child element
 		var consumption = parseFloat(mqttpayload);
 		if ( isNaN(consumption) ) {
