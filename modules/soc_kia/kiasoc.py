@@ -39,7 +39,7 @@ def main():
         cookies = session.cookies.get_dict()
         #print(cookies)
     else:
-        print('NOK cookie fÃ¼r login')
+        print('NOK cookie for login')
         return
 
     url = 'https://prd.eu-ccapi.kia.com:8080/api/v1/user/language' 

@@ -3,7 +3,12 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
@@ -30,13 +35,24 @@ case $CHARGEPOINT in
 		;;
 esac
 
-soctimer=$(<$soctimerfile)
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date --rfc-3339=seconds`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+soctimervalue=$(<$soctimerfile)
 tmpintervall=$(( kia_intervall * 6 ))
 
-if (( soctimer < tmpintervall )); then
-	soctimer=$((soctimer+1))
-	echo $soctimer > soctimerfile
+socDebugLog "SoCtimer: $soctimervalue, SoCIntervall: $tmpintervall"
+
+if (( soctimervalue < tmpintervall )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
+	soctimervalue=$((soctimervalue+1))
+	echo $soctimervalue > $soctimerfile
 else
-	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile &
-	echo 0 > soctimerfile
+	socDebugLog "Requesting SoC"
+	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile >> $LOGFILE &
+	echo 0 > $soctimerfile
 fi
