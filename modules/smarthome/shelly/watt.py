@@ -15,7 +15,10 @@ devicenumber=str(sys.argv[1])
 ipadr=str(sys.argv[2])
 uberschuss=int(sys.argv[3])
 answer = json.loads(str(urllib.request.urlopen("http://"+str(ipadr)+"/status", timeout=3).read().decode("utf-8")))
-aktpower = int(answer['meters'][0]['power'])
+try:
+    aktpower = int(answer['meters'][0]['power'])  # Abfrage shelly 
+except:
+    aktpower = int(answer['emeters'][0]['power']) # Abfrage shellyEM
 relais = int(answer['relays'][0]['ison'])
 powerc = 0
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
