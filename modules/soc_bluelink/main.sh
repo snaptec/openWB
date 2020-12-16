@@ -17,7 +17,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc1"
 		bluelink_email=$soc2user
 		bluelink_password=$soc2pass
-		bluelink_pin=$soc2pin
+		# bluelink_pin=$soc2pin # not needed at 2020-12-16
 		bluelink_intervall=20
 		;;
 	*)
@@ -28,7 +28,7 @@ case $CHARGEPOINT in
 		socfile="$RAMDISKDIR/soc"
 		bluelink_email=$soc_bluelink_email
 		bluelink_password=$soc_bluelink_password
-		bluelink_pin=$soc_bluelink_pin
+		# bluelink_pin=$soc_bluelink_pin # not needed at 2020-12-16
 		bluelink_intervall=$soc_bluelink_interval
 		;;
 esac
@@ -52,6 +52,6 @@ if (( soctimervalue < tmpintervall )); then
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc hyundai --user $soc_bluelink_email --password $soc_bluelink_password --pin $soc_bluelink_pin > $socfile &
+	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile &
 	echo 0 > $soctimerfile
 fi
