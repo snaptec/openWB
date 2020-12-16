@@ -136,7 +136,7 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/config/get/SmartHome/Devices/"+str(devicenumb)+"/device_name", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (( "openWB/config/set/SmartHome/Device" in msg.topic) and ("device_type" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            validDeviceTypes = ['shelly','tasmota','acthor','elwa','idm','stiebel','pyt'] # 'pyt' is deprecated and will be removed!
+            validDeviceTypes = ['shelly','tasmota','acthor','elwa','idm','stiebel','http','pyt'] # 'pyt' is deprecated and will be removed!
             if ( 1 <= int(devicenumb) <= numberOfSupportedDevices and len(str(msg.payload.decode("utf-8"))) > 2):
                 try:
                     # just check vor payload in list, deviceTypeIndex is not used
