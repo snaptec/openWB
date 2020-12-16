@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
-
+<?php
+// set number of supported smarthome devices
+$numDevices = 9;
+?>
 	<head>
 		<base href="/openWB/web/">
 
@@ -105,7 +108,7 @@
 
 			<form id="myForm">
 				<h1>Einstellungen für SmartHome Geräte</h1>
-<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { // Limited to devices 1-9 as device 10 is not properly implemented in various parts of the code ?>
+<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
@@ -114,10 +117,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_configuredDevices<?php echo $devicenum; ?>" name="device_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-sm btn-outline-info">
-											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>Off" data-option="0">Aus
+											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>Off" data-option="0" value="0" checked="checked">Aus
 										</label>
 										<label class="btn btn-sm btn-outline-info">
-											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>On" data-option="1">An
+											<input type="radio" name="device_configuredDevices<?php echo $devicenum; ?>" id="device_configuredDevices<?php echo $devicenum; ?>On" data-option="1" value="1">An
 										</label>
 									</div>
 								</div>
@@ -129,7 +132,7 @@
 							<div class="form-row mb-1">
 								<label for="device_nameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Name</label>
 								<div class="col">
-									<input id="device_nameDevices<?php echo $devicenum; ?>" name="device_name" class="form-control" type="text" minlength="3" maxlength="12" pattern="[a-zA-Z]*" inputmode="text" value="Name" data-default="Name" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									<input id="device_nameDevices<?php echo $devicenum; ?>" name="device_name" class="form-control" type="text" required="required" minlength="3" maxlength="12" pattern="[a-zA-Z]*" inputmode="text" value="Name" data-default="Name" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 									<span class="form-text small">Der Name muss aus 3-12 Zeichen bestehen und darf nur Buchstaben enthalten.</span>
 								</div>
 							</div>
@@ -137,6 +140,7 @@
 								<label class="col-md-4 col-form-label">Gerätetyp</label>
 								<div class="col">
 									<select class="form-control" name="device_type" id="device_typeDevices<?php echo $devicenum; ?>" data-default="shelly" value="shelly" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<option value ="" data-option="" disabled="disabled" selected="selected">-- Bitte auswählen --</option>
 										<option value="shelly" data-option="shelly">Shelly</option>
 										<option value="tasmota" data-option="tasmota">Tasmota</option>
 										<option value="acthor" data-option="acthor">Acthor</option>
@@ -185,29 +189,15 @@
 						<div class="form-row mb-1 device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-pyt hide">
 							<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 							<div class="col">
-								<input id="device_ipDevices<?php echo $devicenum; ?>" name="device_ip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+								<input id="device_ipDevices<?php echo $devicenum; ?>" name="device_ip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 							</div>
 						</div>
 						<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="device_einschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Einschalt-URL</label>
-									<div class="col">
-										<input id="device_einschalturlDevices<?php echo $devicenum; ?>" name="device_einschalturl" class="form-control" type="text" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät einzuschalten.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1">
-									<label for="device_ausschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschalt-URL</label>
-									<div class="col">
-										<input id="device_ausschalturlDevices<?php echo $devicenum; ?>" name="device_ausschalturl" class="form-control" type="text" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät auszuschalten.</span>
-									</div>
-								</div>
-								<div class="form-row mb-1 device<?php echo $devicenum; ?>noDifferentMeasurement hide">
 									<label for="device_leistungurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
 									<div class="col">
-										<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.</span>
 									</div>
 								</div>
@@ -220,10 +210,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_canSwitchDevices<?php echo $devicenum; ?>" name="device_canSwitch" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>0" data-option="0">Nein
+											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>1" data-option="1">Ja
+											<input type="radio" name="device_canSwitchDevices<?php echo $devicenum; ?>" id="device_canSwitch<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 										</label>
 									</div>
 									<span class="form-text small">Ist diese Option aktiviert, dann wird das Gerät anhand des Überschusses automatisch oder manuell geschaltet.</span>
@@ -232,6 +222,24 @@
 						</div>
 						<div class="device<?php echo $devicenum; ?>canSwitch">
 							<hr class="border-secondary">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_einschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Einschalt-URL</label>
+										<div class="col">
+											<input id="device_einschalturlDevices<?php echo $devicenum; ?>" name="device_einschalturl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät einzuschalten.</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="device_ausschalturlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschalt-URL</label>
+										<div class="col">
+											<input id="device_ausschalturlDevices<?php echo $devicenum; ?>" name="device_ausschalturl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">Die hier angegebene URL wird aufgerufen, um das Gerät auszuschalten.</span>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="device_mineinschaltdauerDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Mindesteinschaltdauer</label>
@@ -255,10 +263,10 @@
 									<div class="col">
 										<div class="btn-group btn-group-toggle btn-block" id="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" name="device_deactivateWhileEvCharging" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 											<label class="btn btn-outline-info">
-												<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>0" data-option="0">Nein
+												<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
 											</label>
 											<label class="btn btn-outline-info">
-												<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1">Ja
+												<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 											</label>
 										</div>
 										<span class="form-text small">Diese Option sorgt dafür, dass das Gerät gezielt abgeschaltet wird, wenn ein Auto geladen wird. Dem Auto steht somit entweder mehr PV-Überschuss zur Verfügung oder der Bezug verringert sich.</span>
@@ -315,7 +323,7 @@
 								<div class="form-row mb-1">
 									<label for="device_ausschaltverzoegerungDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Ausschaltverzögerung</label>
 									<div class="col">
-										<input id="device_ausschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_ausschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000"  data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<input id="device_ausschaltverzoegerungDevices<?php echo $devicenum; ?>" name="device_ausschaltverzoegerung" class="form-control naturalNumber" type="number" inputmode="decimal" required min="0" max="1000" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<span class="form-text small">Parameter in Minuten der bestimmt wie lange die Ausschaltschwelle <b>am Stück</b> überschritten werden muss bevor das Gerät ausgeschaltet wird.</span>
 									</div>
 								</div>
@@ -359,16 +367,16 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>" name="device_temperatur_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>0" data-option="0">0
+											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">0
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>1" data-option="1">1
+											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>1" data-option="1" value="1">1
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>2" data-option="2">2
+											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>2" data-option="2" value="2">2
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>3" data-option="3">3
+											<input type="radio" name="device_temperatur_configuredDevices<?php echo $devicenum; ?>" id="device_temperatur_configuredDevices<?php echo $devicenum; ?>3" data-option="3" value="3">3
 										</label>
 									</div>
 									<span class="form-text small">Anzahl der Temperatursensoren die an einem Shelly Unterputzgerät anschließbar sind.</span>
@@ -382,10 +390,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_differentMeasurementDevices<?php echo $devicenum; ?>" name="device_differentMeasurement" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>0" data-option="0">Nein
+											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>0" data-option="0" value="0" checked="checked">Nein
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1">Ja
+											<input type="radio" name="device_differentMeasurementDevices<?php echo $devicenum; ?>" id="device_differentMeasurement<?php echo $devicenum; ?>1" data-option="1" value="1">Ja
 										</label>
 									</div>
 									<span class="form-text small">Wenn diese Option aktiviert wird, wird für die Leistungserfassung einseparates Gerät abgefragt. Das kann genutzt werden, wenn z. B. ein Gerät über keine Leistungsmessung verfügt, jedoch ein Zwischenstecker mit Messung eingesetzt wird.</span>
@@ -398,13 +406,13 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_measureTypeDevices<?php echo $devicenum; ?>" name="device_measureType" data-toggle="buttons" data-default="sdm630" value="sdm630" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly">Shelly
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>Shelly" data-option="shelly" value="shelly" checked="checked">Shelly
 										</label>
 										<label class="btn btn-outline-info btn-toggle">
-											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>SDM630" data-option="sdm630"> SDM630
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>SDM630" data-option="sdm630" value="sdm630"> SDM630
 										</label>
 										<label class="btn btn-outline-info">
-											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http">Http
+											<input type="radio" name="device_measureTypeDevices<?php echo $devicenum; ?>" id="device_measureTypeDevices<?php echo $devicenum; ?>http" data-option="http" value="http">Http
 										</label>
 									</div>
 								</div>
@@ -412,7 +420,7 @@
 							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-shelly deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
 								<label for="device_measureipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 								<div class="col">
-									<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									<input id="device_measureipDevices<?php echo $devicenum; ?>" name="device_measureip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
 							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-sdm630 hide">
@@ -424,7 +432,7 @@
 							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-http hide">
 								<label for="device_measureurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
 								<div class="col">
-									<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurld" class="form-control" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurld" class="form-control" type="text" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
 						</div>
@@ -442,7 +450,7 @@
 								<label for="logLevel" class="col-md-4 col-form-label">SmartHome Loglevel</label>
 								<div class="col">
 									<select name="logLevel" id="logLevel" class="form-control" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/">
-										<option value="0" data-option="0">0</option>
+										<option value="0" data-option="0" checked="checked">0</option>
 										<option value="1" data-option="1">1</option>
 										<option value="2" data-option="2">2</option>
 									</select>
@@ -552,7 +560,7 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20201207" ></script>
 
 		<script>
-			<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+			<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 				function visibility_device_configuredDevices<?php echo $devicenum; ?>( data ){
 					// console.log("device_configuredDevices: data: "+data);
 					if( typeof data == 'undefined' ){
@@ -602,11 +610,11 @@
 				}
 
 				function visibility_device_canSwitchDevices<?php echo $devicenum; ?>( data ){
-					console.log("device_canSwitchDevices: data: "+data);
+					// console.log("device_canSwitchDevices: data: "+data);
 					if( typeof data == 'undefined' ){
 						data = $('input[name=device_canSwitchDevices<?php echo $devicenum; ?>]:checked').attr("data-option");
 					}
-					console.log("device_canSwitchDevices: data: "+data);
+					// console.log("device_canSwitchDevices: data: "+data);
 					if( data == 0 ){
 						hideSection('.device<?php echo $devicenum; ?>canSwitch');
 					} else {
@@ -615,6 +623,11 @@
 				}
 
 				function visibility_device_nameDevices<?php echo $devicenum; ?>( data ){
+					// console.log("device_nameDevices: data: "+data);
+					if( typeof data =='undefined' ){
+						data = $('input[name=device_nameDevices<?php echo $devicenum; ?>]').val();
+					}
+					// console.log("device_nameDevices: data: "+data);
 					if ( data != "Name" ) {
 						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+data+')');
 					} else {
@@ -632,11 +645,7 @@
 			}
 
 			function visibiltycheck(elementId, mqttpayload) {
-				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
-					if ( elementId == 'boolHouseBatteryConfigured' ) {
-						visibility_housebatteryConfigured( mqttpayload );
-					}
-
+				<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 					if ( elementId == 'device_configuredDevices<?php echo $devicenum; ?>') {
 						visibility_device_configuredDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
@@ -661,10 +670,14 @@
 						visibility_device_nameDevices<?php echo $devicenum; ?>( mqttpayload );
 					}
 				<?php } ?>
+
+				if ( elementId == 'boolHouseBatteryConfigured' ) {
+						visibility_housebatteryConfigured( mqttpayload );
+					}
 			}
 
 			$(function() {
-				<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+				<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
 					$('#device_configuredDevices<?php echo $devicenum; ?>').change(function(){
 						visibility_device_configuredDevices<?php echo $devicenum; ?>();
 					});
@@ -711,6 +724,17 @@
 				sendValues();
 			}
 
+			function initForm() {
+				<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
+					visibility_device_configuredDevices<?php echo $devicenum; ?>();
+					visibility_device_typeDevices<?php echo $devicenum; ?>();
+					visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
+					visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
+					visibility_device_canSwitchDevices<?php echo $devicenum; ?>();
+					visibility_device_nameDevices<?php echo $devicenum; ?>();
+				<?php } ?>
+			}
+
 			$(document).ready(function(){
 
 				$('input').blur(function(event) {
@@ -752,6 +776,8 @@
 					// on the fly input validation
 					formatToNaturalNumber(this);
 				});
+
+				initForm();
 			});  // end document ready function
 
 		</script>
