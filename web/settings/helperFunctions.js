@@ -14,8 +14,8 @@ var changedValuesHandler = {
         // array is only filled by function getChangedValues!
         console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
-            // window.location.href = './index.php';
             console.log("done");
+            window.location.href = './index.php';
         } else {
             return true;
         }
