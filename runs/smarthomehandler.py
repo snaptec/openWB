@@ -130,7 +130,7 @@ def logDebug(level, msg):
         if (int(level) == 1):
             file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 2):
-            file.write(time.ctime() + ' ERROR: ' + str(msg)+ '\n')
+            file.write(time.ctime() + ': ' + str(msg)+ '\n')
         file.close()
 
 def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
