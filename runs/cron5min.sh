@@ -57,7 +57,7 @@ d6=$(</var/www/html/openWB/ramdisk/device6_wh)
 d7=$(</var/www/html/openWB/ramdisk/device7_wh)
 d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
-d10=$(</var/www/html/openWB/ramdisk/device10_wh)
+d10="0"
 
 
 

@@ -27,6 +27,7 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setInputValue - is declared in pvconfig.html
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
+    console.log("new message: "+mqttmsg+": "+mqttpayload);
     checkAllSaved(mqttmsg, mqttpayload);
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);

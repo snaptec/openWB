@@ -12,8 +12,10 @@ var changedValuesHandler = {
         // if array is empty after delete, all send topics have been received with correct value
         // so redirect to main page
         // array is only filled by function getChangedValues!
+        console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
-            window.location.href = './index.php';
+            // window.location.href = './index.php';
+            console.log("done");
         } else {
             return true;
         }
@@ -109,6 +111,7 @@ function sendValues() {
         Object.keys(changedValues).forEach(function(topic, index) {
             var value = this[topic].toString();
             setTimeout(function () {
+                console.log("publishing changed value: "+topic+": "+value);
                 publish(value, topic);
             }, index * intervall);
         }, changedValues);
@@ -159,6 +162,7 @@ function getChangedValues() {
         if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
             topic = topic.replace('/get/', '/set/');
             changedValues[topic] = value;
+            console.log("ChangedValue found: "+topic+": "+value);
         }
     });
 }
