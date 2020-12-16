@@ -439,7 +439,7 @@ $numDevices = 9;
 							<div class="form-row mb-1 deviceMeasureTypeDevices<?php echo $devicenum; ?>-option deviceMeasureTypeDevices<?php echo $devicenum; ?>-option-http hide">
 								<label for="device_measureurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
 								<div class="col">
-									<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurld" class="form-control" type="text" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									<input id="device_measureurlDevices<?php echo $devicenum; ?>" name="device_measureurl" class="form-control" type="text" required="required" data-default="" value=""  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 								</div>
 							</div>
 						</div>
