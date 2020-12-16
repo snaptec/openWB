@@ -185,20 +185,27 @@ $numDevices = 9;
 								</div>
 							</div>
 						</div>
-						<hr class="border-secondary">
-						<div class="form-row mb-1 device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-pyt hide">
-							<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
-							<div class="col">
-								<input id="device_ipDevices<?php echo $devicenum; ?>" name="device_ip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+						<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-pyt hide">
+							<hr class="border-secondary">
+							<div class="form-row mb-1">
+								<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
+								<div class="col">
+									<input id="device_ipDevices<?php echo $devicenum; ?>" name="device_ip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+								</div>
 							</div>
 						</div>
 						<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-http hide">
+							<hr class="border-secondary">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="device_leistungurlDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Leistungs-URL</label>
 									<div class="col">
 										<input id="device_leistungurlDevices<?php echo $devicenum; ?>" name="device_leistungurl" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
-										<span class="form-text small">Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.</span>
+										<span class="form-text small">
+											Die hier angegebene URL wird aufgerufen, um die aktuelle Leistung des Geräts zu erhalten.<br>
+											In der URL kann ein Parameter angegeben werden, der den aktuellen Überschuss an das Gerät übermittelt. Hierzu ist folgender Platzhalter in der URL zu verwenden (inklusive der spitzen Klammern):<br>
+											<span class="text-info">&lt;openwb-ueberschuss&gt;</span>
+										</span>
 									</div>
 								</div>
 							</div>
@@ -625,7 +632,7 @@ $numDevices = 9;
 				function visibility_device_nameDevices<?php echo $devicenum; ?>( data ){
 					// console.log("device_nameDevices: data: "+data);
 					if( typeof data =='undefined' ){
-						data = $('input[name=device_nameDevices<?php echo $devicenum; ?>]').val();
+						data = $('#device_nameDevices<?php echo $devicenum; ?>').val();
 					}
 					// console.log("device_nameDevices: data: "+data);
 					if ( data != "Name" ) {
