@@ -663,6 +663,19 @@
 			});
 		}
 		nurpvlog();
+		function soclog() {
+			$.ajax({
+				url: "/openWB/ramdisk/soc.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#socdiv").html(result);
+				}
+			});
+		}
+		soclog();
 	</script>
 
 	<?php
@@ -1320,6 +1333,12 @@
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="nurpvdiv"></div>
+
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="soclog"> <h4>EV SoC Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="socdiv"></div>
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
@@ -1360,6 +1379,16 @@
 			} else {
 				$('#nurpvdiv').hide(); 
 				$('#nurpvdiv').addClass("hide");
+			}
+		});
+		$('#soclog').click(function(event){
+			var element = document.getElementById('socdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#socdiv').show();
+				$('#socdiv').removeClass("hide");
+			} else {
+				$('#socdiv').hide(); 
+				$('#socdiv').addClass("hide");
 			}
 		});
 

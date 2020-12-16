@@ -1,6 +1,8 @@
 #!/bin/bash
 input=$1
-if [[ "$input" == "201912" ]]; then
+if [[ "$input" == "202012" ]]; then
+	oldmonth="202101"
+elif [[ "$input" == "201912" ]]; then
 	oldmonth="202001"
 elif [[ "$input" == "201812" ]]; then
 	oldmonth="201901"

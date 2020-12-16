@@ -16,10 +16,12 @@ config = configparser.ConfigParser()
 config.read(shconfigfile)
 prefixpy = basePath+'/modules/smarthome/'
 loglevel=2
+numberOfSupportedDevices=9 # limit number of smarthome devices
 DeviceValues = { }
 DeviceTempValues = { }
 DeviceCounters = { }
-for i in range(1, 11):
+
+for i in range(1, (numberOfSupportedDevices+1)):
     DeviceTempValues.update({'oldw'+str(i) : '2'})
     DeviceTempValues.update({'oldwh'+str(i) : '2'})
     DeviceTempValues.update({'oldtemp'+str(i) : '2'})
@@ -98,7 +100,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
        try:
           pyname = prefixpy + 'http/watt.py'
           try:
-             device_measureurl = str(config.get('smarthomedevices', 'device_measureurl'+str(nummer))) 
+             device_measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer))) 
           except:
              device_measureurl = "undef"
           proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(uberschuss),device_measureurl])
@@ -128,7 +130,7 @@ def logDebug(level, msg):
         if (int(level) == 1):
             file.write(time.ctime() + ': ' + str(msg)+ '\n')
         if (int(level) == 2):
-            file.write(time.ctime() + ': ' + str('\x1b[6;30;42m' + msg + '\x1b[0m')+ '\n')
+            file.write(time.ctime() + ': ' + str(msg)+ '\n')
         file.close()
 
 def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
@@ -230,14 +232,6 @@ def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
         f.close()
 
 def publishmqtt():
-    """ arg parser not used here
-    TODO remove lines
-    parser = argparse.ArgumentParser(description='openWB MQTT Publisher')
-    parser.add_argument('--qos', '-q', metavar='qos', type=int, help='The QOS setting', default=0)
-    parser.add_argument('--retain', '-r', dest='retain', action='store_true', help='If true, retain this publish')
-    parser.set_defaults(retain=False)
-    args = parser.parse_args()
-    """
     client = mqtt.Client("openWB-SmartHome-bulkpublisher-" + str(os.getpid()))
     client.connect("localhost")
     for key in DeviceValues:
@@ -285,6 +279,7 @@ def loadregelvars():
     global loglevel
     global reread
     global wattbezug
+    global numberOfSupportedDevices
     try:
         with open('ramdisk/wattbezug', 'r') as value:
             wattbezug = int(float(value.read())) * -1
@@ -327,13 +322,13 @@ def loadregelvars():
         f.write(str(0))
         f.close()
         logDebug("2", "Config reRead")
-    for i in range(1, 11):
+    for i in range(1, (numberOfSupportedDevices+1)):
         try:
             with open('ramdisk/smarthome_device_manual_' + str(i), 'r') as value:
                 DeviceValues.update( {str(i) + "manual": int(value.read())}) 
         except:
             DeviceValues.update( {str(i) + "manual": 0})
-    for i in range(1, 11):
+    for i in range(1, (numberOfSupportedDevices+1)):
         try:
             with open('ramdisk/smarthome_device_manual_control_' + str(i), 'r') as value:
                 DeviceValues.update( {str(i) + "manualmodevar": int(value.read())}) 
@@ -345,32 +340,20 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/SmartHome/#", 2)
 
 def on_message(client, userdata, msg):
+    global numberOfSupportedDevices
     if (( "openWB/SmartHome/Device" in msg.topic) and ("WHImported_temp" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= 10 ):
+        if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"WHImported_tmp": int(msg.payload)})
     if (( "openWB/SmartHome/Device" in msg.topic) and ("RunningTimeToday" in msg.topic)):
         devicenumb=re.sub(r'\D', '', msg.topic)
-        if ( 1 <= int(devicenumb) <= 10 ):
+        if ( 1 <= int(devicenumb) <= numberOfSupportedDevices ):
             DeviceValues.update( {str(devicenumb)+"runningtime": int(msg.payload)})
-
-client = mqtt.Client("openWB-mqttsmarthome")
-client.on_connect = on_connect
-client.on_message = on_message
-startTime = time.time()
-waitTime = 3
-client.connect("localhost")
-while True:
-    client.loop()
-    client.subscribe("openWB/SmartHome/#", 2)
-    elapsedTime = time.time() - startTime
-    if elapsedTime > waitTime:
-        client.disconnect()
-        break
 
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
-    DeviceList = [config.get('smarthomedevices', 'device_configured_1'), config.get('smarthomedevices', 'device_configured_2'), config.get('smarthomedevices', 'device_configured_3'), config.get('smarthomedevices', 'device_configured_4'), config.get('smarthomedevices', 'device_configured_5'), config.get('smarthomedevices', 'device_configured_6'), config.get('smarthomedevices', 'device_configured_7'), config.get('smarthomedevices', 'device_configured_8'), config.get('smarthomedevices', 'device_configured_9'), config.get('smarthomedevices', 'device_configured_10')] 
+    # TODO: iterate from over num devices
+    DeviceList = [config.get('smarthomedevices', 'device_configured_1'), config.get('smarthomedevices', 'device_configured_2'), config.get('smarthomedevices', 'device_configured_3'), config.get('smarthomedevices', 'device_configured_4'), config.get('smarthomedevices', 'device_configured_5'), config.get('smarthomedevices', 'device_configured_6'), config.get('smarthomedevices', 'device_configured_7'), config.get('smarthomedevices', 'device_configured_8'), config.get('smarthomedevices', 'device_configured_9')]
     numberOfDevices = 0
     totalwatt = 0
     for n in DeviceList:
@@ -404,7 +387,7 @@ def getdevicevalues():
             switchtyp =  str(config.get('smarthomedevices', 'device_type_'+str(numberOfDevices)))
             devicename = str(config.get('smarthomedevices', 'device_name_'+str(numberOfDevices)))
             try:
-                device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl'+str(numberOfDevices))) 
+                device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl_'+str(numberOfDevices))) 
             except:
                 device_leistungurl = "undef"
             pyname0 = getdir(switchtyp,devicename)
@@ -427,7 +410,7 @@ def getdevicevalues():
                    wattstart = 0
                    wattkstart = 0
                    relais = 0
-                   # only relevant for canswitch == 1, file not found, 
+                   # only relevant for canswitch == 1, file not found
                    if (canswitch == 1):
                       logDebug("0", "Device " + str(switchtyp) + str(numberOfDevices) + str(devicename) + " File not found: " + str(pyname))
                 #Shelly temp sensor
@@ -443,7 +426,7 @@ def getdevicevalues():
                               f.close()
                    except:
                       pass
-                # Separate Leistungs messung ?    
+                # Separate Leistungs messung ?
                 (watt,wattk) = sepwatt(wattstart,wattkstart,numberOfDevices)
                 if abschalt == 1:
                    totalwatt = totalwatt + watt
@@ -512,11 +495,11 @@ def turndevicerelais(nummer, zustand):
     switchtyp =  str(config.get('smarthomedevices', 'device_type_'+str(nummer)))
     devicename = str(config.get('smarthomedevices', 'device_name_'+str(nummer)))
     try:
-       device_einschalturl = str(config.get('smarthomedevices', 'device_einschalturl'+str(nummer))) 
+       device_einschalturl = str(config.get('smarthomedevices', 'device_einschalturl_'+str(nummer))) 
     except:
        device_einschalturl = "undef"
     try:
-       device_ausschalturl = str(config.get('smarthomedevices', 'device_ausschalturl'+str(nummer))) 
+       device_ausschalturl = str(config.get('smarthomedevices', 'device_ausschalturl_'+str(nummer))) 
     except:
        device_ausschalturl = "undef"
     pyname0 = getdir(switchtyp,devicename)
@@ -543,6 +526,7 @@ def turndevicerelais(nummer, zustand):
               logDebug("0", "Device " + str(switchtyp) + str(nummer) + str(devicename) + " File not found: " + str(pyname)) 
        except Exception as e:
            logDebug("2", "Fehler beim Ausschalten von Device " + str(nummer) + " Fehlermeldung: " + str(e))
+
 def conditions(nummer):
     try:
         speichersocbeforestop = int(config.get('smarthomedevices', 'device_speichersocbeforestop_'+str(nummer)))
@@ -692,12 +676,13 @@ def conditions(nummer):
 
 def resetmaxeinschaltdauerfunc():
     global resetmaxeinschaltdauer
+    global numberOfSupportedDevices
 
     hour=time.strftime("%H")
     if (int(hour) == 0):
         try:
             if (int(resetmaxeinschaltdauer) == 0):
-                for i in range(1, 11):
+                for i in range(1, (numberOfSupportedDevices+1)):
                     DeviceValues.update({str(i) + "runningtime" : '0'})
                 resetmaxeinschaltdauer=1
         except:
@@ -705,12 +690,26 @@ def resetmaxeinschaltdauerfunc():
     if (int(hour) == 2):
         resetmaxeinschaltdauer=0
 
+client = mqtt.Client("openWB-mqttsmarthome")
+client.on_connect = on_connect
+client.on_message = on_message
+startTime = time.time()
+waitTime = 3
+client.connect("localhost")
+while True:
+    client.loop()
+    client.subscribe("openWB/SmartHome/#", 2)
+    elapsedTime = time.time() - startTime
+    if elapsedTime > waitTime:
+        client.disconnect()
+        break
+
 while True:
     config.read(shconfigfile)
     loadregelvars()
     getdevicevalues()
     resetmaxeinschaltdauerfunc()
-    for i in range(1, 11):
+    for i in range(1, (numberOfSupportedDevices+1)):
         try:
             configured = config.get('smarthomedevices', 'device_configured_' + str(i))
             if (configured == "1"):
