@@ -176,6 +176,9 @@ var topicsToSubscribe = [
 	// Status Konfiguration SoC
 	["openWB/lp/1/boolSocConfigured", 1],
 	["openWB/lp/2/boolSocConfigured", 1],
+	// manual SoC
+	["openWB/lp/1/boolSocManual", 1],
+	["openWB/lp/2/boolSocManual", 1],
 	// Status Nachtladen
 	["openWB/lp/1/boolChargeAtNight", 1],
 	["openWB/lp/2/boolChargeAtNight", 1],
