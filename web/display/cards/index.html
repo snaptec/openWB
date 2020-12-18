@@ -37,7 +37,7 @@
             <a class="btn btn-outline-info btn-toggle active" href="#dashboard" onclick="return false;">Dashboard</a>
             <a class="btn btn-outline-info" href="#ladepunkte" onclick="return false;">Ladepunkte</a>
             <a class="btn btn-outline-info hide" id="rfidCodeBtn" href="#code" onclick="return false;">Code</a>
-            <a class="btn btn-outline-info" id="statusBtn" href="#status" onclick="return false;">Status</a>
+            <a class="btn btn-outline-info displayLock" id="statusBtn" href="#status" onclick="return false;">Status</a>
             <a class="btn btn-outline-danger text-danger hide" id="lastmanagementShowBtn" onclick="return false;">Warnungen</a>
         </div>
 
@@ -2290,6 +2290,10 @@
                     displaylocked = true;
                     $('#displaylock').find('.fa-lock').removeClass('hide');
                     $('#displaylock').find('.fa-unlock').addClass('hide');
+                    if( $('.sidenav').find('.btn.active').hasClass('displayLock') ) {
+                        console.log('changing panel');
+                        initPanels();
+                    }
                     window.clearTimeout(lockTimeoutHandler);
                     lockTimeoutHandler = null;
                 }
@@ -2342,6 +2346,15 @@
                 dataLpElements.find('[data-option-limit]').not('[data-option-limit=' + option + ']').hide(); // hide all other options
             }
 
+            function initPanels(){
+                $('.resume').hide();
+                $('.sidenav').find('.btn').removeClass('active');
+                var firstButton = $('.sidenav').find('.btn').not('.hide').not('.displayLock').first();
+                var firstNavTarget = $(firstButton).attr('href');
+                $(firstButton).addClass('active');
+                $(firstNavTarget).toggle();
+            }
+
             $(document).ready(function(){
 
                 // load scripts synchronously in order specified
@@ -2361,6 +2374,28 @@
                     script.src = src;
                     script.async = false;
                     document.body.appendChild(script);
+                });
+
+                // handling of display panels
+                initPanels();
+
+                $('.sidenav').find('a[href^="#"]').on('click', function(event) {
+                    if( $(this).hasClass('displayLock') && displaylocked == true ) {
+                        $("#lockInfoModal").modal("show");
+                    } else {
+                        // hide all panels
+                        $('.resume').hide();
+                        // get target panel
+                        var target = $(this).attr('href');
+                        // display target panel
+                        $('.resume'+target).toggle();
+                        // remove active menu element
+                        $('.sidenav').find('.active').removeClass('active');
+                        // activate clicked menu element
+                        $(this).addClass('active');
+                        // update sparklines
+                        $.sparkline_display_visible();
+                    }
                 });
 
                 // display lock
@@ -2384,26 +2419,6 @@
                     } else {
                         lockDisplay(true);
                     }
-                });
-
-                // handling of display panels
-                $('.resume') .hide();
-                var firstNavTarget = $('.sidenav').find('.btn').not('.hide').first().attr('href');
-                $(firstNavTarget).toggle();
-
-                $('.sidenav').find('a[href^="#"]').on('click', function(event) {
-                    // hide all panels
-                    $('.resume').hide();
-                    // get target panel
-                    var target = $(this).attr('href');
-                    // display target panel
-                    $('.resume'+target).toggle();
-                    // remove active menu element
-                    $('.sidenav').find('.active').removeClass('active');
-                    // activate clicked menu element
-                    $(this).addClass('active');
-                    // update sparklines
-                    $.sparkline_display_visible();
                 });
 
                 $('.btn-group-toggle').change(function(event){
