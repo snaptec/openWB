@@ -2080,7 +2080,7 @@
                     var currentLp = $('#socModal').find('.socLp').text();
                     var manualSoc = $("#manualSocBox").val();
                     console.log("SoC for LP"+currentLp+": "+manualSoc);
-                    // publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
+                    publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
                     // reset input after publishing
                     clearSocForm();
                 };

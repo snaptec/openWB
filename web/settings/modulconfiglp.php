@@ -682,7 +682,7 @@
 									<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 									<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
 									<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID</option>
-
+									<option <?php if($socmodulold == "soc_manual") echo "selected" ?> value="soc_manual">Manuell + Berechnung</option>
 								</select>
 							</div>
 						</div>
@@ -709,6 +709,38 @@
 							</div>
 							<div id="socmnone" class="hide">
 								<!-- nothing here -->
+							</div>
+							<div id="socmanual" class="hide">
+								<div class="alert alert-info">
+									Beim Anstecken des Fahrzeugs muss der aktuelle SoC (am Display oder über einen Browser) angegeben werden.
+									Anhand des Zählers im Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden Einstellungen "Akkugröße" und "Wirkungsgrad".<br>
+									<span class="text-danger">Das ist ein experimentelles Feature! Es wäre toll, wenn im Forum funktionierende Einstellungen für verschiedene Fahrzeuge gesammelt werden!</span>
+								</div>
+								<div class="form-row mb-1">
+									<label for="akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="akkuglp1" value="<?php echo $akkuglp1old ?>">
+										<span class="form-text small">
+											Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+											Die Netto-Kapazität unterscheidet sich meist von den Angaben der Fahrzeughersteller. So besitzt ein Tesla Model S 90 z. B. nur ca. 83kWh und nicht die durch die Typenbezeichnung suggerierten 90kWh.
+											Andere Hersteller begrenzen die nutzbare Kapazität absichtlich, um eine höhere Lebensdauer der Akkus zu erreichen. Gängig sind eine Drosselung auf 90% der angegebenen Brutto-Kapazität.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+										<span class="form-text small">
+											Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+											Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+											SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen
+										</span>
+									</div>
+								</div>
 							</div>
 							<div id="socmqtt" class="hide">
 								<div class="alert alert-info">
@@ -1386,6 +1418,7 @@
 							hideSection('socmyrenault');
 							hideSection('socmypeugeot');
 							hideSection('socmyopel');
+							hideSection('socmanual');
 
 							if($('#socmodul').val() == 'none') {
 								showSection('socmnone');
@@ -1406,7 +1439,6 @@
 							if($('#socmodul').val() == 'soc_id') {
 								showSection('socmid');
 							}
-
 							if($('#socmodul').val() == 'soc_kia') {
 								showSection('socmkia');
 								showSection('socmbluelink');
@@ -1446,6 +1478,9 @@
 							}
 							if($('#socmodul').val() == 'soc_myopel') {
 								showSection('socmyopel');
+							}
+							if($('#socmodul').val() == 'soc_manual') {
+								showSection('socmanual');
 							}
 						}
 

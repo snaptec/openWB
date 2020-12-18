@@ -254,15 +254,19 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-        if (( "openWB/config/set/lp" in msg.topic) and ("ManualSoc" in msg.topic)):
+        if (( "openWB/set/lp" in msg.topic) and ("manualSoc" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 100):
-                client.publish("openWB/config/get/lp/"+str(devicenumb)+"/manualSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
-                f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'_manual_soc', 'w')
+            if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
+                client.publish("openWB/lp/"+str(devicenumb)+"/manualSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/manual_soc_lp'+str(devicenumb), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-                #TODO: sichtbaren SoC direkt setzen je Ladepunkt
-                f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+                client.publish("openWB/lp/"+str(devicenumb)+"/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
+                if ( int(devicenumb) == 1 ):
+                    socFile = '/var/www/html/openWB/ramdisk/soc'
+                elif ( int(devicenumb) == 2 ):
+                    socFile = '/var/www/html/openWB/ramdisk/soc1'
+                f = open(socFile, 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
         if (( "openWB/config/set/sofort/lp" in msg.topic) and ("energyToCharge" in msg.topic)):

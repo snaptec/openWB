@@ -2822,6 +2822,10 @@ then
 	echo "soc2vin=" >> /var/www/html/openWB/openwb.conf
 	echo "soc2intervall=60" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "wirkungsgradlp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "wirkungsgradlp1=90" >> /var/www/html/openWB/openwb.conf
+fi
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null
