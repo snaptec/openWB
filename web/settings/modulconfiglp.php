@@ -791,6 +791,7 @@
 											</span>
 										</div>
 									</div>
+									<!-- not needed anymore 2020-12-16
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
 										<div class="col">
@@ -800,6 +801,7 @@
 											</span>
 										</div>
 									</div>
+									-->
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_interval" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
@@ -2482,7 +2484,7 @@
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
 								showSection('socmuser2');
 								showSection('socmpass2');
-								showSection('socmpin2');
+								// showSection('socmpin2'); // not needed anymore 2020-12-16
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
 								showSection('socmuser2');
