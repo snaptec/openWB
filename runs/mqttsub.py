@@ -722,6 +722,24 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
                 client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
             setTopicCleared = True
+        if (msg.topic == "openWB/set/graph/RequestYearGraph"):
+            if (int(msg.payload) >= 1 and int(msg.payload) <= 2050):
+                sendcommand = ["/var/www/html/openWB/runs/sendyeargraphdata.sh", msg.payload]
+                subprocess.Popen(sendcommand)
+            else:
+                client.publish("openWB/system/YearGraphData1", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData2", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData3", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData4", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData5", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData6", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData7", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData8", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData9", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData10", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData11", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData12", "empty", qos=0, retain=True)
+            setTopicCleared = True
         if (msg.topic == "openWB/set/system/debug/RequestDebugInfo"):
             if (int(msg.payload) == 1):
                 sendcommand = ["/var/www/html/openWB/runs/sendmqttdebug.sh"]

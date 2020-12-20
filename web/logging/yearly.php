@@ -60,9 +60,12 @@
 			<div class="row" id="thegraph">
 				<div class="col">
 					<div id="waitforgraphloadingdiv" style="text-align: center;">
-						<br>Feature noch nicht vollständig implementiert...
+						<br>Graph lädt, bitte warten...<br>
+						<div class="spinner-grow text-muted mt-3"></div>
 					</div>
-					<canvas id="canvas" style="height: 400px;"></canvas>
+					<div id="canvasdiv">
+						<canvas id="canvas" style="height: 400px;"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -75,7 +78,8 @@
 
 		<!-- load Chart.js library -->
 		<script src="../js/Chart.bundle.js"></script>
-
+		<script src="../js/hammerjs@2.0.8"></script>
+		<script src="../js/chartjs-plugin-zoom@0.7.4"></script>
 		<!-- load Bootstrap-Datepicker library -->
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 		<script src="../js/bootstrap-datepicker/bootstrap-datepicker.de.min.js"></script>
@@ -88,7 +92,7 @@
 			$(document).ready(function(){
 				// GET expects date format Y like 2020
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01.01.2015';  // no earlier date choosable
+				const EARLIESTDATE = '01.01.2018';  // no earlier date choosable
 				var url_string = window.location.href;
 				var url = new URL(url_string);
 				var parsedDateString = url.searchParams.get('date');
@@ -116,7 +120,7 @@
 				$('.datepicker').datepicker({
 					format: 'MM yyyy',
 					language: "de-DE",
-					startDate: EARLIESTDATE,
+					startDate: '2017',
 					endDate: '0d',
 					startView: 'years',
 					minViewMode: 'years',
@@ -132,7 +136,7 @@
 
 				// load graph
 				// TODO: implement yearlychart.js
-				// $.getScript("yearlychart.js");
+				$.getScript("yearlychart.js");
 			})
 		</script>
 
