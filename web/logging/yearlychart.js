@@ -173,6 +173,7 @@ function buildCsvDataArray() {
 			var dataRowMonthStr = dataRowDateStr.substr(4, 2);
 			var dataRowYearStr = dataRowDateStr.substr(0, 4);
 			var dataRowDate = new Date(dataRowYearStr + '/' + dataRowMonthStr + '/' + dataRowDayStr);  // to avoid parsed dates like 20190245 convert string to date and back
+			var totalcounter = 0;
 			if ( dataRowDate !== "Invalid Date" && !isNaN(dataRowDate) ) {
 				// date is a valid date
 				var dataRowyyyy = dataRowDate.getFullYear();
@@ -204,10 +205,13 @@ function buildCsvDataArray() {
 								theArray[columnIndex] = 0;
 							} else {
 								theArray[columnIndex] = parseFloat(value);
+								totalcounter = totalcounter + parseFloat(value); 
 							}
 						}
 					});
-					csvData.push(dataRow);
+					if (totalcounter > 0) {
+						csvData.push(dataRow);
+					}
 				}
 			}
 		}
