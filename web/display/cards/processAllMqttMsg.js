@@ -181,11 +181,11 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case '0':
 				// deaktiviert
-				$('#70ModeBtn').hide();
+				$('#70ModeBtn').addClass('hide');
 				break;
 			case '1':
 				// activiert
-				$('#70ModeBtn').show();
+				$('#70ModeBtn').removeClass('hide');
 				break;
 		}
 	}
@@ -273,11 +273,11 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload.length >= 5 ) {
 			// if there is info-text in payload for topic, show the text
 			$('#lastregelungaktiv').text(mqttpayload);
-			$('#lastmanagementShowBtn').show();
+			$('#lastmanagementShowBtn').removeClass('hide');
 		} else {
 			// if there is no text, show nothing (hides row)
 			$('#lastregelungaktiv').text('');
-			$('#lastmanagementShowBtn').hide();
+			$('#lastmanagementShowBtn').addClass('hide');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
@@ -291,7 +291,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.chargeModeSelectBtnText').text('Sofort');  // text btn mainpage
 				$('.chargeModeBtn').removeClass('btn-success');  // changes to select btns in modal
 				$('.chargeModeBtnSofort').addClass('btn-success');
-				$('.priorityEvBatteryIcon').hide();  // visibility of priority icon
+				$('.priorityEvBatteryIcon').addClass('hide');  // visibility of priority icon
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
 				$('.chargeModeSofort').removeClass('hide'); // modal chargepoint config
 				break;
@@ -300,7 +300,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.chargeModeSelectBtnText').text('Min+PV');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('.chargeModeBtnMinPV').addClass('btn-success');
-				$('.priorityEvBatteryIcon').hide();
+				$('.priorityEvBatteryIcon').addClass('hide');
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
 				$('.chargeModeMinPv').removeClass('hide'); // modal chargepoint config
 				break;
@@ -309,7 +309,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.chargeModeSelectBtnText').text('PV');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('.chargeModeBtnPV').addClass('btn-success');
-				$('.priorityEvBatteryIcon').show();
+				$('.priorityEvBatteryIcon').removeClass('hide');
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
 				$('.chargeModePv').removeClass('hide'); // modal chargepoint config
 				break;
@@ -318,7 +318,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.chargeModeSelectBtnText').text('Stop');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('.chargeModeBtnStop').addClass('btn-success');
-				$('.priorityEvBatteryIcon').hide();
+				$('.priorityEvBatteryIcon').addClass('hide');
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
 				$('.chargeModeStop').removeClass('hide'); // modal chargepoint config
 				break;
@@ -327,7 +327,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('.chargeModeSelectBtnText').text('Standby');
 				$('.chargeModeBtn').removeClass('btn-success');
 				$('.chargeModeBtnStandby').addClass('btn-success');
-				$('.priorityEvBatteryIcon').hide();
+				$('.priorityEvBatteryIcon').addClass('hide');
 				$('.chargeMode').addClass('hide'); // modal chargepoint config
 				$('.chargeModeStandby').removeClass('hide'); // modal chargepoint config
 				break;
@@ -392,17 +392,17 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == 'openWB/housebattery/boolHouseBatteryConfigured' ) {
 		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show info-cards
-			$('.hausbatterie').show();
+			$('.hausbatterie').removeClass('hide');
 			// and outer element for priority icon in pv mode
-			$('.priorityEvBattery').show();
+			$('.priorityEvBattery').removeClass('hide');
 			// priority buttons in modal
-			$('#priorityModeBtns').show();
+			$('#priorityModeBtns').removeClass('hide');
 			// update sparklines
 			$.sparkline_display_visible();
 		} else {
-			$('.hausbatterie').hide();
-			$('.priorityEvBattery').hide();
-			$('#priorityModeBtns').hide();
+			$('.hausbatterie').addClass('hide');
+			$('.priorityEvBattery').addClass('hide');
+			$('#priorityModeBtns').addClass('hide');
 		}
 	}
 }
