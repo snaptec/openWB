@@ -3,7 +3,9 @@
 input=$1
 nextyear=$(( input + 1 ))
 
-echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"01.csv")" > /var/www/html/openWB/ramdisk/yearlydata
+echo ""  > /var/www/html/openWB/ramdisk/yearlydata
+
+echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"01.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
 echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"02.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
 echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"03.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
 echo "$(head -n 1 /var/www/html/openWB/web/logging/data/monthly/$input"04.csv")" >> /var/www/html/openWB/ramdisk/yearlydata
