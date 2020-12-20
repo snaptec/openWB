@@ -197,7 +197,7 @@
                                     <div class="col-lg-6 mb-2">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -260,7 +260,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -316,7 +316,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -372,7 +372,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -428,7 +428,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -484,7 +484,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -540,7 +540,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -596,7 +596,7 @@
                                     <div class="col-lg-6 mb-2 hide">
                                         <button class="btn btn-block btn-info chargeModeSelectBtn" type="button">
                                             <span class="chargeModeSelectBtnText">Modus</span>
-                                            <span class="priorityEvBattery">
+                                            <span class="priorityEvBattery hide">
                                                 <span class="fas fa-car priorityEvBatteryIcon">&nbsp;</span>
                                             </span>
                                         </button>
@@ -2172,7 +2172,7 @@
                             </div>
                         </div>
                         <!-- priority buttons -->
-                        <div id='priorityModeBtns'>
+                        <div id='priorityModeBtns' class="hide">
                             <hr>
                             <div class="row">
                                 <h3 class="col text-center text-light">Vorrang im Lademodus PV-Laden:</h3>
@@ -2191,7 +2191,7 @@
                             </div>
                         </div>
                         <!-- 70% button -->
-                        <div id='70ModeBtn'>
+                        <div id='70ModeBtn' class="hide">
                             <hr>
                             <div class="row">
                                 <h3 class="col text-center text-light">70% beachten im Lademodus PV-Laden:</h3>
@@ -2338,21 +2338,21 @@
                 // show/hide all option-parameters in form-rows for selected option
                 var parent = btnGrp.closest('.chargeLimitation[data-lp]');  // get parent div element for charge limitation options
                 var index = $(parent).data('lp');  // get current chargepoint number
-                $(parent).find('.form-row[data-option=' + option + ']').show();  // now show option elements for selected option
-                $(parent).find('.form-row[data-option]').not('[data-option=' + option + ']').hide();  // hide all other option elements
+                $(parent).find('.form-row[data-option=' + option + ']').removeClass('hide');  // now show option elements for selected option
+                $(parent).find('.form-row[data-option]').not('[data-option=' + option + ']').addClass('hide');  // hide all other option elements
                 // now show/hide elements in modal info dialog
                 var dataLpElements = $('[data-lp=' + index + ']');  // get main divs for our current chargepoint
-                dataLpElements.find('[data-option-limit=' + option + ']').show();  // show info element for selected option
-                dataLpElements.find('[data-option-limit]').not('[data-option-limit=' + option + ']').hide(); // hide all other options
+                dataLpElements.find('[data-option-limit=' + option + ']').removeClass('hide');  // show info element for selected option
+                dataLpElements.find('[data-option-limit]').not('[data-option-limit=' + option + ']').addClass('hide'); // hide all other options
             }
 
             function initPanels(){
-                $('.resume').hide();
+                $('.resume').addClass('hide');
                 $('.sidenav').find('.btn').removeClass('active');
                 var firstButton = $('.sidenav').find('.btn').not('.hide').not('.displayLock').first();
                 var firstNavTarget = $(firstButton).attr('href');
                 $(firstButton).addClass('active');
-                $(firstNavTarget).toggle();
+                $(firstNavTarget).removeClass('hide');
             }
 
             $(document).ready(function(){
@@ -2384,11 +2384,11 @@
                         $("#lockInfoModal").modal("show");
                     } else {
                         // hide all panels
-                        $('.resume').hide();
+                        $('.resume').addClass('hide');
                         // get target panel
                         var target = $(this).attr('href');
                         // display target panel
-                        $('.resume'+target).toggle();
+                        $('.resume'+target).removeClass('hide');
                         // remove active menu element
                         $('.sidenav').find('.active').removeClass('active');
                         // activate clicked menu element
