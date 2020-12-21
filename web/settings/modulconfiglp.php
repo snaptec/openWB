@@ -823,17 +823,6 @@
 											</span>
 										</div>
 									</div>
-									<!-- not needed anymore 2020-12-16
-									<div class="form-row mb-1">
-										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
-											<span class="form-text small">
-												PIN des Accounts.
-											</span>
-										</div>
-									</div>
-									-->
 									<div class="form-row mb-1">
 										<label for="soc_bluelink_interval" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
@@ -847,6 +836,15 @@
 							</div>
 							<div id="socmkia" class="hide">
 								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_bluelink_pin" class="col-md-4 col-form-label">PIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
+											<span class="form-text small">
+												PIN des Accounts.
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_vin" class="col-md-4 col-form-label">VIN</label>
 										<div class="col">
