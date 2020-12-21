@@ -92,7 +92,11 @@
 			$(document).ready(function(){
 				// GET expects date format Y like 2020
 				// get parsed date and format nicely for input field
-				const EARLIESTDATE = '01.01.2018';  // no earlier date choosable
+				const EARLIESTDATE = '01/01/2018';  // no earlier date choosable
+				// TODO: set earliestdate to first occurance of valid logging data
+				var LATESTDATE = '12/31/' + new Date().getFullYear();
+				var earliestDate = new Date(EARLIESTDATE);
+				var latestDate = new Date(LATESTDATE);
 				var url_string = window.location.href;
 				var url = new URL(url_string);
 				var parsedDateString = url.searchParams.get('date');
@@ -102,29 +106,30 @@
 					// nothing parsed or format not valid, so set date to today
 					var parsedDate = new Date();
 				} else {
-					var earliestDate = new Date (EARLIESTDATE);
 					var parsedDate = new Date(parsedDateString);
-					if ( parsedDate < earliestDate ) {
-						// date parsed was too early so set to today
+					if ( (parsedDate < earliestDate) || (parsedDate > latestDate) ) {
+						// date parsed was out of valid range so set to today
 						parsedDate = new Date();
 						reloadNeeded = true;
 					}
 				}
 				if ( reloadNeeded ) {
 					// date parsed was too early so reload with today
+					alert('reloadNeeded! date: '+parsedDate.getFullYear());
 					window.location.href = "yearly.php?date=" + parsedDate.getFullYear();
 				}
 				var theDate = parsedDate.getFullYear();
 				$('#theDate').val(theDate);  // set value of input field
 				// config the datepicker
 				$('.datepicker').datepicker({
-					format: 'MM yyyy',
+					format: 'yyyy',
 					language: "de-DE",
-					startDate: '2017',
-					endDate: '0d',
+					startDate: earliestDate.getFullYear().toString(),
+					endDate: latestDate.getFullYear().toString(),
 					startView: 'years',
 					minViewMode: 'years',
-					todayBtn: true,
+					maxViewMode: 'years',
+					todayBtn: false,
 					todayHighlight: true,
 					autoclose: true
 				})
@@ -135,7 +140,6 @@
 				});
 
 				// load graph
-				// TODO: implement yearlychart.js
 				$.getScript("yearlychart.js");
 			})
 		</script>

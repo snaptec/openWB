@@ -135,8 +135,7 @@ var publish = function (payload, topic) {
 }
 
 function requestyeargraph() {
-      publish(graphDate, "openWB/set/graph/RequestYearGraph");
-//    publish("2019", "openWB/set/graph/RequestYearGraph");
+	publish(graphDate, "openWB/set/graph/RequestYearGraph");
 }
 
 function getCol(matrix, col) {
@@ -269,8 +268,6 @@ function calcMonthlyValues() {
 	}
 }
 
-
-
 function formatDateColumn() {
 	// formats the first csvdata-column so date is displayed at labels like 'Jan'
 	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
@@ -297,13 +294,14 @@ function lpCount() {
 
 function loadgraph() {
 	buildCsvDataArray();
+	console.log('CsvDataLength: '+csvData.length);
 	if ( csvData.length < 2 ) {
 		// not enough data rows: nothing to display
 		$("#waitforgraphloadingdiv").html('<br>Nicht genügend Daten für diesen Zeitraum verfügbar.');
 		$('#canvasdiv').hide();
 		return;
 	}
-	if ( csvData.length > ((    monthsInYear*2) + 1) ) {
+	if ( csvData.length > ((monthsInYear*2) + 1) ) {
 		// too many data-rows have been transmitted, data may be corrupt
 		$("#waitforgraphloadingdiv").html('<br>Fehler bei der Übertragung der Daten für dieses Jahr, bitte erneut versuchen.');
 		$('#canvasdiv').hide();
@@ -313,18 +311,15 @@ function loadgraph() {
 	// sort array by date
 	csvData.sort((date1, date2) => date1[0].localeCompare(date2[0]));
 
-//	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
-//		console.log("nach Sort " + rowIndex  + " Datum " + csvData[rowIndex][0]  + " Bezug " + csvData[rowIndex][1] );
-//
-//	}
-
+	// for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+	// 	console.log("nach Sort " + rowIndex  + " Datum " + csvData[rowIndex][0]  + " Bezug " + csvData[rowIndex][1] );
+	// }
 
 	fillLpCounterValuesArray();  // fills an array containg all counter values for every lp
 	calcMonthlyValues();  // sum up values for totals
-//	for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
-//		console.log("nach Sum " + rowIndex  + " Datum " + csvData[rowIndex][0]  + " Bezug " + csvData[rowIndex][1] );
-//   
-//	}    
+	// for ( var rowIndex = 0; rowIndex < csvData.length; rowIndex++ ) {
+	// 	console.log("nach Sum " + rowIndex  + " Datum " + csvData[rowIndex][0]  + " Bezug " + csvData[rowIndex][1] );
+	// }
 	csvData.pop();  // discard last row in csvData-array, it was just needed for calculation of daily values from original counter-values
 
 	formatDateColumn();  // format date for labels
@@ -363,7 +358,7 @@ function loadgraph() {
 			data: getCol(csvData, 1),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 1)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 1)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Einspeisung ' + totalValues[2].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 255, 105, 0.9)",
@@ -373,7 +368,7 @@ function loadgraph() {
 			data: getCol(csvData, 2),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 2)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 2)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'PV ' + totalValues[3].toFixed(2) + ' kWh',
 			borderColor: 'green',
@@ -383,7 +378,7 @@ function loadgraph() {
 			data: getCol(csvData, 3),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 3)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 3)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp1 ' + totalValues[4].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 0, 255, 0.7)",
@@ -393,7 +388,7 @@ function loadgraph() {
 			data: getCol(csvData, 4),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 4)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 4)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp2 ' + totalValues[5].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 30, 105, 0.7)",
@@ -403,7 +398,7 @@ function loadgraph() {
 			data: getCol(csvData, 5),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 5)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 5)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp3 ' + totalValues[6].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -413,7 +408,7 @@ function loadgraph() {
 			data: getCol(csvData, 6),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 6)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 6)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp Gesamt ' + totalValues[7].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -423,7 +418,7 @@ function loadgraph() {
 			data: getCol(csvData, 7),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 in ' + totalValues[8].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -433,7 +428,7 @@ function loadgraph() {
 			data: getCol(csvData, 8),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 out ' + totalValues[9].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -443,7 +438,7 @@ function loadgraph() {
 			data: getCol(csvData, 9),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 9)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 in ' + totalValues[10].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -453,7 +448,7 @@ function loadgraph() {
 			data: getCol(csvData, 10),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 10)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 2 out ' + totalValues[11].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -463,7 +458,7 @@ function loadgraph() {
 			data: getCol(csvData, 11),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 11)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 11)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp4 ' + totalValues[12].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -473,7 +468,7 @@ function loadgraph() {
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 12)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 12)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp5 ' + totalValues[13].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -483,7 +478,7 @@ function loadgraph() {
 			data: getCol(csvData, 13),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 13)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 13)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp6 ' + totalValues[14].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -493,7 +488,7 @@ function loadgraph() {
 			data: getCol(csvData, 14),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 14)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 14)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp7 ' + totalValues[15].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -503,7 +498,7 @@ function loadgraph() {
 			data: getCol(csvData, 15),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 15)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 15)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Lp8 ' + totalValues[16].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -513,7 +508,7 @@ function loadgraph() {
 			data: getCol(csvData, 16),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Speicherladung ' + totalValues[17].toFixed(2) + ' kWh',
 			borderColor: 'orange',
@@ -523,7 +518,7 @@ function loadgraph() {
 			data: getCol(csvData, 17),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Speicherentladung ' + totalValues[18].toFixed(2) + ' kWh',
 			borderColor: 'orange',
@@ -533,7 +528,7 @@ function loadgraph() {
 			data: getCol(csvData, 18),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
 		} , {
 			label: d1name + ' Import ' + totalValues[19].toFixed(2) + ' kWh',
 			borderColor:"rgba(200, 150, 200, 0.7)",
@@ -543,7 +538,7 @@ function loadgraph() {
 			data: getCol(csvData, 19),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 19)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 19)  // custom added field, holds counter values or empty string
 		} , {
 			label: d2name + ' Import ' + totalValues[20].toFixed(2) + ' kWh',
 			borderColor: "rgba(200, 100, 200, 0.7)",
@@ -553,7 +548,7 @@ function loadgraph() {
 			data: getCol(csvData, 20),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
 		} , {
 			label: d3name + ' Import ' + totalValues[21].toFixed(2) + ' kWh',
 			borderColor: "rgba(200, 50, 200, 0.7)",
@@ -563,7 +558,7 @@ function loadgraph() {
 			data: getCol(csvData, 21),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
 		} , {
 			label: d4name + ' Import ' + totalValues[22].toFixed(2) + ' kWh',
 			borderColor: "rgba(200, 0, 200, 0.7)",
@@ -573,7 +568,7 @@ function loadgraph() {
 			data: getCol(csvData, 22),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
 		} , {
 			label: d5name + ' Import ' + totalValues[23].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 200, 200, 0.7)",
@@ -583,7 +578,7 @@ function loadgraph() {
 			data: getCol(csvData, 23),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
 		} , {
 			label: d6name + ' Import ' + totalValues[24].toFixed(2) + ' kWh',
 			borderColor: "rgba(100, 200, 200, 0.7)",
@@ -593,7 +588,7 @@ function loadgraph() {
 			data: getCol(csvData, 24),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
 		} , {
 			label: d7name + ' Import ' + totalValues[25].toFixed(2) + ' kWh',
 			borderColor: "rgba(50, 200, 200, 0.7)",
@@ -603,7 +598,7 @@ function loadgraph() {
 			data: getCol(csvData, 25),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
 		} , {
 			label: d8name + ' Import ' + totalValues[26].toFixed(2) + ' kWh',
 			borderColor: "rgba(0, 200, 200, 0.7)",
@@ -613,7 +608,7 @@ function loadgraph() {
 			data: getCol(csvData, 26),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
+			toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
 		} , {
 			label: d9name + ' Import ' + totalValues[27].toFixed(2) + ' kWh',
 			borderColor: "rgba(200, 200, 200, 0.7)",
@@ -623,8 +618,7 @@ function loadgraph() {
 			data: getCol(csvData, 27),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
-
+			toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Hausverbrauch ' + totalValues[28].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -634,7 +628,7 @@ function loadgraph() {
 			data: getCol(csvData, 28),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
-            toolTipData: getCol(lpCounterValues, 0)  // custom added field, always empty string at index 0
+			toolTipData: getCol(lpCounterValues, 0)  // custom added field, always empty string at index 0
 		}
 	];
 
@@ -670,53 +664,53 @@ function loadgraph() {
 				enabled: true,
 				mode: 'index',
 				callbacks: {
-                    title: function(dataPoint, graphData) {
-                        // return complete data as title
-                        return dataPoint[0].xLabel + ' ' + graphYear;
-                    },
+					title: function(dataPoint, graphData) {
+						// return complete data as title
+						return dataPoint[0].xLabel + ' ' + graphYear;
+					},
 					label: function(dataPoint, graphData) {
-                        // get only the name of the respective dataline since total value is visible at legend
-                        var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
-                        // get value for the tooltip-day
-                        var yLabel = ', Monatswert: ' + dataPoint.yLabel.toFixed(2) + ' kWh';
-                        // get counter value for the day (or empty string if not apliccable)
-                        var counter = graphData.datasets[dataPoint.datasetIndex].toolTipData[dataPoint.index];
-			   			return xLabel + counter + yLabel;
-                    }
+						// get only the name of the respective dataline since total value is visible at legend
+						var xLabel = graphData.datasets[dataPoint.datasetIndex].label.split(' ', 1)[0];
+						// get value for the tooltip-day
+						var yLabel = ', Monatswert: ' + dataPoint.yLabel.toFixed(2) + ' kWh';
+						// get counter value for the day (or empty string if not apliccable)
+						var counter = graphData.datasets[dataPoint.datasetIndex].toolTipData[dataPoint.index];
+						return xLabel + counter + yLabel;
+					}
 				}
 			},
 			plugins: {
-			    zoom: {
+				zoom: {
 					// Container for pan options
 					pan: {
-					    // Boolean to enable panning
-					    enabled: true,
+						// Boolean to enable panning
+						enabled: true,
 
-					    // Panning directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow panning in the y direction
-					    mode: 'x',
-					    rangeMin: {
-						    x: null
-					    },
-					    rangeMax: {
-						    x: null
-					    },
-					    speed: 1000
+						// Panning directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow panning in the y direction
+						mode: 'x',
+						rangeMin: {
+							x: null
+						},
+						rangeMax: {
+							x: null
+						},
+						speed: 1000
 					},
 
 					// Container for zoom options
 					zoom: {
-					    // Boolean to enable zooming
-					    enabled: true,
+						// Boolean to enable zooming
+						enabled: true,
 
-					    // Zooming directions. Remove the appropriate direction to disable
-					    // Eg. 'y' would only allow zooming in the y direction
-					    mode: 'x',
+						// Zooming directions. Remove the appropriate direction to disable
+						// Eg. 'y' would only allow zooming in the y direction
+						mode: 'x',
 
-					    sensitivity: 0.01
+						sensitivity: 0.01
 
 					}
-				    }
+					}
 			},
 			responsive: true,
 			maintainAspectRatio: false,
