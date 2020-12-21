@@ -83,6 +83,9 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 			break;
 		}
 	}
+	else if ( mqttmsg == 'openWB/config/get/pv/minCurrentMinPv' ) {
+		setInputValue('minCurrentMinPv', mqttpayload);
+	}
 }
 
 function processSofortConfigMessages(mqttmsg, mqttpayload) {
@@ -387,6 +390,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').show();  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').show();
 				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '1':
 				// mode min+pv
@@ -396,6 +401,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').show();
+
 				break;
 			case '2':
 				// mode pv
@@ -405,6 +412,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').show();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '3':
 				// mode stop
@@ -414,6 +423,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '4':
 				// mode standby
@@ -423,6 +434,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/DailyYieldAllChargePointsKwh') {
@@ -602,6 +615,44 @@ function processVerbraucherMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
 	processPreloader(mqttmsg);
+	var index = getIndex(mqttmsg);  // extract number between two / /
+	if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Configured$/i ) ) {
+		if ( mqttpayload == 1 ) {
+			// if at least one device is configured, show info-div
+			$('#verbraucher').removeClass("hide");
+			// now show info-div for this device
+			$('#verbraucher'+index).removeClass("hide");
+		} else {
+			$('#verbraucher'+index).addClass("hide");
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Name$/i ) ) {
+		if ( mqttpayload != "Name" ){
+			$('#verbraucher'+index+'name').text(mqttpayload);
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Watt$/i ) ) {
+		var unit = ' W';
+		var verbraucherwatt = parseInt(mqttpayload, 10);
+		if ( isNaN(verbraucherwatt) ) {
+			verbraucherwatt = 0;
+		}
+		if ( verbraucherwatt > 999 ) {
+			verbraucherwatt = (verbraucherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#verbraucher'+index+'leistung').text(verbraucherwatt + unit);
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/DailyYieldImportkWh$/i ) ) {
+		var verbraucherDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(verbraucherDailyYield) ) {
+			verbraucherDailyYield = 0;
+		}
+		if ( verbraucherDailyYield >= 0 ) {
+			var verbraucherDailyYieldStr = ' (' + verbraucherDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#verbraucher'+index+'dailyyield').text(verbraucherDailyYieldStr);
+		} else {
+			$('#verbraucher'+index+'dailyyield').text("");
+		}
+
+	}
 }
 
 function processLpMessages(mqttmsg, mqttpayload) {
@@ -673,6 +724,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			soc = '--';
 		}
 		element.text(soc + ' %');
+		var spinner = parent.find('.reloadLpSoc');
+		if ( spinner.hasClass('fa-spin') ) {
+			spinner.removeClass('fa-spin');
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value

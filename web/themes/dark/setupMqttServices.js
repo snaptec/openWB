@@ -22,6 +22,15 @@ var topicsToSubscribe = [
 	["openWB/hook/1/boolHookConfigured", 0],
 	["openWB/hook/2/boolHookConfigured", 0],
 	["openWB/hook/3/boolHookConfigured", 0],
+	// verbraucher Konfiguration
+	["openWB/Verbraucher/1/Configured", 0],
+	["openWB/Verbraucher/1/Name", 0],
+	["openWB/Verbraucher/1/Watt", 0],
+	["openWB/Verbraucher/1/DailyYieldImportkWh", 0],
+	["openWB/Verbraucher/2/Configured", 0],
+	["openWB/Verbraucher/2/Name", 0],
+	["openWB/Verbraucher/2/Watt", 0],
+	["openWB/Verbraucher/2/DailyYieldImportkWh", 0],
 	// housebattery Konfiguration
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	// SmartHome Konfiguration
@@ -95,6 +104,7 @@ var topicsToSubscribe = [
 	["openWB/global/WAllChargePoints", 1],
 	["openWB/global/strLastmanagementActive", 1],
 	["openWB/config/get/pv/priorityModeEVBattery", 1],
+	["openWB/config/get/pv/minCurrentMinPv", 1],
 	// system topics
 	["openWB/system/Timestamp", 1],
 	// pv topics
@@ -264,7 +274,10 @@ var topicsToSubscribe = [
 	["openWB/SmartHome/Devices/3/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/4/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/5/DailyYieldKwh", 1],
-
+	["openWB/SmartHome/Devices/6/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/7/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/8/DailyYieldKwh", 1],
+	["openWB/SmartHome/Devices/9/DailyYieldKwh", 1],
 	["openWB/SmartHome/Devices/1/Watt", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor0", 1],
 	["openWB/SmartHome/Devices/1/TemperatureSensor1", 1],
@@ -358,7 +371,7 @@ var options = {
 	},
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
-		client.connect(options);
+		setTimeout(function() { client.conect(options); }, 5000);
 	}
 };
 

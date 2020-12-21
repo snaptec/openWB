@@ -611,6 +611,32 @@
 			});
 		}
 		mqttlog();
+		function rfidlog() {
+			$.ajax({
+				url: "/openWB/ramdisk/rfid.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#rfiddiv").html(result);
+				}
+			});
+		}
+		rfidlog();
+		function debuglog() {
+			$.ajax({
+				url: "/openWB/ramdisk/openWB.log",
+				complete: function(request){
+					var lines = request.responseText.split("\n");
+					var result = "";
+					for(var i=0; i<lines.length; i++)
+						result = lines[i] + "\n" + result;
+					$("#debugdiv").html(result);
+				}
+			});
+		}
+		debuglog();
 		function smarthomelog() {
 			$.ajax({
 				url: "/openWB/ramdisk/smarthome.log",
@@ -1273,12 +1299,22 @@
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
-		
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="rfidlog"> <h4>RFID Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="rfiddiv"></div>
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
 		</div>
 
 		<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
+		<div class="row">
+			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="debuglog"> <h4>Debug Log:</h4></span>
+		</div>
+
+		<div class="hide" style="white-space: pre-line; display: none;" id="debugdiv"></div>
+
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="nurpvlog"> <h4>Nur PV Log:</h4></span>
 		</div>
@@ -1306,6 +1342,16 @@
 				$('#mqttdiv').addClass("hide");
 			}
 		});
+		$('#rfidlog').click(function(event){
+			var element = document.getElementById('rfiddiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#rfiddiv').show();
+				$('#rfiddiv').removeClass("hide");
+			} else {
+				$('#rfiddiv').hide(); 
+				$('#rfiddiv').addClass("hide");
+			}
+		});
 		$('#nurpvlog').click(function(event){
 			var element = document.getElementById('nurpvdiv'); 
 			if ( element.classList.contains("hide") ) { 
@@ -1325,6 +1371,16 @@
 			} else {
 				$('#ladestatuslogdiv').hide(); 
 				$('#ladestatuslogdiv').addClass("hide");
+			}
+		});
+		$('#debuglog').click(function(event){
+			var element = document.getElementById('debugdiv'); 
+			if ( element.classList.contains("hide") ) { 
+				$('#debugdiv').show();
+				$('#debugdiv').removeClass("hide");
+			} else {
+				$('#debugdiv').hide(); 
+				$('#debugdiv').addClass("hide");
 			}
 		});
 		$('#smarthomelog').click(function(event){

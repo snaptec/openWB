@@ -8,7 +8,14 @@ declare -r LastImbalanceFile="ramdisk/lastImbalanceLp"
 declare -r ExpectedChangeFile="ramdisk/expectedChangeLp"
 declare -r SystemVoltage=240
 declare -r MaxCurrentOffset=1.0
+declare -r LmStatusFile="ramdisk/lmStatusLp"
 declare -r MinimumAdjustmentInterval=${slaveModeMinimumAdjustmentInterval:-15}
+declare -r LmStatusSuperseded=0
+declare -r LmStatusInLoop=1
+declare -r LmStatusDownByLm=2
+declare -r LmStatusDownByEv=3
+declare -r LmStatusDownByError=4
+declare -r LmStatusDownByDisable=5
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -72,6 +79,9 @@ openwbisslave() {
 
 	echo "Slave Mode Aktiv, openWB NUR fernsteuerbar" > ramdisk/lastregelungaktiv
 
+	# re-publish the state after control loop (in background)
+	runs/pubmqtt.sh &
+
 	exit 0
 }
 
@@ -88,7 +98,7 @@ function computeAndSetCurrentForChargePoint() {
 		if (( fixedCurrent >= 0 )); then
 			$dbgWrite "$NowItIs: Slave Mode: Forced to ${fixedCurrent} A, ignoring imbalance"
 			echo "0" > "${LastImbalanceFile}${chargePoint}"
-			callSetCurrent $fixedCurrent $chargePoint
+			callSetCurrent $fixedCurrent $chargePoint $LmStatusSuperseded
 			return 0
 		fi
 	fi
@@ -124,7 +134,7 @@ function computeAndSetCurrentForChargePoint() {
 
 		if (( TotalPowerConsumption == -1 )); then
 			echo "$NowItIs: Slave Mode: ERROR: Peak power limit set (${AllowedPeakPower} W) but total power consumption not availble (TotalPowerConsumption=${TotalPowerConsumption} W): Immediately stopping charge and exiting"
-			callSetCurrent 0 $chargePoint
+			callSetCurrent 0 $chargePoint $LmStatusDownByError
 			exit 2
 		fi
 
@@ -190,6 +200,7 @@ function computeAndSetCurrentForChargePoint() {
 
 			if (( $llneu > $PreviousExpectedChargeCurrent )); then
 				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu > PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Not changing allowed current."
+				llneu=$PreviousExpectedChargeCurrent
 			else
 				$dbgWrite "$NowItIs: Slave Mode: Fast ramping: EV seems to consume less than allowed (llneu=$llneu > AllowedTotalCurrentPerPhase=$AllowedTotalCurrentPerPhase && llneu <= PreviousExpectedChargeCurrent=$PreviousExpectedChargeCurrent): Limiting allowed current to $AllowedTotalCurrentPerPhase A."
 				llneu=$AllowedTotalCurrentPerPhase
@@ -199,7 +210,7 @@ function computeAndSetCurrentForChargePoint() {
 		fi
 	fi
 
-	callSetCurrent $llneu $chargePoint
+	callSetCurrent $llneu $chargePoint -1
 
 	if (( PreviousExpectedChargeCurrent != llneu )); then
 		echo "$date Ändere Ladeleistung von $PreviousExpectedChargeCurrent auf $llneu Ampere" >> ramdisk/ladestatus.log
@@ -453,11 +464,11 @@ function aggregateDataForChargePoint() {
 			NumberOfChargingPhases=$previousNumberOfChargingPhases
 			$dbgWrite "$NowItIs: CP${chargePoint}: Previously charging phase #${ChargingPhaseWithMaximumTotalCurrent} has highest current and will be used for load management"
 		fi
+	fi
 
-		# if we have no charging vehicles at all, assume ourself as charging (and avoid dev/0 error)
-		if (( ChargingVehiclesAdjustedForThisCp == 0 )); then
-			ChargingVehiclesAdjustedForThisCp=1
-		fi
+	# if we have no charging vehicles at all, assume ourself as charging (and avoid dev/0 error)
+	if (( ChargingVehiclesAdjustedForThisCp == 0 )); then
+		ChargingVehiclesAdjustedForThisCp=1
 	fi
 
 	# we must make sure that we don't leave NumberOfChargingPhases at 0 if we couldn't count it up to here
@@ -556,7 +567,7 @@ function checkControllerHeartbeat() {
 			fi
 			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
-			callSetCurrent 0 0
+			callSetCurrent 0 0 $LmStatusDownByError
 			exit 1
 		else
 			echo "1" > ramdisk/heartbeat
@@ -587,6 +598,10 @@ function callSetCurrent() {
 	# numeric, value of 0 means "all"
 	local chargePoint=$2
 
+	# the status reason to write to ramdisk
+	local statusReason=$3
+	local computedReason=$statusReason
+
 	# we have to do a slightly ugly if-else-cascade to set the charge point selector for set-current.sh
 	# Note: There's currently only one current limit (min/max) per box - so setting same for all CPs
 	if (( chargePoint == 0 )); then
@@ -604,15 +619,20 @@ function callSetCurrent() {
 		return 1
 	fi
 
+	computedReason=$LmStatusInLoop
+
 	# finally limit to the configured min or max values
 	if ( (( currentToSet < MinimumCurrentPossibleForCp )) || ((LpEnabled == 0)) ) && (( currentToSet != 0 )); then
 		if ((LpEnabled != 0)); then
 			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP akt., LpEnabled=$LpEnabled, currentToSet=$currentToSet < MinimumCurrentPossibleForCp=$MinimumCurrentPossibleForCp --> setze currentToSet=0"
+			computedReason=$LmStatusDownByLm
 		else
 			$dbgWrite "$NowItIs: Slave Mode Aktiv, LP deakt. --> setze currentToSet=0"
+			computedReason=$LmStatusDownByDisable
 		fi
 		currentToSet=0
 	fi
+
 	if (( currentToSet > MaximumCurrentPossibleForCp )); then
 		$dbgWrite "$NowItIs: Slave Mode Aktiv, currentToSet=$currentToSet < MaximumCurrentPossibleForCp=$MaximumCurrentPossibleForCp --> setze currentToSet=$MaximumCurrentPossibleForCp"
 		currentToSet=$MaximumCurrentPossibleForCp
@@ -622,6 +642,25 @@ function callSetCurrent() {
 
 		$dbgWrite "$NowItIs: Setting current to ${currentToSet} A for CP#${chargePoint}"
 		echo "$NowItIs,$currentToSet" > "${ExpectedChangeFile}${chargePoint}"
+	fi
+
+	if (( $statusReason == -1 )); then
+		if (( $CpIsCharging == 1 )) || (( $currentToSet == 0 )); then
+			statusReason=$computedReason
+		else
+			statusReason=$LmStatusDownByEv
+		fi
+	fi
+
+	$dbgWrite "$NowItIs: Settings status reason = $statusReason"
+
+	if (( chargePoint != 0 )); then
+		echo "$statusReason" > "${LmStatusFile}${chargePoint}"
+	else
+		for i in $(seq 1 $NumberOfSupportedChargePoints);
+		do
+			echo "$statusReason" > "${LmStatusFile}${i}"
+		done
 	fi
 
 	runs/set-current.sh $currentToSet "${chargePointString}"

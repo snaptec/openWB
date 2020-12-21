@@ -31,6 +31,28 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
 	</head>
 
 	<body>
@@ -42,47 +64,43 @@
 			<form id="myForm">
 				<h1>Einstellungen für Nachtladen - Testversion!!</h1>
 
-				<div class="card">
+				<div class="card border-secondary">
 					<div class="card-header font-weight-bold text-white bg-secondary">
 						 Einstellungen Ladepunkt 1 (funktionslos)
 					</div>
 					<div class="card-body">
-						<h6 class="mb-0">Nachtladen im Modus Sofortladen</h6>
-						<div>
-							<small>
-								Auswahl der Funktion Nachladen im Modus Sofortladen.
-								Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.
-							</small>
-						</div>
-						<div class="form-row form-group mt-2">
-							<div class="col btn-group btn-group-toggle" id="chargeLimitationLp3" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
-								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="0"> ausgeschaltet
-								</label>
-								<label class="btn btn-outline-info btn-toggle">
-									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="1"> eingeschaltet
-								</label>
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Nachtladen im Modus Sofortladen</label>
+								<div class="col">
+									<!-- TODO: create proper MQTT Topic -->
+									<div class="btn-group btn-group-toggle btn-block" id="nachtladenLp1" name="nachtladen" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/1/">
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="nachtladen" data-option="0">ausgeschaltet
+										</label>
+										<label class="btn btn-outline-info btn-toggle">
+											<input type="radio" name="nachtladen" data-option="1">eingeschaltet
+										</label>
+									</div>
+											<span class="form-text small">Auswahl der Funktion Nachladen im Modus Sofortladen. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.</span>
+								</div>
 							</div>
 						</div>
 					</div>  <!-- end card body Einstellungen Ladepunkt 1 -->
 				</div>  <!-- end card Einstellungen Ladepunkt 1 -->
 
-				<br>
-
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled>speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled="disabled">speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="button" class="btn btn-danger" disabled>Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
-
-			<br>
 
 			<!-- modal set-defaults-confirmation window -->
 			<div class="modal fade" id="setDefaultsConfirmationModal" role="dialog">
@@ -100,7 +118,7 @@
 						</div>
 						<!-- modal footer -->
 						<div class="modal-footer d-flex justify-content-center">
-							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn">Fortfahren</button>
+							<button type="button" class="btn btn-success" data-dismiss="modal" id="saveDefaultsBtn" disabled="disabled">Fortfahren</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Abbruch</button>
 						</div>
 					</div>
@@ -170,13 +188,16 @@
 		<!-- load mqtt handler-->
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get('settings/navbar.html', function(data){
-				$('#nav').replaceWith(data);
-				// disable navbar entry for current page
-				$('#navNachtladen').addClass('disabled');
-			});
+			$.get(
+				{ url: 'settings/navbar.html', cache: false },
+				function(data){
+					$('#nav').replaceWith(data);
+					// disable navbar entry for current page
+					$('#navNachtladen').addClass('disabled');
+				}
+			);
 
 			function saveSettings() {
 				// sends all changed values by mqtt if valid

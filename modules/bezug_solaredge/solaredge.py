@@ -12,13 +12,36 @@ from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=502)
 slaveid = int(sys.argv[2])
 
-resp= client.read_holding_registers(40206,1,unit=slaveid)
-value1 = resp.registers[0]
-all = format(value1, '04x')
-final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1
-f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
-f.write(str(final))
-f.close()
+resp= client.read_holding_registers(40206,5,unit=slaveid)
+value1 = resp.registers[0] 
+all = format(value1, '04x') 
+final = int(struct.unpack('>h', all.decode('hex'))[0]) * -1 
+ 
+sf = resp.registers[4] 
+sf = format(sf, '04x') 
+fsf = int(struct.unpack('>h', sf.decode('hex'))[0]) 
+if fsf == 4: 
+    final = final * 10000 
+if fsf == 3: 
+    final = final * 1000 
+if fsf == 2: 
+    final = final * 100 
+if fsf == 1: 
+    final = final * 10 
+if fsf == -1: 
+    final = final / 10 
+if fsf == -2: 
+    final = final / 100 
+if fsf == -3: 
+    final = final / 1000 
+if fsf == -4: 
+    final = final / 10000 
+ 
+f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w') 
+f.write(str(final)) 
+f.close() 
+ 
+
 
 resp= client.read_holding_registers(40194,2,unit=slaveid)
 multipli = resp.registers[0]
