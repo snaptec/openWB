@@ -2826,6 +2826,11 @@ if ! grep -Fq "wirkungsgradlp1=" /var/www/html/openWB/openwb.conf
 then
 	echo "wirkungsgradlp1=90" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "akkuglp2=" /var/www/html/openWB/openwb.conf
+then
+	echo "akkuglp2=35" >> /var/www/html/openWB/openwb.conf
+	echo "wirkungsgradlp2=90" >> /var/www/html/openWB/openwb.conf
+fi
 
 sudo kill $(ps aux |grep '[s]marthomehandler.py' | awk '{print $2}')
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler.py" > /dev/null

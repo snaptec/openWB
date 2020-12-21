@@ -11,6 +11,17 @@ socDebug=$debug
 socDebug=1
 
 case $CHARGEPOINT in
+	2)
+		# second charge point
+		manualSocFile="$RAMDISKDIR/manual_soc_lp2"
+		manualMeterFile="$RAMDISKDIR/manual_soc_meter_lp2"
+		socFile="$RAMDISKDIR/soc1"
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socIntervall=1 # update every minute if script is called every 10 seconds
+		meterFile="$RAMDISKDIR/llkwhs1"
+		akkug=$akkuglp2
+		efficiency=$wirkungsgradlp2
+		;;
 	*)
 		# defaults to first charge point for backward compatibility
 		# set CHARGEPOINT in case it is empty (needed for logging)
