@@ -121,6 +121,17 @@
 		}
 		fclose($fp);
 
+		// handling of different actions required by some modules
+
+		// check for manual ev soc module
+		if( array_key_exists( 'socmodul', $_POST ) ){
+			if( $_POST['socmodul'] == 'soc_manual' ){
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
+			}
+		}
+
 		// update display process if in POST data
 		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){
 			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );

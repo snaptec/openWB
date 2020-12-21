@@ -254,15 +254,19 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-        if (( "openWB/config/set/lp" in msg.topic) and ("ManualSoc" in msg.topic)):
+        if (( "openWB/set/lp" in msg.topic) and ("manualSoc" in msg.topic)):
             devicenumb=re.sub(r'\D', '', msg.topic)
-            if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 100):
-                client.publish("openWB/config/get/lp/"+str(devicenumb)+"/manualSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
-                f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'_manual_soc', 'w')
+            if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
+                client.publish("openWB/lp/"+str(devicenumb)+"/manualSoc", msg.payload.decode("utf-8"), qos=0, retain=True)
+                f = open('/var/www/html/openWB/ramdisk/manual_soc_lp'+str(devicenumb), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-                #TODO: sichtbaren SoC direkt setzen je Ladepunkt
-                f = open('/var/www/html/openWB/ramdisk/soc', 'w')
+                client.publish("openWB/lp/"+str(devicenumb)+"/%Soc", msg.payload.decode("utf-8"), qos=0, retain=True)
+                if ( int(devicenumb) == 1 ):
+                    socFile = '/var/www/html/openWB/ramdisk/soc'
+                elif ( int(devicenumb) == 2 ):
+                    socFile = '/var/www/html/openWB/ramdisk/soc1'
+                f = open(socFile, 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
         if (( "openWB/config/set/sofort/lp" in msg.topic) and ("energyToCharge" in msg.topic)):
@@ -717,6 +721,24 @@ def on_message(client, userdata, msg):
                 client.publish("openWB/system/MonthGraphData10", "empty", qos=0, retain=True)
                 client.publish("openWB/system/MonthGraphData11", "empty", qos=0, retain=True)
                 client.publish("openWB/system/MonthGraphData12", "empty", qos=0, retain=True)
+            setTopicCleared = True
+        if (msg.topic == "openWB/set/graph/RequestYearGraph"):
+            if (int(msg.payload) >= 1 and int(msg.payload) <= 2050):
+                sendcommand = ["/var/www/html/openWB/runs/sendyeargraphdata.sh", msg.payload]
+                subprocess.Popen(sendcommand)
+            else:
+                client.publish("openWB/system/YearGraphData1", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData2", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData3", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData4", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData5", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData6", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData7", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData8", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData9", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData10", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData11", "empty", qos=0, retain=True)
+                client.publish("openWB/system/YearGraphData12", "empty", qos=0, retain=True)
             setTopicCleared = True
         if (msg.topic == "openWB/set/system/debug/RequestDebugInfo"):
             if (int(msg.payload) == 1):
