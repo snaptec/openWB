@@ -1928,7 +1928,7 @@
 									<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 									<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
 									<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID</option>
-
+									<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
 								</select>
 							</div>
 						</div>
@@ -1957,7 +1957,38 @@
 									</div>
 								</div>
 							</div>
-
+							<div id="socmanuallp2" class="hide">
+								<div class="alert alert-info">
+									Beim Anstecken des Fahrzeugs muss der aktuelle SoC (am Display oder über einen Browser) angegeben werden.
+									Anhand des Zählers im Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden Einstellungen "Akkugröße" und "Wirkungsgrad".<br>
+									<span class="text-danger">Das ist ein experimentelles Feature! Es wäre toll, wenn im Forum funktionierende Einstellungen für verschiedene Fahrzeuge gesammelt werden!</span>
+								</div>
+								<div class="form-row mb-1">
+									<label for="akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="akkuglp2" value="<?php echo $akkuglp2old ?>">
+										<span class="form-text small">
+											Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+											Die Netto-Kapazität unterscheidet sich meist von den Angaben der Fahrzeughersteller. So besitzt ein Tesla Model S 90 z. B. nur ca. 83kWh und nicht die durch die Typenbezeichnung suggerierten 90kWh.
+											Andere Hersteller begrenzen die nutzbare Kapazität absichtlich, um eine höhere Lebensdauer der Akkus zu erreichen. Gängig sind eine Drosselung auf 90% der angegebenen Brutto-Kapazität.
+										</span>
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<label for="wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik</label>
+									<div class="col">
+										<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+										<span class="form-text small">
+											Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+											Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+											Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
+											Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+											SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+											SoC an der Wallbox zu gering: Wirkungsgras um ein paar Prozent erhöhen
+										</span>
+									</div>
+								</div>
+							</div>
 							<div id="socmqtt1" class="hide">
 								<div class="alert alert-info">
 									Keine Konfiguration erforderlich.<br>
@@ -2498,6 +2529,7 @@
 							hideSection('socmyopellp2');
 							hideSection('socmvin2');
 							hideSection('socmintervall2');
+							hideSection('socmanuallp2');
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('socmnone1');
@@ -2560,6 +2592,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_myopellp2') {
 								showSection('socmyopellp2');
+							}
+							if($('#socmodul1').val() == 'soc_manuallp2') {
+								showSection('socmanuallp2');
 							}
 						}
 
