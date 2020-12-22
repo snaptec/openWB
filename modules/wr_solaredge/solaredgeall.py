@@ -66,6 +66,11 @@ try:
         fwr1watt = wr1watt / 10000
     if fmultiplier == -5:
         fwr1watt = wr1watt / 10000
+    resp= client.read_holding_registers(40093,2,unit=slave1id)
+    value1 = resp.registers[0]
+    value2 = resp.registers[1]
+    all = format(value1, '04x') + format(value2, '04x')
+    final = int(struct.unpack('>i', all.decode('hex'))[0])
 except:
     fwr1watt=0
 if slave2id != 0:
@@ -90,6 +95,11 @@ if slave2id != 0:
             fwr2watt = wr2watt / 10000
         if fmultiplier == -5:
             fwr2watt = wr2watt / 10000
+        resp= client.read_holding_registers(40093,2,unit=slave2id)
+        value1 = resp.registers[0]
+        value2 = resp.registers[1]
+        all = format(value1, '04x') + format(value2, '04x')
+        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
     except:
         fwr2watt=0
 else:
@@ -116,6 +126,11 @@ if slave3id != 0:
             fwr3watt = wr3watt / 10000
         if fmultiplier == -5:
             fwr3watt = wr3watt / 10000
+        resp= client.read_holding_registers(40093,2,unit=slave3id)
+        value1 = resp.registers[0]
+        value2 = resp.registers[1]
+        all = format(value1, '04x') + format(value2, '04x')
+        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
     except:
         fwr3watt=0
 else:
@@ -142,6 +157,11 @@ if slave4id != 0:
             fwr4watt = wr4watt / 10000
         if fmultiplier == -5:
             fwr4watt = wr4watt / 10000
+        resp= client.read_holding_registers(40093,2,unit=slave4id)
+        value1 = resp.registers[0]
+        value2 = resp.registers[1]
+        all = format(value1, '04x') + format(value2, '04x')
+        final = final + int(struct.unpack('>i', all.decode('hex'))[0])
     except:
         fwr4watt=0
 else:
@@ -161,11 +181,7 @@ f.write(str(allwatt))
 f.close()
 
 
-resp= client.read_holding_registers(40093,2,unit=slave1id)
-value1 = resp.registers[0]
-value2 = resp.registers[1]
-all = format(value1, '04x') + format(value2, '04x')
-final = int(struct.unpack('>i', all.decode('hex'))[0])
+
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(final))
 f.close()
