@@ -1,17 +1,58 @@
 #!/bin/bash
-soctimer=$(</var/www/html/openWB/ramdisk/soctimer)
-ladeleistung=$(</var/www/html/openWB/ramdisk/llaktuell)
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
+CHARGEPOINT=$1
 
+socDebug=$debug
+# for developement only
+socDebug=1
+
+case $CHARGEPOINT in
+	2)
+		# second charge point
+		ladeleistung=$(<$RAMDISKDIR/llaktuells1)
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
+		username=$soc2user
+		password=$soc2pass
+		vin=$soc2vin
+		;;
+	*)
+		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
+		ladeleistung=$(<$RAMDISKDIR/llaktuell)
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
+		username=$soc_id_username
+		password=$soc_id_passwort
+		vin=$soc_id_vin
+		;;
+esac
+
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date --rfc-3339=seconds`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
+soctimer=$(<$soctimerfile)
 
 tmpintervall=$(( 480 * 6 ))
 
 if (( soctimer < tmpintervall )); then
+	socDebugLog "Nothing to do yet. Incrementing timer."
 	soctimer=$((soctimer+1))
 	if (( ladeleistung > 500 ));then
+		socDebugLog "Car is charging"
 		soctimer=$((soctimer+47))
 	fi
-	echo $soctimer > /var/www/html/openWB/ramdisk/soctimer
+	echo $soctimer > $soctimerfile
 else
-	/var/www/html/openWB/modules/evcc-soc id --user "$soc_id_username" --password "$soc_id_passwort" --vin "$soc_id_vin" > /var/www/html/openWB/ramdisk/soc &
-	echo 0 > /var/www/html/openWB/ramdisk/soctimer
+	socDebugLog "Requesting SoC"
+	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile &
+	echo 0 > $soctimerfile
 fi
