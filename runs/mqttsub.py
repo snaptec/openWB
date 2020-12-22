@@ -545,73 +545,88 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/AllowedPeakPower"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
                 f = open('/var/www/html/openWB/ramdisk/AllowedPeakPower', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp1"):
             if (int(msg.payload) >= -1 and int(msg.payload) <=32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
             if (int(msg.payload) >= -1 and int(msg.payload) <=32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
             f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            setTopicCleared = True
         if (msg.topic == "openWB/set/configure/AllowedRfidsForLp2"):
             f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp2', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            setTopicCleared = True
         if (msg.topic == "openWB/set/configure/LastControllerPublish"):
             f = open('/var/www/html/openWB/ramdisk/LastControllerPublish', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+            setTopicCleared = True
         if (msg.topic == "openWB/set/configure/TotalPower"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
                 f = open('/var/www/html/openWB/ramdisk/TotalPower', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL1"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL2"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/TotalCurrentConsumptionOnL3"):
             if (float(msg.payload) >= 0 and float(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/TotalCurrentConsumptionOnL3', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL1"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL2"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/set/configure/ChargingVehiclesOnL3"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=200):
                 f = open('/var/www/html/openWB/ramdisk/ChargingVehiclesOnL3', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+                setTopicCleared = True
         if (msg.topic == "openWB/config/set/global/lp/1/cpInterrupt"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=1):
                 einbeziehen=msg.payload.decode("utf-8")
