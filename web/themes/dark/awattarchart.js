@@ -2,13 +2,14 @@ function loadawattargraph() {
 	var lineAwattarData = {
 		labels: awattartime,
 		datasets: [{
-			label: 'Awattar Preis Cent/kWh',
+			label: 'Strompreis Cent/kWh',
 			borderColor: "rgba(255, 155, 155, 0.9)",
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
 			borderWidth: 2,
 			fill: false,
 			data: graphawattarprice,
 			yAxisID: 'y-axis-1',
+			steppedLine: true
 		} ]
 	}
 
@@ -18,12 +19,7 @@ function loadawattargraph() {
 		data: lineAwattarData,
 		options: {
 			tooltips: {
-				enabled: false
-			},
-			elements: {
-				point: {
-					radius: 3
-				}
+				enabled: true
 			},
 			responsive: true,
 			maintainAspectRatio: false,
