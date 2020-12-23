@@ -367,7 +367,7 @@ function loadgraph() {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
 		// and extend csvData by these values
 		// tägl. Hausverbrauch = Bezug - Einspeisung + PV - alle LP + Speicherentladung - Speicherladung ;
-		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] + csvData[rowIndex][18] - csvData[rowIndex][17];
+		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] - csvData[rowIndex][8] + csvData[rowIndex][9] - csvData[rowIndex][10] + csvData[rowIndex][11] + csvData[rowIndex][18] - csvData[rowIndex][17];
 		if ( homeConsumption >= 0) {
 			csvData[rowIndex].push(homeConsumption);
 		} else {

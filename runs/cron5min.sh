@@ -134,6 +134,26 @@ do
 		sedailyyield=$(echo "scale=2;($speichere - $i) / 1000" |bc)
 		echo $sedailyyield > /var/www/html/openWB/ramdisk/daily_sekwh
 	fi
+	if (( pvyieldcount == 11 )); then
+		verbraucher1dailyyield=$(echo "scale=2;($verbraucher1 - $i) / 1000" |bc)
+		echo $verbraucher1dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher1ikwh
+	fi
+	if (( pvyieldcount == 12 )); then
+		verbrauchere1dailyyield=$(echo "scale=2;($verbrauchere1 - $i) / 1000" |bc)
+		echo $verbrauchere1dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher1ekwh
+	fi
+	if (( pvyieldcount == 13 )); then
+		verbraucher2dailyyield=$(echo "scale=2;($verbraucher2 - $i) / 1000" |bc)
+		echo $verbraucher2dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher2ikwh
+	fi
+	if (( pvyieldcount == 14 )); then
+		verbrauchere2dailyyield=$(echo "scale=2;($verbrauchere2 - $i) / 1000" |bc)
+		echo $verbrauchere2dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher2ekwh
+	fi
+	if (( pvyieldcount == 15 )); then
+		verbraucher3dailyyield=$(echo "scale=2;($verbraucher3 - $i) / 1000" |bc)
+		echo $verbraucher3dailyyield > /var/www/html/openWB/ramdisk/daily_verbraucher3ikwh
+	fi
 	if (( pvyieldcount == 27 )); then
 		d1dailyyield=$(echo "scale=2;($d1 - $i) / 1000" |bc)
 		echo $d1dailyyield > /var/www/html/openWB/ramdisk/daily_d1kwh
@@ -154,17 +174,34 @@ do
 		d5dailyyield=$(echo "scale=2;($d5 - $i) / 1000" |bc)
 		echo $d5dailyyield > /var/www/html/openWB/ramdisk/daily_d5kwh
 	fi
-
+	if (( pvyieldcount == 32 )); then
+		d6dailyyield=$(echo "scale=2;($d6 - $i) / 1000" |bc)
+		echo $d6dailyyield > /var/www/html/openWB/ramdisk/daily_d6kwh
+	fi
+	if (( pvyieldcount == 33 )); then
+		d7dailyyield=$(echo "scale=2;($d7 - $i) / 1000" |bc)
+		echo $d7dailyyield > /var/www/html/openWB/ramdisk/daily_d7kwh
+	fi
+	if (( pvyieldcount == 34 )); then
+		d8dailyyield=$(echo "scale=2;($d8 - $i) / 1000" |bc)
+		echo $d8dailyyield > /var/www/html/openWB/ramdisk/daily_d8kwh
+	fi
+	if (( pvyieldcount == 35 )); then
+		d9dailyyield=$(echo "scale=2;($d9 - $i) / 1000" |bc)
+		echo $d9dailyyield > /var/www/html/openWB/ramdisk/daily_d9kwh
+	fi
 done
-hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield" | bc)
+hausdailyyield=$(echo "scale=2;$bezugdailyyield + $pvdailyyield - $lladailyyield + $sedailyyield - $sidailyyield - $einspeisungdailyyield - $d1dailyyield - $d2dailyyield - $d3dailyyield - $d4dailyyield - $d5dailyyield - $d6dailyyield - $d7dailyyield - $d8dailyyield - $d9dailyyield - $verbraucher1dailyyield + $verbrauchere1dailyyield - $verbraucher2dailyyield + $verbrauchere2dailyyield - $verbraucher3dailyyield" | bc)
 echo $hausdailyyield > /var/www/html/openWB/ramdisk/daily_hausverbrauchkwh
 
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
 
 
-echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
-echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
-echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+#echo "$(tail -500 /var/www/html/openWB/ramdisk/smarthome.log)" > /var/www/html/openWB/ramdisk/smarthome.log
+#echo "$(tail -500 /var/www/html/openWB/ramdisk/mqtt.log)" > /var/www/html/openWB/ramdisk/mqtt.log
+#echo "$(tail -500 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/nurpv.log
+#echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/isss.log
+#echo "$(tail -5000 /var/www/html/openWB/ramdisk/nurpv.log)" > /var/www/html/openWB/ramdisk/rfid.log
 
 
 if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/mqttsub.py" > /dev/null
@@ -177,6 +214,54 @@ if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/smarthomehandler
 then
 	echo "test" > /dev/null
 else
-	python3 /var/www/html/openWB/runs/smarthomehandler.py &
+	python3 /var/www/html/openWB/runs/smarthomehandler.py  >> /var/www/html/openWB/ramdisk/smarthomehandler.log 2>&1 &
 fi
 
+if (( isss == 1 )); then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/isss.py &
+       fi
+else
+	ethstate=$(</sys/class/net/eth0/carrier)
+	if (( ethstate == 1 )); then
+		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 up
+		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+
+	else
+		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 up
+		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+
+	fi
+fi
+if [[ "$evsecon" == "buchse" ]]; then
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/buchse.py &
+       fi
+fi
+if [[ "$rfidakt" == "2" ]]; then
+	echo $rfidlist > /var/www/html/openWB/ramdisk/rfidlist
+       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+       then
+               echo "test" > /dev/null
+       else
+               python3 /var/www/html/openWB/runs/rfid.py &
+       fi
+else
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+       	then
+		sudo kill $(ps aux |grep 'runs/[r]fid.py' | awk '{print $2}')       
+	fi
+fi
+if ps ax |grep -v grep |grep "sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py" > /dev/null
+then
+       echo "test" > /dev/null
+else
+       sudo python3 /var/www/html/openWB/runs/modbusserver/modbusserver.py &
+fi
+	/var/www/html/openWB/runs/cleanup.sh >> /var/www/html/openWB/ramdisk/cleanup.log 2>&1

@@ -2,6 +2,7 @@
 
 declare -A mqttvar
 mqttvar["system/IpAddress"]=ipaddress
+mqttvar["system/ConfiguredChargePoints"]=ConfiguredChargePoints
 mqttvar["evu/APhase1"]=bezuga1
 mqttvar["evu/APhase2"]=bezuga2
 mqttvar["evu/APhase3"]=bezuga3
@@ -44,9 +45,13 @@ mqttvar["lp/3/kWhCounter"]=llkwhs2
 mqttvar["Verbraucher/1/Watt"]=verbraucher1_watt
 mqttvar["Verbraucher/1/WhImported"]=verbraucher1_wh
 mqttvar["Verbraucher/1/WhExported"]=verbraucher1_whe
+mqttvar["Verbraucher/1/DailyYieldImportkWh"]=daily_verbraucher1ikwh
+mqttvar["Verbraucher/1/DailyYieldExportkWh"]=daily_verbraucher1ekwh
 mqttvar["Verbraucher/2/Watt"]=verbraucher2_watt
 mqttvar["Verbraucher/2/WhImported"]=verbraucher2_wh
 mqttvar["Verbraucher/2/WhExported"]=verbraucher2_whe
+mqttvar["Verbraucher/2/DailyYieldImportkWh"]=daily_verbraucher2ikwh
+mqttvar["Verbraucher/2/DailyYieldExportkWh"]=daily_verbraucher2ekwh
 mqttvar["evu/WhExported"]=einspeisungkwh
 mqttvar["evu/WhImported"]=bezugkwh
 mqttvar["housebattery/WhExported"]=speicherekwh
@@ -178,6 +183,10 @@ mqttvar["SmartHome/Devices/2/DailyYieldKwh"]=daily_d2kwh
 mqttvar["SmartHome/Devices/3/DailyYieldKwh"]=daily_d3kwh
 mqttvar["SmartHome/Devices/4/DailyYieldKwh"]=daily_d4kwh
 mqttvar["SmartHome/Devices/5/DailyYieldKwh"]=daily_d5kwh
+mqttvar["SmartHome/Devices/6/DailyYieldKwh"]=daily_d6kwh
+mqttvar["SmartHome/Devices/7/DailyYieldKwh"]=daily_d7kwh
+mqttvar["SmartHome/Devices/8/DailyYieldKwh"]=daily_d8kwh
+mqttvar["SmartHome/Devices/9/DailyYieldKwh"]=daily_d9kwh
 mqttvar["global/boolRse"]=rsestatus
 mqttvar["hook/1/boolHookStatus"]=hook1akt
 mqttvar["hook/2/boolHookStatus"]=hook2akt
@@ -214,20 +223,42 @@ mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
+for i in $(seq 1 8);
+do
+	for f in \
+		"lp/${i}/plugStartkWh:pluggedladunglp${i}startkwh" \
+		"lp/${i}/pluggedladungakt:pluggedladungaktlp${i}" \
+		"lp/${i}/lmStatus:lmStatusLp${i}"
+	do
+		IFS=':' read -r -a tuple <<< "$f"
+		#echo "Setting mqttvar[${tuple[0]}]=${tuple[1]}"
+		mqttvar["${tuple[0]}"]=${tuple[1]}
+	done
+done
+
 tempPubList=""
 for mq in "${!mqttvar[@]}"; do
 	declare o${mqttvar[$mq]}
 	declare ${mqttvar[$mq]}
 	tempnewname=${mqttvar[$mq]}
-
 	tempoldname=o${mqttvar[$mq]}
-	tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
-	tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
-	if [[ "$tempoldname" != "$tempnewname" ]]; then
-		tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
-		echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+
+	if [ -r ramdisk/"${mqttvar[$mq]}" ]; then
+
+		tempnewname=$(<ramdisk/"${mqttvar[$mq]}")
+
+		if [ -r ramdisk/mqtt"${mqttvar[$mq]}" ]; then
+			tempoldname=$(<ramdisk/mqtt"${mqttvar[$mq]}")
+		else
+			tempoldname=""
+		fi
+
+		if [[ "$tempoldname" != "$tempnewname" ]]; then
+			tempPubList="${tempPubList}\nopenWB/${mq}=${tempnewname}"
+			echo $tempnewname > ramdisk/mqtt${mqttvar[$mq]}
+		fi
+		#echo ${mqttvar[$mq]} $mq
 	fi
-	#echo ${mqttvar[$mq]} $mq 
 done
 
 
