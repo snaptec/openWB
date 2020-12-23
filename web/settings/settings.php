@@ -111,10 +111,10 @@
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
 										<label class="btn btn-outline-info<?php if($isssold == 0) echo " active" ?>">
-											<input type="radio" name="isss" id="isssOff" value="0"<?php if($isssold == 0) echo " checked=\"checked\"" ?>>Aus
+											<input type="radio" name="isss" id="isssOff" value="0"<?php if($isssold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
 										<label class="btn btn-outline-info<?php if($isssold == 1) echo " active" ?>">
-											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>An
+											<input type="radio" name="isss" id="isssOn" value="1"<?php if($isssold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 								</div>
@@ -837,7 +837,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="nachtladenabuhr" id="nachtladenabuhr" class="form-control">
 														<option <?php if($nachtladenabuhrold == 17) echo "selected" ?> value="17">17:00</option>
 														<option <?php if($nachtladenabuhrold == 18) echo "selected" ?> value="18">18:00</option>
@@ -856,7 +856,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="nachtladenbisuhr" id="nachtladenbisuhr" class="form-control">
 														<option <?php if($nachtladenbisuhrold == 0) echo "selected" ?> value="0">0:00</option>
 														<option <?php if($nachtladenbisuhrold == 1) echo "selected" ?> value="1">1:00</option>
@@ -933,7 +933,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1moab" id="mollp1moab" class="form-control">
 														<option <?php if($mollp1moabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1moabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -976,7 +976,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1mobis" id="mollp1mobis" class="form-control">
 														<option <?php if($mollp1mobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1mobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1046,7 +1046,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1diab" id="mollp1diab" class="form-control">
 														<option <?php if($mollp1diabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1diabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1089,7 +1089,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1dibis" id="mollp1dibis" class="form-control">
 														<option <?php if($mollp1dibisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1dibisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1159,7 +1159,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1miab" id="mollp1miab" class="form-control">
 														<option <?php if($mollp1miabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1miabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1202,7 +1202,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1mibis" id="mollp1mibis" class="form-control">
 														<option <?php if($mollp1mibisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1mibisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1272,7 +1272,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1doab" id="mollp1doab" class="form-control">
 														<option <?php if($mollp1doabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1doabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1315,7 +1315,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1dobis" id="mollp1dobis" class="form-control">
 														<option <?php if($mollp1dobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1dobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1385,7 +1385,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1frab" id="mollp1frab" class="form-control">
 														<option <?php if($mollp1frabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1frabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1428,7 +1428,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1frbis" id="mollp1frbis" class="form-control">
 														<option <?php if($mollp1frbisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1frbisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1498,7 +1498,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1saab" id="mollp1saab" class="form-control">
 														<option <?php if($mollp1saabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1saabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1541,7 +1541,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1sabis" id="mollp1sabis" class="form-control">
 														<option <?php if($mollp1sabisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1sabisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1611,7 +1611,7 @@
 														<div class="input-group-text">
 															Anfang
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1soab" id="mollp1soab" class="form-control">
 														<option <?php if($mollp1soabold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1soabold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1654,7 +1654,7 @@
 														<div class="input-group-text">
 															Ende
 														</div>
-													</div> 
+													</div>
 													<select name="mollp1sobis" id="mollp1sobis" class="form-control">
 														<option <?php if($mollp1sobisold == "03:00") echo "selected" ?> value="03:00">03:00</option>
 														<option <?php if($mollp1sobisold == "03:15") echo "selected" ?> value="03:15">03:15</option>
@@ -1922,7 +1922,7 @@
 													<div class="input-group-text">
 														Phase 1
 													</div>
-												</div> 
+												</div>
 												<input type="number" min="7" max="1000" step="1" name="lastmaxap1" id="lastmaxap1" class="form-control" value="<?php echo $lastmaxap1old ?>">
 											</div>
 										</div>
@@ -1932,7 +1932,7 @@
 													<div class="input-group-text">
 														Phase 2
 													</div>
-												</div> 
+												</div>
 												<input type="number" min="7" max="1000" step="1" name="lastmaxap2" id="lastmaxap2" class="form-control" value="<?php echo $lastmaxap2old ?>">
 											</div>
 										</div>
@@ -1942,7 +1942,7 @@
 													<div class="input-group-text">
 														Phase 3
 													</div>
-												</div> 
+												</div>
 												<input type="number" min="7" max="1000" step="1" name="lastmaxap3" id="lastmaxap3" class="form-control" value="<?php echo $lastmaxap3old ?>">
 											</div>
 										</div>

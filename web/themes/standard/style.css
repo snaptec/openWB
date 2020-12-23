@@ -128,7 +128,7 @@ body > .container {
 }
 
 .text-lightgrey {
-	color: rgba(0, 0, 0, 0.82);
+	color: #9c9b98;
 }
 
 .bg-darkgrey {
@@ -335,7 +335,7 @@ h3 {
 /* Livechart colors */
 :root {
 	--fontCol: rgba(153, 153, 153, 1);
-	--xgridCol: rgba(204, 204, 204, 1);	
+	--xgridCol: rgba(204, 204, 204, 1);
 	--gridCol: rgba(204, 204, 204, 1);
 	--gridSocCol: rgba(0, 0, 0, 0);
 	--tickCol: rgba(153, 153, 153, 1);
