@@ -8,9 +8,9 @@
 	<title>openWB</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="openWB">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="openWB">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<link rel="apple-touch-startup-image" href="/openWB/web/img/favicons/splash1125x2436w.png"  />
 	<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="img/favicons/splash1125x2436w.png">
@@ -45,7 +45,7 @@
 	<!-- Normalize -->
 	<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 	<!-- Font Awesome, all styles -->
-  	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
+	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
 
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
@@ -91,10 +91,10 @@
 	<!-- style instead of css due to async loading of theme css -->
 	<div id="preloader" style="background-color:white; position:fixed; top:0px; left:0px; width:100%; height:100%; z-index:999999;">
 		<div style="margin-top: 150px; text-align: center;">
-		  	<div class="row" style="color:black;">
-			  	<div class="mx-auto d-block justify-content-center">
+			<div class="row" style="color:black;">
+				<div class="mx-auto d-block justify-content-center">
 					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
-			  	</div>
+				</div>
 			</div>
 			<div class="row justify-content-center mt-2" style="color:grey;">
 				<div class="col-10 col-sm-6">
@@ -108,7 +108,7 @@
 						</div>
 					</div>
 				</div>
-  			</div>
+			</div>
 		</div>
 	</div>
 
@@ -243,22 +243,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp2-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="2">
@@ -266,22 +268,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center cursor-pointer">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp3-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="3">
@@ -289,22 +293,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp4-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="4">
@@ -312,22 +318,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp5-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="5">
@@ -335,22 +343,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp6-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="6">
@@ -358,22 +368,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<span class="socLp"></span> %
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp7-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="7">
@@ -381,22 +393,24 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<span class="socLp"></span> %
+			</div>
+		</div>
 
 		<!-- chargepoint info data lp8-->
 		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey" data-lp="8">
@@ -404,40 +418,42 @@
 				<span class="fas fa-xs hide autolockConfiguredLp"></span>
 				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
 				<span class="fa fa-xs fa-plug text-orange hide plugstatLp"></span>
-			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
-			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+				<span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+				<span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-            <div class="col-3 px-0">
-                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
-            </div>
-            <div class="col-4 px-0">
-                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
-            </div>
-            <div class="col-2 px-0 socNotConfiguredLp text-center">
-              --
-            </div>
-            <div class="col-2 px-0 hide socConfiguredLp text-center">
-                <span class="socLp"></span>
-            </div>
-        </div>
+			<div class="col-3 px-0">
+				<span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+			</div>
+			<div class="col-4 px-0">
+				<span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" data-consumption="0"></span>
+			</div>
+			<div class="col-2 px-0 socNotConfiguredLp text-center">
+				--
+			</div>
+			<div class="col-2 px-0 hide socConfiguredLp text-center">
+				<i class="small reloadLpSoc fas fa-redo-alt"></i>
+				<i class="manualSocSymbol fas fa-edit hide"></i>
+				<span class="socLp"></span> %
+			</div>
+		</div>
 
 		<div class="smartHome">
-			<hr color="white">
+			<hr class="border-secondary">
 
-            <!-- SmartHome info header -->
-	        <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
+			<!-- SmartHome info header -->
+			<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
 				<div class="col-3 px-0">
-	                Gerät
-	            </div>
-	            <div class="col-3 px-0">
-	                Verbrauch
-	            </div>
-	            <div class="col-3 px-0">
-	                Modus
+					Gerät
 				</div>
 				<div class="col-3 px-0">
-	                Laufzeit
-	            </div>
+					Verbrauch
+				</div>
+				<div class="col-3 px-0">
+					Modus
+				</div>
+				<div class="col-3 px-0">
+					Laufzeit
+				</div>
 			</div>
 
 			<!-- SmartHome Device 1 data -->
@@ -583,14 +599,12 @@
 					<span class="actualRunningTimeDevice">lade Daten</span>
 				</div>
 			</div>
-
-
-	</div>  <!-- and smarthome -->
+		</div>  <!-- and smarthome -->
 
 		<!-- depending on charge mode show options -->
-	    <form id="sofortladenEinstellungen" class="hide">
+		<form id="sofortladenEinstellungen" class="hide">
 
-			<hr color="white">
+			<hr class="border-secondary">
 			<div class="row justify-content-center">
 				<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Stromstärke <span class="nameLp"></span></h3>
 			</div>
@@ -674,7 +688,7 @@
 			</div>
 
 			<div class="hide" id="awattar">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
 					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
 				</div>
@@ -691,16 +705,16 @@
 				<div class="form-row form-group mb-1 vaRow regularTextSize">
 					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
 					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-8" max="12" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="25" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
 			</div>  <!--/ awattar -->
 
 			<div class="chargeLimitation" data-lp="1">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 					<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -743,9 +757,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="2">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 					<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -788,9 +802,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="3">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 					<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -823,9 +837,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="4">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 					<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -858,9 +872,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="5">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 					<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -893,9 +907,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="6">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 					<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -928,9 +942,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="7">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 					<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -963,9 +977,9 @@
 			</div>
 
 			<div class="chargeLimitation" data-lp="8">
-				<hr color="white">
+				<hr class="border-secondary">
 				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></label></h3>
+					<h3 class="font-weight-bold text-center text-lightgrey">Lademengenbegrenzung <span class="nameLp"></span></h3>
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 					<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
@@ -998,114 +1012,199 @@
 			</div>
 
 		</form>
-		<br>
-	<!-- modal chargemode-select-window -->
-	<div class="modal fade" id="chargeModeModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
 
-				<!-- modal header -->
-				<div class="modal-header bg-success">
-					<h4 class="modal-title">Lademodus-Auswahl</h4>
-				</div>
+		<!-- modal chargemode-select-window -->
+		<div class="modal fade" id="chargeModeModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
 
-				<!-- modal body -->
-				<div class="modal-body">
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
-						</div>
+					<!-- modal header -->
+					<div class="modal-header bg-success">
+						<h4 class="modal-title">Lademodus-Auswahl</h4>
 					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 order-first order-sm-last py-1">
-							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
+
+					<!-- modal body -->
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
-						</div>
-					</div>
-					<span id='priorityModeBtns'>
-						<hr>
-						<div class="row">
-							<div class="col text-center text-grey">
-								Vorrang im Lademodus PV-Laden:
+						<div class="row justify-content-center">
+							<div class="col-sm-5 order-first order-sm-last py-1">
+								<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
 							</div>
 						</div>
 						<div class="row justify-content-center">
 							<div class="col-sm-5 py-1">
-								<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
-									EV <span class="fas fa-car">&nbsp;</span>
-								</button>
+								<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
 							</div>
 						</div>
 						<div class="row justify-content-center">
 							<div class="col-sm-5 py-1">
-								<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
-									Speicher <span class="fas fa-car-battery">&nbsp;</span>
-								</button>
-							</div>
-						</div>
-					</span>
-					<span id='70ModeBtn'>
-						<hr>
-
-						<div class="row">
-							<div class="col text-center text-grey">
-								70% beachten im Lademodus PV-Laden:
+								<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
 							</div>
 						</div>
 						<div class="row justify-content-center">
 							<div class="col-sm-5 py-1">
-								<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
-									70 % beachten
-								</button>
+								<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
 							</div>
 						</div>
-					</span>
+						<div id='priorityModeBtns'>
+							<hr>
+							<div class="row">
+								<div class="col text-center text-grey">
+									Vorrang im Lademodus PV-Laden:
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
+										EV <span class="fas fa-car">&nbsp;</span>
+									</button>
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
+										Speicher <span class="fas fa-car-battery">&nbsp;</span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div id='70ModeBtn'>
+							<hr>
 
-				</div> <!-- /modal body -->
+							<div class="row">
+								<div class="col text-center text-grey">
+									70% beachten im Lademodus PV-Laden:
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col-sm-5 py-1">
+									<button id="70PvBtn" type="button" class=" 70PvBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal">
+										70 % beachten
+									</button>
+								</div>
+							</div>
+						</div>
 
-				<!-- no modal footer -->
-			</div>
-		</div>
-	</div>
+					</div> <!-- /modal body -->
 
-	<!-- modal reset-gauge-limits-window -->
-	<div class="modal fade" id="resetGaugeLimitsModal" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<!-- modal header -->
-				<div class="modal-header bg-danger">
-					<h4 class="modal-title text-light">Achtung</h4>
-				</div>
-				<!-- modal body -->
-				<div class="modal-body text-center text-black">
-					<p>
-						Sollen die Limits für diese Gauge wirklich zurückgesetzt werden?
-					</p>
-				</div>
-				<!-- modal footer -->
-				<div class="modal-footer d-flex justify-content-center">
-					<button type="button" class="btn btn-success" data-dismiss="modal" id="resetGaugeLimitsBtn" data-gaugeID="">Fortfahren</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal" id="resetGaugeLimitsCancelBtn">Abbruch</button>
+					<!-- no modal footer -->
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- some scripts -->
+		<!-- modal SoC-window -->
+		<div class="modal fade" id="socModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- modal header -->
+					<div class="modal-header bg-warning">
+						<h4 class="modal-title text-dark">Manuelle SoC-Eingabe - Ladepunkt <span class="socLp"></span></h4>
+					</div>
+					<!-- modal body -->
+					<div class="modal-body">
+						<div class="row justify-content-center">
+							<div class="col-2 px-1 py-1">
+								<button type="button" id="manualSocDecrement" class="btn btn-block btn-secondary">-</button>
+							</div>
+							<div class="col-5 py-1">
+								<div class="input-group">
+									<input id="manualSocBox" type="number" min="0" max="100" step="1" value="0" name="socBox" class="form-control text-right">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											%
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-2 px-1 py-1">
+								<button type="button" id="manualSocIncrement" class="btn btn-block btn-secondary">+</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button type="button" id="manualSocOk" class="btn btn-lg btn-block btn-success" data-dismiss="modal">Übernehmen</button>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button type="button" id="manualSocCancel" class="btn btn-lg btn-block btn-secondary" data-dismiss="modal">Abbrechen</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				function clearSocForm(){
+					$("#manualSocBox").val("0");
+				}
+
+				function submitSocForm() {
+					var currentLp = $('#socModal').find('.socLp').text();
+					var manualSoc = $("#manualSocBox").val();
+					console.log("SoC for LP"+currentLp+": "+manualSoc);
+					publish(manualSoc, "openWB/set/lp/"+currentLp+"/manualSoc");
+					// reset input after publishing
+					clearSocForm();
+				};
+				$(document).ready(function(){
+
+					$('#manualSocDecrement').click(function() {
+						var newValue = parseInt($('#manualSocBox').val()) - 1;
+						if( newValue < 0 ){
+							newValue = 0;
+						}
+						$('#manualSocBox').val(newValue);
+					});
+
+					$('#manualSocIncrement').click(function() {
+						var newValue = parseInt($('#manualSocBox').val()) + 1;
+						if( newValue > 100 ){
+							newValue = 100;
+						}
+						$('#manualSocBox').val(newValue);
+					});
+
+					$('#manualSocCancel').click(function() {
+						clearSocForm();
+					});
+
+					$('#manualSocOk').click(function() {
+						submitSocForm();
+					});
+
+				});
+			</script>
+		</div>
+
+		<!-- modal reset-gauge-limits-window -->
+		<div class="modal fade" id="resetGaugeLimitsModal" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<!-- modal header -->
+					<div class="modal-header bg-danger">
+						<h4 class="modal-title text-light">Achtung</h4>
+					</div>
+					<!-- modal body -->
+					<div class="modal-body text-center text-black">
+						<p>
+							Sollen die Limits für diese Gauge wirklich zurückgesetzt werden?
+						</p>
+					</div>
+					<!-- modal footer -->
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="resetGaugeLimitsBtn" data-gaugeID="">Fortfahren</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" id="resetGaugeLimitsCancelBtn">Abbruch</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>  <!-- container -->
+
 	<script>
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
@@ -1202,67 +1301,67 @@
 		}
 
 		function updateGaugeValue(gauge, value, text) {
-		    // gauge: zu erneuernde Gauge
-		    // value: neuer Wert
-		    // text: ggf. neuer Text
-		    if( isNaN(parseFloat(value)) ){
-		        // es wurde keine Zahl als Wert übergeben
-			     return;  // gleich wieder zurück
-		    }
-		    var needsScaling = false;
-		    var newGaugeMax = Math.ceil((Math.abs(value) / gauge.scaleBase)) * gauge.scaleBase;
-		    if ( gauge.max < newGaugeMax ) {
-		        // benötigtes Maximum ist größer als Skala
-		        gauge.max = newGaugeMax;  // Skala positiv anpassen
-		        gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-		        needsScaling = true;
-		        if ( !gauge.autoRescale ) {
-		            // neues Maximum der Gauge als Cookie speichern
+			// gauge: zu erneuernde Gauge
+			// value: neuer Wert
+			// text: ggf. neuer Text
+			if( isNaN(parseFloat(value)) ){
+				// es wurde keine Zahl als Wert übergeben
+					return;  // gleich wieder zurück
+			}
+			var needsScaling = false;
+			var newGaugeMax = Math.ceil((Math.abs(value) / gauge.scaleBase)) * gauge.scaleBase;
+			if ( gauge.max < newGaugeMax ) {
+				// benötigtes Maximum ist größer als Skala
+				gauge.max = newGaugeMax;  // Skala positiv anpassen
+				gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+				needsScaling = true;
+				if ( !gauge.autoRescale ) {
+					// neues Maximum der Gauge als Cookie speichern
 					setCookie('GaugesScaleMax_' + gauge.id, newGaugeMax, 365);
-		        }
-		    } else if ( gauge.max > newGaugeMax ) {
-		        // Skala ist aktuell eigentlich zu groß
-		        if ( gauge.autoRescale ) {
-		            // und Anpassung soll automatisch erfolgen
-		            gauge.scaleCounter -= 1; // dann Counter reduzieren
-		            if ( gauge.scaleCounter == 0 ) {
-		                // wenn Zeit rum
-		                gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-		                gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / (2 * gauge.scaleBase)) * gauge.scaleBase);  // Skala anpassen
-		                needsScaling = true;
-		            }
-		        }
-		    } else {
-		        // Skala soll bleiben, keine automatische Anpassung
-		        if ( gauge.scaleCounter < defaultScaleCounter ) {
-		            // aber Zähler zum Wechsel ist schon angelaufen
-		            gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-		        }
-		    }
-		    if ( needsScaling ) {
-		        // wenn Skala angepasst werden muss
-		        if ( gauge.isSymmetric ) {
-		            // bei symmetrischer Gauge die negative Skala angleichen
-		            gauge.min = gauge.max * -1;
-		        }
-		        // farbigen Rand anpassen
-		        gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
-		        // Labels in kW
-		        gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
-		    }
-		    // neuen Wert für Gauge setzen, ggf. Text im Label ändern
-		    gauge.value = value;
-		    if ( gauge.setText ) {
-		        gauge.set('titleBottom', text);
-		        // Farben der Schrift ggf. anpassen
-		        if ( value < 0 ) {
-		            gauge.set('titleBottomColor', 'red');
-		        } else {
-		            gauge.set('titleBottomColor', 'green');
-		        }
-		    }
-		    // und Anzeige erneuern
-		    gauge.grow();
+				}
+			} else if ( gauge.max > newGaugeMax ) {
+				// Skala ist aktuell eigentlich zu groß
+				if ( gauge.autoRescale ) {
+					// und Anpassung soll automatisch erfolgen
+					gauge.scaleCounter -= 1; // dann Counter reduzieren
+					if ( gauge.scaleCounter == 0 ) {
+						// wenn Zeit rum
+						gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+						gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / (2 * gauge.scaleBase)) * gauge.scaleBase);  // Skala anpassen
+						needsScaling = true;
+					}
+				}
+			} else {
+				// Skala soll bleiben, keine automatische Anpassung
+				if ( gauge.scaleCounter < defaultScaleCounter ) {
+					// aber Zähler zum Wechsel ist schon angelaufen
+					gauge.scaleCounter = defaultScaleCounter;  // Counter reset
+				}
+			}
+			if ( needsScaling ) {
+				// wenn Skala angepasst werden muss
+				if ( gauge.isSymmetric ) {
+					// bei symmetrischer Gauge die negative Skala angleichen
+					gauge.min = gauge.max * -1;
+				}
+				// farbigen Rand anpassen
+				gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
+				// Labels in kW
+				gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
+			}
+			// neuen Wert für Gauge setzen, ggf. Text im Label ändern
+			gauge.value = value;
+			if ( gauge.setText ) {
+				gauge.set('titleBottom', text);
+				// Farben der Schrift ggf. anpassen
+				if ( value < 0 ) {
+					gauge.set('titleBottomColor', 'red');
+				} else {
+					gauge.set('titleBottomColor', 'green');
+				}
+			}
+			// und Anzeige erneuern
+			gauge.grow();
 		}
 
 		function prepareGauges() {
@@ -1277,7 +1376,7 @@
 						if ( obj.autoScale ) {
 							setGaugeInitialMinMax(obj);
 						}
-	            	}
+					}
 				},
 				{maxWidth: 575, width: 155, height: 155,
 					options: {
@@ -1288,7 +1387,7 @@
 						if ( obj.autoScale ) {
 							setGaugeInitialMinMax(obj);
 						}
-	            	}
+					}
 				},
 				{maxWidth: 767, width: 220, height: 220,
 					options: {
@@ -1299,7 +1398,7 @@
 						if ( obj.autoScale ) {
 							setGaugeInitialMinMax(obj);
 						}
-	            	}
+					}
 				},
 				{maxWidth: 991, width: 150, height: 150,
 					options: {
@@ -1310,7 +1409,7 @@
 						if ( obj.autoScale ) {
 							setGaugeInitialMinMax(obj);
 						}
-	            	}
+					}
 				},
 				{maxWidth: 1199, width: 200, height: 200,
 					options: {
@@ -1321,7 +1420,7 @@
 						if ( obj.autoScale ) {
 							setGaugeInitialMinMax(obj);
 						}
-	            	}
+					}
 				},
 				{maxWidth: null, width: 220, height: 220,
 					options: {
@@ -1377,15 +1476,15 @@
 			gaugePV.scaleBase = 1000;  // 1000 W ist Basisgröße
 
 			// Add the context menu click listener
-		    gaugePV.canvas.ondblclick = function (e)
-		    {
+			gaugePV.canvas.ondblclick = function (e)
+			{
 				e.stopPropagation();  // Stops the window.dblclick event from firing
 				var gaugeID = e.srcElement.__object__.id;
 				if ( gaugeID == 'pvData' ) {
 					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
 					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
 				}
-		    }
+			}
 
 			gaugeBatt = new RGraph.Gauge({
 				id: 'battData',
@@ -1534,15 +1633,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/Gauges/helperFunctions.js?ver=20200525-a',
+				'themes/Gauges/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20200525-a',
+				'themes/Gauges/processAllMqttMsg.js?ver=20201218',
 				// respective Chart.js definition live
-				'themes/Gauges/livechart.js?ver=20200525-a',
+				'themes/Gauges/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
-				'themes/Gauges/awattarchart.js?ver=20200525-a',
+				'themes/Gauges/awattarchart.js?ver=20201218',
 				// functions performing mqtt and start mqtt-service
-				'themes/Gauges/setupMqttServices.js?ver=20200525-a'
+				'themes/Gauges/setupMqttServices.js?ver=20201218'
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1562,6 +1661,26 @@
 						publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
 					} else {
 						publish("1", "openWB/set/lp/" + lp + "/ChargePointEnabled");
+					}
+				}
+			});
+
+			$('.socConfiguredLp').click(function(event){
+				// send mqtt set to force reload of charge point SoC after click
+				var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
+				if ( !isNaN(parseInt(lp)) && lp > 0 && lp < 9 ) {
+					if ( $(this).hasClass('manualSoC') ) {
+						var currentSoc = $(this).find('.socLp').text();
+						$('#socModal').find('.socLp').text(lp);
+						$("#manualSocBox").val(currentSoc);
+						$('#socModal').modal("show");
+					} else {
+						var spinner = $(this).find('.reloadLpSoc');
+						var isRunning = spinner.hasClass("fa-spin");
+						if ( !isRunning ) {
+							spinner.addClass("fa-spin");
+							publish("1", "openWB/set/lp/" + lp + "/ForceSoCUpdate");
+						}
 					}
 				}
 			});
@@ -1631,7 +1750,7 @@
 					setCookie('GaugesScaleMax_evuData', gaugeEVU.scaleBase, 365);
 					document.location.reload(true);
 				}
-    		});
+			});
 
 			$('#resetGaugeLimitsCancelBtn').click(function(event){
 				$("#resetGaugeLimitsBtn").data("gaugeID", "");
@@ -1640,31 +1759,31 @@
 			$('.btn[value="Reset"]').click(function(event){
 				var topic = getTopicToSendTo($(this).attr('id'));
 				publish("1", topic);
-    		});
+			});
 
 			$('.sofortladenLadezielSelektor').change(function(event){
-			    // switches the visibility of the settings-divs according to dropdown selection
-			    var selectorId = '#' + event.target.id;
-			    var divAusId = selectorId.slice(0, 8) + 'n' + selectorId.slice(8);
-			    var divSocId = selectorId.slice(0, 8) + 's' + selectorId.slice(8);
-			    var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
-			    switch ($(selectorId).val()) {
-			        case '0':
-			            $(divAusId).show();
-			            $(divSocId).hide();
-			            $(divMengeId).hide();
-			            break;
-			        case '1':
-			            $(divAusId).hide();
-			            $(divSocId).hide();
-			            $(divMengeId).show();
-			            break;
-			        case '2':
-			            $(divAusId).hide();
-			            $(divSocId).show();
-			            $(divMengeId).hide();
-			            break;
-			    }
+				// switches the visibility of the settings-divs according to dropdown selection
+				var selectorId = '#' + event.target.id;
+				var divAusId = selectorId.slice(0, 8) + 'n' + selectorId.slice(8);
+				var divSocId = selectorId.slice(0, 8) + 's' + selectorId.slice(8);
+				var divMengeId = selectorId.slice(0, 8) + 'm' + selectorId.slice(8);
+				switch ($(selectorId).val()) {
+					case '0':
+						$(divAusId).show();
+						$(divSocId).hide();
+						$(divMengeId).hide();
+						break;
+					case '1':
+						$(divAusId).hide();
+						$(divSocId).hide();
+						$(divMengeId).show();
+						break;
+					case '2':
+						$(divAusId).hide();
+						$(divSocId).show();
+						$(divMengeId).hide();
+						break;
+				}
 			});
 
 			$('.btn-group-toggle').change(function(event){
@@ -1693,19 +1812,19 @@
 					var topic = getTopicToSendTo(id);
 					publish(value, topic);
 					var label = $('label[for="' + id + '"].valueLabel');
-     				label.removeClass('text-danger');
+					label.removeClass('text-danger');
 					// if rangeInput is for chargeLimitation, recalc progress
 					if ( id.includes('/energyToCharge') ) {
 						var parent = elem.closest('.chargeLimitation')  // get parent div element for charge limitation
 						var element = parent.find('.progress-bar');  // now get parents progressbar
 						var actualCharged = element.data('actualCharged');  // get stored value
-						if ( isNaN(actualCharged) ) {
+						if ( isNaN(parseFloat(actualCharged)) ) {
 							actualCharged = 0;  // minimum value
 						}
 						var progress = (actualCharged / value * 100).toFixed(0);
 						element.width(progress+"%");
 					}
-  				}, 2000);
+				}, 2000);
 			});
 
 			// register an event listener for changes in visibility

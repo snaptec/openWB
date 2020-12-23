@@ -1,68 +1,169 @@
 #!/bin/bash
+TOKENPASSWORD='#TokenInUse#'
+response=''
 
-# echo $#
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
-# echo $OPENWBBASEDIR
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+CONFIGFILE="$OPENWBBASEDIR/openwb.conf"
+LOGFILE="$RAMDISKDIR/soc.log"
+CHARGEPOINT=$1
 
+socDebug=$debug
+# for developement only
+socDebug=1
 
-case $1 in
+case $CHARGEPOINT in
 	2)
 		# second charge point
-		tintervallladen=$(( soc_teslalp2_intervallladen * 6 ))
-		tintervall=$(( soc_teslalp2_intervall * 6 ))
-		teslatimer=$(<$OPENWBBASEDIR/ramdisk/soctimer1)
-		ladeleistung=$(<$OPENWBBASEDIR/ramdisk/llaktuells1)
-		soctimerfile="$OPENWBBASEDIR/ramdisk/soctimer1"
-		socfile="$OPENWBBASEDIR/ramdisk/soc1"
+		socintervallladen=$(( soc_teslalp2_intervallladen * 6 ))
+		socintervall=$(( soc_teslalp2_intervall * 6 ))
+		ladeleistung=$(<$RAMDISKDIR/llaktuells1)
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
 		username=$soc_teslalp2_username
-		password=$soc_teslalp2_password
+		passwordConfigText="soc_teslalp2_password"
 		carnumber=$soc_teslalp2_carnumber
+		tokensfile="$MODULEDIR/tokens.lp2"
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
-		tintervallladen=$(( soc_tesla_intervallladen * 6 ))
-		tintervall=$(( soc_tesla_intervall * 6 ))
-		teslatimer=$(<$OPENWBBASEDIR/ramdisk/soctimer)
-		ladeleistung=$(<$OPENWBBASEDIR/ramdisk/llaktuell)
-		soctimerfile="$OPENWBBASEDIR/ramdisk/soctimer"
-		socfile="$OPENWBBASEDIR/ramdisk/soc"
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
+		socintervallladen=$(( soc_tesla_intervallladen * 6 ))
+		socintervall=$(( soc_tesla_intervall * 6 ))
+		ladeleistung=$(<$RAMDISKDIR/llaktuell)
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
 		username=$soc_tesla_username
-		password=$soc_tesla_password
+		passwordConfigText="soc_tesla_password"
 		carnumber=$soc_tesla_carnumber
+		tokensfile="$MODULEDIR/tokens.lp1"
 		;;
 esac
 
+password="${!passwordConfigText}"
+
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date --rfc-3339=seconds`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
+
 getAndWriteSoc(){
 	re='^-?[0-9]+$'
-	soclevel=$(sudo python $OPENWBBASEDIR/modules/soc_tesla/tsoc.py $username $password $carnumber | jq .battery_level)
+	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json get data)
+	# current state of car
+	state=$(echo $response | jq .response.state)
+	socDebugLog "State: $state"
+	soclevel=$(echo $response | jq .response.charge_state.battery_level)
+	socDebugLog "SoC: $soclevel"
+
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then
 			echo $soclevel > $socfile
-			# echo "$soclevel > $socfile"
 		fi
 	fi
-	echo 0 > $soctimerfile
-	# echo "0 > $soctimerfile"
 }
 
 incrementTimer(){
-	teslatimer=$((teslatimer+1))
-	echo $teslatimer > $soctimerfile
-	# echo "$teslatimer > $soctimerfile"
+	soctimer=$((soctimer+1))
+	echo $soctimer > $soctimerfile
 }
 
+clearPassword(){
+	socDebugLog "Removing password from config."
+	sed -i "s/$passwordConfigText=.*/$passwordConfigText=''/" $CONFIGFILE
+}
+
+setTokenPassword(){
+	socDebugLog "Writing token password to config."
+	sed -i "s/$passwordConfigText=.*/$passwordConfigText='$TOKENPASSWORD'/" $CONFIGFILE
+}
+
+checkToken(){
+	returnValue=0
+	case $password in
+		'')
+			# empty password tells us to remove a possible saved token
+			if [ -f $tokensfile ]; then
+				socDebugLog "Empty password set: removing tokensfile."
+				rm $tokensfile
+			fi
+			socDebugLog "Empty Password - nothing to do."
+			returnValue=1
+			;;
+		$TOKENPASSWORD)
+			# check if token is present
+			if [ ! -f $tokensfile ]; then
+				socDebugLog "Tokenpassword set but no token found: clearing password in config."
+				clearPassword
+				socDebugLog "Tokenpassword without token - nothing to do."
+				returnValue=2
+			fi
+			;;
+		*)
+			# new password entered
+			if [ -f $tokensfile ]; then
+				socDebugLog "New password set: removing tokensfile."
+				rm $tokensfile
+			fi
+			# Request new token with user/pass.
+			socDebugLog "Requesting new token..."
+			response=$(python $MODULEDIR/teslajson.py --email="$username" --password="$password" --tokens_file="$tokensfile" --json)
+			# password in response, so do not log it!
+			if [ -f $tokensfile ]; then
+				socDebugLog "...all done, removing password from config file."
+				setTokenPassword
+			else
+				socDebugLog "ERROR: Auth with user/pass failed!"
+				echo "Fehler: Anmeldung bei Tesla gescheitert!" > $RAMDISKDIR/lastregelungaktiv
+				returnValue=3
+			fi
+			;;
+	esac
+	socDebugLog "CheckToken returnValue: $returnValue"
+	return "$returnValue"
+}
+
+wakeUpCar(){
+	socDebugLog "Waking up car."
+	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
+	state=$(echo $response | jq .response.state)
+	socDebugLog "Car state after wakeup: $state"
+}
+
+soctimer=$(<$soctimerfile)
 if (( ladeleistung > 1000 )); then
-	if (( teslatimer < tintervallladen )); then
-		# echo "$teslatimer < $tintervallladen"
+	# socDebugLog "Car is charging"
+	if (( soctimer < socintervallladen )); then
+		# socDebugLog "Nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
-		getAndWriteSoc
+		socDebugLog "Requesting SoC"
+		echo 0 > $soctimerfile
+		checkToken
+		checkResult=$?
+		if [ "$checkResult" == 0 ]; then
+			# car cannot be asleep while charging
+			getAndWriteSoc
+		fi
 	fi
 else
-	if (( teslatimer < tintervall )); then
-		# echo "$teslatimer < $tintervall"
+	# socDebugLog "Car is not charging"
+	if (( soctimer < socintervall )); then
+		# socDebugLog "Nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
-		getAndWriteSoc
+		socDebugLog "Requesting SoC"
+		echo 0 > $soctimerfile
+		checkToken
+		checkResult=$?
+		if [ "$checkResult" == 0 ]; then
+			# todo: do not always wake car
+			wakeUpCar
+			getAndWriteSoc
+		fi
 	fi
 fi

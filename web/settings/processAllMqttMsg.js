@@ -27,6 +27,7 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setInputValue - is declared in pvconfig.html
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
+    console.log("new message: "+mqttmsg+": "+mqttpayload);
     checkAllSaved(mqttmsg, mqttpayload);
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);
@@ -52,9 +53,9 @@ function processMessages(mqttmsg, mqttpayload) {
     } else if ( element.hasClass('btn-group-toggle') ) {
         originalValues[mqttmsg] = mqttpayload;
         setToggleBtnGroup(elementId, mqttpayload);
-
-
-
+    } else if ( element.is('select') ) {
+        originalValues[mqttmsg] = mqttpayload;
+        setInputValue(elementId, mqttpayload);
     } else {
         console.log(elementId + ' not found');
     }

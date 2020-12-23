@@ -3,7 +3,8 @@
 echo "Start cron nightly @ $(date)"
 #logfile aufräumen
 echo "$(tail -1000 /var/log/openWB.log)" > /var/log/openWB.log
-echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
+# echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay
+mosquitto_pub -t openWB/system/reloadDisplay -m "1"
 echo "reset" > /var/www/html/openWB/ramdisk/mqtt.log
 
 
@@ -14,7 +15,11 @@ monthlyfile="/var/www/html/openWB/web/logging/data/monthly/$(date +%Y%m)"
 
 bezug=$(</var/www/html/openWB/ramdisk/bezugkwh)
 einspeisung=$(</var/www/html/openWB/ramdisk/einspeisungkwh)
-pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+if [[ $pv2wattmodul != "none" ]]; then
+	pv=$(</var/www/html/openWB/ramdisk/pvallwh)
+else
+	pv=$(</var/www/html/openWB/ramdisk/pvkwh)
+fi
 ll1=$(</var/www/html/openWB/ramdisk/llkwh)
 ll2=$(</var/www/html/openWB/ramdisk/llkwhs1)
 ll3=$(</var/www/html/openWB/ramdisk/llkwhs2)
@@ -39,7 +44,7 @@ d6=$(</var/www/html/openWB/ramdisk/device6_wh)
 d7=$(</var/www/html/openWB/ramdisk/device7_wh)
 d8=$(</var/www/html/openWB/ramdisk/device8_wh)
 d9=$(</var/www/html/openWB/ramdisk/device9_wh)
-d10=$(</var/www/html/openWB/ramdisk/device10_wh)
+d10="0"
 
 ll1=$(echo "$ll1 * 1000" | bc)
 ll2=$(echo "$ll2 * 1000" | bc)
@@ -87,3 +92,10 @@ curl -s https://raw.githubusercontent.com/snaptec/openWB/master/web/version > /v
 curl -s https://raw.githubusercontent.com/snaptec/openWB/beta/web/version > /var/www/html/openWB/ramdisk/vbeta
 curl -s https://raw.githubusercontent.com/snaptec/openWB/stable/web/version > /var/www/html/openWB/ramdisk/vstable
 
+randomSleep=$(<ramdisk/randomSleepValue)
+if [[ ! -z $randomSleep ]] && (( `echo "$randomSleep != 0" | bc` == 1 )); then
+    echo $(date +%s): Deleting ramdisk/randomSleepValue to force new randomization
+    rm /var/www/html/openWB/ramdisk/randomSleepValue
+else
+    echo "Not deleting randomSleepValue"
+fi

@@ -167,7 +167,7 @@
 				});
 
 				// load graph
-				$.getScript("monthlychart.js?ver=1.0");
+				$.getScript("monthlychart.js?ver=1.10");
 			})
 		</script>
 

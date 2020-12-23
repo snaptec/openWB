@@ -6,7 +6,7 @@
  * fills data-gaps in timeline with respective values and hides empty data from being displayed
  */
 
-const DATACOLUMNCOUNT = 19;  // count of native data columns received by mqtt (including timestamp-column)
+const DATACOLUMNCOUNT = 28;  // count of native data columns received by mqtt (including timestamp-column)
 const LPCOLUMNS = [4, 5, 6, 12, 13, 14, 15, 16];  // column-indexes of LP-entries in csvData-array
 
 var initialread = 0;
@@ -16,6 +16,16 @@ var graphDataSegments = new Array(12).fill('');  // all data segments
 var csvData = [];  // holds data as 2d-array after calculating values from graphDataStr
 var totalValues = [''];  // holds monthly totals for every data-column from csvData, starting with empty value at index 0 (equals timestamp index at csvData)
 var lpCounterValues = [];  // holds all counter values transformed to kWh
+var d1name = 'Device 1';
+var d2name = 'Device 2';
+var d3name = 'Device 3';
+var d4name = 'Device 4';
+var d5name = 'Device 5';
+var d6name = 'Device 6';
+var d7name = 'Device 7';
+var d8name = 'Device 8';
+var d9name = 'Device 9';
+var d10name = 'Device 10';
 var thevalues = [
 	["openWB/system/MonthGraphData1", "#"],
 	["openWB/system/MonthGraphData2", "#"],
@@ -29,6 +39,16 @@ var thevalues = [
 	["openWB/system/MonthGraphData10", "#"],
 	["openWB/system/MonthGraphData11", "#"],
 	["openWB/system/MonthGraphData12", "#"],
+	["openWB/config/get/SmartHome/Devices/1/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/2/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/3/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/4/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/5/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/6/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/7/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/8/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/9/device_name", "#"],
+	["openWB/config/get/SmartHome/Devices/10/device_name", "#"],
 ]
 
 var url_string = window.location.href
@@ -54,6 +74,10 @@ var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host, 9001, clientuid);
 
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+	if ( mqttmsg.match( /^openWB\/config\/get\/SmartHome\/Devices\/[1-9][0-9]*\/device_name$/i ) ) {
+		var index = mqttmsg.match(/\d+/)[0];
+		window['d'+index+'name']=mqttpayload;
+	}
 	if ( mqttmsg.match( /^openwb\/system\/monthgraphdata[1-9][0-9]*$/i ) ) {
 		// matches to all messages containing "openwb/graph/monthgraphdata#"
 		// where # is an integer > 0
@@ -367,7 +391,7 @@ function loadgraph() {
 		// calculate daily 'Hausverbrauch [kWh]' from row-values
 		// and extend csvData by these values
 		// tägl. Hausverbrauch = Bezug - Einspeisung + PV - alle LP + Speicherentladung - Speicherladung ;
-		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] + csvData[rowIndex][18] - csvData[rowIndex][17];
+		var homeConsumption = csvData[rowIndex][1] - csvData[rowIndex][2] + csvData[rowIndex][3] - csvData[rowIndex][7] - csvData[rowIndex][8] + csvData[rowIndex][9] - csvData[rowIndex][10] + csvData[rowIndex][11] + csvData[rowIndex][18] - csvData[rowIndex][17] - csvData[rowIndex][19] - csvData[rowIndex][20] - csvData[rowIndex][21] - csvData[rowIndex][22] - csvData[rowIndex][23] - csvData[rowIndex][24] - csvData[rowIndex][25] - csvData[rowIndex][26] - csvData[rowIndex][27];
 		if ( homeConsumption >= 0) {
 			csvData[rowIndex].push(homeConsumption);
 		} else {
@@ -569,12 +593,103 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 18)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Hausverbrauch ' + totalValues[19].toFixed(2) + ' kWh',
+			label: d1name + ' Import ' + totalValues[19].toFixed(2) + ' kWh',
+			borderColor:"rgba(200, 150, 200, 0.7)",
+			backgroundColor: "rgba(200, 150, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 19),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 19)  // custom added field, holds counter values or empty string
+		} , {
+			label: d2name + ' Import ' + totalValues[20].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 100, 200, 0.7)",
+			backgroundColor: "rgba(200, 100, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 20),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 20)  // custom added field, holds counter values or empty string
+		} , {
+			label: d3name + ' Import ' + totalValues[21].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 50, 200, 0.7)",
+			backgroundColor: "rgba(200, 50, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 21),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 21)  // custom added field, holds counter values or empty string
+		} , {
+			label: d4name + ' Import ' + totalValues[22].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 0, 200, 0.7)",
+			backgroundColor: "rgba(200, 0, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 22),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 22)  // custom added field, holds counter values or empty string
+		} , {
+			label: d5name + ' Import ' + totalValues[23].toFixed(2) + ' kWh',
+			borderColor: "rgba(150, 200, 200, 0.7)",
+			backgroundColor: "rgba(150, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 23),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 23)  // custom added field, holds counter values or empty string
+		} , {
+			label: d6name + ' Import ' + totalValues[24].toFixed(2) + ' kWh',
+			borderColor: "rgba(100, 200, 200, 0.7)",
+			backgroundColor: "rgba(100, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 24),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 24)  // custom added field, holds counter values or empty string
+		} , {
+			label: d7name + ' Import ' + totalValues[25].toFixed(2) + ' kWh',
+			borderColor: "rgba(50, 200, 200, 0.7)",
+			backgroundColor: "rgba(50, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 25),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 25)  // custom added field, holds counter values or empty string
+		} , {
+			label: d8name + ' Import ' + totalValues[26].toFixed(2) + ' kWh',
+			borderColor: "rgba(0, 200, 200, 0.7)",
+			backgroundColor: "rgba(0, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 26),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 26)  // custom added field, holds counter values or empty string
+		} , {
+			label: d9name + ' Import ' + totalValues[27].toFixed(2) + ' kWh',
+			borderColor: "rgba(200, 200, 200, 0.7)",
+			backgroundColor: "rgba(200, 200, 200, 0.7)",
+			fill: false,
+			borderWidth: 1,
+			data: getCol(csvData, 27),
+			yAxisID: 'y-axis-1',
+			lineTension: 0.2,
+            toolTipData: getCol(lpCounterValues, 27)  // custom added field, holds counter values or empty string
+
+		} , {
+			label: 'Hausverbrauch ' + totalValues[28].toFixed(2) + ' kWh',
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
-			data: getCol(csvData, 19),
+			data: getCol(csvData, 28),
 			yAxisID: 'y-axis-1',
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 0)  // custom added field, always empty string at index 0

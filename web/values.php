@@ -14,6 +14,9 @@ foreach($lines as $line) {
 	if(strpos($line, "maximalstromstaerke=") !== false) {
 		list(, $maximalstromstaerkeold) = explode("=", $line);
 	}
+	if(strpos($line, "isss=") !== false) {
+		list(, $isssold) = explode("=", $line);
+	}
 	if(strpos($line, "sofortll=") !== false) {
 		list(, $sofortllold) = explode("=", $line);
 	}
@@ -137,9 +140,6 @@ foreach($lines as $line) {
 	if(strpos($line, "displaypinaktiv=") !== false) {
 		list(, $displaypinaktivold) = explode("=", $line);
 	}
-	if(strpos($line, "displaytagesgraph=") !== false) {
-		list(, $displaytagesgraphold) = explode("=", $line);
-	}
 	if(strpos($line, "displaypincode=") !== false) {
 		list(, $displaypincodeold) = explode("=", $line);
 	}
@@ -154,6 +154,9 @@ foreach($lines as $line) {
 	}
 	if(strpos($line, "hook3_aktiv=") !== false) {
 		list(, $hook3_aktivold) = explode("=", $line);
+	}
+	if(strpos($line, "ssdisplay=") !== false) {
+		list(, $ssdisplayold) = explode("=", $line);
 	}
 }
 $displaypincodeold = str_replace("\n", '', $displaypincodeold);

@@ -34,7 +34,7 @@ auslademodus(){
 		runs/set-current.sh 0 lp8
 		echo "$date LP8, Lademodus Stop. Stoppe Ladung" >> ramdisk/ladestatus.log
 	fi
-	if (( llkombiniert > 300 )); then
+	if (( ladeleistung > 300 )); then
 		runs/set-current.sh 0 m
 		runs/set-current.sh 0 s1
 		runs/set-current.sh 0 s2

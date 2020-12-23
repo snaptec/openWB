@@ -548,7 +548,11 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(soc) || soc < 0 || soc > 100 ) {
 			soc = '--';
 		}
-		element.text(soc + ' %');
+		element.text(soc);
+		var spinner = parent.find('.reloadLpSoc');
+		if ( spinner.hasClass('fa-spin') ) {
+			spinner.removeClass('fa-spin');
+		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
@@ -588,7 +592,6 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			element.removeClass('text-green').addClass('text-orange');
 		}
 	}
-
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/strchargepointname$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		$('.nameLp').each(function() {  // fill in name for all element of class '.nameLp'
@@ -626,8 +629,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			element.text(' ' + phaseSymbols[phasesInUse]);
 		}
 	}
-    else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
-    	// target current value at charge point
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
+		// target current value at charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
 		var element = parent.find('.targetCurrentLp');  // now get parents respective child element
@@ -637,7 +640,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		} else {
 			element.text(' ' + targetCurrent + ' A');
 		}
-    }
+	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocconfigured$/i ) ) {
 		// soc-module configured for respective charge point
 		var index = getIndex(mqttmsg);  // extract number between two / /
@@ -650,6 +653,22 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		} else {
 			$(elementIsNotConfigured).show();
 			$(elementIsConfigured).hide();
+		}
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolsocmanual$/i ) ) {
+		console.log(mqttmsg+': '+mqttpayload);
+		// manual soc-module configured for respective charge point
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		var parent = $('[data-lp="' + index + '"]');  // get parent row element for charge point
+		var elementIsConfigured = $(parent).find('.socConfiguredLp');  // now get parents respective child element
+		if (mqttpayload == 1) {
+			$(elementIsConfigured).addClass('manualSoC');
+			$(elementIsConfigured).find('.manualSocSymbol').removeClass('hide');
+			$(elementIsConfigured).find('.reloadLpSoc').addClass('hide');
+		} else {
+			$(elementIsConfigured).removeClass('manualSoC');
+			$(elementIsConfigured).find('.manualSocSymbol').addClass('hide');
+			$(elementIsConfigured).find('.reloadLpSoc').removeClass('hide');
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargepointconfigured$/i ) ) {
