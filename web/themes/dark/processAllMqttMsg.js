@@ -348,12 +348,15 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
 			$('#awattarEnabledIcon').show();
 			$('#awattar').show();
+			$('#strompreis').show();
 		} else {
 			$('#awattarEnabledIcon').hide();
 			$('#awattar').hide();
+			$('#strompreis').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
@@ -374,7 +377,7 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		$('#ActualPriceForCharging').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}));
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' Cent/kWh');
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode
