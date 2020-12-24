@@ -95,7 +95,7 @@
 		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
-		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
+		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=23122020">');
 	</script>
 </head>
 
@@ -168,7 +168,11 @@
 				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
 			</div>
 		</div>
-
+		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-rose">
+				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
+			</div>
+		</div>
 		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
 			<div id="verbraucher1" class="col-sm hide">
 				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
@@ -633,6 +637,21 @@
 		</form>
 
 		<form id="sofortladenEinstellungen" class="hide">
+			<div class="hide" id="awattar">
+				<hr class="border-secondary">
+				<div class="row justify-content-center my-2">
+					<div id="awattarcanvasdiv" class="col text-center">
+						<canvas id="awattarcanvas"></canvas>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+					</div>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+				</div>
+			</div>  <!--/ awattar -->
 
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
@@ -641,7 +660,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
-				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -651,7 +670,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
-				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -661,7 +680,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
-				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -670,7 +689,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
-				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -679,7 +698,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
-				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -689,7 +708,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
-				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -699,7 +718,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
-				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -709,37 +728,13 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
-				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-			<div class="hide" id="awattar">
-				<hr class="border-secondary">
-				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
-				</div>
-				<div class="row regularTextSize">
-					<div class="col text-center">
-						aktueller Awattar-Preis: <span id="ActualPriceForCharging"></span> Cent/kWh
-					</div>
-				</div>
-				<div class="row justify-content-center my-2">
-					<div id="awattarcanvasdiv" class="col text-center">
-						<canvas id="awattarcanvas"></canvas>
-					</div>
-				</div>
-				<div class="form-row form-group mb-1 vaRow regularTextSize">
-					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
-					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="25" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
-					</div>
-					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
-				</div>
-			</div>  <!--/ awattar -->
 
 			<div class="chargeLimitation" data-lp="1">
 				<hr class="border-secondary">
@@ -1295,13 +1290,13 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20201218',
+				'themes/dark/processAllMqttMsg.js?ver=20201224',
 				// respective Chart.js definition live
 				'themes/dark/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
 				'themes/dark/awattarchart.js?ver=20201223',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20201218',
+				'themes/dark/setupMqttServices.js?ver=20201224',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
