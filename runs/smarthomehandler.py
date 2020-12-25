@@ -20,6 +20,7 @@ numberOfSupportedDevices=9 # limit number of smarthome devices
 DeviceValues = { }
 DeviceTempValues = { }
 DeviceCounters = { }
+DeviceConfigured = []
 
 for i in range(1, (numberOfSupportedDevices+1)):
     DeviceTempValues.update({'oldw'+str(i) : '2'})
@@ -29,7 +30,8 @@ for i in range(1, (numberOfSupportedDevices+1)):
     DeviceTempValues.update({'oldrelais'+str(i) : '2'})
     DeviceValues.update({ str(i)+"runningtime" : int(0)})
     DeviceValues.update( {str(i)+"WHImported_tmp" : int(0)})
-
+    DeviceConfigured.append("0")
+    
 global numberOfDevices
 
 # support old smarttypes and new smarttypes 
@@ -352,11 +354,11 @@ def on_message(client, userdata, msg):
 
 # Auslesen des Smarthome Devices (Watt und/oder Temperatur)
 def getdevicevalues():
-    # TODO: iterate from over num devices
-    DeviceList = [config.get('smarthomedevices', 'device_configured_1'), config.get('smarthomedevices', 'device_configured_2'), config.get('smarthomedevices', 'device_configured_3'), config.get('smarthomedevices', 'device_configured_4'), config.get('smarthomedevices', 'device_configured_5'), config.get('smarthomedevices', 'device_configured_6'), config.get('smarthomedevices', 'device_configured_7'), config.get('smarthomedevices', 'device_configured_8'), config.get('smarthomedevices', 'device_configured_9')]
+    for i in range(1, (numberOfSupportedDevices+1)):
+        DeviceConfigured[i-1] = config.get('smarthomedevices', 'device_configured_'+str(i)) # list starts at 0
     numberOfDevices = 0
     totalwatt = 0
-    for n in DeviceList:
+    for n in DeviceConfigured:
         numberOfDevices += 1
         # prepare 
         abschalt = 0
@@ -508,6 +510,9 @@ def turndevicerelais(nummer, zustand):
            pyname = pyname0 +"/on.py"
            if os.path.isfile(pyname):
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " angeschaltet")
+              f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
+              f.write(str(zustand))
+              f.close()
               DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
               proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_einschalturl])
               proc.communicate()
@@ -522,6 +527,9 @@ def turndevicerelais(nummer, zustand):
               proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_ausschalturl])
               proc.communicate()
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " ausgeschaltet")
+              f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
+              f.write(str(zustand))
+              f.close()
            else:
               logDebug("0", "Device " + str(switchtyp) + str(nummer) + str(devicename) + " File not found: " + str(pyname)) 
        except Exception as e:
