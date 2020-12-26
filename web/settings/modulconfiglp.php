@@ -675,6 +675,7 @@
 									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
+									<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
 									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
@@ -1257,6 +1258,40 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeq" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp1" id="soc_eq_client_id_lp1" value="<?php echo $soc_eq_client_id_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp1" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp1" id="soc_eq_client_secret_lp1" value="<?php echo $soc_eq_client_secret_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp1" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp1" id="soc_eq_vin_lp1" value="<?php echo $soc_eq_vin_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp1" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp1" id="soc_eq_cb_lp1" value="<?php echo $soc_eq_cb_lp1old ?>">
+										</div>
+									</div>
+                  <div class="form-row mb-1">
+										<span class="form-text small">
+                      Wichtig: erst Speichern und danach <?php echo gethostname(); ?>
+                      <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
+										</span>
+                  </div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -1406,6 +1441,7 @@
 							hideSection('socmtesla');
 							hideSection('soccarnet');
 							hideSection('socmzerong');
+							hideSection('socmeq');
 							hideSection('socmaudi');
 							hideSection('socmid');
 							hideSection('socmqtt');
@@ -1452,6 +1488,9 @@
 							}
 							if($('#socmodul').val() == 'soc_zerong') {
 								showSection('socmzerong');
+							}
+							if($('#socmodul').val() == 'soc_eq') {
+								showSection('socmeq');
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
 								showSection('socleaf');
@@ -1922,6 +1961,7 @@
 									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+									<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
@@ -2404,6 +2444,41 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeqlp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp2" id="soc_eq_client_id_lp2" value="<?php echo $soc_eq_client_id_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp2" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp2" id="soc_eq_client_secret_lp2" value="<?php echo $soc_eq_client_secret_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp2" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp2" id="soc_eq_vin_lp2" value="<?php echo $soc_eq_vin_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp2" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp2" id="soc_eq_cb_lp2" value="<?php echo $soc_eq_cb_lp2old ?>">
+										</div>
+									</div>
+                  <div class="form-row mb-1">
+										<span class="form-text small">
+                      Wichtig: erst Speichern und danach 
+                      <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
+										</span>
+                  </div>
+								</div>
+
+							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2523,6 +2598,7 @@
 							hideSection('socevnotifylp2');
 							hideSection('soczoelp2');
 							hideSection('socmteslalp2');
+							hideSection('socmeqlp2');
 							hideSection('socmyrenaultlp2');
 							hideSection('soccarnetlp2');
 							hideSection('socmzeronglp2');
@@ -2578,6 +2654,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_zoelp2') {
 								showSection('soczoelp2');
+							}
+							if($('#socmodul1').val() == 'soc_eqlp2') {
+								showSection('socmeqlp2');
 							}
 							if($('#socmodul1').val() == 'soc_carnetlp2') {
 								showSection('soccarnetlp2');

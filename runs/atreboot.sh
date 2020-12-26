@@ -2817,6 +2817,17 @@ then
 	echo "myopel_clientidlp2=ID" >> /var/www/html/openWB/openwb.conf
 	echo "myopel_clientsecretlp2=Secret" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "soc_eq_client_id_lp1=" /var/www/html/openWB/openwb.conf
+then
+	echo "soc_eq_client_id_lp1=ID" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_client_secret_lp1=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_vin_lp1=VIN" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_cb_lp1=http://openWB/openWB/modules/soc_eq/cb1.php" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_client_id_lp2=ID" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_client_secret_lp2=Secret" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_vin_lp2=VIN" >> /var/www/html/openWB/openwb.conf
+	echo "soc_eq_cb_lp2=http://openWB/openWB/modules/soc_eq/cb2.php" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "soc2vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soc2vin=" >> /var/www/html/openWB/openwb.conf
