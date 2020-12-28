@@ -1,23 +1,23 @@
 #!/usr/bin/python3
 
-import os, requests, json, time
+import os, requests, json, time, sys
 
-ramdir = '/var/www/html/openWB/ramdisk/'
-moddir = '/var/www/html/openWB/modules/soc_eq/'
+ramdiskdir = '/var/www/html/openWB/ramdisk/'
+moduledir = '/var/www/html/openWB/modules/soc_eq/'
 
-client_id     = os.environ.get('soc_eq_client_id', 'id')
-client_secret = os.environ.get('soc_eq_client_secret', 'ecret')
-VIN           = os.environ.get('soc_eq_vin', 'VIN')
-soc_file      = os.environ.get('soc_file', ramdir + 'soc')
-ChargePoint   = os.environ.get('CHARGEPOINT', '1')
+client_id     = str(sys.argv[1])
+client_secret = str(sys.argv[2])
+VIN           = str(sys.argv[3])
+soc_file      = str(sys.argv[4])
+ChargePoint   = str(sys.argv[5])
 
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
-soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/soc"
+#soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/soc"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 #range_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/rangeelectric"
 print("SOC URL: " + soc_url)
 #Get Access token expiry from file
-fd = open(moddir + 'expires_lp' + str(ChargePoint),'r')
+fd = open(moduledir + 'expires_lp' + str(ChargePoint),'r')
 expires_in = fd.read().rstrip()
 fd.close()
 
@@ -25,7 +25,7 @@ fd.close()
 if int(expires_in) < int(time.time()):
   #Access Token is exired
   print("Acc Token Expired")
-  fd = open(moddir + 'ref_tok_lp' + str(ChargePoint),'r')
+  fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'r')
   refresh_token = fd.read().rstrip()
   fd.close()
   
@@ -35,7 +35,7 @@ if int(expires_in) < int(time.time()):
   print("Refresh Token Call:" + str(ref.status_code))
   #write HTTP reponse code to file
   try:
-    fd = open(ramdir + 'soc_eq_lastresp','w')
+    fd = open(ramdiskdir + 'soc_eq_lastresp','w')
     fd.write(str(ref.status_code))
     fd.close()
   except:
@@ -51,15 +51,15 @@ if int(expires_in) < int(time.time()):
     expires_in = tok['expires_in'] - 60 + int(time.time())
 
 	#write new tokens
-    fd = open(moddir + 'acc_tok_lp' + str(ChargePoint),'w')
+    fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'w')
     fd.write(str(access_token))
     fd.close()
 
-    fd = open(moddir + 'ref_tok_lp' + str(ChargePoint),'w')
+    fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'w')
     fd.write(str(refresh_token))
     fd.close()
 
-    fd = open(moddir + 'expires_lp' + str(ChargePoint),'w')
+    fd = open(moduledir + 'expires_lp' + str(ChargePoint),'w')
     fd.write(str(expires_in))
     fd.close()
   else:
@@ -67,7 +67,7 @@ if int(expires_in) < int(time.time()):
     exit(1)
 
 #get access token from file	
-fd = open(moddir + 'acc_tok_lp' + str(ChargePoint),'r')
+fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'r')
 access_token = fd.read().rstrip()
 fd.close()
 
@@ -79,7 +79,7 @@ print("SOC Response: " + req_soc.text)
 
 #write HTTP reponse code to file
 try:
-  fd = open(ramdir + 'soc_eq_lastresp','w')
+  fd = open(ramdiskdir + 'soc_eq_lastresp','w')
   fd.write(str(req_soc.status_code))
   fd.close()
 except:

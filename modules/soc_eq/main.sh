@@ -3,7 +3,13 @@
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
+
 
 case $CHARGEPOINT in
   2)
@@ -28,6 +34,12 @@ case $CHARGEPOINT in
     ;;
 esac
 
+socDebugLog(){
+	if (( socDebug > 0 )); then
+		timestamp=`date --rfc-3339=seconds`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
 
 soctimer=$(<$soctimerfile)
 ladeleistung=$(<$ladeleistungfile)
@@ -37,13 +49,18 @@ if (( ladeleistung > 500 ));then
 else
   tmpintervall=$(( 60 * 6 ))
 fi
+  #tmpintervall=5
 
 if (( soctimer < tmpintervall )); then
+  socDebugLog "Nothing to do yet. Incrementing timer. ${soctimer} < ${tmpintervall}"
   soctimer=$((soctimer+1))
   echo $soctimer > $soctimerfile
 else
-  export soc_eq_client_id soc_eq_client_secret soc_eq_vin soc_file CHARGEPOINT
-  /var/www/html/openWB/modules/soc_eq/soc.py
+  socDebugLog "Requesting SoC"
+  #export soc_eq_client_id soc_eq_client_secret soc_eq_vin soc_file CHARGEPOINT
+  #$MODULEDIR/soc.py 
+  $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE &
+  
   echo 0 > $soctimerfile
 fi
 
