@@ -283,27 +283,28 @@ def loadregelvars():
     global wattbezug
     global numberOfSupportedDevices
     try:
-        with open('ramdisk/wattbezug', 'r') as value:
-            wattbezug = int(float(value.read())) * -1
         with open('ramdisk/speichervorhanden', 'r') as value:
             speichervorhanden = int(value.read())
         if ( speichervorhanden == 1):
             with open('ramdisk/speicherleistung', 'r') as value:
                 speicherleistung = int(float(value.read()))
-                uberschuss = wattbezug + speicherleistung 
             with open('ramdisk/speichersoc', 'r') as value:
                 speichersoc = int(float(value.read()))
         else:
             speicherleistung = 0
             speichersoc = 100
-            uberschuss = wattbezug
     except Exception as e:
-        logDebug("2", "Fehler beim Auslesen der Ramdisk: " + str(e))
-        wattbezug = 0
-        uberschuss = 0
+        logDebug("2", "Fehler beim Auslesen der Ramdisk (speichervorhanden,speicherleistung,speichersoc): " + str(e))
         speichervorhanden = 0
         speicherleistung = 0
-        speichersoc = 0
+        speichersoc = 100
+    try:
+        with open('ramdisk/wattbezug', 'r') as value:
+            wattbezug = int(float(value.read())) * -1
+    except Exception as e:
+        logDebug("2", "Fehler beim Auslesen der Ramdisk (wattbezug): " + str(e))
+        wattbezug = 0
+    uberschuss = wattbezug + speicherleistung 
     try:
         with open('ramdisk/smarthomehandlerloglevel', 'r') as value:
             loglevel = int(value.read())
