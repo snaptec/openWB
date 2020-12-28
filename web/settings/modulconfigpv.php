@@ -656,7 +656,7 @@
 								<div class="col">
 									<input class="form-control" type="number" min="1" step="1" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>">
 									<span class="form-text small">
-										Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+										Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|less -N"<br>
 										Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.
 									</span>
 								</div>
