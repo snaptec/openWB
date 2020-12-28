@@ -351,27 +351,26 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
 			$('#awattarEnabledIcon').show();
-			$('#awattar').show();
+			$('#priceBasedCharging').show();
 			$('#strompreis').show();
 		} else {
 			$('#awattarEnabledIcon').hide();
-			$('#awattar').hide();
+			$('#priceBasedCharging').hide();
 			$('#strompreis').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
 		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
+		// loadawattargraph will show awattardiv is awattaraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
-		awattartime = getCol(csvaData, 0);
-		graphawattarprice = getCol(csvaData, 1);
-
-		loadawattargraph();
+		electricityPriceTimeline = getCol(csvaData, 0);
+		electricityPriceChartline = getCol(csvaData, 1);
+		loadElectricityPriceChart();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
 		setInputValue('MaxPriceForCharging', mqttpayload);

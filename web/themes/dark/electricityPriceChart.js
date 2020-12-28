@@ -1,22 +1,22 @@
-function loadawattargraph() {
-	var lineAwattarData = {
-		labels: awattartime,
+function loadElectricityPriceChart() {
+	var electricityPriceChartData = {
+		labels: electricityPriceTimeline,
 		datasets: [{
 			label: 'Strompreis Cent/kWh',
 			borderColor: "rgba(255, 155, 155, 0.9)",
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
 			borderWidth: 2,
 			fill: false,
-			data: graphawattarprice,
+			data: electricityPriceChartline,
 			yAxisID: 'y-axis-1',
 			steppedLine: true
 		} ]
 	}
 
-	var ctxa = document.getElementById('awattarcanvas').getContext('2d');
+	var ctxa = $('#electricityPriceChartCanvas')[0].getContext('2d');
 
 	window.AwattarLine = new Chart.Line(ctxa, {
-		data: lineAwattarData,
+		data: electricityPriceChartData,
 		options: {
 			tooltips: {
 				enabled: true

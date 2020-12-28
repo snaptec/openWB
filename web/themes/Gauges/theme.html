@@ -45,8 +45,35 @@
 	<!-- Normalize -->
 	<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
 	<!-- Font Awesome, all styles -->
-	<link href="fonts/font-awesome-5.8.2/css/all.css" rel="stylesheet">
-
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
+	<!-- local css due to async loading of theme css -->
+	<style type="text/css">
+		#preloader {
+			background-color:white;
+			position:fixed;
+			top:0px;
+			left:0px;
+			width:100%;
+			height:100%;
+			z-index:999999;
+		}
+		#preloader-inner {
+			margin-top: 150px;
+			text-align: center;
+		}
+		#preloader-image {
+			max-width: 300px;
+		}
+		#preloader-info {
+			color:grey;
+		}
+		#thegraph > div {
+			height: 350px;
+		}
+		#electricityPriceChartCanvasDiv {
+			height: 150px;
+		}
+	</style>
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
@@ -71,15 +98,6 @@
 			}
 			return '';
 		}
-		function setCookie(name, value, days) {
-			var expires = '';
-			if ( days ) {
-				var date = new Date();
-				date.setDate(date.getDate() + days);
-				expires = '; expires=' + date.toUTCString();
-			}
-			document.cookie = name + '=' + (value || '')  + expires;
-		}
 		var themeCookie = getCookie('openWBTheme');
 		// include special Theme style
 		$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/style.css?v=20052020">');
@@ -89,14 +107,14 @@
 <body>
 	<!-- Preloader with Progress Bar -->
 	<!-- style instead of css due to async loading of theme css -->
-	<div id="preloader" style="background-color:white; position:fixed; top:0px; left:0px; width:100%; height:100%; z-index:999999;">
-		<div style="margin-top: 150px; text-align: center;">
-			<div class="row" style="color:black;">
+	<div id="preloader">
+		<div id="preloader-inner">
+			<div class="row">
 				<div class="mx-auto d-block justify-content-center">
-					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
+					<img id="preloader-image" src="img/favicons/preloader-image.png" alt="openWB">
 				</div>
 			</div>
-			<div class="row justify-content-center mt-2" style="color:grey;">
+			<div id="preloader-info" class="row justify-content-center mt-2">
 				<div class="col-10 col-sm-6">
 					Bitte warten, während die Seite aufgebaut wird.
 				</div>
@@ -164,6 +182,19 @@
 				Ladeleistung: <span id="powerAllLp">lade Daten</span>
 			</div>
 		</div>
+		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-rose">
+				<span class="smallTextSize">aktueller Strompreis: <span id="aktuellerStrompreis"> lade Daten</span></span>
+			</div>
+		</div>
+		<div id="verbraucher" class="row justify-content-center regularTextSize font-weight-bold text-center openwb-devices hide">
+			<div id="verbraucher1" class="col-sm hide">
+				<span class="smallTextSize"><span id="verbraucher1name">Verbraucher 1</span>: <span id="verbraucher1leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher1dailyyield"></span>
+			</div>
+			<div id="verbraucher2" class="col-sm hide">
+				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
+			</div>
+		</div>
 
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
@@ -205,9 +236,9 @@
 		</div>
 
 		<!-- interactive chart.js -->
-		<!-- will be refreshed using MQTT (in live.js)-->
+		<!-- will be refreshed using MQTT (in livechart.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
-			<div class="col-sm-12 text-center smallTextSize" style="height: 350px;">
+			<div class="col-sm-12 text-center smallTextSize">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
 				</div>
@@ -462,7 +493,8 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
+
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -478,7 +510,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -494,7 +526,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -510,7 +542,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -526,7 +558,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -542,7 +574,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -558,7 +590,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -574,7 +606,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -590,7 +622,7 @@
 					<span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
 				</div>
 				<div class="col-3 px-0">
-					<span class="actualPowerDevice">lade Daten</span>
+					<span class="actualPowerDevice">lade Daten</span><span class="actualDailyYieldDevice"></span>
 				</div>
 				<div class="col-3 px-0">
 					<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
@@ -602,7 +634,39 @@
 		</div>  <!-- and smarthome -->
 
 		<!-- depending on charge mode show options -->
+		<form id="minundpvladenEinstellungen" class="hide">
+			<hr class="border-secondary">
+			<div class="row justify-content-center">
+				<h3 class="font-weight-bold text-center text-lightgrey">Minimal Stromstärke</h3>
+			</div>
+
+
+			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
+				<label for="minCurrentMinPv" class="col-3 col-form-label text-right"></label>
+				<div class="col">
+
+					<input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
+				</div>
+				<label for="minCurrentMinPv" class="col-3 col-form-label valueLabel" suffix="A"></label>
+			</div>
+		</form>
+
 		<form id="sofortladenEinstellungen" class="hide">
+			<div class="hide" id="priceBasedCharging">
+				<hr class="border-secondary">
+				<div class="row justify-content-center my-2">
+					<div id="electricityPriceChartCanvasDiv" class="col text-center">
+						<canvas id="electricityPriceChartCanvas"></canvas>
+					</div>
+				</div>
+				<div class="form-row form-group mb-1 vaRow regularTextSize">
+					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
+					<div class="col">
+						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="40" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
+					</div>
+					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
+				</div>
+			</div>  <!--/ priceBasedCharging -->
 
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
@@ -611,7 +675,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="1">
-				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/1/current" class="col-3 col-form-label text-right"><span class="nameLp">LP1</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/1/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -621,7 +685,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="2">
-				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/2/current" class="col-3 col-form-label text-right"><span class="nameLp">LP2</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/2/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -631,7 +695,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="3">
-				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/3/current" class="col-3 col-form-label text-right"><span class="nameLp">LP3</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/3/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -640,7 +704,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="4">
-				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/4/current" class="col-3 col-form-label text-right"><span class="nameLp">LP4</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/4/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -649,7 +713,7 @@
 			</div>
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="5">
-				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/5/current" class="col-3 col-form-label text-right"><span class="nameLp">LP5</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/5/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -659,7 +723,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="6">
-				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/6/current" class="col-3 col-form-label text-right"><span class="nameLp">LP6</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/6/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -669,7 +733,7 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="7">
-				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/7/current" class="col-3 col-form-label text-right"><span class="nameLp">LP7</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/7/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
@@ -679,37 +743,13 @@
 
 
 			<div class="form-row form-group mb-1 vaRow regularTextSize" data-lp="8">
-				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp"></span>:</label>
+				<label for="lp/8/current" class="col-3 col-form-label text-right"><span class="nameLp">LP8</span>:</label>
 				<div class="col">
 
 					<input type="range" class="form-control-range rangeInput" id="lp/8/current" min="6" max="32" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/sofort/">
 				</div>
 				<label for="lp/8/current" class="col-3 col-form-label valueLabel" suffix="A"></label>
 			</div>
-
-			<div class="hide" id="awattar">
-				<hr class="border-secondary">
-				<div class="row justify-content-center">
-					<h3 class="font-weight-bold text-lightgrey">Awattar</h3>
-				</div>
-				<div class="row regularTextSize">
-					<div class="col text-center">
-						aktueller Awattar-Preis: <span id="ActualPriceForCharging"></span> Cent/kWh
-					</div>
-				</div>
-				<div class="row justify-content-center my-2">
-					<div class="col text-center" style="height: 150px;">
-						<canvas id="awattarcanvas"></canvas>
-					</div>
-				</div>
-				<div class="form-row form-group mb-1 vaRow regularTextSize">
-					<label for="MaxPriceForCharging" class="col-3 col-form-label text-right">max. Preis:</label>
-					<div class="col">
-						<input type="range" class="form-control-range rangeInput" id="MaxPriceForCharging" min="-25" max="25" step="0.1" value="0" data-topicprefix="openWB/global/awattar/">
-					</div>
-					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
-				</div>
-			</div>  <!--/ awattar -->
 
 			<div class="chargeLimitation" data-lp="1">
 				<hr class="border-secondary">
@@ -1633,15 +1673,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/Gauges/helperFunctions.js?ver=20201218',
+				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20201218',
+				'themes/Gauges/processAllMqttMsg.js?ver=20201228',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
-				'themes/Gauges/awattarchart.js?ver=20201218',
+				'themes/dark/electricityPriceChart.js?ver=20201228',
 				// functions performing mqtt and start mqtt-service
-				'themes/Gauges/setupMqttServices.js?ver=20201218'
+				'themes/Gauges/setupMqttServices.js?ver=20201228'
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
