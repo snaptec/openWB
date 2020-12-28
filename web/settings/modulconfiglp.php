@@ -1286,9 +1286,7 @@
 									</div>
                   <div class="form-row mb-1">
 										<span class="form-text small">
-										Wichtig: erst Speichern und danach 
-										<?php echo $_SERVER['HTTP_HOST'] ?> <?php echo $_SERVER["SERVER_PROTOCOL"] ?> <?php echo $_SERVER[SERVER_NAME] ?> <?php echo $_SERVER["SCRIPT_NAME"] ?>
-                      <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
+										Wichtig: erst Speichern und danach <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
 										</span>
                   </div>
 								</div>

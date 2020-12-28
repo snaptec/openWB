@@ -13,8 +13,9 @@ ChargePoint   = os.environ.get('CHARGEPOINT', '1')
 
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/soc"
-range_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/rangeelectric"
-
+soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
+#range_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/rangeelectric"
+print("SOC URL: " + soc_url)
 #Get Access token expiry from file
 fd = open(moddir + 'expires_lp' + str(ChargePoint),'r')
 expires_in = fd.read().rstrip()
@@ -23,6 +24,7 @@ fd.close()
 
 if int(expires_in) < int(time.time()):
   #Access Token is exired
+  print("Acc Token Expired")
   fd = open(moddir + 'ref_tok_lp' + str(ChargePoint),'r')
   refresh_token = fd.read().rstrip()
   fd.close()
@@ -30,7 +32,7 @@ if int(expires_in) < int(time.time()):
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
   ref = requests.post(tok_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret))
-
+  print("Refresh Token Call:" + str(ref.status_code))
   #write HTTP reponse code to file
   try:
     fd = open(ramdir + 'soc_eq_lastresp','w')
@@ -61,6 +63,7 @@ if int(expires_in) < int(time.time()):
     fd.write(str(expires_in))
     fd.close()
   else:
+    print("Error getting Acc after Refresh: " + str(ref.status_code))
     exit(1)
 
 #get access token from file	
@@ -71,6 +74,8 @@ fd.close()
 #call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
 req_soc = requests.get(soc_url, headers=header, verify=True)
+print("SOC Request: " + str(req_soc.status_code))
+print("SOC Response: " + req_soc.text)
 
 #write HTTP reponse code to file
 try:
@@ -84,7 +89,16 @@ if req_soc.status_code == 200:
   #valid Response
   res = json.loads(req_soc.text)
   #Extract SoC value and write to file
-  soc = res['soc']['value']
+  #for entry in res:
+    #print(entry)
+    #if entry == 'soc':
+     #soc = entry['soc']['value']
+    #elif entry == 'rangeelectric':
+     #range = entry['rangeelectric']['value']
+
+  soc = res[0]['soc']['value']
+  range = res[1]['rangeelectric']['value']
+  print("SOC: " + soc + " RANGE: " + range)
   fd = open(soc_file,'w')
   fd.write(str(soc))
   fd.close()
