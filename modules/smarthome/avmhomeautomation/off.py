@@ -4,12 +4,12 @@ import os
 import time
 import json
 import urllib.request
-import login
+import avmcommon
 import credentials
 
 #from urllib.parse import urlparse
 named_tuple = time.localtime() # getstruct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S avmhomeautomation off.py", named_tuple)
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S avmhomeautomation on.py", named_tuple)
 devicenumber=str(sys.argv[1])
 switchname=str(sys.argv[2])
 # needs to be configurable
@@ -49,7 +49,7 @@ if username == '' or password == '':
     sys.exit()
 
 baseurl='http://fritz.box'
-sessionid = login.getAVMSessionID(
+sessionid = avmcommon.getAVMSessionID(
         baseurl, 
         previoussessionid=sessionid,
         username=username,
@@ -62,16 +62,9 @@ try:
 except IOError:
     pass
 
-baseurl += "/webservices/homeautoswitch.lua?sid="+sessionid+"&switchcmd="
 
-getswitchlisturl=baseurl+"getswitchlist"
-getswitchlistResponseBody = str(urllib.request.urlopen(getswitchlisturl).read(), "utf-8").strip()
-switchIDs = getswitchlistResponseBody.split(",")
-for id in switchIDs:
-    getswitchnameurl=baseurl+"getswitchname&ain=" + id
-    foundswitchname = str(urllib.request.urlopen(getswitchnameurl).read(), "utf-8").strip()
-    if foundswitchname == switchname:
-        setswitchoffurl=baseurl+"setswitchoff&ain=" + id
-        urllib.request.urlopen(setswitchoffurl)
-        sys.exit()
+switch = avmcommon.getDevicesDict(baseurl, sessionid)[switchname]
+ain = urllib.parse.quote(switch["ain"])
+setswitchoffurl=baseurl+"/webservices/homeautoswitch.lua?sid="+sessionid+"&switchcmd=setswitchoff&ain="+ain
+urllib.request.urlopen(setswitchoffurl)
 

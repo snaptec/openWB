@@ -4,7 +4,7 @@ import os
 import time
 import json
 import urllib.request
-import login
+import avmcommon
 import credentials
 #from urllib.parse import urlparse
 named_tuple = time.localtime() # getstruct_time
@@ -48,32 +48,21 @@ if username == '' or password == '':
     sys.exit()
 
 baseurl='http://fritz.box'
-sessionid = login.getAVMSessionID(
+sessionid = avmcommon.getAVMSessionID(
         baseurl, 
         previoussessionid=sessionid,
         username=username,
         password=password)
 
-baseurl += "/webservices/homeautoswitch.lua?sid="+sessionid+"&switchcmd="
 
-getswitchlisturl=baseurl+"getswitchlist"
-getswitchlistResponseBody = str(urllib.request.urlopen(getswitchlisturl).read(), "utf-8").strip()
-switchIDs = getswitchlistResponseBody.split(",")
-for id in switchIDs:
-    getswitchnameurl=baseurl+"getswitchname&ain=" + id
-    foundswitchname = str(urllib.request.urlopen(getswitchnameurl).read(), "utf-8").strip()
-    if foundswitchname == switchname:
-        getswitchpower=baseurl+"getswitchpower&ain=" + id
-        getswitchpowerResponseBody = str(urllib.request.urlopen(getswitchpower).read(), "utf-8").strip()
-        aktpower = float(getswitchpowerResponseBody)/1000.0
-        print (aktpower)
-        if aktpower > 50:
-            relais = 1
-        else:
-            relais = 0
-        powerc = 0
-        answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
-        f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
-        json.dump(answer,f1)
-        f1.close()
-        sys.exit()
+switch = avmcommon.getDevicesDict(baseurl, sessionid)[switchname]
+aktpower = switch['power']
+if aktpower > 50:
+    relais = 1
+else:
+    relais = 0
+powerc = 0
+answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
+f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(devicenumber), 'w')
+json.dump(answer,f1)
+f1.close()

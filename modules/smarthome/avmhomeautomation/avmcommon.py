@@ -35,3 +35,21 @@ def getAVMSessionID(
     sessioninfo = ET.fromstring(loginResponseBody)
     sessionid = sessioninfo.find('SID').text
     return sessionid
+
+def getDevicesDict(baseurl, sessionid):
+    getdevicelistinfosurl = baseurl + "/webservices/homeautoswitch.lua?sid="+sessionid+"&switchcmd=getdevicelistinfos"
+    getdevicelistinfosResponseBody = str(urllib.request.urlopen(getdevicelistinfosurl).read(), "utf-8").strip()
+    devicelistinfos = ET.fromstring(getdevicelistinfosResponseBody)
+    deviceNames = {}
+    for device in devicelistinfos:
+        name = device.find("name").text
+        ain = device.attrib["identifier"]
+        powermeter = device.find("powermeter")
+        power = float(powermeter.find("power").text)/1000.0
+        voltage = float(powermeter.find("voltage").text)/1000.0
+        energy = powermeter.find("energy").text
+        deviceNames[name] = {'ain': ain, 'power': power, 'voltage': voltage, 'energy': energy}
+        temperatureBlock = device.find("temperature")
+        if temperatureBlock != None:
+            deviceNames['temperature'] = float(temperatureBlock.find("celsius").text)/10.0 
+    return deviceNames
