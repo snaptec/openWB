@@ -4,7 +4,7 @@
  * @author Kevin Wieland
  * @author Michael Ortenstein
  */
-
+var graphrefreshcounter = 0;
 function getCol(matrix, col){
 	var column = [];
 	for(var i=0; i<matrix.length; i++){
@@ -82,6 +82,9 @@ function processPvConfigMessages(mqttmsg, mqttpayload) {
 				$('#70ModeBtn').show();
 			break;
 		}
+	}
+	else if ( mqttmsg == 'openWB/config/get/pv/minCurrentMinPv' ) {
+		setInputValue('minCurrentMinPv', mqttpayload);
 	}
 }
 
@@ -230,6 +233,29 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( initialread > 0) {
 			updateGraph(mqttpayload);
 		}
+		if (graphrefreshcounter > 60) {
+			// reload graph completety
+			initialread = 0;
+			all1 = 0;
+			all2 = 0;
+			all3 = 0;
+			all4 = 0;
+			all5 = 0;
+			all6 = 0;
+			all7 = 0;
+			all8 = 0;
+			all9 = 0;
+			all10 = 0;
+			all11 = 0;
+			all12 = 0;
+			all13 = 0;
+			all14 = 0;
+			all15 = 0;
+			all16 = 0;
+			graphrefreshcounter = 0;
+			subscribeMqttGraphSegments();
+		}
+		graphrefreshcounter += 1;
 	}
 }  // end processGraphMessages
 
@@ -250,11 +276,24 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 		} else if ( anzeigeWert > 0 ) {
 			anzeigeText = 'Einspeisung';
 		}
-		// Text und Farbe des Labels anpassen je nach Einspeisung/Bezug
-		// Neuzeichnung erfolgt bei Update der Werte
-		// updateGaugeBottomText(gaugeEVU, anzeigeText, true, true);
-		// Gauge mit Rückgabewert und Text erneuern, symmetrische Gauge Min-Max, kein AutoRescale
-		updateGaugeValue(gaugeEVU, anzeigeWert, anzeigeText);
+		if ( powerEvu > 999 ) {
+			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#bezug').text(prefix + powerEvu + unit);
+	 }
+	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
+		var evuiDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(evuiDailyYield) ) {
+			evuiDailyYield = 0;
+		}
+		if ( evuiDailyYield >= 0 ) {
+			var evuiDailyYieldStr = ' (' + evuiDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh I)';
+			$('#evuidailyyield').text(evuiDailyYieldStr);
+		} else {
+			$('#evuidailyyield').text("");
+		}
+
 	}
 }
 
@@ -294,33 +333,35 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/boolAwattarEnabled' ) {
+		// sets icon, graph and price-info-field visible/invisible
 		if ( mqttpayload == '1' ) {
 			$('#awattarEnabledIcon').show();
-			$('#awattar').show();
+			$('#priceBasedCharging').show();
+			$('#strompreis').show();
 		} else {
 			$('#awattarEnabledIcon').hide();
-			$('#awattar').hide();
+			$('#priceBasedCharging').hide();
+			$('#strompreis').hide();
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
 		// read awattar values and trigger graph creation
-		// loadawattargraph will show awattardiv is awataraktiv=1 in openwb.conf
+		// loadawattargraph will show awattardiv is awattaraktiv=1 in openwb.conf
 		// graph will be redrawn after 5 minutes (new data pushed from cron5min.sh)
 		var csvaData = [];
 		var rawacsv = mqttpayload.split(/\r?\n|\r/);
 		for (var i = 0; i < rawacsv.length; i++) {
 			csvaData.push(rawacsv[i].split(','));
 		}
-		awattartime = getCol(csvaData, 0);
-		graphawattarprice = getCol(csvaData, 1);
-
-		loadawattargraph();
+		electricityPriceTimeline = getCol(csvaData, 0);
+		electricityPriceChartline = getCol(csvaData, 1);
+		loadElectricityPriceChart();
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/MaxPriceForCharging' ) {
 		setInputValue('MaxPriceForCharging', mqttpayload);
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/ActualPriceForCharging' ) {
-		$('#ActualPriceForCharging').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}));
+		$('#aktuellerStrompreis').text(parseFloat(mqttpayload).toLocaleString(undefined, {maximumFractionDigits: 2}) + ' Cent/kWh');
 	}
 	else if ( mqttmsg == 'openWB/global/ChargeMode' ) {
 		// set modal button colors depending on charge mode
@@ -336,6 +377,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').show();  // visibility of divs for special settings
 				$('#sofortladenEinstellungen').show();
 				$('#priorityEvBatteryIcon').hide();  // visibility of priority icon
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '1':
 				// mode min+pv
@@ -345,6 +388,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').show();
+
 				break;
 			case '2':
 				// mode pv
@@ -354,6 +399,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').show();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '3':
 				// mode stop
@@ -363,6 +410,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 				break;
 			case '4':
 				// mode standby
@@ -372,6 +421,8 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 				$('#targetChargingProgress').hide();
 				$('#sofortladenEinstellungen').hide();
 				$('#priorityEvBatteryIcon').hide();
+				$('#minundpvladenEinstellungen').hide();
+
 		}
 	}
 
@@ -478,6 +529,44 @@ function processVerbraucherMessages(mqttmsg, mqttpayload) {
 	// processes mqttmsg for topic openWB/Verbraucher
 	// called by handlevar
 	processPreloader(mqttmsg);
+	var index = getIndex(mqttmsg);  // extract number between two / /
+	if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Configured$/i ) ) {
+		if ( mqttpayload == 1 ) {
+			// if at least one device is configured, show info-div
+			$('#verbraucher').removeClass("hide");
+			// now show info-div for this device
+			$('#verbraucher'+index).removeClass("hide");
+		} else {
+			$('#verbraucher'+index).addClass("hide");
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Name$/i ) ) {
+		if ( mqttpayload != "Name" ){
+			$('#verbraucher'+index+'name').text(mqttpayload);
+		}
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/Watt$/i ) ) {
+		var unit = ' W';
+		var verbraucherwatt = parseInt(mqttpayload, 10);
+		if ( isNaN(verbraucherwatt) ) {
+			verbraucherwatt = 0;
+		}
+		if ( verbraucherwatt > 999 ) {
+			verbraucherwatt = (verbraucherwatt / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+			unit = ' kW';
+		}
+		$('#verbraucher'+index+'leistung').text(verbraucherwatt + unit);
+	} else if ( mqttmsg.match( /^openwb\/Verbraucher\/[1-2]\/DailyYieldImportkWh$/i ) ) {
+		var verbraucherDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(verbraucherDailyYield) ) {
+			verbraucherDailyYield = 0;
+		}
+		if ( verbraucherDailyYield >= 0 ) {
+			var verbraucherDailyYieldStr = ' (' + verbraucherDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			$('#verbraucher'+index+'dailyyield').text(verbraucherDailyYieldStr);
+		} else {
+			$('#verbraucher'+index+'dailyyield').text("");
+		}
+
+	}
 }
 
 function processLpMessages(mqttmsg, mqttpayload) {
@@ -806,6 +895,23 @@ function processSmartHomeDevicesMessages(mqttmsg, mqttpayload) {
 		}
 		element.text(actualPower);
 	}
+	if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/DailyYieldKwh$/i ) ) {
+
+		var index = getIndex(mqttmsg);  // extract number between two / /
+		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
+		var element = parent.find('.actualDailyYieldDevice');  // now get parents respective child element
+		var actualDailyYield = parseFloat(mqttpayload);
+		if ( isNaN(actualDailyYield) ) {
+			siiDailyYield = 0;
+		}
+		if ( actualDailyYield >= 0 ) {
+			var actualDailyYieldStr = ' (' + actualDailyYield.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kWh)';
+			element.text(actualDailyYieldStr);
+		} else {
+			element.text("");
+		}
+
+		}
 	else if ( mqttmsg.match( /^openwb\/SmartHome\/Devices\/[1-9][0-9]*\/RunningTimeToday$/i ) ) {
 		var index = getIndex(mqttmsg);  // extract number between two / /
 		var parent = $('[data-dev="' + index + '"]');  // get parent row element for SH Device
