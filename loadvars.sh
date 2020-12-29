@@ -883,7 +883,7 @@ loadvars(){
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 			fi
 		else
-			timeout 10 modules/$socmodul/main.sh || true
+			timeout 20 modules/$socmodul/main.sh || true
 			soc=$(</var/www/html/openWB/ramdisk/soc)
 			tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 			if ! [[ $soc =~ $re ]] ; then
