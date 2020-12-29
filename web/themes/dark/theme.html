@@ -70,7 +70,7 @@
 		#thegraph > div {
 			height: 350px;
 		}
-		#awattarcanvasdiv {
+		#electricityPriceChartCanvasDiv {
 			height: 150px;
 		}
 	</style>
@@ -221,7 +221,7 @@
 		</div>
 
 		<!-- interactive chart.js -->
-		<!-- will be refreshed using MQTT (in live.js)-->
+		<!-- will be refreshed using MQTT (in livechart.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
 			<div class="col-sm-12 text-center smallTextSize">
 				<div id="waitforgraphloadingdiv">
@@ -637,11 +637,11 @@
 		</form>
 
 		<form id="sofortladenEinstellungen" class="hide">
-			<div class="hide" id="awattar">
+			<div class="hide" id="priceBasedCharging">
 				<hr class="border-secondary">
 				<div class="row justify-content-center my-2">
-					<div id="awattarcanvasdiv" class="col text-center">
-						<canvas id="awattarcanvas"></canvas>
+					<div id="electricityPriceChartCanvasDiv" class="col text-center">
+						<canvas id="electricityPriceChartCanvas"></canvas>
 					</div>
 				</div>
 				<div class="form-row form-group mb-1 vaRow regularTextSize">
@@ -651,7 +651,7 @@
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
-			</div>  <!--/ awattar -->
+			</div>  <!--/ priceBasedCharging -->
 
 			<hr class="border-secondary">
 			<div class="row justify-content-center">
@@ -1290,13 +1290,13 @@
 				// some helper functions
 				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/dark/processAllMqttMsg.js?ver=20201224',
+				'themes/dark/processAllMqttMsg.js?ver=20201228',
 				// respective Chart.js definition live
 				'themes/dark/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
-				'themes/dark/awattarchart.js?ver=20201223',
+				'themes/dark/electricityPriceChart.js?ver=20201228',
 				// functions performing mqtt and start mqtt-service
-				'themes/dark/setupMqttServices.js?ver=20201224',
+				'themes/dark/setupMqttServices.js?ver=20201228',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
