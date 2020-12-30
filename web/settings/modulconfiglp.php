@@ -1261,6 +1261,14 @@
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soc_eq_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc_eq_client_id_lp1" id="soc_eq_client_id_lp1" value="<?php echo $soc_eq_client_id_lp1old ?>">
@@ -1284,11 +1292,15 @@
 											<input class="form-control" type="text" name="soc_eq_cb_lp1" id="soc_eq_cb_lp1" value="<?php echo $soc_eq_cb_lp1old ?>">
 										</div>
 									</div>
-                  <div class="form-row mb-1">
-										<span class="form-text small">
-										Wichtig: erst Speichern und danach <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
-										</span>
-                  </div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small">
+												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
+												<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -2446,6 +2458,14 @@
 							<div id="socmeqlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soc_eq_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soc_eq_client_id_lp2" id="soc_eq_client_id_lp2" value="<?php echo $soc_eq_client_id_lp2old ?>">
@@ -2469,12 +2489,14 @@
 											<input class="form-control" type="text" name="soc_eq_cb_lp2" id="soc_eq_cb_lp2" value="<?php echo $soc_eq_cb_lp2old ?>">
 										</div>
 									</div>
-                  <div class="form-row mb-1">
-										<span class="form-text small">
-                      Wichtig: erst Speichern und danach 
-                      <a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a>
-										</span>
-                  </div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
+											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_2p1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
 								</div>
 
 							</div>

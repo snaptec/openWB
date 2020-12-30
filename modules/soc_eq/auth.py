@@ -7,7 +7,7 @@ ChargePoint = str(sys.argv[1])
 code        = str(sys.argv[2]) 
 
 moddir = '/var/www/html/openWB/modules/soc_eq/'
-
+print("<html>")
 
 client_id = ""
 client_secret = ""
@@ -52,5 +52,25 @@ if act.status_code == 200:
   fd = open(moddir + 'expires_lp' + str(ChargePoint),'w')
   fd.write(str(int(time.time())))
   fd.close()
-
-print( "<h1>Antwort (200 ist OK, alles andere ein Fehler): " + str(act.status_code) + "</h1>")
+if act.status_code == 200:
+	print( "Anmeldung erfolgreich! <br/>Sie können das Fenster schließen." )
+elif act.status_code == 400:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Bad Request)")
+elif act.status_code == 401:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Invalid or missing authorization in header)")	
+elif act.status_code == 402:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Payment required)")		
+elif act.status_code == 403:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Forbidden)")			
+elif act.status_code == 404:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")				
+elif act.status_code == 429:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")					
+elif act.status_code == 500:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")						
+elif act.status_code == 503:
+	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")					
+else:
+	print("Anmeldung Fehlgeschlagen unbekannter Code: " + str(act.status_code))					
+	
+print("</html>")
