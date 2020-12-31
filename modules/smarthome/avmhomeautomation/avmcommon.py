@@ -8,6 +8,8 @@ import hashlib
 import credentials
 import xml.etree.ElementTree as ET
 
+# getAVMSessionID retrieves a session ID for issuing commands to a FRITZ!Box webinterface.
+# See https://avm.de/fileadmin/user_upload/Global/Service/Schnittstellen/Session-ID_deutsch_13Nov18.pdf for a description of the challenge-response-method.
 def getAVMSessionID(
         baseurl, 
         password,
@@ -44,6 +46,10 @@ def getAVMSessionID(
     sessionid = sessioninfo.find('SID').text
     return sessionid
 
+# getDevicesDict returns a dictionary that maps defined actor names to its
+# unique hardware ID (called "AIN": "Actuator Identification Number") and
+# current values for the power, voltage, integraded energy, temperature (not
+# for group actors).
 def getDevicesDict(baseurl, sessionid):
     getdevicelistinfosurl = baseurl + "/webservices/homeautoswitch.lua?sid="+sessionid+"&switchcmd=getdevicelistinfos"
     getdevicelistinfosResponseBody = str(urllib.request.urlopen(getdevicelistinfosurl).read(), "utf-8").strip()
