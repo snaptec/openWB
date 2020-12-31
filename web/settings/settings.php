@@ -34,34 +34,8 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -146,9 +120,9 @@
 						$(function() {
 							function visibility_isss() {
 								if($('#isssOff').prop("checked")) {
-									hideSection('isssdiv');
+									hideSection('#isssdiv');
 								} else {
-									showSection('isssdiv');
+									showSection('#isssdiv');
 								}
 							}
 
@@ -202,9 +176,9 @@
 						$(function() {
 							function visibility_awattaraktiv() {
 								if($('#awattaraktivOff').prop("checked")) {
-									hideSection('awattardiv');
+									hideSection('#awattardiv');
 								} else {
-									showSection('awattardiv');
+									showSection('#awattardiv');
 								}
 							}
 
@@ -358,49 +332,49 @@
 							var lp8akt = <?php echo $lastmanagementlp8old ?>;
 
 							if(lp2akt == '0') {
-								hideSection('lp2aktdiv');
-								hideSection('loadsharingdiv');
-								showSection('loadsharingoffdiv');
-								hideSection('nachtladenlp2div');
-								hideSection('durchslp2div');
+								hideSection('#lp2aktdiv');
+								hideSection('#loadsharingdiv');
+								showSection('#loadsharingoffdiv');
+								hideSection('#nachtladenlp2div');
+								hideSection('#durchslp2div');
 							} else {
-								showSection('lp2aktdiv');
-								showSection('loadsharingdiv');
-								hideSection('loadsharingoffdiv');
-								showSection('nachtladenlp2div');
-								showSection('durchslp2div');
+								showSection('#lp2aktdiv');
+								showSection('#loadsharingdiv');
+								hideSection('#loadsharingoffdiv');
+								showSection('#nachtladenlp2div');
+								showSection('#durchslp2div');
 							}
 							if(lp3akt == '0') {
-								hideSection('lp3aktdiv');
-								hideSection('durchslp3div');
+								hideSection('#lp3aktdiv');
+								hideSection('#durchslp3div');
 							} else {
-								showSection('lp3aktdiv');
-								showSection('durchslp3div');
+								showSection('#lp3aktdiv');
+								showSection('#durchslp3div');
 							}
 							if(lp4akt == '0') {
-								hideSection('lp4aktdiv');
+								hideSection('#lp4aktdiv');
 							} else {
-								showSection('lp4aktdiv');
+								showSection('#lp4aktdiv');
 							}
 							if(lp5akt == '0') {
-								hideSection('lp5aktdiv');
+								hideSection('#lp5aktdiv');
 							} else {
-								showSection('lp5aktdiv');
+								showSection('#lp5aktdiv');
 							}
 							if(lp6akt == '0') {
-								hideSection('lp6aktdiv');
+								hideSection('#lp6aktdiv');
 							} else {
-								showSection('lp6aktdiv');
+								showSection('#lp6aktdiv');
 							}
 							if(lp7akt == '0') {
-								hideSection('lp7aktdiv');
+								hideSection('#lp7aktdiv');
 							} else {
-								showSection('lp7aktdiv');
+								showSection('#lp7aktdiv');
 							}
 							if(lp8akt == '0') {
-								hideSection('lp8aktdiv');
+								hideSection('#lp8aktdiv');
 							} else {
-								showSection('lp8aktdiv');
+								showSection('#lp8aktdiv');
 							}
 						});
 					</script>
@@ -471,9 +445,9 @@
 						$(function() {
 							function visibility_zielladenaktivlp1() {
 								if($('#zielladenaktivlp1Off').prop("checked")) {
-									hideSection('zielladenaktivlp1div');
+									hideSection('#zielladenaktivlp1div');
 								} else {
-									showSection('zielladenaktivlp1div');
+									showSection('#zielladenaktivlp1div');
 								}
 							}
 
@@ -710,18 +684,18 @@
 						$(function() {
 							function visibility_u1p3paktiv() {
 								if($('#u1p3paktivOff').prop("checked")) {
-									hideSection('u1p3pan');
+									hideSection('#u1p3pan');
 								} else {
-									showSection('u1p3pan');
+									showSection('#u1p3pan');
 									visibility_schieflastaktiv();
 								}
 							}
 
 							function visibility_schieflastaktiv() {
 								if($('#schieflastaktivOff').prop("checked")) {
-									hideSection('schieflastan');
+									hideSection('#schieflastan');
 								} else {
-									showSection('schieflastan');
+									showSection('#schieflastan');
 								}
 							}
 
@@ -1156,17 +1130,17 @@
 						$(function() {
 							function visibility_nachtladen() {
 								if($('#nachtladenOff').prop("checked")) {
-									hideSection('nachtladenan');
+									hideSection('#nachtladenan');
 								} else {
-									showSection('nachtladenan');
+									showSection('#nachtladenan');
 								}
 							}
 
 							function visibility_nachtladens1() {
 								if($('#nachtladens1Off').prop("checked")) {
-									hideSection('nachtladenans1');
+									hideSection('#nachtladenans1');
 								} else {
-									showSection('nachtladenans1');
+									showSection('#nachtladenans1');
 								}
 							}
 
@@ -1316,9 +1290,9 @@
 						$(function() {
 							function visibility_loadsharinglp12() {
 								if($('#loadsharinglp12Off').prop("checked")) {
-									hideSection('loadsharinglp12div');
+									hideSection('#loadsharinglp12div');
 								} else {
-									showSection('loadsharinglp12div');
+									showSection('#loadsharinglp12div');
 								}
 							}
 
