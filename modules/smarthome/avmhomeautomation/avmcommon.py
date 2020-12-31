@@ -5,6 +5,7 @@ import time
 import json
 import urllib.request
 import hashlib
+import credentials
 import xml.etree.ElementTree as ET
 
 def getAVMSessionID(
@@ -13,6 +14,13 @@ def getAVMSessionID(
         username, 
         previoussessionid="0000000000000000",
         ):
+
+    # fallback for storing password and credentials locally
+    if username == '':
+        username = credentials.username
+    if password == '':
+        password = credentials.password
+        
     loginurl = baseurl + '/login_sid.lua'
     challengeURL = loginurl + "?sid="+previoussessionid
     challengeResponse = ET.fromstring(urllib.request.urlopen(loginurl, timeout=5).read())

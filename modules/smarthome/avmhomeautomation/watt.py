@@ -5,33 +5,21 @@ import time
 import json
 import urllib.request
 import avmcommon
-import credentials
 #from urllib.parse import urlparse
 named_tuple = time.localtime() # getstruct_time
 time_string = time.strftime("%m/%d/%Y, %H:%M:%S avmhomeautomation watt.py", named_tuple)
 devicenumber=str(sys.argv[1])
-switchname=str(sys.argv[2])
+fritzboxAddress = str(sys.argv[2]) # IP or hostname (e.g. "fritz.box")
+switchname = str(sys.argv[5])
+username = str(sys.argv[6])
+password = str(sys.argv[7])
 # needs to be configurable
 file_string = '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_avmhomeautomation.log'
 file_stringsessionid = '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_sessionid'
-file_stringuser= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_user'
-file_stringpass= '/var/www/html/openWB/ramdisk/smarthome_device_' + str(devicenumber) + '_pass'
-username = credentials.username
-password = credentials.password
 sessionid = '0000000000000000'
 if os.path.isfile(file_stringsessionid):
     f = open(file_stringsessionid, 'r')
     sessionid = f.read()
-    f.close()
-
-if os.path.isfile(file_stringuser):
-    f = open(file_stringsessionid, 'r')
-    username = f.read()
-    f.close()
-
-if os.path.isfile(file_stringpass):
-    f = open(file_stringsessionid, 'r')
-    password = f.read()
     f.close()
 
 try:
@@ -44,10 +32,7 @@ try:
 except IOError:
     pass
 
-if username == '' or password == '':
-    sys.exit()
-
-baseurl='http://fritz.box'
+baseurl='http://' + fritzboxAddress
 sessionid = avmcommon.getAVMSessionID(
         baseurl, 
         previoussessionid=sessionid,
