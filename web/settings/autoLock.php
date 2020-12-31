@@ -249,10 +249,10 @@ ECHODAYROWTAIL;
 						// build form-groups for all lp
 						if ( $isConfiguredLp[$lp] ) {
 							// if lp is configured: display form-group
-							$visibility = '';
+							$visibilityClass = '';
 						} else {
 							// if lp is not configured: hide form-group
-							$visibility = ' display: none;';
+							$visibilityClass = ' hide';
 						}
 						// remove special characters except space and underscore... maybe dangerous
 						$nameLp = preg_replace('/[^A-Za-z0-9_ ]/', '', $settingsArray['lp'.$lp.'name']);
@@ -268,7 +268,7 @@ ECHODAYROWTAIL;
 						}
 
 						echo <<<ECHOFORMGROUPHEAD
-				<div class="card border-secondary" style="{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+				<div class="card border-secondary{$visibilityClass}" id="lp{$lp}">  <!-- group charge point {$lp} -->
 					<div class="card-header bg-secondary">
 						Ladepunkt {$lp} ({$nameLp})
 					</div>
