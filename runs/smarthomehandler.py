@@ -397,7 +397,14 @@ def getdevicevalues():
             try:
                 pyname = pyname0 +"/watt.py"
                 if os.path.isfile(pyname) and (canswitch == 1):
-                   proc=subprocess.Popen( ['python3',pyname,str(numberOfDevices),config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)),str(uberschuss),device_leistungurl])
+                   argumentList = ['python3', pyname, str(nummer)]
+                   argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+                   argumentList.append(str(uberschuss))
+                   argumentList.append(device_leistungurl)
+                   argumentList.append(config.get('smarthomedevices', 'device_actor_'+str(nummer)))
+                   argumentList.append(config.get('smarthomedevices', 'device_username_'+str(nummer)))
+                   argumentList.append(config.get('smarthomedevices', 'device_password_'+str(nummer)))
+                   proc=subprocess.Popen(argumentList)
                    proc.communicate() 
                    f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
                    answerj=json.load(f1)
@@ -506,16 +513,25 @@ def turndevicerelais(nummer, zustand):
     except:
        device_ausschalturl = "undef"
     pyname0 = getdir(switchtyp,devicename)
+    argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
+    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    argumentList.append(str(uberschuss))
+    argumentList.append("") # element with index 5 will be set on URL for switch on or off
+    argumentList.append(config.get('smarthomedevices', 'device_actor_'+str(nummer)))
+    argumentList.append(config.get('smarthomedevices', 'device_username_'+str(nummer)))
+    argumentList.append(config.get('smarthomedevices', 'device_password_'+str(nummer)))
     if ( zustand == 1):
        try:
            pyname = pyname0 +"/on.py"
            if os.path.isfile(pyname):
+              argumentList[1] = pyname
+              argumentList[5] = device_einschalturl
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " angeschaltet")
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
               f.write(str(zustand))
               f.close()
               DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
-              proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_einschalturl])
+              proc=subprocess.Popen(argumentList)
               proc.communicate()
            else:
               logDebug("0", "Device " + str(switchtyp) + str(nummer) + str(devicename) + " File not found: " + str(pyname)) 
@@ -525,7 +541,9 @@ def turndevicerelais(nummer, zustand):
        try:
            pyname = pyname0 +"/off.py"
            if os.path.isfile( pyname  ): 
-              proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_ausschalturl])
+              argumentList[1] = pyname
+              argumentList[5] = device_ausschalturl
+              proc=subprocess.Popen(argumentList)
               proc.communicate()
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " ausgeschaltet")
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
