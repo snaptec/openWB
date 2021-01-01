@@ -123,6 +123,7 @@
 								System Laufzeit: <span id="uptime">--</span><br>
 							</p>
 							<p>
+								CPU-Frequenz: <span id="cpufreq">--</span>MHz<br>
 								CPU-Temperatur: <span id="cputemp">--</span>°C<br>
 								CPU-Last: <meter id="cpu" high=85 min=0 max=100 value=0></meter> <span id="cpuuse">--</span>%<br>
 								Durchschnittslast: <span id="loadaverage">--</span>
@@ -202,6 +203,7 @@
 						$('#cpu').val(json.cpuuse);
 						$('#cpuuse').text(json.cpuuse);
 						$('#cputemp').text((json.cputemp/1000).toFixed(2));
+						$('#cpufreq').text((json.cpufreq/1000));
 						$('#memtot').text(json.memtot);
 						$('#memused').text(json.memuse);
 						$('#diskuse').text(json.diskuse);
