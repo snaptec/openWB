@@ -189,10 +189,10 @@
 				}
 
 				function updatesysteminfo() {
-					function addTimePart(timePart, timePartUnit) {
+					function addTimePart(timePart, timePartUnit, extension) {
 						if (timePart > 0) {
 							var result = timePart + ' ' + timePartUnit;
-							if (timePart > 1) result += 'n';
+							if (timePart > 1) result += extension;
 							return result + ', ';
 						} else return '';
 					}
@@ -236,8 +236,8 @@
 						var minutesUp = Math.floor(upTimeUnix / 60) % 60;
 						upTimeUnix -= minutesUp * 60;
 						var secondsUp = upTimeUnix % 60;
-						var formattedUpTime = addTimePart(weeksUp, 'Woche') + addTimePart(daysUp, 'Tag');
-						formattedUpTime = formattedUpTime + addTimePart(hoursUp, 'Stunde') + addTimePart(minutesUp, 'Minute') + addTimePart(secondsUp, 'Sekunde');
+						var formattedUpTime = addTimePart(weeksUp, 'Woche', 'n') + addTimePart(daysUp, 'Tag', 'e');
+						formattedUpTime = formattedUpTime + addTimePart(hoursUp, 'Stunde', 'n') + addTimePart(minutesUp, 'Minute', 'n') + addTimePart(secondsUp, 'Sekunde', 'n');
 						formattedUpTime = formattedUpTime.substr(0, formattedUpTime.length-2);
 						$('#uptime').text(formattedUpTime);
 
