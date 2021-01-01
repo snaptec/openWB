@@ -1248,8 +1248,8 @@
 	<script>
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
-		// load navbar
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
+		// load navbar, be carefull: it loads asynchonously
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown

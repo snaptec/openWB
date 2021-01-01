@@ -32,6 +32,24 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+		</script>
 
 		<script>
 			var doInterval;
@@ -729,7 +747,7 @@
 	$(function() {
 		var lp2akt = <?php echo $lastmanagementold ?>;
 		var lp3akt = <?php echo $lastmanagements2old ?>;
-		
+
 		if(lp2akt == '0') {
 			$('#ladepunkt2div').hide();
 		} else {
@@ -745,10 +763,7 @@
 
 </head>
 <body>
-	<?php
-		include '/var/www/html/openWB/web/status/navbar.php';
-	?>
-
+	<div id="nav-placeholder"></div>
 	<div role="main" class="container" style="margin-top: 20px; display: block;">
 		<div class="row">
 			<div class="col-sm-12 text-center">
@@ -1270,43 +1285,12 @@
 			</div>
 		</div>
 		<hr style="height:3px;border:none;color:#333;background-color:#333;" />
-		<p>
-			Uptime: <span id='uptime'>--</span><br>
-			OS: <?php echo exec('uname -ors'); ?><br>
-			System: <?php echo exec('uname -nmi'); ?> <?php echo exec("cat /proc/cpuinfo | grep 'Processor' | head -n 1"); ?>
-			<meter id='cpu' high=85 min=0 max=100 value=0></meter> <span id='cpuuse'>--</span>%<br>
-			Memory: <span id='memtot'>--</span>MB
-			<meter id='mem' min='0' value=0></meter> <span style="font-size: small;">(<span id='memfree'>--</span>MB free)</span><br>
-			Disk Usage: <span id='diskuse'>--</span>, <span id='diskfree'>--</span> avail.<br>
-			openWB Version <?php echo $owbversion ?>
-		</p>
-		<script>
-			function updateit() {
-				$.getJSON('tools/programmloggerinfo.php', function(data){
-					json = eval(data);
-					document.getElementById('cpu').value= json.cpuuse;
-					document.getElementById('uptime').innerHTML = json.uptime;
-					document.getElementById('cpuuse').innerHTML = json.cpuuse;
-					document.getElementById('memtot').innerHTML = json.memtot;
-					document.getElementById('mem').max= json.memtot;
-					document.getElementById('mem').value= json.memuse;
-					document.getElementById('mem').high = (json.memtot*0.85);
-					document.getElementById('memfree').innerHTML = json.memfree;
-					document.getElementById('diskuse').innerHTML = json.diskuse;
-					document.getElementById('diskfree').innerHTML = json.diskfree;
-				})
-			}
-			$(document).ready(function() {
-				updateit();
-				setInterval(updateit, 1000);
-			})
-		</script>
 
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
 		</div>
 		<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
-		
+
 		<div class="row">
 			<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
 		</div>
@@ -1342,83 +1326,92 @@
 	</div>  <!-- container -->
 
 	<footer class="footer bg-dark text-light font-small">
-		<!-- no text for footer -->
+		<div class="container text-center">
+			<small>Sie befinden sich hier: System/Status</small>
+		</div>
 	</footer>
 
 	<script>
+
+		// load navbar
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
+		function disableMenuItem() {
+			$('#navStatus').addClass('disabled');
+		}
+
 		$(function() {
 			if('<?php echo $kostalplenticoreip2old ?>' == 'none') {
 				$('#pvinverter1and2div').hide();
 			}
 		});
 		$('#mqttlog').click(function(event){
-			var element = document.getElementById('mqttdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('mqttdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#mqttdiv').show();
 				$('#mqttdiv').removeClass("hide");
 			} else {
-				$('#mqttdiv').hide(); 
+				$('#mqttdiv').hide();
 				$('#mqttdiv').addClass("hide");
 			}
 		});
 		$('#rfidlog').click(function(event){
-			var element = document.getElementById('rfiddiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('rfiddiv');
+			if ( element.classList.contains("hide") ) {
 				$('#rfiddiv').show();
 				$('#rfiddiv').removeClass("hide");
 			} else {
-				$('#rfiddiv').hide(); 
+				$('#rfiddiv').hide();
 				$('#rfiddiv').addClass("hide");
 			}
 		});
 		$('#nurpvlog').click(function(event){
-			var element = document.getElementById('nurpvdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('nurpvdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#nurpvdiv').show();
 				$('#nurpvdiv').removeClass("hide");
 			} else {
-				$('#nurpvdiv').hide(); 
+				$('#nurpvdiv').hide();
 				$('#nurpvdiv').addClass("hide");
 			}
 		});
 		$('#soclog').click(function(event){
-			var element = document.getElementById('socdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('socdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#socdiv').show();
 				$('#socdiv').removeClass("hide");
 			} else {
-				$('#socdiv').hide(); 
+				$('#socdiv').hide();
 				$('#socdiv').addClass("hide");
 			}
 		});
 
 		$('#ladestatuslog').click(function(event){
-			var element = document.getElementById('ladestatuslogdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('ladestatuslogdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#ladestatuslogdiv').show();
 				$('#ladestatuslogdiv').removeClass("hide");
 			} else {
-				$('#ladestatuslogdiv').hide(); 
+				$('#ladestatuslogdiv').hide();
 				$('#ladestatuslogdiv').addClass("hide");
 			}
 		});
 		$('#debuglog').click(function(event){
-			var element = document.getElementById('debugdiv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('debugdiv');
+			if ( element.classList.contains("hide") ) {
 				$('#debugdiv').show();
 				$('#debugdiv').removeClass("hide");
 			} else {
-				$('#debugdiv').hide(); 
+				$('#debugdiv').hide();
 				$('#debugdiv').addClass("hide");
 			}
 		});
 		$('#smarthomelog').click(function(event){
-			var element = document.getElementById('smarthomediv'); 
-			if ( element.classList.contains("hide") ) { 
+			var element = document.getElementById('smarthomediv');
+			if ( element.classList.contains("hide") ) {
 				$('#smarthomediv').show();
 				$('#smarthomediv').removeClass("hide");
 			} else {
-				$('#smarthomediv').hide(); 
+				$('#smarthomediv').hide();
 				$('#smarthomediv').addClass("hide");
 			}
 		});
