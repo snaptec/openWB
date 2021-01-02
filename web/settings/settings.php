@@ -1202,7 +1202,7 @@
 											</div>
 										</div>
 									</div>
-									<span class="form-text small">Gültige Werte 7-125. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des Hausanschlusses im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt.</span>
+									<span class="form-text small">Gültige Werte 7-125. Definiert die maximal erlaubte Stromstärke der einzelnen Phasen des <b>Hausanschlusses</b> im Sofort Laden Modus, sofern das EVU Modul die Werte je Phase zur Verfügung stellt. Hiermit ist nicht der Anschluss der openWB gemeint! Übliche Werte für ein EFH/MFH sind im Bereich 35 bis 63A.</span>
 								</div>
 							</div>
 							<div class="form-row mb-1">
