@@ -126,8 +126,7 @@
 	</div>
 
 	<!-- Landing Page -->
-	<div id="nav-placeholder">
-	</div>
+	<div id="nav-placeholder"></div>
 	<div class="container">
 		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
@@ -1209,8 +1208,8 @@
 
 	<script>
 
-		// load navbar
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html');
+		// load navbar, be carefull: it loads asynchonously
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
