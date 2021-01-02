@@ -86,7 +86,7 @@
 								<span class="form-text small">Auswahl des Regelmodus in beiden Lademodi. Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.</span>
 							</div>
 						</div>
-						<div class="form-row mb-1 manualsetpoint">
+						<div class="form-row mb-1 manualsetpoint hide">
 							<label class="col-md-4 col-form-label">manueller Regelpunkt</label>
 							<div class="col">
 								<div class="form-row vaRow">
@@ -110,9 +110,9 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=chargeSubmode]').change(function(){
 								if(this.value == '2') {
-									$('.manualsetpoint').show();
+									showSection('.manualsetpoint');
 								} else {
-									$('.manualsetpoint').hide();
+									hideSection('.manualsetpoint');
 								}
 							})
 						});
@@ -265,9 +265,9 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=nurpv70dynact]').change(function(){
 								if(this.value == '1') {
-									$('.nurpv70options').show();
+									showSection('.nurpv70options');
 								} else {
-									$('.nurpv70options').hide();
+									hideSection('.nurpv70options');
 								}
 							})
 						});
@@ -471,11 +471,11 @@
 						$(document).ready(function(){
 							$('input[type=radio][name=priorityModeEVBattery]').change(function(){
 								if(this.value == '0') {
-									$('.priorityevoptions').hide();
-									$('.prioritybatoptions').show();
+									hideSection('.priorityevoptions');
+									showSection('.prioritybatoptions');
 								} else {
-									$('.prioritybatoptions').hide();
-									$('.priorityevoptions').show();
+									hideSection('.prioritybatoptions');
+									showSection('.priorityevoptions');
 								}
 							})
 						});
@@ -652,84 +652,84 @@
 				
 				if ( elementId == "boolHouseBatteryConfigured") {
 					if ( mqttpayload == 0 ) {
-						$('.housebatteryoptions').hide();
-						$('.nohousebattery').show();
+						hideSection('.housebatteryoptions');
+						showSection('.nohousebattery');
 					} else {
-						$('.housebatteryoptions').show();
-						$('.nohousebattery').hide();
+						showSection('.housebatteryoptions');
+						hideSection('.nohousebattery');
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp1options').hide();
+						hideSection('.soclp1options');
 						soc1vis = 0;
 					} else {
-						$('.soclp1options').show();
+						showSection('.soclp1options');
 						soc1vis = 1;
 					}
 				}
 				if ( elementId == "boolSocConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.soclp2options').hide();
+						hideSection('.soclp2options');
 						soc2vis = 0;
 					} else {
-						$('.soclp2options').show();
+						showSection('.soclp2options');
 						soc2vis = 1;
 					}
 				}
 				if ( soc1vis == 1 && soc2vis == 0){
-					$('.onlysoclp1options').show();
-					$('.soclp1options').hide();
+					showSection('.onlysoclp1options');
+					hideSection('.soclp1options');
 
 				} else {
-					$('.onlysoclp1options').hide();
+					hideSection('.onlysoclp1options');
 				}
 				if ( soc1vis == 1 && soc2vis == 1){
-					$('.soclp12options').show();
+					showSection('.soclp12options');
 
 				} else {
-					$('.soclp12options').hide();
+					hideSection('.soclp12options');
 				}
 
 				if ( elementId == "boolChargePointConfiguredLp1") {
 					if ( mqttpayload == 0 ) {
-						$('.lp1options').hide();
+						hideSection('.lp1options');
 						lp1vis = 0;
 					} else {
-						$('.lp1options').show();
+						showSection('.lp1options');
 						lp1vis = 1;
 					}
 				}
 				if ( elementId == "boolChargePointConfiguredLp2") {
 					if ( mqttpayload == 0 ) {
-						$('.lp2options').hide();
+						hideSection('.lp2options');
 						lp2vis = 0;
 					} else {
-						$('.lp1options').show();
+						showSection('.lp1options');
 						lp2vis = 1;
 					}
 				}
 				if ( elementId == "chargeSubmode") {
 					if ( mqttpayload == 2 ) {
-						$('.manualsetpoint').show();
+						showSection('.manualsetpoint');
 					} else {
-						$('.manualsetpoint').hide();
+						hideSection('.manualsetpoint');
 					}
 				}
 				if ( elementId == "nurpv70dynact") {
 					if ( mqttpayload == 1 ) {
-						$('.nurpv70options').show();
+						showSection('.nurpv70options');
 					} else {
-						$('.nurpv70options').hide();
+						hideSection('.nurpv70options');
 					}
 				}
 				if ( elementId == "priorityModeEVBattery") {
 					if ( mqttpayload == 0 ) {
-						$('.priorityevoptions').hide();
-						$('.prioritybatoptions').show();
+						hideSection('.priorityevoptions');
+						showSection('.prioritybatoptions');
 					} else {
-						$('.prioritybatoptions').hide();
-						$('.priorityevoptions').show();
+						hideSection('.prioritybatoptions');
+						showSection('.priorityevoptions');
 					}
 				}
 			}

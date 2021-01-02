@@ -33,33 +33,9 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -656,7 +632,7 @@
 								<div class="col">
 									<input class="form-control" type="number" min="1" step="1" name="vzloggerpvline" id="vzloggerpvline" value="<?php echo $vzloggerpvlineold ?>">
 									<span class="form-text small">
-										Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
+										Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq .|cat -n"<br>
 										Nun zählen in welcher Zeile der gewünschte Wert steht und diesen hier eintragen.
 									</span>
 								</div>
@@ -696,129 +672,128 @@
 
 						<script>
 							function display_pvwattmodul() {
-								hideSection('pvvzl');
-								hideSection('pvsdmwr');
-								hideSection('pvwrfronius');
-								hideSection('pvhttp');
-								hideSection('pvsma');
-								hideSection('pvwrjson');
-								hideSection('pvmpm3pm');
-								hideSection('pvwrkostalpiko');
-								hideSection('pvwrsolaredge');
-								hideSection('pvsmartme');
-								hideSection('pvwrtri9000');
-								hideSection('pvplenti');
-								hideSection('pvsolarlog');
-								hideSection('pvpiko2');
-								hideSection('pvpowerwall');
-								hideSection('pvmpmevu');
-								hideSection('pvethsdm120');
-								hideSection('pvsolarview');
-								hideSection('pvdiscovergy');
-								hideSection('pvyouless');
-								hideSection('pvlgessv1');
-								hideSection('pvmqtt');
-								hideSection('pvsunways');
-								hideSection('pvfems');
-								hideSection('pvsolarworld');
-								hideSection('pvip');
-								hideSection('pvsiemens');
-								hideSection('pvrct');
-								hideSection('pvpowerdog');
+								hideSection('#pvvzl');
+								hideSection('#pvsdmwr');
+								hideSection('#pvwrfronius');
+								hideSection('#pvhttp');
+								hideSection('#pvsma');
+								hideSection('#pvwrjson');
+								hideSection('#pvmpm3pm');
+								hideSection('#pvwrkostalpiko');
+								hideSection('#pvwrsolaredge');
+								hideSection('#pvsmartme');
+								hideSection('#pvwrtri9000');
+								hideSection('#pvplenti');
+								hideSection('#pvsolarlog');
+								hideSection('#pvpiko2');
+								hideSection('#pvpowerwall');
+								hideSection('#pvmpmevu');
+								hideSection('#pvethsdm120');
+								hideSection('#pvsolarview');
+								hideSection('#pvdiscovergy');
+								hideSection('#pvyouless');
+								hideSection('#pvlgessv1');
+								hideSection('#pvmqtt');
+								hideSection('#pvsunways');
+								hideSection('#pvfems');
+								hideSection('#pvsolarworld');
+								hideSection('#pvip');
+								hideSection('#pvsiemens');
+								hideSection('#pvrct');
+								hideSection('#pvpowerdog');
 								if($('#pvwattmodul').val() == 'wr_siemens') {
-									showSection('pvip');
-									showSection('pvsiemens');
+									showSection('#pvip');
+									showSection('#pvsiemens');
 								}
 								if($('#pvwattmodul').val() == 'wr_victron') {
-									showSection('pvip');
+									showSection('#pvip');
 								}
 								if($('#pvwattmodul').val() == 'wr_huawei') {
-									showSection('pvip');
+									showSection('#pvip');
 								}
 								if($('#pvwattmodul').val() == 'wr_shelly') {
-									showSection('pvip');
+									showSection('#pvip');
 								}
-
 								if($('#pvwattmodul').val() == 'wr_powerdog') {
-									showSection('pvpowerdog');
+									showSection('#pvpowerdog');
 								}
 								if($('#pvwattmodul').val() == 'wr_rct') {
-									showSection('pvrct');
+									showSection('#pvrct');
 								}
 								if($('#pvwattmodul').val() == 'wr_fems') {
-									showSection('pvfems');
+									showSection('#pvfems');
 								}
 								if($('#pvwattmodul').val() == 'wr_solarworld') {
-									showSection('pvsolarworld');
+									showSection('#pvsolarworld');
 								}
 								if($('#pvwattmodul').val() == 'wr_sunways') {
-									showSection('pvsunways');
+									showSection('#pvsunways');
 								}
 								if($('#pvwattmodul').val() == 'wr_mqtt') {
-									showSection('pvmqtt');
+									showSection('#pvmqtt');
 								}
 								if($('#pvwattmodul').val() == 'wr_youless120') {
-									showSection('pvyouless');
+									showSection('#pvyouless');
 								}
 								if($('#pvwattmodul').val() == 'wr_solarview') {
-									showSection('pvsolarview');
+									showSection('#pvsolarview');
 								}
 								if($('#pvwattmodul').val() == 'wr_discovergy') {
-									showSection('pvdiscovergy');
+									showSection('#pvdiscovergy');
 								}
 								if($('#pvwattmodul').val() == 'wr_ethsdm120') {
-									showSection('pvethsdm120');
+									showSection('#pvethsdm120');
 								}
 								if($('#pvwattmodul').val() == 'wr_ethmpm3pmaevu') {
-									showSection('pvmpmevu');
+									showSection('#pvmpmevu');
 								}
 								if($('#pvwattmodul').val() == 'vzloggerpv') {
-									showSection('pvvzl');
+									showSection('#pvvzl');
 								}
 								if($('#pvwattmodul').val() == 'sdm630modbuswr')   {
-									showSection('pvsdmwr');
+									showSection('#pvsdmwr');
 								}
 								if($('#pvwattmodul').val() == 'wr_fronius')   {
-									showSection('pvwrfronius');
+									showSection('#pvwrfronius');
 								}
 								if($('#pvwattmodul').val() == 'wr_http')   {
-									showSection('pvhttp');
+									showSection('#pvhttp');
 								}
 								if($('#pvwattmodul').val() == 'smaemd_pv')   {
-									showSection('pvsma');
+									showSection('#pvsma');
 								}
 								if($('#pvwattmodul').val() == 'wr_json')   {
-									showSection('pvwrjson');
+									showSection('#pvwrjson');
 								}
 								if($('#pvwattmodul').val() == 'mpm3pmpv')   {
-									showSection('pvmpm3pm');
+									showSection('#pvmpm3pm');
 								}
 								if($('#pvwattmodul').val() == 'wr_kostalpiko')   {
-									showSection('pvwrkostalpiko');
+									showSection('#pvwrkostalpiko');
 								}
 								if($('#pvwattmodul').val() == 'wr_solaredge')   {
-									showSection('pvwrsolaredge');
+									showSection('#pvwrsolaredge');
 								}
 								if($('#pvwattmodul').val() == 'wr_smartme')   {
-									showSection('pvsmartme');
+									showSection('#pvsmartme');
 								}
 								if($('#pvwattmodul').val() == 'wr_tripower9000')   {
-									showSection('pvwrtri9000');
+									showSection('#pvwrtri9000');
 								}
 								if($('#pvwattmodul').val() == 'wr_plenticore')   {
-									showSection('pvplenti');
+									showSection('#pvplenti');
 								}
 								if($('#pvwattmodul').val() == 'wr_solarlog')   {
-									showSection('pvsolarlog');
+									showSection('#pvsolarlog');
 								}
 								if($('#pvwattmodul').val() == 'wr_kostalpikovar2')   {
-									showSection('pvpiko2');
+									showSection('#pvpiko2');
 								}
 								if($('#pvwattmodul').val() == 'wr_powerwall')   {
-									showSection('pvpowerwall');
+									showSection('#pvpowerwall');
 								}
 								if($('#pvwattmodul').val() == 'wr_lgessv1')   {
-									showSection('pvlgessv1');
+									showSection('#pvlgessv1');
 								}
 							}
 
@@ -924,38 +899,38 @@
 						</div>
 						<script>
 							function display_pv2wattmodul() {
-								hideSection('pv2noconfig');
-								hideSection('pv2ipdiv');
-								hideSection('pv2iddiv');
-								hideSection('pv2kitdiv');
-								hideSection('pv2wrjsondiv');
+								hideSection('#pv2noconfig');
+								hideSection('#pv2ipdiv');
+								hideSection('#pv2iddiv');
+								hideSection('#pv2kitdiv');
+								hideSection('#pv2wrjsondiv');
 								
 								if($('#pv2wattmodul').val() == 'wr2_json') {
-									showSection('pv2wrjsondiv');
+									showSection('#pv2wrjsondiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
-									showSection('pv2kitdiv');
+									showSection('#pv2kitdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethlovato') {
-									showSection('pv2kitdiv');
+									showSection('#pv2kitdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
-									showSection('pv2ipdiv');
+									showSection('#pv2ipdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_kostalsteca') {
-									showSection('pv2ipdiv');
+									showSection('#pv2ipdiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_victron') {
-									showSection('pv2ipdiv');
-									showSection('pv2iddiv');
+									showSection('#pv2ipdiv');
+									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_solaredge') {
-									showSection('pv2ipdiv');
-									showSection('pv2iddiv');
+									showSection('#pv2ipdiv');
+									showSection('#pv2iddiv');
 								}
 								if($('#pv2wattmodul').val() == 'wr2_ethsdm120') {
-									showSection('pv2ipdiv');
-									showSection('pv2iddiv');
+									showSection('#pv2ipdiv');
+									showSection('#pv2iddiv');
 								}
 							}
 							$(function() {

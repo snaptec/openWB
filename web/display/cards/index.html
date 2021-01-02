@@ -1184,6 +1184,22 @@
                     </div>
                     <!-- modal body -->
                     <div class="modal-body">
+                        <!-- global options for all charge points -->
+                        <!-- options specific for charge mode Min+PV -->
+                        <div class="chargeMode chargeModeMinPv">
+                            <div class="form-row vaRow">
+                                <div class="col-4">
+                                    <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
+                                    <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
+                                </div>
+                                <div class="col">
+                                    <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
+                                </div>
+                            </div>
+                            <div class="form-row vaRow">
+                                <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
+                            </div>
+                        </div>
                         <!-- chargepoint 1-->
                         <div data-config-lp="1" class="hide">
                             <!-- options specific for charge mode Sofort -->
@@ -1244,21 +1260,6 @@
                             <div class="chargeMode chargeModePv">
                                 <div class="form-row vaRow">
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
-                                </div>
-                            </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
                                 </div>
                             </div>
                             <!-- options specific for charge mode Standby -->
@@ -1334,21 +1335,6 @@
                             <div class="chargeMode chargeModePv">
                                 <div class="form-row vaRow">
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
-                                </div>
-                            </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
                                 </div>
                             </div>
                             <!-- options specific for charge mode Standby -->
@@ -1431,21 +1417,6 @@
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
                                 </div>
                             </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
-                                </div>
-                            </div>
                             <!-- options specific for charge mode Standby -->
                             <div class="chargeMode chargeModeStandby">
                                 <div class="form-row vaRow">
@@ -1524,21 +1495,6 @@
                             <div class="chargeMode chargeModePv">
                                 <div class="form-row vaRow">
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
-                                </div>
-                            </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
                                 </div>
                             </div>
                             <!-- options specific for charge mode Standby -->
@@ -1621,21 +1577,6 @@
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
                                 </div>
                             </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
-                                </div>
-                            </div>
                             <!-- options specific for charge mode Standby -->
                             <div class="chargeMode chargeModeStandby">
                                 <div class="form-row vaRow">
@@ -1714,21 +1655,6 @@
                             <div class="chargeMode chargeModePv">
                                 <div class="form-row vaRow">
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
-                                </div>
-                            </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
                                 </div>
                             </div>
                             <!-- options specific for charge mode Standby -->
@@ -1811,21 +1737,6 @@
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
                                 </div>
                             </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
-                                </div>
-                            </div>
                             <!-- options specific for charge mode Standby -->
                             <div class="chargeMode chargeModeStandby">
                                 <div class="form-row vaRow">
@@ -1904,21 +1815,6 @@
                             <div class="chargeMode chargeModePv">
                                 <div class="form-row vaRow">
                                     <div class="col text-center text-info">In dem Lademodus "PV" gibt es keine Einstellungen.</div>
-                                </div>
-                            </div>
-                            <!-- options specific for charge mode Min+PV -->
-                            <div class="chargeMode chargeModeMinPv">
-                                <div class="form-row vaRow">
-                                    <div class="col-4">
-                                        <label for="minCurrentMinPv" class="col-form-label">Min.-Strom: </label>
-                                        <label for="minCurrentMinPv" class="col-form-label valueLabel pull-right" data-suffix="A"></label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="range" class="form-control-range rangeInput" id="minCurrentMinPv" min="6" max="16" step="1" value="6" data-initialized="0" data-topicprefix="openWB/config/get/pv/">
-                                    </div>
-                                </div>
-                                <div class="form-row vaRow">
-                                    <div class="col text-center text-info">Diese Einstellung gilt für alle Ladepunkte!</div>
                                 </div>
                             </div>
                             <!-- options specific for charge mode Standby -->

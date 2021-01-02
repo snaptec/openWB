@@ -179,20 +179,20 @@
 							$(document).ready(function(){
 								$('input[type=radio][name=chargeLimitationLp<?php echo $chargepoint; ?>]').change(function(){
 									if(this.value == '0') {
-										$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+										hideSection('.lp<?php echo $chargepoint; ?>limitenergy');
 										<?php if( $chargepoint <= 2 ){ ?>
-										$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+										hideSection('.lp<?php echo $chargepoint; ?>limitsoc');
 										<?php } ?>
 									} else {
 										if(this.value == 1) {
-											$('.lp<?php echo $chargepoint; ?>limitenergy').show();
+											showSection('.lp<?php echo $chargepoint; ?>limitenergy');
 											<?php if( $chargepoint <= 2 ){ ?>
-											$('.lp<?php echo $chargepoint; ?>limitsoc').hide();
+											hideSection('.lp<?php echo $chargepoint; ?>limitsoc');
 											<?php } ?>
 										} else {
-											$('.lp<?php echo $chargepoint; ?>limitenergy').hide();
+											hideSection('.lp<?php echo $chargepoint; ?>limitenergy');
 											<?php if( $chargepoint <= 2 ){ ?>
-											$('.lp<?php echo $chargepoint; ?>limitsoc').show();
+											showSection('.lp<?php echo $chargepoint; ?>limitsoc');
 											<?php } ?>
 										}
 									}
@@ -296,7 +296,7 @@
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_sofortconfig.js?ver=20200503-a" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20200424-a" ></script>
 		<!-- load mqtt handler-->
@@ -318,24 +318,24 @@
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 1) {
-						$('.lp' + index + 'options').show();
+						showSection('.lp' + index + 'options');
 					} else {
-						$('.lp' + index + 'options').hide();
+						hideSection('.lp' + index + 'options');
 					}
 				}
 				if ( elementId.match( /^chargeLimitationLp[1-2]*$/i ) ) {
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 0) {
-						$('.lp' + index + 'limitenergy').hide();
-						$('.lp' + index + 'limitsoc').hide();
+						hideSection('.lp' + index + 'limitenergy');
+						hideSection('.lp' + index + 'limitsoc');
 					} else {
 						if ( mqttpayload == 1 ) {
-							$('.lp' + index + 'limitenergy').show();
-							$('.lp' + index + 'limitsoc').hide();
+							showSection('.lp' + index + 'limitenergy');
+							hideSection('.lp' + index + 'limitsoc');
 						} else {
-							$('.lp' + index + 'limitenergy').hide();
-							$('.lp' + index + 'limitsoc').show();
+							hideSection('.lp' + index + 'limitenergy');
+							showSection('.lp' + index + 'limitsoc');
 						}
 					}
 				}
@@ -343,9 +343,9 @@
 					var index = elementId.match(/(\d+)(?!.*\d)/g)[0];  // extract last match = number from mqttmsg
 					// now call functions or set variables corresponding to the index
 					if ( mqttpayload == 0) {
-						$('.lp' + index + 'limitenergy').hide();
+						hideSection('.lp' + index + 'limitenergy');
 					} else {
-						$('.lp' + index + 'limitenergy').show();
+						showSection('.lp' + index + 'limitenergy');
 					}
 				}
 			}

@@ -33,33 +33,9 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -675,6 +651,7 @@
 									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
+									<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ (BETA!!!)</option>
 									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
@@ -1257,145 +1234,191 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeq" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp1" id="soc_eq_client_id_lp1" value="<?php echo $soc_eq_client_id_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp1" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp1" id="soc_eq_client_secret_lp1" value="<?php echo $soc_eq_client_secret_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp1" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp1" id="soc_eq_vin_lp1" value="<?php echo $soc_eq_vin_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp1" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp1" id="soc_eq_cb_lp1" value="<?php echo $soc_eq_cb_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small">
+												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
+												<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
 						// visibility of charge point types
 						function display_lp1() {
-							hideSection('llmodullp1');
-							hideSection('evsecondac');
-							hideSection('evseconmod');
-							hideSection('evseconswifi');
-							hideSection('evsecongoe');
-							hideSection('evseconnrgkick');
-							hideSection('evseconmastereth');
-							hideSection('evseconkeba');
-							hideSection('openwb12');
-							hideSection('openwb12mid');
-							hideSection('openwb12v2mid');
-							hideSection('evseconhttp');
-							hideSection('evsecontwcmanager');
-							hideSection('evseconipevse');
-							hideSection('openwbbuchse');
-							hideSection('evseconextopenwb');
+							hideSection('#llmodullp1');
+							hideSection('#evsecondac');
+							hideSection('#evseconmod');
+							hideSection('#evseconswifi');
+							hideSection('#evsecongoe');
+							hideSection('#evseconnrgkick');
+							hideSection('#evseconmastereth');
+							hideSection('#evseconkeba');
+							hideSection('#openwb12');
+							hideSection('#openwb12mid');
+							hideSection('#openwb12v2mid');
+							hideSection('#evseconhttp');
+							hideSection('#evsecontwcmanager');
+							hideSection('#evseconipevse');
+							hideSection('#openwbbuchse');
+							hideSection('#evseconextopenwb');
 
 							if($('#evsecon').val() == 'modbusevse') {
 								switch( $("#evsecon option:selected").attr('data-id') ){
 									case "openwb series1/2":
-										showSection('openwb12');
+										showSection('#openwb12');
 									break;
 									case "openwb series1/2 mid v1":
-										showSection('openwb12mid');
+										showSection('#openwb12mid');
 									break;
 									case "openwb series1/2 mid v2":
-										showSection('openwb12v2mid');
+										showSection('#openwb12v2mid');
 									break;
 									default:
-										showSection('evseconmod');
-										showSection('llmodullp1');
+										showSection('#evseconmod');
+										showSection('#llmodullp1');
 										display_llmp1();
 								}
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('evseconipevse');
-								showSection('llmodullp1');
+								showSection('#evseconipevse');
+								showSection('#llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'extopenwb') {
-								showSection('evseconextopenwb');
+								showSection('#evseconextopenwb');
 							}
 							if($('#evsecon').val() == 'buchse') {
-								showSection('openwbbuchse');
+								showSection('#openwbbuchse');
 							}
 							if($('#evsecon').val() == 'dac') {
-								showSection('evsecondac');
-								showSection('llmodullp1');
+								showSection('#evsecondac');
+								showSection('#llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'simpleevsewifi') {
-								showSection('evseconswifi');
+								showSection('#evseconswifi');
 							}
 							if($('#evsecon').val() == 'httpevse') {
-								showSection('evseconhttp');
-								showSection('llmodullp1');
+								showSection('#evseconhttp');
+								showSection('#llmodullp1');
 								display_llmp1();
 							}
 							if($('#evsecon').val() == 'goe') {
-								showSection('evsecongoe');
+								showSection('#evsecongoe');
 							}
 							if($('#evsecon').val() == 'masterethframer') {
-								showSection('evseconmastereth');
+								showSection('#evseconmastereth');
 							}
 							if($('#evsecon').val() == 'nrgkick') {
-								showSection('evseconnrgkick');
+								showSection('#evseconnrgkick');
 							}
 							if($('#evsecon').val() == 'keba') {
-								showSection('evseconkeba');
+								showSection('#evseconkeba');
 							}
 							if($('#evsecon').val() == 'twcmanager') {
-								showSection('evsecontwcmanager');
+								showSection('#evsecontwcmanager');
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('evseconipevse');
+								showSection('#evseconipevse');
 							}
 						}
 
 						// visibility of meter modules
 						function display_llmp1() {
-							hideSection('llmnone');
-							hideSection('llmsdm');
-							hideSection('llmpm3pm');
-							hideSection('llswifi');
-							hideSection('llsma');
-							hideSection('sdm120div');
-							hideSection('rs485lanlp1');
-							hideSection('llmfsm');
-							hideSection('httpll');
-							hideSection('mpm3pmlllp1div');
-							hideSection('mqttll');
+							hideSection('#llmnone');
+							hideSection('#llmsdm');
+							hideSection('#llmpm3pm');
+							hideSection('#llswifi');
+							hideSection('#llsma');
+							hideSection('#sdm120div');
+							hideSection('#rs485lanlp1');
+							hideSection('#llmfsm');
+							hideSection('#httpll');
+							hideSection('#mpm3pmlllp1div');
+							hideSection('#mqttll');
 
 							if($('#ladeleistungmodul').val() == 'mpm3pmlllp1') {
-								showSection('mpm3pmlllp1div');
-								hideSection('rs485lanlp1'); // BUG hide/show typo?
+								showSection('#mpm3pmlllp1div');
+								hideSection('#rs485lanlp1'); // BUG hide/show typo?
 							}
 							if($('#ladeleistungmodul').val() == 'none') {
-								showSection('llmnone');
+								showSection('#llmnone');
 							}
 							if($('#ladeleistungmodul').val() == 'mpm3pmtripple') {
-								showSection('llmnone');
+								showSection('#llmnone');
 							}
 							if($('#ladeleistungmodul').val() == 'httpll') {
-								showSection('httpll');
+								showSection('#httpll');
 							}
 							if($('#ladeleistungmodul').val() == 'sdm630modbusll') {
-								showSection('llmsdm');
-								showSection('rs485lanlp1');
+								showSection('#llmsdm');
+								showSection('#rs485lanlp1');
 							}
 							if($('#ladeleistungmodul').val() == 'smaemd_ll') {
-								showSection('llsma');
+								showSection('#llsma');
 							}
 							if($('#ladeleistungmodul').val() == 'sdm120modbusll') {
-								showSection('sdm120div');
-								showSection('rs485lanlp1');
+								showSection('#sdm120div');
+								showSection('#rs485lanlp1');
 							}
 							if($('#ladeleistungmodul').val() == 'simpleevsewifi') {
-								showSection('llswifi');
+								showSection('#llswifi');
 							}
 							if($('#ladeleistungmodul').val() == 'mpm3pmll') {
-								showSection('llmpm3pm');
-								showSection('rs485lanlp1');
+								showSection('#llmpm3pm');
+								showSection('#rs485lanlp1');
 							}
 							if($('#ladeleistungmodul').val() == 'fsm63a3modbusll') {
-								showSection('rs485lanlp1');
-								showSection('llmfsm');
+								showSection('#rs485lanlp1');
+								showSection('#llmfsm');
 							}
 							if($('#ladeleistungmodul').val() == 'mqttll') {
-								showSection('mqttll');
+								showSection('#mqttll');
 							}
 						}
 
 						// visibility of soc modules
 						function display_socmodul() {
+
 							hideSection('socmodullp1');
 							hideSection('socmnone');
 							hideSection('socmhttp');
@@ -1406,6 +1429,7 @@
 							hideSection('socmtesla');
 							hideSection('soccarnet');
 							hideSection('socmzerong');
+							hideSection('socmeq');
 							hideSection('socmaudi');
 							hideSection('socmid');
 							hideSection('socmqtt');
@@ -1418,67 +1442,71 @@
 							hideSection('socmyopel');
 							hideSection('socmanual');
 
+
 							if($('#socmodul').val() == 'none') {
-								showSection('socmnone');
+								showSection('#socmnone');
 							} else {
-								showSection('socmodullp1', false); // do not enable all input child-elements!
-								showSection('stopsocnotpluggedlp1');
+								showSection('#socmodullp1', false); // do not enable all input child-elements!
+								showSection('#stopsocnotpluggedlp1');
 							}
 							if($('#socmodul').val() == 'soc_volvo') {
-								showSection('socmuser');
-								showSection('socmpass');
+								showSection('#socmuser');
+								showSection('#socmpass');
 							}
 							if($('#socmodul').val() == 'soc_mqtt') {
-								showSection('socmqtt');
+								showSection('#socmqtt');
 							}
 							if($('#socmodul').val() == 'soc_bluelink') {
-								showSection('socmbluelink');
+								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_id') {
-								showSection('socmid');
+								showSection('#socmid');
 							}
 							if($('#socmodul').val() == 'soc_kia') {
-								showSection('socmkia');
-								showSection('socmbluelink');
+								showSection('#socmkia');
+								showSection('#socmbluelink');
 							}
 							if($('#socmodul').val() == 'soc_audi') {
-								showSection('socmaudi');
+								showSection('#socmaudi');
 							}
 							if($('#socmodul').val() == 'soc_myrenault') {
-								showSection('socmyrenault');
+								showSection('#socmyrenault');
 							}
 							if($('#socmodul').val() == 'soc_http') {
-								showSection('socmhttp');
+								showSection('#socmhttp');
 							}
 							if($('#socmodul').val() == 'soc_zerong') {
-								showSection('socmzerong');
+								showSection('#socmzerong');
+							}
+							if($('#socmodul').val() == 'soc_eq') {
+								showSection('socmeq');
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
-								showSection('socleaf');
+								showSection('#socleaf');
 							}
 							if($('#socmodul').val() == 'soc_i3') {
-								showSection('soci3');
+								showSection('#soci3');
 							}
 							if($('#socmodul').val() == 'soc_zoe') {
-								showSection('soczoe');
+								showSection('#soczoe');
 							}
 							if($('#socmodul').val() == 'soc_evnotify') {
-								showSection('socevnotify');
+								showSection('#socevnotify');
 							}
 							if($('#socmodul').val() == 'soc_tesla') {
-								showSection('socmtesla');
+								showSection('#socmtesla');
 							}
 							if($('#socmodul').val() == 'soc_carnet') {
-								showSection('soccarnet');
+								showSection('#soccarnet');
 							}
 							if($('#socmodul').val() == 'soc_mypeugeot') {
-								showSection('socmypeugeot');
+								showSection('#socmypeugeot');
 							}
 							if($('#socmodul').val() == 'soc_myopel') {
-								showSection('socmyopel');
+								showSection('#socmyopel');
 							}
 							if($('#socmodul').val() == 'soc_manual') {
-								showSection('socmanual');
+								showSection('#socmanual');
 							}
 						}
 
@@ -1922,6 +1950,7 @@
 									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+									<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ (BETA!!!)</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
@@ -2404,6 +2433,51 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeqlp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp2" id="soc_eq_client_id_lp2" value="<?php echo $soc_eq_client_id_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp2" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp2" id="soc_eq_client_secret_lp2" value="<?php echo $soc_eq_client_secret_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp2" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp2" id="soc_eq_vin_lp2" value="<?php echo $soc_eq_vin_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp2" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp2" id="soc_eq_cb_lp2" value="<?php echo $soc_eq_cb_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
+											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_2p1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2421,96 +2495,97 @@
 					</div>
 					<script>
 						function display_lp2() {
-							hideSection('evsecondacs1');
-							hideSection('evseconmbs1');
-							hideSection('evseconswifis1');
-							hideSection('llmodullp2');
-							hideSection('evsecongoes1');
-							hideSection('evsecoslaveeth');
-							hideSection('evseconkebas1');
-							hideSection('evseconnrgkicks1');
-							hideSection('openwb12s1v1');
-							hideSection('openwb12s1v2');
-							hideSection('evseconextopenwblp2');
-							hideSection('evseconipevselp2');
+							hideSection('#evsecondacs1');
+							hideSection('#evseconmbs1');
+							hideSection('#evseconswifis1');
+							hideSection('#llmodullp2');
+							hideSection('#evsecongoes1');
+							hideSection('#evsecoslaveeth');
+							hideSection('#evseconkebas1');
+							hideSection('#evseconnrgkicks1');
+							hideSection('#openwb12s1v1');
+							hideSection('#openwb12s1v2');
+							hideSection('#evseconextopenwblp2');
+							hideSection('#evseconipevselp2');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
 									case "openwb series1/2 duo v1":
-										showSection('openwb12s1v1');
+										showSection('#openwb12s1v1');
 									break;
 									case "openwb series1/2 duo v2":
-										showSection('openwb12s1v2');
+										showSection('#openwb12s1v2');
 									break;
 									default:
-										showSection('evseconmbs1');
-										showSection('llmodullp2');
+										showSection('#evseconmbs1');
+										showSection('#llmodullp2');
 										display_llmp2();
 								}
 							}
 							if($('#evsecons1').val() == 'ipevse') {
-								showSection('evseconipevselp2');
-								showSection('llmodullp2');
+								showSection('#evseconipevselp2');
+								showSection('#llmodullp2');
 								display_llmp2();
 							}
 							if($('#evsecons1').val() == 'dac') {
-								showSection('evsecondacs1');
-								showSection('llmodullp2');
+								showSection('#evsecondacs1');
+								showSection('#llmodullp2');
 								display_llmp2();
 							}
 							if($('#evsecons1').val() == 'simpleevsewifi') {
-								showSection('evseconswifis1');
+								showSection('#evseconswifis1');
 							}
 							if($('#evsecons1').val() == 'extopenwb') {
-								showSection('evseconextopenwblp2');
+								showSection('#evseconextopenwblp2');
 							}
 							if($('#evsecons1').val() == 'goe') {
-								showSection('evsecongoes1');
+								showSection('#evsecongoes1');
 							}
 							if($('#evsecons1').val() == 'slaveeth') {
-								showSection('evsecoslaveeth');
+								showSection('#evsecoslaveeth');
 							}
 							if($('#evsecons1').val() == 'keba') {
-								showSection('evseconkebas1');
+								showSection('#evseconkebas1');
 							}
 							if($('#evsecons1').val() == 'nrgkick') {
-								showSection('evseconnrgkicks1');
+								showSection('#evseconnrgkicks1');
 							}
 						}
 
 						function display_llmp2() {
-							hideSection('sdm630s1div');
-							hideSection('sdm120s1div');
-							hideSection('swifis1div');
-							hideSection('mpm3pmlls1div');
-							hideSection('rs485lanlp2');
-							hideSection('mpm3pmlllp2div');
+							hideSection('#sdm630s1div');
+							hideSection('#sdm120s1div');
+							hideSection('#swifis1div');
+							hideSection('#mpm3pmlls1div');
+							hideSection('#rs485lanlp2');
+							hideSection('#mpm3pmlllp2div');
 
 							if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
-								showSection('sdm630s1div');
-								showSection('rs485lanlp2');
+								showSection('#sdm630s1div');
+								showSection('#rs485lanlp2');
 							}
 							if($('#ladeleistungs1modul').val() == 'sdm120modbuslls1') {
-								showSection('sdm120s1div');
-								showSection('rs485lanlp2');
+								showSection('#sdm120s1div');
+								showSection('#rs485lanlp2');
 							}
 							if($('#ladeleistungs1modul').val() == 'simpleevsewifis1') {
-								showSection('swifis1div');
+								showSection('#swifis1div');
 							}
 							if($('#ladeleistungs1modul').val() == 'goelp2') {
-								showSection('swifis1div');
+								showSection('#swifis1div');
 							}
 							if($('#ladeleistungs1modul').val() == 'mpm3pmlllp2') {
-								showSection('mpm3pmlllp2div');
-								hideSection('rs485lanlp2'); // BUG show/hide typo?
+								showSection('#mpm3pmlllp2div');
+								hideSection('#rs485lanlp2'); // BUG show/hide typo?
 							}
 							if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
-								showSection('mpm3pmlls1div');
-								showSection('rs485lanlp2');
+								showSection('#mpm3pmlls1div');
+								showSection('#rs485lanlp2');
 							}
 						}
 
 						function display_socmodul1() {
+
 							hideSection('socmodullp2');
 							hideSection('socmqtt1');
 							hideSection('socmuser2');
@@ -2523,6 +2598,7 @@
 							hideSection('socevnotifylp2');
 							hideSection('soczoelp2');
 							hideSection('socmteslalp2');
+							hideSection('socmeqlp2');
 							hideSection('socmyrenaultlp2');
 							hideSection('soccarnetlp2');
 							hideSection('socmzeronglp2');
@@ -2532,87 +2608,91 @@
 							hideSection('socmintervall2');
 							hideSection('socmanuallp2');
 
+
 							if($('#socmodul1').val() == 'none') {
-								showSection('socmnone1');
+								showSection('#socmnone1');
 							} else {
-								showSection('socmodullp2', false); // do not enable all input child-elements!
+								showSection('#socmodullp2', false); // do not enable all input child-elements!
 							}
 							if($('#socmodul1').val() == 'soc_mqtt') {
-								showSection('socmqtt1');
+								showSection('#socmqtt1');
 							}
 							if($('#socmodul1').val() == 'soc_http1') {
-								showSection('socmhttp1');
+								showSection('#socmhttp1');
 							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
-								showSection('socmuser2');
-								showSection('socmpass2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
 							}
 							if($('#socmodul1').val() == 'soc_bluelinklp2') {
-								showSection('socmuser2');
-								showSection('socmpass2');
-								// showSection('socmpin2'); // not needed anymore 2020-12-16
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								// showSection('#socmpin2'); // not needed anymore 2020-12-16
 							}
 							if($('#socmodul1').val() == 'soc_kialp2') {
-								showSection('socmuser2');
-								showSection('socmpass2');
-								showSection('socmpin2');
-								showSection('socmvin2');
-								showSection('socmintervall2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmpin2');
+								showSection('#socmvin2');
+								showSection('#socmintervall2');
 							}
 							if($('#socmodul1').val() == 'soc_idlp2') {
-								showSection('socmuser2');
-								showSection('socmpass2');
-								showSection('socmvin2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvin2');
 							}
 							if($('#socmodul1').val() == 'soc_leafs1') {
-								showSection('socleaf1');
+								showSection('#socleaf1');
 							}
 							if($('#socmodul1').val() == 'soc_myrenaultlp2') {
-								showSection('socmyrenaultlp2');
+								showSection('#socmyrenaultlp2');
 							}
 							if($('#socmodul1').val() == 'soc_i3s1') {
-								showSection('soci31');
+								showSection('#soci31');
 							}
 							if($('#socmodul1').val() == 'soc_evnotifys1') {
-								showSection('socevnotifylp2');
+								showSection('#socevnotifylp2');
 							}
 							if($('#socmodul1').val() == 'soc_zoelp2') {
-								showSection('soczoelp2');
+								showSection('#soczoelp2');
+							}
+							if($('#socmodul1').val() == 'soc_eqlp2') {
+								showSection('socmeqlp2');
 							}
 							if($('#socmodul1').val() == 'soc_carnetlp2') {
-								showSection('soccarnetlp2');
+								showSection('#soccarnetlp2');
 							}
 							if($('#socmodul1').val() == 'soc_teslalp2') {
-								showSection('socmteslalp2');
+								showSection('#socmteslalp2');
 							}
 							if($('#socmodul1').val() == 'soc_zeronglp2') {
-								showSection('socmzeronglp2');
+								showSection('#socmzeronglp2');
 							}
 							if($('#socmodul1').val() == 'soc_mypeugeotlp2') {
-								showSection('socmypeugeotlp2');
+								showSection('#socmypeugeotlp2');
 							}
 							if($('#socmodul1').val() == 'soc_myopellp2') {
-								showSection('socmyopellp2');
+								showSection('#socmyopellp2');
 							}
 							if($('#socmodul1').val() == 'soc_manuallp2') {
-								showSection('socmanuallp2');
+								showSection('#socmanuallp2');
 							}
 							if($('#socmodul1').val() == 'soc_volvolp2') {
-								showSection('socmuser2');
-								showSection('socmpass2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
 							}
 						}
 
 						function display_lastmanagement() {
 							if($('#lastmanagementOff').prop("checked")) {
-								hideSection('lastmman');
-								hideSection('durchslp2');
-								hideSection('nachtls1div');
+								hideSection('#lastmman');
+								hideSection('#durchslp2');
+								hideSection('#nachtls1div');
 							}
 							else {
-								showSection('lastmman');
-								showSection('durchslp2');
-								showSection('nachtls1div');
+								showSection('#lastmman');
+								showSection('#durchslp2');
+								showSection('#nachtls1div');
 								display_socmodul1();
 								display_llmp2 ();
 								display_lp2();
@@ -2962,83 +3042,83 @@
 					<script>
 						function display_lastmanagement2() {
 							if($('#lastmanagements2Off').prop("checked")) {
-								hideSection('lasts2mman');
+								hideSection('#lasts2mman');
 							}
 							else {
-								showSection('lasts2mman');
+								showSection('#lasts2mman');
 								display_lp3();
 							}
 						}
 
 						function display_lp3 () {
-							hideSection('evsecondacs2');
-							hideSection('evseconmbs2');
-							hideSection('evseconswifis2');
-							hideSection('llmodullp3');
-							hideSection('evsecongoes2');
-							hideSection('evseconipevselp3');
-							hideSection('evseconextopenwblp3');
-							hideSection('evseconthirdeth');
+							hideSection('#evsecondacs2');
+							hideSection('#evseconmbs2');
+							hideSection('#evseconswifis2');
+							hideSection('#llmodullp3');
+							hideSection('#evsecongoes2');
+							hideSection('#evseconipevselp3');
+							hideSection('#evseconextopenwblp3');
+							hideSection('#evseconthirdeth');
 
 							if($('#evsecons2').val() == 'thirdeth') {
-								showSection('evseconthirdeth');
+								showSection('#evseconthirdeth');
 							}
 							if($('#evsecons2').val() == 'dac') {
-								showSection('evsecondacs2');
-								showSection('llmodullp3');
+								showSection('#evsecondacs2');
+								showSection('#llmodullp3');
 								display_llmp3();
 							}
 							if($('#evsecons2').val() == 'modbusevse') {
-								showSection('evseconmbs2');
-								showSection('llmodullp3');
+								showSection('#evseconmbs2');
+								showSection('#llmodullp3');
 								display_llmp3();
 							}
 							if($('#evsecons2').val() == 'simpleevsewifi') {
-								showSection('evseconswifis2');
+								showSection('#evseconswifis2');
 							}
 							if($('#evsecons2').val() == 'extopenwb') {
-								showSection('evseconextopenwblp3');
+								showSection('#evseconextopenwblp3');
 							}
 							if($('#evsecons2').val() == 'goe') {
-								showSection('evsecongoes2');
+								showSection('#evsecongoes2');
 							}
 							if($('#evsecons2').val() == 'ipevse') {
-								showSection('evseconipevselp3');
-								showSection('llmodullp3');
+								showSection('#evseconipevselp3');
+								showSection('#llmodullp3');
 								display_llmp3();
 							}
 						}
 
 						function display_llmp3 () {
-							hideSection('sdm630s2div');
-							hideSection('sdm120s2div');
-							hideSection('swifis2div');
-							hideSection('rs485lanlp3');
-							hideSection('mpm3pmlls2div');
-							hideSection('mpm3pmlllp3div');
+							hideSection('#sdm630s2div');
+							hideSection('#sdm120s2div');
+							hideSection('#swifis2div');
+							hideSection('#rs485lanlp3');
+							hideSection('#mpm3pmlls2div');
+							hideSection('#mpm3pmlllp3div');
 
 
 							if($('#ladeleistungs2modul').val() == 'mpm3pmlllp3') {
-								showSection('mpm3pmlllp3div');
-								showSection('rs485lanlp3');
+								showSection('#mpm3pmlllp3div');
+								showSection('#rs485lanlp3');
 							}
 							if($('#ladeleistungs2modul').val() == 'sdm630modbuslls2') {
-								showSection('sdm630s2div');
-								showSection('rs485lanlp3');
+								showSection('#sdm630s2div');
+								showSection('#rs485lanlp3');
 							}
 							if($('#ladeleistungs2modul').val() == 'sdm120modbuslls2') {
-								showSection('sdm120s2div');
-								showSection('rs485lanlp3');
+								showSection('#sdm120s2div');
+								showSection('#rs485lanlp3');
 							}
 							if($('#ladeleistungs2modul').val() == 'simpleevsewifis2') {
-								showSection('swifis2div');
+								showSection('#swifis2div');
 							}
 							if($('#ladeleistungs2modul').val() == 'goelp3') {
-								showSection('swifis2div');
+								showSection('#swifis2div');
 							}
 							if($('#ladeleistungs2modul').val() == 'mpm3pmlls2') {
-								showSection('mpm3pmlls2div');
-								showSection('rs485lanlp3');
+								showSection('#mpm3pmlls2div');
+								showSection('#rs485lanlp3');
 							}
 						}
 
@@ -3159,23 +3239,23 @@
 						</div>
 						<script>
 							function display_lp<?php echo $chargepointNum; ?> () {
-								hideSection('evseconipevselp<?php echo $chargepointNum; ?>');
-								hideSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>');
+								hideSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'extopenwb') {
-									showSection('evseconextopenwblp<?php echo $chargepointNum; ?>');
+									showSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								}
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
-									showSection('evseconipevselp<?php echo $chargepointNum; ?>');
+									showSection('#evseconipevselp<?php echo $chargepointNum; ?>');
 								}
 							}
 
 							function display_lastmanagementlp<?php echo $chargepointNum; ?>() {
 								if($('#lastmanagementlp<?php echo $chargepointNum; ?>Off').prop("checked")) {
-									hideSection('lastlp<?php echo $chargepointNum; ?>mman');
+									hideSection('#lastlp<?php echo $chargepointNum; ?>mman');
 								}
 								else {
-									showSection('lastlp<?php echo $chargepointNum; ?>mman');
+									showSection('#lastlp<?php echo $chargepointNum; ?>mman');
 									display_lp<?php echo $chargepointNum; ?>();
 								}
 							}

@@ -34,7 +34,7 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
 			function getCookie(cname) {
 				var name = cname + '=';
@@ -243,16 +243,16 @@
 					<script>
 						$(function() {
 							if($('#angesteckthooklp1Off').prop("checked")) {
-								$('#angesteckthooklp1andiv').hide();
+								hideSection('#angesteckthooklp1andiv');
 							} else {
-								$('#angesteckthooklp1andiv').show();
+								showSection('#angesteckthooklp1andiv');
 							}
 
 							$('input[type=radio][name=angesteckthooklp1]').change(function(){
 								if(this.value == '0') {
-									$('#angesteckthooklp1andiv').hide();
+									hideSection('#angesteckthooklp1andiv');
 								} else {
-									$('#angesteckthooklp1andiv').show();
+									showSection('#angesteckthooklp1andiv');
 								}
 							});
 						});
@@ -343,16 +343,16 @@
 						$(function() {
 							<?php for ( $deviceNum = 1; $deviceNum < 4; $deviceNum++ ){ ?>
 								if($('#hook<?php echo $deviceNum; ?>_aktivOff').prop("checked")) {
-									$('#hook<?php echo $deviceNum; ?>andiv').hide();
+									hideSection('#hook<?php echo $deviceNum; ?>andiv');
 								} else {
-									$('#hook<?php echo $deviceNum; ?>andiv').show();
+									showSection('#hook<?php echo $deviceNum; ?>andiv');
 								}
 
 								$('input[type=radio][name=hook<?php echo $deviceNum; ?>_aktiv]').change(function(){
 									if(this.value == '0') {
-										$('#hook<?php echo $deviceNum; ?>andiv').hide();
+										hideSection('#hook<?php echo $deviceNum; ?>andiv');
 									} else {
-										$('#hook<?php echo $deviceNum; ?>andiv').show();
+										showSection('#hook<?php echo $deviceNum; ?>andiv');
 									}
 								});
 							<?php } ?>
@@ -461,43 +461,43 @@
 						$(function() {
 							<?php for ( $deviceNum = 1; $deviceNum < 4; $deviceNum++ ){ ?>
 								if($('#verbraucher<?php echo $deviceNum; ?>_aktivOff').prop("checked")) {
-									$('#verbraucher<?php echo $deviceNum; ?>andiv').hide();
+									hideSection('#verbraucher<?php echo $deviceNum; ?>andiv');
 								} else {
-									$('#verbraucher<?php echo $deviceNum; ?>andiv').show();
+									showSection('#verbraucher<?php echo $deviceNum; ?>andiv');
 								}
 
 								$('input[type=radio][name=verbraucher<?php echo $deviceNum; ?>_aktiv]').change(function(){
 									if(this.value == '0') {
-										$('#verbraucher<?php echo $deviceNum; ?>andiv').hide();
+										hideSection('#verbraucher<?php echo $deviceNum; ?>andiv');
 									} else {
-										$('#verbraucher<?php echo $deviceNum; ?>andiv').show();
+										showSection('#verbraucher<?php echo $deviceNum; ?>andiv');
 									}
 								});
 
 								function display_verbraucher<?php echo $deviceNum; ?> () {
-									$('#v<?php echo $deviceNum; ?>http').hide();
-									$('#v<?php echo $deviceNum; ?>modbus').hide();
-									$('#v<?php echo $deviceNum; ?>tasmota').hide();
+									hideSection('#v<?php echo $deviceNum; ?>http');
+									hideSection('#v<?php echo $deviceNum; ?>modbus');
+									hideSection('#v<?php echo $deviceNum; ?>tasmota');
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'http') {
-										$('#v<?php echo $deviceNum; ?>http').show();
+										showSection('#v<?php echo $deviceNum; ?>http');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'mpm3pm') {
-										$('#v<?php echo $deviceNum; ?>modbus').show();
+										showSection('#v<?php echo $deviceNum; ?>modbus');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'sdm630') {
-										$('#v<?php echo $deviceNum; ?>modbus').show();
+										showSection('#v<?php echo $deviceNum; ?>modbus');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'sdm120') {
-										$('#v<?php echo $deviceNum; ?>modbus').show();
+										showSection('#v<?php echo $deviceNum; ?>modbus');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'abb-b23') {
-										$('#v<?php echo $deviceNum; ?>modbus').show();
+										showSection('#v<?php echo $deviceNum; ?>modbus');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'tasmota') {
-										$('#v<?php echo $deviceNum; ?>tasmota').show();
+										showSection('#v<?php echo $deviceNum; ?>tasmota');
 									}
 									if($('#verbraucher<?php echo $deviceNum; ?>_typ').val() == 'shelly') {
-										$('#v<?php echo $deviceNum; ?>tasmota').show();
+										showSection('#v<?php echo $deviceNum; ?>tasmota');
 									}
 
 								}
