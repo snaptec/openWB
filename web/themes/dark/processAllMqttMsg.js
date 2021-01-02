@@ -353,10 +353,12 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			$('#awattarEnabledIcon').show();
 			$('#priceBasedCharging').show();
 			$('#strompreis').show();
+			$('#navStromtarifInfo').removeClass('disabled');
 		} else {
 			$('#awattarEnabledIcon').hide();
 			$('#priceBasedCharging').hide();
 			$('#strompreis').hide();
+			$('#navStromtarifInfo').addClass('disabled');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
