@@ -35,48 +35,6 @@ $numDevices = 9;
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with selector 'section' in JQuery syntax
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$(section).addClass('hide');
-				updateFormFields();
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with selector 'section' in JQuery syntax
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$(section).removeClass('hide');
-				updateFormFields();
-			}
-
-			/**
-			 * updateFormFields
-			 * checks every input and select element for a parent with class 'hide'
-			 * if there is a match, disable this element
-			**/
-			function updateFormFields() {
-				$('input').each(function() {
-					if( $(this).closest('.hide').length == 0 ) {
-						$(this).prop("disabled", false);
-					} else {
-						$(this).prop("disabled", true);
-					}
-				});
-				$('select').each(function() {
-					if( $(this).closest('.hide').length == 0 ) {
-						$(this).prop("disabled", false);
-					} else {
-						$(this).prop("disabled", true);
-					}
-				});
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -560,7 +518,7 @@ $numDevices = 9;
 		<!-- load topics -->
 		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20201207" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201207" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20201207" ></script>
 		<!-- load mqtt handler-->

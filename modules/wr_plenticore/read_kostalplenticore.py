@@ -278,7 +278,7 @@ try:
     reg_326 = client.read_holding_registers(326,2,unit=71)
 except:
     # kein Zugriff auf WR1, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-    writeLogEntry('Fehler beim Lesen der Modbus-Register WR1 (falsche WR-IP?)')
+    writeLogEntry('Fehler beim Lesen der Modbus-Register WR1 (falsche IP oder WR offline?)')
     writeToRamdisk()
     sys.exit(1)
 
@@ -300,7 +300,7 @@ if ipaddress2 != 'none':
         reg2_326 = client2.read_holding_registers(326,2,unit=71)
     except:
         # Lesefehler bei den Registern, also Abbruch und mit 0 initialisierte Variablen in die Ramdisk
-        writeLogEntry('Fehler beim Lesen der Modbus-Register WR2 (falsche WR-IP?)')
+        writeLogEntry('Fehler beim Lesen der Modbus-Register WR2 (falsche IP oder WR offline?)')
         writeToRamdisk()
         sys.exit(1)
 

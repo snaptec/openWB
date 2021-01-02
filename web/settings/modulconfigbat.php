@@ -33,33 +33,9 @@
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -500,97 +476,97 @@
 
 						<script>
 							function display_speichermodul() {
-								hideSection('divspeichermqtt');
-								hideSection('divspeicherhttp');
-								hideSection('divspeichermpm3pm');
-								hideSection('divspeicherbydhv');
-								hideSection('divspeicherfronius');
-								hideSection('divspeichere3dc');
-								hideSection('divspeichersbs25');
-								hideSection('divspeichersolaredge');
-								hideSection('divspeicherpw');
-								hideSection('divspeicherplenti');
-								hideSection('divspeichersunnyisland');
-								hideSection('divspeicherseco');
-								hideSection('divspeicherkit');
-								hideSection('divspeichervarta');
-								hideSection('divspeicheralphaess');
-								hideSection('divspeichervictron');
-								hideSection('divspeicherlgessv1');
-								hideSection('divspeicherfems');
-								hideSection('divspeicherip');
-								hideSection('divspeichersiemens');
-								hideSection('divspeicherrct');
-								hideSection('divspeichersungrow');
+								hideSection('#divspeichermqtt');
+								hideSection('#divspeicherhttp');
+								hideSection('#divspeichermpm3pm');
+								hideSection('#divspeicherbydhv');
+								hideSection('#divspeicherfronius');
+								hideSection('#divspeichere3dc');
+								hideSection('#divspeichersbs25');
+								hideSection('#divspeichersolaredge');
+								hideSection('#divspeicherpw');
+								hideSection('#divspeicherplenti');
+								hideSection('#divspeichersunnyisland');
+								hideSection('#divspeicherseco');
+								hideSection('#divspeicherkit');
+								hideSection('#divspeichervarta');
+								hideSection('#divspeicheralphaess');
+								hideSection('#divspeichervictron');
+								hideSection('#divspeicherlgessv1');
+								hideSection('#divspeicherfems');
+								hideSection('#divspeicherip');
+								hideSection('#divspeichersiemens');
+								hideSection('#divspeicherrct');
+								hideSection('#divspeichersungrow');
 
 								if($('#speichermodul').val() == 'speicher_fems') {
-									showSection('divspeicherfems');
+									showSection('#divspeicherfems');
 								}
 								if($('#speichermodul').val() == 'speicher_rct') {
-									showSection('divspeicherrct');
+									showSection('#divspeicherrct');
 								}
 								if($('#speichermodul').val() == 'speicher_siemens') {
-									showSection('divspeicherip');
-									showSection('divspeichersiemens');
+									showSection('#divspeicherip');
+									showSection('#divspeichersiemens');
 								}
 								if($('#speichermodul').val() == 'speicher_solarwatt') {
-									showSection('divspeicherip');
+									showSection('#divspeicherip');
 								}
 
 								if($('#speichermodul').val() == 'speicher_sungrow') {
-									showSection('divspeicherip');
-									showSection('divspeichersungrow');
+									showSection('#divspeicherip');
+									showSection('#divspeichersungrow');
 								}
 								if($('#speichermodul').val() == 'speicher_alphaess') {
-									showSection('divspeicheralphaess');
+									showSection('#divspeicheralphaess');
 								}
 								if($('#speichermodul').val() == 'speicher_mqtt') {
-									showSection('divspeichermqtt');
+									showSection('#divspeichermqtt');
 								}
 								if($('#speichermodul').val() == 'speicher_victron') {
-									showSection('divspeichervictron');
+									showSection('#divspeichervictron');
 								}
 								if($('#speichermodul').val() == 'speicher_mpm3pm') {
-									showSection('divspeicherkit');
+									showSection('#divspeicherkit');
 								}
 								if($('#speichermodul').val() == 'speicher_sonneneco') {
-									showSection('divspeicherseco');
+									showSection('#divspeicherseco');
 								}
 								if($('#speichermodul').val() == 'speicher_http')   {
-									showSection('divspeicherhttp');
+									showSection('#divspeicherhttp');
 								}
 								if($('#speichermodul').val() == 'mpm3pmspeicher')   {
-									showSection('divspeichermpm3pm');
+									showSection('#divspeichermpm3pm');
 								}
 								if($('#speichermodul').val() == 'speicher_bydhv')   {
-									showSection('divspeicherbydhv');
+									showSection('#divspeicherbydhv');
 								}
 								if($('#speichermodul').val() == 'speicher_fronius')   {
-									showSection('divspeicherfronius');
+									showSection('#divspeicherfronius');
 								}
 								if($('#speichermodul').val() == 'speicher_e3dc')   {
-									showSection('divspeichere3dc');
+									showSection('#divspeichere3dc');
 								}
 								if($('#speichermodul').val() == 'speicher_sbs25')   {
-									showSection('divspeichersbs25');
+									showSection('#divspeichersbs25');
 								}
 								if($('#speichermodul').val() == 'speicher_solaredge')   {
-									showSection('divspeichersolaredge');
+									showSection('#divspeichersolaredge');
 								}
 								if($('#speichermodul').val() == 'speicher_varta')   {
-									showSection('divspeichervarta');
+									showSection('#divspeichervarta');
 								}
 								if($('#speichermodul').val() == 'speicher_powerwall')   {
-									showSection('divspeicherpw');
+									showSection('#divspeicherpw');
 								}
 								if($('#speichermodul').val() == 'speicher_kostalplenticore')   {
-									showSection('divspeicherplenti');
+									showSection('#divspeicherplenti');
 								}
 								if($('#speichermodul').val() == 'speicher_sunnyisland')   {
-									showSection('divspeichersunnyisland');
+									showSection('#divspeichersunnyisland');
 								}
 								if($('#speichermodul').val() == 'speicher_lgessv1')   {
-									showSection('divspeicherlgessv1');
+									showSection('#divspeicherlgessv1');
 								}
 							}
 
