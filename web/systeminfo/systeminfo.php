@@ -248,10 +248,9 @@
 
 					})
 				}
-				$(document).ready(function() {
-					updatesysteminfo();
-					setInterval(updatesysteminfo, 2000);
-				})
+
+				updatesysteminfo();
+				setInterval(updatesysteminfo, 2000);
 
 			});
 
