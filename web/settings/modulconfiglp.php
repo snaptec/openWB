@@ -651,6 +651,7 @@
 									<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
 									<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									<option <?php if($socmodulold == "soc_audi") echo "selected" ?> value="soc_audi">Audi</option>
+									<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ (BETA!!!)</option>
 									<option <?php if($socmodulold == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 									<option <?php if($socmodulold == "soc_bluelink") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 									<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia</option>
@@ -1233,6 +1234,51 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeq" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp1" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp1" id="soc_eq_client_id_lp1" value="<?php echo $soc_eq_client_id_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp1" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp1" id="soc_eq_client_secret_lp1" value="<?php echo $soc_eq_client_secret_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp1" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp1" id="soc_eq_vin_lp1" value="<?php echo $soc_eq_vin_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp1" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp1" id="soc_eq_cb_lp1" value="<?php echo $soc_eq_cb_lp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small">
+												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
+												<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<script>
@@ -1372,27 +1418,30 @@
 
 						// visibility of soc modules
 						function display_socmodul() {
-							hideSection('#socmodullp1');
-							hideSection('#socmnone');
-							hideSection('#socmhttp');
-							hideSection('#socleaf');
-							hideSection('#soci3');
-							hideSection('#soczoe');
-							hideSection('#socevnotify');
-							hideSection('#socmtesla');
-							hideSection('#soccarnet');
-							hideSection('#socmzerong');
-							hideSection('#socmaudi');
-							hideSection('#socmid');
-							hideSection('#socmqtt');
-							hideSection('#socmbluelink');
-							hideSection('#socmkia');
-							hideSection('#socmuser');
-							hideSection('#socmpass');
-							hideSection('#socmyrenault');
-							hideSection('#socmypeugeot');
-							hideSection('#socmyopel');
-							hideSection('#socmanual');
+
+							hideSection('socmodullp1');
+							hideSection('socmnone');
+							hideSection('socmhttp');
+							hideSection('socleaf');
+							hideSection('soci3');
+							hideSection('soczoe');
+							hideSection('socevnotify');
+							hideSection('socmtesla');
+							hideSection('soccarnet');
+							hideSection('socmzerong');
+							hideSection('socmeq');
+							hideSection('socmaudi');
+							hideSection('socmid');
+							hideSection('socmqtt');
+							hideSection('socmbluelink');
+							hideSection('socmkia');
+							hideSection('socmuser');
+							hideSection('socmpass');
+							hideSection('socmyrenault');
+							hideSection('socmypeugeot');
+							hideSection('socmyopel');
+							hideSection('socmanual');
+
 
 							if($('#socmodul').val() == 'none') {
 								showSection('#socmnone');
@@ -1428,6 +1477,9 @@
 							}
 							if($('#socmodul').val() == 'soc_zerong') {
 								showSection('#socmzerong');
+							}
+							if($('#socmodul').val() == 'soc_eq') {
+								showSection('socmeq');
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
 								showSection('#socleaf');
@@ -1898,6 +1950,7 @@
 									<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
 									<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
+									<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ (BETA!!!)</option>
 									<option <?php if($socmodul1old == "soc_audilp2") echo "selected" ?> value="soc_audilp2">Audi</option>
 									<option <?php if($socmodul1old == "soc_bluelinklp2") echo "selected" ?> value="soc_bluelinklp2">Hyundai Bluelink</option>
 									<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia</option>
@@ -2380,6 +2433,51 @@
 									</div>
 								</div>
 							</div>
+							<div id="socmeqlp2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_id_lp2" class="col-md-4 col-form-label">Client ID</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_id_lp2" id="soc_eq_client_id_lp2" value="<?php echo $soc_eq_client_id_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_client_secret_lp2" class="col-md-4 col-form-label">Client Secret</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_client_secret_lp2" id="soc_eq_client_secret_lp2" value="<?php echo $soc_eq_client_secret_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_vin_lp2" class="col-md-4 col-form-label">Fahrzeug ident</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_vin_lp2" id="soc_eq_vin_lp2" value="<?php echo $soc_eq_vin_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_cb_lp2" class="col-md-4 col-form-label">Callback</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_eq_cb_lp2" id="soc_eq_cb_lp2" value="<?php echo $soc_eq_cb_lp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<div class="col">
+											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
+											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_2p1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
 							<div id="socmintervall2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -2487,26 +2585,29 @@
 						}
 
 						function display_socmodul1() {
-							hideSection('#socmodullp2');
-							hideSection('#socmqtt1');
-							hideSection('#socmuser2');
-							hideSection('#socmpass2');
-							hideSection('#socmpin2');
-							hideSection('#socmnone1');
-							hideSection('#socmhttp1');
-							hideSection('#socleaf1');
-							hideSection('#soci31');
-							hideSection('#socevnotifylp2');
-							hideSection('#soczoelp2');
-							hideSection('#socmteslalp2');
-							hideSection('#socmyrenaultlp2');
-							hideSection('#soccarnetlp2');
-							hideSection('#socmzeronglp2');
-							hideSection('#socmypeugeotlp2');
-							hideSection('#socmyopellp2');
-							hideSection('#socmvin2');
-							hideSection('#socmintervall2');
-							hideSection('#socmanuallp2');
+
+							hideSection('socmodullp2');
+							hideSection('socmqtt1');
+							hideSection('socmuser2');
+							hideSection('socmpass2');
+							hideSection('socmpin2');
+							hideSection('socmnone1');
+							hideSection('socmhttp1');
+							hideSection('socleaf1');
+							hideSection('soci31');
+							hideSection('socevnotifylp2');
+							hideSection('soczoelp2');
+							hideSection('socmteslalp2');
+							hideSection('socmeqlp2');
+							hideSection('socmyrenaultlp2');
+							hideSection('soccarnetlp2');
+							hideSection('socmzeronglp2');
+							hideSection('socmypeugeotlp2');
+							hideSection('socmyopellp2');
+							hideSection('socmvin2');
+							hideSection('socmintervall2');
+							hideSection('socmanuallp2');
+
 
 							if($('#socmodul1').val() == 'none') {
 								showSection('#socmnone1');
@@ -2554,6 +2655,9 @@
 							}
 							if($('#socmodul1').val() == 'soc_zoelp2') {
 								showSection('#soczoelp2');
+							}
+							if($('#socmodul1').val() == 'soc_eqlp2') {
+								showSection('socmeqlp2');
 							}
 							if($('#socmodul1').val() == 'soc_carnetlp2') {
 								showSection('#soccarnetlp2');
