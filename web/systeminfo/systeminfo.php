@@ -120,7 +120,7 @@
 							<p>
 								Systemzeit: <span id="systemtime">--</span><br>
 								Letzter Systemstart: <span id="lastreboot">--</span><br>
-								System Laufzeit: <span id="uptime">--</span><br>
+								System-Laufzeit: <span id="uptime">--</span><br>
 							</p>
 							<p>
 								CPU-Frequenz: <span id="cpufreq">--</span>MHz<br>
@@ -134,9 +134,6 @@
 							</p>
 							<p>
 								SD-Karte: <span id="diskuse">--</span>, <span id="diskfree">--</span> verfügbar
-							</p>
-							<p>
-								angem. Nutzer: <span id="userscount">--</span><br>
 							</p>
 							IP-Adresse LAN: <span id="iplan">--</span><br>
 							IP-Adresse WLAN: <span id="ipwifi">--</span>
@@ -249,15 +246,11 @@
 						var loadAverage = json.uptime.substr(json.uptime.indexOf(pattern) + pattern.length, json.uptime.length);
 						$('#loadaverage').text(loadAverage);
 
-						var userscount = json.uptime.split(',', 2)[1].match(/(\d+)/)[0];
-						$('#userscount').text(userscount);
-
 					})
 				}
-				$(document).ready(function() {
-					updatesysteminfo();
-					setInterval(updatesysteminfo, 2000);
-				})
+
+				updatesysteminfo();
+				setInterval(updatesysteminfo, 2000);
 
 			});
 
