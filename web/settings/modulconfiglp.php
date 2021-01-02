@@ -1419,28 +1419,28 @@
 						// visibility of soc modules
 						function display_socmodul() {
 
-							hideSection('socmodullp1');
-							hideSection('socmnone');
-							hideSection('socmhttp');
-							hideSection('socleaf');
-							hideSection('soci3');
-							hideSection('soczoe');
-							hideSection('socevnotify');
-							hideSection('socmtesla');
-							hideSection('soccarnet');
-							hideSection('socmzerong');
-							hideSection('socmeq');
-							hideSection('socmaudi');
-							hideSection('socmid');
-							hideSection('socmqtt');
-							hideSection('socmbluelink');
-							hideSection('socmkia');
-							hideSection('socmuser');
-							hideSection('socmpass');
-							hideSection('socmyrenault');
-							hideSection('socmypeugeot');
-							hideSection('socmyopel');
-							hideSection('socmanual');
+							hideSection('#socmodullp1');
+							hideSection('#socmnone');
+							hideSection('#socmhttp');
+							hideSection('#socleaf');
+							hideSection('#soci3');
+							hideSection('#soczoe');
+							hideSection('#socevnotify');
+							hideSection('#socmtesla');
+							hideSection('#soccarnet');
+							hideSection('#socmzerong');
+							hideSection('#socmeq');
+							hideSection('#socmaudi');
+							hideSection('#socmid');
+							hideSection('#socmqtt');
+							hideSection('#socmbluelink');
+							hideSection('#socmkia');
+							hideSection('#socmuser');
+							hideSection('#socmpass');
+							hideSection('#socmyrenault');
+							hideSection('#socmypeugeot');
+							hideSection('#socmyopel');
+							hideSection('#socmanual');
 
 
 							if($('#socmodul').val() == 'none') {
@@ -1479,7 +1479,7 @@
 								showSection('#socmzerong');
 							}
 							if($('#socmodul').val() == 'soc_eq') {
-								showSection('socmeq');
+								showSection('#socmeq');
 							}
 							if($('#socmodul').val() == 'soc_leaf') {
 								showSection('#socleaf');
@@ -2586,27 +2586,27 @@
 
 						function display_socmodul1() {
 
-							hideSection('socmodullp2');
-							hideSection('socmqtt1');
-							hideSection('socmuser2');
-							hideSection('socmpass2');
-							hideSection('socmpin2');
-							hideSection('socmnone1');
-							hideSection('socmhttp1');
-							hideSection('socleaf1');
-							hideSection('soci31');
-							hideSection('socevnotifylp2');
-							hideSection('soczoelp2');
-							hideSection('socmteslalp2');
-							hideSection('socmeqlp2');
-							hideSection('socmyrenaultlp2');
-							hideSection('soccarnetlp2');
-							hideSection('socmzeronglp2');
-							hideSection('socmypeugeotlp2');
-							hideSection('socmyopellp2');
-							hideSection('socmvin2');
-							hideSection('socmintervall2');
-							hideSection('socmanuallp2');
+							hideSection('#socmodullp2');
+							hideSection('#socmqtt1');
+							hideSection('#socmuser2');
+							hideSection('#socmpass2');
+							hideSection('#socmpin2');
+							hideSection('#socmnone1');
+							hideSection('#socmhttp1');
+							hideSection('#socleaf1');
+							hideSection('#soci31');
+							hideSection('#socevnotifylp2');
+							hideSection('#soczoelp2');
+							hideSection('#socmteslalp2');
+							hideSection('#socmeqlp2');
+							hideSection('#socmyrenaultlp2');
+							hideSection('#soccarnetlp2');
+							hideSection('#socmzeronglp2');
+							hideSection('#socmypeugeotlp2');
+							hideSection('#socmyopellp2');
+							hideSection('#socmvin2');
+							hideSection('#socmintervall2');
+							hideSection('#socmanuallp2');
 
 
 							if($('#socmodul1').val() == 'none') {
@@ -2657,7 +2657,7 @@
 								showSection('#soczoelp2');
 							}
 							if($('#socmodul1').val() == 'soc_eqlp2') {
-								showSection('socmeqlp2');
+								showSection('#socmeqlp2');
 							}
 							if($('#socmodul1').val() == 'soc_carnetlp2') {
 								showSection('#soccarnetlp2');
