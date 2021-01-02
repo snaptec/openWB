@@ -156,7 +156,7 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101', disableMenuItem);
+			$("#nav-placeholder").load('settings/navbar.html?v=20210101', disableMenuItem);
 			function disableMenuItem() {
 				$('#navSystemInfo').addClass('disabled');
 			}
