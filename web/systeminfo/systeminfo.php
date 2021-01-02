@@ -120,7 +120,7 @@
 							<p>
 								Systemzeit: <span id="systemtime">--</span><br>
 								Letzter Systemstart: <span id="lastreboot">--</span><br>
-								System Laufzeit: <span id="uptime">--</span><br>
+								System-Laufzeit: <span id="uptime">--</span><br>
 							</p>
 							<p>
 								CPU-Frequenz: <span id="cpufreq">--</span>MHz<br>
