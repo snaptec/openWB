@@ -1,14 +1,14 @@
-function loadElectricityPricechart(labels, data) {
+function loadHourlyConsumptionchart(labels, data) {
 	/**
-	 * creates chart for price information
+	 * creates chart for hourly consumption
 	 *
-	 * @function loadElectricityPricechart
+	 * @function loadHourlyConsumptionchart
 	 * @author Michael Ortenstein
 	 * @param {object} priceTodayData as JSON object
 	 * @param {object} priceTomorrowData as JSON object
 	 */
 
-	var ctxElectricityPricechart = $('#electricityPricechartCanvas')[0].getContext('2d');
+	var ctxHourlyConsumptionchart = $('#consumptionchartCanvas')[0].getContext('2d');
 
 	var config = {
 		type: 'line',
@@ -20,19 +20,18 @@ function loadElectricityPricechart(labels, data) {
 				borderColor: "rgba(255, 155, 155, 0.9)",
 				backgroundColor: "rgba(0, 0, 255, 0.7)",
 				borderWidth: 2,
-				fill: false,
-				steppedLine: true
+				fill: false
 			}]
 		},
 		options: {
 			tooltips: {
 				enabled: true,
 				mode: 'single',
-				callbacks: {
-					label: function(tooltipItems, data) {
-						return tooltipItems.yLabel + ' Cent/kWh';
-					}
-				}
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return tooltipItems.yLabel + ' kWh Tages-Gesamtverbrauch';
+                    }
+                }
 			},
 			responsive: true,
 			maintainAspectRatio: false,
@@ -68,7 +67,7 @@ function loadElectricityPricechart(labels, data) {
 						display: true,
 						scaleLabel: {
 						display: true,
-						labelString: 'stündl. Preis Cent/kWh',
+						labelString: 'verbrauchte kWh',
 							// middle grey, opacy = 100% (visible)
 							fontColor: "rgba(153, 153, 153, 1)"
 					},
@@ -86,6 +85,6 @@ function loadElectricityPricechart(labels, data) {
 		}
 	};
 
-	var electricityPricechart = new Chart(ctxElectricityPricechart, config);
+	var hourlyConsumptionchart = new Chart(ctxHourlyConsumptionchart, config);
 
 }

@@ -34,6 +34,7 @@
 
 		<script src="stromtarifinfo/tibber.js?ver=20210102"></script>
 		<script src="stromtarifinfo/tibberElectricityPricechart.js?ver=20210102"></script>
+		<script src="stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210103"></script>
 
 		<script>
 			function getCookie(cname) {
@@ -101,7 +102,6 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col smallTextSize">
-								stündlicher Preis aktiv: <span id="realTimePrice">--</span><br>
 								aktueller Preis: <span id="currentPrice">--</span><br>
 								Börsenanteil: <span id="currentEnergyPrice">--</span><br>
 								Steuern/Gebühren: <span id="currentTax">--</span><br>
@@ -124,20 +124,30 @@
 				</div>
 
 
-				<div class="card border-secondary">
+				<div id="cardTagesverbrauch" class="card border-secondary hide">
 					<div class="card-header bg-secondary">
-						Tagesverbrauch
+						Tagesverbrauch <span id="dateYesterday"></span>
 					</div>
 					<div class="card-body">
 						<div class="row">
 							<div class="col smallTextSize">
-								Derzeit noch nicht implementiert.
+								Gesamtverbrauch:  <span id="totalConsumptionDay"></span><br>
+								Gesamtkosten:  <span id="totalCostsDay"></span><br>
+								&empty;-Strompreis: <span id="avgPriceDay"></span>
 							</div>
 						</div>
+						<div class="row justify-content-center my-2">
+							<div class="col-sm-12 text-center smallTextSize">
+								<div id="dailyConsumptionchartCanvasDiv" class="col text-center" style="position: relative; height:250px;">
+									<canvas id="consumptionchartCanvas"></canvas>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 
-				<div class="card border-secondary">
+				<div class="card border-secondary hide">
 					<div class="card-header bg-secondary">
 						Monatsverbrauch
 					</div>
@@ -150,7 +160,7 @@
 					</div>
 				</div>
 
-				<div class="card border-secondary">
+				<div class="card border-secondary hide">
 					<div class="card-header bg-secondary">
 						Jahresverbrauch
 					</div>
