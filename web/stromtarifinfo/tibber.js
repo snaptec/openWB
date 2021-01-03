@@ -161,7 +161,7 @@ function fillCardTagesverbrauch(response){
     var totalCostsDay = 0;
 
     if (typeof consumptionHourly !== 'undefined') {
-        $('#dateYesterday').text('für ' + yesterday.toLocaleDateString(undefined, options));
+        $('#dateYesterday').text('für gestern ' + yesterday.toLocaleDateString(undefined, options));
         // first filter all dates other than yesterday
     	var midnight = new Date(new Date().setHours(0,0,0,0));
         consumptionHourly = consumptionHourly.filter(function (e) {
