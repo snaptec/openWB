@@ -157,8 +157,8 @@ function fillCardTagesverbrauch(response){
     var yesterday = new Date(Date.now() - 86400000);
     var labels = ["0 Uhr"];
     var data = [0];
-    var totalConsumption = 0;
-    var totalCosts = 0;
+    var totalConsumptionDay = 0;
+    var totalCostsDay = 0;
 
     if (typeof consumptionHourly !== 'undefined') {
         $('#dateYesterday').text('für ' + yesterday.toLocaleDateString(undefined, options));
@@ -172,15 +172,15 @@ function fillCardTagesverbrauch(response){
         if (consumptionHourly.length == 24) {
             for (i=0; i<consumptionHourly.length; i++) {
                 if (typeof consumptionHourly[i].cost === 'number' && typeof consumptionHourly[i].consumption === 'number') {
-                    totalConsumption += consumptionHourly[i].consumption;
-                    totalCosts += consumptionHourly[i].cost;
+                    totalConsumptionDay += consumptionHourly[i].consumption;
+                    totalCostsDay += consumptionHourly[i].cost;
                     labels.push(createXLabel(consumptionHourly[i].to));
-                    data.push(totalConsumption.toFixed(2));
+                    data.push(totalConsumptionDay.toFixed(2));
                 }
             }
-            $('#totalConsumptionDay').text(convertToLocale(totalConsumption, ' kWh'));
-            $('#totalCostsDay').text(convertToLocale(totalCosts, ' €'));
-            $('#avgPriceDay').text(convertToLocale((totalCosts / totalConsumption * 100), ' Cent/kWh'));
+            $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
+            $('#totalCostsDay').text(convertToLocale(totalCostsDay, ' €'));
+            $('#avgPriceDay').text(convertToLocale((totalCostsDay / totalConsumptionDay * 100), ' Cent/kWh'));
         }
         // create chart or hide it
         if (totalConsumptionDay > 0) {
