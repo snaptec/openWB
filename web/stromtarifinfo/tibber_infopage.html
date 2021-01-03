@@ -80,7 +80,7 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col">
+							<div class="col smallTextSize">
 								<p>
 									<b>Objekt:</b><br>
 									<span id="name">--</span><br>
@@ -100,20 +100,26 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col">
-								<p>
-									aktueller Preis: <span id="currentPrice">--</span><br>
-								</p>
-								gültig seit: <span id="currentValidSince">--</span><br>
+							<div class="col smallTextSize">
+								stündlicher Preis aktiv: <span id="realTimePrice">--</span><br>
+								aktueller Preis: <span id="currentPrice">--</span><br>
 								Börsenanteil: <span id="currentEnergyPrice">--</span><br>
-								Steuern/Gebühren: <span id="currentTax">--</span>
+								Steuern/Gebühren: <span id="currentTax">--</span><br>
+								Preis gültig seit: <span id="currentValidSince">--</span>
 							</div>
 						</div>
+
 						<div class="row justify-content-center my-2">
-							<div id="electricityPricechartCanvasDiv" class="col text-center" style="position: relative; height:40vh;">
-								<canvas id="electricityPricechartCanvas"></canvas>
+							<div class="col-sm-12 text-center smallTextSize">
+								<div id="noPricechartDiv">
+									Keine Daten für Preis-Chart verfügbar.
+								</div>
+								<div id="electricityPricechartCanvasDiv" class="col text-center" style="position: relative; height:250px;">
+									<canvas id="electricityPricechartCanvas"></canvas>
+								</div>
 							</div>
 						</div>
+
 					</div>
 				</div>
 
@@ -124,7 +130,7 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col">
+							<div class="col smallTextSize">
 								Derzeit noch nicht implementiert.
 							</div>
 						</div>
@@ -137,7 +143,7 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col">
+							<div class="col smallTextSize">
 								Derzeit noch nicht implementiert.
 							</div>
 						</div>

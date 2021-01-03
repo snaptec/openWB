@@ -21,7 +21,6 @@ function loadElectricityPricechart(priceDataToday, priceDataTomorrow) {
 	for (i=0; i<priceDataToday.length; i++) {
 		var startsAtDate = new Date(priceDataToday[i].startsAt);
 		if (startsAtDate.valueOf() >= now.valueOf()){
-			console.log(createXLabel(priceDataToday[i].startsAt));
 			data.push((priceDataToday[i].total*100).toFixed(2));
 			labels.push(createXLabel(priceDataToday[i].startsAt));
 		}
