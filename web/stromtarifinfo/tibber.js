@@ -182,8 +182,12 @@ function fillCardTagesverbrauch(response){
             $('#totalCostsDay').text(convertToLocale(totalCosts, ' €'));
             $('#avgPriceDay').text(convertToLocale((totalCosts / totalConsumption * 100), ' Cent/kWh'));
         }
-        // create chart
-        loadHourlyConsumptionchart(labels, data);
+        // create chart or hide it
+        if (totalConsumptionDay > 0) {
+            loadHourlyConsumptionchart(labels, data);
+        } else {
+            $('#dailyConsumptionchartCanvasDiv').hide();
+        }
         $('#cardTagesverbrauch').show();
     }
 }

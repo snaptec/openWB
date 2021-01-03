@@ -67,7 +67,7 @@ function loadHourlyConsumptionchart(labels, data) {
 						display: true,
 						scaleLabel: {
 						display: true,
-						labelString: 'verbrauchte kWh',
+						labelString: 'bezogene kWh',
 							// middle grey, opacy = 100% (visible)
 							fontColor: "rgba(153, 153, 153, 1)"
 					},
