@@ -59,9 +59,9 @@ def getDevicesDict(baseurl, sessionid):
         name = device.find("name").text
         ain = device.attrib["identifier"]
         powermeter = device.find("powermeter")
-        power = float(powermeter.find("power").text)/1000.0
-        voltage = float(powermeter.find("voltage").text)/1000.0
-        energy = powermeter.find("energy").text
+        power = float(powermeter.find("power").text)/1000.0 # AVM returns mW, convert to W here
+        voltage = float(powermeter.find("voltage").text)/1000.0 # AVM returns mV, convert to V here
+        energy = powermeter.find("energy").text # AVM returns Wh
         deviceNames[name] = {'ain': ain, 'power': power, 'voltage': voltage, 'energy': energy}
         temperatureBlock = device.find("temperature")
         if temperatureBlock != None:
@@ -160,12 +160,12 @@ class AVMHomeAutomation:
 
         switch = getDevicesDict(self.baseURL, self.sessionID)[self.switchname]
         aktpower = switch['power']
+        powerc = switch['energy']
 
         if switch['state']:
             relais = 1
         else:
             relais = 0
-        powerc = 0
         answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
         try:
             f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(self.devicenumber), 'w')
