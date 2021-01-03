@@ -45,6 +45,9 @@ def getdir(smarttype,name):
     if (smarttype == "pyt"):
        dirname = prefixpy + name.lower()
        return dirname
+    if (smarttype == "avm"):
+       dirname = prefixpy + 'avmhomeautomation'
+       return dirname
     dirname = prefixpy + smarttype.lower()
     return dirname
 
@@ -393,17 +396,29 @@ def getdevicevalues():
                 device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl_'+str(numberOfDevices))) 
             except:
                 device_leistungurl = "undef"
+            try:
+                device_actor = str(config.get('smarthomedevices','device_actor_'+str(numberOfDevices))) 
+            except:
+                device_actor = "undef"
+            try:
+                device_username = str(config.get('smarthomedevices','device_username_'+str(numberOfDevices))) 
+            except:
+                device_username = "undef"
+            try:
+                device_password = str(config.get('smarthomedevices','device_password_'+str(numberOfDevices))) 
+            except:
+                device_password = "undef"
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
                 if os.path.isfile(pyname) and (canswitch == 1):
-                   argumentList = ['python3', pyname, str(nummer)]
-                   argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+                   argumentList = ['python3', pyname, str(numberOfDevices)]
+                   argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
                    argumentList.append(str(uberschuss))
                    argumentList.append(device_leistungurl)
-                   argumentList.append(config.get('smarthomedevices', 'device_actor_'+str(nummer)))
-                   argumentList.append(config.get('smarthomedevices', 'device_username_'+str(nummer)))
-                   argumentList.append(config.get('smarthomedevices', 'device_password_'+str(nummer)))
+                   argumentList.append(device_actor)
+                   argumentList.append(device_username)
+                   argumentList.append(device_password)
                    proc=subprocess.Popen(argumentList)
                    proc.communicate() 
                    f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
@@ -512,14 +527,26 @@ def turndevicerelais(nummer, zustand):
        device_ausschalturl = str(config.get('smarthomedevices', 'device_ausschalturl_'+str(nummer))) 
     except:
        device_ausschalturl = "undef"
+    try:
+       device_actor = str(config.get('smarthomedevices','device_actor_'+str(nummer))) 
+    except:
+       device_actor = "undef"
+    try:
+       device_username = str(config.get('smarthomedevices','device_username_'+str(nummer))) 
+    except:
+       device_username = "undef"
+    try:
+       device_password = str(config.get('smarthomedevices','device_password_'+str(nummer))) 
+    except:
+       device_password = "undef"
     pyname0 = getdir(switchtyp,devicename)
     argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
     argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
     argumentList.append(str(uberschuss))
     argumentList.append("") # element with index 5 will be set on URL for switch on or off
-    argumentList.append(config.get('smarthomedevices', 'device_actor_'+str(nummer)))
-    argumentList.append(config.get('smarthomedevices', 'device_username_'+str(nummer)))
-    argumentList.append(config.get('smarthomedevices', 'device_password_'+str(nummer)))
+    argumentList.append(device_actor)
+    argumentList.append(device_username)
+    argumentList.append(device_password)
     if ( zustand == 1):
        try:
            pyname = pyname0 +"/on.py"
