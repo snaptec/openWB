@@ -9,8 +9,9 @@ import struct
 import binascii
 ipaddress = str(sys.argv[1])
 slave1id = int(sys.argv[2])
+port = int(sys.argv[3])
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusTcpClient(ipaddress, port=port)
 #batterie auslesen und pv leistung korrigieren
 resp= client.read_holding_registers(40084,2,unit=slave1id)
 multipli = resp.registers[0]

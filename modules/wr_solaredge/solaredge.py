@@ -8,11 +8,12 @@ import ConfigParser
 import struct
 import binascii
 ipaddress = str(sys.argv[1])
-slave1id = int(sys.argv[2])
-batwrsame = int(sys.argv[3])
-extprodakt = int(sys.argv[4])
+port = int(sys.argv[2])
+slave1id = int(sys.argv[3])
+batwrsame = int(sys.argv[4])
+extprodakt = int(sys.argv[5])
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusTcpClient(ipaddress, port=port)
 #batterie auslesen und pv leistung korrigieren
 storagepower = 0
 if batwrsame == 1:

@@ -8,8 +8,9 @@ import ConfigParser
 import struct
 import binascii
 ipaddress = str(sys.argv[1])
+port = int(sys.argv[2])
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusTcpClient(ipaddress, port=port)
 slaveid = int(sys.argv[2])
 
 resp= client.read_holding_registers(40206,5,unit=slaveid)

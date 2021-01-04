@@ -8,14 +8,15 @@ import ConfigParser
 import struct
 import binascii
 ipaddress = str(sys.argv[1])
-slave1id = int(sys.argv[2])
-slave2id = int(sys.argv[3])
-slave3id = int(sys.argv[4])
-batwrsame = int(sys.argv[5])
-extprodakt = int(sys.argv[6])
+port = int(sys.argv[2])
+slave1id = int(sys.argv[3])
+slave2id = int(sys.argv[4])
+slave3id = int(sys.argv[5])
+batwrsame = int(sys.argv[6])
+extprodakt = int(sys.argv[7])
 
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusTcpClient(ipaddress, port=port)
 storagepower = 0
 if batwrsame == 1:
     rr = client.read_holding_registers(62836, 2, unit=1)

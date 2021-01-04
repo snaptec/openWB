@@ -9,26 +9,30 @@ import struct
 import binascii
 ipaddress = str(sys.argv[1])
 try:
-    slave1id = int(sys.argv[2])
+    port = int(sys.argv[2])
+except:
+    port = 502
+try:
+    slave1id = int(sys.argv[3])
 except:
     slave1id=0
 try:
-    slave2id = int(sys.argv[3])
+    slave2id = int(sys.argv[4])
 except:
     slave2id=0
 try:
-    slave3id = int(sys.argv[4])
+    slave3id = int(sys.argv[5])
 except:
     slave3id=0
 try:
-    slave4id = int(sys.argv[5])
+    slave4id = int(sys.argv[6])
 except:
     slave4id=0
-batwrsame = int(sys.argv[6])
-extprodakt = int(sys.argv[7])
+batwrsame = int(sys.argv[7])
+extprodakt = int(sys.argv[8])
 
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(ipaddress, port=502)
+client = ModbusTcpClient(ipaddress, port=port)
 #batterie auslesen und pv leistung korrigieren
 storagepower = 0
 if batwrsame == 1:

@@ -703,6 +703,11 @@
 										Ebenso muss ModbusTCP am Wechselrichter aktiviert werden.<br>
 										Der Zähler muss an erster Position im Wechselrichter konfiguriert sein, sonst ist eine Auslesung nicht möglich.
 									</span>
+									<input class="form-control" type="number" pattern="^(502)|(1502)$" name="solaredgeport" id="solaredgeport" value="<?php echo $solaredgeportold ?>">
+									<span class="form-text small">
+										Gültige Werte Port Nummer.<br>
+										Die Portnummer ist entweder 502 oder 1502 (bei neueren Anlagen).
+									</span>
 								</div>
 							</div>
 						</div>
