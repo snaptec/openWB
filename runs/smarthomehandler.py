@@ -79,9 +79,9 @@ def sepwatt(oldwatt,oldwattk,nummer):
     if meastyp == "sdm630":
        argumentList[1] = prefixpy +'sdm630/sdm630.py'
        argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
-    else if meastyp == "shelly":
+    elif meastyp == "shelly":
        argumentList[1] = prefixpy + 'shelly/watt.py'
-    else if meastyp == "http":
+    elif meastyp == "http":
        argumentList[1] = prefixpy + 'http/watt.py'
        try:
           measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer)))
