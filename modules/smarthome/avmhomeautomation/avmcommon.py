@@ -112,7 +112,7 @@ class AVMHomeAutomation:
         # with username/password.
         try:
             f = open(file_stringsessionid, 'w')
-            print ('%s' % (sessionid),file = f)
+            print ('%s' % (self.sessionID),file = f)
             f.close()
         except IOError:
             pass
