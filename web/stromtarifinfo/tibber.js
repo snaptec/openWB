@@ -49,18 +49,26 @@ function readTibberAPI() {
     })
 }
 
-function createXLabel(date){
+function createXLabel(dateFrom, dateTo){
     /**
      * convert date in suitable label for chart x-axis
      *
      * @function createXLabel
      * @author Michael Ortenstein
-     * @param {string} date as date string
+     * @param {string} dateFrom as date string
+     * @param {string} dateTo as date string
      * @returns {string} label as prettified date
      */
-    var dateObj = new Date(date);
-    return  dateObj.getHours() + " Uhr";
+    var dateFromObj = new Date(dateFrom);
+    var dateToObj = new Date(dateTo);
+    var result = dateFromObj.getHours();
+    if (!isNaN(dateToObj.getHours())) {
+        result += " - " + dateToObj.getHours();
+    }
+    result += " Uhr";
+    return  result;
 }
+
 
 function convertToLocale(number, unit){
     /**
@@ -155,10 +163,11 @@ function fillCardTagesverbrauch(response){
     const options = { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' };
     var consumptionHourly = response?.data?.viewer?.home?.cons_hourly?.nodes;
     var yesterday = new Date(Date.now() - 86400000);
-    var labels = ["0 Uhr"];
-    var data = [0];
     var totalConsumptionDay = 0;
     var totalCostsDay = 0;
+    var labels = [];
+    var dataConsumption = [];
+    var dataPrice = [];
 
     if (typeof consumptionHourly !== 'undefined') {
         $('#dateYesterday').text('für gestern ' + yesterday.toLocaleDateString(undefined, options));
@@ -174,8 +183,9 @@ function fillCardTagesverbrauch(response){
                 if (typeof consumptionHourly[i].cost === 'number' && typeof consumptionHourly[i].consumption === 'number') {
                     totalConsumptionDay += consumptionHourly[i].consumption;
                     totalCostsDay += consumptionHourly[i].cost;
-                    labels.push(createXLabel(consumptionHourly[i].to));
-                    data.push(totalConsumptionDay.toFixed(2));
+                    labels.push(createXLabel(consumptionHourly[i].from, consumptionHourly[i].to));
+                    dataConsumption.push(consumptionHourly[i].consumption.toFixed(2));
+                    dataPrice.push((consumptionHourly[i].unitPrice * 100).toFixed(2));
                 }
             }
             $('#totalConsumptionDay').text(convertToLocale(totalConsumptionDay, ' kWh'));
@@ -184,7 +194,7 @@ function fillCardTagesverbrauch(response){
         }
         // create chart or hide it
         if (totalConsumptionDay > 0) {
-            loadHourlyConsumptionchart(labels, data);
+            loadHourlyConsumptionchart(labels, dataConsumption, dataPrice);
         } else {
             $('#dailyConsumptionchartCanvasDiv').hide();
         }

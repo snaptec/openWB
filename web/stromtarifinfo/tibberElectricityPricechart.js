@@ -1,11 +1,11 @@
-function loadElectricityPricechart(labels, data) {
+function loadElectricityPricechart(labels, dataPrice) {
 	/**
 	 * creates chart for price information
 	 *
 	 * @function loadElectricityPricechart
 	 * @author Michael Ortenstein
-	 * @param {object} priceTodayData as JSON object
-	 * @param {object} priceTomorrowData as JSON object
+	 * @param {array} labels is time
+	 * @param {array} dataPrice is hourly price
 	 */
 
 	var ctxElectricityPricechart = $('#electricityPricechartCanvas')[0].getContext('2d');
@@ -15,10 +15,10 @@ function loadElectricityPricechart(labels, data) {
 		data: {
 		  	labels: labels,
 			datasets: [{
-				yAxisID: 'y-axis-1',
-				data: data,
-				borderColor: "rgba(255, 155, 155, 0.9)",
-				backgroundColor: "rgba(0, 0, 255, 0.7)",
+				yAxisID: 'y-axis-left',
+				data: dataPrice,
+				borderColor: 'rgba(201, 38, 38, 1)',
+				backgroundColor: 'rgba(30, 33, 194, 0.7)',
 				borderWidth: 2,
 				fill: false,
 				steppedLine: true
@@ -27,10 +27,10 @@ function loadElectricityPricechart(labels, data) {
 		options: {
 			tooltips: {
 				enabled: true,
-				mode: 'single',
+				mode: 'index',
 				callbacks: {
-					label: function(tooltipItems, data) {
-						return tooltipItems.yLabel + ' Cent/kWh';
+					label: function(tooltipItem, data) {
+						return tooltipItem.yLabel + ' Cent/kWh';
 					}
 				}
 			},
@@ -50,35 +50,30 @@ function loadElectricityPricechart(labels, data) {
 				xAxes: [
 					{
 					gridLines: {
-							// light grey, opacy = 100% (visible)
-							color: "rgba(204, 204, 204, 0.3)",
+							color: 'rgba(204, 204, 204, 0.3)',
 						},
 
 					ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: 'rgba(153, 153, 153, 1)'
 					}
 				}],
 				yAxes: [
 					{
-						// horizontal line for values displayed on the left side (power)
+						// values displayed on the left side (price)
 						position: 'left',
-						id: 'y-axis-1',
+						id: 'y-axis-left',
 						type: 'linear',
 						display: true,
 						scaleLabel: {
-						display: true,
-						labelString: 'stündl. Preis Cent/kWh',
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
-					},
+							display: true,
+							labelString: 'stündl. Preis Cent/kWh',
+							fontColor: 'rgba(153, 153, 153, 1)'
+						},
 						gridLines: {
-							// light grey, opacy = 100% (visible)
-							color: "rgba(204, 204, 204, 1)",
+							color: 'rgba(204, 204, 204, 1)',
 						},
 						ticks: {
-							// middle grey, opacy = 100% (visible)
-							fontColor: "rgba(153, 153, 153, 1)"
+							fontColor: 'rgba(153, 153, 153, 1)'
 						}
 
 					}]
