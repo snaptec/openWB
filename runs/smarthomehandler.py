@@ -56,76 +56,60 @@ def sepwatt(oldwatt,oldwattk,nummer):
          difmes = int(config.get('smarthomedevices', 'device_differentmeasurement_'+str(nummer)))
     except:
          difmes = 0
+    try:
+       configuredName = config.get('smarthomedevices', 'device_name_'+str(nummer))
+    except:
+       configuredName = "(unknown name)"
     if difmes == 0:
-       logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " keine separate Leistungsmessung")
+       logDebug("0","Device: " + str(nummer) + " " + str(configuredName) + " keine separate Leistungsmessung")
        newwatt = oldwatt
        # simcount verwenden wenn newwattk = 0
        newwattk = oldwattk
-       return (newwatt,newwattk)
-    logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " hat separate Leistungsmessung")
+       return (newwatt, newwattk)
+    logDebug("0","Device: " + str(nummer) + " " + str(configuredName) + " hat separate Leistungsmessung")
     try:
-       meastyp=str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
+       meastyp = str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
     except:
        meastyp = "undef"
     logDebug("0", "Device: " + str(nummer) + " Leistungsmessung durch " +  meastyp)
+    argumentList = ['python3', pyname, str(nummer)]
+    argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
+    argumentList.append(str(uberschuss))
+
     if meastyp == "sdm630":
-       pyname = prefixpy +'sdm630/sdm630.py'
-       try:    
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)) ,config.get('smarthomedevices', 'device_measureid_'+str(nummer))])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          newwattk = int(answer['powerc'])
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung sdm630 " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
-    if meastyp == "shelly": 
+       argumentList[1] = prefixpy +'sdm630/sdm630.py'
+       argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+    elif meastyp == "shelly":
+       argumentList[1] = prefixpy + 'shelly/watt.py'
+    elif meastyp == "http":
+       argumentList[1] = prefixpy + 'http/watt.py'
        try:
-          pyname = prefixpy + 'shelly/watt.py'
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(uberschuss)])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          #always zero for shelly
-          newwattk = 0
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung shelly " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
-    if meastyp == "http": 
-       try:
-          pyname = prefixpy + 'http/watt.py'
-          try:
-             device_measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer))) 
-          except:
-             device_measureurl = "undef"
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(uberschuss),device_measureurl])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          #always zero for http
-          newwattk = 0
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung http " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
+          measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer)))
+          argumentList.append(measureurl)
+       except:
+          argumentList.append("undef")
     else:
+       # no known meastyp, so return the old values directly
+       logDebug("2", "Device Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
        newwatt = oldwatt
        newwattk = oldwattk
-    return (newwatt,newwattk)
+       return (newwatt, newwattk)
+
+    # now we have everthing we need to call the subprocess
+    try:
+       proc = subprocess.Popen(argumentList)
+       proc.communicate()
+       f1 = open(basePath+'/ramdisk/smarthome_device_ret' + str(nummer) , 'r')
+       answerj = json.load(f1)
+       f1.close()
+       answer = json.loads(answerj)
+       newwatt = int(answer['power'])
+       newwattk = int(answer['powerc'])
+    except Exception as e1:
+       DeviceValues.update( {str(nummer) : "error"})
+       logDebug("2", "Device Leistungsmessung %s %d %s Fehlermeldung: %s " % (meastyp, nummer, str(configuredName), str(e1)))
+       raise Exception("error in sepwatt")
+    return (newwatt, newwattk)
 
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
