@@ -11,7 +11,7 @@ ipaddress = str(sys.argv[1])
 port = int(sys.argv[2])
 from pymodbus.client.sync import ModbusTcpClient
 client = ModbusTcpClient(ipaddress, port=port)
-slaveid = int(sys.argv[2])
+slaveid = int(sys.argv[3])
 
 resp= client.read_holding_registers(40206,5,unit=slaveid)
 value1 = resp.registers[0] 
