@@ -51,14 +51,13 @@ else
 fi
   #tmpintervall=5
 
+
 if (( soctimer < tmpintervall )); then
   socDebugLog "Nothing to do yet. Incrementing timer. ${soctimer} < ${tmpintervall}"
   soctimer=$((soctimer+1))
   echo $soctimer > $soctimerfile
 else
   socDebugLog "Requesting SoC"
-  #export soc_eq_client_id soc_eq_client_secret soc_eq_vin soc_file CHARGEPOINT
-  #$MODULEDIR/soc.py 
   $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE &
   
   echo 0 > $soctimerfile
