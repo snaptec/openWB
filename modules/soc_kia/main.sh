@@ -53,6 +53,6 @@ if (( soctimervalue < tmpintervall )); then
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile >> $LOGFILE &
 	echo 0 > $soctimerfile
+	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile >> $LOGFILE
 fi
