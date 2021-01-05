@@ -8,6 +8,7 @@ import argparse
 import re
 import getopt
 import subprocess
+from datetime import datetime, timezone
 
 basePath = '/var/www/html/openWB'
 shconfigfile = basePath+'/smarthome.ini'
@@ -113,13 +114,14 @@ def sepwatt(oldwatt,oldwattk,nummer):
 
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
+        local_time = datetime.now(timezone.utc).astimezone()
         file = open(basePath+'/ramdisk/smarthome.log', 'a')
         if (int(level) == 0):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         if (int(level) == 1):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         if (int(level) == 2):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         file.close()
 
 def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
