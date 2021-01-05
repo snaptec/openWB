@@ -52,6 +52,7 @@ fi
 	#tmpintervall=5
 
 
+
 if (( soctimer < tmpintervall )); then
 	socDebugLog "Nothing to do yet. Incrementing timer. ${soctimer} < ${tmpintervall}"
 	soctimer=$((soctimer+1))

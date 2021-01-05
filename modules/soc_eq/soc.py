@@ -29,11 +29,27 @@ def socDebugLog(message):
 if Debug == 1:
     socDebugLog("client: " + client_id)
 
+Debug         = int(os.environ.get('debug'))
+
+#set the correct permissions as Apache and rest uses different users
+#os.chmod( moduledir + 'acc_tok_lp' + str(ChargePoint),0o646)
+#os.chmod( moduledir + 'ref_tok_lp' + str(ChargePoint),0o646)
+#os.chmod( moduledir + 'expires_lp' + str(ChargePoint),0o646)
+
+
+def socDebugLog(message):
+    local_time = datetime.now(timezone.utc).astimezone()
+#    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
+
+if Debug >= 1:
+    socDebugLog("client: " + client_id)
+
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
 #soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/soc"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
 #range_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/rangeelectric"
-if Debug == 1:
+if Debug >= 1:
     socDebugLog("SOC URL: " + soc_url)
 #Get Access token expiry from file
 fd = open(moduledir + 'expires_lp' + str(ChargePoint),'r')
@@ -47,11 +63,11 @@ if int(expires_in) < int(time.time()):
   fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'r')
   refresh_token = fd.read().rstrip()
   fd.close()
-  
+
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
   ref = requests.post(tok_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret), timeout=req_timeout)
-  if Debug == 1:
+  if Debug >= 1:
       socDebugLog("Refresh Token Call:" + str(ref.status_code))
       socDebugLog("Refresh Token Text:" + str(ref.text))
 
@@ -64,7 +80,7 @@ if int(expires_in) < int(time.time()):
   except:
     fd.close()
 
-	
+
   if ref.status_code == 200:
 	#valid response
     tok = json.loads(ref.text)
@@ -123,7 +139,7 @@ if int(expires_in) < int(time.time()):
     socDebugLog(ref.text)
     exit(1)
 
-#get access token from file	
+#get access token from file
 fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'r')
 access_token = fd.read().rstrip()
 fd.close()
@@ -132,7 +148,7 @@ fd.close()
 header = {'authorization': 'Bearer ' + access_token}
 req_soc = requests.get(soc_url, headers=header, verify=True)
 #req_soc = requests.get(soc_url, headers=header, verify=True, timeout=req_timeout)
-if Debug == 1:
+if Debug >= 1:
     socDebugLog("SOC Request: " + str(req_soc.status_code))
     socDebugLog("SOC Response: " + req_soc.text)
 
@@ -163,7 +179,11 @@ if req_soc.status_code == 200:
   fd = open(soc_file,'w')
   fd.write(str(soc))
   fd.close()
-  
+
+elif req_soc.status_code == 204:
+  # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)
+  socDebugLog("SoC Request Code: " + str(req_soc.status_code) + " (no data is available for the resource)")
+  socDebugLog(req_soc.text)
 elif req_soc.status_code == 400:
   socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Bad Request)")
   socDebugLog(req_soc.text)
