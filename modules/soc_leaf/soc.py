@@ -45,7 +45,6 @@ def readSoc(leaf):
 
     return bat_percent
 
-
 def requestSoc(leaf):
     '''
     Fordert den asynchron Server auf, den Ladezustand vom Auto abzufragen.
@@ -64,11 +63,10 @@ def requestSoc(leaf):
         status = leaf.get_status_from_update(key)
     logging.debug("Finished updating")
 
-
 if ( leaftimer < 180 ):
     leaftimer += 1
-    f = open('/var/www/html/openWB/ramdisk/soctimer', 'w')
     logging.debug("Update soctimer to " + str(leaftimer))
+    f = open('/var/www/html/openWB/ramdisk/soctimer', 'w')
     f.write(str(leaftimer))
     f.close()
     if ( leaftimer == 10 ):

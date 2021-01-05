@@ -24,7 +24,7 @@ Debug=0
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S%z") +" : Lp" +ChargePoint + ": " + message)
+    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
 
 if Debug == 1:
     socDebugLog("client: " + client_id)

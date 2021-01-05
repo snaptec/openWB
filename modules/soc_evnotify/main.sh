@@ -31,7 +31,7 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
