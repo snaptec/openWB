@@ -35,7 +35,7 @@ esac
 
 socDebugLog(){
 	if (( $socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
@@ -52,6 +52,6 @@ if (( soctimervalue < tmpintervall )); then
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile &
 	echo 0 > $soctimerfile
+	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile
 fi

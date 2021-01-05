@@ -521,7 +521,7 @@ loadvars(){
 	#zweiter ladepunkt
 	if [[ $lastmanagement == "1" ]]; then
 		if [[ $socmodul1 != "none" ]]; then
-			timeout 10 modules/$socmodul1/main.sh || true
+			modules/$socmodul1/main.sh &
 			soc1=$(</var/www/html/openWB/ramdisk/soc1)
 			tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 			if ! [[ $soc1 =~ $re ]] ; then
@@ -873,17 +873,20 @@ loadvars(){
 		echo 1 > /var/www/html/openWB/ramdisk/socvorhanden
 		if (( stopsocnotpluggedlp1 == 1 )); then
 			if (( plugstat == 1 )); then
-				timeout 20 modules/$socmodul/main.sh || true
+				modules/$socmodul/main.sh &
 				soc=$(</var/www/html/openWB/ramdisk/soc)
+				tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 				if ! [[ $soc =~ $re ]] ; then
-					soc="0"
+					soc=$tmpsoc
+				else
+					echo $soc > /var/www/html/openWB/ramdisk/tmpsoc
 				fi
 			else
 				echo 600 > /var/www/html/openWB/ramdisk/soctimer
 				soc=$(</var/www/html/openWB/ramdisk/soc)
 			fi
 		else
-			timeout 20 modules/$socmodul/main.sh || true
+			modules/$socmodul/main.sh &
 			soc=$(</var/www/html/openWB/ramdisk/soc)
 			tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 			if ! [[ $soc =~ $re ]] ; then

@@ -31,6 +31,6 @@ if (( timer < 60 )); then
 	timer=$((timer+1))
 	echo $timer > $soctimerfile
 else
-	sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 	echo 0 > $soctimerfile
+	sudo python $MODULEDIR/peugeotsoc.py $CHARGEPOINT $username $password $clientId $clientSecret
 fi

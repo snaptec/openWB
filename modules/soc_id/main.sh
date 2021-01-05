@@ -34,7 +34,7 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
@@ -53,6 +53,6 @@ if (( soctimer < tmpintervall )); then
 	echo $soctimer > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile &
 	echo 0 > $soctimerfile
+	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile
 fi

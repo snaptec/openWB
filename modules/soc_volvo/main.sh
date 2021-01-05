@@ -31,7 +31,7 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
@@ -43,6 +43,7 @@ if (( soctimer < 60 )); then
 	soctimer=$((soctimer+1))
 	echo $soctimer > $soctimerfile
 else
+	echo 0 > $soctimerfile
 	socDebugLog "Requesting SoC"
 	re='^-?[0-9]+$'
 	soclevel=$(python3 $MODULEDIR/voc -u $username -p $password dashboard |grep 'Battery level' | cut -f2 -d":" |sed 's/[^0-9]*//g')
@@ -52,9 +53,6 @@ else
 			socDebugLog "Valid SoC found: $soclevel"
 			echo $soclevel > $socfile
 		fi
-	echo 0 > $soctimerfile
 	fi
 
 fi
-
-

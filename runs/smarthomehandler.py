@@ -8,6 +8,7 @@ import argparse
 import re
 import getopt
 import subprocess
+from datetime import datetime, timezone
 
 basePath = '/var/www/html/openWB'
 shconfigfile = basePath+'/smarthome.ini'
@@ -45,6 +46,9 @@ def getdir(smarttype,name):
     if (smarttype == "pyt"):
        dirname = prefixpy + name.lower()
        return dirname
+    if (smarttype == "avm"):
+       dirname = prefixpy + 'avmhomeautomation'
+       return dirname
     dirname = prefixpy + smarttype.lower()
     return dirname
 
@@ -53,86 +57,71 @@ def sepwatt(oldwatt,oldwattk,nummer):
          difmes = int(config.get('smarthomedevices', 'device_differentmeasurement_'+str(nummer)))
     except:
          difmes = 0
+    try:
+       configuredName = config.get('smarthomedevices', 'device_name_'+str(nummer))
+    except:
+       configuredName = "(unknown name)"
     if difmes == 0:
-       logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " keine separate Leistungsmessung")
+       logDebug("0","Device: " + str(nummer) + " " + str(configuredName) + " keine separate Leistungsmessung")
        newwatt = oldwatt
        # simcount verwenden wenn newwattk = 0
        newwattk = oldwattk
-       return (newwatt,newwattk)
-    logDebug("0","Device: " + str(nummer) + " " + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " hat separate Leistungsmessung")
+       return (newwatt, newwattk)
+    logDebug("0","Device: " + str(nummer) + " " + str(configuredName) + " hat separate Leistungsmessung")
     try:
-       meastyp=str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
+       meastyp = str(config.get('smarthomedevices', 'device_measuretype_'+str(nummer)))
     except:
        meastyp = "undef"
     logDebug("0", "Device: " + str(nummer) + " Leistungsmessung durch " +  meastyp)
+    argumentList = ['python3', pyname, str(nummer)]
+    argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
+    argumentList.append(str(uberschuss))
+
     if meastyp == "sdm630":
-       pyname = prefixpy +'sdm630/sdm630.py'
-       try:    
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)) ,config.get('smarthomedevices', 'device_measureid_'+str(nummer))])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          newwattk = int(answer['powerc'])
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung sdm630 " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
-    if meastyp == "shelly": 
+       argumentList[1] = prefixpy +'sdm630/sdm630.py'
+       argumentList[4] = config.get('smarthomedevices', 'device_measureid_'+str(nummer)) # replace uberschuss as third command line parameter with measureid
+    elif meastyp == "shelly":
+       argumentList[1] = prefixpy + 'shelly/watt.py'
+    elif meastyp == "http":
+       argumentList[1] = prefixpy + 'http/watt.py'
        try:
-          pyname = prefixpy + 'shelly/watt.py'
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(uberschuss)])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          #always zero for shelly
-          newwattk = 0
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung shelly " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
-    if meastyp == "http": 
-       try:
-          pyname = prefixpy + 'http/watt.py'
-          try:
-             device_measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer))) 
-          except:
-             device_measureurl = "undef"
-          proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_measureip_'+str(nummer)),str(uberschuss),device_measureurl])
-          proc.communicate() 
-          f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(nummer) , 'r')
-          answerj=json.load(f1)
-          f1.close()
-          answer = json.loads(answerj)
-          newwatt = int(answer['power'])
-          #always zero for http
-          newwattk = 0
-       except Exception as e1:
-          DeviceValues.update( {str(nummer) : "error"})
-          logDebug("2", "Device Leistungsmessung http " + str(nummer) + str(config.get('smarthomedevices', 'device_name_'+str(nummer))) + " Fehlermeldung: " + str(e1))
-          raise Exception("error in sepwatt")
-       return (newwatt,newwattk)
+          measureurl = str(config.get('smarthomedevices', 'device_measureurl_'+str(nummer)))
+          argumentList.append(measureurl)
+       except:
+          argumentList.append("undef")
     else:
+       # no known meastyp, so return the old values directly
+       logDebug("2", "Device Leistungsmessung %s %d %s Geraetetyp ist nicht implementiert!" % (meastyp, nummer, str(configuredName)))
        newwatt = oldwatt
        newwattk = oldwattk
-    return (newwatt,newwattk)
+       return (newwatt, newwattk)
+
+    # now we have everthing we need to call the subprocess
+    try:
+       proc = subprocess.Popen(argumentList)
+       proc.communicate()
+       f1 = open(basePath+'/ramdisk/smarthome_device_ret' + str(nummer) , 'r')
+       answerj = json.load(f1)
+       f1.close()
+       answer = json.loads(answerj)
+       newwatt = int(answer['power'])
+       newwattk = int(answer['powerc'])
+    except Exception as e1:
+       DeviceValues.update( {str(nummer) : "error"})
+       logDebug("2", "Device Leistungsmessung %s %d %s Fehlermeldung: %s " % (meastyp, nummer, str(configuredName), str(e1)))
+       raise Exception("error in sepwatt")
+    return (newwatt, newwattk)
 
 def logDebug(level, msg):
     if (int(level) >= int(loglevel)):
+        local_time = datetime.now(timezone.utc).astimezone()
         file = open(basePath+'/ramdisk/smarthome.log', 'a')
         if (int(level) == 0):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         if (int(level) == 1):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         if (int(level) == 2):
-            file.write(time.ctime() + ': ' + str(msg)+ '\n')
+            file.write(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") + ': ' + str(msg)+ '\n')
         file.close()
 
 def simcount(watt2, pref, importfn, exportfn, nummer,wattks):
@@ -393,11 +382,30 @@ def getdevicevalues():
                 device_leistungurl = str(config.get('smarthomedevices', 'device_leistungurl_'+str(numberOfDevices))) 
             except:
                 device_leistungurl = "undef"
+            try:
+                device_actor = str(config.get('smarthomedevices','device_actor_'+str(numberOfDevices))) 
+            except:
+                device_actor = "undef"
+            try:
+                device_username = str(config.get('smarthomedevices','device_username_'+str(numberOfDevices))) 
+            except:
+                device_username = "undef"
+            try:
+                device_password = str(config.get('smarthomedevices','device_password_'+str(numberOfDevices))) 
+            except:
+                device_password = "undef"
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
                 if os.path.isfile(pyname) and (canswitch == 1):
-                   proc=subprocess.Popen( ['python3',pyname,str(numberOfDevices),config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)),str(uberschuss),device_leistungurl])
+                   argumentList = ['python3', pyname, str(numberOfDevices)]
+                   argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
+                   argumentList.append(str(uberschuss))
+                   argumentList.append(device_leistungurl)
+                   argumentList.append(device_actor)
+                   argumentList.append(device_username)
+                   argumentList.append(device_password)
+                   proc=subprocess.Popen(argumentList)
                    proc.communicate() 
                    f1 = open(basePath+'/ramdisk/smarthome_device_ret' +str(numberOfDevices) , 'r')
                    answerj=json.load(f1)
@@ -505,17 +513,38 @@ def turndevicerelais(nummer, zustand):
        device_ausschalturl = str(config.get('smarthomedevices', 'device_ausschalturl_'+str(nummer))) 
     except:
        device_ausschalturl = "undef"
+    try:
+       device_actor = str(config.get('smarthomedevices','device_actor_'+str(nummer))) 
+    except:
+       device_actor = "undef"
+    try:
+       device_username = str(config.get('smarthomedevices','device_username_'+str(nummer))) 
+    except:
+       device_username = "undef"
+    try:
+       device_password = str(config.get('smarthomedevices','device_password_'+str(nummer))) 
+    except:
+       device_password = "undef"
     pyname0 = getdir(switchtyp,devicename)
+    argumentList = ['python3', "", str(nummer)] # element with index 1 will be set to on.py or off.py
+    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(nummer)))
+    argumentList.append(str(uberschuss))
+    argumentList.append("") # element with index 5 will be set on URL for switch on or off
+    argumentList.append(device_actor)
+    argumentList.append(device_username)
+    argumentList.append(device_password)
     if ( zustand == 1):
        try:
            pyname = pyname0 +"/on.py"
            if os.path.isfile(pyname):
+              argumentList[1] = pyname
+              argumentList[5] = device_einschalturl
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " angeschaltet")
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')
               f.write(str(zustand))
               f.close()
               DeviceCounters.update( {str(nummer) + "eintime" : time.time()})
-              proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_einschalturl])
+              proc=subprocess.Popen(argumentList)
               proc.communicate()
            else:
               logDebug("0", "Device " + str(switchtyp) + str(nummer) + str(devicename) + " File not found: " + str(pyname)) 
@@ -525,7 +554,9 @@ def turndevicerelais(nummer, zustand):
        try:
            pyname = pyname0 +"/off.py"
            if os.path.isfile( pyname  ): 
-              proc=subprocess.Popen( ['python3',pyname,str(nummer),config.get('smarthomedevices', 'device_ip_'+str(nummer)),str(uberschuss),device_ausschalturl])
+              argumentList[1] = pyname
+              argumentList[5] = device_ausschalturl
+              proc=subprocess.Popen(argumentList)
               proc.communicate()
               logDebug("1", "Device: " + str(nummer) + " " + str(devicename) + " ausgeschaltet")
               f = open(basePath+'/ramdisk/device' + str(nummer) + '_req_relais', 'w')

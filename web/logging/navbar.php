@@ -10,9 +10,6 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-select="" href="../index.php">Home</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" data-select="" href="index.php">Langzeit</a>
                 </li>
                 <li class="nav-item">

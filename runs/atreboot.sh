@@ -13,6 +13,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 echo 0 > /var/www/html/openWB/ramdisk/randomSleepValue
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 auditimer=$(</var/www/html/openWB/ramdisk/soctimer1)
 if (( auditimer < 180 )); then
 	auditimer=$((auditimer+1))
@@ -9,7 +8,6 @@ if (( auditimer < 180 )); then
 	fi
 	echo $auditimer > /var/www/html/openWB/ramdisk/soctimer1
 else
-	/var/www/html/openWB/modules/evcc-soc audi --user "$soc2user" --password "$soc2pass" > /var/www/html/openWB/ramdisk/soc1 &
-
-	echo 1 > /var/www/html/openWB/ramdisk/soctimer1
+	echo 0 > /var/www/html/openWB/ramdisk/soctimer1
+	/var/www/html/openWB/modules/evcc-soc audi --user "$soc2user" --password "$soc2pass" > /var/www/html/openWB/ramdisk/soc1
 fi
