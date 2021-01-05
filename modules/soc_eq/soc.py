@@ -165,6 +165,10 @@ if req_soc.status_code == 200:
   fd.write(str(soc))
   fd.close()
   
+elif req_soc.status_code == 204:
+  # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)  
+  socDebugLog("SoC Request Code: " + str(req_soc.status_code) + " (no data is available for the resource)")
+  socDebugLog(req_soc.text)
 elif req_soc.status_code == 400:
   socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Bad Request)")
   socDebugLog(req_soc.text)
