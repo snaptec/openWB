@@ -13,21 +13,6 @@ client_secret = str(sys.argv[2])
 VIN           = str(sys.argv[3])
 soc_file      = str(sys.argv[4])
 ChargePoint   = str(sys.argv[5])
-Debug=0
-
-#set the correct permissions as Apache and rest uses different users
-#os.chmod( moduledir + 'acc_tok_lp' + str(ChargePoint),0o646)
-#os.chmod( moduledir + 'ref_tok_lp' + str(ChargePoint),0o646)
-#os.chmod( moduledir + 'expires_lp' + str(ChargePoint),0o646)
-
-
-def socDebugLog(message):
-    local_time = datetime.now(timezone.utc).astimezone()
-#    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
-    print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
-
-if Debug == 1:
-    socDebugLog("client: " + client_id)
 
 Debug         = int(os.environ.get('debug'))
 
@@ -42,6 +27,8 @@ def socDebugLog(message):
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
     print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
 
+if Debug >= 1:
+    socDebugLog("Debug Level: " + str(Debug))
 if Debug >= 1:
     socDebugLog("client: " + client_id)
 
@@ -63,7 +50,7 @@ if int(expires_in) < int(time.time()):
   fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'r')
   refresh_token = fd.read().rstrip()
   fd.close()
-
+  
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
   ref = requests.post(tok_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret), timeout=req_timeout)
@@ -80,7 +67,7 @@ if int(expires_in) < int(time.time()):
   except:
     fd.close()
 
-
+	
   if ref.status_code == 200:
 	#valid response
     tok = json.loads(ref.text)
@@ -103,43 +90,43 @@ if int(expires_in) < int(time.time()):
     fd.close()
 
   elif ref.status_code == 400:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (Bad Request)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (Bad Request)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 401:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (Invalid or missing authorization in header)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (Invalid or missing authorization in header)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 402:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (Payment required)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (Payment required)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 403:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (Forbidden)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (Forbidden)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 404:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 429:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (The service received too many requests in a given amount of time)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (The service received too many requests in a given amount of time)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 500:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (The service received too many requests in a given amount of time)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (The service received too many requests in a given amount of time)")
     socDebugLog(ref.text)
     exit(1)
   elif ref.status_code == 503:
-    socDebugLog("Refresh Fehlgeschlagen Code: " + str(ref.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
+    socDebugLog("Refresh fehlgeschlagen Code: " + str(ref.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
     socDebugLog(ref.text)
     exit(1)
   else:
-    socDebugLog("Refresh Fehlgeschlagen unbekannter Code: " + str(ref.status_code))
+    socDebugLog("Refresh fehlgeschlagen unbekannter Code: " + str(ref.status_code))
     socDebugLog(ref.text)
     exit(1)
 
-#get access token from file
+#get access token from file	
 fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'r')
 access_token = fd.read().rstrip()
 fd.close()
@@ -179,46 +166,48 @@ if req_soc.status_code == 200:
   fd = open(soc_file,'w')
   fd.write(str(soc))
   fd.close()
-
+  
 elif req_soc.status_code == 204:
-  # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)
+  # this is not an error code. Nothing to fetch so nothing to update and no reason to exit(1)  
   socDebugLog("SoC Request Code: " + str(req_soc.status_code) + " (no data is available for the resource)")
   socDebugLog(req_soc.text)
 elif req_soc.status_code == 400:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Bad Request)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (Bad Request)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 401:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Invalid or missing authorization in header)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (Invalid or missing authorization in header)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 402:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Payment required)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (Payment required)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 403:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (Forbidden)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (Forbidden)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 404:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 429:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (The service received too many requests in a given amount of time)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (The service received too many requests in a given amount of time)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 500:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (The service received too many requests in a given amount of time)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (The service received too many requests in a given amount of time)")
   socDebugLog(req_soc.text)
   exit(1)
 elif req_soc.status_code == 503:
-  socDebugLog("SoC Request Fehlgeschlagen Code: " + str(req_soc.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
+  socDebugLog("SoC Request fehlgeschlagen Code: " + str(req_soc.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")
   socDebugLog(req_soc.text)
   exit(1)
 else:
-  socDebugLog("SoC Request Fehlgeschlagen unbekannter Code: " + str(req_soc.status_code))
+  socDebugLog("SoC Request fehlgeschlagen unbekannter Code: " + str(req_soc.status_code))
   socDebugLog(req_soc.text)
   exit(1)
 
+if Debug >= 2:
+    socDebugLog("SoC EQ Ende ohne fehler")
 exit(0)
