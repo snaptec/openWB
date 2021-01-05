@@ -83,39 +83,55 @@ class AVMHomeAutomation:
         self.username = str(sys.argv[6])
         self.password = str(sys.argv[7])
         self.sessionID = ""
+        self.device_infos = {}
+
+    # cacheFileString returns the filename in which the device dictionary is cached
+    def cacheFileString(self):
+        return '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_avmdeviceinfos'
+
+    # sessionIDFile returns the filename in which the session ID is stored
+    def sessionIDFile(self):
+        return '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_sessionid'
 
     # connect checks the currently known session ID for validity and
-    # performs an authentication to obtain a new session ID if neccessary
+    # performs an authentication to obtain a new session ID if neccessary.
+    # The session ID is assumed to be valid if it has been written to the
+    # ramdisk less than 5 minutes ago.
     def connect(self):
-        file_stringsessionid = '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_sessionid'
-
+        file_stringsessionid = self.sessionIDFile()
         # try to read previous session id from ramdisk file. If this operation fails,
         # no harm is done as we can proceed with normal authentication. Reusing
         # a session ID (which is valid up to 60 minutes) saves some time, though.
         try:
             if os.path.isfile(file_stringsessionid):
                 f = open(file_stringsessionid, 'r')
-                self.sessionID = f.read()
+                self.sessionID = f.read().strip()
                 f.close()
+                mtime = os.path.getmtime(file_stringsessionid)
+                age_of_id_in_seconds = time.time() - mtime
+                should_authenticate = age_of_id_in_seconds / 60 >= 5
+            else:
+                should_authenticate = True
         except IOError:
-            pass
+            should_authenticate = True
 
-        # perform login
-        self.sessionID = getAVMSessionID(
-                self.baseURL,
-                previoussessionid = self.sessionID,
-                username = self.username,
-                password = self.password)
+        if should_authenticate:
+            # perform authentication
+            self.sessionID = getAVMSessionID(
+                    self.baseURL,
+                    previoussessionid = self.sessionID,
+                    username = self.username,
+                    password = self.password)
 
-        # Try to store potentially new session id to ramdisk for next run
-        # If this operations fails, no harm is done as we can always authenticate
-        # with username/password.
-        try:
-            f = open(file_stringsessionid, 'w')
-            print ('%s' % (self.sessionID),file = f)
-            f.close()
-        except IOError:
-            pass
+            # Try to store potentially new session id to ramdisk for next run
+            # If this operations fails, no harm is done as we can always authenticate
+            # with username/password.
+            try:
+                f = open(file_stringsessionid, 'w')
+                print ('%s' % (self.sessionID),file = f)
+                f.close()
+            except IOError:
+                pass
 
     # logAction writes a message to the logfile for the smarthome device.
     def logAction(self, action):
@@ -132,6 +148,37 @@ class AVMHomeAutomation:
         except IOError:
             pass
 
+    # readOfBuildDeviceInfoCache fills self.device_infos, either from a cached
+    # file of maximum age 5 minutes, or by fetching the info from the fritzbox.
+    # The main purpose of this cache is to skip looking up the AIN via network
+    # every time.
+    def readOrBuildDeviceInfoCache(self):
+        file_stringdeviceinfos = self.cacheFileString()
+        try:
+            if os.path.isfile(file_stringdeviceinfos):
+                f = open(file_stringdeviceinfos, 'r')
+                self.device_infos = json.loads(f.read().strip())
+                f.close()
+                mtime = os.path.getmtime(file_stringdeviceinfos)
+                age_of_id_in_seconds = time.time() - mtime
+                should_fetch = age_of_id_in_seconds / 60 >= 5
+            else:
+                should_fetch = True
+        except IOError:
+            should_fetch = True
+
+        if should_fetch:
+            self.fetchAndCacheDeviceInfos()
+
+    def fetchAndCacheDeviceInfos(self):
+        self.device_infos = getDevicesDict(self.baseURL, self.sessionID)
+        try:
+            f = open(self.cacheFileString(), 'w')
+            print ('%s' % (json.dumps(self.device_infos)), file = f)
+            f.close()
+        except IOError:
+            pass
+
 
     # switchDevice sets the relais of the AVM Home Automation actor
     # state parameter: true -> on, false -> off
@@ -142,7 +189,17 @@ class AVMHomeAutomation:
             cmd = "setswitchoff"
         self.logAction(cmd)
 
-        switch = getDevicesDict(self.baseURL, self.sessionID)[self.switchname]
+
+        if not self.switchname in self.device_infos:
+            # try updating the info, first
+            self.readOrBuildDeviceInfoCache()
+
+        if not self.switchname in self.device_infos:
+            # still not found -> bail out
+            self.logAction("no such device found at fritzbox")
+            return
+
+        switch = self.device_infos[self.switchname]
         ain = urllib.parse.quote(switch["ain"])
 
         commandURL = self.baseURL + \
@@ -152,13 +209,14 @@ class AVMHomeAutomation:
             "&ain=" + ain
         urllib.request.urlopen(commandURL, timeout = 5)
 
-    # getActualPower returns current observed power and the state of the switch relais.
+    # getActualPowerForce returns current observed power and the state of the switch relais.
     # The JSON answer is either written to the according smarthome device return file
     # or dumped to stdout if no such file exists (for local development)
     def getActualPower(self):
         self.logAction("fetch power")
 
-        switch = getDevicesDict(self.baseURL, self.sessionID)[self.switchname]
+        self.fetchAndCacheDeviceInfos()
+        switch = self.device_infos[self.switchname]
         aktpower = switch['power']
         powerc = switch['energy']
 
@@ -166,7 +224,7 @@ class AVMHomeAutomation:
             relais = 1
         else:
             relais = 0
-        answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '} '
+        answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
         try:
             f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(self.devicenumber), 'w')
             json.dump(answer, f1)
