@@ -27,7 +27,7 @@ def socDebugLog(message):
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
     print(local_time.strftime(format = "%Y-%m-%d %H:%M:%S") +": Lp" +ChargePoint + ": " + message)
 
-if Debug == 1:
+if Debug >= 1:
     socDebugLog("client: " + client_id)
 
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
