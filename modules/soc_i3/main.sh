@@ -6,7 +6,7 @@ if (( i3timer < 60 )); then
 	i3timer=$((i3timer+1))
 	echo $i3timer > /var/www/html/openWB/ramdisk/soctimer
 else
-	echo 1 > /var/www/html/openWB/ramdisk/soctimer
+	echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	re='^-?[0-9]+$'
 	abfrage=$(sudo php index.php | jq '.')
 	soclevel=$(echo $abfrage | jq '.chargingLevel')
