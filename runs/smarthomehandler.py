@@ -73,7 +73,7 @@ def sepwatt(oldwatt,oldwattk,nummer):
     except:
        meastyp = "undef"
     logDebug("0", "Device: " + str(nummer) + " Leistungsmessung durch " +  meastyp)
-    argumentList = ['python3', pyname, str(nummer)]
+    argumentList = ['python3', 'undef', str(nummer)]
     argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
     argumentList.append(str(uberschuss))
 
