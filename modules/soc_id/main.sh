@@ -53,6 +53,6 @@ if (( soctimer < tmpintervall )); then
 	echo $soctimer > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile &
 	echo 0 > $soctimerfile
+	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile
 fi

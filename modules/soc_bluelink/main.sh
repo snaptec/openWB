@@ -52,6 +52,6 @@ if (( soctimervalue < tmpintervall )); then
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile &
 	echo 0 > $soctimerfile
+	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile
 fi

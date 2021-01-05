@@ -11,6 +11,7 @@ if (( $ischarging != 0 )); then
 		zerotimer=$((zerotimer+1))
 		echo $zerotimer > /var/www/html/openWB/ramdisk/soctimer
 	else
+		echo 0 > /var/www/html/openWB/ramdisk/soctimer
 		re='^-?[0-9]+$'
 		soclevel=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$soc_zerong_username -d pass=$soc_zerong_password -d unitnumber=$zerounitnumber | jq '.[].soc')
 		if  [[ $soclevel =~ $re ]] ; then
@@ -18,13 +19,13 @@ if (( $ischarging != 0 )); then
 				echo $soclevel > /var/www/html/openWB/ramdisk/soc
 			fi
 		fi
-		echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	fi
 else
 	if (( zerotimer < zintervall )); then
 		zerotimer=$((zerotimer+1))
 		echo $zerotimer > /var/www/html/openWB/ramdisk/soctimer
 	else
+		echo 0 > /var/www/html/openWB/ramdisk/soctimer
 		re='^-?[0-9]+$'
 		soclevel=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$soc_zerong_username -d pass=$soc_zerong_password -d unitnumber=$zerounitnumber | jq '.[].soc')
 		if  [[ $soclevel =~ $re ]] ; then
@@ -32,6 +33,5 @@ else
 				echo $soclevel > /var/www/html/openWB/ramdisk/soc
 			fi
 		fi
-		echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	fi
 fi

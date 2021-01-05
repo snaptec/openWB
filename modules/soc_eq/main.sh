@@ -58,7 +58,6 @@ if (( soctimer < tmpintervall )); then
 	echo $soctimer > $soctimerfile
 else
   socDebugLog "Requesting SoC"
-  $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE &
-  
   echo 0 > $soctimerfile
+  $MODULEDIR/soc.py $soc_eq_client_id $soc_eq_client_secret $soc_eq_vin $soc_file $CHARGEPOINT >>$LOGFILE
 fi
