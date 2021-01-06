@@ -2,6 +2,7 @@
 
 # Allow 3 minutes between RFID scan and plugin - else the CP gets disabled again
 declare -r MaximumSecondsAfterRfidScanToAssignCp=180
+declare -r SocketActivationFile="ramdisk/socketActivationRequested"
 
 # lastmanagement == 1 means that it's on openWB duo
 if (( lastmanagement > 0 )); then
@@ -71,6 +72,10 @@ rfid() {
 	# handle special behaviour for slave mode
 	#
 	if (( slavemode == 1 )); then
+
+		if (( standardSocketInstalled > 0 )); then
+			checkTagValidForSocket
+		fi
 
 		# handle plugin only if we have valid un-assigned start data (i.e. an RFID-scan that has not yet been assigned to a CP)
 		if [ -f "${StartScanDataLocation}" ]; then
@@ -222,6 +227,59 @@ setLpPlugChangeState() {
 	fi
 }
 
+# checks if the tag stored in $lasttag is valid for socket activation (if it is, returning 0, else > 0)
+checkTagValidForSocket() {
+
+	if [[ $lasttag == "0" ]]; then
+		return 1
+	fi
+
+	local ramdiskFileForSocket="ramdisk/AllowedRfidsForSocket"
+	if [ ! -f "$ramdiskFileForSocket" ]; then
+		return 1
+	fi
+
+	local rfidlist=$(<"$ramdiskFileForSocket")
+	$dbgWrite "$NowItIs: rfidlist(Socket)='${rfidlist}'"
+
+	# leave right away if we have no list of valid RFID tags for the charge point
+	if [ -z "$rfidlist" ]; then
+		echo "$NowItIs: Empty 'allowed tags list' for Socket after scan of tag '${lasttag}'"
+		return 1
+	fi
+
+	for i in $(echo $rfidlist | sed "s/,/ /g")
+	do
+		if [ "$lasttag" == "$i" ] ; then
+
+			# and the ramdisk file for legacy ladelog
+			echo $lasttag > "ramdisk/rfidSocket"
+
+			if [ -f $SocketActivationFile ]; then
+				# we have activate status ...
+				local active=$(<$SocketActivationFile)
+				if (( active > 0 )); then
+					# ... and it's already active --> request DEactivation
+					echo 2 > $SocketActivationFile
+				else
+					# ... and it's not active --> request Activation
+					echo 1 > $SocketActivationFile
+				fi
+			else
+				# no activated status --> request Activation
+				echo 1 > $SocketActivationFile
+			fi
+
+			echo "$NowItIs: Detected RFID scan of '$lasttag' @ meter value $llkwh as socket-activation request"
+
+			return 0
+		fi
+	done
+
+	echo "$NowItIs: RFID tag '${lasttag}' is not authorized for socket activation"
+
+	return 1
+}
 
 # checks if the tag stored in $lasttag is valid for the charge point passed in $1
 checkTagValidAndSetStartScanData() {
@@ -263,6 +321,9 @@ checkTagValidAndSetStartScanData() {
 			mosquitto_pub -r -q 2 -t "openWB/set/lp${chargePoint}/ChargePointEnabled" -m "1"
 			eval lp${chargePoint}enabled=1
 			openwbDebugLog "MAIN" 0 "Start waiting for ${MaximumSecondsAfterRfidScanToAssignCp} seconds for CP #${chargePoint} to get plugged in after RFID scan of '$lasttag' @ meter value $llkwh (justPlugged == ${pluggedLps[$chargePoint]})"
+
+			# explicitly and immediately disable the socket
+			echo 2 > $SocketActivationFile
 
 			return 0
 		fi

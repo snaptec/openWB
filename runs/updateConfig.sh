@@ -1547,7 +1547,11 @@ updateConfig(){
 		echo "slaveModeSlowRamping=1" >> $ConfigFile
 	fi
 	if ! grep -Fq "slaveModeMinimumAdjustmentInterval=" $ConfigFile; then
-		echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
+    	echo "slaveModeMinimumAdjustmentInterval=15" >> $ConfigFile
+	fi
+	if ! grep -Fq "standardSocketInstalled=" /var/www/html/openWB/openwb.conf
+	then
+		echo "standardSocketInstalled=0" >> /var/www/html/openWB/openwb.conf
 	fi
 	if ! grep -Fq "solarworld_emanagerip=" $ConfigFile; then
 		echo "solarworld_emanagerip=192.192.192.192" >> $ConfigFile
@@ -1718,8 +1722,8 @@ updateConfig(){
 		echo "mypeugeot_soccalclp2=0" >> $ConfigFile
 	fi
 	if ! grep -Fq "myopel_soccalclp1=" $ConfigFile; then
-		echo "myopel_soccalclp1=0" >> $ConfigFile; 
-	fi 
+		echo "myopel_soccalclp1=0" >> $ConfigFile;
+	fi
 	if ! grep -Fq "myopel_soccalclp2=" $ConfigFile; then
 		echo "myopel_soccalclp2=0" >> $ConfigFile;
 	fi

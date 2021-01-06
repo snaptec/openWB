@@ -608,35 +608,46 @@ def on_message(client, userdata, msg):
                 subprocess.Popen(sendcommand)
                 client.publish("openWB/config/get/slave/UseLastChargingPhase", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/configure/AllowedTotalCurrentPerPhase"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                 f = open('/var/www/html/openWB/ramdisk/AllowedTotalCurrentPerPhase', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/config/set/slave/SocketApproved"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <= 2):
+                f = open('/var/www/html/openWB/ramdisk/socketApproved', 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+                client.publish("openWB/config/get/slave/SocketApproved", msg.payload.decode("utf-8"), qos=0, retain=True)
         if (msg.topic == "openWB/set/configure/AllowedPeakPower"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=300000):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 300000):
                 f = open('/var/www/html/openWB/ramdisk/AllowedPeakPower', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp1"):
-            if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            if (int(msg.payload) >= -1 and int(msg.payload) <= 32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp1', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/FixedChargeCurrentCp2"):
-            if (int(msg.payload) >= -1 and int(msg.payload) <=32):
+            if (int(msg.payload) >= -1 and int(msg.payload) <= 32):
                 f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
         if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            if (float(msg.payload) >= 0 and float(msg.payload) <= 200):
                 f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/set/configure/AllowedRfidsForSocket"):
+            f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForSocket', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            setTopicCleared = True
         if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
             f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
             f.write(msg.payload.decode("utf-8"))
@@ -694,6 +705,18 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
                 setTopicCleared = True
+        if (msg.topic == "openWB/config/set/global/slaveMode"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                slaveMode=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "slavemode=", slaveMode]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/global/slaveMode", slaveMode, qos=0, retain=True)
+        if (msg.topic == "openWB/config/set/global/standardSocketInstalled"):
+            if (int(msg.payload) >= 0 and int(msg.payload) <=1):
+                standardSocketInstalled=msg.payload.decode("utf-8")
+                sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "standardSocketInstalled=", standardSocketInstalled]
+                subprocess.Popen(sendcommand)
+                client.publish("openWB/config/get/global/standardSocketInstalled", standardSocketInstalled, qos=0, retain=True)
         if (msg.topic == "openWB/config/set/global/lp/1/cpInterrupt"):
             if (int(msg.payload) >= 0 and int(msg.payload) <=1):
                 einbeziehen=msg.payload.decode("utf-8")

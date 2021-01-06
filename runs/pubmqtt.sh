@@ -236,6 +236,10 @@ mqttvar["lp/6/TimeRemaining"]=restzeitlp6
 mqttvar["lp/7/TimeRemaining"]=restzeitlp7
 mqttvar["lp/8/TimeRemaining"]=restzeitlp8
 
+mqttvar["config/get/slave/SocketActivated"]=socketActivated
+mqttvar["config/get/slave/SocketRequested"]=socketActivationRequested
+mqttvar["config/get/slave/SocketApproved"]=socketApproved
+
 for i in $(seq 1 8);
 do
 	for f in \
