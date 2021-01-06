@@ -58,8 +58,8 @@ sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
 sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
 sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
-sudo cp /tmp/soc_eq_acc_lp1 modules/soc_eq/soc_eq_acc_lp1
-sudo cp /tmp/soc_eq_acc_lp2 modules/soc_eq/soc_eq_acc_lp2
+sudo cp /tmp/soc_eq_acc_lp1 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp1
+sudo cp /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
 sudo chmod +x /var/www/html/openWB/runs/*
