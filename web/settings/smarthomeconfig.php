@@ -176,6 +176,7 @@ $numDevices = 9;
 										<label for="device_actorDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Aktor</label>
 										<div class="col">
 											<input id="device_actorDevices<?php echo $devicenum; ?>" name="device_actor" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">Hier ist der Name des Gerätes einzutragen, wie er in der Fritz!Box angezeigt wird.</span>
 										</div>
 									</div>
 								</div>

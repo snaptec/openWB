@@ -29,6 +29,6 @@ if (( auditimer < 180 )); then
 	fi
 	echo $auditimer > $soctimerfile
 else
-	echo 1 > $soctimerfile
+	echo 0 > $soctimerfile
 	/var/www/html/openWB/modules/evcc-soc audi --user "$username" --password "$passsword" > $socfile
 fi

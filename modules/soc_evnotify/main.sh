@@ -44,6 +44,7 @@ if (( soctimer < 4 )); then
 	echo $soctimer > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
+	echo 0 > $soctimerfile
 	answer=$(curl -s -X GET 'https://app.evnotify.de/soc?akey='$akey'&token='$token)
 	# extract the soc value
 	soc=$(echo $answer | jq .soc_display)
@@ -51,6 +52,5 @@ else
 	isvalid=$(echo $soc | cut -d "." -f 1 | cut -d "," -f 1)
 	if (( isvalid >= 0 && isvalid != null)); then
 		echo $isvalid > $socfile
-		echo 0 > $soctimerfile
 	fi
 fi

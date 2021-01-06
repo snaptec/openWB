@@ -44,14 +44,21 @@ soctimervalue=$(<$soctimerfile)
 
 tmpintervall=$(( bluelink_intervall * 6 ))
 
-socDebugLog "SoCtimer: $soctimervalue, SoCIntervall: $tmpintervall"
-
 if (( soctimervalue < tmpintervall )); then
 	socDebugLog "Nothing to do yet. Incrementing timer."
 	soctimervalue=$((soctimervalue+1))
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	$MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" > $socfile &
+	# reset timer first!
 	echo 0 > $soctimerfile
+	answer=$($MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" 2>&1)
+	if [ $? -eq 0 ]; then
+		# we got a valid answer
+		echo $answer > $socfile
+		socDebugLog "SoC: $answer"
+	else
+		# we have a problem
+		socDebugLog "Error from evcc-soc: $answer"
+	fi
 fi

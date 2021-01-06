@@ -33,6 +33,7 @@ if (( $ischarging != 0 )); then
 		zerotimer=$((zerotimer+1))
 		echo $zerotimer > $soctimerfile
 	else
+		echo 0 > $soctimerfile
 		re='^-?[0-9]+$'
 		soclevel=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].soc')
 		if  [[ $soclevel =~ $re ]] ; then
@@ -40,13 +41,13 @@ if (( $ischarging != 0 )); then
 				echo $soclevel > $socfile
 			fi
 		fi
-		echo 0 > $soctimerfile
 	fi
 else
 	if (( zerotimer < zintervall )); then
 		zerotimer=$((zerotimer+1))
 		echo $zerotimer > $soctimerfile
 	else
+		echo 0 > $soctimerfile
 		re='^-?[0-9]+$'
 		soclevel=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].soc')
 		if  [[ $soclevel =~ $re ]] ; then
@@ -54,6 +55,5 @@ else
 				echo $soclevel > $socfile
 			fi
 		fi
-		echo 0 > $soctimerfile
 	fi
 fi

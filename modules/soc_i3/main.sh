@@ -23,6 +23,7 @@ if (( i3timer < 60 )); then
 	i3timer=$((i3timer+1))
 	echo $i3timer > $soctimerfile
 else
+	echo 0 > /var/www/html/openWB/ramdisk/soctimer
 	re='^-?[0-9]+$'
 	abfrage=$(sudo php index.php | jq '.')
 	soclevel=$(echo $abfrage | jq '.chargingLevel')
@@ -32,16 +33,14 @@ else
 		fi
 	fi
 
-#Abfrage Ladung aktiv. Setzen des soctimers. 
+	#Abfrage Ladung aktiv. Setzen des soctimers.
 	charging=$(echo $abfrage | jq '.chargingActive')
 	if [[ $charging != 0 ]] ; then
 		soctimer=$((60 * (10 - $intervall) / 10))
 		echo $soctimer > $soctimerfile
-	else
-		echo 1 > $soctimerfile
 	fi
 
-#Benachrichtigung bei Ladeabbruch 
+	#Benachrichtigung bei Ladeabbruch
 	error=$(echo $abfrage | jq '.chargingError')
 	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
