@@ -244,7 +244,7 @@ checkTagValidForSocket() {
 
 	# leave right away if we have no list of valid RFID tags for the charge point
 	if [ -z "$rfidlist" ]; then
-		echo "$NowItIs: Empty 'allowed tags list' for Socket after scan of tag '${lasttag}'"
+		echo "$NowItIs: Empty 'allowed tags list' for socket after scan of tag '${lasttag}'"
 		return 1
 	fi
 
@@ -270,13 +270,13 @@ checkTagValidForSocket() {
 				echo 1 > $SocketActivationFile
 			fi
 
-			echo "$NowItIs: Detected RFID scan of '$lasttag' @ meter value $llkwh as socket-activation request"
+			echo "$NowItIs: Detected RFID scan of '$lasttag' @ meter value $llkwh as socket control request"
 
 			return 0
 		fi
 	done
 
-	echo "$NowItIs: RFID tag '${lasttag}' is not authorized for socket activation"
+	echo "$NowItIs: RFID tag '${lasttag}' is not authorized to control socket"
 
 	return 1
 }
