@@ -30,5 +30,13 @@ if (( auditimer < 180 )); then
 	echo $auditimer > $soctimerfile
 else
 	echo 0 > $soctimerfile
-	/var/www/html/openWB/modules/evcc-soc audi --user "$username" --password "$passsword" > $socfile
+	answer=$(/var/www/html/openWB/modules/evcc-soc audi --user "$username" --password "$passsword" 2>&1)
+	if [ $? -eq 0 ]; then
+ 		# we got a valid answer
+ 		echo $answer > $socfile
+ 		socDebugLog "SoC: $answer"
+ 	else
+ 		# we have a problem
+ 		socDebugLog "Error from evcc-soc: $answer"
+ 	fi
 fi

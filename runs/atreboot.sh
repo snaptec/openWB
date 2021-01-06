@@ -12,7 +12,27 @@ sudo chmod 777 /var/www/html/openWB/ramdisk/
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+
+if [ -d "/var/www/html/openWB/modules/soc_i3s1" ]; then
+	sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+fi
+
+if [ -f "/var/www/html/openWB/modules/soc_i3/auth.json" ]; then
+	mv "/var/www/html/openWB/modules/soc_i3/auth.json" "/var/www/html/openWB/modules/soc_i3/auth1.json"
+fi
+
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/auth.json" ]; then
+	mv "/var/www/html/openWB/modules/soc_i3s1/auth.json" "/var/www/html/openWB/modules/soc_i3/auth2.json"
+fi
+
+if [ -f "/var/www/html/openWB/modules/soc_i3/token.json" ]; then
+	mv "/var/www/html/openWB/modules/soc_i3/token.json" "/var/www/html/openWB/modules/soc_i3/token1.json"
+fi
+
+if [ -f "/var/www/html/openWB/modules/soc_i3s1/token.json" ]; then
+	mv "/var/www/html/openWB/modules/soc_i3s1/token.json" "/var/www/html/openWB/modules/soc_i3/token2.json"
+fi
+
 sudo chmod 777 /var/www/html/openWB/modules/soc_eq/*
 echo 0 > /var/www/html/openWB/ramdisk/randomSleepValue
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
@@ -571,8 +591,6 @@ echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher3ikwh
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
-sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
 
 for i in $(seq 1 8);
 do

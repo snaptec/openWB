@@ -6,11 +6,33 @@ case $CHARGEPOINT in
 	2)
 		# second charge point
 		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
+		soc=$(</var/www/html/openWB/ramdisk/soc1)
+		lstate=$(</var/www/html/openWB/ramdisk/ladestatuss1)
+		plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
+		chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
+		r8=$(</var/www/html/openWB/ramdisk/zoereply8lp2)
+		username=$myrenault_userlp2
+		password=$myrenault_passlp2
+		location=$myrenault_locationlp2
+		country=$myrenault_countrylp2
+		wakeup=$wakeupmyrenaultlp2
+		vin=$soclp2_vin
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
 		CHARGEPOINT=1
 		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
+		soc=$(</var/www/html/openWB/ramdisk/soc)
+		lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
+		plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
+		chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
+		r8=$(</var/www/html/openWB/ramdisk/zoereply8lp1)
+		username=$myrenault_userlp1
+		password=$myrenault_passlp1
+		location=$myrenault_locationlp1
+		country=$myrenault_countrylp1
+		wakeup=$wakeupmyrenaultlp1
+		vin=$soclp1_vin
 		;;
 esac
 
@@ -20,37 +42,6 @@ if (( timer < 60 )); then
 	echo $timer > $soctimerfile
 else
 	echo 0 > $soctimerfile
-
-	case $CHARGEPOINT in
-		2)
-			# second charge point
-			soc=$(</var/www/html/openWB/ramdisk/soc1)
-			lstate=$(</var/www/html/openWB/ramdisk/ladestatuss1)
-			plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
-			chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
-			r8=$(</var/www/html/openWB/ramdisk/zoereply8lp2)
-			username=$myrenault_userlp2
-			password=$myrenault_passlp2
-			location=$myrenault_locationlp2
-			country=$myrenault_countrylp2
-			wakeup=$wakeupmyrenaultlp2
-			vin=$soclp2_vin
-			;;
-		*)
-			# defaults to first charge point for backward compatibility
-			soc=$(</var/www/html/openWB/ramdisk/soc)
-			lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
-			plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
-			chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
-			r8=$(</var/www/html/openWB/ramdisk/zoereply8lp1)
-			username=$myrenault_userlp1
-			password=$myrenault_passlp1
-			location=$myrenault_locationlp1
-			country=$myrenault_countrylp1
-			wakeup=$wakeupmyrenaultlp1
-			vin=$soclp1_vin
-			;;
-	esac
 	sudo python /var/www/html/openWB/modules/soc_myrenault/zoensoc.py $username $password $location $country $vin $CHARGEPOINT
 
 	dtime=$(date +"%T")
