@@ -8,12 +8,16 @@ case $CHARGEPOINT in
 		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
 		socfile="/var/www/html/openWB/ramdisk/soc1"
 		intervall=$soccarnetlp2intervall
+		username=$carnetlp2user
+		password=$carnetlp2pass
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
 		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
 		socfile="/var/www/html/openWB/ramdisk/soc"
 		intervall=$soccarnetintervall
+		username=$carnetuser
+		password=$carnetpass
 		;;
 esac
 
@@ -24,11 +28,11 @@ if (( vwtimer < 60 )); then
 else
 	#Abfrage Ladung aktiv. Setzen des soctimers. 
 	if (( ladeleistung > 800 )) ; then
-		vwtimer=$((60 * (10 - $soccarnetintervall) / 10))
+		vwtimer=$((60 * (10 - $intervall) / 10))
 		echo $vwtimer > $soctimerfile
 	else
 		echo 1 > $soctimerfile
 	fi
 	
-	/var/www/html/openWB/modules/soc_carnet/soc.sh $carnetuser $carnetpass $socfile
+	/var/www/html/openWB/modules/soc_carnet/soc.sh $username $password $socfile
 fi
