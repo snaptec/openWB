@@ -54,5 +54,13 @@ if (( soctimer < tmpintervall )); then
 else
 	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
-	$MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" > $socfile
+	answer=$($MODULEDIR/../evcc-soc id --user "$username" --password "$password" --vin "$vin" 2>&1)
+	if [ $? -eq 0 ]; then
+		# we got a valid answer
+		echo $answer > $socfile
+		socDebugLog "SoC: $answer"
+	else
+		# we have a problem
+		socDebugLog "Error from evcc-soc: $answer"
+	fi
 fi
