@@ -1,21 +1,63 @@
 #!/bin/bash
-timer=$(</var/www/html/openWB/ramdisk/soctimer)
+
+CHARGEPOINT=$1
+
+case $CHARGEPOINT in
+	2)
+		# second charge point
+		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
+		;;
+	*)
+		# defaults to first charge point for backward compatibility
+		CHARGEPOINT=1
+		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
+		;;
+esac
+
+timer=$(<$soctimerfile)
 if (( timer < 60 )); then
 	timer=$((timer+1))
-	echo $timer > /var/www/html/openWB/ramdisk/soctimer
+	echo $timer > $soctimerfile
 else
-	echo 0 > /var/www/html/openWB/ramdisk/soctimer
-	sudo python /var/www/html/openWB/modules/soc_myrenault/zoensoclp1.py $myrenault_userlp1 $myrenault_passlp1 $myrenault_locationlp1 $myrenault_countrylp1 $soclp1_vin
-	soc=$(</var/www/html/openWB/ramdisk/soc)
-	lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
+	echo 0 > $soctimerfile
+
+	case $CHARGEPOINT in
+		2)
+			# second charge point
+			soc=$(</var/www/html/openWB/ramdisk/soc1)
+			lstate=$(</var/www/html/openWB/ramdisk/ladestatuss1)
+			plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
+			chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
+			r8=$(</var/www/html/openWB/ramdisk/zoereply8lp2)
+			username=$myrenault_userlp2
+			password=$myrenault_passlp2
+			location=$myrenault_locationlp2
+			country=$myrenault_countrylp2
+			wakeup=$wakeupmyrenaultlp2
+			vin=$soclp2_vin
+			;;
+		*)
+			# defaults to first charge point for backward compatibility
+			soc=$(</var/www/html/openWB/ramdisk/soc)
+			lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
+			plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
+			chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
+			r8=$(</var/www/html/openWB/ramdisk/zoereply8lp1)
+			username=$myrenault_userlp1
+			password=$myrenault_passlp1
+			location=$myrenault_locationlp1
+			country=$myrenault_countrylp1
+			wakeup=$wakeupmyrenaultlp1
+			vin=$soclp1_vin
+			;;
+	esac
+	sudo python /var/www/html/openWB/modules/soc_myrenault/zoensoc.py $username $password $location $country $vin $CHARGEPOINT
+
 	dtime=$(date +"%T")
-	plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
-	chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
-	r8=$(</var/www/html/openWB/ramdisk/zoereply8lp1)
 	charging=$(echo $r8 | jq -r .data.attributes.chargingStatus)
-	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $soc -ne 100 ]] && [[ $wakeupmyrenaultlp1 == "1" ]] ; then
-		echo " $dtime zoe p1 ladung remote gestartet"
-		echo " $dtime zoe p1 lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
-		sudo python /var/www/html/openWB/modules/soc_myrenault/zoenwakelp1.py $myrenault_userlp1 $myrenault_passlp1  $myrenault_locationlp1  $myrenault_countrylp1 $soclp1_vin
+	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $soc -ne 100 ]] && [[ $wakeup == "1" ]] ; then
+		echo " $dtime zoe p$CHARGEPOINT ladung remote gestartet"
+		echo " $dtime zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+		sudo python /var/www/html/openWB/modules/soc_myrenault/zoenwake.py $username $password $location $country $vin $CHARGEPOINT
 	fi
 fi
