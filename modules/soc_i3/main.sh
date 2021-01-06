@@ -1,18 +1,26 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
-		socfile="/var/www/html/openWB/ramdisk/soc1"
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
 		intervall=$soci3intervall1
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
-		socfile="/var/www/html/openWB/ramdisk/soc"
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
 		intervall=$soci3intervall
 		;;
 esac
@@ -23,7 +31,7 @@ if (( i3timer < 60 )); then
 	i3timer=$((i3timer+1))
 	echo $i3timer > $soctimerfile
 else
-	echo 0 > /var/www/html/openWB/ramdisk/soctimer
+	echo 0 > $soctimerfile
 	re='^-?[0-9]+$'
 	abfrage=$(sudo php index.php?chargepoint=$CHARGEPOINT | jq '.')
 	soclevel=$(echo $abfrage | jq '.chargingLevel')
@@ -44,7 +52,7 @@ else
 	error=$(echo $abfrage | jq '.chargingError')
 	if [[ $error == 1 ]] && [[ $pushbenachrichtigung == 1 ]] ; then
 		#Abfrage, ob Fehler schon dokumentiert
-		chargingError=$(</var/www/html/openWB/ramdisk/chargingerror)
+		chargingError=$(<$RAMDISKDIR/chargingerror)
 		#wiederholte Benachrichtigungen verhindern
 		if [[ $chargingError == 0 ]] ; then
 			message="ACHTUNG - Ladung bei "
@@ -52,9 +60,9 @@ else
 			message+="% abgebrochen"
 			/var/www/html/openWB/runs/pushover.sh "$message"
 			#dokumetieren des Fehlers in der Ramdisk
-			echo 1 > /var/www/html/openWB/ramdisk/chargingerror
+			echo 1 > $RAMDISKDIR/chargingerror
 		fi
 	else
-		echo 0 > /var/www/html/openWB/ramdisk/chargingerror
+		echo 0 > $RAMDISKDIR/chargingerror
 	fi
 fi

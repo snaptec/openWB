@@ -1,6 +1,14 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)

@@ -1,16 +1,23 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
-		soc=$(</var/www/html/openWB/ramdisk/soc1)
-		lstate=$(</var/www/html/openWB/ramdisk/ladestatuss1)
-		plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
-		chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
-		r8=$(</var/www/html/openWB/ramdisk/zoereply8lp2)
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		soc=$(<$RAMDISKDIR/soc1)
+		lstate=$(<$RAMDISKDIR/ladestatuss1)
+		plugstatus=$(<$RAMDISKDIR/plugstats1)
+		chagerstatus=$(<$RAMDISKDIR/chargestats1)
+		r8=$(<$RAMDISKDIR/zoereply8lp2)
 		username=$myrenault_userlp2
 		password=$myrenault_passlp2
 		location=$myrenault_locationlp2
@@ -21,12 +28,12 @@ case $CHARGEPOINT in
 	*)
 		# defaults to first charge point for backward compatibility
 		CHARGEPOINT=1
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
-		soc=$(</var/www/html/openWB/ramdisk/soc)
-		lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
-		plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
-		chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
-		r8=$(</var/www/html/openWB/ramdisk/zoereply8lp1)
+		soctimerfile="$RAMDISKDIR/soctimer"
+		soc=$(<$RAMDISKDIR/soc)
+		lstate=$(<$RAMDISKDIR/ladestatus)
+		plugstatus=$(<$RAMDISKDIR/plugstat)
+		chagerstatus=$(<$RAMDISKDIR/chargestat)
+		r8=$(<$RAMDISKDIR/zoereply8lp1)
 		username=$myrenault_userlp1
 		password=$myrenault_passlp1
 		location=$myrenault_locationlp1
@@ -35,6 +42,13 @@ case $CHARGEPOINT in
 		vin=$soclp1_vin
 		;;
 esac
+
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
 
 timer=$(<$soctimerfile)
 if (( timer < 60 )); then
@@ -47,8 +61,8 @@ else
 	dtime=$(date +"%T")
 	charging=$(echo $r8 | jq -r .data.attributes.chargingStatus)
 	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $soc -ne 100 ]] && [[ $wakeup == "1" ]] ; then
-		echo " $dtime zoe p$CHARGEPOINT ladung remote gestartet"
-		echo " $dtime zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+		socDebugLog "zoe p$CHARGEPOINT ladung remote gestartet"
+		socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
 		sudo python /var/www/html/openWB/modules/soc_myrenault/zoenwake.py $username $password $location $country $vin $CHARGEPOINT
 	fi
 fi

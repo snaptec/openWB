@@ -1,42 +1,57 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-        lstate=$(</var/www/html/openWB/ramdisk/ladestatuss1)
-        plugstatus=$(</var/www/html/openWB/ramdisk/plugstats1)
-        chagerstatus=$(</var/www/html/openWB/ramdisk/chargestats1)
-        soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
+        lstate=$(<$RAMDISKDIR/ladestatuss1)
+        plugstatus=$(<$RAMDISKDIR/plugstats1)
+        chagerstatus=$(<$RAMDISKDIR/chargestats1)
+        soctimerfile="$RAMDISKDIR/soctimer1"
         username=$zoelp2username
         password=$zoelp2passwort
-        socfile="/var/www/html/openWB/ramdisk/soc1"
-        requestfile="/var/www/html/openWB/ramdisk/zoerequestlp2"
-        request1file="/var/www/html/openWB/ramdisk/zoerequest1lp2"
-        request2file="/var/www/html/openWB/ramdisk/zoerequest2lp2"
-        request3file="/var/www/html/openWB/ramdisk/zoerequest3lp2"
+        socfile="$RAMDISKDIR/soc1"
+        requestfile="$RAMDISKDIR/zoerequestlp2"
+        request1file="$RAMDISKDIR/zoerequest1lp2"
+        request2file="$RAMDISKDIR/zoerequest2lp2"
+        request3file="$RAMDISKDIR/zoerequest3lp2"
         wakeup="wakeupzoelp2"
-        zoestatusfile="/var/www/html/openWB/ramdisk/zoestatuslp2"
+        zoestatusfile="$RAMDISKDIR/zoestatuslp2"
         ;;
 	*)
         CHARGEPOINT=1
 		# defaults to first charge point for backward compatibility
-        lstate=$(</var/www/html/openWB/ramdisk/ladestatus)
-        plugstatus=$(</var/www/html/openWB/ramdisk/plugstat)
-        chagerstatus=$(</var/www/html/openWB/ramdisk/chargestat)
-        soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
+        lstate=$(<$RAMDISKDIR/ladestatus)
+        plugstatus=$(<$RAMDISKDIR/plugstat)
+        chagerstatus=$(<$RAMDISKDIR/chargestat)
+        soctimerfile="$RAMDISKDIR/soctimer"
         username=$zoeusername
         password=$zoepasswort
-        socfile="/var/www/html/openWB/ramdisk/soc"
-        requestfile="/var/www/html/openWB/ramdisk/zoerequest"
-        request1file="/var/www/html/openWB/ramdisk/zoerequest1"
-        request2file="/var/www/html/openWB/ramdisk/zoerequest2"
-        request3file="/var/www/html/openWB/ramdisk/zoerequest3"
+        socfile="$RAMDISKDIR/soc"
+        requestfile="$RAMDISKDIR/zoerequest"
+        request1file="$RAMDISKDIR/zoerequest1"
+        request2file="$RAMDISKDIR/zoerequest2"
+        request3file="$RAMDISKDIR/zoerequest3"
         wakeup="wakeupzoelp1"
-        zoestatusfile="/var/www/html/openWB/ramdisk/zoestatus"
+        zoestatusfile="$RAMDISKDIR/zoestatus"
         ;;
 esac
+
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
 
 timer=$(<$soctimerfile)
 dtime=$(date +"%T")
@@ -61,20 +76,20 @@ else
 	echo $soc > $socfile
 	echo 0 > $soctimerfile
     if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $scheduler == "false" ]] && [[ $soc -ne 100 ]] && [[ $charging == "false" ]] && [[ $wakeup == "1" ]] ; then
-        echo " $dtime zoe p$CHARGEPOINT ladung remote gestartet"
-        echo " $dtime zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+        socDebugLog "zoe p$CHARGEPOINT ladung remote gestartet"
+        socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
         request3=$(curl -s -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $token" https://www.services.renault-ze.com/api/vehicle/$vin/charge)
         echo 0 > $zoestatusfile
         echo $request3 > $request3file
 #             else
-#              echo " $dtime zoe p$CHARGEPOINT laedt nicht, warte... "
-#              echo " $dtime zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "                    
+#              socDebugLog "zoe p$CHARGEPOINT laedt nicht, warte... "
+#              socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "                    
 #              echo 6 > $zoestatusfile
 #            fi
      else
 #           echo 0 > $zoestatusfile
             if [[ $debug = "1" ]] ; then
-                echo " $dtime zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
+                socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
             fi
    fi    
 fi

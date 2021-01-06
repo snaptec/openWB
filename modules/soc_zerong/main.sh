@@ -1,12 +1,20 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
-		socfile="/var/www/html/openWB/ramdisk/soc1"
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
 		zintervallladen=$(( soc_zeronglp2_intervallladen * 6 ))
 		zintervall=$(( soc_zeronglp2_intervall * 6 ))
 		username=$soc_zeronglp2_username
@@ -14,8 +22,8 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
-		socfile="/var/www/html/openWB/ramdisk/soc"
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
 		zintervallladen=$(( soc_zerong_intervallladen * 6 ))
 		zintervall=$(( soc_zerong_intervall * 6 ))
 		username=$soc_zerong_username
@@ -24,7 +32,7 @@ case $CHARGEPOINT in
 esac
 
 zerotimer=$(<$soctimerfile)
-#ladeleistung=$(</var/www/html/openWB/ramdisk/llaktuell)
+#ladeleistung=$(<$RAMDISKDIR/llaktuell)
 zerounitnumber=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_units -d format=json -d pass=$password -d user=$username | jq '.[].unitnumber')
 ischarging=$(curl -s --http2 -G https://mongol.brono.com/mongol/api.php?commandname=get_last_transmit -d format=json -d user=$username -d pass=$password -d unitnumber=$zerounitnumber | jq '.[].charging')
 

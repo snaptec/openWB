@@ -1,12 +1,20 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2) 
 		# second charge point
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
-		socfile="/var/www/html/openWB/ramdisk/soc1"
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
 		username=$soc2user
 		password=$soc2pass
 		;;
@@ -14,12 +22,19 @@ case $CHARGEPOINT in
 		# defaults to first charge point for backward compatibility
 		# set CHARGEPOINT in case it is empty (needed for logging)
 		CHARGEPOINT=1
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
-		socfile="/var/www/html/openWB/ramdisk/soc"
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
 		username=$soc_audi_username
 		password=$soc_audi_passwort
 		;;
 esac
+
+socDebugLog(){
+	if (( $socDebug > 0 )); then
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
+		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
+	fi
+}
 
 auditimer=$(<$soctimerfile)
 if (( auditimer < 180 )); then

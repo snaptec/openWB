@@ -1,20 +1,28 @@
 #!/bin/bash
 
+OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
+RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+MODULEDIR=$(cd `dirname $0` && pwd)
+LOGFILE="$RAMDISKDIR/soc.log"
 CHARGEPOINT=$1
+
+socDebug=$debug
+# for developement only
+socDebug=1
 
 case $CHARGEPOINT in
 	2)
 		# second charge point
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer1"
-		socfile="/var/www/html/openWB/ramdisk/soc1"
+		soctimerfile="$RAMDISKDIR/soctimer1"
+		socfile="$RAMDISKDIR/soc1"
 		intervall=$soccarnetlp2intervall
 		username=$carnetlp2user
 		password=$carnetlp2pass
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
-		soctimerfile="/var/www/html/openWB/ramdisk/soctimer"
-		socfile="/var/www/html/openWB/ramdisk/soc"
+		soctimerfile="$RAMDISKDIR/soctimer"
+		socfile="$RAMDISKDIR/soc"
 		intervall=$soccarnetintervall
 		username=$carnetuser
 		password=$carnetpass
