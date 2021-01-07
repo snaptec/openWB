@@ -102,6 +102,7 @@
 									<option <?php if($speichermodulold == "speicher_sbs25") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 									<option <?php if($speichermodulold == "speicher_sunnyisland") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
 									<option <?php if($speichermodulold == "speicher_solaredge") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
+									<option <?php if($speichermodulold == "speicher_solax") echo "selected" ?> value="speicher_solax">Solax Speicher</option>
 									<option <?php if($speichermodulold == "speicher_solarwatt") echo "selected" ?> value="speicher_solarwatt">Solarwatt My Reserve</option>
 									<option <?php if($speichermodulold == "speicher_sonneneco") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 									<option <?php if($speichermodulold == "speicher_sungrow") echo "selected" ?> value="speicher_sungrow">Sungrow Hybrid</option>
@@ -351,6 +352,12 @@
 							</div>
 						</div>
 
+						<div id="divspeichersolax" class="hide">
+							<div class="alert alert-info">
+								Die IP des Wechselrichters wird im dazugehörigen Solax PV-Modul eingestellt.
+							</div>
+						</div>
+
 						<div id="divspeicherplenti" class="hide">
 							<div class="alert alert-info">
 								Ein am 1. Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus.
@@ -484,6 +491,7 @@
 								hideSection('#divspeichere3dc');
 								hideSection('#divspeichersbs25');
 								hideSection('#divspeichersolaredge');
+								hideSection('#divspeichersolax');
 								hideSection('#divspeicherpw');
 								hideSection('#divspeicherplenti');
 								hideSection('#divspeichersunnyisland');
@@ -552,6 +560,9 @@
 								}
 								if($('#speichermodul').val() == 'speicher_solaredge')   {
 									showSection('#divspeichersolaredge');
+								}
+								if($('#speichermodul').val() == 'speicher_solax')   {
+									showSection('#divspeichersolax');
 								}
 								if($('#speichermodul').val() == 'speicher_varta')   {
 									showSection('#divspeichervarta');
