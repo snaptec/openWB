@@ -2959,7 +2959,7 @@ if (( isss == 1 )); then
     fi
   fi
 fi
-if [[ "$evsecon" == "buchse" ]]; then
+if [[ "$evsecon" == "buchse" ]]  && [[ "$isss" == "0" ]]; then
   # ppbuchse is used in issss.py to detect "openWB Buchse"
   if [ ! -f /home/pi/ppbuchse ]; then
     echo "32" > /home/pi/ppbuchse
