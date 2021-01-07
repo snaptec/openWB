@@ -61,8 +61,8 @@ else
 	dtime=$(date +"%T")
 	charging=$(echo $r8 | jq -r .data.attributes.chargingStatus)
 	if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $charging == '-1' ]] && [[ $soc -ne 100 ]] && [[ $wakeup == "1" ]] ; then
-		socDebugLog "zoe p$CHARGEPOINT ladung remote gestartet"
-		socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+		socDebugLog "zoe ladung remote gestartet"
+		socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
 		sudo python /var/www/html/openWB/modules/soc_myrenault/zoenwake.py $username $password $location $country $vin $CHARGEPOINT
 	fi
 fi

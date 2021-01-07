@@ -76,20 +76,20 @@ else
 	echo $soc > $socfile
 	echo 0 > $soctimerfile
     if [[ $lstate == "1" ]] && [[ $chagerstatus == "0" ]] && [[ $plugstatus == "1" ]] && [[ $scheduler == "false" ]] && [[ $soc -ne 100 ]] && [[ $charging == "false" ]] && [[ $wakeup == "1" ]] ; then
-        socDebugLog "zoe p$CHARGEPOINT ladung remote gestartet"
-        socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
+        socDebugLog "zoe ladung remote gestartet"
+        socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "
         request3=$(curl -s -H "Content-Type: application/json" -X POST -H "Authorization: Bearer $token" https://www.services.renault-ze.com/api/vehicle/$vin/charge)
         echo 0 > $zoestatusfile
         echo $request3 > $request3file
 #             else
-#              socDebugLog "zoe p$CHARGEPOINT laedt nicht, warte... "
-#              socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "                    
+#              socDebugLog "zoe laedt nicht, warte... "
+#              socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc "                    
 #              echo 6 > $zoestatusfile
 #            fi
      else
 #           echo 0 > $zoestatusfile
             if [[ $debug = "1" ]] ; then
-                socDebugLog "zoe p$CHARGEPOINT lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
+                socDebugLog "zoe lstate(wallbox) $lstate plugged(Wallbox) $plugstatus charging(Wallbox) $chagerstatus charging(Zoe) $charging scheduler(zoe) $scheduler soc $soc wakeupzoe $wakeup"
             fi
    fi    
 fi
