@@ -16,12 +16,6 @@ ChargePoint   = str(sys.argv[5])
 
 Debug         = int(os.environ.get('debug'))
 
-#set the correct permissions as Apache and rest uses different users
-#os.chmod( moduledir + 'acc_tok_lp' + str(ChargePoint),0o646)
-#os.chmod( moduledir + 'ref_tok_lp' + str(ChargePoint),0o646)
-#os.chmod( moduledir + 'expires_lp' + str(ChargePoint),0o646)
-
-
 def socDebugLog(message):
     local_time = datetime.now(timezone.utc).astimezone()
 #    print(local_time.isoformat() +": Lp" +ChargePoint + ": " + message)
@@ -33,23 +27,25 @@ if Debug >= 1:
     socDebugLog("client: " + client_id)
 
 tok_url   = "https://id.mercedes-benz.com/as/token.oauth2"
-#soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/soc"
 soc_url   = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/containers/electricvehicle"
-#range_url = "https://api.mercedes-benz.com/vehicledata/v2/vehicles/"+VIN+"/resources/rangeelectric"
+
 if Debug >= 1:
     socDebugLog("SOC URL: " + soc_url)
-#Get Access token expiry from file
-fd = open(moduledir + 'expires_lp' + str(ChargePoint),'r')
-expires_in = fd.read().rstrip()
+
+#Get Access token from file
+
+fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'r')
+tok = json.load(fd)
+access_token = tok['access_token']
+refresh_token = tok['refresh_token']
+expires_in = tok['expires_in']
 fd.close()
 
 #socDebugLog("Expire in: " str((int(expires_in)-int(time.time())))
+
 if int(expires_in) < int(time.time()):
   #Access Token is exired
   socDebugLog("Acc Token Expired")
-  fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'r')
-  refresh_token = fd.read().rstrip()
-  fd.close()
   
   #get new Access Token with referesh token
   data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
@@ -76,17 +72,10 @@ if int(expires_in) < int(time.time()):
     refresh_token = tok['refresh_token']
     expires_in = tok['expires_in'] - 60 + int(time.time())
 
-	#write new tokens
-    fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'w')
-    fd.write(str(access_token))
-    fd.close()
-
-    fd = open(moduledir + 'ref_tok_lp' + str(ChargePoint),'w')
-    fd.write(str(refresh_token))
-    fd.close()
-
-    fd = open(moduledir + 'expires_lp' + str(ChargePoint),'w')
-    fd.write(str(expires_in))
+    #write new tokens
+    
+    fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'w')
+    json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token}, fd)
     fd.close()
 
   elif ref.status_code == 400:
@@ -125,11 +114,6 @@ if int(expires_in) < int(time.time()):
     socDebugLog("Refresh fehlgeschlagen unbekannter Code: " + str(ref.status_code))
     socDebugLog(ref.text)
     exit(1)
-
-#get access token from file	
-fd = open(moduledir + 'acc_tok_lp' + str(ChargePoint),'r')
-access_token = fd.read().rstrip()
-fd.close()
 
 #call API for SoC
 header = {'authorization': 'Bearer ' + access_token}
@@ -209,5 +193,5 @@ else:
   exit(1)
 
 if Debug >= 2:
-    socDebugLog("SoC EQ Ende ohne fehler")
+    socDebugLog("SoC EQ Ende ohne Fehler")
 exit(0)

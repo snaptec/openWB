@@ -1,12 +1,27 @@
 #!/usr/bin/python3
 
-import requests, json, sys, time, os, time
+import requests, json, sys, time, os, html
 
 #call parameters
 ChargePoint = str(sys.argv[1]) 
 code        = str(sys.argv[2]) 
 
+#Debug       = int(os.environ.get('debug'))
+Debug       = 0
+
 moddir = '/var/www/html/openWB/modules/soc_eq/'
+
+
+def printDebug(message, level):
+    htmlmsg = html.escape(message)
+    if level <= Debug:
+        print("<p>" + htmlmsg + "</p>")
+
+
+def printHtml(message):
+    htmlmsg = html.escape(message)
+    print("<p>" + htmlmsg + "</p>")
+
 print("<html>")
 
 client_id = ""
@@ -17,14 +32,21 @@ callback = ""
 fd = open('/var/www/html/openWB/openwb.conf','r')
 for line in fd:
   try: 
+    printDebug("owb Conf: " + line,2 )
     (key, val) = line.rstrip().split("=")
+    if key == "debug":
+        Debug = int(val)
     if key == "soc_eq_client_id_lp" + str(ChargePoint):
+      printDebug("Found Client ID: " + val ,1)
       client_id = val
     if key == "soc_eq_client_secret_lp" + str(ChargePoint):
+      printDebug("Found Client Secret: " + val ,1)
       client_secret = val
     if key == "soc_eq_cb_lp" + str(ChargePoint):
+      printDebug("Found callback URL: " + val ,1)
       callback = val
   except:
+    
     val = ""
 
 fd.close()
@@ -40,37 +62,34 @@ if act.status_code == 200:
   toks = json.loads(act.text)
   access_token = toks['access_token']
   refresh_token = toks['refresh_token']
+  expires_in = int(time.time())
+
 	#write tokens to files
-  fd = open(moddir + 'acc_tok_lp' + str(ChargePoint),'w')
-  fd.write(str(access_token))
+
+  fd = open(moddir + 'soc_eq_acc_lp' + str(ChargePoint),'w')
+  json.dump({'expires_in' : expires_in, 'refresh_token' : refresh_token, 'access_token' : access_token}, fd)
   fd.close()
 
-  fd = open(moddir + 'ref_tok_lp' + str(ChargePoint),'w')
-  fd.write(str(refresh_token))
-  fd.close()
-	#write token expiy to file
-  fd = open(moddir + 'expires_lp' + str(ChargePoint),'w')
-  fd.write(str(int(time.time())))
-  fd.close()
 if act.status_code == 200:
-	print( "Anmeldung erfolgreich! <br/>Sie können das Fenster schließen." )
+    printHtml( "Anmeldung erfolgreich!" )
+    print( "<a href=""javascript:window.close()"">Sie k&ouml;nnen das Fenster schlie&szlig;en.</a>" )
 elif act.status_code == 400:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Bad Request)")
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Bad Request)")
 elif act.status_code == 401:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Invalid or missing authorization in header)")	
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Invalid or missing authorization in header)")	
 elif act.status_code == 402:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Payment required)")		
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Payment required)")		
 elif act.status_code == 403:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Forbidden)")			
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (Forbidden)")			
 elif act.status_code == 404:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")				
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The requested resource was not found, e.g.: the selected vehicle could not be found)")				
 elif act.status_code == 429:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")					
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")					
 elif act.status_code == 500:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")						
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The service received too many requests in a given amount of time)")						
 elif act.status_code == 503:
-	print("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")					
+    printHtml("Anmeldung Fehlgeschlagen Code: " + str(act.status_code) + " (The server is unable to service the request due to a temporary unavailability condition)")					
 else:
-	print("Anmeldung Fehlgeschlagen unbekannter Code: " + str(act.status_code))					
+    printHtml("Anmeldung Fehlgeschlagen unbekannter Code: " + str(act.status_code))					
 	
 print("</html>")

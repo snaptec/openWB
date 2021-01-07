@@ -2471,7 +2471,7 @@
 										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_2p1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
