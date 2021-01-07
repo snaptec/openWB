@@ -10,6 +10,9 @@ socDebug=$debug
 # for developement only
 socDebug=1
 
+# allow SoC from 1-100
+reIsValidSoc='^(100|[1-9][0-9]{0,1})$'
+
 case $CHARGEPOINT in
 	2)
 		# second charge point
@@ -54,9 +57,13 @@ else
 	echo 0 > $soctimerfile
 	answer=$($MODULEDIR/../evcc-soc hyundai --user "$soc_bluelink_email" --password "$soc_bluelink_password" 2>&1)
 	if [ $? -eq 0 ]; then
-		# we got a valid answer
-		echo $answer > $socfile
-		socDebugLog "SoC: $answer"
+		if [[ $answer =~ $reIsValidSoc ]]; then
+			# we got a valid answer
+			echo $answer > $socfile
+			socDebugLog "SoC: $answer"
+		else
+			socDebugLog "Ignoring invalid SoC from evcc-soc: $answer"
+		fi
 	else
 		# we have a problem
 		socDebugLog "Error from evcc-soc: $answer"
