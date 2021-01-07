@@ -706,6 +706,11 @@
 								</div>
 							</div>
 						</div>
+						<div id="wattbezugsolax" class="hide">
+							<div class="alert alert-info">
+								Die IP des Wechselrichters wird im dazugehörigen Solax PV-Modul eingestellt.
+							</div>
+						</div>
 						<div id="wattbezuge3dc" class="hide">
 							<div class="card-text alert alert-info">
 								Die IP des Speichers wird im dazugehörigen E3DC Speicher-Modul eingestellt.<br>
@@ -776,6 +781,7 @@
 								hideSection('#wattbezugmpm3pm');
 								hideSection('#wattbezugsolarlog');
 								hideSection('#wattbezugsolaredge');
+								hideSection('#wattbezugsolax');
 								hideSection('#wattbezugshm');
 								hideSection('#wattbezugsmartme');
 								hideSection('#wattbezugsbs25');
@@ -828,7 +834,7 @@
 
 								}
 								if($('#wattbezugmodul').val() == 'bezug_solax') {
-									showSection('#wattbezugip');
+									showSection('#wattbezugsolax');
 
 								}
 								if($('#wattbezugmodul').val() == 'bezug_rct') {
