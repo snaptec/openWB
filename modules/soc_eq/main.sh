@@ -8,7 +8,7 @@ CHARGEPOINT=$1
 
 socDebug=$debug
 # for developement only
-socDebug=1
+#socDebug=1
 
 
 case $CHARGEPOINT in
@@ -49,7 +49,9 @@ if (( ladeleistung > 500 ));then
 else
 	tmpintervall=$(( 60 * 6 ))
 fi
-	#tmpintervall=5
+if (( socDebug > 0 )); then
+	tmpintervall=5
+fi
 
 
 
