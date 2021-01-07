@@ -397,7 +397,7 @@ def getdevicevalues():
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
-                if os.path.isfile(pyname) and (canswitch == 1):
+                if os.path.isfile(pyname):
                    argumentList = ['python3', pyname, str(numberOfDevices)]
                    argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
                    argumentList.append(str(uberschuss))
