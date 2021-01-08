@@ -630,7 +630,14 @@
 									Keine Konfiguration erforderlich.<br>
 									Per MQTT zu schreiben:<br>
 									<span class="text-info">openWB/set/lp/1/W</span> Ladeleistung in Watt, int, positiv<br>
-									<span class="text-info">openWB/set/lp/1/kWhCounter</span> Zählerstand in kWh, float, Punkt als Trenner, nur positiv
+									<span class="text-info">openWB/set/lp/1/kWhCounter</span> Zählerstand in kWh, float, Punkt als Trenner, nur positiv<br>
+									Optional zusätzlich:<br>
+									<span class="text-info">openWB/set/lp/1/VPhase1</span> Spannung Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/VPhase2</span> Spannung Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/VPhase3</span> Spannung Phase 3, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/APhase1</span> Strom Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/APhase2</span> Strom Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv
 								</div>
 							</div>
 						</div>
@@ -1237,10 +1244,10 @@
 							<div id="socmeq" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
 											</span>
 										</div>
 									</div>
@@ -1269,11 +1276,11 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -1813,7 +1820,23 @@
 										<option <?php if($ladeleistungs1modulold == "goelp2") echo "selected" ?> value="goelp2">Go-e</option> <!-- BUG go-E als LL-Modul? -->
 										<option <?php if($ladeleistungs1modulold == "mpm3pmtripplelp2") echo "selected" ?> value="mpm3pmtripplelp2">openWB Tripple</option>
 										<option <?php if($ladeleistungs1modulold == "mpm3pmlllp2") echo "selected" ?> value="mpm3pmlllp2">openWB Satelit</option>
+										<option <?php if($ladeleistungs1modulold == "mqttlllp2") echo "selected" ?> value="mqttlllp2">MQTT</option>
 									</select>
+								</div>
+							</div>
+							<div id="mqttlllp2div" class="hide">
+								<div class="alert alert-info">
+									Keine Konfiguration erforderlich.<br>
+									Per MQTT zu schreiben:<br>
+									<span class="text-info">openWB/set/lp/2/W</span> Ladeleistung in Watt, int, positiv<br>
+									<span class="text-info">openWB/set/lp/2/kWhCounter</span> Zählerstand in kWh, float, Punkt als Trenner, nur positiv<br>
+									Optional zusätzlich:<br>
+									<span class="text-info">openWB/set/lp/2/VPhase1</span> Spannung Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/2/VPhase2</span> Spannung Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/2/VPhase3</span> Spannung Phase 3, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/2/APhase1</span> Strom Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/2/APhase2</span> Strom Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/2/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv
 								</div>
 							</div>
 							<div id="mpm3pmlllp2div" class="hide">
@@ -2436,10 +2459,10 @@
 							<div id="socmeqlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="soc_eq_description" class="col-md-4 col-form-label"></label>
+										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
-											<a href=<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?> target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
+											<a href="<?php echo "https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ"?>" target="_blank">Eine Step-by-Step Anleitung findet ihr hier</a></b><br/>
 											</span>
 										</div>
 									</div>
@@ -2468,10 +2491,10 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_eq_description2" class="col-md-4 col-form-label"></label>
+										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href=<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?> target="_blank">HIER bei Mercedes Me anmelden</a></b>
+											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -2559,6 +2582,7 @@
 							hideSection('#mpm3pmlls1div');
 							hideSection('#rs485lanlp2');
 							hideSection('#mpm3pmlllp2div');
+							hideSection('#mqttlllp2div');
 
 							if($('#ladeleistungs1modul').val() == 'sdm630modbuslls1') {
 								showSection('#sdm630s1div');
@@ -2581,6 +2605,9 @@
 							if($('#ladeleistungs1modul').val() == 'mpm3pmlls1') {
 								showSection('#mpm3pmlls1div');
 								showSection('#rs485lanlp2');
+							}
+							if($('#ladeleistungs1modul').val() == 'mqttlllp2') {
+								showSection('#mqttlllp2div');
 							}
 						}
 
@@ -2918,7 +2945,23 @@
 										<option <?php if($ladeleistungs2modulold == "simpleevsewifis2") echo "selected" ?> value="simpleevsewifis2">Simple EVSE Wifi</option>
 										<option <?php if($ladeleistungs2modulold == "mpm3pmtripplelp3") echo "selected" ?> value="mpm3pmtripplelp3">openWB Tripple</option>
 										<option <?php if($ladeleistungs2modulold == "mpm3pmlllp3") echo "selected" ?> value="mpm3pmlllp3">openWB Satellit</option>
+										<option <?php if($ladeleistungs2modulold == "mqttlllp3") echo "selected" ?> value="mqttlllp3">MQTT</option>
 									</select>
+								</div>
+							</div>
+							<div id="mqttlllp3div" class="hide">
+								<div class="alert alert-info">
+									Keine Konfiguration erforderlich.<br>
+									Per MQTT zu schreiben:<br>
+									<span class="text-info">openWB/set/lp/3/W</span> Ladeleistung in Watt, int, positiv<br>
+									<span class="text-info">openWB/set/lp/3/kWhCounter</span> Zählerstand in kWh, float, Punkt als Trenner, nur positiv<br>
+									Optional zusätzlich:<br>
+									<span class="text-info">openWB/set/lp/3/VPhase1</span> Spannung Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/3/VPhase2</span> Spannung Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/3/VPhase3</span> Spannung Phase 3, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/3/APhase1</span> Strom Phase 1, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/3/APhase2</span> Strom Phase 2, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/3/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv
 								</div>
 							</div>
 							<div id="mpm3pmlllp3div" class="hide">
@@ -3096,7 +3139,7 @@
 							hideSection('#rs485lanlp3');
 							hideSection('#mpm3pmlls2div');
 							hideSection('#mpm3pmlllp3div');
-
+							hideSection('#mqttlllp3div');
 
 							if($('#ladeleistungs2modul').val() == 'mpm3pmlllp3') {
 								showSection('#mpm3pmlllp3div');
@@ -3119,6 +3162,9 @@
 							if($('#ladeleistungs2modul').val() == 'mpm3pmlls2') {
 								showSection('#mpm3pmlls2div');
 								showSection('#rs485lanlp3');
+							}
+							if($('#ladeleistungs2modul').val() == 'mqttlllp3') {
+								showSection('#mqttlllp3div');
 							}
 						}
 
