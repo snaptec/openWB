@@ -10,6 +10,7 @@ import configparser
 import re
 global inaction
 inaction=0
+openwbconffile = "/var/www/html/openWB/openwb.conf"
 config = configparser.ConfigParser()
 shconfigfile='/var/www/html/openWB/smarthome.ini'
 config.read(shconfigfile)
@@ -47,12 +48,18 @@ def replaceAll(changeval,newval):
     global inaction
     if ( inaction == 0 ):
         inaction=1
-        for line in fileinput.input('/var/www/html/openWB/openwb.conf', inplace=1):
+        for line in fileinput.input(openwbconffile, inplace=1):
             if line.startswith(changeval):
                 line = changeval + newval + "\n"
             sys.stdout.write(line)
         time.sleep(0.1)
         inaction=0
+
+def getConfigValue(key):
+    for line in fileinput.input(openwbconffile):
+        if line.startswith(str(key+"=")):
+            return line.split("=", 1)[1]
+    return
 
 def getserial():
     # Extract serial from cpuinfo file
@@ -1060,17 +1067,92 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/autolockstatuslp8', 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
-        if (msg.topic == "openWB/set/lp/1/W"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <= 100000):
+
+        # Topics for Mqtt-LL module
+        # ToDo: check if Mqtt-LL module is selected!
+        # llmodule = getConfigValue("ladeleistungsmodul")
+        if (( "openWB/set/lp" in msg.topic) and ("/W" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 100000) ):
                 llaktuell=int(msg.payload.decode("utf-8"))
-                f = open('/var/www/html/openWB/ramdisk/llaktuell', 'w')
+                if ( devicenumb == 1 ):
+                    filename = "llaktuell"
+                elif ( devicenumb == 2 ):
+                    filename = "llaktuells1"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(str(llaktuell))
                 f.close()
-        if (msg.topic == "openWB/set/lp/1/kWhCounter"):
-            if (float(msg.payload) >= 0 and float(msg.payload) <= 10000000000):
-                f = open('/var/www/html/openWB/ramdisk/llkwh', 'w')
+        if (( "openWB/set/lp" in msg.topic) and ("kWhCounter" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 10000000000) ):
+                if ( devicenumb == 1 ):
+                    filename = "llkwh"
+                elif ( devicenumb == 2 ):
+                    filename = "llkwhs1"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("VPhase1" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 300) ):
+                if ( devicenumb == 1 ):
+                    filename = "llv1"
+                elif ( devicenumb == 2 ):
+                    filename = "llvs11"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("VPhase2" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 300) ):
+                if ( devicenumb == 1 ):
+                    filename = "llv2"
+                elif ( devicenumb == 2 ):
+                    filename = "llvs12"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("VPhase3" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 300) ):
+                if ( devicenumb == 1 ):
+                    filename = "llv3"
+                elif ( devicenumb == 2 ):
+                    filename = "llvs13"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("APhase1" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 3000) ):
+                if ( devicenumb == 1 ):
+                    filename = "lla1"
+                elif ( devicenumb == 2 ):
+                    filename = "llas11"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("APhase2" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 3000) ):
+                if ( devicenumb == 1 ):
+                    filename = "lla2"
+                elif ( devicenumb == 2 ):
+                    filename = "llas12"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("APhase3" in msg.topic)):
+            devicenumb = int(re.sub(r'\D.', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 3000) ):
+                if ( devicenumb == 1 ):
+                    filename = "lla3"
+                elif ( devicenumb == 2 ):
+                    filename = "llas13"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(msg.payload.decode("utf-8"))
+                f.close()
+
         # clear all set topics if not already done
         if ( not(setTopicCleared) ):
             client.publish(msg.topic, "", qos=0, retain=True)
