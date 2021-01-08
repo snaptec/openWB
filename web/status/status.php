@@ -26,12 +26,16 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="./status/status_style.css">
+		<link rel="stylesheet" type="text/css" href="./settings/settings_style.css">
 
 		<!-- important scripts to be loaded -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<!-- load helper functions -->
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
 			function getCookie(cname) {
 				var name = cname + '=';
@@ -763,96 +767,142 @@
 
 </head>
 <body>
+<?php
+			$lines = file($_SERVER['DOCUMENT_ROOT'] . '/openWB/openwb.conf');
+			foreach($lines as $line) {
+				list($key, $value) = explode("=", $line, 2);
+				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
+			}
+
+			$speichervorhanden = trim( file_get_contents( $_SERVER['DOCUMENT_ROOT'] . '/openWB/ramdisk/speichervorhanden' ) );
+		?>
 	<div id="nav-placeholder"></div>
-	<div role="main" class="container" style="margin-top: 20px; display: block;">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<h3> Status </h3>
+	<div role="main" class="container" style="margin-top: 20px">
+		<h1>Status</h1>
+		<form action="./tools/saveconfig.php" method="POST">
+
+			<!-- EVU  -->
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
+					<div class="form-group mb-0">
+						<div class="form-row vaRow mb-0">
+							<div class="col-4">EVU</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive table-sm" style="width: 50%;">
+						<table id="evu1">
+							<tbody>
+								<tr>
+									<th scope="row">Schieflast [A]</th>
+									<td><div id="schieflastdiv"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Gesamtleistung [W]</th>
+									<td><div id="wattbezugdiv"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Frequenz [Hz]</th>
+									<td><div id="evuhzdiv"></div></td>
+								</tr>																							
+								<tr>
+									<th scope="row">Bezug [kWh]</th>
+									<td><div id="bezugkwhdiv"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Einspeisung [kWh]</th>
+									<td><div id="einspeisungkwhdiv"></div></td>
+								</tr>									
+							</tbody>
+						</table>
+					</div>
+					<script>
+					$('#evu1 tr td').each(function() {
+						if ($(this).text() === '0'){
+							$(this).parent().hide();
+						}
+					});
+					</script>
+					<div class="table-responsive table-sm">
+						<table id="evu2">
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">Phase 1</th>
+									<th scope="col">Phase 2</th>
+									<th scope="col">Phase 3</th>
+								</tr>
+							</head>
+							<tbody>
+								<tr>
+									<th scope="row">Spannung [V]</th>
+									<td><div id="evuv1div"></div></td>
+									<td><div id="evuv2div"></div></td>
+									<td><div id="evuv3div"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Stromstärke [A]</th>
+									<td><div id="bezuga1div"></div></td>
+									<td><div id="bezuga2div"></div></td>
+									<td><div id="bezuga3div"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Leistung [W]</th>
+									<td><div id="bezugw1div"></div></td>
+									<td><div id="bezugw2div"></div></td>
+									<td><div id="bezugw3div"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Power Faktor</th>
+									<td><div id="evupf1div"></div></td>
+									<td><div id="evupf2div"></div></td>
+									<td><div id="evupf3div"></div></td>
+								</tr>
+								<tr>
+									<th scope="row">Test</th>
+									<td>0</td>
+									<td>0</td>
+									<td>0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!--     $('#evu2 tr td').each(function() 
+	{
+		var tr = $(this);
+    if (tr.find("td:eq(0)").text()=="0"
+        && tr.find("td:eq(1)").text()=="0"
+        && tr.find("td:eq(2)").text()=="0"
+    ) tr.parent().hide();
+	}
+	-->
+					<script>
+						var tbl = document.getElementById('evu2');         //find the table
+						var rows = tbl.querySelectorAll('tbody tr');        //find all rows in the table body
+
+						for(i = 0; i < rows.length; i++) {                  //iterate through the rows
+
+							var cells = rows[i].querySelectorAll('td');     //find all of the cells in the row
+
+							var flag = true;                                //set flag prior to cell evaluation
+
+							for(j = 2; j < cells.length; j++) {             //iterate through the cells (starting with the cell at position 2)
+								if (cells[j].innerHTML != '0') {            //check if the cell contains '0' (set flag to false if cell is not '0')
+									flag = false;                           
+								}
+							}
+
+							if(flag) { 
+								rows[i].classList.add('hide');              //hide the row if the falg remained true (i.e. none of the cells contained a value other than '0'
+							}
+						}
+					</script>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4 text-center"></div>
-			<div class="col-sm-2 text-center">
-				Phase 1
-			</div>
-			<div class="col-sm-2 text-center">
-				Phase 2
-			</div>
-			<div class="col-sm-2 text-center">
-				Phase 3
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Spannung [V]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evuv3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Stromstärke [A]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezuga3div"></div>
-			</div>
-		</div>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-			EVU Schieflast [A]</div>
-			<div class="col-sm-2 text-center">
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="schieflastdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Leistung [W]
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="bezugw3div"></div>
-			</div>
-		</div>
-		<hr>
-		<div class="row" style="background-color:#febebe">
-			<div class="col-sm-4 text-center">
-				EVU Power Faktor
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf1div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf2div"></div>
-			</div>
-			<div class="col-sm-2 text-center">
-				<div id="evupf3div"></div>
-			</div>
-		</div>
+
+
+
 		<hr>
 		<div class="row bg-info">
 			<div class="col-sm-4 text-center">
@@ -1211,18 +1261,6 @@
 			<div class="col-sm-2 text-center bg-info">
 				<div id="soclevel"></div>
 			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU [W]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="wattbezugdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU [Hz]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="evuhzdiv"></div>
-			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-2 text-center bg-info">
@@ -1230,18 +1268,6 @@
 			</div>
 			<div class="col-sm-2 text-center bg-info">
 				<div id="soclevel1"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU Bezug [kWh]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="bezugkwhdiv"></div>
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				EVU Einspeisung [kWh]
-			</div>
-			<div class="col-sm-2 text-center" style="background-color:#febebe">
-				<div id="einspeisungkwhdiv"></div>
 			</div>
 		</div>
 		<div class="row">
