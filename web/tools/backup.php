@@ -1,4 +1,12 @@
-<?php exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf /var/www/html/openWB/web/backup/backup.tar.gz /var/www/html/"); ?>
+<?php
+	$backupPath = "/var/www/html/openWB/web/backup/";
+	$timestamp = date("Y-m-d") . "_" . date("H-i-s");
+	$filename = "openWB_backup_" . $timestamp . ".tar.gz" ;
+	// first empty backup-directory
+	array_map( "unlink", array_filter((array) glob($backupPath . "*") ) );
+	// then create new backup-file
+	exec("tar --exclude='/var/www/html/openWB/web/backup' --exclude='/var/www/html/openWB/.git' -czf ". $backupPath . $filename . " /var/www/html/");
+?>
 <!DOCTYPE html>
 <html lang="de">
 
@@ -73,7 +81,7 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/backup.tar.gz"><i class="fas fa-download"></i> Download</a>
+						<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Download</a>
 					</div>
 				</div>
 			</div>
