@@ -83,7 +83,7 @@
 
 			<h1>Backup erstellen</h1>
 			<div class="alert alert-success">
-				Backup erfoglreich erstellt.
+				Backup-Datei <?php echo $filename; ?> erfoglreich erstellt.
 			</div>
 
 			<div class="row">
