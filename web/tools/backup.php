@@ -88,7 +88,7 @@
 
 			<div class="row">
 				<div class="col text-center">
-					<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Backup herunterladen</a>
+					<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>" target="_blank"><i class="fas fa-download"></i> Backup herunterladen</a>
 				</div>
 			</div>
 
