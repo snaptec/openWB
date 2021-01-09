@@ -60,16 +60,16 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-
-			<div class="alert alert-warning">
-				Wiederherstellen der Einstellungen von openWB und Log Daten von Zählern. Die Backupdatei muss den Namen backup.tar.gz haben.<br>
-				Sollte das Wiedereinspielen nicht funktionieren bitte ein Update durchführen. Im Anschluss neustarten und erneut einspielen.
+			<h1>openWB aus Backup wiederherstellen</h1>
+			<div class="alert alert-warning text-center">
+				Wiederherstellen der openWB-Einstellungen und Log-Daten aus einer Backup-Datei (Dateiendung gz).<br>
+				Sollte die Wiederherstellung fehlschlagen, bitte ein Update der openWB auf die gewünschte Version durchführen. Im Anschluss die openWB neu starten und das Wiederherstellen erneut versuchen.
 			</div>
 
 			<div class="card border-secondary">
 				<form action="settings/upload.php" method="POST" enctype="multipart/form-data">
 					<div class="card-header bg-secondary">
-						Backup wiederherstellen
+						Backup-Datei
 					</div>
 					<div class="card-body">
 						<input type="hidden" name="MAX_FILE_SIZE" value="300000000">
@@ -84,20 +84,11 @@
 						</div>
 					</div>
 					<div class="card-footer text-center">
-						<button type="submit" class="btn btn-success" value="Upload Backup" name="submit">
-							<i class="fas fa-upload"></i>
-							Upload Backup
+						<button id="submitBtn" type="submit" class="btn btn-success disabled">
+							<i class="fas fa-upload"></i> Wiederherstellung starten
 						</button>
 					</div>
 				</form>
-				<script>
-					$('#fileToUpload').on('change',function(e){
-						//get the file name without path
-						var fileName = e.target.files[0].name;
-						//replace the "Choose a file" label
-						$(this).next('.custom-file-label').html(fileName);
-					})
-				</script>
 			</div>
 
 		</div>  <!-- container -->
@@ -115,9 +106,37 @@
 				function(data){
 					$("#nav").replaceWith(data);
 					// disable navbar entry for current page
-					$('#navWiederherstellen').addClass('disabled');
+					$("#navWiederherstellen").addClass("disabled");
 				}
 			);
+
+			$(document).ready(function() {
+
+				$("#fileToUpload").on("change",function(e){
+					//get the file name without path
+					if (this.value !== "") {
+						var fileName = this.value.match(/[^\\/]*$/)[0];
+						var fileExt = this.value.match(/\.([^\.]+)$/)[1];
+						if (fileExt == "gz") {
+							//replace the "Choose a file" label
+							$(this).next(".custom-file-label").text(fileName);
+							$("#submitBtn").removeClass("disabled");
+							return;
+						}
+					}
+					$("#submitBtn").addClass("disabled");
+					$(this).next(".custom-file-label").text("Datei auswählen");
+				})
+
+				$("#submitBtn").click(function(){
+					if (!$(this).hasClass("disabled")) {
+						$(this).addClass("disabled");
+						$(this).text("Bitte warten, Backup wird geladen");
+						$(this).parents("form").submit();
+					}
+				});
+
+			})
 
 		</script>
 
