@@ -1,4 +1,5 @@
 <?php
  	$themeCookie = $_GET['theme'];
-	setcookie('openWBTheme', $themeCookie, time()+(60*60*24*365*2));
+    $expire = time()+(60*60*24*365*2);  // expiring-date to now + 2 years
+	setcookie('openWBTheme', $themeCookie, $expire, '/openWB/');
 ?>
