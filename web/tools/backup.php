@@ -1,7 +1,18 @@
 <?php
+	// if paranmeter extendedFilename is passed with value 1 the filename changes
+	// from backup.tar.gz to openWB_backup_YYYY-MM-DD_HH-MM-SS.tar.gz
+	$useExtendedFilename = false;
+	if( isset($_GET["extendedFilename"]) && $_GET["extendedFilename"] == "1") {
+		$useExtendedFilename = true;
+	}
 	$backupPath = "/var/www/html/openWB/web/backup/";
 	$timestamp = date("Y-m-d") . "_" . date("H-i-s");
-	$filename = "openWB_backup_" . $timestamp . ".tar.gz" ;
+	if ( $useExtendedFilename ) {
+		$filename = "openWB_backup_" . $timestamp . ".tar.gz" ;
+	} else {
+		$filename = "backup.tar.gz" ;
+	}
+
 	// first empty backup-directory
 	array_map( "unlink", array_filter((array) glob($backupPath . "*") ) );
 	// then create new backup-file
@@ -70,22 +81,23 @@
 
 		<div role="main" class="container" style="margin-top:20px">
 
-		<div class="alert alert-info">
-			Backup erfoglreich erstellt.
-		</div>
-
-		<div class="card border-secondary">
-			<div class="card-header bg-secondary">
-				Backup herunterladen
+			<h1>Backup erstellen</h1>
+			<div class="alert alert-info">
+				Backup erfoglreich erstellt.
 			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col text-center">
-						<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Download</a>
+
+			<div class="card border-secondary">
+				<div class="card-header bg-secondary">
+					Backup herunterladen
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col text-center">
+							<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Download</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
 		</div>  <!-- container -->
 
