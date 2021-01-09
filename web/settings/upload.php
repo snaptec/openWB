@@ -60,7 +60,7 @@
 		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<h1>openWB aus Backup wiederherstellen</h1>
+			<h1>Backup wiederherstellen</h1>
 
 			<?php
 				// Returns a file size limit in bytes based on the PHP upload_max_filesize
