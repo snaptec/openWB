@@ -41,7 +41,6 @@
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
-				console.log(document.cookie);
 				var ca = decodedCookie.split(';');
 				for(var i = 0; i <ca.length; i++) {
 					var c = ca[i];
@@ -55,7 +54,6 @@
 				return '';
 			}
 			var themeCookie = getCookie('openWBTheme');
-			console.log('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
 			// include special Theme style
 			if( '' != themeCookie ){
 				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
@@ -68,7 +66,10 @@
 		<div id="nav-placeholder"></div>
 		<div role="main" class="container" style="margin-top:20px">
 			<h1>Stromtarif-Info Tibber</h1>
-			Daten stellen lediglich beispielhaft das Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.) folgt.
+			<div class="alert alert-info" role="alert">
+				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
+				und der durch den Anbieter bereitgestellten Daten folgt.
+			</div>
 			<div id="noValidData">
 				<span id="noValidDataText">Tibber-Daten werden abgerufen, bitte warten... </span>
 				<div id="noValidDataSpinner" class="spinner-border spinner-border-sm" role="status">
@@ -184,7 +185,7 @@
 		<script>
 
 			// load navbar
-			$("#nav-placeholder").load('themes' + themeCookie + '/navbar.html?v=20210102');
+			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
 
 			$(document).ready(function(){
 				readTibberAPI()
