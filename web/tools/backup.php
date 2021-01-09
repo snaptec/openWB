@@ -82,20 +82,13 @@
 		<div role="main" class="container" style="margin-top:20px">
 
 			<h1>Backup erstellen</h1>
-			<div class="alert alert-info">
+			<div class="alert alert-success">
 				Backup erfoglreich erstellt.
 			</div>
 
-			<div class="card border-secondary">
-				<div class="card-header bg-secondary">
-					Backup herunterladen
-				</div>
-				<div class="card-body">
-					<div class="row">
-						<div class="col text-center">
-							<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Download</a>
-						</div>
-					</div>
+			<div class="row">
+				<div class="col text-center">
+					<a class="btn btn-success" href="/openWB/web/backup/<?php echo $filename; ?>"><i class="fas fa-download"></i> Backup herunterladen</a>
 				</div>
 			</div>
 
