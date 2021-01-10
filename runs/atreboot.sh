@@ -653,6 +653,10 @@ then
   echo "rseenabled=0" >> /var/www/html/openWB/openwb.conf
 fi
 . /var/www/html/openWB/loadconfig.sh
+if (( u1p3paktiv == 1 )); then
+	python /var/www/html/runs/triginit.py
+fi
+	
 if (( ladetaster == 1 )); then
   if ! [ -x "$(command -v nmcli)" ]; then
     if ps ax |grep -v grep |grep "python /var/www/html/openWB/runs/ladetaster.py" > /dev/null
