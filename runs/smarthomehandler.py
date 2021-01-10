@@ -74,7 +74,10 @@ def sepwatt(oldwatt,oldwattk,nummer):
        meastyp = "undef"
     logDebug("0", "Device: " + str(nummer) + " Leistungsmessung durch " +  meastyp)
     argumentList = ['python3', 'undef', str(nummer)]
-    argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
+    try:
+        argumentList.append(config.get('smarthomedevices', 'device_measureip_'+str(nummer)))
+    except:
+        argumentList.append("undef")
     argumentList.append(str(uberschuss))
 
     if meastyp == "sdm630":
@@ -394,12 +397,16 @@ def getdevicevalues():
                 device_password = str(config.get('smarthomedevices','device_password_'+str(numberOfDevices))) 
             except:
                 device_password = "undef"
+            try:
+                device_ip = str(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
+            except:
+                device_ip = "undef"
             pyname0 = getdir(switchtyp,devicename)
             try:
                 pyname = pyname0 +"/watt.py"
                 if os.path.isfile(pyname):
                    argumentList = ['python3', pyname, str(numberOfDevices)]
-                   argumentList.append(config.get('smarthomedevices', 'device_ip_'+str(numberOfDevices)))
+                   argumentList.append(device_ip)
                    argumentList.append(str(uberschuss))
                    argumentList.append(device_leistungurl)
                    argumentList.append(device_actor)

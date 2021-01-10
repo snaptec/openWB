@@ -35,8 +35,12 @@ if Debug >= 1:
 #Get Access token from file
 
 fd = open(moduledir + 'soc_eq_acc_lp' + str(ChargePoint),'r')
-tok = json.load(fd)
-access_token = tok['access_token']
+try:
+    tok = json.load(fd)
+    access_token = tok['access_token']
+except ValueError:
+    socDebugLog("ERROR: Access Token not found. Please use Link 'HIER bei Mercedes Me' anmelden in LP Configuration")
+    exit(1)        
 refresh_token = tok['refresh_token']
 expires_in = tok['expires_in']
 fd.close()
