@@ -19,6 +19,8 @@ case $CHARGEPOINT in
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
+		# set CHARGEPOINT in case it is empty (needed for logging)
+		CHARGEPOINT=1
 		soctimerfile="$RAMDISKDIR/soctimer"
 		socfile="$RAMDISKDIR/soc"
 		intervall=$soci3intervall
@@ -33,7 +35,7 @@ if (( i3timer < 60 )); then
 else
 	echo 0 > $soctimerfile
 	re='^-?[0-9]+$'
-	abfrage=$(sudo php index.php?chargepoint=$CHARGEPOINT | jq '.')
+	abfrage=$(sudo php index.php --chargepoint=$CHARGEPOINT | jq '.')
 	soclevel=$(echo $abfrage | jq '.chargingLevel')
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then
