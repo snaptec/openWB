@@ -33,7 +33,7 @@ if (( i3timer < 60 )); then
 else
 	echo 0 > $soctimerfile
 	re='^-?[0-9]+$'
-	abfrage=$(sudo php index.php?chargepoint=$CHARGEPOINT | jq '.')
+	abfrage=$(sudo php index.php "$CHARGEPOINT" | jq '.')
 	soclevel=$(echo $abfrage | jq '.chargingLevel')
 	if  [[ $soclevel =~ $re ]] ; then
 		if (( $soclevel != 0 )) ; then

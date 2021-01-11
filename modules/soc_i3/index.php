@@ -21,8 +21,8 @@ class Battery_API {
     function __construct ( $chargepoint = null ) {
 
         if( !is_null($chargepoint) ){
-            $this->$auth_file = $this->$auth_file_prefix . $chargepoint . $auth_file_suffix;
-            $this->$token_file = $this->$token_file_prefix . $chargepoint . $token_file_suffix;
+            $this->auth_file = $this->auth_file_prefix . $chargepoint . $this->auth_file_suffix;
+            $this->token_file = $this->token_file_prefix . $chargepoint . $this->token_file_suffix;
         }
 
         $this->auth = $this->get_auth_data();
@@ -217,8 +217,13 @@ class Battery_API {
     }
 }
 
-if( array_key_exists( "chargepoint", $_GET ) ){
+if( array_key_exists( "chargepoint", $_GET ) ) {
     new Battery_API( $_GET['chargepoint'] );
 } else {
-    new Battery_API();
+    if ($argc > 1) {
+        new Battery_API( $argv[1] );
+    }
+    else {
+        new Battery_API();
+    }
 }
