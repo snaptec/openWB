@@ -19,7 +19,7 @@ declare -r LmStatusDownByLm=2
 declare -r LmStatusDownByEv=3
 declare -r LmStatusDownByError=4
 declare -r LmStatusDownByDisable=5
-declare -r LmStatusDownForSocket=6
+declare -r LmStatusDownForSocket=8
 
 if (( lastmanagement > 0 )); then
 	declare -r -i NumberOfSupportedChargePoints=2
@@ -37,7 +37,7 @@ openwbisslave() {
 
 	# socket mode, if either requested or already active,
 	# otherwise normal EV charge mode
-	if (( standardSocketInstalled == 1 )) && ( (( SocketActivationRequested > 0 )) || (( SocketActivated > 0 )) || (( SocketApproved > 0 )) ); then
+	if (( standardSocketInstalled > 0 )) && ( (( SocketActivationRequested > 0 )) || (( SocketActivated > 0 )) || (( SocketApproved > 0 )) ); then
 
 		# socket slave mode
 		openwbDebugLog "MAIN" 2 "Slave Socket mode: Checking: SocketActivationRequested == '${SocketActivationRequested}', SocketApproved == '${SocketApproved}', SocketActivated == '${SocketActivated}'"
@@ -629,6 +629,9 @@ function checkControllerHeartbeat() {
 			echo "Slave Mode: Zentralserver Ausfall, Ladung auf allen LP deaktiviert !" > ramdisk/lastregelungaktiv
 			echo "0" > ramdisk/heartbeat
 			callSetCurrent 0 0 $LmStatusDownByError
+			if (( standardSocketInstalled > 0 )); then
+				sudo python runs/standardSocket.py off
+			fi
 			exit 1
 		else
 			echo "1" > ramdisk/heartbeat
