@@ -654,7 +654,7 @@ then
 fi
 . /var/www/html/openWB/loadconfig.sh
 if (( u1p3paktiv == 1 )); then
-	python /var/www/html/runs/triginit.py
+	sudo python /var/www/html/openWB/runs/triginit.py
 fi
 	
 if (( ladetaster == 1 )); then
