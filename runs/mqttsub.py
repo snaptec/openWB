@@ -1068,17 +1068,49 @@ def on_message(client, userdata, msg):
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
 
+        # Topics for Mqtt-EVSE module
+        # ToDo: check if Mqtt-EVSE module is selected!
+        # llmodule = getConfigValue("evsecon")
+        if (( "openWB/set/lp" in msg.topic) and ("plugStat" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= int(msg.payload) <= 1) ):
+                plugstat=int(msg.payload.decode("utf-8"))
+                if ( devicenumb == 1 ):
+                    filename = "plugstat"
+                elif ( devicenumb == 2 ):
+                    filename = "plugstats1"
+                elif ( devicenumb == 3 ):
+                    filename = "plugstatlp3"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(str(plugstat))
+                f.close()
+        if (( "openWB/set/lp" in msg.topic) and ("chargeStat" in msg.topic)):
+            devicenumb = int(re.sub(r'\D', '', msg.topic))
+            if ( (1 <= devicenumb <= 3) and (0 <= int(msg.payload) <= 1) ):
+                chargestat=int(msg.payload.decode("utf-8"))
+                if ( devicenumb == 1 ):
+                    filename = "chargestat"
+                elif ( devicenumb == 2 ):
+                    filename = "chargestats1"
+                elif ( devicenumb == 3 ):
+                    filename = "chargestatlp3"
+                f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
+                f.write(str(chargestat))
+                f.close()
+
         # Topics for Mqtt-LL module
         # ToDo: check if Mqtt-LL module is selected!
         # llmodule = getConfigValue("ladeleistungsmodul")
         if (( "openWB/set/lp" in msg.topic) and ("/W" in msg.topic)):
             devicenumb = int(re.sub(r'\D', '', msg.topic))
-            if ( (1 <= devicenumb <= 3) and (0 <= float(msg.payload) <= 100000) ):
+            if ( (1 <= devicenumb <= 3) and (0 <= int(msg.payload) <= 100000) ):
                 llaktuell=int(msg.payload.decode("utf-8"))
                 if ( devicenumb == 1 ):
                     filename = "llaktuell"
                 elif ( devicenumb == 2 ):
                     filename = "llaktuells1"
+                elif ( devicenumb == 3 ):
+                    filename = "llaktuells2"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(str(llaktuell))
                 f.close()
@@ -1089,6 +1121,8 @@ def on_message(client, userdata, msg):
                     filename = "llkwh"
                 elif ( devicenumb == 2 ):
                     filename = "llkwhs1"
+                elif ( devicenumb == 3 ):
+                    filename = "llkwhs2"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1099,6 +1133,8 @@ def on_message(client, userdata, msg):
                     filename = "llv1"
                 elif ( devicenumb == 2 ):
                     filename = "llvs11"
+                elif ( devicenumb == 3 ):
+                    filename = "llvs21"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1109,6 +1145,8 @@ def on_message(client, userdata, msg):
                     filename = "llv2"
                 elif ( devicenumb == 2 ):
                     filename = "llvs12"
+                elif ( devicenumb == 3 ):
+                    filename = "llvs22"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1119,6 +1157,8 @@ def on_message(client, userdata, msg):
                     filename = "llv3"
                 elif ( devicenumb == 2 ):
                     filename = "llvs13"
+                elif ( devicenumb == 3 ):
+                    filename = "llvs23"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1129,6 +1169,8 @@ def on_message(client, userdata, msg):
                     filename = "lla1"
                 elif ( devicenumb == 2 ):
                     filename = "llas11"
+                elif ( devicenumb == 3 ):
+                    filename = "llas21"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1139,6 +1181,8 @@ def on_message(client, userdata, msg):
                     filename = "lla2"
                 elif ( devicenumb == 2 ):
                     filename = "llas12"
+                elif ( devicenumb == 3 ):
+                    filename = "llas22"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()
@@ -1149,6 +1193,8 @@ def on_message(client, userdata, msg):
                     filename = "lla3"
                 elif ( devicenumb == 2 ):
                     filename = "llas13"
+                elif ( devicenumb == 3 ):
+                    filename = "llas23"
                 f = open('/var/www/html/openWB/ramdisk/'+str(filename), 'w')
                 f.write(msg.payload.decode("utf-8"))
                 f.close()

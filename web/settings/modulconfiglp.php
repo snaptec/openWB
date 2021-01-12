@@ -103,6 +103,7 @@
 									<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 									<option <?php if($evseconold == "dac") echo "selected" ?> value="dac">DAC</option>
 									<option <?php if($evseconold == "httpevse") echo "selected" ?> value="httpevse">HTTP</option>
+									<option <?php if($evseconold == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
 									<option <?php if($evseconold == "modbusevse" && !($ladeleistungmodulold == "mpm3pmll" && ($mpm3pmllsourceold == "/dev/ttyUSB0" || $mpm3pmllsourceold == "/dev/serial0") && ($mpm3pmllidold == "5" || $mpm3pmllidold == "105"))) echo "selected" ?> value="modbusevse">Modbusevse</option>
 									<option <?php if($evseconold == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi / smartWB</option>
 									<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -296,6 +297,16 @@
 										</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evseconmqtt" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu lesen:<br>
+								<span class="text-info">openWB/lp/1/AConfigured</span> Stromvorgabe in A<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/lp/1/plugStat</span> Status, ob ein Fahrzeug angesteckt ist, nur 0 (nein) oder 1 (ja)<br>
+								<span class="text-info">openWB/set/lp/1/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
 							</div>
 						</div>
 						<div id="evsecontwcmanager" class="hide">
@@ -1307,6 +1318,7 @@
 							hideSection('#evseconipevse');
 							hideSection('#openwbbuchse');
 							hideSection('#evseconextopenwb');
+							hideSection('#evseconmqtt');
 
 							if($('#evsecon').val() == 'modbusevse') {
 								switch( $("#evsecon option:selected").attr('data-id') ){
@@ -1346,6 +1358,11 @@
 							}
 							if($('#evsecon').val() == 'httpevse') {
 								showSection('#evseconhttp');
+								showSection('#llmodullp1');
+								display_llmp1();
+							}
+							if($('#evsecon').val() == 'mqttevse') {
+								showSection('#evseconmqtt');
 								showSection('#llmodullp1');
 								display_llmp1();
 							}
@@ -1580,6 +1597,7 @@
 														&& !($evseids1old == "2" && $ladeleistungs1modulold == "mpm3pmlls1" && $mpm3pmlls1sourceold == "/dev/ttyUSB0" && $mpm3pmlls1idold == "106" && $evsesources1old == "/dev/ttyUSB0")
 													) echo "selected" ?> value="modbusevse">Modbus</option>
 									<option <?php if($evsecons1old == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evsecons1old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
 									<option <?php if($evsecons1old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 									<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
 									<option <?php if($evsecons1old == "nrgkick") echo "selected" ?> value="nrgkick">NRGKick + Connect</option>
@@ -1752,6 +1770,16 @@
 										</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evseconmqtts1" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu lesen:<br>
+								<span class="text-info">openWB/lp/2/AConfigured</span> Stromvorgabe in A<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/lp/2/plugStat</span> Status, ob ein Fahrzeug angesteckt ist, nur 0 (nein) oder 1 (ja)<br>
+								<span class="text-info">openWB/set/lp/2/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
 							</div>
 						</div>
 						<div id="evsecoslaveeth" class="hide">
@@ -2530,6 +2558,7 @@
 							hideSection('#openwb12s1v2');
 							hideSection('#evseconextopenwblp2');
 							hideSection('#evseconipevselp2');
+							hideSection('#evseconmqtts1');
 
 							if($('#evsecons1').val() == 'modbusevse') {
 								switch( $("#evsecons1 option:selected").attr('data-id') ){
@@ -2552,6 +2581,11 @@
 							}
 							if($('#evsecons1').val() == 'dac') {
 								showSection('#evsecondacs1');
+								showSection('#llmodullp2');
+								display_llmp2();
+							}
+							if($('#evsecons1').val() == 'mqttevse') {
+								showSection('#evseconmqtts1');
 								showSection('#llmodullp2');
 								display_llmp2();
 							}
@@ -2713,13 +2747,9 @@
 						function display_lastmanagement() {
 							if($('#lastmanagementOff').prop("checked")) {
 								hideSection('#lastmman');
-								hideSection('#durchslp2');
-								hideSection('#nachtls1div');
 							}
 							else {
 								showSection('#lastmman');
-								showSection('#durchslp2');
-								showSection('#nachtls1div');
 								display_socmodul1();
 								display_llmp2 ();
 								display_lp2();
@@ -2789,6 +2819,7 @@
 									<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 									<option <?php if($evsecons2old == "modbusevse") echo "selected" ?> value="modbusevse">Modbus</option>
 									<option <?php if($evsecons2old == "dac") echo "selected" ?> value="dac">DAC</option>
+									<option <?php if($evsecons2old == "mqttevse") echo "selected" ?> value="mqttevse">MQTT</option>
 									<option <?php if($evsecons2old == "simpleevsewifi") echo "selected" ?> value="simpleevsewifi">SimpleEVSEWifi</option>
 									<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
 								</select>
@@ -2884,6 +2915,16 @@
 										</span>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="evseconmqtts2" class="hide">
+							<div class="alert alert-info">
+								Keine Konfiguration erforderlich.<br>
+								Per MQTT zu lesen:<br>
+								<span class="text-info">openWB/lp/3/AConfigured</span> Stromvorgabe in A<br>
+								Per MQTT zu schreiben:<br>
+								<span class="text-info">openWB/set/lp/3/plugStat</span> Status, ob ein Fahrzeug angesteckt ist, nur 0 (nein) oder 1 (ja)<br>
+								<span class="text-info">openWB/set/lp/3/chargeStat</span> Status, ob gerade geladen wird, nur 0 (nein) oder 1 (ja)
 							</div>
 						</div>
 						<div id="evseconswifis2" class="hide">
@@ -3089,6 +3130,7 @@
 							}
 							else {
 								showSection('#lasts2mman');
+								display_llmp3();
 								display_lp3();
 							}
 						}
@@ -3102,6 +3144,7 @@
 							hideSection('#evseconipevselp3');
 							hideSection('#evseconextopenwblp3');
 							hideSection('#evseconthirdeth');
+							hideSection('#evseconmqtts2');
 
 							if($('#evsecons2').val() == 'thirdeth') {
 								showSection('#evseconthirdeth');
@@ -3110,6 +3153,11 @@
 								showSection('#evsecondacs2');
 								showSection('#llmodullp3');
 								display_llmp3();
+							}
+							if($('#evsecons2').val() == 'mqttevse') {
+								showSection('#evseconmqtts2');
+								showSection('#llmodullp3');
+								display_llmp2();
 							}
 							if($('#evsecons2').val() == 'modbusevse') {
 								showSection('#evseconmbs2');
