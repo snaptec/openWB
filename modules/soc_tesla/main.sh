@@ -99,7 +99,6 @@ checkToken(){
 			if [ ! -f $tokensfile ]; then
 				socDebugLog "Tokenpassword set but no token found: clearing password in config."
 				clearPassword
-				socDebugLog "Tokenpassword without token - nothing to do."
 				returnValue=2
 			fi
 			;;
@@ -123,14 +122,19 @@ checkToken(){
 			fi
 			;;
 	esac
-	socDebugLog "CheckToken returnValue: $returnValue"
 	return "$returnValue"
 }
 
 wakeUpCar(){
 	socDebugLog "Waking up car."
-	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
-	state=$(echo $response | jq .response.state)
+	counter=0
+	until [ "$state" = "\"online\"" -o $counter -ge 12 ]; do
+		response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
+		state=$(echo $response | jq .response.state)
+		counter=$((counter+1))
+		sleep 5
+		socDebugLog "Loop: $counter State: $state"
+	done
 	socDebugLog "Car state after wakeup: $state"
 }
 
@@ -163,6 +167,7 @@ else
 		if [ "$checkResult" == 0 ]; then
 			# todo: do not always wake car
 			wakeUpCar
+			socDebugLog "Update SoC"
 			getAndWriteSoc
 		fi
 	fi
