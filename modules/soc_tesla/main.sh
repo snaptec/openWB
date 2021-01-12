@@ -178,10 +178,10 @@ else
 			wakeUpResult=$?
 			if [ $wakeUpResult -eq 0 ]; then
 				socDebugLog "Update SoC"
-				getAndWriteSoc
 			else
-				socDebugLog "Car not online after timeout. Aborting."
+				socDebugLog "Car not online after timeout. SoC will be outdated!"
 			fi
+			getAndWriteSoc
 		fi
 	fi
 fi
