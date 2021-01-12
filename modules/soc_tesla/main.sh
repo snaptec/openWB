@@ -128,14 +128,22 @@ checkToken(){
 wakeUpCar(){
 	socDebugLog "Waking up car."
 	counter=0
-	until [ "$state" = "\"online\"" -o $counter -ge 12 ]; do
+	until [ $counter -ge 12 ]; do
 		response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
 		state=$(echo $response | jq .response.state)
+		if [ "$state" = "\"online\"" ]; then
+			break
+		fi
 		counter=$((counter+1))
 		sleep 5
 		socDebugLog "Loop: $counter State: $state"
 	done
 	socDebugLog "Car state after wakeup: $state"
+	if [ "$state" = "\"online\"" ]; then
+		return 0
+	else
+		return 1
+	fi
 }
 
 soctimer=$(<$soctimerfile)
@@ -167,8 +175,13 @@ else
 		if [ "$checkResult" == 0 ]; then
 			# todo: do not always wake car
 			wakeUpCar
-			socDebugLog "Update SoC"
-			getAndWriteSoc
+			wakeUpResult=$?
+			if [ $wakeUpResult -eq 0 ]; then
+				socDebugLog "Update SoC"
+				getAndWriteSoc
+			else
+				socDebugLog "Car not online after timeout. Aborting."
+			fi
 		fi
 	fi
 fi
