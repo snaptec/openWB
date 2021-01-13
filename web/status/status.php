@@ -84,156 +84,7 @@
 						$("#evsedintestlp3div").html(request.responseText);
 					}
 				});
-				$.ajax({
-					url: "/openWB/ramdisk/schieflast",
-					complete: function(request){
-						$("#schieflastdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga1",
-					complete: function(request){
-						$("#bezuga1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga2",
-					complete: function(request){
-						$("#bezuga2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezuga3",
-					complete: function(request){
-						$("#bezuga3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw1",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw1div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw2",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw2div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugw3",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#bezugw3div").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsoll",
-					complete: function(request){
-						$("#llsolldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsolls1",
-					complete: function(request){
-						$("#llsolls1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llsolls2",
-					complete: function(request){
-						$("#llsolls2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas11",
-					complete: function(request){
-						$("#llas11div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas12",
-					complete: function(request){
-						$("#llas12div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas13",
-					complete: function(request){
-						$("#llas13div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas21",
-					complete: function(request){
-						$("#llas21div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas22",
-					complete: function(request){
-						$("#llas22div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llas23",
-					complete: function(request){
-						$("#llas23div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla1",
-					complete: function(request){
-						$("#lla1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla2",
-					complete: function(request){
-						$("#lla2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/lla3",
-					complete: function(request){
-						$("#lla3div").html(request.responseText);
-					}
-				});
+
 				$.ajax({
 					url: "/openWB/ramdisk/llaktuell",
 					complete: function(request){
@@ -253,109 +104,9 @@
 					}
 				});
 				$.ajax({
-					url: "/openWB/ramdisk/llkwh",
-					complete: function(request){
-						$("#llkwhdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhs1",
-					complete: function(request){
-						$("#llkwhs1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhs2",
-					complete: function(request){
-						$("#llkwhs2div").html(request.responseText);
-					}
-				});
-				$.ajax({
 					url: "/openWB/ramdisk/llkwhges",
 					complete: function(request){
 						$("#llkwhgesdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_watt",
-					complete: function(request){
-						$("#verbraucher1wattdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_wh",
-					complete: function(request){
-						var vfinal = request.responseText;
-						vfinal = (vfinal / 1000).toFixed(3);
-						$("#verbraucher1whdiv").html(vfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher1_whe",
-					complete: function(request){
-						var vefinal = request.responseText;
-						vefinal = (vefinal / 1000).toFixed(3);
-						$("#verbraucher1whediv").html(vefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_watt",
-					complete: function(request){
-						$("#verbraucher2wattdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_wh",
-					complete: function(request){
-						var vfinal = request.responseText;
-						vfinal = (vfinal / 1000).toFixed(3);
-						$("#verbraucher2whdiv").html(vfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/verbraucher2_whe",
-					complete: function(request){
-						var vefinal = request.responseText;
-						vefinal = (vefinal / 1000).toFixed(3);
-						$("#verbraucher2whediv").html(vefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/einspeisungkwh",
-					complete: function(request){
-						var eefinal = request.responseText;
-						eefinal = (eefinal / 1000).toFixed(3);
-						$("#einspeisungkwhdiv").html(eefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/bezugkwh",
-					complete: function(request){
-						var eifinal = request.responseText;
-						eifinal = (eifinal / 1000).toFixed(3);
-						$("#bezugkwhdiv").html(eifinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/speicherikwh",
-					complete: function(request){
-						var sgfinal = request.responseText;
-						sgfinal = (sgfinal / 1000).toFixed(3);
-						$("#speicherikwhdiv").html(sgfinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/speicherekwh",
-					complete: function(request){
-						var sefinal = request.responseText;
-						sefinal = (sefinal / 1000).toFixed(3);
-						$("#speicherekwhdiv").html(sefinal);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvcounter",
-					complete: function(request){
-						$("#pvcounterdiv").html(request.responseText);
 					}
 				});
 				$.ajax({
@@ -371,12 +122,6 @@
 					url: "/openWB/ramdisk/pvallwh",
 					complete: function(request){
 						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/daily_pvkwhk",
-					complete: function(request){
-						$("#daily_pvkwhdiv").html(request.responseText);
 					}
 				});
 				$.ajax({
@@ -488,120 +233,6 @@
 					url: "/openWB/ramdisk/soc1",
 					complete: function(request){
 						$("#soclevel1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv1",
-					complete: function(request){
-						$("#llv1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv2",
-					complete: function(request){
-						$("#llv2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llv3",
-					complete: function(request){
-						$("#llv3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs11",
-					complete: function(request){
-						$("#llv1s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs21",
-					complete: function(request){
-						$("#llv1s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs12",
-					complete: function(request){
-						$("#llv2s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs22",
-					complete: function(request){
-						$("#llv2s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs13",
-					complete: function(request){
-						$("#llv3s1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llvs23",
-					complete: function(request){
-						$("#llv3s2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf1",
-					complete: function(request){
-						$("#llpf1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf2",
-					complete: function(request){
-						$("#llpf2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llpf3",
-					complete: function(request){
-						$("#llpf3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv1",
-					complete: function(request){
-						$("#evuv1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv2",
-					complete: function(request){
-						$("#evuv2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuv3",
-					complete: function(request){
-						$("#evuv3div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evuhz",
-					complete: function(request){
-						$("#evuhzdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf1",
-					complete: function(request){
-						$("#evupf1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf2",
-					complete: function(request){
-						$("#evupf2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evupf3",
-					complete: function(request){
-						$("#evupf3div").html(request.responseText);
 					}
 				});
 			}
@@ -1443,5 +1074,35 @@
 		});
 
 	</script>
+
+	<script>
+	$(document).ready(function(){
+
+		// load scripts synchronously in order specified
+		var scriptsToLoad = [
+			// load Chart.js library
+			'js/Chart.bundle.js',
+			// load mqtt library
+			'js/mqttws31.js',
+			// some helper functions
+			//'themes/dark/helperFunctions.js?ver=20201218',
+			// functions for processing messages
+			'status/processAllMqttMsg.js?ver=20201228a',
+			// respective Chart.js definition live
+			//'themes/dark/livechart.js?ver=20201218',
+			// respective Chart.js definition awattar
+			//'themes/dark/electricityPriceChart.js?ver=20201228',
+			// functions performing mqtt and start mqtt-service
+			'status/setupMqttServices.js?ver=20201228a',
+		];
+		scriptsToLoad.forEach(function(src) {
+			var script = document.createElement('script');
+			script.src = src;
+			script.async = false;
+			document.body.appendChild(script);
+		});
+	});  // end document ready
+	</script>
+
 </body>
 </html>
