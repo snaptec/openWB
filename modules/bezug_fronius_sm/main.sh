@@ -74,24 +74,24 @@ if [[ $froniusvar2 == "0" ]]; then
 elif [[ $froniusvar2 == "1" ]]; then
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
 	    # Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-	    wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data."1".PowerReal_P_Sum')/1" | bc)
-	    evuv1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".Voltage_AC_Phase_1')/1" | bc)
-	    evuv2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".Voltage_AC_Phase_2')/1" | bc)
-	    evuv3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".Voltage_AC_Phase_3')/1" | bc)
-	    bezugw1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerReal_P_Phase_1')/1" | bc)
-	    bezugw2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerReal_P_Phase_2')/1" | bc)
-	    bezugw3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerReal_P_Phase_3')/1" | bc)
+	    wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerReal_P_Sum')/1" | bc)
+	    evuv1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".Voltage_AC_Phase_1')/1" | bc)
+	    evuv2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".Voltage_AC_Phase_2')/1" | bc)
+	    evuv3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".Voltage_AC_Phase_3')/1" | bc)
+	    bezugw1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerReal_P_Phase_1')/1" | bc)
+	    bezugw2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerReal_P_Phase_2')/1" | bc)
+	    bezugw3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerReal_P_Phase_3')/1" | bc)
 	    # Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
 	    # "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
 	    bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
 	    bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
 	    bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
-	    evuhz=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".Frequency_Phase_Average')/1" | bc)
-	    evupf1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerFactor_Phase_1')/1" | bc)
-	    evupf2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerFactor_Phase_2')/1" | bc)
-	    evupf3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."1".PowerFactor_Phase_3')/1" | bc)
-	    ikwh=$(echo $response_sm | jq '.Body.Data."1".EnergyReal_WAC_Sum_Consumed')
-	    ekwh=$(echo $response_sm | jq '.Body.Data."1".EnergyReal_WAC_Sum_Produced')
+	    evuhz=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".Frequency_Phase_Average')/1" | bc)
+	    evupf1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerFactor_Phase_1')/1" | bc)
+	    evupf2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerFactor_Phase_2')/1" | bc)
+	    evupf3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data."$froniuserzeugung".PowerFactor_Phase_3')/1" | bc)
+	    ikwh=$(echo $response_sm | jq '.Body.Data."$froniuserzeugung".EnergyReal_WAC_Sum_Consumed')
+	    ekwh=$(echo $response_sm | jq '.Body.Data."$froniuserzeugung".EnergyReal_WAC_Sum_Produced')
 	# ... ansonsten, wenn das SmartMeter im Verbrauchszweig sitzt, kombiniere dessen Werte mit denen des Wechselrichters.
 elif [[ $froniusvar2 == "2" ]]; then
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
