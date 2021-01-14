@@ -17,7 +17,7 @@ elif [[ $froniusvar2 == "1" ]]; then
 	json_id=".\"$froniuserzeugung\""
 	# Hole die JSON-Daten
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
-	# selbe response_sm wie in Variante0 mit folgendem Aufruf:
+	# TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
 	# response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
 	# dann auch json_id wieder gleich:
 	# json_id=""
