@@ -46,6 +46,17 @@
 		<link rel="stylesheet" type="text/css" href="css/cardio.css">
 		<!-- Data refresher -->
 		<script src="livefunctions.js?ver=20201201"></script>
+		<script>
+			/**
+			 * detect touch devices and map contextmenu (long press) to normal click
+			 */
+			$('body').on("contextmenu", function(event){
+				if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+					$(event.target).trigger("click"); // fire a click event
+					event.preventDefault();
+				}
+			});
+		</script>
 	</head>
 	<body>
 		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
