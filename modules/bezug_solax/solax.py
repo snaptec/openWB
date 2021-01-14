@@ -37,8 +37,9 @@ client = ModbusTcpClient(ipaddress, port=502)
 
 resp=client.read_input_registers(0, 114)
 
-value = signed32(resp, 70);
-value = -value;   # for SolaX negative means get power from grid
+value = signed32(resp, 70)
+# for SolaX negative means get power from grid
+value = -value
 
 f = open('/var/www/html/openWB/ramdisk/wattbezug', 'w')
 f.write(str(value))
@@ -50,10 +51,13 @@ f = open('/var/www/html/openWB/ramdisk/evuhz', 'w')
 f.write(str(frequenz))
 f.close()
 
-#consumed = unsigned32(resp,74) / 100
-#print (consumed)
-#f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
-#f.write(str(consumed))
-#f.close()
+consumed = unsigned32(resp,74) / 100
+print (consumed)
+f = open('/var/www/html/openWB/ramdisk/bezugkwh', 'w')
+f.write(str(consumed))
+f.close()
 
-
+einspeisung = unsigned32(resp,72) / 100
+f = open('/var/www/html/openWB/ramdisk/einspeisungkwh', 'w')
+f.write(str(einspeisung))
+f.close()

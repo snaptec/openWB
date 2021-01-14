@@ -46,7 +46,7 @@ password="${!passwordConfigText}"
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
@@ -99,7 +99,6 @@ checkToken(){
 			if [ ! -f $tokensfile ]; then
 				socDebugLog "Tokenpassword set but no token found: clearing password in config."
 				clearPassword
-				socDebugLog "Tokenpassword without token - nothing to do."
 				returnValue=2
 			fi
 			;;
@@ -123,15 +122,28 @@ checkToken(){
 			fi
 			;;
 	esac
-	socDebugLog "CheckToken returnValue: $returnValue"
 	return "$returnValue"
 }
 
 wakeUpCar(){
 	socDebugLog "Waking up car."
-	response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
-	state=$(echo $response | jq .response.state)
+	counter=0
+	until [ $counter -ge 12 ]; do
+		response=$(python $MODULEDIR/teslajson.py --email="$username" --tokens_file="$tokensfile" --vid="$carnumber" --json do wake_up)
+		state=$(echo $response | jq .response.state)
+		if [ "$state" = "\"online\"" ]; then
+			break
+		fi
+		counter=$((counter+1))
+		sleep 5
+		socDebugLog "Loop: $counter State: $state"
+	done
 	socDebugLog "Car state after wakeup: $state"
+	if [ "$state" = "\"online\"" ]; then
+		return 0
+	else
+		return 1
+	fi
 }
 
 soctimer=$(<$soctimerfile)
@@ -163,6 +175,12 @@ else
 		if [ "$checkResult" == 0 ]; then
 			# todo: do not always wake car
 			wakeUpCar
+			wakeUpResult=$?
+			if [ $wakeUpResult -eq 0 ]; then
+				socDebugLog "Update SoC"
+			else
+				socDebugLog "Car not online after timeout. SoC will be outdated!"
+			fi
 			getAndWriteSoc
 		fi
 	fi

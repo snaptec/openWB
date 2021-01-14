@@ -172,7 +172,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {

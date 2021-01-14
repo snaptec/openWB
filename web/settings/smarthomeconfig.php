@@ -106,6 +106,7 @@ $numDevices = 9;
 											<option value="idm" data-option="idm">Idm</option>
 											<option value="stiebel" data-option="stiebel">Stiebel</option>
 											<option value="http" data-option="http">Http (in Entwicklung)</option>
+											<option value="avm" data-option="avm">AVM (in Entwicklung)</option>
 											<option value="pyt" data-option="pyt">Pyt (veraltet, bitte andere Option wählen)</option>
 										</select>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-acthor hide">
@@ -140,15 +141,43 @@ $numDevices = 9;
 											Mit diesem Typ werden alle Geräte unterstützt, welche sich durch einfache Http-Aufrufe schalten lassen.<br>
 											<span class="text-danger">Das Modul befindet sich noch in der Entwicklung und kann nicht genutzt werden!</span>
 										</span>
+										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-avm hide">
+											Mit diesem Typ werden SmartHome Geräte von AVM unterstützt, welche über eine Fritz!Box verbunden sind.<br>
+											<span class="text-danger">Das Modul befindet sich noch in der Entwicklung und wurde nicht ausgiebig getestet!</span>
+										</span>
 									</div>
 								</div>
 							</div>
-							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-pyt hide">
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-shelly device<?php echo $devicenum; ?>-option-tasmota device<?php echo $devicenum; ?>-option-acthor device<?php echo $devicenum; ?>-option-elwa device<?php echo $devicenum; ?>-option-idm device<?php echo $devicenum; ?>-option-stiebel device<?php echo $devicenum; ?>-option-avm device<?php echo $devicenum; ?>-option-pyt hide">
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
 									<label for="device_ipDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
 										<input id="device_ipDevices<?php echo $devicenum; ?>" name="device_ip" class="form-control" type="text" required="required" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" data-default="192.168.1.1" value="192.168.1.1" inputmode="text"  data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+									</div>
+								</div>
+							</div>
+							<div class="device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-avm hide">
+								<hr class="border-secondary">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="device_usernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input id="device_usernameDevices<?php echo $devicenum; ?>" name="device_username" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="device_passwordDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input id="device_passwordDevices<?php echo $devicenum; ?>" name="device_password" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="device_actorDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Aktor</label>
+										<div class="col">
+											<input id="device_actorDevices<?php echo $devicenum; ?>" name="device_actor" class="form-control" type="text" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+											<span class="form-text small">Hier ist der Name des Gerätes einzutragen, wie er in der Fritz!Box angezeigt wird.</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -516,13 +545,13 @@ $numDevices = 9;
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20201207" ></script>
+		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210104" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
+		<script src = "settings/helperFunctions.js?ver=20210104" ></script>
 		<!-- load service -->
 		<script src = "settings/setupMqttServices.js?ver=20201207" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg.js?ver=20201207" ></script>
+		<script src = "settings/processAllMqttMsg.js?ver=20210104" ></script>
 
 		<script>
 			<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>

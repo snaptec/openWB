@@ -83,6 +83,16 @@
 	<script src="js/RGraph.gauge.js"></script>
 
 	<script>
+		function setCookie(name, value, days) {
+			var expires = '';
+			if ( days ) {
+				var date = new Date();
+				date.setDate(date.getDate() + days);
+				expires = '; expires=' + date.toUTCString();
+			}
+			document.cookie = name + '=' + (value || '')  + expires;
+		}
+
 		function getCookie(cname) {
 			var name = cname + '=';
 			var decodedCookie = decodeURIComponent(document.cookie);
@@ -1675,7 +1685,7 @@
 				// some helper functions
 				'themes/Gauges/helperFunctions.js?ver=20201228',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20201228',
+				'themes/Gauges/processAllMqttMsg.js?ver=20210114',
 				// respective Chart.js definition live
 				'themes/Gauges/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
