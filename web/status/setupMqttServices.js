@@ -16,24 +16,25 @@ var topicsToSubscribe = [
 	//evsedintestlp2
 	//evsedintestlp3
 	["openWB/evu/ASchieflast", 0],
-	["openwb/evu/APhase1", 0],
-	["openwb/evu/APhase2", 0],
-	["openwb/evu/APhase3", 0],
-	["openwb/evu/WPhase1", 0],
-	["openwb/evu/WPhase2", 0],
-	["openwb/evu/WPhase3", 0],
-	["openwb/lp/1/AConfigured", 0] 
-	["openwb/lp/2/AConfigured", 0] 
-	["openwb/lp/3/AConfigured", 0] 
-	["openwb/lp/2/APhase1", 0],
-	["openwb/lp/2/APhase2", 0],
-	["openwb/lp/2/APhase3", 0],
-	["openwb/lp/3/APhase1", 0],
-	["openwb/lp/3/APhase2", 0],
-	["openwb/lp/3/APhase3", 0],
-	["openwb/lp/1/APhase1", 0],
-	["openwb/lp/1/APhase2", 0],
-	["openwb/lp/1/APhase3", 0],
+	["openWB/evu/APhase1", 0],
+	["openWB/evu/APhase2", 0],
+	["openWB/evu/APhase3", 0],
+	["openWB/evu/WPhase1", 0],
+	["openWB/evu/WPhase2", 0],
+	["openWB/evu/WPhase3", 0],
+	/*
+	["openWB/lp/1/AConfigured", 0] 
+	["openWB/lp/2/AConfigured", 0] 
+	["openWB/lp/3/AConfigured", 0] */
+	["openWB/lp/2/APhase1", 0],
+	["openWB/lp/2/APhase2", 0],
+	["openWB/lp/2/APhase3", 0],
+	["openWB/lp/3/APhase1", 0],
+	["openWB/lp/3/APhase2", 0],
+	["openWB/lp/3/APhase3", 0],
+	["openWB/lp/1/APhase1", 0],
+	["openWB/lp/1/APhase2", 0],
+	["openWB/lp/1/APhase3", 0],
 	//llaktuell
 	//llaktuells1
 	//llaktuells2
@@ -47,7 +48,7 @@ var topicsToSubscribe = [
 	["openWB/Verbraucher/2/Watt", 0],
 	["openWB/Verbraucher/2/WhImported", 0],
 	["openWB/Verbraucher/2/WhExported", 0],
-	["openWB/evu/WhExported", 0],
+	//["openWB/evu/WhExported", 0],
 	["openWB/evu/WhImported", 0],
 	["openWB/housebattery/WhImported", 0],
 	["openWB/housebattery/WhExported", 0],
@@ -87,7 +88,7 @@ var topicsToSubscribe = [
 	["openWB/evu/Hz", 0],
 	["openWB/evu/PfPhase1", 0],
 	["openWB/evu/PfPhase2", 0],
-	["openWB/evu/PfPhase3", 0],
+	["openWB/evu/PfPhase3", 0]
 ];
 
 // holds number of topics flagged 1 initially
@@ -102,11 +103,9 @@ var options = {
 	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
-		console.log("connected");
 		retries = 0;
 		topicsToSubscribe.forEach((topic) => {
 			client.subscribe(topic[0], {qos: 0});
-			console.log(topic[0]);
 		});
 	},
 	//Gets Called if the connection could not be established
