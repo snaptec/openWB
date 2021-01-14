@@ -542,6 +542,80 @@
 						</div>
 					</div>
 				</div>
+				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
+				<!-- Ladepunkte-->
+				<?php switch($chargepointNum) {
+					case 1: $zaehlerstandLPdiv = $_GET['#llkwhdiv']; break;
+					
+				}
+?>
+				<div class="card border-secondary" id="lp<?php echo $chargepointNum ?>">
+					<div class="card-header bg-secondary">
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Ladepunkt <?php echo $chargepointNum ?></div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-sm w-50">
+								<tbody>
+									<tr id="ladestromvorgabeLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Ladestromvorgabe [A]</th>
+										<td><?php echo $ladestromvorgabeLPdiv?></td>
+									</tr>
+									<tr id="ladeleistungLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Ladeleistung [W]</th>
+										<td><?php echo $ladeleistungLPdiv ?></td>
+									</tr>
+									<tr id="zaehlerstandLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Zählerstand [kWh]</th>
+										<td><?php echo $zaehlerstandLPdiv?></td>
+									</tr>
+									<tr id="socLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">SoC [%]</th>
+										<td><?php echo $socLPdiv?></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-sm">
+								<thead>
+									<tr>
+										<th scope="col"></th>
+										<th scope="col">Phase 1</th>
+										<th scope="col">Phase 2</th>
+										<th scope="col">Phase 3</th>
+									</tr>
+								</head>
+								<tbody>
+									<tr id ="spannungLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Spannung [V]</th>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+									</tr>
+									<tr id ="pfLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Power Faktor</th>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+									</tr>
+									<tr id ="stromstaerkeLP<?php echo $chargepointNum ?>StatusId">
+										<th scope="row">Stromstärke [A]</th>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+										<td><div id=""></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+
 				<hr>
 					<div class="row bg-info">
 						<div class="col-sm-4 text-center">
