@@ -542,18 +542,82 @@
 						</div>
 					</div>
 				</div>
-				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
+
 				<!-- Ladepunkte-->
-				<?php switch($chargepointNum) {
-					case 1: $zaehlerstandLPdiv = $_GET['#llkwhdiv']; break;
-					
-				}
-?>
-				<div class="card border-secondary" id="lp<?php echo $chargepointNum ?>">
+				<?php for( $chargepointNum = 1; $chargepointNum <= 3; $chargepointNum++ ){ ?>
+					<div class="card border-secondary" id="lp<?php echo $chargepointNum ?>">
+						<div class="card-header bg-secondary">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div class="col-4">Ladepunkt <?php echo $chargepointNum ?></div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-sm w-50">
+									<tbody>
+										<tr class=stromvorgabeRow>
+											<th scope="row">Ladestromvorgabe [A]</th>
+											<td class=stromvorgabe></td>
+										</tr>
+										<tr class=ladeleistungRow>
+											<th scope="row">Ladeleistung [W]</th>
+											<td class=ladeleistung></td>
+										</tr>
+										<tr class=kWhCounterRow>
+											<th scope="row">Zählerstand [kWh]</th>
+											<td class="kWhCounter"></td>
+										</tr>
+										<tr class=socRow>
+											<th scope="row">SoC [%]</th>
+											<td class=soc></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-sm">
+									<thead>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">Phase 1</th>
+											<th scope="col">Phase 2</th>
+											<th scope="col">Phase 3</th>
+										</tr>
+									</head>
+									<tbody>
+										<tr class=spannungRow>
+											<th scope="row">Spannung [V]</th>
+											<td class=spannungP1></td>
+											<td class=spannungP2></td>
+											<td class=spannungP3></td>
+										</tr>
+										<tr class=powerFaktorRow>
+											<th scope="row">Power Faktor</th>
+											<td class=powerFaktorP1></td>
+											<td class=powerFaktorP2></td>
+											<td class=powerFaktorP3></td>
+										</tr>
+										<tr class=stromstaerkeRow>
+											<th scope="row">Stromstärke [A]</th>
+											<td class=stromstaerkeP1></td>
+											<td class=stromstaerkeP2></td>
+											<td class=stromstaerkeP3></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+
+				<!-- Ladepunkte Gesamt -->
+				<div class="card border-secondary" id="lpges">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Ladepunkt <?php echo $chargepointNum ?></div>
+								<div class="col-4">Ladepunkte Gesamt</div>
 							</div>
 						</div>
 					</div>
@@ -561,238 +625,19 @@
 						<div class="table-responsive">
 							<table class="table table-sm w-50">
 								<tbody>
-									<tr id="ladestromvorgabeLP<?php echo $chargepointNum ?>StatusId">
-										<th scope="row">Ladestromvorgabe [A]</th>
-										<td><?php echo $ladestromvorgabeLPdiv?></td>
-									</tr>
-									<tr id="ladeleistungLP<?php echo $chargepointNum ?>StatusId">
+									<tr class=ladeleistungAllRow>
 										<th scope="row">Ladeleistung [W]</th>
-										<td><?php echo $ladeleistungLPdiv ?></td>
+										<td><div id="ladeleistungAll"></div></td>
 									</tr>
-									<tr id="zaehlerstandLP<?php echo $chargepointNum ?>StatusId">
+									<tr id=kWhCounterAllRow>
 										<th scope="row">Zählerstand [kWh]</th>
-										<td><?php echo $zaehlerstandLPdiv?></td>
-									</tr>
-									<tr id="socLP<?php echo $chargepointNum ?>StatusId">
-										<th scope="row">SoC [%]</th>
-										<td><?php echo $socLPdiv?></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="table-responsive">
-							<table class="table table-sm">
-								<thead>
-									<tr>
-										<th scope="col"></th>
-										<th scope="col">Phase 1</th>
-										<th scope="col">Phase 2</th>
-										<th scope="col">Phase 3</th>
-									</tr>
-								</head>
-								<tbody>
-									<tr id ="spannungLP<?php echo $chargepointNum ?>StatusId">
-										<th scope="row">Spannung [V]</th>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
-									</tr>
-									<tr id ="pfLP<?php echo $chargepointNum ?>StatusId">
-										<th scope="row">Power Faktor</th>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
-									</tr>
-									<tr id ="stromstaerkeLP<?php echo $chargepointNum ?>StatusId">
-										<th scope="row">Stromstärke [A]</th>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
-										<td><div id=""></div></td>
+										<td><div id="kWhCounterAll"></div></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
-				<?php } ?>
-
-				<hr>
-					<div class="row bg-info">
-						<div class="col-sm-4 text-center">
-							LP1 <?php echo $lp1nameold ?>  Spannung [V]
-						</div>
-						<div class="col-sm-2 text-center">
-							<div id="llv1div"></div>
-						</div>
-						<div class="col-sm-2 text-center">
-							<div id="llv2div"></div>
-						</div>
-						<div class="col-sm-2 text-center">
-							<div id="llv3div"></div>
-						</div>
-					</div>
-				<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center">
-					LP1 <?php echo $lp1nameold ?>  Power Faktor
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llpf1div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llpf2div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llpf3div"></div>
-				</div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center">
-					LP1 <?php echo $lp1nameold ?>  Stromstärke [A]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="lla1div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="lla2div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="lla3div"></div>
-				</div>
-			</div>
-			<div id="ladepunkt2div">
-				<hr>
-				<div class="row bg-info">
-					<div class="col-sm-4 text-center">
-						LP2 <?php echo $lp2nameold ?>  Spannung [V]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv1s1div"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv2s1div"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv3s1div"></div>
-					</div>
-				</div>
-				<hr>
-				<div class="row bg-info">
-					<div class="col-sm-4 text-center bg-info">
-						LP2 <?php echo $lp2nameold ?> Stromstärke [A]
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas11div"></div>
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas12div"></div>
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas13div"></div>
-					</div>
-				</div>
-			</div>
-			<div id="ladepunkt3div">
-				<hr>
-				<div class="row bg-info">
-					<div class="col-sm-4 text-center">
-						LP3 <?php echo $lp3nameold ?> Spannung [V]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv1s2div"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv2s2div"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="llv3s2div"></div>
-					</div>
-				</div>
-				<hr>
-				<div class="row bg-info">
-					<div class="col-sm-4 text-center bg-info">
-						LP3 <?php echo $lp3nameold ?> Stromstärke [A]
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas21div"></div>
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas22div"></div>
-					</div>
-					<div class="col-sm-2 text-center bg-info">
-						<div id="llas23div"></div>
-					</div>
-				</div>
-			</div>
-			<hr style="height:3px;background-color:#333;" />
-			<div class="row">
-				<div class="col-sm-4 text-center"></div>
-				<div class="col-sm-2 text-center">
-					Ladepunkt 1
-				</div>
-				<div class="col-sm-2 text-center">
-					Ladepunkt 2
-				</div>
-				<div class="col-sm-2 text-center">
-					Ladepunkt 3
-				</div>
-				<div class="col-sm-2 text-center">
-					Gesamt
-				</div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center">
-					Ladestromvorgabe [A]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llsolldiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llsolls1div"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="llsolls2div"></div>
-				</div>
-				<div class="col-sm-2 text-center"></div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center bg-info">
-					Ladeleistung [W]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llaktuelldiv"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llaktuells1div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llaktuells2div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="lldiv"></div>
-				</div>
-			</div>
-			<hr>
-			<div class="row bg-info">
-				<div class="col-sm-4 text-center bg-info">
-					Zählerstand [kWh]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llkwhdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llkwhs1div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llkwhs2div"></div>
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="llkwhgesdiv"></div>
-				</div>
-			</div>
 
 
 			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
@@ -966,22 +811,6 @@
 					</div>
 				</div>
 				<hr>
-			</div>
-			<div class="row">
-				<div class="col-sm-2 text-center bg-info">
-					SoC LP1 [%]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="soclevel"></div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-2 text-center bg-info">
-					SoC LP2 [%]
-				</div>
-				<div class="col-sm-2 text-center bg-info">
-					<div id="soclevel1"></div>
-				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-2 text-center ">

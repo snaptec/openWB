@@ -11,7 +11,7 @@
 var topicsToSubscribe = [
 	// Status Konfiguration Ladepunkt
 
-	// llkombiniert
+	// llkombiniert in ladeleistungAll
 	//evsedintestlp1
 	//evsedintestlp2
 	//evsedintestlp3
@@ -41,7 +41,7 @@ var topicsToSubscribe = [
 	["openWB/lp/1/kWhCounter", 0],
 	["openWB/lp/2/kWhCounter", 0],
 	["openWB/lp/3/kWhCounter", 0],
-	//llkwhges
+	//llkwhges in kWhCounterAll
 	["openWB/Verbraucher/1/Watt", 0],
 	["openWB/Verbraucher/1/WhImported", 0],
 	["openWB/Verbraucher/1/WhExported", 0],
@@ -88,7 +88,10 @@ var topicsToSubscribe = [
 	["openWB/evu/Hz", 0],
 	["openWB/evu/PfPhase1", 0],
 	["openWB/evu/PfPhase2", 0],
-	["openWB/evu/PfPhase3", 0]
+	["openWB/evu/PfPhase3", 0],
+	["openWB/lp/1/boolChargePointConfigured", 0],
+	["openWB/lp/2/boolChargePointConfigured", 0],
+	["openWB/lp/3/boolChargePointConfigured", 0],
 ];
 
 // holds number of topics flagged 1 initially
