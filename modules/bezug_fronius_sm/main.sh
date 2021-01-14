@@ -8,77 +8,77 @@
 # Fordere die Werte vom SmartMeter an.
 if [[ $froniusvar2 == "0" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
-	json_id=""
+	json_id=".Body.Data"
 	# Hole die JSON Daten
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung")
 
 elif [[ $froniusvar2 == "1" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
-	json_id=".\"$froniuserzeugung\""
+	json_id=".Body.Data.\"$froniuserzeugung\""
 	# Hole die JSON-Daten
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
 	# TODO: Evtl. ist es noch weiter zu vereinfachen -> selbe response_sm wie in Variante0 mit folgendem Aufruf:
 	# response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceID=$froniuserzeugung&DataCollection=MeterRealtimeData")
 	# dann auch json_id wieder gleich:
-	# json_id=""
+	# json_id=".Body.Data"
 
 elif [[ $froniusvar2 == "2" ]]; then
 	# Setze die für JSON Abruf benötigte DeviceID
-	json_id=".\"$froniuserzeugung\""
+	json_id=".Body.Data.\"$froniuserzeugung\""
 	# Hole die JSON-Daten
 	response_sm=$(curl --connect-timeout 5 -s "$wrfroniusip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System")
 	
 	# TODO: meter_location für diese Variante korrekt ermitteln
 	# Überprüfe den Einbauort des SmartMeters.
-	meter_location=$(echo $response_sm | jq '.Body.Data'$json_id'.Meter_Location_Current')
+	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
 	
 	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-	wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_POWERACTIVE_MEAN_SUM_F64')/1" | bc)
-	evuv1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_VOLTAGE_01_F64')/1" | bc)
-	evuv2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_VOLTAGE_02_F64')/1" | bc)
-	evuv3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_VOLTAGE_03_F64')/1" | bc)
-	bezugw1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_POWERACTIVE_MEAN_01_F64')/1" | bc)
-	bezugw2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_POWERACTIVE_MEAN_02_F64')/1" | bc)
-	bezugw3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_POWERACTIVE_MEAN_03_F64')/1" | bc)
+	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_SUM_F64')/1" | bc)
+	evuv1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_VOLTAGE_01_F64')/1" | bc)
+	evuv2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_VOLTAGE_02_F64')/1" | bc)
+	evuv3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_VOLTAGE_03_F64')/1" | bc)
+	bezugw1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_01_F64')/1" | bc)
+	bezugw2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_02_F64')/1" | bc)
+	bezugw3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_POWERACTIVE_MEAN_03_F64')/1" | bc)
 	# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
 	# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
 	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
 	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
 	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
 	# TODO: ist dieser Parameter für diese Variante korrekt? sieht aus wie Copy-Paste
-	evuhz=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.Frequency_Phase_Average')/1" | bc)
-	evupf1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_FACTOR_POWER_01_F64')/1" | bc)
-	evupf2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_FACTOR_POWER_02_F64')/1" | bc)
-	evupf3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_FACTOR_POWER_03_F64')/1" | bc)
-	ikwh=$(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64')
-	ekwh=$(echo $response_sm | jq '.Body.Data'$json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
+	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Frequency_Phase_Average')/1" | bc)
+	evupf1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_01_F64')/1" | bc)
+	evupf2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_02_F64')/1" | bc)
+	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.SMARTMETER_FACTOR_POWER_03_F64')/1" | bc)
+	ikwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_CONSUMED_SUM_F64')
+	ekwh=$(echo $response_sm | jq $json_id'.SMARTMETER_ENERGYACTIVE_PRODUCED_SUM_F64')
 
 fi
 
 # Auswertung für Variante0 und Variante1 gebündelt
 if [[ $froniusvar2 != "2" ]]; then
 	# Überprüfe den Einbauort des SmartMeters.
-	meter_location=$(echo $response_sm | jq '.Body.Data'$json_id'.Meter_Location_Current')
+	meter_location=$(echo $response_sm | jq $json_id'.Meter_Location_Current')
 	
 	# Lese alle wichtigen Werte aus der JSON-Antwort und skaliere sie gleich.
-	wattbezug=$(echo "scale=0; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerReal_P_Sum')/1" | bc)
-	evuv1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.Voltage_AC_Phase_1')/1" | bc)
-	evuv2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.Voltage_AC_Phase_2')/1" | bc)
-	evuv3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.Voltage_AC_Phase_3')/1" | bc)
-	bezugw1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerReal_P_Phase_1')/1" | bc)
-	bezugw2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerReal_P_Phase_2')/1" | bc)
-	bezugw3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerReal_P_Phase_3')/1" | bc)
+	wattbezug=$(echo "scale=0; $(echo $response_sm | jq $json_id'.PowerReal_P_Sum')/1" | bc)
+	evuv1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_1')/1" | bc)
+	evuv2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_2')/1" | bc)
+	evuv3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Voltage_AC_Phase_3')/1" | bc)
+	bezugw1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_1')/1" | bc)
+	bezugw2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_2')/1" | bc)
+	bezugw3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerReal_P_Phase_3')/1" | bc)
 	# Berechne den Strom und lese ihn nicht direkt (der eigentlich zu lesende direkte Wert
 	# "Current_AC_Phase_1" wäre der Absolutwert und man würde das Vorzeichen verlieren).
 	bezuga1=$(echo "scale=2; $bezugw1 / $evuv1" | bc)
 	bezuga2=$(echo "scale=2; $bezugw2 / $evuv2" | bc)
 	bezuga3=$(echo "scale=2; $bezugw3 / $evuv3" | bc)
-	evuhz=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.Frequency_Phase_Average')/1" | bc)
-	evupf1=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerFactor_Phase_1')/1" | bc)
-	evupf2=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerFactor_Phase_2')/1" | bc)
-	evupf3=$(echo "scale=2; $(echo $response_sm | jq '.Body.Data'$json_id'.PowerFactor_Phase_3')/1" | bc)
-	ikwh=$(echo $response_sm | jq '.Body.Data'$json_id'.EnergyReal_WAC_Sum_Consumed')
-	ekwh=$(echo $response_sm | jq '.Body.Data'$json_id'.EnergyReal_WAC_Sum_Produced')
+	evuhz=$(echo "scale=2; $(echo $response_sm | jq $json_id'.Frequency_Phase_Average')/1" | bc)
+	evupf1=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_1')/1" | bc)
+	evupf2=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_2')/1" | bc)
+	evupf3=$(echo "scale=2; $(echo $response_sm | jq $json_id'.PowerFactor_Phase_3')/1" | bc)
+	ikwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Consumed')
+	ekwh=$(echo $response_sm | jq $json_id'.EnergyReal_WAC_Sum_Produced')
 
 fi
 
