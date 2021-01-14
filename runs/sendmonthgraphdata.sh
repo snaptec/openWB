@@ -9,7 +9,7 @@ elif [[ "$input" == "201812" ]]; then
 
 else
 	month=${input: -2}
-	month=$(( month + 1 ))
+	month=$(( ${month#0} +1))
 	if (( month < 10 )); then
 		month=$(printf "0$month")
 	fi

@@ -1,8 +1,11 @@
 <?php
 
-
 class Battery_API {
 
+    private $token_file_prefix = 'token';
+    private $token_file_suffix = '.json';
+    private $auth_file_prefix = 'auth';
+    private $auth_file_suffix = '.json';
 
     private $token_file = 'token.json';
     private $auth_file = 'auth.json';
@@ -15,8 +18,12 @@ class Battery_API {
     private $json;
 
 
-    function __construct () {
-      
+    function __construct ( $chargepoint = null ) {
+
+        if( !is_null($chargepoint) ){
+            $this->auth_file = $this->auth_file_prefix . $chargepoint . $this->auth_file_suffix;
+            $this->token_file = $this->token_file_prefix . $chargepoint . $this->token_file_suffix;
+        }
 
         $this->auth = $this->get_auth_data();
         $this->token = $this->get_token();
@@ -182,7 +189,6 @@ class Battery_API {
         $chargingActive = intval( $attributes->chargingSystemStatus === 'CHARGINGACTIVE' );
         $chargingError = intval( $attributes->chargingSystemStatus === 'CHARGINGERROR' );
 
-
         //$chargingTimeRemaining = intval( $attributes->chargingTimeRemaining );
         //$chargingTimeRemaining = ( $chargingTimeRemaining ? ( date( 'H:i', mktime( 0, $chargingTimeRemaining ) ) ) : '0:00' );
 
@@ -211,5 +217,15 @@ class Battery_API {
     }
 }
 
+$shortopts = "c:";
+$longopts = array( "chargepoint:" );
+$cliargs = getopt( $shortopts, $longopts );
 
-new Battery_API();
+// default to first chargepoint
+$chargepoint = 1;
+if( array_key_exists( "chargepoint", $cliargs ) ){
+    $chargepoint = $cliargs["chargepoint"];
+} else if( array_key_exists( "c", $cliargs ) ) {
+    $chargepoint = $cliargs["c"];
+}
+new Battery_API( $chargepoint );

@@ -39,8 +39,24 @@ echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /
 mosquitto_pub -t "openWB/global/strLastmanagementActive" -r -m "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist"
 echo "Update im Gange, bitte warten bis die Meldung nicht mehr sichtbar ist" > /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 chmod 777 var/www/html/openWB/ramdisk/mqttlastregelungaktiv
-cp modules/soc_i3/auth.json /tmp/auth.json
-cp modules/soc_i3s1/auth.json /tmp/auth.json.1
+
+if [ -f modules/soc_i3/auth.json ]; then
+	cp modules/soc_i3/auth.json /tmp/auth.json
+fi
+
+if [ -f modules/soc_i3s1/auth.json ]; then
+	cp modules/soc_i3s1/auth.json /tmp/auth.json.1
+fi
+
+if [ -f modules/soc_i3/auth1.json ]; then
+	cp modules/soc_i3/auth1.json /tmp/auth1.json
+fi
+
+if [ -f modules/soc_i3/auth2.json ]; then
+	cp modules/soc_i3/auth2.json /tmp/auth2.json
+fi
+cp modules/soc_eq/soc_eq_acc_lp1 /tmp/soc_eq_acc_lp1
+cp modules/soc_eq/soc_eq_acc_lp2 /tmp/soc_eq_acc_lp2
 cp openwb.conf /tmp/openwb.conf
 #mkdir /tmp/data
 #mkdir /tmp/data/daily
@@ -54,8 +70,24 @@ sudo chown -R pi:pi openWB
 sudo chown -R www-data:www-data /var/www/html/openWB/web/backup
 sudo chown -R www-data:www-data /var/www/html/openWB/web/tools/upload
 sudo cp /tmp/openwb.conf /var/www/html/openWB/openwb.conf
-sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
-sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
+
+if [ -f /tmp/auth.json ]; then
+	sudo cp /tmp/auth.json /var/www/html/openWB/modules/soc_i3/auth.json
+fi
+
+if [ -f /tmp/auth.json.1 ]; then
+	sudo cp /tmp/auth.json.1 /var/www/html/openWB/modules/soc_i3s1/auth.json
+fi
+
+if [ -f /tmp/auth1.json]; then
+	sudo cp /tmp/auth1.json /var/www/html/openWB/modules/soc_i3/auth1.json
+fi
+
+if [ -f /tmp/auth2.json]; then
+	sudo cp /tmp/auth2.json /var/www/html/openWB/modules/soc_i3/auth2.json
+fi
+sudo cp /tmp/soc_eq_acc_lp1 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp1
+sudo cp /tmp/soc_eq_acc_lp2 /var/www/html/openWB/modules/soc_eq/soc_eq_acc_lp2
 sudo chmod 777 /var/www/html/openWB/openwb.conf
 sudo chmod +x /var/www/html/openWB/modules/*                     
 sudo chmod +x /var/www/html/openWB/runs/*

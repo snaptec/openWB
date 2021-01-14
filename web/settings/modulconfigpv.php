@@ -97,6 +97,7 @@
 									<option <?php if($pvwattmodulold == "mpm3pmpv") echo "selected" ?> value="mpm3pmpv">MPM3PM </option>
 									<option <?php if($pvwattmodulold == "wr_kostalpiko") echo "selected" ?> value="wr_kostalpiko">Kostal Piko</option>
 									<option <?php if($pvwattmodulold == "wr_solaredge") echo "selected" ?> value="wr_solaredge">SolarEdge WR</option>
+									<option <?php if($pvwattmodulold == "wr_solax") echo "selected" ?> value="wr_solax">Solax WR</option>
 									<option <?php if($pvwattmodulold == "wr_smartme") echo "selected" ?> value="wr_smartme">SmartMe</option>
 									<option <?php if($pvwattmodulold == "wr_tripower9000") echo "selected" ?> value="wr_tripower9000">SMA ModbusTCP WR</option>
 									<option <?php if($pvwattmodulold == "wr_plenticore") echo "selected" ?> value="wr_plenticore">Kostal Plenticore</option>
@@ -509,6 +510,17 @@
 								</div>
 							</div>
 						</div>
+						<div id="pvwrsolax" class="hide">
+							<div class="form-row mb-1">
+								<label for="solaxip" class="col-md-4 col-form-label">WR Solax IP</label>
+								<div class="col">
+									<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="solaxip" id="solaxip" value="<?php echo $solaxipold ?>">
+									<span class="form-text small">
+										Gültige Werte: IPs. IP Adresse des Solax Wechselrichters. 
+									</span>
+								</div>
+							</div>
+						</div> 
 						<div id="pvwrfronius" class="hide">
 							<div class="form-row mb-1">
 								<label for="wrfroniusip" class="col-md-4 col-form-label">WR Fronius IP</label>
@@ -681,6 +693,7 @@
 								hideSection('#pvmpm3pm');
 								hideSection('#pvwrkostalpiko');
 								hideSection('#pvwrsolaredge');
+								hideSection('#pvwrsolax');
 								hideSection('#pvsmartme');
 								hideSection('#pvwrtri9000');
 								hideSection('#pvplenti');
@@ -773,6 +786,9 @@
 								}
 								if($('#pvwattmodul').val() == 'wr_solaredge')   {
 									showSection('#pvwrsolaredge');
+								}
+								if($('#pvwattmodul').val() == 'wr_solax')   {
+									showSection('#pvwrsolax');
 								}
 								if($('#pvwattmodul').val() == 'wr_smartme')   {
 									showSection('#pvsmartme');
