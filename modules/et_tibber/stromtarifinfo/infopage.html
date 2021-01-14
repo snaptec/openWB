@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+
+	<head>
+		<base href="/openWB/web/">
+
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>openWB Stromtarif-Info</title>
+		<meta name="author" content="Michael Ortenstein" />
+		<!-- Favicons (created with http://realfavicongenerator.net/)-->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="manifest.json">
+		<link rel="shortcut icon" href="img/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#00a8ff">
+		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<!-- Normalize -->
+		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<!-- include stromtarif-style	-->
+		<link rel="stylesheet" type="text/css" href="../modules/et_tibber/stromtarifinfo/stromtarifinfo_style.css">
+
+		<!-- important scripts to be loaded -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/Chart.bundle.js"></script>
+
+		<!-- special stromtarif scripts to be loaded -->
+		<script src="../modules/et_tibber/stromtarifinfo/tibber.js?ver=20210104-a"></script>
+		<script src="../modules/et_tibber/stromtarifinfo/tibberElectricityPricechart.js?ver=20210104"></script>
+		<script src="../modules/et_tibber/stromtarifinfo/tibberHourlyConsumptionchart.js?ver=20210104-b"></script>
+
+		<script>
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<div id="nav-placeholder"></div>
+		<div role="main" class="container" style="margin-top:20px">
+			<h1>Stromtarif-Info Tibber</h1>
+			<div class="alert alert-info" role="alert">
+				Daten stellen lediglich beispielhaft das kommende Layout der Seite dar. Vollständige Implementierung je nach Anbieter (Awattar, Tibber etc.)
+				und der durch den Anbieter bereitgestellten Daten folgt.
+			</div>
+			<div id="noValidData">
+				<span id="noValidDataText">Tibber-Daten werden abgerufen, bitte warten... </span>
+				<div id="noValidDataSpinner" class="spinner-border spinner-border-sm" role="status">
+  					<span class="sr-only"></span>
+				</div>
+			</div>
+
+			<div id="validData" style="display: none;">
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Allgemein
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col smallTextSize">
+								<p>
+									<b>Objekt:</b><br>
+									<span id="name">--</span><br>
+									<span id="street"></span><br>
+									<span id="city"></span><br>
+								</p>
+								<b>letzter Datenabruf:</b><br>
+								<span id="lastDataReceived"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Strompreisentwicklung
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col smallTextSize">
+								aktueller Preis: <span id="currentPrice">--</span><br>
+								Börsenanteil: <span id="currentEnergyPrice">--</span><br>
+								Steuern/Gebühren: <span id="currentTax">--</span><br>
+								Preis gültig seit: <span id="currentValidSince">--</span>
+							</div>
+						</div>
+
+						<div class="row justify-content-center my-2">
+							<div class="col-sm-12 text-center smallTextSize">
+								<div id="noPricechartDiv">
+									Keine Daten für Preis-Chart verfügbar.
+								</div>
+								<div id="electricityPricechartCanvasDiv" class="col text-center" style="position: relative; height:250px;">
+									<canvas id="electricityPricechartCanvas"></canvas>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+
+				<div id="cardTagesverbrauch" class="card border-secondary hide">
+					<div class="card-header bg-secondary">
+						Tagesverbrauch <span id="dateYesterday"></span>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col smallTextSize">
+								Gesamtverbrauch:  <span id="totalConsumptionDay"></span><br>
+								Gesamtkosten:  <span id="totalCostsDay"></span><br>
+								&empty;-Strompreis: <span id="avgPriceDay"></span>
+							</div>
+						</div>
+						<div class="row justify-content-center my-2">
+							<div class="col-sm-12 text-center smallTextSize">
+								<div id="dailyConsumptionchartCanvasDiv" class="col text-center" style="position: relative; height:250px;">
+									<canvas id="consumptionchartCanvas"></canvas>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="card border-secondary hide">
+					<div class="card-header bg-secondary">
+						Monatsverbrauch
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col smallTextSize">
+								Derzeit noch nicht implementiert.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card border-secondary hide">
+					<div class="card-header bg-secondary">
+						Jahresverbrauch
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								Derzeit noch nicht implementiert.
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>  <!-- container -->
+
+		<script>
+
+			// load navbar
+			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
+
+			$(document).ready(function(){
+				readTibberAPI()
+				.then((data) => {
+    				processTibberResponse(data)
+				})
+				.catch((error) => {
+    				console.log(error)
+  				})
+			});
+
+		</script>
+
+	</body>
+</html>
