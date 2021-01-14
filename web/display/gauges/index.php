@@ -117,6 +117,17 @@
 				box-shadow: 0px 5px 5px -0px rgba(0,0,0,0.3);
 			}
 		</style>
+		<script>
+			/**
+			 * detect touch devices and map contextmenu (long press) to normal click
+			 */
+			$('body').on("contextmenu", function(event){
+				if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+					$(event.target).trigger("click"); // fire a click event
+					event.preventDefault();
+				}
+			});
+		</script>
 	</head>
 	<body>
 		<input type="hidden" name="lastmanagement" id="lastmanagement" value="<?php echo trim($lastmanagementold); ?>" />
