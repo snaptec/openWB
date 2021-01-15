@@ -544,7 +544,7 @@
 				</div>
 
 				<!-- Ladepunkte-->
-				<?php for( $chargepointNum = 1; $chargepointNum <= 3; $chargepointNum++ ){ ?>
+				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
 					<div class="card border-secondary" id="lp<?php echo $chargepointNum ?>">
 						<div class="card-header bg-secondary">
 							<div class="form-group mb-0">
