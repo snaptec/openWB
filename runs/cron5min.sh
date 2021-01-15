@@ -258,7 +258,7 @@ else
 fi
 
 # if this is a socket system check for our handler to control the socket lock
-if [[ "$evsecon" == "buchse" ]]; then
+if [[ "$evsecon" == "buchse" ]] && [[ "$isss" == "0" ]]; then
 	if ps ax |grep -v grep |grep "python3 $OPENWBBASEDIR/runs/buchse.py" > /dev/null
 	then
 		echo "test" > /dev/null

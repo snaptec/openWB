@@ -101,7 +101,7 @@
 					<div class="row">
 						<div class="col">
 							<p>
-								Board: <?php echo exec('cat /sys/firmware/devicetree/base/model'); ?>
+								Board: <?php echo trim( exec('cat /sys/firmware/devicetree/base/model') ); ?>
 							</p>
 							CPU: <?php echo exec('cat /proc/cpuinfo | grep -m 1 "model name" | sed "s/^.*: //"'); ?><br>
 							CPU-Kerne: <?php echo exec('cat /proc/cpuinfo | grep processor | wc -l'); ?><br>
@@ -130,7 +130,7 @@
 							</p>
 							<p>
 								RAM: <span id="memtot">--</span>MB
-								<meter id="memMeter" min=0 max=0 value=0></meter> (<span id='memused'>--</span>MB genutzt)</span>
+								<meter id="memMeter" min=0 max=0 value=0></meter> (<span id='memused'>--</span>MB genutzt)
 							</p>
 							<p>
 								SD-Karte: <span id="diskuse">--</span>, <span id="diskfree">--</span> verfügbar

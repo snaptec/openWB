@@ -37,7 +37,7 @@ esac
 
 socDebugLog(){
 	if (( socDebug > 0 )); then
-		timestamp=`date --rfc-3339=seconds`
+		timestamp=`date +"%Y-%m-%d %H:%M:%S"`
 		echo "$timestamp: Lp$CHARGEPOINT: $@" >> $LOGFILE
 	fi
 }
@@ -53,6 +53,6 @@ if (( soctimervalue < tmpintervall )); then
 	echo $soctimervalue > $soctimerfile
 else
 	socDebugLog "Requesting SoC"
-	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile >> $LOGFILE &
 	echo 0 > $soctimerfile
+	sudo python3 $MODULEDIR/kiasoc.py $kia_email $kia_password $kia_pin $kia_vin $socfile >> $LOGFILE
 fi

@@ -40,9 +40,7 @@ f = open('/var/www/html/openWB/ramdisk/pvwatt', 'w')
 f.write(str(pv1+pv2))
 f.close()
 
-pvall = unsigned32(resp,82) / 10   # yield today
+pvall = unsigned32(resp,80) / 10   # yield today
 f = open('/var/www/html/openWB/ramdisk/pvkwh', 'w')
 f.write(str(pvall))
 f.close()
-
-

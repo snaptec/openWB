@@ -266,22 +266,12 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 	if ( mqttmsg == "openWB/evu/W" ) {
 		// zur Regelung: Einspeisung = negativ, Bezug = positiv
 		// Vorzeichen zur Darstellung umdrehen
-		var anzeigeWert = parseInt(mqttpayload,10) * -1;
-		if ( isNaN(anzeigeWert) ) {
-			anzeigeWert = 0;
+		var evuPower = parseInt(mqttpayload,10) * -1;
+		if ( isNaN(evuPower) ) {
+			evuPower = 0;
 		}
-		var anzeigeText = '';
-		if ( anzeigeWert < 0 ) {
-			anzeigeText = 'Bezug';
-		} else if ( anzeigeWert > 0 ) {
-			anzeigeText = 'Einspeisung';
-		}
-		if ( powerEvu > 999 ) {
-			powerEvu = (powerEvu / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-			unit = ' kW';
-		}
-		$('#bezug').text(prefix + powerEvu + unit);
-	 }
+		updateGaugeValue(gaugeEVU, evuPower, "");
+	}
 	else if ( mqttmsg == 'openWB/evu/DailyYieldImportKwh') {
 		var evuiDailyYield = parseFloat(mqttpayload);
 		if ( isNaN(evuiDailyYield) ) {
