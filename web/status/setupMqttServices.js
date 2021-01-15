@@ -10,6 +10,7 @@
 // if flags are preset with 1 they are not counted on reload and page will show even if topic was not received
 var topicsToSubscribe = [
  	["openWB/global/WAllChargePoints", 0],
+	["openWB/global/kWhCounterAllChargePoints", 0],
 	["openWB/evu/ASchieflast", 0],
 	["openWB/evu/APhase1", 0],
 	["openWB/evu/APhase2", 0],
@@ -25,6 +26,7 @@ var topicsToSubscribe = [
 	["openWB/evu/PfPhase2", 0],
 	["openWB/evu/PfPhase3", 0],
 	["openWB/evu/WhImported", 0],
+	["openWB/evu/WhExported", 0],
 	["openWB/evu/Hz", 0],
 	["openWB/evu/W", 0],
 
@@ -120,29 +122,20 @@ var topicsToSubscribe = [
 	["openWB/lp/8/VPhase3", 0],
 	["openWB/lp/8/W", 0],
 
-
-
-	//llaktuells1
-	//llaktuells2
-
-	//llkwhges in kWhCounterAll
-
-
-	//["openWB/evu/WhExported", 0],
-
-
+	["openWB/pv/boolPVConfigured", 0],
 	["openWB/pv/CounterTillStartPvCharging", 0],
 	["openWB/pv/W", 0],
 	//pvallwh
 	["openWB/pv/DailyYieldKwh", 0],
-	//monthly_pvkwhk
-	//yearly_pvkwhk
-	//pvwatt1
+	["openWB/pv/MonthlyYieldKwh", 0],
+	["openWB/pv/YearlyYieldKwh", 0],
+	["openWB/pv/Modul1W", 0],
+	["openWB/pv/Modul2W", 0],
+
 	//pvkwhk1
 	//daily_pvkwhk1
 	//monthly_pvkwhk1
 	//yearly_pvkwhk1
-	//pvwatt2
 	//daily_pvkwhk2
 	//monthly_pvkwhk2
 	//yearly_pvkwhk2

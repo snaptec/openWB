@@ -427,11 +427,13 @@ input:invalid {
 }
 
 .accordion .card-header:after {
-    font-family: 'FontAwesome';  
-    content: "\f0fe";
+    font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+    content: "\f146";
     float: right; 
 }
 .accordion .card-header.collapsed:after {
     /* symbol for "collapsed" panels */
-    content: "\f146"; 
+    content: "\f0fe"; 
 }
+

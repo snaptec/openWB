@@ -42,9 +42,14 @@ function handlevar(mqttmsg, mqttpayload) {
 			case "openWB/evu/WhImported": kShow(mqttpayload, "#bezugkwhdiv"); visibilityValue('#bezugEvuStatusId', "#bezugkwhdiv"); break;
 			case "openWB/housebattery/WhImported": kShow(mqttpayload, '#speicherikwhdiv'); visibilityValue('#geladenRow', '#speicherikwhdiv'); break;
 			case "openWB/housebattery/WhExported": kShow(mqttpayload, '#speicherekwhdiv'); visibilityValue('#entladenRow', '#speicherekwhdiv');break;
+			case "openWB/pv/boolPVConfigured": visibilityCard('#pvGes', mqttpayload); visibilityCard('#inverter1', mqttpayload); visibilityCard('#inverter2', mqttpayload); break;
 			case "openWB/pv/CounterTillStartPvCharging": directShow(mqttpayload, '#pvcounterdiv'); visibilityValue('#pvCounterRow', "#pvcounterdiv"); break;
-			case "openWB/pv/W": invertShow(mqttpayload, '#pvwattdiv'); visibilityValue('#leistungRow', "#pvwattdiv"); break;
+			case "openWB/pv/W": invertShow(mqttpayload, '#pvkwhdiv'); visibilityMin('#gesamtertragRow', "#pvkwhdiv"); break;
 			case "openWB/pv/DailyYieldKwh": directShow(mqttpayload, '#daily_pvkwhdiv'); visibilityValue('#tagesertragRow', "#daily_pvkwhdiv"); break;
+			case "openWB/pv/MonthlyYieldKwh": directShow(mqttpayload, '#monthly_pvkwhdiv'); visibilityValue('#monatsertragRow', "#monthly_pvkwhdiv"); break;
+			case "openWB/pv/YearlyYieldKwh": directShow(mqttpayload, '#yearly_pvkwhdiv'); visibilityValue('#jahresertragRow', "#yearly_pvkwhdiv"); break;
+			case "openWB/pv/Modul1W": invertShow(mqttpayload, '#inverter1 .pvwattdiv'); visibilityValue('#inverter1 .gesamtertragPvRow', '#inverter1 .pvwattdiv'); break;
+			case "openWB/pv/Modul2W": invertShow(mqttpayload, '#inverter2 .pvwattdiv'); visibilityValue('#inverter2 .gesamtertragPvRow', '#inverter2 .pvwattdiv'); break;
 			case "openWB/evu/VPhase1": directShow(mqttpayload, '#evuv1div'); visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div'); break;
 			case "openWB/evu/VPhase2": directShow(mqttpayload, '#evuv2div'); visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div'); break;
 			case "openWB/evu/VPhase3": directShow(mqttpayload, '#evuv3div'); visibilityRow('#spannungEvuStatusId', '#evuv1div', '#evuv2div', '#evuv3div'); break;
@@ -56,6 +61,7 @@ function handlevar(mqttmsg, mqttpayload) {
 			case "openWB/Verbraucher/1/Configured": visibilityCard('#loads1', mqttpayload); break;
 			case "openWB/Verbraucher/2/Configured": visibilityCard('#loads2', mqttpayload); break;
 			case "openWB/global/WAllChargePoints": directShow(mqttpayload, '#ladeleistungAll'); visibilityValue('#ladeleistungAllRow', '#ladeleistungAll'); break;
+			case "openWB/global/kWhCounterAllChargePoints": directShow(mqttpayload, '#kWhCounterAll'); visibilityValue('#kWhCounterAllRow', '#ladeleistkWhCounterAllungAll'); break;
 			default: break;
 		}
 	}
@@ -190,6 +196,17 @@ function invertShow(mqttpayload, variable) {
 	var value = parseInt(mqttpayload) * -1;
 	var valueStr = value.toLocaleString(undefined) ;
 	$(variable).text(valueStr);
+}
+
+//show only values over 100
+function visibilityMin(row, variable) {
+	var value = parseFloat($(variable).text());
+	if (value>100){
+		showSection($(row));
+	}
+	else {
+		hideSection($(row));
+	}
 }
 
 //show/hide row with only one value

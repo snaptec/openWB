@@ -87,34 +87,10 @@
 
 			function getfile() {
 				$.ajaxSetup({ cache: false});
-
-
-				$.ajax({
-					url: "/openWB/ramdisk/llkwhges",
-					complete: function(request){
-						$("#llkwhgesdiv").html(request.responseText);
-					}
-				});
-
 				$.ajax({
 					url: "/openWB/ramdisk/pvallwh",
 					complete: function(request){
 						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/monthly_pvkwhk",
-					complete: function(request){
-						$("#monthly_pvkwhdiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/yearly_pvkwhk",
-					complete: function(request){
-						$("#yearly_pvkwhdiv").html(request.responseText);
-						if ( request.responseText > 100 ) {
-							$('#pvpartlycounterdiv').show();
-						}
 					}
 				});
 				$.ajax({
@@ -398,7 +374,7 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-sm w-50" id="evu1">
+							<table class="table" id="evu1">
 								<tbody>
 									<tr id="schieflastEvuStatusId">
 										<th scope="row">Schieflast [A]</th>
@@ -424,7 +400,7 @@
 							</table>
 						</div>
 						<div class="table-responsive">
-							<table class="table table-sm" id="evu2">
+							<table class="table" id="evu2">
 								<thead>
 									<tr>
 										<th scope="col"></th>
@@ -498,7 +474,7 @@
 								</table>
 							</div>
 							<div class="table-responsive">
-								<table class="table table-sm">
+								<table class="table">
 									<thead>
 										<tr>
 											<th scope="col"></th>
@@ -544,7 +520,7 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-sm w-50">
+							<table class="table">
 								<tbody>
 									<tr id=ladeleistungAllRow>
 										<th scope="row">Ladeleistung [W]</th>
@@ -571,7 +547,7 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-sm ">
+							<table class="table">
 								<tbody>
 									<tr id=pvCounterRow>
 										<th scope="row">Counter</th>
@@ -624,7 +600,7 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-sm w-50">
+								<table class="table">
 									<tbody>
 										<tr class=leistungPvRow>
 											<th scope="row">Leistung [W]</th>
@@ -632,7 +608,7 @@
 										</tr>
 										<tr class=gesamtertragPvRow>
 											<th scope="row">Gesamtertrag [kWh]</th>
-											<td class=></td>
+											<td class=pvwattdiv></td>
 										</tr>
 										<tr id=tagesertragPvRow>
 										<th scope="row">Tagesertrag [kWh]</th>
@@ -664,7 +640,7 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-sm w-50">
+							<table class="table">
 								<tbody>
 									<tr id=geladenRow>
 										<th scope="row">geladen [kWh]</th>
@@ -692,7 +668,7 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-sm w-50">
+								<table class="table">
 									<tbody>
 										<tr class=leistungVerbraucherRow>
 											<th scope="row">Leistung [W]</th>
@@ -808,7 +784,6 @@
 					};
 					if ( topicsToSubscribe[index][1] > 0 ) {
 						countTopicsReceived++;
-						//console.log('topics received', topicsToSubscribe[index][0], countTopicsReceived);
 					}
 				};
 				// countTopicsToBeReceived holds all topics flagged 1 and not only those for preloader
