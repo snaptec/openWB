@@ -88,21 +88,6 @@
 			function getfile() {
 				$.ajaxSetup({ cache: false});
 				$.ajax({
-					url: "/openWB/ramdisk/pvallwh",
-					complete: function(request){
-						$("#pvkwhdiv").html((request.responseText / 1000).toFixed(2));
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvwatt1",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv1").html(""+value);
-					}
-				});
-				$.ajax({
 					url: "/openWB/ramdisk/pvkwhk1",
 					complete: function(request){
 						$("#pvkwhdiv1").html(request.responseText);
@@ -124,15 +109,6 @@
 					url: "/openWB/ramdisk/yearly_pvkwhk1",
 					complete: function(request){
 						$("#yearly_pvkwhdiv1").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvwatt2",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv2").html(""+value);
 					}
 				});
 				$.ajax({
@@ -364,8 +340,8 @@
 			<form action="./tools/saveconfig.php" method="POST">
 
 				<!-- EVU  -->
-				<div class="card border-secondary">
-					<div class="card-header bg-secondary">
+				<div class="card border-danger">
+					<div class="card-header bg-danger">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
 								<div>EVU</div>
@@ -442,8 +418,8 @@
 
 				<!-- Ladepunkte-->
 				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
-					<div class="card border-secondary" id="lp<?php echo $chargepointNum ?>">
-						<div class="card-header bg-secondary">
+					<div class="card border-primary" id="lp<?php echo $chargepointNum ?>">
+						<div class="card-header bg-primary">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
 									<div>Ladepunkt <?php echo $chargepointNum ?></div>
@@ -510,8 +486,8 @@
 				<?php } ?>
 
 				<!-- Ladepunkte Gesamt -->
-				<div class="card border-secondary" id="lpges">
-					<div class="card-header bg-secondary">
+				<div class="card border-primary" id="lpges">
+					<div class="card-header bg-primary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
 								<div>Ladepunkte Gesamt</div>
@@ -537,8 +513,8 @@
 				</div>
 
 				<!--PV Gesamt-Anlagendaten-->
-				<div class="card border-secondary" id="pvGes">
-					<div class="card-header bg-secondary">
+				<div class="card border-success" id="pvGes">
+					<div class="card-header bg-success">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
 								<div>PV Gesamt-Anlagendaten</div>
@@ -581,8 +557,8 @@
 
 					<!--PV Wechselrichter-->
 					<?php for( $inverterNum = 1; $inverterNum <= 2; $inverterNum++ ){ ?>
-					<div class="card border-secondary" id="inverter<?php echo $inverterNum ?>">
-						<div class="card-header bg-secondary">
+					<div class="card border-success" id="inverter<?php echo $inverterNum ?>">
+						<div class="card-header bg-success">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
 									<div>PV Wechselrichter 
@@ -630,8 +606,8 @@
 				<?php } ?>
 
 				<!-- Speicher -->
-				<div class="card border-secondary" id="speicher">
-					<div class="card-header bg-secondary">
+				<div class="card border-warning" id="speicher">
+					<div class="card-header bg-warning">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
 								<div>Speicher</div>

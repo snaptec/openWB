@@ -200,7 +200,7 @@ function invertShow(mqttpayload, variable) {
 
 //show only values over 100
 function visibilityMin(row, variable) {
-	var value = parseFloat($(variable).text());
+	var value = parseInt($(variable).text());
 	if (value>100){
 		showSection($(row));
 	}
