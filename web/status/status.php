@@ -29,7 +29,7 @@
 
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5.8.2/css/all.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="./settings/settings_style.css">
+		<link rel="stylesheet" type="text/css" href="status/status_style.css">
 		<!-- local css due to async loading of theme css -->
 		<style type="text/css">
 			#preloader {
@@ -476,7 +476,7 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-sm w-50">
+								<table class="table table-sm ">
 									<tbody>
 										<tr class=stromvorgabeRow>
 											<th scope="row">Ladestromvorgabe [A]</th>
