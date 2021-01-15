@@ -1,9 +1,19 @@
 /**
- * helper functions for setup-pages
+ * helper functions for cards display theme
  *
  * @author Michael Ortenstein
  * @author Lutz Bender
  */
+
+/**
+ * detect touch devices and map contextmenu (long press) to normal click
+ */
+$('body').on("contextmenu", function(event){
+    if( ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) ) {
+        $(event.target).trigger("click"); // fire a click event
+        event.preventDefault();
+    }
+});
 
 function updateLabel(elementId) {
     /** @function updateLabel

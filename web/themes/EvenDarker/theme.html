@@ -2,8 +2,9 @@
 <html lang="de">
 
 <head>
-	<!-- theme with gauges for openWB -->
+	<!-- theme for openWB layout for standard and dark, only css is different-->
 	<!-- 2020 Michael Ortenstein -->
+	<!-- modified for theme 'EevenDarker' by Lutz Bender -->
 
 	<title>openWB</title>
 	<meta charset="UTF-8">
@@ -49,7 +50,7 @@
 	<!-- local css due to async loading of theme css -->
 	<style type="text/css">
 		#preloader {
-			background-color:white;
+			background-color:black;
 			position:fixed;
 			top:0px;
 			left:0px;
@@ -63,12 +64,14 @@
 		}
 		#preloader-image {
 			max-width: 300px;
+			filter:invert(1);
 		}
 		#preloader-info {
-			color:grey;
+			color: #e4e4e4;
 		}
 		#thegraph > div {
 			height: 350px;
+			padding: 0;
 		}
 		#electricityPriceChartCanvasDiv {
 			height: 150px;
@@ -77,22 +80,7 @@
 	<!-- important scripts to be loaded -->
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
-	<script src="js/RGraph.common.core.js"></script>
-	<script src="js/RGraph.common.dynamic.js"></script>
-	<script src="js/RGraph.common.effects.js"></script>
-	<script src="js/RGraph.gauge.js"></script>
-
 	<script>
-		function setCookie(name, value, days) {
-			var expires = '';
-			if ( days ) {
-				var date = new Date();
-				date.setDate(date.getDate() + days);
-				expires = '; expires=' + date.toUTCString();
-			}
-			document.cookie = name + '=' + (value || '')  + expires;
-		}
-
 		function getCookie(cname) {
 			var name = cname + '=';
 			var decodedCookie = decodeURIComponent(document.cookie);
@@ -144,7 +132,7 @@
 	<div id="nav-placeholder">
 	</div>
 	<div class="container">
-		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
+		<div class="row middle py-1 regularTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
@@ -161,35 +149,27 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-6 col-md-3 pvInfoStyle text-center">
-				<div class="">Photovoltaik</div>
-				<canvas id="pvData">
-					Sorry, no canvas support
-				</canvas>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center">
+			<div class="col-sm openwb-pv">
+				<span class="smallTextSize">PV: <span id="pvleistung">lade Daten</span></span><span class="verySmallTextSize" id="pvdailyyield"></span>
 			</div>
-			<div class="col-6 col-md-3 pvInfoStyle text-center" id="battDataDiv">
-				<div>Speicher</div>
-				<canvas id="battData">
-					Sorry, no canvas support
-				</canvas>
-			</div>
-			<div class="col-6 col-md-3 pvInfoStyle text-center">
-				<div>Energienetz</div>
-				<canvas id="evuData">
-					Sorry, no canvas support
-				</canvas>
-			</div>
-			<div class="col-6 col-md-3 pvInfoStyle text-center">
-				<div>Hausverbrauch</div>
-				<canvas id="homeData">
-					Sorry, no canvas support
-				</canvas>
+			<div id="evudiv" class="col-sm openwb-evu">
+				<span class="smallTextSize">Netz<span id="bezug">: lade Daten</span></span><span class="verySmallTextSize" id="evuidailyyield"></span><span class="verySmallTextSize" id="evuedailyyield"></span>
 			</div>
 		</div>
-		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-grey">
-			<div class="col bg-lightgrey">
-				Ladeleistung: <span id="powerAllLp">lade Daten</span>
+
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center">
+			<div class="col-sm openwb-house">
+				<span class="smallTextSize">Hausverbrauch: <span id="hausverbrauch">lade Daten</span></span><span class="verySmallTextSize" id="hausverbrauchdailyyield"></span>
+			</div>
+			<div class="col-sm openwb-lp">
+				<span class="smallTextSize">Ladeleistung: <span id="powerAllLp">lade Daten</span></span><span class="verySmallTextSize" id="lladailyyield"></span>
+			</div>
+		</div>
+
+		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center">
+			<div class="col-sm openwb-housebat">
+				<span class="smallTextSize">Speicher<span id="speicherleistung">: lade Daten</span></span><span class="verySmallTextSize" id="siidailyyield"></span><span class="verySmallTextSize" id="siedailyyield"></span> <span class="smallTextSize">- Ladestand: <span id="speichersoc"> lade Daten</span></span>
 			</div>
 		</div>
 		<div id="strompreis" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
@@ -205,7 +185,6 @@
 				<span class="smallTextSize"><span id="verbraucher2name">Verbraucher 1</span>: <span id="verbraucher2leistung">lade Daten</span></span><span class="verySmallTextSize" id="verbraucher2dailyyield"></span>
 			</div>
 		</div>
-
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="hide bg-lightblue col-sm SmartHomeTemp" data-dev="1">
@@ -256,7 +235,7 @@
 			</div>
 		</div>
 
-		<div class="row text-center bg-darkgrey">
+		<div class="row text-center bg-lightgrey">
 			<div class="col">
 				<span id="lastregelungaktiv" class="regularTextSize text-red animate-alertPulsation"></span>
 			</div>
@@ -768,13 +747,13 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="1">
 					<div class="col btn-group btn-group-toggle" id="lp/1/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/1/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/1/chargeLimitation" data-option="1"> Energiemenge
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/1/chargeLimitation" data-option="2"> EV-SoC
 						</label>
 					</div>
@@ -813,13 +792,13 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="2">
 					<div class="col btn-group btn-group-toggle" id="lp/2/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/2/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/2/chargeLimitation" data-option="1"> Energiemenge
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/2/chargeLimitation" data-option="2"> EV-SoC
 						</label>
 					</div>
@@ -858,10 +837,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="3">
 					<div class="col btn-group btn-group-toggle" id="lp/3/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/3/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/3/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -893,10 +872,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="4">
 					<div class="col btn-group btn-group-toggle" id="lp/4/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/4/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/4/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -928,10 +907,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="5">
 					<div class="col btn-group btn-group-toggle" id="lp/5/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/5/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/5/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -963,10 +942,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="6">
 					<div class="col btn-group btn-group-toggle" id="lp/6/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/6/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/6/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -998,10 +977,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="7">
 					<div class="col btn-group btn-group-toggle" id="lp/7/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/7/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/7/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -1033,10 +1012,10 @@
 				</div>
 				<div class="form-row vaRow form-group mt-1 justify-content-center" data-lp="8">
 					<div class="col btn-group btn-group-toggle" id="lp/8/chargeLimitation" data-toggle="buttons" data-topicprefix="openWB/config/get/sofort/">
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/8/chargeLimitation" data-option="0"> keine
 						</label>
-						<label class="btn btn-sm btn-outline-info btn-toggle regularTextSize">
+						<label class="btn btn-sm btn-dark btn-outline-info btn-toggle regularTextSize">
 							<input type="radio" name="lp/8/chargeLimitation" data-option="1"> Energiemenge
 						</label>
 					</div>
@@ -1230,36 +1209,12 @@
 			</script>
 		</div>
 
-		<!-- modal reset-gauge-limits-window -->
-		<div class="modal fade" id="resetGaugeLimitsModal" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<!-- modal header -->
-					<div class="modal-header bg-danger">
-						<h4 class="modal-title text-light">Achtung</h4>
-					</div>
-					<!-- modal body -->
-					<div class="modal-body text-center text-black">
-						<p>
-							Sollen die Limits für diese Gauge wirklich zurückgesetzt werden?
-						</p>
-					</div>
-					<!-- modal footer -->
-					<div class="modal-footer d-flex justify-content-center">
-						<button type="button" class="btn btn-success" data-dismiss="modal" id="resetGaugeLimitsBtn" data-gaugeID="">Fortfahren</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal" id="resetGaugeLimitsCancelBtn">Abbruch</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>  <!-- container -->
 
 	<script>
-		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
-		// load navbar, be carefull: it loads asynchonously
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101');
+		// load navbar
+		$("#nav-placeholder").load('themes/dark/navbar.html');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1328,352 +1283,6 @@
 			};
 		})();
 
-		function getScaleCookie (cookie) {
-			// reads cookie for gauge-scale and returns default if not set
-			var cookieValue = getCookie(cookie);
-			if ( isNaN (parseInt(cookieValue)) ) {
-				return 1000;
-			} else {
-				return cookieValue;
-			}
-		}
-
-		function setGaugeInitialMinMax(gauge) {
-			gauge.max = getScaleCookie('GaugesScaleMax_' + gauge.id);
-			if ( gauge.isSymmetric ) {
-				gauge.min = gauge.max * -1;
-			}
-			// farbigen Rand anpassen
-			gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
-			// Labels in kW
-			gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
-			gauge.grow()
-		}
-
-		function updateGaugeValue(gauge, value, text) {
-			// gauge: zu erneuernde Gauge
-			// value: neuer Wert
-			// text: ggf. neuer Text
-			if( isNaN(parseFloat(value)) ){
-				// es wurde keine Zahl als Wert übergeben
-					return;  // gleich wieder zurück
-			}
-			var needsScaling = false;
-			var newGaugeMax = Math.ceil((Math.abs(value) / gauge.scaleBase)) * gauge.scaleBase;
-			if ( gauge.max < newGaugeMax ) {
-				// benötigtes Maximum ist größer als Skala
-				gauge.max = newGaugeMax;  // Skala positiv anpassen
-				gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-				needsScaling = true;
-				if ( !gauge.autoRescale ) {
-					// neues Maximum der Gauge als Cookie speichern
-					setCookie('GaugesScaleMax_' + gauge.id, newGaugeMax, 365);
-				}
-			} else if ( gauge.max > newGaugeMax ) {
-				// Skala ist aktuell eigentlich zu groß
-				if ( gauge.autoRescale ) {
-					// und Anpassung soll automatisch erfolgen
-					gauge.scaleCounter -= 1; // dann Counter reduzieren
-					if ( gauge.scaleCounter == 0 ) {
-						// wenn Zeit rum
-						gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-						gauge.max = gauge.max-(Math.ceil((gauge.max-newGaugeMax) / (2 * gauge.scaleBase)) * gauge.scaleBase);  // Skala anpassen
-						needsScaling = true;
-					}
-				}
-			} else {
-				// Skala soll bleiben, keine automatische Anpassung
-				if ( gauge.scaleCounter < defaultScaleCounter ) {
-					// aber Zähler zum Wechsel ist schon angelaufen
-					gauge.scaleCounter = defaultScaleCounter;  // Counter reset
-				}
-			}
-			if ( needsScaling ) {
-				// wenn Skala angepasst werden muss
-				if ( gauge.isSymmetric ) {
-					// bei symmetrischer Gauge die negative Skala angleichen
-					gauge.min = gauge.max * -1;
-				}
-				// farbigen Rand anpassen
-				gauge.set('colorsRanges', [[gauge.min, 0, 'red', 3], [0, gauge.max, 'green', 3]]);
-				// Labels in kW
-				gauge.set('labelsSpecific', [(gauge.min/gauge.scaleBase), ((gauge.max-Math.abs(gauge.min))/(2*gauge.scaleBase)), (gauge.max/gauge.scaleBase)]);
-			}
-			// neuen Wert für Gauge setzen, ggf. Text im Label ändern
-			gauge.value = value;
-			if ( gauge.setText ) {
-				gauge.set('titleBottom', text);
-				// Farben der Schrift ggf. anpassen
-				if ( value < 0 ) {
-					gauge.set('titleBottomColor', 'red');
-				} else {
-					gauge.set('titleBottomColor', 'green');
-				}
-			}
-			// und Anzeige erneuern
-			gauge.grow();
-		}
-
-		function prepareGauges() {
-			// prepares all gauges and their settings for ui
-			responsiveGaugeSettings = [
-				{maxWidth: 400, width: 145, height: 145,
-					options: {
-						radius:65, marginTop: 30, shadowBlur: 3, titleTopPos: 0.28,
-						titleTopSize: 7, titleBottomSize: 6, labelsValueSize: 10, labelsSize: 8
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				},
-				{maxWidth: 575, width: 155, height: 155,
-					options: {
-						radius: 70, marginTop: 30, shadowBlur: 3, titleTopPos: 0.3,
-						titleTopSize: 7, titleBottomSize: 7, labelsValueSize: 10, labelsSize: 8
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				},
-				{maxWidth: 767, width: 220, height: 220,
-					options: {
-						radius: 95, marginTop: 20, shadowBlur: 5, titleTopPos: 0.4,
-						titleTopSize: 11, titleBottomSize: 8, labelsValueSize: 10, labelsSize: 11
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				},
-				{maxWidth: 991, width: 150, height: 150,
-					options: {
-						radius: 72, marginTop: 35, shadowBlur: 4, titleTopPos: 0.30,
-						titleTopSize: 10, titleBottomSize: 8, labelsValueSize: 11, labelsSize: 9
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				},
-				{maxWidth: 1199, width: 200, height: 200,
-					options: {
-						radius: 92, marginTop: 35, shadowBlur: 6, titleTopPos: 0.36,
-						titleTopSize: 12, titleBottomSize: 9, labelsValueSize: 12, labelsSize: 11
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				},
-				{maxWidth: null, width: 220, height: 220,
-					options: {
-						radius: 102, marginTop: 35, shadowBlur: 6, titleTopPos: 0.38,
-						titleTopSize: 14, titleBottomSize: 10, labelsValueSize: 13, labelsSize: 13
-					},
-					callback: function (obj){
-						if ( obj.autoScale ) {
-							setGaugeInitialMinMax(obj);
-						}
-					}
-				}
-			];
-
-			gaugePV = new RGraph.Gauge({
-				id: 'pvData',
-				min: 0,
-				max: 1000,
-				value: 0,
-				options: {
-					marginLeft: 0,
-					marginRight: 0,
-					titleTop: 'kW',
-					labelsCount: 2,
-					labelsSpecific: ['0', '0.5', '1'],
-					tickmarksLarge: 4,
-					tickmarksSmall: 20,
-					shadow: true,
-					shadowColor: '#E9E9E9',
-					backgroundColor: 'Gradient(white:#BEFEBE)',
-					borderWidth: 1,
-					borderInner: '#739B73',
-					centerpinColor: '#8E8E8B',
-					labelsValue: true,
-					labelsValueBounding: false,
-					labelsValueUnitsPost: ' W',
-					labelsValueBold: true,
-					labelsValueItalic: true,
-					titleBottomPos: 0.61,
-					titleBottomBold: true,
-					adjustable: false,
-					textAccessible: false,
-					colorsRanges: [[0, 1000, 'green', 3]],
-					anglesStart: RGraph.PI - 0.55,
-					anglesEnd: RGraph.TWOPI + 0.55
-				}
-			}).draw().responsive(responsiveGaugeSettings);
-			gaugePV.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
-			gaugePV.isSymmetric = false;  // nur Werte > 0
-			gaugePV.autoScale = true;  // Skalierung automatisch vergrößern
-			gaugePV.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
-			gaugePV.setText = false;  // Text und Farbe des Labels anpassen
-			gaugePV.scaleBase = 1000;  // 1000 W ist Basisgröße
-
-			// Add the context menu click listener
-			gaugePV.canvas.ondblclick = function (e)
-			{
-				e.stopPropagation();  // Stops the window.dblclick event from firing
-				var gaugeID = e.srcElement.__object__.id;
-				if ( gaugeID == 'pvData' ) {
-					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
-					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
-				}
-			}
-
-			gaugeBatt = new RGraph.Gauge({
-				id: 'battData',
-				min: -1000,
-				max: 1000,
-				value: 0,
-				options: {
-					marginLeft: 0,
-					marginRight: 0,
-					titleTop: 'kW',
-					labelsCount: 2,
-					labelsSpecific: ['-1', '0', '1'],
-					tickmarksLarge: 4,
-					tickmarksSmall: 20,
-					shadow: true,
-					shadowColor: '#E9E9E9',
-					backgroundColor: 'Gradient(white:#FCBE1E)',
-					borderWidth: 1,
-					borderInner: '#BA8C16',
-					centerpinColor: '#8E8E8B',
-					labelsValue: true,
-					labelsValueBounding: false,
-					labelsValueUnitsPost: ' W',
-					labelsValueBold: true,
-					labelsValueItalic: true,
-					titleBottomPos: 0.61,
-					titleBottomBold: true,
-					adjustable: false,
-					textAccessible: false,
-					colorsRanges: [[-1000, 0, 'red', 3], [0, 1000, 'green', 3]],
-					anglesStart: RGraph.PI - 0.55,
-					anglesEnd: RGraph.TWOPI + 0.55
-				}
-			}).draw().responsive(responsiveGaugeSettings);
-			gaugeBatt.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
-			gaugeBatt.isSymmetric = true;  // Werte +-
-			gaugeBatt.autoScale = true;  // Skalierung automatisch vergrößern
-			gaugeBatt.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
-			gaugeBatt.setText = false;  // Text und Farbe des Labels anpassen
-			gaugeBatt.scaleBase = 1000;  // 1000 W ist Basisgröße
-
-			gaugeEVU = new RGraph.Gauge({
-				id: 'evuData',
-				min: -1000,
-				max: 1000,
-				value: 0,
-				options: {
-					marginLeft: 0,
-					marginRight: 0,
-					titleTop: 'kW',
-					labelsCount: 2,
-					labelsSpecific: ['-1', '0', '1'],
-					tickmarksLarge: 4,
-					tickmarksSmall: 20,
-					shadow: true,
-					shadowColor: '#E9E9E9',
-					backgroundColor: 'Gradient(white:#FEBEBE)',
-					borderWidth: 1,
-					borderInner: '#A07676',
-					centerpinColor: '#8E8E8B',
-					labelsValue: true,
-					labelsValueBounding: false,
-					labelsValueUnitsPost: ' W',
-					labelsValueBold: true,
-					labelsValueItalic: true,
-					labelsValueSize: 17,
-					titleBottomPos: 0.61,
-					titleBottomBold: true,
-					titleBottomSize: 11,
-					adjustable: false,
-					textAccessible: false,
-					colorsRanges: [[-1000, 0, 'red', 3], [0, 1000, 'green', 3]],
-					anglesStart: RGraph.PI - 0.55,
-					anglesEnd: RGraph.TWOPI + 0.55
-				}
-			}).draw().responsive(responsiveGaugeSettings);
-			gaugeEVU.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
-			gaugeEVU.isSymmetric = true;  // Werte +-
-			gaugeEVU.autoScale = true;  // Skalierung automatisch vergrößern
-			gaugeEVU.autoRescale = false;  // neue Skalierung wird nicht von selbst wieder verkleinert
-			gaugeEVU.setText = true;  // Text und Farbe des Labels anpassen
-			gaugeEVU.scaleBase = 1000;  // 1000 W ist Basisgröße
-
-			gaugeEVU.canvas.ondblclick = function (e)
-			{
-				e.stopPropagation();  // Stops the window.ondblclick event from firing
-				var gaugeID = e.srcElement.__object__.id;
-				if ( gaugeID == 'evuData' ) {
-					$("#resetGaugeLimitsBtn").data("gaugeID", gaugeID);
-					$("#resetGaugeLimitsModal").modal("show");  // if resetGaugeLimitsBtn is clicked, event handler will reset limits
-				}
-			}
-
-			gaugeHome = new RGraph.Gauge({
-				id: 'homeData',
-				min: 0,
-				max: 1000,
-				value: 0,
-				options: {
-					marginLeft: 0,
-					marginRight: 0,
-					titleTop: 'kW',
-					labelsCount: 2,
-					labelsSpecific: ['0', '0.5', '1'],
-					tickmarksLarge: 4,
-					tickmarksSmall: 20,
-					shadow: true,
-					shadowColor: '#E9E9E9',
-					backgroundColor: 'Gradient(white:#B5F1FF)',
-					borderWidth: 1,
-					borderInner: '#6E939B',
-					centerpinColor: '#8E8E8B',
-					labelsValue: true,
-					labelsValueBounding: false,
-					labelsValueUnitsPost: ' W',
-					labelsValueBold: true,
-					labelsValueItalic: true,
-					labelsValueSize: 17,
-					adjustable: false,
-					textAccessible: false,
-					colorsRanges: [[0, 1000, 'green', 3]],
-					colorsRedWidth: 0,
-					colorsYellowWidth: 0,
-					anglesStart: RGraph.PI - 0.55,
-					anglesEnd: RGraph.TWOPI + 0.55
-				}
-			}).draw().responsive(responsiveGaugeSettings);
-			gaugeHome.scaleCounter = defaultScaleCounter;  // Attribut zur Gauge hinzufügen
-			gaugeHome.isSymmetric = false;  // Werte > 0
-			gaugeHome.autoScale = true;  // Skalierung automatisch vergrößern
-			gaugeHome.autoRescale = true;  // neue Skalierung wird von selbst wieder verkleinert
-			gaugeHome.setText = false;  // Text und Farbe des Labels nicht anpassen
-			gaugeHome.scaleBase = 1000;  // 1000 W ist Basisgröße
-
-			setGaugeInitialMinMax(gaugePV);
-			setGaugeInitialMinMax(gaugeEVU);
-			setGaugeInitialMinMax(gaugeBatt);
-		}
-
 		$(document).ready(function(){
 
 			// load scripts synchronously in order specified
@@ -1683,15 +1292,15 @@
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
-				'themes/Gauges/helperFunctions.js?ver=20201228',
+				'themes/dark/helperFunctions.js?ver=20201218',
 				// functions for processing messages
-				'themes/Gauges/processAllMqttMsg.js?ver=20210114',
+				'themes/dark/processAllMqttMsg.js?ver=20210114',
 				// respective Chart.js definition live
-				'themes/Gauges/livechart.js?ver=20201218',
+				'themes/dark/livechart.js?ver=20201218',
 				// respective Chart.js definition awattar
-				'themes/dark/electricityPriceChart.js?ver=20201228',
+				'themes/dark/electricityPriceChart.js?ver=20201218',
 				// functions performing mqtt and start mqtt-service
-				'themes/Gauges/setupMqttServices.js?ver=20201228'
+				'themes/dark/setupMqttServices.js?ver=20201218',
 			];
 			scriptsToLoad.forEach(function(src) {
 				var script = document.createElement('script');
@@ -1699,8 +1308,6 @@
 				script.async = false;
 				document.body.appendChild(script);
 			});
-
-			prepareGauges();
 
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
@@ -1789,21 +1396,6 @@
 				} else {
 					publish("1", "openWB/set/pv/NurPV70Status");
 				}
-			});
-
-			$('#resetGaugeLimitsBtn').click(function(event){
-				var gaugeID = $("#resetGaugeLimitsBtn").data("gaugeID");
-				if ( gaugeID == 'pvData' ) {
-					setCookie('GaugesScaleMax_pvData', gaugePV.scaleBase, 365);
-					document.location.reload(true);
-				} else if ( gaugeID == 'evuData' ) {
-					setCookie('GaugesScaleMax_evuData', gaugeEVU.scaleBase, 365);
-					document.location.reload(true);
-				}
-			});
-
-			$('#resetGaugeLimitsCancelBtn').click(function(event){
-				$("#resetGaugeLimitsBtn").data("gaugeID", "");
 			});
 
 			$('.btn[value="Reset"]').click(function(event){

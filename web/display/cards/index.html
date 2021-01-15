@@ -241,7 +241,7 @@
                             <div class="col">
                                 <!-- chargepoint actual values -->
                                 <div class="form-row mb-1">
-                                    <div class="col">
+                                    <div class="col-8">
                                         <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
                                         <span class="phasesInUseLp"></span>&nbsp;
                                         <span class="targetCurrentLp"></span>
@@ -302,9 +302,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt3llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -358,9 +360,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt4llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -414,9 +418,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt5llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -470,9 +476,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt6llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -526,9 +534,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt7llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -582,9 +592,11 @@
                             <!-- left section -->
                             <div class="col">
                                 <div class="form-row mb-1">
-                                    <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
-                                    <span class="phasesInUseLp"></span>&nbsp;
-                                    <span class="targetCurrentLp"></span>
+                                    <div class="col-8">
+                                        <span class="actualPowerLp ladepunktll">Lade Daten</span>&nbsp;
+                                        <span class="phasesInUseLp"></span>&nbsp;
+                                        <span class="targetCurrentLp"></span>
+                                    </div>
                                 </div>
                                 <div class="form-row mb-1">
                                     <span class="col sparkline ladepunktllchart" data-values="" data-chartName="ladepunkt8llchart" data-sparkBarColor="#007bff" data-sparkChartRangeMin="0"></span>
@@ -619,7 +631,8 @@
             </div>
             <script>
                 var currentLp = 1;
-                $('.ladepunktInfoBtn').click(function(event){
+
+                $('.ladepunktInfoBtn').on("click", function(event){
                     currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
                     $('#ladepunktInfoModal').find('.infoLp').text(currentLp);
                     $('#ladepunktInfoModal').find('[data-lp]').addClass('hide');
@@ -627,7 +640,7 @@
                     $('#ladepunktInfoModal').modal("show");
                 });
 
-                $('.ladepunktConfigBtn').click(function(event){
+                $('.ladepunktConfigBtn').on("click", function(event){
                     if( displaylocked == false ){
                         currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
                         $('#ladepunktConfigModal').find('.configLp').text(currentLp);
@@ -639,7 +652,7 @@
                     }
                 });
 
-                $('.chargeModeSelectBtn').click(function(event){
+                $('.chargeModeSelectBtn').on("click", function(event){
                     if( displaylocked == false ){
                         $("#chargeModeModal").modal("show");
                     } else {
@@ -647,11 +660,7 @@
                     }
                 });
 
-                $('#lastmanagementShowBtn').click(function(event){
-                    $("#lastregelungModal").modal("show");
-                });
-
-                $('.enableLp').click(function(event){
+                $('.enableLp').on("click", function(event){
                     if( displaylocked == false ){
                         // send mqtt set to enable/disable charge point after click
                         var lp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
@@ -668,7 +677,7 @@
                     }
                 });
 
-                $('.socConfiguredLp').click(function(event){
+                $('.socConfiguredLp').on("click", function(event){
                     if ( $(this).hasClass('manualSoC') ) {
                         if( displaylocked == false ){
                             currentLp = parseInt($(this).closest('[data-lp]').data('lp'));  // get attribute lp-# of parent element
@@ -1834,7 +1843,7 @@
                 </div>
             </div>
             <script>
-                $('.resetEnergyToCharge').click(function() {
+                $('.resetEnergyToCharge').on("click", function() {
                     var topic = getTopicToSendTo($(this).attr('id'));
                     publish("1", topic);
                 });
@@ -2104,14 +2113,14 @@
                 </div>
             </div>
             <script>
-                $('.chargeModeBtn').click(function(event){
+                $('.chargeModeBtn').on("click", function(event){
                     if( displaylocked == false ){
-                        var chargeMode = $(this).attr("data-chargeMode")
+                        var chargeMode = $(this).attr("data-chargeMode");
                         publish(chargeMode, "openWB/set/ChargeMode");
                     }
                 });
 
-                $('.priorityModeBtn').click(function(event){
+                $('.priorityModeBtn').on("click", function(event){
                     // prio: 0 = battery, 1 = ev
                     if( displaylocked == false ){
                         var priority = $(this).attr('data-priority');
@@ -2121,11 +2130,10 @@
                     }
                 });
 
-                $('.70PvBtn').click(function(event){
+                $('.70PvBtn').on("click", function(event){
                     // 0 deaktiviert, 1 aktiviert
                     if( displaylocked == false ){
-                        var element = $('#70PvBtn');
-                        if ( element.classList.contains("btn-success") ) {
+                        if ( $(this).hasClass("btn-success") ) {
                             publish("0", "openWB/set/pv/NurPV70Status");
                         } else {
                             publish("1", "openWB/set/pv/NurPV70Status");
@@ -2258,7 +2266,7 @@
                     // load mqtt library
                     'js/mqttws31.js',
                     // some helper functions
-                    'display/cards/helperFunctions.js?ver=20201215',
+                    'display/cards/helperFunctions.js?ver=20210113',
                     // functions for processing messages
                     'display/cards/processAllMqttMsg.js?ver=20201215',
                     // functions performing mqtt and start mqtt-service
@@ -2275,7 +2283,7 @@
                 // handling of display panels
                 initPanels();
 
-                $('.sidenav').find('a[href^="#"]').on('click', function(event) {
+                $('.sidenav').find('a[href^="#"]').on("click", function(event) {
                     if( $(this).hasClass('displayLock') && displaylocked == true ) {
                         $("#lockInfoModal").modal("show");
                     } else {
@@ -2294,6 +2302,10 @@
                     }
                 });
 
+                $('#lastmanagementShowBtn').on("click", function(event){
+                    $("#lastregelungModal").modal("show");
+                });
+
                 // display lock
                 $.get(
                     { url: "display/cards/checklock.php?lock=1", cache: false },
@@ -2309,7 +2321,7 @@
                     }
                 );
 
-                $('#displaylock').on('click', function(){
+                $('#displaylock').on("click", function(){
                     if( displaylocked == true ){
                         $("#lockModal").modal("show");
                     } else {

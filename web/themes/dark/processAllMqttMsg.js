@@ -353,10 +353,12 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 			$('#awattarEnabledIcon').show();
 			$('#priceBasedCharging').show();
 			$('#strompreis').show();
+			$('#navStromtarifInfo').removeClass('disabled');
 		} else {
 			$('#awattarEnabledIcon').hide();
 			$('#priceBasedCharging').hide();
 			$('#strompreis').hide();
+			$('#navStromtarifInfo').addClass('disabled');
 		}
 	}
 	else if ( mqttmsg == 'openWB/global/awattar/pricelist' ) {
@@ -695,7 +697,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		} else {
-			kmCharged = '-- km';
+			kmCharged = ' / -- km';
 		}
 		$(kmChargedLp).text(kmCharged);
 	}
@@ -923,7 +925,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 			kmCharged = (energyCharged / consumption) * 100;
 			kmCharged = ' / ' + kmCharged.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' km';
 		} else {
-			kmCharged = '-- km';
+			kmCharged = ' / -- km';
 		}
 		element.text(kmCharged);
 	}
