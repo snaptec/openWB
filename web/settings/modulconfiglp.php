@@ -648,7 +648,8 @@
 									<span class="text-info">openWB/set/lp/1/VPhase3</span> Spannung Phase 3, float, Punkt als Trenner, nur positiv<br>
 									<span class="text-info">openWB/set/lp/1/APhase1</span> Strom Phase 1, float, Punkt als Trenner, nur positiv<br>
 									<span class="text-info">openWB/set/lp/1/APhase2</span> Strom Phase 2, float, Punkt als Trenner, nur positiv<br>
-									<span class="text-info">openWB/set/lp/1/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv
+									<span class="text-info">openWB/set/lp/1/APhase3</span> Strom Phase 3, float, Punkt als Trenner, nur positiv<br>
+									<span class="text-info">openWB/set/lp/1/HzFrequenz</span> Netzfrequenz, float, Punkt als Trenner, nur positiv
 								</div>
 							</div>
 						</div>
