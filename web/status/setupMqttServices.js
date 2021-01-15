@@ -9,12 +9,7 @@
 // index 1 represents flag if value was received, needed for preloaderbar progress
 // if flags are preset with 1 they are not counted on reload and page will show even if topic was not received
 var topicsToSubscribe = [
-	// Status Konfiguration Ladepunkt
-
-	// llkombiniert in ladeleistungAll
-	//evsedintestlp1
-	//evsedintestlp2
-	//evsedintestlp3
+ 	["openWB/global/WAllChargePoints", 0],
 	["openWB/evu/ASchieflast", 0],
 	["openWB/evu/APhase1", 0],
 	["openWB/evu/APhase2", 0],
@@ -30,6 +25,8 @@ var topicsToSubscribe = [
 	["openWB/evu/PfPhase2", 0],
 	["openWB/evu/PfPhase3", 0],
 	["openWB/evu/WhImported", 0],
+	["openWB/evu/Hz", 0],
+	["openWB/evu/W", 0],
 
 	["openWB/lp/1/boolChargePointConfigured", 0],
 	["openWB/lp/1/AConfigured", 0], 
@@ -43,6 +40,8 @@ var topicsToSubscribe = [
 	["openWB/lp/1/PfPhase1", 0],
 	["openWB/lp/1/PfPhase2", 0],
 	["openWB/lp/1/PfPhase3", 0],
+	["openWB/lp/1/W", 0],
+	["openWB/lp/1/%Soc", 0],
 
 	["openWB/lp/2/boolChargePointConfigured", 0],
 	["openWB/lp/2/AConfigured", 0], 
@@ -53,6 +52,7 @@ var topicsToSubscribe = [
 	["openWB/lp/2/VPhase1", 0],
 	["openWB/lp/2/VPhase2", 0],
 	["openWB/lp/2/VPhase3", 0],
+	["openWB/lp/2/W", 0],
 
 	["openWB/lp/3/boolChargePointConfigured", 0],
 	["openWB/lp/3/AConfigured", 0], 
@@ -63,6 +63,7 @@ var topicsToSubscribe = [
 	["openWB/lp/3/VPhase1", 0],
 	["openWB/lp/3/VPhase2", 0],
 	["openWB/lp/3/VPhase3", 0],
+	["openWB/lp/3/W", 0],
 
 	["openWB/lp/4/boolChargePointConfigured", 0],
 	["openWB/lp/4/AConfigured", 0], 
@@ -73,6 +74,7 @@ var topicsToSubscribe = [
 	["openWB/lp/4/VPhase1", 0],
 	["openWB/lp/4/VPhase2", 0],
 	["openWB/lp/4/VPhase3", 0],
+	["openWB/lp/4/W", 0],
 
 	["openWB/lp/5/boolChargePointConfigured", 0],
 	["openWB/lp/5/AConfigured", 0], 
@@ -83,6 +85,7 @@ var topicsToSubscribe = [
 	["openWB/lp/5/VPhase1", 0],
 	["openWB/lp/5/VPhase2", 0],
 	["openWB/lp/5/VPhase3", 0],
+	["openWB/lp/5/W", 0],
 
 	["openWB/lp/6/boolChargePointConfigured", 0],
 	["openWB/lp/6/AConfigured", 0], 
@@ -93,6 +96,7 @@ var topicsToSubscribe = [
 	["openWB/lp/6/VPhase1", 0],
 	["openWB/lp/6/VPhase2", 0],
 	["openWB/lp/6/VPhase3", 0],
+	["openWB/lp/6/W", 0],
 
 	["openWB/lp/7/boolChargePointConfigured", 0],
 	["openWB/lp/7/AConfigured", 0], 
@@ -103,6 +107,7 @@ var topicsToSubscribe = [
 	["openWB/lp/7/VPhase1", 0],
 	["openWB/lp/7/VPhase2", 0],
 	["openWB/lp/7/VPhase3", 0],
+	["openWB/lp/7/W", 0],
 
 	["openWB/lp/8/boolChargePointConfigured", 0],
 	["openWB/lp/8/AConfigured", 0], 
@@ -113,9 +118,10 @@ var topicsToSubscribe = [
 	["openWB/lp/8/VPhase1", 0],
 	["openWB/lp/8/VPhase2", 0],
 	["openWB/lp/8/VPhase3", 0],
+	["openWB/lp/8/W", 0],
 
 
-	//llaktuell
+
 	//llaktuells1
 	//llaktuells2
 
@@ -126,7 +132,7 @@ var topicsToSubscribe = [
 
 
 	["openWB/pv/CounterTillStartPvCharging", 0],
-	//pvallwatt
+	["openWB/pv/W", 0],
 	//pvallwh
 	["openWB/pv/DailyYieldKwh", 0],
 	//monthly_pvkwhk
@@ -141,8 +147,7 @@ var topicsToSubscribe = [
 	//monthly_pvkwhk2
 	//yearly_pvkwhk2
 	//wattbezug
-	//soc
-	//soc1
+
 
 	["openWB/housebattery/boolHouseBatteryConfigured", 0],
 	["openWB/housebattery/WhImported", 0],

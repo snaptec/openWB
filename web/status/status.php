@@ -87,64 +87,15 @@
 
 			function getfile() {
 				$.ajaxSetup({ cache: false});
-				$.ajax({
-					url: "/openWB/ramdisk/llkombiniert",
-					complete: function(request){
-						$("#lldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp1",
-					complete: function(request){
-						$("#evsedintestlp1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp2",
-					complete: function(request){
-						$("#evsedintestlp2div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/evsedintestlp3",
-					complete: function(request){
-						$("#evsedintestlp3div").html(request.responseText);
-					}
-				});
 
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuell",
-					complete: function(request){
-						$("#llaktuelldiv").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuells1",
-					complete: function(request){
-						$("#llaktuells1div").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/llaktuells2",
-					complete: function(request){
-						$("#llaktuells2div").html(request.responseText);
-					}
-				});
+
 				$.ajax({
 					url: "/openWB/ramdisk/llkwhges",
 					complete: function(request){
 						$("#llkwhgesdiv").html(request.responseText);
 					}
 				});
-				$.ajax({
-					url: "/openWB/ramdisk/pvallwatt",
-					complete: function(request){
-						// zur Anzeige Wert positiv darstellen
-						// (Erzeugung liegt als Negativwert vor)
-						var value = parseInt(request.responseText) * -1;
-						$("#pvwattdiv").html(""+value);
-					}
-				});
+
 				$.ajax({
 					url: "/openWB/ramdisk/pvallwh",
 					complete: function(request){
@@ -230,36 +181,6 @@
 					url: "/openWB/ramdisk/yearly_pvkwhk2",
 					complete: function(request){
 						$("#yearly_pvkwhdiv2").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/wattbezug",
-					complete: function(request){
-						// zur Anzeige Wert um "Bezug"/"Einspeisung" ergänzen
-						var value = parseInt(request.responseText);
-						var valueStr = "";
-						if(value<0) {
-							value = value * -1;
-							valueStr = valueStr+value+" (E)"
-						} else if (value>0) {
-							valueStr = valueStr+value+" (B)"
-						} else  {
-							// Bezug = 0
-							valueStr = valueStr+value
-						}
-						$("#wattbezugdiv").html(valueStr);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/soc",
-					complete: function(request){
-						$("#soclevel").html(request.responseText);
-					}
-				});
-				$.ajax({
-					url: "/openWB/ramdisk/soc1",
-					complete: function(request){
-						$("#soclevel1").html(request.responseText);
 					}
 				});
 			}
@@ -471,7 +392,7 @@
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">EVU</div>
+								<div>EVU</div>
 							</div>
 						</div>
 					</div>
@@ -549,7 +470,7 @@
 						<div class="card-header bg-secondary">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
-									<div class="col-4">Ladepunkt <?php echo $chargepointNum ?></div>
+									<div>Ladepunkt <?php echo $chargepointNum ?></div>
 								</div>
 							</div>
 						</div>
@@ -617,7 +538,7 @@
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Ladepunkte Gesamt</div>
+								<div>Ladepunkte Gesamt</div>
 							</div>
 						</div>
 					</div>
@@ -644,13 +565,13 @@
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">PV Gesamt-Anlagendaten</div>
+								<div>PV Gesamt-Anlagendaten</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-sm w-50">
+							<table class="table table-sm ">
 								<tbody>
 									<tr id=pvCounterRow>
 										<th scope="row">Counter</th>
@@ -688,7 +609,7 @@
 						<div class="card-header bg-secondary">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
-									<div class="col-4">PV Wechselrichter 
+									<div>PV Wechselrichter 
 										<?php 
 										echo $inverterNum ;
 										if (${'name_wechselrichter'.$inverterNum.'old'} != '') {
@@ -737,7 +658,7 @@
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Speicher</div>
+								<div>Speicher</div>
 							</div>
 						</div>
 					</div>
@@ -765,7 +686,7 @@
 						<div class="card-header bg-secondary">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
-									<div class="col-4">Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?></div>
+									<div>Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?></div>
 								</div>
 							</div>
 						</div>
@@ -869,78 +790,6 @@
 					$('#pvinverter1and2div').hide();
 				}
 			});
-			$('#mqttlog').click(function(event){
-				var element = document.getElementById('mqttdiv');
-				if ( element.classList.contains("hide") ) {
-					$('#mqttdiv').show();
-					$('#mqttdiv').removeClass("hide");
-				} else {
-					$('#mqttdiv').hide();
-					$('#mqttdiv').addClass("hide");
-				}
-			});
-			$('#rfidlog').click(function(event){
-				var element = document.getElementById('rfiddiv');
-				if ( element.classList.contains("hide") ) {
-					$('#rfiddiv').show();
-					$('#rfiddiv').removeClass("hide");
-				} else {
-					$('#rfiddiv').hide();
-					$('#rfiddiv').addClass("hide");
-				}
-			});
-			$('#nurpvlog').click(function(event){
-				var element = document.getElementById('nurpvdiv');
-				if ( element.classList.contains("hide") ) {
-					$('#nurpvdiv').show();
-					$('#nurpvdiv').removeClass("hide");
-				} else {
-					$('#nurpvdiv').hide();
-					$('#nurpvdiv').addClass("hide");
-				}
-			});
-			$('#soclog').click(function(event){
-				var element = document.getElementById('socdiv');
-				if ( element.classList.contains("hide") ) {
-					$('#socdiv').show();
-					$('#socdiv').removeClass("hide");
-				} else {
-					$('#socdiv').hide();
-					$('#socdiv').addClass("hide");
-				}
-			});
-
-			$('#ladestatuslog').click(function(event){
-				var element = document.getElementById('ladestatuslogdiv');
-				if ( element.classList.contains("hide") ) {
-					$('#ladestatuslogdiv').show();
-					$('#ladestatuslogdiv').removeClass("hide");
-				} else {
-					$('#ladestatuslogdiv').hide();
-					$('#ladestatuslogdiv').addClass("hide");
-				}
-			});
-			$('#debuglog').click(function(event){
-				var element = document.getElementById('debugdiv');
-				if ( element.classList.contains("hide") ) {
-					$('#debugdiv').show();
-					$('#debugdiv').removeClass("hide");
-				} else {
-					$('#debugdiv').hide();
-					$('#debugdiv').addClass("hide");
-				}
-			});
-			$('#smarthomelog').click(function(event){
-				var element = document.getElementById('smarthomediv');
-				if ( element.classList.contains("hide") ) {
-					$('#smarthomediv').show();
-					$('#smarthomediv').removeClass("hide");
-				} else {
-					$('#smarthomediv').hide();
-					$('#smarthomediv').addClass("hide");
-				}
-			});
-
 		</script>
 
 		<script>
