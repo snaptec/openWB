@@ -47,8 +47,10 @@ else
 	socDebugLog "Requesting SoC"
 	echo 0 > $soctimerfile
 
-	soclevel=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py -u $username -p $password | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
-	socDebugLog "Response from Server: $soclevel"
+	response=$(sudo PYTHONIOENCODING=UTF-8 python $MODULEDIR/we_connect_client.py -u $username -p $password)
+	socDebugLog "Response from Server: $response"
+	soclevel=$(echo $response | grep batteryPercentage | jq -r .EManager.rbc.status.batteryPercentage)
+	socDebugLog "Filtered SoC from Server: $soclevel"
 	if  [[ $soclevel =~ $reValidSoc ]] ; then
 		if (( $soclevel != 0 )) ; then
 			socDebugLog "SoC is valid"
