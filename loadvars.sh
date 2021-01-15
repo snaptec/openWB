@@ -419,6 +419,7 @@ loadvars(){
 			pvwatt="0"
 		fi
 		pv1watt=$pvwatt
+		echo $pv1watt > ramdisk/pv1watt
 	else
 		pvvorhanden="0"
 		echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
@@ -426,6 +427,7 @@ loadvars(){
 	fi
 	if [[ $pv2wattmodul != "none" ]]; then
 		pv2watt=$(modules/$pv2wattmodul/main.sh || true)
+		echo $pv2watt > ramdisk/pv2watt
 		pvwatt=$(( pvwatt + pv2watt ))
 		pvkwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 		pv2kwh=$(</var/www/html/openWB/ramdisk/pv2kwh)
