@@ -437,3 +437,11 @@ input:invalid {
     content: "\f0fe"; 
 }
 
+.card-deck{
+    margin-top: 10px;
+	margin-left: auto;
+	margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-gap: .5rem;
+}

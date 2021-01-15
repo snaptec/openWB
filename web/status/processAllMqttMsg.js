@@ -44,7 +44,7 @@ function handlevar(mqttmsg, mqttpayload) {
 			case "openWB/housebattery/WhExported": kShow(mqttpayload, '#speicherekwhdiv'); visibilityValue('#entladenRow', '#speicherekwhdiv');break;
 			case "openWB/pv/boolPVConfigured": visibilityCard('#pvGes', mqttpayload); visibilityCard('#inverter1', mqttpayload); visibilityCard('#inverter2', mqttpayload); break;
 			case "openWB/pv/CounterTillStartPvCharging": directShow(mqttpayload, '#pvcounterdiv'); visibilityValue('#pvCounterRow', "#pvcounterdiv"); break;
-			case "openWB/pv/W": invertShow(mqttpayload, '#pvkwhdiv'); visibilityMin('#gesamtertragRow', "#pvkwhdiv"); break;
+			case "openWB/pv/W": invertShow(mqttpayload, '#pvkwhdiv'); visibilityMin('#gesamtertragRow', "#pvkwhdiv");invertShow(mqttpayload, '#pvwattdiv'); visibilityMin('#leistungRow', "#pvwattdiv"); break;
 			case "openWB/pv/DailyYieldKwh": directShow(mqttpayload, '#daily_pvkwhdiv'); visibilityValue('#tagesertragRow', "#daily_pvkwhdiv"); break;
 			case "openWB/pv/MonthlyYieldKwh": directShow(mqttpayload, '#monthly_pvkwhdiv'); visibilityValue('#monatsertragRow', "#monthly_pvkwhdiv"); break;
 			case "openWB/pv/YearlyYieldKwh": directShow(mqttpayload, '#yearly_pvkwhdiv'); visibilityValue('#jahresertragRow', "#yearly_pvkwhdiv"); break;
@@ -61,7 +61,7 @@ function handlevar(mqttmsg, mqttpayload) {
 			case "openWB/Verbraucher/1/Configured": visibilityCard('#loads1', mqttpayload); break;
 			case "openWB/Verbraucher/2/Configured": visibilityCard('#loads2', mqttpayload); break;
 			case "openWB/global/WAllChargePoints": directShow(mqttpayload, '#ladeleistungAll'); visibilityValue('#ladeleistungAllRow', '#ladeleistungAll'); break;
-			case "openWB/global/kWhCounterAllChargePoints": directShow(mqttpayload, '#kWhCounterAll'); visibilityValue('#kWhCounterAllRow', '#ladeleistkWhCounterAllungAll'); break;
+			case "openWB/global/kWhCounterAllChargePoints": console.log(mqttpayload); directShow(mqttpayload, '#kWhCounterAll'); visibilityValue('#kWhCounterAllRow', '#kWhCounterAll'); break;
 			default: break;
 		}
 	}

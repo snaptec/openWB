@@ -340,117 +340,44 @@
 			<form action="./tools/saveconfig.php" method="POST">
 
 				<!-- EVU  -->
-				<div class="card border-danger">
-					<div class="card-header bg-danger">
-						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div>EVU</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table" id="evu1">
-								<tbody>
-									<tr id="schieflastEvuStatusId">
-										<th scope="row">Schieflast [A]</th>
-										<td><div id="schieflastdiv"></div></td>
-									</tr>
-									<tr id="gesamtleistungEvuStatusId">
-										<th scope="row">Gesamtleistung [W]</th>
-										<td><div id="wattbezugdiv"></div></td>
-									</tr>
-									<tr id="frequenzEvuStatusId">
-										<th scope="row">Frequenz [Hz]</th>
-										<td><div id="evuhzdiv"></div></td>
-									</tr>																							
-									<tr id="bezugEvuStatusId">
-										<th scope="row">Bezug [kWh]</th>
-										<td><div id="bezugkwhdiv"></div></td>
-									</tr>
-									<tr id="einspeisungEvuStatusId">
-										<th scope="row">Einspeisung [kWh]</th>
-										<td><div id="einspeisungkwhdiv"></div></td>
-									</tr>									
-								</tbody>
-							</table>
-						</div>
-						<div class="table-responsive">
-							<table class="table" id="evu2">
-								<thead>
-									<tr>
-										<th scope="col"></th>
-										<th scope="col">Phase 1</th>
-										<th scope="col">Phase 2</th>
-										<th scope="col">Phase 3</th>
-									</tr>
-								</head>
-								<tbody>
-									<tr id =spannungEvuStatusId>
-										<th scope="row">Spannung [V]</th>
-										<td><div id="evuv1div"></div></td>
-										<td><div id="evuv2div"></div></td>
-										<td><div id="evuv3div"></div></td>
-									</tr>
-									<tr id =stromstaerkeEvuStatusId>
-										<th scope="row">Stromstärke [A]</th>
-										<td><div id="bezuga1div"></div></td>
-										<td><div id="bezuga2div"></div></td>
-										<td><div id="bezuga3div"></div></td>
-									</tr>
-									<tr id =leistungEvuStatusId>
-										<th scope="row">Leistung [W]</th>
-										<td><div id="bezugw1div"></div></td>
-										<td><div id="bezugw2div"></div></td>
-										<td><div id="bezugw3div"></div></td>
-									</tr>
-									<tr id =powerfaktorEvuStatusId>
-										<th scope="row">Power Faktor</th>
-										<td><div id="evupf1div"></div></td>
-										<td><div id="evupf2div"></div></td>
-										<td><div id="evupf3div"></div></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!-- Ladepunkte-->
-				<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
-					<div class="card border-primary" id="lp<?php echo $chargepointNum ?>">
-						<div class="card-header bg-primary">
+				<div class="card-deck">
+					<div class="card border-danger">
+						<div class="card-header bg-danger">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
-									<div>Ladepunkt <?php echo $chargepointNum ?></div>
+									<div>EVU</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-sm ">
+								<table class="table" id="evu1">
 									<tbody>
-										<tr class=stromvorgabeRow>
-											<th scope="row">Ladestromvorgabe [A]</th>
-											<td class=stromvorgabe></td>
+										<tr id="schieflastEvuStatusId">
+											<th scope="row">Schieflast [A]</th>
+											<td><div id="schieflastdiv"></div></td>
 										</tr>
-										<tr class=ladeleistungRow>
-											<th scope="row">Ladeleistung [W]</th>
-											<td class=ladeleistung></td>
+										<tr id="gesamtleistungEvuStatusId">
+											<th scope="row">Gesamtleistung [W]</th>
+											<td><div id="wattbezugdiv"></div></td>
 										</tr>
-										<tr class=kWhCounterRow>
-											<th scope="row">Zählerstand [kWh]</th>
-											<td class="kWhCounter"></td>
+										<tr id="frequenzEvuStatusId">
+											<th scope="row">Frequenz [Hz]</th>
+											<td><div id="evuhzdiv"></div></td>
+										</tr>																							
+										<tr id="bezugEvuStatusId">
+											<th scope="row">Bezug [kWh]</th>
+											<td><div id="bezugkwhdiv"></div></td>
 										</tr>
-										<tr class=socRow>
-											<th scope="row">SoC [%]</th>
-											<td class=soc></td>
-										</tr>
+										<tr id="einspeisungEvuStatusId">
+											<th scope="row">Einspeisung [kWh]</th>
+											<td><div id="einspeisungkwhdiv"></div></td>
+										</tr>									
 									</tbody>
 								</table>
 							</div>
 							<div class="table-responsive">
-								<table class="table">
+								<table class="table" id="evu2">
 									<thead>
 										<tr>
 											<th scope="col"></th>
@@ -460,185 +387,111 @@
 										</tr>
 									</head>
 									<tbody>
-										<tr class=spannungRow>
+										<tr id =spannungEvuStatusId>
 											<th scope="row">Spannung [V]</th>
-											<td class=spannungP1></td>
-											<td class=spannungP2></td>
-											<td class=spannungP3></td>
+											<td><div id="evuv1div"></div></td>
+											<td><div id="evuv2div"></div></td>
+											<td><div id="evuv3div"></div></td>
 										</tr>
-										<tr class=powerFaktorRow>
-											<th scope="row">Power Faktor</th>
-											<td class=powerFaktorP1></td>
-											<td class=powerFaktorP2></td>
-											<td class=powerFaktorP3></td>
-										</tr>
-										<tr class=stromstaerkeRow>
+										<tr id =stromstaerkeEvuStatusId>
 											<th scope="row">Stromstärke [A]</th>
-											<td class=stromstaerkeP1></td>
-											<td class=stromstaerkeP2></td>
-											<td class=stromstaerkeP3></td>
+											<td><div id="bezuga1div"></div></td>
+											<td><div id="bezuga2div"></div></td>
+											<td><div id="bezuga3div"></div></td>
+										</tr>
+										<tr id =leistungEvuStatusId>
+											<th scope="row">Leistung [W]</th>
+											<td><div id="bezugw1div"></div></td>
+											<td><div id="bezugw2div"></div></td>
+											<td><div id="bezugw3div"></div></td>
+										</tr>
+										<tr id =powerfaktorEvuStatusId>
+											<th scope="row">Power Faktor</th>
+											<td><div id="evupf1div"></div></td>
+											<td><div id="evupf2div"></div></td>
+											<td><div id="evupf3div"></div></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
 					</div>
-				<?php } ?>
 
-				<!-- Ladepunkte Gesamt -->
-				<div class="card border-primary" id="lpges">
-					<div class="card-header bg-primary">
-						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div>Ladepunkte Gesamt</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table">
-								<tbody>
-									<tr id=ladeleistungAllRow>
-										<th scope="row">Ladeleistung [W]</th>
-										<td><div id="ladeleistungAll"></div></td>
-									</tr>
-									<tr id=kWhCounterAllRow>
-										<th scope="row">Zählerstand [kWh]</th>
-										<td><div id="kWhCounterAll"></div></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!--PV Gesamt-Anlagendaten-->
-				<div class="card border-success" id="pvGes">
-					<div class="card-header bg-success">
-						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div>PV Gesamt-Anlagendaten</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table">
-								<tbody>
-									<tr id=pvCounterRow>
-										<th scope="row">Counter</th>
-										<td><div id="pvcounterdiv"></div></td>
-									</tr>
-									<tr id=leistungRow>
-										<th scope="row">Leistung [W]</th>
-										<td><div id="pvwattdiv"></div></td>
-									</tr>
-									<tr id=gesamtertragRow>
-										<th scope="row">Gesamtertrag [kWh]</th>
-										<td><div id="pvkwhdiv"></div></td>
-									</tr>
-									<tr id=tagesertragRow>
-										<th scope="row">Tagesertrag [kWh]</th>
-										<td><div id="daily_pvkwhdiv"></div></td>
-									</tr>
-									<tr id=monatsertragRow>
-										<th scope="row">Monatsertrag [kWh]</th>
-										<td><div id="monthly_pvkwhdiv"></div></td>
-									</tr>
-									<tr id=jahresertragRow>
-										<th scope="row">Jahresertrag [kWh]</th>
-										<td><div id="yearly_pvkwhdiv"></div></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-					<!--PV Wechselrichter-->
-					<?php for( $inverterNum = 1; $inverterNum <= 2; $inverterNum++ ){ ?>
-					<div class="card border-success" id="inverter<?php echo $inverterNum ?>">
-						<div class="card-header bg-success">
-							<div class="form-group mb-0">
-								<div class="form-row vaRow mb-0">
-									<div>PV Wechselrichter 
-										<?php 
-										echo $inverterNum ;
-										if (${'name_wechselrichter'.$inverterNum.'old'} != '') {
-											echo ' (';
-											echo ${'name_wechselrichter'.$inverterNum.'old'};
-											echo ')';
-										}
-										?>
+					<!-- Ladepunkte-->
+					<?php for( $chargepointNum = 1; $chargepointNum <= 8; $chargepointNum++ ){ ?>
+						<div class="card border-primary" id="lp<?php echo $chargepointNum ?>">
+							<div class="card-header bg-primary">
+								<div class="form-group mb-0">
+									<div class="form-row vaRow mb-0">
+										<div>Ladepunkt <?php echo $chargepointNum ?></div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table">
-									<tbody>
-										<tr class=leistungPvRow>
-											<th scope="row">Leistung [W]</th>
-											<td class=></td>
-										</tr>
-										<tr class=gesamtertragPvRow>
-											<th scope="row">Gesamtertrag [kWh]</th>
-											<td class=pvwattdiv></td>
-										</tr>
-										<tr id=tagesertragPvRow>
-										<th scope="row">Tagesertrag [kWh]</th>
-										<td><div id=""></div></td>
-										</tr>
-										<tr id=monatsertragPvRow>
-											<th scope="row">Monatsertrag [kWh]</th>
-											<td><div id=""></div></td>
-										</tr>
-										<tr id=jahresertragPvRow>
-											<th scope="row">Jahresertrag [kWh]</th>
-											<td><div id=""></div></td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-sm ">
+										<tbody>
+											<tr class=stromvorgabeRow>
+												<th scope="row">Ladestromvorgabe [A]</th>
+												<td class=stromvorgabe></td>
+											</tr>
+											<tr class=ladeleistungRow>
+												<th scope="row">Ladeleistung [W]</th>
+												<td class=ladeleistung></td>
+											</tr>
+											<tr class=kWhCounterRow>
+												<th scope="row">Zählerstand [kWh]</th>
+												<td class="kWhCounter"></td>
+											</tr>
+											<tr class=socRow>
+												<th scope="row">SoC [%]</th>
+												<td class=soc></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">Phase 1</th>
+												<th scope="col">Phase 2</th>
+												<th scope="col">Phase 3</th>
+											</tr>
+										</head>
+										<tbody>
+											<tr class=spannungRow>
+												<th scope="row">Spannung [V]</th>
+												<td class=spannungP1></td>
+												<td class=spannungP2></td>
+												<td class=spannungP3></td>
+											</tr>
+											<tr class=powerFaktorRow>
+												<th scope="row">Power Faktor</th>
+												<td class=powerFaktorP1></td>
+												<td class=powerFaktorP2></td>
+												<td class=powerFaktorP3></td>
+											</tr>
+											<tr class=stromstaerkeRow>
+												<th scope="row">Stromstärke [A]</th>
+												<td class=stromstaerkeP1></td>
+												<td class=stromstaerkeP2></td>
+												<td class=stromstaerkeP3></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-					</div>
-				<?php } ?>
+					<?php } ?>
 
-				<!-- Speicher -->
-				<div class="card border-warning" id="speicher">
-					<div class="card-header bg-warning">
-						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div>Speicher</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table">
-								<tbody>
-									<tr id=geladenRow>
-										<th scope="row">geladen [kWh]</th>
-										<td><div id="speicherikwhdiv"></div></td>
-									</tr>
-									<tr id=entladenRow>
-										<th scope="row">entladen [kWh]</th>
-										<td><div id="speicherekwhdiv"></div></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!--Verbraucher-->
-				<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>
-					<div class="card border-secondary" id="loads<?php echo $loadsNum ?>">
-						<div class="card-header bg-secondary">
+					<!-- Ladepunkte Gesamt -->
+					<div class="card border-primary" id="lpges">
+						<div class="card-header bg-primary">
 							<div class="form-group mb-0">
 								<div class="form-row vaRow mb-0">
-									<div>Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?></div>
+									<div>Ladepunkte Gesamt</div>
 								</div>
 							</div>
 						</div>
@@ -646,24 +499,173 @@
 							<div class="table-responsive">
 								<table class="table">
 									<tbody>
-										<tr class=leistungVerbraucherRow>
-											<th scope="row">Leistung [W]</th>
-											<td class=verbraucherWatt></td>
+										<tr id=ladeleistungAllRow>
+											<th scope="row">Ladeleistung [W]</th>
+											<td><div id="ladeleistungAll"></div></td>
 										</tr>
-										<tr class=importVerbraucherRow>
-											<th scope="row">Import [kWh]</th>
-											<td class=importVerbraucher></td>
-										</tr>
-										<tr class=exportVerbraucherRow>
-											<th scope="row">Export [kWh]</th>
-											<td class=exportVerbraucher></td>
+										<tr id=kWhCounterAllRow>
+											<th scope="row">Zählerstand [kWh]</th>
+											<td><div id="kWhCounterAll"></div></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
 					</div>
-				<?php } ?>
+
+					<!--PV Gesamt-Anlagendaten-->
+					<div class="card border-success" id="pvGes">
+						<div class="card-header bg-success">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div>PV Gesamt-Anlagendaten</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<tbody>
+										<tr id=pvCounterRow>
+											<th scope="row">Counter</th>
+											<td><div id="pvcounterdiv"></div></td>
+										</tr>
+										<tr id=leistungRow>
+											<th scope="row">Leistung [W]</th>
+											<td><div id="pvwattdiv"></div></td>
+										</tr>
+										<tr id=gesamtertragRow>
+											<th scope="row">Gesamtertrag [kWh]</th>
+											<td><div id="pvkwhdiv"></div></td>
+										</tr>
+										<tr id=tagesertragRow>
+											<th scope="row">Tagesertrag [kWh]</th>
+											<td><div id="daily_pvkwhdiv"></div></td>
+										</tr>
+										<tr id=monatsertragRow>
+											<th scope="row">Monatsertrag [kWh]</th>
+											<td><div id="monthly_pvkwhdiv"></div></td>
+										</tr>
+										<tr id=jahresertragRow>
+											<th scope="row">Jahresertrag [kWh]</th>
+											<td><div id="yearly_pvkwhdiv"></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+						<!--PV Wechselrichter-->
+						<?php for( $inverterNum = 1; $inverterNum <= 2; $inverterNum++ ){ ?>
+						<div class="card border-success" id="inverter<?php echo $inverterNum ?>">
+							<div class="card-header bg-success">
+								<div class="form-group mb-0">
+									<div class="form-row vaRow mb-0">
+										<div>PV Wechselrichter 
+											<?php 
+											echo $inverterNum ;
+											if (${'name_wechselrichter'.$inverterNum.'old'} != '') {
+												echo ' (';
+												echo ${'name_wechselrichter'.$inverterNum.'old'};
+												echo ')';
+											}
+											?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table">
+										<tbody>
+											<tr class=leistungPvRow>
+												<th scope="row">Leistung [W]</th>
+												<td class=></td>
+											</tr>
+											<tr class=gesamtertragPvRow>
+												<th scope="row">Gesamtertrag [kWh]</th>
+												<td class=pvwattdiv></td>
+											</tr>
+											<tr id=tagesertragPvRow>
+											<th scope="row">Tagesertrag [kWh]</th>
+											<td><div id=""></div></td>
+											</tr>
+											<tr id=monatsertragPvRow>
+												<th scope="row">Monatsertrag [kWh]</th>
+												<td><div id=""></div></td>
+											</tr>
+											<tr id=jahresertragPvRow>
+												<th scope="row">Jahresertrag [kWh]</th>
+												<td><div id=""></div></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+
+					<!-- Speicher -->
+					<div class="card border-warning" id="speicher">
+						<div class="card-header bg-warning">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div>Speicher</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table">
+									<tbody>
+										<tr id=geladenRow>
+											<th scope="row">geladen [kWh]</th>
+											<td><div id="speicherikwhdiv"></div></td>
+										</tr>
+										<tr id=entladenRow>
+											<th scope="row">entladen [kWh]</th>
+											<td><div id="speicherekwhdiv"></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!--Verbraucher-->
+					<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>
+						<div class="card border-secondary" id="loads<?php echo $loadsNum ?>">
+							<div class="card-header bg-secondary">
+								<div class="form-group mb-0">
+									<div class="form-row vaRow mb-0">
+										<div>Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?></div>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table">
+										<tbody>
+											<tr class=leistungVerbraucherRow>
+												<th scope="row">Leistung [W]</th>
+												<td class=verbraucherWatt></td>
+											</tr>
+											<tr class=importVerbraucherRow>
+												<th scope="row">Import [kWh]</th>
+												<td class=importVerbraucher></td>
+											</tr>
+											<tr class=exportVerbraucherRow>
+												<th scope="row">Export [kWh]</th>
+												<td class=exportVerbraucher></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+				</div>
 
 				<!--Log-->
 				<div id="accordion" class="accordion">
