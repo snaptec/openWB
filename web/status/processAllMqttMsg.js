@@ -31,18 +31,18 @@ function handlevar(mqttmsg, mqttpayload) {
 		case "openWB/lp/1/kWhCounter": directShow(mqttpayload, '#lp1 .kWhCounter'); visibilityValue('#lp1 .kWhCounterRow', '#lp1 .kWhCounter'); break;
 		case "openWB/lp/2/kWhCounter": directShow(mqttpayload, '#lp2 .kWhCounter'); visibilityValue('#lp2 .kWhCounterRow', '#lp2 .kWhCounter');break;
 		case "openWB/lp/3/kWhCounter": directShow(mqttpayload, '#lp3 .kWhCounter'); visibilityValue('#lp3 .kWhCounterRow', '#lp3 .kWhCounter');break;
-		case "openWB/Verbraucher/1/Watt": directShow(mqttpayload, '#verbraucher1wattdiv'); break;
-		case "openWB/Verbraucher/1/WhImported": kShow(mqttpayload, "#verbraucher1whdiv"); break;
-		case "openWB/Verbraucher/1/WhExported": kShow(mqttpayload, "#verbraucher1whediv"); break;
-		case "openWB/Verbraucher/2/Watt": directShow(mqttpayload, '#verbraucher2wattdiv'); break;
-		case "openWB/Verbraucher/2/WhImported": kShow(mqttpayload, "#verbraucher2whdiv"); break;
-		case "openWB/Verbraucher/2/WhExported": kShow(mqttpayload, "#verbraucher2whediv"); break;
+		case "openWB/Verbraucher/1/Watt": directShow(mqttpayload, '#loads1 .verbraucherWatt'); visibilityValue('#loads1 .leistungVerbraucherRow', '#loads1 .verbraucherWatt'); break;
+		case "openWB/Verbraucher/1/WhImported": kShow(mqttpayload, "#loads1 .importVerbraucher"); visibilityValue('#loads1 .importVerbraucherRow', '#loads1 .importVerbraucher'); break;
+		case "openWB/Verbraucher/1/WhExported": kShow(mqttpayload, "#loads1 .exportVerbraucher"); visibilityValue('#loads1 .exportVerbraucherRow', '#loads1 .exportVerbraucher'); break;
+		case "openWB/Verbraucher/2/Watt": directShow(mqttpayload, '#loads2 .verbraucherWatt'); visibilityValue('#loads2 .leistungVerbraucherRow', '#loads2 .verbraucherWatt'); break;
+		case "openWB/Verbraucher/2/WhImported": kShow(mqttpayload, "#loads2 .importVerbraucher"); visibilityValue('#loads2 .importVerbraucherRow', '#loads2 .importVerbraucher'); break;
+		case "openWB/Verbraucher/2/WhExported": kShow(mqttpayload, "#loads2 .exportVerbraucher"); visibilityValue('#loads2 .exportVerbraucherRow', '#loads2 .exportVerbraucher'); break;
 		case "openWB/evu/WhExported": kShow(mqttpayload, "#einspeisungkwhdiv"); visibilityValue('#einspeisungEvuStatusId', "#einspeisungkwhdiv"); break;
 		case "openWB/evu/WhImported": kShow(mqttpayload, "#bezugkwhdiv"); visibilityValue('#bezugEvuStatusId', "#bezugkwhdiv"); break;
 		case "openWB/housebattery/WhImported": kShow(mqttpayload, "#speicherikwhdiv"); break;
 		case "openWB/housebattery/WhExported": kShow(mqttpayload, "#speicherekwhdiv"); break;
-		case "openWB/pv/CounterTillStartPvCharging": directShow(mqttpayload, '#pvcounterdiv'); break;
-		case "openWB/pv/DailyYieldKwh": directShow(mqttpayload, '#daily_pvkwhdiv'); break;
+		case "openWB/pv/CounterTillStartPvCharging": directShow(mqttpayload, '#pvcounterdiv'); visibilityValue('#pvCounterRow', "#pvcounterdiv"); break;
+		case "openWB/pv/DailyYieldKwh": directShow(mqttpayload, '#daily_pvkwhdiv'); visibilityValue('#tagesertragRow', "#daily_pvkwhdiv"); break;
 		case "openWB/lp/1/VPhase1": directShow(mqttpayload, '#lp1 .spannungP1'); visibilityRow('#lp1 .spannungRow', '#lp1 .spannungP1', '#lp1 .spannungP2', '#lp1 .spannungP3'); break;
 		case "openWB/lp/1/VPhase2": directShow(mqttpayload, '#lp1 .spannungP2'); visibilityRow('#lp1 .spannungRow', '#lp1 .spannungP1', '#lp1 .spannungP2', '#lp1 .spannungP3'); break;
 		case "openWB/lp/1/VPhase3": directShow(mqttpayload, '#lp1 .spannungP3'); visibilityRow('#lp1 .spannungRow', '#lp1 .spannungP1', '#lp1 .spannungP2', '#lp1 .spannungP3'); break;
@@ -65,6 +65,9 @@ function handlevar(mqttmsg, mqttpayload) {
 		case "openWB/lp/1/boolChargePointConfigured": visibilityCard('#lp1', mqttpayload); break;
 		case "openWB/lp/2/boolChargePointConfigured": visibilityCard('#lp2', mqttpayload); break;
 		case "openWB/lp/3/boolChargePointConfigured": visibilityCard('#lp3', mqttpayload); break;
+		case "openWB/housebattery/boolHouseBatteryConfigured": visibilityCard('#speicher', mqttpayload); break;
+		case "openWB/Verbraucher/1/Configured": visibilityCard('#loads1', mqttpayload); break;
+		case "openWB/Verbraucher/2/Configured": visibilityCard('#loads2', mqttpayload); break;
 		default: break;}
 }  // end handlevar
 
@@ -106,7 +109,8 @@ function kShow(mqttpayload, variable) {
 
 //show/hide row with only one value
 function visibilityValue(row, variable){
-	if (( $(variable).text() != "0") && ( $(variable).text() != "")) {
+	var value = parseFloat($(variable).text()); // zu Berücksichtigung von 0,00
+	if (( value != 0) && ( $(variable).text() != "")) {
 		showSection($(row));
 	}
 	else {
@@ -116,9 +120,12 @@ function visibilityValue(row, variable){
 
 //show/hide complete row, if all three values are zero or empty
 function visibilityRow(row, var1, var2, var3) {
-	if ( ( ($(var1).text() == "0") || ($(var1).text() == "") ) &&
-		 ( ($(var2).text() == "0") || ($(var2).text() == "") ) &&
-		 ( ($(var3).text() == "0") || ($(var3).text() == "") ) ) {
+	var val1 = parseFloat($(var1).text()); // zu Berücksichtigung von 0,00
+	var val2 = parseFloat($(var2).text());
+	var val3 = parseFloat($(var3).text());
+	if ( ( (val1 == 0) || ($(var1).text() == "") ) &&
+		 ( (val2 == 0) || ($(var2).text() == "") ) &&
+		 ( (val3 == 0) || ($(var3).text() == "") ) ) {
 		hideSection($(row));
 	}
 	else {

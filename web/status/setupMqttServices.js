@@ -92,6 +92,9 @@ var topicsToSubscribe = [
 	["openWB/lp/1/boolChargePointConfigured", 0],
 	["openWB/lp/2/boolChargePointConfigured", 0],
 	["openWB/lp/3/boolChargePointConfigured", 0],
+	["openWB/housebattery/boolHouseBatteryConfigured", 0],
+	//["openWB/Verbraucher/1/Configured", 0],
+	//["openWB/Verbraucher/2/Configured", 0],
 ];
 
 // holds number of topics flagged 1 initially

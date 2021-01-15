@@ -625,7 +625,7 @@
 						<div class="table-responsive">
 							<table class="table table-sm w-50">
 								<tbody>
-									<tr class=ladeleistungAllRow>
+									<tr id=ladeleistungAllRow>
 										<th scope="row">Ladeleistung [W]</th>
 										<td><div id="ladeleistungAll"></div></td>
 									</tr>
@@ -639,258 +639,215 @@
 					</div>
 				</div>
 
+				<!--PV Gesamt-Anlagendaten-->
+				<div class="card border-secondary" id="pvGes">
+					<div class="card-header bg-secondary">
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">PV Gesamt-Anlagendaten</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-sm w-50">
+								<tbody>
+									<tr id=pvCounterRow>
+										<th scope="row">Counter</th>
+										<td><div id="pvcounterdiv"></div></td>
+									</tr>
+									<tr id=leistungRow>
+										<th scope="row">Leistung [W]</th>
+										<td><div id="pvwattdiv"></div></td>
+									</tr>
+									<tr id=gesamtertragRow>
+										<th scope="row">Gesamtertrag [kWh]</th>
+										<td><div id="pvkwhdiv"></div></td>
+									</tr>
+									<tr id=tagesertragRow>
+										<th scope="row">Tagesertrag [kWh]</th>
+										<td><div id="daily_pvkwhdiv"></div></td>
+									</tr>
+									<tr id=monatsertragRow>
+										<th scope="row">Monatsertrag [kWh]</th>
+										<td><div id="monthly_pvkwhdiv"></div></td>
+									</tr>
+									<tr id=jahresertragRow>
+										<th scope="row">Jahresertrag [kWh]</th>
+										<td><div id="yearly_pvkwhdiv"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 
-			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col text-center bold">
-					PV Gesamt-Anlagendaten
-				</div>
-			</div>
-			<div class="row" style="background-color:#BEFEBE">
-				<div class="col-sm-2 text-center">
-					PV Counter
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvcounterdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Leistung [W]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvwattdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					PV Gesamtertrag [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="pvkwhdiv"></div>
-				</div>
-			</div>
-			<div id="pvpartlycounterdiv" style="display: none;">
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col-sm-2 text-center">
-						PV Tagesertrag [kWh]
+					<!--PV Wechselrichter-->
+					<?php for( $inverterNum = 1; $inverterNum <= 2; $inverterNum++ ){ ?>
+					<div class="card border-secondary" id="inverter<?php echo $inverterNum ?>">
+						<div class="card-header bg-secondary">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div class="col-4">PV Wechselrichter 
+										<?php 
+										echo $inverterNum ;
+										if (${'name_wechselrichter'.$inverterNum.'old'} != '') {
+											echo ' (';
+											echo ${'name_wechselrichter'.$inverterNum.'old'};
+											echo ')';
+										}
+										?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-sm w-50">
+									<tbody>
+										<tr class=leistungPvRow>
+											<th scope="row">Leistung [W]</th>
+											<td class=></td>
+										</tr>
+										<tr class=gesamtertragPvRow>
+											<th scope="row">Gesamtertrag [kWh]</th>
+											<td class=></td>
+										</tr>
+										<tr id=tagesertragPvRow>
+										<th scope="row">Tagesertrag [kWh]</th>
+										<td><div id=""></div></td>
+										</tr>
+										<tr id=monatsertragPvRow>
+											<th scope="row">Monatsertrag [kWh]</th>
+											<td><div id=""></div></td>
+										</tr>
+										<tr id=jahresertragPvRow>
+											<th scope="row">Jahresertrag [kWh]</th>
+											<td><div id=""></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-					<div class="col-sm-2 text-center">
-						<div id="daily_pvkwhdiv"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Monatsertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="monthly_pvkwhdiv"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Jahresertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="yearly_pvkwhdiv"></div>
-					</div>
-				</div>
-			</div>
-			<div class="row" style="background-color:#FCBE1E">
-				<div class="col-sm-2 text-center">
-				</div>
-				<div class="col-sm-2 text-center">
-					Speicher
-				</div>
-				<div class="col-sm-2 text-center">
-					geladen [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="speicherikwhdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					entladen [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="speicherekwhdiv"></div>
-				</div>
-			</div>
-			<hr>
-			<div id="pvinverter1and2div">
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col text-center bold">
-						PV Anlagendaten Wechselrichter 1
-						<?php
-							if ($name_wechselrichter1old != '') {
-								echo ' (';
-								echo $name_wechselrichter1old;
-								echo ')';
-							}
-						?>
-					</div>
-				</div>
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col-sm-2 text-center">
-					</div>
-					<div class="col-sm-2 text-center">
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Leistung [W]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="pvwattdiv1"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Gesamtertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="pvkwhdiv1"></div>
-					</div>
-				</div>
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col-sm-2 text-center">
-						PV Tagesertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="daily_pvkwhdiv1"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Monatsertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="monthly_pvkwhdiv1"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Jahresertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="yearly_pvkwhdiv1"></div>
-					</div>
-				</div>
-				<hr>
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col text-center bold">
-						PV Anlagendaten Wechselrichter 2
-						<?php
-							if ($name_wechselrichter2old != '') {
-								echo ' (';
-								echo $name_wechselrichter2old;
-								echo ')';
-							}
-						?>
-					</div>
-				</div>
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col-sm-2 text-center">
-					</div>
-					<div class="col-sm-2 text-center">
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Leistung [W]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="pvwattdiv2"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Gesamtertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="pvkwhdiv2"></div>
-					</div>
-				</div>
-				<div class="row" style="background-color:#BEFEBE">
-					<div class="col-sm-2 text-center">
-						PV Tagesertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="daily_pvkwhdiv2"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Monatsertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="monthly_pvkwhdiv2"></div>
-					</div>
-					<div class="col-sm-2 text-center">
-						PV Jahresertrag [kWh]
-					</div>
-					<div class="col-sm-2 text-center">
-						<div id="yearly_pvkwhdiv2"></div>
-					</div>
-				</div>
-				<hr>
-			</div>
-			<div class="row">
-				<div class="col-sm-2 text-center ">
-					<?php echo $verbraucher1_nameold ?> [W]
-				</div>
-				<div class="col-sm-2 text-center ">
-					<div id="verbraucher1wattdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<?php echo $verbraucher1_nameold ?> Import [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="verbraucher1whdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<?php echo $verbraucher1_nameold ?>Export [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="verbraucher1whediv"></div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-2 text-center ">
-					<?php echo $verbraucher2_nameold ?> [W]
-				</div>
-				<div class="col-sm-2 text-center ">
-					<div id="verbraucher2wattdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<?php echo $verbraucher2_nameold ?> Import [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="verbraucher2whdiv"></div>
-				</div>
-				<div class="col-sm-2 text-center">
-					<?php echo $verbraucher2_nameold ?> Export [kWh]
-				</div>
-				<div class="col-sm-2 text-center">
-					<div id="verbraucher2whediv"></div>
-				</div>
-			</div>
-			<hr style="height:3px;border:none;color:#333;background-color:#333;" />
+				<?php } ?>
 
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" id="ladestatuslog"><h4>Ladestatus Änderungen:</h4></span>
-			</div>
-			<div class="hide" style="white-space: pre-line; display: none;" id="ladestatuslogdiv"></div>
+				<!-- Speicher -->
+				<div class="card border-secondary" id="speicher">
+					<div class="card-header bg-secondary">
+						<div class="form-group mb-0">
+							<div class="form-row vaRow mb-0">
+								<div class="col-4">Speicher</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-sm w-50">
+								<tbody>
+									<tr id=geladenRow>
+										<th scope="row">geladen [kWh]</th>
+										<td><div id="speicherikwhdiv"></div></td>
+									</tr>
+									<tr id=entladenRow>
+										<th scope="row">entladen [kWh]</th>
+										<td><div id="speicherekwhdiv"></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" id="smarthomelog"> <h4>SmartHome Log:</h4></span>
-			</div>
+				<!--Verbraucher-->
+				<?php for( $loadsNum = 1; $loadsNum <= 2; $loadsNum++ ){ ?>
+					<div class="card border-secondary" id="loads<?php echo $loadsNum ?>">
+						<div class="card-header bg-secondary">
+							<div class="form-group mb-0">
+								<div class="form-row vaRow mb-0">
+									<div class="col-4">Verbraucher <?php echo ${'verbraucher'.loadsNum.'_nameold'} ?></div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-sm w-50">
+									<tbody>
+										<tr class=leistungVerbraucherRow>
+											<th scope="row">Leistung [W]</th>
+											<td class=verbraucherWatt></td>
+										</tr>
+										<tr class=importVerbraucherRow>
+											<th scope="row">Import [kWh]</th>
+											<td class=importVerbraucher></td>
+										</tr>
+										<tr class=exportVerbraucherRow>
+											<th scope="row">Export [kWh]</th>
+											<td class=exportVerbraucher></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
 
-			<div class="hide" style="white-space: pre-line; display: none;" id="smarthomediv"></div>
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="rfidlog"> <h4>RFID Log:</h4></span>
-			</div>
+				<!--Log-->
+				<div id="accordion" class="accordion">
+					<div class="card mb-0">
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseOne">
+							<a class="card-title">Ladestatus Änderungen </a>
+						</div>
+						<div id="collapseOne" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="ladestatuslogdiv"></div>
+						</div>
+						
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseTwo">
+							<a class="card-title">SmartHome Log </a>
+						</div>
+						<div id="collapseTwo" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="smarthomediv"></div>
+						</div>
+						
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseThree">
+							<a class="card-title">RFID Log </a>
+						</div>
+						<div id="collapseThree" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="rfiddiv"></div>
+						</div>
 
-			<div class="hide" style="white-space: pre-line; display: none;" id="rfiddiv"></div>
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="mqttlog"> <h4>Mqtt Log:</h4></span>
-			</div>
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFour">
+							<a class="card-title">Mqtt Log </a>
+						</div>
+						<div id="collapseFour" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="mqttdiv"></div>
+						</div>
+						
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseFive">
+							<a class="card-title">Debug Log </a>
+						</div>
+						<div id="collapseFive" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="debugdiv"></div>
+						</div>
+						
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSix">
+							<a class="card-title">Nur PV Log </a>
+						</div>
+						<div id="collapseSix" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="nurpvdiv"></div>
+						</div>
+						
+						<div class="card-header bg-secondary collapsed" data-toggle="collapse" href="#collapseSeven">
+							<a class="card-title">EV SoC Log </a>
+						</div>
+						<div id="collapseSeven" class="card-body collapse" style="white-space: pre-line " data-parent="#accordion">
+						<div id="socdiv"></div>
+						</div>
 
-			<div class="hide" style="white-space: pre-line; display: none;" id="mqttdiv"></div>
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="debuglog"> <h4>Debug Log:</h4></span>
-			</div>
+					</div>
+				</div>
 
-			<div class="hide" style="white-space: pre-line; display: none;" id="debugdiv"></div>
 
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="nurpvlog"> <h4>Nur PV Log:</h4></span>
-			</div>
-
-			<div class="hide" style="white-space: pre-line; display: none;" id="nurpvdiv"></div>
-
-			<div class="row">
-				<span style="cursor: pointer; text-decoration: underline;" class="cursor-pointer" id="soclog"> <h4>EV SoC Log:</h4></span>
-			</div>
-
-			<div class="hide" style="white-space: pre-line; display: none;" id="socdiv"></div>
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
