@@ -141,7 +141,7 @@
 	</div>
 
 	<!-- load Chart.js library -->
-	<script src="js/Chart.bundle.js"></script>
+	<script src="js/Chart.bundle.min.js"></script>
 
 	<!-- load mqtt library -->
 	<script src = "js/mqttws31.js" ></script>
