@@ -1436,6 +1436,13 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
+			$('#MaxPriceForCharging').on('input', function(event){
+				// marks times in the pricechart where the price is low enough so charging would be allowed
+				var priceAnnotations = createPriceAnnotations();
+				electricityPricechart.options.annotation.annotations = priceAnnotations;
+				electricityPricechart.update();
+			});
+
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel
 				var elementId = $(this).attr('id');

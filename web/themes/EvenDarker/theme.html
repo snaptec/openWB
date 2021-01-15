@@ -1289,6 +1289,8 @@
 			var scriptsToLoad = [
 				// load Chart.js library
 				'js/Chart.bundle.min.js',
+				// load Chart.js annotation plugin
+				'js/chartjs-plugin-annotation.min.js',
 				// load mqtt library
 				'js/mqttws31.js',
 				// some helper functions
@@ -1438,6 +1440,14 @@
 				// show/hide respective option-values and progress
 				chargeLimitationOptionsShowHide(this, option);
 			});
+
+			$('#MaxPriceForCharging').on('input', function(event){
+				// marks times in the pricechart where the price is low enough so charging would be allowed
+				var priceAnnotations = createPriceAnnotations();
+				electricityPricechart.options.annotation.annotations = priceAnnotations;
+				electricityPricechart.update();
+			});
+
 
 			$('.rangeInput').on('input', function() {
 				// show slider value in label of class valueLabel

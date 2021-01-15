@@ -1,3 +1,38 @@
+function createPriceAnnotations(){
+	// creates annotation boxes for all times when price is <= maxPrice
+	class Annotation {
+		type = 'box';
+		xScaleID = 'x-axis-0';
+		yScaleID = 'y-axis-left';
+		// left and right edge of the box, units are x-axis index
+		// initially set to index found
+		xMin = 0;
+		xMax = 0;
+		yMin = Math.floor(Math.min(...electricityPriceChartline));
+		yMax = Math.ceil(Math.max(...electricityPriceChartline));
+		borderColor = 'rgba(73, 238, 73, 0.3)';
+		borderWidth = 2;
+		backgroundColor = 'rgba(73, 238, 73, 0.3)';
+		cornerRadius = 0;
+	}
+	var annotations = [];
+	var maxPrice = $('#MaxPriceForCharging').val();
+	if ( !isNaN(maxPrice) ) {
+		for ( var i = 0; i < electricityPriceChartline.length; i++ ) {
+			if ( electricityPriceChartline[i] <= maxPrice ) {
+				var newAnnotation = new Annotation();
+				newAnnotation.xMin = i;  // set left edge of box
+				while ( i < electricityPriceChartline.length && electricityPriceChartline[i] <= maxPrice ) {
+					i++;
+				}
+				newAnnotation.xMax = i;  // first index electricityPriceChartline[i] > maxPrice is right edge of box
+				annotations.push(newAnnotation);  // add box to annotations
+			}
+		}
+	}
+	return annotations;
+}
+
 function loadElectricityPriceChart() {
 	var electricityPriceChartData = {
 		labels: electricityPriceTimeline,
@@ -11,10 +46,10 @@ function loadElectricityPriceChart() {
 			steppedLine: true
 		}]
 	}
+	var ctxElectricityPricechart = $('#electricityPriceChartCanvas')[0].getContext('2d');
+	var priceAnnotations = createPriceAnnotations();
 
-	var ctxa = $('#electricityPriceChartCanvas')[0].getContext('2d');
-
-	window.AwattarLine = new Chart.Line(ctxa, {
+	window.electricityPricechart = new Chart.Line(ctxElectricityPricechart, {
 		data: electricityPriceChartData,
 		options: {
 			tooltips: {
@@ -22,6 +57,7 @@ function loadElectricityPriceChart() {
 			},
 			responsive: true,
 			maintainAspectRatio: false,
+			animation: false,
 			hover: {
 				mode: 'null'
 			},
@@ -65,31 +101,8 @@ function loadElectricityPriceChart() {
 				}]
 			},
 			annotation: {
-		        annotations: [{
-		            type: 'line',
-					id: 'maxPrice',
-		            mode: 'horizontal',
-		            scaleID: 'y-axis-left',
-		            value: 32,
-		            borderColor: 'rgba(73, 238, 73, 0.7)',
-		            borderWidth: 2,
-					label: {
-				        backgroundColor: 'rgba(73, 238, 73, 0.6)',
-				        font: {
-				            // Font style of text, default below
-				            style: "bold",
-				            // Font color of text, default below
-				            color: "rgba(20, 122, 20, 1)",
-				        },
-				        // Whether the label is enabled and should be displayed
-				        enabled: true,
-				        // Text to display in label - default is null. Provide an array to display values on a new line
-				        content: "preiyslabel",
-				        // Rotation of label, in degrees, or 'auto' to use the degrees of the line, default is 0
-				        rotation: "auto"
-				    }
-		        }],
-		        drawTime: "afterDatasetsDraw" // (default)
+		        annotations: priceAnnotations,
+		        drawTime: "beforeDatasetsDraw" // (default)
 		    }
 		}
 	});
