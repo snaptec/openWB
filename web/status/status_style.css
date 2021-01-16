@@ -123,3 +123,7 @@ body > .container {
   display: flex;
   align-items: center;
 }
+
+.hide {
+    display: none;
+}

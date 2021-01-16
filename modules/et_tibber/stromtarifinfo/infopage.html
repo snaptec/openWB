@@ -188,6 +188,8 @@
 			$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210102');
 
 			$(document).ready(function(){
+				$('#navStromtarifInfo').removeClass('hide');
+
 				readTibberAPI()
 				.then((data) => {
     				processTibberResponse(data)
