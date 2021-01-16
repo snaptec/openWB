@@ -1259,7 +1259,7 @@
 		var defaultScaleCounter = 8640;  // ca. 12 Stunden Gauge Auto-Rescale
 
 		// load navbar, be carefull: it loads asynchonously
-		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210101');
+		$("#nav-placeholder").load('themes/' + themeCookie + '/navbar.html?v=20210115');
 
 		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
 		var landingpageShown = false;  // holds flag for landing page being shown
@@ -1856,6 +1856,12 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
+				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
+					// marks times in the pricechart where the price is low enough so charging would be allowed
+					var priceAnnotations = createPriceAnnotations();
+					electricityPricechart.options.annotation.annotations = priceAnnotations;
+					electricityPricechart.update();
+				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt
