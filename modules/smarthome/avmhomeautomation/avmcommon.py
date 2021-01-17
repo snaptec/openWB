@@ -84,6 +84,11 @@ class AVMHomeAutomation:
         self.password = str(sys.argv[7])
         self.sessionID = ""
         self.device_infos = {}
+        try:
+            with open('ramdisk/smarthomehandlerloglevel', 'r') as value:
+                self.loglevel = int(value.read())
+        except:
+            self.loglevel=2
 
     # cacheFileString returns the filename in which the device dictionary is cached
     def cacheFileString(self):
@@ -116,6 +121,7 @@ class AVMHomeAutomation:
             should_authenticate = True
 
         if should_authenticate:
+            self.logMessage(0, "(re-)authenticate at fritzbox")
             # perform authentication
             self.sessionID = getAVMSessionID(
                     self.baseURL,
@@ -133,18 +139,20 @@ class AVMHomeAutomation:
             except IOError:
                 pass
 
-    # logAction writes a message to the logfile for the smarthome device.
-    def logAction(self, action):
+    # logMessage writes a message to the logfile for the smarthome device.
+    def logMessage(self, level, message):
+        if level < self.loglevel:
+            return
         named_tuple = time.localtime() # getstruct_time
-        time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
-        logfile_string = '/var/www/html/openWB/ramdisk/smarthome_device_' + str(self.devicenumber) + '_avmhomeautomation.log'
+        time_string = time.strftime("%Y-%m-%d, %H:%M:%S", named_tuple)
+        logfile_string = '/var/www/html/openWB/ramdisk/smarthome.log'
         try:
             if os.path.isfile(logfile_string):
                 f = open( logfile_string , 'a')
             else:
                 f = open( logfile_string , 'w') 
-                print ('%s devicenr %s avmhomeautomation %s' % (time_string, self.devicenumber, action),file = f)
-                f.close()
+            print ('%s Device %s: AVMHomeAutomation (actor name:%s) %s' % (time_string, self.devicenumber, self.switchname, message), file = f)
+            f.close()
         except IOError:
             pass
 
@@ -166,6 +174,8 @@ class AVMHomeAutomation:
                 should_fetch = True
         except IOError:
             should_fetch = True
+        except:
+            self.logMessage(2, "unexpected error: %s" % (sys.exc_info()[0]))
 
         if should_fetch:
             self.fetchAndCacheDeviceInfos()
@@ -176,8 +186,11 @@ class AVMHomeAutomation:
             f = open(self.cacheFileString(), 'w')
             print ('%s' % (json.dumps(self.device_infos)), file = f)
             f.close()
-        except IOError:
+        except IOError as e:
             pass
+            self.logMessage(2, "error writing power result %s" % (e))
+        except:
+            self.logMessage(2, "unexpected error: %s" % (sys.exc_info()[0]))
 
 
     # switchDevice sets the relais of the AVM Home Automation actor
@@ -187,7 +200,7 @@ class AVMHomeAutomation:
             cmd = "setswitchon"
         else:
             cmd = "setswitchoff"
-        self.logAction(cmd)
+        self.logMessage(1, cmd)
 
 
         if not self.switchname in self.device_infos:
@@ -196,7 +209,7 @@ class AVMHomeAutomation:
 
         if not self.switchname in self.device_infos:
             # still not found -> bail out
-            self.logAction("no such device found at fritzbox")
+            self.logMessage(2, "no such device found at fritzbox: %s" % (self.switchname))
             return
 
         switch = self.device_infos[self.switchname]
@@ -213,22 +226,33 @@ class AVMHomeAutomation:
     # The JSON answer is either written to the according smarthome device return file
     # or dumped to stdout if no such file exists (for local development)
     def getActualPower(self):
-        self.logAction("fetch power")
+        self.logMessage(0, "fetch power")
 
         self.fetchAndCacheDeviceInfos()
-        switch = self.device_infos[self.switchname]
-        aktpower = switch['power']
-        powerc = switch['energy']
+        if not self.switchname in self.device_infos:
+            self.logMessage(2, "no such device found at fritzbox: %s" % (self.switchname))
+            return
 
-        if switch['state']:
-            relais = 1
-        else:
-            relais = 0
-        answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
+        try:
+            switch = self.device_infos[self.switchname]
+            aktpower = switch['power']
+            powerc = switch['energy']
+
+            if switch['state']:
+                relais = 1
+            else:
+                relais = 0
+            answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc) + ',"on":' + str(relais) + '}'
+        except:
+            self.logMessage(2, "Unexpected error: %s" % (sys.exc_info()[0]))
+
         try:
             f1 = open('/var/www/html/openWB/ramdisk/smarthome_device_ret' + str(self.devicenumber), 'w')
             json.dump(answer, f1)
             f1.close()
-        except IOError:
+        except IOError as e:
+            self.logMessage(2, "error writing power result %s" % (e))
             print(answer) # dump answer to stdout if file cannot be written
+        except:
+            self.logMessage(2, "unexpected error: %s" % (sys.exc_info()[0]))
 
