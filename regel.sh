@@ -291,6 +291,7 @@ if (( rseenabled == 1 )); then
 		fi
 	else
 		if (( rseaktiv == 1 )); then
+			echo "Ladung wurde nach Pause durch aktivierten RSE Kontakt fortgesetzt" > ramdisk/lastregelungaktiv
 			echo "$date RSE Kontakt deaktiviert, setze auf alten Lademodus zurück" >> ramdisk/ladestatus.log
 			rselademodus=$(<ramdisk/rseoldlademodus)
 			echo $rselademodus > ramdisk/lademodus
