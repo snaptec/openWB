@@ -655,6 +655,11 @@
 					</div>
 					<label for="MaxPriceForCharging" class="col-3 col-form-label valueLabel" suffix="Cent/kWh"></label>
 				</div>
+				<div class="row justify-content-center regularTextSize vaRow">
+					<button type="button" class="btn btn-secondary mr-3 priceLess"><i class="far fa-minus-square"></i></button>
+					Preis
+					<button type="button" class="btn btn-secondary ml-3 priceMore"><i class="far fa-plus-square"></i></button>
+				</div>
 			</div>  <!--/ priceBasedCharging -->
 
 			<hr class="border-secondary">
@@ -1441,11 +1446,26 @@
 				chargeLimitationOptionsShowHide(this, option);
 			});
 
-			$('#MaxPriceForCharging').on('input', function(event){
-				// marks times in the pricechart where the price is low enough so charging would be allowed
-				var priceAnnotations = createPriceAnnotations();
-				electricityPricechart.options.annotation.annotations = priceAnnotations;
-				electricityPricechart.update();
+			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
+				event.preventDefault();
+				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
+				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
+				var rangeMax = parseFloat($('#MaxPriceForCharging').attr('max'));
+				var step = parseFloat($('#MaxPriceForCharging').attr('step'));
+				if ( $(this).hasClass ('priceLess') ) {
+					currentMaxPrice -= step;
+				} else {
+					currentMaxPrice += step;
+				}
+				// prevent timeout of delayUserInput when clicking "beyond" range
+				if ( currentMaxPrice < rangeMin ) {
+					currentMaxPrice = rangeMin;
+				} else if ( currentMaxPrice > rangeMax ) {
+					currentMaxPrice = rangeMax;
+				}
+				$('#MaxPriceForCharging').val(currentMaxPrice);
+				$('#MaxPriceForCharging').trigger('input');
 			});
 
 
@@ -1456,6 +1476,12 @@
 				var element = $('#' + $.escapeSelector(elementId));
 				var label = $('label[for="' + elementId + '"].valueLabel');
 				label.addClass('text-danger');
+				if ( $.escapeSelector(elementId) == 'MaxPriceForCharging') {
+					// marks times in the pricechart where the price is low enough so charging would be allowed
+	 				var priceAnnotations = createPriceAnnotations();
+	 				electricityPricechart.options.annotation.annotations = priceAnnotations;
+	 				electricityPricechart.update();
+				}
 				delayUserInput(elementId, function (id) {
 					// gets executed on callback, 2000ms after last input-change
 					// changes label color back to normal and sends input-value by mqtt

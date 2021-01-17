@@ -1442,6 +1442,7 @@
 			});
 
 			$('.priceMore, .priceLess').click(function(event){
+				// change Slider upon click on buttons
 				event.preventDefault();
 				var currentMaxPrice = parseFloat($('#MaxPriceForCharging').val());
 				var rangeMin = parseFloat($('#MaxPriceForCharging').attr('min'));
